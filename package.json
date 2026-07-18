@@ -1,0 +1,21 @@
+{
+  "name": "docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "blume dev",
+    "build": "blume build --strict",
+    "check": "blume check --strict --isolated",
+    "validate": "blume validate --strict",
+    "verify:public-safety": "node scripts/verify-public-safety.mjs",
+    "verify:routes": "node scripts/verify-routes.mjs",
+    "doctor": "blume doctor"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "bun@1.3.11",
+  "dependencies": {
+    "blume": "1.0.4"
+  }
+}

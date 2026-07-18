@@ -1,0 +1,58 @@
+---
+title: Quickstart
+description: Publish a static site with one command. No account required.
+sidebar:
+  order: 1
+---
+
+Publish a static folder in about a minute. No framework adapter. No dashboard
+maze.
+
+## 1. Make a tiny site
+
+You need Node.js 20 or later for the one-off CLI command.
+
+```bash
+mkdir hello-spacefast
+printf '<!doctype html><title>Hello</title><h1>Hello, Spacefast.</h1>\n' > hello-spacefast/index.html
+```
+
+Already have a build output folder such as `dist`? Use that instead and skip
+this step.
+
+## 2. Publish it
+
+```bash
+npx -y spacefast publish ./hello-spacefast
+```
+
+The command uploads the folder and waits until it is live. The receipt includes
+both URLs that matter:
+
+- **Live URL** — the stable address for the space.
+- **Version URL** — the immutable address for this exact snapshot.
+
+## 3. Keep it
+
+The first publish can be anonymous. Open the claim URL from the receipt before
+its displayed deadline to attach the space to your account. The deadline in the
+receipt is the one that counts.
+
+Change the files, then run the same publish command again. Spacefast updates the
+live URL to the new version; publishing identical content creates nothing new.
+
+## Publishing a real build
+
+Build your project, then point the same command at its static output:
+
+```bash
+npm run build
+npx -y spacefast publish ./dist
+```
+
+Want the installed `sf` command instead?
+
+```bash
+curl -fsSL https://spacefast.com/install.sh | bash
+sf publish ./dist
+```

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "blume": {
+      "source": "haydenbleasel/blume",
+      "sourceType": "github",
+      "skillPath": "skills/blume/SKILL.md",
+      "computedHash": "81f78ca5ba7a549291d8f4ea6b6e0b4e4df87634aa9a70288eb355813d483972"
+    },
+    "blume-migrate": {
+      "source": "haydenbleasel/blume",
+      "sourceType": "github",
+      "skillPath": "skills/blume-migrate/SKILL.md",
+      "computedHash": "0a9e27785b1e63df5d94ff3d1e22df8476484a3b9e5a7c8077989378817acd6a"
+    },
+    "blume-update-docs": {
+      "source": "haydenbleasel/blume",
+      "sourceType": "github",
+      "skillPath": "skills/blume-update-docs/SKILL.md",
+      "computedHash": "0b49689a8d949583b7773b5914a219d5d998547a54143c3bf9532ede06b778df"
+    }
+  }
+}

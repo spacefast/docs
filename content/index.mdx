@@ -1,0 +1,38 @@
+---
+title: Spacefast documentation
+description: Publish static sites, keep every version, and skip the deployment ceremony.
+---
+
+Spacefast hosts static sites for people and the agents building with them. Give
+it HTML, CSS, JavaScript, Wasm, and assets; get a stable live URL without
+babysitting a server.
+
+## Start here
+
+[Publish your first site](/quickstart) in a couple of commands. No account is
+required for the first publish.
+
+## The useful mental model
+
+- A **space** is your site or project. It has one stable live URL.
+- A **publish** sends a static file, folder, archive, or detected project build.
+- A **version** is an immutable snapshot with its own URL. A successful publish
+  moves the live URL to that version atomically.
+- Publishing the same content again is a no-op. Changed content becomes a new
+  version.
+
+A root `index.html` is the ordinary homepage. Spacefast serves the files you
+upload; it does not execute uploaded server code.
+
+## Configuration, when you need it
+
+The common path needs no config. Add `sf.jsonc` at the publish root when you
+need serving settings, `_redirects` for redirects and rewrites, or `_headers`
+for response headers.
+
+## What is here today
+
+This is the initial docs cut, not a victory lap for a migration that is still
+underway. The overview and quickstart are ready now. Deeper API, platform, CLI,
+error, integration, package, and migration references will appear as their
+public sources move over.
