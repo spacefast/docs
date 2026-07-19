@@ -9,8 +9,23 @@ babysitting a server.
 
 ## Start here
 
-[Publish your first site](/quickstart) in a couple of commands. No account is
-required for the first publish.
+[Publish your first site](/quickstart) in a few steps. No account is required
+for the first publish.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" href="/quickstart" icon="rocket">
+    Publish a folder, zip, or single `index.html`, then claim the space.
+  </Card>
+  <Card title="Agents" href="/agents" icon="bot">
+    Publish through the CLI, REST API, skills, or MCP.
+  </Card>
+  <Card title="Configuration" href="/configuration" icon="settings">
+    Add SPA behavior, metadata, access rules, redirects, and headers.
+  </Card>
+  <Card title="Migrate a site" href="/migrate-from" icon="move-right">
+    Bring static output from another host without changing the artifact first.
+  </Card>
+</CardGroup>
 
 ## The useful mental model
 
@@ -24,15 +39,23 @@ required for the first publish.
 A root `index.html` is the ordinary homepage. Spacefast serves the files you
 upload; it does not execute uploaded server code.
 
-## Configuration, when you need it
+## Find the detail
 
-The common path needs no config. Add `sf.jsonc` at the publish root when you
-need serving settings, `_redirects` for redirects and rewrites, or `_headers`
-for response headers.
+- [Publishing](/publishing), [builds from Git](/builds), and [rollback](/rollback)
+  cover the release loop.
+- [Redirects](/redirects), [headers](/headers), [proxy routes](/proxy-routes),
+  and [custom domains](/domains) cover serving behavior.
+- [Vite](/integrations/vite), [Next.js](/integrations/nextjs), and
+  [image acceleration](/image-acceleration) cover common integrations.
+- The [REST API guide](/api) and [Platforms guide](/platforms) explain the two
+  API surfaces without pretending the generated references have moved yet.
+- [Limits](/limits) and [troubleshooting](/troubleshooting) answer the questions
+  that usually show up after the first publish.
 
-## What is here today
+## More from Spacefast
 
-This is the initial docs cut, not a victory lap for a migration that is still
-underway. The overview and quickstart are ready now. Deeper API, platform, CLI,
-error, integration, package, and migration references will appear as their
-public sources move over.
+The main site still owns [guides](https://spacefast.com/guides),
+[recipes](https://spacefast.com/recipes), the [FAQ](https://spacefast.com/faq),
+and [What's new](https://spacefast.com/whats-new). For agent-specific setup, use
+[Agent setup](https://spacefast.com/agents) or the guided
+[start flow](https://spacefast.com/start).

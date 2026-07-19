@@ -1,0 +1,88 @@
+---
+title: Agents
+description: How AI agents can publish, update, and operate Spacefast spaces through the CLI and API.
+---
+
+Agents publish through the same REST API and CLI as humans: one curl call for a publish, the CLI for the full surface, machine-readable docs for discovery. The fastest handoff is a direct instruction:
+
+```bash
+fetch https://spacefast.com/ai
+and publish this space to Spacefast
+```
+
+## Publish with curl (no install, no account)
+
+```bash
+curl -F "files=@index.html" https://api.spacefast.com/v1/publish
+```
+
+To publish a folder, zip it first and send it as `-F archive=@site.zip`. The response is `{ "data": <receipt> }` — the receipt rides inside `data`, and it contains everything that matters:
+
+- `data.space.liveUrl` — the live site.
+- `data.version.immutableUrl` — the exact thing just published, frozen. It is reserved in the initial receipt; if the publish is still finalizing, poll `data.links.status` until the version status is `ready` before sharing it.
+- `data.claim.url` and `data.claim.expiresAt` — anonymous spaces expire unless claimed within 6 hours; always show the user the claim link and the deadline.
+- `data.shareBlurb` — a paste-ready one-liner with the URL and claim nudge; relay it verbatim.
+
+For anonymous spaces, send the receipt's `data.claim.token` as `Authorization: Bearer <claim-token>` when polling `data.links.status`, reading `data.links.inspect` / `data.links.version`, finalizing uploads, or updating the same `spaceId`. Never print the token back to the user. Errors come back as JSON with stable `code` values and a `docsUrl` for recovery steps.
+
+## After the user claims
+
+Claiming ends the claim token's publish rights, but when the owner keeps agent continuation on (the default at claim time) the token becomes a one-time exchange voucher. The next publish with it fails with an error that points here: call `POST /v1/anonymous-claim/exchange` with the same bearer auth to trade the token once for a durable, publish-only API key scoped to that space, save the key to `.spacefast/state.json`, and retry the publish with the new key as the bearer credential. The owner can see and revoke the key under Account → Access tokens; if they turned continuation off, ask them to mint an access token in the dashboard instead.
+
+## Install the Spacefast CLI
+
+The CLI is the full surface: incremental publishes, version history, rollback, passwords, domains, logs, and diagnostics.
+
+```bash
+curl -fsSL https://spacefast.com/install.sh | bash
+```
+
+To connect a local coding agent in one step:
+
+```bash
+curl -fsSL https://spacefast.com/agents.sh | sh -s -- --local --agent codex
+```
+
+Use hosted MCP for cloud/browser agents that cannot run local commands:
+
+```text
+https://mcp.spacefast.com
+```
+
+Hosted MCP can edit its durable virtual workspace and publish from it. On-Device MCP, installed through the CLI, can read and edit the bounded local checkout.
+
+On Windows PowerShell:
+
+```bash
+irm https://spacefast.com/install.ps1 | iex
+```
+
+Use `--json` on any command when the output will be parsed. Publishing the same directory again updates the space saved in `.spacefast/state.json`. For agents that support skills, install the official skill:
+
+```bash
+npx -y skills add spacefast/plugins --skill spacefast -g -y
+```
+
+Raw skill markdown is still available at `https://api.spacefast.com/skill` for agents that only support fetch-and-import flows.
+
+The skill gives agents the publish workflow, space-state rules, claim-link handling, and Spacefast file conventions without rediscovering them from docs. Anonymous publish needs no auth; claiming a space requires a WordPress.com login, and CI/API access uses API keys.
+
+## Docs as Markdown
+
+Every docs page is fetchable as plain Markdown. Append `.md` to any docs URL (for example `https://spacefast.com/docs/cli.md` or `https://spacefast.com/docs/errors/rate_limited.md`) to get the exact Markdown source — this works for every client, including curl. Requests from known AI-agent user agents (and requests whose `Accept` header prefers `text/plain`/`text/markdown` over `text/html`) receive the Markdown form at the HTML URL automatically, and the site root serves the agent setup instructions to those agents.
+
+Machine-readable discovery lives at [`/llms.txt`](https://spacefast.com/llms.txt), [`/llms-full.txt`](https://spacefast.com/llms-full.txt), and [`/.well-known/agent-card.json`](https://spacefast.com/.well-known/agent-card.json), all generated from the same sources as these pages. The same build publishes the open discovery standards registries read: the [integrations.sh declaration](https://spacefast.com/.well-known/integrations.json) at `/.well-known/integrations.json`, the [RFC 9727 API catalog](https://spacefast.com/.well-known/api-catalog) at `/.well-known/api-catalog`, the [MCP server card](https://spacefast.com/.well-known/mcp/server-card.json) at `/.well-known/mcp/server-card.json`, and the [agent-skills index](https://spacefast.com/.well-known/agent-skills/index.json) at `/.well-known/agent-skills/index.json`. The full API surface is the generated OpenAPI spec at [`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json).
+
+Published spaces can do the same trick: an `Agent=true` condition in `_redirects` serves browsers the HTML page and agent fetches plain text at the same URL — it's how `https://spacefast.com/ai` works:
+
+```text
+/ai /ai.txt 200! Agent=true
+```
+
+## Agent-safe behavior
+
+- Incremental uploads send only changed files after the first publish.
+- Finalize is the completion boundary for live publishes; upload URLs can be refreshed without restarting a version.
+- Space metadata, password protection, and SPA mode survive redeploys.
+- Plan limits surface as diagnostics, not guesswork: publish the intended artifact, then read and report what the API or CLI says.
+- Never print claim tokens, API keys, or `.spacefast/state.json` contents into transcripts.
