@@ -2,6 +2,9 @@
 .blume-verify/
 dist/
 node_modules/
+content/cli/
+content/errors/
+public/_redirects
 .env
 .env.*
 !.env.example

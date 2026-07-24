@@ -1,0 +1,2353 @@
+{
+  "contentDigest": "9c1ba83580991868439bbd475348fd13952ea675b18523c813a1827b9e76711c",
+  "counts": {
+    "apiOperations": 327,
+    "errorCodes": 463,
+    "platformOperations": 362,
+    "redirects": 2512
+  },
+  "files": [
+    {
+      "bytes": 202781,
+      "path": "cli/index.md",
+      "sha256": "08bf8d9bab90aac37d9d9dce2def5b8f74c12ffd3acfcc4808c688f96f3bca81"
+    },
+    {
+      "bytes": 960,
+      "path": "errors/abuse_report_invalid_transition.md",
+      "sha256": "a1f0931a2df7f0f2caf7d29f72b8880479f02a780560202be080752265c4b46f"
+    },
+    {
+      "bytes": 935,
+      "path": "errors/abuse_report_rate_limited.md",
+      "sha256": "002ca6011bad54dd55920520e251dff538892bcac94b27523ff478606d929347"
+    },
+    {
+      "bytes": 908,
+      "path": "errors/abuse_takedown.md",
+      "sha256": "efb7bfc3bcb1c4ddfbb77387e715fcb455bf4d70c992756d00493bcc881652c6"
+    },
+    {
+      "bytes": 809,
+      "path": "errors/access_denied.md",
+      "sha256": "0e9a495fd7e584b4a6295979008def203ab7266dfd7d7fcebed93d23456a5fda"
+    },
+    {
+      "bytes": 918,
+      "path": "errors/account_suspended.md",
+      "sha256": "e1dde4ba256056d4b99dcd18d7ba7f05df42b4d2e628a4e639d93b8fbe062f36"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/agent_handoff_declined.md",
+      "sha256": "8df783460b4583d992bd212128c715b00dd515025180717a081cd37cace8eeb8"
+    },
+    {
+      "bytes": 953,
+      "path": "errors/agent_handoff_limit_reached.md",
+      "sha256": "0714ef7ca54fb067bbff262f1d4ef28fb4ef06a7ec0e0ba6d1def53c4aded5ef"
+    },
+    {
+      "bytes": 1052,
+      "path": "errors/agent_handoff_origin_unsupported.md",
+      "sha256": "a83711fcc5dd8748605a84f29012541488b8d54beebfa67a69848cc51b242e33"
+    },
+    {
+      "bytes": 940,
+      "path": "errors/ambiguous_space_slug.md",
+      "sha256": "0bed5c70d8827d6fe7397b469e0f8f27415b73b8441e284c2973786c55a791bb"
+    },
+    {
+      "bytes": 1018,
+      "path": "errors/anonymous_expired.md",
+      "sha256": "b4799b5eaf6b4192945506b45cd9bfc8a9d85fb4cbc1a3196f91c10548646bd8"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/anonymous_pool_unavailable.md",
+      "sha256": "fbcfecf160c79223c96858ce548ed31a85fe4120d0ef18efcb6280b0e419025c"
+    },
+    {
+      "bytes": 938,
+      "path": "errors/anonymous_publish_rate_limited.md",
+      "sha256": "aaf444e9c0a4c7ba3e153c3869e166602288905b3c9d489a92ea5daf444faa77"
+    },
+    {
+      "bytes": 979,
+      "path": "errors/anonymous_space_limit_reached.md",
+      "sha256": "7086c4bf071d3c5651a46f85df84f3333069103a81b53450da1df468118242e6"
+    },
+    {
+      "bytes": 1036,
+      "path": "errors/api_key_scope_underivable.md",
+      "sha256": "0cd1557ba53d5011d1d833f2a574e1baa378f59711ac99368b1944aeac1502bc"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/archive_body_required.md",
+      "sha256": "93c837256668cfccc80a96a8e411c2a1edf39cceaeff63193382155360cd7997"
+    },
+    {
+      "bytes": 863,
+      "path": "errors/archive_too_large.md",
+      "sha256": "12260b4671310515055a431aeca8a48ceb8dbe43dcd8b6d529faa755a3cd719e"
+    },
+    {
+      "bytes": 835,
+      "path": "errors/auth_code_required.md",
+      "sha256": "dc3d76b73d8e772e1adab20f73b20cb5846f67c6badf07bc0d953ff2b551706d"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/authorization_pending.md",
+      "sha256": "0dcc313fb4ae52e8c8a172cea305ded752ea53d7b4bde26733e6e31da7c25ca0"
+    },
+    {
+      "bytes": 967,
+      "path": "errors/billing_receipt_invalid.md",
+      "sha256": "78f1cc6e6c977bb45021f0affc7ec5ec434edd3b68bb277bd087d6c3d2a24897"
+    },
+    {
+      "bytes": 979,
+      "path": "errors/billing_receipt_not_bound_to_team.md",
+      "sha256": "74c2b5c0d047f79c3eeba74bf8b865f10eb67a969e33d205b2bdac1c17dcbc1e"
+    },
+    {
+      "bytes": 935,
+      "path": "errors/billing_store_not_configured.md",
+      "sha256": "79fb44fe79f6538ae7ec51d2e753a14bfc47a90a71e3c3edd9c1ce7ce1f2fbf2"
+    },
+    {
+      "bytes": 954,
+      "path": "errors/billing_subscription_conflict.md",
+      "sha256": "d15d0a14e82ffa3a3b2e93554f1deedca78ad8d655b4167ee46d4ef772208ee4"
+    },
+    {
+      "bytes": 945,
+      "path": "errors/billing_unknown_product.md",
+      "sha256": "8a50dbfb0bb7c9cb25478f1c3f99925ecf5f006750a6a670d0e9339df7937fbb"
+    },
+    {
+      "bytes": 935,
+      "path": "errors/build_command_missing.md",
+      "sha256": "07f6ffe81c8f0ff320f5726dec37631ae20870d207a0152433c2bbec26f4ea53"
+    },
+    {
+      "bytes": 880,
+      "path": "errors/build_execution_unavailable.md",
+      "sha256": "31bece7bbf2fa26b61741e7ccf18eeb0a8802be9e6507a17b81cb9db5edde304"
+    },
+    {
+      "bytes": 807,
+      "path": "errors/build_failed.md",
+      "sha256": "6f9d0894b60fa428ef0f5af96e547fafe23d6d063115ffa4a3558b3a9f296f42"
+    },
+    {
+      "bytes": 897,
+      "path": "errors/build_install_failed.md",
+      "sha256": "34092c5aa9f1feb59d351fffcb8f12347979c26efe3933ee3bb1bcf27392313b"
+    },
+    {
+      "bytes": 932,
+      "path": "errors/build_no_index_html.md",
+      "sha256": "02ddb173dee6b41f3533f925af8ed01f50e6daf087f47a6b8830650dfd7d7b6c"
+    },
+    {
+      "bytes": 751,
+      "path": "errors/build_not_created.md",
+      "sha256": "4f3e8234e67508064b08b8606c743f2ccc4911cd4bc7c9d493ba22c914f1519b"
+    },
+    {
+      "bytes": 872,
+      "path": "errors/build_oom.md",
+      "sha256": "006a3e2a71b556c3e72778bee41b1507150b38b202f234a62992e686cc29298a"
+    },
+    {
+      "bytes": 928,
+      "path": "errors/build_output_dir_missing.md",
+      "sha256": "bb5c773828f5d839f32ecb1f781f117e070f5a8ec77154e927ca1779c4921569"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/build_timeout.md",
+      "sha256": "10ac50b8c88ec07e9b6ae7677ea789e5a7ad1756cc0ac3aac12a4193495b6cd8"
+    },
+    {
+      "bytes": 823,
+      "path": "errors/cache_purge_domain_required.md",
+      "sha256": "3993c7c8167acd1454577f55f80e6d74e3f1ed29e2f775679c687d8dde6380e2"
+    },
+    {
+      "bytes": 811,
+      "path": "errors/cache_purge_path_required.md",
+      "sha256": "1afb162f872a664ebf4af73b978fb971aa59280459bd6300f4e2a6597c1caf70"
+    },
+    {
+      "bytes": 947,
+      "path": "errors/channel_name_reserved.md",
+      "sha256": "c4872c38751c906fe58f97631a2bf5be377e556ecde6b83be3dfa7cb056cdfd5"
+    },
+    {
+      "bytes": 903,
+      "path": "errors/channel_pointer_moved.md",
+      "sha256": "c098f469ca84dab8288dbd5ec8b9b01bd28549f64a3bd70941c9cc9c1640ca20"
+    },
+    {
+      "bytes": 838,
+      "path": "errors/channel_unsupported.md",
+      "sha256": "635d3df457dd96077003b046e48185bce86ddffcc4a8b916f2c003d7a87906a2"
+    },
+    {
+      "bytes": 867,
+      "path": "errors/claim_blocked_takedown.md",
+      "sha256": "88d73515066d76d7562a725aa1a0092b8bd2c7ad75946cb24990e93481af020d"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/claim_target_not_found.md",
+      "sha256": "4c8b839059cb1a0ecc9808e48b869242ad736d3019cbdf3eb483785150824f84"
+    },
+    {
+      "bytes": 943,
+      "path": "errors/claimed_space_quota_exceeded.md",
+      "sha256": "5fbf8944791349543a04c8c4bc536808757d11992bc4458442689d0168343cdd"
+    },
+    {
+      "bytes": 834,
+      "path": "errors/cli_upgrade_required.md",
+      "sha256": "f0f687fbd6525c7991607a247f95d0372c9320cf2903eca58d2044c54312b946"
+    },
+    {
+      "bytes": 914,
+      "path": "errors/comment_screenshot_rate_limited.md",
+      "sha256": "5466bcf5a8b2004a49ae0a2b8f8b3d641a2f1cb83e6509edccfa4089ca63a354"
+    },
+    {
+      "bytes": 867,
+      "path": "errors/config_file_too_large.md",
+      "sha256": "aa6a8fb8ea4fbc6136d0a2e94d7c9990dad347fe56a243f35412bd41fd0772e6"
+    },
+    {
+      "bytes": 805,
+      "path": "errors/config_invalid.md",
+      "sha256": "5512fce2b7938334b197e89aaaa74a024aebcfbc5cad3c110ceabb93fc531d3a"
+    },
+    {
+      "bytes": 886,
+      "path": "errors/config_meta_too_long.md",
+      "sha256": "27821cd827b7869f4aad6ed5ff3be17da7b3ec79595609f7409f59429a3ec338"
+    },
+    {
+      "bytes": 966,
+      "path": "errors/config_templates_over_limit.md",
+      "sha256": "b5f618f3eff1301f9701e8b3144f925ca354beeedbae2c5deb72ad0c990a47e9"
+    },
+    {
+      "bytes": 1087,
+      "path": "errors/continuation_unavailable.md",
+      "sha256": "fa51274ced9cec534fed9d9eeb6857a86b9cf883f424457330ed91f5c1c6562a"
+    },
+    {
+      "bytes": 977,
+      "path": "errors/continuation_used.md",
+      "sha256": "8cdaa8644fda6dcc71307d9677b5447a518eadc0d50162e0e4853b72846dc0a0"
+    },
+    {
+      "bytes": 803,
+      "path": "errors/credential_expired.md",
+      "sha256": "30f07e2446471ecabf2371311641f346842434c80f2e562e47a25c2c3db26126"
+    },
+    {
+      "bytes": 909,
+      "path": "errors/credential_not_yet_valid.md",
+      "sha256": "dd0e3a76e17021ae9a6f34b02f42c6adbe6696b5c5f50eb2faab78ec3e3e6c66"
+    },
+    {
+      "bytes": 916,
+      "path": "errors/credential_retired.md",
+      "sha256": "c9ebdb523069e489445be44db6db9c2624679a529503c2870b3b37f21eddf974"
+    },
+    {
+      "bytes": 809,
+      "path": "errors/credential_revoked.md",
+      "sha256": "e970907d2e9846f6ba0f89338e895bb6d33fe59add95a51d7989c571fc537be9"
+    },
+    {
+      "bytes": 898,
+      "path": "errors/csam_blocked.md",
+      "sha256": "9df53f58d8aab3d17f223e630b515ac2001f30c328cd2c23bdf576b8a4fa092c"
+    },
+    {
+      "bytes": 916,
+      "path": "errors/csam_policy_floor.md",
+      "sha256": "b0d694981815338309111fc3c28f06ae11fc807e4cda0286146eae110b016ca4"
+    },
+    {
+      "bytes": 989,
+      "path": "errors/custom_certificates_require_dedicated_site.md",
+      "sha256": "74e9feda0ce981f93e79c0d57da5ade14f2342ad761228323afef9ba468bf450"
+    },
+    {
+      "bytes": 938,
+      "path": "errors/data_location_immutable.md",
+      "sha256": "b2b14e7d5385245dac4d9c6f3d126a1e80f17c3e92e19dd9a61541c115825549"
+    },
+    {
+      "bytes": 814,
+      "path": "errors/datacenters_unavailable.md",
+      "sha256": "d4c98e861478dfbae91685d795afaa0db093962f86f2ee9457b5159424613c89"
+    },
+    {
+      "bytes": 843,
+      "path": "errors/device_authorization_failed.md",
+      "sha256": "60613adce1c40f95e780c77989d44ba9635c80b7ec9979eee5eed094c17816fd"
+    },
+    {
+      "bytes": 925,
+      "path": "errors/device_verification_rate_limited.md",
+      "sha256": "c026f64eecdc7d52b674f15df7e578f6b56a23c2263b7b0fcf27b01aacae40f5"
+    },
+    {
+      "bytes": 876,
+      "path": "errors/dns_export_required.md",
+      "sha256": "44ce9f15218550773d135bfe97e63852b09c81a93485b8f6783cb69e9a830e81"
+    },
+    {
+      "bytes": 920,
+      "path": "errors/dns_field_conflict.md",
+      "sha256": "d534f7a07083a2302c5e7369e32d9e71d9c3f4f45556fd7b1db083eac82e51b9"
+    },
+    {
+      "bytes": 969,
+      "path": "errors/dns_field_not_applicable.md",
+      "sha256": "fab6378bf86304cfd907c28f6ded11408477964ed2d6aea8d107888dc91ff5ce"
+    },
+    {
+      "bytes": 937,
+      "path": "errors/dns_import_partial_visibility.md",
+      "sha256": "e404610a66efc2187b959c665432874c62589f7c295547aa31441c1f19cc0e7f"
+    },
+    {
+      "bytes": 938,
+      "path": "errors/dns_provider_auth_expired.md",
+      "sha256": "56193d541a21804d056051acfebd234ff3d5c9cec3e1756f45da85066f041ae0"
+    },
+    {
+      "bytes": 965,
+      "path": "errors/dns_provider_batch_unsupported.md",
+      "sha256": "d2d728166ae22a88887bd068dc4872d308f50bfb3d36597509f0b73e698018f7"
+    },
+    {
+      "bytes": 1014,
+      "path": "errors/dns_provider_change_pending.md",
+      "sha256": "8a3e31afd7dbbf791ae86b51be47bf107bfe40b5088e1ee2e44addd658706865"
+    },
+    {
+      "bytes": 972,
+      "path": "errors/dns_provider_conflict.md",
+      "sha256": "7e355515b70a1fe2055f13cc3d02258f259e42de9da57ad8511b7c2fb8033549"
+    },
+    {
+      "bytes": 919,
+      "path": "errors/dns_provider_connection_in_use.md",
+      "sha256": "dde616409407cf20cad8dcd41efeba7f00bd6bb76525cd63f629658574173fa7"
+    },
+    {
+      "bytes": 901,
+      "path": "errors/dns_provider_connection_unavailable.md",
+      "sha256": "2fba6b556c56f3ff19964ef2ca2c56cbc118c753c97904bb12a554343be784b0"
+    },
+    {
+      "bytes": 1051,
+      "path": "errors/dns_provider_controlled_desired_state.md",
+      "sha256": "49ca03eacb7baec6e94826baa8a7f1d7e2d3e900c964e378c1fd2dd7fd5be90c"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/dns_provider_credentials_expired.md",
+      "sha256": "4494fa29596a97994ee8a2af456fd6d26ac5fbc1da9c61fa4ddc8be640898b8d"
+    },
+    {
+      "bytes": 956,
+      "path": "errors/dns_provider_feature_descriptors.md",
+      "sha256": "3beb6d56652d7fc3fd153653b63f6fabc4d2dc325c7da16e9b0aef053c068bab"
+    },
+    {
+      "bytes": 951,
+      "path": "errors/dns_provider_feature_unavailable.md",
+      "sha256": "621d6381325afb779523f428956ea76913b3f8694da4609ff3f6c1b5db6c6bb4"
+    },
+    {
+      "bytes": 951,
+      "path": "errors/dns_provider_field_unsupported.md",
+      "sha256": "e656e3b1c3b114448018dd0096c8acf35549eee9f75a332d07dc03c109ab52aa"
+    },
+    {
+      "bytes": 998,
+      "path": "errors/dns_provider_future_authoritative_backend.md",
+      "sha256": "5a1795e59a3069f8dffb114228b79949c6af0850dcffa35f03b9eeba082ad8d2"
+    },
+    {
+      "bytes": 939,
+      "path": "errors/dns_provider_missing_permission.md",
+      "sha256": "569fbf425c3441db894195c13dc8af63cbca389809110f2d263f27ce8f67fce1"
+    },
+    {
+      "bytes": 866,
+      "path": "errors/dns_provider_not_connected.md",
+      "sha256": "2568d1588486835e44da18fd41611729fc1beb1a03a3b0815fb1961a476ea3ce"
+    },
+    {
+      "bytes": 983,
+      "path": "errors/dns_provider_operation_failed.md",
+      "sha256": "aad501883d3d6fb2a4fa79358b37a8e296f1b9aae7b9d358330183c466f0d5a6"
+    },
+    {
+      "bytes": 969,
+      "path": "errors/dns_provider_permission_denied.md",
+      "sha256": "8ef4859d449d0c54f1b8f8a50742865928b1ff29d64b896d19a3c9a6e7e719ce"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/dns_provider_rate_limited.md",
+      "sha256": "9b9d4038c8489b96a869018daa134fa4e34a20bce65ba849afd3875ab80e81a0"
+    },
+    {
+      "bytes": 1022,
+      "path": "errors/dns_provider_replace_all_requires_fresh_plan.md",
+      "sha256": "d4d881363699258d3819d820251365af57067972450ef3de805fbdd0cbbac7d1"
+    },
+    {
+      "bytes": 987,
+      "path": "errors/dns_provider_replace_all_write_strategy.md",
+      "sha256": "f24fde155047949873167034a8aa5af887a5d1ed8288d6a61ac8b3ca572c0160"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/dns_provider_snapshot_stale.md",
+      "sha256": "233febf85c0d224d3c7c0b6f18f6cf5b1728600f9790e1123d772acdf081ef04"
+    },
+    {
+      "bytes": 947,
+      "path": "errors/dns_provider_snapshot_unavailable.md",
+      "sha256": "2ccd41fb284d6ac6bae92f484283f8c6d3852e1351adc898e1b748cd7beb2122"
+    },
+    {
+      "bytes": 981,
+      "path": "errors/dns_provider_temporarily_unavailable.md",
+      "sha256": "3a01f272b82bd9751ed4aff98d99a215d3e32867ded2dad458af4226239d7c53"
+    },
+    {
+      "bytes": 895,
+      "path": "errors/dns_provider_timeout.md",
+      "sha256": "f10c0feeccfa4b11b0aca686151d6fd19c627403418f7ea88121c6fc850d6238"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/dns_provider_validation_failed.md",
+      "sha256": "4d28874829717ca208d78e5109e9d4de82a2f41342d48b27faaca92f1b6eea19"
+    },
+    {
+      "bytes": 1015,
+      "path": "errors/dns_provider_workflow_templates.md",
+      "sha256": "2bafdc2db0cac9536ee2da7f1ffc08b928968043c302d3b48581f3ff78dad003"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/dns_provider_zone_not_found.md",
+      "sha256": "0ba8c23ebe3814d0dde70c29fa474f060ac9e07071b23f35e250b09e882473eb"
+    },
+    {
+      "bytes": 960,
+      "path": "errors/dns_record_conflicts_with_managed.md",
+      "sha256": "b5d0cafa2677f91070e0a7504b072ccede5f9c9db3bb5e754b7d7f426f7a3872"
+    },
+    {
+      "bytes": 901,
+      "path": "errors/dns_record_managed.md",
+      "sha256": "bfd2bc10063d3bcd7c520a71a176fdcefb7e262f7ea06e4460e7ce5a4d24d0e9"
+    },
+    {
+      "bytes": 799,
+      "path": "errors/dns_record_not_found.md",
+      "sha256": "44efe88b8f3f30e7389ac6001f10011f8d79cf4eb9848b84e1c1da45e9793009"
+    },
+    {
+      "bytes": 832,
+      "path": "errors/domain_already_exists.md",
+      "sha256": "ebdfd3a5a5e707ab6c262b53bba86c8dd3f2bc79e6dbdcd43fe6fc368e58c9ab"
+    },
+    {
+      "bytes": 857,
+      "path": "errors/domain_bound.md",
+      "sha256": "4c3d647d383b7c0ea2094204c687e37f9e1b51432446c508990cc933d3f7fc9c"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/domain_facet_already_managed.md",
+      "sha256": "6b428ad8611b08e221c1ced23c5d10d50afca8369cc2d4ae2d6253e01b9064f8"
+    },
+    {
+      "bytes": 863,
+      "path": "errors/domain_facet_external.md",
+      "sha256": "de2532ccef446b8fa53944acda44bb153240efd244a148ba37c0d0763a90fae0"
+    },
+    {
+      "bytes": 846,
+      "path": "errors/domain_facet_not_applicable.md",
+      "sha256": "0748602f0c3d0ce9e475db3d612a15caa825373ad0b588ebfd0398be015c7af3"
+    },
+    {
+      "bytes": 965,
+      "path": "errors/domain_hostname_site_mismatch.md",
+      "sha256": "0085c7a6912cc292c3a1031afad5c84014c2f5feb85a4a320e3775d6e2a2a99f"
+    },
+    {
+      "bytes": 819,
+      "path": "errors/domain_in_use.md",
+      "sha256": "f37a493ff59782ef5c7b67cc675b7405ed5adf44eb686e86c68677a227a66307"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/domain_lookup_rate_limited.md",
+      "sha256": "65c041dd470160a853d23b416e80b172b719b3255506d3bb2a16ccf9b5d468da"
+    },
+    {
+      "bytes": 761,
+      "path": "errors/domain_not_bound.md",
+      "sha256": "a9b6c0f31bff0bc896335464aaf6911994ae8b2da6082266ad9d86c5d2e514c1"
+    },
+    {
+      "bytes": 923,
+      "path": "errors/domain_quota_exceeded.md",
+      "sha256": "696d3f4b56a85b13859a4d82f876a5bca23d554bc060d76af0322b83f9c85335"
+    },
+    {
+      "bytes": 895,
+      "path": "errors/domain_registration_active.md",
+      "sha256": "cec8ca7985f5d3e022d3e2192ea008fe08660a4fd03f9d15293d63ce9e588be1"
+    },
+    {
+      "bytes": 883,
+      "path": "errors/domain_registration_not_renewable.md",
+      "sha256": "ed34fe585054dc53a253be00ee5bb1667232fa5ca6a0e46f13c9038320f91ec0"
+    },
+    {
+      "bytes": 965,
+      "path": "errors/domain_reserved_suffix.md",
+      "sha256": "8bc7114b31c245f8710d467841d85b55c1bc001fa3d40dd4f921434ce90f44e9"
+    },
+    {
+      "bytes": 892,
+      "path": "errors/domain_transfer_active.md",
+      "sha256": "976e44f280c31051612afe0284eb2e36c022135a90db8fa3b4d570a9d8b82b1b"
+    },
+    {
+      "bytes": 903,
+      "path": "errors/domain_wildcard_label.md",
+      "sha256": "b871125051b5c4bdf4680ebb6d8ac675ed7d040bf9a5708a18e213b1647cf32d"
+    },
+    {
+      "bytes": 889,
+      "path": "errors/domain_wildcard_not_enabled.md",
+      "sha256": "05a63c6f42fd1d36ab274fb7bd8c88841341079a32b65d939669623f7a361add"
+    },
+    {
+      "bytes": 871,
+      "path": "errors/download_required.md",
+      "sha256": "c6923bd8ea591fd939442391b561fbfe423b5bc3196d426f670edfeebfd37dec"
+    },
+    {
+      "bytes": 842,
+      "path": "errors/duplicate_version_path.md",
+      "sha256": "fe816215a9d85d3f7eaa23c1cf532b76c17fe98a41b0e1dbfa904ef62d22aae3"
+    },
+    {
+      "bytes": 902,
+      "path": "errors/enforcement_policy_overlap.md",
+      "sha256": "5746573d00789af8da4ac91dd44806124329b91e0351a69ba72471efd5c81772"
+    },
+    {
+      "bytes": 783,
+      "path": "errors/event_payload_too_large.md",
+      "sha256": "06ba2140b40a8612388e6e3c5a08a0fe8c8b14ed7d07fac9abf9ad67ee7d3b5d"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/event_rate_limited.md",
+      "sha256": "f6c84ea010a731848187e5c6ac189181f6b0670972c930ba472e6272255421e4"
+    },
+    {
+      "bytes": 699,
+      "path": "errors/expired_token.md",
+      "sha256": "e819ff22228e20869bf9cdc3501492616230fe531f33bf78855feac0cf2b7012"
+    },
+    {
+      "bytes": 834,
+      "path": "errors/export_archive_not_ready.md",
+      "sha256": "0e075cb347d36f7b58b9da67ef0825d5b864bcffa62534fa0b10b4aaceff67c3"
+    },
+    {
+      "bytes": 837,
+      "path": "errors/export_version_not_found.md",
+      "sha256": "3782d6957f9a24b69daf19d350525348045f2db407edc3008a98009d8b189161"
+    },
+    {
+      "bytes": 872,
+      "path": "errors/feature_unavailable.md",
+      "sha256": "9ac90eaeb251e7b1dbd4f64d00e55d5e73181975ccb3e74726a6c0bdc231ec35"
+    },
+    {
+      "bytes": 904,
+      "path": "errors/files_mode_does_not_support_spa.md",
+      "sha256": "0b2442f2296ab38d5679590c0a261901341146d238c5742c9f0ed54cbe11f731"
+    },
+    {
+      "bytes": 822,
+      "path": "errors/forbidden.md",
+      "sha256": "2f929fa6f59037c0b5666e12edfc3e5f75f526ebf2fb19c6bf87c1dcd66a2f44"
+    },
+    {
+      "bytes": 966,
+      "path": "errors/free_external_proxy_disabled.md",
+      "sha256": "e30e0f7c90006418af5fda80e9e44de09ed98f258c8918d6e5c114284eeac6da"
+    },
+    {
+      "bytes": 939,
+      "path": "errors/free_headers_basic_auth_disabled.md",
+      "sha256": "40861e464deb850f45eab8be015bee7850ea94db6e10a3d48f3e16c4d9afa123"
+    },
+    {
+      "bytes": 1032,
+      "path": "errors/google_play_webhook_identity_not_configured.md",
+      "sha256": "9ad211969fd8a86f83f70b8d8d55c7a5f7800b620dadd32359bdfdbe7dabdfc9"
+    },
+    {
+      "bytes": 926,
+      "path": "errors/idempotency_conflict_in_progress.md",
+      "sha256": "dec57728d939c39f7dc692e10d0fbbcf8e6465695c18e1cad67229d27e82dae1"
+    },
+    {
+      "bytes": 883,
+      "path": "errors/idempotency_key_reused.md",
+      "sha256": "c3706c4674f0f730367338b82fcb09d2c670e143bd3f4aa2bf3c1fac58f50f7d"
+    },
+    {
+      "bytes": 963,
+      "path": "errors/immutable_version_requires_login.md",
+      "sha256": "ff319f8ce0b609c1b959aa4b9055f039d7af196268d2c13262cae21c29994a7e"
+    },
+    {
+      "bytes": 826,
+      "path": "errors/import_archive_not_uploaded.md",
+      "sha256": "d5dcfda94db869d54f66b28108ef150a61bcfa8db7e87f9e2a632059a1ff625d"
+    },
+    {
+      "bytes": 901,
+      "path": "errors/import_not_cancelable.md",
+      "sha256": "3dd89f104967c195ba790b4230a830f331cb1d36138931b4326fcc68ed6a9092"
+    },
+    {
+      "bytes": 864,
+      "path": "errors/import_not_waiting_for_archive.md",
+      "sha256": "9c4e48a7cb57c1b0fbe369d20ea13cb9f9ef4b312e21cc32243909223d1e3d23"
+    },
+    {
+      "bytes": 919,
+      "path": "errors/incumbent_controls_dns.md",
+      "sha256": "f61662818d3ad50af6d8ce6971765ca30dfc8c126093852be9671a8e87f16df6"
+    },
+    {
+      "bytes": 58851,
+      "path": "errors/index.md",
+      "sha256": "91778556f9eb2a1c1bb4c52d40200bcbca30493fecfa66756c01895113b1e8e6"
+    },
+    {
+      "bytes": 810,
+      "path": "errors/inject_invalid.md",
+      "sha256": "42c131222c49a63b861a44628fc2773a9f197b87cc9623895fae125836efc95c"
+    },
+    {
+      "bytes": 837,
+      "path": "errors/inject_snippet_too_large.md",
+      "sha256": "b451753c5dfa2b13c56fac6d799aecc58e4c900f49fbd52a6e3f2364d8a21023"
+    },
+    {
+      "bytes": 775,
+      "path": "errors/internal_error.md",
+      "sha256": "35df1421add1388b1abcc6b0012e7b72e7a8ac3aaf8212d529e19b3fbb7d38b5"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/invalid_claim_token.md",
+      "sha256": "0bfa5ea87eb3b4a827d16bec9df20925e7c8e564b277f62995295d2b1bf84dfa"
+    },
+    {
+      "bytes": 928,
+      "path": "errors/invalid_continuation_token.md",
+      "sha256": "a9261fe9a012e1a3faf0654ac4225ffb412add914246a6ee0eb8664e59a05e63"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/invalid_data_location.md",
+      "sha256": "b6629e44e46648481e980af9f017775ca6196997c8b9e2e20710e386243d5343"
+    },
+    {
+      "bytes": 777,
+      "path": "errors/invalid_device_code.md",
+      "sha256": "0604c5d46a9f8536b396db4b3293bd3eea72ae17a46e621af25c8d2fff2eaf60"
+    },
+    {
+      "bytes": 733,
+      "path": "errors/invalid_domain.md",
+      "sha256": "30883d091089cb94380ddba075647e17875a2fe94c79888bac715e58cefb6931"
+    },
+    {
+      "bytes": 834,
+      "path": "errors/invalid_domain_name.md",
+      "sha256": "8c4143ec110df9ddfd5a73a5f6ed2f22309085ca5873420b27dec14c6c1f99a7"
+    },
+    {
+      "bytes": 834,
+      "path": "errors/invalid_file_path.md",
+      "sha256": "f2b18ee2e10be8e73d14b7ba2a7f5898437eb96c0c020263e17181899032acbe"
+    },
+    {
+      "bytes": 976,
+      "path": "errors/invalid_google_play_webhook_identity.md",
+      "sha256": "7dd10b379af96bea7c94db4e5df9328df8201ce4d648103fe505d368c7ae9c03"
+    },
+    {
+      "bytes": 813,
+      "path": "errors/invalid_grant.md",
+      "sha256": "53daf733ef2bda44e69e04f39e63b3cf3934238d5f0d1413092e18716161b296"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/invalid_idempotency_key.md",
+      "sha256": "48de17a8a147dd429595748f1d6495735afa3aa739347827f153f59c2894575a"
+    },
+    {
+      "bytes": 852,
+      "path": "errors/invalid_publish_archive.md",
+      "sha256": "f4534e4dc56353ca42e8e763b14a826383ad30aeda687cdd4621a9e604b5bf10"
+    },
+    {
+      "bytes": 847,
+      "path": "errors/invalid_publish_path.md",
+      "sha256": "c24969f284263504696a6c1f18e6cc5497d0031928f1fbe11e219c8d9815cc2e"
+    },
+    {
+      "bytes": 793,
+      "path": "errors/invalid_publish_payload.md",
+      "sha256": "dfaaf3200e6f81bbde7f333c519eaa6d0c9cbc08c4948787fd582d39a6234134"
+    },
+    {
+      "bytes": 742,
+      "path": "errors/invalid_request.md",
+      "sha256": "e0256014347395317728686d1da3aa8a01f373fc68e7d3dd9d465e1e478305e3"
+    },
+    {
+      "bytes": 820,
+      "path": "errors/invalid_runtime_event.md",
+      "sha256": "82e69350861f5581001e81c60ac5350910e760f81efd833468fdf6b875167f31"
+    },
+    {
+      "bytes": 736,
+      "path": "errors/invalid_space.md",
+      "sha256": "66c14c227f932532e6a00f143fc39a1b83f2a81ff549f01edb2c70ec71c149ac"
+    },
+    {
+      "bytes": 806,
+      "path": "errors/invalid_space_mode.md",
+      "sha256": "68eba5e5c15faed52da558f118416db2ac4ce7d1a6072ed775bac295fe0e878c"
+    },
+    {
+      "bytes": 849,
+      "path": "errors/invalid_user_code.md",
+      "sha256": "ece7d1e910df5ffe0ac41b26c71146db6aa2d13934690f41e30c792527a77b4f"
+    },
+    {
+      "bytes": 843,
+      "path": "errors/invalid_version_path.md",
+      "sha256": "5ecb75b0732f04b9e012e37c9642a9a05802262ed907290326e1b079e9ef4f6f"
+    },
+    {
+      "bytes": 866,
+      "path": "errors/invalid_webhook_events.md",
+      "sha256": "8be983e03e0634d2be9d55bdf5413bc8ca3c9b7218995ce6e07940f71f1dd64e"
+    },
+    {
+      "bytes": 818,
+      "path": "errors/invalid_webhook_payload.md",
+      "sha256": "4cfdc49146437f587b7dab2ba3d6e963e84eb9d72b74c0e5956746ddb8a888dc"
+    },
+    {
+      "bytes": 838,
+      "path": "errors/invalid_webhook_signature.md",
+      "sha256": "2b763f119447694707d091406b52547b69bc092d0ff5d635da759b92f367d87b"
+    },
+    {
+      "bytes": 867,
+      "path": "errors/invalid_webhook_url.md",
+      "sha256": "3b926c46a91e9914043bad7a2f4c7c2e46b440b28a355b1d6d49fe983a3f682c"
+    },
+    {
+      "bytes": 934,
+      "path": "errors/invalid_zero_realtime_event.md",
+      "sha256": "dc2a76a14a761543f691341a3d339e56f85048139eabc46a98592efe357876d8"
+    },
+    {
+      "bytes": 905,
+      "path": "errors/invalid_zero_realtime_replay_query.md",
+      "sha256": "f342082ceb4d7060fd0b4be3b7911e8e4636f0dc2b9e8e6e7e35b9a6c1affc0a"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/invitation_already_exists.md",
+      "sha256": "d7845d56421a5f9d150e8c68613a143e9c238fb2faaf2732f1b64b80243126f9"
+    },
+    {
+      "bytes": 941,
+      "path": "errors/invitation_email_mismatch.md",
+      "sha256": "ce198b297ddd1c171b4be64575ab71a9bfaf062c36454ac0cd1d987d84eb1789"
+    },
+    {
+      "bytes": 858,
+      "path": "errors/invitation_expired.md",
+      "sha256": "b59b5027fec59869d6e61198d0905e84bfaf939ceda10f3869408a220a7c886a"
+    },
+    {
+      "bytes": 796,
+      "path": "errors/invitation_not_pending.md",
+      "sha256": "8b7507d82fe29f96d4a1c025acce49a21de6d64838ee828833c90874a3c6da57"
+    },
+    {
+      "bytes": 879,
+      "path": "errors/ip_blocked.md",
+      "sha256": "184f87bfda0c447acaead4b4932212c538e0660622d698005adb946df1ca120d"
+    },
+    {
+      "bytes": 758,
+      "path": "errors/job_not_found.md",
+      "sha256": "41bcd60ca1e64f28d848389f23f9c059040ca5c1f66ba2bcb6a26461a78e494d"
+    },
+    {
+      "bytes": 815,
+      "path": "errors/job_not_promotable.md",
+      "sha256": "c21b464ec8ae2e6dda50e6fb82190fe0d2efcd195da3ad2d2a8071b154e38032"
+    },
+    {
+      "bytes": 802,
+      "path": "errors/job_not_removable.md",
+      "sha256": "f21232b121c12a6285d248226adb0292d9ccf11db085bf2f40d4fb28965497cc"
+    },
+    {
+      "bytes": 788,
+      "path": "errors/job_not_retryable.md",
+      "sha256": "3f94fd5edcdfb678dbc7715fb86ab050495bbbd5a3f893d6f90cded205d3127c"
+    },
+    {
+      "bytes": 803,
+      "path": "errors/last_owner.md",
+      "sha256": "539f21c016e6a2a48aa37c309c6d8d63512ea1b7b82e2fed3e8647e7740f30e3"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/log_retention_clamped.md",
+      "sha256": "2809f8421b1cf254140279481a501503fa514823f5ef22c5459a19ebb90eaa82"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/lost_domain_control.md",
+      "sha256": "6015445451bd115bb8a1e89b23ec04996af813a98184761e8bc64648004aa84f"
+    },
+    {
+      "bytes": 897,
+      "path": "errors/maintenance_in_progress.md",
+      "sha256": "bdb87c08d5a3270f7e9a8dfefd1c0efa1ff9c7012bf10a549e51ab13c5c02118"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/malware_detected.md",
+      "sha256": "ee883dc01e740ee0a35bd4803f7c3c95e369a339f1756b3436d4b3365b0b5f82"
+    },
+    {
+      "bytes": 1006,
+      "path": "errors/managed_domain_protected.md",
+      "sha256": "04fb44d38b47fbd9a5d41c89d726ec623292a4b085f05c1d26ddfcd1aed6daf7"
+    },
+    {
+      "bytes": 854,
+      "path": "errors/manifest_body_too_large.md",
+      "sha256": "287b1c5c6e77bea09dbfe1c62bb45a81abb6d0598053388757aa0fb687f2419c"
+    },
+    {
+      "bytes": 876,
+      "path": "errors/manifest_duplicate_path.md",
+      "sha256": "576bd62b8c4b5a09c2c3888f70982cf85ce658ff5d2f318a1aed50258c2a936a"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/manifest_too_many_files.md",
+      "sha256": "5d3b2deda8bf02632b5c27edd40a3eb0627ba8cdf82df816ee4f95a5c11911eb"
+    },
+    {
+      "bytes": 1193,
+      "path": "errors/mcp_acted_for_team_deleted.md",
+      "sha256": "a89c6a9252226c40baba2f3160829b37ae6aeec5beca4fe92017dfe643c9a4cd"
+    },
+    {
+      "bytes": 813,
+      "path": "errors/member_already_exists.md",
+      "sha256": "48d785fdb7c877e9af5cb1d452a5c9f7d15f9b90fa1907c75655a3f57ddea2e4"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/missing_route_param.md",
+      "sha256": "f1bbdaf3655c018f8582dd5ccd8f1ac7bfb83e6449bf98ede945a81ed61d0a4f"
+    },
+    {
+      "bytes": 891,
+      "path": "errors/move_target_capacity_lost.md",
+      "sha256": "31447462f603641a8521f753678dedac7760a279b9c247cebf6d20e39151a359"
+    },
+    {
+      "bytes": 970,
+      "path": "errors/nameserver_delegation_required.md",
+      "sha256": "6643dfe73a7dcc1a31381fffcc87648292a5e9b4e16fc04f5007545e1df2ab20"
+    },
+    {
+      "bytes": 897,
+      "path": "errors/nameserver_divergence.md",
+      "sha256": "1ca8fa3bd3c3ff73f384078f809b6316795028c96275c7122bff6311208688ac"
+    },
+    {
+      "bytes": 867,
+      "path": "errors/noop_publish.md",
+      "sha256": "2074604a3b1959667f53e78cdbea65f5f4d61f30495a02e1b95a5ddd8c7199e2"
+    },
+    {
+      "bytes": 908,
+      "path": "errors/not_enrolled.md",
+      "sha256": "4a6a498b98a24d24478155bff8994bd6bfafac0643f6c0e4936eba2669a97376"
+    },
+    {
+      "bytes": 765,
+      "path": "errors/not_found.md",
+      "sha256": "eb81a4ede6ab6cc762b1a26c105160950cf187581861889a1b81b299050b91dd"
+    },
+    {
+      "bytes": 891,
+      "path": "errors/path_case_collision.md",
+      "sha256": "bc588a4be10cab4b9c292015b65cdeb9b4fb9e533974a6a06e08f911e886f20d"
+    },
+    {
+      "bytes": 763,
+      "path": "errors/path_too_long.md",
+      "sha256": "02a2eaedfbde1797ff90e86b2500581d3b4534b904acf68b371f62112e377176"
+    },
+    {
+      "bytes": 971,
+      "path": "errors/placement_invalid_burstable.md",
+      "sha256": "e72c485d79809ed131d05d0a94af68bc159d39991d0046d96b92816d12ec2b1a"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/placement_mode_requires_plan.md",
+      "sha256": "6c2c5ef2d0bb481d3b718616b75f9e647fed825b98fa8bb93179de98f3e8d814"
+    },
+    {
+      "bytes": 884,
+      "path": "errors/plan_grant_already_active.md",
+      "sha256": "de82f7b474bfa970a2db222d8244fd96145f29526033a85820659976f8e0ded9"
+    },
+    {
+      "bytes": 819,
+      "path": "errors/plan_grant_already_revoked.md",
+      "sha256": "cbc8610a73c5c63004dcd39e339b8ede39c121bea57246d5214e0e84010d3ea3"
+    },
+    {
+      "bytes": 862,
+      "path": "errors/platform_tenant_immutable_client.md",
+      "sha256": "1642c86dac637d89ac2f5dbf2f5ee69db66c9f6e6ceb450345049eb37a3ae299"
+    },
+    {
+      "bytes": 906,
+      "path": "errors/policy_exceeds_grantor.md",
+      "sha256": "affdacfec3b5663da8885d3ac9cc258eeb1bd708fa20061f1670f9afff2614eb"
+    },
+    {
+      "bytes": 869,
+      "path": "errors/principal_space_mismatch.md",
+      "sha256": "85380713f78d06a74cf386a0b1f4e2e1683e9f8b4baa3adf1db8e17200b534c9"
+    },
+    {
+      "bytes": 788,
+      "path": "errors/provider_error.md",
+      "sha256": "71112514a1f8e42772da937e5741a85e381805133b2c714e516035cbe7cafcd9"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/provider_job_failed.md",
+      "sha256": "e240e96018445b4061817ca19e32660ae3c95adedb7d124bf8634d6dfe9606a5"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/provider_job_timeout.md",
+      "sha256": "46b145dbac16abea1350d7fb4634182f164e7e08f5a6b3299ded09dba5e78106"
+    },
+    {
+      "bytes": 906,
+      "path": "errors/provider_runtime_feature_unsupported.md",
+      "sha256": "d50b2f7432e149a992a52f8054f1cee5f36a2112c813b1dfaf9725883d858d99"
+    },
+    {
+      "bytes": 849,
+      "path": "errors/provider_site_id_required.md",
+      "sha256": "c120c31bc06cb9c3dc0e65871dd45d69b675685e9d2b84dba2e4db3391f6d57c"
+    },
+    {
+      "bytes": 891,
+      "path": "errors/proxy_upstream_denied.md",
+      "sha256": "4a0040fc71f54984840f78e949c6ca9c007220817ab49818456a060ad529bdaf"
+    },
+    {
+      "bytes": 856,
+      "path": "errors/proxy_upstream_unresolved.md",
+      "sha256": "7bf86e3851664ef967fa187a89f2ad06bef9dc20bfeb8e1914a088cb3512e6d7"
+    },
+    {
+      "bytes": 962,
+      "path": "errors/publish_archive_compression_ratio_exceeded.md",
+      "sha256": "e27a6af2ccbe4b64692549333a70c4d6a2323d0d53490f9b9e16bcd94f6c01da"
+    },
+    {
+      "bytes": 876,
+      "path": "errors/publish_archive_expanded_size_exceeded.md",
+      "sha256": "0873174eed58344c9ce14c6bb9112b9db75573f115ccb8f878e89307e7cdbf65"
+    },
+    {
+      "bytes": 902,
+      "path": "errors/publish_archive_file_count_exceeded.md",
+      "sha256": "574f768756f6c26327f74fae4bbd9d4c42872f9509f4767993444ccad8d72f80"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/publish_archive_too_large.md",
+      "sha256": "50798261f3da5cfc5f5e647eb78df5a251bd900b257dc69abc80f7d9a7e76342"
+    },
+    {
+      "bytes": 1042,
+      "path": "errors/publish_base_changed.md",
+      "sha256": "636f56a4fbac1b63dfb871574fe55e945df368a385b2ec8b4ba59f2c87e8e9e6"
+    },
+    {
+      "bytes": 861,
+      "path": "errors/publish_bytes_missing.md",
+      "sha256": "bfe4eeff7ac578281502381e93035e9d32c3903f3076f53066095966d0593056"
+    },
+    {
+      "bytes": 896,
+      "path": "errors/publish_config_unsupported.md",
+      "sha256": "f957fa846cc20859676f6f79dba8ae32d88fbd539a8fde25ea07c54b809d943e"
+    },
+    {
+      "bytes": 781,
+      "path": "errors/publish_failed.md",
+      "sha256": "a4d54082dca60cf92d29388461b6db0d0427a34d2b8aedf27bd3c6a602d5f534"
+    },
+    {
+      "bytes": 905,
+      "path": "errors/publish_file_missing.md",
+      "sha256": "e4c96b69f050d5771513e5e90e8cc03920a9581ce92a5a532c877b3363b49f20"
+    },
+    {
+      "bytes": 847,
+      "path": "errors/publish_hash_mismatch.md",
+      "sha256": "17b96c3b481f6cc79e9c3a299d0b5ba6cb156dcc669acc7afc5d00fa5262d434"
+    },
+    {
+      "bytes": 918,
+      "path": "errors/publish_inline_limit_exceeded.md",
+      "sha256": "d5940273337d815d1a77618a252ca29df04c69244044913d01cad224b69b1144"
+    },
+    {
+      "bytes": 920,
+      "path": "errors/publish_not_cancelable.md",
+      "sha256": "2da0e1fffa87847893596d66ffce175c05f699b3c883d2afd7fbf5a290f80d76"
+    },
+    {
+      "bytes": 889,
+      "path": "errors/publish_path_collision.md",
+      "sha256": "aa988fab74889e36d8f526fb4be39f143880f39db6745446eaf7f7a85d7725b7"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/publish_path_invalid.md",
+      "sha256": "8cff5742599e83880764316323b9d579a9482be5252e71ca6453672da94507af"
+    },
+    {
+      "bytes": 805,
+      "path": "errors/publish_setup_failed.md",
+      "sha256": "634b360ed1592ca1981884cf827614e5432d29725416f6308506a14bfb4b0b6d"
+    },
+    {
+      "bytes": 904,
+      "path": "errors/publish_snapshot_empty.md",
+      "sha256": "0e4b4955cef82688be446fc4020f9c85fa34fb151f1bc54b38dc57c8bfb93ed1"
+    },
+    {
+      "bytes": 814,
+      "path": "errors/publish_upload_failed.md",
+      "sha256": "4eaf0ec2a81e506bb0ee72216a3d99e8fec35421d2542722843157d6d441cf83"
+    },
+    {
+      "bytes": 895,
+      "path": "errors/publish_verification_failed.md",
+      "sha256": "d36c1c60aecd29a21ab048947f2dbc90a9259aa3be830360c99c738fb6a81482"
+    },
+    {
+      "bytes": 767,
+      "path": "errors/queue_not_found.md",
+      "sha256": "66f6e86235eb83146c417a26f560df2f96c49ef1dce1737f536d08ff3b573aa3"
+    },
+    {
+      "bytes": 804,
+      "path": "errors/rate_limited.md",
+      "sha256": "b95b70e2ae815b347a65685584d3daa322892cccbb53f2254c37cd913a39aba2"
+    },
+    {
+      "bytes": 782,
+      "path": "errors/registration_expired.md",
+      "sha256": "9832dde17183b78301027a824fc707ca5799e3b61155f3f7aba892b019bc1b67"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/registration_expiring.md",
+      "sha256": "d23e783211f4566e55d34918ad8edf9dd0ddbd1e800b440f5aff0ae19ac5ad0a"
+    },
+    {
+      "bytes": 959,
+      "path": "errors/routing_rules_over_plan.md",
+      "sha256": "b4f02e0f2c3dc7c59bb505f646cdc2d12380769d869c91bbb41d9224ef54fd25"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/runtime_action_forbidden.md",
+      "sha256": "f52283cd1ad68b5af04f24376a8599565ac403e8642c5efebbccde709a2a239d"
+    },
+    {
+      "bytes": 884,
+      "path": "errors/runtime_api_not_found.md",
+      "sha256": "2f9abf1f39e59d1f86221ce97b8bba150539bb70df67e610801e7f80cae8ac95"
+    },
+    {
+      "bytes": 844,
+      "path": "errors/runtime_callback_forbidden.md",
+      "sha256": "76205b524f1413fd2e0811e7106b4a2f311d7decdbdba81a0685af23f3a5779d"
+    },
+    {
+      "bytes": 882,
+      "path": "errors/runtime_engine_zip_missing.md",
+      "sha256": "f6df12fbf1cd12e9138862f994a866a73eb4698cfa12a40f796bd2fa8721933c"
+    },
+    {
+      "bytes": 927,
+      "path": "errors/runtime_hostname_unassigned.md",
+      "sha256": "551686235c4558d21a5a6f858a002ea09d053367b5f83f5abab0a99c6338f4f9"
+    },
+    {
+      "bytes": 949,
+      "path": "errors/runtime_instance_mismatch.md",
+      "sha256": "63765ac411b1e669b8cefbe254e192fc8971fb7a02c133fdef51e55e8ade9cad"
+    },
+    {
+      "bytes": 841,
+      "path": "errors/runtime_jti_missing.md",
+      "sha256": "c0ffbfb50f9c49101e6cf2b5658ed51039a0c11529a5946b96b81be0ec560394"
+    },
+    {
+      "bytes": 839,
+      "path": "errors/runtime_jti_replayed.md",
+      "sha256": "6a1eee9531de3eabdc4edf0601e51431f72711f74aecebd2d1ee442464ce6255"
+    },
+    {
+      "bytes": 855,
+      "path": "errors/runtime_jwks_key_missing.md",
+      "sha256": "0775de39df852ef4ed61d674e1380bfd8ccc530284ab5abc798943b121e02be6"
+    },
+    {
+      "bytes": 990,
+      "path": "errors/runtime_logs_unavailable.md",
+      "sha256": "321c07e58b513e41d3e43c75ffbbdd77a9faeac41c9555dca367b23e47cd4123"
+    },
+    {
+      "bytes": 896,
+      "path": "errors/runtime_management_unavailable.md",
+      "sha256": "93c6ec05b4cfd606f22d3b4d32fb6e4864bbe111662f9281c3c8d05e62b9d5fc"
+    },
+    {
+      "bytes": 828,
+      "path": "errors/runtime_not_provisioned.md",
+      "sha256": "1afa7d75ebced13810897f78e0cee31b67f8801fcb781b8b529cc7c930497936"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/runtime_operation_missing.md",
+      "sha256": "3eeb6b4eaf1363d6579cae7e30f8978f3e5a6afd70901daf219325019f4d29fd"
+    },
+    {
+      "bytes": 877,
+      "path": "errors/runtime_scope_forbidden.md",
+      "sha256": "c457a5ee7e70039755d94f00453cc056233afc73a6786cdf3398d7a48621f80b"
+    },
+    {
+      "bytes": 842,
+      "path": "errors/runtime_token_bad_signature.md",
+      "sha256": "57eb8cc1ffc31123740926be75f0490e0aa5d24a5f1cec7dd576d83fe3e7a3ff"
+    },
+    {
+      "bytes": 783,
+      "path": "errors/runtime_token_expired.md",
+      "sha256": "115e04a5eaa96d7ebb094b8800fd6064455a84b4a850b409ed6f549e451919ae"
+    },
+    {
+      "bytes": 807,
+      "path": "errors/runtime_token_invalid.md",
+      "sha256": "01bfe0894e29623bfa952bbb8352c428b9e74bb9afdf21d50b816b0fe9726893"
+    },
+    {
+      "bytes": 838,
+      "path": "errors/runtime_unauthorized.md",
+      "sha256": "6322c9f9c067a2c6096da99e68d91e178e71fd11eb7e123c389866e9e3f67258"
+    },
+    {
+      "bytes": 924,
+      "path": "errors/runtime_upload_operation_not_supported.md",
+      "sha256": "51b784a9feaefc268556dde769f670416d1592fececc6a1124e6f831c0a8179a"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/runtime_upload_required.md",
+      "sha256": "afbac62b9d5911f0bc4c431b983329f2dc53c91f1c581b6f48aabd56f8716b4f"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/scan_pending.md",
+      "sha256": "3bffed93319d9e48c148b08c6f53507b5a88920e48bbb47f3f366be23ccb5546"
+    },
+    {
+      "bytes": 920,
+      "path": "errors/secret_variable_in_template.md",
+      "sha256": "21a68a396f51afd706d8b4bffa344c48bd961cb6cc559cd8d476ca8ff11e2410"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/service_signature_invalid.md",
+      "sha256": "ed852149ea745b0d6a5827b0b9d142624b15a281a5921e1c4068a54a0454ef00"
+    },
+    {
+      "bytes": 746,
+      "path": "errors/site_already_deleted.md",
+      "sha256": "e2e27d58bff51c8fdc6d4472c3bf5fcd7e99a345ae1eef1023e7fbb25a802873"
+    },
+    {
+      "bytes": 894,
+      "path": "errors/site_capacity_exceeded.md",
+      "sha256": "34960432b16efbce9764dfd54d7b2be492ef73b4d498861ae17e85f4d15be673"
+    },
+    {
+      "bytes": 915,
+      "path": "errors/site_has_live_spaces.md",
+      "sha256": "e9685e8bb7e488cb3492f2c97e0e1129f1bbc1ad8230c99661cbf0977c4fa754"
+    },
+    {
+      "bytes": 794,
+      "path": "errors/site_not_static.md",
+      "sha256": "698df2dba6cbc142b3aa9dd5f1ca632cbacbf20f91fd8d5508a3987a46f49b96"
+    },
+    {
+      "bytes": 764,
+      "path": "errors/site_required.md",
+      "sha256": "42ecf44164e73d7328587b51167dc986a3dd5eeba7180634c3fd8b66e44d3bc7"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/site_suspended.md",
+      "sha256": "6f1dd7ee0815a02d32b78b5425bb37912bd881b67c83e58efb75cc51f607e14d"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/slow_down.md",
+      "sha256": "183b2ca10b74e983b45244471f85a315d3b70947a96a2cda4625d7f7068e13c4"
+    },
+    {
+      "bytes": 908,
+      "path": "errors/slug_invalid.md",
+      "sha256": "336477366d175016a3151d3829606b3c12b72e83f01b5b74f4431daa01928f96"
+    },
+    {
+      "bytes": 908,
+      "path": "errors/slug_reserved.md",
+      "sha256": "af0b33557d106902fcb88a150c181bf1479b829bd4b5d9c8bf8a4d1618cc861e"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/slug_unavailable.md",
+      "sha256": "9e779039f9307d95eceda515f4ebfeb062594c3e927fd0a585ab33fe3a9c2964"
+    },
+    {
+      "bytes": 1023,
+      "path": "errors/source_archive_decompression_timeout.md",
+      "sha256": "a4fb420a830ef40a661c47f001a1b31172dc0f5d35c8173a9c91bb7ceb65f034"
+    },
+    {
+      "bytes": 1010,
+      "path": "errors/source_archive_expansion_ratio_exceeded.md",
+      "sha256": "b510845e5ae9350e599396a1846a6fb1c42fe90ffc70e6a3796ce2437759714f"
+    },
+    {
+      "bytes": 904,
+      "path": "errors/source_archive_validation_busy.md",
+      "sha256": "a62b20d3da6edda5b3b4ad172a109d1c1688f0f79c70b868933c6a37261ffb10"
+    },
+    {
+      "bytes": 1066,
+      "path": "errors/space_already_claimed.md",
+      "sha256": "117065c4a5952b07277a0f58647c3c58087efee3c6d0d19403781dbce48c6757"
+    },
+    {
+      "bytes": 793,
+      "path": "errors/space_claim_unavailable.md",
+      "sha256": "bc7674bc7814bdfd2a19d7d411db7e633840be041fdb8915778584e6e1275298"
+    },
+    {
+      "bytes": 1273,
+      "path": "errors/space_claimed_credential_available.md",
+      "sha256": "c558b0047309c0dc87be81aadff35d3688239a04be3aead2e1f97eb0971f4165"
+    },
+    {
+      "bytes": 846,
+      "path": "errors/space_disabled.md",
+      "sha256": "35ccd95bd29b6d05fa9cc534712f8735d4a4495cd1c3dafe65b40337f5e90a86"
+    },
+    {
+      "bytes": 811,
+      "path": "errors/space_expired.md",
+      "sha256": "c35d6d7350f85935b98f398ef9762998c8dced34065c9919bc495b4c15598c81"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/space_has_active_publish.md",
+      "sha256": "b4c4459179ce7588248aea6fa59c312975b111c7c069aaaba424628c6b434c7a"
+    },
+    {
+      "bytes": 882,
+      "path": "errors/space_has_active_version.md",
+      "sha256": "4cbfe659f1d2ea37e2ce664b142b428c1b72fd76f4d112f2261b20893e02d1c6"
+    },
+    {
+      "bytes": 919,
+      "path": "errors/space_hostname_identity_missing.md",
+      "sha256": "d021a97ae55fecc7d77e692d155b681629196f249898d23f8f9a022980d612d3"
+    },
+    {
+      "bytes": 865,
+      "path": "errors/space_import_archive_invalid.md",
+      "sha256": "4541bf4ee1eb1b3d3b9b9813816c0faf01de440d05483d53bab62c0130cb15ce"
+    },
+    {
+      "bytes": 866,
+      "path": "errors/space_import_archive_too_large.md",
+      "sha256": "a268e360927b1b3b55e19d5e0311aafc92e23e106fc01a0da6a83303e863d56a"
+    },
+    {
+      "bytes": 947,
+      "path": "errors/space_import_config_only_archive.md",
+      "sha256": "b32fbf85acc574d685d86bf79bebfa17fe64776afc1c2af9c78b25f2da4c90f9"
+    },
+    {
+      "bytes": 938,
+      "path": "errors/space_import_runtime_schema_unsupported.md",
+      "sha256": "7985d0d88bc6ec427886e1f73874cdd653ebb6aed0cf506c6ce51dd4556fa841"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/space_moving.md",
+      "sha256": "9b4e7a092230a5d47d47cf3f74c3f5dcca11071620e28dfb79e52a4a76fba7ca"
+    },
+    {
+      "bytes": 883,
+      "path": "errors/space_no_live_version.md",
+      "sha256": "ab5dd84876b222b70a41e278727ae7e7d5a3ca72766acd37d6176a632704aec6"
+    },
+    {
+      "bytes": 820,
+      "path": "errors/space_not_disabled.md",
+      "sha256": "0e6d656d7a5ec7229b3bf0e15726ae5b1672c500410c8a33c6f9f81bc9bc5bbe"
+    },
+    {
+      "bytes": 842,
+      "path": "errors/space_not_restorable.md",
+      "sha256": "de1ee01b3e4bedf2c8b2ebccc478ee91ad1c3f37e2c635de70343058493d54af"
+    },
+    {
+      "bytes": 853,
+      "path": "errors/space_ref_ambiguous.md",
+      "sha256": "3c889bdc9c722568800f3cfb648ca7b11aca7fa1b620fb6a1ed25a481bc7c0a1"
+    },
+    {
+      "bytes": 799,
+      "path": "errors/space_ref_required.md",
+      "sha256": "e81ebb83270fe48d8d56968284c6e31279b42a41944e40b25efc92d142459094"
+    },
+    {
+      "bytes": 854,
+      "path": "errors/space_transferring.md",
+      "sha256": "8f7022cf001c5b4a8d906d6b6a280079bc5a33e93c0e6175e1c4e78648658bd3"
+    },
+    {
+      "bytes": 771,
+      "path": "errors/space_unclaimed.md",
+      "sha256": "93b763eccf6b279ab1e202fc5c7595edffb3cefb6ea4eb90a19e561bb820581c"
+    },
+    {
+      "bytes": 842,
+      "path": "errors/ssl_renewal_blocked.md",
+      "sha256": "d00c0e2ef41ceeda58ccc83684d151bd8c577dd78bafe8f2fd5a3af15b8756bc"
+    },
+    {
+      "bytes": 903,
+      "path": "errors/static_control_file_not_supported.md",
+      "sha256": "b7d2564e67fede514d0a8f74257ca2c956d542ca61d085d335efbc44bdedf904"
+    },
+    {
+      "bytes": 924,
+      "path": "errors/static_mount_path_conflict.md",
+      "sha256": "1f434e7fa3ac4b7133f4ec75236d390aba1349b12f534db3d8988e38f60700d8"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/static_mount_source_not_ready.md",
+      "sha256": "feedb76d774cd51a05b677cb0e4f33e1d24b420627b37b4bae40140173b23c19"
+    },
+    {
+      "bytes": 932,
+      "path": "errors/static_mount_target_forbidden.md",
+      "sha256": "b699a513951fab8988aac495172108f19451fb767e10b5e4f03e4a7a8efb860a"
+    },
+    {
+      "bytes": 900,
+      "path": "errors/static_mount_target_in_use.md",
+      "sha256": "24caa84ab008cec799eb6b97e62e4f1c224fb0e88ba0a87ab2d12cd90113a944"
+    },
+    {
+      "bytes": 898,
+      "path": "errors/static_mount_target_not_live.md",
+      "sha256": "34dacecba42526495086616c57afa2a6aa29ca8cc10fe15c2aedd5763b129afb"
+    },
+    {
+      "bytes": 901,
+      "path": "errors/static_mount_target_not_ready.md",
+      "sha256": "f0a63c025a9b51f6597cbbd13e8a364ab727d5cb3236dc240fd438c01ef22617"
+    },
+    {
+      "bytes": 919,
+      "path": "errors/static_mount_target_not_static.md",
+      "sha256": "05e27ce5503166aceafd8b45d2b498418c4feed1b6819496e70b35c66141178a"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/static_runtime_control_path_not_supported.md",
+      "sha256": "0089e3bd2751fa13e4aa3187a83baf3500dc40e467af47e55b5038eeb400bb8b"
+    },
+    {
+      "bytes": 822,
+      "path": "errors/static_runtime_required.md",
+      "sha256": "7556539db6f6c99152a0fb88434440c99cd7ac471b1e3a6bef6cbc9df9a65b16"
+    },
+    {
+      "bytes": 927,
+      "path": "errors/storage_bucket_unavailable.md",
+      "sha256": "d52b5fd6a81ad0b24d3ef8de1973cf4f6dcb79148436e677c39136dd51568258"
+    },
+    {
+      "bytes": 879,
+      "path": "errors/storage_quota_exceeded.md",
+      "sha256": "4bfd69088d51878c8fb22b578624bf03c64ac57f7af7e68af7777f957695499a"
+    },
+    {
+      "bytes": 791,
+      "path": "errors/storage_usage_unavailable.md",
+      "sha256": "5eda36d255292f0f31f9a8da6ead6ab02ca8663d19bc74887beeb48fefd5a107"
+    },
+    {
+      "bytes": 774,
+      "path": "errors/stripe_error.md",
+      "sha256": "d08113cf098822feadba02ebfccd09fd7b9664890a2e761d8a55d2aed6422c35"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/superseded_by_publish.md",
+      "sha256": "8c4378bd6e99d4b261068c24bce539475605e7afaaf08f26bf57c9e0c7dbc111"
+    },
+    {
+      "bytes": 936,
+      "path": "errors/takeover_notice_window.md",
+      "sha256": "acaefc99bf365355152d354eec462ee74caeb4500f556464f468943a9f01a62c"
+    },
+    {
+      "bytes": 921,
+      "path": "errors/team_member_quota_exceeded.md",
+      "sha256": "f8f0c0705372a94be7032edf2ebb3a11d6404bfc047f749f8675f024f47eedfc"
+    },
+    {
+      "bytes": 784,
+      "path": "errors/team_ref_required.md",
+      "sha256": "2c0df75377ea2d7ee9a87f19cfad6810fb4280b191c6be6bf1aec2a265955a87"
+    },
+    {
+      "bytes": 759,
+      "path": "errors/team_required.md",
+      "sha256": "db3bfdf9dfb74817f27f11a075f5029c8311c11a6606e2522154727482c25613"
+    },
+    {
+      "bytes": 735,
+      "path": "errors/team_slug_conflict.md",
+      "sha256": "8851b84ccc222a29f06faa595252973eae0ceea4013848725400e5492dc8f589"
+    },
+    {
+      "bytes": 867,
+      "path": "errors/template_file_too_large.md",
+      "sha256": "006f7649b11ea1d7b25896b64b71a728854add47b3ad2a26815c1813887e30c2"
+    },
+    {
+      "bytes": 900,
+      "path": "errors/template_not_in_version.md",
+      "sha256": "ef116417abb9947c49e3264762d22e91c953c3230a2f8d3087d1610f3b0362a1"
+    },
+    {
+      "bytes": 875,
+      "path": "errors/template_variable_unresolved.md",
+      "sha256": "b5b255ce70683ccdc65421b9daf9f688e09c7534675175ebc532d80b30a09273"
+    },
+    {
+      "bytes": 864,
+      "path": "errors/tenant_id_mismatch.md",
+      "sha256": "029f409bf4b5d85fe291b9c06d4593c2e6536ce894a7177bd6638e3f013ce053"
+    },
+    {
+      "bytes": 708,
+      "path": "errors/tenant_not_found.md",
+      "sha256": "6e4ea7e194e3aa8ae054da0169234d6ebecc09ed24498a4bb4e2815873fad061"
+    },
+    {
+      "bytes": 817,
+      "path": "errors/tenant_not_granted.md",
+      "sha256": "49c278a6372adbfe4370f9ef5e513f2c112927bd3e5f54abfded625074b32804"
+    },
+    {
+      "bytes": 876,
+      "path": "errors/tenant_past_due.md",
+      "sha256": "e37f09df6a0b1699c58e0c2673a27b9592d60c3bcfde9974b9608037b2b3be8b"
+    },
+    {
+      "bytes": 900,
+      "path": "errors/tenant_selection_required.md",
+      "sha256": "b497ade7f6387e6b020c31ab6463e72afde11988ff9592b1397b40e1cc9ed2ea"
+    },
+    {
+      "bytes": 861,
+      "path": "errors/tenant_suspended.md",
+      "sha256": "e35efad3b3a79e106e61f8f44fb33d5a98c2f2692377f0feec50bd5ed58f888d"
+    },
+    {
+      "bytes": 897,
+      "path": "errors/theme_value_invalid.md",
+      "sha256": "2e29008cd0d7f5a55ad16c467450642b788e9b0419a4a91d3fdf7a260001970d"
+    },
+    {
+      "bytes": 858,
+      "path": "errors/transfer_cross_tenant_unsupported.md",
+      "sha256": "80cf56508f9c03d415cefc344c339d1b393f7b142c5c2095480fb023dbfeeb85"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/transfer_move_failed.md",
+      "sha256": "8418a1b202dae11f553eba76d043f9e4a3893407f2ee6287ad5cbd645cbbc7e6"
+    },
+    {
+      "bytes": 869,
+      "path": "errors/transfer_not_cancelable.md",
+      "sha256": "c606196c9455a17d54b498fd897abd92441d2355631b4154e104011b4b774d27"
+    },
+    {
+      "bytes": 931,
+      "path": "errors/transfer_push_failed.md",
+      "sha256": "508c3561489945314e94b5bec0e5f0ba4bdb0c71cace18d6e1cb4e6bc3007de1"
+    },
+    {
+      "bytes": 928,
+      "path": "errors/transfer_source_changed.md",
+      "sha256": "abf74d810c55bec95e67d0e8b7cb5583ae884124a50b70de4c5ae7ab151e4aa5"
+    },
+    {
+      "bytes": 904,
+      "path": "errors/transfer_target_same_as_source.md",
+      "sha256": "f45619a2158b5bd1a81ffb6b62e19183576b4100c4478c9bbe7d6c7874a4dc3b"
+    },
+    {
+      "bytes": 891,
+      "path": "errors/transfer_verify_failed.md",
+      "sha256": "e0770777ee9a8605b4de43d26caf9ade2b3f5cf8e7f32892c4c9c8c394920912"
+    },
+    {
+      "bytes": 786,
+      "path": "errors/unauthorized.md",
+      "sha256": "b4a9ed8d37f4e10b2f714d355786a56baf1d6ae165bac5fef00916b6a3505bfd"
+    },
+    {
+      "bytes": 829,
+      "path": "errors/unsupported_publish_media_type.md",
+      "sha256": "0baf118be46c9f374adf9e5d1d3785b70eb181238f6e4209c7ef7c983e6476c2"
+    },
+    {
+      "bytes": 841,
+      "path": "errors/upload_hash_mismatch.md",
+      "sha256": "401a1ebec994d466f18d6695341d7cdd87106a5193a6ec4ceac1af89392552a3"
+    },
+    {
+      "bytes": 901,
+      "path": "errors/upload_path_not_canonical.md",
+      "sha256": "097dd7f373b8d3e710bea8ea36f2334bfebe05d8ce43339ba15a5a09ad859311"
+    },
+    {
+      "bytes": 892,
+      "path": "errors/upload_path_not_declared.md",
+      "sha256": "3fd62955714331509928fbaacd7d6b12ec1d6cf0686a07c399d6998bafebddb6"
+    },
+    {
+      "bytes": 879,
+      "path": "errors/upload_session_cap_exceeded.md",
+      "sha256": "16f0cb5abc9a8aa88f9e215d627329025e86d189637f8c822d4982ca9d3ebc15"
+    },
+    {
+      "bytes": 839,
+      "path": "errors/upload_size_mismatch.md",
+      "sha256": "ed9ce0e18d7faa94116613e953d4c7fca02d2b468bdc0e8b3d17d595cb976fc6"
+    },
+    {
+      "bytes": 911,
+      "path": "errors/user_banned.md",
+      "sha256": "86fe45e471b59dc1ba130074337e22eb989200d7568848e5195ea8733b05de4f"
+    },
+    {
+      "bytes": 772,
+      "path": "errors/validation_error.md",
+      "sha256": "98d081e4dd522736bcfbc7796e52a01fec68e87a56c6f51779261e436566e08e"
+    },
+    {
+      "bytes": 868,
+      "path": "errors/variable_cascade_failed.md",
+      "sha256": "6d57b7c93c841ee2396dee8780b1d22bbf3b29e53a2b7a2eff1c649c1aece06f"
+    },
+    {
+      "bytes": 852,
+      "path": "errors/verification_required.md",
+      "sha256": "b6eb11359ec97fc03fbc4b5029168d7c13fcea51531fc5872bd8cd3b9f630e5c"
+    },
+    {
+      "bytes": 773,
+      "path": "errors/version_already_live.md",
+      "sha256": "fec72829067c978f4d84d69210fdd019a3328e1f1e7f8d4f7ea3061aae527888"
+    },
+    {
+      "bytes": 836,
+      "path": "errors/version_artifact_not_found.md",
+      "sha256": "54f359bb8e56a50d8dccf2bb72549d39082020f9aa874fbda1ad06304fb705a1"
+    },
+    {
+      "bytes": 784,
+      "path": "errors/version_busy.md",
+      "sha256": "101e0bd2e050d62194095aab1e8c8fc35b618c93b534ed486cda26294811cb31"
+    },
+    {
+      "bytes": 764,
+      "path": "errors/version_canceled.md",
+      "sha256": "dec6b2705a346d9f05fe88817b361a9abf30c3610049e40d99d24cbb128d3894"
+    },
+    {
+      "bytes": 850,
+      "path": "errors/version_closed.md",
+      "sha256": "09ea1c9706981d5aa85a18774ed66b387f630495f5be38b18983fd59815f7bd5"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/version_expired.md",
+      "sha256": "1fc70b3c049d3a2fe628425928cc580d954bc529da3d9b1ce7f7a3b886be0ec6"
+    },
+    {
+      "bytes": 784,
+      "path": "errors/version_failed.md",
+      "sha256": "787bc65e32534593f04afb7ac143477c7a94a738079d8fbdc60e3d13dfb15493"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/version_file_count_exceeded.md",
+      "sha256": "b0411a2e23a0fd74d24ed272d6a4485f13899e17d0ea154d368eb3463bdff165"
+    },
+    {
+      "bytes": 825,
+      "path": "errors/version_file_not_found.md",
+      "sha256": "b255507d0afd22f60e6877dc68ce7aff4023742fad033d42e190faca95220b71"
+    },
+    {
+      "bytes": 783,
+      "path": "errors/version_file_too_large.md",
+      "sha256": "70afe0e26e53c1ffec025e8565560a0c0c4c0bd6649d6e177334f51323524091"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/version_files_missing.md",
+      "sha256": "52861e2d2e2afdd91761f47ab5f4d15d759ba6dae3ff53ebfdff7903b915068a"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/version_in_use.md",
+      "sha256": "e9e8dfedac873319d95f0e334e0a4b789c88367ad1fc50271fe5a0cee7c8edc2"
+    },
+    {
+      "bytes": 764,
+      "path": "errors/version_live.md",
+      "sha256": "cea95139f075b7160b6f93e1a8ed5ff92a9df337fa515f2da0c4c0487b01e64b"
+    },
+    {
+      "bytes": 823,
+      "path": "errors/version_no_publishable_files.md",
+      "sha256": "41c1d523e17dd8725fe2fa4c3c0d9a77cec05d70c2b3d269eee1c2e9bd32e5e6"
+    },
+    {
+      "bytes": 853,
+      "path": "errors/version_not_finalizable.md",
+      "sha256": "379af64eddc6bc943c5a0aa1c284d49bec4affb7d9ff553c2af98f816e79649a"
+    },
+    {
+      "bytes": 737,
+      "path": "errors/version_not_found.md",
+      "sha256": "f1824e07e2864564c61b2b2d1afbf2ebb16ffd74a9fe38f1c4d13e9f0c3141ca"
+    },
+    {
+      "bytes": 820,
+      "path": "errors/version_not_prepared.md",
+      "sha256": "e2d89ba94f510a9587d8373597a160d8ff6ef04fa424197222209414ed80fae7"
+    },
+    {
+      "bytes": 838,
+      "path": "errors/version_not_promotable.md",
+      "sha256": "130821ed40318eeb901eb58bfc8cf51f41a46211bd747251d27f1d080741e1a6"
+    },
+    {
+      "bytes": 772,
+      "path": "errors/version_not_ready.md",
+      "sha256": "d3b5c20e184a326bb4bd2226542193fc97b219686c40aaf8c78831e6f2bc268c"
+    },
+    {
+      "bytes": 837,
+      "path": "errors/version_quota_exceeded.md",
+      "sha256": "3e7289423aea60917b4df8c2349d1055022189a79275cfa566874e548c035f70"
+    },
+    {
+      "bytes": 801,
+      "path": "errors/version_total_bytes_exceeded.md",
+      "sha256": "7e5a12f4c596bae75b370a00b4b0f2ad37c3c9392e508d87ec0d309e145a3ff5"
+    },
+    {
+      "bytes": 899,
+      "path": "errors/webhook_delivery_budget_exceeded.md",
+      "sha256": "f7cdea6c70c401ae7c892dd04d3719ab7fc94abf7239212a5cbcc701ae69cd45"
+    },
+    {
+      "bytes": 783,
+      "path": "errors/whois_unavailable.md",
+      "sha256": "5cbc89275af68b8f3c694820c749cd4393d0bc2ab16b60ea3420ac6c9105688e"
+    },
+    {
+      "bytes": 826,
+      "path": "errors/wp_cloud_anonymous_pool_required.md",
+      "sha256": "30a122d5be2c7f94de0050aab6a5a8b1a55fbc5ef7cf1d205e78022a003e7a6a"
+    },
+    {
+      "bytes": 876,
+      "path": "errors/wp_cloud_assignment_kind_mismatch.md",
+      "sha256": "3aafc80fa44e782b0c2e807e288578c4c92ddfbe448a198642cb5f58d847481e"
+    },
+    {
+      "bytes": 853,
+      "path": "errors/wp_cloud_assignment_space_mismatch.md",
+      "sha256": "4b4fc4174055a8887e363c737052c76efb31459b4a2a6b0b319d4eef1073b741"
+    },
+    {
+      "bytes": 846,
+      "path": "errors/wp_cloud_assignment_team_mismatch.md",
+      "sha256": "98a56d0f0691de92b3b2c19ab7e7309923256d85145d4d777cf61f414f590e60"
+    },
+    {
+      "bytes": 831,
+      "path": "errors/wp_cloud_client_in_use.md",
+      "sha256": "b41f11398c2a48e8db1883119fbca4bd97609034049872ac59437000176270c9"
+    },
+    {
+      "bytes": 771,
+      "path": "errors/wp_cloud_client_not_found.md",
+      "sha256": "152fbce61b1c0d080e0face900575b6495fc041a73588f8d35cc5857216fe0e4"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/wp_cloud_site_still_assigned.md",
+      "sha256": "411dbe515f2f2e6ffe86d1c971a98cab9d401726d85ea2da35a118556f365580"
+    },
+    {
+      "bytes": 836,
+      "path": "errors/wp_cloud_team_shared_site_exists.md",
+      "sha256": "2f1451da91c19a1455dec0c0c8c94af9f8ad6da0380bb7a83249fa7cd80c22c2"
+    },
+    {
+      "bytes": 926,
+      "path": "errors/wp_cloud_webhook_secret_not_configured.md",
+      "sha256": "6d8cb77c22b7607d5a520230316e39896536c510bd4cafccdd9960d4f890f37f"
+    },
+    {
+      "bytes": 771,
+      "path": "errors/zero_activating.md",
+      "sha256": "0bcb05af80835833895574e32fb878ef25a24a05e05b16edb4fa4e39ecd5b1b8"
+    },
+    {
+      "bytes": 820,
+      "path": "errors/zero_ai_unavailable.md",
+      "sha256": "1ee728a2ac5b195bb2f75ec0f7e3e93573562b69edf3ceeead140597dccf9201"
+    },
+    {
+      "bytes": 916,
+      "path": "errors/zero_artifact_abi_mismatch.md",
+      "sha256": "2b0b5350f06a9bc4465b793a5df57d80ba37ff21aac4fcc4bbbbd29a718db065"
+    },
+    {
+      "bytes": 906,
+      "path": "errors/zero_artifact_invalid.md",
+      "sha256": "f7dfaff41426565af5aeb354fa3e0553957f4f8a7378aaf696ee0c040a95b0ba"
+    },
+    {
+      "bytes": 844,
+      "path": "errors/zero_artifact_malformed.md",
+      "sha256": "00214b2a5aacbd0d52cbd5157348df244bfb05ceae2c2a18656d2c43dde4656c"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/zero_artifact_missing.md",
+      "sha256": "07b8768eca0fb12efac72b60a29992059f429f99162f066c000f1faa738e3a6e"
+    },
+    {
+      "bytes": 848,
+      "path": "errors/zero_artifact_path_invalid.md",
+      "sha256": "957b3e4b5895f8d28dda0eb61dc261d6d4d0bed19039554bc83efd375e01610f"
+    },
+    {
+      "bytes": 883,
+      "path": "errors/zero_artifact_unreadable.md",
+      "sha256": "2a00b48bb1d6dacbe40fcb50192585edc7f08f101f7990da5fa7bb3f50d60b3d"
+    },
+    {
+      "bytes": 942,
+      "path": "errors/zero_artifact_untrusted.md",
+      "sha256": "6d3ee4bdfa54b717d0f6271cf6d21491431bf5aaa63f36eae6e02e2e9dcbda6a"
+    },
+    {
+      "bytes": 864,
+      "path": "errors/zero_auth_unavailable.md",
+      "sha256": "62c9308d0333554adee110c52225940cc04fb0c537ae5aade04163dd91c30a9d"
+    },
+    {
+      "bytes": 786,
+      "path": "errors/zero_blob_key_invalid.md",
+      "sha256": "6834963c5d643f4f189c24bb3885dc33f2d159224fb988528277df7607a2dca0"
+    },
+    {
+      "bytes": 857,
+      "path": "errors/zero_blob_store_full.md",
+      "sha256": "fbd40ff780bb78ff232cf35b3bf2ab871bf15a878eb85148b6d0ce9629ad2aa7"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/zero_blob_too_large.md",
+      "sha256": "fd9e19e0554cceb738d9cc332ab98b0618884cfb481ac7568916936676622e83"
+    },
+    {
+      "bytes": 828,
+      "path": "errors/zero_blob_value_invalid.md",
+      "sha256": "841ca652aea44a58a6f5e58a0a7eb22f1061c52e2f52cb19c23f5fd80164a120"
+    },
+    {
+      "bytes": 904,
+      "path": "errors/zero_bootstrap_encode_failed.md",
+      "sha256": "a512ec8093efcbb3283f963337366c87ebf50dcba8b49aab642fd1901c872dff"
+    },
+    {
+      "bytes": 932,
+      "path": "errors/zero_bytecode_hash_mismatch.md",
+      "sha256": "d56324f488e253d0e5ddb163cb9c0113e8cc4e2074698ae9f00f64f5f4b05220"
+    },
+    {
+      "bytes": 863,
+      "path": "errors/zero_bytecode_invalid.md",
+      "sha256": "41fa8cca117b889e13e42b97f639288d0c73a73711884c59f55ffce36b8bd1f9"
+    },
+    {
+      "bytes": 844,
+      "path": "errors/zero_bytecode_path_invalid.md",
+      "sha256": "6ddfe346809fd01e52062dd0d09e36fed428d6cab8aa35e1843f5f542b99907b"
+    },
+    {
+      "bytes": 857,
+      "path": "errors/zero_bytecode_unreadable.md",
+      "sha256": "f33562aae5a3a71c4899cd1934e4d8810de19dff7f663d818f269ec035f48a9a"
+    },
+    {
+      "bytes": 911,
+      "path": "errors/zero_capabilities_encode_failed.md",
+      "sha256": "052de2e43a49121664f6190367e11815266f67043e13fcee4a120eea1b69e1d4"
+    },
+    {
+      "bytes": 925,
+      "path": "errors/zero_client_bundle_not_loaded.md",
+      "sha256": "621093c5a6edf4c4e060f9b9fcfdf3a72a46b7ea5b17e2d99d50b3ee6510842d"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/zero_db_connect_failed.md",
+      "sha256": "aaa5302703ff5dad07f126f8a4db0b2251bfe70fe08d90b051050bfc83928ad6"
+    },
+    {
+      "bytes": 804,
+      "path": "errors/zero_db_execute_failed.md",
+      "sha256": "37942ce41601e544d1ac994f3efd95ce9cd3d453f2358bcf7282dea16c680717"
+    },
+    {
+      "bytes": 889,
+      "path": "errors/zero_db_host_install_failed.md",
+      "sha256": "09162c70e3586417bc36ad1771dc37cbf7a9320c4b858115d49d8760d8551780"
+    },
+    {
+      "bytes": 913,
+      "path": "errors/zero_db_operation_invalid.md",
+      "sha256": "b215c751d6b7d2c07778975104f84d57e79b955078b8a275d9aa974cdd0d8f3a"
+    },
+    {
+      "bytes": 840,
+      "path": "errors/zero_db_operation_too_large.md",
+      "sha256": "eca771b073f70743aa622293467b609c133780991d9c385263e5621f2ec23829"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/zero_db_param_invalid.md",
+      "sha256": "3a342a74ed6de49737eb1cef112ddcbaf324707959d3b06d609102271413ca22"
+    },
+    {
+      "bytes": 792,
+      "path": "errors/zero_db_query_failed.md",
+      "sha256": "aa627ed3b7f52f4b4a0b1f6fc92a067eb0f77c22aecee8b8c45c24dd47ce6804"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/zero_db_row_invalid.md",
+      "sha256": "0dc6dc119f19058086ecc4bc97fd843a5e401d0191dbc3ebac4aab8d29b00152"
+    },
+    {
+      "bytes": 862,
+      "path": "errors/zero_db_sql_invalid.md",
+      "sha256": "2df1b54f22fe1934795f187eb12f4ee7952784f8361ed2ac5e8ddc99f74be4a9"
+    },
+    {
+      "bytes": 850,
+      "path": "errors/zero_db_too_many_params.md",
+      "sha256": "2d0262c77c57daa683b65a25da1a29f83fac0fb85c40c88321970a2af89da2a3"
+    },
+    {
+      "bytes": 965,
+      "path": "errors/zero_db_transaction_active.md",
+      "sha256": "fda20389c7e70d909b0a117ad6b6de41095a0d1ec9a50666a9d9817d6b6314aa"
+    },
+    {
+      "bytes": 891,
+      "path": "errors/zero_db_transaction_commit_failed.md",
+      "sha256": "0049c25d8e192477e7eca7cf95660f9386fae1b4ea9ab077747b9af3d1ae6ddd"
+    },
+    {
+      "bytes": 826,
+      "path": "errors/zero_db_transaction_invalid.md",
+      "sha256": "a9ced55aafd11391abf0f860f77ddcae90acbbd3f990081255ca5a27cfa6b3ac"
+    },
+    {
+      "bytes": 944,
+      "path": "errors/zero_db_transaction_missing.md",
+      "sha256": "eb7e15df32be8101036d6dfcba3d25071d018c369e6d4922c13b14ffcbe65764"
+    },
+    {
+      "bytes": 935,
+      "path": "errors/zero_db_transaction_rollback_failed.md",
+      "sha256": "69766a4c411004b9d1f50d654fc8daecd474f1a896f640e52bd6da7d86e93c66"
+    },
+    {
+      "bytes": 864,
+      "path": "errors/zero_db_transaction_start_failed.md",
+      "sha256": "d620ce2f2696414fff20a9ec3d519e0228a41f744b277d3c86a25c5bedc6d3dd"
+    },
+    {
+      "bytes": 811,
+      "path": "errors/zero_db_url_invalid.md",
+      "sha256": "f7ed5d633a747973930ece3bed9a9ae59fb32a3d80816f5dc91a3b34673c34c4"
+    },
+    {
+      "bytes": 808,
+      "path": "errors/zero_db_url_missing.md",
+      "sha256": "d18f20f3793fc1217a6740fe081971ceab83cdb0b8ea8e3897016209b85d57d6"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/zero_dev_endpoint_failed.md",
+      "sha256": "32f14e8c3c20ff2d14705b857cb1ad077c0bcb081c48e4dd0932607115f278a1"
+    },
+    {
+      "bytes": 835,
+      "path": "errors/zero_dump_query_invalid.md",
+      "sha256": "ad37d7cfc5f04968ff0302af1d6dfb5f3f20f1a7787b94ce5fdf6ebe07766757"
+    },
+    {
+      "bytes": 895,
+      "path": "errors/zero_endpoint_compile_failed.md",
+      "sha256": "55828991d23ff6ea7e90880be8afca4eda8b0cbcffcbc3bfdc05d5b53d3541b0"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/zero_endpoint_conflict.md",
+      "sha256": "a514563a0b796f9567b90a96f18db427506397c0be8e0d52009ecb3655604d87"
+    },
+    {
+      "bytes": 861,
+      "path": "errors/zero_endpoint_duplicate.md",
+      "sha256": "98c7d377ea1f3f36c7ca86578b477de91495ac4da3425ef3eb097e7b13fd8187"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/zero_endpoint_id_duplicate.md",
+      "sha256": "4e4d3fd0f48687c0b3949b49081f6d7e5cead9a3d5a354c330535b24fc0d5d24"
+    },
+    {
+      "bytes": 879,
+      "path": "errors/zero_endpoint_index_invalid.md",
+      "sha256": "b0351da65f04a08a5a960a9c880cb184e91827cb6bccfd946cb52c6b4c0b2c34"
+    },
+    {
+      "bytes": 833,
+      "path": "errors/zero_endpoint_index_malformed.md",
+      "sha256": "a93c1821c5c0bfa178f037a277b2bf8ea4326083649a71b812f6dd435182341a"
+    },
+    {
+      "bytes": 850,
+      "path": "errors/zero_endpoint_index_path_invalid.md",
+      "sha256": "5e80cc9b2d85c32572548cd8b1e53c22fa32795a9c1d9d8d4e781574ed034951"
+    },
+    {
+      "bytes": 848,
+      "path": "errors/zero_endpoint_index_unreadable.md",
+      "sha256": "5f100fb110d6fced198dffbd920ff74ee5df85f28c3d18ba220be5699c78470b"
+    },
+    {
+      "bytes": 909,
+      "path": "errors/zero_endpoint_invalid.md",
+      "sha256": "adba0a786dd26d931f61192e6e834d498bbf5741133b8c70216bfff9875a8e5c"
+    },
+    {
+      "bytes": 888,
+      "path": "errors/zero_endpoint_mismatch.md",
+      "sha256": "3991fc3052ad74fc6c60269e97bff7af6466dbebb637b4161f13eb5b7f6c57c5"
+    },
+    {
+      "bytes": 852,
+      "path": "errors/zero_endpoint_not_found.md",
+      "sha256": "9912cd65bfdf015c93917c99ae46ed7939bcbacf852dcc9549d8422d358c005b"
+    },
+    {
+      "bytes": 810,
+      "path": "errors/zero_endpoints_invalid.md",
+      "sha256": "59cf7571bbe0c69663b418cf79c10b5f346c9cb0e22bedf2d42b891868ac0d3f"
+    },
+    {
+      "bytes": 894,
+      "path": "errors/zero_endpoints_too_many.md",
+      "sha256": "8d24d61c4a6abee3f1f16deb1a432fc8879c9e89dcf1c464d04575c71f219e04"
+    },
+    {
+      "bytes": 903,
+      "path": "errors/zero_envelope_encode_failed.md",
+      "sha256": "584090f17229dcb67a3e15005e1c3f76ba7ca0fd9a10756dc68802b0508a1b9f"
+    },
+    {
+      "bytes": 889,
+      "path": "errors/zero_js_context_init_failed.md",
+      "sha256": "7c18c7a9f47c595177dac2bbddadaf75186438a5dc26eb4dc51759020ca4c7b8"
+    },
+    {
+      "bytes": 844,
+      "path": "errors/zero_js_execution_failed.md",
+      "sha256": "84c06a5bfff40d369a8574c7b2bcfa31c3cb2e067cf1dd8f16d2ab60bccb40b5"
+    },
+    {
+      "bytes": 879,
+      "path": "errors/zero_js_execution_timeout.md",
+      "sha256": "cb37084f16f4e27f3292cbac011c24cc4f1b1100fe75af43b0afe7dc27b26428"
+    },
+    {
+      "bytes": 898,
+      "path": "errors/zero_js_globals_failed.md",
+      "sha256": "6ec9857b445ad08161ef10c6dceb209274424253cff7d08d4e9b45f77b6c5eeb"
+    },
+    {
+      "bytes": 864,
+      "path": "errors/zero_js_response_malformed.md",
+      "sha256": "91b00def6c8b338c6555d45a7b84ad10a7834c675ef046d88697ceb7ff9b9a6e"
+    },
+    {
+      "bytes": 836,
+      "path": "errors/zero_js_runtime_init_failed.md",
+      "sha256": "1c2a13516722eef5156cc3ae024ec84976c5803dfb82b4f3518525afb90f6aa1"
+    },
+    {
+      "bytes": 820,
+      "path": "errors/zero_log_query_invalid.md",
+      "sha256": "7b60f7e8082b9857024aa221f752c888eed334858f1b6de62bff42a758e7bd34"
+    },
+    {
+      "bytes": 849,
+      "path": "errors/zero_lookup_invalid.md",
+      "sha256": "e696bd7b1ea8897827ff7af3a8e44050043e4a8afdde0423f8d309be8fe5b9bc"
+    },
+    {
+      "bytes": 873,
+      "path": "errors/zero_method_not_allowed.md",
+      "sha256": "960ef2d5c0671fd955e07f8f6a78da6c79bab91ae7b112cf3c9565d16fc9339c"
+    },
+    {
+      "bytes": 885,
+      "path": "errors/zero_migration_failed.md",
+      "sha256": "581c2fe8a695cbf6531d1fc7fb350e44f986d7f2105b6857460ccea50cf8dd22"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/zero_query_name_missing.md",
+      "sha256": "f53ca2c9d4abd321d27d58f6e0fd75e3d68a8693c473e74c1e2cc2ffd4e8a235"
+    },
+    {
+      "bytes": 858,
+      "path": "errors/zero_realtime_forbidden.md",
+      "sha256": "793456c1a0af3639f8646d2b644384dae43b59ccf0206309ed282b98f28fc3bd"
+    },
+    {
+      "bytes": 835,
+      "path": "errors/zero_realtime_message_invalid.md",
+      "sha256": "21676296fc67aa98c3282c8569c18f1cf5887472ca597a555c3e2f90649d7943"
+    },
+    {
+      "bytes": 913,
+      "path": "errors/zero_realtime_operation_unsupported.md",
+      "sha256": "6a7193f985b2c9c4f26e686be0a356124663a455d635519e93bbb57531539202"
+    },
+    {
+      "bytes": 858,
+      "path": "errors/zero_realtime_query_invalid.md",
+      "sha256": "109d66345f2fb93a2db78d790b179fc3e872f4301ef87b75f47389121ef936c2"
+    },
+    {
+      "bytes": 884,
+      "path": "errors/zero_realtime_space_required.md",
+      "sha256": "b189bd0204390c747458ad3ce0da3cc5aacd7606b562b1b4292f6cb120617953"
+    },
+    {
+      "bytes": 874,
+      "path": "errors/zero_realtime_unavailable.md",
+      "sha256": "90e741cb50f60a4627806908508429b9789e797177bb735163867f7dd92bc2f6"
+    },
+    {
+      "bytes": 912,
+      "path": "errors/zero_realtime_websocket_forbidden.md",
+      "sha256": "e3da96fe6c608a944c9dd91a6cce07ab3d96c178bbee1bf4e12dda351f70dea8"
+    },
+    {
+      "bytes": 887,
+      "path": "errors/zero_replay_failed.md",
+      "sha256": "a6054b0a2db9994b0de3c062021479a24c890942f235951d35b41d1031a4fc0e"
+    },
+    {
+      "bytes": 836,
+      "path": "errors/zero_replay_query_invalid.md",
+      "sha256": "b2fcf674a250b56fefef509165ef8606fb72b0cc111b94c31203ab6189c68fd8"
+    },
+    {
+      "bytes": 881,
+      "path": "errors/zero_replay_unavailable.md",
+      "sha256": "f7ed53b8a6723366b9b4f46dcaec7a547e1ea7640d4d696b90a5d6c5153f846a"
+    },
+    {
+      "bytes": 878,
+      "path": "errors/zero_request_body_too_large.md",
+      "sha256": "770b3c69f7e4b4385fbe2e6dc8cbb3e1ea11e3ba486b1e73750f84d2703e1903"
+    },
+    {
+      "bytes": 925,
+      "path": "errors/zero_requires_dedicated_plan.md",
+      "sha256": "c9c5bb971f88d73ddc0c488056e34f382e397f369a8e4754a037e66fd5b7cb87"
+    },
+    {
+      "bytes": 859,
+      "path": "errors/zero_response_too_large.md",
+      "sha256": "adb33cb900119a5e7a18a341293d02c7adbcedefc3fa6fae778eb87074041ca2"
+    },
+    {
+      "bytes": 788,
+      "path": "errors/zero_routes_invalid.md",
+      "sha256": "6b0b61e36f5738829b6e8b6da7abe77149dee6ffa3d8a81d0dd5fad02502bf36"
+    },
+    {
+      "bytes": 859,
+      "path": "errors/zero_run_compile_failed.md",
+      "sha256": "ef18056c904bdcbf0934de917ea849cfadb46bb7ba51e889e98fadbc9a89a740"
+    },
+    {
+      "bytes": 819,
+      "path": "errors/zero_run_duplicate.md",
+      "sha256": "015020cbf55333fa289753328a209df37bcf4c77f50ed807ec06806280f01141"
+    },
+    {
+      "bytes": 812,
+      "path": "errors/zero_run_invalid.md",
+      "sha256": "244611f1c8f20abfe9ce3cc3bcddf18e24c5608421a74e33a3781939289dfc5e"
+    },
+    {
+      "bytes": 924,
+      "path": "errors/zero_run_operation_unsupported.md",
+      "sha256": "ae4edd96d9fc03fcd2b2a3aa86fae1896fffe6d5f311d2603562bbd2535fd1fe"
+    },
+    {
+      "bytes": 861,
+      "path": "errors/zero_runner_envelope_invalid.md",
+      "sha256": "fee69bdec9f53125747b8c425078d3755dc7d5b36e8f4d8db09f96a88c9c96ec"
+    },
+    {
+      "bytes": 860,
+      "path": "errors/zero_runner_failed.md",
+      "sha256": "2a5a7237db0614e34dc15dad5585d65a06c9a215197edd3042f5e74d697b793d"
+    },
+    {
+      "bytes": 830,
+      "path": "errors/zero_runner_invalid_body.md",
+      "sha256": "b70544e8f888c9bc893bd8726d11bdaa3ad8b9ffc2d6844c6b9c8316ec439f82"
+    },
+    {
+      "bytes": 843,
+      "path": "errors/zero_runner_invalid_response.md",
+      "sha256": "bfa4e3797a5012c7c4a6cb88d713c5a5d456229ca5331431c40e1c1df5520b8d"
+    },
+    {
+      "bytes": 847,
+      "path": "errors/zero_runner_invalid_status.md",
+      "sha256": "bef09950c070cbb369559baddf8b29345b6c4e6d58721e12dad0a2a86ebd7ed5"
+    },
+    {
+      "bytes": 898,
+      "path": "errors/zero_runner_protocol_unsupported.md",
+      "sha256": "4c5e12d295190633c0136f20dab70f095c533ad9469b4fdecb369ef2b46d5a0f"
+    },
+    {
+      "bytes": 865,
+      "path": "errors/zero_runner_response_encode_failed.md",
+      "sha256": "6eeccc8abccdcf8c525c1142324c7eebbf5093467b264a197617984cfb95ffe4"
+    },
+    {
+      "bytes": 851,
+      "path": "errors/zero_runner_stdin_invalid.md",
+      "sha256": "708db4e74a9936d3379da89842fb24a3d3bb56fe75249dbca3e9d247409e692d"
+    },
+    {
+      "bytes": 838,
+      "path": "errors/zero_runner_stdin_too_large.md",
+      "sha256": "e1366c9c46c30c86e6a5ddf1a81b403313dee9e8fe716defd7e762a11c7eb0c6"
+    },
+    {
+      "bytes": 836,
+      "path": "errors/zero_runner_unavailable.md",
+      "sha256": "3b084c2e4fb47588e5b437dcf4759a3fd3333c874fb0af45fb0459cc24353781"
+    },
+    {
+      "bytes": 798,
+      "path": "errors/zero_runs_invalid.md",
+      "sha256": "39b5eaa44afabeced69f5bde38555155e603977c743cf18b1e2e4b6816453434"
+    },
+    {
+      "bytes": 890,
+      "path": "errors/zero_runs_require_runtime_compiler.md",
+      "sha256": "1d07ab92dbf0ccbe562fabde445bc0fca4714b0777cbef3aec1bdbc856eb9fb0"
+    },
+    {
+      "bytes": 885,
+      "path": "errors/zero_runs_too_many.md",
+      "sha256": "8c58f95851afedbb03cbd4ef8eea9f77156f01c8a3395e3275c523d31e2331eb"
+    },
+    {
+      "bytes": 859,
+      "path": "errors/zero_shopify_unavailable.md",
+      "sha256": "521c8fd0490c95862218dbee11891ebd19140b724e62621d0f29bfd3b475d86f"
+    },
+    {
+      "bytes": 843,
+      "path": "errors/zero_source_compile_failed.md",
+      "sha256": "afb5250cff2ea49819807d900c2d6ef1a49b423d16885591f86be34c0e6424d0"
+    },
+    {
+      "bytes": 918,
+      "path": "errors/zero_source_hash_mismatch.md",
+      "sha256": "61683065f2502894b8ae3cc583e2f7af3077fef57fb9f955f656ce73a574dc17"
+    },
+    {
+      "bytes": 775,
+      "path": "errors/zero_source_invalid.md",
+      "sha256": "38585850b6a89ae9a3e60ca30b85084dda84a05f7cafdff3ef36c8243afba271"
+    },
+    {
+      "bytes": 830,
+      "path": "errors/zero_source_path_invalid.md",
+      "sha256": "2d6544dd74ac8e2c30de21394610ba4ac68d0e02c446491a791175edb020df1a"
+    },
+    {
+      "bytes": 839,
+      "path": "errors/zero_source_unreadable.md",
+      "sha256": "16a6d9f8bcf7ffe954082924a6e44cad8a40bf539531681abeae15d650995aa9"
+    },
+    {
+      "bytes": 5526652,
+      "path": "openapi/api.json",
+      "sha256": "0bf694a9f49139ebba0ead607573388754f06805c4f56e1b60fc6325d129d80b"
+    },
+    {
+      "bytes": 5996450,
+      "path": "openapi/platform.json",
+      "sha256": "364b666b8d664a98044bbf9f61b87d60c6937edf139399174bc2ce93863f1d11"
+    },
+    {
+      "bytes": 465014,
+      "path": "redirects.json",
+      "sha256": "62405a9703d3a082506ecf1bc2a7137a5c4166ec25474c96fb50730293f94581"
+    }
+  ],
+  "generator": "spacefast-public-docs",
+  "schemaVersion": 1
+}
