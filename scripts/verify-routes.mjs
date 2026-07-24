@@ -1,6 +1,11 @@
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  compileRedirectRules,
+  resolveRedirect,
+} from "./redirect-rules.mjs";
+
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
 const deploymentBase = "/docs";
@@ -270,7 +275,8 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
   readFile(path.join(root, "generated/redirects.json"), "utf8").then(JSON.parse),
   readBuilt("_redirects"),
 ]);
-const expectedRedirects = `${generatedRedirects
+const routingRules = compileRedirectRules(generatedRedirects);
+const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
   .join("\n")}\n`;
 if (
@@ -296,6 +302,16 @@ for (const redirect of generatedRedirects) {
       `Redirect destination is missing: ${redirect.from} -> ${redirect.to}`,
     );
   }
+  const resolved = resolveRedirect(redirect.from, routingRules);
+  if (
+    resolved.destination !== redirect.to ||
+    resolved.hops.length < 1 ||
+    resolved.hops.some(({ status }) => status !== redirect.status)
+  ) {
+    throw new Error(
+      `Built routing rules do not preserve compatibility: ${redirect.from} -> ${redirect.to}`,
+    );
+  }
 }
 if (await exists(path.join(dist, "api/operations/index.html"))) {
   throw new Error("Compatibility redirects must not become indexed HTML pages.");
@@ -317,5 +333,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} search records, ${sitemapUrls.length} sitemap URLs, ${generatedRedirects.length} compatibility redirects, and every root-relative URL scoped to ${deploymentBase}.`,
+  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} search records, ${sitemapUrls.length} sitemap URLs, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL scoped to ${deploymentBase}.`,
 );
