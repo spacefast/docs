@@ -161,7 +161,7 @@ for (const artifact of [
   "pagefind/pagefind.js",
   "pagefind/pagefind-entry.json",
   "_redirects",
-  "sf.jsonc",
+  "spacefast.jsonc",
 ]) {
   await requireFile(artifact);
 }
@@ -261,21 +261,28 @@ if ("askApi" in readability.artifacts || "mcp" in readability.artifacts) {
   throw new Error("agent-readability.json advertises a disabled server feature.");
 }
 
-const staticConfig = JSON.parse(await readBuilt("sf.jsonc"));
+const staticConfig = JSON.parse(await readBuilt("spacefast.jsonc"));
 if (
   staticConfig.$schema !== `${site}/schemas/sf.json` ||
   staticConfig.cleanUrls !== true ||
   staticConfig.fallback?.path !== "404.html" ||
   staticConfig.fallback?.status !== 404
 ) {
-  throw new Error("dist/sf.jsonc does not carry the mounted static serving contract.");
+  throw new Error(
+    "dist/spacefast.jsonc does not carry the mounted static serving contract.",
+  );
 }
 
 const [generatedRedirects, builtRedirects] = await Promise.all([
   readFile(path.join(root, "generated/redirects.json"), "utf8").then(JSON.parse),
   readBuilt("_redirects"),
 ]);
-const routingRules = compileRedirectRules(generatedRedirects);
+const compatibilityRules = compileRedirectRules(generatedRedirects);
+const directHostingRules = [
+  { from: "/docs", status: 200, to: "/" },
+  { from: "/docs/*", status: 200, to: "/:splat" },
+];
+const routingRules = [...compatibilityRules, ...directHostingRules];
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
   .join("\n")}\n`;
@@ -302,7 +309,7 @@ for (const redirect of generatedRedirects) {
       `Redirect destination is missing: ${redirect.from} -> ${redirect.to}`,
     );
   }
-  const resolved = resolveRedirect(redirect.from, routingRules);
+  const resolved = resolveRedirect(redirect.from, compatibilityRules);
   if (
     resolved.destination !== redirect.to ||
     resolved.hops.length < 1 ||
