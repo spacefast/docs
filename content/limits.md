@@ -17,12 +17,15 @@ Limits combine plan entitlements and runtime safety limits. Current public plans
 | Public immutable versions        | Last 7 days                  | Always public | Always public |
 | Publishes & builds (pooled)      | 100/month                    | 1,000/month   | Unlimited     |
 | Max file size                    | 50 MB                        | 1 GB          | Unlimited     |
-| Rewrites + redirects rules       | 10                           | 1,000         | Unlimited     |
+| Routing rules (combined)         | 10                           | 1,000         | Unlimited     |
 | `_headers` Basic Auth            | No                           | Yes           | Yes           |
 | External proxy routes            | Not executed (platform page) | Yes           | Yes           |
 | Audit & build/access logs        | 48 hours                     | 1 month       | Unlimited     |
 
 Add-ons:
+
+The combined routing-rule quota counts redirects, rewrites, response-header
+blocks, Basic Auth blocks, and proxy routes.
 
 | Add-on          | Availability                          | Price                         |
 | --------------- | ------------------------------------- | ----------------------------- |

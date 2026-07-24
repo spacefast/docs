@@ -294,6 +294,9 @@ export function siteAcceleratorUrl(src: string, options: SiteAcceleratorOptions 
   } catch {
     return src;
   }
+  if (source.protocol !== "http:" && source.protocol !== "https:") {
+    return src;
+  }
 
   if (source.hostname === "i0.wp.com") {
     applySiteAcceleratorOptions(source.searchParams, options);

@@ -3,7 +3,11 @@ title: Publishing
 description: How publishing works in Spacefast, including uploads, CLI publishes, immutable versions, and updates.
 ---
 
-Publish a directory or a single file. Every publish creates an immutable version with its own URL, and the live URL moves to it — typically in under ten seconds after the upload completes. Earlier versions stay available for rollback, so publishing is never a one-way door.
+Publish a directory or a single file. A changed-content publish creates an
+immutable version with its own URL, and the live URL moves to it — typically in
+under ten seconds after the upload completes. Publishing content identical to
+the current version is a no-op. Earlier versions stay available for rollback,
+so publishing is never a one-way door.
 
 Directory publishes preserve relative paths and can include `_redirects`, `_headers`, and `sf.jsonc`. Spacefast serves static files only: uploaded server-side code never executes, and the CLI and dashboard warn early about files blocked by runtime safety policy.
 

@@ -24,7 +24,7 @@ Every response uses one envelope: successes carry `{ "data": ... }`, failures ca
 
 Send an API key as a bearer token:
 
-```
+```http
 Authorization: Bearer <SPACEFAST_TOKEN>
 ```
 

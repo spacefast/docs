@@ -36,7 +36,7 @@ Manage them with `sf access`:
 | `sf access effective` (alias `sf access ls`) | Show the resolved policy — every rule with its source and order. Start here. |
 | `sf access show`                             | Show just the rules you've set on this space.                                |
 | `sf access grant <audience>`                 | Require visitors to sign in as that audience to enter.                       |
-| `sf access ban <audience>`                   | Block that audience outright (takes precedence over everything).             |
+| `sf access ban <audience>`                   | Prepend a deny to the cloud lane for that audience.                           |
 | `sf access set <file.json>`                  | Replace all of your rules from a JSON document (full control).               |
 | `sf access rm <index>`                       | Remove one rule by the `[index]` shown in `sf access show`.                  |
 | `sf access clear`                            | Remove all of your rules.                                                    |
@@ -54,7 +54,7 @@ Common audience prefixes: `team:<id>:member`, `user:<id>`, `email:` (supports `*
 
 ### Block an audience, an IP range, or a country
 
-`sf access ban` blocks an identity audience and is always evaluated first:
+`sf access ban` blocks an identity audience by prepending a deny to the cloud lane:
 
 ```bash
 sf access ban 'email:*@spammer.example'
@@ -91,6 +91,12 @@ Rules resolve from three sources, in order — **first match wins**:
 1. **Platform** — plan-level defaults you can't override (see the note below).
 2. **File** — rules you commit to `access.rules` in [`sf.jsonc`](/configuration), so they version and roll back with your site.
 3. **Cloud** — rules you set with `sf access`, applied live without a republish.
+
+There is no separate ban pre-pass. `sf access ban` assigns the new deny the first
+order inside the cloud lane, so it wins over later cloud allows; platform and
+file rules still have earlier merged order values. Put a file-lane deny before
+file-lane allows when that deny must travel with the version, and confirm the
+actual merged order with `sf access effective`.
 
 File rules use the exact same rule shape as `sf access set` and compile when you publish. An invalid rule fails the publish with a `config_invalid` diagnostic — it is never silently dropped.
 
@@ -138,7 +144,11 @@ Use a `Basic-Auth` line in [`_headers`](/headers) to protect matching paths with
 - Password cannot contain whitespace and must be non-empty.
 - `Basic-Auth` is never sent in the response, and `! Basic-Auth` is invalid because Basic Auth must be configured with credentials.
 
-Because `_headers` ships with each publish, Basic Auth credentials are versioned with your files and roll back with versions. Anonymous spaces cannot use it.
+Because `_headers` ships with each publish, Basic Auth credentials are versioned
+with your files and roll back with versions. Anyone who can read the repository
+or a retained version may recover historical credentials. Use unique,
+non-reused passwords and rotate them after exposure or access changes.
+Anonymous spaces cannot use it.
 
 ## Which one to use
 

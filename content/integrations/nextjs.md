@@ -133,7 +133,7 @@ export function HeroImage() {
       alt="Hero image"
       width={1200}
       height={630}
-      quality={80}
+      quality={85}
       priority
     />
   );
@@ -143,7 +143,7 @@ export function HeroImage() {
 This outputs image URLs like:
 
 ```text
-https://i0.wp.com/example.com/uploads/hero.jpg?w=1200&quality=80&strip=all
+https://i0.wp.com/example.com/uploads/hero.jpg?w=1200&quality=85&strip=all
 ```
 
 For advanced Site Accelerator options, see [Image acceleration](/image-acceleration). It covers `resize`, `fit`, `crop`, `filter`, `brightness`, `contrast`, `colorize`, `smooth`, `zoom`, `allow_lossy`, and metadata. Put those options in one URL helper so components do not rebuild image URLs differently.

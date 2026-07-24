@@ -78,7 +78,7 @@ Each request also carries:
 
 The `Spacefast-Signature` header looks like:
 
-```
+```text
 Spacefast-Signature: t=1730289600, v1=5257a8…
 ```
 

@@ -128,11 +128,15 @@ Use `Basic-Auth` to protect matching paths. Credentials are one or more space-se
 
 ```text
 /preview/*
-  Basic-Auth: editor:preview-password
+  Basic-Auth: EXAMPLE_USER:EXAMPLE_PASSWORD
 
 /staging/*
-  Basic-Auth: alice:one-password bob:another-password
+  Basic-Auth: EXAMPLE_USER_ONE:EXAMPLE_PASSWORD_ONE EXAMPLE_USER_TWO:EXAMPLE_PASSWORD_TWO
 ```
+
+These values are placeholders. Never commit production credentials to
+`_headers` or repository history; compile-time hashing protects runtime
+metadata, not the source file or earlier versions.
 
 - Username cannot contain `:` or whitespace.
 - Password cannot contain whitespace and must be non-empty.

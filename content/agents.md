@@ -5,7 +5,7 @@ description: How AI agents can publish, update, and operate Spacefast spaces thr
 
 Agents publish through the same REST API and CLI as humans: one curl call for a publish, the CLI for the full surface, machine-readable docs for discovery. The fastest handoff is a direct instruction:
 
-```bash
+```text
 fetch https://spacefast.com/ai
 and publish this space to Spacefast
 ```
@@ -34,13 +34,19 @@ Claiming ends the claim token's publish rights, but when the owner keeps agent c
 The CLI is the full surface: incremental publishes, version history, rollback, passwords, domains, logs, and diagnostics.
 
 ```bash
-curl -fsSL https://spacefast.com/install.sh | bash
+npm install -g spacefast@0.0.11
 ```
 
-To connect a local coding agent in one step:
+That command pins the package reviewed for this docs release. For a standalone
+binary, choose a version from the
+[public CLI releases](https://github.com/spacefast/cli/releases), download the
+asset for your platform plus `checksums.txt`, and verify its SHA-256 before
+installing it. The hosted `install.sh` and `install.ps1` commands track the
+latest release; use them only when you intentionally trust that moving channel.
 
 ```bash
-curl -fsSL https://spacefast.com/agents.sh | sh -s -- --local --agent codex
+sf agents init
+sf mcp install --mode local --transport stdio --write
 ```
 
 Use hosted MCP for cloud/browser agents that cannot run local commands:
@@ -50,12 +56,6 @@ https://mcp.spacefast.com
 ```
 
 Hosted MCP can edit its durable virtual workspace and publish from it. On-Device MCP, installed through the CLI, can read and edit the bounded local checkout.
-
-On Windows PowerShell:
-
-```bash
-irm https://spacefast.com/install.ps1 | iex
-```
 
 Use `--json` on any command when the output will be parsed. Publishing the same directory again updates the space saved in `.spacefast/state.json`. For agents that support skills, install the official skill:
 

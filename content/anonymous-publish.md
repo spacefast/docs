@@ -5,7 +5,11 @@ description: How anonymous publishes work and how to claim a space after publish
 
 Publishing without an access token creates an anonymous space. The response includes a claim token, claim link, and expiration time. Save them immediately; the token and link are returned only once.
 
-Claim the space within 6 hours or it expires. Opening the claim page with a valid claim link extends the deadline a little (capped at about six extra hours total) — enough to finish signing up, not enough to skip it.
+Claim the space within 6 hours or it expires. Opening the claim page with a
+valid claim link extends the current deadline toward one hour from that visit,
+with at most 6 hours of claim-page extensions in total. Successful anonymous
+updates reset the deadline to 6 hours from the update, capped 30 days after the
+space was created.
 
 ## Before claim
 
@@ -14,7 +18,7 @@ Claim the space within 6 hours or it expires. Opening the claim page with a vali
 - Static assets, redirects, response headers, SPA fallback, and metadata all publish.
 - Anonymous spaces are capped at most at Free-plan limits: 50 MB max file size, 100 MB total per version, 1,000 files per version, and 20 publishes per hour per IP.
 - Uploads are accepted and scanned like any publish, but unclaimed spaces serve web content only — HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Other files stay dark until you claim.
-- Around 100 visits pauses an unclaimed space behind a claim page. Claiming brings it back instantly.
+- More than 100 counted, non-crawler visits pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement may occur after the 101st request. Claiming brings it back instantly.
 - External proxy execution, `_headers` Basic Auth, and custom domains are not available on anonymous spaces.
 
 :::note[Basic Auth and external proxy]
@@ -38,4 +42,7 @@ sf spaces claim --team my-team
 
 ## If a space expires
 
-An unclaimed space that reaches its deadline is disabled: live access stops and the content is queued for deletion after a recovery window of about one day. Its hostname serves an expired page from then on and is never re-issued to someone else, so stale links can't be taken over.
+An unclaimed space that reaches its deadline is disabled: live access stops and
+the content enters a 7-day claim-only recovery window before deletion is
+queued. Its hostname serves an expired page from then on and is never re-issued
+to someone else, so stale links can't be taken over.
