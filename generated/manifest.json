@@ -1,10 +1,10 @@
 {
-  "contentDigest": "9c1ba83580991868439bbd475348fd13952ea675b18523c813a1827b9e76711c",
+  "contentDigest": "ec6a2c61b7dd54e7071061c84c41efc2f3b555763500ae9f1b7ab8882aacfc76",
   "counts": {
     "apiOperations": 327,
     "errorCodes": 463,
     "platformOperations": 362,
-    "redirects": 2512
+    "redirects": 2513
   },
   "files": [
     {
@@ -2343,9 +2343,9 @@
       "sha256": "364b666b8d664a98044bbf9f61b87d60c6937edf139399174bc2ce93863f1d11"
     },
     {
-      "bytes": 465014,
+      "bytes": 465094,
       "path": "redirects.json",
-      "sha256": "62405a9703d3a082506ecf1bc2a7137a5c4166ec25474c96fb50730293f94581"
+      "sha256": "e027689ed673f57e1416d3eeccf4f7f40d126078265ffdc1ea24095c58138bb9"
     }
   ],
   "generator": "spacefast-public-docs",

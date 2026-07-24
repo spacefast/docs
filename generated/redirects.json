@@ -12558,5 +12558,10 @@
     "from": "/static-spaces",
     "status": 301,
     "to": "/"
+  },
+  {
+    "from": "/static-spaces/*",
+    "status": 301,
+    "to": "/:splat"
   }
 ]

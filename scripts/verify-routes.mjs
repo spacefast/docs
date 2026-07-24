@@ -92,6 +92,20 @@ function localTargetFor(url) {
   return `${relative.replace(/\/$/u, "")}/index.html`;
 }
 
+function representativeRedirect(redirect) {
+  if (!redirect.from.includes("*")) {
+    return { source: redirect.from, destination: redirect.to };
+  }
+  const source = redirect.from.replace("*", "quickstart");
+  const destination = redirect.to.replace(":splat", "quickstart");
+  if (source.includes("*") || destination.includes(":splat")) {
+    throw new Error(
+      `Unsupported compatibility wildcard: ${redirect.from} -> ${redirect.to}`,
+    );
+  }
+  return { source, destination };
+}
+
 if (!(await exists(dist))) {
   throw new Error("Missing dist/. Run `bun run build` first.");
 }
@@ -303,20 +317,21 @@ for (const redirect of generatedRedirects) {
   ) {
     throw new Error("Mounted redirect rules must use target-space logical paths.");
   }
-  const target = localTargetFor(`${deploymentBase}${redirect.to}`);
+  const example = representativeRedirect(redirect);
+  const target = localTargetFor(`${deploymentBase}${example.destination}`);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(
-      `Redirect destination is missing: ${redirect.from} -> ${redirect.to}`,
+      `Redirect destination is missing: ${example.source} -> ${example.destination}`,
     );
   }
-  const resolved = resolveRedirect(redirect.from, compatibilityRules);
+  const resolved = resolveRedirect(example.source, compatibilityRules);
   if (
-    resolved.destination !== redirect.to ||
+    resolved.destination !== example.destination ||
     resolved.hops.length < 1 ||
     resolved.hops.some(({ status }) => status !== redirect.status)
   ) {
     throw new Error(
-      `Built routing rules do not preserve compatibility: ${redirect.from} -> ${redirect.to}`,
+      `Built routing rules do not preserve compatibility: ${example.source} -> ${example.destination}`,
     );
   }
 }
