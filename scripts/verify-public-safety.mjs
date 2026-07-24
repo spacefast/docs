@@ -148,7 +148,7 @@ const scanText = (path, text) => {
   const shortHashPattern = /(?<![#\p{L}\p{N}_])[0-9a-f]{7,12}(?![\p{L}\p{N}_])/giu;
   for (const match of text.matchAll(shortHashPattern)) {
     const value = match[0];
-    if (/[a-f]/iu.test(value)) {
+    if (value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {
       report(path, lineForOffset(text, match.index), "short commit hash");
     }
   }

@@ -1,136 +1,167 @@
-import { access, readFile, stat } from "node:fs/promises";
-import { resolve } from "node:path";
+import { access, readFile, readdir, stat } from "node:fs/promises";
+import path from "node:path";
 
-const root = resolve(process.cwd());
-const dist = resolve(root, "dist");
+const root = path.resolve(process.cwd());
+const dist = path.join(root, "dist");
 const deploymentBase = "/docs";
 const site = "https://spacefast.com";
 const docsRoot = `${site}${deploymentBase}`;
-const checks = [];
+const checked = [];
 
-const exists = async (path) => {
+async function exists(value) {
   try {
-    await access(path);
+    await access(value);
     return true;
   } catch {
     return false;
   }
-};
+}
 
-const requireFile = async (relativePath) => {
-  const path = resolve(dist, relativePath);
-  const details = await stat(path).catch(() => null);
+async function requireFile(relativePath) {
+  const value = path.join(dist, relativePath);
+  const details = await stat(value).catch(() => null);
   if (!details?.isFile()) {
     throw new Error(`Missing built file: dist/${relativePath}`);
   }
-  checks.push(`dist/${relativePath}`);
-  return path;
-};
+  checked.push(relativePath);
+  return value;
+}
 
-const requireAbsent = async (relativePath) => {
-  if (await exists(resolve(dist, relativePath))) {
-    throw new Error(`Unexpected server or basePath output: dist/${relativePath}`);
-  }
-};
+async function readBuilt(relativePath) {
+  return readFile(await requireFile(relativePath), "utf8");
+}
 
-const readBuilt = async (relativePath) =>
-  readFile(await requireFile(relativePath), "utf-8");
-
-const attribute = (tag, name) => {
+function attribute(tag, name) {
   const match = tag.match(new RegExp(`\\b${name}=["']([^"']+)["']`, "iu"));
   return match?.[1];
-};
+}
 
-const canonicalFrom = (html) => {
+function canonicalFrom(html) {
   for (const match of html.matchAll(/<link\b[^>]*>/giu)) {
     if (attribute(match[0], "rel") === "canonical") {
       return attribute(match[0], "href");
     }
   }
   return undefined;
-};
+}
 
-const requirePage = async (relativePath, expectedCanonical) => {
+async function requirePage(relativePath, expectedCanonical, expectedText) {
   const html = await readBuilt(relativePath);
   const canonical = canonicalFrom(html)?.replace(/\/$/u, "");
   if (canonical !== expectedCanonical.replace(/\/$/u, "")) {
     throw new Error(
-      `Wrong canonical in dist/${relativePath}: ${canonical ?? "missing"}`
+      `Wrong canonical in dist/${relativePath}: ${canonical ?? "missing"}`,
     );
   }
   if (!/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>/iu.test(html)) {
     throw new Error(`Missing structured data in dist/${relativePath}`);
   }
-};
+  if (expectedText && !html.includes(expectedText)) {
+    throw new Error(`Missing expected content in dist/${relativePath}`);
+  }
+}
 
-const collectUrls = (value, output = []) => {
-  if (typeof value === "string") {
-    if (value.startsWith("http://") || value.startsWith("https://")) {
-      output.push(value);
-    }
-    return output;
-  }
-  if (Array.isArray(value)) {
-    for (const item of value) {
-      collectUrls(item, output);
-    }
-    return output;
-  }
-  if (value && typeof value === "object") {
-    for (const item of Object.values(value)) {
-      collectUrls(item, output);
+async function htmlFilesUnder(directory, relative = "") {
+  const entries = await readdir(path.join(directory, relative), {
+    withFileTypes: true,
+  });
+  const files = [];
+  for (const entry of entries) {
+    const child = path.join(relative, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await htmlFilesUnder(directory, child)));
+    } else if (entry.isFile() && entry.name.endsWith(".html")) {
+      files.push(child.split(path.sep).join("/"));
     }
   }
-  return output;
-};
+  return files;
+}
+
+function localTargetFor(url) {
+  const pathname = url.split(/[?#]/u, 1)[0];
+  if (pathname === deploymentBase || pathname === `${deploymentBase}/`) {
+    return "index.html";
+  }
+  const relative = pathname.slice(`${deploymentBase}/`.length);
+  if (path.extname(relative)) return relative;
+  return `${relative.replace(/\/$/u, "")}/index.html`;
+}
 
 if (!(await exists(dist))) {
   throw new Error("Missing dist/. Run `bun run build` first.");
 }
-
-// Astro's deployment.base changes the served URL, not the physical output root.
-await requireAbsent("docs");
-await requirePage("index.html", docsRoot);
-const overviewHtml = await readBuilt("index.html");
-if (!overviewHtml.includes('href="/docs/quickstart"')) {
-  throw new Error("Overview does not link to the docs-scoped quickstart route.");
+if (await exists(path.join(dist, "docs"))) {
+  throw new Error("deployment.base must not create a physical dist/docs tree");
 }
-await requirePage("quickstart/index.html", `${docsRoot}/quickstart`);
-await requirePage("changelog/index.html", `${docsRoot}/changelog`);
-await requirePage(
-  "changelog/initial-docs/index.html",
-  `${docsRoot}/changelog/initial-docs`
-);
 
-for (const path of [
-  "404.html",
+const representativePages = [
+  ["index.html", docsRoot, "Spacefast documentation"],
+  ["quickstart/index.html", `${docsRoot}/quickstart`, "Common first publish"],
+  ["api/index.html", `${docsRoot}/api`, "The shape of every response"],
+  [
+    "api/reference/index.html",
+    `${docsRoot}/api/reference`,
+    "REST API",
+  ],
+  [
+    "api/reference/spaces/getv1spacesbyspaceidmounts/index.html",
+    `${docsRoot}/api/reference/spaces/getv1spacesbyspaceidmounts`,
+    "mount",
+  ],
+  ["cli/index.html", `${docsRoot}/cli`, "CLI reference"],
+  ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
+  [
+    "errors/rate_limited/index.html",
+    `${docsRoot}/errors/rate_limited`,
+    "rate_limited",
+  ],
+  [
+    "integrations/vite/index.html",
+    `${docsRoot}/integrations/vite`,
+    "Vite",
+  ],
+  [
+    "migrate-from/vercel/index.html",
+    `${docsRoot}/migrate-from/vercel`,
+    "Vercel",
+  ],
+  [
+    "platforms/api/reference/index.html",
+    `${docsRoot}/platforms/api/reference`,
+    "Platform API",
+  ],
+];
+for (const page of representativePages) {
+  await requirePage(...page);
+}
+
+const notFound = await readBuilt("404.html");
+if (!notFound.includes("Page not found") || !notFound.includes('href="/docs"')) {
+  throw new Error("Built 404 does not stay inside the docs mount.");
+}
+
+for (const artifact of [
   "index.md",
   "index.mdx",
   "quickstart.md",
   "quickstart.mdx",
+  "api/reference.md",
+  "cli.md",
+  "errors/rate_limited.md",
   "llms.txt",
   "llms-full.txt",
   "sitemap.xml",
   "robots.txt",
   "agent-readability.json",
-  "changelog/rss.xml",
   "pagefind/pagefind.js",
   "pagefind/pagefind-entry.json",
+  "_redirects",
   "sf.jsonc",
 ]) {
-  await requireFile(path);
+  await requireFile(artifact);
 }
 
-const pagefindEntry = JSON.parse(await readBuilt("pagefind/pagefind-entry.json"));
-const indexedPages = Object.values(pagefindEntry.languages ?? {}).reduce(
-  (total, language) => total + (language.page_count ?? 0),
-  0
-);
-if (indexedPages !== 5) {
-  throw new Error(`Expected Pagefind to index 5 built pages, got ${indexedPages}.`);
-}
-
-for (const path of [
+for (const serverArtifact of [
   "api/ask",
   "api/ask/index.html",
   "api/search",
@@ -141,20 +172,43 @@ for (const path of [
   ".well-known/mcp/server-card.json",
   "blume-search.json",
 ]) {
-  await requireAbsent(path);
+  if (await exists(path.join(dist, serverArtifact))) {
+    throw new Error(`Static build unexpectedly emitted dist/${serverArtifact}`);
+  }
+}
+
+const pagefindEntry = JSON.parse(
+  await readBuilt("pagefind/pagefind-entry.json"),
+);
+const indexedPages = Object.values(pagefindEntry.languages ?? {}).reduce(
+  (total, language) => total + (language.page_count ?? 0),
+  0,
+);
+if (indexedPages < 1_180) {
+  throw new Error(`Pagefind indexed only ${indexedPages} pages.`);
 }
 
 const sitemap = await readBuilt("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/gu)].map(
-  (match) => match[1]
+  (match) => match[1],
 );
-for (const expected of [docsRoot, `${docsRoot}/quickstart`, `${docsRoot}/changelog`]) {
-  if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === expected)) {
+for (const expected of representativePages.map(([, canonical]) => canonical)) {
+  if (!sitemapUrls.includes(expected)) {
     throw new Error(`Sitemap is missing ${expected}`);
   }
 }
-if (sitemapUrls.some((url) => !url.startsWith(`${docsRoot}`))) {
+if (
+  sitemapUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)
+) {
   throw new Error("Sitemap contains a URL outside the /docs deployment base.");
+}
+if (new Set(sitemapUrls).size !== sitemapUrls.length) {
+  throw new Error("Sitemap contains duplicate URLs.");
+}
+if (indexedPages !== sitemapUrls.length + 1) {
+  throw new Error(
+    `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,
+  );
 }
 
 const robots = await readBuilt("robots.txt");
@@ -163,52 +217,105 @@ if (!robots.includes(`Sitemap: ${docsRoot}/sitemap.xml`)) {
 }
 
 const llmsIndex = await readBuilt("llms.txt");
-const indexedUrls = [
-  ...llmsIndex.matchAll(/https:\/\/spacefast\.com[^\s)>]*/gu),
+const llmsPageUrls = [
+  ...llmsIndex.matchAll(/https:\/\/spacefast\.com\/docs[^\s)>]*/gu),
 ].map((match) => match[0]);
 if (
-  indexedUrls.length === 0 ||
-  indexedUrls.some((url) => !url.startsWith(docsRoot))
+  llmsPageUrls.length < 1_000 ||
+  llmsPageUrls.some(
+    (url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot,
+  )
 ) {
   throw new Error("llms.txt has missing or non-docs-scoped page URLs.");
 }
 
 const llmsFull = await readBuilt("llms-full.txt");
 const sourceUrls = [...llmsFull.matchAll(/^Source: (https:\/\/[^\s]+)$/gmu)].map(
-  (match) => match[1]
+  (match) => match[1],
 );
-if (sourceUrls.length !== 3 || sourceUrls.some((url) => !url.startsWith(docsRoot))) {
+if (
+  sourceUrls.length < 1_000 ||
+  sourceUrls.some(
+    (url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot,
+  )
+) {
   throw new Error("llms-full.txt has missing or non-docs-scoped source URLs.");
 }
 
 const readability = JSON.parse(await readBuilt("agent-readability.json"));
-const readabilityUrls = collectUrls(readability.artifacts);
-if (
-  readabilityUrls.length === 0 ||
-  readabilityUrls.some((url) => !url.startsWith(docsRoot))
-) {
-  throw new Error("agent-readability.json advertises an artifact outside /docs.");
+for (const value of Object.values(readability.artifacts)) {
+  if (
+    typeof value === "string" &&
+    value.startsWith(site) &&
+    !value.startsWith(docsRoot)
+  ) {
+    throw new Error("agent-readability.json advertises an artifact outside /docs.");
+  }
 }
 if ("askApi" in readability.artifacts || "mcp" in readability.artifacts) {
   throw new Error("agent-readability.json advertises a disabled server feature.");
 }
-if (
-  !Array.isArray(readability.artifacts.feeds) ||
-  !readability.artifacts.feeds.includes(`${docsRoot}/changelog/rss.xml`)
-) {
-  throw new Error("agent-readability.json is missing changelog RSS.");
-}
-
-const rss = await readBuilt("changelog/rss.xml");
-if (!rss.includes(`${docsRoot}/changelog/initial-docs`)) {
-  throw new Error("Changelog RSS is missing the initial documentation entry.");
-}
 
 const staticConfig = JSON.parse(await readBuilt("sf.jsonc"));
-if (staticConfig.$schema !== `${site}/schemas/sf.json`) {
-  throw new Error("dist/sf.jsonc does not use the current Spacefast schema.");
+if (
+  staticConfig.$schema !== `${site}/schemas/sf.json` ||
+  staticConfig.cleanUrls !== true ||
+  staticConfig.fallback?.path !== "404.html" ||
+  staticConfig.fallback?.status !== 404
+) {
+  throw new Error("dist/sf.jsonc does not carry the mounted static serving contract.");
+}
+
+const [generatedRedirects, builtRedirects] = await Promise.all([
+  readFile(path.join(root, "generated/redirects.json"), "utf8").then(JSON.parse),
+  readBuilt("_redirects"),
+]);
+const expectedRedirects = `${generatedRedirects
+  .map(({ from, status, to }) => `${from} ${to} ${status}`)
+  .join("\n")}\n`;
+if (
+  !builtRedirects.startsWith(
+    "# Generated from generated/redirects.json. Do not edit.\n",
+  ) ||
+  !builtRedirects.endsWith(expectedRedirects)
+) {
+  throw new Error("Built redirects do not match the generated compatibility map.");
+}
+for (const redirect of generatedRedirects) {
+  if (
+    redirect.from === deploymentBase ||
+    redirect.from.startsWith(`${deploymentBase}/`) ||
+    redirect.to === deploymentBase ||
+    redirect.to.startsWith(`${deploymentBase}/`)
+  ) {
+    throw new Error("Mounted redirect rules must use target-space logical paths.");
+  }
+  const target = localTargetFor(`${deploymentBase}${redirect.to}`);
+  if (!(await exists(path.join(dist, target)))) {
+    throw new Error(
+      `Redirect destination is missing: ${redirect.from} -> ${redirect.to}`,
+    );
+  }
+}
+if (await exists(path.join(dist, "api/operations/index.html"))) {
+  throw new Error("Compatibility redirects must not become indexed HTML pages.");
+}
+
+const htmlFiles = await htmlFilesUnder(dist);
+for (const file of htmlFiles) {
+  const html = await readFile(path.join(dist, file), "utf8");
+  for (const match of html.matchAll(/\b(?:action|href|src)=["'](\/[^"']*)["']/giu)) {
+    const url = match[1];
+    if (url !== deploymentBase && !url.startsWith(`${deploymentBase}/`)) {
+      throw new Error(`Root-relative URL escapes /docs in dist/${file}: ${url}`);
+    }
+    const target = localTargetFor(url);
+    if (!(await exists(path.join(dist, target)))) {
+      throw new Error(`Broken built URL in dist/${file}: ${url} -> dist/${target}`);
+    }
+  }
 }
 
 console.log(
-  `Route verification passed: ${checks.length} built route and artifact checks under ${deploymentBase}.`
+  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} search records, ${sitemapUrls.length} sitemap URLs, ${generatedRedirects.length} compatibility redirects, and every root-relative URL scoped to ${deploymentBase}.`,
 );

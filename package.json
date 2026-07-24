@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "blume dev",
-    "build": "blume build --strict",
-    "check": "blume check --strict --isolated",
-    "validate": "blume validate --strict",
+    "dev": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume dev",
+    "build": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume build --strict",
+    "check": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume check --strict --isolated",
+    "validate": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume validate --strict",
+    "verify:generated": "node scripts/verify-generated.mjs",
     "verify:public-safety": "node scripts/verify-public-safety.mjs",
     "verify:routes": "node scripts/verify-routes.mjs",
     "doctor": "blume doctor"

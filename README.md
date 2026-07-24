@@ -2,9 +2,9 @@
 
 The public documentation site for Spacefast, built with Blume 1.0.4.
 
-This bootstrap starts small on purpose: an overview, a focused quickstart, and
-scaffolding for the reference sections that follow. Missing sections are not
-placeholder pages. They land when their public source is ready.
+The authored guides live in `content/`. API specifications, the CLI reference,
+error pages, and compatibility redirects arrive as one verified snapshot in
+`generated/`.
 
 ## Local development
 
@@ -21,6 +21,7 @@ The production checks are:
 bun run check
 bun run validate
 bun run build
+bun run verify:generated
 bun run verify:public-safety
 bun run verify:routes
 ```
@@ -33,7 +34,8 @@ so the physical overview remains `dist/index.html` rather than
 ## Publishing the static artifact
 
 `public/sf.jsonc` is copied to the root of `dist/` during the build. Publish the
-already-built directory without running another build:
+already-built directory without running another build. The same artifact works
+as its own Spacefast space and behind the native `/docs` mount:
 
 ```bash
 sf publish dist --prebuilt
