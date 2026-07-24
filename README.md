@@ -33,7 +33,7 @@ so the physical overview remains `dist/index.html` rather than
 
 ## Publishing the static artifact
 
-`public/sf.jsonc` is copied to the root of `dist/` during the build. Publish the
+`public/spacefast.jsonc` is copied to the root of `dist/` during the build. Publish the
 already-built directory without running another build. The same artifact works
 as its own Spacefast space and behind the native `/docs` mount:
 

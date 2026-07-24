@@ -6,6 +6,10 @@ import { compileRedirectRules } from "./redirect-rules.mjs";
 const root = path.resolve(process.cwd());
 const markerName = ".spacefast-generated-copy";
 const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.\n";
+const directHostingRules = [
+  { from: "/docs", status: 200, to: "/" },
+  { from: "/docs/*", status: 200, to: "/:splat" },
+];
 const trees = [
   { source: "generated/cli", target: "content/cli" },
   { source: "generated/errors", target: "content/errors" },
@@ -56,7 +60,7 @@ const redirects = await readFile(
   path.join(root, "generated/redirects.json"),
   "utf8",
 ).then(JSON.parse);
-const routingRules = compileRedirectRules(redirects);
+const routingRules = [...compileRedirectRules(redirects), ...directHostingRules];
 const staticRules = routingRules.filter(({ from }) => !from.includes("*")).length;
 if (staticRules > 2_000 || routingRules.length > 2_100) {
   throw new Error(

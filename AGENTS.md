@@ -36,8 +36,9 @@ Assume every commit and every line of history will be public.
 - `content/cli/**`, `content/errors/**`, and `public/_redirects` are ignored
   build overlays materialized from the verified snapshot. Do not hand-edit
   them.
-- `public/sf.jsonc` is authored here and copied to `dist/sf.jsonc` by the static
-  build so the published artifact carries its serving config.
+- `public/spacefast.jsonc` is authored here and copied to
+  `dist/spacefast.jsonc` by the static build so the published artifact carries
+  its serving config.
 
 ## Verification
 

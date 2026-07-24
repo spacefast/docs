@@ -1,6 +1,7 @@
 .blume/
 .blume-verify/
 dist/
+.spacefast/
 node_modules/
 content/cli/
 content/errors/
