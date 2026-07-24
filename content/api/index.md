@@ -12,9 +12,9 @@ Every response uses one envelope: successes carry `{ "data": ... }`, failures ca
 ```json
 {
   "error": {
-    "code": "space_not_found",
-    "message": "No space with that id is visible to this token.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_not_found",
+    "code": "access_denied",
+    "message": "This token cannot access that space.",
+    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
     "requestId": "req_4mz0v8qk"
   }
 }
