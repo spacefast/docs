@@ -1,6 +1,8 @@
 import { cp, lstat, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { compileRedirectRules } from "./redirect-rules.mjs";
+
 const root = path.resolve(process.cwd());
 const markerName = ".spacefast-generated-copy";
 const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.\n";
@@ -54,13 +56,20 @@ const redirects = await readFile(
   path.join(root, "generated/redirects.json"),
   "utf8",
 ).then(JSON.parse);
+const routingRules = compileRedirectRules(redirects);
+const staticRules = routingRules.filter(({ from }) => !from.includes("*")).length;
+if (staticRules > 2_000 || routingRules.length > 2_100) {
+  throw new Error(
+    `Generated compatibility routes exceed Spacefast limits: ${staticRules} static, ${routingRules.length} total`,
+  );
+}
 await writeFile(
   redirectsTarget,
-  `${redirectsMarker}${redirects
+  `${redirectsMarker}${routingRules
     .map(({ from, status, to }) => `${from} ${to} ${status}`)
     .join("\n")}\n`,
 );
 
 console.log(
-  `Prepared generated CLI, error-reference, and ${redirects.length} redirect entries.`,
+  `Prepared generated CLI, error-reference, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
 );
