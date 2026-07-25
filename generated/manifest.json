@@ -1,8 +1,8 @@
 {
-  "contentDigest": "ec6a2c61b7dd54e7071061c84c41efc2f3b555763500ae9f1b7ab8882aacfc76",
+  "contentDigest": "c262898be8f96cd105c3e24ccbc352aa1f5fb1d24ab0b2580e0ade940c4d4bd3",
   "counts": {
     "apiOperations": 327,
-    "errorCodes": 463,
+    "errorCodes": 462,
     "platformOperations": 362,
     "redirects": 2513
   },
@@ -658,9 +658,9 @@
       "sha256": "f61662818d3ad50af6d8ce6971765ca30dfc8c126093852be9671a8e87f16df6"
     },
     {
-      "bytes": 58851,
+      "bytes": 58772,
       "path": "errors/index.md",
-      "sha256": "91778556f9eb2a1c1bb4c52d40200bcbca30493fecfa66756c01895113b1e8e6"
+      "sha256": "3e4483db84189b4f9d204ce28fbe1a7d2e0dc0a92d6ed4a2af5cfe12214f2d8e"
     },
     {
       "bytes": 810,
@@ -2126,11 +2126,6 @@
       "bytes": 820,
       "path": "errors/zero_log_query_invalid.md",
       "sha256": "7b60f7e8082b9857024aa221f752c888eed334858f1b6de62bff42a758e7bd34"
-    },
-    {
-      "bytes": 849,
-      "path": "errors/zero_lookup_invalid.md",
-      "sha256": "e696bd7b1ea8897827ff7af3a8e44050043e4a8afdde0423f8d309be8fe5b9bc"
     },
     {
       "bytes": 873,
