@@ -1,33 +1,33 @@
 ---
-title: Spacefast documentation
-description: Publish static sites, keep every version, and skip the deployment ceremony.
+title: Spacefast for developers
+description: One API for spaces, versions, builds, domains, access, and collaboration — available through REST, CLI, SDK, and MCP.
 ---
 
-Spacefast hosts static sites for people and the agents building with them. Give
-it HTML, CSS, JavaScript, Wasm, and assets; get a stable live URL without
-babysitting a server.
+Spacefast is a static hosting product for people and the agents working for
+them. This portal is the contract: resources, interfaces, errors, and the
+multi-tenant Platform API.
 
 ## Start here
 
-[Publish your first site](/quickstart) in a few steps. No account is required
-for the first publish.
+[Publish your first site](/quickstart), or jump straight to the interface you
+already use.
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" href="/quickstart" icon="rocket">
-    Publish a folder, zip, or single `index.html`, then claim the space.
+  <Card title="REST API" href="/api" icon="braces">
+    Authentication, envelopes, idempotency, versions, and the generated reference.
   </Card>
-  <Card title="Agents" href="/agents" icon="bot">
-    Publish through the CLI, REST API, skills, or MCP.
+  <Card title="CLI" href="/cli" icon="terminal">
+    Publish and operate spaces from a terminal or CI.
   </Card>
-  <Card title="Configuration" href="/configuration" icon="settings">
-    Add SPA behavior, metadata, access rules, redirects, and headers.
+  <Card title="MCP" href="/mcp" icon="bot">
+    Give an authenticated agent the same product capabilities.
   </Card>
-  <Card title="Migrate a site" href="/migrate-from" icon="move-right">
-    Bring static output from another host without changing the artifact first.
+  <Card title="Platforms" href="/platforms" icon="building">
+    Host customer sites behind your own product and billing.
   </Card>
 </CardGroup>
 
-## The useful mental model
+## The product model
 
 - A **space** is your site or project. It has one stable live URL.
 - A **publish** sends a static file, folder, archive, or detected project build.
@@ -39,24 +39,17 @@ for the first publish.
 A root `index.html` is the ordinary homepage. Spacefast serves the files you
 upload; it does not execute uploaded server code.
 
-## Find the detail
+## Browse by feature
 
-- [Publishing](/publishing), [builds from Git](/builds), and
-  [rollback](/rollback) cover the release loop.
-- [Redirects](/redirects), [headers](/headers),
-  [proxy routes](/proxy-routes), and [custom domains](/domains) cover
-  serving behavior.
-- [Vite](/integrations/vite), [Next.js](/integrations/nextjs), and
-  [image acceleration](/image-acceleration) cover common integrations.
-- The [REST API guide](/api), [endpoint reference](/api/reference),
-  and [Platforms guide](/platforms) cover both API surfaces.
-- [Limits](/limits) and [troubleshooting](/troubleshooting) answer the
-  questions that usually show up after the first publish.
+- [Spaces](/spaces) — ownership, stable URLs, configuration, and lifecycle.
+- [Publishing and versions](/publishing) — files in, immutable release out.
+- [Builds](/builds) — turn source into static output.
+- [Domains](/domains) — custom hostnames, verification, and certificates.
+- [Access](/access) — public, private, password, and invited access.
+- [Collab](/collab) — presence, comments, and version-aware review.
 
 ## More from Spacefast
 
-The main site still owns [guides](https://spacefast.com/guides),
-[recipes](https://spacefast.com/recipes), the [FAQ](https://spacefast.com/faq),
-and [What's new](https://spacefast.com/whats-new). For agent-specific setup, use
-[Agent setup](https://spacefast.com/agents) or the guided
-[start flow](https://spacefast.com/start).
+The main product site owns [Help](https://spacefast.com/help),
+[recipes](https://spacefast.com/recipes), and
+[agent setup](https://spacefast.com/setup). Search from either site covers both.

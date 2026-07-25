@@ -3,8 +3,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const SITE_ORIGIN = "https://spacefast.com";
-const DOCS_BASE = "/docs";
+const SITE_ORIGIN = "https://developers.spacefast.com";
+const DOCS_BASE = "";
 const ESSENTIAL_PATHS = new Set([
   "/",
   "/agents",
@@ -16,10 +16,10 @@ const ESSENTIAL_PATHS = new Set([
 
 function normalizePath(url) {
   const parsed = new URL(url);
-  if (parsed.origin !== SITE_ORIGIN || !parsed.pathname.startsWith(DOCS_BASE)) {
+  if (parsed.origin !== SITE_ORIGIN) {
     throw new Error(`Unexpected documentation URL: ${url}`);
   }
-  const path = parsed.pathname.slice(DOCS_BASE.length) || "/";
+  const path = parsed.pathname || "/";
   return path.length > 1 ? path.replace(/\/+$/u, "") : path;
 }
 
@@ -61,16 +61,13 @@ function summaryFor(body) {
 export function parseLlmsFull(source) {
   const pages = [];
   const sectionPattern =
-    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/spacefast\.com\/docs(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
+    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/developers\.spacefast\.com(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
   for (const match of source.matchAll(sectionPattern)) {
     const title = match[1]?.trim();
     const url = match[2]?.trim();
     const body = match[3]?.trim();
     if (!title || !url || !body) continue;
     const path = normalizePath(url);
-    if (path === "/platforms" || path.startsWith("/platforms/")) {
-      throw new Error(`Platform documentation leaked into the public corpus: ${path}`);
-    }
     const { kind, tier } = pageMetadata(path);
     pages.push({
       body,

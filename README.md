@@ -1,6 +1,6 @@
-# Spacefast Docs
+# Spacefast Developers
 
-The public documentation site for Spacefast, built with Blume 1.0.4.
+The developer documentation site for Spacefast, built with Blume.
 
 The authored guides live in `content/`. API specifications, the CLI reference,
 error pages, and compatibility redirects arrive as one verified snapshot in
@@ -27,15 +27,12 @@ bun run verify:routes
 ```
 
 Blume writes the static site to `dist/`. The site is built for
-`https://spacefast.com/docs`; `deployment.base` supplies the `/docs` host prefix,
-so the physical overview remains `dist/index.html` rather than
-`dist/docs/index.html`.
+`https://developers.spacefast.com` at the origin root.
 
 ## Publishing the static artifact
 
 `public/spacefast.jsonc` is copied to the root of `dist/` during the build. Publish the
-already-built directory without running another build. The same artifact works
-as its own Spacefast space and behind the native `/docs` mount:
+already-built directory without running another build:
 
 ```bash
 sf publish dist --prebuilt

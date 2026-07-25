@@ -69,11 +69,15 @@ The skill gives agents the publish workflow, space-state rules, claim-link handl
 
 ## Docs as Markdown
 
-Every docs page is fetchable as plain Markdown. Append `.md` to any docs URL (for example `https://spacefast.com/docs/cli.md` or `https://spacefast.com/docs/errors/rate_limited.md`) to get the exact Markdown source — this works for every client, including curl. Requests from known AI-agent user agents (and requests whose `Accept` header prefers `text/plain`/`text/markdown` over `text/html`) receive the Markdown form at the HTML URL automatically, and the site root serves the agent setup instructions to those agents.
+Every developer page is fetchable as plain Markdown. Append `.md` to any URL
+(for example `https://developers.spacefast.com/cli.md` or
+`https://developers.spacefast.com/errors/rate_limited.md`) to get the exact
+Markdown source. Requests from known AI-agent user agents, and requests whose
+`Accept` header prefers Markdown, receive that form at the HTML URL automatically.
 
 Machine-readable docs discovery lives at
-[`/docs/llms.txt`](https://spacefast.com/docs/llms.txt) and
-[`/docs/llms-full.txt`](https://spacefast.com/docs/llms-full.txt), generated
+[`llms.txt`](https://developers.spacefast.com/llms.txt) and
+[`llms-full.txt`](https://developers.spacefast.com/llms-full.txt), generated
 from the same Blume sources as these pages. Product-level discovery remains on
 the main site: the [agent card](https://spacefast.com/.well-known/agent-card.json),
 [integrations.sh declaration](https://spacefast.com/.well-known/integrations.json),
@@ -82,6 +86,9 @@ the main site: the [agent card](https://spacefast.com/.well-known/agent-card.jso
 [agent-skills index](https://spacefast.com/.well-known/agent-skills/index.json).
 The full API surface is the generated OpenAPI spec at
 [`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json).
+
+Client-specific plugins, skills, and setup steps live in the consumer
+[agent setup directory](https://spacefast.com/setup).
 
 Published spaces can do the same trick: an `Agent=true` condition in `_redirects` serves browsers the HTML page and agent fetches plain text at the same URL — it's how `https://spacefast.com/ai` works:
 
