@@ -3,9 +3,21 @@ import { defineConfig } from "blume";
 export default defineConfig({
   title: "Spacefast Docs",
   description: "Build and publish static sites with Spacefast.",
+  analytics: {
+    posthog: {
+      key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT",
+    },
+  },
   content: {
     root: "content",
   },
+  export: true,
+  github: {
+    owner: "spacefast",
+    repo: "docs",
+    branch: "main",
+  },
+  lastModified: true,
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
@@ -15,7 +27,7 @@ export default defineConfig({
         icon: "book-open",
       },
     ],
-    repo: false,
+    repo: true,
     sidebar: {
       display: "group",
       items: [
@@ -103,15 +115,30 @@ export default defineConfig({
         label: "Platform API",
         route: "/platforms/api/reference",
         spec: "./generated/openapi/platform.json",
+        includeInLlms: false,
+        includeInSearch: false,
+        noindex: true,
       },
     ],
   },
   search: {
     provider: "pagefind",
+    popular: [
+      { label: "Quickstart", href: "/quickstart", icon: "rocket" },
+      { label: "Agents", href: "/agents", icon: "bot" },
+      { label: "Publishing", href: "/publishing", icon: "upload" },
+      { label: "API reference", href: "/api/reference", icon: "braces" },
+    ],
   },
   ai: {
     ask: {
-      enabled: false,
+      enabled: true,
+      endpoint: "https://api.spacefast.com/v1/docs/ask",
+      suggestions: [
+        { label: "How do I publish a site?", icon: "upload" },
+        { label: "How should an agent use Spacefast?", icon: "bot" },
+        { label: "How do I roll back a version?", icon: "undo-2" },
+      ],
     },
     llmsTxt: {
       enabled: true,
@@ -124,7 +151,7 @@ export default defineConfig({
   seo: {
     agentReadability: true,
     og: {
-      enabled: false,
+      enabled: true,
     },
     robots: true,
     sitemap: true,

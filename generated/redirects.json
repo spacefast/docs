@@ -1095,6 +1095,11 @@
     "to": "/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/api/operations/postv1docsask",
+    "status": 301,
+    "to": "/api/reference/docs/postv1docsask"
+  },
+  {
     "from": "/api/operations/postv1domains",
     "status": 301,
     "to": "/api/reference/domains/postv1domains"
@@ -2785,6 +2790,11 @@
     "to": "/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/api/reference/operations/postv1docsask",
+    "status": 301,
+    "to": "/api/reference/docs/postv1docsask"
+  },
+  {
     "from": "/api/reference/operations/postv1domains",
     "status": 301,
     "to": "/api/reference/domains/postv1domains"
@@ -3628,6 +3638,11 @@
     "from": "/api/reference/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/api/reference/docs/listdocs"
+  },
+  {
+    "from": "/api/reference/resources/docs/methods/post_v1_docs_ask",
+    "status": 301,
+    "to": "/api/reference/docs/postv1docsask"
   },
   {
     "from": "/api/reference/resources/domains",
@@ -6270,6 +6285,11 @@
     "to": "/platforms/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/platform-api/operations/postv1docsask",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/postv1docsask"
+  },
+  {
     "from": "/platform-api/operations/postv1domains",
     "status": 301,
     "to": "/platforms/api/reference/domains/postv1domains"
@@ -7193,6 +7213,11 @@
     "from": "/platform-api/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/platforms/api/reference/docs/listdocs"
+  },
+  {
+    "from": "/platform-api/resources/docs/methods/post_v1_docs_ask",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/postv1docsask"
   },
   {
     "from": "/platform-api/resources/domains",
@@ -10010,6 +10035,11 @@
     "to": "/platforms/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/platforms/api/reference/operations/postv1docsask",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/postv1docsask"
+  },
+  {
     "from": "/platforms/api/reference/operations/postv1domains",
     "status": 301,
     "to": "/platforms/api/reference/domains/postv1domains"
@@ -10933,6 +10963,11 @@
     "from": "/platforms/api/reference/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/platforms/api/reference/docs/listdocs"
+  },
+  {
+    "from": "/platforms/api/reference/resources/docs/methods/post_v1_docs_ask",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/postv1docsask"
   },
   {
     "from": "/platforms/api/reference/resources/domains",

@@ -33,7 +33,10 @@ const walk = async (directory) => {
   entries.sort((left, right) => left.name.localeCompare(right.name));
 
   for (const entry of entries) {
-    if (entry.isDirectory() && skippedDirectories.has(entry.name)) {
+    if (
+      skippedDirectories.has(entry.name) &&
+      (entry.isDirectory() || (entry.name === ".git" && entry.isFile()))
+    ) {
       continue;
     }
     if (skippedLockfiles.has(entry.name) || entry.name.endsWith(".lock")) {

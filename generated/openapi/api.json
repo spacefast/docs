@@ -1506,6 +1506,7 @@
                                                 "builds:read",
                                                 "builds:create",
                                                 "teams:read",
+                                                "teams:create",
                                                 "teams:write",
                                                 "teams:members.write",
                                                 "billing:read",
@@ -24509,6 +24510,7 @@
                                               "builds:read",
                                               "builds:create",
                                               "teams:read",
+                                              "teams:create",
                                               "teams:write",
                                               "teams:members.write",
                                               "billing:read",
@@ -24845,6 +24847,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -25009,6 +25012,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -25173,6 +25177,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -25492,6 +25497,7 @@
                                             "builds:read",
                                             "builds:create",
                                             "teams:read",
+                                            "teams:create",
                                             "teams:write",
                                             "teams:members.write",
                                             "billing:read",
@@ -25970,6 +25976,7 @@
                                             "builds:read",
                                             "builds:create",
                                             "teams:read",
+                                            "teams:create",
                                             "teams:write",
                                             "teams:members.write",
                                             "billing:read",
@@ -26299,6 +26306,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -26466,6 +26474,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -26633,6 +26642,7 @@
                         "builds:read",
                         "builds:create",
                         "teams:read",
+                        "teams:create",
                         "teams:write",
                         "teams:members.write",
                         "billing:read",
@@ -26947,6 +26957,7 @@
                                             "builds:read",
                                             "builds:create",
                                             "teams:read",
+                                            "teams:create",
                                             "teams:write",
                                             "teams:members.write",
                                             "billing:read",
@@ -27418,6 +27429,7 @@
                                             "builds:read",
                                             "builds:create",
                                             "teams:read",
+                                            "teams:create",
                                             "teams:write",
                                             "teams:members.write",
                                             "billing:read",
@@ -37795,6 +37807,14 @@
                     "items": {
                       "type": "string",
                       "minLength": 1
+                    }
+                  },
+                  "immutableAssetPrefixes": {
+                    "description": "Publisher-owned directory prefixes whose declared files are immutable generation assets. Snapshot publishes retain the current generation's matching files for exactly one subsequent generation.",
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 2
                     }
                   },
                   "source": {
@@ -101672,6 +101692,202 @@
         "operationId": "getV1SpacesBySpaceIdDeployments",
         "tags": [
           "Spaces"
+        ]
+      }
+    },
+    "/v1/docs/ask": {
+      "post": {
+        "description": "Streams a documentation-grounded answer as plain UTF-8 text. The request contract is compatible with Blume's external Ask AI endpoint.",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "A streamed documentation-grounded answer."
+          },
+          "default": {
+            "description": "Error envelope. Any 4xx/5xx response is the shared `{ error }` shape.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ask the Spacefast documentation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "messages": {
+                    "minItems": 1,
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 8000
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "content",
+                        "role"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "page": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "maxLength": 512,
+                        "pattern": "^\\/.*"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "messages"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "messages": {
+                    "minItems": 1,
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 8000
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "content",
+                        "role"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "page": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "maxLength": 512,
+                        "pattern": "^\\/.*"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "messages"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "messages": {
+                    "minItems": 1,
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "content": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 8000
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "content",
+                        "role"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "page": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "maxLength": 512,
+                        "pattern": "^\\/.*"
+                      }
+                    },
+                    "required": [
+                      "path"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "messages"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "operationId": "postV1DocsAsk",
+        "tags": [
+          "Docs"
         ]
       }
     },

@@ -4,12 +4,13 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume dev",
-    "build": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume build --strict",
+    "build": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume build --strict && node scripts/build-docs-corpus.mjs",
     "check": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume check --strict --isolated",
     "validate": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume validate --strict",
     "verify:generated": "node scripts/verify-generated.mjs",
     "verify:public-safety": "node scripts/verify-public-safety.mjs",
     "verify:routes": "node scripts/verify-routes.mjs",
+    "test:corpus": "node --test scripts/build-docs-corpus.test.mjs",
     "doctor": "blume doctor"
   },
   "engines": {
@@ -17,6 +18,9 @@
   },
   "packageManager": "bun@1.3.11",
   "dependencies": {
-    "blume": "1.0.4"
+    "blume": "1.1.4"
+  },
+  "patchedDependencies": {
+    "blume@1.1.4": "patches/blume@1.1.4.patch"
   }
 }

@@ -1,6 +1,12 @@
 ---
 title: Platforms
 description: The Spacefast platform surface for companies hosting sites for their own customers — the tenant model, key posture, on-behalf-of calls, and the Platform API reference.
+ai:
+  exclude: true
+search:
+  exclude: true
+seo:
+  noindex: true
 ---
 
 The platform surface is for companies that host many sites for **their own customers** — white-label static hosting behind your brand and your billing. You call one API; your customer sees you, full stop. This page is the guide — the [Platform API reference](/platforms/api/reference) lists every operation.
