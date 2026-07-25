@@ -33,7 +33,7 @@ function pageMetadata(path) {
   if (path === "/agents" || path === "/publishing" || path === "/rollback") {
     return { kind: "workflow", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
   }
-  if (path.startsWith("/migrate-from/")) return { kind: "recipe", tier: "full" };
+  if (path.startsWith("/migrate-from/")) return { kind: "guide", tier: "full" };
   return { kind: "guide", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
 }
 
