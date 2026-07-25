@@ -4,10 +4,10 @@ description: "Every Spacefast API error carries a stable code and a docsUrl that
 ---
 
 Every Spacefast API error response carries a stable `code` and a `docsUrl` that
-links to one of the pages below. Codes are never renamed or removed. Match on
-`code` in clients; `message` text may improve over time.
+links to one of the pages below. Match on `code` in clients; its meaning stays stable
+while `message` text may improve. Retired codes leave with their owning API surface.
 
-There are 463 error codes in the registry.
+There are 462 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -433,7 +433,6 @@ There are 463 error codes in the registry.
 | [`zero_js_response_malformed`](/errors/zero_js_response_malformed) | The Zero endpoint returned a malformed runner response. |
 | [`zero_js_runtime_init_failed`](/errors/zero_js_runtime_init_failed) | The Zero runner could not initialize QuickJS. |
 | [`zero_log_query_invalid`](/errors/zero_log_query_invalid) | The Zero log query parameters are invalid. |
-| [`zero_lookup_invalid`](/errors/zero_lookup_invalid) | The Zero lookup map contains an invalid path or action. |
 | [`zero_method_not_allowed`](/errors/zero_method_not_allowed) | The request method is not allowed for this Zero endpoint. |
 | [`zero_migration_failed`](/errors/zero_migration_failed) | The Zero database migration command failed during finalize. |
 | [`zero_query_name_missing`](/errors/zero_query_name_missing) | A Zero realtime query subscription did not include a query name. |
