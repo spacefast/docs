@@ -71,7 +71,16 @@
     const copy = playground.querySelector<HTMLButtonElement>("[data-config-copy]");
     if (!form || !code || !copy) continue;
 
+    const mode = form.elements.namedItem("mode");
+    const spa = form.elements.namedItem("spa");
+
     const render = () => {
+      const filesMode = mode instanceof HTMLSelectElement && mode.value === "files";
+      if (spa instanceof HTMLInputElement) {
+        spa.disabled = filesMode;
+        if (filesMode) spa.checked = false;
+      }
+
       const values = new FormData(form);
       const config: Record<string, unknown> = {
         $schema: "https://spacefast.com/schemas/sf.json",
@@ -80,11 +89,11 @@
       const title = String(values.get("title") ?? "").trim();
       const description = String(values.get("description") ?? "").trim();
       if (name) config.name = name;
-      if (values.get("mode") === "files") {
+      if (filesMode) {
         config.index = false;
         config.listing = true;
       }
-      if (values.get("spa") === "on") config.fallback = "/index.html";
+      if (!filesMode && values.get("spa") === "on") config.fallback = "/index.html";
       config.cleanUrls = values.get("cleanUrls") === "on";
       if (values.get("public") === "on") config.access = "public";
       if (title || description) {
@@ -181,6 +190,11 @@
     width: 1.15rem;
     height: 1.15rem;
     accent-color: var(--blume-accent);
+  }
+
+  .config-toggle:has(input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 
   .config-output {

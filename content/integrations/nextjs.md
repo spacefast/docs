@@ -1,9 +1,11 @@
 ---
 title: Next.js
-description: How to export a static Next.js site and publish it on Spacefast with predictable routing and asset behavior.
+description: Publish a static Next.js export, or run SSR and route handlers with Functions and OpenNext.
 ---
 
-Spacefast hosts Next.js spaces that build to static files. It does not run the Next.js server, so use static export and move request-time features to build time, browser code, or another backend.
+The simplest Next.js deployment is a static export. When an app needs SSR,
+Route Handlers, or Middleware, build it with OpenNext and publish the result as
+a Spacefast Function.
 
 ## Static export
 
@@ -36,6 +38,87 @@ sf publish ./out
 Static export works best when routes are known at build time. Avoid server-only features such as API Routes, Middleware, `getServerSideProps`, ISR, on-demand revalidation, Draft Mode, Preview Mode, request-time redirects and rewrites, and dynamic rendering from cookies or headers.
 
 Several of these have a static-hosting answer: redirects and rewrites move to [`_redirects`](/redirects), and API calls can target your backend directly or through a [proxy route](/proxy-routes).
+
+## Functions with OpenNext
+
+:::warning[Private beta]
+Functions is available to teams with the private-beta flag. Ask Spacefast to
+enable it for your team before publishing an OpenNext worker.
+:::
+
+Use this path when the app needs request-time Next.js features. Remove
+`output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
+into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
+so also remove any `export const runtime = "edge"` declarations.
+
+Install the adapter and its build-time Wrangler dependency:
+
+```bash
+bun add @opennextjs/cloudflare
+```
+
+```bash
+bun add --dev wrangler
+```
+
+Add the OpenNext configuration at the project root:
+
+```ts
+// open-next.config.ts
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+
+export default defineCloudflareConfig({});
+```
+
+Give the Spacefast build its own package script:
+
+```json
+{
+  "scripts": {
+    "build": "next build",
+    "build:spacefast": "opennextjs-cloudflare build"
+  }
+}
+```
+
+Build from the project root:
+
+```bash
+bun run build:spacefast
+```
+
+Confirm that OpenNext produced the worker Spacefast detects:
+
+```bash
+ls .open-next/worker.js
+```
+
+Then publish the project. Do not run OpenNext's `deploy` command: that deploys
+directly to Cloudflare instead of creating a Spacefast version.
+
+```bash
+sf publish
+```
+
+Spacefast detects `.open-next/worker.js`, enables the Node.js compatibility
+support it needs, and publishes the worker with the generated static assets.
+Requests for a published file are served from disk first; SSR, Route Handlers,
+and other misses reach the worker. You can pin the detected entry explicitly:
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "runtime": {
+    "kind": "functions",
+    "entry": ".open-next/worker.js"
+  }
+}
+```
+
+See OpenNext's [Cloudflare adapter setup](https://opennext.js.org/cloudflare/get-started)
+and [CLI reference](https://opennext.js.org/cloudflare/cli) for framework-specific
+requirements. Spacefast owns the publish step, so Cloudflare deployment and
+binding configuration from those guides do not apply here.
 
 ## Images
 
@@ -172,7 +255,8 @@ export function CardImage() {
 
 ## Publishing checklist
 
-- Confirm `next build` creates an `out` directory with `index.html` at the root.
-- Replace Vercel or Next.js runtime features before publishing.
+- For a static export, confirm `next build` creates an `out` directory with `index.html` at the root.
+- For Functions, confirm the OpenNext build creates `.open-next/worker.js`.
+- Replace request-time features when publishing a static export; keep them when using Functions.
 - Put `_redirects` and `_headers` in the exported output if the space needs Spacefast routing, response headers, or `_headers` Basic Auth (not available on Free; available on Personal and Work).
 - Use Site Accelerator URLs only for public images that the CDN can fetch.

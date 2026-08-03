@@ -65,13 +65,13 @@ sf share people ls
 Change one person's access:
 
 ```bash
-sf share people edit <person-id> --grant /docs=commenter
+sf share people edit '<person-id>' --grant /docs=commenter
 ```
 
 Remove them:
 
 ```bash
-sf share people remove <person-id>
+sf share people remove '<person-id>'
 ```
 
 Visitors can request access from the private-space access page. List pending
@@ -84,13 +84,13 @@ sf share request ls
 Approve one:
 
 ```bash
-sf share request approve <request-id>
+sf share request approve '<request-id>'
 ```
 
 Deny one:
 
 ```bash
-sf share request deny <request-id>
+sf share request deny '<request-id>'
 ```
 
 Approval creates a Person Grant. It does not make the space public. Responses
@@ -115,13 +115,13 @@ sf share link ls
 Copy the credential URL:
 
 ```bash
-sf share link copy <link-id> --show-secret
+sf share link copy '<link-id>' --show-secret
 ```
 
 Revoke it and every session it admitted:
 
 ```bash
-sf share link revoke <link-id>
+sf share link revoke '<link-id>'
 ```
 
 Spacefast shows the secret URL only when you create or explicitly copy it.
@@ -137,7 +137,7 @@ sf share password create --name "Launch review" --password-from-stdin --can comm
 Rotate one:
 
 ```bash
-sf share password rotate <password-id> --password-from-stdin
+sf share password rotate '<password-id>' --password-from-stdin
 ```
 
 Machine tokens are header-only bearer credentials. They can also grant Publish
@@ -150,7 +150,7 @@ sf share token create --name "Docs publisher" --can publish --path '/docs/**'
 Rotate a compromised token:
 
 ```bash
-sf share token rotate <machine-id> --show-secret
+sf share token rotate '<machine-id>' --show-secret
 ```
 
 Treat password proofs, Link URLs, and machine tokens as secrets. CLI JSON and
@@ -162,11 +162,11 @@ Connect an OIDC provider or white-label Ed25519 signer, then create Grants for
 the external subjects it proves.
 
 ```bash
-sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id <id> --client-secret <secret>
+sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id '<client-id>' --client-secret '<client-secret>'
 ```
 
 ```bash
-sf share identity grant --connection <connection-id> --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
+sf share identity grant --connection '<connection-id>' --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
 ```
 
 Signer rotation can overlap old and new keys. Revoking a connection revokes its
