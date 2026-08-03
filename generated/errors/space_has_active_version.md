@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_has_active_version",
     "message": "The space still has an active version, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_has_active_version",
+    "docsUrl": "https://docs.spacefast.com/errors/space_has_active_version",
     "requestId": "req_4mz0v8qk"
   }
 }

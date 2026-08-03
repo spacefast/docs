@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runs_invalid",
     "message": "The Zero run-handler payload is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runs_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runs_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

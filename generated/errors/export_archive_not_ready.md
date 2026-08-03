@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "export_archive_not_ready",
     "message": "The export archive is still being prepared.",
-    "docsUrl": "https://spacefast.com/docs/errors/export_archive_not_ready",
+    "docsUrl": "https://docs.spacefast.com/errors/export_archive_not_ready",
     "requestId": "req_4mz0v8qk"
   }
 }

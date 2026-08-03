@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "template_variable_unresolved",
     "message": "A template references a variable that has no value.",
-    "docsUrl": "https://spacefast.com/docs/errors/template_variable_unresolved",
+    "docsUrl": "https://docs.spacefast.com/errors/template_variable_unresolved",
     "requestId": "req_4mz0v8qk"
   }
 }

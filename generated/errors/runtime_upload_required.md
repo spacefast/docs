@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_upload_required",
     "message": "This step requires uploaded content that has not arrived yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_upload_required",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_upload_required",
     "requestId": "req_4mz0v8qk"
   }
 }

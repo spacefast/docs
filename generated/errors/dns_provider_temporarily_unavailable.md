@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_temporarily_unavailable",
     "message": "The DNS provider is rate-limited, degraded, or temporarily unavailable.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_temporarily_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_temporarily_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

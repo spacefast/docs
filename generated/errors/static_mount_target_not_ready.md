@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_mount_target_not_ready",
     "message": "The target production version is not ready for static delivery.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_mount_target_not_ready",
+    "docsUrl": "https://docs.spacefast.com/errors/static_mount_target_not_ready",
     "requestId": "req_4mz0v8qk"
   }
 }

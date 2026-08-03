@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_globals_failed",
     "message": "The Zero runner could not install runtime globals for the endpoint.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_globals_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_globals_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_timeout",
     "message": "The DNS provider did not accept the change within the bounded wait.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_timeout",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_timeout",
     "requestId": "req_4mz0v8qk"
   }
 }

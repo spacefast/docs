@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "source_archive_decompression_timeout",
     "message": "The uploaded source archive did not finish decompressing within the validation limit.",
-    "docsUrl": "https://spacefast.com/docs/errors/source_archive_decompression_timeout",
+    "docsUrl": "https://docs.spacefast.com/errors/source_archive_decompression_timeout",
     "requestId": "req_4mz0v8qk"
   }
 }

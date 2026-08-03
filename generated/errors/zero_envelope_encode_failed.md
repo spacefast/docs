@@ -5,7 +5,7 @@ description: "The PHP bridge could not encode the Zero runner request envelope."
 
 The PHP bridge could not encode the Zero runner request envelope.
 
-**How to resolve:** Retry with valid request data; report the issue if it persists.
+**How to resolve:** Retry with valid request data. Report the issue if it persists.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_envelope_encode_failed",
     "message": "The PHP bridge could not encode the Zero runner request envelope.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_envelope_encode_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_envelope_encode_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

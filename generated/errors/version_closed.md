@@ -1,9 +1,9 @@
 ---
 title: "version_closed"
-description: "The version's upload session is closed; no more files can be added."
+description: "The version's upload session is closed. No more files can be added."
 ---
 
-The version's upload session is closed; no more files can be added.
+The version's upload session is closed. No more files can be added.
 
 **How to resolve:** Start a new version for additional changes.
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "version_closed",
-    "message": "The version's upload session is closed; no more files can be added.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_closed",
+    "message": "The version's upload session is closed. No more files can be added.",
+    "docsUrl": "https://docs.spacefast.com/errors/version_closed",
     "requestId": "req_4mz0v8qk"
   }
 }

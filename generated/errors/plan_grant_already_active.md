@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "plan_grant_already_active",
     "message": "The team already holds an active operator grant for this plan.",
-    "docsUrl": "https://spacefast.com/docs/errors/plan_grant_already_active",
+    "docsUrl": "https://docs.spacefast.com/errors/plan_grant_already_active",
     "requestId": "req_4mz0v8qk"
   }
 }

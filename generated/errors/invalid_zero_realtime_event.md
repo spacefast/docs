@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_zero_realtime_event",
     "message": "The Zero realtime event payload is malformed or scoped to the wrong space.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_zero_realtime_event",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_zero_realtime_event",
     "requestId": "req_4mz0v8qk"
   }
 }

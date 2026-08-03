@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "claim_target_not_found",
     "message": "The team or account to claim the space into was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/claim_target_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/claim_target_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

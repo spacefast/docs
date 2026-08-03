@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_replay_unavailable",
     "message": "Realtime replay is not configured for this Zero version.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_replay_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_replay_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

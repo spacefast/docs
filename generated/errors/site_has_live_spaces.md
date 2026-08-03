@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "site_has_live_spaces",
     "message": "The site still has live spaces assigned to it, so it cannot be deleted.",
-    "docsUrl": "https://spacefast.com/docs/errors/site_has_live_spaces",
+    "docsUrl": "https://docs.spacefast.com/errors/site_has_live_spaces",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "config_file_too_large",
     "message": "The sf.jsonc configuration file exceeds the maximum size.",
-    "docsUrl": "https://spacefast.com/docs/errors/config_file_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/config_file_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

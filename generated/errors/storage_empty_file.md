@@ -1,11 +1,11 @@
 ---
-title: "zero_source_invalid"
-description: "The Zero endpoint source is invalid."
+title: "storage_empty_file"
+description: "The Zero storage upload is empty."
 ---
 
-The Zero endpoint source is invalid.
+The Zero storage upload is empty.
 
-**How to resolve:** Fix the generated endpoint source and rebuild.
+**How to resolve:** Upload a file containing at least 1 byte.
 
 <div data-pagefind-ignore>
 
@@ -18,9 +18,9 @@ structured context. Match on `code`, never on `message`.
 ```json
 {
   "error": {
-    "code": "zero_source_invalid",
-    "message": "The Zero endpoint source is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_source_invalid",
+    "code": "storage_empty_file",
+    "message": "The Zero storage upload is empty.",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_empty_file",
     "requestId": "req_4mz0v8qk"
   }
 }

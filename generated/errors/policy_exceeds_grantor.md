@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "policy_exceeds_grantor",
     "message": "The requested key policy grants more than your own credential allows.",
-    "docsUrl": "https://spacefast.com/docs/errors/policy_exceeds_grantor",
+    "docsUrl": "https://docs.spacefast.com/errors/policy_exceeds_grantor",
     "requestId": "req_4mz0v8qk"
   }
 }

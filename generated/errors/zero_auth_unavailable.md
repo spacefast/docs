@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_auth_unavailable",
     "message": "Hosted Zero auth is not configured for this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_auth_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_auth_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

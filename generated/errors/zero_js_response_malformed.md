@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_response_malformed",
     "message": "The Zero endpoint returned a malformed runner response.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_response_malformed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_response_malformed",
     "requestId": "req_4mz0v8qk"
   }
 }

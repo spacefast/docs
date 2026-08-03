@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_no_publishable_files",
     "message": "The version contains no publishable files.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_no_publishable_files",
+    "docsUrl": "https://docs.spacefast.com/errors/version_no_publishable_files",
     "requestId": "req_4mz0v8qk"
   }
 }

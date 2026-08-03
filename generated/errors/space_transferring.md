@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_transferring",
     "message": "The space has a transfer in progress, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_transferring",
+    "docsUrl": "https://docs.spacefast.com/errors/space_transferring",
     "requestId": "req_4mz0v8qk"
   }
 }

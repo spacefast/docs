@@ -5,7 +5,7 @@ description: "The background job was not found."
 
 The background job was not found.
 
-**How to resolve:** Verify the job id; completed jobs are eventually pruned.
+**How to resolve:** Verify the job id. Completed jobs are eventually pruned.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "job_not_found",
     "message": "The background job was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/job_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/job_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

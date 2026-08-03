@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_facet_not_applicable",
     "message": "The requested facet does not apply to this domain.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_facet_not_applicable",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_facet_not_applicable",
     "requestId": "req_4mz0v8qk"
   }
 }

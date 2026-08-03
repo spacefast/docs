@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_file_count_exceeded",
     "message": "The version exceeds the maximum number of files.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_file_count_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/version_file_count_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

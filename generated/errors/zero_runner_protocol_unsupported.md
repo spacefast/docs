@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runner_protocol_unsupported",
     "message": "The Zero runner received an unsupported invoke protocol.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runner_protocol_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_protocol_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

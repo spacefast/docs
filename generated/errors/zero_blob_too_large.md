@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_blob_too_large",
     "message": "The local Zero blob value exceeds the maximum allowed size.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_blob_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_blob_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

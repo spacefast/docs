@@ -5,7 +5,7 @@ description: "A newer publish superseded this operation, so it was skipped."
 
 A newer publish superseded this operation, so it was skipped.
 
-**How to resolve:** No action needed; the newer publish already carries the change.
+**How to resolve:** No action needed. The newer publish already carries the change.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "superseded_by_publish",
     "message": "A newer publish superseded this operation, so it was skipped.",
-    "docsUrl": "https://spacefast.com/docs/errors/superseded_by_publish",
+    "docsUrl": "https://docs.spacefast.com/errors/superseded_by_publish",
     "requestId": "req_4mz0v8qk"
   }
 }

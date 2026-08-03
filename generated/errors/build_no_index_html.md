@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_no_index_html",
     "message": "The build produced output but no index.html at the site root.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_no_index_html",
+    "docsUrl": "https://docs.spacefast.com/errors/build_no_index_html",
     "requestId": "req_4mz0v8qk"
   }
 }

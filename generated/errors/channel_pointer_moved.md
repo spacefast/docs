@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "channel_pointer_moved",
     "message": "The channel was promoted to a different version since you read it.",
-    "docsUrl": "https://spacefast.com/docs/errors/channel_pointer_moved",
+    "docsUrl": "https://docs.spacefast.com/errors/channel_pointer_moved",
     "requestId": "req_4mz0v8qk"
   }
 }

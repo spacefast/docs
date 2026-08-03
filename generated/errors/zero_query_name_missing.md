@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_query_name_missing",
     "message": "A Zero realtime query subscription did not include a query name.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_query_name_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_query_name_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

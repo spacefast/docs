@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "queue_not_found",
     "message": "The named job queue does not exist.",
-    "docsUrl": "https://spacefast.com/docs/errors/queue_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/queue_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

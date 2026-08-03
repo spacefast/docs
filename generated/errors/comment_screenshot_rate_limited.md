@@ -1,9 +1,9 @@
 ---
 title: "comment_screenshot_rate_limited"
-description: "Too many anonymous comment screenshot uploads were attempted."
+description: "Too many comment screenshot uploads were attempted."
 ---
 
-Too many anonymous comment screenshot uploads were attempted.
+Too many comment screenshot uploads were attempted.
 
 **How to resolve:** Wait for the one-minute window to reset, then retry the screenshot upload.
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "comment_screenshot_rate_limited",
-    "message": "Too many anonymous comment screenshot uploads were attempted.",
-    "docsUrl": "https://spacefast.com/docs/errors/comment_screenshot_rate_limited",
+    "message": "Too many comment screenshot uploads were attempted.",
+    "docsUrl": "https://docs.spacefast.com/errors/comment_screenshot_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

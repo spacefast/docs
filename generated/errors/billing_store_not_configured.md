@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "billing_store_not_configured",
     "message": "App Store or Google Play billing is not configured on this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/billing_store_not_configured",
+    "docsUrl": "https://docs.spacefast.com/errors/billing_store_not_configured",
     "requestId": "req_4mz0v8qk"
   }
 }

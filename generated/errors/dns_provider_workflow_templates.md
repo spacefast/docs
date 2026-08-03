@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_workflow_templates",
     "message": "This provider exposes setup through workflow templates instead of low-level DNS edits.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_workflow_templates",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_workflow_templates",
     "requestId": "req_4mz0v8qk"
   }
 }

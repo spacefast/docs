@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invitation_expired",
     "message": "The invitation has expired and can no longer be accepted.",
-    "docsUrl": "https://spacefast.com/docs/errors/invitation_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/invitation_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_artifact_invalid",
     "message": "The Zero endpoint artifact is missing required runtime metadata.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_artifact_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_artifact_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

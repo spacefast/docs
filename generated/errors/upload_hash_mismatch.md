@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "upload_hash_mismatch",
     "message": "An uploaded file's bytes do not match the declared sha256.",
-    "docsUrl": "https://spacefast.com/docs/errors/upload_hash_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/upload_hash_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_message_invalid",
     "message": "The Zero realtime websocket message is malformed.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_message_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_message_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

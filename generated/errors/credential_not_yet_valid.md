@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "credential_not_yet_valid",
     "message": "The credential is not valid yet because its start time is in the future.",
-    "docsUrl": "https://spacefast.com/docs/errors/credential_not_yet_valid",
+    "docsUrl": "https://docs.spacefast.com/errors/credential_not_yet_valid",
     "requestId": "req_4mz0v8qk"
   }
 }

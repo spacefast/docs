@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "template_file_too_large",
     "message": "A template file exceeds the maximum size for substitution.",
-    "docsUrl": "https://spacefast.com/docs/errors/template_file_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/template_file_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

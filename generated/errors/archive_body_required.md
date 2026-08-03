@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "archive_body_required",
     "message": "This request must carry an archive body but none was provided.",
-    "docsUrl": "https://spacefast.com/docs/errors/archive_body_required",
+    "docsUrl": "https://docs.spacefast.com/errors/archive_body_required",
     "requestId": "req_4mz0v8qk"
   }
 }

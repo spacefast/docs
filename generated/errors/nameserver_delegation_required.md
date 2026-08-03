@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "nameserver_delegation_required",
     "message": "This operation requires the domain to be delegated to Spacefast nameservers.",
-    "docsUrl": "https://spacefast.com/docs/errors/nameserver_delegation_required",
+    "docsUrl": "https://docs.spacefast.com/errors/nameserver_delegation_required",
     "requestId": "req_4mz0v8qk"
   }
 }

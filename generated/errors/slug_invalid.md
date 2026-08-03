@@ -5,7 +5,7 @@ description: "The slug does not meet the structural rules for managed names."
 
 The slug does not meet the structural rules for managed names.
 
-**How to resolve:** Use lowercase letters, numbers, and single dashes within the allowed length; the error message identifies the failed rule.
+**How to resolve:** Use lowercase letters, numbers, and single dashes within the allowed length. The error message identifies the failed rule.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "slug_invalid",
     "message": "The slug does not meet the structural rules for managed names.",
-    "docsUrl": "https://spacefast.com/docs/errors/slug_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/slug_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

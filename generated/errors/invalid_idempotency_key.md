@@ -1,11 +1,11 @@
 ---
 title: "invalid_idempotency_key"
-description: "The Idempotency-Key header is missing, empty, or too long."
+description: "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal."
 ---
 
-The Idempotency-Key header is missing, empty, or too long.
+The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.
 
-**How to resolve:** Send a non-empty Idempotency-Key header of at most 512 characters.
+**How to resolve:** Send a non-empty Idempotency-Key of at most 255 characters. Credential-free publish retries also need a stable, secret X-Spacefast-Idempotency-Principal containing 64 hexadecimal characters.
 
 <div data-pagefind-ignore>
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "invalid_idempotency_key",
-    "message": "The Idempotency-Key header is missing, empty, or too long.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_idempotency_key",
+    "message": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_idempotency_key",
     "requestId": "req_4mz0v8qk"
   }
 }

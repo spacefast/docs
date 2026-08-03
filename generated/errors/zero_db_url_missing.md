@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_url_missing",
     "message": "No Zero database URL is configured.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_url_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_url_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

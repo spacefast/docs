@@ -5,7 +5,7 @@ description: "Republishing spaces after a variable change failed."
 
 Republishing spaces after a variable change failed.
 
-**How to resolve:** Check the operation's diagnostics; live content keeps serving the previous values.
+**How to resolve:** Check the operation's diagnostics. Live content keeps serving the previous values.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "variable_cascade_failed",
     "message": "Republishing spaces after a variable change failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/variable_cascade_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/variable_cascade_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

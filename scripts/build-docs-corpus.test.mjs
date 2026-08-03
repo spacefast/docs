@@ -11,7 +11,7 @@ const fixture = `# Spacefast Docs
 > Build and publish static sites with Spacefast.
 
 # Quickstart
-Source: https://developers.spacefast.com/quickstart
+Source: https://docs.spacefast.com/quickstart
 
 Publish a site in a few commands.
 
@@ -22,7 +22,7 @@ Publish a site in a few commands.
 ---
 
 # REST API
-Source: https://developers.spacefast.com/api/reference
+Source: https://docs.spacefast.com/api/reference
 
 Use the REST API to manage spaces and versions.
 `;
@@ -43,7 +43,7 @@ test("turns Blume's agent-readable output into ranked corpus records", () => {
 
 test("includes the Platform API in the unified developer corpus", () => {
   const pages = parseLlmsFull(`# Platform API
-Source: https://developers.spacefast.com/platforms/api/reference
+Source: https://docs.spacefast.com/platforms/api/reference
 
 Tenant and customer operations.
 `);

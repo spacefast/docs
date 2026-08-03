@@ -5,7 +5,7 @@ description: "The site was already deleted."
 
 The site was already deleted.
 
-**How to resolve:** No action needed; the site is gone.
+**How to resolve:** No action needed. The site is gone.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "site_already_deleted",
     "message": "The site was already deleted.",
-    "docsUrl": "https://spacefast.com/docs/errors/site_already_deleted",
+    "docsUrl": "https://docs.spacefast.com/errors/site_already_deleted",
     "requestId": "req_4mz0v8qk"
   }
 }

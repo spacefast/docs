@@ -5,7 +5,7 @@ description: "The runtime token is missing its replay-protection id."
 
 The runtime token is missing its replay-protection id.
 
-**How to resolve:** Mint a fresh runtime token; tokens must carry a jti claim.
+**How to resolve:** Mint a fresh runtime token. Tokens must carry a jti claim.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_jti_missing",
     "message": "The runtime token is missing its replay-protection id.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_jti_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_jti_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

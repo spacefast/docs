@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_scope_forbidden",
     "message": "The runtime token's scope does not cover this path or action.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_scope_forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_scope_forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

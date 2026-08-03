@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "anonymous_space_limit_reached",
     "message": "Too many unclaimed anonymous spaces are already active for this client.",
-    "docsUrl": "https://spacefast.com/docs/errors/anonymous_space_limit_reached",
+    "docsUrl": "https://docs.spacefast.com/errors/anonymous_space_limit_reached",
     "requestId": "req_4mz0v8qk"
   }
 }

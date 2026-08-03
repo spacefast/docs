@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_feature_descriptors",
     "message": "This provider exposes domain features through capability descriptors.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_feature_descriptors",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_feature_descriptors",
     "requestId": "req_4mz0v8qk"
   }
 }

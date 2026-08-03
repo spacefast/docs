@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_runtime_event",
     "message": "The runtime event payload is not recognized.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_runtime_event",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_runtime_event",
     "requestId": "req_4mz0v8qk"
   }
 }

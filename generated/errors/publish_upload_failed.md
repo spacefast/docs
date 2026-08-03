@@ -5,7 +5,7 @@ description: "Uploading the publish content failed."
 
 Uploading the publish content failed.
 
-**How to resolve:** Retry the publish; partial uploads are resumable through the upload session.
+**How to resolve:** Retry the publish. Partial uploads are resumable through the upload session.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_upload_failed",
     "message": "Uploading the publish content failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_upload_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_upload_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

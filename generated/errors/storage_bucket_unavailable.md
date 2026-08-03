@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "storage_bucket_unavailable",
     "message": "No usable internal storage bucket is configured for this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/storage_bucket_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_bucket_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

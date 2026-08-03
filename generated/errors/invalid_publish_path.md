@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_publish_path",
     "message": "A file path in the publish payload is not allowed.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_publish_path",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_publish_path",
     "requestId": "req_4mz0v8qk"
   }
 }

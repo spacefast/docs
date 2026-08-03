@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_bytecode_hash_mismatch",
     "message": "The Zero endpoint bytecode hash does not match its artifact metadata.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_bytecode_hash_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_bytecode_hash_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

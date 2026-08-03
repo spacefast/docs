@@ -5,7 +5,7 @@ description: "No signing key matching the token's key id was found."
 
 No signing key matching the token's key id was found.
 
-**How to resolve:** Refresh the runtime JWKS; the signing keys may have rotated.
+**How to resolve:** Refresh the runtime JWKS. The signing keys may have rotated.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_jwks_key_missing",
     "message": "No signing key matching the token's key id was found.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_jwks_key_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_jwks_key_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

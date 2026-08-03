@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_websocket_forbidden",
     "message": "The Zero realtime websocket credential is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_websocket_forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_websocket_forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

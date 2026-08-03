@@ -5,7 +5,7 @@ description: "The Zero endpoint artifact could not be parsed."
 
 The Zero endpoint artifact could not be parsed.
 
-**How to resolve:** Rebuild the Zero project; do not edit generated artifact JSON by hand.
+**How to resolve:** Rebuild the Zero project. Do not edit generated artifact JSON by hand.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_artifact_malformed",
     "message": "The Zero endpoint artifact could not be parsed.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_artifact_malformed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_artifact_malformed",
     "requestId": "req_4mz0v8qk"
   }
 }

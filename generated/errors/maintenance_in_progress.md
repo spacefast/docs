@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "maintenance_in_progress",
     "message": "This change is temporarily unavailable while maintenance finishes.",
-    "docsUrl": "https://spacefast.com/docs/errors/maintenance_in_progress",
+    "docsUrl": "https://docs.spacefast.com/errors/maintenance_in_progress",
     "requestId": "req_4mz0v8qk"
   }
 }

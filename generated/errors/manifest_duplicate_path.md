@@ -5,7 +5,7 @@ description: "The upload manifest declares the same path more than once."
 
 The upload manifest declares the same path more than once.
 
-**How to resolve:** Deduplicate paths; comparisons use the canonical (decoded, NFC) form.
+**How to resolve:** Deduplicate paths. Comparisons use the canonical (decoded, NFC) form.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "manifest_duplicate_path",
     "message": "The upload manifest declares the same path more than once.",
-    "docsUrl": "https://spacefast.com/docs/errors/manifest_duplicate_path",
+    "docsUrl": "https://docs.spacefast.com/errors/manifest_duplicate_path",
     "requestId": "req_4mz0v8qk"
   }
 }

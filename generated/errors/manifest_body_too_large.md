@@ -5,7 +5,7 @@ description: "The upload manifest body exceeds the maximum size."
 
 The upload manifest body exceeds the maximum size.
 
-**How to resolve:** Keep the manifest under 16 MB; split very large publishes into batches.
+**How to resolve:** Keep the manifest under 16 MB. Split very large publishes into batches.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "manifest_body_too_large",
     "message": "The upload manifest body exceeds the maximum size.",
-    "docsUrl": "https://spacefast.com/docs/errors/manifest_body_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/manifest_body_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

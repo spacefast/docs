@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "download_required",
     "message": "This content is too large to return inline and must be downloaded.",
-    "docsUrl": "https://spacefast.com/docs/errors/download_required",
+    "docsUrl": "https://docs.spacefast.com/errors/download_required",
     "requestId": "req_4mz0v8qk"
   }
 }

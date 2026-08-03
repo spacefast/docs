@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "access_denied",
     "message": "The authorization request was denied by the user.",
-    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
+    "docsUrl": "https://docs.spacefast.com/errors/access_denied",
     "requestId": "req_4mz0v8qk"
   }
 }

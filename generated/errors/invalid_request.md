@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_request",
     "message": "The request is malformed.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_request",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_request",
     "requestId": "req_4mz0v8qk"
   }
 }

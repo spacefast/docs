@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_mismatch",
     "message": "The requested Zero endpoint does not match the endpoint artifact.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "claim_blocked_takedown",
     "message": "This space is under an abuse takedown and cannot be claimed.",
-    "docsUrl": "https://spacefast.com/docs/errors/claim_blocked_takedown",
+    "docsUrl": "https://docs.spacefast.com/errors/claim_blocked_takedown",
     "requestId": "req_4mz0v8qk"
   }
 }

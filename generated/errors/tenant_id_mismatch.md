@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "tenant_id_mismatch",
     "message": "The resource belongs to a different tenant than the request.",
-    "docsUrl": "https://spacefast.com/docs/errors/tenant_id_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/tenant_id_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

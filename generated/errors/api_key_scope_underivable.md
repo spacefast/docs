@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "api_key_scope_underivable",
     "message": "A concrete access policy could not be derived from the requested scope and permissions.",
-    "docsUrl": "https://spacefast.com/docs/errors/api_key_scope_underivable",
+    "docsUrl": "https://docs.spacefast.com/errors/api_key_scope_underivable",
     "requestId": "req_4mz0v8qk"
   }
 }

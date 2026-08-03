@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_sql_invalid",
     "message": "The Zero runner rejected unsafe or unsupported SQL.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_sql_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_sql_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

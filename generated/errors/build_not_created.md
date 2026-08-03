@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_not_created",
     "message": "The build could not be created.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_not_created",
+    "docsUrl": "https://docs.spacefast.com/errors/build_not_created",
     "requestId": "req_4mz0v8qk"
   }
 }

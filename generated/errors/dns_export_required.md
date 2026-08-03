@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_export_required",
     "message": "This operation requires exporting the current DNS records first.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_export_required",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_export_required",
     "requestId": "req_4mz0v8qk"
   }
 }

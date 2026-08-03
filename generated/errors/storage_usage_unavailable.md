@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "storage_usage_unavailable",
     "message": "Storage usage could not be computed right now.",
-    "docsUrl": "https://spacefast.com/docs/errors/storage_usage_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_usage_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

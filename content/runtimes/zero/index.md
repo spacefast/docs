@@ -1,0 +1,103 @@
+---
+title: Zero
+description: Build apps with a database, storage, authentication, and typed server functions.
+---
+
+Zero is the full-stack Spacefast runtime. One project contains a Preact client,
+a typed server capsule, a database schema, authentication, and storage. One
+publish command deploys the whole app as a normal space version.
+
+:::warning[Private beta]
+Zero requires a team private-beta flag. Ask Spacefast to enable it before you
+publish a Zero app.
+:::
+
+## Quick start
+
+```bash
+sf create my-app --runtime zero
+```
+
+```bash
+cd my-app
+```
+
+```bash
+sf dev
+```
+
+Open `http://localhost:4173`. Edit `client/index.tsx` and `server/index.ts`;
+the local server reloads on save. State is in memory unless you pass
+`--state-backend sqlite`.
+
+```bash
+sf publish
+```
+
+Publish compiles the capsule, plans and applies the database migration,
+uploads the client, and activates the version.
+
+## Project layout
+
+```text
+my-app/
+  client/index.tsx
+  server/index.ts
+  shared/
+  .env.server
+  sf.jsonc
+  package.json
+```
+
+The runtime is explicit:
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "name": "My app",
+  "runtime": {
+    "kind": "zero",
+    "server": "server/index.ts",
+    "client": "client/index.tsx"
+  }
+}
+```
+
+Both entries are required. An unresolved entry fails the publish instead of
+exposing the source as static files.
+
+## Build the app
+
+- [Capsule API](/runtimes/zero/capsule-api) — schema, queries, mutations,
+  actions, endpoints, sockets, variables, logging, and client hooks.
+- [Authentication](/runtimes/zero/authentication) — guest identity,
+  WordPress.com sign-in, sign-out, and server-side authorization.
+- [Database](/runtimes/zero/database) — fields, indexes, reads, writes,
+  migrations, transactions, and inspection.
+- [Storage](/runtimes/zero/storage) — authenticated uploads, public and private
+  objects, deletion, safety policy, and limits.
+
+## Operate a deployed app
+
+```bash
+sf runtime status
+```
+
+```bash
+sf logs runtime --follow
+```
+
+```bash
+sf db
+```
+
+```bash
+sf db console
+```
+
+The first Zero publish places the space on its own site and database. A publish
+can report `zero_activating` while that move completes. Code belongs to the
+version; database rows and stored objects belong to the space and do not roll
+back with code.
+
+The compiled server bundle is limited to 768 KiB.

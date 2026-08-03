@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_not_connected",
     "message": "This domain has no connected DNS provider zone.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_not_connected",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_not_connected",
     "requestId": "req_4mz0v8qk"
   }
 }

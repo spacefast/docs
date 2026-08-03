@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "verification_required",
     "message": "Domain verification is required before this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/verification_required",
+    "docsUrl": "https://docs.spacefast.com/errors/verification_required",
     "requestId": "req_4mz0v8qk"
   }
 }

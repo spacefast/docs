@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_operation_missing",
     "message": "The runtime operation referenced by this request was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_operation_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_operation_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

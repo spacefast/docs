@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "team_ref_required",
     "message": "A team reference is required for this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/team_ref_required",
+    "docsUrl": "https://docs.spacefast.com/errors/team_ref_required",
     "requestId": "req_4mz0v8qk"
   }
 }

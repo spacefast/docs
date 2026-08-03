@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_invalid",
     "message": "A Zero endpoint definition or its database metadata is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

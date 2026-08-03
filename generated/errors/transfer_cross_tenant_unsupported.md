@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_cross_tenant_unsupported",
     "message": "Spaces cannot be transferred across tenants.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_cross_tenant_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_cross_tenant_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

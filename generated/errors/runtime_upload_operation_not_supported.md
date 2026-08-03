@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_upload_operation_not_supported",
     "message": "The runtime upload session does not support this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_upload_operation_not_supported",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_upload_operation_not_supported",
     "requestId": "req_4mz0v8qk"
   }
 }

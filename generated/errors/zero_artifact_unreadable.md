@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_artifact_unreadable",
     "message": "The Zero endpoint artifact could not be read by the runtime.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_artifact_unreadable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_artifact_unreadable",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_run_operation_unsupported",
     "message": "The hosted Zero runtime does not support this run operation yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_run_operation_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_run_operation_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

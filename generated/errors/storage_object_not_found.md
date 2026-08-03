@@ -1,11 +1,11 @@
 ---
-title: "datacenters_unavailable"
-description: "Placement regions are temporarily unavailable."
+title: "storage_object_not_found"
+description: "The requested Zero storage object does not exist."
 ---
 
-Placement regions are temporarily unavailable.
+The requested Zero storage object does not exist.
 
-**How to resolve:** Retry after the datacenter list has synced.
+**How to resolve:** Check the object key or upload the object again.
 
 <div data-pagefind-ignore>
 
@@ -18,9 +18,9 @@ structured context. Match on `code`, never on `message`.
 ```json
 {
   "error": {
-    "code": "datacenters_unavailable",
-    "message": "Placement regions are temporarily unavailable.",
-    "docsUrl": "https://spacefast.com/docs/errors/datacenters_unavailable",
+    "code": "storage_object_not_found",
+    "message": "The requested Zero storage object does not exist.",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_object_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

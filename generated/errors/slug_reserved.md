@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "slug_reserved",
     "message": "The slug is reserved for infrastructure, product, or impersonation protection.",
-    "docsUrl": "https://spacefast.com/docs/errors/slug_reserved",
+    "docsUrl": "https://docs.spacefast.com/errors/slug_reserved",
     "requestId": "req_4mz0v8qk"
   }
 }

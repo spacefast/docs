@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_claim_token",
     "message": "The claim token is invalid or does not match this space.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_claim_token",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_claim_token",
     "requestId": "req_4mz0v8qk"
   }
 }

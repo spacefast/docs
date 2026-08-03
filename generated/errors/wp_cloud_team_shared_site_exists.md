@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_team_shared_site_exists",
     "message": "The team already has a shared site of this class.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_team_shared_site_exists",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_team_shared_site_exists",
     "requestId": "req_4mz0v8qk"
   }
 }

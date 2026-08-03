@@ -5,7 +5,7 @@ description: "The import is not waiting for an archive upload."
 
 The import is not waiting for an archive upload.
 
-**How to resolve:** Check the import status; the archive step may already be complete.
+**How to resolve:** Check the import status. The archive step may already be complete.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "import_not_waiting_for_archive",
     "message": "The import is not waiting for an archive upload.",
-    "docsUrl": "https://spacefast.com/docs/errors/import_not_waiting_for_archive",
+    "docsUrl": "https://docs.spacefast.com/errors/import_not_waiting_for_archive",
     "requestId": "req_4mz0v8qk"
   }
 }

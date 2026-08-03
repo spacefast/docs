@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_timeout",
     "message": "The build exceeded its time limit before producing a version.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_timeout",
+    "docsUrl": "https://docs.spacefast.com/errors/build_timeout",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_bound",
     "message": "The domain is currently bound to a space, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_bound",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_bound",
     "requestId": "req_4mz0v8qk"
   }
 }

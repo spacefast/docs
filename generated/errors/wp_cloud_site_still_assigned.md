@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_site_still_assigned",
     "message": "The provider site still has assignments and cannot be released.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_site_still_assigned",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_site_still_assigned",
     "requestId": "req_4mz0v8qk"
   }
 }

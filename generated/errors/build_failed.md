@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_failed",
     "message": "The build run failed before producing a version.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/build_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

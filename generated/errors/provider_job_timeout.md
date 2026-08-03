@@ -5,7 +5,7 @@ description: "A hosting-provider job timed out while processing this operation."
 
 A hosting-provider job timed out while processing this operation.
 
-**How to resolve:** Retry the operation; the provider may be slow right now.
+**How to resolve:** Retry the operation. The provider may be slow right now.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "provider_job_timeout",
     "message": "A hosting-provider job timed out while processing this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_job_timeout",
+    "docsUrl": "https://docs.spacefast.com/errors/provider_job_timeout",
     "requestId": "req_4mz0v8qk"
   }
 }

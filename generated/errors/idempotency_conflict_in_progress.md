@@ -5,7 +5,7 @@ description: "Another request with the same Idempotency-Key is still in flight."
 
 Another request with the same Idempotency-Key is still in flight.
 
-**How to resolve:** Wait for the original request to finish; its response will be replayed.
+**How to resolve:** Wait for the original request to finish. Its response will be replayed.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "idempotency_conflict_in_progress",
     "message": "Another request with the same Idempotency-Key is still in flight.",
-    "docsUrl": "https://spacefast.com/docs/errors/idempotency_conflict_in_progress",
+    "docsUrl": "https://docs.spacefast.com/errors/idempotency_conflict_in_progress",
     "requestId": "req_4mz0v8qk"
   }
 }

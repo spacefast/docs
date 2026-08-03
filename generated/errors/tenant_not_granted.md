@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "tenant_not_granted",
     "message": "Your credential has no grant on the requested tenant.",
-    "docsUrl": "https://spacefast.com/docs/errors/tenant_not_granted",
+    "docsUrl": "https://docs.spacefast.com/errors/tenant_not_granted",
     "requestId": "req_4mz0v8qk"
   }
 }

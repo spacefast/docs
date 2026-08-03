@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "claimed_space_quota_exceeded",
     "message": "Claiming this space would exceed the target team's space quota.",
-    "docsUrl": "https://spacefast.com/docs/errors/claimed_space_quota_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/claimed_space_quota_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

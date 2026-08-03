@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_not_restorable",
     "message": "The space is past its recovery window and cannot be restored.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_not_restorable",
+    "docsUrl": "https://docs.spacefast.com/errors/space_not_restorable",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "inject_snippet_too_large",
     "message": "An inject snippet exceeds the per-snippet size limit.",
-    "docsUrl": "https://spacefast.com/docs/errors/inject_snippet_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/inject_snippet_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

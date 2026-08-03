@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "export_version_not_found",
     "message": "The version requested for export was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/export_version_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/export_version_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

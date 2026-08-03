@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_total_bytes_exceeded",
     "message": "The version exceeds the maximum total size.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_total_bytes_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/version_total_bytes_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

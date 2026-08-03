@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_controlled_desired_state",
     "message": "This DNS provider is controlled through desired-state templates instead of direct record edits.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_controlled_desired_state",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_controlled_desired_state",
     "requestId": "req_4mz0v8qk"
   }
 }

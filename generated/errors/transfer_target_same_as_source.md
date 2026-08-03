@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_target_same_as_source",
     "message": "The transfer target is the same principal that already owns the space.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_target_same_as_source",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_target_same_as_source",
     "requestId": "req_4mz0v8qk"
   }
 }

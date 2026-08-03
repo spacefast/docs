@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "last_owner",
     "message": "The last owner of a team cannot be removed or downgraded.",
-    "docsUrl": "https://spacefast.com/docs/errors/last_owner",
+    "docsUrl": "https://docs.spacefast.com/errors/last_owner",
     "requestId": "req_4mz0v8qk"
   }
 }

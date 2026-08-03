@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_field_conflict",
     "message": "Two DNS fields cannot be used together for this provider or record type.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_field_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_field_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

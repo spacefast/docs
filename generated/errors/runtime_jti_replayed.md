@@ -1,9 +1,9 @@
 ---
 title: "runtime_jti_replayed"
-description: "The runtime token was already used; replays are rejected."
+description: "The runtime token was already used. Replays are rejected."
 ---
 
-The runtime token was already used; replays are rejected.
+The runtime token was already used. Replays are rejected.
 
 **How to resolve:** Mint a fresh runtime token for each request.
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "runtime_jti_replayed",
-    "message": "The runtime token was already used; replays are rejected.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_jti_replayed",
+    "message": "The runtime token was already used. Replays are rejected.",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_jti_replayed",
     "requestId": "req_4mz0v8qk"
   }
 }

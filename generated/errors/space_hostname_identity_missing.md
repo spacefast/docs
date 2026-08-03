@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_hostname_identity_missing",
     "message": "The space is missing its persisted default hostname identity.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_hostname_identity_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/space_hostname_identity_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

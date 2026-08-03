@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_domain_name",
     "message": "The domain name is not a valid registrable hostname.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_domain_name",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_domain_name",
     "requestId": "req_4mz0v8qk"
   }
 }

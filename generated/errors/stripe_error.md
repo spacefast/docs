@@ -5,7 +5,7 @@ description: "The billing provider reported an error."
 
 The billing provider reported an error.
 
-**How to resolve:** Retry; if it persists, check the team's billing settings.
+**How to resolve:** Retry. If it persists, check the team's billing settings.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "stripe_error",
     "message": "The billing provider reported an error.",
-    "docsUrl": "https://spacefast.com/docs/errors/stripe_error",
+    "docsUrl": "https://docs.spacefast.com/errors/stripe_error",
     "requestId": "req_4mz0v8qk"
   }
 }

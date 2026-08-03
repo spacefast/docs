@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_registration_active",
     "message": "The domain has an active registration, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_registration_active",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_registration_active",
     "requestId": "req_4mz0v8qk"
   }
 }

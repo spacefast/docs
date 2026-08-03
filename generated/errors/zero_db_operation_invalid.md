@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_operation_invalid",
     "message": "The Zero database bridge received an invalid operation payload.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_operation_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_operation_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

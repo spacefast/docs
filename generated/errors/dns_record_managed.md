@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_record_managed",
     "message": "This DNS record is managed by Spacefast and cannot be edited directly.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_record_managed",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_record_managed",
     "requestId": "req_4mz0v8qk"
   }
 }

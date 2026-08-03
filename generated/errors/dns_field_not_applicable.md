@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_field_not_applicable",
     "message": "The DNS field is not writable for this provider, record type, or management mode.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_field_not_applicable",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_field_not_applicable",
     "requestId": "req_4mz0v8qk"
   }
 }

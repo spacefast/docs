@@ -5,7 +5,7 @@ description: "The channel name collides with a reserved hostname suffix and cann
 
 The channel name collides with a reserved hostname suffix and cannot be used.
 
-**How to resolve:** Choose a different channel name; v-prefixed numeric names and ver- prefixes are reserved.
+**How to resolve:** Choose a different channel name. V-prefixed numeric names and ver- prefixes are reserved.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "channel_name_reserved",
     "message": "The channel name collides with a reserved hostname suffix and cannot be used.",
-    "docsUrl": "https://spacefast.com/docs/errors/channel_name_reserved",
+    "docsUrl": "https://docs.spacefast.com/errors/channel_name_reserved",
     "requestId": "req_4mz0v8qk"
   }
 }

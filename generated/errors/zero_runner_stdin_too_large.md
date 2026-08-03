@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runner_stdin_too_large",
     "message": "The Zero runner request envelope is too large.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runner_stdin_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_stdin_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

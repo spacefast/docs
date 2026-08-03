@@ -8,7 +8,9 @@ here.now and Spacefast both publish prebuilt static files, and both support anon
 ```bash
 # Republish the same static output that was sent to here.now
 sf publish ./dist
+```
 
+```bash
 # Single-page apps should keep an explicit fallback
 sf publish ./dist --spa true
 ```

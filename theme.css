@@ -1,0 +1,36 @@
+@font-face {
+  font-display: swap;
+  font-family: "Recoleta";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://s1.wp.com/i/fonts/recoleta/400.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Haskoy";
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("/fonts/haskoy-latin-variable.woff2") format("woff2");
+}
+
+:root {
+  --blume-font-body-src: "Haskoy", ui-sans-serif, system-ui, sans-serif;
+  --blume-font-display-src: "Recoleta", Georgia, serif;
+  --blume-font-mono-src: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+[data-blume-header] > a:first-of-type {
+  font-family: "Haskoy", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.prose :where(h1, h2, h3) {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.prose :where(.config-playground, .config-playground *) {
+  box-sizing: border-box;
+}

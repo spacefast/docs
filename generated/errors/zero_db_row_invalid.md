@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_row_invalid",
     "message": "A database row could not be converted into a Zero response value.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_row_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_row_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

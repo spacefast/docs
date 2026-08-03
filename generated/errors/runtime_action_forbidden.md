@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_action_forbidden",
     "message": "The runtime credential does not allow this action.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_action_forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_action_forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

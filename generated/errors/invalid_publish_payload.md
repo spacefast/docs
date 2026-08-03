@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_publish_payload",
     "message": "The publish payload is malformed.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_publish_payload",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_publish_payload",
     "requestId": "req_4mz0v8qk"
   }
 }

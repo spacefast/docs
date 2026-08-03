@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_data_location",
     "message": "The requested data location is not a supported region.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_data_location",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_data_location",
     "requestId": "req_4mz0v8qk"
   }
 }

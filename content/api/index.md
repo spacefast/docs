@@ -14,7 +14,7 @@ Every response uses one envelope: successes carry `{ "data": ... }`, failures ca
   "error": {
     "code": "access_denied",
     "message": "This token cannot access that space.",
-    "docsUrl": "https://developers.spacefast.com/errors/access_denied",
+    "docsUrl": "https://docs.spacefast.com/errors/access_denied",
     "requestId": "req_4mz0v8qk"
   }
 }
@@ -30,7 +30,7 @@ Authorization: Bearer <SPACEFAST_TOKEN>
 
 Create keys in the dashboard or with `sf api-keys create` — the `--preset ci_deploy` flag mints a least-privilege key for pipelines, shown once. One call works without any token: an anonymous `POST /v1/publish` creates a brand-new space and returns a one-time claim token alongside the receipt. That claim token acts as a bearer token scoped to that single space until it is claimed.
 
-## Publishing: two front doors
+## Publish
 
 **One POST.** `POST /v1/publish` takes a single file, a multipart form of files, or a zip archive, and returns the whole receipt in one request — the live URL, the permanent version URL, and (for anonymous publishes) the claim link.
 
@@ -55,7 +55,7 @@ Rate limits and plan quotas are enforced per account and documented in [Limits](
 ## For agents
 
 The API ships a machine-discovery surface —
-[`llms.txt`](https://developers.spacefast.com/llms.txt), an
+[`llms.txt`](https://docs.spacefast.com/llms.txt), an
 [agent card](https://spacefast.com/.well-known/agent-card.json), a publish
 skill, and a hosted MCP server with typed tools. If an agent is doing the
 calling, start with [MCP](/mcp) or choose a client in

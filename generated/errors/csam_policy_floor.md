@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "csam_policy_floor",
     "message": "CSAM enforcement policy cannot be set below the mandatory account-suspend floor.",
-    "docsUrl": "https://spacefast.com/docs/errors/csam_policy_floor",
+    "docsUrl": "https://docs.spacefast.com/errors/csam_policy_floor",
     "requestId": "req_4mz0v8qk"
   }
 }

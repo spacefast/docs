@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_publish_archive",
     "message": "The uploaded archive could not be read as a valid zip.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_publish_archive",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_publish_archive",
     "requestId": "req_4mz0v8qk"
   }
 }

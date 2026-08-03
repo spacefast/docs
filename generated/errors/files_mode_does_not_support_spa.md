@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "files_mode_does_not_support_spa",
     "message": "SPA fallback cannot be combined with files-listing mode.",
-    "docsUrl": "https://spacefast.com/docs/errors/files_mode_does_not_support_spa",
+    "docsUrl": "https://docs.spacefast.com/errors/files_mode_does_not_support_spa",
     "requestId": "req_4mz0v8qk"
   }
 }

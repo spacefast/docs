@@ -5,7 +5,7 @@ description: "Too many event submissions came from this client in a short window
 
 Too many event submissions came from this client in a short window.
 
-**How to resolve:** Drop or batch events; event delivery is best-effort and never required.
+**How to resolve:** Drop or batch events. Event delivery is best-effort and never required.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "event_rate_limited",
     "message": "Too many event submissions came from this client in a short window.",
-    "docsUrl": "https://spacefast.com/docs/errors/event_rate_limited",
+    "docsUrl": "https://docs.spacefast.com/errors/event_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

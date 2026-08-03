@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_registration_not_renewable",
     "message": "The domain registration cannot be renewed right now.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_registration_not_renewable",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_registration_not_renewable",
     "requestId": "req_4mz0v8qk"
   }
 }

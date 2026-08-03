@@ -5,7 +5,7 @@ description: "The hostname is under a Spacefast-managed suffix and cannot be add
 
 The hostname is under a Spacefast-managed suffix and cannot be added as a domain.
 
-**How to resolve:** Use a domain you own; Spacefast default and management hostnames are assigned automatically.
+**How to resolve:** Use a domain you own. Spacefast assigns default and management hostnames automatically.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_reserved_suffix",
     "message": "The hostname is under a Spacefast-managed suffix and cannot be added as a domain.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_reserved_suffix",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_reserved_suffix",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_query_invalid",
     "message": "The Zero realtime query subscription payload is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_query_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_query_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

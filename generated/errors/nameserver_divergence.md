@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "nameserver_divergence",
     "message": "The domain's observed nameservers diverge from the expected set.",
-    "docsUrl": "https://spacefast.com/docs/errors/nameserver_divergence",
+    "docsUrl": "https://docs.spacefast.com/errors/nameserver_divergence",
     "requestId": "req_4mz0v8qk"
   }
 }

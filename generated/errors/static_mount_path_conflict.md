@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_mount_path_conflict",
     "message": "The requested mount path overlaps another static mount on this space.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_mount_path_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/static_mount_path_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

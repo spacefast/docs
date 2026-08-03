@@ -5,7 +5,7 @@ description: "The runtime management endpoint was not found."
 
 The runtime management endpoint was not found.
 
-**How to resolve:** Send the request with the management hostname as the Host header; management routes are not served on public hostnames.
+**How to resolve:** Send the request with the management hostname as the Host header. Management routes are not served on public hostnames.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_api_not_found",
     "message": "The runtime management endpoint was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_api_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_api_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

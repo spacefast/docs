@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "ip_blocked",
     "message": "Requests from this IP address are blocked for abuse or policy reasons.",
-    "docsUrl": "https://spacefast.com/docs/errors/ip_blocked",
+    "docsUrl": "https://docs.spacefast.com/errors/ip_blocked",
     "requestId": "req_4mz0v8qk"
   }
 }

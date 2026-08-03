@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "slug_unavailable",
     "message": "The slug is already in use within the relevant ownership scope.",
-    "docsUrl": "https://spacefast.com/docs/errors/slug_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/slug_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

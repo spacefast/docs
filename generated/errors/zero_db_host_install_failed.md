@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_host_install_failed",
     "message": "The Zero runner could not install the database host bridge.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_host_install_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_host_install_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

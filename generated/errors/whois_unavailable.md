@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "whois_unavailable",
     "message": "WHOIS data is unavailable for this domain right now.",
-    "docsUrl": "https://spacefast.com/docs/errors/whois_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/whois_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "cache_purge_path_required",
     "message": "A purge request must name at least one path.",
-    "docsUrl": "https://spacefast.com/docs/errors/cache_purge_path_required",
+    "docsUrl": "https://docs.spacefast.com/errors/cache_purge_path_required",
     "requestId": "req_4mz0v8qk"
   }
 }

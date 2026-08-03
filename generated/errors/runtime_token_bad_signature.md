@@ -5,7 +5,7 @@ description: "The runtime token signature did not verify."
 
 The runtime token signature did not verify.
 
-**How to resolve:** Mint a fresh token; verify clocks and JWKS freshness if it persists.
+**How to resolve:** Mint a fresh token. Verify clocks and JWKS freshness if it persists.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_token_bad_signature",
     "message": "The runtime token signature did not verify.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_token_bad_signature",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_token_bad_signature",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -6,7 +6,7 @@ import { compileRedirectRules, resolveRedirect } from "./redirect-rules.mjs";
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
 const deploymentBase = "";
-const site = "https://developers.spacefast.com";
+const site = "https://docs.spacefast.com";
 const docsRoot = `${site}${deploymentBase}`;
 const checked = [];
 
@@ -135,7 +135,7 @@ for (const page of representativePages) {
 
 const notFound = await readBuilt("404.html");
 if (!notFound.includes("Page not found") || !notFound.includes('href="/"')) {
-  throw new Error("Built 404 does not link back to the developer portal.");
+  throw new Error("Built 404 does not link back to the docs site.");
 }
 
 for (const artifact of [
@@ -199,7 +199,7 @@ for (const expected of representativePages.map(([, canonical]) => canonical)) {
   }
 }
 if (sitemapUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)) {
-  throw new Error("Sitemap contains a URL outside the developer origin.");
+  throw new Error("Sitemap contains a URL outside the docs origin.");
 }
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error("Sitemap contains duplicate URLs.");
@@ -211,18 +211,18 @@ if (indexedPages !== sitemapUrls.length + 1) {
 }
 const robots = await readBuilt("robots.txt");
 if (!robots.includes(`Sitemap: ${docsRoot}/sitemap.xml`)) {
-  throw new Error("robots.txt does not advertise the developer sitemap.");
+  throw new Error("robots.txt does not advertise the docs sitemap.");
 }
 
 const llmsIndex = await readBuilt("llms.txt");
-const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/developers\.spacefast\.com[^\s)>]*/gu)].map(
+const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/docs\.spacefast\.com[^\s)>]*/gu)].map(
   (match) => match[0],
 );
 if (
   llmsPageUrls.length !== sitemapUrls.length ||
   llmsPageUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)
 ) {
-  throw new Error("llms.txt has missing or non-developer page URLs.");
+  throw new Error("llms.txt has missing or non-docs page URLs.");
 }
 
 const llmsFull = await readBuilt("llms-full.txt");
@@ -233,7 +233,7 @@ if (
   sourceUrls.length !== sitemapUrls.length ||
   sourceUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)
 ) {
-  throw new Error("llms-full.txt has missing or non-developer source URLs.");
+  throw new Error("llms-full.txt has missing or non-docs source URLs.");
 }
 if (
   sourceUrls.length !== sitemapUrls.length ||
@@ -250,13 +250,13 @@ if (
   corpus.pages.length !== sourceUrls.length ||
   corpus.pages.some((page) => !sourceUrls.includes(page.url))
 ) {
-  throw new Error("docs-corpus.json does not match the unified developer LLM corpus.");
+  throw new Error("docs-corpus.json does not match the unified docs LLM corpus.");
 }
 
 const readability = JSON.parse(await readBuilt("agent-readability.json"));
 for (const value of Object.values(readability.artifacts)) {
   if (typeof value === "string" && value.startsWith(site) && !value.startsWith(docsRoot)) {
-    throw new Error("agent-readability.json advertises an artifact outside the developer origin.");
+    throw new Error("agent-readability.json advertises an artifact outside the docs origin.");
   }
 }
 if (

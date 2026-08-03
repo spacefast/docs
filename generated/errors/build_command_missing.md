@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_command_missing",
     "message": "A build or install command could not be found during the build run.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_command_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/build_command_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

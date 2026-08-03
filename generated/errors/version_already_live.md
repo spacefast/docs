@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_already_live",
     "message": "The version is already live on this channel.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_already_live",
+    "docsUrl": "https://docs.spacefast.com/errors/version_already_live",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "credential_revoked",
     "message": "The credential used for this request was revoked.",
-    "docsUrl": "https://spacefast.com/docs/errors/credential_revoked",
+    "docsUrl": "https://docs.spacefast.com/errors/credential_revoked",
     "requestId": "req_4mz0v8qk"
   }
 }

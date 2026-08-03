@@ -5,7 +5,7 @@ description: "The Zero runner could not read its request envelope."
 
 The Zero runner could not read its request envelope.
 
-**How to resolve:** Retry; report the runtime bridge failure if it persists.
+**How to resolve:** Retry. Report the runtime bridge failure if it persists.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runner_stdin_invalid",
     "message": "The Zero runner could not read its request envelope.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runner_stdin_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_stdin_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

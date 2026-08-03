@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_replace_all_write_strategy",
     "message": "This provider applies DNS changes with a replace-all write strategy.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_replace_all_write_strategy",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_replace_all_write_strategy",
     "requestId": "req_4mz0v8qk"
   }
 }

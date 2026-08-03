@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "billing_receipt_not_bound_to_team",
     "message": "The store purchase was made under a different account token than this team's.",
-    "docsUrl": "https://spacefast.com/docs/errors/billing_receipt_not_bound_to_team",
+    "docsUrl": "https://docs.spacefast.com/errors/billing_receipt_not_bound_to_team",
     "requestId": "req_4mz0v8qk"
   }
 }

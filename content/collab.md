@@ -24,9 +24,21 @@ Agents and scripts can read and act on threads with `sf comments`:
 
 ```bash
 sf comments list --version v123 --status open
+```
+
+```bash
 sf comments get cmt_123
+```
+
+```bash
 sf comments reply cmt_123 --body "Fixed in the next build"
+```
+
+```bash
 sf comments archive cmt_123
+```
+
+```bash
 sf comments export --version v123 --format markdown
 ```
 

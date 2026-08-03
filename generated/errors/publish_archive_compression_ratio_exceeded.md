@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_archive_compression_ratio_exceeded",
     "message": "The archive's compression ratio is suspiciously high and was rejected.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_archive_compression_ratio_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_archive_compression_ratio_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

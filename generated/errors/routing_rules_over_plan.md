@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "routing_rules_over_plan",
     "message": "The published _redirects and _headers exceed the plan's routing-rule allowance.",
-    "docsUrl": "https://spacefast.com/docs/errors/routing_rules_over_plan",
+    "docsUrl": "https://docs.spacefast.com/errors/routing_rules_over_plan",
     "requestId": "req_4mz0v8qk"
   }
 }

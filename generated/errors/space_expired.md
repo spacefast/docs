@@ -5,7 +5,7 @@ description: "The space expired and is no longer served."
 
 The space expired and is no longer served.
 
-**How to resolve:** If it is within the recovery window, claim or restore it; otherwise publish again.
+**How to resolve:** If it is within the recovery window, claim or restore it. Otherwise publish again.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_expired",
     "message": "The space expired and is no longer served.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/space_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

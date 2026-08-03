@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "webhook_delivery_budget_exceeded",
     "message": "The webhook exhausted its delivery budget and was paused.",
-    "docsUrl": "https://spacefast.com/docs/errors/webhook_delivery_budget_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/webhook_delivery_budget_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

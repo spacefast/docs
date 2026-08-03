@@ -36,7 +36,13 @@ Accounts are WordPress.com accounts. Claiming moves the space into a team and un
 
 ```bash
 sf publish ./dist
+```
+
+```bash
 sf login
+```
+
+```bash
 sf spaces claim --team my-team
 ```
 

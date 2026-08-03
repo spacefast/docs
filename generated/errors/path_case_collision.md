@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "path_case_collision",
     "message": "Two file paths differ only by letter case, which collides on serving.",
-    "docsUrl": "https://spacefast.com/docs/errors/path_case_collision",
+    "docsUrl": "https://docs.spacefast.com/errors/path_case_collision",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_transaction_missing",
     "message": "The Zero runner tried to finish a database transaction that was not active.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_transaction_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_transaction_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

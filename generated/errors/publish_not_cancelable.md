@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_not_cancelable",
     "message": "The publish has progressed past the point where it can be canceled.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_not_cancelable",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_not_cancelable",
     "requestId": "req_4mz0v8qk"
   }
 }

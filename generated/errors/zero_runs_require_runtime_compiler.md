@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runs_require_runtime_compiler",
     "message": "Zero run handlers require the Rust runtime compiler.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runs_require_runtime_compiler",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runs_require_runtime_compiler",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_busy",
     "message": "The version is busy with another operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_busy",
+    "docsUrl": "https://docs.spacefast.com/errors/version_busy",
     "requestId": "req_4mz0v8qk"
   }
 }

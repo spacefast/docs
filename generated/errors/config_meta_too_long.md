@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "config_meta_too_long",
     "message": "A meta field in the space configuration exceeds its maximum length.",
-    "docsUrl": "https://spacefast.com/docs/errors/config_meta_too_long",
+    "docsUrl": "https://docs.spacefast.com/errors/config_meta_too_long",
     "requestId": "req_4mz0v8qk"
   }
 }

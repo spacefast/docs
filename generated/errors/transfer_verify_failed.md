@@ -5,7 +5,7 @@ description: "The target runtime could not verify transferred blob content."
 
 The target runtime could not verify transferred blob content.
 
-**How to resolve:** Retry the move; if it persists, check the target runtime and bucket integrity.
+**How to resolve:** Retry the move. If it persists, check the target runtime and bucket integrity.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_verify_failed",
     "message": "The target runtime could not verify transferred blob content.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_verify_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_verify_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

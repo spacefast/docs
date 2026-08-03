@@ -5,7 +5,7 @@ description: "The local Zero AI service is not configured."
 
 The local Zero AI service is not configured.
 
-**How to resolve:** Configure an AI handler for zero dev before calling the AI service.
+**How to resolve:** Configure an AI handler in the project, then restart `sf dev` before calling the AI service.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_ai_unavailable",
     "message": "The local Zero AI service is not configured.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_ai_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_ai_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

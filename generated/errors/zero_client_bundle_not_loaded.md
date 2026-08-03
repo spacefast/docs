@@ -5,7 +5,7 @@ description: "The local Zero dev client bundle has not been generated or loaded.
 
 The local Zero dev client bundle has not been generated or loaded.
 
-**How to resolve:** Restart zero dev or run a fresh local build before loading the client route.
+**How to resolve:** Restart `sf dev` or run a fresh local build before loading the client route.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_client_bundle_not_loaded",
     "message": "The local Zero dev client bundle has not been generated or loaded.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_client_bundle_not_loaded",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_client_bundle_not_loaded",
     "requestId": "req_4mz0v8qk"
   }
 }

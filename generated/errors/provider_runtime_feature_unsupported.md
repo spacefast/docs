@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "provider_runtime_feature_unsupported",
     "message": "The hosting provider does not support this runtime feature.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_runtime_feature_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/provider_runtime_feature_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

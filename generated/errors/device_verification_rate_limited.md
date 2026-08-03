@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "device_verification_rate_limited",
     "message": "Too many incorrect device codes were entered in a short window.",
-    "docsUrl": "https://spacefast.com/docs/errors/device_verification_rate_limited",
+    "docsUrl": "https://docs.spacefast.com/errors/device_verification_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

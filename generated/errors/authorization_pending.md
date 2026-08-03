@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "authorization_pending",
     "message": "The device login has not been approved yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/authorization_pending",
+    "docsUrl": "https://docs.spacefast.com/errors/authorization_pending",
     "requestId": "req_4mz0v8qk"
   }
 }

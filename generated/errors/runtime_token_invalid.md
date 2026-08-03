@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_token_invalid",
     "message": "The runtime token could not be parsed or validated.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_token_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_token_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

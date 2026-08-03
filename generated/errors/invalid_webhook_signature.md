@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_webhook_signature",
     "message": "The webhook signature did not verify.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_webhook_signature",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_webhook_signature",
     "requestId": "req_4mz0v8qk"
   }
 }

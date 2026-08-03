@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "feature_unavailable",
     "message": "This feature is not available on this deployment or plan.",
-    "docsUrl": "https://spacefast.com/docs/errors/feature_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/feature_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

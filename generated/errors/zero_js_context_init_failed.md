@@ -5,7 +5,7 @@ description: "The Zero runner could not initialize a QuickJS context."
 
 The Zero runner could not initialize a QuickJS context.
 
-**How to resolve:** Retry or rebuild the runner; report persistent runtime initialization failures.
+**How to resolve:** Retry or rebuild the runner. Report persistent runtime initialization failures.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_context_init_failed",
     "message": "The Zero runner could not initialize a QuickJS context.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_context_init_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_context_init_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

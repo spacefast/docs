@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "provider_site_id_required",
     "message": "A provider site id is required for this internal operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_site_id_required",
+    "docsUrl": "https://docs.spacefast.com/errors/provider_site_id_required",
     "requestId": "req_4mz0v8qk"
   }
 }

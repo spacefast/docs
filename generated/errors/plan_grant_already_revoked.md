@@ -5,7 +5,7 @@ description: "This plan grant was already revoked."
 
 This plan grant was already revoked.
 
-**How to resolve:** Nothing to do; create a new grant if the team should regain the plan.
+**How to resolve:** Nothing to do. Create a new grant if the team should regain the plan.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "plan_grant_already_revoked",
     "message": "This plan grant was already revoked.",
-    "docsUrl": "https://spacefast.com/docs/errors/plan_grant_already_revoked",
+    "docsUrl": "https://docs.spacefast.com/errors/plan_grant_already_revoked",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_operation_too_large",
     "message": "The Zero database operation payload is too large.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_operation_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_operation_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

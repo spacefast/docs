@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_execution_timeout",
     "message": "The Zero endpoint exceeded its JavaScript execution budget.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_execution_timeout",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_execution_timeout",
     "requestId": "req_4mz0v8qk"
   }
 }

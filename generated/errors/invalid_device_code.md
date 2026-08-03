@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_device_code",
     "message": "The device code is invalid or has expired.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_device_code",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_device_code",
     "requestId": "req_4mz0v8qk"
   }
 }

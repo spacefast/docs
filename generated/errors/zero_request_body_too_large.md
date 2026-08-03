@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_request_body_too_large",
     "message": "The Zero request body exceeds the runtime size limit.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_request_body_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_request_body_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

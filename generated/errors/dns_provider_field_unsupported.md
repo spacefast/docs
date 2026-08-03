@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_field_unsupported",
     "message": "The DNS provider does not support one of the requested record fields.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_field_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_field_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

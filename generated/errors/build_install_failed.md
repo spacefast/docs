@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_install_failed",
     "message": "The dependency install step failed during the build run.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_install_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/build_install_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

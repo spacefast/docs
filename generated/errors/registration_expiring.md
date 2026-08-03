@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "registration_expiring",
     "message": "The domain registration is about to expire, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/registration_expiring",
+    "docsUrl": "https://docs.spacefast.com/errors/registration_expiring",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -5,7 +5,7 @@ description: "Post-publish verification did not see the new content serving."
 
 Post-publish verification did not see the new content serving.
 
-**How to resolve:** Retry; if the space still serves stale content, contact support.
+**How to resolve:** Retry. If the space still serves stale content, contact support.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_verification_failed",
     "message": "Post-publish verification did not see the new content serving.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_verification_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_verification_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

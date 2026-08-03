@@ -5,7 +5,7 @@ description: "This request tried to change data location through an immutable pa
 
 This request tried to change data location through an immutable path.
 
-**How to resolve:** Use PATCH /v1/spaces/{id} to queue a region move when region changes are supported for this space.
+**How to resolve:** Data location is fixed when the space is created and cannot be changed afterwards. Create a new space in the region you want.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "data_location_immutable",
     "message": "This request tried to change data location through an immutable path.",
-    "docsUrl": "https://spacefast.com/docs/errors/data_location_immutable",
+    "docsUrl": "https://docs.spacefast.com/errors/data_location_immutable",
     "requestId": "req_4mz0v8qk"
   }
 }

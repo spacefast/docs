@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_quota_exceeded",
     "message": "Adding this domain would exceed the plan's external domain allowance.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_quota_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_quota_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

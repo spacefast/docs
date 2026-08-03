@@ -51,7 +51,13 @@ You don't have to wait for a push:
 
 ```bash
 sf git build --branch main          # build the current production settings now
+```
+
+```bash
 sf git build --pull-request 42      # build a specific PR
+```
+
+```bash
 sf git build --target preview --wait  # force a preview build and wait for it
 ```
 
@@ -63,10 +69,25 @@ Every build is a tracked object you can follow to completion:
 
 ```bash
 sf builds ls                 # recent builds, newest first
+```
+
+```bash
 sf builds get bld_123        # status and details for one build
+```
+
+```bash
 sf builds logs bld_123 -f    # stream runner logs live
+```
+
+```bash
 sf builds retry bld_123      # re-run with the same input and settings
+```
+
+```bash
 sf builds cancel bld_123     # cancel a queued or running build
+```
+
+```bash
 sf builds resume-upload bld_123  # refresh the source upload for a build waiting on its archive
 ```
 
@@ -99,6 +120,9 @@ If you'd rather push straight to Spacefast instead of wiring up a provider, inst
 
 ```bash
 sf git origin            # adds a `spacefast` remote next to your `origin`
+```
+
+```bash
 git push spacefast main  # deploys the pushed commit
 ```
 

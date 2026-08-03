@@ -5,7 +5,7 @@ description: "This claim token was already exchanged for a durable access token.
 
 This claim token was already exchanged for a durable access token.
 
-**How to resolve:** Authenticate with the exchanged access token (check .spacefast/state.json or wherever it was saved). If it was lost, ask the space owner to mint a new access token.
+**How to resolve:** Authenticate with the exchanged access token (check .spacefast/state.json or wherever it was saved). If it was lost, ask the space owner to create a new API key.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "continuation_used",
     "message": "This claim token was already exchanged for a durable access token.",
-    "docsUrl": "https://spacefast.com/docs/errors/continuation_used",
+    "docsUrl": "https://docs.spacefast.com/errors/continuation_used",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "move_target_capacity_lost",
     "message": "The selected move target no longer has capacity for the space.",
-    "docsUrl": "https://spacefast.com/docs/errors/move_target_capacity_lost",
+    "docsUrl": "https://docs.spacefast.com/errors/move_target_capacity_lost",
     "requestId": "req_4mz0v8qk"
   }
 }

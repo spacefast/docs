@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "cli_upgrade_required",
     "message": "This CLI version is too old to talk to the API safely.",
-    "docsUrl": "https://spacefast.com/docs/errors/cli_upgrade_required",
+    "docsUrl": "https://docs.spacefast.com/errors/cli_upgrade_required",
     "requestId": "req_4mz0v8qk"
   }
 }

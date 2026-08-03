@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_config_unsupported",
     "message": "The publish carries configuration this endpoint does not support.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_config_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_config_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

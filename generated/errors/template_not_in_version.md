@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "template_not_in_version",
     "message": "The configuration names a template file the version does not contain.",
-    "docsUrl": "https://spacefast.com/docs/errors/template_not_in_version",
+    "docsUrl": "https://docs.spacefast.com/errors/template_not_in_version",
     "requestId": "req_4mz0v8qk"
   }
 }

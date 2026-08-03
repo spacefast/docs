@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "ambiguous_space_slug",
     "message": "The slug matches spaces in more than one of your teams, so it cannot be resolved.",
-    "docsUrl": "https://spacefast.com/docs/errors/ambiguous_space_slug",
+    "docsUrl": "https://docs.spacefast.com/errors/ambiguous_space_slug",
     "requestId": "req_4mz0v8qk"
   }
 }

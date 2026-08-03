@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_assignment_kind_mismatch",
     "message": "The domain assignment's kind does not match the site.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_assignment_kind_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_assignment_kind_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

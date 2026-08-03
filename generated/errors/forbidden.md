@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "forbidden",
     "message": "The credential is valid but does not allow this action.",
-    "docsUrl": "https://spacefast.com/docs/errors/forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

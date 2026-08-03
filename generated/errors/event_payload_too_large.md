@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "event_payload_too_large",
     "message": "The event payload exceeds the maximum size.",
-    "docsUrl": "https://spacefast.com/docs/errors/event_payload_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/event_payload_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

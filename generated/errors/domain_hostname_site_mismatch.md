@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_hostname_site_mismatch",
     "message": "All bindings of one hostname must point at spaces on the same underlying site.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_hostname_site_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_hostname_site_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

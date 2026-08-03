@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "device_authorization_failed",
     "message": "The device login request failed and cannot be completed.",
-    "docsUrl": "https://spacefast.com/docs/errors/device_authorization_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/device_authorization_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

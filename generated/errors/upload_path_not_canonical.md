@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "upload_path_not_canonical",
     "message": "An upload path is not in canonical (decoded, NFC-normalized) form.",
-    "docsUrl": "https://spacefast.com/docs/errors/upload_path_not_canonical",
+    "docsUrl": "https://docs.spacefast.com/errors/upload_path_not_canonical",
     "requestId": "req_4mz0v8qk"
   }
 }

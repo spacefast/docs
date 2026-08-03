@@ -5,7 +5,7 @@ description: "A hosting-provider job failed while processing this operation."
 
 A hosting-provider job failed while processing this operation.
 
-**How to resolve:** Retry the operation; if it keeps failing, contact support with the operation id.
+**How to resolve:** Retry the operation. If it keeps failing, contact support with the operation id.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "provider_job_failed",
     "message": "A hosting-provider job failed while processing this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_job_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/provider_job_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

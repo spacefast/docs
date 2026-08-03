@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_rate_limited",
     "message": "The DNS provider rate-limited the requested operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_rate_limited",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

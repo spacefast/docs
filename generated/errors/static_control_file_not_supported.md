@@ -5,7 +5,7 @@ description: "This control file is not supported by the static runtime."
 
 This control file is not supported by the static runtime.
 
-**How to resolve:** Remove the file; see the routing docs for supported convention files.
+**How to resolve:** Remove the file. See the routing docs for supported convention files.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_control_file_not_supported",
     "message": "This control file is not supported by the static runtime.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_control_file_not_supported",
+    "docsUrl": "https://docs.spacefast.com/errors/static_control_file_not_supported",
     "requestId": "req_4mz0v8qk"
   }
 }

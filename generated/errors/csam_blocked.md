@@ -5,7 +5,7 @@ description: "The content was blocked because it matched known child sexual abus
 
 The content was blocked because it matched known child sexual abuse material.
 
-**How to resolve:** This action is final and reported as required by law; do not retry.
+**How to resolve:** This action is final and reported as required by law. Do not retry.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "csam_blocked",
     "message": "The content was blocked because it matched known child sexual abuse material.",
-    "docsUrl": "https://spacefast.com/docs/errors/csam_blocked",
+    "docsUrl": "https://docs.spacefast.com/errors/csam_blocked",
     "requestId": "req_4mz0v8qk"
   }
 }

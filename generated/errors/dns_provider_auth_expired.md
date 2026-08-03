@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_auth_expired",
     "message": "The connected DNS provider authorization expired or was revoked.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_auth_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_auth_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

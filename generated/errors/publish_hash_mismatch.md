@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_hash_mismatch",
     "message": "Publish content does not match its declared sha256.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_hash_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_hash_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

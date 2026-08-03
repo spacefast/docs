@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_not_found",
     "message": "No Zero endpoint artifact exists for this endpoint id.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_zero_realtime_replay_query",
     "message": "The Zero realtime replay query parameters are invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_zero_realtime_replay_query",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_zero_realtime_replay_query",
     "requestId": "req_4mz0v8qk"
   }
 }

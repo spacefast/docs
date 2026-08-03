@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "placement_invalid_burstable",
     "message": "The placement burstable option was used with an unsupported placement mode.",
-    "docsUrl": "https://spacefast.com/docs/errors/placement_invalid_burstable",
+    "docsUrl": "https://docs.spacefast.com/errors/placement_invalid_burstable",
     "requestId": "req_4mz0v8qk"
   }
 }

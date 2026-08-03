@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_failed",
     "message": "The publish failed before going live.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_space_mode",
     "message": "The requested space serving mode is not supported.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_space_mode",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_space_mode",
     "requestId": "req_4mz0v8qk"
   }
 }

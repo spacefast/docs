@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "missing_route_param",
     "message": "A required route parameter is missing from the request path.",
-    "docsUrl": "https://spacefast.com/docs/errors/missing_route_param",
+    "docsUrl": "https://docs.spacefast.com/errors/missing_route_param",
     "requestId": "req_4mz0v8qk"
   }
 }

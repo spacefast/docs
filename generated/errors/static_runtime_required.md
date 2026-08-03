@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_runtime_required",
     "message": "This operation only applies to static-runtime spaces.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_runtime_required",
+    "docsUrl": "https://docs.spacefast.com/errors/static_runtime_required",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_blob_value_invalid",
     "message": "The local Zero blob request body is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_blob_value_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_blob_value_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

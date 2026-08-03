@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_compile_failed",
     "message": "The runtime could not compile the Zero endpoint bytecode.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_compile_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_compile_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

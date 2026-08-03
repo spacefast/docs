@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_inline_limit_exceeded",
     "message": "The inline publish exceeds the file-count or total-size limit.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_inline_limit_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_inline_limit_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

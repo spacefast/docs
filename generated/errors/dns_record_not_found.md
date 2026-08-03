@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_record_not_found",
     "message": "The DNS record was not found in this zone.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_record_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_record_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

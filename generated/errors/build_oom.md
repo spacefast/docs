@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_oom",
     "message": "The build process was killed, most likely after running out of memory.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_oom",
+    "docsUrl": "https://docs.spacefast.com/errors/build_oom",
     "requestId": "req_4mz0v8qk"
   }
 }

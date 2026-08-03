@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_version_path",
     "message": "A file path in the version is not a valid space path.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_version_path",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_version_path",
     "requestId": "req_4mz0v8qk"
   }
 }

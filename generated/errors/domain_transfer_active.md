@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_transfer_active",
     "message": "The domain has a transfer in progress, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_transfer_active",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_transfer_active",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -5,7 +5,7 @@ description: "The runtime token has expired."
 
 The runtime token has expired.
 
-**How to resolve:** Mint a fresh runtime token; step tokens are short-lived by design.
+**How to resolve:** Mint a fresh runtime token. Step tokens are short-lived by design.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_token_expired",
     "message": "The runtime token has expired.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_token_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_token_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

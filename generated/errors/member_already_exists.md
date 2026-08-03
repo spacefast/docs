@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "member_already_exists",
     "message": "This user is already a member of the team.",
-    "docsUrl": "https://spacefast.com/docs/errors/member_already_exists",
+    "docsUrl": "https://docs.spacefast.com/errors/member_already_exists",
     "requestId": "req_4mz0v8qk"
   }
 }

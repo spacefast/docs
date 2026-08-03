@@ -1,11 +1,11 @@
 ---
 title: "agent_handoff_limit_reached"
-description: "This user already has the maximum number of pending handoffs for the Space."
+description: "This user already has the maximum number of pending handoffs for the space."
 ---
 
-This user already has the maximum number of pending handoffs for the Space.
+This user already has the maximum number of pending handoffs for the space.
 
-**How to resolve:** Redeem or revoke an existing pending handoff for the Space before creating another.
+**How to resolve:** Redeem or revoke an existing pending handoff for the space before creating another.
 
 <div data-pagefind-ignore>
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "agent_handoff_limit_reached",
-    "message": "This user already has the maximum number of pending handoffs for the Space.",
-    "docsUrl": "https://spacefast.com/docs/errors/agent_handoff_limit_reached",
+    "message": "This user already has the maximum number of pending handoffs for the space.",
+    "docsUrl": "https://docs.spacefast.com/errors/agent_handoff_limit_reached",
     "requestId": "req_4mz0v8qk"
   }
 }

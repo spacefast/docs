@@ -33,6 +33,9 @@ export default nextConfig;
 
 ```bash
 bun run build
+```
+
+```bash
 sf publish ./out
 ```
 

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "unsupported_publish_media_type",
     "message": "The publish content-type is not supported.",
-    "docsUrl": "https://spacefast.com/docs/errors/unsupported_publish_media_type",
+    "docsUrl": "https://docs.spacefast.com/errors/unsupported_publish_media_type",
     "requestId": "req_4mz0v8qk"
   }
 }

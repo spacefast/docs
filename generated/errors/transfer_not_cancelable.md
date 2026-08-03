@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_not_cancelable",
     "message": "The transfer has progressed past the point where it can be canceled.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_not_cancelable",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_not_cancelable",
     "requestId": "req_4mz0v8qk"
   }
 }

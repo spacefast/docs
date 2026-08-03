@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_claimed_credential_available",
     "message": "The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_claimed_credential_available",
+    "docsUrl": "https://docs.spacefast.com/errors/space_claimed_credential_available",
     "requestId": "req_4mz0v8qk"
   }
 }

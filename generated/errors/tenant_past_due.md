@@ -1,9 +1,9 @@
 ---
 title: "tenant_past_due"
-description: "The tenant is past due; mutations are rejected while serving continues."
+description: "The tenant is past due. Mutations are rejected while serving continues."
 ---
 
-The tenant is past due; mutations are rejected while serving continues.
+The tenant is past due. Mutations are rejected while serving continues.
 
 **How to resolve:** Settle the outstanding balance to restore full access.
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "tenant_past_due",
-    "message": "The tenant is past due; mutations are rejected while serving continues.",
-    "docsUrl": "https://spacefast.com/docs/errors/tenant_past_due",
+    "message": "The tenant is past due. Mutations are rejected while serving continues.",
+    "docsUrl": "https://docs.spacefast.com/errors/tenant_past_due",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_space",
     "message": "The space reference is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_space",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_space",
     "requestId": "req_4mz0v8qk"
   }
 }

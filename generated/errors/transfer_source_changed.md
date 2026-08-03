@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_source_changed",
     "message": "The space changed since the transfer was created, so it must be re-confirmed.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_source_changed",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_source_changed",
     "requestId": "req_4mz0v8qk"
   }
 }

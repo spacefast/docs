@@ -5,7 +5,7 @@ description: Theme or take over Spacefast's not-found, access, directory, and fi
 
 Spacefast publishes six visitor-facing pages with every version: `404`, `password`, `denied`, `login`, `index`, and `preview`. The defaults are responsive, support dark mode, use the right HTTP status and cache policy, and pick up your theme automatically.
 
-Add visual tokens to `sf.jsonc` (or its `spacefast.jsonc` alias):
+Add visual tokens to the canonical `sf.jsonc` file:
 
 ```jsonc
 {
@@ -48,8 +48,17 @@ Use the CLI to start from the readable defaults and validate with the exact publ
 
 ```bash
 sf pages pull password
+```
+
+```bash
 sf pages pull layout
+```
+
+```bash
 sf pages validate
+```
+
+```bash
 sf dev
 ```
 

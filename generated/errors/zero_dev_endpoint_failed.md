@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_dev_endpoint_failed",
     "message": "A local Zero dev endpoint failed while handling the request.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_dev_endpoint_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_dev_endpoint_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

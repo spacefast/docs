@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_client_not_found",
     "message": "The provider client was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_client_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_client_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

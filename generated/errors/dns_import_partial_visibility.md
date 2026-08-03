@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_import_partial_visibility",
     "message": "The DNS import could not see the full zone, so importing would lose records.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_import_partial_visibility",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_import_partial_visibility",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_connect_failed",
     "message": "The Zero runner could not connect to the configured database.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_connect_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_connect_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

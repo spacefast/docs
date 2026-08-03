@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_hostname_unassigned",
     "message": "The hostname is not assigned to a runtime, so the request cannot be routed.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_hostname_unassigned",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_hostname_unassigned",
     "requestId": "req_4mz0v8qk"
   }
 }

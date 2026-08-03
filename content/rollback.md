@@ -7,6 +7,9 @@ Every publish creates an immutable version with its own URL. Rolling back promot
 
 ```bash
 sf versions ls
+```
+
+```bash
 sf rollback v12
 ```
 

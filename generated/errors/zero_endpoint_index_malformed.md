@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_index_malformed",
     "message": "The Zero endpoint index could not be parsed.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_index_malformed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_index_malformed",
     "requestId": "req_4mz0v8qk"
   }
 }

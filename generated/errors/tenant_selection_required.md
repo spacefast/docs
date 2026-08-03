@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "tenant_selection_required",
     "message": "The credential spans multiple tenants, so the request must select one.",
-    "docsUrl": "https://spacefast.com/docs/errors/tenant_selection_required",
+    "docsUrl": "https://docs.spacefast.com/errors/tenant_selection_required",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "path_too_long",
     "message": "A file path exceeds the maximum length.",
-    "docsUrl": "https://spacefast.com/docs/errors/path_too_long",
+    "docsUrl": "https://docs.spacefast.com/errors/path_too_long",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_mount_target_in_use",
     "message": "A static mount dependency blocks changing or deleting this space.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_mount_target_in_use",
+    "docsUrl": "https://docs.spacefast.com/errors/static_mount_target_in_use",
     "requestId": "req_4mz0v8qk"
   }
 }

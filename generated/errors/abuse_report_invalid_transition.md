@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "abuse_report_invalid_transition",
     "message": "The abuse report cannot move to the requested status from its current status.",
-    "docsUrl": "https://spacefast.com/docs/errors/abuse_report_invalid_transition",
+    "docsUrl": "https://docs.spacefast.com/errors/abuse_report_invalid_transition",
     "requestId": "req_4mz0v8qk"
   }
 }

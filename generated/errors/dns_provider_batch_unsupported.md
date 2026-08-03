@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_batch_unsupported",
     "message": "The connected DNS provider cannot apply this batch with the required semantics.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_batch_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_batch_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_wildcard_not_enabled",
     "message": "Wildcard hostnames are not enabled for this domain or plan.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_wildcard_not_enabled",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_wildcard_not_enabled",
     "requestId": "req_4mz0v8qk"
   }
 }

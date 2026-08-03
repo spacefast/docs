@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_change_pending",
     "message": "The DNS provider accepted the change but propagation or provider completion is still pending.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_change_pending",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_change_pending",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "config_templates_over_limit",
     "message": "The configuration declares more template files than the plan allows.",
-    "docsUrl": "https://spacefast.com/docs/errors/config_templates_over_limit",
+    "docsUrl": "https://docs.spacefast.com/errors/config_templates_over_limit",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_expired",
     "message": "The version's upload session expired before it was finalized.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/version_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

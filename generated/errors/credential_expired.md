@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "credential_expired",
     "message": "The credential used for this request has expired.",
-    "docsUrl": "https://spacefast.com/docs/errors/credential_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/credential_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

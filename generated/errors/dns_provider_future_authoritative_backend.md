@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_future_authoritative_backend",
     "message": "This domain uses a future Spacefast authoritative DNS backend adapter.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_future_authoritative_backend",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_future_authoritative_backend",
     "requestId": "req_4mz0v8qk"
   }
 }

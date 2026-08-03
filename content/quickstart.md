@@ -25,7 +25,13 @@ Prefer the terminal? Install the CLI once, then publish:
 
 ```bash
 curl -fsSL https://spacefast.com/install.sh | bash
+```
+
+```bash
 sf publish ./dist --name docs
+```
+
+```bash
 sf publish ./dist --spa true
 ```
 

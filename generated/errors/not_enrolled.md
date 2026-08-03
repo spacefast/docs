@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "not_enrolled",
     "message": "This account is not enrolled in the private beta, so the API cannot be used yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/not_enrolled",
+    "docsUrl": "https://docs.spacefast.com/errors/not_enrolled",
     "requestId": "req_4mz0v8qk"
   }
 }

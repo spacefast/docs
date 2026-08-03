@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_replace_all_requires_fresh_plan",
     "message": "This provider requires a fresh full-zone plan before replacing DNS records.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_replace_all_requires_fresh_plan",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_replace_all_requires_fresh_plan",
     "requestId": "req_4mz0v8qk"
   }
 }

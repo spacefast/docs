@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_live",
     "message": "The version is live and cannot be deleted.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_live",
+    "docsUrl": "https://docs.spacefast.com/errors/version_live",
     "requestId": "req_4mz0v8qk"
   }
 }

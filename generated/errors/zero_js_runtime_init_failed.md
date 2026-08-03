@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_runtime_init_failed",
     "message": "The Zero runner could not initialize QuickJS.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_runtime_init_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_runtime_init_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

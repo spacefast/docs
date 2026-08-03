@@ -5,7 +5,7 @@ description: "The hosting provider reported an error."
 
 The hosting provider reported an error.
 
-**How to resolve:** Retry; if the error persists, contact support with the requestId.
+**How to resolve:** Retry. If the error persists, contact support with the requestId.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "provider_error",
     "message": "The hosting provider reported an error.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_error",
+    "docsUrl": "https://docs.spacefast.com/errors/provider_error",
     "requestId": "req_4mz0v8qk"
   }
 }

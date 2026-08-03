@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "job_not_promotable",
     "message": "The job cannot be promoted in its current state.",
-    "docsUrl": "https://spacefast.com/docs/errors/job_not_promotable",
+    "docsUrl": "https://docs.spacefast.com/errors/job_not_promotable",
     "requestId": "req_4mz0v8qk"
   }
 }

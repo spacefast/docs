@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_assignment_team_mismatch",
     "message": "The domain assignment belongs to a different team.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_assignment_team_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_assignment_team_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

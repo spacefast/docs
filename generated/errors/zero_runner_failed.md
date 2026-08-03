@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runner_failed",
     "message": "The Zero runner process exited without a valid response.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runner_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

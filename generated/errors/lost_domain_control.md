@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "lost_domain_control",
     "message": "Spacefast no longer observes DNS control for this domain.",
-    "docsUrl": "https://spacefast.com/docs/errors/lost_domain_control",
+    "docsUrl": "https://docs.spacefast.com/errors/lost_domain_control",
     "requestId": "req_4mz0v8qk"
   }
 }

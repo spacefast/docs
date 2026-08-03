@@ -5,7 +5,7 @@ description: "The space move backing this transfer failed."
 
 The space move backing this transfer failed.
 
-**How to resolve:** Retry the transfer; if it persists, contact support with the transfer id.
+**How to resolve:** Retry the transfer. If it persists, contact support with the transfer id.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_move_failed",
     "message": "The space move backing this transfer failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_move_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_move_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

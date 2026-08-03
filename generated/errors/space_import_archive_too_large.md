@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_import_archive_too_large",
     "message": "The import archive exceeds the maximum allowed size.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_import_archive_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/space_import_archive_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

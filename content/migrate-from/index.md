@@ -7,6 +7,9 @@ Publish the existing static output directory to Spacefast. Keep root `_redirects
 
 ```bash
 sf publish ./dist
+```
+
+```bash
 sf domains add www.example.com --wait
 ```
 

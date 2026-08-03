@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_runtime_control_path_not_supported",
     "message": "This control path is not supported by the static runtime.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_runtime_control_path_not_supported",
+    "docsUrl": "https://docs.spacefast.com/errors/static_runtime_control_path_not_supported",
     "requestId": "req_4mz0v8qk"
   }
 }

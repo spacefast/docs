@@ -5,7 +5,7 @@ description: "The DNS change conflicts with a record Spacefast manages for this 
 
 The DNS change conflicts with a record Spacefast manages for this domain.
 
-**How to resolve:** Remove or adjust the conflicting record; managed records cannot be overridden.
+**How to resolve:** Remove or adjust the conflicting record. Managed records cannot be overridden.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_record_conflicts_with_managed",
     "message": "The DNS change conflicts with a record Spacefast manages for this domain.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_record_conflicts_with_managed",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_record_conflicts_with_managed",
     "requestId": "req_4mz0v8qk"
   }
 }

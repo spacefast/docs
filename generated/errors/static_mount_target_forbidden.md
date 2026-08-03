@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "static_mount_target_forbidden",
     "message": "The target space is not an authorized space in the same team.",
-    "docsUrl": "https://spacefast.com/docs/errors/static_mount_target_forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/static_mount_target_forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

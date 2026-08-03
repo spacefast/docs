@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_wildcard_label",
     "message": "The hostname uses a wildcard label in a position that is not allowed.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_wildcard_label",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_wildcard_label",
     "requestId": "req_4mz0v8qk"
   }
 }

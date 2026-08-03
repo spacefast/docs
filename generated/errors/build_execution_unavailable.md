@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_execution_unavailable",
     "message": "Build execution is not available on this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_execution_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/build_execution_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "channel_unsupported",
     "message": "This space does not support the requested channel.",
-    "docsUrl": "https://spacefast.com/docs/errors/channel_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/channel_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

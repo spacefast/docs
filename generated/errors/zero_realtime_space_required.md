@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_space_required",
     "message": "The Zero realtime request does not identify a space.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_space_required",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_space_required",
     "requestId": "req_4mz0v8qk"
   }
 }

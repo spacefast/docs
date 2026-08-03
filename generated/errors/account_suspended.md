@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "account_suspended",
     "message": "This account is suspended for a policy or abuse violation and cannot be used.",
-    "docsUrl": "https://spacefast.com/docs/errors/account_suspended",
+    "docsUrl": "https://docs.spacefast.com/errors/account_suspended",
     "requestId": "req_4mz0v8qk"
   }
 }

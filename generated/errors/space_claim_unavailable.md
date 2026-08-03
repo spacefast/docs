@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_claim_unavailable",
     "message": "This space cannot be claimed.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_claim_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/space_claim_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

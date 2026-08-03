@@ -5,7 +5,7 @@ description: "The content is still being scanned for safety and cannot be served
 
 The content is still being scanned for safety and cannot be served yet.
 
-**How to resolve:** Wait for the scan to finish; serving resumes automatically once it clears.
+**How to resolve:** Wait for the scan to finish. Serving resumes automatically once it clears.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "scan_pending",
     "message": "The content is still being scanned for safety and cannot be served yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/scan_pending",
+    "docsUrl": "https://docs.spacefast.com/errors/scan_pending",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_operation_failed",
     "message": "The DNS provider operation failed before the requested change was accepted.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_operation_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_operation_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

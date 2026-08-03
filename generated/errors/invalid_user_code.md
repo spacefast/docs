@@ -5,7 +5,7 @@ description: "The user code does not match a pending device login."
 
 The user code does not match a pending device login.
 
-**How to resolve:** Enter the code exactly as shown by your CLI; codes expire after a few minutes.
+**How to resolve:** Enter the code exactly as shown by your CLI. Codes expire after a few minutes.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_user_code",
     "message": "The user code does not match a pending device login.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_user_code",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_user_code",
     "requestId": "req_4mz0v8qk"
   }
 }

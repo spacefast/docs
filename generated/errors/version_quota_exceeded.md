@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_quota_exceeded",
     "message": "The space has reached its version quota.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_quota_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/version_quota_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_conflict",
     "message": "Two Zero routes resolve to the same runtime path.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

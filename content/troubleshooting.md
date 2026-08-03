@@ -7,6 +7,9 @@ description: Troubleshooting guidance for publishes, routing, domains, DNS, head
 
 ```bash
 sf domains add www.example.com --wait
+```
+
+```bash
 sf domains check www.example.com
 ```
 
@@ -26,6 +29,9 @@ The live site is never taken down by a bad publish; promote a known-good version
 
 ```bash
 sf versions ls
+```
+
+```bash
 sf rollback v12
 ```
 

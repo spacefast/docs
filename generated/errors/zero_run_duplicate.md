@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_run_duplicate",
     "message": "Two Zero run handlers declare the same run id.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_run_duplicate",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_run_duplicate",
     "requestId": "req_4mz0v8qk"
   }
 }

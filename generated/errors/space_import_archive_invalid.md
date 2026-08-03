@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_import_archive_invalid",
     "message": "The import archive is not a valid Spacefast export.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_import_archive_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/space_import_archive_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

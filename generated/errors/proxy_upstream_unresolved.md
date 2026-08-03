@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "proxy_upstream_unresolved",
     "message": "The proxy upstream hostname could not be resolved.",
-    "docsUrl": "https://spacefast.com/docs/errors/proxy_upstream_unresolved",
+    "docsUrl": "https://docs.spacefast.com/errors/proxy_upstream_unresolved",
     "requestId": "req_4mz0v8qk"
   }
 }

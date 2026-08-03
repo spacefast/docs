@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "build_output_dir_missing",
     "message": "The build finished but its output directory was not produced.",
-    "docsUrl": "https://spacefast.com/docs/errors/build_output_dir_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/build_output_dir_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

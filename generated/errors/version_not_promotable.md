@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_not_promotable",
     "message": "The version cannot be promoted in its current status.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_not_promotable",
+    "docsUrl": "https://docs.spacefast.com/errors/version_not_promotable",
     "requestId": "req_4mz0v8qk"
   }
 }

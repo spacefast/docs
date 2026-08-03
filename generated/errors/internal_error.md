@@ -5,7 +5,7 @@ description: "Something went wrong on our side."
 
 Something went wrong on our side.
 
-**How to resolve:** Retry the request; if it persists, contact support with the requestId.
+**How to resolve:** Retry the request. If it persists, contact support with the requestId.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "internal_error",
     "message": "Something went wrong on our side.",
-    "docsUrl": "https://spacefast.com/docs/errors/internal_error",
+    "docsUrl": "https://docs.spacefast.com/errors/internal_error",
     "requestId": "req_4mz0v8qk"
   }
 }

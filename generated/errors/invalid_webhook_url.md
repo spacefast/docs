@@ -5,7 +5,7 @@ description: "The webhook URL is not an allowed public HTTPS endpoint."
 
 The webhook URL is not an allowed public HTTPS endpoint.
 
-**How to resolve:** Use a public HTTPS URL; private networks and link-local addresses are blocked.
+**How to resolve:** Use a public HTTPS URL. Private networks and link-local addresses are blocked.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_webhook_url",
     "message": "The webhook URL is not an allowed public HTTPS endpoint.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_webhook_url",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_webhook_url",
     "requestId": "req_4mz0v8qk"
   }
 }

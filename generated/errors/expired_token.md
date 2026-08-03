@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "expired_token",
     "message": "The token has expired.",
-    "docsUrl": "https://spacefast.com/docs/errors/expired_token",
+    "docsUrl": "https://docs.spacefast.com/errors/expired_token",
     "requestId": "req_4mz0v8qk"
   }
 }

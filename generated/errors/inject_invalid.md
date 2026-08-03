@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "inject_invalid",
     "message": "The inject config key is malformed.",
-    "docsUrl": "https://spacefast.com/docs/errors/inject_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/inject_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

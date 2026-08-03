@@ -5,7 +5,7 @@ description: "This facet of the domain is already managed by Spacefast."
 
 This facet of the domain is already managed by Spacefast.
 
-**How to resolve:** No action is needed; the facet is already active.
+**How to resolve:** No action is needed. The facet is already active.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_facet_already_managed",
     "message": "This facet of the domain is already managed by Spacefast.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_facet_already_managed",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_facet_already_managed",
     "requestId": "req_4mz0v8qk"
   }
 }

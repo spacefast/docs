@@ -5,7 +5,7 @@ description: "The device login is being polled faster than the advised interval.
 
 The device login is being polled faster than the advised interval.
 
-**How to resolve:** Increase the polling interval; aggressive polling invalidates the flow.
+**How to resolve:** Increase the polling interval. Aggressive polling invalidates the flow.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "slow_down",
     "message": "The device login is being polled faster than the advised interval.",
-    "docsUrl": "https://spacefast.com/docs/errors/slow_down",
+    "docsUrl": "https://docs.spacefast.com/errors/slow_down",
     "requestId": "req_4mz0v8qk"
   }
 }

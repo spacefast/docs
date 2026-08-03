@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_file_missing",
     "message": "A declared file was never uploaded, so the publish cannot finalize.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_file_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_file_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

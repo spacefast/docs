@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_conflict",
     "message": "The DNS provider rejected the change because it conflicts with existing provider state.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

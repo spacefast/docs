@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "auth_code_required",
     "message": "An authorization code is required to complete this step.",
-    "docsUrl": "https://spacefast.com/docs/errors/auth_code_required",
+    "docsUrl": "https://docs.spacefast.com/errors/auth_code_required",
     "requestId": "req_4mz0v8qk"
   }
 }

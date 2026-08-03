@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_canceled",
     "message": "The version was canceled and cannot be used.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_canceled",
+    "docsUrl": "https://docs.spacefast.com/errors/version_canceled",
     "requestId": "req_4mz0v8qk"
   }
 }

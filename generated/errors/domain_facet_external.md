@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_facet_external",
     "message": "This facet of the domain is managed outside Spacefast.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_facet_external",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_facet_external",
     "requestId": "req_4mz0v8qk"
   }
 }

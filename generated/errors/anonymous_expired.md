@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "anonymous_expired",
     "message": "This anonymous space expired before it was claimed.",
-    "docsUrl": "https://spacefast.com/docs/errors/anonymous_expired",
+    "docsUrl": "https://docs.spacefast.com/errors/anonymous_expired",
     "requestId": "req_4mz0v8qk"
   }
 }

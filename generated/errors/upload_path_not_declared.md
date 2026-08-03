@@ -5,7 +5,7 @@ description: "An uploaded path was not declared in the version's manifest."
 
 An uploaded path was not declared in the version's manifest.
 
-**How to resolve:** Declare every path up front, or use an open session for incremental uploads.
+**How to resolve:** Declare every path up front.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "upload_path_not_declared",
     "message": "An uploaded path was not declared in the version's manifest.",
-    "docsUrl": "https://spacefast.com/docs/errors/upload_path_not_declared",
+    "docsUrl": "https://docs.spacefast.com/errors/upload_path_not_declared",
     "requestId": "req_4mz0v8qk"
   }
 }

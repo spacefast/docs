@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_requires_dedicated_plan",
     "message": "Zero endpoints require a plan with dedicated runtime isolation.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_requires_dedicated_plan",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_requires_dedicated_plan",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -5,7 +5,7 @@ description: "The runtime management surface is unavailable for this site."
 
 The runtime management surface is unavailable for this site.
 
-**How to resolve:** Retry shortly; if the site stays unreachable, contact support.
+**How to resolve:** Retry shortly. If the site stays unreachable, contact support.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_management_unavailable",
     "message": "The runtime management surface is unavailable for this site.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_management_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_management_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

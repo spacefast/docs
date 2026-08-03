@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "billing_subscription_conflict",
     "message": "The team already has an active subscription with another payment provider.",
-    "docsUrl": "https://spacefast.com/docs/errors/billing_subscription_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/billing_subscription_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

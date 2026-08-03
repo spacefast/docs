@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_in_use",
     "message": "The domain is in use by another binding or assignment.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_in_use",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_in_use",
     "requestId": "req_4mz0v8qk"
   }
 }

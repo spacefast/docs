@@ -27,6 +27,9 @@ Build and publish the generated directory:
 
 ```bash
 bun run build
+```
+
+```bash
 sf publish ./out
 ```
 

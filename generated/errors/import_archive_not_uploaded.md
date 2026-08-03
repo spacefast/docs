@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "import_archive_not_uploaded",
     "message": "The import has no uploaded archive yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/import_archive_not_uploaded",
+    "docsUrl": "https://docs.spacefast.com/errors/import_archive_not_uploaded",
     "requestId": "req_4mz0v8qk"
   }
 }

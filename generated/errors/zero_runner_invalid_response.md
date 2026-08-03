@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_runner_invalid_response",
     "message": "The Zero runner output was not valid JSON.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_runner_invalid_response",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_invalid_response",
     "requestId": "req_4mz0v8qk"
   }
 }

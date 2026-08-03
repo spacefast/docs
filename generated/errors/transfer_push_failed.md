@@ -5,7 +5,7 @@ description: "The source runtime could not push the space blobs into the transfe
 
 The source runtime could not push the space blobs into the transfer bucket.
 
-**How to resolve:** Retry the move; if it persists, check the source runtime and bucket configuration.
+**How to resolve:** Retry the move. If it persists, check the source runtime and bucket configuration.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "transfer_push_failed",
     "message": "The source runtime could not push the space blobs into the transfer bucket.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_push_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/transfer_push_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

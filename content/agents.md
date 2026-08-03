@@ -10,7 +10,7 @@ fetch https://spacefast.com/ai
 and publish this space to Spacefast
 ```
 
-## Publish with curl (no install, no account)
+## Publish with curl
 
 ```bash
 curl -F "files=@index.html" https://api.spacefast.com/v1/publish
@@ -25,16 +25,16 @@ To publish a folder, zip it first and send it as `-F archive=@site.zip`. The res
 
 For anonymous spaces, send the receipt's `data.claim.token` as `Authorization: Bearer <claim-token>` when polling `data.links.status`, reading `data.links.inspect` / `data.links.version`, finalizing uploads, or updating the same `spaceId`. Never print the token back to the user. Errors come back as JSON with stable `code` values and a `docsUrl` for recovery steps.
 
-## After the user claims
+## Continue after claim
 
 Claiming ends the claim token's publish rights, but when the owner keeps agent continuation on (the default at claim time) the token becomes a one-time exchange voucher. The next publish with it fails with an error that points here: call `POST /v1/anonymous-claim/exchange` with the same bearer auth to trade the token once for a durable, publish-only API key scoped to that space, save the key to `.spacefast/state.json`, and retry the publish with the new key as the bearer credential. The owner can see and revoke the key under Account → Access tokens; if they turned continuation off, ask them to mint an access token in the dashboard instead.
 
-## Install the Spacefast CLI
+## MCP
 
 The CLI is the full surface: incremental publishes, version history, rollback, passwords, domains, logs, and diagnostics.
 
 ```bash
-npm install -g spacefast@0.0.11
+npm install -g spacefast@0.0.13
 ```
 
 That command pins the package reviewed for this docs release. For a standalone
@@ -46,6 +46,9 @@ latest release; use them only when you intentionally trust that moving channel.
 
 ```bash
 sf agents init
+```
+
+```bash
 sf mcp install --mode local --transport stdio --write
 ```
 
@@ -56,6 +59,34 @@ https://mcp.spacefast.com
 ```
 
 Hosted MCP can edit its durable virtual workspace and publish from it. On-Device MCP, installed through the CLI, can read and edit the bounded local checkout.
+
+## Workspace files
+
+Hosted MCP provides a durable virtual workspace that agents can list, read,
+patch, import, export, and publish. On-Device MCP applies the same file tools
+inside its configured local root. Keep the publish root narrow and never add
+`.spacefast/`, credential files, or unrelated repository content to it.
+
+## MCP resources
+
+Read resources before calling tools when the agent needs bounded context:
+
+- `spacefast://account/current` for the authenticated subject.
+- `spacefast://teams/current` and `spacefast://spaces/recent` for scope.
+- Space detail and recent-version resources for a selected space.
+- `spacefast://policy/current` for write and approval posture.
+- `spacefast://workspace/manifest` for hosted workspace files and hashes.
+
+Resources are read-only and redact credentials. Use tool receipts as the
+authority for operations that change state.
+
+## Agent accounts
+
+For durable automation, create an agent account instead of sharing a broad
+personal API key. Agent accounts use OAuth `private_key_jwt` and are loaded by
+the CLI or On-Device MCP through `SPACEFAST_AGENT_CONFIG`. Scope the account to
+the teams and capabilities it needs. For a one-off CI deploy, a masked
+`ci_deploy` API key is the smaller option.
 
 Use `--json` on any command when the output will be parsed. Publishing the same directory again updates the space saved in `.spacefast/state.json`. For agents that support skills, install the official skill:
 
@@ -70,14 +101,14 @@ The skill gives agents the publish workflow, space-state rules, claim-link handl
 ## Docs as Markdown
 
 Every developer page is fetchable as plain Markdown. Append `.md` to any URL
-(for example `https://developers.spacefast.com/cli.md` or
-`https://developers.spacefast.com/errors/rate_limited.md`) to get the exact
+(for example `https://docs.spacefast.com/cli.md` or
+`https://docs.spacefast.com/errors/rate_limited.md`) to get the exact
 Markdown source. Requests from known AI-agent user agents, and requests whose
 `Accept` header prefers Markdown, receive that form at the HTML URL automatically.
 
 Machine-readable docs discovery lives at
-[`llms.txt`](https://developers.spacefast.com/llms.txt) and
-[`llms-full.txt`](https://developers.spacefast.com/llms-full.txt), generated
+[`llms.txt`](https://docs.spacefast.com/llms.txt) and
+[`llms-full.txt`](https://docs.spacefast.com/llms-full.txt), generated
 from the same Blume sources as these pages. Product-level discovery remains on
 the main site: the [agent card](https://spacefast.com/.well-known/agent-card.json),
 [integrations.sh declaration](https://spacefast.com/.well-known/integrations.json),
@@ -103,3 +134,11 @@ Published spaces can do the same trick: an `Agent=true` condition in `_redirects
 - Space metadata, password protection, and SPA mode survive redeploys.
 - Plan limits surface as diagnostics, not guesswork: publish the intended artifact, then read and report what the API or CLI says.
 - Never print claim tokens, API keys, or `.spacefast/state.json` contents into transcripts.
+
+## Secret handling
+
+Treat claim tokens, upload tokens, device codes, API keys, Link URLs, and
+`.spacefast` state as credentials. Do not print, commit, archive, or include
+them in logs and chat. Avoid shell tracing when secrets are present. Pass
+credentials through the environment or the target platform's secret store,
+and clear temporary copies after use.

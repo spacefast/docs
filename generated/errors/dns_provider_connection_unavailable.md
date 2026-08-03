@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_connection_unavailable",
     "message": "The DNS provider connection cannot currently be used.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_connection_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_connection_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

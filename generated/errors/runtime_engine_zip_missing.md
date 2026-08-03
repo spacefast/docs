@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_engine_zip_missing",
     "message": "The runtime engine artifact is missing from this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_engine_zip_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_engine_zip_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

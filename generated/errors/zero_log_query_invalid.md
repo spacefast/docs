@@ -5,7 +5,7 @@ description: "The Zero log query parameters are invalid."
 
 The Zero log query parameters are invalid.
 
-**How to resolve:** Use valid cursor, limit, mutationName, and requestId parameters.
+**How to resolve:** Use valid cursor, limit, handlerName, and requestId parameters.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_log_query_invalid",
     "message": "The Zero log query parameters are invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_log_query_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_log_query_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "not_found",
     "message": "The requested resource was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

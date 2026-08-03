@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "validation_error",
     "message": "A request field failed validation.",
-    "docsUrl": "https://spacefast.com/docs/errors/validation_error",
+    "docsUrl": "https://docs.spacefast.com/errors/validation_error",
     "requestId": "req_4mz0v8qk"
   }
 }

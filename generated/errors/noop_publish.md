@@ -5,7 +5,7 @@ description: "The publish matched the live version exactly, so nothing changed."
 
 The publish matched the live version exactly, so nothing changed.
 
-**How to resolve:** No action needed; the existing live version already serves this content.
+**How to resolve:** No action needed. The existing live version already serves this content.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "noop_publish",
     "message": "The publish matched the live version exactly, so nothing changed.",
-    "docsUrl": "https://spacefast.com/docs/errors/noop_publish",
+    "docsUrl": "https://docs.spacefast.com/errors/noop_publish",
     "requestId": "req_4mz0v8qk"
   }
 }

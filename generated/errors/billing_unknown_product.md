@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "billing_unknown_product",
     "message": "The purchased store product does not map to any plan sold by this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/billing_unknown_product",
+    "docsUrl": "https://docs.spacefast.com/errors/billing_unknown_product",
     "requestId": "req_4mz0v8qk"
   }
 }

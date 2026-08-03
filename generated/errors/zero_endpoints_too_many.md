@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoints_too_many",
     "message": "The Zero endpoints payload exceeds the supported endpoint count.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoints_too_many",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoints_too_many",
     "requestId": "req_4mz0v8qk"
   }
 }

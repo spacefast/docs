@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_archive_expanded_size_exceeded",
     "message": "The archive expands beyond the maximum allowed total size.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_archive_expanded_size_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_archive_expanded_size_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

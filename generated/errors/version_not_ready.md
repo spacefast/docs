@@ -5,7 +5,7 @@ description: "The version is not ready yet."
 
 The version is not ready yet.
 
-**How to resolve:** Wait for finalize to complete; the operation receipt reports progress.
+**How to resolve:** Wait for finalize to complete. The operation receipt reports progress.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_not_ready",
     "message": "The version is not ready yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_not_ready",
+    "docsUrl": "https://docs.spacefast.com/errors/version_not_ready",
     "requestId": "req_4mz0v8qk"
   }
 }

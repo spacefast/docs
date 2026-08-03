@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "unauthorized",
     "message": "The request carried no valid credential.",
-    "docsUrl": "https://spacefast.com/docs/errors/unauthorized",
+    "docsUrl": "https://docs.spacefast.com/errors/unauthorized",
     "requestId": "req_4mz0v8qk"
   }
 }

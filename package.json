@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume dev",
-    "build": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume build --strict && node scripts/build-docs-corpus.mjs",
-    "check": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume check --strict --isolated",
-    "validate": "node scripts/verify-generated.mjs && node scripts/prepare-generated.mjs && blume validate --strict",
+    "build": "node scripts/verify-generated.mjs && node scripts/verify-command-examples.mjs && node scripts/prepare-generated.mjs && blume build --strict && node scripts/build-docs-corpus.mjs",
+    "check": "node scripts/verify-generated.mjs && node scripts/verify-command-examples.mjs && node scripts/prepare-generated.mjs && blume check --strict --isolated",
+    "validate": "node scripts/verify-generated.mjs && node scripts/verify-command-examples.mjs && node scripts/prepare-generated.mjs && blume validate --strict",
     "verify:generated": "node scripts/verify-generated.mjs",
     "verify:public-safety": "node scripts/verify-public-safety.mjs",
+    "verify:commands": "node scripts/verify-command-examples.mjs",
     "verify:routes": "node scripts/verify-routes.mjs",
     "test:corpus": "node --test scripts/build-docs-corpus.test.mjs",
     "doctor": "blume doctor"

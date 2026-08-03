@@ -8,6 +8,9 @@ Migrate the files GitHub Pages served, not the whole repository. Find the publis
 ```bash
 # If GitHub Pages built the site with Jekyll
 bundle exec jekyll build
+```
+
+```bash
 sf publish ./_site
 ```
 

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_already_exists",
     "message": "This domain is already present in your inventory.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_already_exists",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_already_exists",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_continuation_token",
     "message": "The continuation token is invalid, expired, or already finished.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_continuation_token",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_continuation_token",
     "requestId": "req_4mz0v8qk"
   }
 }

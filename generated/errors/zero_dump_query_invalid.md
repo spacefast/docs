@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_dump_query_invalid",
     "message": "The Zero database dump query parameters are invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_dump_query_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_dump_query_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

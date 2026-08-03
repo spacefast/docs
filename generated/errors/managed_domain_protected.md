@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "managed_domain_protected",
     "message": "This is a system-managed view.fast hostname and cannot be mutated like a custom domain.",
-    "docsUrl": "https://spacefast.com/docs/errors/managed_domain_protected",
+    "docsUrl": "https://docs.spacefast.com/errors/managed_domain_protected",
     "requestId": "req_4mz0v8qk"
   }
 }

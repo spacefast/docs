@@ -5,7 +5,7 @@ description: "The space is disabled and cannot be served or modified."
 
 The space is disabled and cannot be served or modified.
 
-**How to resolve:** Check the disabled reason on the space; it explains the path to restore it.
+**How to resolve:** Check the disabled reason on the space. It explains the path to restore it.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_disabled",
     "message": "The space is disabled and cannot be served or modified.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_disabled",
+    "docsUrl": "https://docs.spacefast.com/errors/space_disabled",
     "requestId": "req_4mz0v8qk"
   }
 }

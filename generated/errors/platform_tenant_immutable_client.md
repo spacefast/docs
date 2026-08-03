@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "platform_tenant_immutable_client",
     "message": "The tenant's provider client cannot be changed.",
-    "docsUrl": "https://spacefast.com/docs/errors/platform_tenant_immutable_client",
+    "docsUrl": "https://docs.spacefast.com/errors/platform_tenant_immutable_client",
     "requestId": "req_4mz0v8qk"
   }
 }

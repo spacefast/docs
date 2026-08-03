@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "team_slug_conflict",
     "message": "The team slug is already taken.",
-    "docsUrl": "https://spacefast.com/docs/errors/team_slug_conflict",
+    "docsUrl": "https://docs.spacefast.com/errors/team_slug_conflict",
     "requestId": "req_4mz0v8qk"
   }
 }

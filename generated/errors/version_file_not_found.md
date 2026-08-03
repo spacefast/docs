@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_file_not_found",
     "message": "The requested file does not exist in this version.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_file_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/version_file_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

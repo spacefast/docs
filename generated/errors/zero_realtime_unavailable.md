@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_unavailable",
     "message": "Zero realtime helpers are unavailable for this endpoint.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

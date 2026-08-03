@@ -5,7 +5,7 @@ description: "The local Zero Shopify service is not configured."
 
 The local Zero Shopify service is not configured.
 
-**How to resolve:** Configure a Shopify handler for zero dev before calling the Shopify service.
+**How to resolve:** Configure a Shopify handler in the project, then restart `sf dev` before calling the Shopify service.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_shopify_unavailable",
     "message": "The local Zero Shopify service is not configured.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_shopify_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_shopify_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }

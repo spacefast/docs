@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "job_not_removable",
     "message": "The job cannot be removed in its current state.",
-    "docsUrl": "https://spacefast.com/docs/errors/job_not_removable",
+    "docsUrl": "https://docs.spacefast.com/errors/job_not_removable",
     "requestId": "req_4mz0v8qk"
   }
 }

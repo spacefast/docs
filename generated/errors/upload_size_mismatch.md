@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "upload_size_mismatch",
     "message": "An uploaded file's size does not match the declared size.",
-    "docsUrl": "https://spacefast.com/docs/errors/upload_size_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/upload_size_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

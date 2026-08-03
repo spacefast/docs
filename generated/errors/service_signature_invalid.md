@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "service_signature_invalid",
     "message": "The service request signature could not be verified.",
-    "docsUrl": "https://spacefast.com/docs/errors/service_signature_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/service_signature_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

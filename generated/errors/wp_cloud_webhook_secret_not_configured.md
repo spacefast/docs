@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_webhook_secret_not_configured",
     "message": "The infra webhook secret is not configured on this deployment.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_webhook_secret_not_configured",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_webhook_secret_not_configured",
     "requestId": "req_4mz0v8qk"
   }
 }

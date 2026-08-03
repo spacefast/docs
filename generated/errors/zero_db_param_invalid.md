@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_param_invalid",
     "message": "A Zero database query parameter has an unsupported value.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_param_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_param_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

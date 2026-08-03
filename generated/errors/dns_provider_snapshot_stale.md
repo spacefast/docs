@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "dns_provider_snapshot_stale",
     "message": "The cached DNS provider snapshot is stale.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_provider_snapshot_stale",
+    "docsUrl": "https://docs.spacefast.com/errors/dns_provider_snapshot_stale",
     "requestId": "req_4mz0v8qk"
   }
 }

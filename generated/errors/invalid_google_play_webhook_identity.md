@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_google_play_webhook_identity",
     "message": "The Google Play notification did not carry a valid Pub/Sub push identity.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_google_play_webhook_identity",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_google_play_webhook_identity",
     "requestId": "req_4mz0v8qk"
   }
 }

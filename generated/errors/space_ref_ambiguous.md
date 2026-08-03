@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_ref_ambiguous",
     "message": "The space reference matches more than one accessible space.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_ref_ambiguous",
+    "docsUrl": "https://docs.spacefast.com/errors/space_ref_ambiguous",
     "requestId": "req_4mz0v8qk"
   }
 }

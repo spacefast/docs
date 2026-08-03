@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_client_in_use",
     "message": "The provider client is in use and cannot be removed.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_client_in_use",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_client_in_use",
     "requestId": "req_4mz0v8qk"
   }
 }

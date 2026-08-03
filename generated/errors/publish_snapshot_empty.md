@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_snapshot_empty",
     "message": "An empty snapshot was sent without an explicit base version.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_snapshot_empty",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_snapshot_empty",
     "requestId": "req_4mz0v8qk"
   }
 }

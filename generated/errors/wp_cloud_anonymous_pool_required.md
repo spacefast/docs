@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "wp_cloud_anonymous_pool_required",
     "message": "This operation requires an anonymous pool site.",
-    "docsUrl": "https://spacefast.com/docs/errors/wp_cloud_anonymous_pool_required",
+    "docsUrl": "https://docs.spacefast.com/errors/wp_cloud_anonymous_pool_required",
     "requestId": "req_4mz0v8qk"
   }
 }

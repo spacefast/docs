@@ -1,11 +1,11 @@
 ---
 title: "publish_path_collision"
-description: "Two entries in the publish payload normalize to the same path."
+description: "Two different artifacts would serve the same URL after directory-index or clean-URL resolution."
 ---
 
-Two entries in the publish payload normalize to the same path.
+Two different artifacts would serve the same URL after directory-index or clean-URL resolution.
 
-**How to resolve:** Remove the duplicate; each path may appear once across files and deletes.
+**How to resolve:** Rename or remove one artifact so every request route has one owner.
 
 <div data-pagefind-ignore>
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "publish_path_collision",
-    "message": "Two entries in the publish payload normalize to the same path.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_path_collision",
+    "message": "Two different artifacts would serve the same URL after directory-index or clean-URL resolution.",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_path_collision",
     "requestId": "req_4mz0v8qk"
   }
 }

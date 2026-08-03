@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "duplicate_version_path",
     "message": "The version upload declares the same file path twice.",
-    "docsUrl": "https://spacefast.com/docs/errors/duplicate_version_path",
+    "docsUrl": "https://docs.spacefast.com/errors/duplicate_version_path",
     "requestId": "req_4mz0v8qk"
   }
 }

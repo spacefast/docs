@@ -5,7 +5,7 @@ description: "The version cannot be finalized in its current status."
 
 The version cannot be finalized in its current status.
 
-**How to resolve:** Only uploaded versions finalize; check the version status.
+**How to resolve:** Only uploaded versions finalize. Check the version status.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_not_finalizable",
     "message": "The version cannot be finalized in its current status.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_not_finalizable",
+    "docsUrl": "https://docs.spacefast.com/errors/version_not_finalizable",
     "requestId": "req_4mz0v8qk"
   }
 }

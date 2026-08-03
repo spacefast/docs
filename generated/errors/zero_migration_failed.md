@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_migration_failed",
     "message": "The Zero database migration command failed during finalize.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_migration_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_migration_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

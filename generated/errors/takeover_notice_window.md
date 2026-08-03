@@ -1,9 +1,9 @@
 ---
 title: "takeover_notice_window"
-description: "The hostname was recently bound elsewhere; a takeover notice window applies."
+description: "The hostname was recently bound elsewhere. A takeover notice window applies."
 ---
 
-The hostname was recently bound elsewhere; a takeover notice window applies.
+The hostname was recently bound elsewhere. A takeover notice window applies.
 
 **How to resolve:** Retry after the notice window, or have the current holder release the binding.
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "takeover_notice_window",
-    "message": "The hostname was recently bound elsewhere; a takeover notice window applies.",
-    "docsUrl": "https://spacefast.com/docs/errors/takeover_notice_window",
+    "message": "The hostname was recently bound elsewhere. A takeover notice window applies.",
+    "docsUrl": "https://docs.spacefast.com/errors/takeover_notice_window",
     "requestId": "req_4mz0v8qk"
   }
 }

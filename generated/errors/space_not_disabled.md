@@ -5,7 +5,7 @@ description: "The space is not disabled, so it cannot be restored."
 
 The space is not disabled, so it cannot be restored.
 
-**How to resolve:** No action needed; the space is already active.
+**How to resolve:** No action needed. The space is already active.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_not_disabled",
     "message": "The space is not disabled, so it cannot be restored.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_not_disabled",
+    "docsUrl": "https://docs.spacefast.com/errors/space_not_disabled",
     "requestId": "req_4mz0v8qk"
   }
 }

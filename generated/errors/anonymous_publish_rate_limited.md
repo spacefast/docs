@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "anonymous_publish_rate_limited",
     "message": "Too many anonymous publishes came from this network in a short window.",
-    "docsUrl": "https://spacefast.com/docs/errors/anonymous_publish_rate_limited",
+    "docsUrl": "https://docs.spacefast.com/errors/anonymous_publish_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

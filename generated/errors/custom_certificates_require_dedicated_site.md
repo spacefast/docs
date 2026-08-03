@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "custom_certificates_require_dedicated_site",
     "message": "Custom certificates are unavailable while this space uses shared placement.",
-    "docsUrl": "https://spacefast.com/docs/errors/custom_certificates_require_dedicated_site",
+    "docsUrl": "https://docs.spacefast.com/errors/custom_certificates_require_dedicated_site",
     "requestId": "req_4mz0v8qk"
   }
 }

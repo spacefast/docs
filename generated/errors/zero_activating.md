@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_activating",
     "message": "Zero endpoints are activating.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_activating",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_activating",
     "requestId": "req_4mz0v8qk"
   }
 }

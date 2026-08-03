@@ -5,7 +5,7 @@ description: "The store receipt or notification could not be verified with the p
 
 The store receipt or notification could not be verified with the payment provider.
 
-**How to resolve:** Re-check the transaction id or purchase token and retry; contact support if it persists.
+**How to resolve:** Re-check the transaction id or purchase token and retry. Contact support if it persists.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "billing_receipt_invalid",
     "message": "The store receipt or notification could not be verified with the payment provider.",
-    "docsUrl": "https://spacefast.com/docs/errors/billing_receipt_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/billing_receipt_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

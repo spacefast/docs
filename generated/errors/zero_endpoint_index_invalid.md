@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_index_invalid",
     "message": "The Zero endpoint index does not contain valid endpoint mappings.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_index_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_index_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

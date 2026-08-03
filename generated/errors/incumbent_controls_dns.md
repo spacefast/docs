@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "incumbent_controls_dns",
     "message": "Another team controls this domain's DNS, so the operation is blocked.",
-    "docsUrl": "https://spacefast.com/docs/errors/incumbent_controls_dns",
+    "docsUrl": "https://docs.spacefast.com/errors/incumbent_controls_dns",
     "requestId": "req_4mz0v8qk"
   }
 }

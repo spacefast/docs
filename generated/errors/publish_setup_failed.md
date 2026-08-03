@@ -5,7 +5,7 @@ description: "Provisioning for this publish failed."
 
 Provisioning for this publish failed.
 
-**How to resolve:** Retry the publish; if it persists, contact support with the requestId.
+**How to resolve:** Retry the publish. If it persists, contact support with the requestId.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_setup_failed",
     "message": "Provisioning for this publish failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_setup_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_setup_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

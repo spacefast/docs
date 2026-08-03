@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "credential_retired",
     "message": "This request used a retired Spacefast token format or authentication header.",
-    "docsUrl": "https://spacefast.com/docs/errors/credential_retired",
+    "docsUrl": "https://docs.spacefast.com/errors/credential_retired",
     "requestId": "req_4mz0v8qk"
   }
 }

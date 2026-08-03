@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "log_retention_clamped",
     "message": "The requested log range exceeds the plan's retention and was clamped.",
-    "docsUrl": "https://spacefast.com/docs/errors/log_retention_clamped",
+    "docsUrl": "https://docs.spacefast.com/errors/log_retention_clamped",
     "requestId": "req_4mz0v8qk"
   }
 }

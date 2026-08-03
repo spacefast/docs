@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invitation_not_pending",
     "message": "The invitation is no longer pending.",
-    "docsUrl": "https://spacefast.com/docs/errors/invitation_not_pending",
+    "docsUrl": "https://docs.spacefast.com/errors/invitation_not_pending",
     "requestId": "req_4mz0v8qk"
   }
 }

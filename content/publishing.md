@@ -29,6 +29,12 @@ Publishes and builds draw from one pooled monthly allowance — 100 per month on
 
 ```bash
 sf publish ./dist
+```
+
+```bash
 sf publish ./dist --space docs --json
+```
+
+```bash
 sf publish ./dist --dry-run
 ```

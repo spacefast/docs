@@ -5,7 +5,7 @@ description: "Inviting this person would exceed the team's seat limit."
 
 Inviting this person would exceed the team's seat limit.
 
-**How to resolve:** Remove a team member or cancel a pending invitation to free a seat; pending invitations count toward the limit.
+**How to resolve:** Remove a team member or cancel a pending invitation to free a seat. Pending invitations count toward the limit.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "team_member_quota_exceeded",
     "message": "Inviting this person would exceed the team's seat limit.",
-    "docsUrl": "https://spacefast.com/docs/errors/team_member_quota_exceeded",
+    "docsUrl": "https://docs.spacefast.com/errors/team_member_quota_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

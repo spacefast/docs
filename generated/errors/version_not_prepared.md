@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_not_prepared",
     "message": "The version is not prepared for this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_not_prepared",
+    "docsUrl": "https://docs.spacefast.com/errors/version_not_prepared",
     "requestId": "req_4mz0v8qk"
   }
 }

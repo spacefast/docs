@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "enforcement_policy_overlap",
     "message": "Enforcement policy severity ranges overlap within a category.",
-    "docsUrl": "https://spacefast.com/docs/errors/enforcement_policy_overlap",
+    "docsUrl": "https://docs.spacefast.com/errors/enforcement_policy_overlap",
     "requestId": "req_4mz0v8qk"
   }
 }

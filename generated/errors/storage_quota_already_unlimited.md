@@ -1,11 +1,11 @@
 ---
-title: "zero_source_unreadable"
-description: "The Zero endpoint source file could not be read."
+title: "storage_quota_already_unlimited"
+description: "The team already has unlimited storage."
 ---
 
-The Zero endpoint source file could not be read.
+The team already has unlimited storage.
 
-**How to resolve:** Verify the version finalized with generated source files present.
+**How to resolve:** No quota override is needed.
 
 <div data-pagefind-ignore>
 
@@ -18,9 +18,9 @@ structured context. Match on `code`, never on `message`.
 ```json
 {
   "error": {
-    "code": "zero_source_unreadable",
-    "message": "The Zero endpoint source file could not be read.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_source_unreadable",
+    "code": "storage_quota_already_unlimited",
+    "message": "The team already has unlimited storage.",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_quota_already_unlimited",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_index_unreadable",
     "message": "The Zero endpoint index could not be read.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_index_unreadable",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_index_unreadable",
     "requestId": "req_4mz0v8qk"
   }
 }

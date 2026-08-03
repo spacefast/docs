@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "placement_mode_requires_plan",
     "message": "The requested placement mode requires a plan entitlement.",
-    "docsUrl": "https://spacefast.com/docs/errors/placement_mode_requires_plan",
+    "docsUrl": "https://docs.spacefast.com/errors/placement_mode_requires_plan",
     "requestId": "req_4mz0v8qk"
   }
 }

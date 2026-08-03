@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_too_many_params",
     "message": "The Zero database operation has too many parameters.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_too_many_params",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_too_many_params",
     "requestId": "req_4mz0v8qk"
   }
 }

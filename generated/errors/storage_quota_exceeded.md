@@ -1,11 +1,11 @@
 ---
 title: "storage_quota_exceeded"
-description: "The publish would exceed the plan's storage allowance."
+description: "The operation would exceed its storage allowance."
 ---
 
-The publish would exceed the plan's storage allowance.
+The operation would exceed its storage allowance.
 
-**How to resolve:** Delete old versions. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Delete unused Zero objects or old versions, reduce the upload size, then retry.
 
 <div data-pagefind-ignore>
 
@@ -19,8 +19,8 @@ structured context. Match on `code`, never on `message`.
 {
   "error": {
     "code": "storage_quota_exceeded",
-    "message": "The publish would exceed the plan's storage allowance.",
-    "docsUrl": "https://spacefast.com/docs/errors/storage_quota_exceeded",
+    "message": "The operation would exceed its storage allowance.",
+    "docsUrl": "https://docs.spacefast.com/errors/storage_quota_exceeded",
     "requestId": "req_4mz0v8qk"
   }
 }

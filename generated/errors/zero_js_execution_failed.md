@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_js_execution_failed",
     "message": "The Zero endpoint JavaScript threw during execution.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_js_execution_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_js_execution_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

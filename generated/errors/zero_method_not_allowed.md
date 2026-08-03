@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_method_not_allowed",
     "message": "The request method is not allowed for this Zero endpoint.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_method_not_allowed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_method_not_allowed",
     "requestId": "req_4mz0v8qk"
   }
 }

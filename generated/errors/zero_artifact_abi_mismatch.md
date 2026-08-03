@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_artifact_abi_mismatch",
     "message": "The Zero endpoint artifact was built for a different runner ABI.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_artifact_abi_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_artifact_abi_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

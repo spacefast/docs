@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_bytecode_invalid",
     "message": "The Zero endpoint bytecode could not be loaded by QuickJS.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_bytecode_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_bytecode_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_db_transaction_rollback_failed",
     "message": "The Zero database transaction could not be rolled back cleanly.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_db_transaction_rollback_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_db_transaction_rollback_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -5,7 +5,7 @@ description: "The request reached a different runtime instance than the one it w
 
 The request reached a different runtime instance than the one it was issued for.
 
-**How to resolve:** Re-request instructions; the space may have moved to another instance.
+**How to resolve:** Re-request instructions. The space may have moved to another instance.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_instance_mismatch",
     "message": "The request reached a different runtime instance than the one it was issued for.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_instance_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_instance_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

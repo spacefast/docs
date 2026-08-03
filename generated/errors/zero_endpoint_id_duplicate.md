@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_endpoint_id_duplicate",
     "message": "Two Zero endpoints declare the same endpoint id.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_endpoint_id_duplicate",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_endpoint_id_duplicate",
     "requestId": "req_4mz0v8qk"
   }
 }

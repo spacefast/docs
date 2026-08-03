@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_files_missing",
     "message": "Declared files were never uploaded, so the version cannot finalize.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_files_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/version_files_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

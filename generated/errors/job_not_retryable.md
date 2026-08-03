@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "job_not_retryable",
     "message": "The job cannot be retried in its current state.",
-    "docsUrl": "https://spacefast.com/docs/errors/job_not_retryable",
+    "docsUrl": "https://docs.spacefast.com/errors/job_not_retryable",
     "requestId": "req_4mz0v8qk"
   }
 }

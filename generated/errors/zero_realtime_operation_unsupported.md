@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_realtime_operation_unsupported",
     "message": "The Zero realtime websocket operation is unsupported.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_realtime_operation_unsupported",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_realtime_operation_unsupported",
     "requestId": "req_4mz0v8qk"
   }
 }

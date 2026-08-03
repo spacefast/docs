@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invitation_email_mismatch",
     "message": "This invitation was addressed to a different email than the accepting user.",
-    "docsUrl": "https://spacefast.com/docs/errors/invitation_email_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/invitation_email_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

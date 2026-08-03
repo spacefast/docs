@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_has_active_publish",
     "message": "The space has a publish in progress, which blocks this operation.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_has_active_publish",
+    "docsUrl": "https://docs.spacefast.com/errors/space_has_active_publish",
     "requestId": "req_4mz0v8qk"
   }
 }

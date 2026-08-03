@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "config_invalid",
     "message": "The space configuration failed validation.",
-    "docsUrl": "https://spacefast.com/docs/errors/config_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/config_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

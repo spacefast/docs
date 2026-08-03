@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "manifest_too_many_files",
     "message": "The upload manifest declares more files than the allowed ceiling.",
-    "docsUrl": "https://spacefast.com/docs/errors/manifest_too_many_files",
+    "docsUrl": "https://docs.spacefast.com/errors/manifest_too_many_files",
     "requestId": "req_4mz0v8qk"
   }
 }

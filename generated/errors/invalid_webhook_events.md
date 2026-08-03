@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invalid_webhook_events",
     "message": "One or more webhook event codes are not in the event taxonomy.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_webhook_events",
+    "docsUrl": "https://docs.spacefast.com/errors/invalid_webhook_events",
     "requestId": "req_4mz0v8qk"
   }
 }

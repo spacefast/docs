@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "cache_purge_domain_required",
     "message": "A purge request must name the domain to purge.",
-    "docsUrl": "https://spacefast.com/docs/errors/cache_purge_domain_required",
+    "docsUrl": "https://docs.spacefast.com/errors/cache_purge_domain_required",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "free_external_proxy_disabled",
     "message": "Proxy routes to external upstreams are not available on the Free plan.",
-    "docsUrl": "https://spacefast.com/docs/errors/free_external_proxy_disabled",
+    "docsUrl": "https://docs.spacefast.com/errors/free_external_proxy_disabled",
     "requestId": "req_4mz0v8qk"
   }
 }

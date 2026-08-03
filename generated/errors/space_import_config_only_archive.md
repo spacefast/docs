@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "space_import_config_only_archive",
     "message": "The archive contains only configuration and cannot be imported as content.",
-    "docsUrl": "https://spacefast.com/docs/errors/space_import_config_only_archive",
+    "docsUrl": "https://docs.spacefast.com/errors/space_import_config_only_archive",
     "requestId": "req_4mz0v8qk"
   }
 }

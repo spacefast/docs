@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "tenant_not_found",
     "message": "The tenant was not found.",
-    "docsUrl": "https://spacefast.com/docs/errors/tenant_not_found",
+    "docsUrl": "https://docs.spacefast.com/errors/tenant_not_found",
     "requestId": "req_4mz0v8qk"
   }
 }

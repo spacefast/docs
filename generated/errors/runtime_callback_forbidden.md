@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "runtime_callback_forbidden",
     "message": "The runtime callback could not be authenticated.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_callback_forbidden",
+    "docsUrl": "https://docs.spacefast.com/errors/runtime_callback_forbidden",
     "requestId": "req_4mz0v8qk"
   }
 }

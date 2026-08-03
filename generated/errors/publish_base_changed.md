@@ -5,7 +5,7 @@ description: "Someone published new space settings after the base you loaded, so
 
 Someone published new space settings after the base you loaded, so saving would overwrite their change.
 
-**How to resolve:** Reload the latest settings, review the difference, and save again; pass force only to overwrite deliberately.
+**How to resolve:** Reload the latest settings, review the difference, and save again. Pass force only to overwrite deliberately.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_base_changed",
     "message": "Someone published new space settings after the base you loaded, so saving would overwrite their change.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_base_changed",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_base_changed",
     "requestId": "req_4mz0v8qk"
   }
 }

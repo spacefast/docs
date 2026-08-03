@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "version_file_too_large",
     "message": "A file exceeds the plan's maximum file size.",
-    "docsUrl": "https://spacefast.com/docs/errors/version_file_too_large",
+    "docsUrl": "https://docs.spacefast.com/errors/version_file_too_large",
     "requestId": "req_4mz0v8qk"
   }
 }

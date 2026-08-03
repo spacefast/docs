@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "source_archive_validation_busy",
     "message": "The service is already validating its maximum number of source archives.",
-    "docsUrl": "https://spacefast.com/docs/errors/source_archive_validation_busy",
+    "docsUrl": "https://docs.spacefast.com/errors/source_archive_validation_busy",
     "requestId": "req_4mz0v8qk"
   }
 }

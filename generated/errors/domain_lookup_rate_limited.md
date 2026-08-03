@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "domain_lookup_rate_limited",
     "message": "Too many domain lookups were made in a short window.",
-    "docsUrl": "https://spacefast.com/docs/errors/domain_lookup_rate_limited",
+    "docsUrl": "https://docs.spacefast.com/errors/domain_lookup_rate_limited",
     "requestId": "req_4mz0v8qk"
   }
 }

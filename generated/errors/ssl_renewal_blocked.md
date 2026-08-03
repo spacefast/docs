@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "ssl_renewal_blocked",
     "message": "SSL certificate renewal is blocked for this hostname.",
-    "docsUrl": "https://spacefast.com/docs/errors/ssl_renewal_blocked",
+    "docsUrl": "https://docs.spacefast.com/errors/ssl_renewal_blocked",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_path_invalid",
     "message": "A publish path is not a relative, normalized POSIX path.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_path_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_path_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_bytecode_path_invalid",
     "message": "The Zero endpoint bytecode path is invalid.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_bytecode_path_invalid",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_bytecode_path_invalid",
     "requestId": "req_4mz0v8qk"
   }
 }

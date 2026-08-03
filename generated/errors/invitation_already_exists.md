@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "invitation_already_exists",
     "message": "An invitation for this email already exists on the team.",
-    "docsUrl": "https://spacefast.com/docs/errors/invitation_already_exists",
+    "docsUrl": "https://docs.spacefast.com/errors/invitation_already_exists",
     "requestId": "req_4mz0v8qk"
   }
 }

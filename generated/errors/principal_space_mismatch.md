@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "principal_space_mismatch",
     "message": "The space does not belong to the principal in the request.",
-    "docsUrl": "https://spacefast.com/docs/errors/principal_space_mismatch",
+    "docsUrl": "https://docs.spacefast.com/errors/principal_space_mismatch",
     "requestId": "req_4mz0v8qk"
   }
 }

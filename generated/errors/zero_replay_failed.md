@@ -5,7 +5,7 @@ description: "The hosted Zero runtime could not fetch realtime replay events."
 
 The hosted Zero runtime could not fetch realtime replay events.
 
-**How to resolve:** Retry shortly; check the central realtime and control-plane logs if it persists.
+**How to resolve:** Retry shortly. Check the central realtime and control-plane logs if it persists.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "zero_replay_failed",
     "message": "The hosted Zero runtime could not fetch realtime replay events.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_replay_failed",
+    "docsUrl": "https://docs.spacefast.com/errors/zero_replay_failed",
     "requestId": "req_4mz0v8qk"
   }
 }

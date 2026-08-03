@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "publish_bytes_missing",
     "message": "The publish has no complete staged content to materialize.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_bytes_missing",
+    "docsUrl": "https://docs.spacefast.com/errors/publish_bytes_missing",
     "requestId": "req_4mz0v8qk"
   }
 }

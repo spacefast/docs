@@ -5,7 +5,7 @@ description: "No pooled capacity is available for anonymous publishes right now.
 
 No pooled capacity is available for anonymous publishes right now.
 
-**How to resolve:** Retry shortly; capacity replenishes automatically.
+**How to resolve:** Retry shortly. Capacity replenishes automatically.
 
 <div data-pagefind-ignore>
 
@@ -20,7 +20,7 @@ structured context. Match on `code`, never on `message`.
   "error": {
     "code": "anonymous_pool_unavailable",
     "message": "No pooled capacity is available for anonymous publishes right now.",
-    "docsUrl": "https://spacefast.com/docs/errors/anonymous_pool_unavailable",
+    "docsUrl": "https://docs.spacefast.com/errors/anonymous_pool_unavailable",
     "requestId": "req_4mz0v8qk"
   }
 }
