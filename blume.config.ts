@@ -1,8 +1,17 @@
 import { defineConfig } from "blume";
 
 export default defineConfig({
-  title: "Spacefast Developers",
-  description: "Build with Spacefast through the API, CLI, SDK, MCP, and Platform API.",
+  title: "Spacefast Docs",
+  description:
+    "Publish sites and build apps with Spacefast through the CLI, API, SDK, and MCP.",
+  logo: { href: "/", text: "Spacefast Docs" },
+  theme: {
+    accent: { dark: "#ff7657", light: "#d93614" },
+    background: { dark: "#111114", light: "#fbfaf7" },
+    fonts: { body: "inter", display: "inter-tight", mono: "ibm-plex-mono" },
+    mode: "system",
+    radius: "sm",
+  },
   analytics: {
     posthog: {
       key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT",
@@ -15,7 +24,7 @@ export default defineConfig({
             .then(async (pagefind) => {
               await pagefind.options({
                 indexWeight: 1.15,
-                mergeFilter: { source: "Developers" },
+                mergeFilter: { source: "Docs" },
               });
               await pagefind.mergeIndex("https://spacefast.com/pagefind", {
                 indexWeight: 1,
@@ -40,8 +49,6 @@ export default defineConfig({
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
-      { label: "Help", href: "https://spacefast.com/help", icon: "book-open" },
-      { label: "Recipes", href: "https://spacefast.com/recipes", icon: "sparkles" },
       { label: "Agent setup", href: "https://spacefast.com/setup", icon: "bot" },
     ],
     repo: true,
@@ -49,14 +56,15 @@ export default defineConfig({
       display: "group",
       items: [
         {
-          label: "Overview",
+          label: "Start",
           collapsed: false,
-          items: ["/", "/quickstart"],
+          items: ["/", "/quickstart", "/agents", "/runtimes"],
         },
         {
-          label: "Features",
+          label: "Core",
           items: [
             "/spaces",
+            "/spaces/rename",
             "/publishing",
             "/versions",
             "/builds",
@@ -66,14 +74,28 @@ export default defineConfig({
           ],
         },
         {
-          label: "Interfaces",
-          items: ["/api", "/api/reference", "/cli", "/sdk", "/mcp", "/errors"],
+          label: "Functions",
+          items: ["/runtimes/functions"],
+        },
+        {
+          label: "Zero",
+          items: [
+            "/runtimes/zero",
+            "/runtimes/zero/capsule-api",
+            "/runtimes/zero/authentication",
+            "/runtimes/zero/database",
+            "/runtimes/zero/storage",
+          ],
         },
         {
           label: "Configure",
           items: [
             "/configuration",
+            "/customization",
             "/pages",
+            "/variables",
+            "/traffic",
+            "/mounts",
             "/redirects",
             "/headers",
             "/proxy-routes",
@@ -82,7 +104,17 @@ export default defineConfig({
         },
         {
           label: "Integrations",
-          items: ["/integrations/vite", "/integrations/nextjs", "/image-acceleration"],
+          items: [
+            "/integrations/tag-manager",
+            "/integrations/wordpress",
+            "/integrations/vite",
+            "/integrations/nextjs",
+            "/image-acceleration",
+          ],
+        },
+        {
+          label: "Interfaces",
+          items: ["/api", "/api/reference", "/cli", "/sdk", "/mcp", "/errors"],
         },
         {
           label: "Migrate",
@@ -110,10 +142,7 @@ export default defineConfig({
         },
       ],
     },
-    tabs: [
-      { label: "API reference", path: "/api/reference", icon: "braces" },
-      { label: "Platforms", path: "/platforms", icon: "building" },
-    ],
+    tabs: [],
   },
   openapi: {
     enabled: true,
@@ -166,5 +195,5 @@ export default defineConfig({
     sitemap: true,
     structuredData: true,
   },
-  deployment: { output: "static", site: "https://developers.spacefast.com" },
+  deployment: { output: "static", site: "https://docs.spacefast.com" },
 });
