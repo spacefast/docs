@@ -54,31 +54,25 @@ export default defineConfig({
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
-      { label: "Agent setup", href: "https://spacefast.com/setup", icon: "bot" },
+      { label: "Agent setup", href: "/agents", icon: "bot" },
     ],
     repo: true,
+    tabs: [
+      { label: "Docs", path: "/", href: "/", icon: "book-open" },
+      { label: "Reference", path: "/reference", icon: "braces" },
+    ],
     sidebar: {
-      display: "page",
+      display: "flat",
       items: [
         "/",
-        {
-          label: "Get started",
-          root: "/getting-started/quickstart",
-          items: [
-            "/getting-started/quickstart",
-            "/getting-started/agents",
-            "/getting-started/browser-terminal",
-          ],
-        },
+        "/getting-started/quickstart",
         {
           label: "Publishing",
           root: "/publishing",
           items: [
             "/publishing",
             "/publishing/anonymous",
-            "/publishing/push-new",
             "/publishing/git",
-            "/publishing/versions",
             "/publishing/channels",
             "/publishing/rollback",
             {
@@ -106,24 +100,40 @@ export default defineConfig({
           ],
         },
         {
+          label: "Agents",
+          root: "/agents",
+          items: [
+            "/agents",
+            "/agents/publishing",
+            "/agents/mcp",
+            "/agents/accounts",
+          ],
+        },
+        {
           label: "Spaces",
           root: "/spaces",
           items: [
             "/spaces",
             "/spaces/files",
+            "/spaces/domains",
             "/spaces/access",
             "/spaces/comments",
-            "/spaces/domains",
-            "/spaces/settings",
-            "/spaces/apply",
-            "/spaces/variables",
-            "/spaces/customization",
-            "/spaces/visitor-pages",
-            "/spaces/traffic",
-            "/spaces/progress",
-            "/spaces/activity",
-            "/spaces/rename",
-            "/spaces/move-copy",
+            "/spaces/manage",
+            {
+              label: "Configure",
+              root: "/spaces/settings",
+              items: [
+                "/spaces/settings",
+                "/spaces/variables",
+                "/spaces/customization",
+                "/spaces/visitor-pages",
+              ],
+            },
+            {
+              label: "Monitor",
+              root: "/spaces/traffic",
+              items: ["/spaces/traffic", "/spaces/activity"],
+            },
             {
               label: "Routing",
               root: "/spaces/redirects",
@@ -149,16 +159,9 @@ export default defineConfig({
         {
           label: "Apps",
           root: "/apps",
-          items: [
-            "/apps",
-            "/apps/functions",
-            "/apps/zero",
-            "/apps/zero/capsule",
-            "/apps/zero/authentication",
-            "/apps/zero/database",
-            "/apps/zero/storage",
-          ],
+          items: ["/apps", "/apps/functions", "/apps/zero"],
         },
+        "/platforms",
         {
           label: "Account & teams",
           root: "/account",
@@ -166,22 +169,9 @@ export default defineConfig({
             "/account",
             "/account/sign-in",
             "/account/security",
-            "/account/notifications",
-            "/account/connections",
             "/account/teams",
             "/account/api-keys",
             "/account/billing",
-            "/account/limits",
-          ],
-        },
-        {
-          label: "Platforms",
-          root: "/platforms",
-          items: [
-            "/platforms",
-            "/platforms/authentication",
-            "/platforms/customers",
-            "/platforms/api/reference",
           ],
         },
         {
@@ -191,10 +181,9 @@ export default defineConfig({
             "/reference",
             "/api",
             "/api/reference",
+            "/platforms/api/reference",
             "/cli",
             "/reference/sdk",
-            "/reference/mcp",
-            "/reference/profiles",
             "/reference/troubleshooting",
             "/errors",
             "/changelog",
@@ -203,7 +192,6 @@ export default defineConfig({
         },
       ],
     },
-    tabs: [],
   },
   openapi: {
     enabled: true,
@@ -225,7 +213,7 @@ export default defineConfig({
     popular: [
       { label: "Quickstart", href: "/getting-started/quickstart", icon: "rocket" },
       { label: "Spaces", href: "/spaces", icon: "box" },
-      { label: "MCP", href: "/reference/mcp", icon: "bot" },
+      { label: "MCP", href: "/agents/mcp", icon: "bot" },
       { label: "API reference", href: "/api/reference", icon: "braces" },
     ],
   },

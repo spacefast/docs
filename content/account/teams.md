@@ -4,8 +4,8 @@ description: Create teams, invite members, switch context, and set defaults for 
 ---
 
 A team is the billing and ownership boundary for spaces, domains, API keys, and
-plan limits. Your personal login can belong to many teams; CLI and dashboard
-commands run against the team you selected.
+plan limits. Your personal login can belong to many teams. CLI and dashboard
+commands run against the team you select.
 
 Dashboard teams live at `my.spacefast.com/<team>`.
 
@@ -19,8 +19,8 @@ sf teams create "Acme Inc"
 sf teams ls
 ```
 
-`sf whoami` and `sf status` show the login and the default team the CLI will
-use next.
+`sf whoami` and `sf status` show the login and the default team that the CLI
+uses next.
 
 ## Switch teams
 
@@ -29,7 +29,7 @@ sf switch acme
 ```
 
 `sf teams switch` is the same operation. Pass `-o` / `--team` on any command to
-override the default for one call, or set `SPACEFAST_TEAM`.
+override the default for one call. Or set `SPACEFAST_TEAM`.
 
 ## Invite members
 
@@ -67,7 +67,7 @@ sf teams members ls
 sf teams members rm jane@example.com
 ```
 
-The selected team's [entitlements](/account/limits) report its current member
+The selected team's [entitlements](/account/billing) report its current member
 capacity. The dashboard shows available options when an invitation would exceed
 it.
 
@@ -84,12 +84,11 @@ sf teams defaults
 sf teams defaults private
 ```
 
-This only affects spaces created after the change. Existing space Grants stay
-put — change those with [Access](/spaces/access).
+This affects only the spaces you create after the change. Existing space Grants
+do not change. Use [Access](/spaces/access) to change them.
 
 ## Related
 
-- [Billing and plans](/account/billing) for plan state and usage.
 - [API keys](/account/api-keys) for machine access scoped to a team.
 - [Spaces](/spaces) for creating and transferring spaces into a team.
 - [Auth](/account/sign-in) for logging the CLI into the right account.

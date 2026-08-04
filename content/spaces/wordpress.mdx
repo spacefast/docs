@@ -10,9 +10,9 @@ public content from WordPress sites with the standard REST API.
 
 ## Connect a source
 
-In the Spacefast dashboard, open the space and go to **Settings → Data
-sources**. Add a named public WordPress site and choose the default source.
-Then connect the repository that builds the site to the same space.
+In the Spacefast dashboard, open the space. Go to **Settings → Data sources**.
+Add a named public WordPress site. Choose the default source. Then connect the
+repository that builds the site to the same space.
 
 Install the client in that repository:
 
@@ -38,7 +38,7 @@ client preserves WordPress pagination metadata.
 
 ## Multiple sources
 
-Omit `url` to use the default source, or select another configured source by
+Omit `url` to use the default source. Or select another configured source by
 name:
 
 ```ts
@@ -46,33 +46,33 @@ const docs = createWordPressClient({ source: "docs" });
 ```
 
 Repository builds receive `SPACEFAST_DATA_SOURCES` and `WORDPRESS_URL` from
-the dashboard configuration. An explicit `url` always wins and is the right
-choice for local development or browser code:
+the dashboard configuration. An explicit `url` always wins. Use it for local
+development or browser code:
 
 ```ts
 const local = createWordPressClient({ url: "https://example.wordpress.com" });
 ```
 
-Zero-config discovery reads Node environment variables, so it is intended for
-build-time or SSR code, not a browser bundle.
+Zero-config discovery reads Node environment variables. Use it in build-time or
+SSR code, not in a browser bundle.
 
 ## Rebuild on WordPress changes
 
-Choose **Connect WordPress** in the data-source settings, install the provided
-plugin in WordPress, and paste the one-time connection into **Settings →
+Choose **Connect WordPress** in the data-source settings. Install the provided
+plugin in WordPress. Paste the one-time connection into **Settings →
 Spacefast**. Public content changes then coalesce into production repository
 builds. **Build now** remains available in both products.
 
-The plugin credential is limited to triggering builds for this space. It
-cannot upload arbitrary output or replace saved build settings. Revoke it when
-the WordPress installation is retired or compromised.
+The plugin credential can only trigger builds for this space. It cannot upload
+arbitrary output or replace saved build settings. Revoke it when the WordPress
+installation is retired or compromised.
 
 ## Boundaries
 
 - The client makes `GET` requests only. It cannot edit WordPress content.
-- Draft, preview, private, and authenticated WordPress content is not
-  supported.
+- The client does not support draft, preview, private, or authenticated
+  WordPress content.
 - Content is a build snapshot. It changes on the Spacefast site only after a
   new repository build succeeds.
 - Dashboard sources require standard pretty-permalink REST URLs under
-  `/wp-json`; explicit client URLs also support the documented REST-root forms.
+  `/wp-json`. Explicit client URLs also support the documented REST-root forms.

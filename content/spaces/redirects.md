@@ -3,7 +3,11 @@ title: Redirects
 description: How to configure redirects, rewrites, SPA fallbacks, and proxy routes.
 ---
 
-Add `_redirects` at the publish root to redirect, rewrite, proxy, or return custom 404 responses. Spacefast compiles the file when a publish finishes and attaches the rules to that immutable version. Serving is precomputed — no rule is parsed or looked up per request, and the file itself is never served.
+Add `_redirects` at the publish root to redirect, rewrite, proxy, or return
+custom 404 responses. Spacefast compiles the file when a publish finishes and
+attaches the rules to that immutable version. The serving rules are
+precomputed — nothing parses the file per request — and Spacefast never serves
+the file itself.
 
 ```text
 /old /new 301
@@ -13,11 +17,14 @@ Add `_redirects` at the publish root to redirect, rewrite, proxy, or return cust
 /missing /404.html 404
 ```
 
-Vite spaces can also define these rules in `vite.config.ts` with the Spacefast Vite plugin. The plugin merges config rules with `_redirects`, applies them in the dev server, and writes the merged output file during build.
+Vite spaces can also define these rules in `vite.config.ts` with the Spacefast
+Vite plugin. The plugin merges config rules with `_redirects`. It applies them
+in the dev server. It writes the merged output file during build.
 
 ## Line syntax
 
-Each non-empty, non-comment line is a rule: source, optional query captures, destination, optional status, then optional conditions.
+Each non-empty, non-comment line is a rule. The order is source, optional query
+captures, destination, optional status, then optional conditions.
 
 ```text
 source [query=:capture ...] destination [status[!]] [Condition=value,... ...]
@@ -32,9 +39,9 @@ source [query=:capture ...] destination [status[!]] [Condition=value,... ...]
 
 ## Rule capacity
 
-The team's [entitlements](/account/limits) set its routing-rule capacity. The
-compiler parses the complete file, so diagnostics identify the exact rules when
-the result is over capacity.
+The team's [entitlements](/account/billing) set its routing-rule capacity. The
+compiler parses the complete file. Diagnostics then identify the exact rules
+when the result is over capacity.
 
 ## Sources
 
@@ -47,7 +54,7 @@ https://www.example.com/old-docs /docs 301
 https://:subdomain.example.com/* /sites/:subdomain/:splat 200
 ```
 
-URL sources are host-specific. If a space has assigned hostnames, exact URL hosts must be assigned to the space. Host patterns may use `*` or placeholders.
+URL sources are host-specific. If a space has assigned hostnames, each exact URL host must belong to the space. Host patterns may use `*` or placeholders.
 
 ## Patterns
 
@@ -60,10 +67,10 @@ Use `*` for one splat capture named `:splat`. Use named placeholders such as `:s
 /products/:id /shop/item/:id 308
 ```
 
-- Only one wildcard is supported per pattern.
+- A pattern supports only one wildcard.
 - Wildcards must appear at the end of a path segment.
-- Wildcards and placeholders cannot be used in the same segment.
-- Placeholder names must start with a letter and can be captured only once per pattern.
+- You cannot use a wildcard and a placeholder in the same segment.
+- Placeholder names must start with a letter. A pattern can capture each placeholder only once.
 
 Static rules are exact path rules without a host constraint. Dynamic rules include any wildcard, placeholder, or host constraint.
 
@@ -82,7 +89,7 @@ the upstream. See [Proxy routes](/spaces/proxy-routes).
 
 ## Query captures
 
-Query captures sit between source and destination. Use `name=:capture`; query names must start with a letter and may include letters, numbers, underscores, or hyphens.
+Query captures sit between source and destination. Use `name=:capture`. Query names must start with a letter. They may include letters, numbers, underscores, or hyphens.
 
 ```text
 /search q=:q /results/:q 302
@@ -92,7 +99,7 @@ Query captures sit between source and destination. Use `name=:capture`; query na
 
 - The incoming query must contain exactly the listed query parameter names.
 - Query order does not matter.
-- Repeated query values are joined with commas before capture expansion.
+- Spacefast joins repeated query values with commas before capture expansion.
 - Redirects without query captures forward the original query when the destination has no query.
 - Redirects with query captures do not forward unmatched original query values.
 
@@ -108,15 +115,25 @@ Conditions come after the status. Spacefast supports `Country`, `Language`, `Coo
 /ai /ai.txt 200! Agent=true
 ```
 
-Only the condition names above are supported. Netlify and Cloudflare spellings such as `nf_country` and `cf_ipcountry` are rejected with a `redirect_condition_unsupported` error that blocks the publish — rename them to `Country=` / `Language=`. Role conditions are rejected the same way.
+Spacefast supports only the condition names above. Spacefast rejects Netlify
+and Cloudflare spellings such as `nf_country` and `cf_ipcountry`. The
+`redirect_condition_unsupported` error blocks the publish. Rename them to
+`Country=` / `Language=`. Spacefast rejects role conditions the same way.
 
-Multiple conditions are combined with `AND`. Multiple comma-separated values inside one condition are combined with `OR`.
+Spacefast combines multiple conditions with `AND`. Spacefast combines multiple
+comma-separated values inside one condition with `OR`.
 
-Use `Agent=true` when a URL should serve a plain-text version to AI agents while keeping the browser version for humans. Spacefast treats requests as agent-like when they prefer `text/plain` or `text/markdown` without asking for HTML, or when they use a known agent user agent — shell fetches like `curl` and `wget` count as agents.
+Use `Agent=true` when a URL should serve a plain-text version to AI agents. The
+same URL keeps the browser version for humans. Spacefast treats requests as
+agent-like when they prefer `text/plain` or `text/markdown` without asking for
+HTML. It also treats requests with a known agent user agent as agent-like.
+Shell fetches like `curl` and `wget` count as agents.
 
 ## Runtime order
 
-Rules run in file order. Browser redirects and external proxy rules run as soon as they match. Local rewrites and custom 404 rules are skipped when the original request resolves to a file, unless the rule status has `!`.
+Rules run in file order. Browser redirects and external proxy rules run as soon
+as they match. Spacefast skips local rewrites and custom 404 rules when the
+original request resolves to a file. A rule with `!` in the status still runs.
 
 ```text
 /app/* /app/index.html 200
@@ -146,4 +163,4 @@ Spacefast rejects rules that are ambiguous, unsafe, or likely to loop.
 /docs /docs 301
 ```
 
-Custom response headers use a separate [Headers](/spaces/headers) page. Proxy examples are covered in [Proxy routes](/spaces/proxy-routes).
+Custom response headers use a separate [Headers](/spaces/headers) page.

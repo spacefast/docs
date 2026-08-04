@@ -1,15 +1,21 @@
 ---
 title: Publish without an account
-description: How anonymous publishes work and how to claim a space after publishing without an account.
+description: Publish by upload or Git push with no account, then claim the space before it expires.
 ---
 
-Publishing without an access token creates an anonymous space. The response includes a claim token, claim link, and expiration time. Save them immediately; the token and link are returned only once.
+Publishing without an access token creates an anonymous space. The response
+includes a claim token, claim link, and expiration time. Save them immediately.
+Spacefast returns the token and link only once.
 
-Claim the space within 6 hours or it expires. Opening the claim page with a
-valid claim link extends the current deadline toward one hour from that visit,
-with at most 6 hours of claim-page extensions in total. Successful anonymous
-updates reset the deadline to 6 hours from the update, capped 30 days after the
-space was created.
+Claim the space within 6 hours or it expires. If you open the claim page with a
+valid claim link, Spacefast extends the current deadline toward one hour from
+that visit. Claim-page extensions total at most 6 hours. Successful anonymous
+updates reset the deadline to 6 hours from the update. Spacefast caps that reset
+30 days after the space creation date.
+
+There are two anonymous paths: a direct upload (dashboard Drop, CLI, or
+`POST /v1/publish`), and a Git push through [push.new](#publish-with-a-git-push)
+with nothing to install.
 
 ## Before claim
 
@@ -17,11 +23,46 @@ space was created.
 - The local `.spacefast/state.json` lets the CLI keep updating the anonymous space.
 - Static assets, redirects, response headers, SPA fallback, and metadata all publish.
 - Anonymous spaces allow a 50 MB file, 100 MB and 1,000 files per version, and 20 publishes per hour per IP.
-- Uploads are accepted and scanned like any publish, but unclaimed spaces serve web content only — HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Other files stay dark until you claim.
-- More than 100 counted, non-crawler visits pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement may occur after the 101st request. Claiming brings it back instantly.
+- Spacefast accepts and scans uploads like any publish. Unclaimed spaces serve web content only — HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Spacefast does not serve other files until you claim the space.
+- After more than 100 counted, non-crawler visits, Spacefast pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement can start after the 101st request. When you claim the space, Spacefast restores it instantly.
 - External proxy execution, `_headers` Basic Auth, and custom domains are not available on anonymous spaces.
 
-## Requires login and claim
+## Publish with a Git push
+
+[push.new](https://push.new) turns a Git push into a live site. You do not need
+the Spacefast CLI or an account.
+
+1. Open [push.new](https://push.new).
+2. Copy the `git remote add` command shown there.
+3. Run it inside the repository you want to publish.
+4. Push your current commit.
+
+The commands look like this, but use the signed remote from your own session:
+
+```bash
+git remote add pushnew "https://signed-remote.example"
+```
+
+```bash
+git push pushnew HEAD:main
+```
+
+The status page follows the publish and shows the live URL when it finishes.
+It also gives you a link to keep the anonymous space in your account.
+
+:::warning[Keep the generated remote private]
+The signed Git remote is a temporary credential. Do not paste it into chat,
+logs, documentation, or a committed Git configuration. Remove it when you are
+done with `git remote remove pushnew`.
+:::
+
+Spacefast detects the project, runs a supported static build when needed, and
+publishes the resulting files. A repository that already contains an
+`index.html` can publish without a build step. The status page shows build and
+publish logs. If detection chooses the wrong root or output directory, use
+[build settings](/publishing/git) with a saved space instead.
+
+## What claiming unlocks
 
 Accounts are WordPress.com accounts. Claiming moves the space into a team and unlocks:
 
@@ -44,7 +85,8 @@ sf spaces claim --team my-team
 
 ## If a space expires
 
-An unclaimed space that reaches its deadline is disabled: live access stops and
-the content enters a 7-day claim-only recovery window before deletion is
-queued. Its hostname serves an expired page from then on and is never re-issued
-to someone else, so stale links can't be taken over.
+Spacefast disables an unclaimed space that reaches its deadline. Live access
+stops. The content then enters a 7-day claim-only recovery window. Spacefast
+queues deletion after that window. Its hostname serves an expired page from then
+on. Spacefast never re-issues the hostname to someone else, so nobody can take
+over stale links.

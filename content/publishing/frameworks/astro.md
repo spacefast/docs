@@ -5,8 +5,9 @@ description: Use @spacefast/astro for local routing parity, validation, and _red
 
 Spacefast publishes ordinary Astro static output without a framework-specific
 host adapter. The optional `@spacefast/astro` integration mirrors
-[`@spacefast/vite-plugin`](/publishing/frameworks/vite): it validates `_redirects` /
-`_headers`, serves them in dev, and emits them into the build output.
+[`@spacefast/vite-plugin`](/publishing/frameworks/vite). It validates
+`_redirects` / `_headers`, serves them in dev, and emits them into the build
+output.
 
 ## Install
 
@@ -14,7 +15,7 @@ host adapter. The optional `@spacefast/astro` integration mirrors
 npm install -D @spacefast/astro
 ```
 
-Pin the release you review. The docs pass was checked against `@spacefast/astro`
+Pin the release you review. We checked this page against `@spacefast/astro`
 `0.0.13`.
 
 ## Usage
@@ -34,10 +35,10 @@ export default defineConfig({
 });
 ```
 
-The integration is optional. A default Astro static build that already emits
-HTML (and any `_redirects` / `_headers` you place in the project or `public/`
-directory) can be published with `sf publish dist` without changing
-`astro.config`.
+The integration is optional. You can publish a default Astro static build with
+`sf publish dist`. That build must already emit HTML. It can also emit any
+`_redirects` / `_headers` files that you place in the project or `public/`
+directory. You do not need to change `astro.config`.
 
 ## What it does
 
@@ -54,8 +55,8 @@ directory) can be published with `sf publish dist` without changing
 
 Use `mode: "static"` (default) for prerendered or ordinary static sites.
 
-Use `mode: "spa"` when you need an index fallback written for client-rendered
-routes — same idea as the Vite plugin's SPA mode.
+Use `mode: "spa"` when you need an index fallback for client-rendered routes.
+This is the same idea as the Vite plugin's SPA mode.
 
 ## Publish
 
@@ -76,6 +77,4 @@ sf routing inspect --routing dist --url /docs
 
 ## Related
 
-- [Vite](/publishing/frameworks/vite) — same routing options for Vite / TanStack Start.
 - [Redirects](/spaces/redirects) and [Headers](/spaces/headers) — file conventions.
-- [Publishing](/publishing) — upload and version flow.

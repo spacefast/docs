@@ -163,8 +163,8 @@ const representativePages = [
     "Common first publish",
   ],
   ["spaces/index.html", `${docsRoot}/spaces`, "What a space owns"],
-  ["publishing/versions/index.html", `${docsRoot}/publishing/versions`, "The release boundary"],
-  ["reference/mcp/index.html", `${docsRoot}/reference/mcp`, "Hosted vs on-device"],
+  ["publishing/channels/index.html", `${docsRoot}/publishing/channels`, "The release boundary"],
+  ["agents/mcp/index.html", `${docsRoot}/agents/mcp`, "Hosted vs on-device"],
   ["api/index.html", `${docsRoot}/api`, "The shape of every response"],
   ["api/reference/index.html", `${docsRoot}/api/reference`, "REST API"],
   [

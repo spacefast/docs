@@ -4,8 +4,8 @@ description: Keep a space private, then grant access to people, links, passwords
 ---
 
 Claimed spaces start private with an owning-team Grant. A URL identifies
-content; it does not grant access to it. Create a Grant when somebody or
-something should be admitted.
+content; it does not grant access. Create a Grant to admit a person or a
+machine.
 
 ## Grants
 
@@ -98,9 +98,9 @@ do not reveal whether an unknown private space exists.
 
 ## Links
 
-A Link is a revocable browser credential backed by one Grant. It can cover
-multiple paths, allow comments, expire, limit uses, or target live content or
-versions.
+A Link is a revocable browser credential. One Grant backs it. It can cover
+multiple paths. It can allow comments, expire, limit uses, or target live
+content or versions.
 
 ```bash
 sf share link create --name "Client review" --landing /proposal --path '/proposal/**' --exclude '/proposal/internal/**' --can comment --expires 7d
@@ -158,8 +158,8 @@ non-interactive output mask them unless you explicitly use `--show-secret`.
 
 ## External identity
 
-Connect an OIDC provider or white-label Ed25519 signer, then create Grants for
-the external subjects it proves.
+Connect an OIDC provider or a white-label Ed25519 signer. Then create Grants
+for the external subjects it proves.
 
 ```bash
 sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id '<client-id>' --client-secret '<client-secret>'
@@ -169,8 +169,8 @@ sf share identity create --type oidc --name "Company login" --issuer https://log
 sf share identity grant --connection '<connection-id>' --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
 ```
 
-Signer rotation can overlap old and new keys. Revoking a connection revokes its
-external Grants and admitted sessions.
+Signer rotation can overlap old and new keys. When you revoke a connection,
+Spacefast revokes its external Grants and admitted sessions.
 
 ## Public paths in sf.jsonc
 
@@ -191,7 +191,7 @@ Make the whole space public:
 ```
 
 Public responses are cacheable. Spacefast never stores private or
-credential-bearing responses in the public cache. Access changes purge the
+credential-bearing responses in the public cache. A change to access purges the
 affected entries.
 
 ## URL types
@@ -205,23 +205,24 @@ affected entries.
 
 Open, Link, and Claim secrets begin in a URL fragment on
 `access.spacefast.com`. The broker exchanges the secret for a short-lived,
-host-bound handoff, then the serving host sets a `__Host-` cookie and redirects
+host-bound handoff. The serving host then sets a `__Host-` cookie. It redirects
 to the clean live URL.
 
 ## The access page
 
 A private page renders its access page on the space's own domain. It offers
-only the methods allowed by the space's Grants: Spacefast sign-in, company SSO,
+only the methods that the space's Grants allow: Spacefast sign-in, company SSO,
 a password, or an invite request. If only one SSO lane exists, Spacefast can go
 straight to that provider.
 
-Retheme the page with the `theme` section of `sf.jsonc`, or take it over with
-`_pages/access.html`. See [Customization](/spaces/customization).
+Change the theme of the page with the `theme` section of `sf.jsonc`. Or replace
+the page with `_pages/access.html`. See
+[Customization](/spaces/customization).
 
 ## Network constraints and logout
 
-Network limits apply to one Grant. They do not deny access granted by another
-matching Grant.
+Network limits apply to one Grant. They do not deny access that another
+matching Grant allows.
 
 ```bash
 sf share grant --to public --can view --path '/partner/**' --network 203.0.113.0/24 --country NL --exclude-user-agent bad-crawler

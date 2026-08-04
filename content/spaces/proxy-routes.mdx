@@ -3,7 +3,9 @@ title: Proxy routes
 description: How to configure public proxy routes with Spacefast redirects.
 ---
 
-Proxy routes live in `_redirects`. Add a `200` rewrite with an absolute `http` or `https` destination. Routes are compiled at finalize and attached to that immutable version.
+Proxy routes live in `_redirects`. Add a `200` rewrite with an absolute `http`
+or `https` destination. Spacefast compiles the routes at finalize. It attaches
+them to that immutable version.
 
 ```text
 # _redirects
@@ -11,21 +13,25 @@ Proxy routes live in `_redirects`. Add a `200` rewrite with an absolute `http` o
 /search q=:q https://api.example.com/search?q=:q 200
 ```
 
-Sources must start with `/` or use an absolute URL. Use trailing `/*` for prefix matches; otherwise the match is exact. Reuse captures such as `:splat` in the destination.
+Source and capture syntax is the same as any [`_redirects`](/spaces/redirects)
+rule.
 
-Internal rewrites to pages in the same space do not need an external proxy route.
+Internal rewrites to pages in the same space do not need an external proxy
+route.
 
 External proxy execution is an entitlement. A rule still compiles when the
-selected team does not have it, but visitors receive a Spacefast information
-page instead of the upstream response. Enabling the entitlement applies to the
-live space without another publish. Anonymous spaces never execute external
-proxy routes.
+selected team does not have it. Visitors then receive a Spacefast information
+page instead of the upstream response. When you enable the entitlement, it
+applies to the live space without another publish. Anonymous spaces never
+execute external proxy routes.
 
-## Supported proxy shape
+## Public endpoints only
 
-Use proxy routes for public HTTP endpoints that do not need Spacefast to inject private credentials. Keep secret-bearing logic behind your own API, Worker, Function, or service, then proxy to that public endpoint.
+Use proxy routes for public HTTP endpoints that do not need Spacefast to inject
+private credentials. Keep secret-bearing logic behind your own API, Worker,
+Function, or service. Then proxy to that public endpoint.
 
-## Migration checklist
+## Migrating from Cloudflare or Netlify functions
 
 - Move any proxy manifest entries into root `_redirects` as `200` rules.
 - Keep response headers in root `_headers`.

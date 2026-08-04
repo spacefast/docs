@@ -26,21 +26,21 @@ Set the common visitor-page values in `sf.jsonc`:
 }
 ```
 
-These tokens style access, error, and platform-owned pages without making you
+These tokens style access, error, and platform-owned pages. You do not need to
 own their form logic.
 
 ## DESIGN.md and generated files
 
 `DESIGN.md` is an authoring file for people and agents. Put fenced
-`theme.json` and `layout.html` blocks in it, then generate the serving files:
+`theme.json` and `layout.html` blocks in it. Then generate the serving files:
 
 ```bash
 sf design generate
 ```
 
-The command writes `theme.json` and `_layout.html`. `DESIGN.md` itself is not
-read during publish or serving. Commit the generated files so the version is
-reproducible.
+The command writes `theme.json` and `_layout.html`. Spacefast does not read
+`DESIGN.md` during a publish or during serving. Commit the generated files so
+the version is reproducible.
 
 Use `--force` when you intentionally want to replace existing generated files:
 
@@ -57,8 +57,8 @@ Spacefast validates required slots before a publish goes live.
 ## Complete page takeovers
 
 Put templates under `_pages/` when a system page needs completely custom
-markup. The runtime injects working status and form blocks into the required
-`sf-*` slots, so access and recovery flows keep working.
+markup. The runtime injects status and form blocks into the required `sf-*`
+slots. Access and recovery flows keep working.
 
 See [Pages](/spaces/visitor-pages) for the available templates, elements, validation command,
 and plan availability.
@@ -76,5 +76,3 @@ Validate templates without starting the server:
 ```bash
 sf pages validate
 ```
-
-Explicit `sf.jsonc` values win over values inferred from `theme.json`.

@@ -4,14 +4,14 @@ description: Leave comments directly on a Spacefast preview — threaded, anchor
 ---
 
 Comments turn any version URL into a place to give feedback. Reviewers open a
-preview, click the part of the page they mean, and leave a thread. Comments are
-anchored to the page and exact [version](/publishing/rollback), so feedback does
-not drift when the site changes.
+preview, click the part of the page they mean, and leave a thread.
+Spacefast anchors each comment to the page and to the exact
+[version](/publishing/rollback). Feedback does not drift when the site changes.
 
 ## Turn it on
 
-Enable Comments in the space settings. Once on, version URLs show the comment
-controls. Options include:
+Enable Comments in the space settings. After that, version URLs show the
+comment controls. Options include:
 
 - **Comments on the live site** — extend feedback beyond version previews.
 - **Anonymous reviewers** — accept a name without a Spacefast account, or
@@ -24,19 +24,19 @@ version with the right person does not make the version public.
 
 ## Leave useful feedback
 
-Click the page element or area you mean, write the comment, and include a
-screenshot when the visual state matters. Reviewers can reply in the thread and
-react without opening a second conversation elsewhere.
+Click the page element or area you mean. Write the comment. Include a
+screenshot when the visual state matters. Reviewers can reply and react in the
+thread instead of opening a second conversation elsewhere.
 
 ## Review and archive
 
 Each comment is a thread with a status: **open** or **archived**. Triage threads
-from the **Comments inbox**, filter by space or version, and use the unread
-filter to catch replies you have not seen.
+from the **Comments inbox**. Filter by space or version. Use the unread filter
+to find replies you did not read.
 
-Archive a thread when the work is done or no longer relevant. If anonymous
-feedback is enabled, review reported or suspicious messages from the spam
-queue instead of letting them interrupt the ordinary inbox.
+Archive a thread when the work finishes or the thread is no longer relevant. If
+you enable anonymous feedback, review reported or suspicious messages from the
+spam queue. Do not let them interrupt the ordinary inbox.
 
 ## From the command line
 
@@ -63,4 +63,4 @@ sf comments export --version v123 --format markdown
 ```
 
 `sf comments export` is the quickest way to hand a version's open feedback to
-an agent: it returns every thread as Markdown or JSON, ready to act on.
+an agent. It returns every thread as Markdown or JSON, ready to act on.

@@ -1,117 +1,149 @@
-SPACEFAST DOCUMENTATION — IMPLEMENTED INFORMATION ARCHITECTURE
+SPACEFAST DOCUMENTATION - IMPLEMENTED INFORMATION ARCHITECTURE
 
-The documentation starts with what a person is trying to do. Product and
-protocol names appear one level later, where they help rather than lead.
+This is the complete public documentation structure. It follows the patterns
+of the strongest developer-docs sites (Stripe, Vercel, Cloudflare, Railway,
+Supabase) rather than internal conventions:
 
-The paths above ROUTE POLICY are the required public navigation. The route
-verification script checks that every path appears in the sidebar and produces
-an indexable page in the built site.
+- Guides and generated reference are separate surfaces. The header has two
+  tabs: Docs (learning and product guides) and Reference (generated and exact
+  contracts). No benchmark site mixes API/CLI/error reference into the middle
+  of a learning sidebar.
+- The homepage is a curated hub with card groups, not just the first sidebar
+  page.
+- Agents are a first-class audience with their own top-level section, the way
+  Railway has "Railway for Agents" and Stripe leads with agent setup. The docs
+  own agent setup; the marketing site is not the canonical setup surface.
+- Every page must earn its place. Pages that only described a dashboard screen
+  or a single CLI flag were merged into the page where that task actually
+  lives. One page per task, not one page per toggle.
+- Platforms and Zero are early products. Each is documented on a single strong
+  page and grows a tree only when real usage demands it.
 
-HOME
-/
+NAMING AND STRUCTURE RULES
 
-1. GET STARTED
-/getting-started/quickstart              Publish your first site
-/getting-started/agents                  Set up an agent
-/getting-started/browser-terminal        Try the CLI in your browser
+- Use human actions and recognizable product nouns.
+- Put a page in one primary place. Cross-link it elsewhere instead of listing
+  it in several sections.
+- This repository is the public source of truth for documentation.
+- URLs may move freely before launch. Prefer the clearest final URL over
+  compatibility with an unpublished route.
+- The paths below are the required public navigation. Route verification
+  checks that every path appears in the sidebar and produces an indexable
+  built page.
 
-2. PUBLISHING
-/publishing                              Publish a site
-/publishing/anonymous                    Publish without an account
-/publishing/push-new                     Publish with Git — nothing to install
-/publishing/git                          Build from Git
-/publishing/versions                     Versions
-/publishing/channels                     Move the live site
-/publishing/rollback                     Roll back
+DOCS TAB
+
+Home
+  /                                      Spacefast documentation (hub)
+
+Get started
+  /getting-started/quickstart            Publish your first site, in the
+                                         dashboard, CLI, or browser terminal
+
+Publishing
+  /publishing                            Publish a site
+  /publishing/anonymous                  Publish without an account, by upload
+                                         or Git push via push.new
+  /publishing/git                        Build from Git
+  /publishing/channels                   Versions and channels
+  /publishing/rollback                   Roll back
 
   Frameworks
-  /publishing/frameworks/jekyll          Jekyll
-  /publishing/frameworks/astro           Astro
-  /publishing/frameworks/vite            Vite
-  /publishing/frameworks/nextjs          Next.js
+    /publishing/frameworks/jekyll        Jekyll
+    /publishing/frameworks/astro         Astro
+    /publishing/frameworks/vite          Vite
+    /publishing/frameworks/nextjs        Next.js
 
   Move from another host
-  /publishing/migrate                    Move to Spacefast
-  /publishing/migrate/here-now           here.now
-  /publishing/migrate/netlify            Netlify
-  /publishing/migrate/cloudflare-pages   Cloudflare Pages
-  /publishing/migrate/github-pages       GitHub Pages
-  /publishing/migrate/vercel             Vercel
+    /publishing/migrate                  Move to Spacefast
+    /publishing/migrate/here-now         here.now
+    /publishing/migrate/netlify          Netlify
+    /publishing/migrate/cloudflare-pages  Cloudflare Pages
+    /publishing/migrate/github-pages     GitHub Pages
+    /publishing/migrate/vercel           Vercel
 
-3. SPACES
-/spaces                                  Spaces
-/spaces/files                            Browse and compare files
-/spaces/access                           Control who can visit
-/spaces/comments                         Comments
-/spaces/domains                          Set up a custom domain
-/spaces/settings                         Space settings
-/spaces/apply                            Apply saved settings
-/spaces/variables                        Variables
-/spaces/customization                    Customization
-/spaces/visitor-pages                    Visitor pages
-/spaces/traffic                          Traffic
-/spaces/progress                         Track progress
-/spaces/activity                         Activity feed
-/spaces/rename                           Rename a space
-/spaces/move-copy                        Move or copy a space
+Agents
+  /agents                                Set up an agent
+  /agents/publishing                     Publish as an agent
+  /agents/mcp                            MCP
+  /agents/accounts                       Auth and accounts
+
+Spaces
+  /spaces                                Spaces
+  /spaces/files                          Browse and compare files
+  /spaces/domains                        Set up a custom domain
+  /spaces/access                         Control who can visit
+  /spaces/comments                       Comments
+  /spaces/manage                         Rename, move, or copy
+
+  Configure
+    /spaces/settings                     Space settings, including sf apply
+    /spaces/variables                    Variables
+    /spaces/customization                Customization
+    /spaces/visitor-pages                Visitor pages
+
+  Monitor
+    /spaces/traffic                      Traffic
+    /spaces/activity                     Activity feed and the Work panel
 
   Routing
-  /spaces/redirects                      Redirects
-  /spaces/headers                        Headers
-  /spaces/proxy-routes                   Proxy routes
-  /spaces/mounts                         Mount another space
+    /spaces/redirects                    Redirects
+    /spaces/headers                      Headers
+    /spaces/proxy-routes                 Proxy routes
+    /spaces/mounts                       Mount another space
 
   Connect and automate
-  /spaces/webhooks                       Webhooks
-  /spaces/wordpress                      WordPress
-  /spaces/tag-manager                    Tag Manager
-  /spaces/image-acceleration             Image acceleration
+    /spaces/webhooks                     Webhooks
+    /spaces/wordpress                    WordPress
+    /spaces/tag-manager                  Tag Manager
+    /spaces/image-acceleration           Image acceleration
 
-4. APPS
-/apps                                    Apps
-/apps/functions                          Functions
-/apps/zero                               Zero
-/apps/zero/capsule                       Capsule
-/apps/zero/authentication                Authentication
-/apps/zero/database                      Database
-/apps/zero/storage                       Storage
+Apps
+  /apps                                  Apps
+  /apps/functions                        Functions
+  /apps/zero                             Zero, one page while in private beta
 
-5. ACCOUNT & TEAMS
-/account                                 Account and teams
-/account/sign-in                         Sign in
-/account/security                        Protect your account
-/account/notifications                   Choose email notifications
-/account/connections                     Connected apps
-/account/teams                           Teams
-/account/api-keys                        API keys
-/account/billing                         Billing and usage
-/account/limits                          Limits
+Platforms
+  /platforms                             Platforms: model, keys, principals,
+                                         and domains on one page
 
-6. PLATFORMS
-/platforms                               Platforms
-/platforms/authentication                Platform authentication
-/platforms/customers                     Customers and sites
-/platforms/api/reference                 Platform API reference
+Account & teams
+  /account                               Account and teams
+  /account/sign-in                       Sign in, including provider profiles
+  /account/security                      Protect your account, including
+                                         connected apps
+  /account/teams                         Teams
+  /account/api-keys                      API keys
+  /account/billing                       Billing and limits
 
-7. REFERENCE
-/reference                               Reference
-/api                                     REST API guide
-/api/reference                           REST API reference
-/cli                                     CLI reference
-/reference/sdk                           SDK
-/reference/mcp                           MCP
-/reference/profiles                      Provider profiles
-/reference/troubleshooting               Troubleshooting
-/errors                                  Error reference
-/changelog                               Changelog
-/changelog/packages                      Package changelog
+REFERENCE TAB
+
+Reference
+  /reference                             Reference overview, the tab landing
+  /api                                   REST API guide
+  /api/reference                         REST API reference
+  /platforms/api/reference               Platform API reference
+  /cli                                   CLI reference
+  /reference/sdk                         SDK
+  /reference/troubleshooting             Troubleshooting
+  /errors                                Error reference
+  /changelog                             Changelog
+  /changelog/packages                    Package changelog
 
 ROUTE POLICY
 
-Authored pages move directly to the paths above. There are no compatibility
-redirects because the site has not launched.
+Authored pages use the paths above. There are no compatibility redirects for
+old authored-page URLs because the documentation site has not launched.
 
 Generated routes stay at /api/reference, /platforms/api/reference, /cli,
 /errors, and /changelog. Those paths are embedded in generated artifacts and
-tool output, so the navigation groups them under Reference without renaming
-their public contracts.
+tool output, so they keep their public contracts. In navigation they belong to
+the Reference tab; because Blume scopes tabs by path prefix, routes outside
+/reference show the Docs sidebar and reach the Reference surface through the
+header tab.
+
+CONTENT OWNERSHIP
+
+All public explanatory documentation is authored in this repository. Generated
+OpenAPI, CLI, error, changelog, and redirect snapshots remain producer-owned
+and must be refreshed through their exporter rather than edited by hand.

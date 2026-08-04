@@ -3,11 +3,10 @@ title: Headers
 description: How to configure response headers for static files served by Spacefast.
 ---
 
-Add `_headers` at the publish root to set or remove response headers. Spacefast compiles the file when a publish finishes and attaches the rules to that immutable version. Serving is precomputed, and the file itself is never served.
-
-Use space password protection for simple gated access. Use `_headers` Basic
-Auth when you need file-based credentials in the routing config and the team
-has that entitlement.
+Add `_headers` at the publish root to set or remove response headers. Spacefast
+compiles the file when a publish finishes and attaches the rules to that
+immutable version. The serving rules are precomputed, and Spacefast never
+serves the file itself.
 
 ```text
 /*
@@ -30,7 +29,7 @@ matcher
 ```
 
 - Lines beginning with `#` are comments.
-- Matchers must start at the beginning of the line. Header operations must be indented with a space or tab.
+- Matchers must start at the beginning of the line. Indent header operations with a space or a tab.
 - Header names may contain letters, numbers, and `-`.
 - Each line can be up to 2,000 characters.
 - A publish can include up to 100 header matcher blocks.
@@ -67,14 +66,11 @@ https://:team.example.com/app/*
   X-Team-Site: :team
 ```
 
-- Only one wildcard is supported per matcher.
-- Wildcards must appear at the end of a segment, unless used as a matcher prefix.
-- Wildcards and placeholders cannot be used in the same segment.
-- Placeholder names must start with a letter and can be captured only once per matcher.
+Matchers otherwise follow the same wildcard and placeholder rules as [redirect patterns](/spaces/redirects).
 
 ## Set headers
 
-Set a header with an indented `Name: value` line. Header names are canonicalized: `x-frame-options` becomes `X-Frame-Options`.
+Set a header with an indented `Name: value` line. Spacefast canonicalizes header names: `x-frame-options` becomes `X-Frame-Options`.
 
 ```text
 /*
@@ -103,7 +99,10 @@ Prefix the header name with `!` to remove a response header from matching paths.
 
 ## Runtime order
 
-All matching blocks apply in file order against the original request path. Captures from path and host matchers expand in header values. Duplicate set operations for the same header are comma-joined. Remove operations delete previously applied values, and a later set can add the header again.
+All matching blocks apply in file order against the original request path.
+Captures from path and host matchers expand in header values. Spacefast joins
+duplicate set operations for the same header with commas. Remove operations
+delete previously applied values. A later set can add the header again.
 
 ```text
 /*
@@ -123,9 +122,12 @@ Headers apply to runtime-served file responses, including internal rewrites and 
 ## Basic Auth
 
 Basic Auth requires the corresponding team entitlement. The dashboard and
-[plan policy](/account/limits) show whether it is enabled.
+[plan policy](/account/billing) show whether it is enabled.
 
-Use `Basic-Auth` to protect matching paths. Credentials are one or more space-separated `username:password` pairs. Credentials are converted to hashed runtime metadata at compile time; `Basic-Auth` is never sent in the response.
+Use `Basic-Auth` to protect matching paths. Credentials are one or more
+space-separated `username:password` pairs. Spacefast converts the credentials
+to hashed runtime metadata at compile time. Spacefast never sends `Basic-Auth`
+in the response.
 
 ```text
 /preview/*
@@ -136,26 +138,31 @@ Use `Basic-Auth` to protect matching paths. Credentials are one or more space-se
 ```
 
 These values are placeholders. Never commit production credentials to
-`_headers` or repository history; compile-time hashing protects runtime
-metadata, not the source file or earlier versions.
+`_headers` or repository history. Compile-time hashing protects runtime
+metadata. It does not protect the source file or earlier versions.
 
 - Username cannot contain `:` or whitespace.
-- Password cannot contain whitespace and must be non-empty.
-- `! Basic-Auth` is invalid because Basic Auth must be configured with credentials.
+- Password cannot contain whitespace. Password cannot be empty.
+- `! Basic-Auth` is invalid. Basic Auth always needs credentials.
 
-Anonymous spaces cannot use Basic Auth. Claim the space first. Space-level
-password protection is a separate access setting.
+Anonymous spaces cannot use Basic Auth. Claim the space first. For simple gated
+access, use space-level password protection instead — a separate access
+setting.
 
 ## Unsupported headers
 
-Spacefast manages connection, transport, cookie, redirect, range, and edge cache behavior. These headers cannot be changed from `_headers`.
+Spacefast manages connection, transport, cookie, redirect, range, and edge cache behavior. You cannot change these headers from `_headers`.
 
 | Header group     | Headers                                                                                                                                                                                                                                  |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Platform-managed | `Accept-Ranges`, `Age`, `Allow`, `Alt-Svc`, `Connection`, `Content-Encoding`, `Content-Length`, `Content-Range`, `Date`, `Location`, `Server`, `Set-Cookie`, `Strict-Transport-Security`, `Trailer`, `Transfer-Encoding`, and `Upgrade`. |
 | Edge cache       | `CDN-Cache-Control`, `Cloudflare-CDN-Cache-Control`, `Netlify-CDN-Cache-Control`, and `Surrogate-Control`.                                                                                                                               |
 
-`Cache-Control` is allowed for browser responses. Spacefast preserves owner intent such as `no-store`, `no-cache`, `private`, and `immutable`; for public revalidating files it may add shared-cache directives such as `s-maxage` and mirror the final policy into provider edge-cache headers so the browser can revalidate while the edge can serve repeat requests.
+Spacefast allows `Cache-Control` for browser responses. Spacefast preserves
+owner intent such as `no-store`, `no-cache`, `private`, and `immutable`. For
+public revalidating files it may add shared-cache directives such as
+`s-maxage`. It may also mirror the final policy into provider edge-cache
+headers. The browser can revalidate while the edge serves repeat requests.
 
 ## Invalid rules
 

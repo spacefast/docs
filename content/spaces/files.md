@@ -8,7 +8,7 @@ snapshot without downloading the whole site.
 
 ## Browse a version
 
-Open a space, choose a version, then open its files. You can:
+Open a space. Choose a version. Open its files. You can then:
 
 - move through folders with breadcrumbs;
 - switch between a grid and a list;
@@ -23,8 +23,8 @@ permanent public links.
 ## Compare versions
 
 Choose another version to compare with the one you are viewing. Spacefast shows
-which paths were added, changed, or removed. For text files, open the diff to
-inspect the changed lines.
+the added, changed, and removed paths. For text files, open the diff to inspect
+the changed lines.
 
 This is useful before [moving the live site](/publishing/channels) or when you
 need to understand what a publish changed.

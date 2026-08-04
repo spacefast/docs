@@ -21,11 +21,12 @@ the runtime you want to use.
 | Local development | `sf dev`                           | Your framework's dev server  |
 
 Pick Zero when the database, authentication, and storage are the app. Pick
-Functions when you already have a worker or SSR build, or want direct control
-over request handling.
+Functions when you already have a worker or an SSR build, or when you want
+direct control over request handling.
 
-The runtime block belongs to the version. Publishing compiles it with the
-files; promoting an older version restores its code and runtime settings.
+The runtime block belongs to the version. The publish command compiles it with
+the files. When you promote an older version, Spacefast restores its code and
+runtime settings.
 
 ```bash
 sf create my-app --runtime zero

@@ -3,7 +3,10 @@ title: Visitor pages
 description: Theme or take over Spacefast's not-found, access, directory, and file-preview pages.
 ---
 
-Spacefast publishes six visitor-facing pages with every version: `404`, `password`, `denied`, `login`, `index`, and `preview`. The defaults are responsive, support dark mode, use the right HTTP status and cache policy, and pick up your theme automatically.
+Spacefast publishes six visitor-facing pages with every version: `404`,
+`password`, `denied`, `login`, `index`, and `preview`. The defaults are
+responsive, support dark mode, use the right HTTP status and cache policy, and
+pick up your theme automatically.
 
 Add visual tokens to the canonical `sf.jsonc` file:
 
@@ -20,13 +23,16 @@ Add visual tokens to the canonical `sf.jsonc` file:
 }
 ```
 
-The team's entitlements decide whether it can hide Spacefast branding or use a
-complete `_pages` takeover. A compatible `theme.json` can infer palette and
-font values, but explicit `theme` values always win.
+The team's entitlements decide whether the team can hide Spacefast branding or
+use a complete `_pages` takeover. Spacefast can infer palette and font values
+from a compatible `theme.json`. Explicit `theme` values always win.
 
 ## Add site chrome
 
-Put `_layout.html` at the publish root or inside a directory. The nearest layout wins for that directory and its children. Spacefast wraps default Pages and site fragments in it; a complete document beginning with `<!doctype html>` opts out. Layouts do not nest in v1.
+Put `_layout.html` at the publish root or inside a directory. The nearest
+layout wins for that directory and its children. Spacefast wraps default Pages
+and site fragments in it. A complete document beginning with `<!doctype html>`
+opts out. Layouts do not nest in v1.
 
 ```html
 <!doctype html>
@@ -42,14 +48,20 @@ Put `_layout.html` at the publish root or inside a directory. The nearest layout
 
 ## Own a page
 
-Entitled spaces can commit complete documents at `_pages/404.html`,
+In an entitled space, you can commit complete documents at `_pages/404.html`,
 `_pages/password.html`, `_pages/denied.html`, `_pages/index.html`, or
-`_pages/preview.html`. A custom page is expanded, then served as written;
-Spacefast never wraps it. Login takeover is not part of v1.
+`_pages/preview.html`. Spacefast expands a custom page, then serves it as
+written — it never wraps the page. Login takeover is not part of v1.
 
-Resolution is nearest literal `404.html`, then nearest `_pages/<id>.html`, then the designed default with the nearest `_layout.html`. A literal `404.html` is always free and served verbatim.
+Spacefast resolves a page in this order:
 
-Use the CLI to start from the readable defaults and validate with the exact publish-time checks:
+1. The nearest literal `404.html`.
+2. The nearest `_pages/<id>.html`.
+3. The designed default with the nearest `_layout.html`.
+
+A literal `404.html` never needs an entitlement. Spacefast serves it verbatim.
+
+Use the CLI to start from the readable defaults. The CLI validates with the exact publish-time checks:
 
 ```bash
 sf pages pull password
@@ -100,4 +112,4 @@ Browsers requesting HTML receive the published page artifact. `Accept: applicati
 }
 ```
 
-Other clients receive one line of plain text. JSON and plain-text representations cannot be customized. Platform refusal pages—undeployed, suspended, legal, visit limit, runtime errors, rate limits, and upstream failures—always use Spacefast-owned defaults.
+Other clients receive one line of plain text. You cannot customize the JSON and plain-text representations. Platform refusal pages—undeployed, suspended, legal, visit limit, runtime errors, rate limits, and upstream failures—always use Spacefast-owned defaults.

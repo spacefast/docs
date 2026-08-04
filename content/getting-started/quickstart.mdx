@@ -1,27 +1,27 @@
 ---
 title: Publish your first site
-description: Documentation for publishing, configuring, operating, and troubleshooting static spaces on Spacefast.
+description: Publish a folder, zip, or single file and get a live URL in seconds, no account required.
 ---
 
-Publish a folder, a zip, or a single `index.html` and Spacefast keeps it at a permanent URL. No account needed for the first publish, and your site is live seconds after the upload completes.
+Publish a folder, a zip, or a single `index.html`. Spacefast keeps it at a permanent URL. You do not need an account for the first publish. Your site is live seconds after the upload completes.
 
 1. Go to [spacefast.com](https://spacefast.com).
 2. Drag your folder, zip, or `index.html` onto the upload box.
-3. Publish. You get a live URL, a permanent Version URL, and — if you published without an account — a claim link.
+3. Publish. You get a live URL and a permanent Version URL. If you published without an account, you also get a claim link.
 
-Claim the space within 6 hours by opening the claim link and signing in with your WordPress.com account; unclaimed spaces expire. Once claimed, it's yours: same URL for every future publish, full version history.
+Claim the space within 6 hours — open the claim link and sign in with your WordPress.com account, or the space [expires](/publishing/anonymous). After claiming, you keep the same URL for every future publish and get full version history.
 
 :::tip
-If you upload a folder, Spacefast looks for `index.html` at the root. Server-executable files are never run — Spacefast serves static files only.
+If you upload a folder, Spacefast looks for `index.html` at the root. Spacefast never runs server-executable files. It serves static files only.
 :::
 
 ## Dashboard URLs
 
-Your team lives at `my.spacefast.com/<team>`, and each space lives at `my.spacefast.com/<team>/<space>`. Those are the canonical dashboard URLs. Old links containing `/~/` are legacy-only and permanently redirect to the canonical URL.
+Your team is at `my.spacefast.com/<team>`. Each space is at `my.spacefast.com/<team>/<space>`. Those are the canonical dashboard URLs. Old links that contain `/~/` are legacy-only. They permanently redirect to the canonical URL.
 
 ## Common first publish
 
-Prefer the terminal? Install the CLI once, then publish:
+Do you prefer the terminal? Install the CLI once. Then publish:
 
 ```bash
 curl -fsSL https://spacefast.com/install.sh | bash
@@ -37,6 +37,22 @@ sf publish ./dist --spa true
 
 The full command surface is in the [CLI reference](/cli).
 
-The first CLI publish writes `.spacefast/state.json` next to the folder. Later publishes from that folder update the same space — same URL, new version — and skip unchanged files when hashes match.
+The first CLI publish writes `.spacefast/state.json` next to the folder. Later publishes from that folder update the same space. The URL stays the same. Each publish creates a new version. Spacefast skips unchanged files when the hashes match.
 
-Every publish is an immutable version, so your live site stays up and you can always roll back: `sf rollback` promotes an earlier version with no rebuild. Mistakes are cheap here.
+Every publish is an immutable version, and [`sf rollback`](/publishing/rollback) promotes an earlier one with no rebuild.
+
+## Try the CLI in your browser
+
+Nothing installed yet? The [Spacefast browser terminal](https://my.spacefast.com/terminal) gives you a working shell and a useful slice of the `sf` CLI. It starts with a small static site in `/workspace/site`:
+
+```bash
+cd /workspace/site
+```
+
+```bash
+sf publish .
+```
+
+The receipt includes the live URL, the version, and a link to claim the space. The terminal can publish files, inspect spaces and versions, move the live version, manage variables, and attach domains — run `sf --help` to explore. To manage spaces already in your account, run `sf login`; the terminal opens the device-login page in a new tab.
+
+It is a browser sandbox, not your computer. Commands that need local files, installed packages, or a full operating system belong in the [real CLI](/cli).

@@ -3,13 +3,13 @@ title: SDK
 description: Install @spacefast/sdk and make typed calls against the Spacefast REST API.
 ---
 
-The Spacefast SDK is a typed TypeScript client generated from the same OpenAPI
-document as the [REST API reference](/api/reference). Use it when you want
-request and response types without hand-writing HTTP.
+The Spacefast SDK is a typed TypeScript client. Spacefast generates it from the
+same OpenAPI document as the [REST API reference](/api/reference). Use it when
+you want request and response types, and you do not want to write HTTP by hand.
 
 The API remains the contract. Authentication, envelopes, idempotency, and error
-codes behave exactly as in the [REST API guide](/api), whether the caller is
-the SDK, CLI, dashboard, or MCP.
+codes behave exactly as in the [REST API guide](/api). That is true whether the
+caller is the SDK, CLI, dashboard, or MCP.
 
 ## Install
 
@@ -17,8 +17,8 @@ the SDK, CLI, dashboard, or MCP.
 npm install @spacefast/sdk
 ```
 
-This docs pass was checked against `@spacefast/sdk` `0.0.13`. Prefer pinning
-the version you review. Requires Node.js 20+.
+This docs pass was checked against `@spacefast/sdk` `0.0.13`. Pin the version
+that you review. The SDK requires Node.js 20 or newer.
 
 ## Create a client
 
@@ -34,9 +34,9 @@ const client = createSpacefastClient({
 });
 ```
 
-`apiKey` is sent as `Authorization: Bearer …`. For browser sessions that rely
-on cookies, pass `credentials: "include"` instead of an API key. Mint keys with
-[`sf api-keys`](/account/api-keys) or the dashboard.
+The client sends `apiKey` as `Authorization: Bearer …`. For browser sessions
+that rely on cookies, pass `credentials: "include"` instead of an API key. Mint
+keys with [`sf api-keys`](/account/api-keys) or the dashboard.
 
 ## One typed call
 
@@ -49,7 +49,7 @@ const spaces = await client.get("/v1/spaces", {
 });
 ```
 
-Mutations take a JSON `body` and optional `idempotencyKey`:
+Mutations take a JSON `body` and an optional `idempotencyKey`:
 
 ```ts
 const space = await client.post("/v1/spaces", {
@@ -66,9 +66,8 @@ const detail = await client.get("/v1/spaces/{spaceId}", {
 });
 ```
 
-Successful JSON envelopes are unwrapped to the `data` payload. Failures throw
-`SpacefastApiError` with `code`, `docsUrl`, `requestId`, and retry hints —
-match on `code`, never on `message`.
+The client unwraps successful JSON envelopes to the `data` payload. Failures
+throw `SpacefastApiError` with `code`, `docsUrl`, `requestId`, and retry hints.
 
 ## Exports
 
@@ -78,8 +77,8 @@ match on `code`, never on `message`.
 | `@spacefast/sdk/schema`    | Generated OpenAPI path types                 |
 | `@spacefast/sdk/transport` | Envelope helpers and transport types         |
 
-If a capability is missing from the generated release you installed, call the
-documented REST endpoint with `sf api` or `fetch` rather than guessing a method
+If a capability is missing from the generated release that you installed, call
+the documented REST endpoint with `sf api` or `fetch`. Do not guess a method
 name.
 
 ## Related

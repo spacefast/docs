@@ -3,9 +3,9 @@ title: MCP
 description: Connect hosted or on-device MCP so agents use the same Spacefast API with OAuth or local credentials.
 ---
 
-MCP gives agents typed Spacefast tools over the same public API the CLI and
-dashboard use. There is no second data model — tools create spaces, publish
-versions, manage access, domains, and collaboration through the ordinary
+MCP gives agents typed Spacefast tools over the same public API that the CLI
+and dashboard use. There is no second data model: tools create spaces, publish
+versions, and manage access, domains, and collaboration through the ordinary
 product contract.
 
 ## Hosted vs on-device
@@ -34,13 +34,11 @@ Point the client at:
 https://mcp.spacefast.com
 ```
 
-The client completes OAuth; the server scopes tools to that user. Hosted MCP
-can list, read, patch, import, export, and publish from its durable virtual
-workspace. Keep the publish root narrow — never include credential files.
+The client completes OAuth. The server scopes tools to that user.
 
 ## On-device MCP
 
-Install and wire the local server with the CLI:
+Use the CLI to install and configure the local server:
 
 ```bash
 sf mcp install --agent claude-code
@@ -52,7 +50,7 @@ For a client that should use hosted MCP with OAuth:
 sf mcp install --agent cursor --remote --oauth
 ```
 
-Useful companions:
+Other useful commands:
 
 ```bash
 sf mcp status
@@ -66,21 +64,24 @@ sf mcp daemon
 sf mcp http
 ```
 
-On-device MCP applies the same file tools inside its configured local root.
 Use it when the agent must see the real checkout. Credentials stay in supported
-Spacefast state files — never paste API keys or claim tokens into prompts.
+Spacefast state files. Never paste API keys or claim tokens into prompts.
 
-For the complete skill and MCP setup in one command:
+For the complete skill and MCP setup in one command, use
+[`sf setup agent`](/agents).
 
-```bash
-sf setup agent
-```
+## Workspace files
+
+Hosted MCP provides a durable virtual workspace. Agents can list, read, patch,
+import, export, and publish from it. On-device MCP applies the same file tools
+inside its configured local root. Keep the publish root narrow. Never add
+`.spacefast/`, credential files, or unrelated repository content to it.
 
 ## Tools, resources, and scopes
 
-Tools operate the same spaces, versions, builds, access, domains, and collab
-capabilities as the [REST API](/api). Prefer receipts from tool calls as the
-authority for mutations.
+Tools operate the same spaces, versions, builds, access, domains, and
+collaboration capabilities as the [REST API](/api). Prefer receipts from tool
+calls as the authority for mutations.
 
 Read resources before calling tools when the agent needs bounded context:
 
@@ -92,19 +93,12 @@ Read resources before calling tools when the agent needs bounded context:
 
 Resources are read-only and redact credentials.
 
-For durable automation outside MCP, use an agent account
-(`SPACEFAST_AGENT_CONFIG`) or a least-privilege [API key](/account/api-keys). For
-CI-only deploys, `ci_deploy` is usually enough.
-
-## Set up a specific agent
-
-Client-specific plugins, skills, and click-path setup live on the consumer
-site: [choose your agent](https://spacefast.com/setup). This page owns the
-technical MCP contract; [Agents](/getting-started/agents) owns publish receipts, claim
-continuation, and secret handling.
+For durable automation outside MCP, use an agent account or a `ci_deploy` API
+key — see [Auth and accounts](/agents/accounts).
 
 ## Related
 
-- [Agents](/getting-started/agents) — publish with curl/CLI, skills, secret rules.
+- [Publish as an agent](/agents/publishing) — receipts, claim continuation,
+  secret rules.
 - [Auth](/account/sign-in) — device login and handoff links.
 - [SDK](/reference/sdk) — typed non-MCP clients.

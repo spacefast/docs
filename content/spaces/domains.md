@@ -6,13 +6,12 @@ description: Attach a hostname you own, verify its DNS, and let Spacefast issue 
 Connect a hostname you already own so a space can use your address. Spacefast
 issues and renews SSL automatically after DNS is ready.
 
-Anonymous spaces cannot use custom domains. [Keep the space](/spaces) first.
+Anonymous spaces cannot use custom domains. [Claim the space](/spaces) first.
 
 ## Attach the hostname
 
-In the dashboard, open the space, choose **Domains**, add the hostname, and copy
-the DNS values Spacefast shows. Create those records at the company that
-currently manages your DNS.
+In the dashboard, open the space. Choose **Domains**. Add the hostname. Copy
+the DNS values Spacefast shows. Create those records at your DNS provider.
 
 From the CLI:
 
@@ -40,9 +39,9 @@ For the records Spacefast can see and the current SSL state:
 sf domains diagnostics example.com --space docs
 ```
 
-DNS changes can take time to reach every resolver. Fix the records reported by
-diagnostics, wait for their TTL, and check again. Do not remove the old host
-until the Spacefast domain is ready and you have tested the site.
+DNS changes can take time to reach every resolver. Fix the records that
+diagnostics reports. Wait for their TTL. Check again. Do not remove the old
+host until the Spacefast domain is ready and you test the site.
 
 ## List or remove hostnames
 
@@ -54,10 +53,10 @@ sf domains ls --space docs
 sf domains rm example.com --space docs
 ```
 
-Removing a hostname stops Spacefast from serving it. It does not change records
-at your DNS provider.
+When you remove a hostname, Spacefast stops serving it. The removal does not
+change records at your DNS provider.
 
-The dashboard and [team entitlements](/account/limits) show how many custom
+The dashboard and [team entitlements](/account/billing) show how many custom
 domains the selected team can attach.
 
 ## Related

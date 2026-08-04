@@ -4,8 +4,9 @@ description: Create scoped API keys with presets for CI, publishers, admins, and
 ---
 
 API keys are bearer credentials for the [REST API](/api), CLI
-(`SPACEFAST_TOKEN` / `sf login --token`), and automation. The secret is shown
-once at creation — store it in a secret manager, not in git or chat.
+(`SPACEFAST_TOKEN` / `sf login --token`), and automation. Spacefast shows the
+secret only once, when you create the key. Store it in a secret manager. Do not
+store it in git or chat.
 
 ## Create and list
 
@@ -34,14 +35,17 @@ Pick the smallest preset that can do the job. Available presets:
 | `team_admin`      | Team administration                                     |
 | `billing_viewer`  | Read plan and billing state                             |
 
-The preset compiles into a concrete policy at creation. Device-login approval
-can also mint a key under one of these presets when you approve a CLI or agent
-device request.
+Spacefast compiles the preset into a concrete policy when you create the key.
+When you approve a CLI or agent device request, Spacefast can also mint a key
+under one of these presets.
 
 ## Rotation
 
-There is no in-place secret rotate that keeps the same id. Create a
-replacement, update CI or local env, then revoke the old key:
+You cannot rotate a secret in place and keep the same id. Instead:
+
+1. Create a replacement key.
+2. Update CI or your local environment.
+3. Revoke the old key.
 
 ```bash
 sf api-keys create --name ci-2026-08 --preset ci_deploy
@@ -55,20 +59,18 @@ sf api-keys revoke key_123
 
 ## CI vs agents
 
-- **CI / one-off deploy:** `ci_deploy` (or another tight preset), masked in the
-  pipeline, injected as `SPACEFAST_TOKEN`.
+- **CI or one-off publish:** use `ci_deploy` or another tight preset. Mask it in
+  the pipeline. Inject it as `SPACEFAST_TOKEN`.
 - **Long-lived agent automation:** prefer an agent account with
-  `SPACEFAST_AGENT_CONFIG` over a broad personal key — see [Agents](/getting-started/agents).
+  `SPACEFAST_AGENT_CONFIG` over a broad personal key — see [Agents](/agents).
 - **Hosted MCP:** uses OAuth; do not paste API keys into prompts — see
-  [MCP](/reference/mcp).
+  [MCP](/agents/mcp).
 
-After claiming an anonymous space with agent continuation on, the claim token
-can be exchanged once for a publish-only key scoped to that space. That key
-still shows under Account → Access tokens and can be revoked there.
+Claiming an anonymous space with agent continuation on lets the agent exchange
+the claim token once for a publish-only key scoped to that space — see
+[Publish as an agent](/agents/publishing).
 
 ## Related
 
 - [Auth](/account/sign-in) — device login and storing tokens.
-- [Teams](/account/teams) — team scope for keys.
 - [Billing](/account/billing) — what `billing_viewer` can read.
-- [REST API](/api) — `Authorization: Bearer` contract.

@@ -3,9 +3,9 @@ title: Spacefast documentation
 description: Publish static sites, build apps, and manage every Spacefast space from the dashboard, CLI, API, SDK, or an agent.
 ---
 
-Spacefast turns static files and app builds into live URLs. Start with a site,
-keep every version, and add domains, access rules, collaboration, or app code
-when you need them.
+Spacefast turns static files and app builds into live URLs. Start with a site.
+Keep every version. Add domains, access rules, collaboration, or app code when
+you need them.
 
 ## Get something live
 
@@ -14,41 +14,49 @@ when you need them.
     Send a file or folder and get a live URL.
   </Card>
   <Card title="Publish without an account" href="/publishing/anonymous" icon="upload">
-    Try Spacefast first; keep the space later.
+    Upload or push with Git; keep the space later.
   </Card>
-  <Card title="Publish with Git" href="/publishing/push-new" icon="git-branch">
-    Push a repository to a temporary remote. Nothing to install.
-  </Card>
-  <Card title="Set up an agent" href="/getting-started/agents" icon="bot">
+  <Card title="Set up an agent" href="/agents" icon="bot">
     Give your coding agent the CLI, skills, and MCP it needs.
+  </Card>
+  <Card title="Move to Spacefast" href="/publishing/migrate" icon="arrow-right-left">
+    Bring a site from Netlify, Vercel, GitHub Pages, and more.
   </Card>
 </CardGroup>
 
-## Find your way around
+## Browse by product
 
-- [Publishing](/publishing) covers uploads, Git builds, versions, rollbacks,
-  frameworks, and moving from another host.
-- [Spaces](/spaces) covers files, visitors, domains, settings, traffic,
-  comments, routing, and automation.
-- [Apps](/apps) covers Functions and Zero when a static site needs server-side
-  work, data, authentication, or storage.
-- [Account and teams](/account) covers security, membership, credentials,
-  usage, and limits.
-- [Platforms](/platforms) is for products that host customer sites through
-  Spacefast.
-- [Reference](/reference) holds the exact CLI, API, SDK, MCP, error, and
-  changelog contracts.
+<CardGroup cols={2}>
+  <Card title="Publishing" href="/publishing" icon="upload">
+    Uploads, Git builds, versions, channels, rollbacks, and framework guides.
+  </Card>
+  <Card title="Spaces" href="/spaces" icon="box">
+    Files, visitors, domains, settings, traffic, comments, routing, and
+    automation.
+  </Card>
+  <Card title="Apps" href="/apps" icon="server">
+    Functions and Zero when a static site needs server-side work, data,
+    authentication, or storage.
+  </Card>
+  <Card title="Platforms" href="/platforms" icon="building-2">
+    Host customer sites through Spacefast behind your own brand.
+  </Card>
+</CardGroup>
+
+For identity, teams, credentials, and billing, see
+[Account and teams](/account). The exact CLI, API, SDK, error, and changelog
+contracts live in [Reference](/reference).
 
 ## The three nouns that matter
 
 - A **space** is a site or app with one stable live URL.
 - A **publish** sends new output to that space.
 - A **version** is an immutable snapshot. A successful publish moves the live
-  URL to the new version atomically; a failed publish leaves the current site
+  URL to the new version atomically. A failed publish leaves the current site
   alone.
 
 A root `index.html` is the ordinary homepage. Spacefast serves the files you
-publish and runs app code only when you explicitly choose Functions or Zero.
+publish. It runs app code only when you explicitly choose Functions or Zero.
 
 Looking for support outside the product reference? Visit
 [Help](https://spacefast.com/help) or browse the

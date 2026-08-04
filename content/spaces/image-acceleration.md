@@ -3,7 +3,9 @@ title: Image acceleration
 description: Resize, crop, filter, and serve public images through Site Accelerator.
 ---
 
-Serve public images through Site Accelerator for CDN caching and on-the-fly transforms. Resize, crop, filter, and compress by appending query parameters to a URL — no build step required.
+Serve public images through Site Accelerator for CDN caching and on-the-fly
+transforms. Append query parameters to a URL to resize, crop, filter, and
+compress an image. You do not need a build step.
 
 ```text
 https://i0.wp.com/s.ma.tt/files/2012/06/DSC01205.jpg?w=300
@@ -25,7 +27,7 @@ For example:
 https://i0.wp.com/example.com/images/hero.jpg?w=1200&quality=80
 ```
 
-Images must be public over HTTP or HTTPS. For secure source images, keep the original source URL as `https://...` in your application and generate the Site Accelerator URL from its host and path.
+Images must be public over HTTP or HTTPS. For secure source images, keep the original source URL as `https://...` in your application. Then generate the Site Accelerator URL from its host and path.
 
 ## Examples
 
@@ -193,7 +195,7 @@ https://i0.wp.com/s.ma.tt/files/2011/06/MCM_9230-1600x1064.jpg?w=310&smooth=1
 
 ![Smooth example](https://i0.wp.com/s.ma.tt/files/2011/06/MCM_9230-1600x1064.jpg?w=310&smooth=1)
 
-Use `zoom` for high pixel ratio displays.
+Use `zoom` for high pixel ratio devices.
 
 ```text
 https://i0.wp.com/s.ma.tt/files/2012/02/MCM_4246-1600x1064.jpg?zoom=2
@@ -227,12 +229,10 @@ https://i0.wp.com/ma.tt/files/2012/06/13-MCM_0885.jpg?w=310&strip=all
 
 ![Strip metadata example](https://i0.wp.com/ma.tt/files/2012/06/13-MCM_0885.jpg?w=310&strip=all)
 
-## What it does
+## Supported formats
 
-- Applies image transformations such as resizing, fitting, cropping, quality adjustment, filters, and metadata handling, then caches the result at the edge.
-- Serves common raster image formats such as `.gif`, `.png`, `.jpg`, and `.webp`.
-- Converts to more efficient lossy output, such as WebP, when the request and browser support it.
-- Works with public image URLs that the CDN can fetch.
+- Site Accelerator serves common raster image formats such as `.gif`, `.png`, `.jpg`, and `.webp`.
+- Site Accelerator converts to more efficient lossy output, such as WebP, when the request and the browser support it.
 
 ## Query parameters
 
@@ -248,16 +248,16 @@ https://i0.wp.com/ma.tt/files/2012/06/13-MCM_0885.jpg?w=310&strip=all
 | `filter`      | Apply a filter. Supported values are `negate`, `grayscale`, `sepia`, `edgedetect`, `emboss`, `blurgaussian`, `blurselective`, and `meanremoval`. | `?filter=grayscale`                                    |
 | `brightness`  | Adjust brightness from `-255` through `255`.                                                                                                     | `?brightness=40`                                       |
 | `contrast`    | Adjust contrast from `-100` through `100`.                                                                                                       | `?contrast=50`                                         |
-| `colorize`    | Add a color hue with comma-separated RGB values.                                                                                                 | `?colorize=100,0,0`                                    |
+| `colorize`    | Add a color tint with comma-separated RGB values.                                                                                                | `?colorize=100,0,0`                                    |
 | `smooth`      | Smooth the image. Lower values increase smoothing; `0` is maximum smoothing.                                                                     | `?smooth=2`                                            |
-| `zoom`        | Size images for high pixel ratio devices. Valid values are `1`, `1.5`, and `2` through `10`. Cannot be used with `crop`.                         | `?zoom=2`                                              |
-| `quality`     | Control output quality from `10` through `100`. If omitted, Site Accelerator tries to preserve the original quality.                             | `?quality=80`                                          |
+| `zoom`        | Size images for high pixel ratio devices. Valid values are `1`, `1.5`, and `2` through `10`. You cannot use `zoom` with `crop`.                  | `?zoom=2`                                              |
+| `quality`     | Control output quality from `10` through `100`. If you omit `quality`, Site Accelerator tries to preserve the original quality.                  | `?quality=80`                                          |
 | `allow_lossy` | Allow lossy output such as JPEG or WebP when the source is lossless and the browser supports it.                                                 | `?allow_lossy=1`                                       |
 | `strip`       | Control metadata. `all` strips extraneous metadata and is the default; `none` preserves Exif, IPTC, and XMP metadata.                            | `?strip=none`                                          |
 
 ## Advanced URL helper
 
-Use `@spacefast/image` when a framework integration needs more than width and quality. It always emits `i0.wp.com` URLs instead of distributing requests across hosts, so repeated requests for the same transformed image share one cache key.
+Use `@spacefast/image` when a framework integration needs more than width and quality. It always emits `i0.wp.com` URLs instead of distributing requests across hosts. Repeated requests for the same transformed image then share one cache key.
 
 Install it:
 
@@ -275,7 +275,7 @@ const src = siteAcceleratorUrl("https://example.com/uploads/hero.jpg", {
 });
 ```
 
-Or copy a small helper into any JavaScript or TypeScript space. For production, prefer the official package — the copy-paste helper below covers common cases, but the package is the maintained source for edge-case behavior.
+Or copy a small helper into any JavaScript or TypeScript space. It covers common cases; for production, prefer the package — it is the maintained source for edge-case behavior.
 
 ```ts
 type SiteAcceleratorOptions = {
@@ -327,10 +327,10 @@ function applySiteAcceleratorOptions(params: URLSearchParams, options: SiteAccel
 
 ## Limitations
 
-- Images must be public. Private upload protection cannot use this path because Site Accelerator must be able to fetch the original image.
-- Site Accelerator will not upscale beyond the original image dimensions.
-- Heavy filters such as `brightness`, `contrast`, `colorize`, and `smooth` may not be applied to large images.
-- Cached images are keyed by image URL. If an image changes, change the filename or path so the edge cache fetches the new asset. Do not rely on query-string cache busters on the original image URL.
+- Images must be public. Private upload protection cannot use this path, because Site Accelerator must fetch the original image.
+- Site Accelerator does not upscale beyond the original image dimensions.
+- Site Accelerator may not apply heavy filters such as `brightness`, `contrast`, `colorize`, and `smooth` to large images.
+- Site Accelerator keys cached images by image URL. When an image changes, change the filename or the path. The edge cache then fetches the new asset. Do not rely on query-string cache busters on the original image URL.
 - Site Accelerator is for images and static assets. It does not serve video, audio, or other media formats as image transforms.
 
 ## See also

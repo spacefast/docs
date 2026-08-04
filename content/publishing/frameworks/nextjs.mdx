@@ -3,13 +3,16 @@ title: Next.js
 description: Publish a static Next.js export, or run SSR and route handlers with Functions and OpenNext.
 ---
 
-The simplest Next.js deployment is a static export. When an app needs SSR,
-Route Handlers, or Middleware, build it with OpenNext and publish the result as
-a Spacefast Function.
+The simplest way to publish a Next.js app is a static export. When an app needs
+SSR, Route Handlers, or Middleware, build it with OpenNext. Publish the result
+as a Spacefast Function.
 
 ## Static export
 
-Configure Next.js with `output: "export"`, as described in the official [Next.js static export guide](https://nextjs.org/docs/pages/guides/static-exports). In current Next.js versions, `next build` writes the static site to `out` when this option is set.
+Configure Next.js with `output: "export"`. The official
+[Next.js static export guide](https://nextjs.org/docs/pages/guides/static-exports)
+describes this option. In current Next.js versions, `next build` writes the
+static site to `out` when you set this option.
 
 ```ts
 // next.config.ts
@@ -35,9 +38,14 @@ bun run build
 sf publish ./out
 ```
 
-Static export works best when routes are known at build time. Avoid server-only features such as API Routes, Middleware, `getServerSideProps`, ISR, on-demand revalidation, Draft Mode, Preview Mode, request-time redirects and rewrites, and dynamic rendering from cookies or headers.
+Static export works best when you know all routes at build time. Avoid server-only
+features such as API Routes, Middleware, `getServerSideProps`, ISR, on-demand
+revalidation, Draft Mode, Preview Mode, request-time redirects and rewrites, and
+dynamic rendering from cookies or headers.
 
-Several of these have a static-hosting answer: redirects and rewrites move to [`_redirects`](/spaces/redirects), and API calls can target your backend directly or through a [proxy route](/spaces/proxy-routes).
+Several of these have a static-hosting answer. Redirects and rewrites move to
+[`_redirects`](/spaces/redirects). API calls can target your backend directly or
+through a [proxy route](/spaces/proxy-routes).
 
 ## Functions with OpenNext
 
@@ -47,9 +55,9 @@ enable it for your team before publishing an OpenNext worker.
 :::
 
 Use this path when the app needs request-time Next.js features. Remove
-`output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
-into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
-so also remove any `export const runtime = "edge"` declarations.
+`output: "export"` from `next.config.ts`. OpenNext builds the Next.js server
+into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime.
+Also remove any `export const runtime = "edge"` declarations.
 
 Install the adapter and its build-time Wrangler dependency:
 
@@ -87,14 +95,14 @@ Build from the project root:
 bun run build:spacefast
 ```
 
-Confirm that OpenNext produced the worker Spacefast detects:
+Check that OpenNext produced the worker that Spacefast detects:
 
 ```bash
 ls .open-next/worker.js
 ```
 
-Then publish the project. Do not run OpenNext's `deploy` command: that deploys
-directly to Cloudflare instead of creating a Spacefast version.
+Then publish the project. Do not run OpenNext's `deploy` command. That command
+deploys directly to Cloudflare instead of creating a Spacefast version.
 
 ```bash
 sf publish
@@ -102,8 +110,9 @@ sf publish
 
 Spacefast detects `.open-next/worker.js`, enables the Node.js compatibility
 support it needs, and publishes the worker with the generated static assets.
-Requests for a published file are served from disk first; SSR, Route Handlers,
-and other misses reach the worker. You can pin the detected entry explicitly:
+Spacefast serves requests for a published file from disk first. SSR, Route
+Handlers, and other misses reach the worker. You can pin the detected entry
+explicitly:
 
 ```jsonc
 {
@@ -117,16 +126,20 @@ and other misses reach the worker. You can pin the detected entry explicitly:
 
 See OpenNext's [Cloudflare adapter setup](https://opennext.js.org/cloudflare/get-started)
 and [CLI reference](https://opennext.js.org/cloudflare/cli) for framework-specific
-requirements. Spacefast owns the publish step, so Cloudflare deployment and
+requirements. Spacefast owns the publish step. Cloudflare deployment and
 binding configuration from those guides do not apply here.
 
 ## Images
 
-Next.js default image optimization requires a Next.js server at runtime. Static export needs `images.unoptimized`, pre-generated responsive assets, or a custom loader.
+Next.js default image optimization requires a Next.js server at runtime. Static
+export needs `images.unoptimized`, pre-generated responsive assets, or a custom
+loader.
 
 Next.js documents this behavior in its [static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization) and the [Export with Image Optimization API error guide](https://nextjs.org/docs/messages/export-image-api). For the full Next.js image API, see the [`next/image` docs](https://nextjs.org/docs/api-reference/next/image) and [`images` config docs](https://nextjs.org/docs/pages/api-reference/config/next-config-js/images).
 
-For public images, use the [Site Accelerator API](/spaces/image-acceleration). It transforms images through `i0.wp.com` and handles width, quality, crop, fit, filters, and metadata at the CDN layer.
+For public images, use the [Site Accelerator API](/spaces/image-acceleration).
+It transforms images through `i0.wp.com`. It handles width, quality, crop, fit,
+filters, and metadata at the CDN layer.
 
 Install the shared image package:
 
@@ -153,7 +166,10 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-`spacefastNextImageConfig` includes the shared `loader: "custom"` and `qualities` settings. Resolve `@spacefast/image/next-loader` from your own `next.config.ts` so pnpm, Yarn PnP, and hoisted workspaces can locate the package correctly.
+`spacefastNextImageConfig` includes the shared `loader: "custom"` and
+`qualities` settings. Resolve `@spacefast/image/next-loader` from your own
+`next.config.ts`. That lets pnpm, Yarn PnP, and hoisted workspaces locate the
+package correctly.
 
 Or copy the loader into your space if you do not want a dependency:
 
@@ -207,7 +223,7 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-Use absolute public image URLs for images that should go through Site Accelerator. Relative images in `public/` are emitted as static files and returned unchanged by this loader.
+Use absolute public image URLs for images that should go through Site Accelerator. Spacefast emits relative images in `public/` as static files. This loader returns them unchanged.
 
 ```tsx
 import Image from "next/image";
@@ -255,9 +271,9 @@ export function CardImage() {
 
 ## Publishing checklist
 
-- For a static export, confirm `next build` creates an `out` directory with `index.html` at the root.
-- For Functions, confirm the OpenNext build creates `.open-next/worker.js`.
-- Replace request-time features when publishing a static export; keep them when using Functions.
+- For a static export, check that `next build` creates an `out` directory with `index.html` at the root.
+- For Functions, check that the OpenNext build creates `.open-next/worker.js`.
+- Replace request-time features when you publish a static export. Keep them when you use Functions.
 - Put `_redirects` and `_headers` in the exported output if the space needs
   Spacefast routing, response headers, or entitled `_headers` Basic Auth.
 - Use Site Accelerator URLs only for public images that the CDN can fetch.

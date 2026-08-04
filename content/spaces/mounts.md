@@ -4,19 +4,19 @@ description: Serve a space's production content at another path prefix in the sa
 ---
 
 A static mount exposes a space's production channel at another path in that
-same space, such as `/docs`. The mount strips the prefix before resolving the
-request, so `/docs/guide.html` serves `/guide.html` from the mounted version.
+same space, such as `/docs`. The mount strips the prefix before it resolves the
+request. So `/docs/guide.html` serves `/guide.html` from the mounted version.
 
-Add a mount with the space's ID and a ready website version. The value passed to
-`--target` must identify the same space selected by `--space`:
+Add a mount with the space's ID and a ready website version. The value of
+`--target` must identify the same space that `--space` selects:
 
 ```bash
 sf mounts add /docs --target spc_main --version ver_main --space spc_main
 ```
 
-The version is an activation fence: the mount becomes eligible when that ready
-version is promoted to the space's production channel. After that, the mount
-follows the production channel rather than freezing one old release.
+The version is an activation fence. The mount becomes eligible when you promote
+that ready version to the space's production channel. After that, the mount
+follows the production channel. It does not freeze one old release.
 
 Static mounts cannot target another space, including another space on the same
 team.

@@ -3,9 +3,12 @@ title: Webhooks
 description: Receive signed HTTPS callbacks when things happen in your team — versions, builds, domains, transfers, and more — with verifiable signatures and retries.
 ---
 
-Webhooks push events to your own HTTPS endpoint as they happen, so you can trigger CI, post to Slack, update a dashboard, or kick off downstream automation without polling the API.
+Webhooks push events to your own HTTPS endpoint as they happen. You can trigger
+CI, post to Slack, update a dashboard, or kick off downstream automation
+without polling the API.
 
-A webhook is **team-scoped**: one endpoint receives events from every space the team owns. Manage them in **Team settings → Webhooks**, or with the API.
+A webhook is **team-scoped**. One endpoint receives events from every space the
+team owns. Manage them in **Team settings → Webhooks**, or with the API.
 
 ## Create a webhook
 
@@ -20,7 +23,10 @@ curl -X POST https://api.spacefast.com/v1/webhooks \
   }'
 ```
 
-The endpoint URL must be **public HTTPS** — `http://` and private/internal hosts are rejected. The response includes the **signing secret** (`whsec_…`) **exactly once**; store it now, because it's never shown again. Leave `events` unset (or `["*"]`) to receive everything.
+The endpoint URL must be **public HTTPS**. Spacefast rejects `http://` and
+private or internal hosts. The response includes the **signing secret**
+(`whsec_…`) **exactly once**. Store it now. Spacefast never shows it again.
+Leave `events` unset (or `["*"]`) to receive everything.
 
 ## Events
 
@@ -66,13 +72,15 @@ Every callback sends a JSON body of the form:
 }
 ```
 
-`version` is the payload schema date, not your space version. The event `code` is one of the events above. Callbacks are **at-least-once** — dedupe on `event.id`.
+`version` is the payload schema date, not your space version. The event `code`
+is one of the events above. Callbacks are **at-least-once**. Dedupe on
+`event.id`.
 
 Each request also carries:
 
 - `Spacefast-Event-Id` — the event id (same as `event.id`).
 - `Spacefast-Delivery-Id` — this callback attempt's id.
-- `Spacefast-Signature` — the signature, described below.
+- `Spacefast-Signature` — the signature. The next section describes it.
 
 ## Verify the signature
 
@@ -82,7 +90,9 @@ The `Spacefast-Signature` header looks like:
 Spacefast-Signature: t=1730289600, v1=5257a8…
 ```
 
-`t` is the unix timestamp; each `v1=` is an **HMAC-SHA256** (hex) of the string `` `${t}.${rawBody}` `` keyed by your signing secret. Recompute it over the **raw request body** and compare in constant time:
+`t` is the unix timestamp. Each `v1=` is an **HMAC-SHA256** (hex) of the string
+`` `${t}.${rawBody}` ``. Your signing secret is the key. Recompute the value
+over the **raw request body**. Compare the values in constant time:
 
 ```js
 import { createHmac, timingSafeEqual } from "node:crypto";
@@ -101,7 +111,9 @@ function verify(rawBody, header, secret) {
 }
 ```
 
-During a secret rotation the header carries **two** `v1=` entries — one signed with the new secret and one with the old — so either secret verifies. Accept a callback if any entry matches.
+During a secret rotation the header carries **two** `v1=` entries. Spacefast
+signs one entry with the new secret and one entry with the old secret. A
+callback verifies with either secret. Accept a callback when any entry matches.
 
 ## Rotate the secret
 
@@ -111,14 +123,25 @@ curl -X POST https://api.spacefast.com/v1/webhooks/whk_123/rotate-secret \
   -d '{ "expireNow": false }'
 ```
 
-A new secret is returned (again, only once). By default the previous secret stays valid for **24 hours** so you can roll it out without dropping callbacks; pass `expireNow: true` to cut over immediately.
+Spacefast returns a new secret (again, only once). By default the previous
+secret stays valid for **24 hours**. You can roll it out without dropping
+callbacks. Pass `expireNow: true` to cut over immediately.
 
 ## Attempts and retries
 
-- `GET /v1/webhooks/:id/deliveries` lists attempts, newest first; `GET /v1/webhook-deliveries/:deliveryId` shows one.
-- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event. The dashboard attempt log has a **Resend** button for the same thing.
-- Each attempt has a **10-second timeout**, follows no redirects, and reads at most 64 KiB of your response. Return a `2xx` to acknowledge.
-- Failed attempts retry with exponential backoff; an attempt that never succeeds ends as `exhausted`.
-- An endpoint that keeps failing is auto-protected: it's marked **failing** after 8 consecutive failures and **disabled** after 32. Any success resets the counter. Re-enable a disabled webhook by setting its status back to `active`.
+- `GET /v1/webhooks/:id/deliveries` lists attempts, newest first.
+  `GET /v1/webhook-deliveries/:deliveryId` shows one.
+- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event. The
+  dashboard attempt log has a **Resend** button for the same thing.
+- Each attempt has a **10-second timeout**. It follows no redirects. It reads
+  at most 64 KiB of your response. Return a `2xx` to acknowledge.
+- Failed attempts retry with exponential backoff. An attempt that never
+  succeeds ends as `exhausted`.
+- Spacefast protects an endpoint that keeps failing: it marks it **failing**
+  after 8 consecutive failures and disables it after 32. Any success resets the
+  counter. To re-enable a disabled
+  webhook, set its status back to `active`.
 
-Deleting a webhook removes it from customer-facing API and dashboard lists and stops callbacks. The record and attempt history are retained for internal audit.
+When you delete a webhook, Spacefast removes it from customer-facing API and
+dashboard lists. The callbacks stop. Spacefast retains the record and the
+attempt history for internal audit.

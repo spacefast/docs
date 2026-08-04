@@ -1,18 +1,18 @@
 ---
 title: Space settings
-description: Configure a space in the file that publishes and rolls back with it.
+description: Configure a space in the file that publishes and rolls back with it, and apply saved settings with sf apply.
 ---
 
 Put `sf.jsonc` at the publish root when settings should travel with your files.
 Spacefast validates it during publish, applies it atomically with the version,
-and restores it on rollback. The file itself is never served.
+and restores it on rollback. It never serves the file itself.
 
 ```bash
 sf init
 ```
 
-`sf init` creates the file and adds the schema URL editors and agents use for
-autocomplete. Use the playground to produce a valid starting point.
+`sf init` creates the file. It adds the schema URL that editors and agents use
+for autocomplete. Use the playground to produce a valid starting point.
 
 <ConfigPlayground />
 
@@ -47,7 +47,7 @@ autocomplete. Use the playground to produce a valid starting point.
 
 ## Serving behavior
 
-Website behavior is the default: Spacefast resolves published files and
+Website behavior is the default. Spacefast resolves published files and
 directory indexes. For a browsable file tree, disable indexes and enable
 listings:
 
@@ -66,8 +66,9 @@ Use `fallback` for an SPA or a custom not-found page:
 ```
 
 `cleanUrls` serves `/about.html` at `/about` when no file or directory index
-matches first. It defaults on for ordinary static sites and off for a
-200-status SPA fallback. Set it explicitly when the desired behavior matters.
+matches first. It defaults to on for ordinary static sites. It defaults to off
+for a 200-status SPA fallback. Set it explicitly when the desired behavior
+matters.
 
 ## Metadata and visitor pages
 
@@ -99,14 +100,38 @@ Expose selected paths while everything else remains private:
 For people, links, passwords, machine credentials, and policy rules, use
 [Access](/spaces/access).
 
+## Apply saved settings
+
+Some space changes save first and go live when you apply them. A publish
+uploads files and can also carry `sf.jsonc` with a version. `sf apply`
+pushes already-saved settings onto the serving runtime. It does not create a
+new content version.
+
+```bash
+sf apply
+```
+
+```bash
+sf apply --space docs
+```
+
+By default the CLI waits until queued work finishes. Queue without waiting with
+`--no-wait`. Tune the wait ceiling with `--wait-timeout` (default 900 seconds).
+
+| Goal                                      | Command                                                                      |
+| ----------------------------------------- | ---------------------------------------------------------------------------- |
+| Publish new or changed files              | [`sf publish`](/publishing)                                                  |
+| Move live/preview to an existing version  | [`sf promote`](/publishing/channels) / [`sf rollback`](/publishing/rollback) |
+| Push saved settings that are not live yet | `sf apply`                                                                   |
+
+You can edit serving settings in the dashboard or through the API. The UI can
+then show those settings as saved but not live. `sf apply` converges the
+runtime.
+
 ## What does not belong here
 
-- Redirects, rewrites, and proxies belong in [`_redirects`](/spaces/redirects).
-- Response headers belong in [`_headers`](/spaces/headers).
-- Cloud and runtime variables are managed through [`sf env`](/spaces/variables).
-- Shared passwords and other visitor credentials are managed through
+- Put redirects, rewrites, and proxies in [`_redirects`](/spaces/redirects).
+- Put response headers in [`_headers`](/spaces/headers).
+- Manage cloud and runtime variables with [`sf env`](/spaces/variables).
+- Manage shared passwords and other visitor credentials with
   [`sf share`](/spaces/access).
-- Saved dashboard/API settings that are not live yet are pushed with
-  [`sf apply`](/spaces/apply).
-
-This separation keeps one source of truth for each concern.

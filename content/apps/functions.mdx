@@ -5,12 +5,14 @@ description: Run a worker on a Spacefast space, beside its static files and on t
 
 :::warning[Private beta]
 Functions is available to teams with the private-beta flag. Ask Spacefast to
-enable it for your team before publishing a worker.
+enable it for your team before you publish a worker.
 :::
 
-Functions adds one Web-standard `fetch` handler to a space. Static files are
-served first; requests no file answers reach the worker. The worker and files
-ship as one version, use one hostname, and roll back together.
+Functions adds one Web-standard `fetch` handler to a space. Spacefast serves
+static files first. When no file answers a request, the request goes to the
+worker.
+Spacefast publishes the worker and the files as one version, on one hostname;
+they roll back together.
 
 ## Quick start
 
@@ -26,7 +28,7 @@ cd my-api
 sf publish
 ```
 
-The worker default-exports an object with a `fetch` method:
+The worker uses a default export of an object with a `fetch` method:
 
 ```ts
 // handler.ts
@@ -51,8 +53,8 @@ Spacefast detects the first matching worker entry:
 | `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker            |
 | `functions/index.ts` or `functions/index.js` | Worker in a functions folder |
 
-Declare an entry when the file lives elsewhere, or when you want to pin the
-runtime settings:
+Declare an entry when the file is in another location, or when you want to pin
+the runtime settings:
 
 ```jsonc
 {
@@ -66,8 +68,8 @@ runtime settings:
 }
 ```
 
-A declared entry that cannot be resolved fails the publish. A directory with
-no declaration and no detected entry remains a static space.
+The publish fails when Spacefast cannot resolve a declared entry. A directory
+with no declaration and no detected entry remains a static space.
 
 ## Runtime contract
 
@@ -75,21 +77,22 @@ Handlers use `Request`, `Response`, streams, `crypto`, and `ctx.waitUntil()`.
 Node built-ins are not generally available. OpenNext builds are compiled with
 the compatibility support they need.
 
-Outbound access is denied unless the published version has the `fetch`
-capability. This is fail-closed: adding `fetch()` to code does not silently add
-network authority.
+Spacefast denies outbound access unless the published version has the `fetch`
+capability. This is fail-closed. A `fetch()` call in your code does not
+silently add network authority.
 
 ## Variables
 
-Put server-only values in `.env.server` or manage them with [`sf env`](/spaces/variables).
-The publish command syncs `.env.server` as secret space variables and never
-uploads the file. The worker reads those values from `env`.
+Put server-only values in `.env.server` — the publish syncs them into the
+space as secret [variables](/spaces/variables) and never uploads the file. The
+worker reads them from `env`.
 
 ```dotenv
 STRIPE_SECRET_KEY=sk_live_...
 ```
 
-Database connection strings are withheld. Use the database binding instead.
+Spacefast withholds database connection strings. Use the database binding
+instead.
 
 ## Database
 
@@ -115,19 +118,19 @@ export default {
 ```
 
 Use `prepare().bind()` with `.all()`, `.first()`, `.run()`, or `.raw()`.
-`db.exec()` runs DDL and `db.batch()` groups statements. Use `sf db console`
-when you need a full SQL session.
+`db.exec()` runs DDL (data definition language) statements. `db.batch()` groups
+statements. Use `sf db console` when you need a full SQL session.
 
 ## Next.js
 
-Build Next.js with OpenNext's Cloudflare adapter, then publish the directory
-containing `.open-next/worker.js`. Spacefast serves static assets from disk and
-routes SSR and route handlers to the worker. See [Next.js](/publishing/frameworks/nextjs)
-for the build recipe.
+Build Next.js with OpenNext's Cloudflare adapter. Then publish the directory
+that contains `.open-next/worker.js`. Spacefast serves static assets from disk.
+It routes SSR and route handlers to the worker. See
+[Next.js](/publishing/frameworks/nextjs) for the build recipe.
 
 ## Develop and inspect
 
-Functions do not run inside `sf dev` yet. Use the framework's dev server, then
+Functions do not run inside `sf dev` yet. Use the framework's dev server. Then
 publish a version to test the Spacefast runtime.
 
 ```bash
@@ -142,7 +145,7 @@ sf logs runtime --follow
 sf logs runtime --request-id req_9f21
 ```
 
-Runtime status reports the deployed entry, bundle digest and size,
+Runtime status reports the published entry, bundle digest and size,
 compatibility date, capabilities, and dispatch state.
 
 ## Limits

@@ -3,15 +3,16 @@ title: Traffic
 description: Read request, visitor, and runtime traffic for a space from the dashboard or CLI.
 ---
 
-Traffic answers how a space is being used over time. It is not the
-[activity](/spaces/activity) audit feed and not raw [logs](#analytics-versus-logs).
+Traffic shows the requests and visitors that a space receives over time. It is
+not the [activity](/spaces/activity) audit feed. It is not raw
+[logs](#analytics-versus-logs).
 
 ## Dashboard
 
-Open a space on `my.spacefast.com/<team>/<space>` and use its Traffic /
-Analytics view for charts over the same windows the CLI supports. Plan tier
-controls how much history and granularity you get — see [Limits](/account/limits) for
-audit and log retention; analytics history follows the team's plan entitlements.
+Open a space on `my.spacefast.com/<team>/<space>`. Use its Traffic / Analytics
+view for charts over the same windows the CLI supports. Plan tier controls how
+much history and granularity you get. See [Limits](/account/billing) for audit
+and log retention.
 
 ## CLI
 
@@ -47,11 +48,9 @@ sf logs runtime --space docs --follow
 ```
 
 Use `--request-id` to trace one request across runtime output. Treat logs as
-operational data: avoid writing credentials or personal data from application
+operational data. Do not write credentials or personal data from application
 code.
 
 ## Related
 
-- [Activity](/spaces/activity) — who changed what.
 - [Channels](/publishing/channels) — which version is live while you interpret traffic.
-- [Billing](/account/billing) — plan state that gates retention and meters.

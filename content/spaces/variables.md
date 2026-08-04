@@ -4,7 +4,7 @@ description: Manage build and runtime configuration without committing secrets.
 ---
 
 Space variables hold configuration and secrets for builds and runtimes. New
-values are write-only by default: the API accepts them but does not print them
+values are write-only by default. The API accepts them. It does not print them
 back.
 
 Set a secret:
@@ -19,7 +19,7 @@ Set a readable, non-secret value explicitly:
 sf env set PUBLIC_ORIGIN https://www.example.com --no-secret --space docs
 ```
 
-List variables with values masked:
+List variables with masked values:
 
 ```bash
 sf env ls --space docs
@@ -49,8 +49,7 @@ sf env pull --space docs
 ```
 
 Spacefast refuses to overwrite an existing file unless you pass `--force`.
-Secret values stay unavailable; pulling does not turn write-only credentials
-back into plaintext.
+A pull does not turn write-only credentials back into plaintext.
 
 ## Environments and branches
 
@@ -69,8 +68,8 @@ Zero and Functions projects can keep server-only values in `.env.server` next
 to `sf.jsonc`. The CLI never uploads that file as a static asset. On publish it
 syncs the entries into the space as secrets.
 
-For an existing project, generate a dotenv template from detected platform
-configuration:
+For an existing project, generate a dotenv template from the platform
+configuration that the CLI detects:
 
 ```bash
 sf env export-template

@@ -14,7 +14,7 @@ From the repository root:
 sf builds detect
 ```
 
-Review the detected install command, build command, and output directory before
+Check the detected install command, build command, and output directory before
 you save them. If the Jekyll project lives below the repository root, pass its
 directory explicitly:
 
@@ -24,7 +24,7 @@ sf builds detect --root-directory docs
 
 ## Publish from Git
 
-[Connect the repository](/publishing/git), then confirm these settings:
+[Connect the repository](/publishing/git), then check these settings:
 
 | Setting          | Default                    |
 | ---------------- | -------------------------- |
