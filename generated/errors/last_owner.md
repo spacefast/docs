@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/last_owner",
+  "type": "https://spacefast.com/docs/errors/last_owner",
   "title": "Last owner",
   "status": 400,
   "detail": "The last owner of a team cannot be removed or downgraded.",

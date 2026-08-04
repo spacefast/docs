@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/import_not_waiting_for_archive",
+  "type": "https://spacefast.com/docs/errors/import_not_waiting_for_archive",
   "title": "Import not waiting for archive",
   "status": 400,
   "detail": "The import is not waiting for an archive upload.",

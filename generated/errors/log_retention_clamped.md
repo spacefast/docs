@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/log_retention_clamped",
+  "type": "https://spacefast.com/docs/errors/log_retention_clamped",
   "title": "Log retention clamped",
   "status": 400,
   "detail": "The requested log range exceeds the plan's retention and was clamped.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_run_operation_unsupported",
+  "type": "https://spacefast.com/docs/errors/zero_run_operation_unsupported",
   "title": "Zero run operation unsupported",
   "status": 400,
   "detail": "The hosted Zero runtime does not support this run operation yet.",

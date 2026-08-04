@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_ai_unavailable",
+  "type": "https://spacefast.com/docs/errors/zero_ai_unavailable",
   "title": "Zero ai unavailable",
   "status": 400,
   "detail": "The local Zero AI service is not configured.",

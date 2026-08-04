@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_endpoint_id_duplicate",
+  "type": "https://spacefast.com/docs/errors/zero_endpoint_id_duplicate",
   "title": "Zero endpoint id duplicate",
   "status": 400,
   "detail": "Two Zero endpoints declare the same endpoint id.",

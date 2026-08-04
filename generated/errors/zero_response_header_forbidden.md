@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_response_header_forbidden",
+  "type": "https://spacefast.com/docs/errors/zero_response_header_forbidden",
   "title": "Zero response header forbidden",
   "status": 400,
   "detail": "A Zero endpoint attempted to set a platform-managed response header.",

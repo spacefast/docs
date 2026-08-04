@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_artifact_abi_mismatch",
+  "type": "https://spacefast.com/docs/errors/zero_artifact_abi_mismatch",
   "title": "Zero artifact abi mismatch",
   "status": 400,
   "detail": "The Zero endpoint artifact was built for a different runner ABI.",

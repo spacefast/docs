@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/enforcement_policy_overlap",
+  "type": "https://spacefast.com/docs/errors/enforcement_policy_overlap",
   "title": "Enforcement policy overlap",
   "status": 400,
   "detail": "Enforcement policy severity ranges overlap within a category.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_not_restorable",
+  "type": "https://spacefast.com/docs/errors/space_not_restorable",
   "title": "Space not restorable",
   "status": 400,
   "detail": "The space is past its recovery window and cannot be restored.",

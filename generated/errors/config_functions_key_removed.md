@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_functions_key_removed",
+  "type": "https://spacefast.com/docs/errors/config_functions_key_removed",
   "title": "Config functions key removed",
   "status": 400,
   "detail": "The sf.jsonc configuration still uses the removed top-level functions key.",

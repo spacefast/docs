@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_inline_limit_exceeded",
+  "type": "https://spacefast.com/docs/errors/publish_inline_limit_exceeded",
   "title": "Publish inline limit exceeded",
   "status": 400,
   "detail": "The inline publish exceeds the file-count or total-size limit.",

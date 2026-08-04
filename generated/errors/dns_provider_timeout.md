@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_timeout",
+  "type": "https://spacefast.com/docs/errors/dns_provider_timeout",
   "title": "Dns provider timeout",
   "status": 400,
   "detail": "The DNS provider did not accept the change within the bounded wait.",

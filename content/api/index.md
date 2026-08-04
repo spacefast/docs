@@ -26,7 +26,7 @@ every code.
   "error": {
     "code": "access_denied",
     "message": "This token cannot access that space.",
-    "docsUrl": "https://docs.spacefast.com/errors/access_denied",
+    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
     "requestId": "req_4mz0v8qk"
   }
 }
@@ -96,7 +96,7 @@ standard error envelope with a `Retry-After` header.
 ## For agents
 
 The API has a machine-discovery surface. It includes
-[`llms.txt`](https://docs.spacefast.com/llms.txt), an
+[`llms.txt`](https://spacefast.com/docs/llms.txt), an
 [agent card](https://spacefast.com/.well-known/agent-card.json), a publish
 skill, and a hosted MCP server with typed tools. If an agent makes the calls,
 start with [MCP](/agents/mcp) and [set up the agent](/agents) with one

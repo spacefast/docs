@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_webhook_payload",
+  "type": "https://spacefast.com/docs/errors/invalid_webhook_payload",
   "title": "Invalid webhook payload",
   "status": 400,
   "detail": "The webhook configuration payload is malformed.",

@@ -70,15 +70,15 @@ from docs.
 ## Docs as Markdown
 
 Every developer page is fetchable as plain Markdown. Append `.md` to any URL
-(for example `https://docs.spacefast.com/cli.md` or
-`https://docs.spacefast.com/errors/rate_limited.md`) to get the exact
+(for example `https://spacefast.com/docs/cli.md` or
+`https://spacefast.com/docs/errors/rate_limited.md`) to get the exact
 Markdown source. Requests from known AI-agent user agents receive that form at
 the HTML URL automatically. Requests whose `Accept` header prefers Markdown also
 receive that form.
 
 Machine-readable docs discovery lives at
-[`llms.txt`](https://docs.spacefast.com/llms.txt) and
-[`llms-full.txt`](https://docs.spacefast.com/llms-full.txt). They are generated
+[`llms.txt`](https://spacefast.com/docs/llms.txt) and
+[`llms-full.txt`](https://spacefast.com/docs/llms-full.txt). They are generated
 from the same Blume sources as these pages. Product-level discovery lives on
 the product origin: the
 [agent card](https://spacefast.com/.well-known/agent-card.json),

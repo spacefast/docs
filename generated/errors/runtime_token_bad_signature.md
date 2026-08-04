@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_token_bad_signature",
+  "type": "https://spacefast.com/docs/errors/runtime_token_bad_signature",
   "title": "Runtime token bad signature",
   "status": 400,
   "detail": "The runtime token signature did not verify.",

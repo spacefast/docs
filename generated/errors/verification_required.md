@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/verification_required",
+  "type": "https://spacefast.com/docs/errors/verification_required",
   "title": "Verification required",
   "status": 400,
   "detail": "Domain verification is required before this operation.",

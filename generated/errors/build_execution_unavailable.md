@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/build_execution_unavailable",
+  "type": "https://spacefast.com/docs/errors/build_execution_unavailable",
   "title": "Build execution unavailable",
   "status": 400,
   "detail": "Build execution is not available on this deployment.",

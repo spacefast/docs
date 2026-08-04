@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/manifest_too_many_files",
+  "type": "https://spacefast.com/docs/errors/manifest_too_many_files",
   "title": "Manifest too many files",
   "status": 400,
   "detail": "The upload manifest declares more files than the allowed ceiling.",

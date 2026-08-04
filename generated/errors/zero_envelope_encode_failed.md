@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_envelope_encode_failed",
+  "type": "https://spacefast.com/docs/errors/zero_envelope_encode_failed",
   "title": "Zero envelope encode failed",
   "status": 400,
   "detail": "The PHP bridge could not encode the Zero runner request envelope.",

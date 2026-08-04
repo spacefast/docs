@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_transaction_active",
+  "type": "https://spacefast.com/docs/errors/zero_db_transaction_active",
   "title": "Zero db transaction active",
   "status": 400,
   "detail": "The Zero runner tried to start a database transaction while one was already active.",

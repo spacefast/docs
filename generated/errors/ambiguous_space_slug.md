@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/ambiguous_space_slug",
+  "type": "https://spacefast.com/docs/errors/ambiguous_space_slug",
   "title": "Ambiguous space slug",
   "status": 400,
   "detail": "The slug matches spaces in more than one of your teams, so it cannot be resolved.",

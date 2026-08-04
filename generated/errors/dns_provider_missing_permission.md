@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_missing_permission",
+  "type": "https://spacefast.com/docs/errors/dns_provider_missing_permission",
   "title": "Dns provider missing permission",
   "status": 400,
   "detail": "The connected DNS provider account lacks the required permission.",

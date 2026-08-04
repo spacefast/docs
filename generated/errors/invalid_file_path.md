@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_file_path",
+  "type": "https://spacefast.com/docs/errors/invalid_file_path",
   "title": "Invalid file path",
   "status": 400,
   "detail": "A file path in the request is not a valid space path.",

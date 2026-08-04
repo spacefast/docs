@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_archive_compression_ratio_exceeded",
+  "type": "https://spacefast.com/docs/errors/publish_archive_compression_ratio_exceeded",
   "title": "Publish archive compression ratio exceeded",
   "status": 400,
   "detail": "The archive's compression ratio is suspiciously high and was rejected.",

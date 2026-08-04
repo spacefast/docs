@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_person_self_invite",
+  "type": "https://spacefast.com/docs/errors/space_person_self_invite",
   "title": "Space person self invite",
   "status": 400,
   "detail": "The inviter already belongs to the space.",

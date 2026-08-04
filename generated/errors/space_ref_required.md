@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_ref_required",
+  "type": "https://spacefast.com/docs/errors/space_ref_required",
   "title": "Space ref required",
   "status": 400,
   "detail": "A space reference is required for this operation.",

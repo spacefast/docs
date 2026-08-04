@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/inject_invalid",
+  "type": "https://spacefast.com/docs/errors/inject_invalid",
   "title": "Inject invalid",
   "status": 400,
   "detail": "The inject config key is malformed.",

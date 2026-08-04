@@ -90,7 +90,6 @@ Spaces
     /spaces/redirects                    Redirects
     /spaces/headers                      Headers
     /spaces/proxy-routes                 Proxy routes
-    /spaces/mounts                       Mount another space
 
   Connect and automate
     /spaces/webhooks                     Webhooks

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_export_required",
+  "type": "https://spacefast.com/docs/errors/dns_export_required",
   "title": "Dns export required",
   "status": 400,
   "detail": "This operation requires exporting the current DNS records first.",

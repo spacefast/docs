@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/channel_pointer_moved",
+  "type": "https://spacefast.com/docs/errors/channel_pointer_moved",
   "title": "Channel pointer moved",
   "status": 400,
   "detail": "The channel was promoted to a different version since you read it.",

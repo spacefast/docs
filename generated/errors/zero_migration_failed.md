@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_migration_failed",
+  "type": "https://spacefast.com/docs/errors/zero_migration_failed",
   "title": "Zero migration failed",
   "status": 400,
   "detail": "The Zero database migration command failed during finalize.",

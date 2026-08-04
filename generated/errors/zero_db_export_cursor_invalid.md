@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_export_cursor_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_db_export_cursor_invalid",
   "title": "Zero db export cursor invalid",
   "status": 400,
   "detail": "The local database export cursor is invalid or belongs to another export.",

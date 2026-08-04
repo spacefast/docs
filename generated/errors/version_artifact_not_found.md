@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/version_artifact_not_found",
+  "type": "https://spacefast.com/docs/errors/version_artifact_not_found",
   "title": "Version artifact not found",
   "status": 400,
   "detail": "The requested version artifact was not found.",

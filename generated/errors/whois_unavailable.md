@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/whois_unavailable",
+  "type": "https://spacefast.com/docs/errors/whois_unavailable",
   "title": "Whois unavailable",
   "status": 400,
   "detail": "WHOIS data is unavailable for this domain right now.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_engine_zip_missing",
+  "type": "https://spacefast.com/docs/errors/runtime_engine_zip_missing",
   "title": "Runtime engine zip missing",
   "status": 400,
   "detail": "The runtime engine artifact is missing from this deployment.",

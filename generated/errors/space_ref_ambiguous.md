@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_ref_ambiguous",
+  "type": "https://spacefast.com/docs/errors/space_ref_ambiguous",
   "title": "Space ref ambiguous",
   "status": 400,
   "detail": "The space reference matches more than one accessible space.",

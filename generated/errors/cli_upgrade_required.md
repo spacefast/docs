@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/cli_upgrade_required",
+  "type": "https://spacefast.com/docs/errors/cli_upgrade_required",
   "title": "Cli upgrade required",
   "status": 400,
   "detail": "This CLI version is too old to talk to the API safely.",

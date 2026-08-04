@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/wp_cloud_team_shared_site_exists",
+  "type": "https://spacefast.com/docs/errors/wp_cloud_team_shared_site_exists",
   "title": "Wp cloud team shared site exists",
   "status": 400,
   "detail": "The team already has a shared site of this class.",

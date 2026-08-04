@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/csam_policy_floor",
+  "type": "https://spacefast.com/docs/errors/csam_policy_floor",
   "title": "Csam policy floor",
   "status": 400,
   "detail": "CSAM enforcement policy cannot be set below the mandatory account-suspend floor.",

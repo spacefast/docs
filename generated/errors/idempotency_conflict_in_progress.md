@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/idempotency_conflict_in_progress",
+  "type": "https://spacefast.com/docs/errors/idempotency_conflict_in_progress",
   "title": "Idempotency conflict in progress",
   "status": 400,
   "detail": "Another request with the same Idempotency-Key is still in flight.",

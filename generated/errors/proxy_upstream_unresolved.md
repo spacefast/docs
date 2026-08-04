@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/proxy_upstream_unresolved",
+  "type": "https://spacefast.com/docs/errors/proxy_upstream_unresolved",
   "title": "Proxy upstream unresolved",
   "status": 400,
   "detail": "The proxy upstream hostname could not be resolved.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_base_changed",
+  "type": "https://spacefast.com/docs/errors/publish_base_changed",
   "title": "Publish base changed",
   "status": 400,
   "detail": "Someone published new space settings after the base you loaded, so saving would overwrite their change.",

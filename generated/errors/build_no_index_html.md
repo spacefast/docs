@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/build_no_index_html",
+  "type": "https://spacefast.com/docs/errors/build_no_index_html",
   "title": "Build no index html",
   "status": 400,
   "detail": "The build produced output but no index.html at the site root.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_runner_invalid_response",
+  "type": "https://spacefast.com/docs/errors/zero_runner_invalid_response",
   "title": "Zero runner invalid response",
   "status": 400,
   "detail": "The Zero runner output was not valid JSON.",

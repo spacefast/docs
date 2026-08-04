@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/path_too_long",
+  "type": "https://spacefast.com/docs/errors/path_too_long",
   "title": "Path too long",
   "status": 400,
   "detail": "A file path exceeds the maximum length.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_runs_require_runtime_compiler",
+  "type": "https://spacefast.com/docs/errors/zero_runs_require_runtime_compiler",
   "title": "Zero runs require runtime compiler",
   "status": 400,
   "detail": "Zero run handlers require the Rust runtime compiler.",

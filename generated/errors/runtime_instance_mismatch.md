@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_instance_mismatch",
+  "type": "https://spacefast.com/docs/errors/runtime_instance_mismatch",
   "title": "Runtime instance mismatch",
   "status": 400,
   "detail": "The request reached a different runtime instance than the one it was issued for.",

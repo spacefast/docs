@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_callback_forbidden",
+  "type": "https://spacefast.com/docs/errors/runtime_callback_forbidden",
   "title": "Runtime callback forbidden",
   "status": 400,
   "detail": "The runtime callback could not be authenticated.",

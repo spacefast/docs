@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_export_schema_changed",
+  "type": "https://spacefast.com/docs/errors/zero_db_export_schema_changed",
   "title": "Zero db export schema changed",
   "status": 400,
   "detail": "The database schema changed while an export was in progress.",

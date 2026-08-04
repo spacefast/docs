@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/billing_receipt_invalid",
+  "type": "https://spacefast.com/docs/errors/billing_receipt_invalid",
   "title": "Billing receipt invalid",
   "status": 400,
   "detail": "The store receipt or notification could not be verified with the payment provider.",

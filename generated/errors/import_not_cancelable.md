@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/import_not_cancelable",
+  "type": "https://spacefast.com/docs/errors/import_not_cancelable",
   "title": "Import not cancelable",
   "status": 400,
   "detail": "The import has progressed past the point where it can be canceled.",

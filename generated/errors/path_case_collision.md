@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/path_case_collision",
+  "type": "https://spacefast.com/docs/errors/path_case_collision",
   "title": "Path case collision",
   "status": 400,
   "detail": "Two file paths differ only by letter case, which collides on serving.",

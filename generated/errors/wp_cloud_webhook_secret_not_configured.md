@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/wp_cloud_webhook_secret_not_configured",
+  "type": "https://spacefast.com/docs/errors/wp_cloud_webhook_secret_not_configured",
   "title": "Wp cloud webhook secret not configured",
   "status": 400,
   "detail": "The infra webhook secret is not configured on this deployment.",

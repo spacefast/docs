@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/archive_body_required",
+  "type": "https://spacefast.com/docs/errors/archive_body_required",
   "title": "Archive body required",
   "status": 400,
   "detail": "This request must carry an archive body but none was provided.",

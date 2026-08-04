@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_upload_required",
+  "type": "https://spacefast.com/docs/errors/runtime_upload_required",
   "title": "Runtime upload required",
   "status": 400,
   "detail": "This step requires uploaded content that has not arrived yet.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/service_signature_invalid",
+  "type": "https://spacefast.com/docs/errors/service_signature_invalid",
   "title": "Service signature invalid",
   "status": 400,
   "detail": "The service request signature could not be verified.",

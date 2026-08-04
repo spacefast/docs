@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_js_context_init_failed",
+  "type": "https://spacefast.com/docs/errors/zero_js_context_init_failed",
   "title": "Zero js context init failed",
   "status": 400,
   "detail": "The Zero runner could not initialize a QuickJS context.",

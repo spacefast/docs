@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_not_connected",
+  "type": "https://spacefast.com/docs/errors/dns_provider_not_connected",
   "title": "Dns provider not connected",
   "status": 400,
   "detail": "This domain has no connected DNS provider zone.",

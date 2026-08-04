@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_snapshot_unavailable",
+  "type": "https://spacefast.com/docs/errors/dns_provider_snapshot_unavailable",
   "title": "Dns provider snapshot unavailable",
   "status": 400,
   "detail": "Spacefast could not cache the latest DNS provider snapshot.",

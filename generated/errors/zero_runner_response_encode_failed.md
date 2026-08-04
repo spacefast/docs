@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_runner_response_encode_failed",
+  "type": "https://spacefast.com/docs/errors/zero_runner_response_encode_failed",
   "title": "Zero runner response encode failed",
   "status": 400,
   "detail": "The Zero runner could not encode its response.",

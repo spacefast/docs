@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_facet_external",
+  "type": "https://spacefast.com/docs/errors/domain_facet_external",
   "title": "Domain facet external",
   "status": 400,
   "detail": "This facet of the domain is managed outside Spacefast.",

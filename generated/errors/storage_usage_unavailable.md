@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_usage_unavailable",
+  "type": "https://spacefast.com/docs/errors/storage_usage_unavailable",
   "title": "Storage usage unavailable",
   "status": 400,
   "detail": "Storage usage could not be computed right now.",

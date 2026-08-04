@@ -102,12 +102,7 @@ export default defineConfig({
         {
           label: "Agents",
           root: "/agents",
-          items: [
-            "/agents",
-            "/agents/publishing",
-            "/agents/mcp",
-            "/agents/accounts",
-          ],
+          items: ["/agents", "/agents/publishing", "/agents/mcp", "/agents/accounts"],
         },
         {
           label: "Spaces",
@@ -137,12 +132,7 @@ export default defineConfig({
             {
               label: "Routing",
               root: "/spaces/redirects",
-              items: [
-                "/spaces/redirects",
-                "/spaces/headers",
-                "/spaces/proxy-routes",
-                "/spaces/mounts",
-              ],
+              items: ["/spaces/redirects", "/spaces/headers", "/spaces/proxy-routes"],
             },
             {
               label: "Connect and automate",
@@ -250,7 +240,7 @@ export default defineConfig({
   },
   deployment: {
     output: "static",
-    site: "https://docs.spacefast.com",
+    site: "https://spacefast.com",
     base: deploymentBase,
   },
 });

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/event_payload_too_large",
+  "type": "https://spacefast.com/docs/errors/event_payload_too_large",
   "title": "Event payload too large",
   "status": 400,
   "detail": "The event payload exceeds the maximum size.",

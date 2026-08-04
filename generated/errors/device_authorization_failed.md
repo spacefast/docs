@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/device_authorization_failed",
+  "type": "https://spacefast.com/docs/errors/device_authorization_failed",
   "title": "Device authorization failed",
   "status": 400,
   "detail": "The device login request failed and cannot be completed.",

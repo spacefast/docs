@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/api_key_scope_underivable",
+  "type": "https://spacefast.com/docs/errors/api_key_scope_underivable",
   "title": "Api key scope underivable",
   "status": 400,
   "detail": "A concrete access policy could not be derived from the requested scope and permissions.",

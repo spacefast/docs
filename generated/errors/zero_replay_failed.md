@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_replay_failed",
+  "type": "https://spacefast.com/docs/errors/zero_replay_failed",
   "title": "Zero replay failed",
   "status": 400,
   "detail": "The hosted Zero runtime could not fetch realtime replay events.",

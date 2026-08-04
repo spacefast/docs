@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_unauthorized",
+  "type": "https://spacefast.com/docs/errors/runtime_unauthorized",
   "title": "Runtime unauthorized",
   "status": 400,
   "detail": "The request to the runtime carried no valid credential.",

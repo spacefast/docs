@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/move_target_capacity_lost",
+  "type": "https://spacefast.com/docs/errors/move_target_capacity_lost",
   "title": "Move target capacity lost",
   "status": 400,
   "detail": "The selected move target no longer has capacity for the space.",

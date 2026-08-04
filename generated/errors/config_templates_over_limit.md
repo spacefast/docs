@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_templates_over_limit",
+  "type": "https://spacefast.com/docs/errors/config_templates_over_limit",
   "title": "Config templates over limit",
   "status": 400,
   "detail": "The configuration declares more template files than the plan allows.",

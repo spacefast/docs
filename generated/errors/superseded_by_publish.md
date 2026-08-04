@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/superseded_by_publish",
+  "type": "https://spacefast.com/docs/errors/superseded_by_publish",
   "title": "Superseded by publish",
   "status": 400,
   "detail": "A newer publish superseded this operation, so it was skipped.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/takeover_notice_window",
+  "type": "https://spacefast.com/docs/errors/takeover_notice_window",
   "title": "Takeover notice window",
   "status": 400,
   "detail": "The hostname was recently bound elsewhere. A takeover notice window applies.",

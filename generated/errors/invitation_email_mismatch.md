@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invitation_email_mismatch",
+  "type": "https://spacefast.com/docs/errors/invitation_email_mismatch",
   "title": "Invitation email mismatch",
   "status": 400,
   "detail": "This invitation was addressed to a different email than the accepting user.",

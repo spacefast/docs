@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/anonymous_pool_unavailable",
+  "type": "https://spacefast.com/docs/errors/anonymous_pool_unavailable",
   "title": "Anonymous pool unavailable",
   "status": 400,
   "detail": "No pooled capacity is available for anonymous publishes right now.",

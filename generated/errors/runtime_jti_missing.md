@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_jti_missing",
+  "type": "https://spacefast.com/docs/errors/runtime_jti_missing",
   "title": "Runtime jti missing",
   "status": 400,
   "detail": "The runtime token is missing its replay-protection id.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_artifact_malformed",
+  "type": "https://spacefast.com/docs/errors/zero_artifact_malformed",
   "title": "Zero artifact malformed",
   "status": 400,
   "detail": "The Zero endpoint artifact could not be parsed.",

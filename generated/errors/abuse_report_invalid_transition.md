@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/abuse_report_invalid_transition",
+  "type": "https://spacefast.com/docs/errors/abuse_report_invalid_transition",
   "title": "Abuse report invalid transition",
   "status": 400,
   "detail": "The abuse report cannot move to the requested status from its current status.",

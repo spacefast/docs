@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/transfer_move_failed",
+  "type": "https://spacefast.com/docs/errors/transfer_move_failed",
   "title": "Transfer move failed",
   "status": 400,
   "detail": "The space move backing this transfer failed.",

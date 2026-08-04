@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_endpoint_index_malformed",
+  "type": "https://spacefast.com/docs/errors/zero_endpoint_index_malformed",
   "title": "Zero endpoint index malformed",
   "status": 400,
   "detail": "The Zero endpoint index could not be parsed.",

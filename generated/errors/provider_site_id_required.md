@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/provider_site_id_required",
+  "type": "https://spacefast.com/docs/errors/provider_site_id_required",
   "title": "Provider site id required",
   "status": 400,
   "detail": "A provider site id is required for this internal operation.",

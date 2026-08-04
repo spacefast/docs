@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_move_would_strand_zero_data",
+  "type": "https://spacefast.com/docs/errors/space_move_would_strand_zero_data",
   "title": "Space move would strand zero data",
   "status": 400,
   "detail": "The Space runs Zero, whose database and object storage live on the site the Space is placed on. Relocating it would strand that data on the old site, so the move is refused.",

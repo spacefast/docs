@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/unsupported_publish_media_type",
+  "type": "https://spacefast.com/docs/errors/unsupported_publish_media_type",
   "title": "Unsupported publish media type",
   "status": 400,
   "detail": "The publish content-type is not supported.",

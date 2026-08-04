@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/inject_snippet_too_large",
+  "type": "https://spacefast.com/docs/errors/inject_snippet_too_large",
   "title": "Inject snippet too large",
   "status": 400,
   "detail": "An inject snippet exceeds the per-snippet size limit.",

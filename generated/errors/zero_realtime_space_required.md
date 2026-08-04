@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_realtime_space_required",
+  "type": "https://spacefast.com/docs/errors/zero_realtime_space_required",
   "title": "Zero realtime space required",
   "status": 400,
   "detail": "The Zero realtime request does not identify a space.",

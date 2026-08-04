@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_registration_not_renewable",
+  "type": "https://spacefast.com/docs/errors/domain_registration_not_renewable",
   "title": "Domain registration not renewable",
   "status": 400,
   "detail": "The domain registration cannot be renewed right now.",

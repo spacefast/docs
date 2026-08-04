@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/job_not_retryable",
+  "type": "https://spacefast.com/docs/errors/job_not_retryable",
   "title": "Job not retryable",
   "status": 400,
   "detail": "The job cannot be retried in its current state.",

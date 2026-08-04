@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/mcp_acted_for_team_deleted",
+  "type": "https://spacefast.com/docs/errors/mcp_acted_for_team_deleted",
   "title": "Mcp acted for team deleted",
   "status": 400,
   "detail": "This MCP approval or execution run acted only for a team that has since been deleted, so it can no longer be approved, denied, or canceled.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/build_install_failed",
+  "type": "https://spacefast.com/docs/errors/build_install_failed",
   "title": "Build install failed",
   "status": 400,
   "detail": "The dependency install step failed during the build run.",

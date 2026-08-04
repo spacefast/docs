@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_unavailable",
+  "type": "https://spacefast.com/docs/errors/storage_unavailable",
   "title": "Storage unavailable",
   "status": 400,
   "detail": "The Zero runtime could not read or persist object storage.",

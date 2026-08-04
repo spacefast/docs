@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_auth_required",
+  "type": "https://spacefast.com/docs/errors/storage_auth_required",
   "title": "Storage auth required",
   "status": 400,
   "detail": "This storage operation requires an authenticated Zero user.",

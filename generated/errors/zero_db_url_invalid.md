@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_url_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_db_url_invalid",
   "title": "Zero db url invalid",
   "status": 400,
   "detail": "The Zero database URL is malformed.",

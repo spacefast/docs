@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_data_location",
+  "type": "https://spacefast.com/docs/errors/invalid_data_location",
   "title": "Invalid data location",
   "status": 400,
   "detail": "The requested data location is not a supported region.",

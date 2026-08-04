@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_import_archive_invalid",
+  "type": "https://spacefast.com/docs/errors/space_import_archive_invalid",
   "title": "Space import archive invalid",
   "status": 400,
   "detail": "The import archive is not a valid Spacefast export.",

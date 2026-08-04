@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_export_failed",
+  "type": "https://spacefast.com/docs/errors/zero_db_export_failed",
   "title": "Zero db export failed",
   "status": 400,
   "detail": "The runtime could not read a database export page.",

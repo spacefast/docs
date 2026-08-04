@@ -3,7 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const SITE_ORIGIN = "https://docs.spacefast.com";
+const SITE_ORIGIN = "https://spacefast.com";
 const DOCS_BASE = "/docs";
 const ESSENTIAL_PATHS = new Set([
   "/",
@@ -69,7 +69,7 @@ function summaryFor(body) {
 export function parseLlmsFull(source) {
   const pages = [];
   const sectionPattern =
-    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/docs\.spacefast\.com(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
+    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/spacefast\.com\/docs(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
   for (const match of source.matchAll(sectionPattern)) {
     const title = match[1]?.trim();
     const url = match[2]?.trim();

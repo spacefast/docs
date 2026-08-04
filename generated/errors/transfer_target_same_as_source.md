@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/transfer_target_same_as_source",
+  "type": "https://spacefast.com/docs/errors/transfer_target_same_as_source",
   "title": "Transfer target same as source",
   "status": 400,
   "detail": "The transfer target is the same principal that already owns the space.",

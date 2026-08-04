@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/agent_handoff_limit_reached",
+  "type": "https://spacefast.com/docs/errors/agent_handoff_limit_reached",
   "title": "Agent handoff limit reached",
   "status": 400,
   "detail": "This user already has the maximum number of pending handoffs for the space.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/billing_receipt_not_bound_to_team",
+  "type": "https://spacefast.com/docs/errors/billing_receipt_not_bound_to_team",
   "title": "Billing receipt not bound to team",
   "status": 400,
   "detail": "The store purchase was made under a different account token than this team's.",

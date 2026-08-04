@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_validation_failed",
+  "type": "https://spacefast.com/docs/errors/dns_provider_validation_failed",
   "title": "Dns provider validation failed",
   "status": 400,
   "detail": "The DNS provider rejected the submitted record data.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_rate_limited",
+  "type": "https://spacefast.com/docs/errors/dns_provider_rate_limited",
   "title": "Dns provider rate limited",
   "status": 400,
   "detail": "The DNS provider rate-limited the requested operation.",

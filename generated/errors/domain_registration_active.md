@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_registration_active",
+  "type": "https://spacefast.com/docs/errors/domain_registration_active",
   "title": "Domain registration active",
   "status": 400,
   "detail": "The domain has an active registration, which blocks this operation.",

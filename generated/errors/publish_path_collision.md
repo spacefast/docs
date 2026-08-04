@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_path_collision",
+  "type": "https://spacefast.com/docs/errors/publish_path_collision",
   "title": "Publish path collision",
   "status": 400,
   "detail": "Two different artifacts would serve the same URL after directory-index or clean-URL resolution.",

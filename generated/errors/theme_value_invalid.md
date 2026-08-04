@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/theme_value_invalid",
+  "type": "https://spacefast.com/docs/errors/theme_value_invalid",
   "title": "Theme value invalid",
   "status": 400,
   "detail": "A theme value in the configuration is outside the allowed grammar.",

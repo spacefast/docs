@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_invalid",
+  "type": "https://spacefast.com/docs/errors/config_invalid",
   "title": "Config invalid",
   "status": 400,
   "detail": "The space configuration failed validation.",

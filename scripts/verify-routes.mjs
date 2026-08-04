@@ -10,7 +10,7 @@ import {
 
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
-const site = "https://docs.spacefast.com";
+const site = "https://spacefast.com";
 const docsRoot = `${site}${deploymentBase}`;
 // The home page is the one URL that can appear bare (origin) or based.
 const corpusKey = (url) => {
@@ -167,11 +167,6 @@ const representativePages = [
   ["agents/mcp/index.html", `${docsRoot}/agents/mcp`, "Hosted vs on-device"],
   ["api/index.html", `${docsRoot}/api`, "The shape of every response"],
   ["api/reference/index.html", `${docsRoot}/api/reference`, "REST API"],
-  [
-    "api/reference/spaces/getv1spacesbyspaceidmounts/index.html",
-    `${docsRoot}/api/reference/spaces/getv1spacesbyspaceidmounts`,
-    "mount",
-  ],
   ["cli/index.html", `${docsRoot}/cli`, "CLI reference"],
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
@@ -248,11 +243,12 @@ if (
   throw new Error("Built headers do not allow the consumer site to merge the Pagefind index.");
 }
 if (
-  !headers.includes(`${deploymentBase}/*.md`) ||
-  !headers.includes("text/markdown; charset=utf-8") ||
-  !headers.includes(`${deploymentBase}/*.md\n  Access-Control-Allow-Origin: *`)
+  !headers.includes(`${deploymentBase}/*\n  Access-Control-Allow-Origin: *`) ||
+  headers.includes(`${deploymentBase}/*.md`) ||
+  headers.includes(`${deploymentBase}/*.mdx`) ||
+  headers.includes(`${deploymentBase}/*.txt`)
 ) {
-  throw new Error("Built headers do not expose canonical Markdown safely to the browser terminal.");
+  throw new Error("Built headers do not expose Docs artifacts through valid routing patterns.");
 }
 
 const sitemap = await readBuilt("sitemap.xml");
@@ -297,7 +293,7 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 }
 
 const llmsIndex = await readBuilt("llms.txt");
-const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/docs\.spacefast\.com[^\s)>]*/gu)]
+const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/spacefast\.com\/docs[^\s)>]*/gu)]
   .map((match) => match[0])
   .filter((url) => !url.endsWith("/rss.xml"));
 if (

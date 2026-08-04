@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/channel_name_reserved",
+  "type": "https://spacefast.com/docs/errors/channel_name_reserved",
   "title": "Channel name reserved",
   "status": 400,
   "detail": "The channel name collides with a reserved hostname suffix and cannot be used.",

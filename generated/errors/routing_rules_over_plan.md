@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/routing_rules_over_plan",
+  "type": "https://spacefast.com/docs/errors/routing_rules_over_plan",
   "title": "Routing rules over plan",
   "status": 400,
   "detail": "The published _redirects and _headers exceed the plan's routing-rule allowance.",

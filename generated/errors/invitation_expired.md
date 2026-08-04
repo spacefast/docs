@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invitation_expired",
+  "type": "https://spacefast.com/docs/errors/invitation_expired",
   "title": "Invitation expired",
   "status": 400,
   "detail": "The invitation has expired and can no longer be accepted.",

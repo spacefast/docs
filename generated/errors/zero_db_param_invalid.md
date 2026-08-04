@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_param_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_db_param_invalid",
   "title": "Zero db param invalid",
   "status": 400,
   "detail": "A Zero database query parameter has an unsupported value.",

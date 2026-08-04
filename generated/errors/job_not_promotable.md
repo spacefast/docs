@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/job_not_promotable",
+  "type": "https://spacefast.com/docs/errors/job_not_promotable",
   "title": "Job not promotable",
   "status": 400,
   "detail": "The job cannot be promoted in its current state.",

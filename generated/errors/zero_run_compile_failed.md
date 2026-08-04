@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_run_compile_failed",
+  "type": "https://spacefast.com/docs/errors/zero_run_compile_failed",
   "title": "Zero run compile failed",
   "status": 400,
   "detail": "The runtime could not compile a Zero run handler.",

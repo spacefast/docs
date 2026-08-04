@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/not_enrolled",
+  "type": "https://spacefast.com/docs/errors/not_enrolled",
   "title": "Not enrolled",
   "status": 400,
   "detail": "This account is not enrolled in the private beta, so the API cannot be used yet.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_bytes_missing",
+  "type": "https://spacefast.com/docs/errors/publish_bytes_missing",
   "title": "Publish bytes missing",
   "status": 400,
   "detail": "The publish has no complete staged content to materialize.",

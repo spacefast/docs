@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_meta_too_long",
+  "type": "https://spacefast.com/docs/errors/config_meta_too_long",
   "title": "Config meta too long",
   "status": 400,
   "detail": "A meta field in the space configuration exceeds its maximum length.",

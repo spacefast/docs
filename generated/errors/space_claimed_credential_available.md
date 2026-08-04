@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_claimed_credential_available",
+  "type": "https://spacefast.com/docs/errors/space_claimed_credential_available",
   "title": "Space claimed credential available",
   "status": 400,
   "detail": "The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher.",

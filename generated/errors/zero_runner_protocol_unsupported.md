@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_runner_protocol_unsupported",
+  "type": "https://spacefast.com/docs/errors/zero_runner_protocol_unsupported",
   "title": "Zero runner protocol unsupported",
   "status": 400,
   "detail": "The Zero runner received an unsupported invoke protocol.",

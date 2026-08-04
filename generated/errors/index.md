@@ -8,7 +8,7 @@ carrying a stable `code` and a `type` URI that links to one of the pages below. 
 `code` in clients. Its meaning stays stable, while `detail` text may improve. Retired
 codes leave with their owning API surface.
 
-There are 486 error codes in the registry.
+There are 479 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -305,13 +305,6 @@ There are 486 error codes in the registry.
 | [`space_unclaimed`](/errors/space_unclaimed) | This operation requires a claimed space. |
 | [`ssl_renewal_blocked`](/errors/ssl_renewal_blocked) | SSL certificate renewal is blocked for this hostname. |
 | [`static_control_file_not_supported`](/errors/static_control_file_not_supported) | This control file is not supported by the static runtime. |
-| [`static_mount_path_conflict`](/errors/static_mount_path_conflict) | The requested mount path overlaps another static mount on this space. |
-| [`static_mount_source_not_ready`](/errors/static_mount_source_not_ready) | The website version that owns this mount is not ready. |
-| [`static_mount_target_forbidden`](/errors/static_mount_target_forbidden) | The target space is not an authorized space in the same team. |
-| [`static_mount_target_in_use`](/errors/static_mount_target_in_use) | A static mount dependency blocks changing or deleting this space. |
-| [`static_mount_target_not_live`](/errors/static_mount_target_not_live) | The target space does not have a production version to mount. |
-| [`static_mount_target_not_ready`](/errors/static_mount_target_not_ready) | The target production version is not ready for static delivery. |
-| [`static_mount_target_not_static`](/errors/static_mount_target_not_static) | The target production version contains runtime functions. |
 | [`static_runtime_control_path_not_supported`](/errors/static_runtime_control_path_not_supported) | This control path is not supported by the static runtime. |
 | [`static_runtime_required`](/errors/static_runtime_required) | This operation only applies to static-runtime spaces. |
 | [`storage_auth_required`](/errors/storage_auth_required) | This storage operation requires an authenticated Zero user. |

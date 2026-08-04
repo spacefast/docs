@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_change_pending",
+  "type": "https://spacefast.com/docs/errors/dns_provider_change_pending",
   "title": "Dns provider change pending",
   "status": 400,
   "detail": "The DNS provider accepted the change but propagation or provider completion is still pending.",

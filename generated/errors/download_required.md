@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/download_required",
+  "type": "https://spacefast.com/docs/errors/download_required",
   "title": "Download required",
   "status": 400,
   "detail": "This content is too large to return inline and must be downloaded.",

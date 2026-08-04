@@ -48,3 +48,29 @@ jobs:
 
       - name: Verify routes and artifacts
         run: bun run verify:routes
+
+  notify-website:
+    if: github.server_url == 'https://github.com' && github.repository == 'spacefast/docs' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Mint monorepo dispatch token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: spacefast
+          repositories: monorepo
+          permission-contents: write
+
+      - name: Notify the Website publisher
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          DOCS_SHA: ${{ github.sha }}
+        run: |
+          gh api --method POST repos/spacefast/monorepo/dispatches \
+            --field event_type=docs-updated \
+            --field "client_payload[repository]=spacefast/docs" \
+            --field "client_payload[sha]=$DOCS_SHA"

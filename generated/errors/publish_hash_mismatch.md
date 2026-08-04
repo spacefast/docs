@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_hash_mismatch",
+  "type": "https://spacefast.com/docs/errors/publish_hash_mismatch",
   "title": "Publish hash mismatch",
   "status": 400,
   "detail": "Publish content does not match its declared sha256.",

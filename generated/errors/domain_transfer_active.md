@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_transfer_active",
+  "type": "https://spacefast.com/docs/errors/domain_transfer_active",
   "title": "Domain transfer active",
   "status": 400,
   "detail": "The domain has a transfer in progress, which blocks this operation.",

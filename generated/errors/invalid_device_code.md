@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_device_code",
+  "type": "https://spacefast.com/docs/errors/invalid_device_code",
   "title": "Invalid device code",
   "status": 400,
   "detail": "The device code is invalid or has expired.",

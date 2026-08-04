@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/noop_publish",
+  "type": "https://spacefast.com/docs/errors/noop_publish",
   "title": "Noop publish",
   "status": 400,
   "detail": "The publish matched the live version exactly, so nothing changed.",

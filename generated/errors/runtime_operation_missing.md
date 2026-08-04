@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_operation_missing",
+  "type": "https://spacefast.com/docs/errors/runtime_operation_missing",
   "title": "Runtime operation missing",
   "status": 400,
   "detail": "The runtime operation referenced by this request was not found.",
