@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/upload_path_not_canonical",
+  "type": "https://spacefast.com/docs/errors/upload_path_not_canonical",
   "title": "Upload path not canonical",
   "status": 400,
   "detail": "An upload path is not in canonical (decoded, NFC-normalized) form.",

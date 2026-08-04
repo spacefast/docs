@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/upload_path_not_declared",
+  "type": "https://spacefast.com/docs/errors/upload_path_not_declared",
   "title": "Upload path not declared",
   "status": 400,
   "detail": "An uploaded path was not declared in the version's manifest.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/provider_runtime_feature_unsupported",
+  "type": "https://spacefast.com/docs/errors/provider_runtime_feature_unsupported",
   "title": "Provider runtime feature unsupported",
   "status": 400,
   "detail": "The hosting provider does not support this runtime feature.",

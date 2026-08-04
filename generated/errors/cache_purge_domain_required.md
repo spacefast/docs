@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/cache_purge_domain_required",
+  "type": "https://spacefast.com/docs/errors/cache_purge_domain_required",
   "title": "Cache purge domain required",
   "status": 400,
   "detail": "A purge request must name the domain to purge.",

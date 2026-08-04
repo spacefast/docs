@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/platform_tenant_immutable_client",
+  "type": "https://spacefast.com/docs/errors/platform_tenant_immutable_client",
   "title": "Platform tenant immutable client",
   "status": 400,
   "detail": "The tenant's provider client cannot be changed.",

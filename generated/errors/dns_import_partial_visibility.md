@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_import_partial_visibility",
+  "type": "https://spacefast.com/docs/errors/dns_import_partial_visibility",
   "title": "Dns import partial visibility",
   "status": 400,
   "detail": "The DNS import could not see the full zone, so importing would lose records.",

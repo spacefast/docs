@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_runtime_event",
+  "type": "https://spacefast.com/docs/errors/invalid_runtime_event",
   "title": "Invalid runtime event",
   "status": 400,
   "detail": "The runtime event payload is not recognized.",

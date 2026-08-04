@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_hostname_site_mismatch",
+  "type": "https://spacefast.com/docs/errors/domain_hostname_site_mismatch",
   "title": "Domain hostname site mismatch",
   "status": 400,
   "detail": "All bindings of one hostname must point at spaces on the same underlying site.",

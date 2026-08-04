@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_snapshot_empty",
+  "type": "https://spacefast.com/docs/errors/publish_snapshot_empty",
   "title": "Publish snapshot empty",
   "status": 400,
   "detail": "An empty snapshot was sent without an explicit base version.",

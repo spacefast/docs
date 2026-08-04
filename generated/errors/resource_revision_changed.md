@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/resource_revision_changed",
+  "type": "https://spacefast.com/docs/errors/resource_revision_changed",
   "title": "Resource revision changed",
   "status": 400,
   "detail": "The resource changed after you loaded it, so the stale write was rejected.",

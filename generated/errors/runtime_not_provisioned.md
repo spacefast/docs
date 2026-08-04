@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_not_provisioned",
+  "type": "https://spacefast.com/docs/errors/runtime_not_provisioned",
   "title": "Runtime not provisioned",
   "status": 400,
   "detail": "The space has not served a published version yet, so it has no runtime data to read.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_archive_file_count_exceeded",
+  "type": "https://spacefast.com/docs/errors/publish_archive_file_count_exceeded",
   "title": "Publish archive file count exceeded",
   "status": 400,
   "detail": "The archive contains more files than the allowed ceiling.",

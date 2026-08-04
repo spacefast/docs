@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_hostname_unassigned",
+  "type": "https://spacefast.com/docs/errors/runtime_hostname_unassigned",
   "title": "Runtime hostname unassigned",
   "status": 400,
   "detail": "The hostname is not assigned to a runtime, so the request cannot be routed.",

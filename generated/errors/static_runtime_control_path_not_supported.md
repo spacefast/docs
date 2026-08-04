@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/static_runtime_control_path_not_supported",
+  "type": "https://spacefast.com/docs/errors/static_runtime_control_path_not_supported",
   "title": "Static runtime control path not supported",
   "status": 400,
   "detail": "This control path is not supported by the static runtime.",

@@ -49,19 +49,17 @@ bun run verify:routes
 ```
 
 Blume writes the static site to `dist/`. Pages emit flat at the tree root and
-every URL carries the `/docs` base (`deployment.base` in `blume.config.ts`), so
-the space serves at `https://docs.spacefast.com/docs` and can be mounted into
-another space at `/docs`; trailing `_redirects` rewrites map `/docs/*` back onto
-the flat tree.
+every URL carries the `/docs` base (`deployment.base` in `blume.config.ts`). The
+Spacefast website build places this output under its own `dist/docs/` tree and
+publishes one static artifact at `https://spacefast.com/docs`.
 
-## Publishing the static artifact
+## Publishing
 
-`public/spacefast.jsonc` is copied to the root of `dist/` during the build. Publish the
-already-built directory without running another build:
-
-```bash
-sf publish dist --prebuilt
-```
+Merges to `main` run every Docs check, then notify the Spacefast monorepo with
+the exact commit SHA. That repository owns the only production publisher: it
+builds the website and this checkout together, composes the artifacts, and
+publishes the resulting Website version. This repository never publishes the
+Website Space directly.
 
 ## Repository safety
 

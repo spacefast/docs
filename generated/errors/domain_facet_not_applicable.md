@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_facet_not_applicable",
+  "type": "https://spacefast.com/docs/errors/domain_facet_not_applicable",
   "title": "Domain facet not applicable",
   "status": 400,
   "detail": "The requested facet does not apply to this domain.",

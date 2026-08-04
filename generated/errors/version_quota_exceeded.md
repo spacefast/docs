@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/version_quota_exceeded",
+  "type": "https://spacefast.com/docs/errors/version_quota_exceeded",
   "title": "Version quota exceeded",
   "status": 400,
   "detail": "The space has reached its version quota.",

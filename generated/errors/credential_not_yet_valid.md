@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/credential_not_yet_valid",
+  "type": "https://spacefast.com/docs/errors/credential_not_yet_valid",
   "title": "Credential not yet valid",
   "status": 400,
   "detail": "The credential is not valid yet because its start time is in the future.",

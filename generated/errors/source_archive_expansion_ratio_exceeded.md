@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/source_archive_expansion_ratio_exceeded",
+  "type": "https://spacefast.com/docs/errors/source_archive_expansion_ratio_exceeded",
   "title": "Source archive expansion ratio exceeded",
   "status": 400,
   "detail": "The uploaded source archive expands too much relative to its compressed size.",

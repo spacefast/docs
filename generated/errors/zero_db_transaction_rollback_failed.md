@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_transaction_rollback_failed",
+  "type": "https://spacefast.com/docs/errors/zero_db_transaction_rollback_failed",
   "title": "Zero db transaction rollback failed",
   "status": 400,
   "detail": "The Zero database transaction could not be rolled back cleanly.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/stripe_error",
+  "type": "https://spacefast.com/docs/errors/stripe_error",
   "title": "Stripe error",
   "status": 400,
   "detail": "The billing provider reported an error.",

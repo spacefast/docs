@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/wp_cloud_assignment_kind_mismatch",
+  "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_kind_mismatch",
   "title": "Wp cloud assignment kind mismatch",
   "status": 400,
   "detail": "The domain assignment's kind does not match the site.",

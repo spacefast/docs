@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/tenant_id_mismatch",
+  "type": "https://spacefast.com/docs/errors/tenant_id_mismatch",
   "title": "Tenant id mismatch",
   "status": 400,
   "detail": "The resource belongs to a different tenant than the request.",

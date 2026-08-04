@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/billing_store_not_configured",
+  "type": "https://spacefast.com/docs/errors/billing_store_not_configured",
   "title": "Billing store not configured",
   "status": 400,
   "detail": "App Store or Google Play billing is not configured on this deployment.",

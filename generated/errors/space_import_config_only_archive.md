@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_import_config_only_archive",
+  "type": "https://spacefast.com/docs/errors/space_import_config_only_archive",
   "title": "Space import config only archive",
   "status": 400,
   "detail": "The archive contains only configuration and cannot be imported as content.",

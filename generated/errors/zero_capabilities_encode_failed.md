@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_capabilities_encode_failed",
+  "type": "https://spacefast.com/docs/errors/zero_capabilities_encode_failed",
   "title": "Zero capabilities encode failed",
   "status": 400,
   "detail": "The runtime could not encode the Zero endpoint capabilities.",

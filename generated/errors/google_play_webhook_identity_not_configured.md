@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/google_play_webhook_identity_not_configured",
+  "type": "https://spacefast.com/docs/errors/google_play_webhook_identity_not_configured",
   "title": "Google play webhook identity not configured",
   "status": 400,
   "detail": "Google Play Pub/Sub push authentication is not configured on this deployment.",

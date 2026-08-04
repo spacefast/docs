@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/continuation_used",
+  "type": "https://spacefast.com/docs/errors/continuation_used",
   "title": "Continuation used",
   "status": 400,
   "detail": "This claim token was already exchanged for a durable access token.",

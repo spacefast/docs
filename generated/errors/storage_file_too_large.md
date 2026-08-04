@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_file_too_large",
+  "type": "https://spacefast.com/docs/errors/storage_file_too_large",
   "title": "Storage file too large",
   "status": 400,
   "detail": "The Zero storage object exceeds the 5 MiB file limit.",

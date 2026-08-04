@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_controlled_desired_state",
+  "type": "https://spacefast.com/docs/errors/dns_provider_controlled_desired_state",
   "title": "Dns provider controlled desired state",
   "status": 400,
   "detail": "This DNS provider is controlled through desired-state templates instead of direct record edits.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_quota_decrease_not_supported",
+  "type": "https://spacefast.com/docs/errors/storage_quota_decrease_not_supported",
   "title": "Storage quota decrease not supported",
   "status": 400,
   "detail": "This control cannot reduce a team's storage quota.",

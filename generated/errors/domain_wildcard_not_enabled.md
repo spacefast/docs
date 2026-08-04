@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_wildcard_not_enabled",
+  "type": "https://spacefast.com/docs/errors/domain_wildcard_not_enabled",
   "title": "Domain wildcard not enabled",
   "status": 400,
   "detail": "Wildcard hostnames are not enabled for this domain or plan.",

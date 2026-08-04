@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/slug_unavailable",
+  "type": "https://spacefast.com/docs/errors/slug_unavailable",
   "title": "Slug unavailable",
   "status": 400,
   "detail": "The slug is already in use within the relevant ownership scope.",

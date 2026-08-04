@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/version_not_finalizable",
+  "type": "https://spacefast.com/docs/errors/version_not_finalizable",
   "title": "Version not finalizable",
   "status": 400,
   "detail": "The version cannot be finalized in its current status.",

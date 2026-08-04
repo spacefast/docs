@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_record_conflicts_with_managed",
+  "type": "https://spacefast.com/docs/errors/dns_record_conflicts_with_managed",
   "title": "Dns record conflicts with managed",
   "status": 400,
   "detail": "The DNS change conflicts with a record Spacefast manages for this domain.",

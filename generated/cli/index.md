@@ -142,10 +142,6 @@ GLOBAL FLAGS
 - [`sf mcp install`](#sf-mcp-install)
 - [`sf mcp proxy`](#sf-mcp-proxy)
 - [`sf mcp status`](#sf-mcp-status)
-- [`sf mounts`](#sf-mounts)
-- [`sf mounts add PATH`](#sf-mounts-add-path)
-- [`sf mounts ls`](#sf-mounts-ls)
-- [`sf mounts rm ID`](#sf-mounts-rm-id)
 - [`sf open [TARGET]`](#sf-open-target)
 - [`sf operations [ID]`](#sf-operations-id)
 - [`sf pages`](#sf-pages)
@@ -2966,7 +2962,7 @@ EXAMPLES
 
   Inspect by live URL.
 
-    $ sf inspect https://docs.spacefast.com
+    $ sf inspect https://spacefast.com
 
   Inspect by ID in a specific team.
 
@@ -3115,7 +3111,7 @@ EXAMPLES
 
   Requests served for a space by URL.
 
-    $ sf logs https://docs.spacefast.com access
+    $ sf logs https://spacefast.com access
 
   Everything one request logged.
 
@@ -3323,102 +3319,6 @@ EXAMPLES
   $ sf mcp status --json
 
   $ sf mcp status --repair
-```
-
-## `sf mounts`
-
-Manage static mounts.
-
-```text
-USAGE
-  $ sf mounts [--profile <value>] [-y]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Manage static mounts.
-
-  Mount another same-team space's production channel at a path.
-```
-
-## `sf mounts add PATH`
-
-Add a static mount.
-
-```text
-USAGE
-  $ sf mounts add PATH --target <value> --version <value> [--profile <value>]
-    [-y] [-o <value>] [--space <value>]
-
-ARGUMENTS
-  PATH  Path prefix, for example /docs.
-
-FLAGS
-  --target=<value>   (required) Target space ID.
-  --version=<value>  (required) Ready website version ID that enables the mount when promoted.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Add a static mount.
-
-  Mount a same-team space's live production channel.
-```
-
-## `sf mounts ls`
-
-List static mounts.
-
-```text
-USAGE
-  $ sf mounts ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List static mounts.
-
-  List static mounts, active immutable versions, and production targets.
-
-ALIASES
-  $ sf mounts list
-```
-
-## `sf mounts rm ID`
-
-Remove a static mount.
-
-```text
-USAGE
-  $ sf mounts rm ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-ARGUMENTS
-  ID  Static mount ID.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Remove a static mount.
-
-  Remove a static mount from a space.
-
-ALIASES
-  $ sf mounts remove
-  $ sf mounts delete
 ```
 
 ## `sf open [TARGET]`

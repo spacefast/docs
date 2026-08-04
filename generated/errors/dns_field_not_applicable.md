@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_field_not_applicable",
+  "type": "https://spacefast.com/docs/errors/dns_field_not_applicable",
   "title": "Dns field not applicable",
   "status": 400,
   "detail": "The DNS field is not writable for this provider, record type, or management mode.",

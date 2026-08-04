@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_client_bundle_not_loaded",
+  "type": "https://spacefast.com/docs/errors/zero_client_bundle_not_loaded",
   "title": "Zero client bundle not loaded",
   "status": 400,
   "detail": "The local Zero dev client bundle has not been generated or loaded.",

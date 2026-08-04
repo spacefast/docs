@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/account_suspended",
+  "type": "https://spacefast.com/docs/errors/account_suspended",
   "title": "Account suspended",
   "status": 400,
   "detail": "This account is suspended for a policy or abuse violation and cannot be used.",

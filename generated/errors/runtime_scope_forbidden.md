@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_scope_forbidden",
+  "type": "https://spacefast.com/docs/errors/runtime_scope_forbidden",
   "title": "Runtime scope forbidden",
   "status": 400,
   "detail": "The runtime token's scope does not cover this path or action.",

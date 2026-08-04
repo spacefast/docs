@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_not_bound",
+  "type": "https://spacefast.com/docs/errors/domain_not_bound",
   "title": "Domain not bound",
   "status": 400,
   "detail": "The domain is not bound to this space.",

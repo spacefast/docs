@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/runtime_dev_unsupported",
+  "type": "https://spacefast.com/docs/errors/runtime_dev_unsupported",
   "title": "Runtime dev unsupported",
   "status": 400,
   "detail": "`sf dev` cannot run this runtime locally yet.",

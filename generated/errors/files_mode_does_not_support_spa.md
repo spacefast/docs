@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/files_mode_does_not_support_spa",
+  "type": "https://spacefast.com/docs/errors/files_mode_does_not_support_spa",
   "title": "Files mode does not support spa",
   "status": 400,
   "detail": "SPA fallback cannot be combined with files-listing mode.",

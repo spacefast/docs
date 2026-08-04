@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/free_external_proxy_disabled",
+  "type": "https://spacefast.com/docs/errors/free_external_proxy_disabled",
   "title": "Free external proxy disabled",
   "status": 400,
   "detail": "Proxy routes to external upstreams are not available on the Free plan.",

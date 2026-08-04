@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_archive_expanded_size_exceeded",
+  "type": "https://spacefast.com/docs/errors/publish_archive_expanded_size_exceeded",
   "title": "Publish archive expanded size exceeded",
   "status": 400,
   "detail": "The archive expands beyond the maximum allowed total size.",

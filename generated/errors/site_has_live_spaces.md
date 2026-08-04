@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/site_has_live_spaces",
+  "type": "https://spacefast.com/docs/errors/site_has_live_spaces",
   "title": "Site has live spaces",
   "status": 400,
   "detail": "The site still has live spaces assigned to it, so it cannot be deleted.",

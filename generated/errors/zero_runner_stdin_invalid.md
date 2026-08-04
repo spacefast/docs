@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_runner_stdin_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_runner_stdin_invalid",
   "title": "Zero runner stdin invalid",
   "status": 400,
   "detail": "The Zero runner could not read its request envelope.",

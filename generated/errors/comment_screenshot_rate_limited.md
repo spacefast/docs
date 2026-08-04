@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/comment_screenshot_rate_limited",
+  "type": "https://spacefast.com/docs/errors/comment_screenshot_rate_limited",
   "title": "Comment screenshot rate limited",
   "status": 400,
   "detail": "Too many comment screenshot uploads were attempted.",

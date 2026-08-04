@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_auth_unavailable",
+  "type": "https://spacefast.com/docs/errors/zero_auth_unavailable",
   "title": "Zero auth unavailable",
   "status": 400,
   "detail": "Hosted Zero auth is not configured for this deployment.",

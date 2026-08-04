@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_domain",
+  "type": "https://spacefast.com/docs/errors/invalid_domain",
   "title": "Invalid domain",
   "status": 400,
   "detail": "The domain reference is invalid.",

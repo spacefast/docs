@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/template_not_in_version",
+  "type": "https://spacefast.com/docs/errors/template_not_in_version",
   "title": "Template not in version",
   "status": 400,
   "detail": "The configuration names a template file the version does not contain.",

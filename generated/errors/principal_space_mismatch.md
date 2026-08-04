@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/principal_space_mismatch",
+  "type": "https://spacefast.com/docs/errors/principal_space_mismatch",
   "title": "Principal space mismatch",
   "status": 400,
   "detail": "The space does not belong to the principal in the request.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_realtime_unavailable",
+  "type": "https://spacefast.com/docs/errors/zero_realtime_unavailable",
   "title": "Zero realtime unavailable",
   "status": 400,
   "detail": "Zero realtime helpers are unavailable for this endpoint.",

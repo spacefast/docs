@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_blob_too_large",
+  "type": "https://spacefast.com/docs/errors/zero_blob_too_large",
   "title": "Zero blob too large",
   "status": 400,
   "detail": "The local Zero blob value exceeds the maximum allowed size.",

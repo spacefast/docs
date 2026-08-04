@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/version_closed",
+  "type": "https://spacefast.com/docs/errors/version_closed",
   "title": "Version closed",
   "status": 400,
   "detail": "The version's upload session is closed. No more files can be added.",

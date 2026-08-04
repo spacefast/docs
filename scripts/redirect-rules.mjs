@@ -69,7 +69,7 @@ function applyRule(rule, source) {
 }
 
 // The published tree is flat (Astro emits pages at the dist root), but every
-// public URL carries the deployment base for the static mount. Browser
+// public URL carries the deployment base for the composed Docs artifact. Browser
 // redirects are prefixed so they fire under the mount; the trailing rewrites
 // then map the remaining based URLs back onto the flat files.
 export function buildRoutingRules(redirects) {

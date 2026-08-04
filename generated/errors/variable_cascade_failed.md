@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/variable_cascade_failed",
+  "type": "https://spacefast.com/docs/errors/variable_cascade_failed",
   "title": "Variable cascade failed",
   "status": 400,
   "detail": "Republishing spaces after a variable change failed.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_field_unsupported",
+  "type": "https://spacefast.com/docs/errors/dns_provider_field_unsupported",
   "title": "Dns provider field unsupported",
   "status": 400,
   "detail": "The DNS provider does not support one of the requested record fields.",

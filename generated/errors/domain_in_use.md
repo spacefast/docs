@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_in_use",
+  "type": "https://spacefast.com/docs/errors/domain_in_use",
   "title": "Domain in use",
   "status": 400,
   "detail": "The domain is in use by another binding or assignment.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/data_location_immutable",
+  "type": "https://spacefast.com/docs/errors/data_location_immutable",
   "title": "Data location immutable",
   "status": 400,
   "detail": "This request tried to change data location through an immutable path.",

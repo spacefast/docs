@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/build_command_missing",
+  "type": "https://spacefast.com/docs/errors/build_command_missing",
   "title": "Build command missing",
   "status": 400,
   "detail": "A build or install command could not be found during the build run.",

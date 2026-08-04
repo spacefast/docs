@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_feature_descriptors",
+  "type": "https://spacefast.com/docs/errors/dns_provider_feature_descriptors",
   "title": "Dns provider feature descriptors",
   "status": 400,
   "detail": "This provider exposes domain features through capability descriptors.",

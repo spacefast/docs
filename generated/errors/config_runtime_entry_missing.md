@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_runtime_entry_missing",
+  "type": "https://spacefast.com/docs/errors/config_runtime_entry_missing",
   "title": "Config runtime entry missing",
   "status": 400,
   "detail": "The declared runtime has no entry module to compile.",

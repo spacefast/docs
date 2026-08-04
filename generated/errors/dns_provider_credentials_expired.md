@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_credentials_expired",
+  "type": "https://spacefast.com/docs/errors/dns_provider_credentials_expired",
   "title": "Dns provider credentials expired",
   "status": 400,
   "detail": "The DNS provider credentials have expired or were revoked.",

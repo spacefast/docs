@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/source_archive_decompression_timeout",
+  "type": "https://spacefast.com/docs/errors/source_archive_decompression_timeout",
   "title": "Source archive decompression timeout",
   "status": 400,
   "detail": "The uploaded source archive did not finish decompressing within the validation limit.",

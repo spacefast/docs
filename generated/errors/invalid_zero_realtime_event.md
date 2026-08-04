@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_zero_realtime_event",
+  "type": "https://spacefast.com/docs/errors/invalid_zero_realtime_event",
   "title": "Invalid zero realtime event",
   "status": 400,
   "detail": "The Zero realtime event payload is malformed or scoped to the wrong space.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_js_response_malformed",
+  "type": "https://spacefast.com/docs/errors/zero_js_response_malformed",
   "title": "Zero js response malformed",
   "status": 400,
   "detail": "The Zero endpoint returned a malformed runner response.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_continuation_token",
+  "type": "https://spacefast.com/docs/errors/invalid_continuation_token",
   "title": "Invalid continuation token",
   "status": 400,
   "detail": "The continuation token is invalid, expired, or already finished.",

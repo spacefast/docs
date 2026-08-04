@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_too_many_params",
+  "type": "https://spacefast.com/docs/errors/zero_db_too_many_params",
   "title": "Zero db too many params",
   "status": 400,
   "detail": "The Zero database operation has too many parameters.",

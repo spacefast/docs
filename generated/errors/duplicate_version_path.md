@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/duplicate_version_path",
+  "type": "https://spacefast.com/docs/errors/duplicate_version_path",
   "title": "Duplicate version path",
   "status": 400,
   "detail": "The version upload declares the same file path twice.",

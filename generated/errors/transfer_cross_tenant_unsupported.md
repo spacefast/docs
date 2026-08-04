@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/transfer_cross_tenant_unsupported",
+  "type": "https://spacefast.com/docs/errors/transfer_cross_tenant_unsupported",
   "title": "Transfer cross tenant unsupported",
   "status": 400,
   "detail": "Spaces cannot be transferred across tenants.",

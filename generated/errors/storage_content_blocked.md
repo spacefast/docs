@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/storage_content_blocked",
+  "type": "https://spacefast.com/docs/errors/storage_content_blocked",
   "title": "Storage content blocked",
   "status": 400,
   "detail": "The object contains executable or active web content that Zero storage does not serve.",

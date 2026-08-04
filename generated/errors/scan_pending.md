@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/scan_pending",
+  "type": "https://spacefast.com/docs/errors/scan_pending",
   "title": "Scan pending",
   "status": 400,
   "detail": "The content is still being scanned for safety and cannot be served yet.",

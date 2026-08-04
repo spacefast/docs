@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/transfer_verify_failed",
+  "type": "https://spacefast.com/docs/errors/transfer_verify_failed",
   "title": "Transfer verify failed",
   "status": 400,
   "detail": "The target runtime could not verify transferred blob content.",

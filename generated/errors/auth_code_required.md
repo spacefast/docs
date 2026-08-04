@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/auth_code_required",
+  "type": "https://spacefast.com/docs/errors/auth_code_required",
   "title": "Auth code required",
   "status": 400,
   "detail": "An authorization code is required to complete this step.",

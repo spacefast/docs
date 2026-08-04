@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_realtime_forbidden",
+  "type": "https://spacefast.com/docs/errors/zero_realtime_forbidden",
   "title": "Zero realtime forbidden",
   "status": 400,
   "detail": "The Zero realtime event intake credential is invalid.",

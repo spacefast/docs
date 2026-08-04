@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/config_runtime_invalid_kind",
+  "type": "https://spacefast.com/docs/errors/config_runtime_invalid_kind",
   "title": "Config runtime invalid kind",
   "status": 400,
   "detail": "The runtime block in the space configuration declares an unknown kind.",

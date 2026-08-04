@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/publish_config_unsupported",
+  "type": "https://spacefast.com/docs/errors/publish_config_unsupported",
   "title": "Publish config unsupported",
   "status": 400,
   "detail": "The publish carries configuration this endpoint does not support.",

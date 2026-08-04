@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_target_denied",
+  "type": "https://spacefast.com/docs/errors/zero_db_target_denied",
   "title": "Zero db target denied",
   "status": 400,
   "detail": "The application Zero database target is not a public TCP address.",

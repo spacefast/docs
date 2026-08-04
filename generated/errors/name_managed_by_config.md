@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/name_managed_by_config",
+  "type": "https://spacefast.com/docs/errors/name_managed_by_config",
   "title": "Name managed by config",
   "status": 400,
   "detail": "The space name is managed by sf.jsonc while its live version declares one.",

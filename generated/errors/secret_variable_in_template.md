@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/secret_variable_in_template",
+  "type": "https://spacefast.com/docs/errors/secret_variable_in_template",
   "title": "Secret variable in template",
   "status": 400,
   "detail": "A secret variable was referenced in a template, which is blocked.",

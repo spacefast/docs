@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_replace_all_requires_fresh_plan",
+  "type": "https://spacefast.com/docs/errors/dns_provider_replace_all_requires_fresh_plan",
   "title": "Dns provider replace all requires fresh plan",
   "status": 400,
   "detail": "This provider requires a fresh full-zone plan before replacing DNS records.",

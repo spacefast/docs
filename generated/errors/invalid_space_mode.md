@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_space_mode",
+  "type": "https://spacefast.com/docs/errors/invalid_space_mode",
   "title": "Invalid space mode",
   "status": 400,
   "detail": "The requested space serving mode is not supported.",

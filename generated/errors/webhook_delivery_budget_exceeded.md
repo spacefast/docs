@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/webhook_delivery_budget_exceeded",
+  "type": "https://spacefast.com/docs/errors/webhook_delivery_budget_exceeded",
   "title": "Webhook delivery budget exceeded",
   "status": 400,
   "detail": "The webhook exhausted its delivery budget and was paused.",

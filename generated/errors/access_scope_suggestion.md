@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/access_scope_suggestion",
+  "type": "https://spacefast.com/docs/errors/access_scope_suggestion",
   "title": "Access scope suggestion",
   "status": 400,
   "detail": "Published dependencies cluster under paths that may be useful as explicit public scopes.",

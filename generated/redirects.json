@@ -80,11 +80,6 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/api/operations/deletev1spacesbyspaceidmountsbymountid",
-    "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/api/operations/deletev1spacesbyspaceidpassword-credentialsbycredentialid",
     "status": 301,
     "to": "/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -483,11 +478,6 @@
     "from": "/api/operations/getv1spacesbyspaceidmachine-credentials",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/api/operations/getv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/api/operations/getv1spacesbyspaceidpassword-credentials",
@@ -1240,11 +1230,6 @@
     "to": "/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
   },
   {
-    "from": "/api/operations/postv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidmounts"
-  },
-  {
     "from": "/api/operations/postv1spacesbyspaceidopen",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidopen"
@@ -1770,11 +1755,6 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/api/reference/operations/deletev1spacesbyspaceidmountsbymountid",
-    "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/api/reference/operations/deletev1spacesbyspaceidpassword-credentialsbycredentialid",
     "status": 301,
     "to": "/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -2173,11 +2153,6 @@
     "from": "/api/reference/operations/getv1spacesbyspaceidmachine-credentials",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/api/reference/operations/getv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/api/reference/operations/getv1spacesbyspaceidpassword-credentials",
@@ -2928,11 +2903,6 @@
     "from": "/api/reference/operations/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/api/reference/operations/postv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/api/reference/operations/postv1spacesbyspaceidopen",
@@ -3850,11 +3820,6 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_mounts_by_mount_id",
-    "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_password_credentials_by_credential_id",
     "status": 301,
     "to": "/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -4053,11 +4018,6 @@
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_password_credentials",
@@ -4338,11 +4298,6 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials_by_credential_id_rotate",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_open",
@@ -5170,11 +5125,6 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/platform-api/operations/deletev1spacesbyspaceidmountsbymountid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/platform-api/operations/deletev1spacesbyspaceidpassword-credentialsbycredentialid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -5643,11 +5593,6 @@
     "from": "/platform-api/operations/getv1spacesbyspaceidmachine-credentials",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/platform-api/operations/getv1spacesbyspaceidpassword-credentials",
@@ -6423,11 +6368,6 @@
     "from": "/platform-api/operations/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/platform-api/operations/postv1spacesbyspaceidopen",
@@ -7505,11 +7445,6 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_mounts_by_mount_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_password_credentials_by_credential_id",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -7713,11 +7648,6 @@
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_password_credentials",
@@ -8013,11 +7943,6 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials_by_credential_id_rotate",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_open",
@@ -8910,11 +8835,6 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidmountsbymountid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidpassword-credentialsbycredentialid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -9383,11 +9303,6 @@
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidmachine-credentials",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidpassword-credentials",
@@ -10163,11 +10078,6 @@
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidmounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidopen",
@@ -11245,11 +11155,6 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmachine-credentialsbycredentialid"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_mounts_by_mount_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidmountsbymountid"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_password_credentials_by_credential_id",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidpassword-credentialsbycredentialid"
@@ -11453,11 +11358,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmachine-credentials"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidmounts"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_password_credentials",
@@ -11753,11 +11653,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials_by_credential_id_rotate",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmachine-credentialsbycredentialidrotate"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_mounts",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidmounts"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_open",

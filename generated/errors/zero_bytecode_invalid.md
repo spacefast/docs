@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_bytecode_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_bytecode_invalid",
   "title": "Zero bytecode invalid",
   "status": 400,
   "detail": "The Zero endpoint bytecode could not be loaded by QuickJS.",

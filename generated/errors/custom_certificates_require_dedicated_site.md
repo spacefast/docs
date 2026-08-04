@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/custom_certificates_require_dedicated_site",
+  "type": "https://spacefast.com/docs/errors/custom_certificates_require_dedicated_site",
   "title": "Custom certificates require dedicated site",
   "status": 400,
   "detail": "Custom certificates are unavailable while this space uses shared placement.",

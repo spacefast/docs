@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/source_archive_validation_busy",
+  "type": "https://spacefast.com/docs/errors/source_archive_validation_busy",
   "title": "Source archive validation busy",
   "status": 400,
   "detail": "The service is already validating its maximum number of source archives.",

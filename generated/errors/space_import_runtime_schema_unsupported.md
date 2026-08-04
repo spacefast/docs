@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/space_import_runtime_schema_unsupported",
+  "type": "https://spacefast.com/docs/errors/space_import_runtime_schema_unsupported",
   "title": "Space import runtime schema unsupported",
   "status": 400,
   "detail": "The export was produced by an unsupported runtime schema version.",

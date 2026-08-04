@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/upload_size_mismatch",
+  "type": "https://spacefast.com/docs/errors/upload_size_mismatch",
   "title": "Upload size mismatch",
   "status": 400,
   "detail": "An uploaded file's size does not match the declared size.",

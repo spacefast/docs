@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_log_query_invalid",
+  "type": "https://spacefast.com/docs/errors/zero_log_query_invalid",
   "title": "Zero log query invalid",
   "status": 400,
   "detail": "The Zero log query parameters are invalid.",

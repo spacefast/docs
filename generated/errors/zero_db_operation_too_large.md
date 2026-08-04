@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_db_operation_too_large",
+  "type": "https://spacefast.com/docs/errors/zero_db_operation_too_large",
   "title": "Zero db operation too large",
   "status": 400,
   "detail": "The Zero database operation payload is too large.",

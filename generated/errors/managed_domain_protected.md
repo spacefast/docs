@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/managed_domain_protected",
+  "type": "https://spacefast.com/docs/errors/managed_domain_protected",
   "title": "Managed domain protected",
   "status": 400,
   "detail": "This is a system-managed view.fast hostname and cannot be mutated like a custom domain.",

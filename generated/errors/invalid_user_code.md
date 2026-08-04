@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/invalid_user_code",
+  "type": "https://spacefast.com/docs/errors/invalid_user_code",
   "title": "Invalid user code",
   "status": 400,
   "detail": "The user code does not match a pending device login.",

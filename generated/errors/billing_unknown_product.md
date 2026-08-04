@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/billing_unknown_product",
+  "type": "https://spacefast.com/docs/errors/billing_unknown_product",
   "title": "Billing unknown product",
   "status": 400,
   "detail": "The purchased store product does not map to any plan sold by this deployment.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_response_too_large",
+  "type": "https://spacefast.com/docs/errors/zero_response_too_large",
   "title": "Zero response too large",
   "status": 400,
   "detail": "The Zero endpoint response exceeds the runtime size limit.",

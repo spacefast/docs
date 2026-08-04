@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/template_variable_unresolved",
+  "type": "https://spacefast.com/docs/errors/template_variable_unresolved",
   "title": "Template variable unresolved",
   "status": 400,
   "detail": "A template references a variable that has no value.",

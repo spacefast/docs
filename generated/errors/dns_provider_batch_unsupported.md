@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_provider_batch_unsupported",
+  "type": "https://spacefast.com/docs/errors/dns_provider_batch_unsupported",
   "title": "Dns provider batch unsupported",
   "status": 400,
   "detail": "The connected DNS provider cannot apply this batch with the required semantics.",

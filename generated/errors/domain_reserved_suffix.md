@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/domain_reserved_suffix",
+  "type": "https://spacefast.com/docs/errors/domain_reserved_suffix",
   "title": "Domain reserved suffix",
   "status": 400,
   "detail": "The hostname is under a Spacefast-managed suffix and cannot be added as a domain.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/nameserver_delegation_required",
+  "type": "https://spacefast.com/docs/errors/nameserver_delegation_required",
   "title": "Nameserver delegation required",
   "status": 400,
   "detail": "This operation requires the domain to be delegated to Spacefast nameservers.",

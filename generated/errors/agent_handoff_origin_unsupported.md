@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/agent_handoff_origin_unsupported",
+  "type": "https://spacefast.com/docs/errors/agent_handoff_origin_unsupported",
   "title": "Agent handoff origin unsupported",
   "status": 400,
   "detail": "The dashboard origin this deployment is configured with cannot mint canonical agent handoff links.",

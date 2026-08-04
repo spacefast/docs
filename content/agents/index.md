@@ -2,18 +2,28 @@
 title: Set up an agent
 sidebar:
   label: Overview
-description: Install the Spacefast CLI, skill, and MCP for any coding agent with one command.
+description: One prompt sets up any agent that can fetch a URL; plugins and one-click installs cover the rest.
 ---
 
 Agents publish through the same REST API and CLI as humans. There is no
-separate agent product to learn. The fastest handoff is a direct instruction:
+separate agent product to learn. For any agent that can fetch a URL and act on
+it, setup is one prompt:
 
 ```text
-fetch https://spacefast.com/ai
-and publish this space to Spacefast
+Fetch https://spacefast.com/setup.md
 ```
 
-For a durable setup, give the agent the CLI, the skill, and MCP.
+That page teaches the agent to publish with a single HTTP request — no MCP, no
+CLI required — and, when the agent has no tools at all, to tell the user what
+unlocks publishing instead of improvising.
+
+Some agents have a better path than the prompt: a plugin with in-agent
+commands (Claude Code, Codex, ChatGPT Work) or a one-click install (Claude,
+Cursor, VS Code, Poke). Each agent's ranked best path lives on its own page
+under [spacefast.com/setup](https://spacefast.com/setup).
+
+The sections below are the durable, advanced lanes: the CLI, the setup
+command, skills, and MCP.
 
 ## Install the CLI
 
@@ -70,15 +80,15 @@ from docs.
 ## Docs as Markdown
 
 Every developer page is fetchable as plain Markdown. Append `.md` to any URL
-(for example `https://docs.spacefast.com/cli.md` or
-`https://docs.spacefast.com/errors/rate_limited.md`) to get the exact
+(for example `https://spacefast.com/docs/cli.md` or
+`https://spacefast.com/docs/errors/rate_limited.md`) to get the exact
 Markdown source. Requests from known AI-agent user agents receive that form at
 the HTML URL automatically. Requests whose `Accept` header prefers Markdown also
 receive that form.
 
 Machine-readable docs discovery lives at
-[`llms.txt`](https://docs.spacefast.com/llms.txt) and
-[`llms-full.txt`](https://docs.spacefast.com/llms-full.txt). They are generated
+[`llms.txt`](https://spacefast.com/docs/llms.txt) and
+[`llms-full.txt`](https://spacefast.com/docs/llms-full.txt). They are generated
 from the same Blume sources as these pages. Product-level discovery lives on
 the product origin: the
 [agent card](https://spacefast.com/.well-known/agent-card.json),

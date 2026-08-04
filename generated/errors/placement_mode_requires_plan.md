@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/placement_mode_requires_plan",
+  "type": "https://spacefast.com/docs/errors/placement_mode_requires_plan",
   "title": "Placement mode requires plan",
   "status": 400,
   "detail": "The requested placement mode requires a plan entitlement.",

@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/proxy_upstream_denied",
+  "type": "https://spacefast.com/docs/errors/proxy_upstream_denied",
   "title": "Proxy upstream denied",
   "status": 400,
   "detail": "The proxy upstream is on a denied network and cannot be used.",

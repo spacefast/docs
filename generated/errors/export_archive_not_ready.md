@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/export_archive_not_ready",
+  "type": "https://spacefast.com/docs/errors/export_archive_not_ready",
   "title": "Export archive not ready",
   "status": 400,
   "detail": "The export archive is still being prepared.",

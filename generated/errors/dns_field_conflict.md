@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/dns_field_conflict",
+  "type": "https://spacefast.com/docs/errors/dns_field_conflict",
   "title": "Dns field conflict",
   "status": 400,
   "detail": "Two DNS fields cannot be used together for this provider or record type.",

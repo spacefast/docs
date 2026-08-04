@@ -20,7 +20,7 @@ offending field in the request body, and `details` may carry structured context.
 
 ```json
 {
-  "type": "https://docs.spacefast.com/docs/errors/zero_query_name_missing",
+  "type": "https://spacefast.com/docs/errors/zero_query_name_missing",
   "title": "Zero query name missing",
   "status": 400,
   "detail": "A Zero realtime query subscription did not include a query name.",
