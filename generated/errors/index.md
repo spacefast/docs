@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with their owning API surface.
 
-There are 480 error codes in the registry.
+There are 479 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -190,7 +190,6 @@ There are 480 error codes in the registry.
 | [`manifest_body_too_large`](/errors/manifest_body_too_large) | The upload manifest body exceeds the maximum size. |
 | [`manifest_duplicate_path`](/errors/manifest_duplicate_path) | The upload manifest declares the same path more than once. |
 | [`manifest_too_many_files`](/errors/manifest_too_many_files) | The upload manifest declares more files than the allowed ceiling. |
-| [`mcp_acted_for_team_deleted`](/errors/mcp_acted_for_team_deleted) | This MCP approval or execution run is scoped only to a team that is now deleted. It can no longer be approved, denied, or canceled. |
 | [`member_already_exists`](/errors/member_already_exists) | This user is already a member of the team. |
 | [`method_not_allowed`](/errors/method_not_allowed) | The requested HTTP method is not supported for this endpoint. |
 | [`missing_route_param`](/errors/missing_route_param) | A required route parameter is missing from the request path. |

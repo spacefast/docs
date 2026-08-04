@@ -1574,8 +1574,8 @@ GLOBAL FLAGS
 DESCRIPTION
   Run the local agent/MCP dogfood demo.
 
-  Run a local dogfood check for Spacefast agent UX: On-Device MCP HTTP health, code-mode approval, resume, and workspace
-  file editing.
+  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated Executor operations, and local
+  publishing.
 
 EXAMPLES
   Run the local agent/MCP dogfood demo.
@@ -3353,7 +3353,7 @@ FLAGS
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --transport=<option>      MCP transport to run. `http` is streamable HTTP.
                             <options: stdio|http|streamable-http>
-  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
 GLOBAL FLAGS
   --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
@@ -3395,7 +3395,7 @@ FLAGS
   --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
   --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
-  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
 GLOBAL FLAGS
   --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
@@ -3428,7 +3428,7 @@ FLAGS
   --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
   --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
-  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
 GLOBAL FLAGS
   --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
