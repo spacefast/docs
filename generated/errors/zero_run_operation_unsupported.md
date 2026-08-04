@@ -9,20 +9,23 @@ The hosted Zero runtime does not support this run operation yet.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "zero_run_operation_unsupported",
-    "message": "The hosted Zero runtime does not support this run operation yet.",
-    "docsUrl": "https://spacefast.com/docs/errors/zero_run_operation_unsupported",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/zero_run_operation_unsupported",
+  "title": "Zero run operation unsupported",
+  "status": 400,
+  "detail": "The hosted Zero runtime does not support this run operation yet.",
+  "code": "zero_run_operation_unsupported",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

@@ -5,24 +5,27 @@ description: "Uploading the publish content failed."
 
 Uploading the publish content failed.
 
-**How to resolve:** Retry the publish; partial uploads are resumable through the upload session.
+**How to resolve:** Retry the publish. Partial uploads are resumable through the upload session.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "publish_upload_failed",
-    "message": "Uploading the publish content failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_upload_failed",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/publish_upload_failed",
+  "title": "Publish upload failed",
+  "status": 400,
+  "detail": "Uploading the publish content failed.",
+  "code": "publish_upload_failed",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

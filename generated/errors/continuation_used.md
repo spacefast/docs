@@ -5,24 +5,27 @@ description: "This claim token was already exchanged for a durable access token.
 
 This claim token was already exchanged for a durable access token.
 
-**How to resolve:** Authenticate with the exchanged access token (check .spacefast/state.json or wherever it was saved). If it was lost, ask the space owner to mint a new access token.
+**How to resolve:** Authenticate with the exchanged access token (check .spacefast/state.json or wherever it was saved). If it was lost, ask the space owner to create a new API key.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "continuation_used",
-    "message": "This claim token was already exchanged for a durable access token.",
-    "docsUrl": "https://spacefast.com/docs/errors/continuation_used",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/continuation_used",
+  "title": "Continuation used",
+  "status": 400,
+  "detail": "This claim token was already exchanged for a durable access token.",
+  "code": "continuation_used",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

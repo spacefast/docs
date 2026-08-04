@@ -9,20 +9,23 @@ This anonymous space expired before it was claimed.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "anonymous_expired",
-    "message": "This anonymous space expired before it was claimed.",
-    "docsUrl": "https://spacefast.com/docs/errors/anonymous_expired",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/anonymous_expired",
+  "title": "Anonymous expired",
+  "status": 400,
+  "detail": "This anonymous space expired before it was claimed.",
+  "code": "anonymous_expired",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

@@ -9,20 +9,23 @@ This space was disabled by an abuse takedown and cannot be served or modified.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "abuse_takedown",
-    "message": "This space was disabled by an abuse takedown and cannot be served or modified.",
-    "docsUrl": "https://spacefast.com/docs/errors/abuse_takedown",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/abuse_takedown",
+  "title": "Abuse takedown",
+  "status": 400,
+  "detail": "This space was disabled by an abuse takedown and cannot be served or modified.",
+  "code": "abuse_takedown",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

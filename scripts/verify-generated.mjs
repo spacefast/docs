@@ -14,9 +14,7 @@ async function filesUnder(directory, relative = "") {
     withFileTypes: true,
   });
   const files = [];
-  for (const entry of entries.toSorted((left, right) =>
-    left.name.localeCompare(right.name),
-  )) {
+  for (const entry of entries.toSorted((left, right) => left.name.localeCompare(right.name))) {
     const child = path.join(relative, entry.name);
     if (entry.isSymbolicLink()) {
       throw new Error(`generated snapshot contains a symlink: ${child}`);
@@ -59,9 +57,7 @@ if (JSON.stringify(actualFiles) !== JSON.stringify(expectedFiles)) {
 for (const entry of manifest.files) {
   const content = await readFile(path.join(root, entry.path));
   if (content.byteLength !== entry.bytes || sha256(content) !== entry.sha256) {
-    throw new Error(
-      `generated docs artifact does not match manifest: ${entry.path}`,
-    );
+    throw new Error(`generated docs artifact does not match manifest: ${entry.path}`);
   }
 }
 
@@ -69,9 +65,23 @@ if (
   manifest.counts.apiOperations < 1 ||
   manifest.counts.platformOperations < 1 ||
   manifest.counts.errorCodes < 1 ||
-  manifest.counts.redirects < 1
+  manifest.counts.redirects < 1 ||
+  (manifest.counts.changelogPackages ?? 0) < 1 ||
+  (manifest.counts.changelogVersions ?? 0) < 1
 ) {
   throw new Error("generated docs manifest has an empty reference surface");
+}
+if (
+  actualFiles.filter((file) => file.startsWith("changelog/packages/")).length <
+  manifest.counts.changelogPackages + 1
+) {
+  throw new Error("generated package changelog reference is incomplete");
+}
+if (
+  actualFiles.filter((file) => /^changelog\/v[^/]+\.md$/u.test(file)).length !==
+  manifest.counts.changelogVersions
+) {
+  throw new Error("generated release changelog reference is incomplete");
 }
 if (
   actualFiles.filter((file) => /^errors\/[^/]+\.md$/u.test(file)).length !==
@@ -79,10 +89,7 @@ if (
 ) {
   throw new Error("generated error reference is incomplete");
 }
-const redirects = await readFile(
-  path.join(root, "redirects.json"),
-  "utf8",
-).then(JSON.parse);
+const redirects = await readFile(path.join(root, "redirects.json"), "utf8").then(JSON.parse);
 if (
   redirects.length !== manifest.counts.redirects ||
   redirects.some(
@@ -98,5 +105,5 @@ if (
 }
 
 console.log(
-  `Generated references verified: ${manifest.files.length} artifacts, ${manifest.counts.apiOperations} API operations, ${manifest.counts.platformOperations} platform operations, ${manifest.counts.errorCodes} error codes, ${manifest.counts.redirects} redirects.`,
+  `Generated references verified: ${manifest.files.length} artifacts, ${manifest.counts.apiOperations} API operations, ${manifest.counts.platformOperations} platform operations, ${manifest.counts.errorCodes} error codes, ${manifest.counts.changelogPackages} packages, ${manifest.counts.changelogVersions} releases, ${manifest.counts.redirects} redirects.`,
 );

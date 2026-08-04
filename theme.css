@@ -1,0 +1,146 @@
+@font-face {
+  font-display: swap;
+  font-family: "Recoleta";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://s1.wp.com/i/fonts/recoleta/400.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Haskoy";
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("/fonts/haskoy-latin-variable.woff2") format("woff2");
+}
+
+:root {
+  --blume-font-body-src: "Haskoy", ui-sans-serif, system-ui, sans-serif;
+  --blume-font-display-src: "Recoleta", Georgia, serif;
+  --blume-font-mono-src: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+[data-blume-header] > a:first-of-type {
+  font-family: "Haskoy", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.prose :where(h1, h2, h3) {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.prose :where(.config-playground, .config-playground *) {
+  box-sizing: border-box;
+}
+
+/*
+ * Shared A8C cookie banner (loaded from https://spacefast.com/cookie-banner.js)
+ * ships marketing styles. Map its tokens to Blume and override the brutalist
+ * chrome so the banner belongs on docs in light and dark mode.
+ */
+:root {
+  --ink: var(--blume-foreground);
+  --paper: var(--blume-background);
+  --salmon: var(--blume-accent);
+  --salmon-deep: var(--blume-accent);
+  --primary-text: var(--blume-accent);
+  --marketing-sans: var(--blume-font-body);
+  --marketing-mono: var(--blume-font-mono);
+}
+
+html body .a8c-cookie-banner {
+  border: 1px solid var(--blume-border) !important;
+  border-radius: var(--blume-radius) !important;
+  background: var(--blume-background) !important;
+  color: var(--blume-foreground) !important;
+  box-shadow:
+    0 1px 2px color-mix(in oklab, var(--blume-foreground) 6%, transparent),
+    0 16px 40px color-mix(in oklab, var(--blume-foreground) 10%, transparent) !important;
+}
+
+html body .a8c-cookie-banner p,
+html body .a8c-cookie-banner .a8c-cookie-banner__simple-text-description,
+html body .a8c-cookie-banner .a8c-cookie-banner__option-description,
+html body .a8c-cookie-banner .a8c-cookie-banner__options-lead-text {
+  color: var(--blume-muted-foreground) !important;
+}
+
+html body .a8c-cookie-banner .a8c-cookie-banner__option-description strong {
+  color: var(--blume-foreground) !important;
+  font-family: var(--blume-font-body) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+}
+
+html body .a8c-cookie-banner .a8c-cookie-banner__options-lead-text {
+  border-bottom-color: var(--blume-border) !important;
+}
+
+html body .a8c-cookie-banner a.a8c-cookie-banner__button,
+html body .a8c-cookie-banner a.a8c-cookie-banner__accept-selection-button {
+  border: 1px solid var(--blume-border) !important;
+  border-radius: var(--blume-radius) !important;
+  font-family: var(--blume-font-body) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease !important;
+}
+
+html body .a8c-cookie-banner a.a8c-cookie-banner__button:hover,
+html body .a8c-cookie-banner a.a8c-cookie-banner__button:focus-visible,
+html body .a8c-cookie-banner a.a8c-cookie-banner__accept-selection-button:hover,
+html body .a8c-cookie-banner a.a8c-cookie-banner__accept-selection-button:focus-visible {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+html body .a8c-cookie-banner a.a8c-cookie-banner__accept-all-button,
+html body .a8c-cookie-banner a.a8c-cookie-banner__accept-selection-button {
+  border-color: var(--blume-accent) !important;
+  background: var(--blume-accent) !important;
+  color: var(--blume-accent-foreground) !important;
+}
+
+html body .a8c-cookie-banner a.a8c-cookie-banner__secondary-button,
+html body .a8c-cookie-banner a.a8c-cookie-banner__customize-button,
+html body .a8c-cookie-banner a.a8c-cookie-banner__essentials-only-button {
+  background: transparent !important;
+  color: var(--blume-foreground) !important;
+}
+
+html body .a8c-cookie-banner a.a8c-cookie-banner__secondary-button:hover,
+html body .a8c-cookie-banner a.a8c-cookie-banner__customize-button:hover,
+html body .a8c-cookie-banner a.a8c-cookie-banner__essentials-only-button:hover {
+  background: var(--blume-muted) !important;
+}
+
+html body .a8c-cookie-banner a:not(.a8c-cookie-banner__button):not(
+    .a8c-cookie-banner__accept-selection-button
+  ) {
+  color: var(--blume-accent) !important;
+}
+
+html body .a8c-cookie-banner .a8c-cookie-banner__options-selection input[type="checkbox"]:checked:after {
+  border-color: var(--blume-accent) !important;
+  background: var(--blume-accent) !important;
+}
+
+html body .a8c-cookie-banner .a8c-cookie-banner__options-selection input[type="checkbox"]:checked:before {
+  background: var(--blume-accent-foreground) !important;
+}
+
+:root[data-theme="dark"] body .a8c-cookie-banner {
+  box-shadow:
+    0 1px 2px color-mix(in oklab, black 35%, transparent),
+    0 18px 48px color-mix(in oklab, black 45%, transparent) !important;
+}

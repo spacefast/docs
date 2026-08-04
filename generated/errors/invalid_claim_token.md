@@ -9,20 +9,23 @@ The claim token is invalid or does not match this space.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "invalid_claim_token",
-    "message": "The claim token is invalid or does not match this space.",
-    "docsUrl": "https://spacefast.com/docs/errors/invalid_claim_token",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/invalid_claim_token",
+  "title": "Invalid claim token",
+  "status": 400,
+  "detail": "The claim token is invalid or does not match this space.",
+  "code": "invalid_claim_token",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

@@ -1,21 +1,35 @@
 import { defineConfig } from "blume";
 
+const deploymentBase = "/docs";
+
 export default defineConfig({
-  title: "Spacefast Developers",
-  description: "Build with Spacefast through the API, CLI, SDK, MCP, and Platform API.",
+  title: "Spacefast Docs",
+  description: "Publish sites and build apps with Spacefast through the CLI, API, SDK, and MCP.",
+  logo: { href: "/", text: "Spacefast Docs" },
+  theme: {
+    accent: { dark: "#ff7657", light: "#d93614" },
+    background: { dark: "#111114", light: "#fbfaf7" },
+    fonts: { body: "inter", display: "inter-tight", mono: "ibm-plex-mono" },
+    mode: "system",
+    radius: "sm",
+  },
   analytics: {
     posthog: {
       key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT",
     },
     scripts: [
       {
+        src: "https://spacefast.com/cookie-banner.js",
+        strategy: "defer",
+      },
+      {
         attributes: { type: "module" },
         content: `
-          import("/pagefind/pagefind.js")
+          import("${deploymentBase}/pagefind/pagefind.js")
             .then(async (pagefind) => {
               await pagefind.options({
                 indexWeight: 1.15,
-                mergeFilter: { source: "Developers" },
+                mergeFilter: { source: "Docs" },
               });
               await pagefind.mergeIndex("https://spacefast.com/pagefind", {
                 indexWeight: 1,
@@ -40,63 +54,129 @@ export default defineConfig({
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
-      { label: "Help", href: "https://spacefast.com/help", icon: "book-open" },
-      { label: "Recipes", href: "https://spacefast.com/recipes", icon: "sparkles" },
       { label: "Agent setup", href: "https://spacefast.com/setup", icon: "bot" },
     ],
     repo: true,
     sidebar: {
-      display: "group",
+      display: "page",
       items: [
+        "/",
         {
-          label: "Overview",
-          collapsed: false,
-          items: ["/", "/quickstart"],
+          label: "Get started",
+          root: "/getting-started/quickstart",
+          items: [
+            "/getting-started/quickstart",
+            "/getting-started/agents",
+            "/getting-started/browser-terminal",
+          ],
         },
         {
-          label: "Features",
+          label: "Publishing",
+          root: "/publishing",
+          items: [
+            "/publishing",
+            "/publishing/anonymous",
+            "/publishing/push-new",
+            "/publishing/git",
+            "/publishing/versions",
+            "/publishing/channels",
+            "/publishing/rollback",
+            {
+              label: "Frameworks",
+              root: "/publishing/frameworks/jekyll",
+              items: [
+                "/publishing/frameworks/jekyll",
+                "/publishing/frameworks/astro",
+                "/publishing/frameworks/vite",
+                "/publishing/frameworks/nextjs",
+              ],
+            },
+            {
+              label: "Move from another host",
+              root: "/publishing/migrate",
+              items: [
+                "/publishing/migrate",
+                "/publishing/migrate/here-now",
+                "/publishing/migrate/netlify",
+                "/publishing/migrate/cloudflare-pages",
+                "/publishing/migrate/github-pages",
+                "/publishing/migrate/vercel",
+              ],
+            },
+          ],
+        },
+        {
+          label: "Spaces",
+          root: "/spaces",
           items: [
             "/spaces",
-            "/publishing",
-            "/versions",
-            "/builds",
-            "/domains",
-            "/access",
-            "/collab",
+            "/spaces/files",
+            "/spaces/access",
+            "/spaces/comments",
+            "/spaces/domains",
+            "/spaces/settings",
+            "/spaces/apply",
+            "/spaces/variables",
+            "/spaces/customization",
+            "/spaces/visitor-pages",
+            "/spaces/traffic",
+            "/spaces/progress",
+            "/spaces/activity",
+            "/spaces/rename",
+            "/spaces/move-copy",
+            {
+              label: "Routing",
+              root: "/spaces/redirects",
+              items: [
+                "/spaces/redirects",
+                "/spaces/headers",
+                "/spaces/proxy-routes",
+                "/spaces/mounts",
+              ],
+            },
+            {
+              label: "Connect and automate",
+              root: "/spaces/webhooks",
+              items: [
+                "/spaces/webhooks",
+                "/spaces/wordpress",
+                "/spaces/tag-manager",
+                "/spaces/image-acceleration",
+              ],
+            },
           ],
         },
         {
-          label: "Interfaces",
-          items: ["/api", "/api/reference", "/cli", "/sdk", "/mcp", "/errors"],
-        },
-        {
-          label: "Configure",
+          label: "Apps",
+          root: "/apps",
           items: [
-            "/configuration",
-            "/pages",
-            "/redirects",
-            "/headers",
-            "/proxy-routes",
-            "/webhooks",
+            "/apps",
+            "/apps/functions",
+            "/apps/zero",
+            "/apps/zero/capsule",
+            "/apps/zero/authentication",
+            "/apps/zero/database",
+            "/apps/zero/storage",
           ],
         },
         {
-          label: "Integrations",
-          items: ["/integrations/vite", "/integrations/nextjs", "/image-acceleration"],
-        },
-        {
-          label: "Migrate",
+          label: "Account & teams",
+          root: "/account",
           items: [
-            "/migrate-from",
-            "/migrate-from/here-now",
-            "/migrate-from/netlify",
-            "/migrate-from/cloudflare-pages",
-            "/migrate-from/github-pages",
-            "/migrate-from/vercel",
+            "/account",
+            "/account/sign-in",
+            "/account/security",
+            "/account/notifications",
+            "/account/connections",
+            "/account/teams",
+            "/account/api-keys",
+            "/account/billing",
+            "/account/limits",
           ],
         },
         {
           label: "Platforms",
+          root: "/platforms",
           items: [
             "/platforms",
             "/platforms/authentication",
@@ -105,15 +185,25 @@ export default defineConfig({
           ],
         },
         {
-          label: "More",
-          items: ["/anonymous-publish", "/rollback", "/limits", "/troubleshooting"],
+          label: "Reference",
+          root: "/reference",
+          items: [
+            "/reference",
+            "/api",
+            "/api/reference",
+            "/cli",
+            "/reference/sdk",
+            "/reference/mcp",
+            "/reference/profiles",
+            "/reference/troubleshooting",
+            "/errors",
+            "/changelog",
+            "/changelog/packages",
+          ],
         },
       ],
     },
-    tabs: [
-      { label: "API reference", path: "/api/reference", icon: "braces" },
-      { label: "Platforms", path: "/platforms", icon: "building" },
-    ],
+    tabs: [],
   },
   openapi: {
     enabled: true,
@@ -133,9 +223,9 @@ export default defineConfig({
   search: {
     provider: "pagefind",
     popular: [
-      { label: "Quickstart", href: "/quickstart", icon: "rocket" },
+      { label: "Quickstart", href: "/getting-started/quickstart", icon: "rocket" },
       { label: "Spaces", href: "/spaces", icon: "box" },
-      { label: "MCP", href: "/mcp", icon: "bot" },
+      { label: "MCP", href: "/reference/mcp", icon: "bot" },
       { label: "API reference", href: "/api/reference", icon: "braces" },
     ],
   },
@@ -166,5 +256,9 @@ export default defineConfig({
     sitemap: true,
     structuredData: true,
   },
-  deployment: { output: "static", site: "https://developers.spacefast.com" },
+  deployment: {
+    output: "static",
+    site: "https://docs.spacefast.com",
+    base: deploymentBase,
+  },
 });

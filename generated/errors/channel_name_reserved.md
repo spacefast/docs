@@ -5,24 +5,27 @@ description: "The channel name collides with a reserved hostname suffix and cann
 
 The channel name collides with a reserved hostname suffix and cannot be used.
 
-**How to resolve:** Choose a different channel name; v-prefixed numeric names and ver- prefixes are reserved.
+**How to resolve:** Choose a different channel name. V-prefixed numeric names and ver- prefixes are reserved.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "channel_name_reserved",
-    "message": "The channel name collides with a reserved hostname suffix and cannot be used.",
-    "docsUrl": "https://spacefast.com/docs/errors/channel_name_reserved",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/channel_name_reserved",
+  "title": "Channel name reserved",
+  "status": 400,
+  "detail": "The channel name collides with a reserved hostname suffix and cannot be used.",
+  "code": "channel_name_reserved",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

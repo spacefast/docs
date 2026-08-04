@@ -3,15 +3,15 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const SITE_ORIGIN = "https://developers.spacefast.com";
-const DOCS_BASE = "";
+const SITE_ORIGIN = "https://docs.spacefast.com";
+const DOCS_BASE = "/docs";
 const ESSENTIAL_PATHS = new Set([
   "/",
-  "/agents",
-  "/anonymous-publish",
+  "/getting-started/agents",
+  "/publishing/anonymous",
   "/publishing",
-  "/quickstart",
-  "/rollback",
+  "/getting-started/quickstart",
+  "/publishing/rollback",
 ]);
 
 function normalizePath(url) {
@@ -19,7 +19,11 @@ function normalizePath(url) {
   if (parsed.origin !== SITE_ORIGIN) {
     throw new Error(`Unexpected documentation URL: ${url}`);
   }
-  const path = parsed.pathname || "/";
+  const mountedPath = parsed.pathname || "/";
+  if (mountedPath !== DOCS_BASE && !mountedPath.startsWith(`${DOCS_BASE}/`)) {
+    throw new Error(`Documentation URL is outside ${DOCS_BASE}: ${url}`);
+  }
+  const path = mountedPath === DOCS_BASE ? "/" : mountedPath.slice(DOCS_BASE.length);
   return path.length > 1 ? path.replace(/\/+$/u, "") : path;
 }
 
@@ -30,10 +34,14 @@ function pageMetadata(path) {
   if (path === "/errors" || path.startsWith("/errors/")) {
     return { kind: "error", tier: "reference" };
   }
-  if (path === "/agents" || path === "/publishing" || path === "/rollback") {
+  if (
+    path === "/getting-started/agents" ||
+    path === "/publishing" ||
+    path === "/publishing/rollback"
+  ) {
     return { kind: "workflow", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
   }
-  if (path.startsWith("/migrate-from/")) return { kind: "guide", tier: "full" };
+  if (path.startsWith("/publishing/migrate/")) return { kind: "guide", tier: "full" };
   return { kind: "guide", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
 }
 
@@ -61,7 +69,7 @@ function summaryFor(body) {
 export function parseLlmsFull(source) {
   const pages = [];
   const sectionPattern =
-    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/developers\.spacefast\.com(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
+    /(?:^|\n)# ([^\n]+)\nSource: (https:\/\/docs\.spacefast\.com(?:\/[^\n]*)?)\n\n([\s\S]*?)(?=\n---\n|$)/gu;
   for (const match of source.matchAll(sectionPattern)) {
     const title = match[1]?.trim();
     const url = match[2]?.trim();

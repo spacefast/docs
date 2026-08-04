@@ -1,14 +1,46 @@
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
-import { compileRedirectRules, resolveRedirect } from "./redirect-rules.mjs";
+import {
+  buildRoutingRules,
+  compileRedirectRules,
+  deploymentBase,
+  resolveRedirect,
+} from "./redirect-rules.mjs";
 
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
-const deploymentBase = "";
-const site = "https://developers.spacefast.com";
+const site = "https://docs.spacefast.com";
 const docsRoot = `${site}${deploymentBase}`;
+// The home page is the one URL that can appear bare (origin) or based.
+const corpusKey = (url) => {
+  const normalized = url.replace(/\/$/u, "");
+  return normalized === site ? docsRoot : normalized;
+};
 const checked = [];
+
+function parseRequiredIaRoutes(source) {
+  const routeSection = source.split(/^ROUTE POLICY$/mu, 1)[0];
+  const routes = routeSection
+    .split("\n")
+    .map((line) => line.match(/^\s*(\/(?:[a-z0-9][a-z0-9_./-]*)?)(?:\s{2,}.*)?$/u)?.[1])
+    .filter(Boolean);
+  if (routes.length === 0 || new Set(routes).size !== routes.length) {
+    throw new Error("proposed-ia.txt must contain a non-empty, duplicate-free route manifest.");
+  }
+  return routes;
+}
+
+function routesFromSidebar(source) {
+  const start = source.indexOf("sidebar:");
+  const end = source.indexOf("openapi:", start);
+  if (start < 0 || end < 0) {
+    throw new Error("Could not locate the sidebar in blume.config.ts.");
+  }
+  return new Set(
+    [...source.slice(start, end).matchAll(/["'](\/[^"']*)["']/gu)].map((match) => match[1]),
+  );
+}
 
 async function exists(value) {
   try {
@@ -109,12 +141,30 @@ function representativeRedirect(redirect) {
 if (!(await exists(dist))) {
   throw new Error("Missing dist/. Run `bun run build` first.");
 }
+const [requiredIaRoutes, sidebarRoutes] = await Promise.all([
+  readFile(path.join(root, "proposed-ia.txt"), "utf8").then(parseRequiredIaRoutes),
+  readFile(path.join(root, "blume.config.ts"), "utf8").then(routesFromSidebar),
+]);
+const requiredIaRouteSet = new Set(requiredIaRoutes);
+const missingFromSidebar = requiredIaRoutes.filter((route) => !sidebarRoutes.has(route));
+const extraSidebarRoutes = [...sidebarRoutes].filter((route) => !requiredIaRouteSet.has(route));
+if (missingFromSidebar.length > 0 || extraSidebarRoutes.length > 0) {
+  throw new Error(
+    `Sidebar and proposed-ia.txt disagree: missing [${missingFromSidebar.join(", ")}], extra [${extraSidebarRoutes.join(", ")}].`,
+  );
+}
 const representativePages = [
-  ["index.html", `${docsRoot}/`, "Spacefast for developers"],
-  ["quickstart/index.html", `${docsRoot}/quickstart`, "Common first publish"],
+  // Blume canonicalizes the home page to the bare site origin; every other
+  // page carries the deployment base.
+  ["index.html", site, "Spacefast documentation"],
+  [
+    "getting-started/quickstart/index.html",
+    `${docsRoot}/getting-started/quickstart`,
+    "Common first publish",
+  ],
   ["spaces/index.html", `${docsRoot}/spaces`, "What a space owns"],
-  ["versions/index.html", `${docsRoot}/versions`, "The release boundary"],
-  ["mcp/index.html", `${docsRoot}/mcp`, "Set up a specific agent"],
+  ["publishing/versions/index.html", `${docsRoot}/publishing/versions`, "The release boundary"],
+  ["reference/mcp/index.html", `${docsRoot}/reference/mcp`, "Hosted vs on-device"],
   ["api/index.html", `${docsRoot}/api`, "The shape of every response"],
   ["api/reference/index.html", `${docsRoot}/api/reference`, "REST API"],
   [
@@ -125,24 +175,31 @@ const representativePages = [
   ["cli/index.html", `${docsRoot}/cli`, "CLI reference"],
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
-  ["integrations/vite/index.html", `${docsRoot}/integrations/vite`, "Vite"],
-  ["migrate-from/vercel/index.html", `${docsRoot}/migrate-from/vercel`, "Vercel"],
+  ["publishing/frameworks/vite/index.html", `${docsRoot}/publishing/frameworks/vite`, "Plain Vite"],
+  [
+    "publishing/migrate/vercel/index.html",
+    `${docsRoot}/publishing/migrate/vercel`,
+    "Static Next.js export",
+  ],
   ["platforms/api/reference/index.html", `${docsRoot}/platforms/api/reference`, "Platform API"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);
 }
+for (const route of requiredIaRoutes) {
+  await requirePage(localTargetFor(route), route === "/" ? site : `${docsRoot}${route}`);
+}
 
 const notFound = await readBuilt("404.html");
-if (!notFound.includes("Page not found") || !notFound.includes('href="/"')) {
-  throw new Error("Built 404 does not link back to the developer portal.");
+if (!notFound.includes("Page not found") || !notFound.includes(`href="${deploymentBase}"`)) {
+  throw new Error("Built 404 does not link back to the docs site.");
 }
 
 for (const artifact of [
   "index.md",
   "index.mdx",
-  "quickstart.md",
-  "quickstart.mdx",
+  "getting-started/quickstart.md",
+  "getting-started/quickstart.mdx",
   "api/reference.md",
   "cli.md",
   "errors/rate_limited.md",
@@ -185,21 +242,34 @@ if (indexedPages < 820) {
 }
 const headers = await readBuilt("_headers");
 if (
-  !headers.includes("/pagefind/*") ||
+  !headers.includes(`${deploymentBase}/pagefind/*`) ||
   !headers.includes("Access-Control-Allow-Origin: *")
 ) {
   throw new Error("Built headers do not allow the consumer site to merge the Pagefind index.");
 }
+if (
+  !headers.includes(`${deploymentBase}/*.md`) ||
+  !headers.includes("text/markdown; charset=utf-8") ||
+  !headers.includes(`${deploymentBase}/*.md\n  Access-Control-Allow-Origin: *`)
+) {
+  throw new Error("Built headers do not expose canonical Markdown safely to the browser terminal.");
+}
 
 const sitemap = await readBuilt("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/gu)].map((match) => match[1]);
-for (const expected of representativePages.map(([, canonical]) => canonical)) {
-  if (!sitemapUrls.includes(expected)) {
+// The home page canonicalizes to the bare origin but is listed at the base.
+const sitemapExpected = representativePages.map(([, canonical]) =>
+  canonical === site ? docsRoot : canonical,
+);
+for (const expected of sitemapExpected) {
+  if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === expected)) {
     throw new Error(`Sitemap is missing ${expected}`);
   }
 }
-if (sitemapUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)) {
-  throw new Error("Sitemap contains a URL outside the developer origin.");
+if (
+  sitemapUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot && url !== site)
+) {
+  throw new Error("Sitemap contains a URL outside the docs origin.");
 }
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error("Sitemap contains duplicate URLs.");
@@ -211,18 +281,30 @@ if (indexedPages !== sitemapUrls.length + 1) {
 }
 const robots = await readBuilt("robots.txt");
 if (!robots.includes(`Sitemap: ${docsRoot}/sitemap.xml`)) {
-  throw new Error("robots.txt does not advertise the developer sitemap.");
+  throw new Error("robots.txt does not advertise the docs sitemap.");
+}
+
+// Blume's generated changelog timeline is in the sitemap/search index, but the
+// LLM corpus enumerates authored changelog entries (and packages) instead.
+const generatedChangelogUrl = `${docsRoot}/changelog`;
+const llmSitemapUrls = sitemapUrls.filter(
+  (url) => url.replace(/\/$/u, "") !== generatedChangelogUrl,
+);
+if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl)) {
+  throw new Error(
+    `Sitemap is missing the generated changelog timeline at ${generatedChangelogUrl}`,
+  );
 }
 
 const llmsIndex = await readBuilt("llms.txt");
-const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/developers\.spacefast\.com[^\s)>]*/gu)].map(
-  (match) => match[0],
-);
+const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/docs\.spacefast\.com[^\s)>]*/gu)]
+  .map((match) => match[0])
+  .filter((url) => !url.endsWith("/rss.xml"));
 if (
-  llmsPageUrls.length !== sitemapUrls.length ||
-  llmsPageUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)
+  llmsPageUrls.length !== llmSitemapUrls.length ||
+  llmsPageUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot && url !== site)
 ) {
-  throw new Error("llms.txt has missing or non-developer page URLs.");
+  throw new Error("llms.txt has missing or non-docs page URLs.");
 }
 
 const llmsFull = await readBuilt("llms-full.txt");
@@ -230,14 +312,15 @@ const sourceUrls = [...llmsFull.matchAll(/^Source: (https:\/\/[^\s]+)$/gmu)].map
   (match) => match[1],
 );
 if (
-  sourceUrls.length !== sitemapUrls.length ||
-  sourceUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot)
+  sourceUrls.length !== llmSitemapUrls.length ||
+  sourceUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot && url !== site)
 ) {
-  throw new Error("llms-full.txt has missing or non-developer source URLs.");
+  throw new Error("llms-full.txt has missing or non-docs source URLs.");
 }
+const sitemapKeys = new Set(llmSitemapUrls.map(corpusKey));
 if (
-  sourceUrls.length !== sitemapUrls.length ||
-  sourceUrls.some((url) => !sitemapUrls.includes(url))
+  sourceUrls.length !== llmSitemapUrls.length ||
+  sourceUrls.some((url) => !sitemapKeys.has(corpusKey(url)))
 ) {
   throw new Error("llms-full.txt and sitemap.xml disagree on the public docs corpus.");
 }
@@ -248,15 +331,20 @@ if (
   typeof corpus.revision !== "string" ||
   corpus.revision.length < 7 ||
   corpus.pages.length !== sourceUrls.length ||
-  corpus.pages.some((page) => !sourceUrls.includes(page.url))
+  corpus.pages.some((page) => !sourceUrls.some((url) => corpusKey(url) === corpusKey(page.url)))
 ) {
-  throw new Error("docs-corpus.json does not match the unified developer LLM corpus.");
+  throw new Error("docs-corpus.json does not match the unified docs LLM corpus.");
 }
 
 const readability = JSON.parse(await readBuilt("agent-readability.json"));
 for (const value of Object.values(readability.artifacts)) {
-  if (typeof value === "string" && value.startsWith(site) && !value.startsWith(docsRoot)) {
-    throw new Error("agent-readability.json advertises an artifact outside the developer origin.");
+  if (
+    typeof value === "string" &&
+    value.startsWith(site) &&
+    !value.startsWith(docsRoot) &&
+    value !== site
+  ) {
+    throw new Error("agent-readability.json advertises an artifact outside the docs origin.");
   }
 }
 if (
@@ -283,23 +371,19 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
   readBuilt("_redirects"),
 ]);
 const compatibilityRules = compileRedirectRules(generatedRedirects);
-const directHostingRules = [
-  { from: "/docs", status: 301, to: "/" },
-  { from: "/docs/*", status: 301, to: "/:splat" },
-];
-const routingRules = [...compatibilityRules, ...directHostingRules];
+const routingRules = buildRoutingRules(generatedRedirects);
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
   .join("\n")}\n`;
 if (
   !builtRedirects.startsWith("# Generated from generated/redirects.json. Do not edit.\n") ||
-  !builtRedirects.endsWith(expectedRedirects)
+  builtRedirects !== `# Generated from generated/redirects.json. Do not edit.\n${expectedRedirects}`
 ) {
   throw new Error("Built redirects do not match the generated compatibility map.");
 }
 for (const redirect of generatedRedirects) {
   const example = representativeRedirect(redirect);
-  const target = localTargetFor(`${deploymentBase}${example.destination}`);
+  const target = localTargetFor(example.destination);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
   }
@@ -323,7 +407,11 @@ for (const file of htmlFiles) {
   const html = await readFile(path.join(dist, file), "utf8");
   for (const match of html.matchAll(/\b(?:action|href|src)=["'](\/[^"']*)["']/giu)) {
     const url = match[1];
-    const target = localTargetFor(url);
+    if (url.startsWith("//")) continue;
+    if (url !== deploymentBase && !url.startsWith(`${deploymentBase}/`)) {
+      throw new Error(`Built URL misses the ${deploymentBase} base in dist/${file}: ${url}`);
+    }
+    const target = localTargetFor(url.slice(deploymentBase.length) || "/");
     if (!(await exists(path.join(dist, target)))) {
       throw new Error(`Broken built URL in dist/${file}: ${url} -> dist/${target}`);
     }
@@ -331,5 +419,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL resolves.`,
+  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL resolves.`,
 );

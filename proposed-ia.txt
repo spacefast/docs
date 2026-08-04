@@ -1,0 +1,117 @@
+SPACEFAST DOCUMENTATION — IMPLEMENTED INFORMATION ARCHITECTURE
+
+The documentation starts with what a person is trying to do. Product and
+protocol names appear one level later, where they help rather than lead.
+
+The paths above ROUTE POLICY are the required public navigation. The route
+verification script checks that every path appears in the sidebar and produces
+an indexable page in the built site.
+
+HOME
+/
+
+1. GET STARTED
+/getting-started/quickstart              Publish your first site
+/getting-started/agents                  Set up an agent
+/getting-started/browser-terminal        Try the CLI in your browser
+
+2. PUBLISHING
+/publishing                              Publish a site
+/publishing/anonymous                    Publish without an account
+/publishing/push-new                     Publish with Git — nothing to install
+/publishing/git                          Build from Git
+/publishing/versions                     Versions
+/publishing/channels                     Move the live site
+/publishing/rollback                     Roll back
+
+  Frameworks
+  /publishing/frameworks/jekyll          Jekyll
+  /publishing/frameworks/astro           Astro
+  /publishing/frameworks/vite            Vite
+  /publishing/frameworks/nextjs          Next.js
+
+  Move from another host
+  /publishing/migrate                    Move to Spacefast
+  /publishing/migrate/here-now           here.now
+  /publishing/migrate/netlify            Netlify
+  /publishing/migrate/cloudflare-pages   Cloudflare Pages
+  /publishing/migrate/github-pages       GitHub Pages
+  /publishing/migrate/vercel             Vercel
+
+3. SPACES
+/spaces                                  Spaces
+/spaces/files                            Browse and compare files
+/spaces/access                           Control who can visit
+/spaces/comments                         Comments
+/spaces/domains                          Set up a custom domain
+/spaces/settings                         Space settings
+/spaces/apply                            Apply saved settings
+/spaces/variables                        Variables
+/spaces/customization                    Customization
+/spaces/visitor-pages                    Visitor pages
+/spaces/traffic                          Traffic
+/spaces/progress                         Track progress
+/spaces/activity                         Activity feed
+/spaces/rename                           Rename a space
+/spaces/move-copy                        Move or copy a space
+
+  Routing
+  /spaces/redirects                      Redirects
+  /spaces/headers                        Headers
+  /spaces/proxy-routes                   Proxy routes
+  /spaces/mounts                         Mount another space
+
+  Connect and automate
+  /spaces/webhooks                       Webhooks
+  /spaces/wordpress                      WordPress
+  /spaces/tag-manager                    Tag Manager
+  /spaces/image-acceleration             Image acceleration
+
+4. APPS
+/apps                                    Apps
+/apps/functions                          Functions
+/apps/zero                               Zero
+/apps/zero/capsule                       Capsule
+/apps/zero/authentication                Authentication
+/apps/zero/database                      Database
+/apps/zero/storage                       Storage
+
+5. ACCOUNT & TEAMS
+/account                                 Account and teams
+/account/sign-in                         Sign in
+/account/security                        Protect your account
+/account/notifications                   Choose email notifications
+/account/connections                     Connected apps
+/account/teams                           Teams
+/account/api-keys                        API keys
+/account/billing                         Billing and usage
+/account/limits                          Limits
+
+6. PLATFORMS
+/platforms                               Platforms
+/platforms/authentication                Platform authentication
+/platforms/customers                     Customers and sites
+/platforms/api/reference                 Platform API reference
+
+7. REFERENCE
+/reference                               Reference
+/api                                     REST API guide
+/api/reference                           REST API reference
+/cli                                     CLI reference
+/reference/sdk                           SDK
+/reference/mcp                           MCP
+/reference/profiles                      Provider profiles
+/reference/troubleshooting               Troubleshooting
+/errors                                  Error reference
+/changelog                               Changelog
+/changelog/packages                      Package changelog
+
+ROUTE POLICY
+
+Authored pages move directly to the paths above. There are no compatibility
+redirects because the site has not launched.
+
+Generated routes stay at /api/reference, /platforms/api/reference, /cli,
+/errors, and /changelog. Those paths are embedded in generated artifacts and
+tool output, so the navigation groups them under Reference without renaming
+their public contracts.

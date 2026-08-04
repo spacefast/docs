@@ -5,24 +5,27 @@ description: "No signing key matching the token's key id was found."
 
 No signing key matching the token's key id was found.
 
-**How to resolve:** Refresh the runtime JWKS; the signing keys may have rotated.
+**How to resolve:** Refresh the runtime JWKS. The signing keys may have rotated.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "runtime_jwks_key_missing",
-    "message": "No signing key matching the token's key id was found.",
-    "docsUrl": "https://spacefast.com/docs/errors/runtime_jwks_key_missing",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/runtime_jwks_key_missing",
+  "title": "Runtime jwks key missing",
+  "status": 400,
+  "detail": "No signing key matching the token's key id was found.",
+  "code": "runtime_jwks_key_missing",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

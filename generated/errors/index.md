@@ -1,13 +1,14 @@
 ---
 title: "Error reference"
-description: "Every Spacefast API error carries a stable code and a docsUrl that links to its reference page."
+description: "Every Spacefast API error is a problem document with a stable code and a type URI linking to its reference page."
 ---
 
-Every Spacefast API error response carries a stable `code` and a `docsUrl` that
-links to one of the pages below. Match on `code` in clients; its meaning stays stable
-while `message` text may improve. Retired codes leave with their owning API surface.
+Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`)
+carrying a stable `code` and a `type` URI that links to one of the pages below. Match on
+`code` in clients. Its meaning stays stable, while `detail` text may improve. Retired
+codes leave with their owning API surface.
 
-There are 462 error codes in the registry.
+There are 486 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -15,9 +16,10 @@ There are 462 error codes in the registry.
 | [`abuse_report_rate_limited`](/errors/abuse_report_rate_limited) | Too many abuse reports were submitted from this client in a short window. |
 | [`abuse_takedown`](/errors/abuse_takedown) | This space was disabled by an abuse takedown and cannot be served or modified. |
 | [`access_denied`](/errors/access_denied) | The authorization request was denied by the user. |
+| [`access_scope_suggestion`](/errors/access_scope_suggestion) | Published dependencies cluster under paths that may be useful as explicit public scopes. |
 | [`account_suspended`](/errors/account_suspended) | This account is suspended for a policy or abuse violation and cannot be used. |
 | [`agent_handoff_declined`](/errors/agent_handoff_declined) | The app-private agent handoff cannot be redeemed. |
-| [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the Space. |
+| [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the space. |
 | [`agent_handoff_origin_unsupported`](/errors/agent_handoff_origin_unsupported) | The dashboard origin this deployment is configured with cannot mint canonical agent handoff links. |
 | [`ambiguous_space_slug`](/errors/ambiguous_space_slug) | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
 | [`anonymous_expired`](/errors/anonymous_expired) | This anonymous space expired before it was claimed. |
@@ -52,10 +54,14 @@ There are 462 error codes in the registry.
 | [`claim_target_not_found`](/errors/claim_target_not_found) | The team or account to claim the space into was not found. |
 | [`claimed_space_quota_exceeded`](/errors/claimed_space_quota_exceeded) | Claiming this space would exceed the target team's space quota. |
 | [`cli_upgrade_required`](/errors/cli_upgrade_required) | This CLI version is too old to talk to the API safely. |
-| [`comment_screenshot_rate_limited`](/errors/comment_screenshot_rate_limited) | Too many anonymous comment screenshot uploads were attempted. |
+| [`comment_screenshot_rate_limited`](/errors/comment_screenshot_rate_limited) | Too many comment screenshot uploads were attempted. |
 | [`config_file_too_large`](/errors/config_file_too_large) | The sf.jsonc configuration file exceeds the maximum size. |
+| [`config_functions_key_removed`](/errors/config_functions_key_removed) | The sf.jsonc configuration still uses the removed top-level functions key. |
 | [`config_invalid`](/errors/config_invalid) | The space configuration failed validation. |
 | [`config_meta_too_long`](/errors/config_meta_too_long) | A meta field in the space configuration exceeds its maximum length. |
+| [`config_name_too_long`](/errors/config_name_too_long) | The name in the space configuration exceeds its maximum length. |
+| [`config_runtime_entry_missing`](/errors/config_runtime_entry_missing) | The declared runtime has no entry module to compile. |
+| [`config_runtime_invalid_kind`](/errors/config_runtime_invalid_kind) | The runtime block in the space configuration declares an unknown kind. |
 | [`config_templates_over_limit`](/errors/config_templates_over_limit) | The configuration declares more template files than the plan allows. |
 | [`continuation_unavailable`](/errors/continuation_unavailable) | This claim token can no longer be exchanged for an access token. |
 | [`continuation_used`](/errors/continuation_used) | This claim token was already exchanged for a durable access token. |
@@ -67,7 +73,7 @@ There are 462 error codes in the registry.
 | [`csam_policy_floor`](/errors/csam_policy_floor) | CSAM enforcement policy cannot be set below the mandatory account-suspend floor. |
 | [`custom_certificates_require_dedicated_site`](/errors/custom_certificates_require_dedicated_site) | Custom certificates are unavailable while this space uses shared placement. |
 | [`data_location_immutable`](/errors/data_location_immutable) | This request tried to change data location through an immutable path. |
-| [`datacenters_unavailable`](/errors/datacenters_unavailable) | Placement regions are temporarily unavailable. |
+| [`db_not_available`](/errors/db_not_available) | The live version has no database to read. |
 | [`device_authorization_failed`](/errors/device_authorization_failed) | The device login request failed and cannot be completed. |
 | [`device_verification_rate_limited`](/errors/device_verification_rate_limited) | Too many incorrect device codes were entered in a short window. |
 | [`dns_export_required`](/errors/dns_export_required) | This operation requires exporting the current DNS records first. |
@@ -131,11 +137,9 @@ There are 462 error codes in the registry.
 | [`files_mode_does_not_support_spa`](/errors/files_mode_does_not_support_spa) | SPA fallback cannot be combined with files-listing mode. |
 | [`forbidden`](/errors/forbidden) | The credential is valid but does not allow this action. |
 | [`free_external_proxy_disabled`](/errors/free_external_proxy_disabled) | Proxy routes to external upstreams are not available on the Free plan. |
-| [`free_headers_basic_auth_disabled`](/errors/free_headers_basic_auth_disabled) | Basic-Auth via _headers is not available on the Free plan. |
 | [`google_play_webhook_identity_not_configured`](/errors/google_play_webhook_identity_not_configured) | Google Play Pub/Sub push authentication is not configured on this deployment. |
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
 | [`idempotency_key_reused`](/errors/idempotency_key_reused) | The Idempotency-Key was reused with a different request body. |
-| [`immutable_version_requires_login`](/errors/immutable_version_requires_login) | This immutable version URL is past its public window and now requires login. |
 | [`import_archive_not_uploaded`](/errors/import_archive_not_uploaded) | The import has no uploaded archive yet. |
 | [`import_not_cancelable`](/errors/import_not_cancelable) | The import has progressed past the point where it can be canceled. |
 | [`import_not_waiting_for_archive`](/errors/import_not_waiting_for_archive) | The import is not waiting for an archive upload. |
@@ -152,7 +156,7 @@ There are 462 error codes in the registry.
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
 | [`invalid_google_play_webhook_identity`](/errors/invalid_google_play_webhook_identity) | The Google Play notification did not carry a valid Pub/Sub push identity. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
-| [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key header is missing, empty, or too long. |
+| [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
 | [`invalid_publish_archive`](/errors/invalid_publish_archive) | The uploaded archive could not be read as a valid zip. |
 | [`invalid_publish_path`](/errors/invalid_publish_path) | A file path in the publish payload is not allowed. |
 | [`invalid_publish_payload`](/errors/invalid_publish_payload) | The publish payload is malformed. |
@@ -188,8 +192,10 @@ There are 462 error codes in the registry.
 | [`manifest_too_many_files`](/errors/manifest_too_many_files) | The upload manifest declares more files than the allowed ceiling. |
 | [`mcp_acted_for_team_deleted`](/errors/mcp_acted_for_team_deleted) | This MCP approval or execution run acted only for a team that has since been deleted, so it can no longer be approved, denied, or canceled. |
 | [`member_already_exists`](/errors/member_already_exists) | This user is already a member of the team. |
+| [`method_not_allowed`](/errors/method_not_allowed) | The requested HTTP method is not supported for this endpoint. |
 | [`missing_route_param`](/errors/missing_route_param) | A required route parameter is missing from the request path. |
 | [`move_target_capacity_lost`](/errors/move_target_capacity_lost) | The selected move target no longer has capacity for the space. |
+| [`name_managed_by_config`](/errors/name_managed_by_config) | The space name is managed by sf.jsonc while its live version declares one. |
 | [`nameserver_delegation_required`](/errors/nameserver_delegation_required) | This operation requires the domain to be delegated to Spacefast nameservers. |
 | [`nameserver_divergence`](/errors/nameserver_divergence) | The domain's observed nameservers diverge from the expected set. |
 | [`noop_publish`](/errors/noop_publish) | The publish matched the live version exactly, so nothing changed. |
@@ -223,8 +229,9 @@ There are 462 error codes in the registry.
 | [`publish_hash_mismatch`](/errors/publish_hash_mismatch) | Publish content does not match its declared sha256. |
 | [`publish_inline_limit_exceeded`](/errors/publish_inline_limit_exceeded) | The inline publish exceeds the file-count or total-size limit. |
 | [`publish_not_cancelable`](/errors/publish_not_cancelable) | The publish has progressed past the point where it can be canceled. |
-| [`publish_path_collision`](/errors/publish_path_collision) | Two entries in the publish payload normalize to the same path. |
+| [`publish_path_collision`](/errors/publish_path_collision) | Two different artifacts would serve the same URL after directory-index or clean-URL resolution. |
 | [`publish_path_invalid`](/errors/publish_path_invalid) | A publish path is not a relative, normalized POSIX path. |
+| [`publish_reference_missing`](/errors/publish_reference_missing) | Published HTML, CSS, or JavaScript references an internal path that is not in the version. |
 | [`publish_setup_failed`](/errors/publish_setup_failed) | Provisioning for this publish failed. |
 | [`publish_snapshot_empty`](/errors/publish_snapshot_empty) | An empty snapshot was sent without an explicit base version. |
 | [`publish_upload_failed`](/errors/publish_upload_failed) | Uploading the publish content failed. |
@@ -233,19 +240,21 @@ There are 462 error codes in the registry.
 | [`rate_limited`](/errors/rate_limited) | Too many requests were made in a short window. |
 | [`registration_expired`](/errors/registration_expired) | The domain registration has expired. |
 | [`registration_expiring`](/errors/registration_expiring) | The domain registration is about to expire, which blocks this operation. |
+| [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
 | [`routing_rules_over_plan`](/errors/routing_rules_over_plan) | The published _redirects and _headers exceed the plan's routing-rule allowance. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
 | [`runtime_api_not_found`](/errors/runtime_api_not_found) | The runtime management endpoint was not found. |
 | [`runtime_callback_forbidden`](/errors/runtime_callback_forbidden) | The runtime callback could not be authenticated. |
+| [`runtime_dev_unsupported`](/errors/runtime_dev_unsupported) | `sf dev` cannot run this runtime locally yet. |
 | [`runtime_engine_zip_missing`](/errors/runtime_engine_zip_missing) | The runtime engine artifact is missing from this deployment. |
 | [`runtime_hostname_unassigned`](/errors/runtime_hostname_unassigned) | The hostname is not assigned to a runtime, so the request cannot be routed. |
 | [`runtime_instance_mismatch`](/errors/runtime_instance_mismatch) | The request reached a different runtime instance than the one it was issued for. |
 | [`runtime_jti_missing`](/errors/runtime_jti_missing) | The runtime token is missing its replay-protection id. |
-| [`runtime_jti_replayed`](/errors/runtime_jti_replayed) | The runtime token was already used; replays are rejected. |
+| [`runtime_jti_replayed`](/errors/runtime_jti_replayed) | The runtime token was already used. Replays are rejected. |
 | [`runtime_jwks_key_missing`](/errors/runtime_jwks_key_missing) | No signing key matching the token's key id was found. |
-| [`runtime_logs_unavailable`](/errors/runtime_logs_unavailable) | Server logs are not available because Spacefast serves your space as static files. |
+| [`runtime_kind_mismatch`](/errors/runtime_kind_mismatch) | This operation is only available for a different runtime kind. |
 | [`runtime_management_unavailable`](/errors/runtime_management_unavailable) | The runtime management surface is unavailable for this site. |
-| [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space has no provisioned runtime yet. |
+| [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space has not served a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
 | [`runtime_token_bad_signature`](/errors/runtime_token_bad_signature) | The runtime token signature did not verify. |
@@ -258,7 +267,6 @@ There are 462 error codes in the registry.
 | [`secret_variable_in_template`](/errors/secret_variable_in_template) | A secret variable was referenced in a template, which is blocked. |
 | [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature could not be verified. |
 | [`site_already_deleted`](/errors/site_already_deleted) | The site was already deleted. |
-| [`site_capacity_exceeded`](/errors/site_capacity_exceeded) | The site has reached its capacity and cannot take more content. |
 | [`site_has_live_spaces`](/errors/site_has_live_spaces) | The site still has live spaces assigned to it, so it cannot be deleted. |
 | [`site_not_static`](/errors/site_not_static) | This operation only applies to static-runtime sites. |
 | [`site_required`](/errors/site_required) | A site reference is required for this operation. |
@@ -270,7 +278,8 @@ There are 462 error codes in the registry.
 | [`source_archive_decompression_timeout`](/errors/source_archive_decompression_timeout) | The uploaded source archive did not finish decompressing within the validation limit. |
 | [`source_archive_expansion_ratio_exceeded`](/errors/source_archive_expansion_ratio_exceeded) | The uploaded source archive expands too much relative to its compressed size. |
 | [`source_archive_validation_busy`](/errors/source_archive_validation_busy) | The service is already validating its maximum number of source archives. |
-| [`space_already_claimed`](/errors/space_already_claimed) | The space was already claimed; a claim can only succeed once. |
+| [`space_already_claimed`](/errors/space_already_claimed) | The space was already claimed. A claim can only succeed once. |
+| [`space_capacity_warming`](/errors/space_capacity_warming) | This space is waiting on serving capacity that is being provisioned in the background. |
 | [`space_claim_unavailable`](/errors/space_claim_unavailable) | This space cannot be claimed. |
 | [`space_claimed_credential_available`](/errors/space_claimed_credential_available) | The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher. |
 | [`space_disabled`](/errors/space_disabled) | The space is disabled and cannot be served or modified. |
@@ -282,10 +291,14 @@ There are 462 error codes in the registry.
 | [`space_import_archive_too_large`](/errors/space_import_archive_too_large) | The import archive exceeds the maximum allowed size. |
 | [`space_import_config_only_archive`](/errors/space_import_config_only_archive) | The archive contains only configuration and cannot be imported as content. |
 | [`space_import_runtime_schema_unsupported`](/errors/space_import_runtime_schema_unsupported) | The export was produced by an unsupported runtime schema version. |
+| [`space_move_would_strand_zero_data`](/errors/space_move_would_strand_zero_data) | The Space runs Zero, whose database and object storage live on the site the Space is placed on. Relocating it would strand that data on the old site, so the move is refused. |
 | [`space_moving`](/errors/space_moving) | The space is moving between sites, which blocks this operation. |
 | [`space_no_live_version`](/errors/space_no_live_version) | The space has no live version, so this operation has nothing to act on. |
 | [`space_not_disabled`](/errors/space_not_disabled) | The space is not disabled, so it cannot be restored. |
 | [`space_not_restorable`](/errors/space_not_restorable) | The space is past its recovery window and cannot be restored. |
+| [`space_person_already_member`](/errors/space_person_already_member) | The email already belongs to a member of the space. |
+| [`space_person_invitation_pending`](/errors/space_person_invitation_pending) | A Person invitation is already pending for this email. |
+| [`space_person_self_invite`](/errors/space_person_self_invite) | The inviter already belongs to the space. |
 | [`space_ref_ambiguous`](/errors/space_ref_ambiguous) | The space reference matches more than one accessible space. |
 | [`space_ref_required`](/errors/space_ref_required) | A space reference is required for this operation. |
 | [`space_transferring`](/errors/space_transferring) | The space has a transfer in progress, which blocks this operation. |
@@ -301,12 +314,22 @@ There are 462 error codes in the registry.
 | [`static_mount_target_not_static`](/errors/static_mount_target_not_static) | The target production version contains runtime functions. |
 | [`static_runtime_control_path_not_supported`](/errors/static_runtime_control_path_not_supported) | This control path is not supported by the static runtime. |
 | [`static_runtime_required`](/errors/static_runtime_required) | This operation only applies to static-runtime spaces. |
+| [`storage_auth_required`](/errors/storage_auth_required) | This storage operation requires an authenticated Zero user. |
 | [`storage_bucket_unavailable`](/errors/storage_bucket_unavailable) | No usable internal storage bucket is configured for this operation. |
-| [`storage_quota_exceeded`](/errors/storage_quota_exceeded) | The publish would exceed the plan's storage allowance. |
+| [`storage_content_blocked`](/errors/storage_content_blocked) | The object contains executable or active web content that Zero storage does not serve. |
+| [`storage_delete_forbidden`](/errors/storage_delete_forbidden) | The current Zero user did not upload this object. |
+| [`storage_empty_file`](/errors/storage_empty_file) | The Zero storage upload is empty. |
+| [`storage_file_too_large`](/errors/storage_file_too_large) | The Zero storage object exceeds the 5 MiB file limit. |
+| [`storage_key_invalid`](/errors/storage_key_invalid) | The Zero storage key is malformed. |
+| [`storage_object_not_found`](/errors/storage_object_not_found) | The requested Zero storage object does not exist. |
+| [`storage_quota_already_unlimited`](/errors/storage_quota_already_unlimited) | The team already has unlimited storage. |
+| [`storage_quota_decrease_not_supported`](/errors/storage_quota_decrease_not_supported) | This control cannot reduce a team's storage quota. |
+| [`storage_quota_exceeded`](/errors/storage_quota_exceeded) | The operation would exceed its storage allowance. |
+| [`storage_unavailable`](/errors/storage_unavailable) | The Zero runtime could not read or persist object storage. |
 | [`storage_usage_unavailable`](/errors/storage_usage_unavailable) | Storage usage could not be computed right now. |
 | [`stripe_error`](/errors/stripe_error) | The billing provider reported an error. |
 | [`superseded_by_publish`](/errors/superseded_by_publish) | A newer publish superseded this operation, so it was skipped. |
-| [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere; a takeover notice window applies. |
+| [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere. A takeover notice window applies. |
 | [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded) | Inviting this person would exceed the team's seat limit. |
 | [`team_ref_required`](/errors/team_ref_required) | A team reference is required for this operation. |
 | [`team_required`](/errors/team_required) | This operation requires an acting team. |
@@ -317,7 +340,7 @@ There are 462 error codes in the registry.
 | [`tenant_id_mismatch`](/errors/tenant_id_mismatch) | The resource belongs to a different tenant than the request. |
 | [`tenant_not_found`](/errors/tenant_not_found) | The tenant was not found. |
 | [`tenant_not_granted`](/errors/tenant_not_granted) | Your credential has no grant on the requested tenant. |
-| [`tenant_past_due`](/errors/tenant_past_due) | The tenant is past due; mutations are rejected while serving continues. |
+| [`tenant_past_due`](/errors/tenant_past_due) | The tenant is past due. Mutations are rejected while serving continues. |
 | [`tenant_selection_required`](/errors/tenant_selection_required) | The credential spans multiple tenants, so the request must select one. |
 | [`tenant_suspended`](/errors/tenant_suspended) | The tenant is suspended, so its resources cannot be served or modified. |
 | [`theme_value_invalid`](/errors/theme_value_invalid) | A theme value in the configuration is outside the allowed grammar. |
@@ -333,7 +356,6 @@ There are 462 error codes in the registry.
 | [`upload_hash_mismatch`](/errors/upload_hash_mismatch) | An uploaded file's bytes do not match the declared sha256. |
 | [`upload_path_not_canonical`](/errors/upload_path_not_canonical) | An upload path is not in canonical (decoded, NFC-normalized) form. |
 | [`upload_path_not_declared`](/errors/upload_path_not_declared) | An uploaded path was not declared in the version's manifest. |
-| [`upload_session_cap_exceeded`](/errors/upload_session_cap_exceeded) | The open upload session exceeded its file or byte cap. |
 | [`upload_size_mismatch`](/errors/upload_size_mismatch) | An uploaded file's size does not match the declared size. |
 | [`user_banned`](/errors/user_banned) | This user is banned for a policy or abuse violation and cannot perform this action. |
 | [`validation_error`](/errors/validation_error) | A request field failed validation. |
@@ -343,7 +365,7 @@ There are 462 error codes in the registry.
 | [`version_artifact_not_found`](/errors/version_artifact_not_found) | The requested version artifact was not found. |
 | [`version_busy`](/errors/version_busy) | The version is busy with another operation. |
 | [`version_canceled`](/errors/version_canceled) | The version was canceled and cannot be used. |
-| [`version_closed`](/errors/version_closed) | The version's upload session is closed; no more files can be added. |
+| [`version_closed`](/errors/version_closed) | The version's upload session is closed. No more files can be added. |
 | [`version_expired`](/errors/version_expired) | The version's upload session expired before it was finalized. |
 | [`version_failed`](/errors/version_failed) | The version failed and cannot be used. |
 | [`version_file_count_exceeded`](/errors/version_file_count_exceeded) | The version exceeds the maximum number of files. |
@@ -376,10 +398,8 @@ There are 462 error codes in the registry.
 | [`zero_artifact_abi_mismatch`](/errors/zero_artifact_abi_mismatch) | The Zero endpoint artifact was built for a different runner ABI. |
 | [`zero_artifact_invalid`](/errors/zero_artifact_invalid) | The Zero endpoint artifact is missing required runtime metadata. |
 | [`zero_artifact_malformed`](/errors/zero_artifact_malformed) | The Zero endpoint artifact could not be parsed. |
-| [`zero_artifact_missing`](/errors/zero_artifact_missing) | A Zero route points to an endpoint artifact that is missing. |
 | [`zero_artifact_path_invalid`](/errors/zero_artifact_path_invalid) | The Zero endpoint artifact path is invalid. |
 | [`zero_artifact_unreadable`](/errors/zero_artifact_unreadable) | The Zero endpoint artifact could not be read by the runtime. |
-| [`zero_artifact_untrusted`](/errors/zero_artifact_untrusted) | A Zero route points to an uploaded artifact that the runtime did not compile. |
 | [`zero_auth_unavailable`](/errors/zero_auth_unavailable) | Hosted Zero auth is not configured for this deployment. |
 | [`zero_blob_key_invalid`](/errors/zero_blob_key_invalid) | The local Zero blob key is invalid. |
 | [`zero_blob_store_full`](/errors/zero_blob_store_full) | The local Zero blob store reached its configured size limit. |
@@ -394,6 +414,12 @@ There are 462 error codes in the registry.
 | [`zero_client_bundle_not_loaded`](/errors/zero_client_bundle_not_loaded) | The local Zero dev client bundle has not been generated or loaded. |
 | [`zero_db_connect_failed`](/errors/zero_db_connect_failed) | The Zero runner could not connect to the configured database. |
 | [`zero_db_execute_failed`](/errors/zero_db_execute_failed) | A Zero database write failed. |
+| [`zero_db_export_cursor_invalid`](/errors/zero_db_export_cursor_invalid) | The local database export cursor is invalid or belongs to another export. |
+| [`zero_db_export_failed`](/errors/zero_db_export_failed) | The runtime could not read a database export page. |
+| [`zero_db_export_page_too_large`](/errors/zero_db_export_page_too_large) | One database export page exceeded the 16 MiB response limit. |
+| [`zero_db_export_query_invalid`](/errors/zero_db_export_query_invalid) | The local database export request has an invalid table or page size. |
+| [`zero_db_export_schema_changed`](/errors/zero_db_export_schema_changed) | The database schema changed while an export was in progress. |
+| [`zero_db_export_schema_unavailable`](/errors/zero_db_export_schema_unavailable) | The live capsule has no stable schema hash for a complete export. |
 | [`zero_db_host_install_failed`](/errors/zero_db_host_install_failed) | The Zero runner could not install the database host bridge. |
 | [`zero_db_operation_invalid`](/errors/zero_db_operation_invalid) | The Zero database bridge received an invalid operation payload. |
 | [`zero_db_operation_too_large`](/errors/zero_db_operation_too_large) | The Zero database operation payload is too large. |
@@ -401,6 +427,8 @@ There are 462 error codes in the registry.
 | [`zero_db_query_failed`](/errors/zero_db_query_failed) | A Zero database read failed. |
 | [`zero_db_row_invalid`](/errors/zero_db_row_invalid) | A database row could not be converted into a Zero response value. |
 | [`zero_db_sql_invalid`](/errors/zero_db_sql_invalid) | The Zero runner rejected unsafe or unsupported SQL. |
+| [`zero_db_target_denied`](/errors/zero_db_target_denied) | The application Zero database target is not a public TCP address. |
+| [`zero_db_tls_required`](/errors/zero_db_tls_required) | The application Zero database cannot be connected with verified pinned TLS. |
 | [`zero_db_too_many_params`](/errors/zero_db_too_many_params) | The Zero database operation has too many parameters. |
 | [`zero_db_transaction_active`](/errors/zero_db_transaction_active) | The Zero runner tried to start a database transaction while one was already active. |
 | [`zero_db_transaction_commit_failed`](/errors/zero_db_transaction_commit_failed) | The Zero database transaction could not be committed. |
@@ -448,6 +476,8 @@ There are 462 error codes in the registry.
 | [`zero_replay_unavailable`](/errors/zero_replay_unavailable) | Realtime replay is not configured for this Zero version. |
 | [`zero_request_body_too_large`](/errors/zero_request_body_too_large) | The Zero request body exceeds the runtime size limit. |
 | [`zero_requires_dedicated_plan`](/errors/zero_requires_dedicated_plan) | Zero endpoints require a plan with dedicated runtime isolation. |
+| [`zero_response_header_forbidden`](/errors/zero_response_header_forbidden) | A Zero endpoint attempted to set a platform-managed response header. |
+| [`zero_response_header_invalid`](/errors/zero_response_header_invalid) | A Zero endpoint response header is invalid or exceeds the header limits. |
 | [`zero_response_too_large`](/errors/zero_response_too_large) | The Zero endpoint response exceeds the runtime size limit. |
 | [`zero_routes_invalid`](/errors/zero_routes_invalid) | The Zero routes artifact is invalid. |
 | [`zero_run_compile_failed`](/errors/zero_run_compile_failed) | The runtime could not compile a Zero run handler. |
@@ -468,8 +498,3 @@ There are 462 error codes in the registry.
 | [`zero_runs_require_runtime_compiler`](/errors/zero_runs_require_runtime_compiler) | Zero run handlers require the Rust runtime compiler. |
 | [`zero_runs_too_many`](/errors/zero_runs_too_many) | The Zero run-handler payload exceeds the supported handler count. |
 | [`zero_shopify_unavailable`](/errors/zero_shopify_unavailable) | The local Zero Shopify service is not configured. |
-| [`zero_source_compile_failed`](/errors/zero_source_compile_failed) | The Zero endpoint source fallback failed to compile. |
-| [`zero_source_hash_mismatch`](/errors/zero_source_hash_mismatch) | The Zero endpoint source hash does not match its artifact metadata. |
-| [`zero_source_invalid`](/errors/zero_source_invalid) | The Zero endpoint source is invalid. |
-| [`zero_source_path_invalid`](/errors/zero_source_path_invalid) | The Zero endpoint source path is invalid. |
-| [`zero_source_unreadable`](/errors/zero_source_unreadable) | The Zero endpoint source file could not be read. |

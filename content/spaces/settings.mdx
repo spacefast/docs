@@ -1,0 +1,112 @@
+---
+title: Space settings
+description: Configure a space in the file that publishes and rolls back with it.
+---
+
+Put `sf.jsonc` at the publish root when settings should travel with your files.
+Spacefast validates it during publish, applies it atomically with the version,
+and restores it on rollback. The file itself is never served.
+
+```bash
+sf init
+```
+
+`sf init` creates the file and adds the schema URL editors and agents use for
+autocomplete. Use the playground to produce a valid starting point.
+
+<ConfigPlayground />
+
+## Complete example
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "space": "docs",
+  "name": "Product docs",
+  "index": "index.html",
+  "fallback": { "path": "/404.html", "status": 404 },
+  "cleanUrls": true,
+  "listing": false,
+  "meta": {
+    "title": "Product docs",
+    "description": "Everything about the product.",
+    "image": "/og.png",
+  },
+  "theme": {
+    "accent": "#ff603d",
+    "background": "#faf9f7",
+    "font": "Haskoy, system-ui, sans-serif",
+    "logo": "/logo.svg",
+    "name": "Product docs",
+  },
+  "access": {
+    "public": ["/assets/**", "/favicon.ico"],
+  },
+}
+```
+
+## Serving behavior
+
+Website behavior is the default: Spacefast resolves published files and
+directory indexes. For a browsable file tree, disable indexes and enable
+listings:
+
+```jsonc
+{ "index": false, "listing": true }
+```
+
+Use `fallback` for an SPA or a custom not-found page:
+
+```jsonc
+{ "fallback": "/index.html" }
+```
+
+```jsonc
+{ "fallback": { "path": "/404.html", "status": 404 } }
+```
+
+`cleanUrls` serves `/about.html` at `/about` when no file or directory index
+matches first. It defaults on for ordinary static sites and off for a
+200-status SPA fallback. Set it explicitly when the desired behavior matters.
+
+## Metadata and visitor pages
+
+`name` is the space display name. `meta.title`, `meta.description`, and
+`meta.image` supply listing and social metadata. `theme` controls the designed
+access, error, and system pages.
+
+See [Customization](/spaces/customization) for `theme.json`, `DESIGN.md`,
+`_layout.html`, and complete `_pages` takeovers.
+
+## Access
+
+Make the whole space public:
+
+```jsonc
+{ "access": "public" }
+```
+
+Expose selected paths while everything else remains private:
+
+```jsonc
+{
+  "access": {
+    "public": ["/assets/**", "/favicon.ico", "!/assets/private/**"],
+  },
+}
+```
+
+For people, links, passwords, machine credentials, and policy rules, use
+[Access](/spaces/access).
+
+## What does not belong here
+
+- Redirects, rewrites, and proxies belong in [`_redirects`](/spaces/redirects).
+- Response headers belong in [`_headers`](/spaces/headers).
+- Cloud and runtime variables are managed through [`sf env`](/spaces/variables).
+- Shared passwords and other visitor credentials are managed through
+  [`sf share`](/spaces/access).
+- Saved dashboard/API settings that are not live yet are pushed with
+  [`sf apply`](/spaces/apply).
+
+This separation keeps one source of truth for each concern.

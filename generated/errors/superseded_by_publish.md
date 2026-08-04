@@ -5,24 +5,27 @@ description: "A newer publish superseded this operation, so it was skipped."
 
 A newer publish superseded this operation, so it was skipped.
 
-**How to resolve:** No action needed; the newer publish already carries the change.
+**How to resolve:** No action needed. The newer publish already carries the change.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "superseded_by_publish",
-    "message": "A newer publish superseded this operation, so it was skipped.",
-    "docsUrl": "https://spacefast.com/docs/errors/superseded_by_publish",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/superseded_by_publish",
+  "title": "Superseded by publish",
+  "status": 400,
+  "detail": "A newer publish superseded this operation, so it was skipped.",
+  "code": "superseded_by_publish",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

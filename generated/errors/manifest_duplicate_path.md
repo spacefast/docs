@@ -5,24 +5,27 @@ description: "The upload manifest declares the same path more than once."
 
 The upload manifest declares the same path more than once.
 
-**How to resolve:** Deduplicate paths; comparisons use the canonical (decoded, NFC) form.
+**How to resolve:** Deduplicate paths. Comparisons use the canonical (decoded, NFC) form.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "manifest_duplicate_path",
-    "message": "The upload manifest declares the same path more than once.",
-    "docsUrl": "https://spacefast.com/docs/errors/manifest_duplicate_path",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/manifest_duplicate_path",
+  "title": "Manifest duplicate path",
+  "status": 400,
+  "detail": "The upload manifest declares the same path more than once.",
+  "code": "manifest_duplicate_path",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

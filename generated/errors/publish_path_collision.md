@@ -1,28 +1,31 @@
 ---
 title: "publish_path_collision"
-description: "Two entries in the publish payload normalize to the same path."
+description: "Two different artifacts would serve the same URL after directory-index or clean-URL resolution."
 ---
 
-Two entries in the publish payload normalize to the same path.
+Two different artifacts would serve the same URL after directory-index or clean-URL resolution.
 
-**How to resolve:** Remove the duplicate; each path may appear once across files and deletes.
+**How to resolve:** Rename or remove one artifact so every request route has one owner.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "publish_path_collision",
-    "message": "Two entries in the publish payload normalize to the same path.",
-    "docsUrl": "https://spacefast.com/docs/errors/publish_path_collision",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/publish_path_collision",
+  "title": "Publish path collision",
+  "status": 400,
+  "detail": "Two different artifacts would serve the same URL after directory-index or clean-URL resolution.",
+  "code": "publish_path_collision",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

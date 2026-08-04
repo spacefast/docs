@@ -9,20 +9,23 @@ The DNS import could not see the full zone, so importing would lose records.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "dns_import_partial_visibility",
-    "message": "The DNS import could not see the full zone, so importing would lose records.",
-    "docsUrl": "https://spacefast.com/docs/errors/dns_import_partial_visibility",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/dns_import_partial_visibility",
+  "title": "Dns import partial visibility",
+  "status": 400,
+  "detail": "The DNS import could not see the full zone, so importing would lose records.",
+  "code": "dns_import_partial_visibility",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

@@ -5,24 +5,27 @@ description: "The hosting provider reported an error."
 
 The hosting provider reported an error.
 
-**How to resolve:** Retry; if the error persists, contact support with the requestId.
+**How to resolve:** Retry. If the error persists, contact support with the requestId.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "provider_error",
-    "message": "The hosting provider reported an error.",
-    "docsUrl": "https://spacefast.com/docs/errors/provider_error",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/provider_error",
+  "title": "Provider error",
+  "status": 400,
+  "detail": "The hosting provider reported an error.",
+  "code": "provider_error",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

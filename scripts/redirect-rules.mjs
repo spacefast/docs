@@ -1,3 +1,10 @@
+export const deploymentBase = "/docs";
+
+const mountRewriteRules = [
+  { from: deploymentBase, status: 200, to: "/" },
+  { from: `${deploymentBase}/*`, status: 200, to: "/:splat" },
+];
+
 const aliasFamilies = [
   {
     sourcePrefix: "/platform-api/operations/",
@@ -61,6 +68,21 @@ function applyRule(rule, source) {
   return rule.to.replace(":splat", source.slice(prefix.length));
 }
 
+// The published tree is flat (Astro emits pages at the dist root), but every
+// public URL carries the deployment base for the static mount. Browser
+// redirects are prefixed so they fire under the mount; the trailing rewrites
+// then map the remaining based URLs back onto the flat files.
+export function buildRoutingRules(redirects) {
+  return [
+    ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
+      from: `${deploymentBase}${from}`,
+      status,
+      to: `${deploymentBase}${to}`,
+    })),
+    ...mountRewriteRules,
+  ];
+}
+
 export function resolveRedirect(source, rules, maximumHops = 5) {
   let current = source;
   const hops = [];
@@ -69,12 +91,7 @@ export function resolveRedirect(source, rules, maximumHops = 5) {
     if (!rule) return { destination: current, hops };
     const destination = applyRule(rule, current);
     hops.push({ source: current, destination, status: rule.status });
-    if (
-      hops.some(
-        (hop, hopIndex) =>
-          hopIndex < hops.length - 1 && hop.source === destination,
-      )
-    ) {
+    if (hops.some((hop, hopIndex) => hopIndex < hops.length - 1 && hop.source === destination)) {
       throw new Error(`Redirect loop while resolving ${source}`);
     }
     current = destination;

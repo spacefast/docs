@@ -1,0 +1,34 @@
+---
+title: "runtime_kind_mismatch"
+description: "This operation is only available for a different runtime kind."
+---
+
+This operation is only available for a different runtime kind.
+
+**How to resolve:** Check `sf runtime status` for what the live version actually runs, then use the surface that runtime supports.
+
+<div data-pagefind-ignore>
+
+## Error shape
+
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
+
+```json
+{
+  "type": "https://docs.spacefast.com/docs/errors/runtime_kind_mismatch",
+  "title": "Runtime kind mismatch",
+  "status": 400,
+  "detail": "This operation is only available for a different runtime kind.",
+  "code": "runtime_kind_mismatch",
+  "requestId": "req_4mz0v8qk"
+}
+```
+
+See the full list of error codes in the [error reference](/errors).
+
+</div>

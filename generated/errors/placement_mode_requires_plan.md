@@ -9,20 +9,23 @@ The requested placement mode requires a plan entitlement.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "placement_mode_requires_plan",
-    "message": "The requested placement mode requires a plan entitlement.",
-    "docsUrl": "https://spacefast.com/docs/errors/placement_mode_requires_plan",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/placement_mode_requires_plan",
+  "title": "Placement mode requires plan",
+  "status": 400,
+  "detail": "The requested placement mode requires a plan entitlement.",
+  "code": "placement_mode_requires_plan",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

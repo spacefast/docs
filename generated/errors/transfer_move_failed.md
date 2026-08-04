@@ -5,24 +5,27 @@ description: "The space move backing this transfer failed."
 
 The space move backing this transfer failed.
 
-**How to resolve:** Retry the transfer; if it persists, contact support with the transfer id.
+**How to resolve:** Retry the transfer. If it persists, contact support with the transfer id.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "transfer_move_failed",
-    "message": "The space move backing this transfer failed.",
-    "docsUrl": "https://spacefast.com/docs/errors/transfer_move_failed",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/transfer_move_failed",
+  "title": "Transfer move failed",
+  "status": 400,
+  "detail": "The space move backing this transfer failed.",
+  "code": "transfer_move_failed",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 
