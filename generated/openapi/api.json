@@ -2603,7 +2603,7 @@
                           },
                           "runtimeAvailable": {
                             "type": "boolean",
-                            "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                            "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                           },
                           "channels": {
                             "type": "object",
@@ -4922,7 +4922,7 @@
                             },
                             "runtimeAvailable": {
                               "type": "boolean",
-                              "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                              "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                             },
                             "channels": {
                               "type": "object",
@@ -5945,7 +5945,7 @@
                         },
                         "runtimeAvailable": {
                           "type": "boolean",
-                          "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                          "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
                         "channels": {
                           "type": "object",
@@ -8280,7 +8280,7 @@
                         },
                         "runtimeAvailable": {
                           "type": "boolean",
-                          "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                          "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
                         "channels": {
                           "type": "object",
@@ -9215,7 +9215,7 @@
                         },
                         "runtimeAvailable": {
                           "type": "boolean",
-                          "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                          "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
                         "channels": {
                           "type": "object",
@@ -27467,7 +27467,7 @@
                           },
                           "runtimeAvailable": {
                             "type": "boolean",
-                            "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                            "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                           },
                           "channels": {
                             "type": "object",
@@ -41113,7 +41113,7 @@
                         },
                         "runtimeAvailable": {
                           "type": "boolean",
-                          "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                          "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
                         "channels": {
                           "type": "object",
@@ -43214,7 +43214,7 @@
                         },
                         "runtimeAvailable": {
                           "type": "boolean",
-                          "description": "Whether the Runtime surface applies to this space: the owning team has runtime enabled, or the live version already runs code. A runtime that already serves code is always available. Flags decide who can start using runtimes, never whether an already-serving runtime is visible."
+                          "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
                         "channels": {
                           "type": "object",
