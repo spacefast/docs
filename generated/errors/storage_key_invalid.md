@@ -9,20 +9,23 @@ The Zero storage key is malformed.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "storage_key_invalid",
-    "message": "The Zero storage key is malformed.",
-    "docsUrl": "https://docs.spacefast.com/errors/storage_key_invalid",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/storage_key_invalid",
+  "title": "Storage key invalid",
+  "status": 400,
+  "detail": "The Zero storage key is malformed.",
+  "code": "storage_key_invalid",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

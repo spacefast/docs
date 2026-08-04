@@ -1,0 +1,31 @@
+---
+title: Roll back
+description: How to roll back a Spacefast space to an earlier version.
+---
+
+Every publish creates an immutable version with its own URL. Rolling back promotes an earlier ready version to live — no rebuild, no re-upload, live in seconds. Your live site stays up and you can always roll back.
+
+```bash
+sf versions ls
+```
+
+```bash
+sf rollback v12
+```
+
+Run these from a directory with `.spacefast/state.json`, or pass `--space docs` to target a space explicitly. Use `sf versions ls` to find the target. `sf rollback <version>` is the recovery-focused command; `sf promote <version>` uses the same backend operation when you want to frame it as promotion rather than recovery. Versions and [channels](/publishing/channels) are the canonical vocabulary; `sf channels history` is the deploy log for a pointer. `sf deploy` is the exact alias of `sf publish`, and `sf deployments` is an accepted alias of `sf versions` — deploying is publishing, and a deployment is a version. Both commands accept a version id, ref, or number such as `ver_123`, `v12`, or `12`.
+
+## Retention and storage
+
+Committed file bytes across versions count toward the team's storage quota. Hitting the quota blocks new publishes but never takes the live site down; free up room by deleting old versions or adding storage. The live version and any version a channel points at are never deleted by retention, so the current rollback target is always safe.
+
+Retention follows the team's current policy. Before an unreferenced version is
+eligible for removal, Spacefast warns the team and offers an export. Versions
+that are live or referenced by a channel are protected.
+
+## Permanent Version URLs
+
+Each version's URL serves exactly what was published; its content never
+changes. Whether an older version URL is public follows the team's current
+entitlements. Owner and API access, including rollback and export, is
+unaffected.

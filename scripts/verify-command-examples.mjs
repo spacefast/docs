@@ -27,7 +27,9 @@ for (const file of files) {
     });
     if (commandLines.length > 1) {
       const line = source.slice(0, match.index).split("\n").length;
-      failures.push(`${path.relative(root, file)}:${line} contains ${commandLines.length} commands`);
+      failures.push(
+        `${path.relative(root, file)}:${line} contains ${commandLines.length} commands`,
+      );
     }
   }
 }

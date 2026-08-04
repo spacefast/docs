@@ -9,20 +9,23 @@ The Idempotency-Key is missing or invalid, or an anonymous publish omitted its s
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "invalid_idempotency_key",
-    "message": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
-    "docsUrl": "https://docs.spacefast.com/errors/invalid_idempotency_key",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/invalid_idempotency_key",
+  "title": "Invalid idempotency key",
+  "status": 400,
+  "detail": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
+  "code": "invalid_idempotency_key",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

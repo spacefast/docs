@@ -43,5 +43,8 @@ jobs:
       - name: Build static site
         run: bun run build
 
+      - name: Audit built site
+        run: bun run audit
+
       - name: Verify routes and artifacts
         run: bun run verify:routes

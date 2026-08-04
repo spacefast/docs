@@ -3,8 +3,8 @@
 The documentation site for Spacefast, built with Blume.
 
 The authored guides live in `content/`. API specifications, the CLI reference,
-error pages, and compatibility redirects arrive as one verified snapshot in
-`generated/`.
+error pages, npm package release history (`generated/changelog/`), and
+compatibility redirects arrive as one verified snapshot in `generated/`.
 
 ## Local development
 
@@ -33,6 +33,10 @@ bun run build
 ```
 
 ```bash
+bun run audit
+```
+
+```bash
 bun run verify:generated
 ```
 
@@ -44,8 +48,11 @@ bun run verify:public-safety
 bun run verify:routes
 ```
 
-Blume writes the static site to `dist/`. The site is built for
-`https://docs.spacefast.com` at the origin root.
+Blume writes the static site to `dist/`. Pages emit flat at the tree root and
+every URL carries the `/docs` base (`deployment.base` in `blume.config.ts`), so
+the space serves at `https://docs.spacefast.com/docs` and can be mounted into
+another space at `/docs`; trailing `_redirects` rewrites map `/docs/*` back onto
+the flat tree.
 
 ## Publishing the static artifact
 

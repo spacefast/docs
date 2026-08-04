@@ -9,20 +9,23 @@ Too many requests were made in a short window.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "rate_limited",
-    "message": "Too many requests were made in a short window.",
-    "docsUrl": "https://docs.spacefast.com/errors/rate_limited",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/rate_limited",
+  "title": "Rate limited",
+  "status": 400,
+  "detail": "Too many requests were made in a short window.",
+  "code": "rate_limited",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

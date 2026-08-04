@@ -9,20 +9,23 @@ An uploaded file's size does not match the declared size.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "upload_size_mismatch",
-    "message": "An uploaded file's size does not match the declared size.",
-    "docsUrl": "https://docs.spacefast.com/errors/upload_size_mismatch",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/upload_size_mismatch",
+  "title": "Upload size mismatch",
+  "status": 400,
+  "detail": "An uploaded file's size does not match the declared size.",
+  "code": "upload_size_mismatch",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

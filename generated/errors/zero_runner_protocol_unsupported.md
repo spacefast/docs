@@ -9,20 +9,23 @@ The Zero runner received an unsupported invoke protocol.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "zero_runner_protocol_unsupported",
-    "message": "The Zero runner received an unsupported invoke protocol.",
-    "docsUrl": "https://docs.spacefast.com/errors/zero_runner_protocol_unsupported",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/zero_runner_protocol_unsupported",
+  "title": "Zero runner protocol unsupported",
+  "status": 400,
+  "detail": "The Zero runner received an unsupported invoke protocol.",
+  "code": "zero_runner_protocol_unsupported",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

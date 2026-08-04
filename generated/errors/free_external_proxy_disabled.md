@@ -9,20 +9,23 @@ Proxy routes to external upstreams are not available on the Free plan.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "free_external_proxy_disabled",
-    "message": "Proxy routes to external upstreams are not available on the Free plan.",
-    "docsUrl": "https://docs.spacefast.com/errors/free_external_proxy_disabled",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/free_external_proxy_disabled",
+  "title": "Free external proxy disabled",
+  "status": 400,
+  "detail": "Proxy routes to external upstreams are not available on the Free plan.",
+  "code": "free_external_proxy_disabled",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 

@@ -1,13 +1,14 @@
 ---
 title: "Error reference"
-description: "Every Spacefast API error carries a stable code and a docsUrl that links to its reference page."
+description: "Every Spacefast API error is a problem document with a stable code and a type URI linking to its reference page."
 ---
 
-Every Spacefast API error response carries a stable `code` and a `docsUrl` that
-links to one of the pages below. Match on `code` in clients. Its meaning stays stable,
-while `message` text may improve. Retired codes leave with their owning API surface.
+Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`)
+carrying a stable `code` and a `type` URI that links to one of the pages below. Match on
+`code` in clients. Its meaning stays stable, while `detail` text may improve. Retired
+codes leave with their owning API surface.
 
-There are 476 error codes in the registry.
+There are 486 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -239,6 +240,7 @@ There are 476 error codes in the registry.
 | [`rate_limited`](/errors/rate_limited) | Too many requests were made in a short window. |
 | [`registration_expired`](/errors/registration_expired) | The domain registration has expired. |
 | [`registration_expiring`](/errors/registration_expiring) | The domain registration is about to expire, which blocks this operation. |
+| [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
 | [`routing_rules_over_plan`](/errors/routing_rules_over_plan) | The published _redirects and _headers exceed the plan's routing-rule allowance. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
 | [`runtime_api_not_found`](/errors/runtime_api_not_found) | The runtime management endpoint was not found. |
@@ -294,6 +296,9 @@ There are 476 error codes in the registry.
 | [`space_no_live_version`](/errors/space_no_live_version) | The space has no live version, so this operation has nothing to act on. |
 | [`space_not_disabled`](/errors/space_not_disabled) | The space is not disabled, so it cannot be restored. |
 | [`space_not_restorable`](/errors/space_not_restorable) | The space is past its recovery window and cannot be restored. |
+| [`space_person_already_member`](/errors/space_person_already_member) | The email already belongs to a member of the space. |
+| [`space_person_invitation_pending`](/errors/space_person_invitation_pending) | A Person invitation is already pending for this email. |
+| [`space_person_self_invite`](/errors/space_person_self_invite) | The inviter already belongs to the space. |
 | [`space_ref_ambiguous`](/errors/space_ref_ambiguous) | The space reference matches more than one accessible space. |
 | [`space_ref_required`](/errors/space_ref_required) | A space reference is required for this operation. |
 | [`space_transferring`](/errors/space_transferring) | The space has a transfer in progress, which blocks this operation. |
@@ -409,6 +414,12 @@ There are 476 error codes in the registry.
 | [`zero_client_bundle_not_loaded`](/errors/zero_client_bundle_not_loaded) | The local Zero dev client bundle has not been generated or loaded. |
 | [`zero_db_connect_failed`](/errors/zero_db_connect_failed) | The Zero runner could not connect to the configured database. |
 | [`zero_db_execute_failed`](/errors/zero_db_execute_failed) | A Zero database write failed. |
+| [`zero_db_export_cursor_invalid`](/errors/zero_db_export_cursor_invalid) | The local database export cursor is invalid or belongs to another export. |
+| [`zero_db_export_failed`](/errors/zero_db_export_failed) | The runtime could not read a database export page. |
+| [`zero_db_export_page_too_large`](/errors/zero_db_export_page_too_large) | One database export page exceeded the 16 MiB response limit. |
+| [`zero_db_export_query_invalid`](/errors/zero_db_export_query_invalid) | The local database export request has an invalid table or page size. |
+| [`zero_db_export_schema_changed`](/errors/zero_db_export_schema_changed) | The database schema changed while an export was in progress. |
+| [`zero_db_export_schema_unavailable`](/errors/zero_db_export_schema_unavailable) | The live capsule has no stable schema hash for a complete export. |
 | [`zero_db_host_install_failed`](/errors/zero_db_host_install_failed) | The Zero runner could not install the database host bridge. |
 | [`zero_db_operation_invalid`](/errors/zero_db_operation_invalid) | The Zero database bridge received an invalid operation payload. |
 | [`zero_db_operation_too_large`](/errors/zero_db_operation_too_large) | The Zero database operation payload is too large. |

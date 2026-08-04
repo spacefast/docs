@@ -1,55 +1,55 @@
 ---
-title: Spacefast for developers
-description: One API for spaces, versions, builds, domains, access, and collaboration — available through REST, CLI, SDK, and MCP.
+title: Spacefast documentation
+description: Publish static sites, build apps, and manage every Spacefast space from the dashboard, CLI, API, SDK, or an agent.
 ---
 
-Spacefast is a static hosting product for people and the agents working for
-them. This portal is the contract: resources, interfaces, errors, and the
-multi-tenant Platform API.
+Spacefast turns static files and app builds into live URLs. Start with a site,
+keep every version, and add domains, access rules, collaboration, or app code
+when you need them.
 
-## Start here
-
-[Publish your first site](/quickstart), or jump straight to the interface you
-already use.
+## Get something live
 
 <CardGroup cols={2}>
-  <Card title="REST API" href="/api" icon="braces">
-    Authentication, envelopes, idempotency, versions, and the generated reference.
+  <Card title="Publish your first site" href="/getting-started/quickstart" icon="rocket">
+    Send a file or folder and get a live URL.
   </Card>
-  <Card title="CLI" href="/cli" icon="terminal">
-    Publish and operate spaces from a terminal or CI.
+  <Card title="Publish without an account" href="/publishing/anonymous" icon="upload">
+    Try Spacefast first; keep the space later.
   </Card>
-  <Card title="MCP" href="/mcp" icon="bot">
-    Give an authenticated agent the same product capabilities.
+  <Card title="Publish with Git" href="/publishing/push-new" icon="git-branch">
+    Push a repository to a temporary remote. Nothing to install.
   </Card>
-  <Card title="Platforms" href="/platforms" icon="building">
-    Host customer sites behind your own product and billing.
+  <Card title="Set up an agent" href="/getting-started/agents" icon="bot">
+    Give your coding agent the CLI, skills, and MCP it needs.
   </Card>
 </CardGroup>
 
-## The product model
+## Find your way around
 
-- A **space** is your site or project. It has one stable live URL.
-- A **publish** sends a static file, folder, archive, or detected project build.
-- A **version** is an immutable snapshot with its own URL. A successful publish
-  moves the live URL to that version atomically.
-- Publishing the same content again is a no-op. Changed content becomes a new
-  version.
+- [Publishing](/publishing) covers uploads, Git builds, versions, rollbacks,
+  frameworks, and moving from another host.
+- [Spaces](/spaces) covers files, visitors, domains, settings, traffic,
+  comments, routing, and automation.
+- [Apps](/apps) covers Functions and Zero when a static site needs server-side
+  work, data, authentication, or storage.
+- [Account and teams](/account) covers security, membership, credentials,
+  usage, and limits.
+- [Platforms](/platforms) is for products that host customer sites through
+  Spacefast.
+- [Reference](/reference) holds the exact CLI, API, SDK, MCP, error, and
+  changelog contracts.
+
+## The three nouns that matter
+
+- A **space** is a site or app with one stable live URL.
+- A **publish** sends new output to that space.
+- A **version** is an immutable snapshot. A successful publish moves the live
+  URL to the new version atomically; a failed publish leaves the current site
+  alone.
 
 A root `index.html` is the ordinary homepage. Spacefast serves the files you
-upload; it does not execute uploaded server code.
+publish and runs app code only when you explicitly choose Functions or Zero.
 
-## Browse by feature
-
-- [Spaces](/spaces) — ownership, stable URLs, configuration, and lifecycle.
-- [Publishing and versions](/publishing) — files in, immutable release out.
-- [Builds](/builds) — turn source into static output.
-- [Domains](/domains) — custom hostnames, verification, and certificates.
-- [Access](/access) — public, private, password, and invited access.
-- [Collab](/collab) — presence, comments, and version-aware review.
-
-## More from Spacefast
-
-The main product site owns [Help](https://spacefast.com/help),
-[recipes](https://spacefast.com/recipes), and
-[agent setup](https://spacefast.com/setup). Search from either site covers both.
+Looking for support outside the product reference? Visit
+[Help](https://spacefast.com/help) or browse the
+[recipes](https://spacefast.com/recipes).

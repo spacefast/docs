@@ -16,26 +16,16 @@ Tell your agent to pick the smallest lane that does the job:
 
 ## Usage
 
-Install the CLI:
-
-```bash
-npm install -g spacefast
-```
-
-Check the installed version:
-
-```bash
-sf --version
-```
-
-See every command or drill into one command:
-
-```bash
-sf --help
-```
-
-```bash
-sf COMMAND --help
+```text
+$ npm install -g spacefast
+$ sf COMMAND
+running command...
+$ sf (--version)
+spacefast/0.0.13
+$ sf --help [COMMAND]
+USAGE
+  $ sf COMMAND
+...
 ```
 
 ## Common flags
@@ -215,6 +205,7 @@ GLOBAL FLAGS
 - [`sf share token revoke ID`](#sf-share-token-revoke-id)
 - [`sf share token rotate ID`](#sf-share-token-rotate-id)
 - [`sf skills`](#sf-skills)
+- [`sf skills remove`](#sf-skills-remove)
 - [`sf skills status`](#sf-skills-status)
 - [`sf spaces`](#sf-spaces)
 - [`sf spaces add`](#sf-spaces-add)
@@ -3146,7 +3137,8 @@ Run the Spacefast MCP server.
 ```text
 USAGE
   $ sf mcp [--transport stdio|http|streamable-http] [--host <value>] [--port <value>] [--path <value>]
-    [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
+    [--profile <value>] [--http-token <value>] [--cors-origin <value>...]
+    [--workspace-root <value>]
 
 FLAGS
   --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
@@ -3161,6 +3153,9 @@ FLAGS
   --transport=<option>      MCP transport to run. `http` is streamable HTTP.
                             <options: stdio|http|streamable-http>
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+
+GLOBAL FLAGS
+  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run the Spacefast MCP server.
@@ -3186,7 +3181,7 @@ Run the local MCP daemon.
 
 ```text
 USAGE
-  $ sf mcp daemon [--host <value>] [--port <value>] [--path <value>]
+  $ sf mcp daemon [--host <value>] [--port <value>] [--path <value>] [--profile <value>]
     [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
 
 FLAGS
@@ -3200,6 +3195,9 @@ FLAGS
   --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+
+GLOBAL FLAGS
+  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run the local MCP daemon.
@@ -3216,7 +3214,7 @@ Run MCP over streamable HTTP.
 
 ```text
 USAGE
-  $ sf mcp http [--host <value>] [--port <value>] [--path <value>]
+  $ sf mcp http [--host <value>] [--port <value>] [--path <value>] [--profile <value>]
     [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
 
 FLAGS
@@ -3230,6 +3228,9 @@ FLAGS
   --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Workspace root exposed to On-Device MCP workspace tools.
+
+GLOBAL FLAGS
+  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run MCP over streamable HTTP.
@@ -3247,13 +3248,13 @@ Install MCP client config.
 ```text
 USAGE
   $ sf mcp install [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|claude|copilot...]
-    [--oauth --remote]
+    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
+    |cline|continue|claude|copilot...] [--oauth --remote]
 
 FLAGS
   --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
                        <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|curs
-                       or|vscode|claude|copilot>
+                       or|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
   --oauth              With --remote, connect directly and let the editor handle OAuth.
   --remote             Use hosted MCP through `sf mcp proxy` and the current CLI login.
 
@@ -4064,15 +4065,15 @@ Install Spacefast agent tooling.
 ```text
 USAGE
   $ sf setup agent [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|claude|copilot...]
-    [-p] [--oauth --remote] [--skip-mcp] [--force] [--handoff]
+    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
+    |cline|continue|claude|copilot...] [-p] [--oauth --remote] [--skip-mcp] [--force] [--handoff]
 
 FLAGS
   -p, --project            Install skills into this project instead of global agent directories.
   -y, --yes                Skip prompts, auto-detect agents, and accept local stdio MCP.
       --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
                            <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|claude|copilot>
+                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
       --force              Overwrite locally modified or unverified Spacefast skill files.
       --handoff            Redeem a one-use agent handoff link from the dashboard before generating setup. The link is
                            read from stdin.
@@ -5193,15 +5194,15 @@ Install or update Spacefast agent skills.
 ```text
 USAGE
   $ sf skills [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|claude|copilot...]
-    [-p] [-l] [--force]
+    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
+    |cline|continue|claude|copilot...] [-p] [-l] [--force]
 
 FLAGS
   -l, --list               List bundled skill files without installing.
   -p, --project            Install into this project instead of the agent's global skills directory.
       --agent=<option>...  Agent to install for. `auto` configures detected agents plus .agents/skills.
                            <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|claude|copilot>
+                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
       --force              Overwrite locally modified or unverified Spacefast skill files.
 
 GLOBAL FLAGS
@@ -5231,6 +5232,47 @@ EXAMPLES
     $ sf skills --agent all
 ```
 
+## `sf skills remove`
+
+Remove Spacefast agent skills.
+
+```text
+USAGE
+  $ sf skills remove [--profile <value>] [-y] [--agent
+    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
+    |cline|continue|claude|copilot...] [-p] [--force]
+
+FLAGS
+  -p, --project            Remove project-local skills instead of global skills.
+      --agent=<option>...  Agent to remove from. Repeat to remove from more than one.
+                           <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
+                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+      --force              Remove locally modified or unverified Spacefast skill files.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Remove Spacefast agent skills.
+
+  Remove the Spacefast skill while preserving locally modified files unless forced.
+
+ALIASES
+  $ sf skills rm
+  $ sf skills uninstall
+
+EXAMPLES
+  Remove the global Codex installation.
+
+    $ sf skills remove --agent codex
+
+  Remove this project's Claude Code installation.
+
+    $ sf skills remove --project --agent claude-code
+```
+
 ## `sf skills status`
 
 Check Spacefast skill installation.
@@ -5238,14 +5280,14 @@ Check Spacefast skill installation.
 ```text
 USAGE
   $ sf skills status [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|claude|copilot...]
-    [-p]
+    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
+    |cline|continue|claude|copilot...] [-p]
 
 FLAGS
   -p, --project            Check project-local skills instead of global skill directories.
       --agent=<option>...  Agent to check. `auto` checks detected agents plus .agents/skills.
                            <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|claude|copilot>
+                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.

@@ -1,10 +1,12 @@
 .blume/
 .blume-verify/
+.blume-base-test/
 dist/
 .spacefast/
 node_modules/
 content/cli/
 content/errors/
+content/changelog/
 public/_redirects
 .env
 .env.*

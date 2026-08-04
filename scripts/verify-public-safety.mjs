@@ -4,6 +4,7 @@ import { relative, resolve } from "node:path";
 const root = resolve(process.cwd());
 const skippedDirectories = new Set([
   ".blume",
+  ".blume-base-test",
   ".blume-verify",
   ".git",
   "dist",
@@ -65,8 +66,7 @@ const report = (path, line, rule) => {
   });
 };
 
-const lineForOffset = (text, offset) =>
-  text.slice(0, offset).split("\n").length;
+const lineForOffset = (text, offset) => text.slice(0, offset).split("\n").length;
 
 const firstMatch = (text, pattern) => {
   pattern.lastIndex = 0;
@@ -82,8 +82,7 @@ const scanText = (path, text) => {
     },
     {
       name: "private GitHub pull request or workflow URL",
-      pattern:
-        /https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/(?:actions\/runs|pull)\/\d+/iu,
+      pattern: /https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/(?:actions\/runs|pull)\/\d+/iu,
     },
     {
       name: "SSH repository metadata",
@@ -93,7 +92,7 @@ const scanText = (path, text) => {
       name: "private key material",
       pattern: new RegExp(
         `-----BEGIN (?:RSA |EC |OPENSSH )?${["PRIVATE", "KEY"].join(" ")}-----`,
-        "u"
+        "u",
       ),
     },
     {
@@ -140,9 +139,7 @@ const scanText = (path, text) => {
       value.startsWith("$") ||
       value.startsWith("<") ||
       value.startsWith("{") ||
-      /^(?:your|example|placeholder|redacted|replace|x{4,}|\*{4,}|\.{3})/iu.test(
-        value
-      );
+      /^(?:your|example|placeholder|redacted|replace|x{4,}|\*{4,}|\.{3})/iu.test(value);
     if (!placeholder) {
       report(path, lineForOffset(text, match.index), "literal secret assignment");
     }
@@ -179,9 +176,7 @@ for (const path of symlinks) {
 }
 
 if (violations.length > 0) {
-  console.error(
-    `Public-safety verification failed with ${violations.length} violation(s):`
-  );
+  console.error(`Public-safety verification failed with ${violations.length} violation(s):`);
   for (const violation of violations.slice(0, 100)) {
     console.error(`- ${violation.path}:${violation.line} — ${violation.rule}`);
   }
@@ -191,6 +186,6 @@ if (violations.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Public-safety verification passed: ${scannedFiles} text file(s) and ${symlinks.length} symlink(s) scanned.`
+    `Public-safety verification passed: ${scannedFiles} text file(s) and ${symlinks.length} symlink(s) scanned.`,
   );
 }

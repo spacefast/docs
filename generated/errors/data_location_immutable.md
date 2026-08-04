@@ -9,20 +9,23 @@ This request tried to change data location through an immutable path.
 
 <div data-pagefind-ignore>
 
-## Error envelope
+## Error shape
 
-Every Spacefast API error uses one envelope. `code` is stable and machine-readable,
-`param` (when present) points at the offending request field, and `details` may carry
-structured context. Match on `code`, never on `message`.
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`. `code` is stable and machine-readable, `type` links to
+this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
+explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
+offending field in the request body, and `details` may carry structured context. Match on
+`code`, never on `detail`.
 
 ```json
 {
-  "error": {
-    "code": "data_location_immutable",
-    "message": "This request tried to change data location through an immutable path.",
-    "docsUrl": "https://docs.spacefast.com/errors/data_location_immutable",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://docs.spacefast.com/docs/errors/data_location_immutable",
+  "title": "Data location immutable",
+  "status": 400,
+  "detail": "This request tried to change data location through an immutable path.",
+  "code": "data_location_immutable",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 
