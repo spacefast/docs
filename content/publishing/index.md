@@ -2,7 +2,7 @@
 title: Publish a site
 sidebar:
   label: Overview
-description: How publishing works in Spacefast, including dashboard Drop, CLI publishes, immutable versions, and updates.
+description: How publishing works in Spacefast, including CLI and agent publishes, immutable versions, updates, and the dashboard Drop uploader.
 ---
 
 Publish a directory or a single file. A changed-content publish creates an
@@ -15,24 +15,11 @@ Directory publishes preserve relative paths. They can include `_redirects`,
 server-side code never executes. The CLI and dashboard warn you early about
 files that the runtime safety policy blocks.
 
-## Dashboard Drop
+## CLI and agents
 
-Drop is the dashboard uploader: drag a folder, a zip archive, or a standalone
-`index.html` onto a space and publish — the
-[quickstart](/getting-started/quickstart) walks through it. Uploads resume if
-interrupted, zips are expanded before publishing, and `index.html` belongs at
-the archive root unless you want a file listing.
-
-Prefer the [CLI](/cli) for incremental uploads, `--json` receipts, CI, or
-dry-runs.
-
-## Folder vs zip vs CLI
-
-| Path                | Best for                                         |
-| ------------------- | ------------------------------------------------ |
-| Dashboard Drop      | First publish, designers, quick zip/`index.html` |
-| `sf publish ./dist` | Local projects, agents, incremental updates      |
-| `POST /v1/publish`  | One-shot HTTP from scripts — see [API](/api)     |
+The [CLI](/cli) is the main publish path: incremental uploads, `--json`
+receipts, CI, and dry-runs. It is also what [agents](/agents) run for you — the
+[quickstart](/getting-started/quickstart) starts there.
 
 ```bash
 sf publish ./dist
@@ -45,6 +32,19 @@ sf publish ./dist --space docs --json
 ```bash
 sf publish ./dist --dry-run
 ```
+
+| Path                | Best for                                         |
+| ------------------- | ------------------------------------------------ |
+| `sf publish ./dist` | Local projects, agents, incremental updates      |
+| `POST /v1/publish`  | One-shot HTTP from scripts — see [API](/api)     |
+| Dashboard Drop      | No tooling at hand, quick zip/`index.html`       |
+
+## Dashboard Drop
+
+Drop is the dashboard uploader and the no-tooling escape hatch: drag a folder,
+a zip archive, or a standalone `index.html` onto a space and publish. Uploads
+resume if interrupted, zips are expanded before publishing, and `index.html`
+belongs at the archive root unless you want a file listing.
 
 ## index.html requirements
 

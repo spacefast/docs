@@ -1,27 +1,24 @@
 ---
 title: Publish your first site
-description: Publish a folder, zip, or single file and get a live URL in seconds, no account required.
+description: Hand your project to your coding agent or run one CLI command and get a live URL in seconds, no account required.
 ---
 
 Publish a folder, a zip, or a single `index.html`. Spacefast keeps it at a permanent URL. You do not need an account for the first publish. Your site is live seconds after the upload completes.
 
-1. Go to [spacefast.com](https://spacefast.com).
-2. Drag your folder, zip, or `index.html` onto the upload box.
-3. Publish. You get a live URL and a permanent Version URL. If you published without an account, you also get a claim link.
+## Tell your agent
 
-Claim the space within 6 hours — open the claim link and sign in with your WordPress.com account, or the space [expires](/publishing/anonymous). After claiming, you keep the same URL for every future publish and get full version history.
+The fastest path is the one you already have open. Paste this into your coding agent:
 
-:::tip
-If you upload a folder, Spacefast looks for `index.html` at the root. Spacefast never runs server-executable files. It serves static files only.
-:::
+```text
+fetch https://spacefast.com/setup.md
+and publish this space to Spacefast
+```
 
-## Dashboard URLs
+The agent fetches the instructions, publishes, and reports back the live URL and the permanent Version URL. If it published without an account, it also hands you a claim link. When you want the setup to stick — CLI, skill, and MCP — see [Set up an agent](/agents).
 
-Your team is at `my.spacefast.com/<team>`. Each space is at `my.spacefast.com/<team>/<space>`. Those are the canonical dashboard URLs. Old links that contain `/~/` are legacy-only. They permanently redirect to the canonical URL.
+## Or run the CLI yourself
 
-## Common first publish
-
-Do you prefer the terminal? Install the CLI once. Then publish:
+Install the CLI once. Then publish:
 
 ```bash
 curl -fsSL https://spacefast.com/install.sh | bash
@@ -40,6 +37,20 @@ The full command surface is in the [CLI reference](/cli).
 The first CLI publish writes `.spacefast/state.json` next to the folder. Later publishes from that folder update the same space. The URL stays the same. Each publish creates a new version. Spacefast skips unchanged files when the hashes match.
 
 Every publish is an immutable version, and [`sf rollback`](/publishing/rollback) promotes an earlier one with no rebuild.
+
+## Claim your space
+
+If you published without an account, claim the space within 6 hours — open the claim link and sign in with your WordPress.com account, or the space [expires](/publishing/anonymous). After claiming, you keep the same URL for every future publish and get full version history.
+
+:::tip
+Spacefast looks for `index.html` at the root of what you publish. It never runs server-executable files. It serves static files only.
+:::
+
+No agent and no terminal? [spacefast.com](https://spacefast.com) has an upload box — drag a folder, zip, or `index.html` onto it and publish. Same URLs, same claim link.
+
+## Dashboard URLs
+
+Your team is at `my.spacefast.com/<team>`. Each space is at `my.spacefast.com/<team>/<space>`. Those are the canonical dashboard URLs. Old links that contain `/~/` are legacy-only. They permanently redirect to the canonical URL.
 
 ## Try the CLI in your browser
 
