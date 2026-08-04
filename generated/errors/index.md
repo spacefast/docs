@@ -3,12 +3,12 @@ title: "Error reference"
 description: "Every Spacefast API error is a problem document with a stable code and a type URI linking to its reference page."
 ---
 
-Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`)
-carrying a stable `code` and a `type` URI that links to one of the pages below. Match on
-`code` in clients. Its meaning stays stable, while `detail` text may improve. Retired
-codes leave with their owning API surface.
+Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`).
+It carries a stable `code` and a `type` URI that links to one of the pages below. Match on
+`code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
+Retired codes leave with their owning API surface.
 
-There are 479 error codes in the registry.
+There are 480 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -26,22 +26,22 @@ There are 479 error codes in the registry.
 | [`anonymous_pool_unavailable`](/errors/anonymous_pool_unavailable) | No pooled capacity is available for anonymous publishes right now. |
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
 | [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | Too many unclaimed anonymous spaces are already active for this client. |
-| [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy could not be derived from the requested scope and permissions. |
+| [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
 | [`archive_body_required`](/errors/archive_body_required) | This request must carry an archive body but none was provided. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
-| [`authorization_pending`](/errors/authorization_pending) | The device login has not been approved yet. |
-| [`billing_receipt_invalid`](/errors/billing_receipt_invalid) | The store receipt or notification could not be verified with the payment provider. |
+| [`authorization_pending`](/errors/authorization_pending) | The device login is not approved yet. |
+| [`billing_receipt_invalid`](/errors/billing_receipt_invalid) | The store receipt or notification cannot be verified with the payment provider. |
 | [`billing_receipt_not_bound_to_team`](/errors/billing_receipt_not_bound_to_team) | The store purchase was made under a different account token than this team's. |
 | [`billing_store_not_configured`](/errors/billing_store_not_configured) | App Store or Google Play billing is not configured on this deployment. |
 | [`billing_subscription_conflict`](/errors/billing_subscription_conflict) | The team already has an active subscription with another payment provider. |
 | [`billing_unknown_product`](/errors/billing_unknown_product) | The purchased store product does not map to any plan sold by this deployment. |
-| [`build_command_missing`](/errors/build_command_missing) | A build or install command could not be found during the build run. |
+| [`build_command_missing`](/errors/build_command_missing) | A build or install command cannot be found during the build run. |
 | [`build_execution_unavailable`](/errors/build_execution_unavailable) | Build execution is not available on this deployment. |
 | [`build_failed`](/errors/build_failed) | The build run failed before producing a version. |
 | [`build_install_failed`](/errors/build_install_failed) | The dependency install step failed during the build run. |
 | [`build_no_index_html`](/errors/build_no_index_html) | The build produced output but no index.html at the site root. |
-| [`build_not_created`](/errors/build_not_created) | The build could not be created. |
+| [`build_not_created`](/errors/build_not_created) | The build cannot be created. |
 | [`build_oom`](/errors/build_oom) | The build process was killed, most likely after running out of memory. |
 | [`build_output_dir_missing`](/errors/build_output_dir_missing) | The build finished but its output directory was not produced. |
 | [`build_timeout`](/errors/build_timeout) | The build exceeded its time limit before producing a version. |
@@ -63,9 +63,9 @@ There are 479 error codes in the registry.
 | [`config_runtime_entry_missing`](/errors/config_runtime_entry_missing) | The declared runtime has no entry module to compile. |
 | [`config_runtime_invalid_kind`](/errors/config_runtime_invalid_kind) | The runtime block in the space configuration declares an unknown kind. |
 | [`config_templates_over_limit`](/errors/config_templates_over_limit) | The configuration declares more template files than the plan allows. |
-| [`continuation_unavailable`](/errors/continuation_unavailable) | This claim token can no longer be exchanged for an access token. |
-| [`continuation_used`](/errors/continuation_used) | This claim token was already exchanged for a durable access token. |
-| [`credential_expired`](/errors/credential_expired) | The credential used for this request has expired. |
+| [`continuation_unavailable`](/errors/continuation_unavailable) | This claim token can no longer be exchanged for an API key. |
+| [`continuation_used`](/errors/continuation_used) | This claim token was already exchanged for a durable API key. |
+| [`credential_expired`](/errors/credential_expired) | The credential used for this request is expired. |
 | [`credential_not_yet_valid`](/errors/credential_not_yet_valid) | The credential is not valid yet because its start time is in the future. |
 | [`credential_retired`](/errors/credential_retired) | This request used a retired Spacefast token format or authentication header. |
 | [`credential_revoked`](/errors/credential_revoked) | The credential used for this request was revoked. |
@@ -79,7 +79,7 @@ There are 479 error codes in the registry.
 | [`dns_export_required`](/errors/dns_export_required) | This operation requires exporting the current DNS records first. |
 | [`dns_field_conflict`](/errors/dns_field_conflict) | Two DNS fields cannot be used together for this provider or record type. |
 | [`dns_field_not_applicable`](/errors/dns_field_not_applicable) | The DNS field is not writable for this provider, record type, or management mode. |
-| [`dns_import_partial_visibility`](/errors/dns_import_partial_visibility) | The DNS import could not see the full zone, so importing would lose records. |
+| [`dns_import_partial_visibility`](/errors/dns_import_partial_visibility) | The DNS import cannot see the full zone, so importing would lose records. |
 | [`dns_provider_auth_expired`](/errors/dns_provider_auth_expired) | The connected DNS provider authorization expired or was revoked. |
 | [`dns_provider_batch_unsupported`](/errors/dns_provider_batch_unsupported) | The connected DNS provider cannot apply this batch with the required semantics. |
 | [`dns_provider_change_pending`](/errors/dns_provider_change_pending) | The DNS provider accepted the change but propagation or provider completion is still pending. |
@@ -87,7 +87,7 @@ There are 479 error codes in the registry.
 | [`dns_provider_connection_in_use`](/errors/dns_provider_connection_in_use) | The DNS provider connection is still attached to one or more zones. |
 | [`dns_provider_connection_unavailable`](/errors/dns_provider_connection_unavailable) | The DNS provider connection cannot currently be used. |
 | [`dns_provider_controlled_desired_state`](/errors/dns_provider_controlled_desired_state) | This DNS provider is controlled through desired-state templates instead of direct record edits. |
-| [`dns_provider_credentials_expired`](/errors/dns_provider_credentials_expired) | The DNS provider credentials have expired or were revoked. |
+| [`dns_provider_credentials_expired`](/errors/dns_provider_credentials_expired) | The DNS provider credentials are expired or revoked. |
 | [`dns_provider_feature_descriptors`](/errors/dns_provider_feature_descriptors) | This provider exposes domain features through capability descriptors. |
 | [`dns_provider_feature_unavailable`](/errors/dns_provider_feature_unavailable) | The requested DNS provider field or feature is not available for this zone. |
 | [`dns_provider_field_unsupported`](/errors/dns_provider_field_unsupported) | The DNS provider does not support one of the requested record fields. |
@@ -100,12 +100,12 @@ There are 479 error codes in the registry.
 | [`dns_provider_replace_all_requires_fresh_plan`](/errors/dns_provider_replace_all_requires_fresh_plan) | This provider requires a fresh full-zone plan before replacing DNS records. |
 | [`dns_provider_replace_all_write_strategy`](/errors/dns_provider_replace_all_write_strategy) | This provider applies DNS changes with a replace-all write strategy. |
 | [`dns_provider_snapshot_stale`](/errors/dns_provider_snapshot_stale) | The cached DNS provider snapshot is stale. |
-| [`dns_provider_snapshot_unavailable`](/errors/dns_provider_snapshot_unavailable) | Spacefast could not cache the latest DNS provider snapshot. |
+| [`dns_provider_snapshot_unavailable`](/errors/dns_provider_snapshot_unavailable) | Spacefast cannot cache the latest DNS provider snapshot. |
 | [`dns_provider_temporarily_unavailable`](/errors/dns_provider_temporarily_unavailable) | The DNS provider is rate-limited, degraded, or temporarily unavailable. |
 | [`dns_provider_timeout`](/errors/dns_provider_timeout) | The DNS provider did not accept the change within the bounded wait. |
 | [`dns_provider_validation_failed`](/errors/dns_provider_validation_failed) | The DNS provider rejected the submitted record data. |
 | [`dns_provider_workflow_templates`](/errors/dns_provider_workflow_templates) | This provider exposes setup through workflow templates instead of low-level DNS edits. |
-| [`dns_provider_zone_not_found`](/errors/dns_provider_zone_not_found) | The connected DNS provider zone could not be found. |
+| [`dns_provider_zone_not_found`](/errors/dns_provider_zone_not_found) | The connected DNS provider zone cannot be found. |
 | [`dns_record_conflicts_with_managed`](/errors/dns_record_conflicts_with_managed) | The DNS change conflicts with a record Spacefast manages for this domain. |
 | [`dns_record_managed`](/errors/dns_record_managed) | This DNS record is managed by Spacefast and cannot be edited directly. |
 | [`dns_record_not_found`](/errors/dns_record_not_found) | The DNS record was not found in this zone. |
@@ -130,7 +130,7 @@ There are 479 error codes in the registry.
 | [`enforcement_policy_overlap`](/errors/enforcement_policy_overlap) | Enforcement policy severity ranges overlap within a category. |
 | [`event_payload_too_large`](/errors/event_payload_too_large) | The event payload exceeds the maximum size. |
 | [`event_rate_limited`](/errors/event_rate_limited) | Too many event submissions came from this client in a short window. |
-| [`expired_token`](/errors/expired_token) | The token has expired. |
+| [`expired_token`](/errors/expired_token) | The token is expired. |
 | [`export_archive_not_ready`](/errors/export_archive_not_ready) | The export archive is still being prepared. |
 | [`export_version_not_found`](/errors/export_version_not_found) | The version requested for export was not found. |
 | [`feature_unavailable`](/errors/feature_unavailable) | This feature is not available on this deployment or plan. |
@@ -141,7 +141,7 @@ There are 479 error codes in the registry.
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
 | [`idempotency_key_reused`](/errors/idempotency_key_reused) | The Idempotency-Key was reused with a different request body. |
 | [`import_archive_not_uploaded`](/errors/import_archive_not_uploaded) | The import has no uploaded archive yet. |
-| [`import_not_cancelable`](/errors/import_not_cancelable) | The import has progressed past the point where it can be canceled. |
+| [`import_not_cancelable`](/errors/import_not_cancelable) | The import is past the point where it can be canceled. |
 | [`import_not_waiting_for_archive`](/errors/import_not_waiting_for_archive) | The import is not waiting for an archive upload. |
 | [`incumbent_controls_dns`](/errors/incumbent_controls_dns) | Another team controls this domain's DNS, so the operation is blocked. |
 | [`inject_invalid`](/errors/inject_invalid) | The inject config key is malformed. |
@@ -150,14 +150,14 @@ There are 479 error codes in the registry.
 | [`invalid_claim_token`](/errors/invalid_claim_token) | The claim token is invalid or does not match this space. |
 | [`invalid_continuation_token`](/errors/invalid_continuation_token) | The continuation token is invalid, expired, or already finished. |
 | [`invalid_data_location`](/errors/invalid_data_location) | The requested data location is not a supported region. |
-| [`invalid_device_code`](/errors/invalid_device_code) | The device code is invalid or has expired. |
+| [`invalid_device_code`](/errors/invalid_device_code) | The device code is invalid or expired. |
 | [`invalid_domain`](/errors/invalid_domain) | The domain reference is invalid. |
 | [`invalid_domain_name`](/errors/invalid_domain_name) | The domain name is not a valid registrable hostname. |
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
 | [`invalid_google_play_webhook_identity`](/errors/invalid_google_play_webhook_identity) | The Google Play notification did not carry a valid Pub/Sub push identity. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
 | [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
-| [`invalid_publish_archive`](/errors/invalid_publish_archive) | The uploaded archive could not be read as a valid zip. |
+| [`invalid_publish_archive`](/errors/invalid_publish_archive) | The uploaded archive cannot be read as a valid zip. |
 | [`invalid_publish_path`](/errors/invalid_publish_path) | A file path in the publish payload is not allowed. |
 | [`invalid_publish_payload`](/errors/invalid_publish_payload) | The publish payload is malformed. |
 | [`invalid_request`](/errors/invalid_request) | The request is malformed. |
@@ -174,7 +174,7 @@ There are 479 error codes in the registry.
 | [`invalid_zero_realtime_replay_query`](/errors/invalid_zero_realtime_replay_query) | The Zero realtime replay query parameters are invalid. |
 | [`invitation_already_exists`](/errors/invitation_already_exists) | An invitation for this email already exists on the team. |
 | [`invitation_email_mismatch`](/errors/invitation_email_mismatch) | This invitation was addressed to a different email than the accepting user. |
-| [`invitation_expired`](/errors/invitation_expired) | The invitation has expired and can no longer be accepted. |
+| [`invitation_expired`](/errors/invitation_expired) | The invitation is expired and can no longer be accepted. |
 | [`invitation_not_pending`](/errors/invitation_not_pending) | The invitation is no longer pending. |
 | [`ip_blocked`](/errors/ip_blocked) | Requests from this IP address are blocked for abuse or policy reasons. |
 | [`job_not_found`](/errors/job_not_found) | The background job was not found. |
@@ -190,7 +190,7 @@ There are 479 error codes in the registry.
 | [`manifest_body_too_large`](/errors/manifest_body_too_large) | The upload manifest body exceeds the maximum size. |
 | [`manifest_duplicate_path`](/errors/manifest_duplicate_path) | The upload manifest declares the same path more than once. |
 | [`manifest_too_many_files`](/errors/manifest_too_many_files) | The upload manifest declares more files than the allowed ceiling. |
-| [`mcp_acted_for_team_deleted`](/errors/mcp_acted_for_team_deleted) | This MCP approval or execution run acted only for a team that has since been deleted, so it can no longer be approved, denied, or canceled. |
+| [`mcp_acted_for_team_deleted`](/errors/mcp_acted_for_team_deleted) | This MCP approval or execution run is scoped only to a team that is now deleted. It can no longer be approved, denied, or canceled. |
 | [`member_already_exists`](/errors/member_already_exists) | This user is already a member of the team. |
 | [`method_not_allowed`](/errors/method_not_allowed) | The requested HTTP method is not supported for this endpoint. |
 | [`missing_route_param`](/errors/missing_route_param) | A required route parameter is missing from the request path. |
@@ -216,7 +216,7 @@ There are 479 error codes in the registry.
 | [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | The hosting provider does not support this runtime feature. |
 | [`provider_site_id_required`](/errors/provider_site_id_required) | A provider site id is required for this internal operation. |
 | [`proxy_upstream_denied`](/errors/proxy_upstream_denied) | The proxy upstream is on a denied network and cannot be used. |
-| [`proxy_upstream_unresolved`](/errors/proxy_upstream_unresolved) | The proxy upstream hostname could not be resolved. |
+| [`proxy_upstream_unresolved`](/errors/proxy_upstream_unresolved) | The proxy upstream hostname cannot be resolved. |
 | [`publish_archive_compression_ratio_exceeded`](/errors/publish_archive_compression_ratio_exceeded) | The archive's compression ratio is suspiciously high and was rejected. |
 | [`publish_archive_expanded_size_exceeded`](/errors/publish_archive_expanded_size_exceeded) | The archive expands beyond the maximum allowed total size. |
 | [`publish_archive_file_count_exceeded`](/errors/publish_archive_file_count_exceeded) | The archive contains more files than the allowed ceiling. |
@@ -228,7 +228,7 @@ There are 479 error codes in the registry.
 | [`publish_file_missing`](/errors/publish_file_missing) | A declared file was never uploaded, so the publish cannot finalize. |
 | [`publish_hash_mismatch`](/errors/publish_hash_mismatch) | Publish content does not match its declared sha256. |
 | [`publish_inline_limit_exceeded`](/errors/publish_inline_limit_exceeded) | The inline publish exceeds the file-count or total-size limit. |
-| [`publish_not_cancelable`](/errors/publish_not_cancelable) | The publish has progressed past the point where it can be canceled. |
+| [`publish_not_cancelable`](/errors/publish_not_cancelable) | The publish is past the point where it can be canceled. |
 | [`publish_path_collision`](/errors/publish_path_collision) | Two different artifacts would serve the same URL after directory-index or clean-URL resolution. |
 | [`publish_path_invalid`](/errors/publish_path_invalid) | A publish path is not a relative, normalized POSIX path. |
 | [`publish_reference_missing`](/errors/publish_reference_missing) | Published HTML, CSS, or JavaScript references an internal path that is not in the version. |
@@ -238,13 +238,13 @@ There are 479 error codes in the registry.
 | [`publish_verification_failed`](/errors/publish_verification_failed) | Post-publish verification did not see the new content serving. |
 | [`queue_not_found`](/errors/queue_not_found) | The named job queue does not exist. |
 | [`rate_limited`](/errors/rate_limited) | Too many requests were made in a short window. |
-| [`registration_expired`](/errors/registration_expired) | The domain registration has expired. |
+| [`registration_expired`](/errors/registration_expired) | The domain registration is expired. |
 | [`registration_expiring`](/errors/registration_expiring) | The domain registration is about to expire, which blocks this operation. |
 | [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
 | [`routing_rules_over_plan`](/errors/routing_rules_over_plan) | The published _redirects and _headers exceed the plan's routing-rule allowance. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
 | [`runtime_api_not_found`](/errors/runtime_api_not_found) | The runtime management endpoint was not found. |
-| [`runtime_callback_forbidden`](/errors/runtime_callback_forbidden) | The runtime callback could not be authenticated. |
+| [`runtime_callback_forbidden`](/errors/runtime_callback_forbidden) | The runtime callback cannot be authenticated. |
 | [`runtime_dev_unsupported`](/errors/runtime_dev_unsupported) | `sf dev` cannot run this runtime locally yet. |
 | [`runtime_engine_zip_missing`](/errors/runtime_engine_zip_missing) | The runtime engine artifact is missing from this deployment. |
 | [`runtime_hostname_unassigned`](/errors/runtime_hostname_unassigned) | The hostname is not assigned to a runtime, so the request cannot be routed. |
@@ -254,18 +254,19 @@ There are 479 error codes in the registry.
 | [`runtime_jwks_key_missing`](/errors/runtime_jwks_key_missing) | No signing key matching the token's key id was found. |
 | [`runtime_kind_mismatch`](/errors/runtime_kind_mismatch) | This operation is only available for a different runtime kind. |
 | [`runtime_management_unavailable`](/errors/runtime_management_unavailable) | The runtime management surface is unavailable for this site. |
-| [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space has not served a published version yet, so it has no runtime data to read. |
+| [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space does not serve a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
 | [`runtime_token_bad_signature`](/errors/runtime_token_bad_signature) | The runtime token signature did not verify. |
-| [`runtime_token_expired`](/errors/runtime_token_expired) | The runtime token has expired. |
-| [`runtime_token_invalid`](/errors/runtime_token_invalid) | The runtime token could not be parsed or validated. |
+| [`runtime_token_expired`](/errors/runtime_token_expired) | The runtime token is expired. |
+| [`runtime_token_invalid`](/errors/runtime_token_invalid) | The runtime token cannot be parsed or validated. |
 | [`runtime_unauthorized`](/errors/runtime_unauthorized) | The request to the runtime carried no valid credential. |
 | [`runtime_upload_operation_not_supported`](/errors/runtime_upload_operation_not_supported) | The runtime upload session does not support this operation. |
-| [`runtime_upload_required`](/errors/runtime_upload_required) | This step requires uploaded content that has not arrived yet. |
+| [`runtime_upload_required`](/errors/runtime_upload_required) | This step requires uploaded content, but that content is not uploaded yet. |
 | [`scan_pending`](/errors/scan_pending) | The content is still being scanned for safety and cannot be served yet. |
 | [`secret_variable_in_template`](/errors/secret_variable_in_template) | A secret variable was referenced in a template, which is blocked. |
-| [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature could not be verified. |
+| [`service_booting`](/errors/service_booting) | The process that received this request is still starting and cannot serve it yet. |
+| [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature cannot be verified. |
 | [`site_already_deleted`](/errors/site_already_deleted) | The site was already deleted. |
 | [`site_has_live_spaces`](/errors/site_has_live_spaces) | The site still has live spaces assigned to it, so it cannot be deleted. |
 | [`site_not_static`](/errors/site_not_static) | This operation only applies to static-runtime sites. |
@@ -318,8 +319,8 @@ There are 479 error codes in the registry.
 | [`storage_quota_already_unlimited`](/errors/storage_quota_already_unlimited) | The team already has unlimited storage. |
 | [`storage_quota_decrease_not_supported`](/errors/storage_quota_decrease_not_supported) | This control cannot reduce a team's storage quota. |
 | [`storage_quota_exceeded`](/errors/storage_quota_exceeded) | The operation would exceed its storage allowance. |
-| [`storage_unavailable`](/errors/storage_unavailable) | The Zero runtime could not read or persist object storage. |
-| [`storage_usage_unavailable`](/errors/storage_usage_unavailable) | Storage usage could not be computed right now. |
+| [`storage_unavailable`](/errors/storage_unavailable) | The Zero runtime cannot read or persist object storage. |
+| [`storage_usage_unavailable`](/errors/storage_usage_unavailable) | Storage usage cannot be computed right now. |
 | [`stripe_error`](/errors/stripe_error) | The billing provider reported an error. |
 | [`superseded_by_publish`](/errors/superseded_by_publish) | A newer publish superseded this operation, so it was skipped. |
 | [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere. A takeover notice window applies. |
@@ -339,11 +340,11 @@ There are 479 error codes in the registry.
 | [`theme_value_invalid`](/errors/theme_value_invalid) | A theme value in the configuration is outside the allowed grammar. |
 | [`transfer_cross_tenant_unsupported`](/errors/transfer_cross_tenant_unsupported) | Spaces cannot be transferred across tenants. |
 | [`transfer_move_failed`](/errors/transfer_move_failed) | The space move backing this transfer failed. |
-| [`transfer_not_cancelable`](/errors/transfer_not_cancelable) | The transfer has progressed past the point where it can be canceled. |
-| [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime could not push the space blobs into the transfer bucket. |
+| [`transfer_not_cancelable`](/errors/transfer_not_cancelable) | The transfer is past the point where it can be canceled. |
+| [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime cannot push the space blobs into the transfer bucket. |
 | [`transfer_source_changed`](/errors/transfer_source_changed) | The space changed since the transfer was created, so it must be re-confirmed. |
 | [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The transfer target is the same principal that already owns the space. |
-| [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime could not verify transferred blob content. |
+| [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime cannot verify transferred blob content. |
 | [`unauthorized`](/errors/unauthorized) | The request carried no valid credential. |
 | [`unsupported_publish_media_type`](/errors/unsupported_publish_media_type) | The publish content-type is not supported. |
 | [`upload_hash_mismatch`](/errors/upload_hash_mismatch) | An uploaded file's bytes do not match the declared sha256. |
@@ -373,7 +374,7 @@ There are 479 error codes in the registry.
 | [`version_not_prepared`](/errors/version_not_prepared) | The version is not prepared for this operation. |
 | [`version_not_promotable`](/errors/version_not_promotable) | The version cannot be promoted in its current status. |
 | [`version_not_ready`](/errors/version_not_ready) | The version is not ready yet. |
-| [`version_quota_exceeded`](/errors/version_quota_exceeded) | The space has reached its version quota. |
+| [`version_quota_exceeded`](/errors/version_quota_exceeded) | The space is at its version quota. |
 | [`version_total_bytes_exceeded`](/errors/version_total_bytes_exceeded) | The version exceeds the maximum total size. |
 | [`webhook_delivery_budget_exceeded`](/errors/webhook_delivery_budget_exceeded) | The webhook exhausted its delivery budget and was paused. |
 | [`whois_unavailable`](/errors/whois_unavailable) | WHOIS data is unavailable for this domain right now. |
@@ -390,69 +391,69 @@ There are 479 error codes in the registry.
 | [`zero_ai_unavailable`](/errors/zero_ai_unavailable) | The local Zero AI service is not configured. |
 | [`zero_artifact_abi_mismatch`](/errors/zero_artifact_abi_mismatch) | The Zero endpoint artifact was built for a different runner ABI. |
 | [`zero_artifact_invalid`](/errors/zero_artifact_invalid) | The Zero endpoint artifact is missing required runtime metadata. |
-| [`zero_artifact_malformed`](/errors/zero_artifact_malformed) | The Zero endpoint artifact could not be parsed. |
+| [`zero_artifact_malformed`](/errors/zero_artifact_malformed) | The Zero endpoint artifact cannot be parsed. |
 | [`zero_artifact_path_invalid`](/errors/zero_artifact_path_invalid) | The Zero endpoint artifact path is invalid. |
-| [`zero_artifact_unreadable`](/errors/zero_artifact_unreadable) | The Zero endpoint artifact could not be read by the runtime. |
+| [`zero_artifact_unreadable`](/errors/zero_artifact_unreadable) | The Zero endpoint artifact cannot be read by the runtime. |
 | [`zero_auth_unavailable`](/errors/zero_auth_unavailable) | Hosted Zero auth is not configured for this deployment. |
 | [`zero_blob_key_invalid`](/errors/zero_blob_key_invalid) | The local Zero blob key is invalid. |
 | [`zero_blob_store_full`](/errors/zero_blob_store_full) | The local Zero blob store reached its configured size limit. |
 | [`zero_blob_too_large`](/errors/zero_blob_too_large) | The local Zero blob value exceeds the maximum allowed size. |
 | [`zero_blob_value_invalid`](/errors/zero_blob_value_invalid) | The local Zero blob request body is invalid. |
-| [`zero_bootstrap_encode_failed`](/errors/zero_bootstrap_encode_failed) | The Zero runner could not encode the JavaScript bootstrap data. |
+| [`zero_bootstrap_encode_failed`](/errors/zero_bootstrap_encode_failed) | The Zero runner cannot encode the JavaScript bootstrap data. |
 | [`zero_bytecode_hash_mismatch`](/errors/zero_bytecode_hash_mismatch) | The Zero endpoint bytecode hash does not match its artifact metadata. |
-| [`zero_bytecode_invalid`](/errors/zero_bytecode_invalid) | The Zero endpoint bytecode could not be loaded by QuickJS. |
+| [`zero_bytecode_invalid`](/errors/zero_bytecode_invalid) | The Zero endpoint bytecode cannot be loaded by QuickJS. |
 | [`zero_bytecode_path_invalid`](/errors/zero_bytecode_path_invalid) | The Zero endpoint bytecode path is invalid. |
-| [`zero_bytecode_unreadable`](/errors/zero_bytecode_unreadable) | The Zero endpoint bytecode file could not be read. |
-| [`zero_capabilities_encode_failed`](/errors/zero_capabilities_encode_failed) | The runtime could not encode the Zero endpoint capabilities. |
-| [`zero_client_bundle_not_loaded`](/errors/zero_client_bundle_not_loaded) | The local Zero dev client bundle has not been generated or loaded. |
-| [`zero_db_connect_failed`](/errors/zero_db_connect_failed) | The Zero runner could not connect to the configured database. |
+| [`zero_bytecode_unreadable`](/errors/zero_bytecode_unreadable) | The Zero endpoint bytecode file cannot be read. |
+| [`zero_capabilities_encode_failed`](/errors/zero_capabilities_encode_failed) | The runtime cannot encode the Zero endpoint capabilities. |
+| [`zero_client_bundle_not_loaded`](/errors/zero_client_bundle_not_loaded) | The local Zero dev client bundle is not generated or loaded. |
+| [`zero_db_connect_failed`](/errors/zero_db_connect_failed) | The Zero runner cannot connect to the configured database. |
 | [`zero_db_execute_failed`](/errors/zero_db_execute_failed) | A Zero database write failed. |
 | [`zero_db_export_cursor_invalid`](/errors/zero_db_export_cursor_invalid) | The local database export cursor is invalid or belongs to another export. |
-| [`zero_db_export_failed`](/errors/zero_db_export_failed) | The runtime could not read a database export page. |
+| [`zero_db_export_failed`](/errors/zero_db_export_failed) | The runtime cannot read a database export page. |
 | [`zero_db_export_page_too_large`](/errors/zero_db_export_page_too_large) | One database export page exceeded the 16 MiB response limit. |
 | [`zero_db_export_query_invalid`](/errors/zero_db_export_query_invalid) | The local database export request has an invalid table or page size. |
 | [`zero_db_export_schema_changed`](/errors/zero_db_export_schema_changed) | The database schema changed while an export was in progress. |
 | [`zero_db_export_schema_unavailable`](/errors/zero_db_export_schema_unavailable) | The live capsule has no stable schema hash for a complete export. |
-| [`zero_db_host_install_failed`](/errors/zero_db_host_install_failed) | The Zero runner could not install the database host bridge. |
+| [`zero_db_host_install_failed`](/errors/zero_db_host_install_failed) | The Zero runner cannot install the database host bridge. |
 | [`zero_db_operation_invalid`](/errors/zero_db_operation_invalid) | The Zero database bridge received an invalid operation payload. |
 | [`zero_db_operation_too_large`](/errors/zero_db_operation_too_large) | The Zero database operation payload is too large. |
 | [`zero_db_param_invalid`](/errors/zero_db_param_invalid) | A Zero database query parameter has an unsupported value. |
 | [`zero_db_query_failed`](/errors/zero_db_query_failed) | A Zero database read failed. |
-| [`zero_db_row_invalid`](/errors/zero_db_row_invalid) | A database row could not be converted into a Zero response value. |
+| [`zero_db_row_invalid`](/errors/zero_db_row_invalid) | A database row cannot be converted into a Zero response value. |
 | [`zero_db_sql_invalid`](/errors/zero_db_sql_invalid) | The Zero runner rejected unsafe or unsupported SQL. |
 | [`zero_db_target_denied`](/errors/zero_db_target_denied) | The application Zero database target is not a public TCP address. |
 | [`zero_db_tls_required`](/errors/zero_db_tls_required) | The application Zero database cannot be connected with verified pinned TLS. |
 | [`zero_db_too_many_params`](/errors/zero_db_too_many_params) | The Zero database operation has too many parameters. |
 | [`zero_db_transaction_active`](/errors/zero_db_transaction_active) | The Zero runner tried to start a database transaction while one was already active. |
-| [`zero_db_transaction_commit_failed`](/errors/zero_db_transaction_commit_failed) | The Zero database transaction could not be committed. |
+| [`zero_db_transaction_commit_failed`](/errors/zero_db_transaction_commit_failed) | The Zero database transaction cannot be committed. |
 | [`zero_db_transaction_invalid`](/errors/zero_db_transaction_invalid) | The Zero database transaction mode is invalid. |
 | [`zero_db_transaction_missing`](/errors/zero_db_transaction_missing) | The Zero runner tried to finish a database transaction that was not active. |
-| [`zero_db_transaction_rollback_failed`](/errors/zero_db_transaction_rollback_failed) | The Zero database transaction could not be rolled back cleanly. |
-| [`zero_db_transaction_start_failed`](/errors/zero_db_transaction_start_failed) | The Zero database transaction could not be started. |
+| [`zero_db_transaction_rollback_failed`](/errors/zero_db_transaction_rollback_failed) | The Zero database transaction cannot be rolled back cleanly. |
+| [`zero_db_transaction_start_failed`](/errors/zero_db_transaction_start_failed) | The Zero database transaction cannot be started. |
 | [`zero_db_url_invalid`](/errors/zero_db_url_invalid) | The Zero database URL is malformed. |
 | [`zero_db_url_missing`](/errors/zero_db_url_missing) | No Zero database URL is configured. |
 | [`zero_dev_endpoint_failed`](/errors/zero_dev_endpoint_failed) | A local Zero dev endpoint failed while handling the request. |
 | [`zero_dump_query_invalid`](/errors/zero_dump_query_invalid) | The Zero database dump query parameters are invalid. |
-| [`zero_endpoint_compile_failed`](/errors/zero_endpoint_compile_failed) | The runtime could not compile the Zero endpoint bytecode. |
+| [`zero_endpoint_compile_failed`](/errors/zero_endpoint_compile_failed) | The runtime cannot compile the Zero endpoint bytecode. |
 | [`zero_endpoint_conflict`](/errors/zero_endpoint_conflict) | Two Zero routes resolve to the same runtime path. |
 | [`zero_endpoint_duplicate`](/errors/zero_endpoint_duplicate) | Two Zero endpoints declare the same method and route. |
 | [`zero_endpoint_id_duplicate`](/errors/zero_endpoint_id_duplicate) | Two Zero endpoints declare the same endpoint id. |
 | [`zero_endpoint_index_invalid`](/errors/zero_endpoint_index_invalid) | The Zero endpoint index does not contain valid endpoint mappings. |
-| [`zero_endpoint_index_malformed`](/errors/zero_endpoint_index_malformed) | The Zero endpoint index could not be parsed. |
+| [`zero_endpoint_index_malformed`](/errors/zero_endpoint_index_malformed) | The Zero endpoint index cannot be parsed. |
 | [`zero_endpoint_index_path_invalid`](/errors/zero_endpoint_index_path_invalid) | The Zero endpoint index path is invalid. |
-| [`zero_endpoint_index_unreadable`](/errors/zero_endpoint_index_unreadable) | The Zero endpoint index could not be read. |
+| [`zero_endpoint_index_unreadable`](/errors/zero_endpoint_index_unreadable) | The Zero endpoint index cannot be read. |
 | [`zero_endpoint_invalid`](/errors/zero_endpoint_invalid) | A Zero endpoint definition or its database metadata is invalid. |
 | [`zero_endpoint_mismatch`](/errors/zero_endpoint_mismatch) | The requested Zero endpoint does not match the endpoint artifact. |
 | [`zero_endpoint_not_found`](/errors/zero_endpoint_not_found) | No Zero endpoint artifact exists for this endpoint id. |
 | [`zero_endpoints_invalid`](/errors/zero_endpoints_invalid) | The Zero endpoints payload is invalid. |
 | [`zero_endpoints_too_many`](/errors/zero_endpoints_too_many) | The Zero endpoints payload exceeds the supported endpoint count. |
-| [`zero_envelope_encode_failed`](/errors/zero_envelope_encode_failed) | The PHP bridge could not encode the Zero runner request envelope. |
-| [`zero_js_context_init_failed`](/errors/zero_js_context_init_failed) | The Zero runner could not initialize a QuickJS context. |
+| [`zero_envelope_encode_failed`](/errors/zero_envelope_encode_failed) | The PHP bridge cannot encode the Zero runner request envelope. |
+| [`zero_js_context_init_failed`](/errors/zero_js_context_init_failed) | The Zero runner cannot initialize a QuickJS context. |
 | [`zero_js_execution_failed`](/errors/zero_js_execution_failed) | The Zero endpoint JavaScript threw during execution. |
 | [`zero_js_execution_timeout`](/errors/zero_js_execution_timeout) | The Zero endpoint exceeded its JavaScript execution budget. |
-| [`zero_js_globals_failed`](/errors/zero_js_globals_failed) | The Zero runner could not install runtime globals for the endpoint. |
+| [`zero_js_globals_failed`](/errors/zero_js_globals_failed) | The Zero runner cannot install runtime globals for the endpoint. |
 | [`zero_js_response_malformed`](/errors/zero_js_response_malformed) | The Zero endpoint returned a malformed runner response. |
-| [`zero_js_runtime_init_failed`](/errors/zero_js_runtime_init_failed) | The Zero runner could not initialize QuickJS. |
+| [`zero_js_runtime_init_failed`](/errors/zero_js_runtime_init_failed) | The Zero runner cannot initialize QuickJS. |
 | [`zero_log_query_invalid`](/errors/zero_log_query_invalid) | The Zero log query parameters are invalid. |
 | [`zero_method_not_allowed`](/errors/zero_method_not_allowed) | The request method is not allowed for this Zero endpoint. |
 | [`zero_migration_failed`](/errors/zero_migration_failed) | The Zero database migration command failed during finalize. |
@@ -464,7 +465,7 @@ There are 479 error codes in the registry.
 | [`zero_realtime_space_required`](/errors/zero_realtime_space_required) | The Zero realtime request does not identify a space. |
 | [`zero_realtime_unavailable`](/errors/zero_realtime_unavailable) | Zero realtime helpers are unavailable for this endpoint. |
 | [`zero_realtime_websocket_forbidden`](/errors/zero_realtime_websocket_forbidden) | The Zero realtime websocket credential is invalid. |
-| [`zero_replay_failed`](/errors/zero_replay_failed) | The hosted Zero runtime could not fetch realtime replay events. |
+| [`zero_replay_failed`](/errors/zero_replay_failed) | The hosted Zero runtime cannot fetch realtime replay events. |
 | [`zero_replay_query_invalid`](/errors/zero_replay_query_invalid) | The hosted Zero realtime replay query is invalid. |
 | [`zero_replay_unavailable`](/errors/zero_replay_unavailable) | Realtime replay is not configured for this Zero version. |
 | [`zero_request_body_too_large`](/errors/zero_request_body_too_large) | The Zero request body exceeds the runtime size limit. |
@@ -473,7 +474,7 @@ There are 479 error codes in the registry.
 | [`zero_response_header_invalid`](/errors/zero_response_header_invalid) | A Zero endpoint response header is invalid or exceeds the header limits. |
 | [`zero_response_too_large`](/errors/zero_response_too_large) | The Zero endpoint response exceeds the runtime size limit. |
 | [`zero_routes_invalid`](/errors/zero_routes_invalid) | The Zero routes artifact is invalid. |
-| [`zero_run_compile_failed`](/errors/zero_run_compile_failed) | The runtime could not compile a Zero run handler. |
+| [`zero_run_compile_failed`](/errors/zero_run_compile_failed) | The runtime cannot compile a Zero run handler. |
 | [`zero_run_duplicate`](/errors/zero_run_duplicate) | Two Zero run handlers declare the same run id. |
 | [`zero_run_invalid`](/errors/zero_run_invalid) | A Zero run-handler definition is invalid. |
 | [`zero_run_operation_unsupported`](/errors/zero_run_operation_unsupported) | The hosted Zero runtime does not support this run operation yet. |
@@ -483,10 +484,10 @@ There are 479 error codes in the registry.
 | [`zero_runner_invalid_response`](/errors/zero_runner_invalid_response) | The Zero runner output was not valid JSON. |
 | [`zero_runner_invalid_status`](/errors/zero_runner_invalid_status) | The Zero runner returned an invalid HTTP status. |
 | [`zero_runner_protocol_unsupported`](/errors/zero_runner_protocol_unsupported) | The Zero runner received an unsupported invoke protocol. |
-| [`zero_runner_response_encode_failed`](/errors/zero_runner_response_encode_failed) | The Zero runner could not encode its response. |
-| [`zero_runner_stdin_invalid`](/errors/zero_runner_stdin_invalid) | The Zero runner could not read its request envelope. |
+| [`zero_runner_response_encode_failed`](/errors/zero_runner_response_encode_failed) | The Zero runner cannot encode its response. |
+| [`zero_runner_stdin_invalid`](/errors/zero_runner_stdin_invalid) | The Zero runner cannot read its request envelope. |
 | [`zero_runner_stdin_too_large`](/errors/zero_runner_stdin_too_large) | The Zero runner request envelope is too large. |
-| [`zero_runner_unavailable`](/errors/zero_runner_unavailable) | The Zero runner process could not be started. |
+| [`zero_runner_unavailable`](/errors/zero_runner_unavailable) | The Zero runner process cannot be started. |
 | [`zero_runs_invalid`](/errors/zero_runs_invalid) | The Zero run-handler payload is invalid. |
 | [`zero_runs_require_runtime_compiler`](/errors/zero_runs_require_runtime_compiler) | Zero run handlers require the Rust runtime compiler. |
 | [`zero_runs_too_many`](/errors/zero_runs_too_many) | The Zero run-handler payload exceeds the supported handler count. |

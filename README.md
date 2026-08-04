@@ -3,8 +3,9 @@
 The documentation site for Spacefast, built with Blume.
 
 The authored guides live in `content/`. API specifications, the CLI reference,
-error pages, npm package release history (`generated/changelog/`), and
-compatibility redirects arrive as one verified snapshot in `generated/`.
+error pages, agent setup pages, npm package release history
+(`generated/changelog/`), and compatibility redirects arrive as one verified
+snapshot in `generated/`.
 
 ## Local development
 

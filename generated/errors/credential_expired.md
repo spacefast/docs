@@ -1,9 +1,9 @@
 ---
 title: "credential_expired"
-description: "The credential used for this request has expired."
+description: "The credential used for this request is expired."
 ---
 
-The credential used for this request has expired.
+The credential used for this request is expired.
 
 **How to resolve:** Create a new API key or sign in again.
 
@@ -12,18 +12,24 @@ The credential used for this request has expired.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/credential_expired",
   "title": "Credential expired",
   "status": 400,
-  "detail": "The credential used for this request has expired.",
+  "detail": "The credential used for this request is expired.",
   "code": "credential_expired",
   "requestId": "req_4mz0v8qk"
 }

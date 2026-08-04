@@ -1,9 +1,9 @@
 ---
 title: "authorization_pending"
-description: "The device login has not been approved yet."
+description: "The device login is not approved yet."
 ---
 
-The device login has not been approved yet.
+The device login is not approved yet.
 
 **How to resolve:** Keep polling at the advised interval until the user approves the request.
 
@@ -12,18 +12,24 @@ The device login has not been approved yet.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/authorization_pending",
   "title": "Authorization pending",
   "status": 400,
-  "detail": "The device login has not been approved yet.",
+  "detail": "The device login is not approved yet.",
   "code": "authorization_pending",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,9 +1,9 @@
 ---
 title: "proxy_upstream_unresolved"
-description: "The proxy upstream hostname could not be resolved."
+description: "The proxy upstream hostname cannot be resolved."
 ---
 
-The proxy upstream hostname could not be resolved.
+The proxy upstream hostname cannot be resolved.
 
 **How to resolve:** Verify the upstream DNS name resolves publicly, then publish again.
 
@@ -12,18 +12,24 @@ The proxy upstream hostname could not be resolved.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/proxy_upstream_unresolved",
   "title": "Proxy upstream unresolved",
   "status": 400,
-  "detail": "The proxy upstream hostname could not be resolved.",
+  "detail": "The proxy upstream hostname cannot be resolved.",
   "code": "proxy_upstream_unresolved",
   "requestId": "req_4mz0v8qk"
 }

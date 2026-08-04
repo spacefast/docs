@@ -10,6 +10,7 @@ const trees = [
   { source: "generated/cli", target: "content/cli" },
   { source: "generated/errors", target: "content/errors" },
   { source: "generated/changelog", target: "content/changelog" },
+  { source: "generated/setup", target: "content/setup" },
 ];
 
 async function exists(value) {
@@ -70,5 +71,5 @@ await writeFile(
 );
 
 console.log(
-  `Prepared generated CLI, error-reference, changelog, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
+  `Prepared generated CLI, error-reference, changelog, agent setup, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
 );
