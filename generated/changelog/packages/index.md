@@ -7,7 +7,6 @@ Each public npm package keeps its own history. The [changelog timeline](/changel
 | Package | npm | Releases |
 | --- | --- | ---: |
 | [`spacefast`](/changelog/packages/spacefast) | [CLI (`spacefast`)](https://www.npmjs.com/package/spacefast) | 8 |
-| [`@spacefast/agent-execution`](/changelog/packages/agent-execution) | [@spacefast/agent-execution](https://www.npmjs.com/package/@spacefast/agent-execution) | 8 |
 | [`@spacefast/astro`](/changelog/packages/astro) | [@spacefast/astro](https://www.npmjs.com/package/@spacefast/astro) | 8 |
 | [`@spacefast/common`](/changelog/packages/common) | [@spacefast/common](https://www.npmjs.com/package/@spacefast/common) | 8 |
 | [`@spacefast/domain-search-terminal`](/changelog/packages/domain-search-terminal) | [@spacefast/domain-search-terminal](https://www.npmjs.com/package/@spacefast/domain-search-terminal) | 8 |

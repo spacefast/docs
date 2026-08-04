@@ -1,20 +1,15 @@
 {
-  "contentDigest": "0f6ba99cf414c2bcc7dd6144bc4f727028372b7e492d8950bb9628ec2a25b4a3",
+  "contentDigest": "5de52bc3ee5a1d5dd282dbca7bb84b65e801d80adb4e71efa3dbcf0ab0da0d04",
   "counts": {
     "apiOperations": 321,
-    "changelogPackages": 15,
+    "changelogPackages": 14,
     "changelogVersions": 8,
-    "errorCodes": 480,
+    "errorCodes": 479,
     "platformOperations": 356,
     "redirects": 2483,
     "setupPages": 16
   },
   "files": [
-    {
-      "bytes": 606,
-      "path": "changelog/packages/agent-execution.md",
-      "sha256": "d0d33b208dcd6f6a706273d06e5f12fb3ae64f0ede9e20ed38b063812050c93f"
-    },
     {
       "bytes": 708,
       "path": "changelog/packages/astro.md",
@@ -41,9 +36,9 @@
       "sha256": "f8c06b0d91520b68b189edb6cd044b262a29096512346d45a4378fe33d2f2be3"
     },
     {
-      "bytes": 2478,
+      "bytes": 2313,
       "path": "changelog/packages/index.md",
-      "sha256": "a47f53af620d77537d5ad5e0d7d59c1ac4ef4c4f01e66d5f139e6d0d16b2f159"
+      "sha256": "db5d04cab5d152ef13d00a51c0e5bb4406d3f089193a88595dccf072e85ebd2e"
     },
     {
       "bytes": 1440,
@@ -131,9 +126,9 @@
       "sha256": "cc3b69fc1d49bdcad8daa3b9ff56bb2cbd41e9fea3f0aab1064320652cdfc191"
     },
     {
-      "bytes": 201607,
+      "bytes": 201572,
       "path": "cli/index.md",
-      "sha256": "a180683f6e20c7d5d62dca00b1175bed6e89ed87374a5b5adf8158e8a2bc0718"
+      "sha256": "28c3e273b584ab1ebcefa7df2cc0e44455235d7165cbff49b600d1ee6f7d05d7"
     },
     {
       "bytes": 1224,
@@ -796,9 +791,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 61250,
+      "bytes": 61045,
       "path": "errors/index.md",
-      "sha256": "eb7135faf0263aefcc6daf3949ba938d752ec93fa6fcd81563f8ee88ed43ce5a"
+      "sha256": "6e34d3d33c433023eca89b60f3d734726436cd176f2465781335e8654e4250ee"
     },
     {
       "bytes": 1057,
@@ -1029,11 +1024,6 @@
       "bytes": 1146,
       "path": "errors/manifest_too_many_files.md",
       "sha256": "6c23daf13aa4432beb0ecf6627155528e1f3d60a62eaa86e958589782f958111"
-    },
-    {
-      "bytes": 1428,
-      "path": "errors/mcp_acted_for_team_deleted.md",
-      "sha256": "fa40801171273fee90ca008ca018e6663f8029735be705da46fabb4cc834a9c3"
     },
     {
       "bytes": 1067,
@@ -2541,14 +2531,14 @@
       "sha256": "9ec7cbe76eb42d9b7d9292c3e26feb8140cfd172a283a711a3b42b87a46d5235"
     },
     {
-      "bytes": 5492479,
+      "bytes": 5837586,
       "path": "openapi/api.json",
-      "sha256": "8ea61ea9230f9c96fa8fa1bb65ec0e94973da59f95670f8de146cefff2e1bd02"
+      "sha256": "e592467b171758889dcf8e74203fa23bdee7694588749dd5455b3f3ed30ac0f4"
     },
     {
-      "bytes": 5914376,
+      "bytes": 6297127,
       "path": "openapi/platform.json",
-      "sha256": "90bf9e5bdb73dd09134dc7d798c78fad2b4a17315434f8fb4d29a2db4ea6557d"
+      "sha256": "a8d575a4d95c02f535cf27502a6e6acadcf5965308a16bc8dc76ed4d250adf93"
     },
     {
       "bytes": 461900,
