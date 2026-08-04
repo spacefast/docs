@@ -129661,6 +129661,15 @@
             }
           },
           {
+            "name": "fallback",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["session-expired"]
+            }
+          },
+          {
             "name": "display",
             "in": "query",
             "required": false,
