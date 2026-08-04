@@ -7,51 +7,33 @@ Published as [`@spacefast/astro`](https://www.npmjs.com/package/@spacefast/astro
 
 ## 0.0.13
 
-#### Patch Changes
-
-- Updated dependencies
-  - @spacefast/routing@0.0.13
+- Various bug fixes and improvements.
 
 ## 0.0.12
 
-#### Patch Changes
-
-- Updated dependencies
-  - @spacefast/routing@0.0.12
+- Various bug fixes and improvements.
 
 ## 0.0.11
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.11
+- Various bug fixes and improvements.
 
 ## 0.0.10
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.10
+- Various bug fixes and improvements.
 
 ## 0.0.9
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.9
+- Various bug fixes and improvements.
 
 ## 0.0.8
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.8
+- Various bug fixes and improvements.
 
 ## 0.0.7
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.7
+- Various bug fixes and improvements.
 
 ## 0.0.6
 
-#### Patch Changes
-
-- @spacefast/routing@0.0.6
+- Various bug fixes and improvements.
 
