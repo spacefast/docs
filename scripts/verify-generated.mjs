@@ -66,6 +66,7 @@ if (
   manifest.counts.platformOperations < 1 ||
   manifest.counts.errorCodes < 1 ||
   manifest.counts.redirects < 1 ||
+  manifest.counts.setupPages < 1 ||
   (manifest.counts.changelogPackages ?? 0) < 1 ||
   (manifest.counts.changelogVersions ?? 0) < 1
 ) {
@@ -88,6 +89,12 @@ if (
   manifest.counts.errorCodes + 1
 ) {
   throw new Error("generated error reference is incomplete");
+}
+if (
+  actualFiles.filter((file) => /^setup\/[^/]+\.md$/u.test(file)).length !==
+  manifest.counts.setupPages + 1
+) {
+  throw new Error("generated agent setup reference is incomplete");
 }
 const redirects = await readFile(path.join(root, "redirects.json"), "utf8").then(JSON.parse);
 if (

@@ -83,6 +83,11 @@ GLOBAL FLAGS
 - [`sf comments unarchive COMMENT`](#sf-comments-unarchive-comment)
 - [`sf continue`](#sf-continue)
 - [`sf create NAME`](#sf-create-name)
+- [`sf db [TARGET]`](#sf-db-target)
+- [`sf db console [TARGET]`](#sf-db-console-target)
+- [`sf db dump [TARGET]`](#sf-db-dump-target)
+- [`sf db export [TARGET]`](#sf-db-export-target)
+- [`sf db migrate [SOURCE]`](#sf-db-migrate-source)
 - [`sf demo`](#sf-demo)
 - [`sf demo agent`](#sf-demo-agent)
 - [`sf deployments`](#sf-deployments)
@@ -217,6 +222,9 @@ GLOBAL FLAGS
 - [`sf spaces transfer TEAM`](#sf-spaces-transfer-team)
 - [`sf spaces update`](#sf-spaces-update)
 - [`sf status`](#sf-status)
+- [`sf storage [TARGET]`](#sf-storage-target)
+- [`sf storage ls [TARGET]`](#sf-storage-ls-target)
+- [`sf storage rm [KEY]`](#sf-storage-rm-key)
 - [`sf switch [TEAM]`](#sf-switch-team)
 - [`sf teams`](#sf-teams)
 - [`sf teams accept INVITATION`](#sf-teams-accept-invitation)
@@ -1331,6 +1339,203 @@ EXAMPLES
   Create a Functions worker directory.
 
     $ sf create my-api --runtime functions
+```
+
+## `sf db [TARGET]`
+
+Inspect a space's database.
+
+```text
+USAGE
+  $ sf db [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --local-url=<value>  Read from a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+
+DESCRIPTION
+  Inspect a space's database.
+
+  Show the tables, columns, and pending migration plan of a space's database.
+
+EXAMPLES
+  Inspect the linked space's database.
+
+    $ sf db
+
+  Inspect space `docs`.
+
+    $ sf db docs
+
+  Inspect the database of a running `sf dev` server.
+
+    $ sf db --port 8787
+```
+
+## `sf db console [TARGET]`
+
+Open a database console.
+
+```text
+USAGE
+  $ sf db console [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--show-secret]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+OPEN FLAGS
+  --show-secret  Print the single-use console URL instead of opening it.
+
+DESCRIPTION
+  Open a database console.
+
+  Open a phpMyAdmin console on the space's own database — the escape hatch for anything `sf db` and `sf db dump` cannot
+  answer. The URL grants full SQL authority, so it is opened rather than printed unless you ask for it.
+
+EXAMPLES
+  Open the console in a browser.
+
+    $ sf db console
+
+  Print the single-use console URL instead of opening it.
+
+    $ sf db console --show-secret
+```
+
+## `sf db dump [TARGET]`
+
+Dump database rows.
+
+```text
+USAGE
+  $ sf db dump [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--table <value>]
+    [--limit <value>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --limit=<value>      Maximum rows per table (default 25, max 100).
+  --local-url=<value>  Read from a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+  --table=<value>      Restrict the dump to one table.
+
+DESCRIPTION
+  Dump database rows.
+
+  Print rows from a space's database, for debugging and export.
+
+EXAMPLES
+  Dump every declared table.
+
+    $ sf db dump
+
+  Dump one table, up to 100 rows.
+
+    $ sf db dump --table todos --limit 100
+```
+
+## `sf db export [TARGET]`
+
+Export a complete database backup.
+
+```text
+USAGE
+  $ sf db export [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--out <value>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --local-url=<value>  Read from a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+
+OUTPUT FLAGS
+  --out=<value>  Backup file path (default spacefast-backup-<space>-<timestamp>.json).
+
+DESCRIPTION
+  Export a complete database backup.
+
+  Export every declared table to one versioned JSON backup. Rows are read in stable keyset pages and the destination is
+  replaced only after the complete export succeeds.
+
+EXAMPLES
+  Export the linked space.
+
+    $ sf db export
+
+  Export a selected space to a named file.
+
+    $ sf db export docs --out ./docs-backup.json
+
+  Export a running local Zero capsule.
+
+    $ sf db export --port 8787
+```
+
+## `sf db migrate [SOURCE]`
+
+Apply database schema migrations.
+
+```text
+USAGE
+  $ sf db migrate [SOURCE] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--previous-artifact <value>] [--drop | --rename]
+
+ARGUMENTS
+  [SOURCE]  [default: .] Capsule source directory.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --drop                       Allow the planned migration to include explicit drop operations.
+  --previous-artifact=<value>  Diff against this artifact or finalize payload instead of the live schema.
+  --rename                     Allow the planned migration to include explicit rename operations.
+
+DESCRIPTION
+  Apply database schema migrations.
+
+  Apply the live version's schema migrations, and report what this source tree would change on top of them. Zero
+  capsules only: a worker declares no schema.
+
+EXAMPLES
+  Re-apply the live capsule's migration plan.
+
+    $ sf db migrate
+
+  Allow destructive operations in the plan computed from this source tree.
+
+    $ sf db migrate --drop
 ```
 
 ## `sf demo`
@@ -4359,15 +4564,15 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 LINK FLAGS
-  --show-secret  Print the credential URL even when output is JSON or non-interactive.
+  --show-secret  Print the share URL even when output is JSON or non-interactive.
 
 DESCRIPTION
   Copy a Link.
 
-  Copy a Link's stable short URL.
+  Print a Link's durable share URL.
 
 EXAMPLES
-  Print the Link's credential URL.
+  Print the Link's share URL.
 
     $ sf share link copy lnk_123
 ```
@@ -4390,13 +4595,13 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 LINK FLAGS
-  --can=<option>        [default: view] Capability preset: view or comment.
+  --can=<option>        [default: comment] Capability preset: view or comment. Defaults to comment.
                         <options: view|comment>
   --exclude=<value>...  [default: ] Excluded route pattern local to this Link. Repeatable.
   --landing=<value>     [default: /] Clean route opened after exchange.
   --name=<value>        (required) Human name shown in the Links list.
   --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
-  --show-secret         Print the credential URL even when output is JSON or non-interactive.
+  --show-secret         Print the share URL even when output is JSON or non-interactive.
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
 
 CONSTRAINTS FLAGS
@@ -4584,7 +4789,7 @@ USAGE
     [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
-  --can=<option>         [default: view] Capability preset.
+  --can=<option>         [default: comment] Capability preset.
                          <options: view|comment>
   --exclude=<value>...   [default: ] Local exclusion pattern.
   --name=<value>         (required) Human-readable password name.
@@ -5694,6 +5899,105 @@ EXAMPLES
   Include a still-pending one-time claim URL.
 
     $ sf status --include-claim-url
+```
+
+## `sf storage [TARGET]`
+
+List a space's stored objects.
+
+```text
+USAGE
+  $ sf storage [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--visibility public|private] [--limit <value>] [--cursor
+    <value>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+FLAGS
+  --cursor=<value>       Continue from an opaque cursor returned by the last page.
+  --limit=<value>        Maximum objects to return (default 50, max 100).
+  --visibility=<option>  Show only public or private objects.
+                         <options: public|private>
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List a space's stored objects.
+
+  List object metadata and quota usage for files uploaded by a space's app.
+
+EXAMPLES
+  List the linked space's objects.
+
+    $ sf storage
+
+  List private objects in space `docs`.
+
+    $ sf storage docs --visibility private
+```
+
+## `sf storage ls [TARGET]`
+
+List a space's stored objects.
+
+```text
+USAGE
+  $ sf storage ls [TARGET] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--visibility public|private] [--limit <value>] [--cursor
+    <value>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+FLAGS
+  --cursor=<value>       Continue from an opaque cursor returned by the last page.
+  --limit=<value>        Maximum objects to return (default 50, max 100).
+  --visibility=<option>  Show only public or private objects.
+                         <options: public|private>
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+ALIASES
+  $ sf storage list
+```
+
+## `sf storage rm [KEY]`
+
+Delete a stored object.
+
+```text
+USAGE
+  $ sf storage rm [KEY] [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+ARGUMENTS
+  [KEY]  Object key, for example private/0123456789abcdef0123456789abcdef.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a stored object.
+
+  Force-delete an app storage object as the space owner, regardless of who uploaded it.
+
+ALIASES
+  $ sf storage remove
+  $ sf storage delete
+
+EXAMPLES
+  Delete a private object without prompting.
+
+    $ sf storage rm private/0123456789abcdef0123456789abcdef --yes
 ```
 
 ## `sf switch [TEAM]`

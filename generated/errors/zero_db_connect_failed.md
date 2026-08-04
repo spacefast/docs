@@ -1,9 +1,9 @@
 ---
 title: "zero_db_connect_failed"
-description: "The Zero runner could not connect to the configured database."
+description: "The Zero runner cannot connect to the configured database."
 ---
 
-The Zero runner could not connect to the configured database.
+The Zero runner cannot connect to the configured database.
 
 **How to resolve:** Verify DATABASE_URL or the generated MySQL connection variables and retry.
 
@@ -12,18 +12,24 @@ The Zero runner could not connect to the configured database.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/zero_db_connect_failed",
   "title": "Zero db connect failed",
   "status": 400,
-  "detail": "The Zero runner could not connect to the configured database.",
+  "detail": "The Zero runner cannot connect to the configured database.",
   "code": "zero_db_connect_failed",
   "requestId": "req_4mz0v8qk"
 }

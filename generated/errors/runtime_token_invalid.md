@@ -1,9 +1,9 @@
 ---
 title: "runtime_token_invalid"
-description: "The runtime token could not be parsed or validated."
+description: "The runtime token cannot be parsed or validated."
 ---
 
-The runtime token could not be parsed or validated.
+The runtime token cannot be parsed or validated.
 
 **How to resolve:** Mint a fresh runtime token.
 
@@ -12,18 +12,24 @@ The runtime token could not be parsed or validated.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/runtime_token_invalid",
   "title": "Runtime token invalid",
   "status": 400,
-  "detail": "The runtime token could not be parsed or validated.",
+  "detail": "The runtime token cannot be parsed or validated.",
   "code": "runtime_token_invalid",
   "requestId": "req_4mz0v8qk"
 }

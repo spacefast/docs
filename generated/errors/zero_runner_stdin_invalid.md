@@ -1,9 +1,9 @@
 ---
 title: "zero_runner_stdin_invalid"
-description: "The Zero runner could not read its request envelope."
+description: "The Zero runner cannot read its request envelope."
 ---
 
-The Zero runner could not read its request envelope.
+The Zero runner cannot read its request envelope.
 
 **How to resolve:** Retry. Report the runtime bridge failure if it persists.
 
@@ -12,18 +12,24 @@ The Zero runner could not read its request envelope.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_stdin_invalid",
   "title": "Zero runner stdin invalid",
   "status": 400,
-  "detail": "The Zero runner could not read its request envelope.",
+  "detail": "The Zero runner cannot read its request envelope.",
   "code": "zero_runner_stdin_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,9 +1,9 @@
 ---
 title: "zero_run_compile_failed"
-description: "The runtime could not compile a Zero run handler."
+description: "The runtime cannot compile a Zero run handler."
 ---
 
-The runtime could not compile a Zero run handler.
+The runtime cannot compile a Zero run handler.
 
 **How to resolve:** Inspect the compile diagnostics, fix the run-handler source, and publish again.
 
@@ -12,18 +12,24 @@ The runtime could not compile a Zero run handler.
 ## Error shape
 
 Every Spacefast API error is an RFC 9457 problem document, served as
-`application/problem+json`. `code` is stable and machine-readable, `type` links to
-this page, `title` is a short label, `status` repeats the HTTP status, and `detail`
-explains this occurrence. `pointer` (when present) is an RFC 6901 JSON Pointer at the
-offending field in the request body, and `details` may carry structured context. Match on
-`code`, never on `detail`.
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
 
 ```json
 {
   "type": "https://spacefast.com/docs/errors/zero_run_compile_failed",
   "title": "Zero run compile failed",
   "status": 400,
-  "detail": "The runtime could not compile a Zero run handler.",
+  "detail": "The runtime cannot compile a Zero run handler.",
   "code": "zero_run_compile_failed",
   "requestId": "req_4mz0v8qk"
 }
