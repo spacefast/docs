@@ -7,8 +7,8 @@ const root = path.resolve(process.cwd());
 const markerName = ".spacefast-generated-copy";
 const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.\n";
 const directHostingRules = [
-  { from: "/docs", status: 200, to: "/" },
-  { from: "/docs/*", status: 200, to: "/:splat" },
+  { from: "/docs", status: 301, to: "/" },
+  { from: "/docs/*", status: 301, to: "/:splat" },
 ];
 const trees = [
   { source: "generated/cli", target: "content/cli" },
@@ -38,8 +38,7 @@ for (const tree of trees) {
     if (
       !targetInfo.isDirectory() ||
       targetInfo.isSymbolicLink() ||
-      (await readFile(marker, "utf8").catch(() => null)) !==
-        "spacefast-public-docs\n"
+      (await readFile(marker, "utf8").catch(() => null)) !== "spacefast-public-docs\n"
     ) {
       throw new Error(`refusing to replace unowned generated overlay: ${tree.target}`);
     }
@@ -56,10 +55,9 @@ if (await exists(redirectsTarget)) {
     throw new Error("refusing to replace unowned generated overlay: public/_redirects");
   }
 }
-const redirects = await readFile(
-  path.join(root, "generated/redirects.json"),
-  "utf8",
-).then(JSON.parse);
+const redirects = await readFile(path.join(root, "generated/redirects.json"), "utf8").then(
+  JSON.parse,
+);
 const routingRules = [...compileRedirectRules(redirects), ...directHostingRules];
 const staticRules = routingRules.filter(({ from }) => !from.includes("*")).length;
 if (staticRules > 2_000 || routingRules.length > 2_100) {

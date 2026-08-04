@@ -1,12 +1,31 @@
 import { defineConfig } from "blume";
 
 export default defineConfig({
-  title: "Spacefast Docs",
-  description: "Build and publish static sites with Spacefast.",
+  title: "Spacefast Developers",
+  description: "Build with Spacefast through the API, CLI, SDK, MCP, and Platform API.",
   analytics: {
     posthog: {
       key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT",
     },
+    scripts: [
+      {
+        attributes: { type: "module" },
+        content: `
+          import("/pagefind/pagefind.js")
+            .then(async (pagefind) => {
+              await pagefind.options({
+                indexWeight: 1.15,
+                mergeFilter: { source: "Developers" },
+              });
+              await pagefind.mergeIndex("https://spacefast.com/pagefind", {
+                indexWeight: 1,
+                mergeFilter: { source: "Spacefast" },
+              });
+            })
+            .catch(() => undefined);
+        `,
+      },
+    ],
   },
   content: {
     root: "content",
@@ -21,61 +40,49 @@ export default defineConfig({
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
-      {
-        label: "Guides",
-        href: "https://spacefast.com/guides",
-        icon: "book-open",
-      },
+      { label: "Help", href: "https://spacefast.com/help", icon: "book-open" },
+      { label: "Recipes", href: "https://spacefast.com/recipes", icon: "sparkles" },
+      { label: "Agent setup", href: "https://spacefast.com/setup", icon: "bot" },
     ],
     repo: true,
     sidebar: {
       display: "group",
       items: [
         {
-          label: "Start",
+          label: "Overview",
           collapsed: false,
-          items: [
-            "/",
-            "/quickstart",
-            "/agents",
-            "/cli",
-            "/api",
-            "/api/reference",
-            "/errors",
-          ],
+          items: ["/", "/quickstart"],
         },
         {
-          label: "Spaces",
+          label: "Features",
           items: [
+            "/spaces",
             "/publishing",
+            "/versions",
             "/builds",
-            "/anonymous-publish",
-            "/configuration",
-            "/pages",
+            "/domains",
             "/access",
             "/collab",
           ],
         },
         {
-          label: "Integrations",
-          items: [
-            "/integrations/vite",
-            "/integrations/nextjs",
-            "/image-acceleration",
-          ],
+          label: "Interfaces",
+          items: ["/api", "/api/reference", "/cli", "/sdk", "/mcp", "/errors"],
         },
         {
-          label: "Routing",
-          items: ["/redirects", "/headers", "/proxy-routes", "/domains"],
-        },
-        {
-          label: "Operate",
+          label: "Configure",
           items: [
-            "/rollback",
+            "/configuration",
+            "/pages",
+            "/redirects",
+            "/headers",
+            "/proxy-routes",
             "/webhooks",
-            "/limits",
-            "/troubleshooting",
           ],
+        },
+        {
+          label: "Integrations",
+          items: ["/integrations/vite", "/integrations/nextjs", "/image-acceleration"],
         },
         {
           label: "Migrate",
@@ -90,17 +97,22 @@ export default defineConfig({
         },
         {
           label: "Platforms",
-          items: ["/platforms", "/platforms/api/reference"],
+          items: [
+            "/platforms",
+            "/platforms/authentication",
+            "/platforms/customers",
+            "/platforms/api/reference",
+          ],
+        },
+        {
+          label: "More",
+          items: ["/anonymous-publish", "/rollback", "/limits", "/troubleshooting"],
         },
       ],
     },
     tabs: [
       { label: "API reference", path: "/api/reference", icon: "braces" },
-      {
-        label: "Platform API",
-        path: "/platforms/api/reference",
-        icon: "building",
-      },
+      { label: "Platforms", path: "/platforms", icon: "building" },
     ],
   },
   openapi: {
@@ -115,9 +127,6 @@ export default defineConfig({
         label: "Platform API",
         route: "/platforms/api/reference",
         spec: "./generated/openapi/platform.json",
-        includeInLlms: false,
-        includeInSearch: false,
-        noindex: true,
       },
     ],
   },
@@ -125,8 +134,8 @@ export default defineConfig({
     provider: "pagefind",
     popular: [
       { label: "Quickstart", href: "/quickstart", icon: "rocket" },
-      { label: "Agents", href: "/agents", icon: "bot" },
-      { label: "Publishing", href: "/publishing", icon: "upload" },
+      { label: "Spaces", href: "/spaces", icon: "box" },
+      { label: "MCP", href: "/mcp", icon: "bot" },
       { label: "API reference", href: "/api/reference", icon: "braces" },
     ],
   },
@@ -157,9 +166,5 @@ export default defineConfig({
     sitemap: true,
     structuredData: true,
   },
-  deployment: {
-    base: "/docs",
-    output: "static",
-    site: "https://spacefast.com",
-  },
+  deployment: { output: "static", site: "https://developers.spacefast.com" },
 });

@@ -14,7 +14,7 @@ Every response uses one envelope: successes carry `{ "data": ... }`, failures ca
   "error": {
     "code": "access_denied",
     "message": "This token cannot access that space.",
-    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
+    "docsUrl": "https://developers.spacefast.com/errors/access_denied",
     "requestId": "req_4mz0v8qk"
   }
 }
@@ -55,10 +55,11 @@ Rate limits and plan quotas are enforced per account and documented in [Limits](
 ## For agents
 
 The API ships a machine-discovery surface —
-[`llms.txt`](https://spacefast.com/docs/llms.txt), an
+[`llms.txt`](https://developers.spacefast.com/llms.txt), an
 [agent card](https://spacefast.com/.well-known/agent-card.json), a publish
 skill, and a hosted MCP server with typed tools. If an agent is doing the
-calling, start at [Agents](/agents).
+calling, start with [MCP](/mcp) or choose a client in
+[agent setup](https://spacefast.com/setup).
 
 ## Building a platform on Spacefast?
 
