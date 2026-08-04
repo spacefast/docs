@@ -160,7 +160,7 @@ const representativePages = [
   [
     "getting-started/quickstart/index.html",
     `${docsRoot}/getting-started/quickstart`,
-    "Common first publish",
+    "Tell your agent",
   ],
   ["spaces/index.html", `${docsRoot}/spaces`, "What a space owns"],
   ["publishing/channels/index.html", `${docsRoot}/publishing/channels`, "The release boundary"],

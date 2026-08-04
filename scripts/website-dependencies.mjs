@@ -10,6 +10,7 @@ export const websiteDependencies = [
   "/cookie-banner.js",
   "/help",
   "/recipes",
+  "/setup",
 ];
 
 export const websiteDependencyManifest = ".spacefast-website-dependencies.json";
