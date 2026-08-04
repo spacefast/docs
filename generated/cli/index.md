@@ -521,7 +521,7 @@ EXAMPLES
 
 ## `sf access grant GRANT`
 
-Grant access to an identity class.
+Gate this space for an identity class.
 
 ```text
 USAGE
@@ -537,16 +537,17 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Grant access to an identity class.
+  Gate this space for an identity class.
 
-  Append a cloud allow rule that admits any visitor whose verified grants intersect the glob (token.requiredGrants).
+  Create or update the identity admission and fallback gate. Approved identities join existing password/share audiences;
+  anonymous fallthrough must sign in.
 
 EXAMPLES
-  Allow any verified acme.com email.
+  Gate the space for any verified acme.com email.
 
     $ sf access grant email:*@acme.com
 
-  Allow members of the eng team.
+  Add members of the eng team to the admitted audience.
 
     $ sf access grant team:eng:member
 ```
@@ -3572,7 +3573,7 @@ Run the Spacefast MCP server.
 USAGE
   $ sf mcp [--transport stdio|http|streamable-http] [--host <value>] [--port <value>] [--path <value>]
     [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
-    [--repair]
+    [--preset all|agents|essential] [--repair]
 
 FLAGS
   --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
@@ -3584,6 +3585,8 @@ FLAGS
   --json                    Print machine-readable status for `sf mcp status`.
   --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
   --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
+  --preset=<option>         [env: SPACEFAST_MCP_PRESET] MCP tool surface to expose.
+                            <options: all|agents|essential>
   --repair                  For `sf mcp status`, remove a stale local daemon manifest and print recovery steps.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --transport=<option>      MCP transport to run. `http` is streamable HTTP.

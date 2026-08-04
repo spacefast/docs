@@ -50,6 +50,10 @@ function canonicalFrom(html) {
   return undefined;
 }
 
+function hasPagefindIgnore(html) {
+  return /<html\b[^>]*\bdata-pagefind-ignore=["']all["'][^>]*>/iu.test(html);
+}
+
 async function requirePage(relativePath, expectedCanonical, expectedText) {
   const html = await readBuilt(relativePath);
   const canonical = canonicalFrom(html)?.replace(/\/$/u, "");
@@ -63,6 +67,9 @@ async function requirePage(relativePath, expectedCanonical, expectedText) {
   }
   if (expectedText && !html.includes(expectedText)) {
     throw new Error(`Missing expected content in dist/${relativePath}`);
+  }
+  if (hasPagefindIgnore(html)) {
+    throw new Error(`Indexable page is excluded from Pagefind in dist/${relativePath}`);
   }
 }
 
@@ -144,14 +151,23 @@ const representativePages = [
     `${docsRoot}/migrate-from/vercel`,
     "Vercel",
   ],
-  [
-    "platforms/api/reference/index.html",
-    `${docsRoot}/platforms/api/reference`,
-    "Platform API",
-  ],
 ];
 for (const page of representativePages) {
   await requirePage(...page);
+}
+
+const platformReference = await readBuilt("platforms/api/reference/index.html");
+if (
+  canonicalFrom(platformReference) ||
+  !/<meta\b[^>]*name=["']robots["'][^>]*content=["']noindex["'][^>]*>/iu.test(
+    platformReference,
+  ) ||
+  !hasPagefindIgnore(platformReference) ||
+  !platformReference.includes("Platform API")
+) {
+  throw new Error(
+    "Platform API reference must render but stay noindex, non-canonical, and excluded from Pagefind.",
+  );
 }
 
 const notFound = await readBuilt("404.html");
@@ -172,6 +188,7 @@ for (const artifact of [
   "sitemap.xml",
   "robots.txt",
   "agent-readability.json",
+  "docs-corpus.json",
   "pagefind/pagefind.js",
   "pagefind/pagefind-entry.json",
   "_redirects",
@@ -203,7 +220,7 @@ const indexedPages = Object.values(pagefindEntry.languages ?? {}).reduce(
   (total, language) => total + (language.page_count ?? 0),
   0,
 );
-if (indexedPages < 1_180) {
+if (indexedPages < 820) {
   throw new Error(`Pagefind indexed only ${indexedPages} pages.`);
 }
 
@@ -229,7 +246,6 @@ if (indexedPages !== sitemapUrls.length + 1) {
     `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,
   );
 }
-
 const robots = await readBuilt("robots.txt");
 if (!robots.includes(`Sitemap: ${docsRoot}/sitemap.xml`)) {
   throw new Error("robots.txt does not advertise the docs-scoped sitemap.");
@@ -240,7 +256,7 @@ const llmsPageUrls = [
   ...llmsIndex.matchAll(/https:\/\/spacefast\.com\/docs[^\s)>]*/gu),
 ].map((match) => match[0]);
 if (
-  llmsPageUrls.length < 1_000 ||
+  llmsPageUrls.length !== sitemapUrls.length ||
   llmsPageUrls.some(
     (url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot,
   )
@@ -253,12 +269,34 @@ const sourceUrls = [...llmsFull.matchAll(/^Source: (https:\/\/[^\s]+)$/gmu)].map
   (match) => match[1],
 );
 if (
-  sourceUrls.length < 1_000 ||
+  sourceUrls.length !== sitemapUrls.length ||
   sourceUrls.some(
     (url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot,
   )
 ) {
   throw new Error("llms-full.txt has missing or non-docs-scoped source URLs.");
+}
+if (
+  sourceUrls.length !== sitemapUrls.length ||
+  sourceUrls.some((url) => !sitemapUrls.includes(url))
+) {
+  throw new Error("llms-full.txt and sitemap.xml disagree on the public docs corpus.");
+}
+
+const corpus = JSON.parse(await readBuilt("docs-corpus.json"));
+if (
+  corpus.schemaVersion !== 1 ||
+  typeof corpus.revision !== "string" ||
+  corpus.revision.length < 7 ||
+  corpus.pages.length !== sourceUrls.length ||
+  corpus.pages.some(
+    (page) =>
+      !sourceUrls.includes(page.url) ||
+      page.path === "/platforms" ||
+      page.path.startsWith("/platforms/"),
+  )
+) {
+  throw new Error("docs-corpus.json does not match the public, platform-free LLM corpus.");
 }
 
 const readability = JSON.parse(await readBuilt("agent-readability.json"));
@@ -271,8 +309,13 @@ for (const value of Object.values(readability.artifacts)) {
     throw new Error("agent-readability.json advertises an artifact outside /docs.");
   }
 }
-if ("askApi" in readability.artifacts || "mcp" in readability.artifacts) {
-  throw new Error("agent-readability.json advertises a disabled server feature.");
+if (
+  readability.artifacts.askApi !== "https://api.spacefast.com/v1/docs/ask" ||
+  "mcp" in readability.artifacts
+) {
+  throw new Error(
+    "agent-readability.json must advertise the external Ask API and keep Blume MCP disabled.",
+  );
 }
 
 const staticConfig = JSON.parse(await readBuilt("spacefast.jsonc"));
@@ -355,5 +398,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} search records, ${sitemapUrls.length} sitemap URLs, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL scoped to ${deploymentBase}.`,
+  `Route verification passed: ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records with platform pages ignored, ${sitemapUrls.length} public sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL scoped to ${deploymentBase}.`,
 );
