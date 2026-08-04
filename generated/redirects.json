@@ -1185,6 +1185,11 @@
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
   },
   {
+    "from": "/api/operations/postv1spacesbyspaceidcommentsscreenshot-urls",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
+  },
+  {
     "from": "/api/operations/postv1spacesbyspaceidcommentsscreenshots",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
@@ -2855,6 +2860,11 @@
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
   },
   {
+    "from": "/api/reference/operations/postv1spacesbyspaceidcommentsscreenshot-urls",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
+  },
+  {
     "from": "/api/reference/operations/postv1spacesbyspaceidcommentsscreenshots",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
@@ -4253,6 +4263,11 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_by_thread_id_unarchive",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshot_urls",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshots",
@@ -6310,6 +6325,11 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
   },
   {
+    "from": "/platform-api/operations/postv1spacesbyspaceidcommentsscreenshot-urls",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
+  },
+  {
     "from": "/platform-api/operations/postv1spacesbyspaceidcommentsscreenshots",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
@@ -7888,6 +7908,11 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_comments_by_thread_id_unarchive",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshot_urls",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshots",
@@ -10010,6 +10035,11 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
   },
   {
+    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidcommentsscreenshot-urls",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
+  },
+  {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidcommentsscreenshots",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
@@ -11588,6 +11618,11 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_by_thread_id_unarchive",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsbythreadidunarchive"
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshot_urls",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshot-urls"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_comments_screenshots",

@@ -1,12 +1,12 @@
 {
-  "contentDigest": "78171cb0f0b6d95ae1ffdfb155e7d092ac6de3b1663c72098927ed1de3ecd34c",
+  "contentDigest": "a80ead99bd19ae29db9428d40d301c411ca516e67345d9931150fd47a6f86bbd",
   "counts": {
-    "apiOperations": 321,
+    "apiOperations": 322,
     "changelogPackages": 14,
     "changelogVersions": 8,
     "errorCodes": 479,
-    "platformOperations": 356,
-    "redirects": 2483,
+    "platformOperations": 357,
+    "redirects": 2490,
     "setupPages": 16
   },
   "files": [
@@ -2531,19 +2531,19 @@
       "sha256": "9ec7cbe76eb42d9b7d9292c3e26feb8140cfd172a283a711a3b42b87a46d5235"
     },
     {
-      "bytes": 5487347,
+      "bytes": 5492734,
       "path": "openapi/api.json",
-      "sha256": "355e180cab69772c3eafcdc5466f87f0588af28153a42055496449215076b79f"
+      "sha256": "b2da641f58796fc9212339322b25c1f08fbc8667bcb3e4fa0129294b42c51a26"
     },
     {
-      "bytes": 5909107,
+      "bytes": 5914494,
       "path": "openapi/platform.json",
-      "sha256": "d4b56f86111c00746d085ad3179879dd5ef910cc9ff6d03b6c373c2ad33db994"
+      "sha256": "f796cfd877033405ce9b73fd4c0e54693c3ebdcaba23ac2fcd486686d1eb4e35"
     },
     {
-      "bytes": 461900,
+      "bytes": 463362,
       "path": "redirects.json",
-      "sha256": "77cf4e83ad6e16bae10132bed79c20cbff41d0fab23f1be403b023a6db2235af"
+      "sha256": "391825bc8cf883a422e755c80c5e11851e0713baa38ea4553f3b45065387dd58"
     },
     {
       "bytes": 766,
