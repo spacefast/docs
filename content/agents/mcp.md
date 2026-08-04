@@ -100,5 +100,5 @@ key — see [Auth and accounts](/agents/accounts).
 
 - [Publish as an agent](/agents/publishing) — receipts, claim continuation,
   secret rules.
-- [Auth](/account/sign-in) — device login and handoff links.
+- [Auth and accounts](/agents/accounts) — credentials and handoff links.
 - [SDK](/reference/sdk) — typed non-MCP clients.

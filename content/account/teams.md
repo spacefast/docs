@@ -91,4 +91,4 @@ do not change. Use [Access](/spaces/access) to change them.
 
 - [API keys](/account/api-keys) for machine access scoped to a team.
 - [Spaces](/spaces) for creating and transferring spaces into a team.
-- [Auth](/account/sign-in) for logging the CLI into the right account.
+- [`sf login`](/cli#sf-login) for logging the CLI into the right account.

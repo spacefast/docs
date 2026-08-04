@@ -62,6 +62,24 @@ sf channels history preview --space docs
 Use it when you need to know what was live, when it changed, and which version
 to promote next.
 
+## Inspect and compare versions
+
+Every version is a fixed snapshot you can browse in the dashboard: open a
+space, choose a version, and open its files to preview them, copy raw-file
+URLs, or download a ZIP. Private file URLs use your current access and can
+expire — do not treat them as permanent public links.
+
+Comparing two versions shows the added, changed, and removed paths, with
+line-level diffs for text files — useful before promoting. For a complete
+local copy of a version:
+
+```bash
+sf versions download --space my-space
+```
+
+See [`sf versions download`](/cli#sf-versions-download) for version selection
+and output options.
+
 ## How this fits publishing
 
 1. [Publish](/publishing) creates (or no-ops) an immutable version.
@@ -76,5 +94,5 @@ command. Use [`sf apply`](/spaces/settings#apply-saved-settings).
 ## Related
 
 - [Builds](/publishing/git) — source builds that produce versions.
-- [Activity](/spaces/activity) — account- and space-scoped event feed, including
-  promotions.
+- [Monitoring](/spaces/monitoring) — analytics, logs, and the activity feed,
+  including promotions.

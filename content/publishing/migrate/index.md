@@ -18,11 +18,11 @@ sf domains add www.example.com --wait
 
 ## Choose a guide
 
-- [Migrate from here.now](/publishing/migrate/here-now)
-- [Migrate from Netlify](/publishing/migrate/netlify)
-- [Migrate from Cloudflare Pages](/publishing/migrate/cloudflare-pages)
-- [Migrate from GitHub Pages](/publishing/migrate/github-pages)
 - [Migrate from Vercel](/publishing/migrate/vercel)
+- [Migrate from Netlify](/publishing/migrate/netlify)
+- [Migrate from GitHub Pages](/publishing/migrate/github-pages)
+- [Migrate from Cloudflare Pages](/publishing/migrate/cloudflare-pages)
+- [Migrate from here.now](/publishing/migrate/here-now)
 
 ## Check capacity before the move
 

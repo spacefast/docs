@@ -51,8 +51,8 @@ Dashboard URLs: `my.spacefast.com/<team>/<space>`.
 ## Claim
 
 An anonymous publish expires unless you claim it within 6 hours. Claim from the
-claim link in the browser, or from the CLI after you
-[sign in](/account/sign-in):
+claim link in the browser, or from the CLI after you sign in with
+[`sf login`](/cli#sf-login):
 
 ```bash
 sf spaces claim
@@ -101,4 +101,4 @@ of content and ownership.
 ## Related
 
 - [Teams](/account/teams) — ownership and defaults for new spaces.
-- [Activity](/spaces/activity) — event timeline for the space.
+- [Monitoring](/spaces/monitoring) — analytics, logs, and the activity timeline.

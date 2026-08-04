@@ -57,10 +57,6 @@ export default defineConfig({
       { label: "Agent setup", href: "/agents", icon: "bot" },
     ],
     repo: true,
-    tabs: [
-      { label: "Docs", path: "/", href: "/", icon: "book-open" },
-      { label: "Reference", path: "/reference", icon: "braces" },
-    ],
     sidebar: {
       display: "flat",
       items: [
@@ -75,28 +71,28 @@ export default defineConfig({
             "/publishing/git",
             "/publishing/channels",
             "/publishing/rollback",
-            {
-              label: "Frameworks",
-              root: "/publishing/frameworks/jekyll",
-              items: [
-                "/publishing/frameworks/jekyll",
-                "/publishing/frameworks/astro",
-                "/publishing/frameworks/vite",
-                "/publishing/frameworks/nextjs",
-              ],
-            },
-            {
-              label: "Move from another host",
-              root: "/publishing/migrate",
-              items: [
-                "/publishing/migrate",
-                "/publishing/migrate/here-now",
-                "/publishing/migrate/netlify",
-                "/publishing/migrate/cloudflare-pages",
-                "/publishing/migrate/github-pages",
-                "/publishing/migrate/vercel",
-              ],
-            },
+          ],
+        },
+        {
+          label: "Frameworks",
+          root: "/publishing/frameworks/nextjs",
+          items: [
+            "/publishing/frameworks/nextjs",
+            "/publishing/frameworks/astro",
+            "/publishing/frameworks/vite",
+            "/publishing/frameworks/jekyll",
+          ],
+        },
+        {
+          label: "Move from another host",
+          root: "/publishing/migrate",
+          items: [
+            "/publishing/migrate",
+            "/publishing/migrate/vercel",
+            "/publishing/migrate/netlify",
+            "/publishing/migrate/github-pages",
+            "/publishing/migrate/cloudflare-pages",
+            "/publishing/migrate/here-now",
           ],
         },
         {
@@ -109,40 +105,30 @@ export default defineConfig({
           root: "/spaces",
           items: [
             "/spaces",
-            "/spaces/files",
             "/spaces/domains",
             "/spaces/access",
-            "/spaces/comments",
             "/spaces/manage",
+            "/spaces/comments",
+            "/spaces/monitoring",
             {
               label: "Configure",
               root: "/spaces/settings",
-              items: [
-                "/spaces/settings",
-                "/spaces/variables",
-                "/spaces/customization",
-                "/spaces/visitor-pages",
-              ],
+              items: ["/spaces/settings", "/spaces/variables", "/spaces/customization"],
             },
             {
-              label: "Monitor",
-              root: "/spaces/traffic",
-              items: ["/spaces/traffic", "/spaces/activity"],
-            },
-            {
-              label: "Routing",
+              label: "Serving",
               root: "/spaces/redirects",
-              items: ["/spaces/redirects", "/spaces/headers", "/spaces/proxy-routes"],
-            },
-            {
-              label: "Connect and automate",
-              root: "/spaces/webhooks",
               items: [
-                "/spaces/webhooks",
-                "/spaces/wordpress",
-                "/spaces/tag-manager",
+                "/spaces/redirects",
+                "/spaces/headers",
+                "/spaces/proxy-routes",
                 "/spaces/image-acceleration",
               ],
+            },
+            {
+              label: "Integrations",
+              root: "/spaces/webhooks",
+              items: ["/spaces/webhooks", "/spaces/wordpress", "/spaces/tag-manager"],
             },
           ],
         },
@@ -161,8 +147,6 @@ export default defineConfig({
           root: "/account",
           items: [
             "/account",
-            "/account/sign-in",
-            "/account/security",
             "/account/teams",
             "/account/api-keys",
             "/account/billing",

@@ -72,5 +72,5 @@ the claim token once for a publish-only key scoped to that space — see
 
 ## Related
 
-- [Auth](/account/sign-in) — device login and storing tokens.
+- [`sf login`](/cli#sf-login) — device login and `--token` storage.
 - [Billing](/account/billing) — what `billing_viewer` can read.

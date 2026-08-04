@@ -4,10 +4,12 @@ This is the complete public documentation structure. It follows the patterns
 of the strongest developer-docs sites (Stripe, Vercel, Cloudflare, Railway,
 Supabase) rather than internal conventions:
 
-- Guides and generated reference are separate surfaces. The header has two
-  tabs: Docs (learning and product guides) and Reference (generated and exact
-  contracts). No benchmark site mixes API/CLI/error reference into the middle
-  of a learning sidebar.
+- Guides and generated reference are separate surfaces in one sidebar:
+  learning and product guides first, then a single Reference group with the
+  generated and exact contracts (the Railway model). Reference routes are
+  pinned at scattered top-level paths by public contracts (see ROUTE POLICY),
+  and Blume scopes header tabs by a single URL prefix, so a tabbed split
+  cannot render a correct sidebar on those routes — one tree can.
 - The homepage is a curated hub with card groups, not just the first sidebar
   page.
 - Agents are a first-class audience with their own top-level section, the way
@@ -31,7 +33,7 @@ NAMING AND STRUCTURE RULES
   checks that every path appears in the sidebar and produces an indexable
   built page.
 
-DOCS TAB
+GUIDES
 
 Home
   /                                      Spacefast documentation (hub)
@@ -48,19 +50,19 @@ Publishing
   /publishing/channels                   Versions and channels
   /publishing/rollback                   Roll back
 
-  Frameworks
-    /publishing/frameworks/jekyll        Jekyll
-    /publishing/frameworks/astro         Astro
-    /publishing/frameworks/vite          Vite
-    /publishing/frameworks/nextjs        Next.js
+Frameworks (ordered by adoption, the way Netlify and Vercel order theirs)
+  /publishing/frameworks/nextjs          Next.js
+  /publishing/frameworks/astro           Astro
+  /publishing/frameworks/vite            Vite
+  /publishing/frameworks/jekyll          Jekyll
 
-  Move from another host
-    /publishing/migrate                  Move to Spacefast
-    /publishing/migrate/here-now         here.now
-    /publishing/migrate/netlify          Netlify
-    /publishing/migrate/cloudflare-pages  Cloudflare Pages
-    /publishing/migrate/github-pages     GitHub Pages
-    /publishing/migrate/vercel           Vercel
+Move from another host (ordered by source-host adoption)
+  /publishing/migrate                    Move to Spacefast
+  /publishing/migrate/vercel             Vercel
+  /publishing/migrate/netlify            Netlify
+  /publishing/migrate/github-pages       GitHub Pages
+  /publishing/migrate/cloudflare-pages   Cloudflare Pages
+  /publishing/migrate/here-now           here.now
 
 Agents
   /agents                                Set up an agent
@@ -70,32 +72,29 @@ Agents
 
 Spaces
   /spaces                                Spaces
-  /spaces/files                          Browse and compare files
   /spaces/domains                        Set up a custom domain
   /spaces/access                         Control who can visit
-  /spaces/comments                       Comments
   /spaces/manage                         Rename, move, or copy
+  /spaces/comments                       Comments
+  /spaces/monitoring                     Analytics, logs, activity, and the
+                                         Work panel
 
   Configure
     /spaces/settings                     Space settings, including sf apply
     /spaces/variables                    Variables
-    /spaces/customization                Customization
-    /spaces/visitor-pages                Visitor pages
+    /spaces/customization                Theme tokens, layouts, and visitor
+                                         page takeovers
 
-  Monitor
-    /spaces/traffic                      Traffic
-    /spaces/activity                     Activity feed and the Work panel
-
-  Routing
+  Serving
     /spaces/redirects                    Redirects
     /spaces/headers                      Headers
     /spaces/proxy-routes                 Proxy routes
+    /spaces/image-acceleration           Image acceleration
 
-  Connect and automate
+  Integrations
     /spaces/webhooks                     Webhooks
     /spaces/wordpress                    WordPress
     /spaces/tag-manager                  Tag Manager
-    /spaces/image-acceleration           Image acceleration
 
 Apps
   /apps                                  Apps
@@ -108,17 +107,14 @@ Platforms
 
 Account & teams
   /account                               Account and teams
-  /account/sign-in                       Sign in, including provider profiles
-  /account/security                      Protect your account, including
-                                         connected apps
   /account/teams                         Teams
   /account/api-keys                      API keys
   /account/billing                       Billing and limits
 
-REFERENCE TAB
+REFERENCE
 
 Reference
-  /reference                             Reference overview, the tab landing
+  /reference                             Reference overview, the section landing
   /api                                   REST API guide
   /api/reference                         REST API reference
   /platforms/api/reference               Platform API reference
@@ -136,10 +132,11 @@ old authored-page URLs because the documentation site has not launched.
 
 Generated routes stay at /api/reference, /platforms/api/reference, /cli,
 /errors, and /changelog. Those paths are embedded in generated artifacts and
-tool output, so they keep their public contracts. In navigation they belong to
-the Reference tab; because Blume scopes tabs by path prefix, routes outside
-/reference show the Docs sidebar and reach the Reference surface through the
-header tab.
+tool output — every API error's RFC 9457 type URI points at /errors/<code>,
+and 2,490 compatibility redirects target the API references — so they keep
+their public contracts. Because they can never share one URL prefix and Blume
+scopes header tabs by prefix, the site uses a single sidebar with no tabs:
+every route shows the full tree and navigation is correct everywhere.
 
 CONTENT OWNERSHIP
 

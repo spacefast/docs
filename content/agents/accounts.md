@@ -3,7 +3,7 @@ title: Auth and accounts
 description: Which credential an agent should use — handoff links, API keys, agent accounts — and the secret-handling rules.
 ---
 
-Interactive humans use [`sf login`](/account/sign-in). CI uses a masked
+Interactive humans use [`sf login`](/cli#sf-login). CI uses a masked
 [`ci_deploy` API key](/account/api-keys). Hosted agents should prefer
 [MCP](/agents/mcp) OAuth or a dashboard handoff link redeemed with
 `sf login --handoff`. Never paste secrets into prompts.
@@ -35,6 +35,6 @@ Clear temporary copies after use.
 
 ## Related
 
-- [Sign in](/account/sign-in) — device login, tokens, and CLI profiles.
+- [`sf login`](/cli#sf-login) — device login, `--handoff`, and `--token`.
 - [API keys](/account/api-keys) — presets, rotation, CI vs agent.
 - [Publish as an agent](/agents/publishing) — claim tokens and continuation.
