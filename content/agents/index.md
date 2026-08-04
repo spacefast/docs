@@ -1,5 +1,7 @@
 ---
 title: Set up an agent
+sidebar:
+  label: Overview
 description: Install the Spacefast CLI, skill, and MCP for any coding agent with one command.
 ---
 

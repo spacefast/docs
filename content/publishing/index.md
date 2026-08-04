@@ -1,5 +1,7 @@
 ---
 title: Publish a site
+sidebar:
+  label: Overview
 description: How publishing works in Spacefast, including dashboard Drop, CLI publishes, immutable versions, and updates.
 ---
 
@@ -15,19 +17,14 @@ files that the runtime safety policy blocks.
 
 ## Dashboard Drop
 
-The fastest path for humans is the dashboard uploader (Drop) on
-[spacefast.com](https://spacefast.com) or inside a space on
-`my.spacefast.com/<team>/<space>`. Drag a folder, a zip archive, or a
-standalone `index.html` onto the upload box and publish — the
-[quickstart](/getting-started/quickstart) walks through it. Later updates on a
-claimed space use the same Drop on that space's page.
+Drop is the dashboard uploader: drag a folder, a zip archive, or a standalone
+`index.html` onto a space and publish — the
+[quickstart](/getting-started/quickstart) walks through it. Uploads resume if
+interrupted, zips are expanded before publishing, and `index.html` belongs at
+the archive root unless you want a file listing.
 
-Folders and standalone files resume interrupted uploads. Spacefast expands zip
-archives before it publishes them. Put `index.html` at the archive root unless
-you want a file listing.
-
-Drop does not need a CLI install. Prefer the [CLI](/cli) when you want
-incremental uploads, `--json` receipts, CI, or dry-runs.
+Prefer the [CLI](/cli) for incremental uploads, `--json` receipts, CI, or
+dry-runs.
 
 ## Folder vs zip vs CLI
 

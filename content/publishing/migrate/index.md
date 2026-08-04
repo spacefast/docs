@@ -1,5 +1,7 @@
 ---
 title: Move to Spacefast
+sidebar:
+  label: Overview
 description: Migration guidance for moving static sites and previews from other hosting providers to Spacefast.
 ---
 

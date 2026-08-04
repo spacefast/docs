@@ -1,5 +1,7 @@
 ---
 title: REST API
+sidebar:
+  label: REST API guide
 description: How the Spacefast REST API works — auth, the response envelope, publishing, versions, idempotency, and errors — with a link to the full reference.
 ---
 

@@ -1,5 +1,7 @@
 ---
 title: Spaces
+sidebar:
+  label: Overview
 description: Create, claim, rename, and delete spaces — the durable resource behind a Spacefast site.
 ---
 

@@ -1,5 +1,7 @@
 ---
 title: Platforms
+sidebar:
+  label: Overview
 description: Host sites for your own customers — the tenant model, server-side keys, on-behalf-of calls, and the Platform API reference.
 ---
 
