@@ -11,9 +11,7 @@ _No noted changes in this release._
 
 ## 0.0.12
 
-#### Patch Changes
-
-- Report call observations as an interval (`startedAt`/`endedAt`) instead of a duration, so observers can merge concurrent calls into wall time.
+- Various bug fixes and improvements.
 
 ## 0.0.11
 

@@ -1,5 +1,5 @@
 {
-  "contentDigest": "f83355d4f69c103c55a8e230318824dd8dc9a61492a2307fc0936f68870902d1",
+  "contentDigest": "4dcf47f410cefee3aba6f74042da63e48832cd88811320d59e6a3c11ad7ec772",
   "counts": {
     "apiOperations": 321,
     "changelogPackages": 14,
@@ -11,24 +11,24 @@
   },
   "files": [
     {
-      "bytes": 708,
+      "bytes": 582,
       "path": "changelog/packages/astro.md",
-      "sha256": "1490b7994b7e5436fe921a8b62f29a7f5d6f42352568dece581d6a3b2d5f8c05"
+      "sha256": "80b11ebfd33318f855d096c66cd7321acbf95ea60d29cbcf188f7926a37c93c6"
     },
     {
-      "bytes": 932,
+      "bytes": 615,
       "path": "changelog/packages/common.md",
-      "sha256": "5e0e91c6c28841878f323df65052491f1ca1b87563419b2827fbaa9e4f489cee"
+      "sha256": "8381694254a78cdf660193407efb8d10840ddd6eb7d245f3cf25dee6279e8e2d"
     },
     {
-      "bytes": 960,
+      "bytes": 650,
       "path": "changelog/packages/domain-search-terminal.md",
-      "sha256": "93196a981f2685c656d6b410e6675e42c2db8fc3d029ef63fe114480d023c1b5"
+      "sha256": "7d699f812dbe4bbfa42e9e0e6ac2b53550a765d93b116aafefb2449a32c9947a"
     },
     {
-      "bytes": 740,
+      "bytes": 622,
       "path": "changelog/packages/domain-services.md",
-      "sha256": "e3dd456f8e5c27bf5cb47d77260065b878ea8b850efecd54cfa6201012d35270"
+      "sha256": "b43e996b82d5a6f25b20f8b1babfe532d6fde2e12280c418d7b59bd512597def"
     },
     {
       "bytes": 566,
@@ -41,14 +41,14 @@
       "sha256": "db5d04cab5d152ef13d00a51c0e5bb4406d3f089193a88595dccf072e85ebd2e"
     },
     {
-      "bytes": 1440,
+      "bytes": 680,
       "path": "changelog/packages/mcp.md",
-      "sha256": "25d9bf2881cfe4d2f0709db66da15f275b40936ce66c55bc9a17f7c4b65011d3"
+      "sha256": "aeb42ffe86ac165c2f68fa5ae4402ed183f8f9ada56b3a6081f0b4b650bfe56a"
     },
     {
-      "bytes": 985,
+      "bytes": 609,
       "path": "changelog/packages/routing.md",
-      "sha256": "9a844d07ab23d180ac8b2fac7d8e20ac2a0f0b53113bb493690a4d2739d66917"
+      "sha256": "895eee70b382ee288f83d06413fe00cadec88126fee378aea420c381983ad44a"
     },
     {
       "bytes": 558,
@@ -61,24 +61,24 @@
       "sha256": "d0eee457109593c30e56b29f79f7964ee48d3ad93703373c00215c30d07bd014"
     },
     {
-      "bytes": 2847,
+      "bytes": 766,
       "path": "changelog/packages/spacefast.md",
-      "sha256": "2401a548cc5f1b616dfeba2e894ae5df5f471dc52a60f8d15906daec0578576e"
+      "sha256": "c33d266beca535cb3823ec5eab4bbaa3bd2f2a60b1844f3bd744f364458dfec3"
     },
     {
-      "bytes": 732,
+      "bytes": 606,
       "path": "changelog/packages/vite-plugin.md",
-      "sha256": "dd710fae2344876d6679b00d6b9f26ca508cb70763a515e671ba7ae0d460ccc5"
+      "sha256": "d15a173f9a295d3d96fa20b10670456dca2ccf8fabc865367ea7c2aea271c8d6"
     },
     {
-      "bytes": 420,
+      "bytes": 288,
       "path": "changelog/packages/wordpress.md",
-      "sha256": "24943e1896f8bdd837aca6671fbd0f4ed3dedeb6deec67911a3bdfa78dce00b6"
+      "sha256": "cf9e25a450b3668eac0a68b60495c095a5bda0976b170f21f212319d7b3d0810"
     },
     {
-      "bytes": 719,
+      "bytes": 592,
       "path": "changelog/packages/wpcloud-sdk.md",
-      "sha256": "7c027aba3dfce0b51df5a1084a3ce1de5f412b8250ab636a92b9fafbbb60bf67"
+      "sha256": "8675c33a217b359d3c20e6c6c4f7457efebaeb96c8e29b5ba9c5915b38d55bbc"
     },
     {
       "bytes": 562,
@@ -86,44 +86,44 @@
       "sha256": "8da4dc1219d0c4a12c8eff091c747913c5866a6a7040f80ed156abc277095a28"
     },
     {
-      "bytes": 948,
+      "bytes": 614,
       "path": "changelog/v0-0-10.md",
-      "sha256": "43d1a9d6f5df4e50494ac66ce5841be43503c868c4480a5387cb06665a0ce4c9"
+      "sha256": "7a76492ae5c976cda188cdec08eaa58ac059bb0b8e81099d2d9e05567fd2f93a"
     },
     {
-      "bytes": 941,
+      "bytes": 575,
       "path": "changelog/v0-0-11.md",
-      "sha256": "dd0083f2139c69d05d585ee4ecb918abb457f59eca4208367c09a3ad98031089"
+      "sha256": "68526159340cc7a1d5571191608c21a8d3247acc6267d7cbfd1696849c1a389f"
     },
     {
-      "bytes": 1258,
+      "bytes": 710,
       "path": "changelog/v0-0-12.md",
-      "sha256": "231f0d21e18105a3630b0e22a17ab36622469951af670c9cffb4e55805587379"
+      "sha256": "4d92db7a2123dc78adff106f1d972b7e1e38248d7309ab5c8e604c6c405531de"
     },
     {
-      "bytes": 2024,
+      "bytes": 869,
       "path": "changelog/v0-0-13.md",
-      "sha256": "6936dea29947195bc5aa25e1b0229567b954cc64e7615ebf7d2709dc74cf8d14"
+      "sha256": "620f014c0ae27e403605f026962c378372b4d6b0399ed79b5b540724721c2746"
     },
     {
-      "bytes": 929,
+      "bytes": 579,
       "path": "changelog/v0-0-6.md",
-      "sha256": "6bb0ead0435d13b878d7fe9d1538ce8d3cd6b903c123d67955e5e808ed4c5848"
+      "sha256": "67bfc426f93b9fff6b1182761bf5b1a1f85ed081ca785adfe81d2369f13ac835"
     },
     {
-      "bytes": 1283,
+      "bytes": 731,
       "path": "changelog/v0-0-7.md",
-      "sha256": "7ad08256c312cbad678bc5bfc346244a2117272830b1d8657e20a25900a16022"
+      "sha256": "a05980b479b54d9043061045352af9a3c99c07db2f922be420e38e9c93c1968c"
     },
     {
-      "bytes": 1249,
+      "bytes": 609,
       "path": "changelog/v0-0-8.md",
-      "sha256": "a286fe7584cef99d5817cb73da0496e2b86d627d7c282d3387093537deb0bebf"
+      "sha256": "4dfd92dee041e98f2a1bd80c62e19c6de2f3ec773eae3e231c3c55bf19c54531"
     },
     {
-      "bytes": 1073,
+      "bytes": 599,
       "path": "changelog/v0-0-9.md",
-      "sha256": "cc3b69fc1d49bdcad8daa3b9ff56bb2cbd41e9fea3f0aab1064320652cdfc191"
+      "sha256": "2cf3ea9a35e425c12d7eec39e0f59110e23d99a5962f8fda296e9ac9cceae809"
     },
     {
       "bytes": 201572,
