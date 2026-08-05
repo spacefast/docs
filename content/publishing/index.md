@@ -59,3 +59,14 @@ unchanged files again. When the upload finishes, the
 
 Publishes and builds draw from the team's resolved capacity. CLI pushes and CI
 builds count the same.
+
+## Content scanning
+
+Spacefast scans published content for malware and abusive material. A publish
+can be held briefly while a scan finishes, surfaced as
+[`scan_pending`](/errors/scan_pending). A scan that finds malware blocks the
+publish with [`malware_detected`](/errors/malware_detected).
+
+Takedowns remove serving for abusive content; affected requests return
+[`abuse_takedown`](/errors/abuse_takedown). Abusive sites can be reported
+through the API. See the [API reference](/api/reference).

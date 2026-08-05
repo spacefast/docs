@@ -16,33 +16,26 @@ successful publish creates an immutable version URL.
 - Routing, headers, page behavior, and other [configuration](/spaces/settings).
 - [Access policy](/spaces/access), [custom domains](/spaces/domains), and [Collab](/spaces/comments).
 
-Use the [REST API reference](/api/reference) for exact request and response
-shapes. The CLI exposes the same resources with human-friendly commands.
+The [REST API reference](/api/reference) has exact request and response
+shapes; the CLI exposes the same resources with human-friendly commands.
 
 ## Create
 
-Create an empty space:
+Create an empty space, or let the first [publish](/publishing) create one:
 
 ```bash
 sf spaces add --name docs
 ```
-
-Or let the first [publish](/publishing) create one:
 
 ```bash
 sf publish ./dist --name docs
 ```
 
 The first CLI publish writes `.spacefast/state.json` so later publishes from
-that directory update the same space. List what you can see:
+that directory update the same space. List what you can see, or inspect one:
 
 ```bash
 sf spaces ls --team acme
-```
-
-Inspect one space:
-
-```bash
 sf spaces get --space docs
 ```
 
@@ -57,9 +50,6 @@ claim link in the browser, or from the CLI after you sign in with
 
 ```bash
 sf spaces claim
-```
-
-```bash
 sf spaces claim --space spc_123 --claim-token claim_123 --team my-team
 ```
 
@@ -68,8 +58,8 @@ continuation after claim.
 
 ## Rename
 
-A rename changes the human-facing slug and the managed `view.fast` hostname.
-The immutable space ID stays the same, so use the ID in integrations that
+A rename changes the human-facing slug and the managed `view.fast` hostname;
+the immutable space ID stays the same, so use the ID in integrations that
 rename spaces.
 
 In the dashboard, open **Space Settings → General → Managed address**, enter
@@ -88,31 +78,29 @@ Content-Type: application/json
 { "slug": "new-name" }
 ```
 
-Every former managed hostname redirects to the current one with a path- and
-query-preserving `307 Temporary Redirect`, and former branch aliases redirect
-to their counterpart under the current hostname. Former managed addresses
-remain attached for the life of the space unless Spacefast explicitly releases
-one. Repeated renames never create a redirect chain. Custom domains, immutable version URLs, published versions,
-access settings, and content stay the same.
+- Every former managed hostname redirects to the current one with a path- and
+  query-preserving `307 Temporary Redirect`; former branch aliases redirect to
+  their counterpart under the current hostname.
+- Former managed addresses remain attached for the life of the space unless
+  Spacefast explicitly releases one.
+- Repeated renames never create a redirect chain.
+- Custom domains, immutable version URLs, published versions, access settings,
+  and content stay the same.
 
 If the space has a live version, the rename returns an operation that updates
-the runtime and provider hostnames; `--wait` waits for it. Repeating the same
-rename resumes an interrupted one. Spacefast refuses a rename while a space is
-moving, transferring, or deleting. The caller needs `spaces:rename`
+the runtime and provider hostnames; `--wait` waits for it, and repeating the
+same rename resumes an interrupted one. Spacefast refuses a rename while a
+space is moving, transferring, or deleting. The caller needs `spaces:rename`
 permission.
 
 ## Export and import
 
 Export creates a portable archive of the selected space. With `--wait` you get
-a download link; add `--output` to write the zip locally:
+a download link; add `--output` to write the zip locally, or `--version` to
+export a single version instead of the default set:
 
 ```bash
 sf spaces export --space docs --wait --output ./site-export.zip
-```
-
-Export a single version instead of the default set:
-
-```bash
 sf spaces export --space docs --version ver_123 --wait
 ```
 
@@ -122,9 +110,6 @@ version when it is ready:
 
 ```bash
 sf spaces import ./site-export.zip --space docs
-```
-
-```bash
 sf spaces import --from-export exp_123 --publish --space docs
 ```
 
@@ -137,8 +122,8 @@ sf spaces duplicate --space docs --slug docs-copy
 ```
 
 Duplicate defaults to the live version; pass `--version`, `--title`, and
-`--wait` as needed. Duplicate is the same-content, new-identity path. Prefer
-export and import when you need an archive or a controlled draft import.
+`--wait` as needed. It is the same-content, new-identity path; prefer export
+and import when you need an archive or a controlled draft import.
 
 ## Transfer to another team
 
@@ -147,30 +132,20 @@ target team accepts:
 
 ```bash
 sf spaces transfer acme --space spc_123
-```
-
-```bash
 sf transfers accept trf_123
-```
-
-```bash
 sf transfers cancel trf_123
 ```
 
-Pending transfers expire, after 7 days by default. Both teams must live in the
-same tenant.
+- Pending transfers expire, after 7 days by default.
+- Both teams must live in the same tenant.
 
 ## Download files only
 
-When you only need the files from a version, not a full export archive:
+Download a version's files when you do not need a full export archive, or grab
+one version as an archive:
 
 ```bash
 sf spaces download --space docs --output ./out
-```
-
-Or grab one version as an archive:
-
-```bash
 sf versions download --space docs --output ./archive.tar.gz
 ```
 

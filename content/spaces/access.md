@@ -19,8 +19,8 @@ A Grant combines 5 dimensions:
 - **Constraints**: Optional time, use-count, email, IP, country, or user-agent
   limits.
 
-Access is additive. Spacefast allows a request when one active Grant matches
-every required dimension. An exclusion applies only to its own Grant.
+Access is additive: Spacefast allows a request when one active Grant matches
+every required dimension, and an exclusion applies only to its own Grant.
 
 Let the owning team view a subtree:
 
@@ -28,16 +28,11 @@ Let the owning team view a subtree:
 sf share grant --to team --can view --path '/docs/**'
 ```
 
-Make the whole live space public:
+Make the whole live space public; add `--target all-versions` to make
+immutable version URLs public too:
 
 ```bash
 sf share grant --to public --can view --path '/**'
-```
-
-Make immutable version URLs public too:
-
-```bash
-sf share grant --to public --can view --path '/**' --target all-versions
 ```
 
 Explain the effective result for one route and audience:
@@ -56,45 +51,25 @@ Invite a person to a scoped role:
 sf share people invite person@example.com --role viewer --scope /docs
 ```
 
-List people:
+List, edit, or remove people:
 
 ```bash
 sf share people ls
-```
-
-Change one person's access:
-
-```bash
 sf share people edit person@example.com --grant /docs=commenter
-```
-
-Remove them:
-
-```bash
 sf share people remove person@example.com
 ```
 
 Visitors can request access from the private-space access page. List pending
-requests:
+requests, then approve or deny:
 
 ```bash
 sf share request ls
-```
-
-Approve one:
-
-```bash
 sf share request approve req_123
-```
-
-Deny one:
-
-```bash
 sf share request deny req_123
 ```
 
-Approval creates a Person Grant; it does not make the space public. Responses
-do not reveal whether an unknown private space exists.
+- Approval creates a Person Grant; it does not make the space public.
+- Responses do not reveal whether an unknown private space exists.
 
 ## Links
 
@@ -106,19 +81,14 @@ versions.
 sf share link create --name "Client review" --landing /proposal --path '/proposal/**' --exclude '/proposal/internal/**' --can comment --expires 7d
 ```
 
-List Links:
+List Links and copy a credential URL:
 
 ```bash
 sf share link ls
-```
-
-Copy the credential URL:
-
-```bash
 sf share link copy lnk_123 --show-secret
 ```
 
-Revoke it and every session it admitted:
+Revoke a Link and every session it admitted:
 
 ```bash
 sf share link revoke lnk_123
@@ -138,7 +108,7 @@ Rotate one:
 sf share password rotate pwd_123 --password-from-stdin
 ```
 
-Machine tokens are header-only bearer credentials. They can also grant Publish
+Machine tokens are header-only bearer credentials that can also grant Publish
 or Manage access:
 
 ```bash
@@ -151,13 +121,27 @@ Rotate a compromised token:
 sf share token rotate mch_123 --show-secret
 ```
 
-Treat password proofs, Link URLs, and machine tokens as secrets. CLI JSON and
-non-interactive output mask them unless you explicitly use `--show-secret`.
+- Treat password proofs, Link URLs, and machine tokens as secrets.
+- CLI JSON and non-interactive output mask them unless you explicitly use
+  `--show-secret`.
+
+## Script reads of a private space
+
+[`sf fetch`](/cli#sf-fetch-path) fetches private space content through the
+same central exchange and host-only cookie flow as a browser. The path
+defaults to `/`, and the required `--output` flag names the file that receives
+the response body:
+
+```bash
+sf fetch /docs --output ./docs.html
+```
+
+For header-only bearer access, create a machine token instead.
 
 ## External identity
 
-Connect an OpenID Connect (OIDC) provider or a white-label Ed25519 signer.
-Then create Grants for the external subjects it proves.
+Connect an OpenID Connect (OIDC) provider or a white-label Ed25519 signer,
+then create Grants for the external subjects it proves.
 
 ```bash
 sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id your_client_id --client-secret your_client_secret
@@ -167,8 +151,8 @@ sf share identity create --type oidc --name "Company login" --issuer https://log
 sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
 ```
 
-Signer rotation can overlap old and new keys. When you revoke a connection,
-Spacefast revokes its external Grants and admitted sessions.
+- Signer rotation can overlap old and new keys.
+- Revoking a connection revokes its external Grants and admitted sessions.
 
 ## Public paths in sf.jsonc
 
@@ -188,9 +172,9 @@ Make the whole space public:
 { "access": "public" }
 ```
 
-Public responses are cacheable. Spacefast never stores private or
-credential-bearing responses in the public cache. A change to access purges the
-affected entries.
+Public responses are cacheable; Spacefast never stores private or
+credential-bearing responses in the public cache, and a change to access
+purges the affected entries.
 
 ## URL types
 
@@ -202,21 +186,19 @@ affected entries.
 | **Claim** | Ownership recovery for an anonymous space.    |
 
 Open, Link, and Claim secrets begin in a URL fragment on
-`access.spacefast.com`. The broker exchanges the secret for a short-lived,
-host-bound handoff. The serving host sets a `__Host-` cookie and redirects to
-the clean live URL.
+`access.spacefast.com`; the broker exchanges the secret for a short-lived,
+host-bound handoff, and the serving host sets a `__Host-` cookie before
+redirecting to the clean live URL.
 
 ## The access page
 
-A private page renders its access page on the space's own domain. It offers
+A private page renders its access page on the space's own domain, offering
 only the methods that the space's Grants allow: Spacefast sign-in, company
 single sign-on (SSO), a password, or an invite request. If only one SSO lane
-exists, Spacefast can go
-straight to that provider.
+exists, Spacefast can go straight to that provider.
 
-Change the theme of the page with the `theme` section of `sf.jsonc`. Or replace
-the page with `_pages/access.html`. See
-[Customization](/spaces/customization).
+Theme the page with the `theme` section of `sf.jsonc`, or replace it with
+`_pages/access.html`. See [Customization](/spaces/customization).
 
 ## Network constraints and logout
 

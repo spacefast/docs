@@ -45,6 +45,19 @@ Fix the records that diagnostics reports, wait for their TTL, and check again.
 Do not remove the old host until diagnostics reports the domain ready and you
 have tested the site.
 
+## Custom certificates and SSL controls
+
+Certificates are automatic by default; most teams never touch them. When you
+need your own, upload a certificate for a hostname, stage it, then activate,
+deactivate, or delete it from the domain settings in the dashboard or through
+the REST API. Per-hostname SSL status and an issuance retry live in the same
+place.
+
+Options include an Android-compatible certificate chain, HSTS for subdomains,
+and disabling HSTS preload.
+
+- There is no CLI command for certificates; use the dashboard or the API.
+
 ## List or remove hostnames
 
 ```bash

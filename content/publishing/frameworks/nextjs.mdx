@@ -31,9 +31,6 @@ Build and publish the generated directory:
 
 ```bash
 bun run build
-```
-
-```bash
 sf publish ./out
 ```
 
@@ -52,7 +49,7 @@ enable it for your team before publishing an OpenNext worker.
 :::
 
 Use this path when the app needs request-time Next.js features. Remove
-`output: "export"` from `next.config.ts`. OpenNext builds the Next.js server
+`output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
 into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
 so also remove any `export const runtime = "edge"` declarations.
 
@@ -60,9 +57,6 @@ Install the adapter and its build-time Wrangler dependency:
 
 ```bash
 bun add @opennextjs/cloudflare
-```
-
-```bash
 bun add --dev wrangler
 ```
 
@@ -86,16 +80,11 @@ Give the Spacefast build its own package script:
 }
 ```
 
-Build from the project root:
+Build from the project root, then confirm the publish plan detects the
+`.open-next/worker.js` entry before anything uploads:
 
 ```bash
 bun run build:spacefast
-```
-
-Confirm the publish plan detects the `.open-next/worker.js` entry before
-anything uploads:
-
-```bash
 sf publish --dry-run
 ```
 
@@ -108,9 +97,8 @@ sf publish
 
 Spacefast detects `.open-next/worker.js`, enables the Node.js compatibility
 support it needs, and publishes the worker with the generated static assets.
-Spacefast serves requests for a published file from disk first. SSR, Route
-Handlers, and other misses reach the worker. You can pin the detected entry
-explicitly:
+Requests for a published file are served from disk first; SSR, Route Handlers,
+and other misses reach the worker. You can pin the detected entry explicitly:
 
 ```jsonc
 {
@@ -123,16 +111,15 @@ explicitly:
 ```
 
 See OpenNext's [Cloudflare adapter setup](https://opennext.js.org/cloudflare/get-started)
-for framework-specific requirements. Spacefast owns the publish step, so the
-Cloudflare deployment and binding configuration from that guide does not apply
-here.
+for framework-specific requirements; Spacefast owns the publish step, so that
+guide's Cloudflare deployment and binding configuration does not apply here.
 
 ## Image optimization
 
-Next.js default image optimization requires a Next.js server at runtime. Static
-export needs `images.unoptimized`, pre-generated responsive assets, or a custom
-loader; Next.js documents the constraint in its
-[static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization).
+Next.js default image optimization requires a Next.js server at runtime;
+static export needs `images.unoptimized`, pre-generated responsive assets, or
+a custom loader (see the Next.js
+[static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization)).
 
 For public images, use the [Site Accelerator API](/spaces/image-acceleration).
 It transforms images through `i0.wp.com`, handling width, quality, crop, fit,
@@ -164,9 +151,8 @@ export default nextConfig;
 ```
 
 `spacefastNextImageConfig` includes the shared `loader: "custom"` and
-`qualities` settings. Resolve `@spacefast/image/next-loader` from your own
-`next.config.ts` so pnpm, Yarn PnP, and hoisted workspaces locate the package
-correctly.
+`qualities` settings; resolve `@spacefast/image/next-loader` from your own
+`next.config.ts` so pnpm, Yarn PnP, and hoisted workspaces locate the package.
 
 Use absolute public image URLs for images that should go through Site
 Accelerator. Spacefast emits relative images in `public/` as static files, and
@@ -195,11 +181,10 @@ This outputs image URLs like:
 https://i0.wp.com/example.com/uploads/hero.jpg?w=1200&quality=85&strip=all
 ```
 
-For per-component control instead of global Next configuration, pass
-`spacefastNextImageLoader` from `@spacefast/image/next` as the `loader` prop.
-For advanced Site Accelerator options, see
-[Image acceleration](/spaces/image-acceleration), and put those options in one
-URL helper so components do not rebuild image URLs differently.
+For per-component control, pass `spacefastNextImageLoader` from
+`@spacefast/image/next` as the `loader` prop. For advanced Site Accelerator
+options, see [Image acceleration](/spaces/image-acceleration), and put them in
+one URL helper so components do not rebuild image URLs differently.
 
 ## Publishing checklist
 

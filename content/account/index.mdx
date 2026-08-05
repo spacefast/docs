@@ -37,6 +37,19 @@ could still hold.
 Account-protection emails (two-factor, password) always arrive and cannot be
 turned off; product and marketing email is a per-user notification setting.
 
+## Two-factor authentication and device approvals
+
+Enroll a second factor on the account security page. CLI and agent sign-ins
+use device authorization: `sf login` shows a code, and the browser asks you
+to approve the device. Approve only sign-ins you started; if a code appears
+that you did not request, deny it.
+
+## Notifications
+
+The dashboard has a notification inbox on your account. Email notification
+preferences and unsubscribe controls live there too, and you can connect
+Slack to receive notifications in a workspace.
+
 ## Teams and keys
 
 <CardGroup cols={2}>

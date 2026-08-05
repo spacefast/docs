@@ -67,6 +67,13 @@ sf teams defaults private
 This affects only the spaces you create after the change. Existing space Grants
 do not change. Use [Access](/spaces/access) to change them.
 
+## Audit log
+
+Each team keeps an audit log of team-level events: find it in the dashboard
+under **Settings → Audit**. How far back it reaches depends on the team's
+plan. For activity inside a single space, use
+[monitoring](/spaces/monitoring) instead.
+
 ## Related
 
 - [API keys](/account/api-keys) for machine access scoped to a team.

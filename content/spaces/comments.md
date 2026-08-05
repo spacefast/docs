@@ -24,9 +24,10 @@ version with the right person does not make the version public.
 
 ## Leave useful feedback
 
-Click the page element or area you mean, write the comment, and include a
-screenshot when the visual state matters. Reviewers can reply and react in the
-thread.
+Click the page element or area you mean, write the comment, and draw directly
+on the page when pointing beats prose. Each comment captures a screenshot of
+the page state by default, so feedback still makes sense after the content
+changes. Reviewers can reply and react in the thread.
 
 ## Review and archive
 

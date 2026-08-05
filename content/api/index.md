@@ -86,6 +86,18 @@ the same key, Spacefast returns the original result. It does not repeat the side
 effect. If you publish identical content, that is a recognized no-op success
 (`noop_publish`), not a wasted version. It is safe to retry blindly.
 
+## Long-running operations
+
+Some mutations outlive the request. Renames, settings applies, transfers, and
+domain changes return an operation that you poll until it finishes.
+
+The CLI covers this with `sf operations`: list recent async operations, or
+read one by ID. Pass `--space` to scope the list to a space.
+
+```bash
+sf operations --space spc_123
+```
+
 ## Limits
 
 Spacefast enforces rate limits and plan quotas per account. Rate-limited
