@@ -11,7 +11,8 @@ The CLI hides the commands until that feature is active.
 Spacefast Tag Manager keeps analytics and marketing code out of page templates.
 You create an immutable tag version, validate it, review the diff, then point
 an environment at the approved version. A release or a rollback of tags
-does not republish the space.
+does not republish the space. This page shows the CLI; the dashboard mirrors
+the same workflow under **Integrations**.
 
 ## Start with a template
 
@@ -24,13 +25,11 @@ sf tags templates
 Create a Google Analytics draft:
 
 ```bash
-sf tags versions create --space docs --template google-analytics --field measurementId=G-XXXXXXXXXX --title "Add analytics"
+sf tags versions create --space docs --template google-analytics --field measurementId=G-1234567890 --title "Add analytics"
 ```
 
 The template supplies the provider script, default trigger, and consent
-category. Other templates include Google Tag Manager, Meta Pixel, TikTok Pixel,
-LinkedIn Insight, Segment, Plausible, PostHog, and custom scripts. Always use
-`sf tags templates` for the current list.
+category. Use `sf tags templates` for the current list of providers.
 
 ## Validate and review
 
@@ -71,8 +70,8 @@ sf tags releases set production tver_123 --space docs
 ```
 
 Use `preview` or `development` instead of `production` for another environment.
-Pass `--expected-current-version` in automation. Concurrent changes then fail
-rather than overwrite one another.
+In automation, pass `--expected-current-version` so concurrent changes fail
+instead of overwriting each other.
 
 Roll production back to a known version:
 
@@ -88,13 +87,13 @@ sf tags releases --space docs
 
 ## Preview a draft
 
-Create a signed, no-store debug session for one page:
+A debug session previews a draft version on one page through a signed,
+no-store URL, without changing any release pointer:
 
 ```bash
 sf tags debug --space docs --version tver_123 --url https://docs.view.fast
 ```
 
-The returned URL previews that version without changing a release pointer.
 Revoke the session when you finish the review:
 
 ```bash
@@ -110,7 +109,7 @@ Keep a desired graph in `spacefast.tags.json`:
   "templates": [
     {
       "templateId": "google-tag-manager",
-      "config": { "containerId": "GTM-XXXXXXX" }
+      "config": { "containerId": "GTM-1234567" }
     }
   ],
   "eventPresets": ["page_view", "outbound_click"]
@@ -134,6 +133,3 @@ sf tags apply spacefast.tags.json --space docs --submit --release production
 Templates declare one or more consent categories: `necessary`, `functional`,
 `analytics`, or `marketing`. Optional tags stay blocked until their categories
 are granted. Browser privacy signals and explicit denials continue to win.
-
-The dashboard exposes the same workflow under **Integrations**: installed
-providers, drafts, review, release pointers, debug sessions, and audit history.

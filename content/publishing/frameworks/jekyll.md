@@ -3,24 +3,9 @@ title: Jekyll
 description: Build and publish a Jekyll site from Git or the Spacefast CLI.
 ---
 
-Spacefast detects Jekyll projects from `_config.yml`, `_config.yaml`, or
-`_config.toml`. The default published directory is `_site`.
-
-## Check the detected build
-
-From the repository root:
-
-```bash
-sf builds detect
-```
-
-Check the detected install command, build command, and output directory before
-you save them. If the Jekyll project lives below the repository root, pass its
-directory explicitly:
-
-```bash
-sf builds detect --root-directory docs
-```
+Connect the repository and let Spacefast build the site, or build locally and
+publish `_site`. Detection recognizes Jekyll from `_config.yml`,
+`_config.yaml`, or `_config.toml` and publishes `_site` by default.
 
 ## Publish from Git
 
@@ -33,11 +18,24 @@ sf builds detect --root-directory docs
 | Output directory | `_site`                    |
 | Environment      | `JEKYLL_ENV=production`    |
 
-Spacefast keeps bundled gems in its build cache. If the project has no bundle,
-the builder installs Jekyll in an isolated gem directory before building.
-
 If `_config.yml` changes Jekyll's `destination`, set the Spacefast output
 directory to the same path.
+
+## Check the detected build
+
+Once the space has a repository connection:
+
+```bash
+sf builds detect --space docs
+```
+
+Check the detected install command, build command, and output directory before
+you save them. If the Jekyll project lives below the repository root, pass its
+directory explicitly:
+
+```bash
+sf builds detect --space docs --root-directory docs
+```
 
 ## Publish from your computer
 

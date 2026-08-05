@@ -3,10 +3,10 @@ title: Netlify
 description: How to move a static site from Netlify to Spacefast.
 ---
 
-Most Netlify sites that build to static files move directly. Run the same build.
-Publish the output directory. Keep root `_redirects` and `_headers` files in
-that output. Check the target team's [routing
-entitlements](/account/billing) before relying on gated features.
+Netlify sites that build to static files move directly: run the same build,
+publish the output directory, and keep root `_redirects` and `_headers` files
+in that output. Check the target team's
+routing entitlements in the dashboard before relying on gated features.
 
 ```text
 # _redirects
@@ -15,11 +15,16 @@ entitlements](/account/billing) before relying on gated features.
 /api/* https://api.example.com/:splat 200
 ```
 
+```bash
+sf publish ./dist
+```
+
 ## Migration checklist
 
-- Check the Netlify publish directory. Run the same build command. Publish that
-  generated directory. Or [connect the repo](/publishing/git) and Spacefast runs
-  the build on every push.
+- Run the same build command and publish the Netlify publish directory, or
+  [connect the repo](/publishing/git) and Spacefast runs the build on every
+  push: `sf git connect --platform-preset netlify` imports your existing
+  Netlify build settings.
 - Check that `_redirects` and `_headers` are in the generated output, not only
   in the source tree.
 - Recreate Netlify deploy-context environment variables in the system that
@@ -31,22 +36,43 @@ entitlements](/account/billing) before relying on gated features.
 - Root `_redirects` and `_headers` files.
 - External proxy rules written as absolute-URL `200` rewrites when enabled for
   the target team.
-- Forced rules, splats, placeholders, exact query matching, conditions, custom 404s, and supported response headers.
+- Forced rules, splats, placeholders, exact query matching, conditions, custom
+  404s, and supported response headers.
 - `_headers` Basic Auth when enabled for the target team.
-- Static framework output from Astro, Eleventy, Hugo, Vite, [static Next.js exports](/publishing/frameworks/nextjs), and similar build tools when the generated files do not need a Netlify runtime.
+- Static framework output from Astro, Eleventy, Hugo, Vite,
+  [static Next.js exports](/publishing/frameworks/nextjs), and similar build
+  tools when the generated files do not need a Netlify runtime.
 
 ## What to change
 
-- Write explicit `301` statuses for permanent redirects. Spacefast defaults omitted statuses to `302`.
-- Move `netlify.toml` redirects and headers into root `_redirects` and `_headers`.
-- Replace Netlify Functions, Edge Functions, Identity, signed proxy redirects, and `Role` conditions before publishing protected content.
+- Write explicit `301` statuses for permanent redirects. Netlify treats omitted
+  statuses as `301`; Spacefast defaults them to `302`.
+- Move `netlify.toml` redirects and headers into root `_redirects` and
+  `_headers`.
+- Replace Netlify Functions, Edge Functions, Identity, signed proxy redirects,
+  and `Role` conditions before publishing protected content.
 
-## Limitations
+## What does not run on Spacefast
 
-Spacefast hosts static artifacts and supports static routing conventions. It does not run Netlify's platform runtime. Audit these features before switching DNS:
+Spacefast does not run Netlify's platform runtime. Audit these features before
+switching DNS:
 
-- Netlify Functions, Background Functions, Scheduled Functions, Edge Functions, SSR pages, and framework adapters do not execute. Replace them with static generation, client-side calls to an external API, or a separate backend.
-- Netlify Forms, Identity, role-based redirects, Split Testing, Visual Editor workflows, Netlify Blobs, Netlify DB, Image CDN transforms, Large Media, and post-processing features do not transfer. Spacefast's [image acceleration](/spaces/image-acceleration) uses Site Accelerator API URLs, not Netlify's `/.netlify/images` API.
-- Build plugins, build hooks, and deploy-context variables are Netlify-specific and do not transfer. Deploy Previews and branch deploys have direct equivalents: [connect the repo](/publishing/git) and Spacefast builds previews on every push.
-- Spacefast does not implement redirect features that only exist in `netlify.toml`, such as signed proxy redirects and custom proxy request headers. External `200` proxy rules work, but Netlify-specific signing and injected upstream headers do not.
-- Header behavior is static. Do not rely on functions, edge functions, or proxied upstreams to receive headers from `_headers`. Return those headers from the upstream service instead.
+- Server-side code does not execute: Netlify Functions (including background,
+  scheduled, and edge variants), server-side rendered (SSR) pages, and
+  framework adapters. Replace them with static generation, client-side calls to
+  an external API, or a separate backend.
+- Netlify platform products (forms, identity, split testing, data stores, image
+  transforms, and post-processing) do not transfer. Spacefast's
+  [image acceleration](/spaces/image-acceleration) uses Site Accelerator API
+  URLs, not Netlify's `/.netlify/images` API.
+- Build plugins, build hooks, and deploy-context variables are Netlify-specific
+  and do not transfer. Deploy Previews and branch deploys have direct
+  equivalents: [connect the repo](/publishing/git) and Spacefast builds
+  previews on every push.
+- Spacefast does not implement redirect features that only exist in
+  `netlify.toml`, such as signed proxy redirects and custom proxy request
+  headers. External `200` proxy rules work, but Netlify-specific signing and
+  injected upstream headers do not.
+- Header behavior is static. Do not rely on functions, edge functions, or
+  proxied upstreams to receive headers from `_headers`. Return those headers
+  from the upstream service instead.

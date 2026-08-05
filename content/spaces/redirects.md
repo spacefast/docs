@@ -1,13 +1,13 @@
 ---
 title: Redirects
-description: How to configure redirects, rewrites, SPA fallbacks, and proxy routes.
+description: Redirect, rewrite, proxy, and 404 rules in the _redirects file.
 ---
 
 Add `_redirects` at the publish root to redirect, rewrite, proxy, or return
 custom 404 responses. Spacefast compiles the file when a publish finishes and
 attaches the rules to that immutable version. The serving rules are
-precomputed — nothing parses the file per request — and Spacefast never serves
-the file itself.
+precomputed: nothing parses the file per request. Spacefast never serves the
+file itself.
 
 ```text
 /old /new 301
@@ -35,13 +35,14 @@ source [query=:capture ...] destination [status[!]] [Condition=value,... ...]
 - Supported statuses are `200`, `301`, `302`, `303`, `307`, `308`, and `404`.
 - Append `!` to the status to force the rule, for example `301!`.
 - Each rule line can be up to 1,000 characters.
-- A publish can include up to 2,100 redirect rules: 2,000 static rules and 100 dynamic rules.
 
 ## Rule capacity
 
-The team's [entitlements](/account/billing) set its routing-rule capacity. The
-compiler parses the complete file. Diagnostics then identify the exact rules
-when the result is over capacity.
+A publish can include up to 2,100 redirect rules: 2,000 static rules and 100
+dynamic rules. Within that ceiling, the team's
+entitlements set its routing-rule capacity. The compiler
+parses the complete file, and diagnostics identify the exact rules when the
+result is over capacity.
 
 ## Sources
 
@@ -83,9 +84,32 @@ Static rules are exact path rules without a host constraint. Dynamic rules inclu
 | `200`                             | Proxy            | Absolute `http`/`https` URL. |
 | `404`                             | Custom not found | Local path.                  |
 
-External proxy rules — `200` with an absolute URL destination — require the
-team's proxy entitlement. The rule still compiles without it but does not reach
-the upstream. See [Proxy routes](/spaces/proxy-routes).
+External proxy rules (`200` with an absolute URL destination) require the
+team's proxy entitlement. See [Proxy routes](#proxy-routes).
+
+## Proxy routes
+
+A proxy route is a `200` rule with an absolute `http` or `https` destination.
+Use it for public endpoints that do not need Spacefast to inject private
+credentials; secret injection is not supported. Keep secret-bearing logic
+behind your own API, Worker, Function, or service, then proxy to that public
+endpoint. Internal rewrites to pages in the same space do not need an external
+proxy route.
+
+External proxy execution is an entitlement. A rule still compiles when the
+team does not have it, but visitors receive a Spacefast information page
+instead of the upstream response. Enabling the entitlement applies to the live
+space without another publish. Anonymous spaces never execute external proxy
+routes.
+
+Migrating from Cloudflare or Netlify functions:
+
+- Move proxy manifest entries into root `_redirects` as `200` rules; Spacefast
+  has no separate proxy manifest.
+- Keep response headers in root `_headers`.
+- Point rules at a real upstream URL for Cloudflare Pages Functions, Workers,
+  or Netlify Functions.
+- Check version diagnostics for unsupported conditions or managed headers.
 
 ## Query captures
 
@@ -115,19 +139,19 @@ Conditions come after the status. Spacefast supports `Country`, `Language`, `Coo
 /ai /ai.txt 200! Agent=true
 ```
 
-Spacefast supports only the condition names above. Spacefast rejects Netlify
-and Cloudflare spellings such as `nf_country` and `cf_ipcountry`. The
-`redirect_condition_unsupported` error blocks the publish. Rename them to
-`Country=` / `Language=`. Spacefast rejects role conditions the same way.
+Spacefast supports only the condition names above and rejects Netlify and
+Cloudflare spellings such as `nf_country` and `cf_ipcountry` with a
+`redirect_condition_unsupported` error that blocks the publish. Rename them to
+`Country=` / `Language=`; role conditions are rejected the same way.
 
-Spacefast combines multiple conditions with `AND`. Spacefast combines multiple
-comma-separated values inside one condition with `OR`.
+Conditions combine with `AND`; comma-separated values inside one condition
+combine with `OR`.
 
 Use `Agent=true` when a URL should serve a plain-text version to AI agents. The
-same URL keeps the browser version for humans. Spacefast treats requests as
-agent-like when they prefer `text/plain` or `text/markdown` without asking for
-HTML. It also treats requests with a known agent user agent as agent-like.
-Shell fetches like `curl` and `wget` count as agents.
+same URL keeps the browser version for humans. Spacefast treats a request as
+agent-like when it prefers `text/plain` or `text/markdown` without asking for
+HTML, or when it carries a known agent user agent. Shell fetches like `curl`
+and `wget` count as agents.
 
 ## Runtime order
 

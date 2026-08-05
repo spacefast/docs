@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Spacefast">
+  <style>
+    .sf-favicon-primary { fill: #141419; }
+    @media (prefers-color-scheme: dark) { .sf-favicon-primary { fill: #fbf8f1; } }
+  </style>
+  <g transform="rotate(-1 80 80)">
+    <g transform="translate(22.5 48) scale(2.15)" fill="#ff4217">
+      <path d="M0 0h24v7H7v7h17v20H0v-7h17v-7H0V0Z"/>
+      <path d="M0 0h25v7H7v6h15v7H7v14H0V0Z" transform="translate(31 0)"/>
+    </g>
+    <g class="sf-favicon-primary" transform="translate(17.5 43) scale(2.15)" fill="#141419">
+      <path d="M0 0h24v7H7v7h17v20H0v-7h17v-7H0V0Z"/>
+      <path d="M0 0h25v7H7v6h15v7H7v14H0V0Z" transform="translate(31 0)"/>
+    </g>
+  </g>
+</svg>

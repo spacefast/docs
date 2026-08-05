@@ -16,13 +16,7 @@ publish a Zero app.
 
 ```bash
 sf create my-app --runtime zero
-```
-
-```bash
 cd my-app
-```
-
-```bash
 sf dev
 ```
 
@@ -73,16 +67,8 @@ database schema and every callable server handler.
 
 ```ts
 // server/index.ts
-import {
-  boolean,
-  capsule,
-  endpoint,
-  json,
-  mutation,
-  query,
-  string,
-  table,
-} from "@spacefast/zero/server";
+import { boolean, capsule, mutation, query, string, table }
+  from "@spacefast/zero/server";
 
 export default capsule({
   name: "Todos",
@@ -101,25 +87,29 @@ export default capsule({
       ctx.db.todos.insert({ text, done: false, ownerId: ctx.auth.userId }),
     ),
   },
-  endpoints: {
-    count: endpoint({ method: "GET", path: "/api/todos/count" }, (ctx) =>
-      json({ count: ctx.db.todos.count() }),
-    ),
-  },
 });
 ```
 
-Handler types: `query()` reads data and supports live client subscriptions,
-`mutation()` writes data and can open transactions, `action()` performs a
-one-shot call including outbound work, `endpoint()` exposes a raw HTTP method
-and path, and `socket()` exposes an application WebSocket handler. Endpoint
-helpers include `json()`, `text()`, `empty()`, and `redirect()`. Paths begin
-with `/`. Spacefast reserves the authentication and platform namespaces.
+Handler types:
 
-Every handler receives `ctx` with `ctx.auth` (identity), `ctx.db` (declared
-tables), `ctx.env` (server-only variables), `ctx.log` (structured logging),
-`ctx.ai` (completion and streaming helpers), and `ctx.blob` (server-side
-object operations).
+- **`query()`**: reads data and supports live client subscriptions.
+- **`mutation()`**: writes data and can open transactions.
+- **`action()`**: performs a one-shot call, including outbound work.
+- **`endpoint()`**: exposes a raw HTTP method and path.
+- **`socket()`**: exposes an application WebSocket handler.
+
+Endpoint helpers include `json()`, `text()`, `empty()`, and `redirect()`.
+Paths begin with `/`. Spacefast reserves the authentication and platform
+namespaces.
+
+Every handler receives `ctx` with:
+
+- **`ctx.auth`**: identity.
+- **`ctx.db`**: the declared tables.
+- **`ctx.env`**: server-only variables.
+- **`ctx.log`**: structured logging.
+- **`ctx.ai`**: completion and streaming helpers.
+- **`ctx.blob`**: server-side object operations.
 
 Call named handlers from the client with hooks:
 
@@ -137,7 +127,7 @@ and `useLocation()` for client-side routes.
 
 ## Authentication
 
-Every Zero visitor starts with a stable guest identity — enough to own rows,
+Every Zero visitor starts with a stable guest identity: enough to own rows,
 return to them later, and keep anonymous users separate. Hosted sign-in
 upgrades the same browser session to an authenticated WordPress.com identity.
 
@@ -149,7 +139,7 @@ import { SignInWithWpcom, SignOut, useAuth } from "@spacefast/zero/client";
 `isAuthenticated`, `email`, and `isLoading`.
 
 On the server, the same identity is `ctx.auth` in every handler. Use
-`requireUser(ctx)` when a handler requires a signed-in caller — guests have a
+`requireUser(ctx)` when a handler requires a signed-in caller: guests have a
 `userId`, but `requireUser()` rejects them. For row ownership, filter reads by
 `ctx.auth.userId` and use `requireOwner(ctx, table, id)` before an update or a
 delete; it does not reveal whether another user's row exists. Do not accept an
@@ -170,36 +160,29 @@ reads with `.withIndex()`.
 Queries use `.where()`, `.orderBy()`, `.limit()`, `.all()`, `.count()`,
 `.first()`, `.get(id)`, and `.paginate()`. Mutation contexts add `.insert()`,
 `.update(id, patch)`, and `.delete(id)`. Group dependent writes with
-`ctx.transaction()` — they commit together or not at all.
+`ctx.transaction()`; they commit together or not at all.
 
 Normal additive changes apply during `sf publish`. Destructive changes require
-an explicit migration command; a publish cannot silently drop data:
+an explicit migration command; a publish cannot silently drop data. Express
+the rename or drop in the capsule schema first, then allow the planned
+migration to include it with the matching boolean flag:
 
 ```bash
-sf db migrate --rename old_name:new_name
-```
-
-```bash
-sf db migrate --drop old_table
+sf db migrate --rename
+sf db migrate --drop
 ```
 
 Inspect and back up:
 
 ```bash
 sf db dump --table projects --limit 100
-```
-
-```bash
 sf db console
-```
-
-```bash
 sf db export --out ./backup.json
 ```
 
 The export contains every declared table in a versioned JSON format and only
 replaces the destination file after the complete export succeeds. A rollback
-promotes older code — it does not rewind database rows. Check the current
+promotes older code; it does not rewind database rows. Check the current
 schema before you roll back across a migration.
 
 ## Storage
@@ -218,12 +201,13 @@ await storage.delete(uploaded.key);
 
 Hosted uploads, private reads, and deletes require sign-in. Only the uploader
 can delete an object. The space owner gets an inventory across uploaders with
-`sf storage ls` and can force-delete with `sf storage rm <key> --yes` — that
-delete is destructive and unrecoverable.
+`sf storage ls` and can force-delete with
+`sf storage rm private/0123456789abcdef0123456789abcdef --yes`; that delete is
+destructive and unrecoverable.
 
 Safety and limits: 5 MiB per object, 100 MiB stored per space, no empty
 uploads, and no executable or active web content (HTML, JavaScript, PHP,
-binaries). Visibility is set at upload time and cannot change — upload a
+binaries). You set visibility at upload time and it cannot change; upload a
 replacement instead. The capsule's `ctx.blob` API is the server-side object
 capability; keep server workflows there and do not relay browser tokens.
 
@@ -232,7 +216,7 @@ capability; keep server workflows there and do not relay browser tokens.
 Keep server-only values in `.env.server`:
 
 ```dotenv
-RESEND_API_KEY=re_...
+RESEND_API_KEY=re_1234567890
 ```
 
 The publish command syncs the file as secret variables. Read values through
@@ -243,9 +227,6 @@ management.
 
 ```bash
 sf runtime status
-```
-
-```bash
 sf logs runtime --follow
 ```
 

@@ -4,21 +4,22 @@ description: Use @spacefast/astro for local routing parity, validation, and _red
 ---
 
 Spacefast publishes ordinary Astro static output without a framework-specific
-host adapter. The optional `@spacefast/astro` integration mirrors
-[`@spacefast/vite-plugin`](/publishing/frameworks/vite). It validates
-`_redirects` / `_headers`, serves them in dev, and emits them into the build
-output.
+host adapter: build, then `sf publish dist`. Any `_redirects` / `_headers`
+files you place in the project or `public/` directory ship with that build, no
+config changes needed. The optional `@spacefast/astro` integration mirrors
+[`@spacefast/vite-plugin`](/publishing/frameworks/vite): it validates those
+files, serves the resulting redirects, rewrites, proxy rules, and response
+headers in the dev server, and emits the merged files into the build output.
 
-## Install
+## Install the integration
 
 ```bash
 npm install -D @spacefast/astro
 ```
 
-Pin the release you review. We checked this page against `@spacefast/astro`
-`0.0.13`.
+This page documents `@spacefast/astro` 0.0.13.
 
-## Usage
+## Add it to astro.config
 
 ```ts
 import { defineConfig } from "astro/config";
@@ -35,46 +36,32 @@ export default defineConfig({
 });
 ```
 
-The integration is optional. You can publish a default Astro static build with
-`sf publish dist`. That build must already emit HTML. It can also emit any
-`_redirects` / `_headers` files that you place in the project or `public/`
-directory. You do not need to change `astro.config`.
+The integration reads `_redirects` and `_headers` from the project root, the
+Astro `publicDir`, and an optional `publishDir`, then merges in the inline
+`redirects` and `headers` options. Routing compile errors fail the build
+unless you set `failOnRoutingError: false`.
 
-## What it does
+Keep `mode: "static"` (the default) for prerendered or ordinary static sites.
+Use `mode: "spa"` when client-rendered routes need an index fallback, the same
+behavior as the [Vite plugin](/publishing/frameworks/vite)'s SPA mode.
 
-- Reads `_redirects` and `_headers` from the project root, Astro `publicDir`,
-  and an optional `publishDir`.
-- Accepts inline `redirects` and `headers` in the integration options.
-- Applies Spacefast redirects, rewrites, proxy rules, and supported response
-  headers in the Astro / Vite dev server.
-- Writes merged `_redirects` and `_headers` into the build output.
-- Validates routing compile diagnostics (`failOnRoutingError` defaults to
-  `true`).
-
-## Modes
-
-Use `mode: "static"` (default) for prerendered or ordinary static sites.
-
-Use `mode: "spa"` when you need an index fallback for client-rendered routes.
-This is the same idea as the Vite plugin's SPA mode.
-
-## Publish
+## Publish and inspect
 
 ```bash
 sf publish dist
 ```
 
-Or let [builds](/publishing/git) detect the Astro project. Inspect routing before
-upload:
+Or let [Git builds](/publishing/git) detect the Astro project. Before upload,
+confirm the declared redirect matches:
 
 ```bash
-sf publish --dry-run
+sf routing inspect --routing dist --url /old
 ```
 
-```bash
-sf routing inspect --routing dist --url /docs
-```
+For `sf publish --dry-run` output and the full list of rule sources, see
+[the Vite page](/publishing/frameworks/vite).
 
-## Related
+## Redirect and header file conventions
 
-- [Redirects](/spaces/redirects) and [Headers](/spaces/headers) — file conventions.
+See [Redirects](/spaces/redirects) and [Headers](/spaces/headers) for the file
+syntax.

@@ -12,9 +12,6 @@ store it in git or chat.
 
 ```bash
 sf api-keys create --name ci --preset ci_deploy
-```
-
-```bash
 sf api-keys ls
 ```
 
@@ -35,7 +32,6 @@ Pick the smallest preset that can do the job. Available presets:
 | `team_admin`      | Team administration                                     |
 | `billing_viewer`  | Read plan and billing state                             |
 
-Spacefast compiles the preset into a concrete policy when you create the key.
 When you approve a CLI or agent device request, Spacefast can also mint a key
 under one of these presets.
 
@@ -49,9 +45,6 @@ You cannot rotate a secret in place and keep the same id. Instead:
 
 ```bash
 sf api-keys create --name ci-2026-08 --preset ci_deploy
-```
-
-```bash
 sf api-keys revoke key_123
 ```
 
@@ -59,18 +52,17 @@ sf api-keys revoke key_123
 
 ## CI vs agents
 
-- **CI or one-off publish:** use `ci_deploy` or another tight preset. Mask it in
-  the pipeline. Inject it as `SPACEFAST_TOKEN`.
-- **Long-lived agent automation:** prefer an agent account with
-  `SPACEFAST_AGENT_CONFIG` over a broad personal key — see [Agents](/agents).
-- **Hosted MCP:** uses OAuth; do not paste API keys into prompts — see
+- **CI or one-off publish**: use `ci_deploy` or another tight preset. Mask it
+  in the pipeline. Inject it as `SPACEFAST_TOKEN`.
+- **Long-lived agent automation**: prefer an agent account with
+  `SPACEFAST_AGENT_CONFIG` over a broad personal key. See [Agents](/agents).
+- **Hosted MCP**: uses OAuth; do not paste API keys into prompts. See
   [MCP](/agents/mcp).
 
 Claiming an anonymous space with agent continuation on lets the agent exchange
-the claim token once for a publish-only key scoped to that space — see
+the claim token once for a publish-only key scoped to that space. See
 [Publish as an agent](/agents/publishing).
 
 ## Related
 
-- [`sf login`](/cli#sf-login) — device login and `--token` storage.
-- [Billing](/account/billing) — what `billing_viewer` can read.
+- [`sf login`](/cli#sf-login): device login and `--token` storage.

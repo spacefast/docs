@@ -8,8 +8,7 @@ same OpenAPI document as the [REST API reference](/api/reference). Use it when
 you want request and response types, and you do not want to write HTTP by hand.
 
 The API remains the contract. Authentication, envelopes, idempotency, and error
-codes behave exactly as in the [REST API guide](/api). That is true whether the
-caller is the SDK, CLI, dashboard, or MCP.
+codes behave exactly as in the [REST API guide](/api).
 
 ## Install
 
@@ -17,8 +16,8 @@ caller is the SDK, CLI, dashboard, or MCP.
 npm install @spacefast/sdk
 ```
 
-This docs pass was checked against `@spacefast/sdk` `0.0.13`. Pin the version
-that you review. The SDK requires Node.js 20 or newer.
+These examples were checked against `@spacefast/sdk` `0.0.13`. Pin the version
+you install. The SDK requires Node.js 20 or newer.
 
 ## Create a client
 
@@ -83,6 +82,6 @@ name.
 
 ## Related
 
-- [REST API](/api) — auth, envelopes, publish flows.
-- [API keys](/account/api-keys) — presets for automation.
-- [CLI](/cli) — `sf api` for ad-hoc signed requests.
+- [REST API](/api): auth, envelopes, publish flows.
+- [API keys](/account/api-keys): presets for automation.
+- [CLI](/cli): `sf api` for ad-hoc signed requests.

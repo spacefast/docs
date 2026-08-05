@@ -16,15 +16,11 @@ they roll back together.
 
 ## Quick start
 
+Two commands scaffold and publish a worker:
+
 ```bash
 sf create my-api --runtime functions
-```
-
-```bash
 cd my-api
-```
-
-```bash
 sf publish
 ```
 
@@ -74,21 +70,23 @@ with no declaration and no detected entry remains a static space.
 ## Runtime contract
 
 Handlers use `Request`, `Response`, streams, `crypto`, and `ctx.waitUntil()`.
-Node built-ins are not generally available. OpenNext builds are compiled with
-the compatibility support they need.
+Node built-ins are not available; OpenNext builds are compiled with the
+compatibility support they need.
 
 Spacefast denies outbound access unless the published version has the `fetch`
 capability. This is fail-closed. A `fetch()` call in your code does not
-silently add network authority.
+silently add network authority. Today no Functions publish grants that
+capability: outbound `fetch` is available only to [Zero](/apps/zero) actions.
+Check which capabilities a published version holds with `sf runtime status`.
 
 ## Variables
 
-Put server-only values in `.env.server` — the publish syncs them into the
+Put server-only values in `.env.server`: the publish syncs them into the
 space as secret [variables](/spaces/variables) and never uploads the file. The
 worker reads them from `env`.
 
 ```dotenv
-STRIPE_SECRET_KEY=sk_live_...
+STRIPE_SECRET_KEY=sk_live_1234567890
 ```
 
 Spacefast withholds database connection strings. Use the database binding
@@ -118,8 +116,9 @@ export default {
 ```
 
 Use `prepare().bind()` with `.all()`, `.first()`, `.run()`, or `.raw()`.
-`db.exec()` runs DDL (data definition language) statements. `db.batch()` groups
-statements. Use `sf db console` when you need a full SQL session.
+`env.DB.exec()` runs DDL (data definition language) statements.
+`env.DB.batch()` groups statements. Use `sf db console` when you need a full
+SQL session.
 
 ## Next.js
 
@@ -135,13 +134,7 @@ publish a version to test the Spacefast runtime.
 
 ```bash
 sf runtime status
-```
-
-```bash
 sf logs runtime --follow
-```
-
-```bash
 sf logs runtime --request-id req_9f21
 ```
 
@@ -152,4 +145,3 @@ compatibility date, capabilities, and dispatch state.
 
 - Worker bundle: 8 MiB maximum.
 - Request execution: 30 seconds maximum.
-- Compatibility date default: `2026-07-01`.

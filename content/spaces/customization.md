@@ -8,8 +8,7 @@ Spacefast publishes six visitor-facing pages with every version: `404`,
 responsive, support dark mode, use the right HTTP status and cache policy, and
 pick up your theme automatically.
 
-Customization has three layers. Start with the smallest one that solves the
-job.
+Start with the smallest customization layer that solves the job.
 
 1. `sf.jsonc` supplies basic metadata and theme tokens.
 2. `theme.json` and `_layout.html` define reusable presentation and site chrome.
@@ -32,9 +31,9 @@ Set the common values in the canonical `sf.jsonc` file:
 }
 ```
 
-These tokens style access, error, and platform-owned pages without you owning
-their form logic. The team's entitlements decide whether it can hide Spacefast
-branding or use a complete `_pages` takeover. Spacefast can infer palette and
+These tokens style access, error, and platform-owned pages without taking over
+their form logic. The team's entitlements decide whether the space can hide
+Spacefast branding or use a complete `_pages` takeover. Spacefast can infer palette and
 font values from a compatible `theme.json`; explicit `theme` values always win.
 
 ## DESIGN.md and generated files
@@ -48,7 +47,7 @@ sf design generate
 
 The command writes `theme.json` and `_layout.html` (pass `--force` to replace
 existing generated files). Spacefast does not read `DESIGN.md` during a
-publish or during serving — commit the generated files so the version is
+publish or during serving. Commit the generated files so the version is
 reproducible.
 
 ## Site chrome with a shared layout
@@ -77,7 +76,18 @@ Spacefast validates required slots before a publish goes live.
 In an entitled space, commit complete documents at `_pages/404.html`,
 `_pages/password.html`, `_pages/denied.html`, `_pages/index.html`, or
 `_pages/preview.html`. Spacefast expands a custom page, then serves it as
-written — it never wraps the page. Login takeover is not part of v1.
+written and never wraps the page. Login takeover is not part of v1.
+
+```html
+<!-- _pages/404.html -->
+<!doctype html>
+<html lang="en">
+  <body>
+    <nav><a href="/"><sf-logo></sf-logo><sf-name></sf-name></a></nav>
+    <main><h1>Not found</h1><p><a href="/">Back to the start.</a></p></main>
+  </body>
+</html>
+```
 
 Spacefast resolves a page in this order:
 
@@ -85,7 +95,7 @@ Spacefast resolves a page in this order:
 2. The nearest `_pages/<id>.html`.
 3. The designed default with the nearest `_layout.html`.
 
-A literal `404.html` never needs an entitlement — Spacefast serves it verbatim.
+A literal `404.html` never needs an entitlement: Spacefast serves it verbatim.
 
 ## Pages elements
 
@@ -123,14 +133,13 @@ Browsers requesting HTML receive the published page artifact.
 ```
 
 Other clients receive one line of plain text. You cannot customize the JSON
-and plain-text representations. Platform refusal pages — undeployed,
-suspended, legal, visit limit, runtime errors, rate limits, and upstream
-failures — always use Spacefast-owned defaults.
+and plain-text representations. Platform refusal pages always use
+Spacefast-owned defaults.
 
 ## Test locally
 
 Start from the readable defaults and validate with the exact publish-time
-checks — `sf pages pull layout` works the same way for the shared layout:
+checks. `sf pages pull layout` works the same way for the shared layout.
 
 ```bash
 sf pages pull password

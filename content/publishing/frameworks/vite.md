@@ -4,13 +4,21 @@ description: How to use Vite, TanStack Start, and optional Spacefast local routi
 ---
 
 Spacefast publishes plain Vite and TanStack Start static output without
-framework-specific packages. Use `sf.jsonc`, `_redirects`, and `_headers` for
-publish behavior. The optional Spacefast Vite plugin is only for local routing
-parity and build validation. For Astro, see
-[`@spacefast/astro`](/publishing/frameworks/astro). It has the same routing
-options in an Astro integration shape.
+framework-specific packages. The optional Spacefast Vite plugin exists only
+for local routing parity and build validation. For Astro, use
+[`@spacefast/astro`](/publishing/frameworks/astro) instead.
 
 ## Plain Vite
+
+A default Vite build emits `dist/index.html` plus hashed files in
+`dist/assets`. Publish it without changing `vite.config.ts`:
+
+```bash
+sf publish dist
+```
+
+Add `@spacefast/vite-plugin` when you want `_redirects` / `_headers` served in
+the dev server and validated at build time:
 
 ```ts
 import { defineConfig } from "vite";
@@ -22,11 +30,10 @@ export default defineConfig({
 });
 ```
 
-The plugin is optional. A default Vite build emits `dist/index.html` plus hashed
-files in `dist/assets`. `sf publish dist` works without changing
-`vite.config.ts`.
+## TanStack Start static site
 
-## TanStack Start Static Site
+Prerender every route when you know them all at build time: marketing pages,
+docs, and blogs.
 
 ```ts
 import { defineConfig } from "vite";
@@ -49,9 +56,12 @@ export default defineConfig({
 });
 ```
 
-This is the right model for marketing pages, docs, and blogs. TanStack can still build an internal server bundle for prerendering. The published Spacefast output must be static files.
+TanStack can still build an internal server bundle for prerendering; Spacefast
+publishes only the static files.
 
 ## TanStack Start SPA
+
+Enable the SPA shell when routes render on the client.
 
 ```ts
 import { defineConfig } from "vite";
@@ -74,7 +84,10 @@ export default defineConfig({
 });
 ```
 
-TanStack Start emits its SPA shell as `dist/client/_shell.html`. It can also emit prerendered route files such as `index.html`. Spacefast auto-detects `_shell.html` as the fallback on direct publishes. In repository builds, make that explicit:
+TanStack Start emits its SPA shell as `dist/client/_shell.html`, plus any
+prerendered route files such as `index.html`. Spacefast auto-detects
+`_shell.html` as the fallback on direct publishes. In repository builds, make
+that explicit:
 
 ```jsonc
 {
@@ -86,20 +99,19 @@ TanStack Start emits its SPA shell as `dist/client/_shell.html`. It can also emi
 }
 ```
 
-## Rule Sources
+## Inspect routing locally
 
-You can define routing in `sf.jsonc`, root `_redirects` and `_headers`, `public/_redirects` and `public/_headers`, or a configured publish directory. Spacefast merges those inputs at finalize.
+You can define routing in `sf.jsonc`, root `_redirects` and `_headers`,
+`public/_redirects` and `public/_headers`, or a configured publish directory.
+Spacefast merges those inputs at finalize, and `sf publish --dry-run` prints
+the detected files, SPA fallback, and routing diagnostics before anything
+uploads.
 
-## Build Summary
-
-`sf publish --dry-run` prints the detected files, SPA fallback, and routing diagnostics before anything uploads.
-
-## Inspect Routing Locally
-
-After a build, inspect the generated output:
+After a TanStack SPA build, point the inspector at the configured output
+directory:
 
 ```bash
-sf routing inspect --routing dist --url /dashboard
+sf routing inspect --routing dist/client --url /dashboard
 ```
 
-The command prints compiled rule counts, diagnostics, and match results for each URL.
+For a plain Vite build, use `--routing dist`.

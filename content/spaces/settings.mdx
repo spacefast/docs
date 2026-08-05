@@ -55,7 +55,7 @@ listings:
 { "index": false, "listing": true }
 ```
 
-Use `fallback` for an SPA or a custom not-found page:
+Use `fallback` for a single-page app (SPA) or a custom not-found page:
 
 ```jsonc
 { "fallback": "/index.html" }
@@ -66,9 +66,8 @@ Use `fallback` for an SPA or a custom not-found page:
 ```
 
 `cleanUrls` serves `/about.html` at `/about` when no file or directory index
-matches first. It defaults to on for ordinary static sites. It defaults to off
-for a 200-status SPA fallback. Set it explicitly when the desired behavior
-matters.
+matches first. It defaults to on for static sites and off for a 200-status
+SPA fallback. Set it explicitly for SPA fallbacks.
 
 ## Metadata and visitor pages
 
@@ -102,36 +101,33 @@ For people, links, passwords, machine credentials, and policy rules, use
 
 ## Apply saved settings
 
-Some space changes save first and go live when you apply them. A publish
-uploads files and can also carry `sf.jsonc` with a version. `sf apply`
-pushes already-saved settings onto the serving runtime. It does not create a
-new content version.
+Serving settings edited in the dashboard or through the API save first and go
+live when you apply them; the UI shows them as saved but not live until then.
+A publish uploads files and can also carry `sf.jsonc` with a version.
+`sf apply` pushes already-saved settings onto the serving runtime. It does not
+create a new content version.
 
 ```bash
 sf apply
 ```
 
+Queue an apply for a specific space without waiting:
+
 ```bash
-sf apply --space docs
+sf apply --space docs --no-wait
 ```
 
-By default the CLI waits until queued work finishes. Queue without waiting with
-`--no-wait`. Tune the wait ceiling with `--wait-timeout` (default 900 seconds).
+By default the CLI waits until queued work finishes. Tune the wait ceiling
+with `--wait-timeout` (default 900 seconds).
 
 | Goal                                      | Command                                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------------- |
 | Publish new or changed files              | [`sf publish`](/publishing)                                                  |
-| Move live/preview to an existing version  | [`sf promote`](/publishing/channels) / [`sf rollback`](/publishing/rollback) |
+| Move live/preview to an existing version  | [`sf promote`](/publishing/channels) / [`sf rollback`](/publishing/channels#roll-back) |
 | Push saved settings that are not live yet | `sf apply`                                                                   |
-
-You can edit serving settings in the dashboard or through the API. The UI can
-then show those settings as saved but not live. `sf apply` converges the
-runtime.
 
 ## What does not belong here
 
-- Put redirects, rewrites, and proxies in [`_redirects`](/spaces/redirects).
-- Put response headers in [`_headers`](/spaces/headers).
+- Put redirects, rewrites, proxies, and response headers in
+  [`_redirects`](/spaces/redirects) and [`_headers`](/spaces/headers).
 - Manage cloud and runtime variables with [`sf env`](/spaces/variables).
-- Manage shared passwords and other visitor credentials with
-  [`sf share`](/spaces/access).

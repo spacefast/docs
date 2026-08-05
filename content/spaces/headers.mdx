@@ -1,6 +1,6 @@
 ---
 title: Headers
-description: How to configure response headers for static files served by Spacefast.
+description: Set and remove response headers with the _headers file.
 ---
 
 Add `_headers` at the publish root to set or remove response headers. Spacefast
@@ -25,8 +25,9 @@ Each block starts with a path or URL matcher. Indented lines apply to matching r
 matcher
   Header-Name: value
   ! Header-To-Remove
-  !Header-To-Remove
 ```
+
+The space after `!` is optional.
 
 - Lines beginning with `#` are comments.
 - Matchers must start at the beginning of the line. Indent header operations with a space or a tab.
@@ -122,7 +123,7 @@ Headers apply to runtime-served file responses, including internal rewrites and 
 ## Basic Auth
 
 Basic Auth requires the corresponding team entitlement. The dashboard and
-[plan policy](/account/billing) show whether it is enabled.
+plan policy show whether it is enabled.
 
 Use `Basic-Auth` to protect matching paths. Credentials are one or more
 space-separated `username:password` pairs. Spacefast converts the credentials
@@ -131,23 +132,23 @@ in the response.
 
 ```text
 /preview/*
-  Basic-Auth: EXAMPLE_USER:EXAMPLE_PASSWORD
+  Basic-Auth: preview_user:preview_password
 
 /staging/*
-  Basic-Auth: EXAMPLE_USER_ONE:EXAMPLE_PASSWORD_ONE EXAMPLE_USER_TWO:EXAMPLE_PASSWORD_TWO
+  Basic-Auth: staging_user_one:staging_password_one staging_user_two:staging_password_two
 ```
 
-These values are placeholders. Never commit production credentials to
-`_headers` or repository history. Compile-time hashing protects runtime
-metadata. It does not protect the source file or earlier versions.
+Never commit production credentials to `_headers` or repository history.
+Compile-time hashing protects runtime metadata. It does not protect the source
+file or earlier versions.
 
 - Username cannot contain `:` or whitespace.
 - Password cannot contain whitespace. Password cannot be empty.
 - `! Basic-Auth` is invalid. Basic Auth always needs credentials.
 
-Anonymous spaces cannot use Basic Auth. Claim the space first. For simple gated
-access, use space-level password protection instead — a separate access
-setting.
+Anonymous spaces cannot use Basic Auth. Claim the space first. To gate access
+without per-user credentials, use space-level password protection, a separate
+access setting.
 
 ## Unsupported headers
 
@@ -160,9 +161,9 @@ Spacefast manages connection, transport, cookie, redirect, range, and edge cache
 
 Spacefast allows `Cache-Control` for browser responses. Spacefast preserves
 owner intent such as `no-store`, `no-cache`, `private`, and `immutable`. For
-public revalidating files it may add shared-cache directives such as
-`s-maxage`. It may also mirror the final policy into provider edge-cache
-headers. The browser can revalidate while the edge serves repeat requests.
+public revalidating files it adds shared-cache directives (`s-maxage`) and
+mirrors the final policy into provider edge-cache headers. The browser can
+revalidate while the edge serves repeat requests.
 
 ## Invalid rules
 

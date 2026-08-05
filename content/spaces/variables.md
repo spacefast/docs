@@ -4,7 +4,7 @@ description: Manage build and runtime configuration without committing secrets.
 ---
 
 Space variables hold configuration and secrets for builds and runtimes. New
-values are write-only by default. The API accepts them. It does not print them
+values are write-only by default: the API accepts them but never prints them
 back.
 
 Set a secret:
@@ -40,12 +40,22 @@ sf env import .env --space docs
 ```
 
 Vercel, Netlify, and Cloudflare dotenv exports use the same command with a
-`--from` value.
+`--from` value:
+
+```bash
+sf env import .env --from vercel --space docs
+```
 
 Pull readable effective values into `.env.local`:
 
 ```bash
 sf env pull --space docs
+```
+
+In CI, print them to stdout instead of writing a file:
+
+```bash
+sf env pull --space docs --stdout > .env
 ```
 
 Spacefast refuses to overwrite an existing file unless you pass `--force`.
@@ -68,8 +78,8 @@ Zero and Functions projects can keep server-only values in `.env.server` next
 to `sf.jsonc`. The CLI never uploads that file as a static asset. On publish it
 syncs the entries into the space as secrets.
 
-For an existing project, generate a dotenv template from the platform
-configuration that the CLI detects:
+For an existing project, generate a dotenv template from detected platform
+config:
 
 ```bash
 sf env export-template

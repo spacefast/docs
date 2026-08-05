@@ -70,7 +70,6 @@ export default defineConfig({
             "/publishing/anonymous",
             "/publishing/git",
             "/publishing/channels",
-            "/publishing/rollback",
           ],
         },
         {
@@ -91,14 +90,13 @@ export default defineConfig({
             "/publishing/migrate/vercel",
             "/publishing/migrate/netlify",
             "/publishing/migrate/github-pages",
-            "/publishing/migrate/cloudflare-pages",
             "/publishing/migrate/here-now",
           ],
         },
         {
           label: "Agents",
           root: "/agents",
-          items: ["/agents", "/agents/publishing", "/agents/mcp", "/agents/accounts"],
+          items: ["/agents", "/agents/publishing", "/agents/mcp"],
         },
         {
           label: "Spaces",
@@ -107,7 +105,6 @@ export default defineConfig({
             "/spaces",
             "/spaces/domains",
             "/spaces/access",
-            "/spaces/manage",
             "/spaces/comments",
             "/spaces/monitoring",
             {
@@ -121,7 +118,6 @@ export default defineConfig({
               items: [
                 "/spaces/redirects",
                 "/spaces/headers",
-                "/spaces/proxy-routes",
                 "/spaces/image-acceleration",
               ],
             },
@@ -149,7 +145,6 @@ export default defineConfig({
             "/account",
             "/account/teams",
             "/account/api-keys",
-            "/account/billing",
           ],
         },
         {
@@ -162,7 +157,6 @@ export default defineConfig({
             { label: "Platform API reference", href: "/platforms/api/reference" },
             "/cli",
             "/reference/sdk",
-            "/reference/troubleshooting",
             "/errors",
             { label: "Changelog", href: "/changelog" },
             "/changelog/packages",

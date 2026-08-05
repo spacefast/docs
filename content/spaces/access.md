@@ -11,12 +11,12 @@ machine.
 
 A Grant combines 5 dimensions:
 
-- **Audience:** Public, Team, Person, Link, Password, Machine, or an external
+- **Audience**: Public, Team, Person, Link, Password, Machine, or an external
   identity.
-- **Paths:** Exact or wildcard paths, with optional exclusions.
-- **Capabilities:** View, Comment, Publish, or Manage.
-- **Target:** Live, all versions, one version, or one branch.
-- **Constraints:** Optional time, use-count, email, IP, country, or user-agent
+- **Paths**: Exact or wildcard paths, with optional exclusions.
+- **Capabilities**: View, Comment, Publish, or Manage.
+- **Target**: Live, all versions, one version, or one branch.
+- **Constraints**: Optional time, use-count, email, IP, country, or user-agent
   limits.
 
 Access is additive. Spacefast allows a request when one active Grant matches
@@ -65,13 +65,13 @@ sf share people ls
 Change one person's access:
 
 ```bash
-sf share people edit '<person-id>' --grant /docs=commenter
+sf share people edit person@example.com --grant /docs=commenter
 ```
 
 Remove them:
 
 ```bash
-sf share people remove '<person-id>'
+sf share people remove person@example.com
 ```
 
 Visitors can request access from the private-space access page. List pending
@@ -84,23 +84,23 @@ sf share request ls
 Approve one:
 
 ```bash
-sf share request approve '<request-id>'
+sf share request approve req_123
 ```
 
 Deny one:
 
 ```bash
-sf share request deny '<request-id>'
+sf share request deny req_123
 ```
 
-Approval creates a Person Grant. It does not make the space public. Responses
+Approval creates a Person Grant; it does not make the space public. Responses
 do not reveal whether an unknown private space exists.
 
 ## Links
 
-A Link is a revocable browser credential. One Grant backs it. It can cover
-multiple paths. It can allow comments, expire, limit uses, or target live
-content or versions.
+A Link is a revocable browser credential backed by one Grant; it can cover
+multiple paths, allow comments, expire, limit uses, or target live content or
+versions.
 
 ```bash
 sf share link create --name "Client review" --landing /proposal --path '/proposal/**' --exclude '/proposal/internal/**' --can comment --expires 7d
@@ -115,16 +115,14 @@ sf share link ls
 Copy the credential URL:
 
 ```bash
-sf share link copy '<link-id>' --show-secret
+sf share link copy lnk_123 --show-secret
 ```
 
 Revoke it and every session it admitted:
 
 ```bash
-sf share link revoke '<link-id>'
+sf share link revoke lnk_123
 ```
-
-Spacefast shows the secret URL only when you create or explicitly copy it.
 
 ## Passwords and machine credentials
 
@@ -137,7 +135,7 @@ sf share password create --name "Launch review" --password-from-stdin --can comm
 Rotate one:
 
 ```bash
-sf share password rotate '<password-id>' --password-from-stdin
+sf share password rotate pwd_123 --password-from-stdin
 ```
 
 Machine tokens are header-only bearer credentials. They can also grant Publish
@@ -150,7 +148,7 @@ sf share token create --name "Docs publisher" --can publish --path '/docs/**'
 Rotate a compromised token:
 
 ```bash
-sf share token rotate '<machine-id>' --show-secret
+sf share token rotate mch_123 --show-secret
 ```
 
 Treat password proofs, Link URLs, and machine tokens as secrets. CLI JSON and
@@ -158,15 +156,15 @@ non-interactive output mask them unless you explicitly use `--show-secret`.
 
 ## External identity
 
-Connect an OIDC provider or a white-label Ed25519 signer. Then create Grants
-for the external subjects it proves.
+Connect an OpenID Connect (OIDC) provider or a white-label Ed25519 signer.
+Then create Grants for the external subjects it proves.
 
 ```bash
-sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id '<client-id>' --client-secret '<client-secret>'
+sf share identity create --type oidc --name "Company login" --issuer https://login.example.com --client-id your_client_id --client-secret your_client_secret
 ```
 
 ```bash
-sf share identity grant --connection '<connection-id>' --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
+sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
 ```
 
 Signer rotation can overlap old and new keys. When you revoke a connection,
@@ -205,14 +203,15 @@ affected entries.
 
 Open, Link, and Claim secrets begin in a URL fragment on
 `access.spacefast.com`. The broker exchanges the secret for a short-lived,
-host-bound handoff. The serving host then sets a `__Host-` cookie. It redirects
-to the clean live URL.
+host-bound handoff. The serving host sets a `__Host-` cookie and redirects to
+the clean live URL.
 
 ## The access page
 
 A private page renders its access page on the space's own domain. It offers
-only the methods that the space's Grants allow: Spacefast sign-in, company SSO,
-a password, or an invite request. If only one SSO lane exists, Spacefast can go
+only the methods that the space's Grants allow: Spacefast sign-in, company
+single sign-on (SSO), a password, or an invite request. If only one SSO lane
+exists, Spacefast can go
 straight to that provider.
 
 Change the theme of the page with the `theme` section of `sf.jsonc`. Or replace
@@ -221,7 +220,7 @@ the page with `_pages/access.html`. See
 
 ## Network constraints and logout
 
-Network limits apply to one Grant. They do not deny access that another
+Network limits apply to one Grant; they do not deny access that another
 matching Grant allows.
 
 ```bash

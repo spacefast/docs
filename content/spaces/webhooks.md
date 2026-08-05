@@ -1,6 +1,6 @@
 ---
 title: Webhooks
-description: Receive signed HTTPS callbacks when things happen in your team — versions, builds, domains, transfers, and more — with verifiable signatures and retries.
+description: Receive signed HTTPS callbacks for team events, with verifiable signatures and retries.
 ---
 
 Webhooks push events to your own HTTPS endpoint as they happen. You can trigger
@@ -11,6 +11,8 @@ A webhook is **team-scoped**. One endpoint receives events from every space the
 team owns. Manage them in **Team settings → Webhooks**, or with the API.
 
 ## Create a webhook
+
+One API call creates the endpoint and returns its secret:
 
 ```bash
 curl -X POST https://api.spacefast.com/v1/webhooks \
@@ -25,7 +27,7 @@ curl -X POST https://api.spacefast.com/v1/webhooks \
 
 The endpoint URL must be **public HTTPS**. Spacefast rejects `http://` and
 private or internal hosts. The response includes the **signing secret**
-(`whsec_…`) **exactly once**. Store it now. Spacefast never shows it again.
+(`whsec_123`) **exactly once**. Store it now. Spacefast never shows it again.
 Leave `events` unset (or `["*"]`) to receive everything.
 
 ## Events
@@ -59,11 +61,11 @@ Every callback sends a JSON body of the form:
 {
   "version": "2026-06-10",
   "event": {
-    "id": "evt_…",
+    "id": "evt_123",
     "sequence": 4821,
-    "tenantId": "tnt_…",
-    "spaceId": "spc_…",
-    "actor": { "type": "user", "id": "usr_…" },
+    "tenantId": "tnt_123",
+    "spaceId": "spc_123",
+    "actor": { "type": "user", "id": "usr_123" },
     "code": "version.ready",
     "message": "Version is live",
     "details": {},
@@ -78,16 +80,16 @@ is one of the events above. Callbacks are **at-least-once**. Dedupe on
 
 Each request also carries:
 
-- `Spacefast-Event-Id` — the event id (same as `event.id`).
-- `Spacefast-Delivery-Id` — this callback attempt's id.
-- `Spacefast-Signature` — the signature. The next section describes it.
+- **`Spacefast-Event-Id`**: the event id (same as `event.id`).
+- **`Spacefast-Delivery-Id`**: this callback attempt's id.
+- **`Spacefast-Signature`**: the signature. The next section describes it.
 
 ## Verify the signature
 
 The `Spacefast-Signature` header looks like:
 
 ```text
-Spacefast-Signature: t=1730289600, v1=5257a8…
+Spacefast-Signature: t=1730289600, v1=5257a8f1c2d94e0b7a6355c8d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0
 ```
 
 `t` is the unix timestamp. Each `v1=` is an **HMAC-SHA256** (hex) of the string
@@ -100,7 +102,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 function verify(rawBody, header, secret) {
   const parts = Object.fromEntries(header.split(",").map((p) => p.trim().split("=")));
   const expected = createHmac("sha256", secret).update(`${parts.t}.${rawBody}`).digest("hex");
-  // A header can carry more than one v1= during secret rotation — accept any match.
+  // A header can carry more than one v1= during secret rotation; accept any match.
   const signatures = header.match(/v1=([0-9a-f]+)/g)?.map((s) => s.slice(3)) ?? [];
   const ok = signatures.some(
     (sig) =>
@@ -111,11 +113,12 @@ function verify(rawBody, header, secret) {
 }
 ```
 
-During a secret rotation the header carries **two** `v1=` entries. Spacefast
-signs one entry with the new secret and one entry with the old secret. A
-callback verifies with either secret. Accept a callback when any entry matches.
+During a secret rotation the header carries two `v1=` entries, one per secret;
+accept a callback when any entry matches.
 
 ## Rotate the secret
+
+Rotation is one API call and returns the replacement secret:
 
 ```bash
 curl -X POST https://api.spacefast.com/v1/webhooks/whk_123/rotate-secret \
@@ -142,6 +145,5 @@ callbacks. Pass `expireNow: true` to cut over immediately.
   counter. To re-enable a disabled
   webhook, set its status back to `active`.
 
-When you delete a webhook, Spacefast removes it from customer-facing API and
-dashboard lists. The callbacks stop. Spacefast retains the record and the
-attempt history for internal audit.
+Deleting a webhook stops its callbacks and removes it from API and dashboard
+lists.

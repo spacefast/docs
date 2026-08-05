@@ -5,39 +5,39 @@ sidebar:
 description: Sign in, protect your account, and manage the teams that own your spaces, API keys, and billing.
 ---
 
-Your account is your identity. Teams own the spaces, API keys, usage, and
-billing you work with.
+This page covers signing in and keeping your account secure. The
+[teams](/account/teams) you belong to own the spaces,
+[API keys](/account/api-keys), usage, and billing you work with.
 
 ## Sign in
 
 Spacefast sign-in is WordPress.com sign-in: use it at
 [spacefast.com](https://spacefast.com), and your teams and spaces appear under
 `my.spacefast.com/<team>`. The CLI authenticates separately with
-[`sf login`](/cli#sf-login) — browser-assisted device login; a browser session
-does not authenticate your terminal. For CI and scripts, use an
-[API key](/account/api-keys) instead.
+[`sf login`](/cli#sf-login). A browser session does not authenticate your
+terminal. For CI and scripts, use an [API key](/account/api-keys) instead.
 
 ## Protect your account
 
-The security page lists the sessions that can currently use your account —
-browser or client, operating system, network address, start time, and expiry —
-with your current session marked. Revoke any session you do not recognize;
-that device must sign in again. **Sign out all other sessions** covers a lost
-device or a shared browser, and Spacefast asks for a fresh sign-in before
-showing or changing sensitive security settings.
+The security page lists the sessions that can currently use your account, with
+your current session marked. Revoke any session you do not recognize; that
+device must sign in again. **Sign out all other sessions** covers a lost device
+or a shared browser. Spacefast asks for a fresh sign-in before showing or
+changing sensitive security settings.
 
 Connected apps are services you authorized to act with your Spacefast
-identity. Revoke an app when you no longer use or recognize it — revocation
+identity. Revoke an app when you no longer use or recognize it. Revocation
 stops future access but does not undo changes the app already made.
 
 Browser sessions, OAuth connections, and CLI API keys have separate
 lifecycles: revoking one does not revoke the others. After losing a device,
 also review [API keys](/account/api-keys) and remove keys the lost computer
-could still hold. Account-protection emails (two-factor, password) always
-arrive and cannot be turned off; product and marketing email is a per-user
-notification setting.
+could still hold.
 
-## Teams, keys, and billing
+Account-protection emails (two-factor, password) always arrive and cannot be
+turned off; product and marketing email is a per-user notification setting.
+
+## Teams and keys
 
 <CardGroup cols={2}>
   <Card title="Teams" href="/account/teams" icon="users">
@@ -48,5 +48,5 @@ notification setting.
   </Card>
 </CardGroup>
 
-For the plan, entitlements, and safety limits attached to a team, see
-[Billing and limits](/account/billing).
+The dashboard shows the plan, entitlements, and safety limits attached to a
+team.

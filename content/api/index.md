@@ -2,13 +2,13 @@
 title: REST API
 sidebar:
   label: REST API guide
-description: How the Spacefast REST API works — auth, the response envelope, publishing, versions, idempotency, and errors — with a link to the full reference.
+description: "How the Spacefast REST API works: auth, the response envelope, publishing, versions, idempotency, errors, and a link to the full reference."
 ---
 
 Everything Spacefast does is one REST API at `https://api.spacefast.com`. The
 dashboard, the CLI, and agents all speak it. There is no private surface behind
-it. This page is the guide. The [full endpoint reference](/api/reference) lists
-every operation, parameter, and schema.
+it. The [full endpoint reference](/api/reference) lists every operation,
+parameter, and schema.
 
 ## The shape of every response
 
@@ -17,7 +17,7 @@ carry `{ "error": ... }`. An error always has a stable machine-readable `code`
 and a human `message`. It also has a `docsUrl` that points at that code's
 reference page, and a `requestId` for support.
 
-Match on `code`. Never match on `message`. Messages may improve over time.
+Match on `code`, never on `message`. Messages may improve over time;
 Spacefast never renames or removes a code. The [error reference](/errors) lists
 every code.
 
@@ -37,7 +37,7 @@ every code.
 Send an API key as a bearer token:
 
 ```http
-Authorization: Bearer <SPACEFAST_TOKEN>
+Authorization: Bearer $SPACEFAST_TOKEN
 ```
 
 Create keys in the dashboard or with `sf api-keys create`. The
@@ -52,17 +52,16 @@ you claim the space.
 
 ## Publish
 
-**One POST.** `POST /v1/publish` takes a single file, a multipart form of files,
-or a zip archive. It returns the whole receipt in one request. The receipt
-carries the live URL and the permanent version URL. For an anonymous publish, it
-also carries the claim link.
+`POST /v1/publish` takes a single file, a multipart form of files, or a zip
+archive, and returns the whole receipt in one request. The receipt carries the
+live URL and the permanent version URL. For an anonymous publish, it also
+carries the claim link.
 
 ```bash
 curl -F archive=@site.zip https://api.spacefast.com/v1/publish
 ```
 
-**The granular flow.** For large uploads and incremental publishes, create a
-version explicitly:
+For large uploads and incremental publishes, create a version explicitly:
 
 1. `POST /v1/spaces`
 2. `POST /v1/spaces/{spaceId}/versions` returns signed upload targets
@@ -75,8 +74,8 @@ receipt shape.
 
 ## Everything is a version
 
-Every publish freezes an immutable version and the live URL is a pointer that
-moves atomically — see [Versions and channels](/publishing/channels). To roll
+Every publish freezes an immutable version, and the live URL is a pointer that
+moves atomically. See [Versions and channels](/publishing/channels). To roll
 back, send a `POST` that promotes an earlier version: a pointer flip, not a
 re-upload. Version lists, diffs, and logs are all plain GET requests.
 
@@ -89,8 +88,8 @@ effect. If you publish identical content, that is a recognized no-op success
 
 ## Limits
 
-Spacefast enforces rate limits and plan quotas per account. See
-[Billing and limits](/account/billing). Rate-limited responses return the
+Spacefast enforces rate limits and plan quotas per account. Rate-limited
+responses return the
 standard error envelope with a `Retry-After` header.
 
 ## For agents
@@ -102,8 +101,8 @@ skill, and a hosted MCP server with typed tools. If an agent makes the calls,
 start with [MCP](/agents/mcp) and [set up the agent](/agents) with one
 command.
 
-## Building a platform on Spacefast?
+## Hosting sites for your customers
 
-You may host sites for **your own customers** — tenants, acting on behalf of end
-users. That is a separate, larger surface with its own guide and reference. See
-[Platforms](/platforms).
+You may host sites for **your own customers**, with your platform as a tenant
+acting on behalf of end users. That is a separate, larger surface with its own
+guide and reference. See [Platforms](/platforms).

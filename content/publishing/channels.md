@@ -1,23 +1,23 @@
 ---
 title: Versions and channels
-description: How immutable versions work, and how live and preview channels point at them.
+description: How immutable versions work, how live and preview channels point at them, and how to roll back.
 ---
 
 Every changed publish creates an immutable version. The version URL is
-permanent. The space's live URL is a pointer — a **channel** — that moves only
-when a publish is ready. Publishing and rollback move a channel. They do not
-rewrite the version it used to serve.
+permanent. The space's live URL is a pointer, called a **channel**, that moves
+only when a publish is ready. Publishing and rollback move a channel; they do
+not rewrite the version it used to serve.
 
 ## The release boundary
 
-Uploading bytes alone is not success: finalization validates the complete
-snapshot, prepares it for serving, and promotes it atomically. A request never
-sees half of a release.
+A request never sees half of a release: finalization validates the complete
+snapshot, prepares it for serving, and promotes it atomically. Uploading bytes
+alone is not success.
 
 The publish receipt contains both identities:
 
 - `space.liveUrl` is the stable address people visit.
-- `version.immutableUrl` is the exact release you just created.
+- `version.immutableUrl` is the exact release that publish created.
 
 ## Live and preview
 
@@ -31,7 +31,7 @@ List where each channel points:
 sf channels ls --space docs
 ```
 
-## Promote and roll back
+## Promote
 
 Promote a ready version to a channel (default `live`):
 
@@ -43,9 +43,28 @@ sf promote v12 --space docs
 sf promote v12 --space docs --channel live
 ```
 
-`sf rollback v12` is the recovery-shaped form of the same live promotion. See
-[Rollback](/publishing/rollback) for the CLI and dashboard workflow, or the
-[API reference](/api/reference) for the exact operation.
+See the [API reference](/api/reference) for the exact operation.
+
+## Roll back
+
+Rolling back promotes an earlier ready version to live. There is no rebuild
+and no re-upload; the site is live in seconds. List versions, then roll back
+to the one you want:
+
+```bash
+sf versions ls
+```
+
+```bash
+sf rollback v12 --space docs
+```
+
+Run these from a directory that contains `.spacefast/state.json`, or pass
+`--space` to target a space explicitly.
+
+`sf rollback` is the recovery-shaped form of the same live promotion that
+`sf promote` performs; use whichever frames the change the way you mean it.
+Both accept a version id, ref, or number such as `ver_123`, `v12`, or `12`.
 
 ## Promotion history
 
@@ -67,32 +86,47 @@ to promote next.
 Every version is a fixed snapshot you can browse in the dashboard: open a
 space, choose a version, and open its files to preview them, copy raw-file
 URLs, or download a ZIP. Private file URLs use your current access and can
-expire — do not treat them as permanent public links.
+expire. Do not treat them as permanent public links.
 
 Comparing two versions shows the added, changed, and removed paths, with
-line-level diffs for text files — useful before promoting. For a complete
+line-level diffs for text files, useful before promoting. For a complete
 local copy of a version:
 
 ```bash
-sf versions download --space my-space
+sf versions download --space docs --version v3 --output ./archive.tar.gz
 ```
 
 See [`sf versions download`](/cli#sf-versions-download) for version selection
 and output options.
 
+## Permanent version URLs
+
+Each version URL serves exactly the content that you published, and that
+content never changes. The team's current entitlements control whether an
+older version URL is public. Entitlements do not change owner access or API
+access. Rollback and export continue to work.
+
+## Retention and storage
+
+Committed file bytes across versions count toward the team's storage quota. If
+you reach the quota, Spacefast blocks new publishes. It never takes the live
+site down. Delete old versions or add storage to free up room.
+
+Retention follows the team's current policy, and Spacefast warns the team and
+offers an export before an unreferenced version becomes eligible for removal.
+Retention never deletes the live version or a version that a channel points
+at, so the current rollback target is always safe.
+
 ## How this fits publishing
 
 1. [Publish](/publishing) creates (or no-ops) an immutable version.
 2. A successful live publish moves the `live` channel to that version.
-3. [Rollback](/publishing/rollback) / `sf promote` moves the channel again without
-   rebuilding.
+3. `sf rollback` / `sf promote` moves the channel again without rebuilding.
 4. Channel history records each move.
 
 Saved space settings that are not yet on the serving runtime need a different
 command. Use [`sf apply`](/spaces/settings#apply-saved-settings).
 
-## Related
-
-- [Builds](/publishing/git) — source builds that produce versions.
-- [Monitoring](/spaces/monitoring) — analytics, logs, and the activity feed,
-  including promotions.
+Source builds that produce versions are covered in
+[Build from Git](/publishing/git). Promotions also appear in the analytics,
+logs, and activity feed under [Monitoring](/spaces/monitoring).

@@ -11,7 +11,7 @@ const ESSENTIAL_PATHS = new Set([
   "/publishing/anonymous",
   "/publishing",
   "/getting-started/quickstart",
-  "/publishing/rollback",
+  "/publishing/channels",
 ]);
 
 function normalizePath(url) {
@@ -37,7 +37,7 @@ function pageMetadata(path) {
   if (
     path === "/getting-started/agents" ||
     path === "/publishing" ||
-    path === "/publishing/rollback"
+    path === "/publishing/channels"
   ) {
     return { kind: "workflow", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
   }

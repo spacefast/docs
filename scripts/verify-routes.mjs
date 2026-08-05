@@ -19,18 +19,6 @@ const corpusKey = (url) => {
 };
 const checked = [];
 
-function parseRequiredIaRoutes(source) {
-  const routeSection = source.split(/^ROUTE POLICY$/mu, 1)[0];
-  const routes = routeSection
-    .split("\n")
-    .map((line) => line.match(/^\s*(\/(?:[a-z0-9][a-z0-9_./-]*)?)(?:\s{2,}.*)?$/u)?.[1])
-    .filter(Boolean);
-  if (routes.length === 0 || new Set(routes).size !== routes.length) {
-    throw new Error("proposed-ia.txt must contain a non-empty, duplicate-free route manifest.");
-  }
-  return routes;
-}
-
 function routesFromSidebar(source) {
   const start = source.indexOf("sidebar:");
   const end = source.indexOf("openapi:", start);
@@ -141,17 +129,13 @@ function representativeRedirect(redirect) {
 if (!(await exists(dist))) {
   throw new Error("Missing dist/. Run `bun run build` first.");
 }
-const [requiredIaRoutes, sidebarRoutes] = await Promise.all([
-  readFile(path.join(root, "proposed-ia.txt"), "utf8").then(parseRequiredIaRoutes),
-  readFile(path.join(root, "blume.config.ts"), "utf8").then(routesFromSidebar),
-]);
-const requiredIaRouteSet = new Set(requiredIaRoutes);
-const missingFromSidebar = requiredIaRoutes.filter((route) => !sidebarRoutes.has(route));
-const extraSidebarRoutes = [...sidebarRoutes].filter((route) => !requiredIaRouteSet.has(route));
-if (missingFromSidebar.length > 0 || extraSidebarRoutes.length > 0) {
-  throw new Error(
-    `Sidebar and proposed-ia.txt disagree: missing [${missingFromSidebar.join(", ")}], extra [${extraSidebarRoutes.join(", ")}].`,
-  );
+// The sidebar in blume.config.ts is the route manifest: every entry must
+// build an indexable page, and nothing ships outside it.
+const requiredIaRoutes = [
+  ...(await readFile(path.join(root, "blume.config.ts"), "utf8").then(routesFromSidebar)),
+];
+if (requiredIaRoutes.length === 0) {
+  throw new Error("The blume.config.ts sidebar declares no routes.");
 }
 const representativePages = [
   // Blume canonicalizes the home page to the bare site origin; every other

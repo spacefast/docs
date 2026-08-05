@@ -8,10 +8,16 @@ The WordPress data-source integration is a read-only private beta. It supports
 public content from WordPress sites with the standard REST API.
 :::
 
+The `@spacefast/wordpress` client reads public WordPress content during your
+repository build, so the build can render posts and pages into a static
+Spacefast site. Connect the WordPress site as a data source in the dashboard,
+read it with the client at build time, and optionally let WordPress edits
+trigger new production builds.
+
 ## Connect a source
 
-In the Spacefast dashboard, open the space. Go to **Settings → Data sources**.
-Add a named public WordPress site. Choose the default source. Then connect the
+In the Spacefast dashboard, open the space, go to **Settings → Data sources**,
+and add a named public WordPress site as the default source. Then connect the
 repository that builds the site to the same space.
 
 Install the client in that repository:
@@ -38,33 +44,33 @@ client preserves WordPress pagination metadata.
 
 ## Multiple sources
 
-Omit `url` to use the default source. Or select another configured source by
-name:
+A space can hold several named WordPress sources. Omit `url` to use the
+default source, or select another configured source by name:
 
 ```ts
 const docs = createWordPressClient({ source: "docs" });
 ```
 
 Repository builds receive `SPACEFAST_DATA_SOURCES` and `WORDPRESS_URL` from
-the dashboard configuration. An explicit `url` always wins. Use it for local
-development or browser code:
+the dashboard configuration. This zero-config discovery reads Node environment
+variables, so use it in build-time or SSR code, not in a browser bundle. An
+explicit `url` always wins. Use it for local development or browser code:
 
 ```ts
 const local = createWordPressClient({ url: "https://example.wordpress.com" });
 ```
 
-Zero-config discovery reads Node environment variables. Use it in build-time or
-SSR code, not in a browser bundle.
-
 ## Rebuild on WordPress changes
 
-Choose **Connect WordPress** in the data-source settings. Install the provided
-plugin in WordPress. Paste the one-time connection into **Settings →
-Spacefast**. Public content changes then coalesce into production repository
-builds. **Build now** remains available in both products.
+Choose **Connect WordPress** in the data-source settings and install the
+Spacefast plugin it provides in WordPress. Copy the one-time connection value
+from the dashboard and paste it into **Settings → Spacefast** in WordPress
+admin. Spacefast then batches public content changes and triggers production
+builds. **Build now** remains available in both the WordPress plugin and the
+Spacefast dashboard.
 
-The plugin credential can only trigger builds for this space. It cannot upload
-arbitrary output or replace saved build settings. Revoke it when the WordPress
+The plugin credential can only trigger builds for this space; it cannot upload
+output or change saved build settings. Revoke it when the WordPress
 installation is retired or compromised.
 
 ## Boundaries
@@ -75,4 +81,4 @@ installation is retired or compromised.
 - Content is a build snapshot. It changes on the Spacefast site only after a
   new repository build succeeds.
 - Dashboard sources require standard pretty-permalink REST URLs under
-  `/wp-json`. Explicit client URLs also support the documented REST-root forms.
+  `/wp-json`. Explicit client URLs can also point at the REST root itself.

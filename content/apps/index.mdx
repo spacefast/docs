@@ -1,12 +1,15 @@
 ---
 title: Apps
 sidebar:
-  label: Overview
+  label: Choose a runtime
 description: Add application code to a space with Zero or Functions.
 ---
 
 A space serves static files by default. Add a `runtime` block to `sf.jsonc`
-when the version needs code as well.
+when the version needs code as well. Two runtimes exist: [Zero](/apps/zero), a
+full-stack runtime with a built-in database, authentication, and storage, and
+[Functions](/apps/functions), a single Web-standard `fetch` worker beside your
+static files. This page helps you pick one.
 
 :::warning[Private beta]
 Zero and Functions require a team private-beta flag. Ask Spacefast to enable
@@ -30,24 +33,5 @@ The runtime block belongs to the version. The publish command compiles it with
 the files. When you promote an older version, Spacefast restores its code and
 runtime settings.
 
-```bash
-sf create my-app --runtime zero
-```
-
-```bash
-sf create my-api --runtime functions
-```
-
-Both use the normal publish and inspection commands:
-
-```bash
-sf publish
-```
-
-```bash
-sf runtime status
-```
-
-```bash
-sf logs runtime --follow
-```
+Both runtimes use the normal commands: `sf publish`, `sf runtime status`, and
+`sf logs runtime --follow`. Each runtime page has its own quick start.

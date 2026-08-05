@@ -3,16 +3,15 @@ title: Next.js
 description: Publish a static Next.js export, or run SSR and route handlers with Functions and OpenNext.
 ---
 
-The simplest way to publish a Next.js app is a static export. When an app needs
-SSR, Route Handlers, or Middleware, build it with OpenNext. Publish the result
-as a Spacefast Function.
+Publish a static export when you can. When the app needs SSR, Route Handlers,
+or Middleware, build it with OpenNext and publish the result as a Spacefast
+Function.
 
 ## Static export
 
-Configure Next.js with `output: "export"`. The official
-[Next.js static export guide](https://nextjs.org/docs/pages/guides/static-exports)
-describes this option. In current Next.js versions, `next build` writes the
-static site to `out` when you set this option.
+Configure Next.js with `output: "export"` (see the
+[Next.js static export guide](https://nextjs.org/docs/pages/guides/static-exports)).
+`next build` writes the static site to `out`.
 
 ```ts
 // next.config.ts
@@ -20,13 +19,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-
-  // Optional: emit /about/index.html instead of /about.html.
-  // trailingSlash: true,
 };
 
 export default nextConfig;
 ```
+
+Set `trailingSlash: true` if you want `/about/index.html` instead of
+`/about.html`.
 
 Build and publish the generated directory:
 
@@ -38,14 +37,12 @@ bun run build
 sf publish ./out
 ```
 
-Static export works best when you know all routes at build time. Avoid server-only
-features such as API Routes, Middleware, `getServerSideProps`, ISR, on-demand
-revalidation, Draft Mode, Preview Mode, request-time redirects and rewrites, and
-dynamic rendering from cookies or headers.
-
-Several of these have a static-hosting answer. Redirects and rewrites move to
-[`_redirects`](/spaces/redirects). API calls can target your backend directly or
-through a [proxy route](/spaces/proxy-routes).
+Static export works best when you know all routes at build time. Avoid
+server-only features such as API Routes, Middleware, `getServerSideProps`,
+ISR, and request-time redirects and rewrites. Two of these have static
+answers: redirects and rewrites move to [`_redirects`](/spaces/redirects), and
+API calls can target your backend directly or through a
+[proxy route](/spaces/redirects#proxy-routes).
 
 ## Functions with OpenNext
 
@@ -56,8 +53,8 @@ enable it for your team before publishing an OpenNext worker.
 
 Use this path when the app needs request-time Next.js features. Remove
 `output: "export"` from `next.config.ts`. OpenNext builds the Next.js server
-into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime.
-Also remove any `export const runtime = "edge"` declarations.
+into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
+so also remove any `export const runtime = "edge"` declarations.
 
 Install the adapter and its build-time Wrangler dependency:
 
@@ -95,14 +92,15 @@ Build from the project root:
 bun run build:spacefast
 ```
 
-Check that OpenNext produced the worker that Spacefast detects:
+Confirm the publish plan detects the `.open-next/worker.js` entry before
+anything uploads:
 
 ```bash
-ls .open-next/worker.js
+sf publish --dry-run
 ```
 
-Then publish the project. Do not run OpenNext's `deploy` command. That command
-deploys directly to Cloudflare instead of creating a Spacefast version.
+Then publish the project. Do not run OpenNext's `deploy` command; it deploys
+directly to Cloudflare instead of creating a Spacefast version.
 
 ```bash
 sf publish
@@ -125,20 +123,19 @@ explicitly:
 ```
 
 See OpenNext's [Cloudflare adapter setup](https://opennext.js.org/cloudflare/get-started)
-and [CLI reference](https://opennext.js.org/cloudflare/cli) for framework-specific
-requirements. Spacefast owns the publish step. Cloudflare deployment and
-binding configuration from those guides do not apply here.
+for framework-specific requirements. Spacefast owns the publish step, so the
+Cloudflare deployment and binding configuration from that guide does not apply
+here.
 
-## Images
+## Image optimization
 
 Next.js default image optimization requires a Next.js server at runtime. Static
 export needs `images.unoptimized`, pre-generated responsive assets, or a custom
-loader.
-
-Next.js documents this behavior in its [static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization) and the [Export with Image Optimization API error guide](https://nextjs.org/docs/messages/export-image-api). For the full Next.js image API, see the [`next/image` docs](https://nextjs.org/docs/api-reference/next/image) and [`images` config docs](https://nextjs.org/docs/pages/api-reference/config/next-config-js/images).
+loader; Next.js documents the constraint in its
+[static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization).
 
 For public images, use the [Site Accelerator API](/spaces/image-acceleration).
-It transforms images through `i0.wp.com`. It handles width, quality, crop, fit,
+It transforms images through `i0.wp.com`, handling width, quality, crop, fit,
 filters, and metadata at the CDN layer.
 
 Install the shared image package:
@@ -168,62 +165,12 @@ export default nextConfig;
 
 `spacefastNextImageConfig` includes the shared `loader: "custom"` and
 `qualities` settings. Resolve `@spacefast/image/next-loader` from your own
-`next.config.ts`. That lets pnpm, Yarn PnP, and hoisted workspaces locate the
-package correctly.
+`next.config.ts` so pnpm, Yarn PnP, and hoisted workspaces locate the package
+correctly.
 
-Or copy the loader into your space if you do not want a dependency:
-
-```ts
-// lib/spacefast-image-loader.ts
-type ImageLoaderParams = {
-  src: string;
-  width: number;
-  quality?: number;
-};
-
-export default function spacefastImageLoader({ src, width, quality }: ImageLoaderParams) {
-  if (!/^https?:\/\//i.test(src)) {
-    return src;
-  }
-
-  const params = new URLSearchParams({
-    w: String(width),
-    quality: String(quality ?? 75),
-    strip: "all",
-  });
-
-  const source = new URL(src);
-  if (source.hostname === "i0.wp.com") {
-    params.forEach((value, key) => source.searchParams.set(key, value));
-    return source.toString();
-  }
-
-  source.searchParams.forEach((value, key) => {
-    if (!params.has(key)) {
-      params.set(key, value);
-    }
-  });
-  return `https://i0.wp.com/${source.host}${source.pathname}?${params.toString()}`;
-}
-```
-
-```ts
-// next.config.ts
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: "export",
-  images: {
-    loader: "custom",
-    loaderFile: "./lib/spacefast-image-loader.ts",
-    qualities: [50, 60, 75, 85, 100],
-  },
-};
-
-export default nextConfig;
-```
-
-Use absolute public image URLs for images that should go through Site Accelerator. Spacefast emits relative images in `public/` as static files. This loader returns them unchanged.
+Use absolute public image URLs for images that should go through Site
+Accelerator. Spacefast emits relative images in `public/` as static files, and
+the loader returns them unchanged.
 
 ```tsx
 import Image from "next/image";
@@ -248,26 +195,11 @@ This outputs image URLs like:
 https://i0.wp.com/example.com/uploads/hero.jpg?w=1200&quality=85&strip=all
 ```
 
-For advanced Site Accelerator options, see [Image acceleration](/spaces/image-acceleration). It covers `resize`, `fit`, `crop`, `filter`, `brightness`, `contrast`, `colorize`, `smooth`, `zoom`, `allow_lossy`, and metadata. Put those options in one URL helper so components do not rebuild image URLs differently.
-
-For component-level loader control instead of global Next configuration, import the loader directly:
-
-```tsx
-import Image from "next/image";
-import { spacefastNextImageLoader } from "@spacefast/image/next";
-
-export function CardImage() {
-  return (
-    <Image
-      loader={spacefastNextImageLoader}
-      src="https://example.com/uploads/card.jpg"
-      alt="Card image"
-      width={800}
-      height={450}
-    />
-  );
-}
-```
+For per-component control instead of global Next configuration, pass
+`spacefastNextImageLoader` from `@spacefast/image/next` as the `loader` prop.
+For advanced Site Accelerator options, see
+[Image acceleration](/spaces/image-acceleration), and put those options in one
+URL helper so components do not rebuild image URLs differently.
 
 ## Publishing checklist
 

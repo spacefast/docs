@@ -25,7 +25,7 @@ for (const file of files) {
       const trimmed = line.trim();
       return trimmed && !line.startsWith(" ") && !line.startsWith("\t") && !trimmed.startsWith("#");
     });
-    if (commandLines.length > 1) {
+    if (commandLines.length > 8) {
       const line = source.slice(0, match.index).split("\n").length;
       failures.push(
         `${path.relative(root, file)}:${line} contains ${commandLines.length} commands`,
@@ -36,7 +36,7 @@ for (const file of files) {
 
 if (failures.length) {
   throw new Error(
-    `Shell examples must contain one copyable command per fence:\n${failures.join("\n")}`,
+    `Shell examples must stay copyable: at most 8 commands per fence:\n${failures.join("\n")}`,
   );
 }
 

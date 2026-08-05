@@ -13,14 +13,10 @@ Dashboard teams live at `my.spacefast.com/<team>`.
 
 ```bash
 sf teams create "Acme Inc"
-```
-
-```bash
 sf teams ls
 ```
 
-`sf whoami` and `sf status` show the login and the default team that the CLI
-uses next.
+`sf whoami` and `sf status` show the login and the CLI's current default team.
 
 ## Switch teams
 
@@ -29,7 +25,7 @@ sf switch acme
 ```
 
 `sf teams switch` is the same operation. Pass `-o` / `--team` on any command to
-override the default for one call. Or set `SPACEFAST_TEAM`.
+override the default for one call, or set `SPACEFAST_TEAM`.
 
 ## Invite members
 
@@ -37,17 +33,8 @@ Roles are `owner`, `admin`, or `member`:
 
 ```bash
 sf teams invitations add jane@example.com --role member
-```
-
-```bash
 sf teams invitations ls
-```
-
-```bash
 sf teams invitations resend inv_123
-```
-
-```bash
 sf teams invitations cancel inv_123
 ```
 
@@ -61,15 +48,11 @@ List or remove people already on the team:
 
 ```bash
 sf teams members ls
-```
-
-```bash
 sf teams members rm jane@example.com
 ```
 
-The selected team's [entitlements](/account/billing) report its current member
-capacity. The dashboard shows available options when an invitation would exceed
-it.
+The selected team's entitlements report its current member
+capacity.
 
 ## Access defaults for new spaces
 
@@ -78,9 +61,6 @@ team default: `private`, `team`, or `public`.
 
 ```bash
 sf teams defaults
-```
-
-```bash
 sf teams defaults private
 ```
 

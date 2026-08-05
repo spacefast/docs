@@ -11,6 +11,15 @@ Assume every commit and every line of history will be public.
   an encyclopedia of alternatives.
 - Do not add navigation to a section until that section has a real page or
   generated source.
+- The sidebar in `blume.config.ts` is the public route manifest.
+  `bun run verify:routes` checks every sidebar route against the built output.
+- Route policy: one page per task, not one page per toggle; a page lives in one
+  primary place and is cross-linked elsewhere. Authored URLs may move freely
+  before launch, without compatibility redirects. Generated routes are frozen
+  public contracts and can never move: `/api/reference`,
+  `/platforms/api/reference`, `/cli`, `/errors` (RFC 9457 error type URIs point
+  at `/errors/<code>`), and `/changelog`. Because those prefixes can never be
+  unified, the site uses a single sidebar with no tabs.
 - Test behavior and built output. Do not read implementation source and assert
   that a string exists as a substitute for exercising the result.
 
