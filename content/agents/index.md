@@ -60,6 +60,50 @@ The [CLI reference](/cli#sf-setup-agent) lists every supported client and
 option. Cloud and browser agents that cannot run local commands should use
 [hosted MCP](/agents/mcp) at `https://mcp.spacefast.com` instead.
 
+## Supported agents
+
+Every agent connects through one of three mechanisms:
+
+- **Plugin or skill**: the `spacefast/plugins` marketplace package, the
+  `spacefast` skill, or an agent's own plugin directory. Includes the publish
+  workflow, not only the tools.
+- **MCP**: local stdio through the CLI, or [hosted MCP](/agents/mcp) at
+  `https://mcp.spacefast.com` with browser OAuth.
+- **Deeplink**: a one-click install link that prefills the hosted endpoint.
+
+Each agent has a setup page with the exact paste, click, or command:
+
+| Agent | Fastest connection |
+| --- | --- |
+| [Claude Code](/setup/claude-code) | Plugin from the marketplace |
+| [Claude](/setup/claude) | [Add to Claude](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Spacefast&connectorUrl=https%3A%2F%2Fmcp.spacefast.com) connector deeplink |
+| [Claude Cowork](/setup/claude-cowork) | [Add to your Claude org](https://claude.ai/admin-settings/connectors?modal=add-custom-connector&connectorName=Spacefast&connectorUrl=https%3A%2F%2Fmcp.spacefast.com) admin deeplink |
+| [Cursor](/setup/cursor) | [Add to Cursor](https://cursor.com/install-mcp?name=spacefast&config=eyJ1cmwiOiJodHRwczovL21jcC5zcGFjZWZhc3QuY29tIn0%3D) MCP deeplink |
+| [Codex](/setup/codex) | Plugin from the marketplace |
+| [ChatGPT](/setup/chatgpt) | Paste `Fetch https://spacefast.com/setup.md` |
+| [ChatGPT Work](/setup/chatgpt-work) | Plugin Directory install |
+| [VS Code](/setup/vscode) | [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=spacefast&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.spacefast.com%22%7D) MCP deeplink |
+| [OpenClaw](/setup/openclaw) | Hosted MCP command with OAuth |
+| [OpenCode](/setup/opencode) | Config block plus `opencode mcp auth` |
+| [Hermes](/setup/hermes) | Hosted MCP command |
+| [Raycast](/setup/raycast) | Install MCP Server, paste the endpoint |
+| [Pi](/setup/pi) | Skill install into `~/.agents/skills` |
+| [Cognition Devin](/setup/devin) | Endpoint in Devin's MCP settings |
+| [Poke](/setup/poke) | [Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com) integration deeplink |
+| [Indent](/setup/indent) | Endpoint under Settings → Integrations |
+
+The [setup index](/setup) lists them all. Claude Desktop installs as a
+one-click extension from the
+[`spacefast/plugins` releases](https://github.com/spacefast/plugins/releases).
+
+`sf setup agent --agent` also configures editor and terminal clients without a
+setup page: `github-copilot` and `factory-droid` get skills plus MCP, while
+`gemini-cli`, `windsurf`, `cline`, and `continue` are skills-only and need
+`--skip-mcp`. Use `generic` for anything that reads `AGENTS.md`. In that
+command, `--agent claude` means Claude Code; the Claude app connects with the
+connector deeplink above. Any other agent that can fetch a URL can use
+[hosted MCP](/agents/mcp) or the [HTTP publish flow](/agents/publishing).
+
 ## Install only the skill
 
 For agents that support skills, install the official skill without the rest of
