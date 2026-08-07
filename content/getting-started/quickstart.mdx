@@ -3,8 +3,8 @@ title: Publish your first site
 description: Hand your project to your coding agent or run one CLI command and get a live URL in seconds, no account required.
 ---
 
-Publish a folder, a zip, or a single `index.html`. Spacefast keeps it at a
-permanent URL. You do not need an account for the first publish. Your site is
+Publish a folder, a zip, or a single `index.html`. Spacefast gives it a stable
+live URL. You do not need an account for the first publish. Your site is
 live seconds after the upload completes.
 
 ## Tell your agent
@@ -18,7 +18,7 @@ and publish this space to Spacefast
 ```
 
 The agent fetches the instructions, publishes, and reports back the live URL
-and the permanent Version URL. If it published without an account, it also
+and the immutable Version URL. If it published without an account, it also
 hands you a claim link. To make the setup stick (CLI, skill, and MCP), see
 [Set up an agent](/agents).
 
@@ -36,7 +36,7 @@ sf publish ./dist --name docs
 
 `--name` sets the space title. If Spacefast guesses your single-page-app setup
 wrong, add `--spa true` to force the SPA fallback. The receipt shows the live
-URL, the permanent version URL, and, without an account, a claim link. The
+URL, the immutable version URL, and, without an account, a claim link. The
 full command surface is in the [CLI reference](/cli).
 
 The first CLI publish writes `.spacefast/state.json` next to the folder. Later
@@ -51,6 +51,10 @@ If you published without an account, claim the space within 6 hours: open the
 claim link and sign in, or the space [expires](/publishing/anonymous). After
 claiming, you keep the same URL for every future publish and get full version
 history.
+
+The claim link carries the space's only key, so treat it like a password: keep
+it out of chat and screenshots. It works as many times as you need until the
+deadline.
 
 :::tip
 Spacefast looks for `index.html` at the root of what you publish. It never

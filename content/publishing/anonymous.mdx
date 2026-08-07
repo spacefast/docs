@@ -3,9 +3,9 @@ title: Publish without an account
 description: Publish by upload or Git push with no account, then claim the space before it expires.
 ---
 
-Publishing without an access token creates an anonymous space. The response
-includes a claim token, claim link, and expiration time. Save them immediately.
-Spacefast returns the token and link only once.
+Publishing without an access token creates an anonymous space. The receipt
+carries one credential for it, the **space key** (`sfc_…`), in `data.claim`.
+Save it immediately. Spacefast returns it only once.
 
 Claim the space within 6 hours or it expires; each successful anonymous update
 resets the deadline to 6 hours out, capped at 30 days after the space creation
@@ -16,17 +16,39 @@ There are two anonymous paths: a direct publish (CLI, `POST /v1/publish`, or
 dashboard Drop), and a Git push through [push.new](#publish-with-a-git-push)
 with nothing to install.
 
+## The space key
+
+`data.claim` spells one secret three ways:
+
+- **`claim.key`**: the key itself. Send it as `Authorization: Bearer sfc_…` to
+  do anything to the space until someone claims it — publish an update, read
+  status, manage sharing, rotate, delete, restore.
+- **`claim.url`**: the site link, the live URL carrying the key in a `/__/`
+  path segment, such as `https://calm-otter.view.fast/__/sfc_…`. Open it in a
+  browser and Spacefast trades the key for a private view session, so you see
+  the space without signing in.
+- **`claim.claimUrl`**: the claim link, `https://my.spacefast.com/claim#sfc_…`.
+  The key rides in the URL fragment, which browsers never send to a server.
+  Open it, sign in, pick a team. It works until `claim.expiresAt`, and it works
+  more than once.
+
+All three are the same secret: whoever holds one can publish to the space and
+claim it. Treat the site link and the claim link like the key. If one leaks,
+`POST /v1/claim/rotate` returns a fresh key with fresh URLs and kills the old
+key, its URLs, and every view session it admitted.
+
 ## Before claim
 
 An unclaimed space works, with limits:
 
-- The live space URL and permanent Version URLs work.
+- The live space URL and immutable Version URLs work until the space expires.
 - The local `.spacefast/state.json` lets the CLI keep updating the anonymous space.
 - Static assets, redirects, response headers, SPA fallback, and metadata all publish.
 - Anonymous spaces allow 50 MB per file, 100 MB and 1,000 files per version, and 20 publishes per hour per IP.
 - Spacefast accepts and scans uploads like any publish. Unclaimed spaces serve web content only: HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Spacefast does not serve other files until you claim the space.
 - After more than 100 counted, non-crawler visits, Spacefast pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement can start after the 101st request. When you claim the space, Spacefast restores it instantly.
 - External proxy execution, `_headers` Basic Auth, and custom domains are not available on anonymous spaces.
+- Nothing the key does is instantly irreversible. `DELETE /v1/spaces/{spaceId}` with the key takes the site dark at once, and `POST /v1/spaces/{spaceId}/restore` with the same key brings it back any time before the claim deadline passes.
 
 ## Publish with a Git push
 
@@ -70,9 +92,10 @@ Accounts are WordPress.com accounts. Claiming moves the space into a team and un
 - Custom domains and diagnostics.
 - Any proxy-route or `_headers` Basic Auth entitlement attached to the team.
 - Larger file-size limits and additional routing capacity.
-- Team access, billing, and long-term retention.
+- Team access, billing, and persistent version history.
 
-From the directory you published from, sign in and claim:
+Open the claim link, sign in, and pick a team. Or, from the directory you
+published from, sign in and claim from the CLI:
 
 ```bash
 sf login
@@ -82,7 +105,10 @@ sf login
 sf spaces claim --team my-team
 ```
 
-Run [`sf continue`](/cli#sf-continue) to continue publishing after the claim.
+Both go through `POST /v1/claim`, which either claims the space or answers with
+the one decision still missing: sign in, choose a team, or say yes or no to
+agent continuation. Run [`sf continue`](/cli#sf-continue) to continue publishing
+after the claim.
 
 ## If a space expires
 

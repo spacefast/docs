@@ -3,10 +3,10 @@ title: Versions and channels
 description: How immutable versions work, how live and preview channels point at them, and how to roll back.
 ---
 
-Every changed publish creates an immutable version. The version URL is
-permanent. The space's live URL is a pointer, called a **channel**, that moves
-only when a publish is ready. Publishing and rollback move a channel; they do
-not rewrite the version it used to serve.
+Every changed publish creates an immutable version. Its URL stays fixed while
+that version exists. The space's live URL is a pointer, called a **channel**,
+that moves only when a publish is ready. Publishing and rollback move a
+channel; they do not rewrite the version it used to serve.
 
 ## The release boundary
 
@@ -99,12 +99,13 @@ sf versions download --space docs --version v3 --output ./archive.tar.gz
 See [`sf versions download`](/cli#sf-versions-download) for version selection
 and output options.
 
-## Permanent version URLs
+## Immutable version URLs
 
 Each version URL serves exactly the content that you published, and that
-content never changes. The team's current entitlements control whether an
-older version URL is public. Entitlements do not change owner access or API
-access. Rollback and export continue to work.
+content never changes. Deleting the version stops its URL from serving. The
+team's current entitlements control whether an older version URL is public.
+Entitlements do not change owner access or API access. Rollback and export
+continue to work while the version exists.
 
 ## Retention and storage
 
@@ -112,10 +113,16 @@ Committed file bytes across versions count toward the team's storage quota. If
 you reach the quota, Spacefast blocks new publishes. It never takes the live
 site down. Delete old versions or add storage to free up room.
 
-Retention follows the team's current policy, and Spacefast warns the team and
-offers an export before an unreferenced version becomes eligible for removal.
-Retention never deletes the live version or a version that a channel points
-at, so the current rollback target is always safe.
+Spacefast does not automatically delete ready versions to enforce storage
+limits. Delete an unreferenced version explicitly:
+
+```bash
+sf versions rm v12 --space docs
+```
+
+Deletion is permanent and its version URL stops serving. A version referenced
+by any channel cannot be deleted; promote another version first. Draft versions
+can expire before they are finalized.
 
 ## How this fits publishing
 

@@ -11,7 +11,7 @@ billing: you call one API, and your customer sees only you. The
 [Platform API reference](/platforms/api/reference) lists every operation.
 
 The Platform API is a superset of the [public REST API](/api). You get the same control plane,
-the same envelope, and the same error codes. You also get the tenant surface:
+the same success envelopes and problem documents, and the same error codes. You also get the tenant surface:
 sites, principals, and on-behalf-of calls. The public reference deliberately
 does not show that surface.
 
@@ -73,8 +73,8 @@ the tenant key and do not need a separate Spacefast account.
 
 - **Idempotent provisioning**: Spacefast honors `Idempotency-Key` per tenant. A
   retried request cannot double-provision a customer.
-- **Typed errors**: the same stable `{ "error": { "code": ... } }` envelope as
-  the public API. Branch on codes.
+- **Typed errors**: the same RFC 9457 problem documents as the public API.
+  Branch on `code`.
 - **Per-customer scoping**: Spacefast attributes each resource to the customer
   you created it for (`siteId`, principal). Listing, transfer, and cleanup are
   exact.

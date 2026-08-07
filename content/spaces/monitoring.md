@@ -53,7 +53,7 @@ List what changed on a space and who changed it:
 sf activity --space docs
 ```
 
-Filter by taxonomy code (for example `--code version.promoted`), or read
+Filter by taxonomy code (for example `--code channel.promoted`), or read
 account-wide events with `--all` and `--since`. Paginate with `--cursor`;
 `--limit` defaults to 50 (max 100).
 

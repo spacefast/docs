@@ -183,10 +183,14 @@ purges the affected entries.
 | **Live**  | Stable content address. Grants no access.     |
 | **Open**  | Temporary author access.                      |
 | **Link**  | Visitor access backed by one revocable Grant. |
+| **Site**  | Space-key door into an unclaimed space.        |
 | **Claim** | Ownership recovery for an anonymous space.    |
 
-Open, Link, and Claim secrets begin in a URL fragment on
-`access.spacefast.com`; the broker exchanges the secret for a short-lived,
+Open and Link URLs carry a short-lived, one-use handoff token in the access
+origin's URL path. A Site URL carries an unclaimed space's key in a `/__/` path
+segment on the space's own host. Claim links keep that same key in the `/claim`
+URL fragment, which browsers never send to a server. The broker exchanges the
+credential for a short-lived,
 host-bound handoff, and the serving host sets a `__Host-` cookie before
 redirecting to the clean live URL.
 

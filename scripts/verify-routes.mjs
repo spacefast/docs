@@ -149,7 +149,7 @@ const representativePages = [
   ["spaces/index.html", `${docsRoot}/spaces`, "What a space owns"],
   ["publishing/channels/index.html", `${docsRoot}/publishing/channels`, "The release boundary"],
   ["agents/mcp/index.html", `${docsRoot}/agents/mcp`, "Hosted vs on-device"],
-  ["api/index.html", `${docsRoot}/api`, "The shape of every response"],
+  ["api/index.html", `${docsRoot}/api`, "Successes and errors"],
   ["api/reference/index.html", `${docsRoot}/api/reference`, "REST API"],
   ["cli/index.html", `${docsRoot}/cli`, "CLI reference"],
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],

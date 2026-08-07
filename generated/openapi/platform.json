@@ -2654,7 +2654,7 @@
                             "type": "boolean",
                             "description": "Whether a placement or transfer move is queued or running."
                           },
-                          "runtimeAvailable": {
+                          "hasRuntime": {
                             "type": "boolean",
                             "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                           },
@@ -3294,7 +3294,7 @@
                           "archivedBytes",
                           "tierPolicy",
                           "moving",
-                          "runtimeAvailable",
+                          "hasRuntime",
                           "channels",
                           "config",
                           "settingsDigest",
@@ -5089,7 +5089,7 @@
                               "type": "boolean",
                               "description": "Whether a placement or transfer move is queued or running."
                             },
-                            "runtimeAvailable": {
+                            "hasRuntime": {
                               "type": "boolean",
                               "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                             },
@@ -5735,7 +5735,7 @@
                             "archivedBytes",
                             "tierPolicy",
                             "moving",
-                            "runtimeAvailable",
+                            "hasRuntime",
                             "channels",
                             "config",
                             "settingsDigest",
@@ -5746,24 +5746,32 @@
                           ],
                           "additionalProperties": false
                         },
-                        "open": {
+                        "access": {
                           "type": "object",
                           "properties": {
                             "url": {
                               "type": "string",
                               "format": "uri"
                             },
-                            "expiresAt": {
+                            "token": {
                               "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "minLength": 16,
+                              "maxLength": 512
                             },
-                            "kind": {
-                              "type": "string",
-                              "enum": ["management", "claim_preview", "person"]
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             }
                           },
-                          "required": ["url", "expiresAt", "kind"],
+                          "required": ["url", "token", "expiresAt"],
                           "additionalProperties": false
                         },
                         "claim": {
@@ -5777,7 +5785,7 @@
                             "url": {
                               "type": "string",
                               "format": "uri",
-                              "description": "Browser-only claim link with a short-lived, one-use path token. The access origin consumes it into an HttpOnly handoff, then redirects to a clean claim page. API clients use the separate claim token as bearer auth for publish, update, status, and exchange."
+                              "description": "Browser-only claim link in /claim#nonce form. The fragment is the claim credential for a person. The link works until expiresAt, and a person can open it more than once. API clients use the separate claim token as bearer auth for publish, update, status, and exchange."
                             },
                             "expiresAt": {
                               "type": "string",
@@ -5789,7 +5797,7 @@
                           "additionalProperties": false
                         }
                       },
-                      "required": ["space", "open"],
+                      "required": ["space", "access"],
                       "additionalProperties": false
                     }
                   },
@@ -6159,7 +6167,7 @@
                           "type": "boolean",
                           "description": "Whether a placement or transfer move is queued or running."
                         },
-                        "runtimeAvailable": {
+                        "hasRuntime": {
                           "type": "boolean",
                           "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
@@ -6799,7 +6807,7 @@
                         "archivedBytes",
                         "tierPolicy",
                         "moving",
-                        "runtimeAvailable",
+                        "hasRuntime",
                         "channels",
                         "config",
                         "settingsDigest",
@@ -8534,7 +8542,7 @@
                           "type": "boolean",
                           "description": "Whether a placement or transfer move is queued or running."
                         },
-                        "runtimeAvailable": {
+                        "hasRuntime": {
                           "type": "boolean",
                           "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
@@ -9174,7 +9182,7 @@
                         "archivedBytes",
                         "tierPolicy",
                         "moving",
-                        "runtimeAvailable",
+                        "hasRuntime",
                         "channels",
                         "config",
                         "settingsDigest",
@@ -9509,7 +9517,7 @@
                           "type": "boolean",
                           "description": "Whether a placement or transfer move is queued or running."
                         },
-                        "runtimeAvailable": {
+                        "hasRuntime": {
                           "type": "boolean",
                           "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
@@ -10149,7 +10157,7 @@
                         "archivedBytes",
                         "tierPolicy",
                         "moving",
-                        "runtimeAvailable",
+                        "hasRuntime",
                         "channels",
                         "config",
                         "settingsDigest",
@@ -27378,28 +27386,6 @@
                               ],
                               "description": "Instant when storage was last accounted."
                             },
-                            "storageOverQuotaSince": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Instant when the team first went over its storage quota."
-                            },
-                            "storageWarningSentAt": {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ],
-                              "description": "Instant when the over-quota warning went out."
-                            },
                             "buildsDeploysThisMonth": {
                               "type": "integer",
                               "minimum": -9007199254740991,
@@ -27440,17 +27426,42 @@
                             "storageQuotaBytes",
                             "storageOverageBytes",
                             "storageCalculatedAt",
-                            "storageOverQuotaSince",
-                            "storageWarningSentAt",
                             "buildsDeploysThisMonth",
                             "buildsDeploysMonthly",
                             "meterStartedAt"
                           ],
                           "additionalProperties": false,
                           "description": "Usage counters against the named plan limits."
+                        },
+                        "spaceStorage": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "spaceId": {
+                                "type": "string",
+                                "description": "Space id."
+                              },
+                              "slug": {
+                                "type": "string",
+                                "description": "Space slug."
+                              },
+                              "title": {
+                                "type": "string",
+                                "description": "Space display title."
+                              },
+                              "storageBytes": {
+                                "type": "number",
+                                "description": "Deduplicated bytes this space's ready versions hold. Spaces sharing files each count them, so the sum can exceed the team total."
+                              }
+                            },
+                            "required": ["spaceId", "slug", "title", "storageBytes"],
+                            "additionalProperties": false
+                          },
+                          "description": "Per-space storage breakdown for spaces the caller can read."
                         }
                       },
-                      "required": ["teamId", "usage"],
+                      "required": ["teamId", "usage", "spaceStorage"],
                       "additionalProperties": false
                     }
                   },
@@ -28297,7 +28308,7 @@
                             "type": "boolean",
                             "description": "Whether a placement or transfer move is queued or running."
                           },
-                          "runtimeAvailable": {
+                          "hasRuntime": {
                             "type": "boolean",
                             "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                           },
@@ -28937,7 +28948,7 @@
                           "archivedBytes",
                           "tierPolicy",
                           "moving",
-                          "runtimeAvailable",
+                          "hasRuntime",
                           "channels",
                           "config",
                           "settingsDigest",
@@ -29153,7 +29164,7 @@
           }
         ],
         "summary": "Set a team variable",
-        "description": "Sets a team variable by name. Updating the value republishes spaces whose templates reference it.",
+        "description": "Creates or updates a team variable by name. The new value applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "teamId",
@@ -29505,7 +29516,7 @@
           }
         ],
         "summary": "Delete a team variable",
-        "description": "Deletes a team variable by name and republishes spaces whose templates reference it.",
+        "description": "Deletes a team variable by name. The deletion applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "teamId",
@@ -30538,7 +30549,7 @@
           }
         ],
         "summary": "Publish files and get a live URL",
-        "description": "Publishes static files in one request: JSON, multipart form, or a zip body. Returns a receipt with the live URL, a repeatable expiring Open Link, and a permanent Version URL. New Spaces are Private by default. Anonymous receipts also carry the separate one-time claim link. By default, queued finalization gets a short UX budget. If public readiness takes longer, the receipt returns an operation to poll while publishing continues. Pass `wait=1` or `true` to use the longer bounded wait for a proven-live receipt. Pass `async=1` or `true` (equivalently `wait=0` or `false`) to queue finalize and return immediately. Pass `spaceId` to update an existing Space; otherwise a new Space is created.",
+        "description": "Publishes static files in one request: JSON, multipart form, or a zip body. The two user-facing links are Open (reusable access) and, for anonymous Spaces, Claim (one-time ownership transfer). The receipt also carries serving and immutable-version addresses as machine-readable resource metadata. New Spaces are Private by default. By default, queued finalization gets a short UX budget. If public readiness takes longer, the receipt returns an operation to poll while publishing continues. Pass `wait=1` or `true` to use the longer bounded wait for a proven-live receipt. Pass `async=1` or `true` (equivalently `wait=0` or `false`) to queue finalize and return immediately. Pass `spaceId` to update an existing Space; otherwise a new Space is created.",
         "responses": {
           "201": {
             "description": "Response for status 201",
@@ -30585,24 +30596,32 @@
                           "required": ["id", "slug", "publicName", "defaultHostname", "liveUrl"],
                           "additionalProperties": false
                         },
-                        "open": {
+                        "access": {
                           "type": "object",
                           "properties": {
                             "url": {
                               "type": "string",
                               "format": "uri"
                             },
-                            "expiresAt": {
+                            "token": {
                               "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                              "minLength": 16,
+                              "maxLength": 512
                             },
-                            "kind": {
-                              "type": "string",
-                              "enum": ["management", "claim_preview", "person"]
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             }
                           },
-                          "required": ["url", "expiresAt", "kind"],
+                          "required": ["url", "token", "expiresAt"],
                           "additionalProperties": false
                         },
                         "version": {
@@ -31155,7 +31174,7 @@
                             "url": {
                               "type": "string",
                               "format": "uri",
-                              "description": "Browser-only claim link with a short-lived, one-use path token. The access origin consumes it into an HttpOnly handoff, then redirects to a clean claim page. API clients use the separate claim token as bearer auth for publish, update, status, and exchange."
+                              "description": "Browser-only claim link in /claim#nonce form. The fragment is the claim credential for a person. The link works until expiresAt, and a person can open it more than once. API clients use the separate claim token as bearer auth for publish, update, status, and exchange."
                             },
                             "expiresAt": {
                               "type": "string",
@@ -31310,10 +31329,10 @@
                       "immutableUrl": "https://v1--marketing-site.view.fast/",
                       "manifestHash": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
                     },
-                    "open": {
-                      "url": "https://api.spacefast.com/open/example",
-                      "expiresAt": "2026-07-07T12:00:00.000Z",
-                      "kind": "claim_preview"
+                    "access": {
+                      "url": "https://marketing-site.view.fast/__/example-access-token",
+                      "token": "example-access-token",
+                      "expiresAt": "2026-07-07T12:00:00.000Z"
                     },
                     "claim": {
                       "token": "sfc_A1b2C3d4E5f6G7h8I9j0K1",
@@ -32310,7 +32329,6 @@
                               "domain_transfer_submit",
                               "domain_dns_apply",
                               "domain_lifecycle",
-                              "variable_cascade",
                               "webhook_deliver",
                               "integration_release"
                             ]
@@ -40580,6 +40598,34 @@
                           "required": ["expiresAt", "claimedAt"],
                           "additionalProperties": false
                         },
+                        "access": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "token": {
+                              "type": "string",
+                              "minLength": 16,
+                              "maxLength": 512
+                            },
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": ["url", "token", "expiresAt"],
+                          "additionalProperties": false
+                        },
                         "continuation": {
                           "type": "object",
                           "properties": {
@@ -40712,7 +40758,15 @@
                           "additionalProperties": false
                         }
                       },
-                      "required": ["state", "action", "space", "claim", "continuation", "sharing"],
+                      "required": [
+                        "state",
+                        "action",
+                        "space",
+                        "claim",
+                        "access",
+                        "continuation",
+                        "sharing"
+                      ],
                       "additionalProperties": false
                     }
                   },
@@ -40911,6 +40965,34 @@
                           "required": ["expiresAt", "claimedAt"],
                           "additionalProperties": false
                         },
+                        "access": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "token": {
+                              "type": "string",
+                              "minLength": 16,
+                              "maxLength": 512
+                            },
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": ["url", "token", "expiresAt"],
+                          "additionalProperties": false
+                        },
                         "continuation": {
                           "type": "object",
                           "properties": {
@@ -41043,7 +41125,15 @@
                           "additionalProperties": false
                         }
                       },
-                      "required": ["state", "action", "space", "claim", "continuation", "sharing"],
+                      "required": [
+                        "state",
+                        "action",
+                        "space",
+                        "claim",
+                        "access",
+                        "continuation",
+                        "sharing"
+                      ],
                       "additionalProperties": false
                     }
                   },
@@ -41260,9 +41350,37 @@
                           },
                           "required": ["state", "url", "expiresAt"],
                           "additionalProperties": false
+                        },
+                        "access": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "token": {
+                              "type": "string",
+                              "minLength": 16,
+                              "maxLength": 512
+                            },
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": ["url", "token", "expiresAt"],
+                          "additionalProperties": false
                         }
                       },
-                      "required": ["publish", "space", "version", "claim"],
+                      "required": ["publish", "space", "version", "claim", "access"],
                       "additionalProperties": false
                     }
                   },
@@ -42006,7 +42124,7 @@
                           "type": "boolean",
                           "description": "Whether a placement or transfer move is queued or running."
                         },
-                        "runtimeAvailable": {
+                        "hasRuntime": {
                           "type": "boolean",
                           "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
@@ -42646,7 +42764,7 @@
                         "archivedBytes",
                         "tierPolicy",
                         "moving",
-                        "runtimeAvailable",
+                        "hasRuntime",
                         "channels",
                         "config",
                         "settingsDigest",
@@ -44166,7 +44284,7 @@
                           "type": "boolean",
                           "description": "Whether a placement or transfer move is queued or running."
                         },
-                        "runtimeAvailable": {
+                        "hasRuntime": {
                           "type": "boolean",
                           "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                         },
@@ -44806,7 +44924,7 @@
                         "archivedBytes",
                         "tierPolicy",
                         "moving",
-                        "runtimeAvailable",
+                        "hasRuntime",
                         "channels",
                         "config",
                         "settingsDigest",
@@ -45512,7 +45630,7 @@
           }
         ],
         "summary": "Set a space variable",
-        "description": "Creates or updates a space variable by name. Changing a value republishes the space when its templates reference it.",
+        "description": "Creates or updates a space variable by name. The new value applies when a version next finalizes; the live version keeps its sealed values.",
         "parameters": [
           {
             "name": "spaceId",
@@ -45867,7 +45985,7 @@
           }
         ],
         "summary": "Delete a space variable",
-        "description": "Deletes a space variable by name and republishes the space when its templates referenced it.",
+        "description": "Deletes a space variable by name. The deletion applies when a version next finalizes; the live version keeps its sealed values.",
         "parameters": [
           {
             "name": "spaceId",
@@ -47217,18 +47335,6 @@
                               }
                             ]
                           },
-                          "retainedUntil": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "format": "date-time",
-                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
                           "updatedAt": {
                             "type": "string",
                             "format": "date-time",
@@ -47267,7 +47373,6 @@
                           "diagnostics",
                           "createdAt",
                           "readyAt",
-                          "retainedUntil",
                           "updatedAt"
                         ],
                         "additionalProperties": false
@@ -49628,18 +49733,6 @@
                             }
                           ]
                         },
-                        "retainedUntil": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
@@ -49678,7 +49771,6 @@
                         "diagnostics",
                         "createdAt",
                         "readyAt",
-                        "retainedUntil",
                         "updatedAt"
                       ],
                       "additionalProperties": false
@@ -53765,18 +53857,6 @@
                             }
                           ]
                         },
-                        "retainedUntil": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
@@ -53815,7 +53895,6 @@
                         "diagnostics",
                         "createdAt",
                         "readyAt",
-                        "retainedUntil",
                         "updatedAt"
                       ],
                       "additionalProperties": false
@@ -54016,7 +54095,6 @@
                     "diagnostics": [],
                     "createdAt": "2026-06-30T12:00:00.000Z",
                     "readyAt": "2026-06-30T12:00:03.000Z",
-                    "retainedUntil": null,
                     "updatedAt": "2026-06-30T12:00:03.000Z"
                   },
                   "operation": null
@@ -55220,18 +55298,6 @@
                             }
                           ]
                         },
-                        "retainedUntil": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
@@ -55270,7 +55336,6 @@
                         "diagnostics",
                         "createdAt",
                         "readyAt",
-                        "retainedUntil",
                         "updatedAt"
                       ],
                       "additionalProperties": false
@@ -56637,18 +56702,6 @@
                             }
                           ]
                         },
-                        "retainedUntil": {
-                          "anyOf": [
-                            {
-                              "type": "string",
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
                         "updatedAt": {
                           "type": "string",
                           "format": "date-time",
@@ -56687,7 +56740,6 @@
                         "diagnostics",
                         "createdAt",
                         "readyAt",
-                        "retainedUntil",
                         "updatedAt"
                       ],
                       "additionalProperties": false
@@ -56732,7 +56784,6 @@
                     "diagnostics": [],
                     "createdAt": "2026-06-30T12:00:00.000Z",
                     "readyAt": "2026-06-30T12:00:03.000Z",
-                    "retainedUntil": null,
                     "updatedAt": "2026-06-30T12:00:03.000Z"
                   }
                 }
@@ -86699,7 +86750,7 @@
                             "type": "boolean",
                             "description": "Whether a placement or transfer move is queued or running."
                           },
-                          "runtimeAvailable": {
+                          "hasRuntime": {
                             "type": "boolean",
                             "description": "Whether this space's live version runs code and therefore has a Runtime surface. Feature eligibility alone does not make the surface visible."
                           },
@@ -87339,7 +87390,7 @@
                           "archivedBytes",
                           "tierPolicy",
                           "moving",
-                          "runtimeAvailable",
+                          "hasRuntime",
                           "channels",
                           "config",
                           "settingsDigest",
@@ -87893,7 +87944,7 @@
           }
         ],
         "summary": "Set a site variable",
-        "description": "Sets a site-scoped variable by name. Changing a value republishes the spaces whose templates reference it.",
+        "description": "Creates or updates a site-scoped variable by name. The new value applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "siteId",
@@ -88245,7 +88296,7 @@
           }
         ],
         "summary": "Delete a site variable",
-        "description": "Deletes a site-scoped variable by name and republishes the spaces whose templates referenced it.",
+        "description": "Deletes a site-scoped variable by name. The deletion applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "siteId",
@@ -89474,7 +89525,7 @@
           }
         ],
         "summary": "Set a principal variable",
-        "description": "Creates or updates a variable on a team or external principal. Changing a value republishes the spaces whose templates reference it.",
+        "description": "Creates or updates a variable on a team or external principal. The new value applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "principalType",
@@ -89834,7 +89885,7 @@
           }
         ],
         "summary": "Delete a principal variable",
-        "description": "Deletes a variable from a team or external principal and republishes the spaces whose templates referenced it.",
+        "description": "Deletes a variable from a team or external principal. The deletion applies when a version next finalizes; live versions keep their sealed values.",
         "parameters": [
           {
             "name": "principalType",
@@ -97568,7 +97619,7 @@
                   },
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -97759,7 +97810,7 @@
                   },
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -97950,7 +98001,7 @@
                   },
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -98459,7 +98510,7 @@
                 "properties": {
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -98474,7 +98525,7 @@
                 "properties": {
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -98489,7 +98540,7 @@
                 "properties": {
                   "password": {
                     "type": "string",
-                    "minLength": 10,
+                    "minLength": 1,
                     "maxLength": 1024
                   }
                 },
@@ -101639,7 +101690,7 @@
           }
         ],
         "summary": "Create a managed Space Grant",
-        "description": "Creates one additive managed Grant and converges runtime fencing, projection, and cache state before returning.",
+        "description": "Durably creates one additive managed Grant, then returns its runtime-convergence operation when projection continues in the background.",
         "parameters": [
           {
             "name": "spaceId",
@@ -102952,9 +103003,165 @@
                         "updatedAt"
                       ],
                       "additionalProperties": false
+                    },
+                    "operation": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "kind": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": ["queued", "running", "succeeded", "failed", "canceled"]
+                            },
+                            "resources": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["type", "id"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "progress": {
+                              "type": "object",
+                              "properties": {
+                                "total": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "completed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "failed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                }
+                              },
+                              "required": ["total", "completed", "failed"],
+                              "additionalProperties": false
+                            },
+                            "diagnostics": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "Stable snake_case diagnostic code naming the public contract that produced it."
+                                  },
+                                  "severity": {
+                                    "type": "string",
+                                    "enum": ["info", "warning", "error"],
+                                    "description": "How actionable the diagnostic is: info, warning, error."
+                                  },
+                                  "message": {
+                                    "type": "string",
+                                    "description": "Human-readable explanation with enough detail to act on."
+                                  },
+                                  "path": {
+                                    "description": "Artifact path the diagnostic points at, for example \"_headers:12\", when one exists.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "provider": {
+                                    "description": "Upstream system the diagnostic originated from, when not Spacefast itself.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": ["wpcloud", "dns", "registrar", "runtime"]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "details": {
+                                    "description": "Machine-readable context for the diagnostic code.",
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {}
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "fix": {
+                                    "description": "Concrete, agent-actionable remediation hint for this diagnostic (react-doctor model), when one can be derived.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "retryable": {
+                                    "description": "Whether retrying the same operation can resolve this diagnostic without the caller changing anything.",
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": ["code", "severity", "message"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            },
+                            "finishedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            }
+                          },
+                          "required": ["id", "kind", "status", "resources", "createdAt"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "description": "Background operation handle when asynchronous work remains after this mutation; null when it completed synchronously."
                     }
                   },
-                  "required": ["data"],
+                  "required": ["data", "operation"],
                   "additionalProperties": false
                 }
               }
@@ -105484,9 +105691,165 @@
                         "updatedAt"
                       ],
                       "additionalProperties": false
+                    },
+                    "operation": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "kind": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": ["queued", "running", "succeeded", "failed", "canceled"]
+                            },
+                            "resources": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["type", "id"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "progress": {
+                              "type": "object",
+                              "properties": {
+                                "total": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "completed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "failed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                }
+                              },
+                              "required": ["total", "completed", "failed"],
+                              "additionalProperties": false
+                            },
+                            "diagnostics": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "Stable snake_case diagnostic code naming the public contract that produced it."
+                                  },
+                                  "severity": {
+                                    "type": "string",
+                                    "enum": ["info", "warning", "error"],
+                                    "description": "How actionable the diagnostic is: info, warning, error."
+                                  },
+                                  "message": {
+                                    "type": "string",
+                                    "description": "Human-readable explanation with enough detail to act on."
+                                  },
+                                  "path": {
+                                    "description": "Artifact path the diagnostic points at, for example \"_headers:12\", when one exists.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "provider": {
+                                    "description": "Upstream system the diagnostic originated from, when not Spacefast itself.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": ["wpcloud", "dns", "registrar", "runtime"]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "details": {
+                                    "description": "Machine-readable context for the diagnostic code.",
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {}
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "fix": {
+                                    "description": "Concrete, agent-actionable remediation hint for this diagnostic (react-doctor model), when one can be derived.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "retryable": {
+                                    "description": "Whether retrying the same operation can resolve this diagnostic without the caller changing anything.",
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": ["code", "severity", "message"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            },
+                            "finishedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            }
+                          },
+                          "required": ["id", "kind", "status", "resources", "createdAt"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "description": "Background operation handle when asynchronous work remains after this mutation; null when it completed synchronously."
                     }
                   },
-                  "required": ["data"],
+                  "required": ["data", "operation"],
                   "additionalProperties": false
                 }
               }
@@ -105513,7 +105876,7 @@
           }
         ],
         "summary": "Revoke a managed Space Grant",
-        "description": "Revokes a managed Grant and converges the access fence, runtime projection, cache purge, and session disconnect.",
+        "description": "Durably revokes a managed Grant after its exposure fence and session disconnect are effective, then returns the remaining runtime-convergence operation.",
         "parameters": [
           {
             "name": "spaceId",
@@ -105561,9 +105924,165 @@
                       },
                       "required": ["id", "revoked"],
                       "additionalProperties": false
+                    },
+                    "operation": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "kind": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": ["queued", "running", "succeeded", "failed", "canceled"]
+                            },
+                            "resources": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "id": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["type", "id"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "progress": {
+                              "type": "object",
+                              "properties": {
+                                "total": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "completed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "failed": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                }
+                              },
+                              "required": ["total", "completed", "failed"],
+                              "additionalProperties": false
+                            },
+                            "diagnostics": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "Stable snake_case diagnostic code naming the public contract that produced it."
+                                  },
+                                  "severity": {
+                                    "type": "string",
+                                    "enum": ["info", "warning", "error"],
+                                    "description": "How actionable the diagnostic is: info, warning, error."
+                                  },
+                                  "message": {
+                                    "type": "string",
+                                    "description": "Human-readable explanation with enough detail to act on."
+                                  },
+                                  "path": {
+                                    "description": "Artifact path the diagnostic points at, for example \"_headers:12\", when one exists.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "provider": {
+                                    "description": "Upstream system the diagnostic originated from, when not Spacefast itself.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "enum": ["wpcloud", "dns", "registrar", "runtime"]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "details": {
+                                    "description": "Machine-readable context for the diagnostic code.",
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "propertyNames": {
+                                          "type": "string"
+                                        },
+                                        "additionalProperties": {}
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "fix": {
+                                    "description": "Concrete, agent-actionable remediation hint for this diagnostic (react-doctor model), when one can be derived.",
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "retryable": {
+                                    "description": "Whether retrying the same operation can resolve this diagnostic without the caller changing anything.",
+                                    "anyOf": [
+                                      {
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": ["code", "severity", "message"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            },
+                            "finishedAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            }
+                          },
+                          "required": ["id", "kind", "status", "resources", "createdAt"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "description": "Background operation handle when asynchronous work remains after this mutation; null when it completed synchronously."
                     }
                   },
-                  "required": ["data"],
+                  "required": ["data", "operation"],
                   "additionalProperties": false
                 }
               }
@@ -120186,30 +120705,61 @@
                         "open": {
                           "anyOf": [
                             {
-                              "type": "object",
-                              "properties": {
-                                "url": {
-                                  "type": "string",
-                                  "format": "uri"
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "const": "link"
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 },
-                                "expiresAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                                },
-                                "kind": {
-                                  "type": "string",
-                                  "enum": ["management", "claim_preview"]
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "enum": ["management", "claim_preview", "person"]
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 }
-                              },
-                              "required": ["url", "expiresAt", "kind"],
-                              "additionalProperties": false
+                              ]
                             },
                             {
                               "type": "null"
                             }
                           ],
-                          "description": "Durable and repeatable author link that opens the private space at live `/`. Clients can persist it until `expiresAt`."
+                          "description": "Reusable Open link for the private space at live `/`. A null expiry means it remains valid until revoked."
                         },
                         "sessionUrl": {
                           "type": "string",
@@ -120526,30 +121076,61 @@
                         "open": {
                           "anyOf": [
                             {
-                              "type": "object",
-                              "properties": {
-                                "url": {
-                                  "type": "string",
-                                  "format": "uri"
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "const": "link"
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 },
-                                "expiresAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                                },
-                                "kind": {
-                                  "type": "string",
-                                  "enum": ["management", "claim_preview"]
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "enum": ["management", "claim_preview", "person"]
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 }
-                              },
-                              "required": ["url", "expiresAt", "kind"],
-                              "additionalProperties": false
+                              ]
                             },
                             {
                               "type": "null"
                             }
                           ],
-                          "description": "Durable and repeatable author link that opens the private space at live `/`. Clients can persist it until `expiresAt`."
+                          "description": "Reusable Open link for the private space at live `/`. A null expiry means it remains valid until revoked."
                         },
                         "sessionUrl": {
                           "type": "string",
@@ -120878,30 +121459,61 @@
                         "open": {
                           "anyOf": [
                             {
-                              "type": "object",
-                              "properties": {
-                                "url": {
-                                  "type": "string",
-                                  "format": "uri"
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "const": "link"
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 },
-                                "expiresAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                                },
-                                "kind": {
-                                  "type": "string",
-                                  "enum": ["management", "claim_preview"]
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "enum": ["management", "claim_preview", "person"]
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 }
-                              },
-                              "required": ["url", "expiresAt", "kind"],
-                              "additionalProperties": false
+                              ]
                             },
                             {
                               "type": "null"
                             }
                           ],
-                          "description": "Durable and repeatable author link that opens the private space at live `/`. Clients can persist it until `expiresAt`."
+                          "description": "Reusable Open link for the private space at live `/`. A null expiry means it remains valid until revoked."
                         },
                         "sessionUrl": {
                           "type": "string",
@@ -121231,30 +121843,61 @@
                         "open": {
                           "anyOf": [
                             {
-                              "type": "object",
-                              "properties": {
-                                "url": {
-                                  "type": "string",
-                                  "format": "uri"
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "format": "date-time",
+                                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "const": "link"
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 },
-                                "expiresAt": {
-                                  "type": "string",
-                                  "format": "date-time",
-                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                                },
-                                "kind": {
-                                  "type": "string",
-                                  "enum": ["management", "claim_preview"]
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "expiresAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                    },
+                                    "kind": {
+                                      "type": "string",
+                                      "enum": ["management", "claim_preview", "person"]
+                                    }
+                                  },
+                                  "required": ["url", "expiresAt", "kind"],
+                                  "additionalProperties": false
                                 }
-                              },
-                              "required": ["url", "expiresAt", "kind"],
-                              "additionalProperties": false
+                              ]
                             },
                             {
                               "type": "null"
                             }
                           ],
-                          "description": "Durable and repeatable author link that opens the private space at live `/`. Clients can persist it until `expiresAt`."
+                          "description": "Reusable Open link for the private space at live `/`. A null expiry means it remains valid until revoked."
                         },
                         "sessionUrl": {
                           "type": "string",
@@ -122097,6 +122740,18 @@
                                               "type": "string",
                                               "minLength": 1,
                                               "maxLength": 256
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
+                                        },
+                                        "ticketPath": {
+                                          "anyOf": [
+                                            {
+                                              "type": "string",
+                                              "minLength": 1,
+                                              "pattern": "^\\/.*"
                                             },
                                             {
                                               "type": "null"
@@ -129628,7 +130283,7 @@
           }
         ],
         "summary": "Open a private Space",
-        "description": "Returns the durable author Link for a claim-preview open of live `/`. Targeted or account-authorized opens use a one-use broker URL.",
+        "description": "Returns the reusable Open Link for an anonymous Space's live `/`. Targeted or account-authorized opens use an internal one-use browser handoff.",
         "parameters": [
           {
             "name": "spaceId",
@@ -129719,24 +130374,55 @@
                       "description": "Canonical JSON Schema URL for this response body. The server also sends it in the `Link: rel=\"describedby\"` response header."
                     },
                     "data": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string",
-                          "format": "uri"
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "expiresAt": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "kind": {
+                              "type": "string",
+                              "const": "link"
+                            }
+                          },
+                          "required": ["url", "expiresAt", "kind"],
+                          "additionalProperties": false
                         },
-                        "expiresAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-                        },
-                        "kind": {
-                          "type": "string",
-                          "enum": ["management", "claim_preview", "person"]
+                        {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                            },
+                            "kind": {
+                              "type": "string",
+                              "enum": ["management", "claim_preview", "person"]
+                            }
+                          },
+                          "required": ["url", "expiresAt", "kind"],
+                          "additionalProperties": false
                         }
-                      },
-                      "required": ["url", "expiresAt", "kind"],
-                      "additionalProperties": false
+                      ]
                     }
                   },
                   "required": ["data"],

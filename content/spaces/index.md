@@ -44,13 +44,12 @@ Dashboard URLs: `my.spacefast.com/acme/docs`. Old dashboard links that contain
 
 ## Claim
 
-An anonymous publish expires unless you claim it within 6 hours. Claim from the
-claim link in the browser, or from the CLI after you sign in with
-[`sf login`](/cli#sf-login):
+An anonymous publish expires unless you claim it within 6 hours. Open the claim
+link from the publish receipt and sign in, or claim from the directory you
+published from after you sign in with [`sf login`](/cli#sf-login):
 
 ```bash
-sf spaces claim
-sf spaces claim --space spc_123 --claim-token claim_123 --team my-team
+sf spaces claim --team my-team
 ```
 
 See [Anonymous publish](/publishing/anonymous) for expiry, scanning, and

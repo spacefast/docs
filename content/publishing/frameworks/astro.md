@@ -17,7 +17,7 @@ headers in the dev server, and emits the merged files into the build output.
 npm install -D @spacefast/astro
 ```
 
-This page documents `@spacefast/astro` 0.0.13.
+This page documents `@spacefast/astro` 0.0.23.
 
 ## Add it to astro.config
 

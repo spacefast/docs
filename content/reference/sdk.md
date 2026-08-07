@@ -16,7 +16,7 @@ codes behave exactly as in the [REST API guide](/api).
 npm install @spacefast/sdk
 ```
 
-These examples were checked against `@spacefast/sdk` `0.0.13`. Pin the version
+These examples were checked against `@spacefast/sdk` `0.0.23`. Pin the version
 you install. The SDK requires Node.js 20 or newer.
 
 ## Create a client
@@ -66,7 +66,8 @@ const detail = await client.get("/v1/spaces/{spaceId}", {
 ```
 
 The client unwraps successful JSON envelopes to the `data` payload. Failures
-throw `SpacefastApiError` with `code`, `docsUrl`, `requestId`, and retry hints.
+throw `SpacefastApiError` with `code`, the problem document's `type`,
+`requestId`, and retry hints.
 
 ## Exports
 

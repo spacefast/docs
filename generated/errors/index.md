@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with their owning API surface.
 
-There are 479 error codes in the registry.
+There are 467 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -16,7 +16,6 @@ There are 479 error codes in the registry.
 | [`abuse_report_rate_limited`](/errors/abuse_report_rate_limited) | Too many abuse reports were submitted from this client in a short window. |
 | [`abuse_takedown`](/errors/abuse_takedown) | This space was disabled by an abuse takedown and cannot be served or modified. |
 | [`access_denied`](/errors/access_denied) | The authorization request was denied by the user. |
-| [`access_scope_suggestion`](/errors/access_scope_suggestion) | Published dependencies cluster under paths that may be useful as explicit public scopes. |
 | [`account_suspended`](/errors/account_suspended) | This account is suspended for a policy or abuse violation and cannot be used. |
 | [`agent_handoff_declined`](/errors/agent_handoff_declined) | The app-private agent handoff cannot be redeemed. |
 | [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the space. |
@@ -27,7 +26,6 @@ There are 479 error codes in the registry.
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
 | [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | Too many unclaimed anonymous spaces are already active for this client. |
 | [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
-| [`archive_body_required`](/errors/archive_body_required) | This request must carry an archive body but none was provided. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
 | [`authorization_pending`](/errors/authorization_pending) | The device login is not approved yet. |
@@ -131,8 +129,6 @@ There are 479 error codes in the registry.
 | [`event_payload_too_large`](/errors/event_payload_too_large) | The event payload exceeds the maximum size. |
 | [`event_rate_limited`](/errors/event_rate_limited) | Too many event submissions came from this client in a short window. |
 | [`expired_token`](/errors/expired_token) | The token is expired. |
-| [`export_archive_not_ready`](/errors/export_archive_not_ready) | The export archive is still being prepared. |
-| [`export_version_not_found`](/errors/export_version_not_found) | The version requested for export was not found. |
 | [`feature_unavailable`](/errors/feature_unavailable) | This feature is not available on this deployment or plan. |
 | [`files_mode_does_not_support_spa`](/errors/files_mode_does_not_support_spa) | SPA fallback cannot be combined with files-listing mode. |
 | [`forbidden`](/errors/forbidden) | The credential is valid but does not allow this action. |
@@ -140,9 +136,6 @@ There are 479 error codes in the registry.
 | [`google_play_webhook_identity_not_configured`](/errors/google_play_webhook_identity_not_configured) | Google Play Pub/Sub push authentication is not configured on this deployment. |
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
 | [`idempotency_key_reused`](/errors/idempotency_key_reused) | The Idempotency-Key was reused with a different request body. |
-| [`import_archive_not_uploaded`](/errors/import_archive_not_uploaded) | The import has no uploaded archive yet. |
-| [`import_not_cancelable`](/errors/import_not_cancelable) | The import is past the point where it can be canceled. |
-| [`import_not_waiting_for_archive`](/errors/import_not_waiting_for_archive) | The import is not waiting for an archive upload. |
 | [`incumbent_controls_dns`](/errors/incumbent_controls_dns) | Another team controls this domain's DNS, so the operation is blocked. |
 | [`inject_invalid`](/errors/inject_invalid) | The inject config key is malformed. |
 | [`inject_snippet_too_large`](/errors/inject_snippet_too_large) | An inject snippet exceeds the per-snippet size limit. |
@@ -230,7 +223,6 @@ There are 479 error codes in the registry.
 | [`publish_not_cancelable`](/errors/publish_not_cancelable) | The publish is past the point where it can be canceled. |
 | [`publish_path_collision`](/errors/publish_path_collision) | Two different artifacts would serve the same URL after directory-index or clean-URL resolution. |
 | [`publish_path_invalid`](/errors/publish_path_invalid) | A publish path is not a relative, normalized POSIX path. |
-| [`publish_reference_missing`](/errors/publish_reference_missing) | Published HTML, CSS, or JavaScript references an internal path that is not in the version. |
 | [`publish_setup_failed`](/errors/publish_setup_failed) | Provisioning for this publish failed. |
 | [`publish_snapshot_empty`](/errors/publish_snapshot_empty) | An empty snapshot was sent without an explicit base version. |
 | [`publish_upload_failed`](/errors/publish_upload_failed) | Uploading the publish content failed. |
@@ -287,10 +279,6 @@ There are 479 error codes in the registry.
 | [`space_has_active_publish`](/errors/space_has_active_publish) | The space has a publish in progress, which blocks this operation. |
 | [`space_has_active_version`](/errors/space_has_active_version) | The space still has an active version, which blocks this operation. |
 | [`space_hostname_identity_missing`](/errors/space_hostname_identity_missing) | The space is missing its persisted default hostname identity. |
-| [`space_import_archive_invalid`](/errors/space_import_archive_invalid) | The import archive is not a valid Spacefast export. |
-| [`space_import_archive_too_large`](/errors/space_import_archive_too_large) | The import archive exceeds the maximum allowed size. |
-| [`space_import_config_only_archive`](/errors/space_import_config_only_archive) | The archive contains only configuration and cannot be imported as content. |
-| [`space_import_runtime_schema_unsupported`](/errors/space_import_runtime_schema_unsupported) | The export was produced by an unsupported runtime schema version. |
 | [`space_move_would_strand_zero_data`](/errors/space_move_would_strand_zero_data) | The Space runs Zero, whose database and object storage live on the site the Space is placed on. Relocating it would strand that data on the old site, so the move is refused. |
 | [`space_moving`](/errors/space_moving) | The space is moving between sites, which blocks this operation. |
 | [`space_no_live_version`](/errors/space_no_live_version) | The space has no live version, so this operation has nothing to act on. |

@@ -35,7 +35,8 @@ sf publish ./dist --spa true
 - Check large files against the target space's file-size limit before
   publishing.
 - If the old deployment was anonymous, recover the source files from your
-  machine or agent logs. here.now returns anonymous claim tokens only once.
+  machine or agent logs. here.now returns an anonymous deployment's credentials
+  only once.
 - Recreate account-level concerns in Spacefast: custom domain records, space
   name, SPA mode, and any environment or secret values that your build or
   external backend needs.

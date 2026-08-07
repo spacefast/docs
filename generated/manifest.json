@@ -1,89 +1,84 @@
 {
-  "contentDigest": "a80ead99bd19ae29db9428d40d301c411ca516e67345d9931150fd47a6f86bbd",
+  "contentDigest": "049fca62e843bbf9e784521b363c97839e9ada8f599d2a5367e66d3be95bfda1",
   "counts": {
     "apiOperations": 322,
-    "changelogPackages": 14,
-    "changelogVersions": 8,
-    "errorCodes": 479,
+    "changelogPackages": 13,
+    "changelogVersions": 18,
+    "errorCodes": 467,
     "platformOperations": 357,
     "redirects": 2490,
     "setupPages": 16
   },
   "files": [
     {
-      "bytes": 582,
+      "bytes": 1323,
       "path": "changelog/packages/astro.md",
-      "sha256": "80b11ebfd33318f855d096c66cd7321acbf95ea60d29cbcf188f7926a37c93c6"
+      "sha256": "f62d2b6a62231f84ed1eb89d3c427a058c7380bca917c2b082df6297ba49c972"
     },
     {
-      "bytes": 615,
+      "bytes": 1604,
       "path": "changelog/packages/common.md",
-      "sha256": "8381694254a78cdf660193407efb8d10840ddd6eb7d245f3cf25dee6279e8e2d"
+      "sha256": "9d31868ff8eddb40ebf79dd6ee73ea0d7eb01e6908355126329a5bd454d16f1d"
     },
     {
-      "bytes": 650,
+      "bytes": 1648,
       "path": "changelog/packages/domain-search-terminal.md",
-      "sha256": "7d699f812dbe4bbfa42e9e0e6ac2b53550a765d93b116aafefb2449a32c9947a"
+      "sha256": "8330aec2caeb5b812e9e61ef92b0aeaaed9521917dd15efe4975c898349f4926"
     },
     {
-      "bytes": 622,
+      "bytes": 1376,
       "path": "changelog/packages/domain-services.md",
-      "sha256": "b43e996b82d5a6f25b20f8b1babfe532d6fde2e12280c418d7b59bd512597def"
+      "sha256": "5c6e3ee73fc29e93947b21404ab5f954562bd42ff3552db3d4eb439cdcb395f7"
     },
     {
-      "bytes": 566,
+      "bytes": 1121,
       "path": "changelog/packages/image.md",
-      "sha256": "f8c06b0d91520b68b189edb6cd044b262a29096512346d45a4378fe33d2f2be3"
+      "sha256": "0b6af35628c8d96d6cafaf31e8e78bd78bdaf5e85aeca60e4153a73ad8ffe230"
     },
     {
-      "bytes": 2313,
+      "bytes": 2185,
       "path": "changelog/packages/index.md",
-      "sha256": "db5d04cab5d152ef13d00a51c0e5bb4406d3f089193a88595dccf072e85ebd2e"
+      "sha256": "77dd071e117a58e176a5e04f0e09a216ba9586a24814a64f6dabce5f4afff297"
     },
     {
-      "bytes": 680,
+      "bytes": 2851,
       "path": "changelog/packages/mcp.md",
-      "sha256": "aeb42ffe86ac165c2f68fa5ae4402ed183f8f9ada56b3a6081f0b4b650bfe56a"
+      "sha256": "ef33bb233e0b23abead76b254b98386a9b3fe0312361a0a2e054d4e6123590c9"
     },
     {
-      "bytes": 609,
+      "bytes": 1487,
       "path": "changelog/packages/routing.md",
-      "sha256": "895eee70b382ee288f83d06413fe00cadec88126fee378aea420c381983ad44a"
+      "sha256": "8e275f86d540b826907da04fbc521aa1d0691e92719bd8396e30c1591ac182f6"
     },
     {
-      "bytes": 558,
+      "bytes": 1113,
       "path": "changelog/packages/sdk.md",
-      "sha256": "3207dd3c725e2667b0c2de524d9db6b78c9d050b05a20027e9be16f0681e9b22"
+      "sha256": "83f6eb611a1138422c8989bada1b65ac60c2df1d6fda5d6deec1457c7c914a43"
     },
     {
-      "bytes": 582,
-      "path": "changelog/packages/sftp-sync.md",
-      "sha256": "d0eee457109593c30e56b29f79f7964ee48d3ad93703373c00215c30d07bd014"
-    },
-    {
-      "bytes": 766,
+      "bytes": 4640,
       "path": "changelog/packages/spacefast.md",
-      "sha256": "c33d266beca535cb3823ec5eab4bbaa3bd2f2a60b1844f3bd744f364458dfec3"
+      "sha256": "25fb804a0e1d009a34502f755a786de57fec51e60297792817c3c8f931aac5a1"
     },
     {
-      "bytes": 606,
+      "bytes": 1347,
       "path": "changelog/packages/vite-plugin.md",
-      "sha256": "d15a173f9a295d3d96fa20b10670456dca2ccf8fabc865367ea7c2aea271c8d6"
+      "sha256": "13c1784162787b929a315bbfd9db692c66a612e0444d1f1c96a46e54b7356993"
     },
     {
-      "bytes": 288,
+      "bytes": 843,
       "path": "changelog/packages/wordpress.md",
-      "sha256": "cf9e25a450b3668eac0a68b60495c095a5bda0976b170f21f212319d7b3d0810"
+      "sha256": "54882fbff115e13742aa01dc5ce0320ed5bc56ce36367462f066d9f7ec5abad1"
     },
     {
-      "bytes": 592,
+      "bytes": 1147,
       "path": "changelog/packages/wpcloud-sdk.md",
-      "sha256": "8675c33a217b359d3c20e6c6c4f7457efebaeb96c8e29b5ba9c5915b38d55bbc"
+      "sha256": "89b93c56f23f067c2f060ac2807db02f489363aaa7800ddd137c99ecb606e7db"
     },
     {
-      "bytes": 562,
+      "bytes": 1442,
       "path": "changelog/packages/zero.md",
-      "sha256": "8da4dc1219d0c4a12c8eff091c747913c5866a6a7040f80ed156abc277095a28"
+      "sha256": "de84bdaf7b675fd5d893dd49a002d258e77a0f05c7d799ff5562394bfbedf117"
     },
     {
       "bytes": 614,
@@ -106,6 +101,56 @@
       "sha256": "620f014c0ae27e403605f026962c378372b4d6b0399ed79b5b540724721c2746"
     },
     {
+      "bytes": 4253,
+      "path": "changelog/v0-0-14.md",
+      "sha256": "52e6221b8cb1fce41bbfbe0efc4c434611a42b267953865ff14f6cf75cd9af2f"
+    },
+    {
+      "bytes": 981,
+      "path": "changelog/v0-0-15.md",
+      "sha256": "cd19447c8646ec2e8b13756ace29c12ff49971304d9553396e11c4dfa030ee14"
+    },
+    {
+      "bytes": 975,
+      "path": "changelog/v0-0-16.md",
+      "sha256": "be9a6650db87207113f298e555f6ec8263d4c5244202c1da8c1f07dffc16d4c8"
+    },
+    {
+      "bytes": 960,
+      "path": "changelog/v0-0-17.md",
+      "sha256": "c24d1e85d10f130e10dc1db73e9b48fc5360bfcdd38e80b11a336a36cf4fc5b9"
+    },
+    {
+      "bytes": 2494,
+      "path": "changelog/v0-0-18.md",
+      "sha256": "848b8231422cc1486536aed0bd8b41e8fe38dd79884e3aa1931e80950bec5050"
+    },
+    {
+      "bytes": 966,
+      "path": "changelog/v0-0-19.md",
+      "sha256": "eaf025bc0bd5108e992fc212e1601ff87aae6b43f7ec8e775c3be19cc234a04f"
+    },
+    {
+      "bytes": 999,
+      "path": "changelog/v0-0-20.md",
+      "sha256": "73ccee2d929c8d8b54a0caba0583cbd83ada69577d3514ec24e59aa5ab7596a4"
+    },
+    {
+      "bytes": 971,
+      "path": "changelog/v0-0-21.md",
+      "sha256": "3c2b482659cb49b02cf6a7299ea28691b6c85fdb42b5f6a7f87d08bb9ecd6b35"
+    },
+    {
+      "bytes": 1086,
+      "path": "changelog/v0-0-22.md",
+      "sha256": "a47cf0c55f64f265f3fbf3cc04dbc454e2ca361a6bc929b9fc47b5879820e575"
+    },
+    {
+      "bytes": 1015,
+      "path": "changelog/v0-0-23.md",
+      "sha256": "ba5a35a65a38e7c445de5ca52120259cbb5f7398de1706184e58c49405f50480"
+    },
+    {
       "bytes": 579,
       "path": "changelog/v0-0-6.md",
       "sha256": "67bfc426f93b9fff6b1182761bf5b1a1f85ed081ca785adfe81d2369f13ac835"
@@ -126,9 +171,9 @@
       "sha256": "2cf3ea9a35e425c12d7eec39e0f59110e23d99a5962f8fda296e9ac9cceae809"
     },
     {
-      "bytes": 201572,
+      "bytes": 201869,
       "path": "cli/index.md",
-      "sha256": "28c3e273b584ab1ebcefa7df2cc0e44455235d7165cbff49b600d1ee6f7d05d7"
+      "sha256": "238993c544b12ab4e75b11d2029180c4f7e6e0f048b0b3782a9dc004fe42a095"
     },
     {
       "bytes": 1224,
@@ -149,11 +194,6 @@
       "bytes": 1055,
       "path": "errors/access_denied.md",
       "sha256": "320d38515e9ec7e645e79eaddc0d731a7132783e237b9dc9e989c51d86fe9d67"
-    },
-    {
-      "bytes": 1269,
-      "path": "errors/access_scope_suggestion.md",
-      "sha256": "86897f9c873c46078ddc4803970f25978dede1c55c99975d0270758647a5f456"
     },
     {
       "bytes": 1168,
@@ -204,11 +244,6 @@
       "bytes": 1287,
       "path": "errors/api_key_scope_underivable.md",
       "sha256": "2117fafdeb5ff36aa362056baf8c03d614a5c115a56d384d4858fe93aa37544e"
-    },
-    {
-      "bytes": 1144,
-      "path": "errors/archive_body_required.md",
-      "sha256": "af9d77169df2f979a38beb837874114f18857079d1564b356aee4d1d1e06f7c4"
     },
     {
       "bytes": 1113,
@@ -726,16 +761,6 @@
       "sha256": "784a8b932c8a78b26ba05b774fe1741922890d8f7c050ac78f662ed75f1cb46c"
     },
     {
-      "bytes": 1091,
-      "path": "errors/export_archive_not_ready.md",
-      "sha256": "dfb64ae198acaccd8e646ecf495ad22728ed537c7856dfe481f921736a7fd40a"
-    },
-    {
-      "bytes": 1094,
-      "path": "errors/export_version_not_found.md",
-      "sha256": "cc13d6f7d70038e036b08f6926abd33e139815fe34e136035f9564ab4146789b"
-    },
-    {
       "bytes": 1124,
       "path": "errors/feature_unavailable.md",
       "sha256": "ee6448d7d7d69393c3431ec34398f42c90218fb53271b9bbbfe9b03c57cf5c8a"
@@ -771,29 +796,14 @@
       "sha256": "372eec95fe9d68706b830a2f60c144681493704266c9dc287d620cb9318c6b2d"
     },
     {
-      "bytes": 1086,
-      "path": "errors/import_archive_not_uploaded.md",
-      "sha256": "b86cb212e489b307e5f644592a0f3a4e490368c5d7057289f155dfd0e5c7f68b"
-    },
-    {
-      "bytes": 1119,
-      "path": "errors/import_not_cancelable.md",
-      "sha256": "dadc38f17ce736ca196b5bd901ef6a05a6ad336d4461e986ab570ed117f55306"
-    },
-    {
-      "bytes": 1145,
-      "path": "errors/import_not_waiting_for_archive.md",
-      "sha256": "0704e892068a22c5ba87f13772cc75eb1e32c3c03aa142787d2289b1b3f0fece"
-    },
-    {
       "bytes": 1174,
       "path": "errors/incumbent_controls_dns.md",
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 61045,
+      "bytes": 59420,
       "path": "errors/index.md",
-      "sha256": "6e34d3d33c433023eca89b60f3d734726436cd176f2465781335e8654e4250ee"
+      "sha256": "f85fdc5fccdcdc1c4fa806d6295eef49171fff92fd45f286a18ef2318d780081"
     },
     {
       "bytes": 1057,
@@ -1226,11 +1236,6 @@
       "sha256": "59a165c4d00559c974279900cc3fcee9367316ef0cc97c76d1b7fd4cca0b98a8"
     },
     {
-      "bytes": 1258,
-      "path": "errors/publish_reference_missing.md",
-      "sha256": "a4f15f2fabf951e8001ef27ad3adc1226e8f3d10d546fdd2770a8bfafebcad45"
-    },
-    {
       "bytes": 1058,
       "path": "errors/publish_setup_failed.md",
       "sha256": "4d0a3e43667f89285080680b811c8a0f733811746b53c7780e202f9483b00cd6"
@@ -1509,26 +1514,6 @@
       "bytes": 1183,
       "path": "errors/space_hostname_identity_missing.md",
       "sha256": "60abd50cb542b7bb8be498ed3b392e3539aa8e15f96a046b529dadaca8612399"
-    },
-    {
-      "bytes": 1126,
-      "path": "errors/space_import_archive_invalid.md",
-      "sha256": "3987ca34e36868975b935feaf692234137b8791127e083e9897269a4f888ee1b"
-    },
-    {
-      "bytes": 1129,
-      "path": "errors/space_import_archive_too_large.md",
-      "sha256": "d6efc4482029e2f23870daa4e9cd754e831d697b88c577643f5bac586efd9a98"
-    },
-    {
-      "bytes": 1212,
-      "path": "errors/space_import_config_only_archive.md",
-      "sha256": "b2022e10083ed8fdf1d30e78e31ea1f25386a254eadedec132a8af2850352043"
-    },
-    {
-      "bytes": 1210,
-      "path": "errors/space_import_runtime_schema_unsupported.md",
-      "sha256": "717ed59386f41bb9afeada4620a352ba8c72e84bcaba5630333dd56e5fb20931"
     },
     {
       "bytes": 1601,
@@ -2531,14 +2516,14 @@
       "sha256": "9ec7cbe76eb42d9b7d9292c3e26feb8140cfd172a283a711a3b42b87a46d5235"
     },
     {
-      "bytes": 5492734,
+      "bytes": 5529354,
       "path": "openapi/api.json",
-      "sha256": "b2da641f58796fc9212339322b25c1f08fbc8667bcb3e4fa0129294b42c51a26"
+      "sha256": "274ebe0cf6506c48bac3674e5f0c9b347faa6489ecb6bcaaa25cae58e757ba85"
     },
     {
-      "bytes": 5914494,
+      "bytes": 5951232,
       "path": "openapi/platform.json",
-      "sha256": "f796cfd877033405ce9b73fd4c0e54693c3ebdcaba23ac2fcd486686d1eb4e35"
+      "sha256": "fcbd0bdac5d97a91b51d916051184866b8142746a744c174d7c2c6ede42f2f00"
     },
     {
       "bytes": 463362,
@@ -2606,9 +2591,9 @@
       "sha256": "56bcea9c4d43066939b06374a4318779e93083458263300d7fc30e2946de0931"
     },
     {
-      "bytes": 658,
+      "bytes": 649,
       "path": "setup/opencode.md",
-      "sha256": "65e68fa7c9876c43b3114d3663a6ef685f52329bca77df30ec9ffe5b9159a343"
+      "sha256": "24580533a3fd3158dcf9170eee58415ccdc9c9735d7c6fd5d2d1aa5fda00428e"
     },
     {
       "bytes": 528,

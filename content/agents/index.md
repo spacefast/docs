@@ -30,7 +30,7 @@ The CLI is the full surface: incremental publishes, version history, rollback,
 passwords, domains, logs, and diagnostics.
 
 ```bash
-npm install -g spacefast@0.0.13
+npm install -g spacefast@0.0.23
 ```
 
 That command pins the package release reviewed for this docs release.
@@ -179,7 +179,7 @@ deploy, a masked `ci_deploy` API key is the smaller option.
 
 ### Secret handling
 
-Treat claim tokens, upload tokens, device codes, API keys,
+Treat space keys, upload tokens, device codes, API keys,
 [share-Link URLs](/spaces/access),
 and `.spacefast` state as credentials. Do not print, commit, archive, or
 include them in logs and chat. Avoid shell tracing when secrets are present.

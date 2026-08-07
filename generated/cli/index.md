@@ -21,7 +21,7 @@ $ npm install -g spacefast
 $ sf COMMAND
 running command...
 $ sf (--version)
-spacefast/0.0.13
+spacefast/0.0.23
 $ sf --help [COMMAND]
 USAGE
   $ sf COMMAND
@@ -640,7 +640,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the apply to finish.
 
 DESCRIPTION
@@ -1574,7 +1574,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Run the local agent/MCP dogfood demo.
 
-  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated Executor operations, and local
+  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated API operations, and local
   publishing.
 
 EXAMPLES
@@ -1649,7 +1649,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -1678,7 +1678,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -1746,7 +1746,8 @@ Start the local dev server.
 ```text
 USAGE
   $ sf dev [--profile <value>] [-y] [-p <value>] [-d
-    <value>] [--host <value>] [--state-backend memory|sqlite|mysql] [--watch] [--watch-interval <value>] [--dry-run]
+    <value>] [--host <value>] [--allow-network] [--state-backend memory|sqlite|mysql] [--watch] [--watch-interval
+    <value>] [--dry-run]
 
 FLAGS
   -d, --dir=<value>   [default: .] Project directory.
@@ -1758,6 +1759,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
+  --allow-network           Allow an explicit non-loopback runtime dev-server binding.
   --dry-run                 Print the dev server plan without starting it.
   --host=<value>            [default: 127.0.0.1] Host interface for the local dev server.
   --state-backend=<option>  [default: memory] Local state adapter for a runtime dev server.
@@ -2354,7 +2356,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Remove a domain.
@@ -2770,7 +2772,7 @@ MIGRATION FLAGS
 
 EXECUTION FLAGS
   --[no-]auto-finalize    Finalize the remote build automatically after staging the build output.
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the repository build to finish.
 
 BUILD FLAGS
@@ -3792,7 +3794,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -3903,7 +3905,8 @@ VERSION FLAGS
                                        <options: additive|snapshot>
 
 OUTPUT FLAGS
-  --show-secret  Print private Open and Claim URLs. Secrets are hidden from JSON and non-interactive output by default.
+  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
+                 default.
 
 DESCRIPTION
   Publish files or built projects to Spacefast.
@@ -3994,7 +3997,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -4267,7 +4270,7 @@ Create a Space Grant.
 ```text
 USAGE
   $ sf share grant --to public|team --can view|comment|publish|manage --path <value>... [--api-url
-    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>]
+    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>] [--wait]
     [--exclude <value>...] [--target <value>] [--name <value>] [--expires <value>] [--network <value>...] [--country
     <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...]
 
@@ -4292,6 +4295,9 @@ CONSTRAINTS FLAGS
   --exclude-country=<value>...     [default: ] Blocked ISO country code. Repeatable.
   --exclude-user-agent=<value>...  [default: ] Block user agents containing this text. Repeatable.
   --network=<value>...             [default: ] Allowed IP address or CIDR. Repeatable.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Create a Space Grant.
@@ -4320,9 +4326,9 @@ Edit a direct managed Grant.
 ```text
 USAGE
   $ sf share grant edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--name <value>] [--can view|comment|publish|manage] [--exclude <value>...
-    --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>... | --no-network]
-    [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
+    <value>] [-o <value>] [--space <value>] [--wait] [--name <value>] [--can view|comment|publish|manage] [--exclude
+    <value>... --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>... |
+    --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
   ID  Managed Grant id.
@@ -4348,6 +4354,9 @@ CONSTRAINTS FLAGS
   --exclude-user-agent=<value>...  Replace blocked user-agent substrings. Repeatable.
   --network=<value>...             Replace allowed IP addresses or CIDRs. Repeatable.
   --no-network                     Remove every network constraint from this Grant.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Edit a direct managed Grant.
@@ -5144,7 +5153,7 @@ Revoke a Space Grant.
 ```text
 USAGE
   $ sf share revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+    <value>] [-o <value>] [--space <value>] [--wait]
 
 ARGUMENTS
   ID  Grant id (see `sf share list`).
@@ -5153,6 +5162,9 @@ GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Revoke a Space Grant.
@@ -5469,7 +5481,8 @@ EXECUTION FLAGS
   --[no-]save-state  Write the created space to .spacefast/state.json.
 
 OUTPUT FLAGS
-  --show-secret  Print private Open and Claim URLs. Secrets are hidden from JSON and non-interactive output by default.
+  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
+                 default.
 
 DESCRIPTION
   Create an empty space.
@@ -5500,7 +5513,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Claim an anonymous space.
@@ -5575,7 +5588,7 @@ DUPLICATE SOURCE FLAGS
   --version=<value>  Version to duplicate. Defaults to the live version.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the duplicate to become ready.
 
 DESCRIPTION
@@ -5678,7 +5691,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
 
 DESCRIPTION
@@ -5743,7 +5756,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Delete a space.
@@ -5848,7 +5861,7 @@ VIEWER METADATA FLAGS
   --viewer-title=<value>          Viewer page title. Pass null to clear.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
 
 DESCRIPTION
@@ -5884,7 +5897,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
-  --include-claim-url  Include a still-pending one-time claim URL.
+  --include-claim-url  Include the still-pending claim URL.
 
 DESCRIPTION
   Show CLI status.
@@ -5896,7 +5909,7 @@ EXAMPLES
 
     $ sf status
 
-  Include a still-pending one-time claim URL.
+  Include the still-pending claim URL.
 
     $ sf status --include-claim-url
 ```
@@ -6500,7 +6513,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
 
 DESCRIPTION

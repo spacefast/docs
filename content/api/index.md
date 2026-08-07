@@ -2,7 +2,7 @@
 title: REST API
 sidebar:
   label: REST API guide
-description: "How the Spacefast REST API works: auth, the response envelope, publishing, versions, idempotency, errors, and a link to the full reference."
+description: "How the Spacefast REST API works: auth, success responses, problem documents, publishing, versions, idempotency, and the full reference."
 ---
 
 Everything Spacefast does is one REST API at `https://api.spacefast.com`. The
@@ -10,25 +10,26 @@ dashboard, the CLI, and agents all speak it. There is no private surface behind
 it. The [full endpoint reference](/api/reference) lists every operation,
 parameter, and schema.
 
-## The shape of every response
+## Successes and errors
 
-Every response uses one envelope. Successes carry `{ "data": ... }`. Failures
-carry `{ "error": ... }`. An error always has a stable machine-readable `code`
-and a human `message`. It also has a `docsUrl` that points at that code's
-reference page, and a `requestId` for support.
+JSON successes carry `{ "data": ... }`; list responses add pagination fields,
+and asynchronous mutations can also include an operation. A `4xx` or `5xx`
+response is a raw [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html)
+problem document with the media type `application/problem+json`. It is not
+wrapped in `{ "error": ... }`.
 
-Match on `code`, never on `message`. Messages may improve over time;
-Spacefast never renames or removes a code. The [error reference](/errors) lists
-every code.
+Match on the stable `code`, not the human-readable `detail`. The `type` URL
+points at that code's reference page, and `requestId` identifies the request
+for support. The [error reference](/errors) lists every current code.
 
 ```json
 {
-  "error": {
-    "code": "access_denied",
-    "message": "This token cannot access that space.",
-    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://spacefast.com/docs/errors/access_denied",
+  "title": "Access denied",
+  "status": 403,
+  "detail": "This token cannot access that space.",
+  "code": "access_denied",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 
@@ -46,15 +47,16 @@ shows the key only once. Presets, rotation, and CI vs agent guidance live on
 [API keys](/account/api-keys).
 
 One call works without any token: an anonymous `POST /v1/publish` creates a
-brand-new space. It returns a one-time claim token alongside the receipt. That
-claim token acts as a bearer token scoped to that single space. It works until
-you claim the space.
+brand-new space. The receipt's `claim` object carries a **space key** (`sfc_…`),
+returned once. The key is a bearer token scoped to that one space, and it
+authorizes everything you can do to the space — publish, status, sharing,
+rotation, delete and restore — until you claim it with `POST /v1/claim`.
 
 ## Publish
 
 `POST /v1/publish` takes a single file, a multipart form of files, or a zip
 archive, and returns the whole receipt in one request. The receipt carries the
-live URL and the permanent version URL. For an anonymous publish, it also
+live URL and the immutable version URL. For an anonymous publish, it also
 carries the claim link.
 
 ```bash
@@ -81,10 +83,18 @@ re-upload. Version lists, diffs, and logs are all plain GET requests.
 
 ## Idempotency and retries
 
-Mutating requests honor an `Idempotency-Key` header. If you retry a request with
-the same key, Spacefast returns the original result. It does not repeat the side
-effect. If you publish identical content, that is a recognized no-op success
-(`noop_publish`), not a wasted version. It is safe to retry blindly.
+Every `POST` accepts an optional `Idempotency-Key` header. Repeating the same
+route and identical request with the same key replays its stored response for
+24 hours instead of repeating the side effect. Reusing a key with different
+request content returns `409 idempotency_key_reused`; a duplicate that is still
+running returns `409 idempotency_conflict_in_progress`.
+
+A credential-free `POST /v1/publish` that uses idempotency must also send a
+stable, secret, 64-character hexadecimal value in
+`X-Spacefast-Idempotency-Principal`. Reuse both values for retries and never log
+them. Retry only when the transport failed before a response or the problem
+document says the operation is safe to retry. Publishing content identical to
+the current version is a recognized no-op success (`noop_publish`).
 
 ## Long-running operations
 
@@ -102,7 +112,7 @@ sf operations --space spc_123
 
 Spacefast enforces rate limits and plan quotas per account. Rate-limited
 responses return the
-standard error envelope with a `Retry-After` header.
+problem document with a `Retry-After` header.
 
 ## For agents
 
