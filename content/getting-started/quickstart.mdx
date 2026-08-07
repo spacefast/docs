@@ -36,8 +36,11 @@ sf publish ./dist --name docs
 
 `--name` sets the space title. If Spacefast guesses your single-page-app setup
 wrong, add `--spa true` to force the SPA fallback. The receipt shows the live
-URL, the immutable version URL, and, without an account, a claim link. The
-full command surface is in the [CLI reference](/cli).
+URL, the immutable version URL, and, without an account, a site link and a
+claim link. A space starts private, so the site link is what opens it in a
+browser; the bare live URL asks for access until you
+[grant it](/spaces/access). The full command surface is in the
+[CLI reference](/cli).
 
 The first CLI publish writes `.spacefast/state.json` next to the folder. Later
 publishes from that folder update the same space at the same URL, and each one

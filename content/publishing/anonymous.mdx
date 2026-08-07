@@ -41,12 +41,11 @@ key, its URLs, and every view session it admitted.
 
 An unclaimed space works, with limits:
 
-- The live space URL and immutable Version URLs work until the space expires.
+- The space is private. The site link is the door; the bare live URL and immutable Version URLs ask a visitor for access instead. To show it to someone else, mint a [share link](/spaces/access) with the key rather than handing the key around.
 - The local `.spacefast/state.json` lets the CLI keep updating the anonymous space.
 - Static assets, redirects, response headers, SPA fallback, and metadata all publish.
 - Anonymous spaces allow 50 MB per file, 100 MB and 1,000 files per version, and 20 publishes per hour per IP.
 - Spacefast accepts and scans uploads like any publish. Unclaimed spaces serve web content only: HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Spacefast does not serve other files until you claim the space.
-- After more than 100 counted, non-crawler visits, Spacefast pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement can start after the 101st request. When you claim the space, Spacefast restores it instantly.
 - External proxy execution, `_headers` Basic Auth, and custom domains are not available on anonymous spaces.
 - Nothing the key does is instantly irreversible. `DELETE /v1/spaces/{spaceId}` with the key takes the site dark at once, and `POST /v1/spaces/{spaceId}/restore` with the same key brings it back any time before the claim deadline passes.
 

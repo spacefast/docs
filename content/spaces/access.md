@@ -3,9 +3,10 @@ title: Control who can visit
 description: Keep a space private, then grant access to people, links, passwords, machines, or the public.
 ---
 
-Claimed spaces start private with an owning-team Grant. A URL identifies
-content; it does not grant access. Create a Grant to admit a person or a
-machine.
+Every space starts private: a claimed one with an owning-team Grant, an
+unclaimed one with only its [space key](/publishing/anonymous). A URL
+identifies content; it does not grant access. Create a Grant to admit a person
+or a machine.
 
 ## Grants
 
