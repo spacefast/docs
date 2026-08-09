@@ -1,11 +1,11 @@
 ---
-title: "invalid_google_play_webhook_identity"
-description: "The Google Play notification did not carry a valid Pub/Sub push identity."
+title: "response_headers_unservable"
+description: "A file needs a response header that the platform cannot deliver for large files."
 ---
 
-The Google Play notification did not carry a valid Pub/Sub push identity.
+A file needs a response header that the platform cannot deliver for large files.
 
-**How to resolve:** Send the notification through the configured authenticated Pub/Sub push subscription.
+**How to resolve:** Reduce the file below 100 MiB or drop the custom header.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/invalid_google_play_webhook_identity",
-  "title": "Invalid google play webhook identity",
+  "type": "https://spacefast.com/docs/errors/response_headers_unservable",
+  "title": "Response headers unservable",
   "status": 400,
-  "detail": "The Google Play notification did not carry a valid Pub/Sub push identity.",
-  "code": "invalid_google_play_webhook_identity",
+  "detail": "A file needs a response header that the platform cannot deliver for large files.",
+  "code": "response_headers_unservable",
   "requestId": "req_4mz0v8qk"
 }
 ```

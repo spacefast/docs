@@ -1,11 +1,11 @@
 ---
-title: "billing_receipt_not_bound_to_team"
-description: "The store purchase was made under a different account token than this team's."
+title: "review_item_claimed"
+description: "Another reviewer already claimed this review item."
 ---
 
-The store purchase was made under a different account token than this team's.
+Another reviewer already claimed this review item.
 
-**How to resolve:** Verify the purchase from the team that initiated it, or contact support to rebind it.
+**How to resolve:** Pick a different item, or ask the current assignee (error.details.assignedToUserId) to release it.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_receipt_not_bound_to_team",
-  "title": "Billing receipt not bound to team",
+  "type": "https://spacefast.com/docs/errors/review_item_claimed",
+  "title": "Review item claimed",
   "status": 400,
-  "detail": "The store purchase was made under a different account token than this team's.",
-  "code": "billing_receipt_not_bound_to_team",
+  "detail": "Another reviewer already claimed this review item.",
+  "code": "review_item_claimed",
   "requestId": "req_4mz0v8qk"
 }
 ```

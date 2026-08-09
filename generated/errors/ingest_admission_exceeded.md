@@ -1,11 +1,11 @@
 ---
-title: "custom_certificates_require_dedicated_site"
-description: "Custom certificates are unavailable while this space uses shared placement."
+title: "ingest_admission_exceeded"
+description: "Too many concurrent uploads for this space."
 ---
 
-Custom certificates are unavailable while this space uses shared placement.
+Too many concurrent uploads for this space.
 
-**How to resolve:** Move the space to dedicated placement before managing custom certificates.
+**How to resolve:** Wait for the Retry-After window, then resume; at most 4 uploads run per space at once.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/custom_certificates_require_dedicated_site",
-  "title": "Custom certificates require dedicated site",
+  "type": "https://spacefast.com/docs/errors/ingest_admission_exceeded",
+  "title": "Ingest admission exceeded",
   "status": 400,
-  "detail": "Custom certificates are unavailable while this space uses shared placement.",
-  "code": "custom_certificates_require_dedicated_site",
+  "detail": "Too many concurrent uploads for this space.",
+  "code": "ingest_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }
 ```

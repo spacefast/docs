@@ -105,9 +105,9 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/api/operations/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid",
+    "from": "/api/operations/deletev1spacesbyspaceidstoragebyobjectid",
     "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/api/operations/deletev1spacesbyspaceidtagsversionsbyversionidpreview-sessionsbysessionid",
@@ -165,26 +165,6 @@
     "to": "/api/reference/docs/getdoc"
   },
   {
-    "from": "/api/operations/getpush-new",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/api/operations/getpush-newbyslug",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/api/operations/getpush-newbyslugclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/api/operations/getpush-newbysluglogs",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbysluglogs"
-  },
-  {
     "from": "/api/operations/getspace",
     "status": 301,
     "to": "/api/reference/spaces/getspace"
@@ -225,11 +205,6 @@
     "to": "/api/reference/activity/getv1activity"
   },
   {
-    "from": "/api/operations/getv1anonymous-claimstatus",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/api/operations/getv1authcapabilities",
     "status": 301,
     "to": "/api/reference/account/getv1authcapabilities"
@@ -260,14 +235,14 @@
     "to": "/api/reference/builds/getv1buildsbybuildidlogs"
   },
   {
+    "from": "/api/operations/getv1claimstatus",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/api/operations/getv1collabnotify-emailunsubscribe",
     "status": 301,
     "to": "/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/api/operations/getv1deploymentsbydeploymentid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1deploymentsbydeploymentid"
   },
   {
     "from": "/api/operations/getv1domains",
@@ -278,21 +253,6 @@
     "from": "/api/operations/getv1domainsbydomainid",
     "status": 301,
     "to": "/api/reference/domains/getv1domainsbydomainid"
-  },
-  {
-    "from": "/api/operations/getv1exportsbyexportid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/api/operations/getv1exportsbyexportidarchive",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/api/operations/getv1importsbyimportid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/api/operations/getv1me",
@@ -348,6 +308,11 @@
     "from": "/api/operations/getv1slugsavailability",
     "status": 301,
     "to": "/api/reference/spaces/getv1slugsavailability"
+  },
+  {
+    "from": "/api/operations/getv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidaccess"
   },
   {
     "from": "/api/operations/getv1spacesbyspaceidapply-state",
@@ -425,11 +390,6 @@
     "to": "/api/reference/database/getv1spacesbyspaceiddbexportbytable"
   },
   {
-    "from": "/api/operations/getv1spacesbyspaceiddeployments",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
     "from": "/api/operations/getv1spacesbyspaceiddomains",
     "status": 301,
     "to": "/api/reference/domains/getv1spacesbyspaceiddomains"
@@ -438,11 +398,6 @@
     "from": "/api/operations/getv1spacesbyspaceiddomainsbydomainiddiagnostics",
     "status": 301,
     "to": "/api/reference/domains/getv1spacesbyspaceiddomainsbydomainiddiagnostics"
-  },
-  {
-    "from": "/api/operations/getv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidexports"
   },
   {
     "from": "/api/operations/getv1spacesbyspaceidfiles",
@@ -458,11 +413,6 @@
     "from": "/api/operations/getv1spacesbyspaceidgrantscheck",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/api/operations/getv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/api/operations/getv1spacesbyspaceidlogsaccess",
@@ -880,11 +830,6 @@
     "to": "/api/reference/docs/listdocs"
   },
   {
-    "from": "/api/operations/listenvironmentvariables",
-    "status": 301,
-    "to": "/api/reference/spaces/listenvironmentvariables"
-  },
-  {
     "from": "/api/operations/listspaceactivity",
     "status": 301,
     "to": "/api/reference/activity/listspaceactivity"
@@ -990,16 +935,6 @@
     "to": "/api/reference/activity/patchv1webhooksbywebhookid"
   },
   {
-    "from": "/api/operations/postpush-new",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/api/operations/postpush-newbyslugupload",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/api/operations/postv1abuse-reports",
     "status": 301,
     "to": "/api/reference/spaces/postv1abuse-reports"
@@ -1008,26 +943,6 @@
     "from": "/api/operations/postv1actionsresume",
     "status": 301,
     "to": "/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/api/operations/postv1anonymous-claimassign",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/api/operations/postv1anonymous-claimexchange",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/api/operations/postv1anonymous-claimresolve",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/api/operations/postv1anonymous-claimrotate",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/api/operations/postv1authdevice",
@@ -1075,6 +990,21 @@
     "to": "/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/api/operations/postv1claim",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claim"
+  },
+  {
+    "from": "/api/operations/postv1claimexchange",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/api/operations/postv1claimrotate",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claimrotate"
+  },
+  {
     "from": "/api/operations/postv1docsask",
     "status": 301,
     "to": "/api/reference/docs/postv1docsask"
@@ -1093,16 +1023,6 @@
     "from": "/api/operations/postv1events",
     "status": 301,
     "to": "/api/reference/account/postv1events"
-  },
-  {
-    "from": "/api/operations/postv1importsbyimportidcancel",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidcancel"
-  },
-  {
-    "from": "/api/operations/postv1importsbyimportidfinalize",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidfinalize"
   },
   {
     "from": "/api/operations/postv1notificationsread",
@@ -1133,11 +1053,6 @@
     "from": "/api/operations/postv1spacesbyspaceidbuildswordpress",
     "status": 301,
     "to": "/api/reference/builds/postv1spacesbyspaceidbuildswordpress"
-  },
-  {
-    "from": "/api/operations/postv1spacesbyspaceidclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/api/operations/postv1spacesbyspaceidclaim-reminders",
@@ -1205,11 +1120,6 @@
     "to": "/api/reference/domains/postv1spacesbyspaceiddomainsbydomainidsslretry"
   },
   {
-    "from": "/api/operations/postv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/api/operations/postv1spacesbyspaceidexternal-grants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -1218,11 +1128,6 @@
     "from": "/api/operations/postv1spacesbyspaceidgrants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/api/operations/postv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/api/operations/postv1spacesbyspaceidmachine-credentials",
@@ -1510,6 +1415,11 @@
     "to": "/api/reference/account/putv1meemail-preferences"
   },
   {
+    "from": "/api/operations/putv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/api/reference/spaces/putv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/api/operations/putv1spacesbyspaceidgrantsbygrantid",
     "status": 301,
     "to": "/api/reference/spaces/putv1spacesbyspaceidgrantsbygrantid"
@@ -1565,11 +1475,6 @@
     "to": "/api/reference/teams/recoverteam"
   },
   {
-    "from": "/api/operations/removeenvironmentvariable",
-    "status": 301,
-    "to": "/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
     "from": "/api/operations/removeteamdomain",
     "status": 301,
     "to": "/api/reference/domains/removeteamdomain"
@@ -1580,6 +1485,11 @@
     "to": "/api/reference/teams/removeteammember"
   },
   {
+    "from": "/api/operations/restorespace",
+    "status": 301,
+    "to": "/api/reference/spaces/restorespace"
+  },
+  {
     "from": "/api/operations/revokeapikey",
     "status": 301,
     "to": "/api/reference/account/revokeapikey"
@@ -1588,11 +1498,6 @@
     "from": "/api/operations/revoketeaminvitation",
     "status": 301,
     "to": "/api/reference/teams/revoketeaminvitation"
-  },
-  {
-    "from": "/api/operations/setenvironmentvariable",
-    "status": 301,
-    "to": "/api/reference/spaces/setenvironmentvariable"
   },
   {
     "from": "/api/operations/tags/account",
@@ -1780,9 +1685,9 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/api/reference/operations/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid",
+    "from": "/api/reference/operations/deletev1spacesbyspaceidstoragebyobjectid",
     "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/api/reference/operations/deletev1spacesbyspaceidtagsversionsbyversionidpreview-sessionsbysessionid",
@@ -1840,26 +1745,6 @@
     "to": "/api/reference/docs/getdoc"
   },
   {
-    "from": "/api/reference/operations/getpush-new",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/api/reference/operations/getpush-newbyslug",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/api/reference/operations/getpush-newbyslugclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/api/reference/operations/getpush-newbysluglogs",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbysluglogs"
-  },
-  {
     "from": "/api/reference/operations/getspace",
     "status": 301,
     "to": "/api/reference/spaces/getspace"
@@ -1900,11 +1785,6 @@
     "to": "/api/reference/activity/getv1activity"
   },
   {
-    "from": "/api/reference/operations/getv1anonymous-claimstatus",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/api/reference/operations/getv1authcapabilities",
     "status": 301,
     "to": "/api/reference/account/getv1authcapabilities"
@@ -1935,14 +1815,14 @@
     "to": "/api/reference/builds/getv1buildsbybuildidlogs"
   },
   {
+    "from": "/api/reference/operations/getv1claimstatus",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/api/reference/operations/getv1collabnotify-emailunsubscribe",
     "status": 301,
     "to": "/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/api/reference/operations/getv1deploymentsbydeploymentid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1deploymentsbydeploymentid"
   },
   {
     "from": "/api/reference/operations/getv1domains",
@@ -1953,21 +1833,6 @@
     "from": "/api/reference/operations/getv1domainsbydomainid",
     "status": 301,
     "to": "/api/reference/domains/getv1domainsbydomainid"
-  },
-  {
-    "from": "/api/reference/operations/getv1exportsbyexportid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/api/reference/operations/getv1exportsbyexportidarchive",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/api/reference/operations/getv1importsbyimportid",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/api/reference/operations/getv1me",
@@ -2023,6 +1888,11 @@
     "from": "/api/reference/operations/getv1slugsavailability",
     "status": 301,
     "to": "/api/reference/spaces/getv1slugsavailability"
+  },
+  {
+    "from": "/api/reference/operations/getv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidaccess"
   },
   {
     "from": "/api/reference/operations/getv1spacesbyspaceidapply-state",
@@ -2100,11 +1970,6 @@
     "to": "/api/reference/database/getv1spacesbyspaceiddbexportbytable"
   },
   {
-    "from": "/api/reference/operations/getv1spacesbyspaceiddeployments",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
     "from": "/api/reference/operations/getv1spacesbyspaceiddomains",
     "status": 301,
     "to": "/api/reference/domains/getv1spacesbyspaceiddomains"
@@ -2113,11 +1978,6 @@
     "from": "/api/reference/operations/getv1spacesbyspaceiddomainsbydomainiddiagnostics",
     "status": 301,
     "to": "/api/reference/domains/getv1spacesbyspaceiddomainsbydomainiddiagnostics"
-  },
-  {
-    "from": "/api/reference/operations/getv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidexports"
   },
   {
     "from": "/api/reference/operations/getv1spacesbyspaceidfiles",
@@ -2133,11 +1993,6 @@
     "from": "/api/reference/operations/getv1spacesbyspaceidgrantscheck",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/api/reference/operations/getv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/api/reference/operations/getv1spacesbyspaceidlogsaccess",
@@ -2555,11 +2410,6 @@
     "to": "/api/reference/docs/listdocs"
   },
   {
-    "from": "/api/reference/operations/listenvironmentvariables",
-    "status": 301,
-    "to": "/api/reference/spaces/listenvironmentvariables"
-  },
-  {
     "from": "/api/reference/operations/listspaceactivity",
     "status": 301,
     "to": "/api/reference/activity/listspaceactivity"
@@ -2665,16 +2515,6 @@
     "to": "/api/reference/activity/patchv1webhooksbywebhookid"
   },
   {
-    "from": "/api/reference/operations/postpush-new",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/api/reference/operations/postpush-newbyslugupload",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/api/reference/operations/postv1abuse-reports",
     "status": 301,
     "to": "/api/reference/spaces/postv1abuse-reports"
@@ -2683,26 +2523,6 @@
     "from": "/api/reference/operations/postv1actionsresume",
     "status": 301,
     "to": "/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/api/reference/operations/postv1anonymous-claimassign",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/api/reference/operations/postv1anonymous-claimexchange",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/api/reference/operations/postv1anonymous-claimresolve",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/api/reference/operations/postv1anonymous-claimrotate",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/api/reference/operations/postv1authdevice",
@@ -2750,6 +2570,21 @@
     "to": "/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/api/reference/operations/postv1claim",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claim"
+  },
+  {
+    "from": "/api/reference/operations/postv1claimexchange",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/api/reference/operations/postv1claimrotate",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claimrotate"
+  },
+  {
     "from": "/api/reference/operations/postv1docsask",
     "status": 301,
     "to": "/api/reference/docs/postv1docsask"
@@ -2768,16 +2603,6 @@
     "from": "/api/reference/operations/postv1events",
     "status": 301,
     "to": "/api/reference/account/postv1events"
-  },
-  {
-    "from": "/api/reference/operations/postv1importsbyimportidcancel",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidcancel"
-  },
-  {
-    "from": "/api/reference/operations/postv1importsbyimportidfinalize",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidfinalize"
   },
   {
     "from": "/api/reference/operations/postv1notificationsread",
@@ -2808,11 +2633,6 @@
     "from": "/api/reference/operations/postv1spacesbyspaceidbuildswordpress",
     "status": 301,
     "to": "/api/reference/builds/postv1spacesbyspaceidbuildswordpress"
-  },
-  {
-    "from": "/api/reference/operations/postv1spacesbyspaceidclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/api/reference/operations/postv1spacesbyspaceidclaim-reminders",
@@ -2880,11 +2700,6 @@
     "to": "/api/reference/domains/postv1spacesbyspaceiddomainsbydomainidsslretry"
   },
   {
-    "from": "/api/reference/operations/postv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/api/reference/operations/postv1spacesbyspaceidexternal-grants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -2893,11 +2708,6 @@
     "from": "/api/reference/operations/postv1spacesbyspaceidgrants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/api/reference/operations/postv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/api/reference/operations/postv1spacesbyspaceidmachine-credentials",
@@ -3185,6 +2995,11 @@
     "to": "/api/reference/account/putv1meemail-preferences"
   },
   {
+    "from": "/api/reference/operations/putv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/api/reference/spaces/putv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/api/reference/operations/putv1spacesbyspaceidgrantsbygrantid",
     "status": 301,
     "to": "/api/reference/spaces/putv1spacesbyspaceidgrantsbygrantid"
@@ -3240,11 +3055,6 @@
     "to": "/api/reference/teams/recoverteam"
   },
   {
-    "from": "/api/reference/operations/removeenvironmentvariable",
-    "status": 301,
-    "to": "/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
     "from": "/api/reference/operations/removeteamdomain",
     "status": 301,
     "to": "/api/reference/domains/removeteamdomain"
@@ -3255,6 +3065,11 @@
     "to": "/api/reference/teams/removeteammember"
   },
   {
+    "from": "/api/reference/operations/restorespace",
+    "status": 301,
+    "to": "/api/reference/spaces/restorespace"
+  },
+  {
     "from": "/api/reference/operations/revokeapikey",
     "status": 301,
     "to": "/api/reference/account/revokeapikey"
@@ -3263,11 +3078,6 @@
     "from": "/api/reference/operations/revoketeaminvitation",
     "status": 301,
     "to": "/api/reference/teams/revoketeaminvitation"
-  },
-  {
-    "from": "/api/reference/operations/setenvironmentvariable",
-    "status": 301,
-    "to": "/api/reference/spaces/setenvironmentvariable"
   },
   {
     "from": "/api/reference/operations/tags/account",
@@ -3845,34 +3655,14 @@
     "to": "/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_visibility_by_object_id",
+    "from": "/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_object_id",
     "status": 301,
-    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_agent_context",
     "status": 301,
     "to": "/api/reference/spaces/getagentcontext"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_push_new",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_push_new_by_slug",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_push_new_by_slug_claim",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_push_new_by_slug_logs",
-    "status": 301,
-    "to": "/api/reference/spaces/getpush-newbysluglogs"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_space",
@@ -3890,39 +3680,19 @@
     "to": "/api/reference/spaces/getv1accessacquirecontinuebycontinuation"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/get_v1_anonymous_claim_status",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/get_v1_beta_visitor",
     "status": 301,
     "to": "/api/reference/spaces/getv1betavisitor"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/get_v1_claim_status",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/get_v1_collab_notify_email_unsubscribe",
     "status": 301,
     "to": "/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_deployments_by_deployment_id",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1deploymentsbydeploymentid"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_exports_by_export_id",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_exports_by_export_id_archive",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_imports_by_import_id",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_v1_repository_connections_installations",
@@ -3943,6 +3713,11 @@
     "from": "/api/reference/resources/spaces/methods/get_v1_slugs_availability",
     "status": 301,
     "to": "/api/reference/spaces/getv1slugsavailability"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidaccess"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_apply_state",
@@ -3985,16 +3760,6 @@
     "to": "/api/reference/spaces/getv1spacesbyspaceiddata-sources"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_deployments",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidexports"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_files",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidfiles"
@@ -4008,11 +3773,6 @@
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_grants_check",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
@@ -4110,11 +3870,6 @@
     "to": "/api/reference/spaces/getv1spacesresolve"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/list_environment_variables",
-    "status": 301,
-    "to": "/api/reference/spaces/listenvironmentvariables"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/list_spaces",
     "status": 301,
     "to": "/api/reference/spaces/listspaces"
@@ -4140,16 +3895,6 @@
     "to": "/api/reference/spaces/patchv1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/post_push_new",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_push_new_by_slug_upload",
-    "status": 301,
-    "to": "/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/post_v1_abuse_reports",
     "status": 301,
     "to": "/api/reference/spaces/postv1abuse-reports"
@@ -4158,26 +3903,6 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_actions_resume",
     "status": 301,
     "to": "/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_anonymous_claim_assign",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_anonymous_claim_exchange",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_anonymous_claim_resolve",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_anonymous_claim_rotate",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_beta_accept",
@@ -4190,14 +3915,19 @@
     "to": "/api/reference/spaces/postv1betasignups"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/post_v1_imports_by_import_id_cancel",
+    "from": "/api/reference/resources/spaces/methods/post_v1_claim",
     "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidcancel"
+    "to": "/api/reference/spaces/postv1claim"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/post_v1_imports_by_import_id_finalize",
+    "from": "/api/reference/resources/spaces/methods/post_v1_claim_exchange",
     "status": 301,
-    "to": "/api/reference/spaces/postv1importsbyimportidfinalize"
+    "to": "/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/post_v1_claim_rotate",
+    "status": 301,
+    "to": "/api/reference/spaces/postv1claimrotate"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_publish",
@@ -4213,11 +3943,6 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidapply"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_claim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_claim_reminders",
@@ -4275,11 +4000,6 @@
     "to": "/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_external_grants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -4288,11 +4008,6 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_grants",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials",
@@ -4410,6 +4125,11 @@
     "to": "/api/reference/spaces/postv1spacesbyspaceidsharinglogout-all"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/put_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/api/reference/spaces/putv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/put_v1_spaces_by_space_id_grants_by_grant_id",
     "status": 301,
     "to": "/api/reference/spaces/putv1spacesbyspaceidgrantsbygrantid"
@@ -4425,14 +4145,9 @@
     "to": "/api/reference/spaces/putv1spacesbyspaceiduploadsbyuploadid"
   },
   {
-    "from": "/api/reference/resources/spaces/methods/remove_environment_variable",
+    "from": "/api/reference/resources/spaces/methods/restore_space",
     "status": 301,
-    "to": "/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/set_environment_variable",
-    "status": 301,
-    "to": "/api/reference/spaces/setenvironmentvariable"
+    "to": "/api/reference/spaces/restorespace"
   },
   {
     "from": "/api/reference/resources/spaces/methods/update_space",
@@ -5145,19 +4860,14 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidrepository-connectionephemeral-branch"
   },
   {
-    "from": "/platform-api/operations/deletev1spacesbyspaceidruntimecertificatesbycertificateid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platform-api/operations/deletev1spacesbyspaceidshare-linksbylinkid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platform-api/operations/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid",
+    "from": "/platform-api/operations/deletev1spacesbyspaceidstoragebyobjectid",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/platform-api/operations/deletev1spacesbyspaceidtagsversionsbyversionidpreview-sessionsbysessionid",
@@ -5215,26 +4925,6 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
-    "from": "/platform-api/operations/getpush-new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/platform-api/operations/getpush-newbyslug",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/platform-api/operations/getpush-newbyslugclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/platform-api/operations/getpush-newbysluglogs",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbysluglogs"
-  },
-  {
     "from": "/platform-api/operations/getspace",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getspace"
@@ -5275,11 +4965,6 @@
     "to": "/platforms/api/reference/activity/getv1activity"
   },
   {
-    "from": "/platform-api/operations/getv1anonymous-claimstatus",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/platform-api/operations/getv1authcapabilities",
     "status": 301,
     "to": "/platforms/api/reference/account/getv1authcapabilities"
@@ -5310,14 +4995,14 @@
     "to": "/platforms/api/reference/builds/getv1buildsbybuildidlogs"
   },
   {
+    "from": "/platform-api/operations/getv1claimstatus",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/platform-api/operations/getv1collabnotify-emailunsubscribe",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/platform-api/operations/getv1deploymentsbydeploymentid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1deploymentsbydeploymentid"
   },
   {
     "from": "/platform-api/operations/getv1domains",
@@ -5358,21 +5043,6 @@
     "from": "/platform-api/operations/getv1domainsresearchwhois",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1domainsresearchwhois"
-  },
-  {
-    "from": "/platform-api/operations/getv1exportsbyexportid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/platform-api/operations/getv1exportsbyexportidarchive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/platform-api/operations/getv1importsbyimportid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/platform-api/operations/getv1me",
@@ -5465,6 +5135,11 @@
     "to": "/platforms/api/reference/spaces/getv1slugsavailability"
   },
   {
+    "from": "/platform-api/operations/getv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/platform-api/operations/getv1spacesbyspaceidapply-state",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidapply-state"
@@ -5540,11 +5215,6 @@
     "to": "/platforms/api/reference/database/getv1spacesbyspaceiddbexportbytable"
   },
   {
-    "from": "/platform-api/operations/getv1spacesbyspaceiddeployments",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
     "from": "/platform-api/operations/getv1spacesbyspaceiddomains",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1spacesbyspaceiddomains"
@@ -5553,11 +5223,6 @@
     "from": "/platform-api/operations/getv1spacesbyspaceiddomainsbydomainiddiagnostics",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1spacesbyspaceiddomainsbydomainiddiagnostics"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidexports"
   },
   {
     "from": "/platform-api/operations/getv1spacesbyspaceidfiles",
@@ -5573,11 +5238,6 @@
     "from": "/platform-api/operations/getv1spacesbyspaceidgrantscheck",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/platform-api/operations/getv1spacesbyspaceidlogsaccess",
@@ -5673,21 +5333,6 @@
     "from": "/platform-api/operations/getv1spacesbyspaceidruntime",
     "status": 301,
     "to": "/platforms/api/reference/runtime/getv1spacesbyspaceidruntime"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidruntimecertificates",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificates"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidruntimecertificatesactive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesactive"
-  },
-  {
-    "from": "/platform-api/operations/getv1spacesbyspaceidruntimecertificatesbycertificateid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesbycertificateid"
   },
   {
     "from": "/platform-api/operations/getv1spacesbyspaceidruntimerealtimeevents",
@@ -6010,11 +5655,6 @@
     "to": "/platforms/api/reference/docs/listdocs"
   },
   {
-    "from": "/platform-api/operations/listenvironmentvariables",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/listenvironmentvariables"
-  },
-  {
     "from": "/platform-api/operations/listspaceactivity",
     "status": 301,
     "to": "/platforms/api/reference/activity/listspaceactivity"
@@ -6120,16 +5760,6 @@
     "to": "/platforms/api/reference/activity/patchv1webhooksbywebhookid"
   },
   {
-    "from": "/platform-api/operations/postpush-new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/platform-api/operations/postpush-newbyslugupload",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/platform-api/operations/postv1abuse-reports",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1abuse-reports"
@@ -6138,26 +5768,6 @@
     "from": "/platform-api/operations/postv1actionsresume",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/platform-api/operations/postv1anonymous-claimassign",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/platform-api/operations/postv1anonymous-claimexchange",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/platform-api/operations/postv1anonymous-claimresolve",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/platform-api/operations/postv1anonymous-claimrotate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/platform-api/operations/postv1authdevice",
@@ -6205,6 +5815,21 @@
     "to": "/platforms/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/platform-api/operations/postv1claim",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claim"
+  },
+  {
+    "from": "/platform-api/operations/postv1claimexchange",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/platform-api/operations/postv1claimrotate",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimrotate"
+  },
+  {
     "from": "/platform-api/operations/postv1docsask",
     "status": 301,
     "to": "/platforms/api/reference/docs/postv1docsask"
@@ -6228,16 +5853,6 @@
     "from": "/platform-api/operations/postv1events",
     "status": 301,
     "to": "/platforms/api/reference/account/postv1events"
-  },
-  {
-    "from": "/platform-api/operations/postv1importsbyimportidcancel",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidcancel"
-  },
-  {
-    "from": "/platform-api/operations/postv1importsbyimportidfinalize",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidfinalize"
   },
   {
     "from": "/platform-api/operations/postv1notificationsread",
@@ -6273,11 +5888,6 @@
     "from": "/platform-api/operations/postv1spacesbyspaceidbuildswordpress",
     "status": 301,
     "to": "/platforms/api/reference/builds/postv1spacesbyspaceidbuildswordpress"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/platform-api/operations/postv1spacesbyspaceidclaim-reminders",
@@ -6345,11 +5955,6 @@
     "to": "/platforms/api/reference/domains/postv1spacesbyspaceiddomainsbydomainidsslretry"
   },
   {
-    "from": "/platform-api/operations/postv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platform-api/operations/postv1spacesbyspaceidexternal-grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -6358,11 +5963,6 @@
     "from": "/platform-api/operations/postv1spacesbyspaceidgrants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/platform-api/operations/postv1spacesbyspaceidmachine-credentials",
@@ -6468,61 +6068,6 @@
     "from": "/platform-api/operations/postv1spacesbyspaceidrequestsbyrequestiddeny",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidrequestsbyrequestiddeny"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimecertificatesstage",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesstage"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimecertificatesvalidate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesvalidate"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslandroid-compat",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslandroid-compat"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslhsts-preloaddisable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-preloaddisable"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslhsts-subdomain",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-subdomain"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslinfo",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslinfo"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslretry",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslretry"
-  },
-  {
-    "from": "/platform-api/operations/postv1spacesbyspaceidruntimesslsocial-crawler-redirect",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslsocial-crawler-redirect"
   },
   {
     "from": "/platform-api/operations/postv1spacesbyspaceidshare-links",
@@ -6715,6 +6260,11 @@
     "to": "/platforms/api/reference/variables/putv1sitesbysiteidvariablesbyname"
   },
   {
+    "from": "/platform-api/operations/putv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/platform-api/operations/putv1spacesbyspaceidgrantsbygrantid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidgrantsbygrantid"
@@ -6770,11 +6320,6 @@
     "to": "/platforms/api/reference/teams/recoverteam"
   },
   {
-    "from": "/platform-api/operations/removeenvironmentvariable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
     "from": "/platform-api/operations/removeteamdomain",
     "status": 301,
     "to": "/platforms/api/reference/domains/removeteamdomain"
@@ -6785,6 +6330,11 @@
     "to": "/platforms/api/reference/teams/removeteammember"
   },
   {
+    "from": "/platform-api/operations/restorespace",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/restorespace"
+  },
+  {
     "from": "/platform-api/operations/revokeapikey",
     "status": 301,
     "to": "/platforms/api/reference/account/revokeapikey"
@@ -6793,11 +6343,6 @@
     "from": "/platform-api/operations/revoketeaminvitation",
     "status": 301,
     "to": "/platforms/api/reference/teams/revoketeaminvitation"
-  },
-  {
-    "from": "/platform-api/operations/setenvironmentvariable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/setenvironmentvariable"
   },
   {
     "from": "/platform-api/operations/tags/account",
@@ -7465,44 +7010,19 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidrepository-connectionephemeral-branch"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_runtime_certificates_by_certificate_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_share_links_by_link_id",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_visibility_by_object_id",
+    "from": "/platform-api/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_object_id",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_agent_context",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getagentcontext"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_push_new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_push_new_by_slug",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_push_new_by_slug_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_push_new_by_slug_logs",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbysluglogs"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_space",
@@ -7520,39 +7040,19 @@
     "to": "/platforms/api/reference/spaces/getv1accessacquirecontinuebycontinuation"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/get_v1_anonymous_claim_status",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/get_v1_beta_visitor",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1betavisitor"
   },
   {
+    "from": "/platform-api/resources/spaces/methods/get_v1_claim_status",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/platform-api/resources/spaces/methods/get_v1_collab_notify_email_unsubscribe",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_deployments_by_deployment_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1deploymentsbydeploymentid"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_exports_by_export_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_exports_by_export_id_archive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_imports_by_import_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_v1_repository_connections_installations",
@@ -7573,6 +7073,11 @@
     "from": "/platform-api/resources/spaces/methods/get_v1_slugs_availability",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1slugsavailability"
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidaccess"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_apply_state",
@@ -7615,16 +7120,6 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_deployments",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_files",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidfiles"
@@ -7638,11 +7133,6 @@
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_grants_check",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
@@ -7725,21 +7215,6 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidroutingcompute"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificates"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates_active",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesactive"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates_by_certificate_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_share_links",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidshare-links"
@@ -7753,11 +7228,6 @@
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_resolve",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesresolve"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/list_environment_variables",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/listenvironmentvariables"
   },
   {
     "from": "/platform-api/resources/spaces/methods/list_spaces",
@@ -7785,16 +7255,6 @@
     "to": "/platforms/api/reference/spaces/patchv1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/post_push_new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_push_new_by_slug_upload",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/post_v1_abuse_reports",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1abuse-reports"
@@ -7803,26 +7263,6 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_actions_resume",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_anonymous_claim_assign",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_anonymous_claim_exchange",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_anonymous_claim_resolve",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_anonymous_claim_rotate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_beta_accept",
@@ -7835,14 +7275,19 @@
     "to": "/platforms/api/reference/spaces/postv1betasignups"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/post_v1_imports_by_import_id_cancel",
+    "from": "/platform-api/resources/spaces/methods/post_v1_claim",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidcancel"
+    "to": "/platforms/api/reference/spaces/postv1claim"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/post_v1_imports_by_import_id_finalize",
+    "from": "/platform-api/resources/spaces/methods/post_v1_claim_exchange",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidfinalize"
+    "to": "/platforms/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/post_v1_claim_rotate",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimrotate"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_publish",
@@ -7858,11 +7303,6 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidapply"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_claim_reminders",
@@ -7920,11 +7360,6 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_external_grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -7933,11 +7368,6 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials",
@@ -8045,61 +7475,6 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidrequestsbyrequestiddeny"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_activate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_deactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_update",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_stage",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesstage"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_validate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesvalidate"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_android_compat",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslandroid-compat"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_hsts_preload_disable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-preloaddisable"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_hsts_subdomain",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-subdomain"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_info",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslinfo"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_retry",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslretry"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_social_crawler_redirect",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslsocial-crawler-redirect"
-  },
-  {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_share_links",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidshare-links"
@@ -8108,6 +7483,11 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_sharing_logout_all",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidsharinglogout-all"
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/put_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidaccess"
   },
   {
     "from": "/platform-api/resources/spaces/methods/put_v1_spaces_by_space_id_grants_by_grant_id",
@@ -8125,14 +7505,9 @@
     "to": "/platforms/api/reference/spaces/putv1spacesbyspaceiduploadsbyuploadid"
   },
   {
-    "from": "/platform-api/resources/spaces/methods/remove_environment_variable",
+    "from": "/platform-api/resources/spaces/methods/restore_space",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/set_environment_variable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/setenvironmentvariable"
+    "to": "/platforms/api/reference/spaces/restorespace"
   },
   {
     "from": "/platform-api/resources/spaces/methods/update_space",
@@ -8855,19 +8230,14 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidrepository-connectionephemeral-branch"
   },
   {
-    "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidruntimecertificatesbycertificateid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidshare-linksbylinkid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid",
+    "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidstoragebyobjectid",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/platforms/api/reference/operations/deletev1spacesbyspaceidtagsversionsbyversionidpreview-sessionsbysessionid",
@@ -8925,26 +8295,6 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
-    "from": "/platforms/api/reference/operations/getpush-new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getpush-newbyslug",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getpush-newbyslugclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getpush-newbysluglogs",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbysluglogs"
-  },
-  {
     "from": "/platforms/api/reference/operations/getspace",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getspace"
@@ -8985,11 +8335,6 @@
     "to": "/platforms/api/reference/activity/getv1activity"
   },
   {
-    "from": "/platforms/api/reference/operations/getv1anonymous-claimstatus",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/platforms/api/reference/operations/getv1authcapabilities",
     "status": 301,
     "to": "/platforms/api/reference/account/getv1authcapabilities"
@@ -9020,14 +8365,14 @@
     "to": "/platforms/api/reference/builds/getv1buildsbybuildidlogs"
   },
   {
+    "from": "/platforms/api/reference/operations/getv1claimstatus",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/platforms/api/reference/operations/getv1collabnotify-emailunsubscribe",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1deploymentsbydeploymentid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1deploymentsbydeploymentid"
   },
   {
     "from": "/platforms/api/reference/operations/getv1domains",
@@ -9068,21 +8413,6 @@
     "from": "/platforms/api/reference/operations/getv1domainsresearchwhois",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1domainsresearchwhois"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1exportsbyexportid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1exportsbyexportidarchive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1importsbyimportid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/platforms/api/reference/operations/getv1me",
@@ -9175,6 +8505,11 @@
     "to": "/platforms/api/reference/spaces/getv1slugsavailability"
   },
   {
+    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidapply-state",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidapply-state"
@@ -9250,11 +8585,6 @@
     "to": "/platforms/api/reference/database/getv1spacesbyspaceiddbexportbytable"
   },
   {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceiddeployments",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceiddomains",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1spacesbyspaceiddomains"
@@ -9263,11 +8593,6 @@
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceiddomainsbydomainiddiagnostics",
     "status": 301,
     "to": "/platforms/api/reference/domains/getv1spacesbyspaceiddomainsbydomainiddiagnostics"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidexports"
   },
   {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidfiles",
@@ -9283,11 +8608,6 @@
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidgrantscheck",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidlogsaccess",
@@ -9383,21 +8703,6 @@
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidruntime",
     "status": 301,
     "to": "/platforms/api/reference/runtime/getv1spacesbyspaceidruntime"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidruntimecertificates",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificates"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidruntimecertificatesactive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesactive"
-  },
-  {
-    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidruntimecertificatesbycertificateid",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesbycertificateid"
   },
   {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceidruntimerealtimeevents",
@@ -9720,11 +9025,6 @@
     "to": "/platforms/api/reference/docs/listdocs"
   },
   {
-    "from": "/platforms/api/reference/operations/listenvironmentvariables",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/listenvironmentvariables"
-  },
-  {
     "from": "/platforms/api/reference/operations/listspaceactivity",
     "status": 301,
     "to": "/platforms/api/reference/activity/listspaceactivity"
@@ -9830,16 +9130,6 @@
     "to": "/platforms/api/reference/activity/patchv1webhooksbywebhookid"
   },
   {
-    "from": "/platforms/api/reference/operations/postpush-new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postpush-newbyslugupload",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/platforms/api/reference/operations/postv1abuse-reports",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1abuse-reports"
@@ -9848,26 +9138,6 @@
     "from": "/platforms/api/reference/operations/postv1actionsresume",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1anonymous-claimassign",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1anonymous-claimexchange",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1anonymous-claimresolve",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1anonymous-claimrotate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/platforms/api/reference/operations/postv1authdevice",
@@ -9915,6 +9185,21 @@
     "to": "/platforms/api/reference/builds/postv1buildsbybuildiduploadsresume"
   },
   {
+    "from": "/platforms/api/reference/operations/postv1claim",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claim"
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1claimexchange",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1claimrotate",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimrotate"
+  },
+  {
     "from": "/platforms/api/reference/operations/postv1docsask",
     "status": 301,
     "to": "/platforms/api/reference/docs/postv1docsask"
@@ -9938,16 +9223,6 @@
     "from": "/platforms/api/reference/operations/postv1events",
     "status": 301,
     "to": "/platforms/api/reference/account/postv1events"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1importsbyimportidcancel",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidcancel"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1importsbyimportidfinalize",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidfinalize"
   },
   {
     "from": "/platforms/api/reference/operations/postv1notificationsread",
@@ -9983,11 +9258,6 @@
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidbuildswordpress",
     "status": 301,
     "to": "/platforms/api/reference/builds/postv1spacesbyspaceidbuildswordpress"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidclaim-reminders",
@@ -10055,11 +9325,6 @@
     "to": "/platforms/api/reference/domains/postv1spacesbyspaceiddomainsbydomainidsslretry"
   },
   {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidexports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidexternal-grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -10068,11 +9333,6 @@
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidgrants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidimports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidmachine-credentials",
@@ -10178,61 +9438,6 @@
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidrequestsbyrequestiddeny",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidrequestsbyrequestiddeny"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimecertificatesstage",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesstage"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimecertificatesvalidate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesvalidate"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslandroid-compat",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslandroid-compat"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslhsts-preloaddisable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-preloaddisable"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslhsts-subdomain",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-subdomain"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslinfo",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslinfo"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslretry",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslretry"
-  },
-  {
-    "from": "/platforms/api/reference/operations/postv1spacesbyspaceidruntimesslsocial-crawler-redirect",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslsocial-crawler-redirect"
   },
   {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidshare-links",
@@ -10425,6 +9630,11 @@
     "to": "/platforms/api/reference/variables/putv1sitesbysiteidvariablesbyname"
   },
   {
+    "from": "/platforms/api/reference/operations/putv1spacesbyspaceidaccess",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidaccess"
+  },
+  {
     "from": "/platforms/api/reference/operations/putv1spacesbyspaceidgrantsbygrantid",
     "status": 301,
     "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidgrantsbygrantid"
@@ -10480,11 +9690,6 @@
     "to": "/platforms/api/reference/teams/recoverteam"
   },
   {
-    "from": "/platforms/api/reference/operations/removeenvironmentvariable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
     "from": "/platforms/api/reference/operations/removeteamdomain",
     "status": 301,
     "to": "/platforms/api/reference/domains/removeteamdomain"
@@ -10495,6 +9700,11 @@
     "to": "/platforms/api/reference/teams/removeteammember"
   },
   {
+    "from": "/platforms/api/reference/operations/restorespace",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/restorespace"
+  },
+  {
     "from": "/platforms/api/reference/operations/revokeapikey",
     "status": 301,
     "to": "/platforms/api/reference/account/revokeapikey"
@@ -10503,11 +9713,6 @@
     "from": "/platforms/api/reference/operations/revoketeaminvitation",
     "status": 301,
     "to": "/platforms/api/reference/teams/revoketeaminvitation"
-  },
-  {
-    "from": "/platforms/api/reference/operations/setenvironmentvariable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/setenvironmentvariable"
   },
   {
     "from": "/platforms/api/reference/operations/tags/account",
@@ -11175,44 +10380,19 @@
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidrepository-connectionephemeral-branch"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_runtime_certificates_by_certificate_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_share_links_by_link_id",
     "status": 301,
     "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_visibility_by_object_id",
+    "from": "/platforms/api/reference/resources/spaces/methods/delete_v1_spaces_by_space_id_storage_by_object_id",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyvisibilitybyobjectid"
+    "to": "/platforms/api/reference/spaces/deletev1spacesbyspaceidstoragebyobjectid"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_agent_context",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getagentcontext"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_push_new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-new"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_push_new_by_slug",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslug"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_push_new_by_slug_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbyslugclaim"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_push_new_by_slug_logs",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getpush-newbysluglogs"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_space",
@@ -11230,39 +10410,19 @@
     "to": "/platforms/api/reference/spaces/getv1accessacquirecontinuebycontinuation"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_anonymous_claim_status",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1anonymous-claimstatus"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_beta_visitor",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1betavisitor"
   },
   {
+    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_claim_status",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1claimstatus"
+  },
+  {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_collab_notify_email_unsubscribe",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1collabnotify-emailunsubscribe"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_deployments_by_deployment_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1deploymentsbydeploymentid"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_exports_by_export_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportid"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_exports_by_export_id_archive",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1exportsbyexportidarchive"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_imports_by_import_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1importsbyimportid"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_repository_connections_installations",
@@ -11283,6 +10443,11 @@
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_slugs_availability",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1slugsavailability"
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidaccess"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_apply_state",
@@ -11325,16 +10490,6 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_deployments",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddeployments"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_files",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidfiles"
@@ -11348,11 +10503,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_grants_check",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidgrantscheck"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidimports"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_machine_credentials",
@@ -11435,21 +10585,6 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidroutingcompute"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificates"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates_active",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesactive"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_runtime_certificates_by_certificate_id",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidruntimecertificatesbycertificateid"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_share_links",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidshare-links"
@@ -11463,11 +10598,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_resolve",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesresolve"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/list_environment_variables",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/listenvironmentvariables"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/list_spaces",
@@ -11495,16 +10625,6 @@
     "to": "/platforms/api/reference/spaces/patchv1spacesbyspaceidshare-linksbylinkid"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_push_new",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-new"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_push_new_by_slug_upload",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postpush-newbyslugupload"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_abuse_reports",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1abuse-reports"
@@ -11513,26 +10633,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_actions_resume",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1actionsresume"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_anonymous_claim_assign",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimassign"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_anonymous_claim_exchange",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimexchange"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_anonymous_claim_resolve",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimresolve"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_anonymous_claim_rotate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1anonymous-claimrotate"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_beta_accept",
@@ -11545,14 +10645,19 @@
     "to": "/platforms/api/reference/spaces/postv1betasignups"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_imports_by_import_id_cancel",
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_claim",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidcancel"
+    "to": "/platforms/api/reference/spaces/postv1claim"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_imports_by_import_id_finalize",
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_claim_exchange",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1importsbyimportidfinalize"
+    "to": "/platforms/api/reference/spaces/postv1claimexchange"
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_claim_rotate",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/postv1claimrotate"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_publish",
@@ -11568,11 +10673,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidapply"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidclaim"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_claim_reminders",
@@ -11630,11 +10730,6 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidcommentsscreenshots"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_exports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexports"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_external_grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidexternal-grants"
@@ -11643,11 +10738,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_grants",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidgrants"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_imports",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidimports"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_machine_credentials",
@@ -11755,61 +10845,6 @@
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidrequestsbyrequestiddeny"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_activate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidactivate"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_deactivate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateiddeactivate"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_by_certificate_id_update",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesbycertificateidupdate"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_stage",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesstage"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_certificates_validate",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimecertificatesvalidate"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_android_compat",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslandroid-compat"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_hsts_preload_disable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-preloaddisable"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_hsts_subdomain",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslhsts-subdomain"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_info",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslinfo"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_retry",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslretry"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_runtime_ssl_social_crawler_redirect",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidruntimesslsocial-crawler-redirect"
-  },
-  {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_share_links",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidshare-links"
@@ -11818,6 +10853,11 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_sharing_logout_all",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidsharinglogout-all"
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/put_v1_spaces_by_space_id_access",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/putv1spacesbyspaceidaccess"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/put_v1_spaces_by_space_id_grants_by_grant_id",
@@ -11835,14 +10875,9 @@
     "to": "/platforms/api/reference/spaces/putv1spacesbyspaceiduploadsbyuploadid"
   },
   {
-    "from": "/platforms/api/reference/resources/spaces/methods/remove_environment_variable",
+    "from": "/platforms/api/reference/resources/spaces/methods/restore_space",
     "status": 301,
-    "to": "/platforms/api/reference/spaces/removeenvironmentvariable"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/set_environment_variable",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/setenvironmentvariable"
+    "to": "/platforms/api/reference/spaces/restorespace"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/update_space",

@@ -1,11 +1,11 @@
 ---
-title: "zero_shopify_unavailable"
-description: "The local Zero Shopify service is not configured."
+title: "promote_admission_exceeded"
+description: "Too many archived files are being restored for this space right now."
 ---
 
-The local Zero Shopify service is not configured.
+Too many archived files are being restored for this space right now.
 
-**How to resolve:** Configure a Shopify handler in the project, then restart `sf dev` before calling the Shopify service.
+**How to resolve:** Retry shortly; restores are limited to protect the host.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/zero_shopify_unavailable",
-  "title": "Zero shopify unavailable",
+  "type": "https://spacefast.com/docs/errors/promote_admission_exceeded",
+  "title": "Promote admission exceeded",
   "status": 400,
-  "detail": "The local Zero Shopify service is not configured.",
-  "code": "zero_shopify_unavailable",
+  "detail": "Too many archived files are being restored for this space right now.",
+  "code": "promote_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }
 ```

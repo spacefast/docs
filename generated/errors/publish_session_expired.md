@@ -1,11 +1,11 @@
 ---
-title: "billing_store_not_configured"
-description: "App Store or Google Play billing is not configured on this deployment."
+title: "publish_session_expired"
+description: "This publish session expired before it was finalized."
 ---
 
-App Store or Google Play billing is not configured on this deployment.
+This publish session expired before it was finalized.
 
-**How to resolve:** Use another billing method, or configure the store credentials on the server.
+**How to resolve:** Start a new publish; declared uploads are kept for 24 hours only.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_store_not_configured",
-  "title": "Billing store not configured",
+  "type": "https://spacefast.com/docs/errors/publish_session_expired",
+  "title": "Publish session expired",
   "status": 400,
-  "detail": "App Store or Google Play billing is not configured on this deployment.",
-  "code": "billing_store_not_configured",
+  "detail": "This publish session expired before it was finalized.",
+  "code": "publish_session_expired",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
-title: "billing_unknown_product"
-description: "The purchased store product does not map to any plan sold by this deployment."
+title: "response_table_too_large"
+description: "A compiled response table exceeded the 1 MiB per-file limit."
 ---
 
-The purchased store product does not map to any plan sold by this deployment.
+A compiled response table exceeded the 1 MiB per-file limit.
 
-**How to resolve:** Check the product id against the store catalog returned by the billing endpoints.
+**How to resolve:** This version has an unusually dense path set; contact support with the requestId.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_unknown_product",
-  "title": "Billing unknown product",
+  "type": "https://spacefast.com/docs/errors/response_table_too_large",
+  "title": "Response table too large",
   "status": 400,
-  "detail": "The purchased store product does not map to any plan sold by this deployment.",
-  "code": "billing_unknown_product",
+  "detail": "A compiled response table exceeded the 1 MiB per-file limit.",
+  "code": "response_table_too_large",
   "requestId": "req_4mz0v8qk"
 }
 ```

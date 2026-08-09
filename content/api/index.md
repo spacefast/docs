@@ -60,8 +60,12 @@ live URL and the immutable version URL. For an anonymous publish, it also
 carries the claim link.
 
 ```bash
-curl -F archive=@site.zip https://api.spacefast.com/v1/publish
+curl -F archive=@site.zip "https://api.spacefast.com/v1/publish?wait=1"
 ```
+
+Without `?wait=1` the request returns once the version is created but before it
+is serving, with `activation.outcome: "pending"` and a `next.action: "poll"`
+pointer at the finalize operation. With it, the receipt is settled.
 
 For large uploads and incremental publishes, create a version explicitly:
 

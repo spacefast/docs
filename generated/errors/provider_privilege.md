@@ -1,11 +1,11 @@
 ---
-title: "billing_receipt_invalid"
-description: "The store receipt or notification cannot be verified with the payment provider."
+title: "provider_privilege"
+description: "The hosting provider does not grant this client permission to change the setting."
 ---
 
-The store receipt or notification cannot be verified with the payment provider.
+The hosting provider does not grant this client permission to change the setting.
 
-**How to resolve:** Re-check the transaction id or purchase token and retry. Contact support if it persists.
+**How to resolve:** Leave the provider-owned setting unchanged or contact support to request the required provider capability.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_receipt_invalid",
-  "title": "Billing receipt invalid",
+  "type": "https://spacefast.com/docs/errors/provider_privilege",
+  "title": "Provider privilege",
   "status": 400,
-  "detail": "The store receipt or notification cannot be verified with the payment provider.",
-  "code": "billing_receipt_invalid",
+  "detail": "The hosting provider does not grant this client permission to change the setting.",
+  "code": "provider_privilege",
   "requestId": "req_4mz0v8qk"
 }
 ```

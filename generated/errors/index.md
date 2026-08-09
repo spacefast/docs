@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with their owning API surface.
 
-There are 467 error codes in the registry.
+There are 465 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -29,11 +29,8 @@ There are 467 error codes in the registry.
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
 | [`authorization_pending`](/errors/authorization_pending) | The device login is not approved yet. |
-| [`billing_receipt_invalid`](/errors/billing_receipt_invalid) | The store receipt or notification cannot be verified with the payment provider. |
-| [`billing_receipt_not_bound_to_team`](/errors/billing_receipt_not_bound_to_team) | The store purchase was made under a different account token than this team's. |
-| [`billing_store_not_configured`](/errors/billing_store_not_configured) | App Store or Google Play billing is not configured on this deployment. |
-| [`billing_subscription_conflict`](/errors/billing_subscription_conflict) | The team already has an active subscription with another payment provider. |
-| [`billing_unknown_product`](/errors/billing_unknown_product) | The purchased store product does not map to any plan sold by this deployment. |
+| [`blob_gate_record_missing`](/errors/blob_gate_record_missing) | The file behind this download link no longer exists. |
+| [`blob_gate_token_invalid`](/errors/blob_gate_token_invalid) | The download token is invalid or expired. |
 | [`build_command_missing`](/errors/build_command_missing) | A build or install command cannot be found during the build run. |
 | [`build_execution_unavailable`](/errors/build_execution_unavailable) | Build execution is not available on this deployment. |
 | [`build_failed`](/errors/build_failed) | The build run failed before producing a version. |
@@ -61,15 +58,14 @@ There are 467 error codes in the registry.
 | [`config_runtime_entry_missing`](/errors/config_runtime_entry_missing) | The declared runtime has no entry module to compile. |
 | [`config_runtime_invalid_kind`](/errors/config_runtime_invalid_kind) | The runtime block in the space configuration declares an unknown kind. |
 | [`config_templates_over_limit`](/errors/config_templates_over_limit) | The configuration declares more template files than the plan allows. |
-| [`continuation_unavailable`](/errors/continuation_unavailable) | This claim token can no longer be exchanged for an API key. |
-| [`continuation_used`](/errors/continuation_used) | This claim token was already exchanged for a durable API key. |
+| [`continuation_unavailable`](/errors/continuation_unavailable) | This space key can no longer be exchanged for an API key. |
+| [`continuation_used`](/errors/continuation_used) | This space key was already exchanged for a durable API key. |
 | [`credential_expired`](/errors/credential_expired) | The credential used for this request is expired. |
 | [`credential_not_yet_valid`](/errors/credential_not_yet_valid) | The credential is not valid yet because its start time is in the future. |
 | [`credential_retired`](/errors/credential_retired) | This request used a retired Spacefast token format or authentication header. |
 | [`credential_revoked`](/errors/credential_revoked) | The credential used for this request was revoked. |
 | [`csam_blocked`](/errors/csam_blocked) | The content was blocked because it matched known child sexual abuse material. |
 | [`csam_policy_floor`](/errors/csam_policy_floor) | CSAM enforcement policy cannot be set below the mandatory account-suspend floor. |
-| [`custom_certificates_require_dedicated_site`](/errors/custom_certificates_require_dedicated_site) | Custom certificates are unavailable while this space uses shared placement. |
 | [`data_location_immutable`](/errors/data_location_immutable) | This request tried to change data location through an immutable path. |
 | [`db_not_available`](/errors/db_not_available) | The live version has no database to read. |
 | [`device_authorization_failed`](/errors/device_authorization_failed) | The device login request failed and cannot be completed. |
@@ -133,21 +129,20 @@ There are 467 error codes in the registry.
 | [`files_mode_does_not_support_spa`](/errors/files_mode_does_not_support_spa) | SPA fallback cannot be combined with files-listing mode. |
 | [`forbidden`](/errors/forbidden) | The credential is valid but does not allow this action. |
 | [`free_external_proxy_disabled`](/errors/free_external_proxy_disabled) | Proxy routes to external upstreams are not available on the Free plan. |
-| [`google_play_webhook_identity_not_configured`](/errors/google_play_webhook_identity_not_configured) | Google Play Pub/Sub push authentication is not configured on this deployment. |
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
 | [`idempotency_key_reused`](/errors/idempotency_key_reused) | The Idempotency-Key was reused with a different request body. |
 | [`incumbent_controls_dns`](/errors/incumbent_controls_dns) | Another team controls this domain's DNS, so the operation is blocked. |
+| [`ingest_admission_exceeded`](/errors/ingest_admission_exceeded) | Too many concurrent uploads for this space. |
 | [`inject_invalid`](/errors/inject_invalid) | The inject config key is malformed. |
 | [`inject_snippet_too_large`](/errors/inject_snippet_too_large) | An inject snippet exceeds the per-snippet size limit. |
 | [`internal_error`](/errors/internal_error) | Something went wrong on our side. |
-| [`invalid_claim_token`](/errors/invalid_claim_token) | The claim token is invalid or does not match this space. |
+| [`invalid_claim_token`](/errors/invalid_claim_token) | The space key is invalid or does not match this space. |
 | [`invalid_continuation_token`](/errors/invalid_continuation_token) | The continuation token is invalid, expired, or already finished. |
 | [`invalid_data_location`](/errors/invalid_data_location) | The requested data location is not a supported region. |
 | [`invalid_device_code`](/errors/invalid_device_code) | The device code is invalid or expired. |
 | [`invalid_domain`](/errors/invalid_domain) | The domain reference is invalid. |
 | [`invalid_domain_name`](/errors/invalid_domain_name) | The domain name is not a valid registrable hostname. |
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
-| [`invalid_google_play_webhook_identity`](/errors/invalid_google_play_webhook_identity) | The Google Play notification did not carry a valid Pub/Sub push identity. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
 | [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
 | [`invalid_publish_archive`](/errors/invalid_publish_archive) | The uploaded archive cannot be read as a valid zip. |
@@ -202,9 +197,11 @@ There are 467 error codes in the registry.
 | [`platform_tenant_immutable_client`](/errors/platform_tenant_immutable_client) | The tenant's provider client cannot be changed. |
 | [`policy_exceeds_grantor`](/errors/policy_exceeds_grantor) | The requested key policy grants more than your own credential allows. |
 | [`principal_space_mismatch`](/errors/principal_space_mismatch) | The space does not belong to the principal in the request. |
+| [`promote_admission_exceeded`](/errors/promote_admission_exceeded) | Too many archived files are being restored for this space right now. |
 | [`provider_error`](/errors/provider_error) | The hosting provider reported an error. |
 | [`provider_job_failed`](/errors/provider_job_failed) | A hosting-provider job failed while processing this operation. |
 | [`provider_job_timeout`](/errors/provider_job_timeout) | A hosting-provider job timed out while processing this operation. |
+| [`provider_privilege`](/errors/provider_privilege) | The hosting provider does not grant this client permission to change the setting. |
 | [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | The hosting provider does not support this runtime feature. |
 | [`provider_site_id_required`](/errors/provider_site_id_required) | A provider site id is required for this internal operation. |
 | [`proxy_upstream_denied`](/errors/proxy_upstream_denied) | The proxy upstream is on a denied network and cannot be used. |
@@ -223,6 +220,7 @@ There are 467 error codes in the registry.
 | [`publish_not_cancelable`](/errors/publish_not_cancelable) | The publish is past the point where it can be canceled. |
 | [`publish_path_collision`](/errors/publish_path_collision) | Two different artifacts would serve the same URL after directory-index or clean-URL resolution. |
 | [`publish_path_invalid`](/errors/publish_path_invalid) | A publish path is not a relative, normalized POSIX path. |
+| [`publish_session_expired`](/errors/publish_session_expired) | This publish session expired before it was finalized. |
 | [`publish_setup_failed`](/errors/publish_setup_failed) | Provisioning for this publish failed. |
 | [`publish_snapshot_empty`](/errors/publish_snapshot_empty) | An empty snapshot was sent without an explicit base version. |
 | [`publish_upload_failed`](/errors/publish_upload_failed) | Uploading the publish content failed. |
@@ -232,6 +230,9 @@ There are 467 error codes in the registry.
 | [`registration_expired`](/errors/registration_expired) | The domain registration is expired. |
 | [`registration_expiring`](/errors/registration_expiring) | The domain registration is about to expire, which blocks this operation. |
 | [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
+| [`response_headers_unservable`](/errors/response_headers_unservable) | A file needs a response header that the platform cannot deliver for large files. |
+| [`response_table_too_large`](/errors/response_table_too_large) | A compiled response table exceeded the 1 MiB per-file limit. |
+| [`review_item_claimed`](/errors/review_item_claimed) | Another reviewer already claimed this review item. |
 | [`routing_rules_over_plan`](/errors/routing_rules_over_plan) | The published _redirects and _headers exceed the plan's routing-rule allowance. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
 | [`runtime_api_not_found`](/errors/runtime_api_not_found) | The runtime management endpoint was not found. |
@@ -247,6 +248,7 @@ There are 467 error codes in the registry.
 | [`runtime_management_unavailable`](/errors/runtime_management_unavailable) | The runtime management surface is unavailable for this site. |
 | [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space does not serve a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
+| [`runtime_purge_failed`](/errors/runtime_purge_failed) | Content updated but the edge cache purge did not confirm. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
 | [`runtime_token_bad_signature`](/errors/runtime_token_bad_signature) | The runtime token signature did not verify. |
 | [`runtime_token_expired`](/errors/runtime_token_expired) | The runtime token is expired. |
@@ -273,13 +275,12 @@ There are 467 error codes in the registry.
 | [`space_already_claimed`](/errors/space_already_claimed) | The space was already claimed. A claim can only succeed once. |
 | [`space_capacity_warming`](/errors/space_capacity_warming) | This space is waiting on serving capacity that is being provisioned in the background. |
 | [`space_claim_unavailable`](/errors/space_claim_unavailable) | This space cannot be claimed. |
-| [`space_claimed_credential_available`](/errors/space_claimed_credential_available) | The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher. |
+| [`space_claimed_credential_available`](/errors/space_claimed_credential_available) | The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher. |
 | [`space_disabled`](/errors/space_disabled) | The space is disabled and cannot be served or modified. |
 | [`space_expired`](/errors/space_expired) | The space expired and is no longer served. |
 | [`space_has_active_publish`](/errors/space_has_active_publish) | The space has a publish in progress, which blocks this operation. |
 | [`space_has_active_version`](/errors/space_has_active_version) | The space still has an active version, which blocks this operation. |
 | [`space_hostname_identity_missing`](/errors/space_hostname_identity_missing) | The space is missing its persisted default hostname identity. |
-| [`space_move_would_strand_zero_data`](/errors/space_move_would_strand_zero_data) | The Space runs Zero, whose database and object storage live on the site the Space is placed on. Relocating it would strand that data on the old site, so the move is refused. |
 | [`space_moving`](/errors/space_moving) | The space is moving between sites, which blocks this operation. |
 | [`space_no_live_version`](/errors/space_no_live_version) | The space has no live version, so this operation has nothing to act on. |
 | [`space_not_disabled`](/errors/space_not_disabled) | The space is not disabled, so it cannot be restored. |
@@ -326,7 +327,6 @@ There are 467 error codes in the registry.
 | [`tenant_suspended`](/errors/tenant_suspended) | The tenant is suspended, so its resources cannot be served or modified. |
 | [`theme_value_invalid`](/errors/theme_value_invalid) | A theme value in the configuration is outside the allowed grammar. |
 | [`transfer_cross_tenant_unsupported`](/errors/transfer_cross_tenant_unsupported) | Spaces cannot be transferred across tenants. |
-| [`transfer_move_failed`](/errors/transfer_move_failed) | The space move backing this transfer failed. |
 | [`transfer_not_cancelable`](/errors/transfer_not_cancelable) | The transfer is past the point where it can be canceled. |
 | [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime cannot push the space blobs into the transfer bucket. |
 | [`transfer_source_changed`](/errors/transfer_source_changed) | The space changed since the transfer was created, so it must be re-confirmed. |
@@ -340,7 +340,6 @@ There are 467 error codes in the registry.
 | [`upload_size_mismatch`](/errors/upload_size_mismatch) | An uploaded file's size does not match the declared size. |
 | [`user_banned`](/errors/user_banned) | This user is banned for a policy or abuse violation and cannot perform this action. |
 | [`validation_error`](/errors/validation_error) | A request field failed validation. |
-| [`variable_cascade_failed`](/errors/variable_cascade_failed) | Republishing spaces after a variable change failed. |
 | [`verification_required`](/errors/verification_required) | Domain verification is required before this operation. |
 | [`version_already_live`](/errors/version_already_live) | The version is already live on this channel. |
 | [`version_artifact_not_found`](/errors/version_artifact_not_found) | The requested version artifact was not found. |
@@ -478,4 +477,3 @@ There are 467 error codes in the registry.
 | [`zero_runs_invalid`](/errors/zero_runs_invalid) | The Zero run-handler payload is invalid. |
 | [`zero_runs_require_runtime_compiler`](/errors/zero_runs_require_runtime_compiler) | Zero run handlers require the Rust runtime compiler. |
 | [`zero_runs_too_many`](/errors/zero_runs_too_many) | The Zero run-handler payload exceeds the supported handler count. |
-| [`zero_shopify_unavailable`](/errors/zero_shopify_unavailable) | The local Zero Shopify service is not configured. |

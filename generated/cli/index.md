@@ -90,10 +90,6 @@ GLOBAL FLAGS
 - [`sf db migrate [SOURCE]`](#sf-db-migrate-source)
 - [`sf demo`](#sf-demo)
 - [`sf demo agent`](#sf-demo-agent)
-- [`sf deployments`](#sf-deployments)
-- [`sf deployments get DEPLOYMENT`](#sf-deployments-get-deployment)
-- [`sf deployments promote DEPLOYMENT`](#sf-deployments-promote-deployment)
-- [`sf deployments rollback DEPLOYMENT`](#sf-deployments-rollback-deployment)
 - [`sf design`](#sf-design)
 - [`sf design generate`](#sf-design-generate)
 - [`sf dev`](#sf-dev)
@@ -123,7 +119,7 @@ GLOBAL FLAGS
 - [`sf env ls`](#sf-env-ls)
 - [`sf env pull [FILE]`](#sf-env-pull-file)
 - [`sf env rm NAME`](#sf-env-rm-name)
-- [`sf env set NAME VALUE`](#sf-env-set-name-value)
+- [`sf env set NAME [VALUE]`](#sf-env-set-name-value)
 - [`sf feedback`](#sf-feedback)
 - [`sf fetch [PATH]`](#sf-fetch-path)
 - [`sf git`](#sf-git)
@@ -213,9 +209,7 @@ GLOBAL FLAGS
 - [`sf spaces claim`](#sf-spaces-claim)
 - [`sf spaces download`](#sf-spaces-download)
 - [`sf spaces duplicate`](#sf-spaces-duplicate)
-- [`sf spaces export`](#sf-spaces-export)
 - [`sf spaces get`](#sf-spaces-get)
-- [`sf spaces import [ARCHIVE]`](#sf-spaces-import-archive)
 - [`sf spaces ls`](#sf-spaces-ls)
 - [`sf spaces rm`](#sf-spaces-rm)
 - [`sf spaces rotate-claim`](#sf-spaces-rotate-claim)
@@ -243,7 +237,6 @@ GLOBAL FLAGS
 - [`sf transfers accept ID`](#sf-transfers-accept-id)
 - [`sf transfers cancel ID`](#sf-transfers-cancel-id)
 - [`sf versions`](#sf-versions)
-- [`sf versions download`](#sf-versions-download)
 - [`sf versions get [VERSION]`](#sf-versions-get-version)
 - [`sf versions ls`](#sf-versions-ls)
 - [`sf versions rm [VERSION]`](#sf-versions-rm-version)
@@ -1286,7 +1279,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Continue publishing after claim.
 
-  Exchange a saved anonymous claim token for a durable space access token after the space is claimed.
+  Exchange a saved space key for a durable space access token after the space is claimed.
 
 EXAMPLES
   Continue publishing to the claimed space saved in this directory.
@@ -1585,106 +1578,6 @@ EXAMPLES
   Keep the generated workspace and print the publish command.
 
     $ sf demo agent --publish
-```
-
-## `sf deployments`
-
-Manage deployments (alias of `sf versions`).
-
-```text
-USAGE
-  $ sf deployments [--profile <value>] [-y]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Manage deployments (alias of `sf versions`).
-
-  List and inspect deployment activity. Alias of `sf versions`. Deploying is publishing: a deployment is a version, and
-  the canonical nouns are version, channel, and build.
-```
-
-## `sf deployments get DEPLOYMENT`
-
-Show a deployment (alias of `sf versions get`).
-
-```text
-USAGE
-  $ sf deployments get DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a deployment (alias of `sf versions get`).
-
-  Fetch a deployment by id. Alias of `sf versions get`; a deployment is a version.
-```
-
-## `sf deployments promote DEPLOYMENT`
-
-Promote a deployment (alias of `sf promote`).
-
-```text
-USAGE
-  $ sf deployments promote DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID to make live, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
-
-DESCRIPTION
-  Promote a deployment (alias of `sf promote`).
-
-  Promote the version produced by a deployment to a channel (default live). Alias of `sf promote`; a deployment is a
-  version.
-```
-
-## `sf deployments rollback DEPLOYMENT`
-
-Roll back to a deployment (alias of `sf rollback`).
-
-```text
-USAGE
-  $ sf deployments rollback DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID to roll back to, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
-
-DESCRIPTION
-  Roll back to a deployment (alias of `sf rollback`).
-
-  Roll live traffic back to the version produced by a deployment. Alias of `sf rollback`; a deployment is a version.
 ```
 
 ## `sf design`
@@ -2617,22 +2510,24 @@ EXAMPLES
     $ sf env rm API_URL --space docs
 ```
 
-## `sf env set NAME VALUE`
+## `sf env set NAME [VALUE]`
 
 Set a space variable.
 
 ```text
 USAGE
-  $ sf env set NAME VALUE [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--[no-]secret] [--production-value <value>] [--preview-value
-    <value>] [--branch-value <value>...]
+  $ sf env set NAME [VALUE] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--value-from-stdin] [--[no-]secret] [--production-value <value>]
+    [--preview-value <value>] [--branch-value <value>...]
 
 ARGUMENTS
-  NAME   Variable name.
-  VALUE  Variable value.
+  NAME     Variable name.
+  [VALUE]  Variable value. Omit it and pass --value-from-stdin for secrets.
 
 FLAGS
-  --[no-]secret  Keep the value write-only. New values default write-only; updates preserve the existing classification.
+  --[no-]secret       Keep the value write-only. New values default write-only; updates preserve the existing
+                      classification.
+  --value-from-stdin  Read the value from standard input, keeping it out of your shell history and process list.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -2648,12 +2543,13 @@ BUILD FLAGS
 DESCRIPTION
   Set a space variable.
 
-  Create or update a space variable. Values are sent to the API and are not printed back.
+  Create or update a space variable. Values are sent to the API and are not printed back. A value given as an argument
+  is visible in your shell history and process list, so pipe secrets in with --value-from-stdin.
 
 EXAMPLES
-  Set a write-only space variable.
+  Set a write-only space variable without putting it in the command line.
 
-    $ sf env set API_TOKEN s3cret --space docs
+    printf %s "$API_TOKEN" | sf env set API_TOKEN --value-from-stdin --space docs
 
   Explicitly set a readable ordinary value.
 
@@ -3488,9 +3384,13 @@ Run the authenticated remote MCP proxy.
 ```text
 USAGE
   $ sf mcp proxy [--profile <value>] [-y] [--endpoint <value>]
+    [--allow-credential-origin <value>...]
 
 FLAGS
-  --endpoint=<value>  [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on loopback.
+  --allow-credential-origin=<value>...  [env: SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN] Send your Spacefast login to this
+                                        MCP origin even though it was not issued for it. Repeatable.
+  --endpoint=<value>                    [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on
+                                        loopback.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -3803,6 +3703,9 @@ DESCRIPTION
   Promote an existing ready version to a channel (default live). Use `rollback` to roll back to an older version
   instead.
 
+ALIASES
+  $ sf deployments promote
+
 EXAMPLES
   Make version v12 live.
 
@@ -3827,10 +3730,10 @@ USAGE
     <value>] [-o <value>] [--space <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa
     auto|true|false] [-m <value>] [--git-branch <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository
     <value>] [--source-type direct-upload|git] [--mode website|files] [--target production|preview] [--dry-run]
-    [--compress] [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote]
-    [--prebuilt] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
-    <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include
-    <value>...] [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
+    [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote] [--prebuilt]
+    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
+    [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include <value>...]
+    [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
     [--allow-unsupported-platform-features] [--auto-finalize]
 
 ARGUMENTS
@@ -3869,7 +3772,6 @@ MIGRATION FLAGS
 
 EXECUTION FLAGS
   --[no-]auto-finalize    Finalize a remote build automatically after staging its output.
-  --[no-]compress         Generate smaller .br/.gz sidecars for compressible files before uploading.
   --config-only           Publish a config-only version that carries the prior artifact forward without building or
                           uploading content.
   --dry-run               Print the resolved publish plan without uploading files or writing state.
@@ -4004,6 +3906,9 @@ DESCRIPTION
   Roll back to a previous version.
 
   Roll live traffic back to an existing ready version. Use `versions ls` to find a version.
+
+ALIASES
+  $ sf deployments rollback
 
 EXAMPLES
   List versions and find the target rollback version.
@@ -4336,7 +4241,7 @@ ARGUMENTS
 FLAGS
   --can=<option>        Replace the capability preset: view, comment, publish, or manage.
                         <options: view|comment|publish|manage>
-  --exclude=<value>...  [default: ] Excluded route pattern for the replacement path set. Repeatable.
+  --exclude=<value>...  Excluded route pattern for the replacement path set. Repeatable.
   --expires=<value>     New lifetime from now (e.g. 30m, 24h, 7d).
   --name=<value>        New human-readable Grant name.
   --no-expiry           Remove the Grant expiry.
@@ -5505,7 +5410,7 @@ Claim an anonymous space.
 ```text
 USAGE
   $ sf spaces claim [--profile <value>] [-y] [--claim-token
-    <value>] [--space <value>] [-o <value>] [--wait]
+    <value>] [--keep-publishing] [--space <value>] [-o <value>] [--wait]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5527,7 +5432,7 @@ EXAMPLES
 
   Claim a space into a specific team.
 
-    $ sf spaces claim --space spc_xxx --claim-token claim_xxx --team my-team
+    $ sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
 ```
 
 ## `sf spaces download`
@@ -5602,42 +5507,6 @@ EXAMPLES
     $ sf spaces duplicate --space docs --slug docs-copy
 ```
 
-## `sf spaces export`
-
-Export a space archive.
-
-```text
-USAGE
-  $ sf spaces export [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--output <value>] [--overwrite] [--wait]
-    [--wait-timeout <value>]
-
-FLAGS
-  --output=<value>   Download the ready archive to this path (implies --wait).
-  --overwrite        Overwrite an existing archive file when --output is set.
-  --version=<value>  Export a single version instead of the default set.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Export a space archive.
-
-  Create a portable export archive of the selected Space. With --wait it returns the download link; add --output to
-  download the zip.
-
-EXAMPLES
-  $ sf spaces export --wait --output ./site-export.zip
-
-  $ sf spaces export --version ver_123 --wait
-```
-
 ## `sf spaces get`
 
 Show a space.
@@ -5666,44 +5535,6 @@ EXAMPLES
   Show a specific space by slug, ID, or URL.
 
     $ sf spaces get --space docs
-```
-
-## `sf spaces import [ARCHIVE]`
-
-Import a space archive.
-
-```text
-USAGE
-  $ sf spaces import [ARCHIVE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--from-export <value>] [--publish] [--wait] [--wait-timeout
-    <value>]
-
-ARGUMENTS
-  [ARCHIVE]  Path to a Spacefast export zip archive.
-
-FLAGS
-  --from-export=<value>  Import from an existing export ID instead of uploading an archive.
-  --publish              Publish the imported version once it is ready.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Import a space archive.
-
-  Import an export archive into the selected space as draft versions. Pass --publish to promote the imported version
-  when it is ready.
-
-EXAMPLES
-  $ sf spaces import ./site-export.zip
-
-  $ sf spaces import --from-export exp_123 --publish
 ```
 
 ## `sf spaces ls`
@@ -5779,7 +5610,7 @@ EXAMPLES
 
 ## `sf spaces rotate-claim`
 
-Rotate anonymous claim authority.
+Rotate an anonymous Space's key.
 
 ```text
 USAGE
@@ -5792,9 +5623,9 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Rotate anonymous claim authority.
+  Rotate an anonymous Space's key.
 
-  Replace an anonymous Space's claim token and browser claim link without changing recipient Links.
+  Replace an anonymous Space's key, site link, and claim link without changing recipient Links.
 
 EXAMPLES
   Rotate the anonymous Space saved in the current directory.
@@ -5897,7 +5728,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
-  --include-claim-url  Include the still-pending claim URL.
+  --include-claim-url  Include the still-pending claim link.
 
 DESCRIPTION
   Show CLI status.
@@ -5909,7 +5740,7 @@ EXAMPLES
 
     $ sf status
 
-  Include the still-pending claim URL.
+  Include the still-pending claim link.
 
     $ sf status --include-claim-url
 ```
@@ -6492,45 +6323,6 @@ DESCRIPTION
   List, promote, and roll back space versions.
 ```
 
-## `sf versions download`
-
-Download a version archive.
-
-```text
-USAGE
-  $ sf versions download [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-v <value>] [--output <value>] [--overwrite] [--wait] [--wait-timeout
-    <value>]
-
-FLAGS
-  -v, --version=<value>  [default: latest] Version ID, version ref, number, or "latest".
-      --output=<value>   Archive file path, or an existing directory to write the archive into.
-      --overwrite        Overwrite an existing archive file.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Download a version archive.
-
-  Create a scoped export for one version and download the resulting archive.
-
-EXAMPLES
-  Download the latest version as an archive.
-
-    $ sf versions download --space docs --output ./archive.tar.gz
-
-  Download version v3, overwriting an existing archive.
-
-    $ sf versions download --space docs --version v3 --overwrite
-```
-
 ## `sf versions get [VERSION]`
 
 Show a version.
@@ -6552,6 +6344,9 @@ DESCRIPTION
   Show a version.
 
   Show one version's status, source, Version URL, diagnostics, and failure details.
+
+ALIASES
+  $ sf deployments get
 
 EXAMPLES
   Inspect version v12 of the linked space.

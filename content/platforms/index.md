@@ -34,7 +34,7 @@ customer site, or generated page. Tenants act on behalf of their customers:
 curl -F archive=@site.zip \
   -H "Authorization: Bearer $TENANT_KEY" \
   -H "X-Spacefast-On-Behalf-Of: cust_4812" \
-  https://api.spacefast.com/v1/publish
+  "https://api.spacefast.com/v1/publish?wait=1"
 ```
 
 End users never see Spacefast credentials. You never store per-user secrets. For

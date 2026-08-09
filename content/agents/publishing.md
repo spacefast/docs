@@ -9,14 +9,24 @@ produce the same receipt.
 ## Publish with curl
 
 ```bash
-curl -F "files=@index.html" https://api.spacefast.com/v1/publish
+curl -F "files=@index.html" "https://api.spacefast.com/v1/publish?wait=1"
 ```
+
+`?wait=1` waits for the publish to finish. Without it the call returns after
+about four seconds carrying `activation.outcome: "pending"` and a
+`next.action: "poll"` pointer, and the site is not serving yet — you then have
+to poll that operation with the space key as bearer. With it the same call
+comes back `activated` and `next.action: "done"`. Quote the URL: `?` is a glob
+character in zsh, and unquoted the command dies before curl runs.
 
 To publish a folder, zip it first. Send it as `-F archive=@site.zip`. The
 response is a JSON envelope; `data` is the receipt, and it contains everything
 that matters:
 
-- **`data.space.liveUrl`**: the live site.
+- **`data.space.liveUrl`**: the address the space serves from once it is
+  claimed. While the space is anonymous it is private, so this URL answers 403
+  for anyone who has not opened `data.claim.url` first. Don't lead with it and
+  don't hand it out on its own.
 - **`data.version.immutableUrl`**: the published bytes, frozen, reserved in
   the initial receipt. Poll `data.links.status` until the version status is
   `ready` before sharing it.

@@ -1,11 +1,11 @@
 ---
-title: "google_play_webhook_identity_not_configured"
-description: "Google Play Pub/Sub push authentication is not configured on this deployment."
+title: "blob_gate_record_missing"
+description: "The file behind this download link no longer exists."
 ---
 
-Google Play Pub/Sub push authentication is not configured on this deployment.
+The file behind this download link no longer exists.
 
-**How to resolve:** Configure the exact push audience and dedicated Pub/Sub service-account email before enabling RTDN delivery.
+**How to resolve:** Ask the owner for a fresh link; the underlying object was deleted.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/google_play_webhook_identity_not_configured",
-  "title": "Google play webhook identity not configured",
+  "type": "https://spacefast.com/docs/errors/blob_gate_record_missing",
+  "title": "Blob gate record missing",
   "status": 400,
-  "detail": "Google Play Pub/Sub push authentication is not configured on this deployment.",
-  "code": "google_play_webhook_identity_not_configured",
+  "detail": "The file behind this download link no longer exists.",
+  "code": "blob_gate_record_missing",
   "requestId": "req_4mz0v8qk"
 }
 ```

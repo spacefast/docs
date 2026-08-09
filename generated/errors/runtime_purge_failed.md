@@ -1,11 +1,11 @@
 ---
-title: "billing_subscription_conflict"
-description: "The team already has an active subscription with another payment provider."
+title: "runtime_purge_failed"
+description: "Content updated but the edge cache purge did not confirm."
 ---
 
-The team already has an active subscription with another payment provider.
+Content updated but the edge cache purge did not confirm.
 
-**How to resolve:** Cancel the existing subscription before subscribing through a different provider.
+**How to resolve:** The runtime retries automatically; recent visitors may briefly see the previous version.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_subscription_conflict",
-  "title": "Billing subscription conflict",
+  "type": "https://spacefast.com/docs/errors/runtime_purge_failed",
+  "title": "Runtime purge failed",
   "status": 400,
-  "detail": "The team already has an active subscription with another payment provider.",
-  "code": "billing_subscription_conflict",
+  "detail": "Content updated but the edge cache purge did not confirm.",
+  "code": "runtime_purge_failed",
   "requestId": "req_4mz0v8qk"
 }
 ```

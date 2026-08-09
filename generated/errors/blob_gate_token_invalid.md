@@ -1,11 +1,11 @@
 ---
-title: "variable_cascade_failed"
-description: "Republishing spaces after a variable change failed."
+title: "blob_gate_token_invalid"
+description: "The download token is invalid or expired."
 ---
 
-Republishing spaces after a variable change failed.
+The download token is invalid or expired.
 
-**How to resolve:** Check the operation's diagnostics. Live content keeps serving the previous values.
+**How to resolve:** Request a fresh download link and use it within its lifetime.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/variable_cascade_failed",
-  "title": "Variable cascade failed",
+  "type": "https://spacefast.com/docs/errors/blob_gate_token_invalid",
+  "title": "Blob gate token invalid",
   "status": 400,
-  "detail": "Republishing spaces after a variable change failed.",
-  "code": "variable_cascade_failed",
+  "detail": "The download token is invalid or expired.",
+  "code": "blob_gate_token_invalid",
   "requestId": "req_4mz0v8qk"
 }
 ```

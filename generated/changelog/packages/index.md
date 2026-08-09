@@ -9,6 +9,7 @@ Each public npm package keeps its own history. The [changelog timeline](/changel
 | [`spacefast`](/changelog/packages/spacefast) | [CLI (`spacefast`)](https://www.npmjs.com/package/spacefast) | 18 |
 | [`@spacefast/astro`](/changelog/packages/astro) | [@spacefast/astro](https://www.npmjs.com/package/@spacefast/astro) | 18 |
 | [`@spacefast/common`](/changelog/packages/common) | [@spacefast/common](https://www.npmjs.com/package/@spacefast/common) | 18 |
+| [`@spacefast/compat-lakebed`](/changelog/packages/compat-lakebed) | [@spacefast/compat-lakebed](https://www.npmjs.com/package/@spacefast/compat-lakebed) | 1 |
 | [`@spacefast/domain-search-terminal`](/changelog/packages/domain-search-terminal) | [@spacefast/domain-search-terminal](https://www.npmjs.com/package/@spacefast/domain-search-terminal) | 18 |
 | [`@spacefast/domain-services`](/changelog/packages/domain-services) | [@spacefast/domain-services](https://www.npmjs.com/package/@spacefast/domain-services) | 18 |
 | [`@spacefast/image`](/changelog/packages/image) | [@spacefast/image](https://www.npmjs.com/package/@spacefast/image) | 18 |
