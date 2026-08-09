@@ -7,9 +7,10 @@ Zero is the full-stack Spacefast runtime. One project contains a Preact client,
 a typed server capsule, a database schema, authentication, and storage. One
 publish command makes the whole app live as a normal space version.
 
-:::warning[Private beta]
-Zero requires a team private-beta flag. Ask Spacefast to enable it before you
-publish a Zero app.
+:::note[Dedicated runtime required]
+Zero is generally available, but publishing a Zero app requires a plan with
+dedicated runtime isolation. Without that entitlement, the publish stops with
+`zero_requires_dedicated_plan` before any server code runs.
 :::
 
 ## Quick start
@@ -77,15 +78,20 @@ export default capsule({
       text: string(),
       done: boolean().default(false),
       ownerId: string(),
-    }),
+    }).index("by_owner", ["ownerId"]),
   },
   queries: {
-    todos: query((ctx) => ctx.db.todos.where("ownerId", ctx.auth.userId).all()),
+    todos: query(async (ctx) =>
+      ctx.db.todos
+        .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+        .order("desc")
+        .collect()
+    ),
   },
   mutations: {
-    addTodo: mutation((ctx, text: string) =>
-      ctx.db.todos.insert({ text, done: false, ownerId: ctx.auth.userId }),
-    ),
+    addTodo: mutation(async (ctx, text: string) => {
+      await ctx.db.todos.insert({ text, done: false, ownerId: ctx.auth.userId });
+    }),
   },
 });
 ```
@@ -93,10 +99,9 @@ export default capsule({
 Handler types:
 
 - **`query()`**: reads data and supports live client subscriptions.
-- **`mutation()`**: writes data and can open transactions.
-- **`action()`**: performs a one-shot call, including outbound work.
+- **`mutation()`**: writes data.
+- **`action()`**: performs a one-shot server call.
 - **`endpoint()`**: exposes a raw HTTP method and path.
-- **`socket()`**: exposes an application WebSocket handler.
 
 Endpoint helpers include `json()`, `text()`, `empty()`, and `redirect()`.
 Paths begin with `/`. Spacefast reserves the authentication and platform
@@ -108,8 +113,6 @@ Every handler receives `ctx` with:
 - **`ctx.db`**: the declared tables.
 - **`ctx.env`**: server-only variables.
 - **`ctx.log`**: structured logging.
-- **`ctx.ai`**: completion and streaming helpers.
-- **`ctx.blob`**: server-side object operations.
 
 Call named handlers from the client with hooks:
 
@@ -129,21 +132,20 @@ and `useLocation()` for client-side routes.
 
 Every Zero visitor starts with a stable guest identity: enough to own rows,
 return to them later, and keep anonymous users separate. Hosted sign-in
-upgrades the same browser session to an authenticated WordPress.com identity.
+upgrades the same browser session to an authenticated identity.
 
 ```tsx
-import { SignInWithWpcom, SignOut, useAuth } from "@spacefast/zero/client";
+import { SignInWithGoogle, signOut, useAuth } from "@spacefast/zero/client";
 ```
 
 `useAuth()` returns `userId`, `displayName`, `provider`, `isGuest`,
 `isAuthenticated`, `email`, and `isLoading`.
 
-On the server, the same identity is `ctx.auth` in every handler. Use
-`requireUser(ctx)` when a handler requires a signed-in caller: guests have a
-`userId`, but `requireUser()` rejects them. For row ownership, filter reads by
-`ctx.auth.userId` and use `requireOwner(ctx, table, id)` before an update or a
-delete; it does not reveal whether another user's row exists. Do not accept an
-owner id from client arguments.
+On the server, the same identity is `ctx.auth` in every handler. Check
+`ctx.auth.isGuest` when a handler requires sign-in. For row ownership, store
+`ctx.auth.userId` with the row, filter reads through an owner index, and verify
+that value before an update or delete. Do not accept an owner id from client
+arguments.
 
 `sf dev` supplies a local guest identity, so authorization logic works the same
 locally and hosted.
@@ -152,15 +154,14 @@ locally and hosted.
 
 Every Zero app has its own database. Declare the schema in the capsule; the
 publish command compares the declaration with the live schema and applies the
-migration. Fields support `string()`, `number()`, `boolean()`, `id(table)`,
-and `jsonField()`, with `.default(value)` and `.nullable()`. Every row also
-has `id`, `createdAt`, and `updatedAt`. Add `.index(name, fields)` for indexed
-reads with `.withIndex()`.
+migration. Fields support `string()`, `boolean()`, and `id(table)`, with
+`.default(value)`. Every row also has `id`, `createdAt`, and `updatedAt`. Add
+`.index(name, fields)` for indexed reads with `.withIndex()`.
 
-Queries use `.where()`, `.orderBy()`, `.limit()`, `.all()`, `.count()`,
-`.first()`, `.get(id)`, and `.paginate()`. Mutation contexts add `.insert()`,
-`.update(id, patch)`, and `.delete(id)`. Group dependent writes with
-`ctx.transaction()`; they commit together or not at all.
+Read a row with `.get(id)`, or start an indexed query with `.withIndex()` and
+finish it with `.collect()`, `.take(count)`, `.first()`, or `.paginate()`.
+Indexed queries support `.order("asc")` and `.order("desc")`. Mutation
+contexts add `.insert()`, `.update(id, patch)`, and `.delete(id)`.
 
 Normal additive changes apply during `sf publish`. Destructive changes require
 an explicit migration command; a publish cannot silently drop data. Express
@@ -208,8 +209,7 @@ destructive and unrecoverable.
 Safety and limits: 5 MiB per object, 100 MiB stored per space, no empty
 uploads, and no executable or active web content (HTML, JavaScript, PHP,
 binaries). You set visibility at upload time and it cannot change; upload a
-replacement instead. The capsule's `ctx.blob` API is the server-side object
-capability; keep server workflows there and do not relay browser tokens.
+replacement instead.
 
 ## Variables
 
