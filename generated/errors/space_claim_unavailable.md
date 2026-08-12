@@ -5,7 +5,7 @@ description: "This space cannot be claimed."
 
 This space cannot be claimed.
 
-**How to resolve:** Only anonymous, unexpired spaces with a valid claim token can be claimed.
+**How to resolve:** Only anonymous, unexpired spaces with a valid space key can be claimed.
 
 <div data-pagefind-ignore>
 

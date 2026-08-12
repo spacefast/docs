@@ -1,11 +1,11 @@
 ---
 title: "storage_auth_required"
-description: "This storage operation requires an authenticated Zero user."
+description: "This storage operation requires an authenticated visitor."
 ---
 
-This storage operation requires an authenticated Zero user.
+This storage operation requires an authenticated visitor.
 
-**How to resolve:** Sign in to the hosted Zero app, then retry the storage operation.
+**How to resolve:** Sign in to the space, then retry the storage operation.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_auth_required",
   "title": "Storage auth required",
   "status": 400,
-  "detail": "This storage operation requires an authenticated Zero user.",
+  "detail": "This storage operation requires an authenticated visitor.",
   "code": "storage_auth_required",
   "requestId": "req_4mz0v8qk"
 }

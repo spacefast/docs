@@ -1,9 +1,9 @@
 ---
 title: "continuation_used"
-description: "This claim token was already exchanged for a durable API key."
+description: "This space key was already exchanged for a durable API key."
 ---
 
-This claim token was already exchanged for a durable API key.
+This space key was already exchanged for a durable API key.
 
 **How to resolve:** Authenticate with the exchanged API key (check .spacefast/state.json or wherever it was saved). If it was lost, ask the space owner to create a new API key.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/continuation_used",
   "title": "Continuation used",
   "status": 400,
-  "detail": "This claim token was already exchanged for a durable API key.",
+  "detail": "This space key was already exchanged for a durable API key.",
   "code": "continuation_used",
   "requestId": "req_4mz0v8qk"
 }

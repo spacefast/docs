@@ -1,9 +1,9 @@
 ---
 title: "storage_file_too_large"
-description: "The Zero storage object exceeds the 5 MiB file limit."
+description: "The storage object exceeds the 5 MiB file limit."
 ---
 
-The Zero storage object exceeds the 5 MiB file limit.
+The storage object exceeds the 5 MiB file limit.
 
 **How to resolve:** Upload a smaller object.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_file_too_large",
   "title": "Storage file too large",
   "status": 400,
-  "detail": "The Zero storage object exceeds the 5 MiB file limit.",
+  "detail": "The storage object exceeds the 5 MiB file limit.",
   "code": "storage_file_too_large",
   "requestId": "req_4mz0v8qk"
 }

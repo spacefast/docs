@@ -16,8 +16,7 @@ codes behave exactly as in the [REST API guide](/api).
 npm install @spacefast/sdk
 ```
 
-These examples were checked against `@spacefast/sdk` `0.0.13`. Pin the version
-you install. The SDK requires Node.js 20 or newer.
+Pin the version you install. The SDK requires Node.js 20 or newer.
 
 ## Create a client
 
@@ -52,7 +51,7 @@ Mutations take a JSON `body` and an optional `idempotencyKey`:
 
 ```ts
 const space = await client.post("/v1/spaces", {
-  body: { name: "docs" },
+  body: { slug: "docs", title: "Docs" },
   idempotencyKey: "01J-create-docs",
 });
 ```
@@ -66,15 +65,18 @@ const detail = await client.get("/v1/spaces/{spaceId}", {
 ```
 
 The client unwraps successful JSON envelopes to the `data` payload. Failures
-throw `SpacefastApiError` with `code`, `docsUrl`, `requestId`, and retry hints.
+throw `SpacefastApiError` carrying the problem document: `status`, `code`,
+`type` (the docs URL), `detail` as the message, `pointer` on validation
+errors, `requestId`, and `retry`.
 
 ## Exports
 
-| Import                     | Purpose                                      |
-| -------------------------- | -------------------------------------------- |
-| `@spacefast/sdk`           | `createSpacefastClient`, `SpacefastApiError` |
-| `@spacefast/sdk/schema`    | Generated OpenAPI path types                 |
-| `@spacefast/sdk/transport` | Envelope helpers and transport types         |
+| Import                      | Purpose                                      |
+| --------------------------- | -------------------------------------------- |
+| `@spacefast/sdk`            | `createSpacefastClient`, `SpacefastApiError` |
+| `@spacefast/sdk/schema`     | Generated OpenAPI path types                 |
+| `@spacefast/sdk/transport`  | Envelope helpers and transport types         |
+| `@spacefast/sdk/openapi.json` | The generated OpenAPI document            |
 
 If a capability is missing from the generated release that you installed, call
 the documented REST endpoint with `sf api` or `fetch`. Do not guess a method

@@ -50,7 +50,7 @@ claim link in the browser, or from the CLI after you sign in with
 
 ```bash
 sf spaces claim
-sf spaces claim --space spc_123 --claim-token claim_123 --team my-team
+sf spaces claim --space spc_123 --claim-token sfc_123 --team my-team
 ```
 
 See [Anonymous publish](/publishing/anonymous) for expiry, scanning, and
@@ -93,26 +93,6 @@ same rename resumes an interrupted one. Spacefast refuses a rename while a
 space is moving, transferring, or deleting. The caller needs `spaces:rename`
 permission.
 
-## Export and import
-
-Export creates a portable archive of the selected space. With `--wait` you get
-a download link; add `--output` to write the zip locally, or `--version` to
-export a single version instead of the default set:
-
-```bash
-sf spaces export --space docs --wait --output ./site-export.zip
-sf spaces export --space docs --version ver_123 --wait
-```
-
-Import an export zip as draft versions on the target space. Import never
-overwrites live content unless you pass `--publish` to promote the imported
-version when it is ready:
-
-```bash
-sf spaces import ./site-export.zip --space docs
-sf spaces import --from-export exp_123 --publish --space docs
-```
-
 ## Duplicate
 
 Duplicate downloads a version and publishes those files as a new space:
@@ -122,8 +102,7 @@ sf spaces duplicate --space docs --slug docs-copy
 ```
 
 Duplicate defaults to the live version; pass `--version`, `--title`, and
-`--wait` as needed. It is the same-content, new-identity path; prefer export
-and import when you need an archive or a controlled draft import.
+`--wait` as needed. It is the same-content, new-identity path.
 
 ## Transfer to another team
 
@@ -139,15 +118,15 @@ sf transfers cancel trf_123
 - Pending transfers expire, after 7 days by default.
 - Both teams must live in the same tenant.
 
-## Download files only
+## Download files
 
-Download a version's files when you do not need a full export archive, or grab
-one version as an archive:
+Copy a version's files into a local directory:
 
 ```bash
 sf spaces download --space docs --output ./out
-sf versions download --space docs --output ./archive.tar.gz
 ```
+
+Pass `--version` to pick a version other than live.
 
 ## Delete
 

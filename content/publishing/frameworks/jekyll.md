@@ -11,12 +11,19 @@ publish `_site`. Detection recognizes Jekyll from `_config.yml`,
 
 [Connect the repository](/publishing/git), then check these settings:
 
-| Setting          | Default                    |
-| ---------------- | -------------------------- |
-| Install          | `bundle install`           |
-| Build            | `bundle exec jekyll build` |
-| Output directory | `_site`                    |
-| Environment      | `JEKYLL_ENV=production`    |
+With a `Gemfile`, Spacefast installs with
+`BUNDLE_PATH=.spacefast/cache/jekyll-bundle bundle install` and builds with:
+
+```bash
+JEKYLL_ENV=production BUNDLE_PATH=.spacefast/cache/jekyll-bundle \
+  bundle exec jekyll build --config _config.yml
+```
+
+Without a `Gemfile`, it installs Jekyll itself
+(`GEM_HOME=.spacefast/cache/jekyll-gems gem install jekyll --no-document`) and
+builds with the same `JEKYLL_ENV=production ... jekyll build --config` form.
+The `--config` argument names the detected file: `_config.yml`,
+`_config.yaml`, or `_config.toml`. The output directory defaults to `_site`.
 
 If `_config.yml` changes Jekyll's `destination`, set the Spacefast output
 directory to the same path.

@@ -14,18 +14,18 @@ A request never sees half of a release: finalization validates the complete
 snapshot, prepares it for serving, and promotes it atomically. Uploading bytes
 alone is not success.
 
-The publish receipt contains both identities:
+The publish receipt contains both identities. The API receipt spells them
+`space.liveUrl` and `version.immutableUrl`; the CLI `--json` receipt spells
+them `siteUrl` and `immutableUrl`.
 
-- `space.liveUrl` is the stable address people visit.
-- `version.immutableUrl` is the exact release that publish created.
+## The live channel
 
-## Live and preview
+Every space has one channel, `live`. That is what the space's live URL serves.
+To publish a version without moving it, run `sf publish --target preview`: it
+creates the version and leaves `live` where it is. Promote the version later
+when you want it served.
 
-Every space has a `live` channel. That is what the space's live URL serves.
-Spaces can also expose a `preview` channel for a non-live pointer you promote
-explicitly.
-
-List where each channel points:
+List where the channel points:
 
 ```bash
 sf channels ls --space docs
@@ -74,10 +74,6 @@ The channel history lists each promotion for that pointer, newest first:
 sf channels history --space docs
 ```
 
-```bash
-sf channels history preview --space docs
-```
-
 Use it when you need to know what was live, when it changed, and which version
 to promote next.
 
@@ -89,22 +85,23 @@ URLs, or download a ZIP. Private file URLs use your current access and can
 expire. Do not treat them as permanent public links.
 
 Comparing two versions shows the added, changed, and removed paths, with
-line-level diffs for text files, useful before promoting. For a complete
-local copy of a version:
+line-level diffs for text files, useful before promoting. To copy a version's
+files into a local directory:
 
 ```bash
-sf versions download --space docs --version v3 --output ./archive.tar.gz
+sf spaces download --space docs --version v3 --output ./site
 ```
 
-See [`sf versions download`](/cli#sf-versions-download) for version selection
-and output options.
+It writes loose files, not an archive. See
+[`sf spaces download`](/cli#sf-spaces-download) for version selection and
+output options.
 
 ## Permanent version URLs
 
 Each version URL serves exactly the content that you published, and that
 content never changes. The team's current entitlements control whether an
 older version URL is public. Entitlements do not change owner access or API
-access. Rollback and export continue to work.
+access. Rollback and `sf spaces download` continue to work.
 
 ## Retention and storage
 
@@ -112,10 +109,8 @@ Committed file bytes across versions count toward the team's storage quota. If
 you reach the quota, Spacefast blocks new publishes. It never takes the live
 site down. Delete old versions or add storage to free up room.
 
-Retention follows the team's current policy, and Spacefast warns the team and
-offers an export before an unreferenced version becomes eligible for removal.
-Retention never deletes the live version or a version that a channel points
-at, so the current rollback target is always safe.
+Versions are kept until you delete them. Only never-finalized draft uploads
+expire on their own.
 
 ## How this fits publishing
 

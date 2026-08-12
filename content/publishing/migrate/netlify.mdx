@@ -38,7 +38,6 @@ sf publish ./dist
   the target team.
 - Forced rules, splats, placeholders, exact query matching, conditions, custom
   404s, and supported response headers.
-- `_headers` Basic Auth when enabled for the target team.
 - Static framework output from Astro, Eleventy, Hugo, Vite,
   [static Next.js exports](/publishing/frameworks/nextjs), and similar build
   tools when the generated files do not need a Netlify runtime.
@@ -51,6 +50,9 @@ sf publish ./dist
   `_headers`.
 - Replace Netlify Functions, Edge Functions, Identity, signed proxy redirects,
   and `Role` conditions before publishing protected content.
+- Netlify Basic Auth in `_headers` does not carry over. Spacefast rejects
+  `Basic-Auth` as a response header on every plan; use
+  [Spacefast sharing](/spaces/access) instead.
 
 ## What does not run on Spacefast
 

@@ -12,28 +12,28 @@ billing: you call one API, and your customer sees only you. The
 
 The Platform API is a superset of the [public REST API](/api). You get the same control plane,
 the same envelope, and the same error codes. You also get the tenant surface:
-sites, principals, and on-behalf-of calls. The public reference deliberately
-does not show that surface.
+principals and on-behalf-of calls. The public reference deliberately does not
+show that surface.
 
-## The model: tenant → site → space
+## The model: tenant → space
 
 - **Tenant**: your platform. The boundary for keys, principals, quotas, and billing.
-- **Site**: a runtime container that one of your customers owns; mostly a provisioning detail (`POST /v1/sites`).
 - **Space**: what customers actually see: files in, live URL out, immutable versions, rollback, passwords, routing, domains.
 
-Map your data model onto these three nouns once. The rest is API calls. Spaces
+Map your data model onto these two nouns once. The rest is API calls. Spaces
 on your platform have every feature that the consumer product has.
 
 ## Keys and the proxy posture
 
 Tenants authenticate **server-side** with a tenant key. Platform credentials
 belong on your server. Never send a tenant key to a browser, mobile app,
-customer site, or generated page. Tenants act on behalf of their customers:
+customer site, or generated page. Tenants act on behalf of their customers by
+naming the customer as the `principal` in the request body (see below):
 
 ```bash
 curl -F archive=@site.zip \
   -H "Authorization: Bearer $TENANT_KEY" \
-  -H "X-Spacefast-On-Behalf-Of: cust_4812" \
+  -F 'payload={"principal":{"type":"external","id":"cust_4812"}}' \
   https://api.spacefast.com/v1/publish
 ```
 
@@ -73,13 +73,13 @@ the tenant key and do not need a separate Spacefast account.
 
 - **Idempotent provisioning**: Spacefast honors `Idempotency-Key` per tenant. A
   retried request cannot double-provision a customer.
-- **Typed errors**: the same stable `{ "error": { "code": ... } }` envelope as
-  the public API. Branch on codes.
+- **Typed errors**: every 4xx/5xx is an RFC 9457 problem document
+  (`application/problem+json`) with a stable top-level `code`, plus a
+  `pointer` JSON Pointer on validation failures. Branch on `code`.
 - **Per-customer scoping**: Spacefast attributes each resource to the customer
-  you created it for (`siteId`, principal). Listing, transfer, and cleanup are
-  exact.
-- **Exports**: every space exports to a portable archive. You can offer your
-  customers a clean exit.
+  principal you created it for. Listing, transfer, and cleanup are exact.
+- **Downloads**: every space version can be downloaded file by file
+  (`sf spaces download`), so you can offer your customers a clean exit.
 
 ## Domains at scale
 

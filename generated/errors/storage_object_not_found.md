@@ -1,11 +1,11 @@
 ---
 title: "storage_object_not_found"
-description: "The requested Zero storage object does not exist."
+description: "The requested storage object does not exist."
 ---
 
-The requested Zero storage object does not exist.
+The requested storage object does not exist.
 
-**How to resolve:** Check the object key or upload the object again.
+**How to resolve:** Check the object id or upload the object again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_object_not_found",
   "title": "Storage object not found",
   "status": 400,
-  "detail": "The requested Zero storage object does not exist.",
+  "detail": "The requested storage object does not exist.",
   "code": "storage_object_not_found",
   "requestId": "req_4mz0v8qk"
 }

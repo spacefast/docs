@@ -62,16 +62,24 @@ const local = createWordPressClient({ url: "https://example.wordpress.com" });
 
 ## Rebuild on WordPress changes
 
-Choose **Connect WordPress** in the data-source settings and install the
-Spacefast plugin it provides in WordPress. Copy the one-time connection value
-from the dashboard and paste it into **Settings → Spacefast** in WordPress
-admin. Spacefast then batches public content changes and triggers production
-builds. **Build now** remains available in both the WordPress plugin and the
-Spacefast dashboard.
+Install the Spacefast plugin in WordPress. In WordPress **Settings →
+Spacefast**, choose **Headless CMS**, continue to Spacefast, authorize one
+team on the consent screen, and select the space. Space management
+(`spaces:write`) is required on consent and cannot be unchecked.
 
-The plugin credential can only trigger builds for this space; it cannot upload
-output or change saved build settings. Revoke it when the WordPress
-installation is retired or compromised.
+Public content changes then wait for a 60-second quiet window before one
+production build starts. **Build now** is immediate, in both the WordPress
+plugin and the Spacefast dashboard.
+
+The plugin authenticates with OAuth 2 and PKCE. Access is bounded by the
+signed-in user's live team role, the one team approved on the consent screen,
+and the Headless CMS scope (`builds:trigger` plus team and space discovery).
+**Disconnect** in the plugin revokes refresh access; the team's **Connected
+Apps** page revokes the grant immediately.
+
+The plugin also has a **Static WordPress** mode: it publishes a
+Simply-Static-generated copy of the WordPress site directly to the space,
+under the `spaces:publish` scope, with no repository build involved.
 
 ## Boundaries
 

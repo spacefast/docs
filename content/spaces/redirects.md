@@ -38,9 +38,10 @@ source [query=:capture ...] destination [status[!]] [Condition=value,... ...]
 
 ## Rule capacity
 
-A publish can include up to 2,100 redirect rules: 2,000 static rules and 100
-dynamic rules. Within that ceiling, the team's
-entitlements set its routing-rule capacity. The compiler
+A publish can include up to 2,100 routing rules: 2,000 static rules and 100
+dynamic rules. `_redirects` and `sf.jsonc` `redirects`/`rewrites` count
+against the same caps. Within that ceiling, the team's entitlements set its
+routing-rule capacity. The compiler
 parses the complete file, and diagnostics identify the exact rules when the
 result is over capacity.
 
@@ -85,13 +86,16 @@ Static rules are exact path rules without a host constraint. Dynamic rules inclu
 | `404`                             | Custom not found | Local path.                  |
 
 External proxy rules (`200` with an absolute URL destination) require the
-team's proxy entitlement. See [Proxy routes](#proxy-routes).
+team's proxy entitlement. See [Proxy routes](#proxy-routes). Destinations
+resolve `{{ vars.NAME }}` from non-secret [variables](/spaces/variables).
 
 ## Proxy routes
 
 A proxy route is a `200` rule with an absolute `http` or `https` destination.
 Use it for public endpoints that do not need Spacefast to inject private
-credentials; secret injection is not supported. Keep secret-bearing logic
+credentials; secret injection is not supported. Add `cache=shared` after the
+status to let the shared cache store upstream responses; it is valid only on
+absolute-URL `200` rules. Keep secret-bearing logic
 behind your own API, Worker, Function, or service, then proxy to that public
 endpoint. Internal rewrites to pages in the same space do not need an external
 proxy route.
@@ -113,7 +117,10 @@ Migrating from Cloudflare or Netlify functions:
 
 ## Query captures
 
-Query captures sit between source and destination. Use `name=:capture`. Query names must start with a letter. They may include letters, numbers, underscores, or hyphens.
+Query captures sit between source and destination. Use `name=:capture`. Both
+names must start with a letter. The query parameter name may include letters,
+numbers, underscores, or hyphens; the capture name after `:` allows letters,
+numbers, and underscores only.
 
 ```text
 /search q=:q /results/:q 302
@@ -142,12 +149,14 @@ Conditions come after the status. Spacefast supports `Country`, `Language`, `Coo
 Spacefast supports only the condition names above and rejects Netlify and
 Cloudflare spellings such as `nf_country` and `cf_ipcountry` with a
 `redirect_condition_unsupported` error that blocks the publish. Rename them to
-`Country=` / `Language=`; role conditions are rejected the same way.
+`Country=` / `Language=`; `Role=` conditions are rejected with
+`redirect_role_unsupported`.
 
 Conditions combine with `AND`; comma-separated values inside one condition
 combine with `OR`.
 
-Use `Agent=true` when a URL should serve a plain-text version to AI agents. The
+Use `Agent=true` when a URL should serve a plain-text version to AI agents
+(accepted values: `true`, `yes`, `1`). The
 same URL keeps the browser version for humans. Spacefast treats a request as
 agent-like when it prefers `text/plain` or `text/markdown` without asking for
 HTML, or when it carries a known agent user agent. Shell fetches like `curl`

@@ -1,11 +1,11 @@
 ---
-title: "billing_subscription_conflict"
-description: "The team already has an active subscription with another payment provider."
+title: "review_item_claimed"
+description: "Another reviewer already claimed this review item."
 ---
 
-The team already has an active subscription with another payment provider.
+Another reviewer already claimed this review item.
 
-**How to resolve:** Cancel the existing subscription before subscribing through a different provider.
+**How to resolve:** Pick a different item, or ask the current assignee (error.details.assignedToUserId) to release it.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/billing_subscription_conflict",
-  "title": "Billing subscription conflict",
+  "type": "https://spacefast.com/docs/errors/review_item_claimed",
+  "title": "Review item claimed",
   "status": 400,
-  "detail": "The team already has an active subscription with another payment provider.",
-  "code": "billing_subscription_conflict",
+  "detail": "Another reviewer already claimed this review item.",
+  "code": "review_item_claimed",
   "requestId": "req_4mz0v8qk"
 }
 ```

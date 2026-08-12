@@ -1,11 +1,11 @@
 ---
-title: "archive_body_required"
-description: "This request must carry an archive body but none was provided."
+title: "blob_gate_record_missing"
+description: "The file behind this download link no longer exists."
 ---
 
-This request must carry an archive body but none was provided.
+The file behind this download link no longer exists.
 
-**How to resolve:** Send the zip bytes as the request body with the matching content-type header.
+**How to resolve:** Ask the owner for a fresh link; the underlying object was deleted.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/archive_body_required",
-  "title": "Archive body required",
+  "type": "https://spacefast.com/docs/errors/blob_gate_record_missing",
+  "title": "Blob gate record missing",
   "status": 400,
-  "detail": "This request must carry an archive body but none was provided.",
-  "code": "archive_body_required",
+  "detail": "The file behind this download link no longer exists.",
+  "code": "blob_gate_record_missing",
   "requestId": "req_4mz0v8qk"
 }
 ```

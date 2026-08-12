@@ -34,14 +34,14 @@ Roles are `owner`, `admin`, or `member`:
 ```bash
 sf teams invitations add jane@example.com --role member
 sf teams invitations ls
-sf teams invitations resend inv_123
-sf teams invitations cancel inv_123
+sf teams invitations resend invite_123
+sf teams invitations cancel invite_123
 ```
 
 The invitee accepts with the invitation id from the invite link:
 
 ```bash
-sf teams accept inv_123
+sf teams accept invite_123
 ```
 
 List or remove people already on the team:
@@ -57,7 +57,7 @@ capacity.
 ## Access defaults for new spaces
 
 When the team creates a space, Spacefast materializes a root Grant from the
-team default: `private`, `team`, or `public`.
+team default: `private`, `team`, or `public`. New teams default to `team`.
 
 ```bash
 sf teams defaults
@@ -70,8 +70,7 @@ do not change. Use [Access](/spaces/access) to change them.
 ## Audit log
 
 Each team keeps an audit log of team-level events: find it in the dashboard
-under **Settings → Audit**. How far back it reaches depends on the team's
-plan. For activity inside a single space, use
+under **Settings → Activity**. For activity inside a single space, use
 [monitoring](/spaces/monitoring) instead.
 
 ## Related

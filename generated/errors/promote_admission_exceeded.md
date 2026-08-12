@@ -1,11 +1,11 @@
 ---
-title: "publish_reference_missing"
-description: "Published HTML, CSS, or JavaScript references an internal path that is not in the version."
+title: "promote_admission_exceeded"
+description: "Too many archived files are being restored for this space right now."
 ---
 
-Published HTML, CSS, or JavaScript references an internal path that is not in the version.
+Too many archived files are being restored for this space right now.
 
-**How to resolve:** Publish the missing artifact, or correct the reference to a route that this version serves.
+**How to resolve:** Retry shortly; restores are limited to protect the host.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/publish_reference_missing",
-  "title": "Publish reference missing",
+  "type": "https://spacefast.com/docs/errors/promote_admission_exceeded",
+  "title": "Promote admission exceeded",
   "status": 400,
-  "detail": "Published HTML, CSS, or JavaScript references an internal path that is not in the version.",
-  "code": "publish_reference_missing",
+  "detail": "Too many archived files are being restored for this space right now.",
+  "code": "promote_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }
 ```

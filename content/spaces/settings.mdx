@@ -16,7 +16,7 @@ for autocomplete. Use the playground to produce a valid starting point.
 
 <ConfigPlayground />
 
-## Complete example
+## Example
 
 ```jsonc
 {
@@ -31,6 +31,7 @@ for autocomplete. Use the playground to produce a valid starting point.
     "title": "Product docs",
     "description": "Everything about the product.",
     "image": "/og.png",
+    "favicon": "/favicon.svg",
   },
   "theme": {
     "accent": "#ff603d",
@@ -65,22 +66,58 @@ Use `fallback` for a single-page app (SPA) or a custom not-found page:
 { "fallback": { "path": "/404.html", "status": 404 } }
 ```
 
+The object form needs both `path` and `status`.
+
 `cleanUrls` serves `/about.html` at `/about` when no file or directory index
 matches first. It defaults to on for static sites and off for a 200-status
 SPA fallback. Set it explicitly for SPA fallbacks.
 
 ## Metadata and visitor pages
 
-`name` is the space display name. `meta.title`, `meta.description`, and
-`meta.image` supply listing and social metadata. `theme` controls the designed
-access, error, and system pages.
+`name` is the space display name. `meta.title`, `meta.description`,
+`meta.image`, and `meta.favicon` supply listing, social, and browser-icon
+metadata. `theme` controls the designed access, error, and system pages.
 
 See [Customization](/spaces/customization) for `theme.json`, `DESIGN.md`,
 `_layout.html`, and complete `_pages` takeovers.
 
+## Routing and headers
+
+`_redirects` and `_headers` files work everywhere. The same rules are also
+`sf.jsonc` keys, useful when the config is generated:
+
+```jsonc
+{
+  "redirects": [{ "source": "/old", "destination": "/new", "status": 301 }],
+  "rewrites": [{ "source": "/api/*", "destination": "https://api.example.com/*" }],
+  "headers": [
+    { "source": "/*", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] },
+  ],
+}
+```
+
+`redirects[].status` accepts 301, 302, 303, 307, or 308 and defaults to 302.
+`rewrites` take no status: a path destination is a rewrite, an absolute URL is
+a proxy. `_redirects` file rules match before config `redirects`, then config
+`rewrites`; a `_headers` block wins over a config rule for the same header.
+All sources count against the same
+[rule caps](/spaces/redirects#rule-capacity).
+
+## Templates
+
+List files that should receive `{{ vars.NAME }}` substitution at publish:
+
+```jsonc
+{ "templates": ["config.js"] }
+```
+
+Values come from [variables](/spaces/variables). Secret variables are refused
+in templates; the publish fails with
+[`secret_variable_in_template`](/errors/secret_variable_in_template).
+
 ## Access
 
-Make the whole space public:
+Make the whole space public (`"public"` is the only string form):
 
 ```jsonc
 { "access": "public" }
@@ -96,7 +133,9 @@ Expose selected paths while everything else remains private:
 }
 ```
 
-For people, links, passwords, machine credentials, and policy rules, use
+Wildcards match whole path segments. A list that is all negations is invalid.
+On an unclaimed space the block is inert until the space is claimed. For
+people, links, passwords, machine credentials, and policy rules, use
 [Access](/spaces/access).
 
 ## Superpowers
@@ -152,6 +191,10 @@ with `--wait-timeout` (default 900 seconds).
 
 ## What does not belong here
 
-- Put redirects, rewrites, proxies, and response headers in
-  [`_redirects`](/spaces/redirects) and [`_headers`](/spaces/headers).
+- Rule syntax and limits for redirects, rewrites, proxies, and response
+  headers live in [`_redirects`](/spaces/redirects) and
+  [`_headers`](/spaces/headers).
+- Build settings (`build.buildCommand`, `build.outputDirectory`, and friends)
+  are covered in [Build from Git](/publishing/git); runtimes (`runtime.kind`)
+  in [Apps](/apps).
 - Manage cloud and runtime variables with [`sf env`](/spaces/variables).

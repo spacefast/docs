@@ -45,18 +45,19 @@ Fix the records that diagnostics reports, wait for their TTL, and check again.
 Do not remove the old host until diagnostics reports the domain ready and you
 have tested the site.
 
-## Custom certificates and SSL controls
+## Certificates
 
-Certificates are automatic by default; most teams never touch them. When you
-need your own, upload a certificate for a hostname, stage it, then activate,
-deactivate, or delete it from the domain settings in the dashboard or through
-the REST API. Per-hostname SSL status and an issuance retry live in the same
-place.
+Certificates are automatic. If issuance fails, retry it from the domain's
+page in the dashboard, or
+`POST /v1/spaces/{spaceId}/domains/{domainId}/ssl/retry`. Uploading your own
+certificate is not available.
 
-Options include an Android-compatible certificate chain, HSTS for subdomains,
-and disabling HSTS preload.
+## Manage DNS at Spacefast
 
-- There is no CLI command for certificates; use the dashboard or the API.
+When Spacefast is the domain's DNS host, manage records from the CLI:
+`sf domains dns add|update|rm|ls|export|refresh`, plus
+`sf domains nameservers set` for delegation and `sf domains search` for
+availability. See the [CLI reference](/cli#sf-domains-dns-add-domain).
 
 ## List or remove hostnames
 

@@ -14,7 +14,9 @@ A Grant combines 5 dimensions:
 - **Audience**: Public, Team, Person, Link, Password, Machine, or an external
   identity.
 - **Paths**: Exact or wildcard paths, with optional exclusions.
-- **Capabilities**: View, Comment, Publish, or Manage.
+- **Role**: `viewer`, `commenter`, `editor`, or `manager` - each a named
+  set of capabilities (`page.view`, `comments.read`, `comments.write`,
+  `content.publish`, `access.manage`).
 - **Target**: Live, all versions, one version, or one branch.
 - **Constraints**: Optional time, use-count, email, IP, country, or user-agent
   limits.
@@ -25,14 +27,14 @@ every required dimension, and an exclusion applies only to its own Grant.
 Let the owning team view a subtree:
 
 ```bash
-sf share grant --to team --can view --path '/docs/**'
+sf share grant --to team --role viewer --path '/docs/**'
 ```
 
 Make the whole live space public; add `--target all-versions` to make
 immutable version URLs public too:
 
 ```bash
-sf share grant --to public --can view --path '/**'
+sf share grant --to public --role viewer --path '/**'
 ```
 
 Explain the effective result for one route and audience:
@@ -78,7 +80,7 @@ multiple paths, allow comments, expire, limit uses, or target live content or
 versions.
 
 ```bash
-sf share link create --name "Client review" --landing /proposal --path '/proposal/**' --exclude '/proposal/internal/**' --can comment --expires 7d
+sf share link create --name "Client review" --landing /proposal --path '/proposal/**' --exclude '/proposal/internal/**' --role commenter --expires 7d
 ```
 
 List Links and copy a credential URL:
@@ -96,10 +98,10 @@ sf share link revoke lnk_123
 
 ## Passwords and machine credentials
 
-Passwords can grant View or Comment access without a user account:
+Passwords can carry the `viewer` or `commenter` role without a user account:
 
 ```bash
-sf share password create --name "Launch review" --password-from-stdin --can comment --path '/launch/**'
+sf share password create --name "Launch review" --password-from-stdin --role commenter --path '/launch/**'
 ```
 
 Rotate one:
@@ -108,11 +110,11 @@ Rotate one:
 sf share password rotate pwd_123 --password-from-stdin
 ```
 
-Machine tokens are header-only bearer credentials that can also grant Publish
-or Manage access:
+Machine tokens are header-only bearer credentials that can also carry the
+`editor` or `manager` role:
 
 ```bash
-sf share token create --name "Docs publisher" --can publish --path '/docs/**'
+sf share token create --name "Docs publisher" --role editor --path '/docs/**'
 ```
 
 Rotate a compromised token:
@@ -148,7 +150,7 @@ sf share identity create --type oidc --name "Company login" --issuer https://log
 ```
 
 ```bash
-sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --can comment --path '/docs/**'
+sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --role commenter --path '/docs/**'
 ```
 
 - Signer rotation can overlap old and new keys.
@@ -172,6 +174,8 @@ Make the whole space public:
 { "access": "public" }
 ```
 
+On an unclaimed space this block is inert until the space is claimed.
+
 Public responses are cacheable; Spacefast never stores private or
 credential-bearing responses in the public cache, and a change to access
 purges the affected entries.
@@ -185,10 +189,16 @@ purges the affected entries.
 | **Link**  | Visitor access backed by one revocable Grant. |
 | **Claim** | Ownership recovery for an anonymous space.    |
 
-Open, Link, and Claim secrets begin in a URL fragment on
-`access.spacefast.com`; the broker exchanges the secret for a short-lived,
-host-bound handoff, and the serving host sets a `__Host-` cookie before
-redirecting to the clean live URL.
+The three credential URLs work differently:
+
+- **Open** links carry their secret in a URL fragment on the handoff broker;
+  it exchanges the secret for a short-lived, host-bound handoff, and the
+  serving host sets a `__Host-` cookie before redirecting to the clean live
+  URL.
+- **Link** URLs are served on the space's own host as
+  `https://<space-host>/<landing>?__=<token>` - no redirect, no interstitial.
+- **Claim** links open the dashboard at
+  `https://my.spacefast.com/claim#<key>`.
 
 ## The access page
 
@@ -197,8 +207,9 @@ only the methods that the space's Grants allow: Spacefast sign-in, company
 single sign-on (SSO), a password, or an invite request. If only one SSO lane
 exists, Spacefast can go straight to that provider.
 
-Theme the page with the `theme` section of `sf.jsonc`, or replace it with
-`_pages/access.html`. See [Customization](/spaces/customization).
+Theme the page with the `theme` section of `sf.jsonc`, or, on a paid plan,
+replace it with `_pages/access.html`. A custom access page must render
+`<sf-access-lanes>`. See [Customization](/spaces/customization).
 
 ## Network constraints and logout
 
@@ -206,7 +217,7 @@ Network limits apply to one Grant; they do not deny access that another
 matching Grant allows.
 
 ```bash
-sf share grant --to public --can view --path '/partner/**' --network 203.0.113.0/24 --country NL --exclude-user-agent bad-crawler
+sf share grant --to public --role viewer --path '/partner/**' --network 203.0.113.0/24 --country NL --exclude-user-agent bad-crawler
 ```
 
 To invalidate every browser session without changing Grants:

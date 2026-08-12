@@ -1,9 +1,9 @@
 ---
 title: "storage_unavailable"
-description: "The Zero runtime cannot read or persist object storage."
+description: "The runtime cannot read or persist object storage."
 ---
 
-The Zero runtime cannot read or persist object storage.
+The runtime cannot read or persist object storage.
 
 **How to resolve:** Retry on a healthy runtime. Contact support if the failure persists.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_unavailable",
   "title": "Storage unavailable",
   "status": 400,
-  "detail": "The Zero runtime cannot read or persist object storage.",
+  "detail": "The runtime cannot read or persist object storage.",
   "code": "storage_unavailable",
   "requestId": "req_4mz0v8qk"
 }

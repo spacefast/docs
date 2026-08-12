@@ -4,8 +4,10 @@ description: Version, review, preview, and release analytics or marketing tags w
 ---
 
 :::note[Early access]
-Tag Manager is available only when the `tags` feature is active for your team.
-The CLI hides the commands until that feature is active.
+Tag Manager is in private beta; ask Spacefast to enable the `tags` feature
+for your team. The CLI hides `sf tags` from help until you set
+`SPACEFAST_CLI_EARLY_ACCESS=tags`; the commands run either way, and the API
+returns `feature_unavailable` until the team has the feature.
 :::
 
 Spacefast Tag Manager keeps analytics and marketing code out of page templates.

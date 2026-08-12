@@ -1,11 +1,11 @@
 ---
-title: "import_archive_not_uploaded"
-description: "The import has no uploaded archive yet."
+title: "ingest_admission_exceeded"
+description: "Too many concurrent uploads for this space."
 ---
 
-The import has no uploaded archive yet.
+Too many concurrent uploads for this space.
 
-**How to resolve:** Upload the archive to the import's upload target, then finalize.
+**How to resolve:** Wait for the Retry-After window, then resume; at most 4 uploads run per space at once.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/import_archive_not_uploaded",
-  "title": "Import archive not uploaded",
+  "type": "https://spacefast.com/docs/errors/ingest_admission_exceeded",
+  "title": "Ingest admission exceeded",
   "status": 400,
-  "detail": "The import has no uploaded archive yet.",
-  "code": "import_archive_not_uploaded",
+  "detail": "Too many concurrent uploads for this space.",
+  "code": "ingest_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }
 ```

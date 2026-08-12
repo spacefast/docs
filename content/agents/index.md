@@ -26,14 +26,12 @@ command, skills, and MCP.
 
 ## Install the CLI
 
-The CLI is the full surface: incremental publishes, version history, rollback,
-passwords, domains, logs, and diagnostics.
+The CLI covers everything an agent needs: incremental publishes, version
+history, rollback, passwords, domains, logs, and diagnostics.
 
 ```bash
-npm install -g spacefast@0.0.13
+npm install -g spacefast
 ```
-
-That command pins the package release reviewed for this docs release.
 
 For a standalone binary, download the asset for your platform plus
 `checksums.txt` from the
@@ -152,7 +150,7 @@ Interactive humans use [`sf login`](/cli#sf-login). CI uses a masked
 [`ci_deploy` API key](/account/api-keys) stored as a token:
 
 ```bash
-sf login --token st_123
+sf login --token sfa_123
 ```
 
 Hosted agents should prefer [MCP](/agents/mcp) OAuth or a dashboard handoff

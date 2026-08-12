@@ -18,35 +18,44 @@ that matters:
 
 - **`data.space.liveUrl`**: the live site.
 - **`data.version.immutableUrl`**: the published bytes, frozen, reserved in
-  the initial receipt. Poll `data.links.status` until the version status is
-  `ready` before sharing it.
-- **`data.claim.url`** and **`data.claim.expiresAt`**: anonymous spaces expire
-  unless claimed within 6 hours. Always show the user the claim link and the
-  deadline.
-- **`data.shareBlurb`**: a paste-ready one-liner with the URL and claim nudge.
-  Relay it verbatim.
+  the initial receipt.
+- **`data.next`**: the one normative next step. Branch on `data.next.action`:
+  `done` (stop), `upload` (PUT the files in `data.upload.targets`, then POST
+  `data.next.url`), `finalize` (POST `data.next.url`), `poll` (GET
+  `data.next.url` after `data.next.retryAfter` seconds).
+- **`data.activation.outcome`**: whether the version is serving. Liveness is a
+  channel pointer; never infer it from a version status.
+- **`data.claim.claimUrl`** and **`data.claim.expiresAt`**: anonymous spaces
+  expire unless claimed within 6 hours. Always show the user the claim link and
+  the deadline.
 
-For anonymous spaces, send the receipt's `data.claim.token` as
-`Authorization: Bearer your_claim_token` when you poll `data.links.status`, read
+MCP callers also get `shareBlurb`, a paste-ready one-liner. The HTTP receipt
+does not carry it.
+
+For anonymous spaces, send the receipt's `data.claim.key` (the space key,
+`sfc_...`) as `Authorization: Bearer sfc_...` when you poll, read
 `data.links.inspect` / `data.links.version`, finalize uploads, or update the
-same `spaceId`. Never print the token back to the user. Errors come back as
-JSON with stable `code` values and a `docsUrl` for recovery steps.
+same `spaceId`. Never print the key back to the user. Errors are RFC 9457
+problem documents: branch on the stable `code` and follow `type` for the
+recovery page.
 
 ## Continue after claim
 
-Claiming ends the claim token's publish rights. When the owner keeps agent
-continuation on (the default at claim time), the token becomes a one-time
-exchange voucher, and the next publish with it fails with an error that points
-here. CLI agents run [`sf continue`](/cli#sf-continue) to exchange the saved
-claim token for a durable space access token in one command. API-only agents:
+Claiming ends the space key's publish rights. When the owner keeps agent
+continuation on (the default at claim time), the key becomes a one-time
+exchange voucher, and the next publish with it fails with
+`409 space_claimed_credential_available` — the signal to run the exchange once.
+CLI agents run [`sf continue`](/cli#sf-continue) to exchange the saved space
+key for a durable credential in one command. API-only agents:
 
-1. Call `POST /v1/anonymous-claim/exchange` with the same bearer auth to trade
-   the token once for a durable, publish-only API key scoped to that space.
+1. Call `POST /v1/claim/exchange` with the same bearer auth. It returns
+   `data.credential.accessToken`, a durable publish-only key scoped to that
+   space.
 2. Save the key to `.spacefast/state.json`.
 3. Retry the publish with the new key as the bearer credential.
 
-The owner can see and revoke the key under **Account → Access tokens**. If
-they turned continuation off, ask them to mint an access token in the
+The owner can see and revoke the key under the team's **Settings → Developer →
+API keys**. If they turned continuation off, ask them to mint an API key in the
 dashboard instead.
 
 ## Agent-safe behavior

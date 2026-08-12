@@ -5,7 +5,7 @@ description: "The operation would exceed its storage allowance."
 
 The operation would exceed its storage allowance.
 
-**How to resolve:** Delete unused Zero objects or old versions, reduce the upload size, then retry.
+**How to resolve:** Delete unused storage objects or old versions, reduce the upload size, then retry.
 
 <div data-pagefind-ignore>
 

@@ -4,8 +4,9 @@ description: Publish by upload or Git push with no account, then claim the space
 ---
 
 Publishing without an access token creates an anonymous space. The response
-includes a claim token, claim link, and expiration time. Save them immediately.
-Spacefast returns the token and link only once.
+includes the space key (`sfc_...`), an Open link that serves the space, a claim
+link, and an expiration time. Save them immediately. Spacefast returns the key
+and links only once.
 
 Claim the space within 6 hours or it expires; each successful anonymous update
 resets the deadline to 6 hours out, capped at 30 days after the space creation
@@ -20,13 +21,14 @@ with nothing to install.
 
 An unclaimed space works, with limits:
 
-- The live space URL and permanent Version URLs work.
+- Unclaimed spaces are private by default. The Open link from the publish
+  receipt serves the space and its permanent Version URLs; the bare live URL
+  shows an unclaimed notice until you claim the space or make it public.
 - The local `.spacefast/state.json` lets the CLI keep updating the anonymous space.
 - Static assets, redirects, response headers, SPA fallback, and metadata all publish.
 - Anonymous spaces allow 50 MB per file, 100 MB and 1,000 files per version, and 20 publishes per hour per IP.
-- Spacefast accepts and scans uploads like any publish. Unclaimed spaces serve web content only: HTML, CSS, JavaScript, JSON, XML, images, fonts, and text. Spacefast does not serve other files until you claim the space.
-- After more than 100 counted, non-crawler visits, Spacefast pauses an unclaimed space behind a claim page. Analytics ingestion can trail live traffic, so enforcement can start after the 101st request. When you claim the space, Spacefast restores it instantly.
-- External proxy execution, `_headers` Basic Auth, and custom domains are not available on anonymous spaces.
+- Spacefast accepts and scans uploads like any publish. Unclaimed spaces serve web content only: text, images, fonts, JSON (including web manifests), XML (including RSS and Atom feeds), JavaScript, and gzip. Spacefast does not serve other files until you claim the space.
+- External proxy execution and custom domains are not available on anonymous spaces.
 
 ## Publish with a Git push
 
@@ -68,7 +70,7 @@ publish logs. If detection chooses the wrong root or output directory, use
 Accounts are WordPress.com accounts. Claiming moves the space into a team and unlocks:
 
 - Custom domains and diagnostics.
-- Any proxy-route or `_headers` Basic Auth entitlement attached to the team.
+- Any proxy-route entitlement attached to the team.
 - Larger file-size limits and additional routing capacity.
 - Team access, billing, and long-term retention.
 
@@ -88,6 +90,8 @@ Run [`sf continue`](/cli#sf-continue) to continue publishing after the claim.
 
 Spacefast disables an unclaimed space that reaches its deadline: live access
 stops, the content enters a 7-day claim-only recovery window, and Spacefast
-queues deletion after that window. The hostname serves an expired page from
-then on and is never re-issued to someone else, so nobody can take over stale
-links.
+queues deletion after that window. Claiming during the window restores the
+space; a space you deleted yourself with its space key can also be restored
+with `POST /v1/spaces/{spaceId}/restore`. The hostname serves an expired page
+from then on and is never re-issued to someone else, so nobody can take over
+stale links.

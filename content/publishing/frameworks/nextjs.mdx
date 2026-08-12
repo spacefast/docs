@@ -43,60 +43,24 @@ API calls can target your backend directly or through a
 
 ## Functions with OpenNext
 
-:::warning[Private beta]
-Functions is available to teams with the private-beta flag. Ask Spacefast to
-enable it for your team before publishing an OpenNext worker.
-:::
-
 Use this path when the app needs request-time Next.js features. Remove
 `output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
 into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
 so also remove any `export const runtime = "edge"` declarations.
 
-Install the adapter and its build-time Wrangler dependency:
-
-```bash
-bun add @opennextjs/cloudflare
-bun add --dev wrangler
-```
-
-Add the OpenNext configuration at the project root:
-
-```ts
-// open-next.config.ts
-import { defineCloudflareConfig } from "@opennextjs/cloudflare";
-
-export default defineCloudflareConfig({});
-```
-
-Give the Spacefast build its own package script:
-
-```json
-{
-  "scripts": {
-    "build": "next build",
-    "build:spacefast": "opennextjs-cloudflare build"
-  }
-}
-```
-
-Build from the project root, then confirm the publish plan detects the
-`.open-next/worker.js` entry before anything uploads:
-
-```bash
-bun run build:spacefast
-sf publish --dry-run
-```
-
-Then publish the project. Do not run OpenNext's `deploy` command; it deploys
-directly to Cloudflare instead of creating a Spacefast version.
+Then publish:
 
 ```bash
 sf publish
 ```
 
-Spacefast detects `.open-next/worker.js`, enables the Node.js compatibility
-support it needs, and publishes the worker with the generated static assets.
+Spacefast detects the Next.js project, builds it with a pinned OpenNext
+Cloudflare adapter, and publishes the worker with the generated static assets.
+No adapter install, no `open-next.config.ts`, no extra package script. Keep an
+`open-next.config.ts` only when you need to override the defaults; Spacefast
+preserves yours. Confirm the plan before anything uploads with
+`sf publish --dry-run`.
+
 Requests for a published file are served from disk first; SSR, Route Handlers,
 and other misses reach the worker. You can pin the detected entry explicitly:
 
@@ -178,7 +142,7 @@ export function HeroImage() {
 This outputs image URLs like:
 
 ```text
-https://i0.wp.com/example.com/uploads/hero.jpg?w=1200&quality=85&strip=all
+https://i0.wp.com/example.com/uploads/hero.jpg?quality=85&strip=all&w=1200
 ```
 
 For per-component control, pass `spacefastNextImageLoader` from
@@ -192,5 +156,5 @@ one URL helper so components do not rebuild image URLs differently.
 - For Functions, check that the OpenNext build creates `.open-next/worker.js`.
 - Replace request-time features when you publish a static export. Keep them when you use Functions.
 - Put `_redirects` and `_headers` in the exported output if the space needs
-  Spacefast routing, response headers, or entitled `_headers` Basic Auth.
+  Spacefast routing or response headers.
 - Use Site Accelerator URLs only for public images that the CDN can fetch.

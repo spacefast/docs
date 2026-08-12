@@ -6,8 +6,7 @@ description: How to move a static site from Vercel to Spacefast.
 Spacefast fits Vercel projects that build into static files. The Git workflow
 carries over: [connect the repo](/publishing/git) for branch previews,
 pull-request comments, and status checks. Check the target team's
-routing entitlements in the dashboard before relying on Basic Auth or
-external proxies.
+routing entitlements in the dashboard before relying on external proxies.
 
 Before switching DNS, audit the project for Vercel-only behavior. If the site
 depends on request-time rendering, functions, middleware, Incremental Static
@@ -49,7 +48,8 @@ sf publish ./out
 - Static assets, generated HTML, client-side JavaScript, single-page app (SPA)
   fallbacks, and custom 404 pages.
 - Redirect, rewrite, and supported response-header intent after conversion from
-  `vercel.json`. Basic Auth carries over when enabled for the target team.
+  `vercel.json`. Vercel password protection maps to
+  [Spacefast sharing](/spaces/access), not `_headers`.
 
 ## What to change
 
