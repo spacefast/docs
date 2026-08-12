@@ -6,17 +6,12 @@ description: Build apps with a database, storage, authentication, and typed serv
 Zero is the full-stack Spacefast runtime. One project contains a Preact client,
 a typed server capsule, a database schema, authentication, and storage. One
 publish command makes the whole app live as a normal space version.
-
-:::note[Dedicated runtime required]
-Zero is generally available, but publishing a Zero app requires a plan with
-dedicated runtime isolation. Without that entitlement, the publish stops with
-`zero_requires_dedicated_plan` before any server code runs.
-:::
+Zero is generally available.
 
 ## Quick start
 
 ```bash
-sf create my-app --runtime zero
+sf init my-app --runtime zero
 cd my-app
 sf dev
 ```
@@ -138,7 +133,9 @@ upgrades the same browser session to an authenticated identity.
 import { SignInWithGoogle, signOut, useAuth } from "@spacefast/zero/client";
 ```
 
-`useAuth()` returns `userId`, `displayName`, `provider`, `isGuest`,
+Hosted sign-in uses Gravatar; `SignInWithGoogle` is a compatibility alias that
+renders the "Sign in with Gravatar" button. `useAuth()` returns `userId`,
+`displayName`, `provider` (`"guest"` or `"gravatar"`), `isGuest`,
 `isAuthenticated`, `email`, and `isLoading`.
 
 On the server, the same identity is `ctx.auth` in every handler. Check
@@ -189,27 +186,28 @@ schema before you roll back across a migration.
 ## Storage
 
 Zero client storage handles browser uploads without a separate storage
-credential. Objects are private by default; anyone with the URL can read a
-public object.
+credential. Objects are addressed by a random 128-bit id. Read URLs carry a
+runtime read key that Spacefast can rotate; rotation immediately invalidates
+every URL minted under the old key.
 
 ```tsx
 import { storage } from "@spacefast/zero/client";
 
 const uploaded = await storage.upload(file);
-const shared = await storage.upload(file, { public: true });
-await storage.delete(uploaded.key);
+await storage.delete(uploaded.id);
 ```
 
-Hosted uploads, private reads, and deletes require sign-in. Only the uploader
-can delete an object. The space owner gets an inventory across uploaders with
-`sf storage ls` and can force-delete with
-`sf storage rm private/0123456789abcdef0123456789abcdef --yes`; that delete is
+Uploads and deletes require an identified visitor; anonymous commenters are
+admitted where Comments admits them, against the daily anonymous budget. Only
+the uploader can delete an object. The space owner gets an inventory across
+uploaders with `sf storage ls` and can force-delete with
+`sf storage rm 0123456789abcdef0123456789abcdef --yes`; that delete is
 destructive and unrecoverable.
 
-Safety and limits: 5 MiB per object, 100 MiB stored per space, no empty
-uploads, and no executable or active web content (HTML, JavaScript, PHP,
-binaries). You set visibility at upload time and it cannot change; upload a
-replacement instead.
+Safety and limits: 5 MiB per object, a 200 MiB rolling daily budget for
+anonymous uploads per space, no empty uploads, and no executable or active web
+content (HTML, JavaScript, PHP, binaries). Total storage counts against the
+plan's storage limit.
 
 ## Variables
 
@@ -230,9 +228,10 @@ sf runtime status
 sf logs runtime --follow
 ```
 
-The first Zero publish places the space on its own site and database. A publish
-can report `zero_activating` while that move completes. Code belongs to the
-version; database rows and stored objects belong to the space and do not roll
-back with it.
+Every space already has its own site, so a capsule publish onto an existing
+space is an ordinary publish; nothing migrates. Code belongs to the version;
+database rows and stored objects belong to the space and do not roll back with
+it.
 
-The compiled server bundle has a maximum size of 768 KiB.
+The compiled server bundle is capped at 768 KiB and the client bundle at
+8 MiB.

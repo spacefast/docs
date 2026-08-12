@@ -11,17 +11,12 @@ full-stack runtime with a built-in database, authentication, and storage, and
 [Functions](/apps/functions), a single Web-standard `fetch` worker beside your
 static files. This page helps you pick one.
 
-:::warning[Private beta]
-Zero and Functions require a team private-beta flag. Ask Spacefast to enable
-the runtime you want to use.
-:::
-
 |                   | [Zero](/apps/zero)                 | [Functions](/apps/functions) |
 | ----------------- | ---------------------------------- | ---------------------------- |
 | You write         | Capsule: schema and named handlers | Worker: one `fetch` handler  |
 | Database          | Built in                           | Optional `env.DB` binding    |
 | Authentication    | Built in                           | Bring your own flow          |
-| Storage           | Built in                           | Use an external service      |
+| Storage           | Built in                           | Built in (`env.STORAGE`)     |
 | Framework         | Zero client and server APIs        | Web APIs and npm packages    |
 | Local development | `sf dev`                           | Your framework's dev server  |
 

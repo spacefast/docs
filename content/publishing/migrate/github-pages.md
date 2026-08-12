@@ -37,8 +37,8 @@ sf publish ./_site
 - Keep `404.html` in the publish root if the site uses a custom not-found
   page.
 - Add a root `_redirects` file if a single-page app needs a fallback such as
-  `/app/* /app/index.html 200`. Check the team's [routing
-  entitlement in the dashboard before moving a large ruleset.
+  `/app/* /app/index.html 200`. Check the team's routing entitlement in the
+  dashboard before moving a large ruleset.
 - Recreate the custom domain in Spacefast, open the test space URL, and confirm
   the new version serves. Then move DNS away from the GitHub Pages records. SSL
   is automatic, and the cutover is reversible.
@@ -61,8 +61,9 @@ sf publish ./_site
   redirects in Spacefast if you want the same canonical domain behavior.
 - GitHub Pages has no native `_redirects` or `_headers` files. If you used
   JavaScript, meta refresh tags, or an external CDN to fill that gap, replace
-  that behavior. Use Spacefast routing and header files where possible. Check
-  the team's entitlements before relying on Basic Auth.
+  that behavior. Use Spacefast routing and header files where possible.
+  `_headers` Basic Auth is not supported; use
+  [Spacefast sharing](/spaces/access) for protected content.
 - Retire the Pages deploy workflow. The best replacement:
   [connect the repo](/publishing/git). Spacefast then builds on every push,
   with branch and PR previews. If you want to keep your GitHub Actions build,

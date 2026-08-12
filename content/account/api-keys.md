@@ -60,7 +60,7 @@ sf api-keys revoke key_123
   [MCP](/agents/mcp).
 
 Claiming an anonymous space with agent continuation on lets the agent exchange
-the claim token once for a publish-only key scoped to that space. See
+the space key (`sfc_...`) once for a publish-only key scoped to that space. See
 [Publish as an agent](/agents/publishing).
 
 ## Related

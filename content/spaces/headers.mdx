@@ -53,14 +53,16 @@ https://*.example.com/private/*
   X-Robots-Tag: noindex
 ```
 
-Patterns support `*` splats and named placeholders such as `:slug`. Header matchers also allow wildcard prefixes inside a segment, such as `*.example.com`.
+Patterns support `*` splats and named placeholders such as `:slug`. Wildcard
+prefixes inside a segment, such as `*.example.com`, work only in absolute-URL
+matchers; in a bare path a `*` must be its own segment or end one.
 
 ```text
 /blog/:slug
   Link: </feed.xml>; rel="alternate"
   X-Page-Slug: :slug
 
-/files/*.pdf
+https://*.example.com/files/*
   Content-Disposition: inline
 
 https://:team.example.com/app/*
@@ -120,35 +122,12 @@ delete previously applied values. A later set can add the header again.
 
 Headers apply to runtime-served file responses, including internal rewrites and custom 404 files. They do not apply to browser redirects or external proxy responses.
 
-## Basic Auth
+## No Basic Auth
 
-Basic Auth requires the corresponding team entitlement. The dashboard and
-plan policy show whether it is enabled.
-
-Use `Basic-Auth` to protect matching paths. Credentials are one or more
-space-separated `username:password` pairs. Spacefast converts the credentials
-to hashed runtime metadata at compile time. Spacefast never sends `Basic-Auth`
-in the response.
-
-```text
-/preview/*
-  Basic-Auth: preview_user:preview_password
-
-/staging/*
-  Basic-Auth: staging_user_one:staging_password_one staging_user_two:staging_password_two
-```
-
-Never commit production credentials to `_headers` or repository history.
-Compile-time hashing protects runtime metadata. It does not protect the source
-file or earlier versions.
-
-- Username cannot contain `:` or whitespace.
-- Password cannot contain whitespace. Password cannot be empty.
-- `! Basic-Auth` is invalid. Basic Auth always needs credentials.
-
-Anonymous spaces cannot use Basic Auth. Claim the space first. To gate access
-without per-user credentials, use space-level password protection, a separate
-access setting.
+`Basic-Auth` is not a response header, and Spacefast rejects it on every plan
+with the `header_basic_auth_unsupported` publish diagnostic. To protect
+paths, use [Spacefast sharing](/spaces/access): passwords, links, people, and
+path rules.
 
 ## Unsupported headers
 
@@ -159,11 +138,15 @@ Spacefast manages connection, transport, cookie, redirect, range, and edge cache
 | Platform-managed | `Accept-Ranges`, `Age`, `Allow`, `Alt-Svc`, `Connection`, `Content-Encoding`, `Content-Length`, `Content-Range`, `Date`, `Location`, `Server`, `Set-Cookie`, `Strict-Transport-Security`, `Trailer`, `Transfer-Encoding`, and `Upgrade`. |
 | Edge cache       | `CDN-Cache-Control`, `Cloudflare-CDN-Cache-Control`, `Netlify-CDN-Cache-Control`, and `Surrogate-Control`.                                                                                                                               |
 
-Spacefast allows `Cache-Control` for browser responses. Spacefast preserves
-owner intent such as `no-store`, `no-cache`, `private`, and `immutable`. For
-public revalidating files it adds shared-cache directives (`s-maxage`) and
-mirrors the final policy into provider edge-cache headers. The browser can
-revalidate while the edge serves repeat requests.
+Spacefast allows `Cache-Control` with a publish warning
+(`header_cache_control_platform_managed`); a rule that sets it replaces the
+platform cache policy, and serving honors your value verbatim for public file
+responses. Without a rule, HTML gets
+`public, s-maxage=31536000, max-age=0, must-revalidate`, other revalidating
+files get `public, max-age=0, must-revalidate`, and immutable assets get
+`public, max-age=31536000, immutable`. Spacefast tells the edge whether the
+final response is shared-cacheable; the browser can revalidate while the edge
+serves repeat requests.
 
 ## Invalid rules
 

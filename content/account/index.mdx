@@ -22,8 +22,7 @@ terminal. For CI and scripts, use an [API key](/account/api-keys) instead.
 The security page lists the sessions that can currently use your account, with
 your current session marked. Revoke any session you do not recognize; that
 device must sign in again. **Sign out all other sessions** covers a lost device
-or a shared browser. Spacefast asks for a fresh sign-in before showing or
-changing sensitive security settings.
+or a shared browser.
 
 Connected apps are services you authorized to act with your Spacefast
 identity. Revoke an app when you no longer use or recognize it. Revocation
@@ -34,8 +33,7 @@ lifecycles: revoking one does not revoke the others. After losing a device,
 also review [API keys](/account/api-keys) and remove keys the lost computer
 could still hold.
 
-Account-protection emails (two-factor, password) always arrive and cannot be
-turned off; product and marketing email is a per-user notification setting.
+Product and marketing email is a per-user notification setting.
 
 ## Two-factor authentication and device approvals
 
@@ -46,9 +44,14 @@ that you did not request, deny it.
 
 ## Notifications
 
-The dashboard has a notification inbox on your account. Email notification
-preferences and unsubscribe controls live there too, and you can connect
-Slack to receive notifications in a workspace.
+The dashboard has a notification inbox behind the bell in the top bar. Email
+notification preferences and unsubscribe controls live on your account.
+
+## Multiple accounts in the CLI
+
+`sf profiles` lists the CLI's configured provider profiles, and the global
+`--profile` flag picks one per command, so one machine can work against
+several accounts.
 
 ## Teams and keys
 

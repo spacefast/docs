@@ -21,7 +21,7 @@ $ npm install -g spacefast
 $ sf COMMAND
 running command...
 $ sf (--version)
-spacefast/0.0.13
+spacefast/0.0.23
 $ sf --help [COMMAND]
 USAGE
   $ sf COMMAND
@@ -55,11 +55,9 @@ GLOBAL FLAGS
 - [`sf api METHODORPATH [PATH]`](#sf-api-methodorpath-path)
 - [`sf api-keys`](#sf-api-keys)
 - [`sf api-keys create`](#sf-api-keys-create)
-- [`sf api-keys delete ID`](#sf-api-keys-delete-id)
 - [`sf api-keys list`](#sf-api-keys-list)
 - [`sf api-keys ls`](#sf-api-keys-ls)
 - [`sf api-keys revoke ID`](#sf-api-keys-revoke-id)
-- [`sf api-keys rm ID`](#sf-api-keys-rm-id)
 - [`sf apply`](#sf-apply)
 - [`sf auth`](#sf-auth)
 - [`sf autocomplete [SHELL]`](#sf-autocomplete-shell)
@@ -80,9 +78,10 @@ GLOBAL FLAGS
 - [`sf comments get COMMENT`](#sf-comments-get-comment)
 - [`sf comments list`](#sf-comments-list)
 - [`sf comments reply COMMENT`](#sf-comments-reply-comment)
+- [`sf comments settings`](#sf-comments-settings)
+- [`sf comments settings set`](#sf-comments-settings-set)
 - [`sf comments unarchive COMMENT`](#sf-comments-unarchive-comment)
 - [`sf continue`](#sf-continue)
-- [`sf create NAME`](#sf-create-name)
 - [`sf db [TARGET]`](#sf-db-target)
 - [`sf db console [TARGET]`](#sf-db-console-target)
 - [`sf db dump [TARGET]`](#sf-db-dump-target)
@@ -90,10 +89,6 @@ GLOBAL FLAGS
 - [`sf db migrate [SOURCE]`](#sf-db-migrate-source)
 - [`sf demo`](#sf-demo)
 - [`sf demo agent`](#sf-demo-agent)
-- [`sf deployments`](#sf-deployments)
-- [`sf deployments get DEPLOYMENT`](#sf-deployments-get-deployment)
-- [`sf deployments promote DEPLOYMENT`](#sf-deployments-promote-deployment)
-- [`sf deployments rollback DEPLOYMENT`](#sf-deployments-rollback-deployment)
 - [`sf design`](#sf-design)
 - [`sf design generate`](#sf-design-generate)
 - [`sf dev`](#sf-dev)
@@ -123,7 +118,7 @@ GLOBAL FLAGS
 - [`sf env ls`](#sf-env-ls)
 - [`sf env pull [FILE]`](#sf-env-pull-file)
 - [`sf env rm NAME`](#sf-env-rm-name)
-- [`sf env set NAME VALUE`](#sf-env-set-name-value)
+- [`sf env set NAME [VALUE]`](#sf-env-set-name-value)
 - [`sf feedback`](#sf-feedback)
 - [`sf fetch [PATH]`](#sf-fetch-path)
 - [`sf git`](#sf-git)
@@ -135,7 +130,7 @@ GLOBAL FLAGS
 - [`sf git sync`](#sf-git-sync)
 - [`sf git update`](#sf-git-update)
 - [`sf help [COMMAND]`](#sf-help-command)
-- [`sf init`](#sf-init)
+- [`sf init [NAME]`](#sf-init-name)
 - [`sf inspect [TARGET]`](#sf-inspect-target)
 - [`sf link`](#sf-link)
 - [`sf login`](#sf-login)
@@ -213,9 +208,7 @@ GLOBAL FLAGS
 - [`sf spaces claim`](#sf-spaces-claim)
 - [`sf spaces download`](#sf-spaces-download)
 - [`sf spaces duplicate`](#sf-spaces-duplicate)
-- [`sf spaces export`](#sf-spaces-export)
 - [`sf spaces get`](#sf-spaces-get)
-- [`sf spaces import [ARCHIVE]`](#sf-spaces-import-archive)
 - [`sf spaces ls`](#sf-spaces-ls)
 - [`sf spaces rm`](#sf-spaces-rm)
 - [`sf spaces rotate-claim`](#sf-spaces-rotate-claim)
@@ -224,7 +217,7 @@ GLOBAL FLAGS
 - [`sf status`](#sf-status)
 - [`sf storage [TARGET]`](#sf-storage-target)
 - [`sf storage ls [TARGET]`](#sf-storage-ls-target)
-- [`sf storage rm [KEY]`](#sf-storage-rm-key)
+- [`sf storage rm [ID]`](#sf-storage-rm-id)
 - [`sf switch [TEAM]`](#sf-switch-team)
 - [`sf teams`](#sf-teams)
 - [`sf teams accept INVITATION`](#sf-teams-accept-invitation)
@@ -243,7 +236,6 @@ GLOBAL FLAGS
 - [`sf transfers accept ID`](#sf-transfers-accept-id)
 - [`sf transfers cancel ID`](#sf-transfers-cancel-id)
 - [`sf versions`](#sf-versions)
-- [`sf versions download`](#sf-versions-download)
 - [`sf versions get [VERSION]`](#sf-versions-get-version)
 - [`sf versions ls`](#sf-versions-ls)
 - [`sf versions rm [VERSION]`](#sf-versions-rm-version)
@@ -485,33 +477,6 @@ EXAMPLES
     $ sf api-keys create --name ci --preset full_access
 ```
 
-## `sf api-keys delete ID`
-
-Revoke an API key.
-
-```text
-USAGE
-  $ sf api-keys delete ID [--profile <value>] [-y]
-
-ARGUMENTS
-  ID  API key id.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Revoke an API key.
-
-  Revoke a platform API key.
-
-EXAMPLES
-  Delete (revoke) an API key by ID.
-
-    $ sf api-keys delete key_123
-```
-
 ## `sf api-keys list`
 
 List API keys.
@@ -589,40 +554,15 @@ DESCRIPTION
 
   Revoke a platform API key.
 
+ALIASES
+  $ sf api-keys delete
+  $ sf api-keys remove
+  $ sf api-keys rm
+
 EXAMPLES
   Revoke an API key by ID.
 
     $ sf api-keys revoke key_123
-```
-
-## `sf api-keys rm ID`
-
-Revoke an API key.
-
-```text
-USAGE
-  $ sf api-keys rm ID [--profile <value>] [-y]
-
-ARGUMENTS
-  ID  API key id.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Revoke an API key.
-
-  Revoke a platform API key.
-
-ALIASES
-  $ sf api-keys remove
-
-EXAMPLES
-  Remove (revoke) an API key by ID.
-
-    $ sf api-keys rm key_123
 ```
 
 ## `sf apply`
@@ -640,7 +580,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the apply to finish.
 
 DESCRIPTION
@@ -1075,7 +1015,7 @@ USAGE
 DESCRIPTION
   Manage comments.
 
-  List, export, and update persistent Space comments.
+  List, export, and update persistent Space comments, and set where Comments run.
 ```
 
 ## `sf comments archive COMMENT`
@@ -1242,6 +1182,75 @@ EXAMPLES
     $ sf comments reply cmt_123 --body "Fixed in v4."
 ```
 
+## `sf comments settings`
+
+Show Comments settings.
+
+```text
+USAGE
+  $ sf comments settings [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show Comments settings.
+
+  Show where Comments run for a Space and which third-party sites may embed them. Change them with `comments settings
+  set`.
+
+EXAMPLES
+  Show Comments settings for the linked Space.
+
+    $ sf comments settings
+```
+
+## `sf comments settings set`
+
+Change Comments settings.
+
+```text
+USAGE
+  $ sf comments settings set [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [--surface off|previews|everywhere] [--embed-allow <value>...]
+    [--embed-remove <value>...]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EMBEDDING FLAGS
+  --embed-allow=<value>...   Site allowed to embed this Space's Comments, e.g. https://docs.example.com.
+  --embed-remove=<value>...  Site to cut off from embedding this Space's Comments.
+
+COMMENTS FLAGS
+  --surface=<option>  Where Comments run: off, previews, or everywhere.
+                      <options: off|previews|everywhere>
+
+DESCRIPTION
+  Change Comments settings.
+
+  Change where Comments run and which third-party sites may embed them. Allowing a site lets it create anonymous
+  commenters in this Space's rooms, so allowlist changes confirm first.
+
+EXAMPLES
+  Run Comments on version previews and the live Space.
+
+    $ sf comments settings set --surface everywhere
+
+  Let docs.example.com embed this Space's Comments.
+
+    $ sf comments settings set --embed-allow https://docs.example.com
+
+  Cut docs.example.com off from this Space's Comments.
+
+    $ sf comments settings set --embed-remove https://docs.example.com
+```
+
 ## `sf comments unarchive COMMENT`
 
 Unarchive a comment.
@@ -1286,59 +1295,12 @@ GLOBAL FLAGS
 DESCRIPTION
   Continue publishing after claim.
 
-  Exchange a saved anonymous claim token for a durable space access token after the space is claimed.
+  Exchange a saved space key for a durable space access token after the space is claimed.
 
 EXAMPLES
   Continue publishing to the claimed space saved in this directory.
 
     $ sf continue
-```
-
-## `sf create NAME`
-
-Create a Spacefast project directory.
-
-```text
-USAGE
-  $ sf create NAME [--profile <value>] [-y] [-o <value>]
-    [--runtime static|zero|functions] [--template todo|guestbook] [--title <value>] [--no-git]
-
-ARGUMENTS
-  NAME  Directory name for the new project.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-ZERO FLAGS
-  --no-git             Skip initializing git for a Zero starter app.
-  --template=<option>  Zero starter template to scaffold.
-                       <options: todo|guestbook>
-  --title=<value>      Zero starter app title.
-
-PROJECT FLAGS
-  --runtime=<option>  [default: static] Project runtime to create.
-                      <options: static|zero|functions>
-
-DESCRIPTION
-  Create a Spacefast project directory.
-
-  Create a new Spacefast project directory. Use --runtime to scaffold a Zero capsule or a Functions worker instead of a
-  static config.
-
-EXAMPLES
-  Create a static Spacefast project directory.
-
-    $ sf create my-site
-
-  Create a Zero capsule directory.
-
-    $ sf create my-app --runtime zero --template guestbook
-
-  Create a Functions worker directory.
-
-    $ sf create my-api --runtime functions
 ```
 
 ## `sf db [TARGET]`
@@ -1574,7 +1536,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Run the local agent/MCP dogfood demo.
 
-  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated Executor operations, and local
+  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated API operations, and local
   publishing.
 
 EXAMPLES
@@ -1585,106 +1547,6 @@ EXAMPLES
   Keep the generated workspace and print the publish command.
 
     $ sf demo agent --publish
-```
-
-## `sf deployments`
-
-Manage deployments (alias of `sf versions`).
-
-```text
-USAGE
-  $ sf deployments [--profile <value>] [-y]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Manage deployments (alias of `sf versions`).
-
-  List and inspect deployment activity. Alias of `sf versions`. Deploying is publishing: a deployment is a version, and
-  the canonical nouns are version, channel, and build.
-```
-
-## `sf deployments get DEPLOYMENT`
-
-Show a deployment (alias of `sf versions get`).
-
-```text
-USAGE
-  $ sf deployments get DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a deployment (alias of `sf versions get`).
-
-  Fetch a deployment by id. Alias of `sf versions get`; a deployment is a version.
-```
-
-## `sf deployments promote DEPLOYMENT`
-
-Promote a deployment (alias of `sf promote`).
-
-```text
-USAGE
-  $ sf deployments promote DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID to make live, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
-  --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
-
-DESCRIPTION
-  Promote a deployment (alias of `sf promote`).
-
-  Promote the version produced by a deployment to a channel (default live). Alias of `sf promote`; a deployment is a
-  version.
-```
-
-## `sf deployments rollback DEPLOYMENT`
-
-Roll back to a deployment (alias of `sf rollback`).
-
-```text
-USAGE
-  $ sf deployments rollback DEPLOYMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
-
-ARGUMENTS
-  DEPLOYMENT  Deployment ID to roll back to, usually dep_build_... or dep_version_....
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
-  --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
-
-DESCRIPTION
-  Roll back to a deployment (alias of `sf rollback`).
-
-  Roll live traffic back to the version produced by a deployment. Alias of `sf rollback`; a deployment is a version.
 ```
 
 ## `sf design`
@@ -1746,7 +1608,8 @@ Start the local dev server.
 ```text
 USAGE
   $ sf dev [--profile <value>] [-y] [-p <value>] [-d
-    <value>] [--host <value>] [--state-backend memory|sqlite|mysql] [--watch] [--watch-interval <value>] [--dry-run]
+    <value>] [--host <value>] [--allow-network] [--state-backend memory|sqlite|mysql] [--watch] [--watch-interval
+    <value>] [--dry-run]
 
 FLAGS
   -d, --dir=<value>   [default: .] Project directory.
@@ -1758,6 +1621,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
+  --allow-network           Allow an explicit non-loopback runtime dev-server binding.
   --dry-run                 Print the dev server plan without starting it.
   --host=<value>            [default: 127.0.0.1] Host interface for the local dev server.
   --state-backend=<option>  [default: memory] Local state adapter for a runtime dev server.
@@ -2354,7 +2218,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Remove a domain.
@@ -2615,22 +2479,24 @@ EXAMPLES
     $ sf env rm API_URL --space docs
 ```
 
-## `sf env set NAME VALUE`
+## `sf env set NAME [VALUE]`
 
 Set a space variable.
 
 ```text
 USAGE
-  $ sf env set NAME VALUE [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--[no-]secret] [--production-value <value>] [--preview-value
-    <value>] [--branch-value <value>...]
+  $ sf env set NAME [VALUE] [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--value-from-stdin] [--[no-]secret] [--production-value <value>]
+    [--preview-value <value>] [--branch-value <value>...]
 
 ARGUMENTS
-  NAME   Variable name.
-  VALUE  Variable value.
+  NAME     Variable name.
+  [VALUE]  Variable value. Omit it and pass --value-from-stdin for secrets.
 
 FLAGS
-  --[no-]secret  Keep the value write-only. New values default write-only; updates preserve the existing classification.
+  --[no-]secret       Keep the value write-only. New values default write-only; updates preserve the existing
+                      classification.
+  --value-from-stdin  Read the value from standard input, keeping it out of your shell history and process list.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -2646,12 +2512,13 @@ BUILD FLAGS
 DESCRIPTION
   Set a space variable.
 
-  Create or update a space variable. Values are sent to the API and are not printed back.
+  Create or update a space variable. Values are sent to the API and are not printed back. A value given as an argument
+  is visible in your shell history and process list, so pipe secrets in with --value-from-stdin.
 
 EXAMPLES
-  Set a write-only space variable.
+  Set a write-only space variable without putting it in the command line.
 
-    $ sf env set API_TOKEN s3cret --space docs
+    printf %s "$API_TOKEN" | sf env set API_TOKEN --value-from-stdin --space docs
 
   Explicitly set a readable ordinary value.
 
@@ -2770,7 +2637,7 @@ MIGRATION FLAGS
 
 EXECUTION FLAGS
   --[no-]auto-finalize    Finalize the remote build automatically after staging the build output.
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the repository build to finish.
 
 BUILD FLAGS
@@ -3087,15 +2954,18 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.53/src/commands/help.ts)_
 
-## `sf init`
+## `sf init [NAME]`
 
 Create a Spacefast project.
 
 ```text
 USAGE
-  $ sf init [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template todo|guestbook] [--title
-    <value>] [--no-git]
+  $ sf init [NAME] [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template todo|guestbook|contact]
+    [--title <value>] [--no-git]
+
+ARGUMENTS
+  [NAME]  Directory name for a new project. Omit to initialize the current directory.
 
 EXECUTION FLAGS
   -f, --force  Overwrite existing generated files.
@@ -3108,31 +2978,35 @@ GLOBAL FLAGS
 ZERO FLAGS
   --no-git             Skip initializing git for a Zero starter app.
   --template=<option>  Zero starter template to scaffold.
-                       <options: todo|guestbook>
+                       <options: todo|guestbook|contact>
   --title=<value>      Zero starter app title.
 
 PROJECT FLAGS
-  --runtime=<option>  [default: static] Project runtime to initialize.
+  --runtime=<option>  [default: static] Project runtime to scaffold.
                       <options: static|zero|functions>
 
 DESCRIPTION
   Create a Spacefast project.
 
-  Create a Spacefast project in the current directory. Use --runtime to scaffold a Zero capsule or a Functions worker
-  instead of a static config.
+  Create a Spacefast project, in a new directory when given a name and in the current one otherwise. Use --runtime to
+  scaffold a Zero capsule or a Functions worker instead of a static config.
 
 EXAMPLES
   Write a starter sf.jsonc in the current directory.
 
     $ sf init
 
+  Create a new project directory named my-site.
+
+    $ sf init my-site
+
   Initialize config and link the current directory to space `docs`.
 
     $ sf init --space docs
 
-  Scaffold a Zero capsule in the current directory.
+  Scaffold a Zero capsule in a new directory.
 
-    $ sf init --runtime zero --template guestbook
+    $ sf init my-app --runtime zero --template guestbook
 
   Scaffold a Functions worker in the current directory.
 
@@ -3298,15 +3172,16 @@ DESCRIPTION
   Read a space's request and handler logs.
 
   Read a space's logs. `access` is every request the edge served; `runtime` is what your own code wrote — a Zero
-  mutation or a Functions handler — with the request id and handler that produced each line. Pass a target to read any
-  space without --space.
+  mutation or a Functions handler — with the request id and handler that produced each line. Runtime lines are collected
+  after the response returns and indexed off the box, so a line you just triggered takes a while to show up; an empty
+  page means not yet, not broken. Pass a target to read any space without --space.
 
 EXAMPLES
   Recent requests for the linked space.
 
     $ sf logs
 
-  Watch what your handlers log, live.
+  Keep pulling what your handlers log as it lands.
 
     $ sf logs runtime --follow
 
@@ -3486,9 +3361,13 @@ Run the authenticated remote MCP proxy.
 ```text
 USAGE
   $ sf mcp proxy [--profile <value>] [-y] [--endpoint <value>]
+    [--allow-credential-origin <value>...]
 
 FLAGS
-  --endpoint=<value>  [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on loopback.
+  --allow-credential-origin=<value>...  [env: SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN] Send your Spacefast login to this
+                                        MCP origin even though it was not issued for it. Repeatable.
+  --endpoint=<value>                    [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on
+                                        loopback.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -3792,7 +3671,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -3825,14 +3704,14 @@ USAGE
     <value>] [-o <value>] [--space <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa
     auto|true|false] [-m <value>] [--git-branch <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository
     <value>] [--source-type direct-upload|git] [--mode website|files] [--target production|preview] [--dry-run]
-    [--compress] [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote]
-    [--prebuilt] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
-    <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include
-    <value>...] [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
+    [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote] [--prebuilt]
+    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
+    [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include <value>...]
+    [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
     [--allow-unsupported-platform-features] [--auto-finalize]
 
 ARGUMENTS
-  [DIR]  File, directory, project, or prebuilt .tgz to publish. Defaults to the current directory.
+  [DIR]  File, directory, project, or .zip/.tar.gz archive to publish. Defaults to the current directory.
 
 VERSION SOURCE FLAGS
   -m, --message=<value>         [env: SPACEFAST_PUBLISH_MESSAGE] Plain-language changelog entry for this version, shown
@@ -3867,7 +3746,6 @@ MIGRATION FLAGS
 
 EXECUTION FLAGS
   --[no-]auto-finalize    Finalize a remote build automatically after staging its output.
-  --[no-]compress         Generate smaller .br/.gz sidecars for compressible files before uploading.
   --config-only           Publish a config-only version that carries the prior artifact forward without building or
                           uploading content.
   --dry-run               Print the resolved publish plan without uploading files or writing state.
@@ -3878,14 +3756,14 @@ EXECUTION FLAGS
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become ready.
 
 BUILD FLAGS
-  --build                          Force local build mode; fails if no build command can be resolved.
+  --build                          Force build mode for directories. Archives always use remote project detection.
   --build-command=<value>          Build command. Defaults to framework and package script detection.
   --env-file=<value>...            Local dotenv file to load for install/build commands. Repeat for multiple files.
   --ignored-build-command=<value>  For --remote, command that skips the build when it exits 0.
   --install-command=<value>        Install command. Defaults to package-manager detection.
   --install-directory=<value>      Repository subdirectory to run dependency installation from.
   --output-directory=<value>       Build output directory relative to the app root.
-  --prebuilt                       Publish a prebuilt directory or .tgz without installing or building.
+  --prebuilt                       Publish a prebuilt directory or archive without installing or building.
   --remote                         Upload source and run the build remotely.
   --root-directory=<value>         Repository subdirectory that contains the app.
   --skip-build                     Skip the build command and publish the selected directory unless --output-directory
@@ -3903,14 +3781,16 @@ VERSION FLAGS
                                        <options: additive|snapshot>
 
 OUTPUT FLAGS
-  --show-secret  Print private Open and Claim URLs. Secrets are hidden from JSON and non-interactive output by default.
+  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
+                 default.
 
 DESCRIPTION
   Publish files or built projects to Spacefast.
 
-  Publish a file, directory, or built project to Spacefast. Direct files publish as-is; project directories with a
-  detected build command build automatically. sf deploy is an exact alias. Deploying is publishing: a deployment is a
-  version, and the canonical nouns are version, channel, and build.
+  Publish a file, directory, project, or archive to Spacefast. Files and static directories deploy directly; archives
+  always use remote detection, which packs static content unchanged and builds detected applications. sf deploy is an
+  exact alias. Deploying is publishing: a deployment is a version, and the canonical nouns are version, channel, and
+  build.
 
 ALIASES
   $ sf deploy
@@ -3928,9 +3808,9 @@ EXAMPLES
 
     $ sf publish --remote
 
-  Publish a prebuilt archive without installing or building.
+  Deploy a static archive, or build a detected project archive remotely.
 
-    $ sf publish ./site.tgz --prebuilt
+    $ sf publish ./site.zip
 
   Publish a preview and print one machine-readable receipt.
 
@@ -3994,7 +3874,7 @@ GLOBAL FLAGS
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
 
 DESCRIPTION
@@ -4266,8 +4146,8 @@ Create a Space Grant.
 
 ```text
 USAGE
-  $ sf share grant --to public|team --can view|comment|publish|manage --path <value>... [--api-url
-    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>]
+  $ sf share grant --to public|team --role viewer|commenter|editor|manager --path <value>... [--api-url
+    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>] [--wait]
     [--exclude <value>...] [--target <value>] [--name <value>] [--expires <value>] [--network <value>...] [--country
     <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...]
 
@@ -4276,22 +4156,25 @@ GLOBAL FLAGS
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-GRANT FLAGS
-  --can=<option>        (required) Capability preset: view, comment, publish, or manage.
-                        <options: view|comment|publish|manage>
-  --exclude=<value>...  [default: ] Excluded route pattern local to this Grant. Repeatable.
-  --expires=<value>     Expire after a duration such as 7d or 30m.
-  --name=<value>        Human-readable Grant name.
-  --path=<value>...     (required) Included route pattern. Repeat for disjoint paths.
-  --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
-  --to=<option>         (required) Audience: public or team.
-                        <options: public|team>
-
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
   --exclude-country=<value>...     [default: ] Blocked ISO country code. Repeatable.
   --exclude-user-agent=<value>...  [default: ] Block user agents containing this text. Repeatable.
   --network=<value>...             [default: ] Allowed IP address or CIDR. Repeatable.
+
+GRANT FLAGS
+  --exclude=<value>...  [default: ] Excluded route pattern local to this Grant. Repeatable.
+  --expires=<value>     Expire after a duration such as 7d or 30m.
+  --name=<value>        Human-readable Grant name.
+  --path=<value>...     (required) Included route pattern. Repeat for disjoint paths.
+  --role=<option>       (required) Role: viewer, commenter, editor, or manager.
+                        <options: viewer|commenter|editor|manager>
+  --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
+  --to=<option>         (required) Audience: public or team.
+                        <options: public|team>
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Create a Space Grant.
@@ -4302,15 +4185,15 @@ DESCRIPTION
 EXAMPLES
   Let the owning team view the docs subtree.
 
-    $ sf share grant --to team --can view --path '/docs/**'
+    $ sf share grant --to team --role viewer --path '/docs/**'
 
   Publish a review subtree with anonymous Comments.
 
-    $ sf share grant --to public --can comment --path '/proposal/**' --exclude '/proposal/internal/**'
+    $ sf share grant --to public --role commenter --path '/proposal/**' --exclude '/proposal/internal/**'
 
   Make every immutable Version public.
 
-    $ sf share grant --to public --can view --path '/**' --target all-versions
+    $ sf share grant --to public --role viewer --path '/**' --target all-versions
 ```
 
 ## `sf share grant edit ID`
@@ -4320,21 +4203,21 @@ Edit a direct managed Grant.
 ```text
 USAGE
   $ sf share grant edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--name <value>] [--can view|comment|publish|manage] [--exclude <value>...
-    --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>... | --no-network]
-    [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
+    <value>] [-o <value>] [--space <value>] [--wait] [--name <value>] [--role viewer|commenter|editor|manager]
+    [--exclude <value>... --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>...
+    | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
   ID  Managed Grant id.
 
 FLAGS
-  --can=<option>        Replace the capability preset: view, comment, publish, or manage.
-                        <options: view|comment|publish|manage>
-  --exclude=<value>...  [default: ] Excluded route pattern for the replacement path set. Repeatable.
+  --exclude=<value>...  Excluded route pattern for the replacement path set. Repeatable.
   --expires=<value>     New lifetime from now (e.g. 30m, 24h, 7d).
   --name=<value>        New human-readable Grant name.
   --no-expiry           Remove the Grant expiry.
   --path=<value>...     Replace included route patterns. Repeat for disjoint paths.
+  --role=<option>       Replace the role: viewer, commenter, editor, or manager.
+                        <options: viewer|commenter|editor|manager>
   --target=<value>      Replace the target: live, all-versions, version:<id>, or branch:<name>.
 
 GLOBAL FLAGS
@@ -4348,6 +4231,9 @@ CONSTRAINTS FLAGS
   --exclude-user-agent=<value>...  Replace blocked user-agent substrings. Repeatable.
   --network=<value>...             Replace allowed IP addresses or CIDRs. Repeatable.
   --no-network                     Remove every network constraint from this Grant.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Edit a direct managed Grant.
@@ -4412,18 +4298,18 @@ Create an external identity Grant.
 ```text
 USAGE
   $ sf share identity grant --connection <value> --subject <value> --name <value> [--profile
-    <value>] [-y] [-o <value>] [--space <value>] [--can
-    view|comment|publish|manage] [--path <value>...] [--except <value>...] [--target <value>] [--not-before <value>]
+    <value>] [-y] [-o <value>] [--space <value>] [--role
+    viewer|commenter|editor|manager] [--path <value>...] [--except <value>...] [--target <value>] [--not-before <value>]
     [--expires <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country
     <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
-  --can=<option>        [default: view]
-                        <options: view|comment|publish|manage>
   --connection=<value>  (required)
   --except=<value>...   [default: ]
   --name=<value>        (required)
   --path=<value>...     [default: /**]
+  --role=<option>       [default: viewer]
+                        <options: viewer|commenter|editor|manager>
   --subject=<value>     (required)
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
 
@@ -4585,24 +4471,14 @@ Create a Link.
 USAGE
   $ sf share link create --name <value> [--profile <value>] [-y]
     [-o <value>] [--space <value>] [--landing <value>] [--path <value>...] [--exclude
-    <value>...] [--can view|comment] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>]
-    [--require-verified-email] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
+    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses
+    <value>] [--require-verified-email] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
     [--exclude-user-agent <value>...] [--show-secret]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-LINK FLAGS
-  --can=<option>        [default: comment] Capability preset: view or comment. Defaults to comment.
-                        <options: view|comment>
-  --exclude=<value>...  [default: ] Excluded route pattern local to this Link. Repeatable.
-  --landing=<value>     [default: /] Clean route opened after exchange.
-  --name=<value>        (required) Human name shown in the Links list.
-  --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
-  --show-secret         Print the share URL even when output is JSON or non-interactive.
-  --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -4614,6 +4490,16 @@ CONSTRAINTS FLAGS
   --not-before=<value>             Do not admit this Link before this ISO date-time.
   --require-verified-email         Admit only visitors whose session has a verified email.
 
+LINK FLAGS
+  --exclude=<value>...  [default: ] Excluded route pattern local to this Link. Repeatable.
+  --landing=<value>     [default: /] Clean route opened after exchange.
+  --name=<value>        (required) Human name shown in the Links list.
+  --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
+  --role=<option>       [default: commenter] Role: viewer or commenter. Defaults to commenter.
+                        <options: viewer|commenter>
+  --show-secret         Print the share URL even when output is JSON or non-interactive.
+  --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
+
 DESCRIPTION
   Create a Link.
 
@@ -4622,8 +4508,8 @@ DESCRIPTION
 EXAMPLES
   Create a client Link that can comment on two path groups except internal docs.
 
-    $ sf share link create --landing /docs --path "/docs/**" --path "/assets/**" --exclude "/docs/internal/**" --can \
-      comment --name "Client review" --expires 7d
+    $ sf share link create --landing /docs --path "/docs/**" --path "/assets/**" --exclude "/docs/internal/**" \
+      --role commenter --name "Client review" --expires 7d
 ```
 
 ## `sf share link edit ID`
@@ -4634,8 +4520,8 @@ Edit Link metadata.
 USAGE
   $ sf share link edit ID [--profile <value>] [-y] [--claim-token
     <value>] [-o <value>] [--space <value>] [--name <value>] [--landing <value>] [--exclude <value>... --path
-    <value>...] [--can view|comment] [--target <value>] [--not-before <value> | --no-not-before] [--expires <value> |
-    --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email | --allow-unverified-email] [--network
+    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value> | --no-not-before] [--expires <value>
+    | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email | --allow-unverified-email] [--network
     <value>... | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent
     <value>... | ]
 
@@ -4663,12 +4549,12 @@ CONSTRAINTS FLAGS
   --require-verified-email         Require a verified email.
 
 LINK FLAGS
-  --can=<option>        Replace the capability preset: view or comment.
-                        <options: view|comment>
-  --exclude=<value>...  [default: ] Excluded route pattern for the replacement path set. Repeatable.
+  --exclude=<value>...  Excluded route pattern for the replacement path set. Repeatable.
   --landing=<value>     New clean landing path.
   --name=<value>        New Link name.
   --path=<value>...     Replace included route patterns. Repeat for disjoint paths.
+  --role=<option>       Replace the role: viewer or commenter.
+                        <options: viewer|commenter>
   --target=<value>      Replace the target: live, all-versions, version:<id>, or branch:<name>.
 
 DESCRIPTION
@@ -4784,18 +4670,18 @@ Create password access.
 USAGE
   $ sf share password create --name <value> --path <value>... [--profile <value>] [--token
     <value>] [-y] [-o <value>] [--space <value>] [--password <value>] [--password-from-stdin]
-    [--can view|comment] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>]
+    [--role viewer|commenter] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>]
     [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
     [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
-  --can=<option>         [default: comment] Capability preset.
-                         <options: view|comment>
   --exclude=<value>...   [default: ] Local exclusion pattern.
   --name=<value>         (required) Human-readable password name.
   --password=<value>     [env: SPACEFAST_SHARE_PASSWORD] Password, or set SPACEFAST_SHARE_PASSWORD.
   --password-from-stdin  Read the password from standard input.
   --path=<value>...      (required) Included route pattern.
+  --role=<option>        [default: commenter] Role granted to password holders.
+                         <options: viewer|commenter>
   --target=<value>       [default: live] Published target selector.
 
 GLOBAL FLAGS
@@ -4918,7 +4804,7 @@ Edit a Person's scoped roles.
 ```text
 USAGE
   $ sf share people edit PERSON --grant <value>... [--profile <value>]
-    [-y] [-o <value>] [--space <value>]
+    [-y] [-o <value>] [--space <value>] [--target <value>]
 
 ARGUMENTS
   PERSON  Person id or email address.
@@ -4930,6 +4816,7 @@ GLOBAL FLAGS
 
 PEOPLE FLAGS
   --grant=<value>...  (required) Scoped role in <path>=<role> form. Repeat to replace the full grant set.
+  --target=<value>    [default: live] live, all-versions, version:<id>, or branch:<name>.
 
 DESCRIPTION
   Edit a Person's scoped roles.
@@ -4949,7 +4836,8 @@ Invite a Person.
 ```text
 USAGE
   $ sf share people invite EMAIL [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor] [--scope <value>...]
+    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>...] [--target
+    <value>]
 
 ARGUMENTS
   EMAIL  Email address to invite.
@@ -4961,8 +4849,9 @@ GLOBAL FLAGS
 
 PEOPLE FLAGS
   --role=<option>     [default: viewer] Role granted on every supplied scope.
-                      <options: viewer|commenter|editor>
+                      <options: viewer|commenter|editor|manager>
   --scope=<value>...  [default: /] Canonical route subtree. Repeat for multiple scopes.
+  --target=<value>    [default: live] live, all-versions, version:<id>, or branch:<name>.
 
 DESCRIPTION
   Invite a Person.
@@ -4973,6 +4862,10 @@ EXAMPLES
   Invite a commenter to two route subtrees.
 
     $ sf share people invite person@example.com --role commenter --scope /docs --scope /assets
+
+  Invite someone to one immutable Version instead of the live site.
+
+    $ sf share people invite client@example.com --role viewer --target version:ver_123
 ```
 
 ## `sf share people ls`
@@ -5070,7 +4963,7 @@ Approve an access request.
 ```text
 USAGE
   $ sf share request approve ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor] [--scope <value>]
+    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>]
 
 ARGUMENTS
   ID  Access request id.
@@ -5082,7 +4975,7 @@ GLOBAL FLAGS
 
 APPROVE FLAGS
   --role=<option>  Approved role. Defaults to the requested role.
-                   <options: viewer|commenter|editor>
+                   <options: viewer|commenter|editor|manager>
   --scope=<value>  Approved route subtree. Defaults to the requested scope.
 
 DESCRIPTION
@@ -5144,7 +5037,7 @@ Revoke a Space Grant.
 ```text
 USAGE
   $ sf share revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+    <value>] [-o <value>] [--space <value>] [--wait]
 
 ARGUMENTS
   ID  Grant id (see `sf share list`).
@@ -5153,6 +5046,9 @@ GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Revoke a Space Grant.
@@ -5187,16 +5083,16 @@ Create a machine credential.
 ```text
 USAGE
   $ sf share token create --name <value> --path <value>... [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--can view|comment|publish|manage] [--exclude
-    <value>...] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network
+    <value>] [-y] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager]
+    [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network
     <value>...] [--country <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...] [--show-secret]
 
 FLAGS
-  --can=<option>        [default: view] Capability preset.
-                        <options: view|comment|publish|manage>
   --exclude=<value>...  [default: ] Local exclusion pattern.
   --name=<value>        (required) Human-readable machine name.
   --path=<value>...     (required) Included route pattern.
+  --role=<option>       [default: viewer] Role granted to this machine.
+                        <options: viewer|commenter|editor|manager>
   --show-secret         Print the one-time token in JSON or non-interactive output.
   --target=<value>      [default: live] Published target selector.
 
@@ -5469,7 +5365,8 @@ EXECUTION FLAGS
   --[no-]save-state  Write the created space to .spacefast/state.json.
 
 OUTPUT FLAGS
-  --show-secret  Print private Open and Claim URLs. Secrets are hidden from JSON and non-interactive output by default.
+  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
+                 default.
 
 DESCRIPTION
   Create an empty space.
@@ -5492,7 +5389,7 @@ Claim an anonymous space.
 ```text
 USAGE
   $ sf spaces claim [--profile <value>] [-y] [--claim-token
-    <value>] [--space <value>] [-o <value>] [--wait]
+    <value>] [--keep-publishing] [--space <value>] [-o <value>] [--wait]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5500,7 +5397,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Claim an anonymous space.
@@ -5514,7 +5411,7 @@ EXAMPLES
 
   Claim a space into a specific team.
 
-    $ sf spaces claim --space spc_xxx --claim-token claim_xxx --team my-team
+    $ sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
 ```
 
 ## `sf spaces download`
@@ -5575,7 +5472,7 @@ DUPLICATE SOURCE FLAGS
   --version=<value>  Version to duplicate. Defaults to the live version.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the duplicate to become ready.
 
 DESCRIPTION
@@ -5587,42 +5484,6 @@ EXAMPLES
   Duplicate the docs space into a new docs-copy space.
 
     $ sf spaces duplicate --space docs --slug docs-copy
-```
-
-## `sf spaces export`
-
-Export a space archive.
-
-```text
-USAGE
-  $ sf spaces export [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--output <value>] [--overwrite] [--wait]
-    [--wait-timeout <value>]
-
-FLAGS
-  --output=<value>   Download the ready archive to this path (implies --wait).
-  --overwrite        Overwrite an existing archive file when --output is set.
-  --version=<value>  Export a single version instead of the default set.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Export a space archive.
-
-  Create a portable export archive of the selected Space. With --wait it returns the download link; add --output to
-  download the zip.
-
-EXAMPLES
-  $ sf spaces export --wait --output ./site-export.zip
-
-  $ sf spaces export --version ver_123 --wait
 ```
 
 ## `sf spaces get`
@@ -5653,44 +5514,6 @@ EXAMPLES
   Show a specific space by slug, ID, or URL.
 
     $ sf spaces get --space docs
-```
-
-## `sf spaces import [ARCHIVE]`
-
-Import a space archive.
-
-```text
-USAGE
-  $ sf spaces import [ARCHIVE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--from-export <value>] [--publish] [--wait] [--wait-timeout
-    <value>]
-
-ARGUMENTS
-  [ARCHIVE]  Path to a Spacefast export zip archive.
-
-FLAGS
-  --from-export=<value>  Import from an existing export ID instead of uploading an archive.
-  --publish              Publish the imported version once it is ready.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Import a space archive.
-
-  Import an export archive into the selected space as draft versions. Pass --publish to promote the imported version
-  when it is ready.
-
-EXAMPLES
-  $ sf spaces import ./site-export.zip
-
-  $ sf spaces import --from-export exp_123 --publish
 ```
 
 ## `sf spaces ls`
@@ -5743,7 +5566,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
-  --[no-]wait  Wait until queued publish work finishes before returning.
+  --[no-]wait  Wait until queued work finishes before returning.
 
 DESCRIPTION
   Delete a space.
@@ -5766,7 +5589,7 @@ EXAMPLES
 
 ## `sf spaces rotate-claim`
 
-Rotate anonymous claim authority.
+Rotate an anonymous Space's key.
 
 ```text
 USAGE
@@ -5779,9 +5602,9 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Rotate anonymous claim authority.
+  Rotate an anonymous Space's key.
 
-  Replace an anonymous Space's claim token and browser claim link without changing recipient Links.
+  Replace an anonymous Space's key, site link, and claim link without changing recipient Links.
 
 EXAMPLES
   Rotate the anonymous Space saved in the current directory.
@@ -5848,7 +5671,7 @@ VIEWER METADATA FLAGS
   --viewer-title=<value>          Viewer page title. Pass null to clear.
 
 EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
+  --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
 
 DESCRIPTION
@@ -5884,7 +5707,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
-  --include-claim-url  Include a still-pending one-time claim URL.
+  --include-claim-url  Include the still-pending claim link.
 
 DESCRIPTION
   Show CLI status.
@@ -5896,7 +5719,7 @@ EXAMPLES
 
     $ sf status
 
-  Include a still-pending one-time claim URL.
+  Include the still-pending claim link.
 
     $ sf status --include-claim-url
 ```
@@ -5908,17 +5731,14 @@ List a space's stored objects.
 ```text
 USAGE
   $ sf storage [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--visibility public|private] [--limit <value>] [--cursor
-    <value>]
+    [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 FLAGS
-  --cursor=<value>       Continue from an opaque cursor returned by the last page.
-  --limit=<value>        Maximum objects to return (default 50, max 100).
-  --visibility=<option>  Show only public or private objects.
-                         <options: public|private>
+  --cursor=<value>  Continue from an opaque cursor returned by the last page.
+  --limit=<value>   Maximum objects to return (default 50, max 100).
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5935,9 +5755,9 @@ EXAMPLES
 
     $ sf storage
 
-  List private objects in space `docs`.
+  List the first ten objects in space `docs`.
 
-    $ sf storage docs --visibility private
+    $ sf storage docs --limit 10
 ```
 
 ## `sf storage ls [TARGET]`
@@ -5947,17 +5767,14 @@ List a space's stored objects.
 ```text
 USAGE
   $ sf storage ls [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--visibility public|private] [--limit <value>] [--cursor
-    <value>]
+    [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 FLAGS
-  --cursor=<value>       Continue from an opaque cursor returned by the last page.
-  --limit=<value>        Maximum objects to return (default 50, max 100).
-  --visibility=<option>  Show only public or private objects.
-                         <options: public|private>
+  --cursor=<value>  Continue from an opaque cursor returned by the last page.
+  --limit=<value>   Maximum objects to return (default 50, max 100).
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5968,17 +5785,17 @@ ALIASES
   $ sf storage list
 ```
 
-## `sf storage rm [KEY]`
+## `sf storage rm [ID]`
 
 Delete a stored object.
 
 ```text
 USAGE
-  $ sf storage rm [KEY] [--profile <value>] [-y] [--claim-token
+  $ sf storage rm [ID] [--profile <value>] [-y] [--claim-token
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
-  [KEY]  Object key, for example private/0123456789abcdef0123456789abcdef.
+  [ID]  Object id, for example 0123456789abcdef0123456789abcdef.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5995,9 +5812,9 @@ ALIASES
   $ sf storage delete
 
 EXAMPLES
-  Delete a private object without prompting.
+  Delete a stored object without prompting.
 
-    $ sf storage rm private/0123456789abcdef0123456789abcdef --yes
+    $ sf storage rm 0123456789abcdef0123456789abcdef --yes
 ```
 
 ## `sf switch [TEAM]`
@@ -6479,45 +6296,6 @@ DESCRIPTION
   List, promote, and roll back space versions.
 ```
 
-## `sf versions download`
-
-Download a version archive.
-
-```text
-USAGE
-  $ sf versions download [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-v <value>] [--output <value>] [--overwrite] [--wait] [--wait-timeout
-    <value>]
-
-FLAGS
-  -v, --version=<value>  [default: latest] Version ID, version ref, number, or "latest".
-      --output=<value>   Archive file path, or an existing directory to write the archive into.
-      --overwrite        Overwrite an existing archive file.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait             Wait until queued publish work finishes before returning.
-  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
-
-DESCRIPTION
-  Download a version archive.
-
-  Create a scoped export for one version and download the resulting archive.
-
-EXAMPLES
-  Download the latest version as an archive.
-
-    $ sf versions download --space docs --output ./archive.tar.gz
-
-  Download version v3, overwriting an existing archive.
-
-    $ sf versions download --space docs --version v3 --overwrite
-```
-
 ## `sf versions get [VERSION]`
 
 Show a version.
@@ -6571,7 +6349,6 @@ DESCRIPTION
 
 ALIASES
   $ sf versions list
-  $ sf deployments ls
 
 EXAMPLES
   List versions for the linked space.

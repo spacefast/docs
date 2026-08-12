@@ -1,9 +1,9 @@
 ---
 title: "storage_empty_file"
-description: "The Zero storage upload is empty."
+description: "The storage upload is empty."
 ---
 
-The Zero storage upload is empty.
+The storage upload is empty.
 
 **How to resolve:** Upload a file containing at least 1 byte.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_empty_file",
   "title": "Storage empty file",
   "status": 400,
-  "detail": "The Zero storage upload is empty.",
+  "detail": "The storage upload is empty.",
   "code": "storage_empty_file",
   "requestId": "req_4mz0v8qk"
 }

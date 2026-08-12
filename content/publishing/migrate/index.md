@@ -55,7 +55,7 @@ For Next.js, start with the
   one click.
 - Anonymous publishing works without an account. Claim the space within 6 hours
   to keep it.
-- Export any space to a self-contained bundle with `sf spaces export`.
+- Download any space version's files with `sf spaces download`.
 
 ## Cloudflare Pages
 

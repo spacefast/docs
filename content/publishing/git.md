@@ -44,7 +44,7 @@ packs the static output, and creates a version through the normal publish path.
 After you connect the repository, Spacefast listens for repository events:
 
 - **Push to the production branch** → Spacefast builds the commit. If `auto-deploy-production` is on, Spacefast promotes the new version to your `live` channel. This is a real publish.
-- **Push to any other branch** → Spacefast builds a preview version when `auto-deploy-previews` is on. The preview gets its own branch subdomain. Spacefast slugifies the branch name: slashes and underscores become dashes. It then uses the slug as a hostname label in front of your space's hostname. The preview URL for branch `feature/nav` looks like `https://br-feature-nav--<your-space-host>/`. If you delete the branch, Spacefast retires its preview.
+- **Push to any other branch** → Spacefast builds a preview version when `auto-deploy-previews` is on. The preview gets its own branch subdomain. Spacefast slugifies the branch name: any character outside `a-z0-9-` becomes a dash, and the label is truncated to 16 characters. It then uses the slug as a hostname label in front of your space's hostname. The preview URL for branch `feature/nav` looks like `https://br-feature-nav--<your-space-host>/`. If you delete the branch, Spacefast retires its preview.
 - **Pull request** (opened, reopened, synchronized, or marked ready for review) → Spacefast builds a PR preview. If you close the pull request, Spacefast retires the preview.
 
 Spacefast skips pushes that do not touch your app root or install directory.
@@ -84,7 +84,8 @@ sf builds cancel bld_123         # cancel a queued or running build
 sf builds resume-upload bld_123  # refresh the source upload for a stalled archive
 ```
 
-Builds move through `queued` → `running` → a terminal `succeeded`, `failed`,
+Builds move through `waiting_for_source` → `uploading_source` → `queued` →
+`running` → a terminal `succeeded`, `failed`,
 `canceled`, or `skipped`. `sf builds logs -f` follows the live log stream until
 the build reaches a terminal state.
 

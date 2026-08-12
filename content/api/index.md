@@ -6,29 +6,30 @@ description: "How the Spacefast REST API works: auth, the response envelope, pub
 ---
 
 Everything Spacefast does is one REST API at `https://api.spacefast.com`. The
-dashboard, the CLI, and agents all speak it. There is no private surface behind
-it. The [full endpoint reference](/api/reference) lists every operation,
-parameter, and schema.
+dashboard, the CLI, and agents all speak it. The
+[full endpoint reference](/api/reference) lists every operation, parameter, and
+schema.
 
 ## The shape of every response
 
-Every response uses one envelope. Successes carry `{ "data": ... }`. Failures
-carry `{ "error": ... }`. An error always has a stable machine-readable `code`
-and a human `message`. It also has a `docsUrl` that points at that code's
-reference page, and a `requestId` for support.
+Successes carry `{ "data": ... }`. Failures are RFC 9457 problem documents
+served as `application/problem+json`: the body is the problem document itself.
+It always has a stable machine-readable `code`, a `type` URL that points at
+that code's reference page, and a `requestId` for support. Validation failures
+add `pointer`, an RFC 6901 JSON Pointer to the failing field.
 
-Match on `code`, never on `message`. Messages may improve over time;
-Spacefast never renames or removes a code. The [error reference](/errors) lists
-every code.
+Match on `code`, never on `detail`. Messages may improve over time; Spacefast
+never renames or removes a code. The [error reference](/errors) lists every
+code.
 
 ```json
 {
-  "error": {
-    "code": "access_denied",
-    "message": "This token cannot access that space.",
-    "docsUrl": "https://spacefast.com/docs/errors/access_denied",
-    "requestId": "req_4mz0v8qk"
-  }
+  "type": "https://spacefast.com/docs/errors/access_denied",
+  "title": "Access denied",
+  "status": 403,
+  "detail": "This token cannot access that space.",
+  "code": "access_denied",
+  "requestId": "req_4mz0v8qk"
 }
 ```
 
@@ -46,9 +47,9 @@ shows the key only once. Presets, rotation, and CI vs agent guidance live on
 [API keys](/account/api-keys).
 
 One call works without any token: an anonymous `POST /v1/publish` creates a
-brand-new space. It returns a one-time claim token alongside the receipt. That
-claim token acts as a bearer token scoped to that single space. It works until
-you claim the space.
+brand-new space. The receipt carries a **space key** (`sfc_...`) in
+`data.claim.key`. That key is the bearer credential for that single space. It
+works until you claim the space.
 
 ## Publish
 
@@ -84,7 +85,7 @@ re-upload. Version lists, diffs, and logs are all plain GET requests.
 Mutating requests honor an `Idempotency-Key` header. If you retry a request with
 the same key, Spacefast returns the original result. It does not repeat the side
 effect. If you publish identical content, that is a recognized no-op success
-(`noop_publish`), not a wasted version. It is safe to retry blindly.
+(`noop_publish`), not a wasted version.
 
 ## Long-running operations
 
@@ -101,8 +102,11 @@ sf operations --space spc_123
 ## Limits
 
 Spacefast enforces rate limits and plan quotas per account. Rate-limited
-responses return the
-standard error envelope with a `Retry-After` header.
+responses return a problem document with a `Retry-After` header.
+
+During maintenance windows, mutating requests return `503` with code
+`maintenance_in_progress` and a `Retry-After` header. Reads keep working; retry
+the mutation after the header's delay.
 
 ## For agents
 

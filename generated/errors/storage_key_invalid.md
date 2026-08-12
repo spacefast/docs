@@ -1,11 +1,11 @@
 ---
 title: "storage_key_invalid"
-description: "The Zero storage key is malformed."
+description: "The storage object id is malformed."
 ---
 
-The Zero storage key is malformed.
+The storage object id is malformed.
 
-**How to resolve:** Use the public or private object key returned by storage.upload.
+**How to resolve:** Use the 32-character object id returned by storage.upload.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_key_invalid",
   "title": "Storage key invalid",
   "status": 400,
-  "detail": "The Zero storage key is malformed.",
+  "detail": "The storage object id is malformed.",
   "code": "storage_key_invalid",
   "requestId": "req_4mz0v8qk"
 }

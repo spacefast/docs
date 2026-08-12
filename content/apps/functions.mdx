@@ -3,23 +3,19 @@ title: Functions
 description: Run a worker on a Spacefast space, beside its static files and on the same hostname.
 ---
 
-:::warning[Private beta]
-Functions is available to teams with the private-beta flag. Ask Spacefast to
-enable it for your team before you publish a worker.
-:::
-
 Functions adds one Web-standard `fetch` handler to a space. Spacefast serves
-static files first. When no file answers a request, the request goes to the
-worker.
-Spacefast publishes the worker and the files as one version, on one hostname;
-they roll back together.
+static files first; requests that no file answers go to the worker, for the
+paths the worker's compiled route table claims. Hand-written handlers claim
+the whole site. Next builds derive a narrower table, and unclaimed paths
+return 404 without waking the worker. Spacefast publishes the worker and the
+files as one version, on one hostname; they roll back together.
 
 ## Quick start
 
 Two commands scaffold and publish a worker:
 
 ```bash
-sf create my-api --runtime functions
+sf init my-api --runtime functions
 cd my-api
 sf publish
 ```
@@ -43,11 +39,12 @@ export default {
 
 Spacefast detects the first matching worker entry:
 
-| Path                                         | Typical source               |
-| -------------------------------------------- | ---------------------------- |
-| `.open-next/worker.js`                       | Next.js built with OpenNext  |
-| `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker            |
-| `functions/index.ts` or `functions/index.js` | Worker in a functions folder |
+| Path                                         | Typical source                  |
+| -------------------------------------------- | ------------------------------- |
+| `.open-next/worker.js`                       | Next.js built with OpenNext     |
+| `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker               |
+| Any route module under `functions/`          | File router; Spacefast          |
+|                                              | synthesizes the dispatcher      |
 
 Declare an entry when the file is in another location, or when you want to pin
 the runtime settings:
@@ -64,14 +61,16 @@ the runtime settings:
 }
 ```
 
-The publish fails when Spacefast cannot resolve a declared entry. A directory
-with no declaration and no detected entry remains a static space.
+A declared `runtime.kind: "functions"` with no detectable entry fails the
+publish with
+[`config_runtime_entry_missing`](/errors/config_runtime_entry_missing). A
+directory with no declaration and no detected entry remains a static space.
 
 ## Runtime contract
 
-Handlers use `Request`, `Response`, streams, `crypto`, and `ctx.waitUntil()`.
-Node built-ins are not available; OpenNext builds are compiled with the
-compatibility support they need.
+Handlers use `Request`, `Response`, streams, and `crypto`. Hand-written
+handlers cannot import Node built-ins; the build fails rather than the
+request. Next and OpenNext builds get `nodejs_compat` automatically.
 
 Spacefast denies outbound access unless the published version has the `fetch`
 capability. This is fail-closed. A `fetch()` call in your code does not
@@ -91,6 +90,14 @@ STRIPE_SECRET_KEY=sk_live_1234567890
 
 Spacefast withholds database connection strings. Use the database binding
 instead.
+
+## Storage
+
+Every worker receives `env.STORAGE`, the same durable, unversioned object
+store that [Zero](/apps/zero#storage) uses. `upload(file)` takes a `Blob` and
+returns an object with `id`, `contentType`, `size`, and `url`; `get(id)`
+returns a `Response`; `delete(id)` removes the object. Objects belong to the
+space and survive rollbacks.
 
 ## Database
 

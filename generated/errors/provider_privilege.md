@@ -1,11 +1,11 @@
 ---
-title: "export_version_not_found"
-description: "The version requested for export was not found."
+title: "provider_privilege"
+description: "The hosting provider does not grant this client permission to change the setting."
 ---
 
-The version requested for export was not found.
+The hosting provider does not grant this client permission to change the setting.
 
-**How to resolve:** List the space's versions and export an existing version id.
+**How to resolve:** Leave the provider-owned setting unchanged or contact support to request the required provider capability.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/export_version_not_found",
-  "title": "Export version not found",
+  "type": "https://spacefast.com/docs/errors/provider_privilege",
+  "title": "Provider privilege",
   "status": 400,
-  "detail": "The version requested for export was not found.",
-  "code": "export_version_not_found",
+  "detail": "The hosting provider does not grant this client permission to change the setting.",
+  "code": "provider_privilege",
   "requestId": "req_4mz0v8qk"
 }
 ```

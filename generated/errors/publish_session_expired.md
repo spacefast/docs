@@ -1,11 +1,11 @@
 ---
-title: "space_import_runtime_schema_unsupported"
-description: "The export was produced by an unsupported runtime schema version."
+title: "publish_session_expired"
+description: "This publish session expired before it was finalized."
 ---
 
-The export was produced by an unsupported runtime schema version.
+This publish session expired before it was finalized.
 
-**How to resolve:** Re-export from a current runtime, or upgrade before exporting.
+**How to resolve:** Start a new publish; declared uploads are kept for 24 hours only.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/space_import_runtime_schema_unsupported",
-  "title": "Space import runtime schema unsupported",
+  "type": "https://spacefast.com/docs/errors/publish_session_expired",
+  "title": "Publish session expired",
   "status": 400,
-  "detail": "The export was produced by an unsupported runtime schema version.",
-  "code": "space_import_runtime_schema_unsupported",
+  "detail": "This publish session expired before it was finalized.",
+  "code": "publish_session_expired",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
-title: "invalid_google_play_webhook_identity"
-description: "The Google Play notification did not carry a valid Pub/Sub push identity."
+title: "runtime_purge_failed"
+description: "Content updated but the edge cache purge did not confirm."
 ---
 
-The Google Play notification did not carry a valid Pub/Sub push identity.
+Content updated but the edge cache purge did not confirm.
 
-**How to resolve:** Send the notification through the configured authenticated Pub/Sub push subscription.
+**How to resolve:** The runtime retries automatically; recent visitors may briefly see the previous version.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/invalid_google_play_webhook_identity",
-  "title": "Invalid google play webhook identity",
+  "type": "https://spacefast.com/docs/errors/runtime_purge_failed",
+  "title": "Runtime purge failed",
   "status": 400,
-  "detail": "The Google Play notification did not carry a valid Pub/Sub push identity.",
-  "code": "invalid_google_play_webhook_identity",
+  "detail": "Content updated but the edge cache purge did not confirm.",
+  "code": "runtime_purge_failed",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
 title: "continuation_unavailable"
-description: "This claim token can no longer be exchanged for an API key."
+description: "This space key can no longer be exchanged for an API key."
 ---
 
-This claim token can no longer be exchanged for an API key.
+This space key can no longer be exchanged for an API key.
 
-**How to resolve:** If the space is claimed, ask its owner for an API key (dashboard: Account → API keys). If it is still unclaimed, keep using the claim token as bearer auth instead of exchanging it. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** If the space is claimed, ask its owner for an API key (dashboard: Account → API keys). If it is still unclaimed, keep using the space key as bearer auth instead of exchanging it. Still stuck? POST /v1/feedback with the error code and request id.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/continuation_unavailable",
   "title": "Continuation unavailable",
   "status": 400,
-  "detail": "This claim token can no longer be exchanged for an API key.",
+  "detail": "This space key can no longer be exchanged for an API key.",
   "code": "continuation_unavailable",
   "requestId": "req_4mz0v8qk"
 }

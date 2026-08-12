@@ -1,11 +1,11 @@
 ---
 title: "space_claimed_credential_available"
-description: "The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher."
+description: "The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher."
 ---
 
-The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher.
+The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher.
 
-**How to resolve:** POST /v1/anonymous-claim/exchange with this claim token as bearer auth. Save the returned API key (e.g. .spacefast/state.json), then retry the request with it as Authorization: Bearer. Do not publish a new space.
+**How to resolve:** POST /v1/claim/exchange with this space key as bearer auth. Save the returned API key (e.g. .spacefast/state.json), then retry the request with it as Authorization: Bearer. Do not publish a new space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_claimed_credential_available",
   "title": "Space claimed credential available",
   "status": 400,
-  "detail": "The space was claimed and its owner kept agent publishing enabled; this claim token now works exactly once as an exchange voucher.",
+  "detail": "The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher.",
   "code": "space_claimed_credential_available",
   "requestId": "req_4mz0v8qk"
 }

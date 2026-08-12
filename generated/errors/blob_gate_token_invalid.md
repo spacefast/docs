@@ -1,11 +1,11 @@
 ---
-title: "google_play_webhook_identity_not_configured"
-description: "Google Play Pub/Sub push authentication is not configured on this deployment."
+title: "blob_gate_token_invalid"
+description: "The download token is invalid or expired."
 ---
 
-Google Play Pub/Sub push authentication is not configured on this deployment.
+The download token is invalid or expired.
 
-**How to resolve:** Configure the exact push audience and dedicated Pub/Sub service-account email before enabling RTDN delivery.
+**How to resolve:** Request a fresh download link and use it within its lifetime.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/google_play_webhook_identity_not_configured",
-  "title": "Google play webhook identity not configured",
+  "type": "https://spacefast.com/docs/errors/blob_gate_token_invalid",
+  "title": "Blob gate token invalid",
   "status": 400,
-  "detail": "Google Play Pub/Sub push authentication is not configured on this deployment.",
-  "code": "google_play_webhook_identity_not_configured",
+  "detail": "The download token is invalid or expired.",
+  "code": "blob_gate_token_invalid",
   "requestId": "req_4mz0v8qk"
 }
 ```

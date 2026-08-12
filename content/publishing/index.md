@@ -12,8 +12,13 @@ no-op. Earlier versions stay available for [rollback](/publishing/channels).
 
 Directory publishes preserve relative paths. They can include `_redirects`,
 `_headers`, and [`sf.jsonc`](/spaces/settings). Spacefast serves static files
-only. Uploaded server-side code never executes. The CLI and dashboard warn you
-early about files that the runtime safety policy blocks.
+by default. Request-time code runs only through a declared
+[Function](/apps/functions); everything else is served as inert content. The
+CLI and dashboard warn you early about files that the runtime safety policy
+blocks.
+
+New spaces are private by default. The publish receipt returns an Open link
+that grants access; make the space public in [access settings](/spaces/access).
 
 ## CLI and agents
 
@@ -45,9 +50,10 @@ belongs at the archive root unless you want a file listing.
 
 Which file serves the homepage depends on the space mode:
 
-- Website mode uses root `index.html` for the space homepage when it is present.
-- SPA mode serves client-side routes through root `index.html`.
-- Files mode does not support SPA fallback. Use files mode for browsable static file trees.
+- Website mode (the default) uses root `index.html` for the space homepage
+  when it is present. Turn on the SPA fallback (`--spa true`) to route
+  unmatched paths to it.
+- Files mode serves a browsable file tree and does not support SPA fallback.
 
 ## First publish vs update
 

@@ -32,26 +32,31 @@ Leave `events` unset (or `["*"]`) to receive everything.
 
 ## Events
 
-Subscribe to exact codes (`version.ready`), a resource wildcard (`version.*`), or the catch-all `*`. The full catalog:
+Subscribe to exact codes (`version.ready`), a resource wildcard (`version.*`),
+or the catch-all `*`. Unknown codes are rejected with
+[`invalid_webhook_events`](/errors/invalid_webhook_events), so copy them
+exactly. The full catalog:
 
-| Resource            | Events                                                                                                                                                                                                                                                          |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `space`             | `created`, `claimed`, `transferred`, `moved`, `expired`, `disabled`, `enabled`, `deleted`, `config_updated`, `password_updated`                                                                                                                                 |
-| `version`           | `created`, `ready`, `warning`, `failed`, `expired`, `canceled`, `deleted`, `retention_warning`, `retention_deleted`                                                                                                                                             |
-| `channel`           | `promoted`                                                                                                                                                                                                                                                      |
-| `build`             | `created`, `succeeded`, `failed`, `canceled`, `skipped`                                                                                                                                                                                                         |
-| `domain`            | `created`, `verified`, `verification_failed`, `control_lost`, `dns_updated`, `nameservers_updated`, `registration_purchased`, `registration_renewed`, `registration_expiring`, `registration_expired`, `transfer_in_started`, `transfer_out_started`, `deleted` |
-| `binding`           | `created`, `activated`, `blocked`, `deleted`                                                                                                                                                                                                                    |
-| `transfer`          | `requested`, `confirmed`, `completed`, `canceled`, `expired`, `failed`                                                                                                                                                                                          |
-| `variable`          | `updated`, `deleted`                                                                                                                                                                                                                                            |
-| `api_key`           | `created`, `updated`, `revoked`                                                                                                                                                                                                                                 |
-| `webhook`           | `created`, `updated`, `secret_rotated`, `disabled`, `deleted`                                                                                                                                                                                                   |
-| `team`              | `updated`, `member_added`, `member_removed`, `member_role_updated`, `builds_deploys_quota_exceeded`                                                                                                                                                             |
-| `tenant`            | `past_due`, `suspended`, `reactivated`, `deleted`                                                                                                                                                                                                               |
-| `export` / `import` | `ready`, `failed`                                                                                                                                                                                                                                               |
-| `comment`           | `token_minted`, `created`, `reply_created`, `archived`, `unarchived`                                                                                                                                                                                            |
-| `abuse_report`      | `created`, `updated`                                                                                                                                                                                                                                            |
-| `user`              | `created`, `signed_in`, `deleted`, `two_factor_enabled`, `two_factor_disabled`, `impersonation_started`, `impersonation_stopped`                                                                                                                                |
+| Resource        | Events |
+| --------------- | ------ |
+| `space`         | `created`, `claimed`, `transferred`, `expired`, `disabled`, `enabled`, `deleted`, `config_updated`, `slug_updated`, `access_logout_all`, `access_transfer_scrub`, `share_link_created`, `share_link_revoked`, `access_request_created`, `access_request_resolved`, `grant_created`, `grant_updated`, `grant_revoked` |
+| `site`          | `provision_requested`, `placement_hold_set`, `placement_hold_cleared`, `burst_toggled` |
+| `version`       | `created`, `ready`, `warning`, `failed`, `expired`, `canceled`, `deleted` |
+| `channel`       | `promoted` |
+| `build`         | `created`, `succeeded`, `failed`, `canceled`, `skipped` |
+| `domain`        | `created`, `verified`, `verification_failed`, `control_lost`, `dns_updated`, `nameservers_updated`, `registration_purchased`, `registration_renewed`, `registration_expiring`, `registration_expired`, `transfer_in_started`, `transfer_out_started`, `deleted`, `attached`, `activated`, `blocked`, `detached` |
+| `transfer`      | `requested`, `confirmed`, `completed`, `canceled`, `expired`, `failed` |
+| `variable`      | `updated`, `deleted` |
+| `api_key`       | `created`, `updated`, `revoked` |
+| `agent_handoff` | `created`, `redeemed`, `revoked` |
+| `webhook`       | `created`, `updated`, `secret_rotated`, `disabled`, `deleted` |
+| `team`          | `updated`, `slug_updated`, `access_defaults_updated`, `member_added`, `member_removed`, `member_role_updated`, `builds_deploys_quota_exceeded` |
+| `tenant`        | `past_due`, `suspended`, `reactivated`, `deleted` |
+| `comment`       | `token_minted`, `created`, `reply_created`, `archived`, `unarchived` |
+| `abuse_report`  | `created`, `updated` |
+| `claim`         | `blocked_takedown`, `authority_rotated` |
+| `feedback`      | `lead_claim_pending` |
+| `user`          | `created`, `signed_in`, `deleted`, `two_factor_enabled`, `two_factor_disabled`, `impersonation_started`, `impersonation_stopped` |
 
 ## Payload
 

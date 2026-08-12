@@ -7,10 +7,11 @@ Space variables hold configuration and secrets for builds and runtimes. New
 values are write-only by default: the API accepts them but never prints them
 back.
 
-Set a secret:
+Set a secret. Pipe the value in so it never reaches shell history or the
+process list:
 
 ```bash
-sf env set API_TOKEN "$API_TOKEN" --space docs
+printf %s "$API_TOKEN" | sf env set API_TOKEN --value-from-stdin --space docs
 ```
 
 Set a readable, non-secret value explicitly:
@@ -71,6 +72,28 @@ sf env set API_ORIGIN https://api.example.com --production-value https://api.exa
 
 Use `--branch-value branch=value` more than once for exact branch overrides.
 Imports accept `--production`, `--preview`, and repeatable `--branch` flags.
+
+## Team variables
+
+Teams can hold shared variables that spaces inherit; a space value overrides
+the team value with the same name. Manage them in the dashboard under the
+team's **Settings → Developer → Variables**. `sf env` targets a space.
+
+## Templates
+
+Non-secret variables can be substituted into published files. List the files
+in `sf.jsonc` under [`templates`](/spaces/settings#templates), then reference
+values as `{{ vars.NAME }}`:
+
+```js
+// config.js, listed in templates
+const API_ORIGIN = "{{ vars.API_ORIGIN }}";
+```
+
+Substitution happens at publish. Secrets are refused in templates; the publish
+fails with
+[`secret_variable_in_template`](/errors/secret_variable_in_template).
+`_redirects` destinations resolve `{{ vars.NAME }}` the same way.
 
 ## Runtime files
 

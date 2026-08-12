@@ -1,9 +1,9 @@
 ---
 title: "storage_content_blocked"
-description: "The object contains executable or active web content that Zero storage does not serve."
+description: "The object contains executable or active web content that Spacefast storage does not serve."
 ---
 
-The object contains executable or active web content that Zero storage does not serve.
+The object contains executable or active web content that Spacefast storage does not serve.
 
 **How to resolve:** Upload a passive file type without HTML, script, SVG, PHP, or executable bytes.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_content_blocked",
   "title": "Storage content blocked",
   "status": 400,
-  "detail": "The object contains executable or active web content that Zero storage does not serve.",
+  "detail": "The object contains executable or active web content that Spacefast storage does not serve.",
   "code": "storage_content_blocked",
   "requestId": "req_4mz0v8qk"
 }

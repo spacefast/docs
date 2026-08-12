@@ -3,10 +3,10 @@ title: Customization
 description: Theme Spacefast's visitor pages, add site chrome, or take system pages over completely.
 ---
 
-Spacefast publishes six visitor-facing pages with every version: `404`,
-`password`, `denied`, `login`, `index`, and `preview`. The defaults are
-responsive, support dark mode, use the right HTTP status and cache policy, and
-pick up your theme automatically.
+Spacefast publishes five visitor-facing pages with every version: `404`,
+`denied`, `access`, `index`, and `preview`. The defaults are responsive,
+support dark mode, use the right HTTP status and cache policy, and pick up
+your theme automatically.
 
 Start with the smallest customization layer that solves the job.
 
@@ -74,9 +74,13 @@ Spacefast validates required slots before a publish goes live.
 ## Own a page completely
 
 In an entitled space, commit complete documents at `_pages/404.html`,
-`_pages/password.html`, `_pages/denied.html`, `_pages/index.html`, or
-`_pages/preview.html`. Spacefast expands a custom page, then serves it as
-written and never wraps the page. Login takeover is not part of v1.
+`_pages/denied.html`, `_pages/access.html`, `_pages/index.html`,
+`_pages/preview.html`, or `_pages/collab.html`. Spacefast expands a custom
+page, then serves it as written and never wraps the page.
+
+A custom `access` page must render `<sf-access-lanes>` so visitors keep a way
+in, and any CSP it declares must allow `form-action 'self'`; the publish fails
+otherwise.
 
 ```html
 <!-- _pages/404.html -->
@@ -102,33 +106,42 @@ A literal `404.html` never needs an entitlement: Spacefast serves it verbatim.
 Pages uses a small, versioned custom-element vocabulary. It has no loops,
 conditionals, or attributes API.
 
-| Element              | Expansion                            | Valid in        |
-| -------------------- | ------------------------------------ | --------------- |
-| `<sf-content>`       | Wrapped page or fragment             | `_layout.html`  |
-| `<sf-password-form>` | Canonical password form              | `password`      |
-| `<sf-login>`         | Login handoff                        | `login` default |
-| `<sf-files>`         | Escaped directory entries            | `index`         |
-| `<sf-file>`          | File preview, metadata, and download | `preview`       |
-| `<sf-logo>`          | Configured logo image                | Anywhere        |
-| `<sf-name>`          | Configured space name                | Anywhere        |
+| Element                   | Expansion                            | Valid in            |
+| ------------------------- | ------------------------------------ | ------------------- |
+| `<sf-content>`            | Wrapped page or fragment             | `_layout.html`      |
+| `<sf-access-lanes>`       | Sign-in, password, and request lanes | `access` (required) |
+| `<sf-access-status>`      | Current access state                 | `access`            |
+| `<sf-denial-context>`     | Why the request was denied           | `denied`            |
+| `<sf-page-path>`          | The requested path                   | `404`, `index`, `preview` |
+| `<sf-page-title>`         | Page title                           | Anywhere            |
+| `<sf-page-summary>`       | Page summary                         | `index`             |
+| `<sf-files>`              | Escaped directory entries            | `index`             |
+| `<sf-file>`               | File preview, metadata, and download | `preview`           |
+| `<sf-logo>`               | Configured logo image                | Anywhere            |
+| `<sf-name>`               | Configured space name                | Anywhere            |
+| `<sf-spacefast-branding>` | Spacefast attribution                | Anywhere            |
 
-A hand-written password form must `POST` a field named `_pw` to the current
-URL. Password checking, throttling, cookies, and redirects remain
-server-owned.
+A layout accepts exactly one `<sf-content>`, plus `<sf-logo>`, `<sf-name>`,
+`<sf-page-title>`, and `<sf-spacefast-branding>`. Unknown elements fail the
+publish.
+
+The runtime owns the sign-in and password lane markup inside
+`<sf-access-lanes>`; you retheme around it. Password checking, throttling,
+cookies, and redirects remain server-owned.
 
 ## Machine responses
 
 Browsers requesting HTML receive the published page artifact.
-`Accept: application/json` and fetch requests receive a fixed envelope such as:
+`Accept: application/json` and fetch requests receive an RFC 9457 problem
+document such as:
 
 ```json
 {
-  "error": {
-    "code": "password_required",
-    "status": 401,
-    "page": "password",
-    "action": { "method": "POST", "field": "_pw", "url": "/private" }
-  }
+  "type": "https://spacefast.com/docs/errors/access_denied",
+  "title": "Access denied",
+  "status": 403,
+  "code": "access_denied",
+  "page": "access"
 }
 ```
 
@@ -139,10 +152,10 @@ Spacefast-owned defaults.
 ## Test locally
 
 Start from the readable defaults and validate with the exact publish-time
-checks. `sf pages pull layout` works the same way for the shared layout.
+checks. Valid pull targets are the five page ids plus `layout` and `all`.
 
 ```bash
-sf pages pull password
+sf pages pull access
 ```
 
 ```bash

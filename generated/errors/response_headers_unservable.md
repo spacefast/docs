@@ -1,11 +1,11 @@
 ---
-title: "access_scope_suggestion"
-description: "Published dependencies cluster under paths that may be useful as explicit public scopes."
+title: "response_headers_unservable"
+description: "A file needs a response header that the platform cannot deliver for large files."
 ---
 
-Published dependencies cluster under paths that may be useful as explicit public scopes.
+A file needs a response header that the platform cannot deliver for large files.
 
-**How to resolve:** If those files are safe for anyone to read, make only the suggested scopes Public. Otherwise leave access unchanged.
+**How to resolve:** Reduce the file below 100 MiB or drop the custom header.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/access_scope_suggestion",
-  "title": "Access scope suggestion",
+  "type": "https://spacefast.com/docs/errors/response_headers_unservable",
+  "title": "Response headers unservable",
   "status": 400,
-  "detail": "Published dependencies cluster under paths that may be useful as explicit public scopes.",
-  "code": "access_scope_suggestion",
+  "detail": "A file needs a response header that the platform cannot deliver for large files.",
+  "code": "response_headers_unservable",
   "requestId": "req_4mz0v8qk"
 }
 ```
