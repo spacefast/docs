@@ -30,17 +30,15 @@ sf domains add www.example.com --wait
 
 ## Check capacity before the move
 
-Open the target team's limits in the dashboard. Compare its storage, routing,
-domain, and publish capacity with the site you move.
+Open the target team's **Usage & billing** page in the dashboard. Compare its
+storage, routing, domain, and publish limits with the site you move.
 
-## When Spacefast fits
+## What carries over
 
-Spacefast directly hosts static output: single-page apps (SPAs), documentation,
-marketing pages, generated reports, and agent-published artifacts. You keep your
-`_redirects` and `_headers` files, SPA fallbacks, custom 404 pages, and external
-proxies (plan-gated), and HTTPS certificates are automatic. If the source site
-needs request-time code, compile that work away, keep it in an external service,
-or use [Apps](/apps) when the team has the needed runtime.
+Spacefast hosts static output. `_redirects` and `_headers` files, SPA
+fallbacks, custom 404 pages, and external proxies (plan-gated) carry over;
+HTTPS certificates are automatic. If the source site needs request-time code,
+compile that work away, keep it in an external service, or use [Apps](/apps).
 
 You can publish built output from continuous integration (CI), an agent, or the
 CLI, or [connect a Git repository](/publishing/git). Spacefast then builds on
@@ -51,8 +49,8 @@ For Next.js, start with the
 
 ## Migration safety
 
-- Every publish is an immutable version. Rollback to any previous version is
-  one click.
+- Every publish is an immutable version. Roll back to any previous version
+  with `sf rollback` or from the dashboard.
 - Anonymous publishing works without an account. Claim the space within 6 hours
   to keep it.
 - Download any space version's files with `sf spaces download`.

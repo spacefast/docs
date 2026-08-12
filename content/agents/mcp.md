@@ -4,7 +4,7 @@ description: Connect hosted or on-device MCP so agents use the same Spacefast AP
 ---
 
 The Model Context Protocol (MCP) gives agents typed Spacefast tools over the
-same public API that the CLI and dashboard use. There is no second data model.
+same public API that the CLI and dashboard use.
 
 ## Hosted vs on-device
 

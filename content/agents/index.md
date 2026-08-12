@@ -26,8 +26,8 @@ command, skills, and MCP.
 
 ## Install the CLI
 
-The CLI is the full surface: incremental publishes, version history, rollback,
-passwords, domains, logs, and diagnostics.
+The CLI covers everything an agent needs: incremental publishes, version
+history, rollback, passwords, domains, logs, and diagnostics.
 
 ```bash
 npm install -g spacefast
