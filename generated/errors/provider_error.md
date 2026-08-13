@@ -1,9 +1,9 @@
 ---
 title: "provider_error"
-description: "The hosting provider reported an error."
+description: "WP Cloud reported an error."
 ---
 
-The hosting provider reported an error.
+WP Cloud reported an error.
 
 **How to resolve:** Retry. If the error persists, contact support with the requestId.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_error",
   "title": "Provider error",
   "status": 400,
-  "detail": "The hosting provider reported an error.",
+  "detail": "WP Cloud reported an error.",
   "code": "provider_error",
   "requestId": "req_4mz0v8qk"
 }

@@ -195,11 +195,11 @@ There are 456 error codes in the registry.
 | [`policy_exceeds_grantor`](/errors/policy_exceeds_grantor) | The requested key policy grants more than your own credential allows. |
 | [`principal_space_mismatch`](/errors/principal_space_mismatch) | The space does not belong to the principal in the request. |
 | [`promote_admission_exceeded`](/errors/promote_admission_exceeded) | Too many archived files are being restored for this space right now. |
-| [`provider_error`](/errors/provider_error) | The hosting provider reported an error. |
+| [`provider_error`](/errors/provider_error) | WP Cloud reported an error. |
 | [`provider_job_failed`](/errors/provider_job_failed) | A hosting-provider job failed while processing this operation. |
 | [`provider_job_timeout`](/errors/provider_job_timeout) | A hosting-provider job timed out while processing this operation. |
-| [`provider_privilege`](/errors/provider_privilege) | The hosting provider does not grant this client permission to change the setting. |
-| [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | The hosting provider does not support this runtime feature. |
+| [`provider_privilege`](/errors/provider_privilege) | WP Cloud does not grant this client permission to change the setting. |
+| [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | WP Cloud does not support this runtime feature. |
 | [`provider_site_id_required`](/errors/provider_site_id_required) | A provider site id is required for this internal operation. |
 | [`proxy_upstream_denied`](/errors/proxy_upstream_denied) | The proxy upstream is on a denied network and cannot be used. |
 | [`proxy_upstream_unresolved`](/errors/proxy_upstream_unresolved) | The proxy upstream hostname cannot be resolved. |

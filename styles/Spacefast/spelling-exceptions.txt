@@ -97,6 +97,7 @@ prefills
 prerender
 prerendered
 prerendering
+Pressable
 proto
 proxied
 raycast
@@ -166,4 +167,5 @@ webhook's
 webhooks
 websocket
 websockets
+WP
 www

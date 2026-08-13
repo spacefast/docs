@@ -66,30 +66,20 @@ for (const spec of specs) {
   visit(document, "");
 }
 
-// Prose that only exists in platform.json (fields the external spec strips)
-// is linted separately: the platform API is a sanctioned context for provider
-// names, and .vale.ini relaxes Spacefast.WpCloud for that file.
 const scratch = mkdtempSync(join(tmpdir(), "vale-openapi-"));
 const extractionFiles = new Map(); // file path -> lineMap [{ start, end, sources }]
 {
-  const buckets = { "api-prose.md": [], "platform-only-prose.md": [] };
+  const lines = [];
+  const lineMap = [];
   for (const [text, sources] of proseSources) {
-    const isPlatformOnly = sources.every((s) => s.spec.endsWith("platform.json"));
-    buckets[isPlatformOnly ? "platform-only-prose.md" : "api-prose.md"].push([text, sources]);
+    const start = lines.length + 1;
+    lines.push(...text.split("\n"));
+    lineMap.push({ start, end: lines.length, sources });
+    lines.push("");
   }
-  for (const [name, entries] of Object.entries(buckets)) {
-    const lines = [];
-    const lineMap = [];
-    for (const [text, sources] of entries) {
-      const start = lines.length + 1;
-      lines.push(...text.split("\n"));
-      lineMap.push({ start, end: lines.length, sources });
-      lines.push("");
-    }
-    const file = join(scratch, name);
-    writeFileSync(file, lines.join("\n") + "\n");
-    extractionFiles.set(file, lineMap);
-  }
+  const file = join(scratch, "openapi-prose.md");
+  writeFileSync(file, lines.join("\n") + "\n");
+  extractionFiles.set(file, lineMap);
 }
 
 // --- run vale ----------------------------------------------------------------

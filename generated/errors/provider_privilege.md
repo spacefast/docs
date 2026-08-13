@@ -1,9 +1,9 @@
 ---
 title: "provider_privilege"
-description: "The hosting provider does not grant this client permission to change the setting."
+description: "WP Cloud does not grant this client permission to change the setting."
 ---
 
-The hosting provider does not grant this client permission to change the setting.
+WP Cloud does not grant this client permission to change the setting.
 
 **How to resolve:** Leave the provider-owned setting unchanged or contact support to request the required provider capability.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_privilege",
   "title": "Provider privilege",
   "status": 400,
-  "detail": "The hosting provider does not grant this client permission to change the setting.",
+  "detail": "WP Cloud does not grant this client permission to change the setting.",
   "code": "provider_privilege",
   "requestId": "req_4mz0v8qk"
 }

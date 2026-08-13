@@ -1,9 +1,9 @@
 ---
 title: "provider_runtime_feature_unsupported"
-description: "The hosting provider does not support this runtime feature."
+description: "WP Cloud does not support this runtime feature."
 ---
 
-The hosting provider does not support this runtime feature.
+WP Cloud does not support this runtime feature.
 
 **How to resolve:** Check the feature's availability for this site's runtime.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_runtime_feature_unsupported",
   "title": "Provider runtime feature unsupported",
   "status": 400,
-  "detail": "The hosting provider does not support this runtime feature.",
+  "detail": "WP Cloud does not support this runtime feature.",
   "code": "provider_runtime_feature_unsupported",
   "requestId": "req_4mz0v8qk"
 }

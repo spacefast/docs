@@ -75,9 +75,11 @@ alerts is the bar.
 - Config: `.vale.ini`. Rules: `styles/Spacefast/` — voice (no AI-speak, no
   filler hype, no condescension), brand casing, and the product vocabulary
   rules, which mirror the vocabulary registry in the product monorepo
-  (`packages/common/src/vocabulary.ts`): "API key" never "access token",
-  provider names never leak ("infra", except platform-API prose and the fixed
-  phrase "built on WP.Cloud").
+  (`packages/common/src/vocabulary.ts`): "API key" never "access token". The
+  infra brand is "WP Cloud" (never dotted or hyphenated). Prefer "infra";
+  name WP Cloud only when the external reference is necessary — never the
+  euphemism "the hosting provider". Marketing may use the family line "the
+  same infra as Automattic, WP Cloud, Pressable, and WordPress.com".
 - Unknown technical words go in `styles/Spacefast/spelling-exceptions.txt`
   (sorted, case matters for proper nouns). Identifiers in prose — commands,
   enum values, claim names, package names — get backticks instead; Vale skips

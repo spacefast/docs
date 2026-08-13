@@ -1,11 +1,14 @@
-# Mirrors packages/common vocabulary registry (PROVIDER_HYGIENE.wpcloud) in the
-# product monorepo: the hosting provider is named only in the platform API or
-# the fixed phrase "built on WP.Cloud" (masked via TokenIgnores in .vale.ini).
-# General copy says "infra".
+# Mirrors the monorepo vocabulary registry (PROVIDER_HYGIENE.wpcloud, amended
+# 2026-08-13): the brand is "WP Cloud" — the dotted and hyphenated forms are
+# always wrong. Prefer "infra"; name WP Cloud only when an external reference
+# is genuinely necessary (provider identity fields, domain conflicts, the
+# marketing family line "the same infra as Automattic, WP Cloud, Pressable,
+# and WordPress.com"). Casing of the correct form is enforced by
+# WpCloudBrand.yml; necessity is a judgment call the gate leaves to review.
 extends: existence
-message: "'%s' names the hosting provider. General copy says 'infra' (allowed: platform API prose, the exact phrase 'built on WP.Cloud')."
+message: "The brand is 'WP Cloud' — never '%s'. And prefer 'infra' unless the external reference is necessary."
 level: error
 ignorecase: true
 tokens:
   - wp\.cloud
-  - wp[- ]cloud
+  - wp-cloud

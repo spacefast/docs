@@ -1,0 +1,10 @@
+# Ruling 2026-08-13: never the euphemism "the hosting provider" for our own
+# infra. Either drop the external reference, or — when it is genuinely
+# necessary — name WP Cloud. Generic third-party mentions ("other hosting
+# providers", "another hosting provider") are fine and don't match.
+extends: existence
+message: "Don't say '%s' for our infra. Drop the reference, or name WP Cloud when the external reference is necessary."
+level: error
+ignorecase: true
+tokens:
+  - the hosting provider

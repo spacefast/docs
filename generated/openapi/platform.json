@@ -2040,7 +2040,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "WP.Cloud `atomic_site_id` serving this space."
+                            "description": "WP Cloud `atomic_site_id` serving this space."
                           },
                           "providerClientId": {
                             "anyOf": [
@@ -2051,7 +2051,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                            "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                           },
                           "teamId": {
                             "anyOf": [
@@ -4621,7 +4621,7 @@
                                   "type": "null"
                                 }
                               ],
-                              "description": "WP.Cloud `atomic_site_id` serving this space."
+                              "description": "WP Cloud `atomic_site_id` serving this space."
                             },
                             "providerClientId": {
                               "anyOf": [
@@ -4632,7 +4632,7 @@
                                   "type": "null"
                                 }
                               ],
-                              "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                              "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                             },
                             "teamId": {
                               "anyOf": [
@@ -5792,7 +5792,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud `atomic_site_id` serving this space."
+                          "description": "WP Cloud `atomic_site_id` serving this space."
                         },
                         "providerClientId": {
                           "anyOf": [
@@ -5803,7 +5803,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                          "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                         },
                         "teamId": {
                           "anyOf": [
@@ -8290,7 +8290,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud `atomic_site_id` serving this space."
+                          "description": "WP Cloud `atomic_site_id` serving this space."
                         },
                         "providerClientId": {
                           "anyOf": [
@@ -8301,7 +8301,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                          "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                         },
                         "teamId": {
                           "anyOf": [
@@ -9349,7 +9349,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud `atomic_site_id` serving this space."
+                          "description": "WP Cloud `atomic_site_id` serving this space."
                         },
                         "providerClientId": {
                           "anyOf": [
@@ -9360,7 +9360,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                          "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                         },
                         "teamId": {
                           "anyOf": [
@@ -10762,7 +10762,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud `atomic_site_id` serving this space."
+                          "description": "WP Cloud `atomic_site_id` serving this space."
                         },
                         "providerClientId": {
                           "anyOf": [
@@ -10773,7 +10773,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                          "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                         },
                         "teamId": {
                           "anyOf": [
@@ -30469,7 +30469,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "WP.Cloud `atomic_site_id` serving this space."
+                            "description": "WP Cloud `atomic_site_id` serving this space."
                           },
                           "providerClientId": {
                             "anyOf": [
@@ -30480,7 +30480,7 @@
                                 "type": "null"
                               }
                             ],
-                            "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                            "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                           },
                           "teamId": {
                             "anyOf": [
@@ -46874,7 +46874,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud `atomic_site_id` serving this space."
+                          "description": "WP Cloud `atomic_site_id` serving this space."
                         },
                         "providerClientId": {
                           "anyOf": [
@@ -46885,7 +46885,7 @@
                               "type": "null"
                             }
                           ],
-                          "description": "WP.Cloud client identity (`pvc_...`) the space's site is provisioned under."
+                          "description": "WP Cloud client identity (`pvc_...`) the space's site is provisioned under."
                         },
                         "teamId": {
                           "anyOf": [

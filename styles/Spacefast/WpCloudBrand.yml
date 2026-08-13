@@ -1,0 +1,9 @@
+# Casing of the sanctioned brand form: "WP Cloud", exactly.
+extends: substitution
+message: "The brand is spelled '%s', not '%s'."
+level: error
+ignorecase: true
+action:
+  name: replace
+swap:
+  "wp cloud": WP Cloud
