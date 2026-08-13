@@ -1,11 +1,11 @@
 ---
-title: "config_file_too_large"
-description: "The sf.jsonc configuration file exceeds the maximum size."
+title: "runtime_release_unverifiable"
+description: "The requested platform release could not be verified at its origin."
 ---
 
-The sf.jsonc configuration file exceeds the maximum size.
+The requested platform release could not be verified at its origin.
 
-**How to resolve:** Keep the configuration file at or under 256 KB.
+**How to resolve:** Check that the release exists and published its full set of artifacts, then request it again.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/config_file_too_large",
-  "title": "Config file too large",
+  "type": "https://spacefast.com/docs/errors/runtime_release_unverifiable",
+  "title": "Runtime release unverifiable",
   "status": 400,
-  "detail": "The sf.jsonc configuration file exceeds the maximum size.",
-  "code": "config_file_too_large",
+  "detail": "The requested platform release could not be verified at its origin.",
+  "code": "runtime_release_unverifiable",
   "requestId": "req_4mz0v8qk"
 }
 ```

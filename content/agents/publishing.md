@@ -43,7 +43,7 @@ recovery page.
 
 Claiming ends the space key's publish rights. When the owner keeps agent
 continuation on (the default at claim time), the key becomes a one-time
-exchange voucher, and the next publish with it fails with
+exchange voucher. The next publish with it fails with
 `409 space_claimed_credential_available` — the signal to run the exchange once.
 CLI agents run [`sf continue`](/cli#sf-continue) to exchange the saved space
 key for a durable credential in one command. API-only agents:

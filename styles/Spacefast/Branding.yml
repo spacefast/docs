@@ -1,0 +1,21 @@
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: error
+ignorecase: false
+action:
+  name: replace
+swap:
+  Github: GitHub
+  Javascript: JavaScript
+  Typescript: TypeScript
+  Wordpress: WordPress
+  MacOS: macOS
+  OSX: macOS
+  NPM: npm
+  Node\.JS: Node.js
+  NodeJS: Node.js
+  "Open API": OpenAPI
+  OpenApi: OpenAPI
+  "e-mail": email
+  "web site": website
+  "Web site": Website

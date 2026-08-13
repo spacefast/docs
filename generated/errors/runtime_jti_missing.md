@@ -5,7 +5,7 @@ description: "The runtime token is missing its replay-protection id."
 
 The runtime token is missing its replay-protection id.
 
-**How to resolve:** Mint a fresh runtime token. Tokens must carry a jti claim.
+**How to resolve:** Mint a fresh runtime token. Tokens must carry a `jti` claim.
 
 <div data-pagefind-ignore>
 

@@ -1,11 +1,27 @@
 ---
 title: "CLI (`spacefast`)"
-description: "Release history for spacefast on npm."
+description: "Release history for the Spacefast CLI on npm."
 ---
 
 Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
+
+## 0.0.24
+
+#### Patch Changes
+
+- Sharpen the agent skill: trigger phrasings in the description, explicit
+  side-effect-free probes vs mutations, the correct pre-success URL check, and
+  a positioning line that reflects Zero and Functions instead of denying
+  server code.
+  - @spacefast/common@0.0.24
+  - @spacefast/domain-search-terminal@0.0.24
+  - @spacefast/mcp@0.0.24
+  - @spacefast/routing@0.0.24
+  - @spacefast/sdk@0.0.24
+  - @spacefast/zero@0.0.24
+  - @spacefast/zero-compile@0.0.24
 
 ## 0.0.23
 
@@ -116,7 +132,7 @@ Install with `npm install -g spacefast`. Standalone binaries are also published 
 - Add complete Zero database exports plus owner storage listing and deletion across the CLI, API, SDK, and dashboard.
 - List MCP daemon, HTTP, and status commands in canonical CLI help.
 - Run Lakebed 0.0.29 core capsules without import rewrites through Spacefast Zero, including actions, runtime-backed object storage, declared indexes, and the database v1 query API.
-- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted wp.cloud execution, and Cast-backed realtime updates.
+- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted execution, and Cast-backed realtime updates.
 - Add Railway-style agent setup with repeated client targeting, optional project-scoped skills, integrated auth health, safe install/update/removal, popular agent consumers, local/remote-proxy/remote-OAuth connection methods, and direct variable, domain, and repository MCP lifecycle tools.
 - Updated dependencies
 - Updated dependencies

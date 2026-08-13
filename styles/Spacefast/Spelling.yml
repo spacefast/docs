@@ -1,0 +1,12 @@
+extends: spelling
+message: "Did you really mean '%s'?"
+level: error
+ignore:
+  - Spacefast/spelling-exceptions.txt
+# Code-shaped tokens are identifiers, not prose: snake_case, camelCase, and
+# key prefixes like sfc_ / spc_.
+filters:
+  - '\w+(?:_\w+)+'
+  - '[a-z][a-z0-9]*[A-Z][A-Za-z0-9]*'
+  - '\w+_'
+

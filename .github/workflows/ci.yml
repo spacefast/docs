@@ -34,6 +34,15 @@ jobs:
       - name: Verify public safety
         run: bun run verify:public-safety
 
+      - name: Install Vale
+        run: |
+          curl -sSL https://github.com/vale-cli/vale/releases/download/v3.17.1/vale_3.17.1_Linux_64-bit.tar.gz \
+            | sudo tar -xz -C /usr/local/bin vale
+          vale --version
+
+      - name: Verify prose style
+        run: bun run verify:prose
+
       - name: Check types and templates
         run: bun run check
 

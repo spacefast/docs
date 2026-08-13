@@ -1,0 +1,24 @@
+extends: existence
+message: "'%s' is internal infrastructure. Public copy says 'CDN', 'edge', or names the user-facing behavior."
+level: error
+ignorecase: true
+# nonword + explicit \b so the path tokens (which start with "/") can match at
+# line start or after a space — Vale's default \b-wrapping kills them.
+nonword: true
+tokens:
+  # wp.cloud lives in WpCloud.yml (platform-API prose is allowed to name it).
+  # Bare "wpcloud" stays legal: @spacefast/wpcloud-sdk is a published npm
+  # package, so its name appears in public release notes by design.
+  - \bbatcache\b
+  - \bplanetscale\b
+  - \bpgbouncer\b
+  - \bstattic\b
+  # "static-runtime" stays legal: it is the public space type named by the
+  # frozen error codes (static_runtime_required), and "runtime" is public API
+  # vocabulary (the Runtime surface).
+  - \bruntime engine\b
+  - \bnginx\b
+  - \bcaddy\b
+  - \bweb server\b
+  - \bmonorepo\b
+  - '(?:/Users/|/home/)[a-z]+'

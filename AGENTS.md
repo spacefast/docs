@@ -61,5 +61,31 @@ bun run validate
 bun run build
 bun run audit
 bun run verify:public-safety
+bun run verify:prose
 bun run verify:routes
 ```
+
+## Prose style (Vale)
+
+`bun run verify:prose` runs [Vale](https://vale.sh) over every docs page and
+over the `summary`/`description` fields of the generated OpenAPI snapshot
+(extracted to markdown, reported by spec + JSON Pointer). CI enforces it; zero
+alerts is the bar.
+
+- Config: `.vale.ini`. Rules: `styles/Spacefast/` — voice (no AI-speak, no
+  filler hype, no condescension), brand casing, and the product vocabulary
+  rules, which mirror the vocabulary registry in the product monorepo
+  (`packages/common/src/vocabulary.ts`): "API key" never "access token",
+  provider names never leak ("infra", except platform-API prose and the fixed
+  phrase "built on WP.Cloud").
+- Unknown technical words go in `styles/Spacefast/spelling-exceptions.txt`
+  (sorted, case matters for proper nouns). Identifiers in prose — commands,
+  enum values, claim names, package names — get backticks instead; Vale skips
+  code spans.
+- The changelog is a historical record: only public-safety and brand-casing
+  rules apply to `content/changelog/**`.
+- Suggestion-level rules (sentence length) don't gate. See them locally with
+  `vale --minAlertLevel=suggestion content/`.
+- OpenAPI/CLI/error/setup violations are fixed at their source in the
+  monorepo (contract `.describe()` strings, error catalog, setup targets),
+  then re-exported — never by hand-editing the snapshot.

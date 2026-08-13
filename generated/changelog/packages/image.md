@@ -5,6 +5,10 @@ description: "Release history for @spacefast/image on npm."
 
 Published as [`@spacefast/image`](https://www.npmjs.com/package/@spacefast/image) on npm.
 
+## 0.0.24
+
+_No noted changes in this release._
+
 ## 0.0.23
 
 _No noted changes in this release._

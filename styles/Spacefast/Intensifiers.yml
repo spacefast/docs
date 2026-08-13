@@ -1,0 +1,15 @@
+# Adopted from a stow (STE-style) audit, 2026-08-13: intensity without
+# information. Zero offenders at adoption; this is a ratchet.
+extends: existence
+message: "'%s' adds intensity, not information. Show the number or cut it."
+level: warning
+ignorecase: true
+tokens:
+  - extremely
+  - dramatically
+  - exceptionally
+  - incredibly
+  - remarkably
+  - '\btruly\b'
+  - undoubtedly
+  - significantly

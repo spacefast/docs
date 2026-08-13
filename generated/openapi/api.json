@@ -14131,7 +14131,7 @@
                                 "type": "string"
                               },
                               "assignedNameservers": {
-                                "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                                "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                                 "type": "array",
                                 "items": {
                                   "type": "string"
@@ -15145,7 +15145,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -16084,7 +16084,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -17617,7 +17617,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -33898,81 +33898,40 @@
                   "files": {
                     "type": "array",
                     "items": {
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "path": {
-                              "type": "string",
-                              "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
-                            },
-                            "size": {
-                              "type": "integer",
-                              "minimum": 0,
-                              "maximum": 9007199254740991,
-                              "description": "File size in bytes."
-                            },
-                            "sha256": {
-                              "type": "string",
-                              "pattern": "^[0-9a-f]{64}$",
-                              "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form)."
-                            },
-                            "contentType": {
-                              "description": "Optional content type for serving metadata.",
-                              "type": "string"
-                            },
-                            "sourceUrl": {
-                              "description": "Optional HTTPS URL the runtime can fetch directly for this file instead of receiving bytes from the client.",
-                              "type": "string",
-                              "format": "uri"
-                            }
-                          },
-                          "required": [
-                            "path",
-                            "size",
-                            "sha256"
-                          ],
-                          "additionalProperties": false
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
                         },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "path": {
-                              "type": "string",
-                              "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
-                            },
-                            "size": {
-                              "type": "integer",
-                              "minimum": 0,
-                              "maximum": 9007199254740991,
-                              "description": "File size in bytes."
-                            },
-                            "sha256": {
-                              "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
-                              "type": "string",
-                              "pattern": "^[0-9a-f]{64}$"
-                            },
-                            "contentType": {
-                              "description": "Optional content type for serving metadata.",
-                              "type": "string"
-                            },
-                            "sourceUrl": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "HTTPS URL the runtime can fetch directly instead of receiving local bytes."
-                            }
-                          },
-                          "required": [
-                            "path",
-                            "size",
-                            "sourceUrl"
-                          ],
-                          "additionalProperties": false
+                        "size": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "File size in bytes."
+                        },
+                        "sha256": {
+                          "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "contentType": {
+                          "description": "Optional content type for serving metadata.",
+                          "type": "string"
+                        },
+                        "sourceUrl": {
+                          "description": "Optional HTTPS URL the runtime can fetch directly for this file instead of receiving bytes from the client.",
+                          "type": "string",
+                          "format": "uri"
                         }
+                      },
+                      "required": [
+                        "path",
+                        "size"
                       ],
-                      "description": "A declared upload file. Local bytes require sha256. A sourceUrl entry may omit sha256 because the runtime computes it while fetching."
+                      "additionalProperties": false
                     },
-                    "description": "Desired file manifest for a declared publish session. Local-byte entries require `sha256`; sourceUrl entries may omit it. Clients upload returned targets, then finalize."
+                    "description": "Desired file manifest for a declared publish session. `sha256` is optional: omitted local bytes receive path-addressed upload targets and are hashed by the runtime; declared hashes receive content-addressed targets and can reuse existing bytes. Clients upload returned targets, then finalize."
                   },
                   "deletePaths": {
                     "default": [],
@@ -35654,7 +35613,7 @@
           }
         ],
         "summary": "List operations",
-        "description": "Returns your workflow operations, newest first. The feed includes publishes, builds, domain and webhook activity, integration releases, agent runs, and approvals. Internal system operations stay out of this feed. Operations your credential cannot reach stay out of this feed. Filter by resource to follow one thread, or by `spaceId` for everything pertaining to one Space.",
+        "description": "Returns your workflow operations, newest first. The feed includes publishes, builds, domain and webhook activity, integration releases, agent runs, and approvals. Internal system operations stay out of this feed. Operations your credential cannot reach stay out of this feed. Filter by resource to follow one thread, or by `spaceId` for everything about one Space.",
         "parameters": [
           {
             "name": "limit",
@@ -35704,7 +35663,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Filter to operations pertaining to one Space — its own operations plus those of its versions and builds. The Space must be readable by the caller.",
+              "description": "Filter to operations for one Space — its own operations plus those of its versions and builds. The Space must be readable by the caller.",
               "type": "string",
               "minLength": 1
             }
@@ -49697,7 +49656,7 @@
                                   "description": "File size in bytes."
                                 },
                                 "sha256": {
-                                  "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                  "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                   "type": "string",
                                   "pattern": "^[0-9a-f]{64}$"
                                 },
@@ -50868,81 +50827,40 @@
                   "files": {
                     "type": "array",
                     "items": {
-                      "anyOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "path": {
-                              "type": "string",
-                              "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
-                            },
-                            "size": {
-                              "type": "integer",
-                              "minimum": 0,
-                              "maximum": 9007199254740991,
-                              "description": "File size in bytes."
-                            },
-                            "sha256": {
-                              "type": "string",
-                              "pattern": "^[0-9a-f]{64}$",
-                              "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form)."
-                            },
-                            "contentType": {
-                              "description": "Optional content type for serving metadata.",
-                              "type": "string"
-                            },
-                            "sourceUrl": {
-                              "description": "Optional HTTPS URL the runtime can fetch directly for this file instead of receiving bytes from the client.",
-                              "type": "string",
-                              "format": "uri"
-                            }
-                          },
-                          "required": [
-                            "path",
-                            "size",
-                            "sha256"
-                          ],
-                          "additionalProperties": false
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
                         },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "path": {
-                              "type": "string",
-                              "description": "Version-relative POSIX path. Canonicalized at intake to UTF-8 NFC, percent-decoded exactly once; max 1,024 bytes in canonical form."
-                            },
-                            "size": {
-                              "type": "integer",
-                              "minimum": 0,
-                              "maximum": 9007199254740991,
-                              "description": "File size in bytes."
-                            },
-                            "sha256": {
-                              "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
-                              "type": "string",
-                              "pattern": "^[0-9a-f]{64}$"
-                            },
-                            "contentType": {
-                              "description": "Optional content type for serving metadata.",
-                              "type": "string"
-                            },
-                            "sourceUrl": {
-                              "type": "string",
-                              "format": "uri",
-                              "description": "HTTPS URL the runtime can fetch directly instead of receiving local bytes."
-                            }
-                          },
-                          "required": [
-                            "path",
-                            "size",
-                            "sourceUrl"
-                          ],
-                          "additionalProperties": false
+                        "size": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991,
+                          "description": "File size in bytes."
+                        },
+                        "sha256": {
+                          "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "contentType": {
+                          "description": "Optional content type for serving metadata.",
+                          "type": "string"
+                        },
+                        "sourceUrl": {
+                          "description": "Optional HTTPS URL the runtime can fetch directly for this file instead of receiving bytes from the client.",
+                          "type": "string",
+                          "format": "uri"
                         }
+                      },
+                      "required": [
+                        "path",
+                        "size"
                       ],
-                      "description": "A declared upload file. Local bytes require sha256. A sourceUrl entry may omit sha256 because the runtime computes it while fetching."
+                      "additionalProperties": false
                     },
-                    "description": "The complete desired file manifest. Local-byte entries require `sha256` and are uploaded to a content-addressed target. A `sourceUrl` entry may omit `sha256` because the runtime computes it while fetching. Hashes also let updates skip unchanged files."
+                    "description": "The complete desired file manifest. `sha256` is optional: omit it to upload by path and let the runtime hash the bytes, or include it to use content-addressed targets and skip bytes the Space already holds. A `sourceUrl` entry is fetched and hashed by the runtime."
                   },
                   "deletePaths": {
                     "default": [],
@@ -52667,7 +52585,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -53688,7 +53606,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -54396,7 +54314,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -56390,7 +56308,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -57960,7 +57878,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -59490,7 +59408,7 @@
                                 "description": "File size in bytes."
                               },
                               "sha256": {
-                                "description": "SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Required when the caller uploads local bytes; may be absent on historical records and sourceUrl entries.",
+                                "description": "Optional SHA-256 content digest: exactly 64 lowercase hex characters, no `sha256:` prefix (Version.manifestHash is the only prefixed form). Omit it to let the runtime hash uploaded bytes; include it to use content-addressed upload targets and skip bytes the Space already holds.",
                                 "type": "string",
                                 "pattern": "^[0-9a-f]{64}$"
                               },
@@ -79035,7 +78953,7 @@
                                 "type": "string"
                               },
                               "assignedNameservers": {
-                                "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                                "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                                 "type": "array",
                                 "items": {
                                   "type": "string"
@@ -80053,7 +79971,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -81339,7 +81257,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -82310,7 +82228,7 @@
                               "type": "string"
                             },
                             "assignedNameservers": {
-                              "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                              "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                               "type": "array",
                               "items": {
                                 "type": "string"
@@ -83590,7 +83508,7 @@
                                     "type": "string"
                                   },
                                   "assignedNameservers": {
-                                    "description": "Managed-zone delegation set the registrar should point at (mode \"stattic\").",
+                                    "description": "Managed-zone delegation set the registrar should point at (mode `stattic`).",
                                     "type": "array",
                                     "items": {
                                       "type": "string"
@@ -93013,7 +92931,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Restrict to one docs area: guide, cli, api, recipe, workflow, or error.",
+              "description": "Restrict to one docs area: `guide`, `cli`, `api`, `recipe`, `workflow`, or `error`.",
               "type": "string",
               "enum": [
                 "guide",
@@ -120665,7 +120583,7 @@
           }
         ],
         "summary": "List Links",
-        "description": "Returns the stable scoped Links that grant visitor access to this Space. The durable branded URL is included only for principals that may manage this Space's access policy; others read the Link metadata with a null url.",
+        "description": "Returns the stable scoped Links that grant visitor access to this Space. The durable branded URL is included only for principals that may manage this Space's access policy; others read the Link metadata with a null `url`.",
         "parameters": [
           {
             "name": "spaceId",

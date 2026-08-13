@@ -5,7 +5,7 @@ description: "Build execution is not available on this deployment."
 
 Build execution is not available on this deployment.
 
-**How to resolve:** Publish prebuilt static output instead, or wait for builds to become available.
+**How to resolve:** Publish prebuilt static output instead.
 
 <div data-pagefind-ignore>
 

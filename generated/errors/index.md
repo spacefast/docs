@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with their owning API surface.
 
-There are 455 error codes in the registry.
+There are 456 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -245,6 +245,7 @@ There are 455 error codes in the registry.
 | [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space does not serve a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
 | [`runtime_purge_failed`](/errors/runtime_purge_failed) | Content updated but the edge cache purge did not confirm. |
+| [`runtime_release_unverifiable`](/errors/runtime_release_unverifiable) | The requested platform release could not be verified at its origin. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
 | [`runtime_token_bad_signature`](/errors/runtime_token_bad_signature) | The runtime token signature did not verify. |
 | [`runtime_token_expired`](/errors/runtime_token_expired) | The runtime token is expired. |

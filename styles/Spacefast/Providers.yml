@@ -1,0 +1,10 @@
+# Mirrors the monorepo vocabulary registry (PROVIDER_HYGIENE): these vendor
+# names never appear on public surfaces, in any context.
+extends: existence
+message: "'%s' is an internal provider name. It never appears in public copy — say 'Spacefast Builds', 'Spacefast CI', or 'infra'."
+level: error
+ignorecase: false
+tokens:
+  - \bE2B\b
+  - code\.storage
+  - \bPierre\b

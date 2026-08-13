@@ -1,0 +1,11 @@
+# Adopted from a stow (STE-style) audit, 2026-08-13: claims that hedge instead
+# of commit. Zero offenders at adoption; this is a ratchet.
+extends: existence
+message: "'%s' hedges. Commit to what the thing does, or state the real condition."
+level: error
+ignorecase: true
+tokens:
+  - helps ensure
+  - may be able to
+  - can potentially
+  - could potentially

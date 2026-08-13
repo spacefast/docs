@@ -1,0 +1,36 @@
+extends: existence
+message: "'%s' is filler hype. Say what the thing does instead."
+level: error
+ignorecase: true
+tokens:
+  - seamless(?:ly)?
+  - delve
+  - robust
+  - cutting[- ]edge
+  - state[- ]of[- ]the[- ]art
+  - best[- ]in[- ]class
+  - world[- ]class
+  - game[- ]chang(?:ing|er)
+  - revolutioniz\w+
+  - supercharged?
+  - effortless(?:ly)?
+  - hassle[- ]free
+  - empowers?
+  - streamlin(?:es?|ed|ing)
+  - blazing(?:ly)?[- ]fast
+  - tapestry
+  - symphony
+  - a beacon of
+  - a testament to
+  - transformative
+  - groundbreaking
+  - '\bpivotal\b'
+  - multifaceted
+  - holistic
+  - shed(?:s|ding)? light on
+  - paves? the way for
+  - at its core
+  - in essence
+  - that being said
+  - "in today's"
+

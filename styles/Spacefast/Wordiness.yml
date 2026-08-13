@@ -1,0 +1,22 @@
+extends: substitution
+message: "Tighten it: '%s' instead of '%s'."
+level: warning
+ignorecase: true
+action:
+  name: replace
+swap:
+  "due to the fact that": because
+  "in the event that": if
+  "at this point in time": now
+  "has the ability to": can
+  "have the ability to": can
+  "is able to": can
+  "are able to": can
+  "in a timely manner": promptly
+  "a number of": several
+  "the majority of": most
+  "on a regular basis": regularly
+  "make use of": use
+  "in the process of": ""
+  "a wide range of": many
+  "a variety of": many

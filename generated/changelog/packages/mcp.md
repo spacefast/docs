@@ -5,6 +5,15 @@ description: "Release history for @spacefast/mcp on npm."
 
 Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on npm.
 
+## 0.0.24
+
+#### Patch Changes
+
+- @spacefast/common@0.0.24
+- @spacefast/routing@0.0.24
+- @spacefast/sdk@0.0.24
+- @spacefast/zero-compile@0.0.24
+
 ## 0.0.23
 
 #### Patch Changes

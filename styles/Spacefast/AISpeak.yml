@@ -1,0 +1,32 @@
+extends: substitution
+message: "Cut the AI-speak: use '%s' instead of '%s'."
+level: error
+ignorecase: true
+action:
+  name: replace
+swap:
+  leverage: use
+  leverages: uses
+  leveraging: using
+  utilize: use
+  utilizes: uses
+  utilizing: using
+  facilitate: help
+  facilitates: helps
+  facilitated: helped
+  facilitating: helping
+  "in order to": to
+  "prior to": before
+  "subsequent to": after
+  "pertaining to": about
+  "with respect to": about
+  "in light of": because of
+  "a myriad of": many
+  "a plethora of": many
+  furthermore: also
+  moreover: also
+  "it is important to note that": ""
+  "it's important to note that": ""
+  "it is worth noting that": ""
+  "it's worth noting that": ""
+  "please note that": ""

@@ -5,6 +5,10 @@ description: "Release history for @spacefast/common on npm."
 
 Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/common) on npm.
 
+## 0.0.24
+
+_No noted changes in this release._
+
 ## 0.0.23
 
 _No noted changes in this release._
@@ -47,7 +51,7 @@ _No noted changes in this release._
 
 #### Patch Changes
 
-- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted wp.cloud execution, and Cast-backed realtime updates.
+- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted execution, and Cast-backed realtime updates.
 - Add Railway-style agent setup with repeated client targeting, optional project-scoped skills, integrated auth health, safe install/update/removal, popular agent consumers, local/remote-proxy/remote-OAuth connection methods, and direct variable, domain, and repository MCP lifecycle tools.
 
 ## 0.0.13

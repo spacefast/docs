@@ -191,12 +191,12 @@ purges the affected entries.
 
 The three credential URLs work differently:
 
-- **Open** links carry their secret in a URL fragment on the handoff broker;
-  it exchanges the secret for a short-lived, host-bound handoff, and the
-  serving host sets a `__Host-` cookie before redirecting to the clean live
-  URL.
+- **Open** links carry their secret in a URL fragment on the handoff broker.
+  The broker exchanges the secret for a short-lived, host-bound handoff, and
+  the serving host sets a `__Host-` cookie before redirecting to the clean
+  live URL.
 - **Link** URLs are served on the space's own host as
-  `https://<space-host>/<landing>?__=<token>` - no redirect, no interstitial.
+  `https://<space-host>/<landing>?__=<token>` — no redirect, no interstitial.
 - **Claim** links open the dashboard at
   `https://my.spacefast.com/claim#<key>`.
 

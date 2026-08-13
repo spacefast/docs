@@ -5,6 +5,12 @@ description: "Release history for @spacefast/astro on npm."
 
 Published as [`@spacefast/astro`](https://www.npmjs.com/package/@spacefast/astro) on npm.
 
+## 0.0.24
+
+#### Patch Changes
+
+- @spacefast/routing@0.0.24
+
 ## 0.0.23
 
 #### Patch Changes

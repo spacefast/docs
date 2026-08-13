@@ -5,6 +5,12 @@ description: "Release history for @spacefast/vite-plugin on npm."
 
 Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast/vite-plugin) on npm.
 
+## 0.0.24
+
+#### Patch Changes
+
+- @spacefast/routing@0.0.24
+
 ## 0.0.23
 
 #### Patch Changes

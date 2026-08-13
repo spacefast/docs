@@ -1,0 +1,11 @@
+# Mirrors packages/common vocabulary registry (PROVIDER_HYGIENE.wpcloud) in the
+# product monorepo: the hosting provider is named only in the platform API or
+# the fixed phrase "built on WP.Cloud" (masked via TokenIgnores in .vale.ini).
+# General copy says "infra".
+extends: existence
+message: "'%s' names the hosting provider. General copy says 'infra' (allowed: platform API prose, the exact phrase 'built on WP.Cloud')."
+level: error
+ignorecase: true
+tokens:
+  - wp\.cloud
+  - wp[- ]cloud

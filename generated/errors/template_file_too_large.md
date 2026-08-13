@@ -5,7 +5,7 @@ description: "A template file exceeds the maximum size for substitution."
 
 A template file exceeds the maximum size for substitution.
 
-**How to resolve:** Keep template files under the documented size limit (16 KB).
+**How to resolve:** Keep template files at or under 16 KB.
 
 <div data-pagefind-ignore>
 

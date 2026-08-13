@@ -1,0 +1,9 @@
+# Adopted from a stow (STE-style) audit, 2026-08-13, relaxed from 25 to 30
+# words: the house voice legitimately builds long em-dash sentences, so this
+# nudges (suggestion) rather than blocks.
+extends: occurrence
+message: "Over 30 words. Split it, or make sure every clause earns its place."
+scope: sentence
+level: suggestion
+max: 30
+token: '\b\w+\b'

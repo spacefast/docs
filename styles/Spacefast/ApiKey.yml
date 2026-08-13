@@ -1,0 +1,12 @@
+# Mirrors the monorepo vocabulary registry (CONCEPTS.apiKey): the credential is
+# an "API key", never an "access token". "OAuth access token" (the protocol's
+# own term) is masked via TokenIgnores in .vale.ini.
+extends: substitution
+message: "The credential is '%s', never '%s'."
+level: error
+ignorecase: true
+action:
+  name: replace
+swap:
+  "access[- ]token": API key
+  "access[- ]tokens": API keys

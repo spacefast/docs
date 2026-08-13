@@ -5,6 +5,10 @@ description: "Release history for @spacefast/sdk on npm."
 
 Published as [`@spacefast/sdk`](https://www.npmjs.com/package/@spacefast/sdk) on npm.
 
+## 0.0.24
+
+_No noted changes in this release._
+
 ## 0.0.23
 
 _No noted changes in this release._

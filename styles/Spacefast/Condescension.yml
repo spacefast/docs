@@ -1,0 +1,14 @@
+extends: existence
+message: "'%s' assumes it's easy for the reader. Drop it — the instruction works without it."
+level: warning
+ignorecase: true
+# nonword + explicit \b: "simply." before punctuation must still match, while
+# "Simply-Static" (the WordPress plugin) must not.
+nonword: true
+tokens:
+  - '\bsimply\b(?:[^-]|$)'
+  - '\beasily\b'
+  - '\bjust click\b'
+  - '\bjust run\b'
+  - '\bobviously\b'
+  - '\bof course\b'

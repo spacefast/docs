@@ -1,99 +1,99 @@
 {
-  "contentDigest": "f4bb26d43d70e2356222631bc66470e9ea18e9c50eb0a80bf0d47d35378d2ae5",
+  "contentDigest": "be1a3a1ccfb9993c14a86267342f8aead34aa3d9a3ca1ace7929ae5ff0431ac2",
   "counts": {
     "apiOperations": 299,
     "changelogPackages": 16,
-    "changelogVersions": 18,
-    "errorCodes": 455,
+    "changelogVersions": 19,
+    "errorCodes": 456,
     "platformOperations": 309,
     "redirects": 2229,
     "setupPages": 16
   },
   "files": [
     {
-      "bytes": 1323,
+      "bytes": 1383,
       "path": "changelog/packages/astro.md",
-      "sha256": "f62d2b6a62231f84ed1eb89d3c427a058c7380bca917c2b082df6297ba49c972"
+      "sha256": "94db57d9ce43171756ced153fa72a7fa4f94d1755ad8919430043bd523d5d6ff"
     },
     {
-      "bytes": 230,
+      "bytes": 278,
       "path": "changelog/packages/auth.md",
-      "sha256": "779e5e662eb10376c236c76e653839fcdab9018cecc368b87b0f80e5ff8a4f9f"
+      "sha256": "6685710ce6cada46e4155fdcf7b5ce1e18c09612def56ec21a990169d275bcfd"
     },
     {
-      "bytes": 1604,
+      "bytes": 1643,
       "path": "changelog/packages/common.md",
-      "sha256": "9d31868ff8eddb40ebf79dd6ee73ea0d7eb01e6908355126329a5bd454d16f1d"
+      "sha256": "de5503b65a9722addb53b1a84d0e7ab5700bdae0438d94e55fdc5156d407f52c"
     },
     {
-      "bytes": 270,
+      "bytes": 414,
       "path": "changelog/packages/compat-lakebed.md",
-      "sha256": "8be982cbe5e18ab28ab2fbc92a52766ec02f4d2453f6975370854f703119e670"
+      "sha256": "4cd7235913fe2f50b7e643e8acb629433b32c6a21d13ba9d884730b4be726600"
     },
     {
-      "bytes": 1648,
+      "bytes": 1731,
       "path": "changelog/packages/domain-search-terminal.md",
-      "sha256": "8330aec2caeb5b812e9e61ef92b0aeaaed9521917dd15efe4975c898349f4926"
+      "sha256": "c181a2fdb91eccd40e7de7519f876b3326184440535af433b4f9c58b65b0f9ef"
     },
     {
-      "bytes": 1376,
+      "bytes": 1435,
       "path": "changelog/packages/domain-services.md",
-      "sha256": "5c6e3ee73fc29e93947b21404ab5f954562bd42ff3552db3d4eb439cdcb395f7"
+      "sha256": "4778b6fd3fddd37b5112b12cca5a4ff93d8870688791cbe69dc565c3fb7bb7de"
     },
     {
-      "bytes": 1121,
+      "bytes": 1169,
       "path": "changelog/packages/image.md",
-      "sha256": "0b6af35628c8d96d6cafaf31e8e78bd78bdaf5e85aeca60e4153a73ad8ffe230"
+      "sha256": "f74a16eb443af417200f9ab6d2364d6788a86065c8f78717264159273a16b933"
     },
     {
       "bytes": 2620,
       "path": "changelog/packages/index.md",
-      "sha256": "21e8d06524708da0fa9ac80bb28cdb277f2b678f7d6a67e7ff74ae6266c94256"
+      "sha256": "d3271e2642f7f804e3362c0e8242b795372e896bcfb9c15f4b9b62e2c31e2bae"
     },
     {
-      "bytes": 2851,
+      "bytes": 2995,
       "path": "changelog/packages/mcp.md",
-      "sha256": "ef33bb233e0b23abead76b254b98386a9b3fe0312361a0a2e054d4e6123590c9"
+      "sha256": "6cd4f27ae79f571f8bc8a2d105020f6e23003fe291069ad3a180eacb9bc24e64"
     },
     {
-      "bytes": 1487,
+      "bytes": 1546,
       "path": "changelog/packages/routing.md",
-      "sha256": "8e275f86d540b826907da04fbc521aa1d0691e92719bd8396e30c1591ac182f6"
+      "sha256": "97bceb40e85138ed52f321e4583efd92bc79cb25ba7eef2e5a83d34c4c60906d"
     },
     {
-      "bytes": 1113,
+      "bytes": 1161,
       "path": "changelog/packages/sdk.md",
-      "sha256": "83f6eb611a1138422c8989bada1b65ac60c2df1d6fda5d6deec1457c7c914a43"
+      "sha256": "ffb73bd58e2cd85129846bfdd63217f6610557a325da24f583d5900aab7f08f9"
     },
     {
-      "bytes": 4640,
+      "bytes": 5130,
       "path": "changelog/packages/spacefast.md",
-      "sha256": "25fb804a0e1d009a34502f755a786de57fec51e60297792817c3c8f931aac5a1"
+      "sha256": "742e77b7a8889f48a0bfc9a6cc37bb8fbca1f22db198aff96dfb65278164f01d"
     },
     {
-      "bytes": 1347,
+      "bytes": 1407,
       "path": "changelog/packages/vite-plugin.md",
-      "sha256": "13c1784162787b929a315bbfd9db692c66a612e0444d1f1c96a46e54b7356993"
+      "sha256": "20236dc972a2ffc2837cde0f2e4d5ace882ad24db50d19c1bd8f5a6260641ad0"
     },
     {
-      "bytes": 843,
+      "bytes": 891,
       "path": "changelog/packages/wordpress.md",
-      "sha256": "54882fbff115e13742aa01dc5ce0320ed5bc56ce36367462f066d9f7ec5abad1"
+      "sha256": "3fb24e053b1ecb9b69cbc9f87b496b00b303edd6c4e3dd0efb1ae184eddd9883"
     },
     {
-      "bytes": 1147,
+      "bytes": 1195,
       "path": "changelog/packages/wpcloud-sdk.md",
-      "sha256": "89b93c56f23f067c2f060ac2807db02f489363aaa7800ddd137c99ecb606e7db"
+      "sha256": "84f6624dbea2ea91c377d875696f10444fac40375fb686a071dd99d7a8e2bb2c"
     },
     {
-      "bytes": 262,
+      "bytes": 346,
       "path": "changelog/packages/zero-compile.md",
-      "sha256": "1622d114ed5534a2c69c2289aa6c1050f15940fe1cf26be3f722ed19f89af076"
+      "sha256": "f3439f03dd29571603985e5a517a6d43efdaf3ee6eb11445bda5539b2e199e66"
     },
     {
-      "bytes": 1442,
+      "bytes": 1492,
       "path": "changelog/packages/zero.md",
-      "sha256": "de84bdaf7b675fd5d893dd49a002d258e77a0f05c7d799ff5562394bfbedf117"
+      "sha256": "bfb0f70fc21243a9f21182527db47d21fdad50f38dfb26edf17e9e3ea325d5fc"
     },
     {
       "bytes": 614,
@@ -116,9 +116,9 @@
       "sha256": "620f014c0ae27e403605f026962c378372b4d6b0399ed79b5b540724721c2746"
     },
     {
-      "bytes": 4253,
+      "bytes": 4226,
       "path": "changelog/v0-0-14.md",
-      "sha256": "52e6221b8cb1fce41bbfbe0efc4c434611a42b267953865ff14f6cf75cd9af2f"
+      "sha256": "5bf57dcb0ee8173e86468e0f70018fe7f4b50c2d4c04f876b857bb514586b6d8"
     },
     {
       "bytes": 981,
@@ -166,6 +166,11 @@
       "sha256": "ba5a35a65a38e7c445de5ca52120259cbb5f7398de1706184e58c49405f50480"
     },
     {
+      "bytes": 1572,
+      "path": "changelog/v0-0-24.md",
+      "sha256": "d2bc6b5806847e9e0bdb6c9ea83be5eb49a354ca1fbd7f7f37b410cf841ca48a"
+    },
+    {
       "bytes": 579,
       "path": "changelog/v0-0-6.md",
       "sha256": "67bfc426f93b9fff6b1182761bf5b1a1f85ed081ca785adfe81d2369f13ac835"
@@ -186,9 +191,9 @@
       "sha256": "2cf3ea9a35e425c12d7eec39e0f59110e23d99a5962f8fda296e9ac9cceae809"
     },
     {
-      "bytes": 195307,
+      "bytes": 235291,
       "path": "cli/index.md",
-      "sha256": "792144fd50e57f21900faea40af90f3281e3f3295ff3b8c195ec1d294f7eef33"
+      "sha256": "567e73d0f23e90223362c831b0308e846b47d24216d549347d4b5bd74242d360"
     },
     {
       "bytes": 1224,
@@ -286,9 +291,9 @@
       "sha256": "41d199ccdd5ae10c5f65f29723b02fb8ffad86f3d2e60dd4e3dae6b93e30758d"
     },
     {
-      "bytes": 1140,
+      "bytes": 1100,
       "path": "errors/build_execution_unavailable.md",
-      "sha256": "e64d4fe42b3234362e7ce9a6ee2fffcb1356896bb770ec419275575237f42c71"
+      "sha256": "f82d0741d7fe811cbba29186010f92ab65ba13b5095de21a3f105aa78c3a9f28"
     },
     {
       "bytes": 1052,
@@ -371,9 +376,9 @@
       "sha256": "ab444e7fb717999c10a30b1ffd81de27ab75dcf9c475c01eff61e4f013783b6b"
     },
     {
-      "bytes": 1121,
+      "bytes": 1099,
       "path": "errors/config_file_too_large.md",
-      "sha256": "7583e049adde73fb313aec87ad1616327f87f5abb15d23157ed4a3306ee376cb"
+      "sha256": "d6ac8a1a19dca5e190e634ae96e028592eedbdfdbf4dec70d750babf15a34c23"
     },
     {
       "bytes": 1270,
@@ -781,9 +786,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 57478,
+      "bytes": 57623,
       "path": "errors/index.md",
-      "sha256": "757c61efed77d0e0cd8e332bde702852152a14f44020f8a27d9520faa5bf7ea0"
+      "sha256": "837e37777cceaaafbb07558669745ceb33f2269f57aca68f912bfb384933f182"
     },
     {
       "bytes": 1112,
@@ -1321,9 +1326,9 @@
       "sha256": "0a3c868c928088b64e3711211cea91ba2c11d8d7e6291dd7d6cdc7fe6a848b48"
     },
     {
-      "bytes": 1093,
+      "bytes": 1095,
       "path": "errors/runtime_jti_missing.md",
-      "sha256": "59617f4e9770a85372bbda3cdcb888d2aa4b51d5ef64a972e8ee42d316a64a4f"
+      "sha256": "093e5a09ea3c3c8e3eab2d4c4611c31d48b7675988011e54892a9e699aa38cfa"
     },
     {
       "bytes": 1092,
@@ -1359,6 +1364,11 @@
       "bytes": 1136,
       "path": "errors/runtime_purge_failed.md",
       "sha256": "cfb5c84b540c7b519bf7c48d34e65cfc38a0cae4d51e7f8996c5836ce8dc68f7"
+    },
+    {
+      "bytes": 1203,
+      "path": "errors/runtime_release_unverifiable.md",
+      "sha256": "8367eceb5d36d5467bb9a15c4c5480fb7b50c2bc496ac7ea2b08115485e390d9"
     },
     {
       "bytes": 1133,
@@ -1681,9 +1691,9 @@
       "sha256": "d6fba89f81ade6974790fccb4af921feefcc923cc5c2cdfebc7772b3f59cb6e4"
     },
     {
-      "bytes": 1123,
+      "bytes": 1101,
       "path": "errors/template_file_too_large.md",
-      "sha256": "971464eb6e24cef586821aab744b92c1db00af00955257105feb0c08cd356b3e"
+      "sha256": "d9519ae3e8e179e2f8b4536ed6a4b5bec487b2c378728539e3d126c9ce0f7d0c"
     },
     {
       "bytes": 1156,
@@ -2291,9 +2301,9 @@
       "sha256": "6a7fa59aaadf6e27cce6722e5a75a2c9d3c16ef8ec4f799503eb09e8182bf897"
     },
     {
-      "bytes": 1074,
+      "bytes": 1145,
       "path": "errors/zero_log_query_invalid.md",
-      "sha256": "bbe7e4d528d5a9eafa545f49b28f2bf94ac8b1eab03ddf61eb8f16ec840bdd8b"
+      "sha256": "02cbc31f8b3107091faddf76554d4ad5a7f952ce5c390d217a3ef14236fc009a"
     },
     {
       "bytes": 1129,
@@ -2471,14 +2481,14 @@
       "sha256": "7b816c8b09da7e153ac1a1c685d1ef4c0d141b008ade9a48d4132527d27bf89e"
     },
     {
-      "bytes": 5644472,
+      "bytes": 5640375,
       "path": "openapi/api.json",
-      "sha256": "67caa15b80c25f7cee718f3ed549bd55faa462ee2a4ac904dc13577cc58a0b54"
+      "sha256": "3d018ebcf2de6957c21deb736fa328e0a9cad43b66c9fd8653d626e55b8d6fb6"
     },
     {
-      "bytes": 5778001,
+      "bytes": 5773904,
       "path": "openapi/platform.json",
-      "sha256": "5274927ca9a4fb970885f8d52cee9a3790182dc99b39ca27a19df1f23a900642"
+      "sha256": "d741f89c887858fd4463ed7a906a8a40f74db7382ad8ff9f03a3aafb6e0e4ccb"
     },
     {
       "bytes": 412034,
@@ -2541,14 +2551,14 @@
       "sha256": "bb36ac6a24e117ffde85620a03f89a27ec204912e942d430642abb1210d59ba6"
     },
     {
-      "bytes": 695,
+      "bytes": 699,
       "path": "setup/openclaw.md",
-      "sha256": "56bcea9c4d43066939b06374a4318779e93083458263300d7fc30e2946de0931"
+      "sha256": "76f8aa02f180f613ca2ea5154acc9f7d6163b0e3a227fcf905a2ac226a854445"
     },
     {
-      "bytes": 649,
+      "bytes": 653,
       "path": "setup/opencode.md",
-      "sha256": "24580533a3fd3158dcf9170eee58415ccdc9c9735d7c6fd5d2d1aa5fda00428e"
+      "sha256": "1c3c49f8d3d325eddce48943c6c1cc4551651f5f3b8e97e3c31ee10f12f904e3"
     },
     {
       "bytes": 528,
