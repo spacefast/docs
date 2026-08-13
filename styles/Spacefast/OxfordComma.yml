@@ -1,0 +1,8 @@
+# Advisory only: the regex cannot tell a serial list from a compound item
+# ("wait and retry"), so this nudges in local runs and never gates.
+extends: existence
+message: "Possible missing Oxford comma in '%s'."
+level: suggestion
+scope: sentence
+tokens:
+  - '(?:[\w()`]+, ){1,}[\w()`]+ (?:and|or) [\w()`]+'

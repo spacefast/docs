@@ -1,0 +1,15 @@
+# Google word list: the verb is two words (log in, set up); the noun is one.
+extends: substitution
+message: "As a verb it's '%s', not '%s'."
+level: error
+ignorecase: true
+action:
+  name: replace
+swap:
+  login to: log in to
+  logout of: log out of
+  setup a: set up a
+  setup the: set up the
+  setup your: set up your
+  backup your: back up your
+  sign into: sign in to

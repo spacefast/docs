@@ -1,0 +1,13 @@
+# Google style: spell it out. Suggestion until the current snapshot's three
+# "e.g." strings (already fixed at source) ship through the next export —
+# then flip to error.
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: suggestion
+ignorecase: true
+nonword: true
+action:
+  name: replace
+swap:
+  '\be\.g\.': for example
+  '\bi\.e\.': that is

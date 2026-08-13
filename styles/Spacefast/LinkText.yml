@@ -1,0 +1,8 @@
+# Google style: link text names the destination. "here" says nothing.
+extends: existence
+message: "Link text '%s' says nothing. Name the destination."
+level: error
+scope: raw
+tokens:
+  - '\[(?:click )?here\]\('
+  - '\[this\]\('
