@@ -1,6 +1,16 @@
 import { defineConfig } from "blume";
 
 const deploymentBase = "/docs";
+const haskoy = {
+  name: "Haskoy",
+  fallback: "sans" as const,
+  variants: [
+    {
+      src: "./public/fonts/haskoy-latin-variable.woff2",
+      weight: "100..900",
+    },
+  ],
+};
 
 export default defineConfig({
   title: "Spacefast Docs",
@@ -9,7 +19,7 @@ export default defineConfig({
   theme: {
     accent: { dark: "#ff7657", light: "#d93614" },
     background: { dark: "#111114", light: "#fbfaf7" },
-    fonts: { body: "inter", display: "inter-tight", mono: "ibm-plex-mono" },
+    fonts: { body: haskoy, display: haskoy, mono: haskoy },
     mode: "system",
     radius: "sm",
   },
