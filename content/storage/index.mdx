@@ -2,13 +2,13 @@
 title: Storage
 search:
   tags: [uploads, files, objects]
-description: "The space object store: browser uploads from Zero, the env.STORAGE binding in Functions, and the sf storage commands."
+description: "Upload objects from Zero, reach the store from Functions through env.STORAGE, and manage it with the sf storage commands."
 ---
 
-Every space that runs code shares one durable, unversioned object store.
-Objects belong to the space and survive rollbacks — like
-[database](/database) rows, they are data, not content, so they do not
-travel with a [version](/publish/versions).
+Every space that runs code has one durable, unversioned object store,
+shared by Zero and Functions. Objects belong to the space and survive
+rollbacks. Like [database](/database) rows, they are data, not content, so
+they do not travel with a [version](/publish/versions).
 
 ## Reach it from code
 
@@ -22,19 +22,19 @@ const uploaded = await storage.upload(file);
 await storage.delete(uploaded.id);
 ```
 
-Objects are addressed by a random 128-bit id, and read URLs carry a runtime
+Objects are addressed by a random 128-bit id. Read URLs carry a runtime
 read key that Spacefast can rotate; rotation immediately invalidates every
 URL minted under the old key. Uploads and deletes require an identified
 visitor, and only the uploader can delete an object.
 
-Functions workers receive the same store as `env.STORAGE`: `upload(file)`
-takes a `Blob` and returns an object with `id`, `contentType`, `size`, and
-`url`; `get(id)` returns a `Response`; `delete(id)` removes the object. See
-[the Functions contract](/functions#storage).
+Functions workers receive the same store as `env.STORAGE`, with
+`upload(file)`, `get(id)`, and `delete(id)` methods. For the full binding
+contract, see [the Functions storage section](/functions#storage).
 
 ## Operate the store
 
-The space owner gets an inventory across uploaders, and can force-delete:
+The space owner gets an inventory across uploaders and can force-delete an
+object:
 
 ```bash
 sf storage ls
@@ -46,13 +46,15 @@ sf storage rm 0123456789abcdef0123456789abcdef --yes
 
 A force delete is destructive and unrecoverable. Over HTTP, list objects
 with `GET /v1/spaces/{spaceId}/storage` and delete one with
-`DELETE /v1/spaces/{spaceId}/storage/{objectId}`; see the
+`DELETE /v1/spaces/{spaceId}/storage/{objectId}`. See the
 [API reference](/api/reference).
 
 ## Safety and limits
 
-- 5 MiB per object.
-- A 200 MiB rolling daily budget for anonymous uploads per space.
-- No empty uploads, and no executable or active web content (HTML,
-  JavaScript, PHP, binaries).
+The store applies these limits:
+
+- Each object is capped at 5 MiB.
+- Anonymous uploads share a 200 MiB rolling daily budget per space.
+- The store refuses empty uploads and executable or active web content
+  (HTML, JavaScript, PHP, binaries).
 - Total storage counts against the plan's storage limit.

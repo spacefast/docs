@@ -113,6 +113,6 @@ When an unclaimed space reaches its deadline, Spacefast disables it. Live
 access stops, the content enters a 7-day claim-only recovery window, and
 deletion is queued after that window. Claiming during the window restores
 the space. To restore a space you deleted yourself, call
-`POST /v1/spaces/{spaceId}/restore` with its space key. The hostname serves an expired page
-from then on and is never re-issued to someone else, so nobody can take
-over stale links.
+`POST /v1/spaces/{spaceId}/restore` with its space key. The hostname serves
+an expired page from then on and is never re-issued to someone else, so
+nobody can take over stale links.

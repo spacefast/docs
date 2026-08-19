@@ -6,7 +6,7 @@ description: Host sites for your own customers with the tenant model, server-sid
 ---
 
 The Platform API is for companies that host many sites for **their own
-customers**: white-label static hosting behind your brand and your
+customers**. It is white-label static hosting behind your brand and your
 billing. You call one API, and your customer sees only you. The
 [Platform API reference](/platforms/api/reference) lists every operation.
 

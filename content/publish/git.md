@@ -7,7 +7,7 @@ description: Connect a Git repository so Spacefast builds and publishes your spa
 
 Instead of uploading a prebuilt folder, connect a Git repository and let
 Spacefast run the build in the cloud. Every push produces a new
-[version](/publish/versions): pushes to your production branch publish
+[version](/publish/versions). Pushes to your production branch publish
 automatically, and other branches and pull requests get their own preview
 URLs.
 
@@ -40,9 +40,9 @@ app or OAuth flow. Connect them with `--clone-url <url>` and a
 connection with `sf git ls`, change settings with `sf git update`, and
 remove it with `sf git disconnect`.
 
-Building from a repository requires the static runtime. Spacefast runs your build,
-packs the static output, and creates a version through the normal publish
-path.
+Building from a repository requires the static runtime. Spacefast runs your
+build, packs the static output, and creates a version through the normal
+publish path.
 
 ## What a push does
 
@@ -83,7 +83,7 @@ sf git build --target preview --wait  # force a preview build and wait for it
 ```
 
 `sf git build` accepts the same per-build overrides as connect
-(`--build-command`, `--output-directory`, and so on), plus `--wait` /
+(`--build-command`, `--output-directory`, and so on), plus `--wait` and
 `--wait-timeout` to block until the build finishes.
 
 ## Watch and manage builds

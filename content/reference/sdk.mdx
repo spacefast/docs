@@ -6,7 +6,7 @@ description: Install @spacefast/sdk and make typed calls against the Spacefast R
 The Spacefast SDK is a typed TypeScript client generated from the same
 OpenAPI document as the [REST API reference](/api/reference). Use it when
 you want request and response types without writing HTTP by hand. The API
-remains the contract: authentication, envelopes, idempotency, and error
+remains the contract. Authentication, envelopes, idempotency, and error
 codes behave exactly as in the [REST API guide](/api).
 
 ## Install
@@ -38,7 +38,7 @@ sessions that rely on cookies, pass `credentials: "include"` instead of an
 API key. Mint keys with [`sf api-keys`](/account/api-keys) or the
 dashboard.
 
-## One typed call
+## Make typed calls
 
 ```ts
 const me = await client.get("/v1/me");
@@ -86,6 +86,6 @@ guessing a method name.
 
 ## Related
 
-- [REST API](/api): auth, envelopes, publish flows.
-- [API keys](/account/api-keys): presets for automation.
-- [CLI](/cli): `sf api` for ad-hoc signed requests.
+- [REST API](/api) covers authentication, envelopes, and publish flows.
+- [API keys](/account/api-keys) covers presets for automation.
+- [CLI](/cli) covers `sf api` for ad-hoc signed requests.

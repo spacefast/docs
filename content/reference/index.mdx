@@ -2,7 +2,7 @@
 title: Reference
 sidebar:
   label: Overview
-description: Exact commands, endpoints, errors, SDKs, and release history for Spacefast interfaces.
+description: Find the exact commands, endpoints, error codes, SDKs, and release history for every Spacefast interface.
 ---
 
 The guides teach workflows; this section holds the exact contracts.
@@ -21,7 +21,7 @@ The guides teach workflows; this section holds the exact contracts.
     Product and package changes by release.
   </Card>
   <Card title="Platform API" href="/platforms/api/reference" icon="building-2">
-    The tenant surface for hosting customer sites.
+    Tenant operations for hosting customer sites.
   </Card>
   <Card title="SDK" href="/reference/sdk" icon="package">
     Typed clients for application code.
@@ -29,9 +29,9 @@ The guides teach workflows; this section holds the exact contracts.
 </CardGroup>
 
 For direct HTTP integration guidance, start with the
-[REST API guide](/api). For agent tooling — MCP, skills, machine-readable
-docs — see [Agents](/agents). When something misbehaves, start with the
-checks below.
+[REST API guide](/api). For agent tooling such as MCP, skills, and
+machine-readable docs, see [Agents](/agents). When something misbehaves,
+start with the troubleshooting checks on this page.
 
 ## Troubleshooting
 
@@ -39,8 +39,8 @@ Find the symptom and run the check next to it.
 
 ### DNS diagnostics
 
-Your domain does not resolve or does not serve the space. Check it, then
-pull the detailed report:
+If your domain does not resolve or does not serve the space, check it,
+then pull the detailed report:
 
 ```bash
 sf domains check www.example.com
@@ -59,7 +59,7 @@ at the root. SPA mode also requires root `index.html`.
 
 Retry the publish. The CLI matches files by `sha256` and size, so it never
 re-uploads an unchanged file. When Spacefast rejects a publish because it
-exceeds the storage quota, the live site is not affected: delete old
+exceeds the storage quota, the live site is not affected. Delete old
 versions or add storage, then publish again.
 
 ### Rollback recovery
@@ -80,7 +80,7 @@ whether older immutable version URLs remain public. See
 
 ### Password prompts
 
-A password wall on every page means space password protection is on.
+A password wall on every page means that space password protection is on.
 Spacefast does not support `_headers` Basic Auth, and path-level protection
 comes from sharing rules. See [Passwords and access](/share).
 

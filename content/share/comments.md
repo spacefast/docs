@@ -2,7 +2,7 @@
 search:
   tags: [feedback, review]
 title: Comments
-description: Leave comments directly on a Spacefast preview, threaded, anchored to the page, and triaged from a shared inbox.
+description: Leave threaded comments anchored to the page on any Spacefast preview, and triage them from a shared inbox.
 ---
 
 Comments turn any version URL into a place to give feedback. A reviewer
@@ -11,9 +11,9 @@ thread. On version previews, each comment anchors to the page and to the
 exact [version](/publish/versions); on the live site, threads anchor to the
 page.
 
-## Turn it on
+## Turn on comments
 
-Enable page enhancements in the space's General settings first, then enable
+In the space's General settings, enable page enhancements, then enable
 Comments. From then on, version URLs show the comment controls. Three
 options matter:
 
@@ -23,32 +23,33 @@ options matter:
 - **Notifications**: two switches, one for new comments (threads and
   replies) and one for status changes.
 
-Who can comment follows from the space's [visitor access](/share): invite
-people, mint links, or allow anonymous commenters there. Sharing a private
-version with the right person does not make the version public.
+The space's [visitor access](/share) controls who can comment. Invite
+people, create Links, or allow anonymous commenters there. Sharing a
+private version with the right person does not make the version public.
 
 ## Leave useful feedback
 
-Click the page element or area you mean, write the comment, and draw
-directly on the page when pointing beats prose. Each comment captures a
-screenshot of the page state by default, so feedback still makes sense
-after the content changes. Reviewers can also attach images and files (up
-to 10 per comment, 5 MB each), reply, and react in the thread.
+Click the page element or area you mean, then write the comment. When a
+drawing is clearer than words, draw directly on the page. Each comment
+captures a screenshot of the page state by default, so feedback still
+makes sense after the content changes. Reviewers can also attach images
+and files (up to 10 per comment, 5 MB each), reply, and react in the
+thread.
 
 ## Review and archive
 
-Each comment is a thread with a status, **open** or **archived**. Triage
-threads from the space's **Comments** page, filtering by status, version,
-page, author, or unread, with full-text search. Archive a thread when the
-work finishes or the thread stops being relevant.
+Each thread has a status, `open` or `archived`. Triage threads from the
+space's **Comments** page. Filter by status, version, page, author, or
+unread state, and search the full text. Archive a thread when the work
+finishes or the thread stops being relevant.
 
-Spam filtering is on by default: suspected spam is held out of the main
+Spam filtering is on by default. Suspected spam is held out of the main
 list, and team admins can review it under the **Spam** filter.
 
 ## Embed on another site
 
 A space's comment overlay can load on a third-party site. Allowlist the
-exact `https` origins — up to 20, with no wildcards:
+exact `https` origins, up to 20 with no wildcards:
 
 ```bash
 sf comments settings set --embed-allow https://staging.example.com

@@ -95,17 +95,16 @@ https://images.spacefast.com/examples/letterbox.jpg?lb=310,250
 
 ## Supported formats
 
-- Site Accelerator serves common raster image formats such as `.gif`,
-  `.png`, `.jpg`, and `.webp`.
-- Site Accelerator converts to more efficient lossy output (WebP) when the
-  request and the browser support it.
+Site Accelerator serves common raster image formats such as `.gif`, `.png`,
+`.jpg`, and `.webp`. When the request and the browser support it, Site
+Accelerator converts to more efficient lossy output (WebP).
 
 ## URL helper package
 
-Use `@spacefast/image` when a framework integration needs more than width
-and quality. It always emits `i0.wp.com` URLs instead of distributing
-requests across hosts, so repeated requests for the same transformed image
-share one cache key.
+When a framework integration needs more than width and quality, use
+`@spacefast/image`. It always emits `i0.wp.com` URLs instead of
+distributing requests across hosts, so repeated requests for the same
+transformed image share one cache key.
 
 Install it:
 
@@ -132,8 +131,8 @@ const src = siteAcceleratorUrl("https://example.com/uploads/hero.jpg", {
   Do not rely on query-string cache busters on the original image URL.
 - Site Accelerator is for images and static assets. It does not serve
   video, audio, or other media formats as image transforms.
-- Site Accelerator may not apply heavy filters such as `brightness`,
-  `contrast`, `colorize`, and `smooth` to large images.
+- On large images, Site Accelerator sometimes skips heavy filters such as
+  `brightness`, `contrast`, `colorize`, and `smooth`.
 
 ## See also
 

@@ -75,7 +75,7 @@ build and publish events. If a source upload stalls,
 ## API operations
 
 `POST /v1/spaces/{spaceId}/builds` creates a build from a repository or
-source archive: repository inputs use the saved connection, and source
+source archive. Repository inputs use the saved connection, and source
 archive inputs receive a Build-owned upload instruction.
 `POST /v1/builds/{buildId}/uploads/resume` returns a fresh upload
 instruction for an archive build that is still waiting for its source. The

@@ -2,19 +2,19 @@
 title: Email, spam, and Gravatar
 search:
   tags: [email, spam, gravatar, avatars, akismet]
-description: "The platform services on every Zero handler context: send email, check submissions for spam, and read Gravatar profiles without holding a credential."
+description: "Send email, check submissions for spam, and read Gravatar profiles from any Zero handler without holding a credential."
 ---
 
 Every [Zero](/zero) handler context carries three platform services:
-`ctx.email` sends mail, `ctx.spam` classifies visitor submissions, and
-`ctx.gravatar` reads public profiles. The runtime brokers each call and
-attaches the credential outside your code, so there is no mail password,
-spam API key, or Gravatar token to configure — and none can leak from a
+`ctx.gravatar` reads public profiles, `ctx.spam` classifies visitor
+submissions, and `ctx.email` sends mail. The runtime brokers each call and
+attaches the credential outside your code. There is no mail password, spam
+API key, or Gravatar token to configure, and none can leak from a
 published bundle.
 
 What a handler receives follows what it may do. A query can be replayed or
-re-run to refresh a live subscription, so anything that leaves a mark
-outside the database is withheld from one:
+re-run to refresh a live subscription, so a query receives only the calls
+that have no effects outside the database:
 
 | Handler    | `ctx.gravatar` | `ctx.spam`                  | `ctx.email`         |
 | ---------- | -------------- | --------------------------- | ------------------- |
@@ -24,9 +24,9 @@ outside the database is withheld from one:
 
 ## Gravatar
 
-`ctx.gravatar.avatarUrl(email, options)` builds an avatar URL. It is
-synchronous and never touches the network — an avatar URL is a hash and a
-query string — so it costs nothing and cannot fail on the way out:
+`ctx.gravatar.avatarUrl(email, options)` builds an avatar URL. An avatar
+URL is a hash and a query string, so the call is synchronous, never
+touches the network, and cannot fail:
 
 ```ts
 queries: {
@@ -49,15 +49,15 @@ The options:
 | `rating`       | Maximum permitted self-rating: `g`, `pg`, `r`, or `x`.                    |
 | `forceDefault` | Serve `default` even when the address has a Gravatar.                     |
 
-Pass `default: "404"` when you want to detect absence by status code
-instead of receiving a generated face.
+To detect absence by status code instead of receiving a generated face,
+pass `default: "404"`.
 
 `ctx.gravatar.profile(email)` returns the profile behind an address, or
 `null` when the address has none. The profile carries `hash`,
 `displayName`, `profileUrl`, `avatarUrl`, `location`, `description`,
 `pronouns`, and `verifiedAccounts` (each with `service`, `url`, and
-`label`). The lookup sends a hash of the address — trimmed, converted to
-lowercase, then SHA-256 — not the address itself.
+`label`). The lookup sends a hash of the address, not the address itself.
+The address is trimmed, converted to lowercase, then hashed with SHA-256.
 
 ## Spam checking
 
@@ -82,8 +82,8 @@ mutations: {
 You supply the content; the runtime supplies the network evidence. The
 visitor's IP, user agent, referrer, and page URL come from the trusted
 request envelope, never from handler arguments, so a browser cannot claim
-its own IP through a mutation's inputs. Those two signals — IP and user
-agent — are the heaviest ones the classifier uses.
+its own IP through a mutation's inputs. IP and user agent are the heaviest
+signals the classifier uses.
 
 The submission fields:
 
@@ -100,11 +100,11 @@ The verdict has two fields. `spam` says the submission classifies as spam
 and belongs in a review queue. `discard` flags blatant, pervasive spam that
 is safe to drop outright instead of holding for review.
 
-Mutations and actions also get the corrections: call
+Mutations and actions also get the corrections. Call
 `ctx.spam.reportSpam(submission)` when something passed that should not
-have, and `ctx.spam.reportHam(submission)` when something was held that
+have. Call `ctx.spam.reportHam(submission)` when something was held that
 should not have been. Corrections usually run later, outside the original
-visitor request, so they take the complete submission — including a
+visitor request, so they take the complete submission, including a
 `userIp` field of your own.
 
 ## Email
@@ -128,12 +128,12 @@ mutations: {
 ```
 
 In a mutation, the send is accepted into the space's outbox on the
-handler's own transaction: a mutation that writes a row and queues its mail
-commits both or neither. A throw after `send()` rolls back the row and the
-message together. `ctx.transaction(handler)` gives you that same boundary
-explicitly when you want to scope it. Actions run outside a parent
-transaction — they exist to touch the world — so their sends go out when
-the handler succeeds rather than atomically with database writes.
+handler's own transaction. A mutation that writes a row and queues its
+mail commits both or neither, and a throw after `send()` rolls back the
+row and the message together. When you want to scope that boundary
+explicitly, use `ctx.transaction(handler)`. Actions run outside a parent
+transaction because they exist to touch the world. Their sends go out when
+the handler succeeds, not atomically with database writes.
 
 The message shape:
 
@@ -146,22 +146,23 @@ The message shape:
 | `replyTo`           | One address.                                                       |
 | `headers`           | Extra headers as string pairs. Names and values are validated; line breaks are refused. |
 
-Email is metered: `GET /v1/spaces/{spaceId}/usage` reports what a space
-consumed — storage, compute, bandwidth, email, and function invocations —
-over the most recent settled period. See the
+Email is metered. `GET /v1/spaces/{spaceId}/usage` reports what a space
+consumed over the most recent settled period: storage, compute, bandwidth,
+email, and function invocations. See the
 [API reference](/api/reference) and [Monitoring](/operate/monitoring).
 
 ## What the platform handles
 
-- **Credentials.** Every call is brokered: the runtime attaches authority
-  outside the code that asked for the call. Your bundle holds no secret to
-  rotate or leak.
+- **Credentials.** Every call is brokered. The runtime attaches authority
+  outside the code that asked for the call, so your bundle holds no secret
+  to rotate or leak.
 - **Delivery.** Queued mail goes out through the platform's own sender;
   there is no SMTP relay to stand up.
-- **Validation.** Malformed input — an avatar size over 2048, a message
-  with no body, a header with a line break — throws in your handler with
-  the code `service_payload_invalid` before anything leaves the runtime.
+- **Validation.** Malformed input throws in your handler with the code
+  `service_payload_invalid` before anything leaves the runtime. That
+  covers an avatar size over 2048, a message with no body, and a header
+  with a line break.
 
 Like [database](/database) rows and [storage](/storage) objects, none of
-this is tied to a [version](/publish/versions): a rollback changes which
+this is tied to a [version](/publish/versions). A rollback changes which
 code runs, not which services it can reach.

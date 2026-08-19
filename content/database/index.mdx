@@ -2,14 +2,14 @@
 title: Database
 search:
   tags: [db, sql, migrations]
-description: "The space database: how Zero and Functions reach it, schema migrations, and the sf db commands."
+description: "Learn how Zero and Functions reach the space database, how migrations apply, and what the sf db commands do."
 ---
 
 A space that runs code can have its own database. [Zero](/zero) declares
-the schema in the capsule and gets typed access through `ctx.db`, while
+the schema in the capsule and gets typed access through `ctx.db`.
 [Functions](/functions) opts in with `runtime.database` and receives
-`env.DB`, a D1-shaped binding. Rows belong to the space, not the version:
-they persist across publishes and do not rewind on rollback.
+`env.DB`, a D1-shaped binding. Rows belong to the space, not the version.
+They persist across publishes and do not rewind on rollback.
 
 ## Reach it from code
 
@@ -33,26 +33,27 @@ In a Functions worker, opt in through `sf.jsonc`:
 { "runtime": { "kind": "functions", "database": true } }
 ```
 
-The worker then receives `env.DB` and uses `prepare().bind()` with
-`.all()`, `.first()`, `.run()`, or `.raw()`; `env.DB.exec()` runs DDL and
-`env.DB.batch()` groups statements. Each runtime page has the full
-contract: [Zero's database](/zero#database) and
+The worker then receives `env.DB`. Use `prepare().bind()` with `.all()`,
+`.first()`, `.run()`, or `.raw()`. `env.DB.exec()` runs DDL (data
+definition language) statements, and `env.DB.batch()` groups statements.
+Each runtime page has the full contract:
+[Zero's database](/zero#database) and
 [the Functions binding](/functions#database).
 
 ## Migrations
 
-Zero compares the capsule's declared schema with the live schema on every
-publish and applies the migration. Normal additive changes apply during
-`sf publish`; destructive changes require an explicit command, so a publish
-cannot silently drop data:
+On every publish, Zero compares the capsule's declared schema with the
+live schema and applies the migration. Additive changes apply during
+`sf publish`. Destructive changes require an explicit command, so a
+publish cannot silently drop data:
 
 ```bash
 sf db migrate --rename
 sf db migrate --drop
 ```
 
-A rollback promotes older code without rewinding rows, so check the current
-schema before rolling back across a migration.
+A rollback promotes older code without rewinding rows. Before you roll
+back across a migration, check the current schema.
 
 ## Inspect, dump, and export
 
@@ -64,8 +65,8 @@ sf db dump --table projects --limit 100
 sf db export --out ./backup.json
 ```
 
-The export contains every declared table in a versioned JSON format and
-only replaces the destination file after the complete export succeeds. For
+The export contains every declared table in a versioned JSON format. It
+replaces the destination file only after the complete export succeeds. For
 anything the other commands cannot do, open a console on the space's own
 database:
 
@@ -73,8 +74,7 @@ database:
 sf db console
 ```
 
-The console is phpMyAdmin — the escape hatch for anything `sf db` and
-`sf db dump` cannot express. The same operations exist over HTTP
+The console is phpMyAdmin. The same operations exist over HTTP
 (`GET /v1/spaces/{spaceId}/db`, `/db/dump`, `/db/export`, `/db/console`,
 and `POST /v1/spaces/{spaceId}/db/migrate`); see the
 [API reference](/api/reference).

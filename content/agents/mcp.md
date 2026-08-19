@@ -10,7 +10,7 @@ the same public API that the CLI and dashboard use.
 
 |          | Hosted MCP                  | On-device MCP                         |
 | -------- | --------------------------- | ------------------------------------- |
-| Endpoint | `https://mcp.spacefast.com` | Local process via CLI                 |
+| Endpoint | `https://mcp.spacefast.com` | Local process run by the CLI          |
 | Auth     | OAuth to the signed-in user | Local Spacefast login or agent config |
 | Files    | Inline files in the call    | Bounded local root                    |
 | Best for | Cloud and browser agents    | Agents that read and publish disk     |

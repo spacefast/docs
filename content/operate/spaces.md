@@ -31,7 +31,7 @@ sf spaces ls --team acme
 sf spaces get --space docs
 ```
 
-Dashboard URLs: `my.spacefast.com/acme/docs`.
+Dashboard URLs follow the pattern `my.spacefast.com/acme/docs`.
 
 ### Data location
 

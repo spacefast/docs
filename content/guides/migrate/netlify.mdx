@@ -1,12 +1,12 @@
 ---
 title: Netlify
-description: How to move a static site from Netlify to Spacefast.
+description: Move a static site from Netlify to Spacefast.
 ---
 
-Netlify sites that build to static files move directly: run the same build,
+Netlify sites that build to static files move directly. Run the same build,
 publish the output directory, and keep root `_redirects` and `_headers` files
-in that output. Check the target team's
-routing entitlements in the dashboard before relying on gated features.
+in that output. Before you rely on gated features, check the target team's
+routing entitlements in the dashboard.
 
 ```text
 # _redirects
@@ -22,9 +22,9 @@ sf publish ./dist
 ## Migration checklist
 
 - Run the same build command and publish the Netlify publish directory, or
-  [connect the repo](/publish/git) and Spacefast runs the build on every
-  push: `sf git connect --platform-preset netlify` imports your existing
-  Netlify build settings.
+  [connect the repository](/publish/git) and Spacefast runs the build on
+  every push. `sf git connect --platform-preset netlify` imports your
+  existing Netlify build settings.
 - Check that `_redirects` and `_headers` are in the generated output, not only
   in the source tree.
 - Recreate Netlify deploy-context environment variables in the system that
@@ -78,7 +78,7 @@ switching DNS:
   URLs, not Netlify's `/.netlify/images` API.
 - Build plugins, build hooks, and deploy-context variables are Netlify-specific
   and do not transfer. Deploy Previews and branch deploys have direct
-  equivalents: [connect the repo](/publish/git) and Spacefast builds
+  equivalents: [connect the repository](/publish/git) and Spacefast builds
   previews on every push.
 - Spacefast does not implement redirect features that only exist in
   `netlify.toml`, such as signed proxy redirects and custom proxy request

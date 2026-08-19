@@ -6,9 +6,9 @@ description: Version, review, preview, and release analytics or marketing tags w
 ---
 
 :::note[Early access]
-Tag Manager is in private beta; ask Spacefast to enable the `tags` feature
-for your team. The CLI hides `sf tags` from help until you set
-`SPACEFAST_CLI_EARLY_ACCESS=tags`; the commands run either way, and the API
+Tag Manager is a private beta; Spacefast enables the `tags` feature per team
+on request. The CLI hides `sf tags` from help until you set
+`SPACEFAST_CLI_EARLY_ACCESS=tags`, but the commands run either way. The API
 returns `feature_unavailable` until the team has the feature.
 :::
 
@@ -33,7 +33,7 @@ sf tags versions create --space docs --template google-analytics --field measure
 ```
 
 The template supplies the provider script, default trigger, and consent
-category. Use `sf tags templates` for the current list of providers.
+category.
 
 ## Validate and review
 
@@ -43,13 +43,16 @@ Validate the immutable draft before you submit it:
 sf tags versions validate tver_123 --space docs
 ```
 
+Validation checks the graph shape, script hosts, consent requirements, trigger
+references, budgets, and the space's review policy.
+
 Inspect its effective diff:
 
 ```bash
 sf tags versions diff tver_123 --space docs
 ```
 
-Submit it for review when the space requires approval:
+When the space requires approval, submit the version for review:
 
 ```bash
 sf tags versions submit tver_123 --space docs
@@ -61,9 +64,7 @@ Approve the submitted version:
 sf tags versions approve tver_123 --space docs
 ```
 
-Validation checks the graph shape, script hosts, consent requirements, trigger
-references, budgets, and the space's review policy. A release cannot bypass a
-required approval.
+A release cannot bypass a required approval.
 
 ## Release and roll back
 
@@ -73,8 +74,8 @@ Point production at an approved version:
 sf tags releases set production tver_123 --space docs
 ```
 
-Use `preview` or `development` instead of `production` for another environment.
-In automation, pass `--expected-current-version` so concurrent changes fail
+To target another environment, use `preview` or `development` instead of
+`production`. In automation, pass `--expected-current-version` so concurrent changes fail
 instead of overwriting each other.
 
 Roll production back to a known version:
@@ -98,7 +99,7 @@ no-store URL, without changing any release pointer:
 sf tags debug --space docs --version tver_123 --url https://docs.view.fast
 ```
 
-Revoke the session when you finish the review:
+When you finish the review, revoke the session:
 
 ```bash
 sf tags debug --space docs --version tver_123 --revoke-session tgp_123
@@ -135,5 +136,6 @@ sf tags apply spacefast.tags.json --space docs --submit --release production
 ## Consent
 
 Templates declare one or more consent categories: `necessary`, `functional`,
-`analytics`, or `marketing`. Optional tags stay blocked until their categories
-are granted. Browser privacy signals and explicit denials continue to win.
+`analytics`, or `marketing`. Optional tags stay blocked until the visitor
+grants their categories. Browser privacy signals and explicit denials still
+take precedence.

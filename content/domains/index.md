@@ -40,7 +40,8 @@ After you change DNS records, ask Spacefast to check them:
 sf domains check example.com --space docs
 ```
 
-Diagnostics shows the records Spacefast can see and the current SSL state:
+The diagnostics command shows the records Spacefast can see and the
+current SSL state:
 
 ```bash
 sf domains diagnostics example.com --space docs

@@ -1,11 +1,11 @@
 ---
 title: here.now
-description: How to move a static site from here.now to Spacefast.
+description: Move a static site from here.now to Spacefast.
 ---
 
-here.now and Spacefast both publish prebuilt static files. Both support
+here.now and Spacefast both publish prebuilt static files, and both support
 anonymous publishing with a claim window. Republish the same output directory
-to Spacefast. Then test the new version before moving DNS.
+to Spacefast, then test the new version before you move DNS.
 
 ```bash
 # Republish the output you sent to here.now
@@ -17,6 +17,20 @@ sf publish ./dist
 sf publish ./dist --spa true
 ```
 
+## Migration checklist
+
+- Find the original publish directory. here.now serves paths relative to the
+  uploaded root. Do not add an extra parent folder.
+- Before you publish, check large files against the target space's file-size
+  limit.
+- If the old deployment was anonymous, recover the source files from your
+  machine or agent logs. here.now returns anonymous claim tokens only once.
+- Recreate account-level concerns in Spacefast: custom domain records, space
+  name, SPA mode, and any environment or secret values that your build or
+  external backend needs.
+- Before you change production DNS, test direct file paths, refreshes on deep
+  SPA links, protected API calls, and cache behavior on the Spacefast URL.
+
 ## What carries over
 
 - Static artifacts within the target space's file-size limit. Uploaded files
@@ -24,24 +38,10 @@ sf publish ./dist --spa true
   [Function](/functions).
 - Single-page apps (SPAs), after you enable the Spacefast SPA fallback for
   client-side routes.
-- Custom domains, after you add the domain in Spacefast and move DNS. Move DNS
-  when the diagnostics pass. SSL is automatic.
+- Custom domains, after you add the domain in Spacefast and move DNS when the
+  diagnostics pass. SSL is automatic.
 - Public external API calls from browser code, if they already work without
   credential injection from a here.now proxy route.
-
-## Migration checklist
-
-- Find the original publish directory. here.now serves paths relative to the
-  uploaded root. Do not add an extra parent folder.
-- Check large files against the target space's file-size limit before
-  publishing.
-- If the old deployment was anonymous, recover the source files from your
-  machine or agent logs. here.now returns anonymous claim tokens only once.
-- Recreate account-level concerns in Spacefast: custom domain records, space
-  name, SPA mode, and any environment or secret values that your build or
-  external backend needs.
-- Test direct file paths, refreshes on deep SPA links, protected API calls, and
-  cache behavior on the Spacefast URL before changing production DNS.
 
 ## What to change
 
@@ -70,11 +70,11 @@ account feature from a public URL.
 - here.now proxy routes are not portable as-is: their manifests can reference
   account variables, inject upstream auth headers, and stream API responses.
 - You cannot export secrets from here.now. Its variable list returns names and
-  metadata, not values. You must rotate lost API keys or recover them from the
+  metadata, not values. Rotate lost API keys or recover them from the
   original provider.
 - Anonymous here.now deployments expire after 24 hours if nobody claims them.
   If you lost the claim URL or token and the deployment expired, Spacefast
   cannot recover the files.
-- Static hosting is still static hosting. Server-rendered apps, background
-  jobs, databases, file uploads, user sessions, and framework server functions
-  need an external service or a different runtime.
+- Server-rendered apps, background jobs, databases, file uploads, user
+  sessions, and framework server functions still need an external service or
+  a different runtime.

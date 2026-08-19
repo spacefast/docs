@@ -83,7 +83,7 @@ space.
 
 ## Templates
 
-Non-secret variables can be substituted into published files. List the
+Spacefast can substitute non-secret variables into published files. List the
 files in `sf.jsonc` under [`templates`](/serve/settings#templates), then
 reference values as `{{ vars.NAME }}`:
 

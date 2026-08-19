@@ -56,7 +56,8 @@ const docs = createWordPressClient({ source: "docs" });
 Repository builds receive `SPACEFAST_DATA_SOURCES` and `WORDPRESS_URL` from
 the dashboard configuration. This zero-config discovery reads Node environment
 variables, so use it in build-time or SSR code, not in a browser bundle. An
-explicit `url` always wins. Use it for local development or browser code:
+explicit `url` overrides the discovered configuration. Pass a `url` for local
+development or browser code:
 
 ```ts
 const local = createWordPressClient({ url: "https://example.wordpress.com" });
@@ -66,8 +67,8 @@ const local = createWordPressClient({ url: "https://example.wordpress.com" });
 
 Install the Spacefast plugin in WordPress. In WordPress **Settings →
 Spacefast**, choose **Headless CMS**, continue to Spacefast, authorize one
-team on the consent screen, and select the space. Space management
-(`spaces:write`) is required on consent and cannot be unchecked.
+team on the consent screen, and select the space. The consent screen requires
+space management (`spaces:write`); you cannot uncheck it.
 
 Public content changes then wait for a 60-second quiet window before one
 production build starts. **Build now** is immediate, in both the WordPress

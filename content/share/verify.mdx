@@ -7,15 +7,15 @@ sidebar:
 description: Verify Spacefast visitor tokens offline in your own service with @spacefast/auth.
 ---
 
-When your own service runs behind a Spacefast-protected space — an API your
-pages call, a WebSocket backend, a companion app — requests arrive carrying
-a Spacefast visitor token. The `@spacefast/auth` package verifies that
-token offline and returns the identity contract every Spacefast surface
-shares, including the capabilities the visitor's [Grants](/share) allow,
-such as `page.view` and `comments.write`.
+When your own service runs behind a Spacefast-protected space, such as an
+API your pages call, a WebSocket backend, or a companion app, requests
+arrive carrying a Spacefast visitor token. The `@spacefast/auth` package
+verifies that token offline and returns the identity contract that all of
+Spacefast shares, including the capabilities the visitor's
+[Grants](/share) allow, such as `page.view` and `comments.write`.
 
-The package has two entry points and never mints — identity always comes
-from the platform:
+The package never mints tokens; identity always comes from the platform.
+It has two entry points:
 
 - `@spacefast/auth/server` verifies a visitor token offline.
 - `@spacefast/auth/tokens` keeps any short-lived credential fresh without
@@ -30,8 +30,8 @@ npm install @spacefast/auth
 ## Verify on the server
 
 The full relying-party profile is mandatory. A signing key alone only says
-who signed a token — issuer, audience, host, purpose, and claim version are
-what make it yours. The JWKS is data you already have, never a URL: no
+who signed a token; issuer, audience, host, purpose, and claim version are
+what make it yours. The JWKS is data you already have, not a URL, so no
 network round-trip hides in your request path.
 
 ```ts
@@ -57,12 +57,12 @@ const auth = await verify(request); // AuthContext | null
 
 `verify` accepts a `Request` (it reads `Authorization: Bearer` or
 `X-SF-Authorization`) or a raw token string. Gate your own responses on
-`capabilities`: it lists what the visitor's Grants allow on the space.
+`capabilities`, which lists what the visitor's Grants allow on the space.
 
-### The four states
+### Verification outcomes
 
-`null` is fine for the main path — anything that isn't a verified identity
-is a guest. When you need to know why, ask for the outcome:
+For the main path, `null` is enough; anything that is not a verified
+identity is a guest. When you need to know why, ask for the outcome:
 
 ```ts
 import { guestContext } from "@spacefast/auth/server";
@@ -79,15 +79,17 @@ const outcome = await verify.outcome(request);
 const auth = outcome.state === "verified" ? outcome.auth : guestContext();
 ```
 
-Fail open to guest: every non-verified state serves the guest experience.
+Fail open to guest. Every non-verified state serves the guest experience.
 The states exist so your logs can tell a forged token from a stale key
-deployment. An unknown `kid` is deliberately unavailable, not invalid —
-during key rotation the honest answer is "I can't know", never "forged".
+deployment. An unknown `kid` is deliberately unavailable, not invalid.
+During key rotation, the honest answer is "I can't know", not "forged".
 
-Defaults worth knowing: 5 seconds of clock skew on `exp` and `nbf`; `azp`
-is checked only when you pass `authorizedParties`; a malformed claim — even
-an optional one — makes the whole token invalid. Bad data fails loud, not
-soft.
+The verifier applies these defaults:
+
+- It allows 5 seconds of clock skew on `exp` and `nbf`.
+- It checks `azp` only when you pass `authorizedParties`.
+- A malformed claim, even an optional one, makes the whole token invalid.
+  Bad data fails loud, not soft.
 
 ## Keep a credential fresh
 
@@ -112,12 +114,12 @@ tickets.onRefusal((code) => teardown(code)); // "no" is terminal, not a retry
 tickets.stop(); // cancels everything, leaks nothing
 ```
 
-The manager refreshes proactively at 80% of each token's lifetime, backs
-off with jitter when minting fails transiently while it keeps serving any
-unexpired token, and shares one in-flight mint across concurrent
-`current()` calls. A caller with no live token during an outage gets a
-`TokenOfflineError`, never a `null` that reads as "no access"; refusals
-throw `TokenRefusedError` with the code the minter gave.
+The manager refreshes each token proactively at 80% of its lifetime. When
+minting fails transiently, it backs off with jitter and keeps serving any
+unexpired token. Concurrent `current()` calls share one in-flight mint.
+During an outage, a caller with no live token gets a `TokenOfflineError`,
+never a `null` that reads as "no access". Refusals throw
+`TokenRefusedError` with the code the minter gave.
 
 ## Related
 

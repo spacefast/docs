@@ -4,12 +4,12 @@ description: Receive signed HTTPS callbacks for team events, with verifiable sig
 ---
 
 Webhooks push events to your own HTTPS endpoint as they happen, so you can
-trigger CI, post to Slack, update a dashboard, or kick off downstream
+trigger CI, post to Slack, update a dashboard, or start downstream
 automation without polling the API.
 
-A webhook is **team-scoped**: one endpoint receives events from every space
-the team owns. Manage them in **Team settings → Webhooks**, or with the
-API.
+A webhook is team-scoped: one endpoint receives events from every space
+the team owns. Manage webhooks in **Team settings → Webhooks**, or with
+the API.
 
 ## Create a webhook
 
@@ -26,17 +26,17 @@ curl -X POST https://api.spacefast.com/v1/webhooks \
   }'
 ```
 
-The endpoint URL must be **public HTTPS**; Spacefast rejects `http://` and
-private or internal hosts. The response includes the **signing secret**
-(`whsec_123`) **exactly once** — store it now, because Spacefast never
-shows it again. Leave `events` unset (or `["*"]`) to receive everything.
+The endpoint URL must be public HTTPS; Spacefast rejects `http://` and
+private or internal hosts. The response includes the signing secret
+(`whsec_123`) exactly once. Store it now, because Spacefast never shows it
+again. To receive every event, leave `events` unset or set it to `["*"]`.
 
 ## Events
 
 Subscribe to exact codes (`version.ready`), a resource wildcard
-(`version.*`), or the catch-all `*`. Unknown codes are rejected with
+(`version.*`), or the catch-all `*`. Spacefast rejects unknown codes with
 [`invalid_webhook_events`](/errors/invalid_webhook_events), so copy them
-exactly. The full catalog:
+exactly. The table lists the full catalog:
 
 | Resource        | Events |
 | --------------- | ------ |
@@ -80,9 +80,9 @@ Every callback sends a JSON body of the form:
 }
 ```
 
-`version` is the payload schema date, not your space version, and the event
-`code` is one of the events above. Callbacks are **at-least-once**, so
-dedupe on `event.id`.
+`version` is the payload schema date, not your space version. The event
+`code` is one of the codes in the catalog. Spacefast delivers each event
+at least once, so deduplicate on `event.id`.
 
 Each request also carries three headers:
 
@@ -98,10 +98,9 @@ The `Spacefast-Signature` header looks like:
 Spacefast-Signature: t=1730289600, v1=5257a8f1c2d94e0b7a6355c8d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0
 ```
 
-`t` is the unix timestamp, and each `v1=` is an **HMAC-SHA256** (hex) of
-the string `` `${t}.${rawBody}` `` keyed with your signing secret.
-Recompute the value over the **raw request body** and compare in constant
-time:
+`t` is the Unix timestamp, and each `v1=` is an HMAC-SHA256 (hex) of the
+string `` `${t}.${rawBody}` `` keyed with your signing secret. Recompute
+the value over the raw request body and compare in constant time:
 
 ```js
 import { createHmac, timingSafeEqual } from "node:crypto";
@@ -120,7 +119,7 @@ function verify(rawBody, header, secret) {
 }
 ```
 
-During a secret rotation the header carries two `v1=` entries, one per
+During a secret rotation, the header carries two `v1=` entries, one per
 secret; accept a callback when any entry matches.
 
 ## Rotate the secret
@@ -133,24 +132,25 @@ curl -X POST https://api.spacefast.com/v1/webhooks/whk_123/rotate-secret \
   -d '{ "expireNow": false }'
 ```
 
-Spacefast returns a new secret — again, only once. By default the previous
-secret stays valid for **24 hours**, so you can roll it out without
-dropping callbacks; pass `expireNow: true` to cut over immediately.
+Spacefast shows the new secret exactly once, like the original. By
+default, the previous secret stays valid for 24 hours, so you can deploy
+the replacement without dropping callbacks. To expire the previous secret
+immediately, pass `expireNow: true`.
 
 ## Attempts and retries
 
 - `GET /v1/webhooks/:id/deliveries` lists attempts, newest first, and
   `GET /v1/webhook-deliveries/:deliveryId` shows one.
-- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event; the
-  dashboard attempt log has a **Resend** button for the same thing.
-- Each attempt has a **10-second timeout**, follows no redirects, and reads
-  at most 64 KiB of your response. Return a `2xx` to acknowledge.
+- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event;
+  the dashboard attempt log has a **Resend** button that does the same.
+- Each attempt has a 10-second timeout, follows no redirects, and reads at
+  most 64 KiB of your response. Return a `2xx` to acknowledge.
 - Failed attempts retry with exponential backoff, and an attempt that never
   succeeds ends as `exhausted`.
-- Spacefast protects an endpoint that keeps failing: it marks it
-  **failing** after 8 consecutive failures and disables it after 32. Any
-  success resets the counter, and setting a disabled webhook's status back
-  to `active` re-enables it.
+- Spacefast protects an endpoint that keeps failing: after 8 consecutive
+  failures, Spacefast marks the endpoint **failing**, and after 32 it
+  disables the endpoint. Any success resets the counter, and setting a
+  disabled webhook's status back to `active` re-enables it.
 
 Deleting a webhook stops its callbacks and removes it from API and
 dashboard lists.

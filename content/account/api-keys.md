@@ -39,7 +39,7 @@ key under one of these presets.
 
 ## Rotation
 
-You cannot rotate a secret in place under the same id. Instead:
+You cannot rotate a secret in place under the same ID. Instead:
 
 1. Create a replacement key.
 2. Update CI or your local environment.

@@ -12,7 +12,8 @@ plan policy, and usage.
 
 ## What an entitlement is
 
-An **entitlement** is a limit or feature your team is allowed to use.
+An **entitlement** is a limit or feature that your team is allowed to
+use.
 Spacefast resolves entitlements per team as **plan limits plus any
 additive grants**. The plan sets the baseline, and grants raise
 individual values above it. A limit resolves to a number, or to

@@ -38,7 +38,7 @@ sf teams invitations resend invite_123
 sf teams invitations cancel invite_123
 ```
 
-The invitee accepts with the invitation id from the invite link:
+The invitee accepts with the invitation ID from the invite link:
 
 ```bash
 sf teams accept invite_123

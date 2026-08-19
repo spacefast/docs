@@ -134,9 +134,9 @@ throttling, cookies, and redirects remain server-owned.
 
 ## Machine responses
 
-Browsers requesting HTML receive the published page artifact, while
-`Accept: application/json` and fetch requests receive an RFC 9457 problem
-document:
+Browsers that request HTML receive the published page artifact. Requests
+with `Accept: application/json` and fetch requests receive an RFC 9457
+problem document:
 
 ```json
 {
@@ -148,18 +148,20 @@ document:
 }
 ```
 
-Other clients receive one line of plain text. The JSON and plain-text
-representations cannot be customized, and platform refusal pages always use
+Other clients receive one line of plain text. You cannot customize the JSON
+and plain-text representations. Platform refusal pages always use
 Spacefast-owned defaults.
 
 ## Test locally
 
-Start from the readable defaults and validate with the exact publish-time
-checks. Valid pull targets are the five page ids plus `layout` and `all`:
+To start from the readable defaults, pull a page. Valid pull targets are
+the five page IDs plus `layout` and `all`:
 
 ```bash
 sf pages pull access
 ```
+
+Validate with the exact publish-time checks:
 
 ```bash
 sf pages validate

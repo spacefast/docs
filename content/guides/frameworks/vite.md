@@ -17,8 +17,8 @@ A default Vite build emits `dist/index.html` plus hashed files in
 sf publish dist
 ```
 
-Add `@spacefast/vite-plugin` when you want `_redirects` / `_headers` served in
-the dev server and validated at build time:
+When you want `_redirects` and `_headers` served in the dev server and
+validated at build time, add `@spacefast/vite-plugin`:
 
 ```ts
 import { defineConfig } from "vite";
