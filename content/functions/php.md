@@ -63,11 +63,12 @@ The brokered services are the same [platform services](/services) Zero
 gets, with two deliberate differences:
 
 - **Spam evidence: explicit values win.** Both lanes fill `userIp`,
-  `userAgent`, and `referrer` from the visitor's request — the IP from the
-  platform-resolved trusted peer, never from a client-settable header. In
+  `userAgent`, and `referrer` from the visitor's request. The IP comes from
+  the platform-resolved trusted peer, never from a client-settable header. In
   a Zero mutation those values are host-owned and final; a PHP handler may
   name any of them explicitly and its value is taken, which is what a
-  handler proxying someone else's submission needs. The corrections
+  handler needs when it relays a submission it received from another
+  visitor. The corrections
   (`sf_report_spam`, `sf_report_ham`) default nothing: a correction
   describes an earlier request, so its submission carries its own
   complete evidence, `userIp` included.

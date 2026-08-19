@@ -132,6 +132,12 @@ skill, and a hosted MCP server with typed tools. If an agent makes the
 calls, start with [MCP](/agents/mcp) and
 [set up the agent](/agents) with one command.
 
+The documentation itself is searchable over the API, with no token
+required: `GET /v1/docs/search` returns ranked pages with excerpts, and
+`GET /v1/docs/page` returns one page's full Markdown by `path` or `slug`.
+Connected MCP agents get the same lookups as the `search_docs` and
+`get_page` [tools](/agents/mcp).
+
 ## Host sites for your customers
 
 You may host sites for **your own customers**, with your platform as a

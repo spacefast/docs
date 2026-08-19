@@ -71,17 +71,27 @@ refuses paths outside it. Keep the publish root narrow, and never add
 
 ## Tools and scopes
 
-The server registers four tools:
+The server registers six tools:
 
 - **`execute`**: run any API operation from the OpenAPI catalog.
 - **`skills`**: workflow recipes for common flows.
 - **`resume`**: continue an approval-gated call.
 - **`publish`**: publish files as a new version.
+- **`search_docs`**: search these docs and get ranked pages with excerpts.
+  An exact slug or path returns that one page, and an empty query lists
+  the available pages.
+- **`get_page`**: read one docs page as full Markdown, by path or slug.
 
 Tools manage the same spaces, versions, access, and domains as the
 [REST API](/api). Treat receipts from tool calls as the authority for
 mutations. Spacefast redacts tool results and persisted session
 transcripts before the model sees them.
+
+The docs tools read the published documentation corpus — the same pages
+this site serves — so a connected agent can answer product questions from
+the docs without scraping HTML or leaving the session. The same lookups
+work over plain HTTP without a token: `GET /v1/docs/search` and
+`GET /v1/docs/page` on the [REST API](/api).
 
 For durable automation outside MCP, use an agent account or a `ci_deploy`
 API key; see [Auth and accounts](/agents#auth-and-accounts).
