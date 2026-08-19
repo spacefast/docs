@@ -98,9 +98,9 @@ instead.
 
 ## Storage
 
-Every worker receives `env.STORAGE`, the same durable, unversioned object
-store that [Zero](/zero#storage) uses. Objects belong to the space and
-survive rollbacks. The binding has three methods:
+Every worker receives `env.STORAGE`, the same space
+[object store](/storage) that [Zero](/zero#storage) uses. The binding has
+three methods:
 
 - `upload(file)` takes a `Blob` and returns an object with `id`,
   `contentType`, `size`, and `url`.
@@ -109,13 +109,8 @@ survive rollbacks. The binding has three methods:
 
 ## Database
 
-Opt in to database access in `sf.jsonc`:
-
-```jsonc
-{ "runtime": { "kind": "functions", "database": true } }
-```
-
-The worker then receives `env.DB`, a D1-shaped binding:
+Set `"database": true` under `runtime` in `sf.jsonc`, and the worker
+receives `env.DB`, a D1-shaped binding:
 
 ```ts
 export default {
@@ -130,10 +125,8 @@ export default {
 };
 ```
 
-Use `prepare().bind()` with `.all()`, `.first()`, `.run()`, or `.raw()`.
-`env.DB.exec()` runs DDL (data definition language) statements, and
-`env.DB.batch()` groups statements. `sf db console` opens a full SQL
-session.
+[Database](/database) has the full binding contract, the migration
+commands, and `sf db console`.
 
 ## Next.js
 

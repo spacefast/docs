@@ -5,8 +5,8 @@ description: Move a static site from Netlify to Spacefast.
 
 Netlify sites that build to static files move directly. Run the same build,
 publish the output directory, and keep root `_redirects` and `_headers` files
-in that output. Before you rely on gated features, check the target team's
-routing entitlements in the dashboard.
+in that output. Before you rely on gated routing features, check the target
+team's [entitlements](/guides/migrate#check-capacity-and-entitlements).
 
 ```text
 # _redirects
@@ -29,7 +29,7 @@ sf publish ./dist
   in the source tree.
 - Recreate Netlify deploy-context environment variables in the system that
   builds your Spacefast artifact.
-- Publish to a test space first. The live site stays up during the switch.
+- Publish to a test space first.
 
 ## What carries over
 
@@ -59,9 +59,8 @@ sf publish ./dist
   `_headers`.
 - Replace Netlify Functions, Edge Functions, Identity, signed proxy redirects,
   and `Role` conditions before publishing protected content.
-- Netlify Basic Auth in `_headers` does not carry over. Spacefast rejects
-  `Basic-Auth` as a response header on every plan; use
-  [Spacefast sharing](/share) instead.
+- Spacefast rejects `_headers` Basic Auth on every plan; use
+  [Spacefast sharing](/share).
 
 ## What does not run on Spacefast
 

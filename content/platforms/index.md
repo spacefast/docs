@@ -23,8 +23,8 @@ reference deliberately does not show.
   live URL, and has immutable versions, rollback, passwords, routing,
   and domains.
 
-Map your data model onto tenants and spaces once. The rest is API calls.
-Spaces on your platform have every feature that the consumer product has.
+Map your data model onto tenants and spaces once. Spaces on your platform
+have every feature that the consumer product has.
 
 ## Server-side keys
 
@@ -43,7 +43,7 @@ curl -F archive=@site.zip \
 
 End users never see Spacefast credentials, and you never store per-user
 secrets. For every request, Spacefast records the acting key and the
-customer it acts for. That record gives you a full audit trail. Scoping,
+customer it acts for. Scoping,
 quotas, and rate limits are per tenant, so one integration cannot affect
 another.
 

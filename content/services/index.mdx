@@ -146,16 +146,12 @@ The message shape:
 | `replyTo`           | One address.                                                       |
 | `headers`           | Extra headers as string pairs. Names and values are validated; line breaks are refused. |
 
-Email is metered. `GET /v1/spaces/{spaceId}/usage` reports what a space
-consumed over the most recent settled period: storage, compute, bandwidth,
-email, and function invocations. See the
-[API reference](/api/reference) and [Monitoring](/operate/monitoring).
+Email is metered per space. See
+[Plans, limits, and usage](/account/plans#what-usage-is-metered) and
+[Monitoring](/operate/monitoring).
 
 ## What the platform handles
 
-- **Credentials.** Every call is brokered. The runtime attaches authority
-  outside the code that asked for the call, so your bundle holds no secret
-  to rotate or leak.
 - **Delivery.** Queued mail goes out through the platform's own sender;
   there is no SMTP relay to stand up.
 - **Validation.** Malformed input throws in your handler with the code

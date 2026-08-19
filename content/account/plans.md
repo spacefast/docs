@@ -5,18 +5,14 @@ title: Plans, limits, and usage
 description: Learn what entitlements are, where to see your team's limits and metered usage, and what happens when you reach a limit.
 ---
 
-Spacefast enforces plan limits per team, because a
-[team](/account/teams) is the billing and ownership boundary. This page
-defines the vocabulary that the rest of the docs use: entitlements,
-plan policy, and usage.
+Spacefast enforces plan limits per [team](/account/teams).
 
 ## What an entitlement is
 
 An **entitlement** is a limit or feature that your team is allowed to
 use.
 Spacefast resolves entitlements per team as **plan limits plus any
-additive grants**. The plan sets the baseline, and grants raise
-individual values above it. A limit resolves to a number, or to
+additive grants**. A limit resolves to a number, or to
 `"unlimited"` when the plan does not bound that axis.
 
 The plans are Free, Personal, Work, and Enterprise, and API responses
@@ -34,7 +30,7 @@ The API exposes the same data in four team-scoped reads:
 
 | Endpoint | Returns |
 | -------- | ------- |
-| `GET /v1/teams/{teamId}/entitlements` | The resolved entitlements: plan limits plus any additive grants. |
+| `GET /v1/teams/{teamId}/entitlements` | The resolved entitlements. |
 | `GET /v1/teams/{teamId}/plan-policy` | Plan limits, current usage, and disabled behaviors as enforced at publish and serving time. |
 | `GET /v1/teams/{teamId}/billing` | The plan, subscription state, and billable usage meters. |
 | `GET /v1/teams/{teamId}/usage` | Current usage counters: spaces, domains, members, storage, and monthly publishes. |

@@ -5,39 +5,20 @@ description: Move a static site from Vercel to Spacefast.
 
 Spacefast fits Vercel projects that build into static files. The Git workflow
 carries over. [Connect the repository](/publish/git) for branch previews,
-pull-request comments, and status checks. Before you rely on external
-proxies, check the target team's routing entitlements in the dashboard.
+pull-request comments, and status checks. Before you rely on gated routing
+features, check the target team's
+[entitlements](/guides/migrate#check-capacity-and-entitlements).
 
-Before switching DNS, audit the project for Vercel-only behavior. If the site
-depends on request-time rendering, functions, middleware, Incremental Static
-Regeneration (ISR), or Vercel image optimization, move those features first.
-Use static generation, a separate backend, or a third-party service.
+Before switching DNS, audit the project for Vercel-only behavior; see
+[What does not run on Spacefast](#what-does-not-run-on-spacefast).
 
 ## Static Next.js export
 
 For Next.js, use static export. Next.js 14 and newer versions do not have
-`next export`. When you configure `output: "export"`, `next build` writes
-the static artifact. See the [Next.js integration](/guides/frameworks/nextjs)
-for image handling and publish setup.
-
-```ts
-// next.config.ts
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: "export",
-};
-
-export default nextConfig;
-```
-
-```bash
-npm run build
-```
-
-```bash
-sf publish ./out
-```
+`next export`. Configure `output: "export"`, and `next build` writes the
+static artifact. Publish it with `sf publish ./out`. For the config, image
+handling, and publish setup, see the
+[Next.js integration](/guides/frameworks/nextjs).
 
 ## What carries over
 
@@ -55,8 +36,7 @@ sf publish ./out
 ## What to change
 
 - Convert `vercel.json` redirects and rewrites into root `_redirects`. External
-  rewrites become absolute-URL `200` proxy rules. They require the corresponding
-  entitlement.
+  rewrites become absolute-URL `200` proxy rules.
 
   <CodeGroup>
 
@@ -86,16 +66,6 @@ sf publish ./out
   [connect the repository](/publish/git), or your own CI. After a publish, only
   values that the build embeds or exposes to browser code are available.
 
-## Next.js images
-
-Vercel's default `next/image` optimization endpoint is request-time
-infrastructure. Static export requires unoptimized images, pre-generated
-responsive assets, or a custom image loader.
-
-Use the [Next.js integration](/guides/frameworks/nextjs) to configure
-static export and send public images through `i0.wp.com`. For transform limits
-and advanced options, see [Image acceleration](/serve/images).
-
 ## What does not run on Spacefast
 
 These Vercel and Next.js features need removal, build-time precomputation, or
@@ -115,7 +85,5 @@ another service:
   `unoptimized`, or pre-generated responsive assets.
 - Vercel platform products (analytics, storage, edge config, firewall and
   protection rules) and Vercel-managed environment variables do not transfer.
-  The Git workflow carries over.
-  [Connect the repository](/publish/git) and Spacefast builds on every
-  push. `sf git connect --platform-preset vercel`
-  imports build settings from your existing Vercel config.
+  `sf git connect --platform-preset vercel` imports build settings from your
+  existing Vercel config.

@@ -85,8 +85,8 @@ sf crons ls --space docs
 
 `sf crons run` requests the declared path over HTTPS immediately, so you
 can see what the schedule sees without waiting for it. It sends the same
-request without the platform's own cron header, which only the schedule can
-send. A handler that checks `CRON_SECRET` still needs the bearer header:
+request without the platform's own cron header. A handler that checks
+`CRON_SECRET` still needs the bearer header:
 
 ```bash
 sf crons run /api/digest

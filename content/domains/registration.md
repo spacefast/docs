@@ -72,9 +72,8 @@ the raw record. When WHOIS data is unavailable for a domain,
 
 ## Buy the name
 
-There is no public API endpoint for purchasing a registration. Pick
-the name with the search and research tools, then buy it in the
-dashboard. After the purchase, the domain appears in your domain
+There is no public API endpoint for purchasing a registration. Buy the
+name in the dashboard. After the purchase, the domain appears in your domain
 inventory and the `domain.registration_purchased` webhook event fires.
 
 ## Your domain inventory

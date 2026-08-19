@@ -23,8 +23,8 @@ JEKYLL_ENV=production BUNDLE_PATH=.spacefast/cache/jekyll-bundle \
 Without a `Gemfile`, Spacefast installs Jekyll itself
 (`GEM_HOME=.spacefast/cache/jekyll-gems gem install jekyll --no-document`) and
 builds with the same `JEKYLL_ENV=production ... jekyll build --config` form.
-The `--config` argument names the detected file: `_config.yml`,
-`_config.yaml`, or `_config.toml`. The output directory defaults to `_site`.
+The `--config` argument names the detected file. The output directory
+defaults to `_site`.
 
 If `_config.yml` changes Jekyll's `destination`, set the Spacefast output
 directory to the same path.

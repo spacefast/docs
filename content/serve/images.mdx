@@ -123,8 +123,8 @@ const src = siteAcceleratorUrl("https://example.com/uploads/hero.jpg", {
 
 ## Limitations
 
-- Images must be public. Private upload protection cannot use this path,
-  because Site Accelerator must fetch the original image.
+- Private upload protection cannot use this path, because Site Accelerator
+  must fetch the original image.
 - Site Accelerator does not upscale beyond the original image dimensions.
 - Site Accelerator keys cached images by image URL. When an image changes,
   change the filename or the path so the edge cache fetches the new asset.

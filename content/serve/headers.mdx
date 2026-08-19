@@ -10,8 +10,9 @@ that immutable version, so nothing parses the file per request. The file
 itself is never served.
 
 The same rules are also an [`sf.jsonc`](/serve/settings) key, which is
-useful when the config is generated. Both forms compile to the same rules, and a
-`_headers` block wins over a config rule for the same header.
+useful when the config is generated. Both forms compile to the same rules.
+For precedence between the two forms, see
+[Space settings](/serve/settings#routing-and-headers).
 
 <CodeGroup>
 
@@ -45,10 +46,6 @@ useful when the config is generated. Both forms compile to the same rules, and a
 ```
 
 </CodeGroup>
-
-`_headers` sits beside the other convention files that publish with a
-version: [`_redirects`](/serve/redirects), [`sf.jsonc`](/serve/settings),
-and the [`_layout.html` and `_pages/` visitor pages](/serve/pages).
 
 ## Block syntax
 

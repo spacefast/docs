@@ -13,8 +13,8 @@ per request. The file itself is never served.
 
 The same rules are also [`sf.jsonc`](/serve/settings) keys, which is useful
 when the config is generated. Both forms compile to the same rules and
-count against the same [caps](#rule-capacity). `_redirects` file rules
-match before config `redirects`, then config `rewrites`.
+count against the same [caps](#rule-capacity). For precedence between the
+two forms, see [Space settings](/serve/settings#routing-and-headers).
 
 <CodeGroup>
 
@@ -173,8 +173,8 @@ allows only letters, numbers, and underscores.
 
 ## Conditions
 
-Conditions come after the status. Spacefast supports `Country`, `Language`,
-`Cookie`, and `Agent`. Values are comma-separated with no spaces. Country
+Conditions come after the status. Spacefast supports only `Country`,
+`Language`, `Cookie`, and `Agent`. Values are comma-separated with no spaces. Country
 values must be two-letter country codes.
 
 ```text
@@ -185,7 +185,7 @@ values must be two-letter country codes.
 /ai /ai.txt 200! Agent=true
 ```
 
-Spacefast supports only these four condition names. It rejects Netlify and
+Spacefast rejects Netlify and
 Cloudflare spellings such as `nf_country` and `cf_ipcountry` with a
 `redirect_condition_unsupported` error that blocks the publish. Rename them
 to `Country=` or `Language=`. Spacefast rejects `Role=` conditions with

@@ -34,9 +34,6 @@ Point your client at:
 https://mcp.spacefast.com
 ```
 
-Your client completes OAuth, and the server scopes tools to the signed-in
-user.
-
 ## On-device MCP
 
 On-device MCP runs a local server for agents that read and publish files
@@ -87,9 +84,8 @@ Tools manage the same spaces, versions, access, and domains as the
 mutations. Spacefast redacts tool results and persisted session
 transcripts before the model sees them.
 
-The docs tools read the published documentation corpus, the same pages
-this site serves, so a connected agent can answer product questions from
-the docs without scraping HTML or leaving the session. The same lookups
+The docs tools read the published documentation corpus, so a connected
+agent can answer product questions without leaving the session. The same lookups
 work over plain HTTP without a token: `GET /v1/docs/search` and
 `GET /v1/docs/page` on the [REST API](/api).
 

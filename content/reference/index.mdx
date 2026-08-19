@@ -30,61 +30,26 @@ The guides teach workflows. This section holds the exact contracts.
 
 For direct HTTP integration guidance, start with the
 [REST API guide](/api). For agent tooling such as MCP, skills, and
-machine-readable docs, see [Agents](/agents). When something misbehaves,
-start with the troubleshooting checks on this page.
+machine-readable docs, see [Agents](/agents).
 
 ## Troubleshooting
 
-Find the symptom and run the check next to it.
+Find the symptom and follow the link.
 
-### DNS diagnostics
-
-If your domain does not resolve or does not serve the space, check it,
-then pull the detailed report:
-
-```bash
-sf domains check www.example.com
-sf domains diagnostics www.example.com
-```
-
-If DNS fails, check that the hostname, record type, and target value
-exactly match the space instructions.
-
-### Missing index
-
-If the homepage is missing, check that your folder or zip has `index.html`
-at the root. SPA mode also requires root `index.html`.
-
-### Upload or finalize failures
-
-Retry the publish. The CLI matches files by `sha256` and size, so it never
-re-uploads an unchanged file. When Spacefast rejects a publish because it
-exceeds the storage quota, the live site is not affected. Delete old
-versions or add storage, then publish again.
-
-### Rollback recovery
-
-A bad publish never takes the live site down. Promote a known-good version
-to recover:
-
-```bash
-sf versions ls
-sf rollback v12
-```
-
-### Version URL asks for sign-in
-
-The live URL is not affected. The team's current entitlements decide
-whether older immutable version URLs remain public. See
-[Roll back](/publish/versions#promote-and-roll-back).
-
-### Password prompts
-
-A password wall on every page means that space password protection is on.
-Spacefast does not support `_headers` Basic Auth, and path-level protection
-comes from sharing rules. See [Passwords and access](/share).
-
-### Local CLI setup
-
-`sf doctor` checks local state, auth, API reachability, and the current
-space link.
+- **A domain does not resolve or serve the space**: run `sf domains check`
+  and `sf domains diagnostics`, then fix the records diagnostics reports.
+  See [Verify DNS and SSL](/domains#verify-dns-and-ssl).
+- **The homepage is missing**: the folder or zip needs `index.html` at the
+  root. See [What serves the homepage](/publish#what-serves-the-homepage).
+- **An upload or finalize fails**: retry the publish. A publish rejected
+  over the storage quota does not affect the live site. See
+  [Retention and storage](/publish/versions#retention-and-storage).
+- **A bad publish is live**: promote a known-good version. See
+  [Promote and roll back](/publish/versions#promote-and-roll-back).
+- **A version URL asks for sign-in**: the live URL is not affected. See
+  [Permanent version URLs](/publish/versions#permanent-version-urls).
+- **Every page asks for a password**: space password protection is on, and
+  Spacefast [rejects `_headers` Basic Auth](/serve/headers#no-basic-auth).
+  See [Control who can visit](/share).
+- **The CLI misbehaves locally**: [`sf doctor`](/cli#sf-doctor) checks
+  local state, auth, API reachability, and the current space link.

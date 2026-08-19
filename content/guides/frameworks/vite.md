@@ -32,8 +32,7 @@ export default defineConfig({
 
 ## TanStack Start static site
 
-When you know every route at build time, prerender them all. Prerendering fits
-marketing pages, docs, and blogs.
+When you know every route at build time, prerender them all.
 
 ```ts
 import { defineConfig } from "vite";

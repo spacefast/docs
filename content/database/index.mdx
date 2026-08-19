@@ -36,9 +36,7 @@ In a Functions worker, opt in through `sf.jsonc`:
 The worker then receives `env.DB`. Use `prepare().bind()` with `.all()`,
 `.first()`, `.run()`, or `.raw()`. `env.DB.exec()` runs DDL (data
 definition language) statements, and `env.DB.batch()` groups statements.
-Each runtime page has the full contract:
-[Zero's database](/zero#database) and
-[the Functions binding](/functions#database).
+For the typed query contract, see [Zero's database](/zero#database).
 
 ## Migrations
 
@@ -52,8 +50,7 @@ sf db migrate --rename
 sf db migrate --drop
 ```
 
-A rollback promotes older code without rewinding rows. Before you roll
-back across a migration, check the current schema.
+Before you roll back across a migration, check the current schema.
 
 ## Inspect, dump, and export
 

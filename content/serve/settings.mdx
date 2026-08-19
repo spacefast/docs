@@ -170,10 +170,8 @@ When no file or directory index matches first, `cleanUrls` serves
 ## Metadata and visitor pages
 
 `name` is the space display name. When the live version's `sf.jsonc` sets
-`name`, the API refuses to rename the space and returns
-[`name_managed_by_config`](/errors/name_managed_by_config). To rename the
-space, change the file and publish. To rename through the API instead,
-remove `name` from the file.
+`name`, the API refuses to rename the space. See
+[Manage spaces](/operate/spaces#rename).
 
 `meta.title`, `meta.description`, `meta.image`, and `meta.favicon` supply
 listing, social, and browser-icon metadata. `theme` styles the designed
@@ -270,8 +268,7 @@ appearing at all, set `disable_all_injection` to `true`.
 Serving settings edited in the dashboard or through the API save first and
 go live when you apply them. Until then, the UI shows them as saved but not
 live. `sf apply` pushes already-saved settings onto the serving runtime
-without creating a new content version. A publish is the path that uploads
-files, and it can carry `sf.jsonc` with a version.
+without creating a new content version.
 
 ```bash
 sf apply

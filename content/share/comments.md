@@ -43,8 +43,8 @@ space's **Comments** page. Filter by status, version, page, author, or
 unread state, and search the full text. Archive a thread when the work
 finishes or the thread stops being relevant.
 
-Spam filtering is on by default. The filter holds suspected spam out of
-the main list, and team admins can review it under the **Spam** filter.
+The spam filter holds suspected spam out of the main list, and team
+admins can review it under the **Spam** filter.
 
 ## Embed on another site
 

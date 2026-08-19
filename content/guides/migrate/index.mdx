@@ -25,11 +25,13 @@ sf domains add www.example.com --wait
 - [Migrate from Cloudflare Pages](#cloudflare-pages)
 - [Migrate from here.now](/guides/migrate/here-now)
 
-## Check capacity before the move
+## Check capacity and entitlements
 
 Open the target team's **Usage & billing** page in the dashboard and
 compare its storage, routing, domain, and publish limits with the needs of
-the site you move.
+the site you move. Gated routing features, such as external `200` proxy
+rules, depend on the team's routing entitlements. Check the entitlements
+in the dashboard before you rely on them.
 
 ## What carries over
 
@@ -39,16 +41,13 @@ and HTTPS certificates are automatic. If the source site needs request-time
 code, move that work to build time, keep it in an external service, or add
 [Functions](/functions).
 
-You can publish built output from continuous integration (CI), an agent,
-or the CLI. You can also [connect a Git repository](/publish/git) so that
-Spacefast builds on every push, with branch previews, PR preview comments,
-and status checks. For Next.js, start with the
-[Next.js integration](/guides/frameworks/nextjs).
+To build on every push, with branch previews and status checks,
+[connect a Git repository](/publish/git).
 
 ## Migration safety
 
-- Every publish is an immutable version, so you can roll back to any
-  previous version with `sf rollback` or from the dashboard.
+- Every publish is an immutable version. Roll back with `sf rollback` or
+  from the dashboard.
 - Anonymous publishing works without an account. To keep the space, claim
   it within 6 hours.
 - You can download any space version's files with `sf spaces download`.
@@ -78,9 +77,8 @@ Account for these Cloudflare-specific differences:
 - For rewrites to public upstream APIs, use external `200`
   [proxy rules](/serve/redirects#proxy-routes). Cloudflare-specific request
   mutation, bindings, and private credential injection do not carry over.
-- Basic Auth in `_headers` and external proxies depend on the target
-  team's routing entitlements. Before you rely on either, check the
-  entitlements in the dashboard.
+- Spacefast rejects `_headers` Basic Auth on every plan; use
+  [Spacefast sharing](/share).
 - To keep building on push, [connect the repository](/publish/git).
   `sf git connect --platform-preset cloudflare-pages` imports build
   settings from your existing Pages config.

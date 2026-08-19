@@ -55,13 +55,8 @@ has a repository connection, `sf builds detect` shows the detected app and
 build settings, with ranked candidates when the repository holds more than
 one app.
 
-## Local builds
-
-`sf build` runs the same detect-build-and-pack step
-[locally](/publish/git#local-builds) and writes
-`.spacefast/build-output.tgz` for a plain `sf publish`. Use `--remote` when
-the build should run on Spacefast's runner instead of your machine. The
-result is the same kind of version either way.
+To run the same detect-build-and-pack step on your own machine instead,
+see [local builds](/publish/git#local-builds).
 
 ## Watch the build
 

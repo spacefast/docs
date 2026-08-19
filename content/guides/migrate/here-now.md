@@ -33,9 +33,7 @@ sf publish ./dist --spa true
 
 ## What carries over
 
-- Static artifacts within the target space's file-size limit. Spacefast
-  serves uploaded files as content; request-time code runs only through a
-  declared [Function](/functions).
+- Static artifacts within the target space's file-size limit.
 - Single-page apps (SPAs), after you enable the Spacefast SPA fallback for
   client-side routes.
 - Custom domains, after you add the domain in Spacefast and move DNS when the
@@ -57,8 +55,8 @@ sf publish ./dist --spa true
   `name.here.now`.
 - Replace here.now password protection, payment gating, forking metadata,
   auto-viewer pages, and directory listings with explicit Spacefast
-  configuration or static pages. `_headers` Basic Auth is not supported; use
-  [Spacefast sharing](/share).
+  configuration or static pages. Spacefast rejects `_headers` Basic Auth on
+  every plan; use [Spacefast sharing](/share).
 
 ## What Spacefast cannot import
 

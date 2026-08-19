@@ -7,9 +7,8 @@ description: Learn how publishing works in Spacefast, including CLI and agent pu
 
 A publish sends a directory or a single file to a space. A publish that
 changes the content creates an immutable [version](/publish/versions) with
-its own URL. When the upload completes, the live URL moves to that version.
-A publish with identical content is a no-op. Earlier versions stay
-available for [rollback](/publish/versions).
+its own URL. A publish with identical content is a no-op. Earlier versions
+stay available for [rollback](/publish/versions).
 
 Directory publishes preserve relative paths and can carry `_redirects`,
 `_headers`, and [`sf.jsonc`](/serve/settings), so serving rules ship with
@@ -51,7 +50,7 @@ Add `--space docs` to target a space explicitly, `--json` for a
 machine-readable receipt, or `--dry-run` to preview the upload without
 publishing.
 
-Drop is the dashboard uploader for when you have no tooling at hand. Drag a
+Drop is the dashboard uploader. Drag a
 folder, a zip archive, or a standalone `index.html` onto a space and
 publish. Interrupted uploads resume, and Spacefast expands zip archives
 before publishing. Unless you want a file listing, put `index.html` at the

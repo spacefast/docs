@@ -6,9 +6,9 @@ description: Learn how the Spacefast REST API handles authentication, responses,
 ---
 
 Everything Spacefast does is one REST API at `https://api.spacefast.com`.
-The dashboard, the CLI, and agents all use it. This page explains how the
-API behaves; the [full endpoint reference](/api/reference) lists every
-operation, parameter, and schema.
+This page explains how the API behaves; the
+[full endpoint reference](/api/reference) lists every operation, parameter,
+and schema.
 
 ## The response envelope
 
@@ -78,9 +78,8 @@ same receipt shape.
 
 Every publish freezes an immutable version, and the live URL is a pointer
 that moves atomically (see [Versions and channels](/publish/versions)). To
-roll back, send a `POST` that promotes an earlier version. The rollback
-flips the pointer; nothing is re-uploaded. Version lists, diffs, and logs
-are all plain GET requests.
+roll back, send a `POST` that promotes an earlier version; nothing is
+re-uploaded. Version lists, diffs, and logs are plain GET requests.
 
 ## Idempotency and retries
 

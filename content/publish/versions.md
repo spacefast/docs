@@ -14,11 +14,12 @@ rewrites the version it used to serve.
 
 ## The release boundary
 
-A request never sees half of a release. Finalization validates the complete
-snapshot, prepares it for serving, and promotes it atomically; uploading
-the bytes alone does not complete the publish. The publish receipt carries
-both URLs. The API names them `space.liveUrl` and `version.immutableUrl`,
-and the CLI `--json` receipt names them `siteUrl` and `immutableUrl`.
+Uploading the bytes alone does not complete a publish; finalization
+promotes the validated snapshot atomically, as
+[How Spacefast works](/start/how-it-works) explains. The publish receipt
+carries both URLs. The API names them `space.liveUrl` and
+`version.immutableUrl`, and the CLI `--json` receipt names them `siteUrl`
+and `immutableUrl`.
 
 ## The live channel
 
@@ -73,9 +74,8 @@ sf channels history --space docs
 
 ## Inspect and compare versions
 
-Every version is a fixed snapshot that you can browse in the dashboard.
-Open a space, choose a version, and open its files to preview them, copy
-raw-file URLs, or download a ZIP. Private file URLs use your current access
+To browse a version in the dashboard, open a space, choose a version, and
+open its files to preview them, copy raw-file URLs, or download a ZIP. Private file URLs use your current access
 and can expire, so do not treat them as permanent public links.
 
 Before you promote, compare two versions to see the added, changed, and
@@ -92,8 +92,7 @@ output options.
 
 ## Permanent version URLs
 
-A version URL serves exactly the content you published, and that content
-never changes. The team's current entitlements control whether an older
+The team's current entitlements control whether an older
 version URL is public. They do not change owner access or API access, and
 rollback and `sf spaces download` keep working either way.
 
@@ -105,12 +104,7 @@ To free up room, delete old versions or add storage. Spacefast keeps
 versions until you delete them; only never-finalized draft uploads expire
 on their own.
 
-## How this fits publishing
-
-1. [Publish](/publish) creates (or no-ops) an immutable version.
-2. A successful live publish moves the `live` channel to that version.
-3. `sf rollback` or `sf promote` moves the channel again without rebuilding.
-4. Channel history records each move.
+## Related
 
 Saved space settings that are not yet on the serving runtime move with a
 different command, [`sf apply`](/serve/settings#apply-saved-settings).

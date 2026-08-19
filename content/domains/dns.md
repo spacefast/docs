@@ -6,10 +6,8 @@ description: Delegate a domain to Spacefast nameservers, manage records from the
 ---
 
 Spacefast can host a domain's DNS zone, so the same CLI that publishes
-your site also edits its records. This page covers delegation, record
-management with `sf domains dns`, and the safety model behind zone
-writes. To attach a hostname to a space, start at
-[custom domains](/domains) instead.
+your site also edits its records. To attach a hostname to a space, start
+at [custom domains](/domains) instead.
 
 ## Delegate the domain first
 

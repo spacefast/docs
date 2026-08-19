@@ -3,9 +3,7 @@ title: GitHub Pages
 description: Move a static site from GitHub Pages to Spacefast.
 ---
 
-Move the static site that GitHub Pages served. Spacefast can build Jekyll from
-the repository, or you can publish an artifact that you already build
-elsewhere.
+Move the static site that GitHub Pages served.
 
 ```bash
 # If GitHub Pages built the site with Jekyll
@@ -40,11 +38,12 @@ sf publish ./_site
 - Check large downloadable files against the target space's file-size limit
   before you move production DNS.
 - If a single-page app needs a fallback such as `/app/* /app/index.html 200`,
-  add a root `_redirects` file. Before you move a large ruleset, check the
-  team's routing entitlement in the dashboard.
+  add a root `_redirects` file. Before you rely on gated routing features,
+  check the target team's
+  [entitlements](/guides/migrate#check-capacity-and-entitlements).
 - Recreate the custom domain in Spacefast, open the test space URL, and confirm
-  that the new version serves. Then move DNS away from the GitHub Pages records. SSL
-  is automatic, and the cutover is reversible.
+  that the new version serves. Then move DNS away from the GitHub Pages
+  records.
 
 ## What carries over
 
@@ -65,8 +64,8 @@ sf publish ./_site
 - GitHub Pages has no native `_redirects` or `_headers` files. If you used
   JavaScript, meta refresh tags, or an external CDN to fill that gap, replace
   that behavior. Use Spacefast routing and header files where possible.
-  `_headers` Basic Auth is not supported; use
-  [Spacefast sharing](/share) for protected content.
+  Spacefast rejects `_headers` Basic Auth on every plan; use
+  [Spacefast sharing](/share).
 - Retire the Pages deploy workflow. The best replacement is to
   [connect the repository](/publish/git). Spacefast then builds on every
   push, with branch and PR previews. If you want to keep your GitHub Actions

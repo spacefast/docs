@@ -68,8 +68,6 @@ code.
 
 ## Trigger a build manually
 
-You do not have to wait for a push:
-
 ```bash
 sf git build --branch main          # build the production branch now
 ```
@@ -87,8 +85,6 @@ sf git build --target preview --wait  # force a preview build and wait for it
 `--wait-timeout` to block until the build finishes.
 
 ## Watch and manage builds
-
-Every build is a tracked object you can follow to completion:
 
 ```bash
 sf builds ls                     # recent builds, newest first

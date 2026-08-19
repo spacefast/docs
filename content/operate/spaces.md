@@ -111,7 +111,7 @@ sf spaces duplicate --space docs --slug docs-copy
 ```
 
 Duplicate defaults to the live version. Pass `--version`, `--title`, and
-`--wait` as needed. The copy has the same content and a new identity.
+`--wait` as needed.
 
 ## Transfer to another team
 
