@@ -13,3 +13,4 @@ public/_redirects
 .env.*
 !.env.example
 .spacefast/state.json
+/.spacefast-*
