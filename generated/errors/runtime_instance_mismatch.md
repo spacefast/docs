@@ -5,7 +5,7 @@ description: "The request reached a different runtime instance than the one it w
 
 The request reached a different runtime instance than the one it was issued for.
 
-**How to resolve:** Re-request instructions. The space is on another instance now.
+**How to resolve:** Re-request instructions. The space is on another instance.
 
 <div data-pagefind-ignore>
 

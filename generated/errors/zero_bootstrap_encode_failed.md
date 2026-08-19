@@ -5,7 +5,7 @@ description: "The Zero runner cannot encode the JavaScript bootstrap data."
 
 The Zero runner cannot encode the JavaScript bootstrap data.
 
-**How to resolve:** Retry with valid request metadata. Report the issue if it persists.
+**How to resolve:** Retry with valid request metadata. If the issue persists, report it.
 
 <div data-pagefind-ignore>
 

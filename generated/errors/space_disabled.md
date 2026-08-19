@@ -5,7 +5,7 @@ description: "The space is disabled and cannot be served or modified."
 
 The space is disabled and cannot be served or modified.
 
-**How to resolve:** Check the disabled reason on the space. It explains the path to restore it.
+**How to resolve:** Check the disabled reason on the space. The reason explains how to restore the space.
 
 <div data-pagefind-ignore>
 

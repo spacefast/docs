@@ -5,53 +5,58 @@ sidebar:
 description: Sign in, protect your account, and manage the teams that own your spaces, API keys, and billing.
 ---
 
-This page covers signing in and keeping your account secure. The
+The
 [teams](/account/teams) you belong to own the spaces,
 [API keys](/account/api-keys), usage, and billing you work with.
 
 ## Sign in
 
-Spacefast sign-in is WordPress.com sign-in: use it at
-[spacefast.com](https://spacefast.com), and your teams and spaces appear under
-`my.spacefast.com/<team>`. The CLI authenticates separately with
-[`sf login`](/cli#sf-login). A browser session does not authenticate your
-terminal. For CI and scripts, use an [API key](/account/api-keys) instead.
+Spacefast sign-in is WordPress.com sign-in. Sign in at
+[spacefast.com](https://spacefast.com), and your teams and spaces appear
+under `my.spacefast.com/<team>`. The CLI authenticates separately with
+[`sf login`](/cli#sf-login). For CI and scripts, use an
+[API key](/account/api-keys) instead.
 
 ## Protect your account
 
-The security page lists the sessions that can currently use your account, with
-your current session marked. Revoke any session you do not recognize; that
-device must sign in again. **Sign out all other sessions** covers a lost device
-or a shared browser.
+The security page lists the sessions that can currently use your account,
+with your current session marked. Revoke any session that you do not
+recognize, and that device must sign in again. If you lost a device or
+signed in on a shared browser, use **Sign out all other sessions**.
 
 Connected apps are services you authorized to act with your Spacefast
 identity. Revoke an app when you no longer use or recognize it. Revocation
 stops future access but does not undo changes the app already made.
 
 Browser sessions, OAuth connections, and CLI API keys have separate
-lifecycles: revoking one does not revoke the others. After losing a device,
-also review [API keys](/account/api-keys) and remove keys the lost computer
-could still hold.
+lifecycles. Revoking one does not revoke the others. After you lose a
+device, also review [API keys](/account/api-keys) and remove keys that the
+lost computer could still hold.
 
-Product and marketing email is a per-user notification setting.
+Notification preferences, including product and marketing email, are
+per-user settings on your account. The unsubscribe controls are in the
+same place.
 
 ## Two-factor authentication and device approvals
 
-Enroll a second factor on the account security page. CLI and agent sign-ins
-use device authorization: `sf login` shows a code, and the browser asks you
-to approve the device. Approve only sign-ins you started; if a code appears
-that you did not request, deny it.
-
-## Notifications
-
-The dashboard has a notification inbox behind the bell in the top bar. Email
-notification preferences and unsubscribe controls live on your account.
+Enroll a second factor on the account security page. CLI and agent
+sign-ins use device authorization: `sf login` shows a code, and the browser
+asks you to approve the device. Approve only sign-ins that you started. If
+a code appears that you did not request, deny it.
 
 ## Multiple accounts in the CLI
 
-`sf profiles` lists the CLI's configured provider profiles, and the global
-`--profile` flag picks one per command, so one machine can work against
-several accounts.
+A profile binds an API base URL and a credential, so one machine can work
+against several accounts. The CLI has four profile commands:
+
+- `sf profiles` lists the configured provider profiles.
+- `sf profiles set` creates or updates a profile. Pass `--api-url` for the
+  endpoint and `--token` to bind a credential.
+- `sf profiles use` selects the profile that applies when no `--profile`
+  flag or `SPACEFAST_PROFILE` variable is set.
+- `sf profiles rm` deletes a profile and its stored credential.
+
+The global `--profile` flag picks a profile for one command.
 
 ## Teams and keys
 
@@ -64,5 +69,5 @@ several accounts.
   </Card>
 </CardGroup>
 
-The dashboard shows the plan, entitlements, and safety limits attached to a
-team.
+For the plan, entitlements, and safety limits attached to a team, see
+[Plans, limits, and usage](/account/plans).

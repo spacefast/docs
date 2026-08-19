@@ -5,7 +5,7 @@ description: "The requested Zero endpoint does not match the endpoint artifact."
 
 The requested Zero endpoint does not match the endpoint artifact.
 
-**How to resolve:** Rebuild routes and artifacts together and redeploy the version.
+**How to resolve:** Rebuild routes and artifacts together, then publish the version again.
 
 <div data-pagefind-ignore>
 

@@ -1,0 +1,170 @@
+---
+title: Functions
+description: Run a worker on a Spacefast space, beside its static files and on the same hostname.
+---
+
+Functions adds one Web-standard `fetch` handler to a space. Spacefast
+serves static files first. Requests that no file answers go to the worker,
+on the paths that the worker's compiled route table claims. Hand-written
+handlers claim the whole site, and Next builds derive a narrower table.
+Unclaimed paths return 404 without waking the worker. The worker and the
+files publish as one version on one hostname, and they roll back together.
+
+## Quick start
+
+Two commands scaffold and publish a worker:
+
+```bash
+sf init my-api --runtime functions
+cd my-api
+sf publish
+```
+
+The worker uses a default export of an object with a `fetch` method:
+
+```ts
+// handler.ts
+export default {
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url);
+    if (url.pathname === "/api/hello") {
+      return Response.json({ hello: "world" });
+    }
+    return new Response("Not found", { status: 404 });
+  },
+};
+```
+
+## Detection and configuration
+
+Spacefast detects the first matching worker entry:
+
+| Path                                         | Typical source                  |
+| -------------------------------------------- | ------------------------------- |
+| `.open-next/worker.js`                       | Next.js built with OpenNext     |
+| `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker               |
+| Any route module under `functions/`          | File router; Spacefast synthesizes the dispatcher |
+
+A `.php` file under `functions/` takes a different lane. It executes at
+its derived route with the `sf_*` prelude, with no worker and no runtime
+declaration. See [Functions for PHP](/functions/php).
+
+Declare an entry when the file is in another location, or when you want to
+pin the runtime settings:
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "runtime": {
+    "kind": "functions",
+    "entry": "build/worker.js", // [!code highlight]
+    "database": true,
+    "compatibilityDate": "2026-07-01",
+  },
+}
+```
+
+If you declare `runtime.kind: "functions"` and Spacefast finds no entry,
+the publish fails with
+[`config_runtime_entry_missing`](/errors/config_runtime_entry_missing).
+A directory with no declaration and no detected entry remains a static
+space.
+
+## Runtime contract
+
+Handlers use `Request`, `Response`, streams, and `crypto`. Hand-written
+handlers cannot import Node built-ins; the build fails rather than the
+request. Next and OpenNext builds get `nodejs_compat` automatically.
+
+Outbound network access is fail-closed. Spacefast denies it unless the
+published version holds the `fetch` capability, so a `fetch()` call in your
+code does not silently add network authority. No Functions publish
+grants that capability; outbound `fetch` is available only to
+[Zero](/zero) actions. To check which capabilities a published version
+holds, run `sf runtime status`.
+
+## Variables
+
+Put server-only values in `.env.server`. The publish syncs them into the
+space as secret [variables](/publish/variables) and never uploads the
+file. The worker reads them from `env`:
+
+```dotenv
+STRIPE_SECRET_KEY=your_stripe_secret_key
+```
+
+Spacefast withholds database connection strings; use the database binding
+instead.
+
+## Storage
+
+Every worker receives `env.STORAGE`, the same space
+[object store](/storage) that [Zero](/zero#storage) uses. The binding has
+three methods:
+
+- `upload(file)` takes a `Blob` and returns an object with `id`,
+  `contentType`, `size`, and `url`.
+- `get(id)` returns a `Response`.
+- `delete(id)` removes the object.
+
+## Database
+
+Set `"database": true` under `runtime` in `sf.jsonc`, and the worker
+receives `env.DB`, a D1-shaped binding:
+
+```ts
+export default {
+  async fetch(_request: Request, env: Env): Promise<Response> {
+    const { results } = await env.DB.prepare(
+      "SELECT id, email FROM signups ORDER BY created_at DESC LIMIT ?",
+    )
+      .bind(10)
+      .all();
+    return Response.json(results);
+  },
+};
+```
+
+[Database](/database) has the full binding contract, the migration
+commands, and `sf db console`.
+
+## Next.js
+
+Build Next.js with OpenNext's Cloudflare adapter, then publish the
+directory that contains `.open-next/worker.js`. Spacefast serves static
+assets from disk and routes SSR and route handlers to the worker. See
+[Next.js](/guides/frameworks/nextjs) for the build recipe.
+
+## Develop and inspect
+
+Functions does not run inside `sf dev` yet. Use your framework's dev server,
+then publish a version to test the Spacefast runtime.
+
+```bash
+sf runtime status
+sf logs runtime --follow
+sf logs runtime --request-id req_9f21
+```
+
+`sf runtime status` reports the published entry, bundle digest and size,
+compatibility date, capabilities, and dispatch state.
+
+## Limits
+
+- Worker bundle: 8 MiB maximum.
+- Request execution: 30 seconds maximum.
+
+## Zero or Functions
+
+Functions gives you direct control over request handling with Web APIs and
+npm packages. If the database, authentication, and storage are the app,
+[Zero](/zero) builds all three in:
+
+|                   | [Zero](/zero)                      | Functions                    |
+| ----------------- | ---------------------------------- | ---------------------------- |
+| You write         | Capsule: schema and named handlers | Worker: one `fetch` handler  |
+| Database          | Built in                           | Optional `env.DB` binding    |
+| Authentication    | Built in                           | Bring your own flow          |
+| Storage           | Built in                           | Built in (`env.STORAGE`)     |
+| Framework         | Zero client and server APIs        | Web APIs and npm packages    |
+| Local development | `sf dev`                           | Your framework's dev server  |

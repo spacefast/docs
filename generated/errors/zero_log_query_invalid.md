@@ -5,7 +5,7 @@ description: "The Zero log query parameters are invalid."
 
 The Zero log query parameters are invalid.
 
-**How to resolve:** Pass `cursor` exactly as the previous page's `nextCursor`, keep `limit` between 1 and 100, and send `since`/`until` as ISO timestamps.
+**How to resolve:** Pass `cursor` exactly as the previous page's `nextCursor`, keep `limit` between 1 and 100, and send `since` and `until` as ISO timestamps.
 
 <div data-pagefind-ignore>
 

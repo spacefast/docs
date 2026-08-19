@@ -5,7 +5,7 @@ description: "The target runtime cannot verify transferred blob content."
 
 The target runtime cannot verify transferred blob content.
 
-**How to resolve:** Retry the move. If it persists, check the target runtime and bucket integrity.
+**How to resolve:** Retry the move. If the failure persists, check the target runtime and bucket integrity.
 
 <div data-pagefind-ignore>
 

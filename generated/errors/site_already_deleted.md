@@ -5,7 +5,7 @@ description: "The site was already deleted."
 
 The site was already deleted.
 
-**How to resolve:** No action needed. The site is gone.
+**How to resolve:** No action is needed. The site is gone.
 
 <div data-pagefind-ignore>
 

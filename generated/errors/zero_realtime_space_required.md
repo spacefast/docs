@@ -5,7 +5,7 @@ description: "The Zero realtime request does not identify a space."
 
 The Zero realtime request does not identify a space.
 
-**How to resolve:** Use a /spaces/{spaceId} realtime URL or include a valid spaceId query parameter.
+**How to resolve:** Use a `/spaces/{spaceId}` realtime URL or include a valid `spaceId` query parameter.
 
 <div data-pagefind-ignore>
 

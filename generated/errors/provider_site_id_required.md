@@ -5,7 +5,7 @@ description: "A provider site id is required for this internal operation."
 
 A provider site id is required for this internal operation.
 
-**How to resolve:** Pass the provider site reference.
+**How to resolve:** Pass the provider site id.
 
 <div data-pagefind-ignore>
 

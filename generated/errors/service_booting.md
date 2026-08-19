@@ -5,7 +5,7 @@ description: "The process that received this request is still starting and canno
 
 The process that received this request is still starting and cannot serve it yet.
 
-**How to resolve:** Wait for the Retry-After window, then send the same request again.
+**How to resolve:** Wait for the `Retry-After` window, then send the same request again.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "This provider applies DNS changes with a replace-all write strateg
 
 This provider applies DNS changes with a replace-all write strategy.
 
-**How to resolve:** Review the full-zone diff carefully so unrelated MX, TXT, CAA, NS, and wildcard records are preserved.
+**How to resolve:** To preserve unrelated MX, TXT, CAA, NS, and wildcard records, review the full-zone diff carefully.
 
 <div data-pagefind-ignore>
 

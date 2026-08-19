@@ -5,7 +5,7 @@ description: "The Zero runner tried to start a database transaction while one wa
 
 The Zero runner tried to start a database transaction while one was already active.
 
-**How to resolve:** Rebuild with the current Zero runner and report the failure if it repeats.
+**How to resolve:** Rebuild with the current Zero runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 

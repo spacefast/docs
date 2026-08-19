@@ -5,7 +5,7 @@ description: "The source runtime cannot push the space blobs into the transfer b
 
 The source runtime cannot push the space blobs into the transfer bucket.
 
-**How to resolve:** Retry the move. If it persists, check the source runtime and bucket configuration.
+**How to resolve:** Retry the move. If the failure persists, check the source runtime and bucket configuration.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The resource changed after you loaded it, so the stale write was r
 
 The resource changed after you loaded it, so the stale write was rejected.
 
-**How to resolve:** Use the current resource returned in error.details.current, reapply the intended fields, and send its revision as expectedRevision.
+**How to resolve:** Use the current resource returned in `error.details.current`, reapply the intended fields, and send its revision as `expectedRevision`.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "Two file paths differ only by letter case, which collides on servi
 
 Two file paths differ only by letter case, which collides on serving.
 
-**How to resolve:** Rename one of the files so paths are unique case-insensitively.
+**How to resolve:** Rename one of the files so that paths are unique case-insensitively.
 
 <div data-pagefind-ignore>
 

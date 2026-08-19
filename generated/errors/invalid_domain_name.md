@@ -5,7 +5,7 @@ description: "The domain name is not a valid registrable hostname."
 
 The domain name is not a valid registrable hostname.
 
-**How to resolve:** Check the spelling and use a fully-qualified domain name.
+**How to resolve:** Check the spelling and use a fully qualified domain name.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The storage object id is malformed."
 
 The storage object id is malformed.
 
-**How to resolve:** Use the 32-character object id returned by storage.upload.
+**How to resolve:** Use the 32-character object id returned by `storage.upload`.
 
 <div data-pagefind-ignore>
 

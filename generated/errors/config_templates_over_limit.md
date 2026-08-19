@@ -5,7 +5,7 @@ description: "The configuration declares more template files than the plan allow
 
 The configuration declares more template files than the plan allows.
 
-**How to resolve:** Reduce the number of template entries in sf.jsonc. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Reduce the number of template entries in sf.jsonc. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 

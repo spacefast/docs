@@ -5,7 +5,7 @@ description: "The Zero runner returned an invalid HTTP status."
 
 The Zero runner returned an invalid HTTP status.
 
-**How to resolve:** Ensure endpoint handlers return a status between 100 and 599.
+**How to resolve:** Return a status between 100 and 599 from endpoint handlers.
 
 <div data-pagefind-ignore>
 

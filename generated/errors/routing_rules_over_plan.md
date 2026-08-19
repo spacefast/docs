@@ -5,7 +5,7 @@ description: "The published _redirects and _headers exceed the plan's routing-ru
 
 The published _redirects and _headers exceed the plan's routing-rule allowance.
 
-**How to resolve:** Reduce the rule count. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Reduce the rule count. If you still need more rules, POST to `/v1/feedback` with the error code and the `requestId`.
 
 <div data-pagefind-ignore>
 

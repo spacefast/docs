@@ -5,7 +5,7 @@ description: "The Zero runner output was not valid JSON."
 
 The Zero runner output was not valid JSON.
 
-**How to resolve:** Inspect runner stderr and rebuild the runner if the failure persists.
+**How to resolve:** Inspect runner stderr. If the failure persists, rebuild the runner.
 
 <div data-pagefind-ignore>
 

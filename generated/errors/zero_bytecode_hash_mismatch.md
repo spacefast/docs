@@ -5,7 +5,7 @@ description: "The Zero endpoint bytecode hash does not match its artifact metada
 
 The Zero endpoint bytecode hash does not match its artifact metadata.
 
-**How to resolve:** Rebuild and republish so bytecode and endpoint metadata are from the same build.
+**How to resolve:** Rebuild and publish again so bytecode and endpoint metadata are from the same build.
 
 <div data-pagefind-ignore>
 

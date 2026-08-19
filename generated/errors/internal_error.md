@@ -5,7 +5,7 @@ description: "Something went wrong on our side."
 
 Something went wrong on our side.
 
-**How to resolve:** Retry the request. If it persists, contact support with the requestId.
+**How to resolve:** Retry the request. If the error persists, contact support with the requestId.
 
 <div data-pagefind-ignore>
 

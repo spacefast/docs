@@ -86,7 +86,7 @@ Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on
 
 - Keep MCP discovery, code-mode guidance, and demo receipts consistently branded as Spacefast.
 - Wait for durable hosted MCP session closure before acknowledging DELETE requests.
-- Replace Spacefast's custom code execution, durable run, and approval stack with Executor's QuickJS runtime and OpenAPI-generated tool surface. Mutating calls now pause and resume through Executor elicitation; legacy execution and approval APIs are removed.
+- Replace Spacefast's custom code execution, durable run, and approval stack with a sandboxed QuickJS runtime and an OpenAPI-generated tool surface. Mutating calls now pause and resume through elicitation; legacy execution and approval APIs are removed.
 - Make hosted MCP execution deadlines abort in-flight work, report shell failures, recover expired replay checkpoints, and expose durable execution polling.
 - Add Railway-style agent setup with repeated client targeting, optional project-scoped skills, integrated auth health, safe install/update/removal, popular agent consumers, local/remote-proxy/remote-OAuth connection methods, and direct variable, domain, and repository MCP lifecycle tools.
 - Add the Spacefast-native code-mode workflow, emitted files, and current approval-resume semantics.
@@ -121,7 +121,7 @@ Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on
 
 ## 0.0.7
 
-- Removed the deprecated `search` tool — use `search_docs` instead.
+- Removed the deprecated `search` tool. Use `search_docs` instead.
 - Unknown tool presets now return a clear error.
 
 ## 0.0.6

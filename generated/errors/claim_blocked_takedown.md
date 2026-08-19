@@ -5,7 +5,7 @@ description: "This space is under an abuse takedown and cannot be claimed."
 
 This space is under an abuse takedown and cannot be claimed.
 
-**How to resolve:** Contact support if you believe the takedown is a mistake.
+**How to resolve:** If you believe the takedown is a mistake, contact support.
 
 <div data-pagefind-ignore>
 

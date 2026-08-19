@@ -5,7 +5,7 @@ description: "The space reference matches more than one accessible space."
 
 The space reference matches more than one accessible space.
 
-**How to resolve:** Use the spc_ id, or scope the reference with a teamRef.
+**How to resolve:** Use the `spc_` id, or scope the reference with a `teamRef`.
 
 <div data-pagefind-ignore>
 

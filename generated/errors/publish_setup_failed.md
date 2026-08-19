@@ -5,7 +5,7 @@ description: "Provisioning for this publish failed."
 
 Provisioning for this publish failed.
 
-**How to resolve:** Retry the publish. If it persists, contact support with the requestId.
+**How to resolve:** Retry the publish. If the error persists, contact support with the `requestId`.
 
 <div data-pagefind-ignore>
 

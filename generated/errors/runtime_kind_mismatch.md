@@ -5,7 +5,7 @@ description: "This operation is only available for a different runtime kind."
 
 This operation is only available for a different runtime kind.
 
-**How to resolve:** Check `sf runtime status` for what the live version actually runs, then use the surface that runtime supports.
+**How to resolve:** Check `sf runtime status` for what the live version actually runs, then use the operations that runtime supports.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The configuration names a template file the version does not conta
 
 The configuration names a template file the version does not contain.
 
-**How to resolve:** Upload the file or remove its templates entry from sf.jsonc.
+**How to resolve:** Upload the file or remove its `templates` entry from `sf.jsonc`.
 
 <div data-pagefind-ignore>
 

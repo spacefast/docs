@@ -5,7 +5,7 @@ description: "The runtime management endpoint was not found."
 
 The runtime management endpoint was not found.
 
-**How to resolve:** Send the request with the management hostname as the Host header. Management routes are not served on public hostnames.
+**How to resolve:** Send the request with the management hostname as the Host header. Spacefast does not serve management routes on public hostnames.
 
 <div data-pagefind-ignore>
 

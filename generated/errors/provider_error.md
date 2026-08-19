@@ -5,7 +5,7 @@ description: "WP Cloud reported an error."
 
 WP Cloud reported an error.
 
-**How to resolve:** Retry. If the error persists, contact support with the requestId.
+**How to resolve:** Retry. If the error persists, contact support with the `requestId`.
 
 <div data-pagefind-ignore>
 

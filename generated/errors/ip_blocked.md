@@ -5,7 +5,7 @@ description: "Requests from this IP address are blocked for abuse or policy reas
 
 Requests from this IP address are blocked for abuse or policy reasons.
 
-**How to resolve:** Contact support with your IP address if you believe this block is in error.
+**How to resolve:** If you believe this block is a mistake, contact support with your IP address.
 
 <div data-pagefind-ignore>
 

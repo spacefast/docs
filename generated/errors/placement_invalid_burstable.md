@@ -5,7 +5,7 @@ description: "The placement burstable option was used with an unsupported placem
 
 The placement burstable option was used with an unsupported placement mode.
 
-**How to resolve:** Set placement.mode to "dedicated" before setting placement.burstable, or remove the burstable option.
+**How to resolve:** Set `placement.mode` to `"dedicated"` before setting `placement.burstable`, or remove the burstable option.
 
 <div data-pagefind-ignore>
 

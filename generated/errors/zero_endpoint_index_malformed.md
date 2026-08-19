@@ -5,7 +5,7 @@ description: "The Zero endpoint index cannot be parsed."
 
 The Zero endpoint index cannot be parsed.
 
-**How to resolve:** Rebuild the generated endpoint index and redeploy.
+**How to resolve:** Rebuild the generated endpoint index and publish again.
 
 <div data-pagefind-ignore>
 

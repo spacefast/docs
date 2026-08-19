@@ -5,10 +5,10 @@ description: "Every Spacefast API error is a problem document with a stable code
 
 Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`).
 It carries a stable `code` and a `type` URI that links to one of the pages below. Match on
-`code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
-Retired codes leave with their owning API surface.
+`code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
+Retired codes leave with the API that owns them.
 
-There are 456 error codes in the registry.
+There are 458 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -23,7 +23,7 @@ There are 456 error codes in the registry.
 | [`ambiguous_space_slug`](/errors/ambiguous_space_slug) | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
 | [`anonymous_expired`](/errors/anonymous_expired) | This anonymous space expired before it was claimed. |
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
-| [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed Spaces. |
+| [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed spaces. |
 | [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
@@ -37,6 +37,7 @@ There are 456 error codes in the registry.
 | [`build_no_index_html`](/errors/build_no_index_html) | The build produced output but no index.html at the site root. |
 | [`build_not_created`](/errors/build_not_created) | The build cannot be created. |
 | [`build_oom`](/errors/build_oom) | The build process was killed, most likely after running out of memory. |
+| [`build_output_contains_server_bundle`](/errors/build_output_contains_server_bundle) | The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download. |
 | [`build_output_dir_missing`](/errors/build_output_dir_missing) | The build finished but its output directory was not produced. |
 | [`build_timeout`](/errors/build_timeout) | The build exceeded its time limit before producing a version. |
 | [`cache_purge_domain_required`](/errors/cache_purge_domain_required) | A purge request must name the domain to purge. |
@@ -193,6 +194,7 @@ There are 456 error codes in the registry.
 | [`plan_grant_already_revoked`](/errors/plan_grant_already_revoked) | This plan grant was already revoked. |
 | [`platform_tenant_immutable_client`](/errors/platform_tenant_immutable_client) | The tenant's provider client cannot be changed. |
 | [`policy_exceeds_grantor`](/errors/policy_exceeds_grantor) | The requested key policy grants more than your own credential allows. |
+| [`prebuilt_metadata_invalid`](/errors/prebuilt_metadata_invalid) | The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown. |
 | [`principal_space_mismatch`](/errors/principal_space_mismatch) | The space does not belong to the principal in the request. |
 | [`promote_admission_exceeded`](/errors/promote_admission_exceeded) | Too many archived files are being restored for this space right now. |
 | [`provider_error`](/errors/provider_error) | WP Cloud reported an error. |

@@ -5,7 +5,7 @@ description: "The hosted Zero runtime cannot fetch realtime replay events."
 
 The hosted Zero runtime cannot fetch realtime replay events.
 
-**How to resolve:** Retry shortly. Check the central realtime and control-plane logs if it persists.
+**How to resolve:** Retry shortly. If the failure persists, check the central realtime and control-plane logs.
 
 <div data-pagefind-ignore>
 

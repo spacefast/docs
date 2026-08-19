@@ -5,7 +5,7 @@ description: "The archive's compression ratio is suspiciously high and was rejec
 
 The archive's compression ratio is suspiciously high and was rejected.
 
-**How to resolve:** Repackage the content without highly-compressible filler data.
+**How to resolve:** Repackage the content without highly compressible filler data.
 
 <div data-pagefind-ignore>
 

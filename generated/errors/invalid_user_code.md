@@ -5,7 +5,7 @@ description: "The user code does not match a pending device login."
 
 The user code does not match a pending device login.
 
-**How to resolve:** Enter the code exactly as shown by your CLI. Codes expire after a few minutes.
+**How to resolve:** Enter the code exactly as your CLI shows it. Codes expire after a few minutes.
 
 <div data-pagefind-ignore>
 

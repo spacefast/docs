@@ -5,7 +5,7 @@ description: "The space is not disabled, so it cannot be restored."
 
 The space is not disabled, so it cannot be restored.
 
-**How to resolve:** No action needed. The space is already active.
+**How to resolve:** No action is needed. The space is already active.
 
 <div data-pagefind-ignore>
 

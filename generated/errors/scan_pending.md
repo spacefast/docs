@@ -5,7 +5,7 @@ description: "The content is still being scanned for safety and cannot be served
 
 The content is still being scanned for safety and cannot be served yet.
 
-**How to resolve:** Wait for the scan to finish. Serving resumes automatically once it clears.
+**How to resolve:** Wait for the scan to finish. Serving resumes automatically once the scan clears.
 
 <div data-pagefind-ignore>
 

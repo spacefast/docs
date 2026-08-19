@@ -5,7 +5,7 @@ description: "`sf dev` cannot run this runtime locally yet."
 
 `sf dev` cannot run this runtime locally yet.
 
-**How to resolve:** Run your framework's own dev server (`next dev`, `vite`, …) and publish with `sf publish` when you are ready.
+**How to resolve:** Run your framework's own dev server, such as `next dev` or `vite`. When you are ready, publish with `sf publish`.
 
 <div data-pagefind-ignore>
 

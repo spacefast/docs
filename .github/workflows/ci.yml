@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -64,14 +67,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Mint monorepo dispatch token
+      - name: Mint Website dispatch token
         id: app-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           owner: spacefast
-          repositories: monorepo
+          repositories: www
           permission-contents: write
 
       - name: Notify the Website publisher
@@ -79,7 +82,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           DOCS_SHA: ${{ github.sha }}
         run: |
-          gh api --method POST repos/spacefast/monorepo/dispatches \
+          gh api --method POST repos/spacefast/www/dispatches \
             --field event_type=docs-updated \
             --field "client_payload[repository]=spacefast/docs" \
             --field "client_payload[sha]=$DOCS_SHA"

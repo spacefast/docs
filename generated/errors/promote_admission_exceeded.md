@@ -5,7 +5,7 @@ description: "Too many archived files are being restored for this space right no
 
 Too many archived files are being restored for this space right now.
 
-**How to resolve:** Retry shortly; restores are limited to protect the host.
+**How to resolve:** Retry shortly. Spacefast limits restores to protect the host.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The PHP bridge cannot encode the Zero runner request envelope."
 
 The PHP bridge cannot encode the Zero runner request envelope.
 
-**How to resolve:** Retry with valid request data. Report the issue if it persists.
+**How to resolve:** Retry with valid request data. If the issue persists, report it.
 
 <div data-pagefind-ignore>
 

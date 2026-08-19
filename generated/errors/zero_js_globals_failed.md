@@ -5,7 +5,7 @@ description: "The Zero runner cannot install runtime globals for the endpoint."
 
 The Zero runner cannot install runtime globals for the endpoint.
 
-**How to resolve:** Rebuild with a current runner and report the failure if it repeats.
+**How to resolve:** Rebuild with a current runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 

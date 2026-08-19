@@ -5,7 +5,7 @@ description: "No Zero database URL is configured."
 
 No Zero database URL is configured.
 
-**How to resolve:** Configure DATABASE_URL or finalize the version with database connection variables.
+**How to resolve:** Configure `DATABASE_URL` or finalize the version with database connection variables.
 
 <div data-pagefind-ignore>
 

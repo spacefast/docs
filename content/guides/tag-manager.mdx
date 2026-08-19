@@ -1,0 +1,141 @@
+---
+title: Tag Manager
+sidebar:
+  badge: Beta
+description: Version, review, preview, and release analytics or marketing tags without republishing a space.
+---
+
+:::note[Early access]
+Tag Manager is a private beta. Spacefast enables the `tags` feature per team
+on request. The CLI hides `sf tags` from help until you set
+`SPACEFAST_CLI_EARLY_ACCESS=tags`, but the commands run either way. The API
+returns `feature_unavailable` until the team has the feature.
+:::
+
+Spacefast Tag Manager keeps analytics and marketing code out of page templates.
+You create an immutable tag version, validate it, review the diff, then point
+an environment at the approved version. A release or a rollback of tags
+does not republish the space. This page shows the CLI. The dashboard mirrors
+the same workflow under **Integrations**.
+
+## Start with a template
+
+List the built-in providers and event presets:
+
+```bash
+sf tags templates
+```
+
+Create a Google Analytics draft:
+
+```bash
+sf tags versions create --space docs --template google-analytics --field measurementId=G-1234567890 --title "Add analytics"
+```
+
+The template supplies the provider script, default trigger, and consent
+category.
+
+## Validate and review
+
+Validate the immutable draft before you submit it:
+
+```bash
+sf tags versions validate tver_123 --space docs
+```
+
+Validation checks the graph shape, script hosts, consent requirements, trigger
+references, budgets, and the space's review policy.
+
+Inspect its effective diff:
+
+```bash
+sf tags versions diff tver_123 --space docs
+```
+
+When the space requires approval, submit the version for review:
+
+```bash
+sf tags versions submit tver_123 --space docs
+```
+
+Approve the submitted version:
+
+```bash
+sf tags versions approve tver_123 --space docs
+```
+
+A release cannot bypass a required approval.
+
+## Release and roll back
+
+Point production at an approved version:
+
+```bash
+sf tags releases set production tver_123 --space docs
+```
+
+To target another environment, use `preview` or `development` instead of
+`production`. In automation, pass `--expected-current-version` so concurrent changes fail
+instead of overwriting each other.
+
+Roll production back to a known version:
+
+```bash
+sf tags releases rollback production tver_122 --space docs
+```
+
+List release pointers:
+
+```bash
+sf tags releases --space docs
+```
+
+## Preview a draft
+
+A debug session previews a draft version on one page through a signed,
+no-store URL, without changing any release pointer:
+
+```bash
+sf tags debug --space docs --version tver_123 --url https://docs.view.fast
+```
+
+When you finish the review, revoke the session:
+
+```bash
+sf tags debug --space docs --version tver_123 --revoke-session tgp_123
+```
+
+## Declarative configuration
+
+Keep a desired graph in `spacefast.tags.json`:
+
+```json
+{
+  "templates": [
+    {
+      "templateId": "google-tag-manager",
+      "config": { "containerId": "GTM-1234567" }
+    }
+  ],
+  "eventPresets": ["page_view", "outbound_click"]
+}
+```
+
+Apply it as a validated draft:
+
+```bash
+sf tags apply spacefast.tags.json --space docs
+```
+
+Submit and release in one policy-checked operation:
+
+```bash
+sf tags apply spacefast.tags.json --space docs --submit --release production
+```
+
+## Consent
+
+Templates declare one or more consent categories: `necessary`, `functional`,
+`analytics`, or `marketing`. Optional tags stay blocked until the visitor
+grants their categories. Browser privacy signals and explicit denials still
+take precedence.

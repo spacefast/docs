@@ -5,7 +5,7 @@ description: "The Zero runner received an unsupported invoke protocol."
 
 The Zero runner received an unsupported invoke protocol.
 
-**How to resolve:** Rebuild and redeploy so the PHP bridge and Rust runner versions match.
+**How to resolve:** Rebuild and publish again so the PHP bridge and Rust runner versions match.
 
 <div data-pagefind-ignore>
 

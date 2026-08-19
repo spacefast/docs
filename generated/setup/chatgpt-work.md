@@ -1,15 +1,15 @@
 ---
 title: "Connect ChatGPT Work to Spacefast"
-description: "Install the Spacefast plugin — or an admin deploys it once and the whole workspace can publish."
+description: "The Spacefast plugin brings publishing to every ChatGPT Work conversation."
 ---
 
-Install the Spacefast plugin — or an admin deploys it once and the whole workspace can publish.
+The Spacefast plugin brings publishing to every ChatGPT Work conversation.
 
-**Plugin** — Install Spacefast from the Plugin Directory: open Plugins, search “Spacefast”, press +, then start a new chat. Skills plus the connector in one install.
+**Plugin.** One install adds the skills and the connector. Install Spacefast from the Plugin Directory: open Plugins, search "Spacefast", press +, and then start a new chat.
 
 ## Other ways to connect
 
-**Workspace app (admin, once)** — An admin adds Spacefast as a workspace app with the hosted endpoint and deploys it to the team — members need no setup at all.
+**Workspace app.** An admin adds Spacefast once as a workspace app with the hosted endpoint and deploys it to the team. Members need no setup.
 
 ```text
 https://mcp.spacefast.com

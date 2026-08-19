@@ -5,7 +5,7 @@ description: "Two different artifacts would serve the same URL after directory-i
 
 Two different artifacts would serve the same URL after directory-index or clean-URL resolution.
 
-**How to resolve:** Rename or remove one artifact so every request route has one owner.
+**How to resolve:** Rename or remove one artifact so that every request route has one owner.
 
 <div data-pagefind-ignore>
 

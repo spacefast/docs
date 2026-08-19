@@ -5,7 +5,7 @@ description: "The connected DNS provider cannot apply this batch with the requir
 
 The connected DNS provider cannot apply this batch with the required semantics.
 
-**How to resolve:** Split the change or use a provider/zone that supports atomic batch writes.
+**How to resolve:** Split the change, or use a provider or zone that supports atomic batch writes.
 
 <div data-pagefind-ignore>
 

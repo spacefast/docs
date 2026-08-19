@@ -5,7 +5,7 @@ description: "The hostname is not assigned to a runtime, so the request cannot b
 
 The hostname is not assigned to a runtime, so the request cannot be routed.
 
-**How to resolve:** Verify the binding is active and DNS points at Spacefast.
+**How to resolve:** Verify that the binding is active and that DNS points at Spacefast.
 
 <div data-pagefind-ignore>
 

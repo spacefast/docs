@@ -5,7 +5,7 @@ description: "The version is referenced by one or more channels and cannot be de
 
 The version is referenced by one or more channels and cannot be deleted.
 
-**How to resolve:** Promote another version on those channels first. Details lists them.
+**How to resolve:** Promote another version on those channels first. The `details` field lists them.
 
 <div data-pagefind-ignore>
 

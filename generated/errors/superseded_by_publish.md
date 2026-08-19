@@ -5,7 +5,7 @@ description: "A newer publish superseded this operation, so it was skipped."
 
 A newer publish superseded this operation, so it was skipped.
 
-**How to resolve:** No action needed. The newer publish already carries the change.
+**How to resolve:** No action is needed. The newer publish already carries the change.
 
 <div data-pagefind-ignore>
 

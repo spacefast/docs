@@ -5,7 +5,7 @@ description: "Too many concurrent uploads for this space."
 
 Too many concurrent uploads for this space.
 
-**How to resolve:** Wait for the Retry-After window, then resume; at most 4 uploads run per space at once.
+**How to resolve:** Wait for the Retry-After window, then resume. At most 4 uploads run per space at once.
 
 <div data-pagefind-ignore>
 

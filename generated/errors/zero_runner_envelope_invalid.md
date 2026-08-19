@@ -5,7 +5,7 @@ description: "The Zero runner request envelope is malformed."
 
 The Zero runner request envelope is malformed.
 
-**How to resolve:** Use the generated runtime bridge and redeploy if generated files are stale.
+**How to resolve:** Use the generated runtime bridge. If generated files are stale, publish again.
 
 <div data-pagefind-ignore>
 

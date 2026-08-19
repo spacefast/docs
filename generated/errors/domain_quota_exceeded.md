@@ -5,7 +5,7 @@ description: "Adding this domain would exceed the plan's external domain allowan
 
 Adding this domain would exceed the plan's external domain allowance.
 
-**How to resolve:** Remove unused domains. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Remove unused domains. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 

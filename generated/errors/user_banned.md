@@ -5,7 +5,7 @@ description: "This user is banned for a policy or abuse violation and cannot per
 
 This user is banned for a policy or abuse violation and cannot perform this action.
 
-**How to resolve:** Contact support to appeal the ban if you believe it is a mistake.
+**How to resolve:** If you believe the ban is a mistake, contact support to appeal it.
 
 <div data-pagefind-ignore>
 

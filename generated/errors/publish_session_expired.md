@@ -5,7 +5,7 @@ description: "This publish session expired before it was finalized."
 
 This publish session expired before it was finalized.
 
-**How to resolve:** Start a new publish; declared uploads are kept for 24 hours only.
+**How to resolve:** Start a new publish. Spacefast keeps declared uploads for 24 hours only.
 
 <div data-pagefind-ignore>
 

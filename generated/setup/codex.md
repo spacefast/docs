@@ -1,11 +1,11 @@
 ---
 title: "Connect Codex to Spacefast"
-description: "One paste and Codex can publish, with the plugin kept fresh from the marketplace."
+description: "One paste installs the plugin — the publish skill plus MCP tools in one go."
 ---
 
-One paste and Codex can publish, with the plugin kept fresh from the marketplace.
+One paste installs the plugin, which adds the publish skill and the MCP tools.
 
-**Plugin** — The $spacefast skill plus MCP in one install — or type /plugins inside Codex and pick Spacefast.
+**Plugin.** One install adds the `$spacefast` skill and the MCP tools. You can also type `/plugins` inside Codex and pick Spacefast.
 
 ```bash
 codex plugin marketplace add spacefast/plugins && codex plugin add spacefast@spacefast
@@ -13,7 +13,7 @@ codex plugin marketplace add spacefast/plugins && codex plugin add spacefast@spa
 
 ## Other ways to connect
 
-**Hosted MCP only** — One command plus a browser sign-in — tools without the $spacefast skill.
+**Hosted MCP only.** One command plus a browser sign-in adds the tools without the `$spacefast` skill.
 
 ```bash
 codex mcp add spacefast --url https://mcp.spacefast.com && codex mcp login spacefast

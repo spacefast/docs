@@ -5,7 +5,7 @@ description: "A compiled response table exceeded the 1 MiB per-file limit."
 
 A compiled response table exceeded the 1 MiB per-file limit.
 
-**How to resolve:** This version has an unusually dense path set; contact support with the requestId.
+**How to resolve:** This version has an unusually dense path set. Contact support with the `requestId`.
 
 <div data-pagefind-ignore>
 

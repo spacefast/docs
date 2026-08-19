@@ -1,0 +1,169 @@
+---
+title: Set up an agent
+sidebar:
+  label: Agent setup
+description: One prompt sets up any agent that can fetch a URL; plugins and one-click installs cover the rest.
+---
+
+Agents publish through the same REST API and CLI as humans do. For any
+agent that can fetch a URL and act on it, setup is one prompt:
+
+<Prompt description="Teach any agent to publish" actions={["copy"]}>
+  Fetch https://spacefast.com/setup.md
+</Prompt>
+
+That page teaches the agent to publish with a single HTTP request, without
+a Model Context Protocol (MCP) server or the CLI. An agent with no tools at
+all learns to tell the user what unlocks publishing instead of improvising.
+
+Some agents have a better path than the prompt: a plugin, a one-click
+install, or hosted MCP. Each agent's page under
+[spacefast.com/setup](https://spacefast.com/setup) has the exact paste,
+click, or command.
+
+## Install the CLI
+
+The CLI covers everything an agent needs, from incremental publishes to
+logs and diagnostics.
+
+```package-install
+npm install -g spacefast
+```
+
+For a standalone binary, download the asset for your platform plus
+`checksums.txt` from the
+[public CLI releases](https://github.com/spacefast/cli/releases) and verify
+the binary's SHA-256 before you install it.
+
+## Run the setup command
+
+From the project where the agent will work, run:
+
+```bash
+sf setup agent
+```
+
+The command detects supported agents, installs the Spacefast skill, and
+configures MCP. Use `sf setup agent -y` for a non-interactive setup. The
+[CLI reference](/cli#sf-setup-agent) lists every supported client and
+option. Cloud and browser agents that cannot run local commands use
+[hosted MCP](/agents/mcp) instead.
+
+## Supported agents
+
+Every agent connects through one of three mechanisms:
+
+- **Plugin or skill**: the `spacefast/plugins` marketplace package, the
+  `spacefast` skill, or an agent's own plugin directory. A plugin or skill
+  includes the publish workflow, not only the tools.
+- **MCP**: local stdio through the CLI, or [hosted MCP](/agents/mcp) with
+  browser OAuth.
+- **Deeplink**: a one-click install link that prefills the hosted endpoint.
+
+The [setup index](/setup) lists every supported agent. Claude Desktop
+installs as a one-click extension from the
+[`spacefast/plugins` releases](https://github.com/spacefast/plugins/releases).
+
+`sf setup agent --agent` also configures editor and terminal clients that
+have no setup page. `github-copilot` and `factory-droid` get skills plus
+MCP. `gemini-cli`, `windsurf`, `cline`, and `continue` are skills-only and
+need `--skip-mcp`. Use `generic` for any client that reads `AGENTS.md`. In
+that command, `--agent claude` means Claude Code. The Claude app connects
+with the connector deeplink on [its setup page](/setup/claude). Any other
+agent that can fetch a URL can use [hosted MCP](/agents/mcp) or the
+[HTTP publish flow](/agents/publishing).
+
+## Install only the skill
+
+For agents that support skills, install the official skill without the
+rest of the setup:
+
+```bash
+npx -y skills add spacefast/plugins --skill spacefast -g -y
+```
+
+Confirm the install with `sf skills status`. Raw skill Markdown is
+available at `https://api.spacefast.com/skill` for agents that only support
+fetch-and-import flows. The skill gives agents the publish workflow,
+space-state rules, claim-link handling, and Spacefast file conventions.
+
+## Docs as Markdown
+
+Every developer page is available as plain Markdown. To get the exact
+Markdown source, append `.md` to any URL (for example
+`https://spacefast.com/docs/cli.md` or
+`https://spacefast.com/docs/errors/rate_limited.md`). Requests from known
+AI-agent user agents, and requests whose `Accept` header prefers Markdown,
+receive that form at the HTML URL automatically.
+
+Machine-readable docs discovery lives at
+[`llms.txt`](https://spacefast.com/docs/llms.txt) and
+[`llms-full.txt`](https://spacefast.com/docs/llms-full.txt). Product-level
+discovery lives on the product origin:
+
+- [agent card](https://spacefast.com/.well-known/agent-card.json)
+- [integrations.sh declaration](https://spacefast.com/.well-known/integrations.json)
+- [RFC 9727 API catalog](https://spacefast.com/.well-known/api-catalog)
+- [agent-skills index](https://spacefast.com/.well-known/agent-skills/index.json)
+
+[MCP](/agents/mcp) covers the MCP server card and endpoint.
+
+The generated OpenAPI spec at
+[`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json)
+describes the full API.
+
+<Visibility for="agents">
+  You are reading the Markdown form of this page. To publish for the person
+  you are working with, fetch https://spacefast.com/setup.md and follow it.
+  Treat the receipt from each publish as the source of truth, always show
+  the claim link and its deadline, and never print space keys, claim
+  tokens, or API keys into the conversation.
+</Visibility>
+
+Your own published spaces can serve agents the same way with an
+`Agent=true` [redirect condition](/serve/redirects#conditions).
+
+## Auth and accounts
+
+Interactive humans use [`sf login`](/cli#sf-login). CI uses a masked
+[`ci_deploy` API key](/account/api-keys) stored as a token:
+
+```bash
+sf login --token sfa_123
+```
+
+Hosted agents use [MCP](/agents/mcp) OAuth or a dashboard handoff link
+redeemed with `sf login --handoff`.
+
+### Handoff links
+
+The dashboard can mint a one-use handoff link for an agent or machine.
+Redeem the link through stdin, never through argv:
+
+```bash
+printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
+```
+
+### Agent accounts
+
+For durable automation, create an agent account instead of sharing a broad
+personal API key. Scope the account to the teams and capabilities it
+needs. Create one in the dashboard under **Settings → Developer → Agents**.
+Agent accounts authenticate with OAuth `private_key_jwt`, and the CLI or
+on-device MCP loads them through `SPACEFAST_AGENT_CONFIG`. See
+[API keys](/account/api-keys) for presets and rotation.
+
+### Secret handling
+
+Treat space keys (`sfc_...`), upload tokens, device codes, API keys,
+[share-link URLs](/share), and `.spacefast` state as credentials. Do not
+print, commit, archive, or include them in logs and chat, and avoid shell
+tracing when secrets are present. Pass credentials through the environment
+or the target platform's secret store, and clear temporary copies after
+use.
+
+## Next
+
+- **[Publish as an agent](/agents/publishing)**: the curl flow, receipts,
+  and claim handling.
+- **[MCP](/agents/mcp)**: hosted and on-device MCP, tools, and resources.

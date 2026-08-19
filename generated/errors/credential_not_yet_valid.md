@@ -5,7 +5,7 @@ description: "The credential is not valid yet because its start time is in the f
 
 The credential is not valid yet because its start time is in the future.
 
-**How to resolve:** Wait until the credential's notBefore time, or adjust it.
+**How to resolve:** Wait until the credential's notBefore time, or adjust the notBefore value.
 
 <div data-pagefind-ignore>
 

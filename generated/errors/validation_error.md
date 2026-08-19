@@ -5,7 +5,7 @@ description: "A request field failed validation."
 
 A request field failed validation.
 
-**How to resolve:** Fix the field referenced by pointer and details, then retry.
+**How to resolve:** Fix the field referenced by `pointer` and `details`, then retry.
 
 <div data-pagefind-ignore>
 

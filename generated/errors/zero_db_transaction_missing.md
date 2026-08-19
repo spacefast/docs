@@ -5,7 +5,7 @@ description: "The Zero runner tried to finish a database transaction that was no
 
 The Zero runner tried to finish a database transaction that was not active.
 
-**How to resolve:** Rebuild with the current Zero runner and report the failure if it repeats.
+**How to resolve:** Rebuild with the current Zero runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 

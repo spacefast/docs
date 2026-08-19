@@ -2,25 +2,22 @@
 title: REST API
 sidebar:
   label: REST API guide
-description: "How the Spacefast REST API works: auth, the response envelope, publishing, versions, idempotency, errors, and a link to the full reference."
+description: Learn how the Spacefast REST API handles authentication, responses, publishing, versions, idempotency, and errors.
 ---
 
-Everything Spacefast does is one REST API at `https://api.spacefast.com`. The
-dashboard, the CLI, and agents all speak it. The
-[full endpoint reference](/api/reference) lists every operation, parameter, and
-schema.
+Everything Spacefast does is one REST API at `https://api.spacefast.com`.
+This page explains how the API behaves; the
+[full endpoint reference](/api/reference) lists every operation, parameter,
+and schema.
 
-## The shape of every response
+## The response envelope
 
 Successes carry `{ "data": ... }`. Failures are RFC 9457 problem documents
-served as `application/problem+json`: the body is the problem document itself.
-It always has a stable machine-readable `code`, a `type` URL that points at
-that code's reference page, and a `requestId` for support. Validation failures
-add `pointer`, an RFC 6901 JSON Pointer to the failing field.
-
-Match on `code`, never on `detail`. Messages may improve over time; Spacefast
-never renames or removes a code. The [error reference](/errors) lists every
-code.
+served as `application/problem+json`, and the body is the problem document
+itself. It carries a stable machine-readable `code`, a `type` URL that
+points at that code's reference page, and a `requestId` for support.
+Validation failures add `pointer`, an RFC 6901 JSON Pointer to the failing
+field.
 
 ```json
 {
@@ -33,6 +30,10 @@ code.
 }
 ```
 
+Match on `code`, never on `detail`. Messages might improve over time, but
+Spacefast never renames or removes a code. The [error reference](/errors)
+lists every code.
+
 ## Authentication
 
 Send an API key as a bearer token:
@@ -42,21 +43,21 @@ Authorization: Bearer $SPACEFAST_TOKEN
 ```
 
 Create keys in the dashboard or with `sf api-keys create`. The
-`--preset ci_deploy` flag mints a least-privilege key for pipelines. Spacefast
-shows the key only once. Presets, rotation, and CI vs agent guidance live on
-[API keys](/account/api-keys).
+`--preset ci_deploy` flag mints a least-privilege key for pipelines, and
+Spacefast shows the key only once. For presets, rotation, and credential
+guidance for CI and agents, see [API keys](/account/api-keys).
 
 One call works without any token: an anonymous `POST /v1/publish` creates a
-brand-new space. The receipt carries a **space key** (`sfc_...`) in
-`data.claim.key`. That key is the bearer credential for that single space. It
-works until you claim the space.
+brand-new space, and the receipt carries a **space key** (`sfc_...`) in
+`data.claim.key`. That key is the bearer credential for that single space
+until you claim it.
 
 ## Publish
 
-`POST /v1/publish` takes a single file, a multipart form of files, or a zip
-archive, and returns the whole receipt in one request. The receipt carries the
-live URL and the permanent version URL. For an anonymous publish, it also
-carries the claim link.
+`POST /v1/publish` takes a single file, a multipart form of files, or a
+zip archive, and returns the whole receipt in one request: the live URL,
+the permanent version URL, and, for an anonymous publish, the claim
+link.
 
 ```bash
 curl -F archive=@site.zip https://api.spacefast.com/v1/publish
@@ -69,56 +70,75 @@ For large uploads and incremental publishes, create a version explicitly:
 3. Upload the bytes
 4. Finalize the version
 
-The CLI uses this flow. It never re-uploads an unchanged file, and it matches
-files by `sha256` and size. Both flows produce the same versions and the same
-receipt shape.
+The CLI uses this flow, matching files by `sha256` and size so an unchanged
+file is never re-uploaded. Both flows produce the same versions and the
+same receipt shape.
 
 ## Everything is a version
 
-Every publish freezes an immutable version, and the live URL is a pointer that
-moves atomically. See [Versions and channels](/publishing/channels). To roll
-back, send a `POST` that promotes an earlier version: a pointer flip, not a
-re-upload. Version lists, diffs, and logs are all plain GET requests.
+Every publish freezes an immutable version, and the live URL is a pointer
+that moves atomically (see [Versions and channels](/publish/versions)). To
+roll back, send a `POST` that promotes an earlier version; nothing is
+re-uploaded. Version lists, diffs, and logs are plain GET requests.
 
 ## Idempotency and retries
 
-Mutating requests honor an `Idempotency-Key` header. If you retry a request with
-the same key, Spacefast returns the original result. It does not repeat the side
-effect. If you publish identical content, that is a recognized no-op success
-(`noop_publish`), not a wasted version.
+`POST /v1/publish` honors an `Idempotency-Key` header: retrying a publish
+with the same key returns the original result without repeating the side
+effect. Publishing identical content is a recognized no-op success
+(`noop_publish`) rather than a wasted version.
 
 ## Long-running operations
 
-Some mutations outlive the request. Renames, settings applies, transfers, and
-domain changes return an operation that you poll until it finishes.
-
-The CLI covers this with `sf operations`: list recent async operations, or
-read one by ID. Pass `--space` to scope the list to a space.
+Some mutations outlive the request. Renames, settings applies, transfers,
+and domain changes return an operation that you poll until it finishes. The
+CLI covers this with `sf operations`. List recent async operations, or
+read one by ID; `--space` scopes the list:
 
 ```bash
 sf operations --space spc_123
 ```
 
+## Call anything with `sf api`
+
+`sf api` sends a signed request to any endpoint with the CLI's resolved
+credentials. Use it for endpoints without a dedicated command. Pass a path
+for a GET, or a method and a path; `--input` supplies a JSON body, and
+`--paginate` emits every page of a cursor-list GET as JSON Lines:
+
+```bash
+sf api /v1/me
+sf api POST /v1/publish --input @publish.json --idempotency-key 01J-logical-attempt
+```
+
+JSON envelopes print verbatim. A non-JSON response needs an explicit
+destination: `--output` for a file or `--raw-stdout` for stdout.
+
 ## Limits
 
-Spacefast enforces rate limits and plan quotas per account. Rate-limited
-responses return a problem document with a `Retry-After` header.
-
-During maintenance windows, mutating requests return `503` with code
-`maintenance_in_progress` and a `Retry-After` header. Reads keep working; retry
-the mutation after the header's delay.
+Spacefast enforces rate limits and plan quotas per account, and
+rate-limited responses return a problem document with a `Retry-After`
+header. During maintenance windows, mutating requests return `503` with
+code `maintenance_in_progress` and a `Retry-After` header; reads keep
+working, so retry the mutation after the header's delay.
 
 ## For agents
 
-The API has a machine-discovery surface. It includes
+Agents can discover the API through
 [`llms.txt`](https://spacefast.com/docs/llms.txt), an
 [agent card](https://spacefast.com/.well-known/agent-card.json), a publish
-skill, and a hosted MCP server with typed tools. If an agent makes the calls,
-start with [MCP](/agents/mcp) and [set up the agent](/agents) with one
-command.
+skill, and a hosted MCP server with typed tools. If an agent makes the
+calls, start with [MCP](/agents/mcp) and
+[set up the agent](/agents) with one command.
 
-## Hosting sites for your customers
+The documentation itself is searchable over the API, with no token
+required: `GET /v1/docs/search` returns ranked pages with excerpts, and
+`GET /v1/docs/page` returns one page's full Markdown by `path` or `slug`.
+Connected MCP agents get the same lookups as the `search_docs` and
+`get_page` [tools](/agents/mcp).
 
-You may host sites for **your own customers**, with your platform as a tenant
-acting on behalf of end users. That is a separate, larger surface with its own
-guide and reference. See [Platforms](/platforms).
+## Host sites for your customers
+
+You may host sites for **your own customers**, with your platform as a
+tenant acting on behalf of end users. That is a separate, larger API with
+its own guide and reference; see [Platforms](/platforms).

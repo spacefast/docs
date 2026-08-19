@@ -2,33 +2,37 @@
 title: Platforms
 sidebar:
   label: Overview
-description: "Host sites for your own customers: the tenant model, server-side keys, on-behalf-of calls, and the Platform API reference."
+description: Host sites for your own customers with the tenant model, server-side keys, and on-behalf-of calls in the Platform API.
 ---
 
-The platform surface is for companies that host many sites for **their own
-customers**. Use it for white-label static hosting behind your brand and your
-billing: you call one API, and your customer sees only you. The
+The Platform API is for companies that host many sites for **their own
+customers**. It is white-label static hosting behind your brand and your
+billing. You call one API, and your customer sees only you. The
 [Platform API reference](/platforms/api/reference) lists every operation.
 
-The Platform API is a superset of the [public REST API](/api). You get the same control plane,
-the same envelope, and the same error codes. You also get the tenant surface:
-principals and on-behalf-of calls. The public reference deliberately does not
-show that surface.
+The Platform API is a superset of the [public REST API](/api). It has the
+same control plane, the same envelope, and the same error codes, plus the
+tenant operations (principals and on-behalf-of calls) that the public
+reference deliberately does not show.
 
-## The model: tenant → space
+## The tenant and space model
 
-- **Tenant**: your platform. The boundary for keys, principals, quotas, and billing.
-- **Space**: what customers actually see: files in, live URL out, immutable versions, rollback, passwords, routing, domains.
+- **Tenant**: your platform. It is the boundary for keys, principals,
+  quotas, and billing.
+- **Space**: what your customers see. A space takes files in, serves a
+  live URL, and has immutable versions, rollback, passwords, routing,
+  and domains.
 
-Map your data model onto these two nouns once. The rest is API calls. Spaces
-on your platform have every feature that the consumer product has.
+Map your data model onto tenants and spaces once. Spaces on your platform
+have every feature that the consumer product has.
 
-## Keys and the proxy posture
+## Server-side keys
 
-Tenants authenticate **server-side** with a tenant key. Platform credentials
-belong on your server. Never send a tenant key to a browser, mobile app,
-customer site, or generated page. Tenants act on behalf of their customers by
-naming the customer as the `principal` in the request body (see below):
+Tenants authenticate **server-side** with a tenant key. Platform
+credentials belong on your server. Never send a tenant key to a browser,
+mobile app, customer site, or generated page. Tenants act on behalf of
+their customers by naming the customer as the `principal` in the request
+body:
 
 ```bash
 curl -F archive=@site.zip \
@@ -37,16 +41,17 @@ curl -F archive=@site.zip \
   https://api.spacefast.com/v1/publish
 ```
 
-End users never see Spacefast credentials. You never store per-user secrets. For
-every request, Spacefast records the acting key and the customer it acts for,
-which gives you a full audit trail. Scoping, quotas, and rate limits are per
-tenant, so one integration cannot affect another.
+End users never see Spacefast credentials, and you never store per-user
+secrets. For every request, Spacefast records the acting key and the
+customer it acts for. Scoping,
+quotas, and rate limits are per tenant, so one integration cannot affect
+another.
 
 ## Customers as principals
 
-Your customer is the principal. Some operations create or publish a customer
-resource. On those operations, include the customer as an external principal in
-the JSON body:
+Your customer is the principal. On operations that create or publish a
+customer resource, include the customer as an external principal in the
+JSON body:
 
 ```http title="Create a space for a customer"
 POST /v1/spaces
@@ -62,33 +67,36 @@ Content-Type: application/json
 }
 ```
 
-The customer ID should be your stable internal identifier. Reuse it across
-requests. The `principal` field attributes resources, quotas, and audit history
-to that customer. Store the Spacefast identifiers beside your own customer and
-project records so the mapping stays durable. Your backend calls the Platform
-API and returns only the product data your UI needs. Customers never receive
-the tenant key and do not need a separate Spacefast account.
+Use your stable internal identifier as the customer ID, and reuse it
+across requests. The `principal` field attributes resources, quotas, and
+audit history to that customer. To keep the mapping durable, store the
+Spacefast identifiers beside your own customer and project records. Your
+backend calls the Platform API and returns only the product data that
+your UI needs. Customers do not need a separate Spacefast account.
 
 ## Operational guarantees
 
-- **Idempotent provisioning**: Spacefast honors `Idempotency-Key` per tenant. A
-  retried request cannot double-provision a customer.
+- **Idempotent provisioning**: Spacefast honors `Idempotency-Key` per
+  tenant, so a retried request cannot double-provision a customer.
 - **Typed errors**: every 4xx/5xx is an RFC 9457 problem document
   (`application/problem+json`) with a stable top-level `code`, plus a
   `pointer` JSON Pointer on validation failures. Branch on `code`.
-- **Per-customer scoping**: Spacefast attributes each resource to the customer
-  principal you created it for. Listing, transfer, and cleanup are exact.
+- **Per-customer scoping**: each resource is attributed to the customer
+  principal you created it for, so listing, transfer, and cleanup are
+  exact.
 - **Downloads**: every space version can be downloaded file by file
   (`sf spaces download`), so you can offer your customers a clean exit.
 
 ## Domains at scale
 
-Use the DNS values that the API returns to attach any domain that a customer
-owns. Spacefast issues and renews certificates automatically. Live diagnostics
-report when each domain resolves, so you can show that status in your own UI.
+To attach a domain that a customer owns, use the DNS values that the API
+returns. Spacefast issues and renews certificates automatically. Live
+diagnostics report when each domain resolves, so you can show that status
+in your own UI.
 
-## Getting access
+## Get access
 
-Platform access is by conversation. We size limits, pricing, and domains to what
-you build. [Tell us what you're making](https://automattic.com/work-with-us/),
-or read the [Platform API reference](/platforms/api/reference) first.
+Spacefast sizes platform limits, pricing, and domains to what you build,
+so access starts with a conversation.
+[Tell us what you're making](https://automattic.com/work-with-us/), or read
+the [Platform API reference](/platforms/api/reference) first.

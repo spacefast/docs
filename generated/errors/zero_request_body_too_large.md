@@ -5,7 +5,7 @@ description: "The Zero request body exceeds the runtime size limit."
 
 The Zero request body exceeds the runtime size limit.
 
-**How to resolve:** Send a smaller request body or move large payloads to blob/object storage.
+**How to resolve:** Send a smaller request body or move large payloads to blob or object storage.
 
 <div data-pagefind-ignore>
 

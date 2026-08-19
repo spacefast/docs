@@ -5,7 +5,7 @@ description: "The publish carries configuration this endpoint does not support."
 
 The publish carries configuration this endpoint does not support.
 
-**How to resolve:** Move the configuration into sf.jsonc or the space settings.
+**How to resolve:** Move the configuration into `sf.jsonc` or the space settings.
 
 <div data-pagefind-ignore>
 

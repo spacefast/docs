@@ -5,7 +5,7 @@ description: "The version is already live on this channel."
 
 The version is already live on this channel.
 
-**How to resolve:** No action needed.
+**How to resolve:** No action is needed.
 
 <div data-pagefind-ignore>
 

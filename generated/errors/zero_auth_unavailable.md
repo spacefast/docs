@@ -5,7 +5,7 @@ description: "Hosted Zero auth is not configured for this deployment."
 
 Hosted Zero auth is not configured for this deployment.
 
-**How to resolve:** Finalize the Zero version with hosted auth URLs or use guest/local auth.
+**How to resolve:** Finalize the Zero version with hosted auth URLs, or use guest or local auth.
 
 <div data-pagefind-ignore>
 

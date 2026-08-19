@@ -5,7 +5,7 @@ description: "The publish matched the live version exactly, so nothing changed."
 
 The publish matched the live version exactly, so nothing changed.
 
-**How to resolve:** No action needed. The existing live version already serves this content.
+**How to resolve:** No action is needed. The existing live version already serves this content.
 
 <div data-pagefind-ignore>
 

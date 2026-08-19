@@ -5,7 +5,7 @@ description: "The space expired and is no longer served."
 
 The space expired and is no longer served.
 
-**How to resolve:** If it is within the recovery window, claim or restore it. Otherwise publish again.
+**How to resolve:** If the space is within the recovery window, claim or restore it. Otherwise publish again.
 
 <div data-pagefind-ignore>
 

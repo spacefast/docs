@@ -3,24 +3,24 @@ title: "Agent setup"
 description: "Connect Codex, Claude, ChatGPT, Cursor, VS Code, or OpenClaw to publish and manage spaces."
 ---
 
-Pick the agent you already use. Every page is one action — a click or a paste — and the
+Pick the agent you already use. Every page is one action, a click or a paste, and the
 same Spacefast account works across all of them.
 
-- [Claude Code](/setup/claude-code) — One paste and Claude Code can publish, with the plugin kept fresh from the marketplace.
-- [Claude](/setup/claude) — Add the connector once and Claude publishes from any conversation.
-- [Claude Cowork](/setup/claude-cowork) — An admin adds the connector once; every Cowork conversation can publish after that.
-- [Cursor](/setup/cursor) — One click adds the hosted tools. Approve once in the browser, nothing to install.
-- [Codex](/setup/codex) — One paste and Codex can publish, with the plugin kept fresh from the marketplace.
-- [ChatGPT](/setup/chatgpt) — In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up. No account needed.
-- [ChatGPT Work](/setup/chatgpt-work) — Install the Spacefast plugin — or an admin deploys it once and the whole workspace can publish.
-- [VS Code](/setup/vscode) — One click gives Copilot agent mode the publish tools. Approve once in the browser.
-- [OpenClaw](/setup/openclaw) — One command connects the hosted tools, one sign-in approves them — then publish from WhatsApp, Telegram, Discord, or a cron job.
-- [OpenCode](/setup/opencode) — One config block, one sign-in — then the session can publish what it's working on.
-- [Hermes](/setup/hermes) — Publishing from Hermes is one command away — from a chat channel or a script.
-- [Raycast](/setup/raycast) — Publishing is one hotkey away: ask Raycast AI and it hands back the live URL.
-- [Pi](/setup/pi) — Pi reads the shared skills folder — one install and every session can publish from the terminal.
-- [Cognition Devin](/setup/devin) — Every Devin session can ship a live URL straight from its cloud workspace.
-- [Poke](/setup/poke) — One tap prefills the integration — review, hit Create, publish by text.
-- [Indent](/setup/indent) — Add the connection once — org-wide or just for you — and every Indent task can ship a live URL.
+- [Claude Code](/setup/claude-code): One plugin install adds the publish skill and the MCP tools. The plugin is the recommended way to connect.
+- [Claude](/setup/claude): One click adds the connector, and Claude publishes from web, desktop, and mobile.
+- [Claude Cowork](/setup/claude-cowork): One admin click adds the org connector, and every Cowork conversation can publish.
+- [Cursor](/setup/cursor): One click adds the hosted tools. Approve once in the browser. There is nothing to install.
+- [Codex](/setup/codex): One paste installs the plugin, which adds the publish skill and the MCP tools.
+- [ChatGPT](/setup/chatgpt): In Work mode or the desktop app, one pasted prompt sets ChatGPT up to publish.
+- [ChatGPT Work](/setup/chatgpt-work): The Spacefast plugin brings publishing to every ChatGPT Work conversation.
+- [VS Code](/setup/vscode): One click adds hosted MCP for Copilot agent mode.
+- [OpenClaw](/setup/openclaw): Send one message from WhatsApp, Telegram, Discord, or a cron job.
+- [OpenCode](/setup/opencode): Connect hosted MCP with a browser sign-in, or install the skill for terminal-driven publishes.
+- [Hermes](/setup/hermes): One command adds hosted MCP. The skill teaches the publish flow for scripts and channels.
+- [Raycast](/setup/raycast): Run Install MCP Server, paste the endpoint, and ask Raycast AI to publish.
+- [Pi](/setup/pi): Install the skill once, and Pi publishes from any session.
+- [Cognition Devin](/setup/devin): Devin publishes from its cloud workspace with hosted MCP or the skill.
+- [Poke](/setup/poke): Text Poke the prompt, and it publishes and texts back the link.
+- [Indent](/setup/indent): Add the endpoint once, org-wide or just for you, and Indent can publish.
 
 Anything else that can fetch a URL can publish too: point it at the [agent documentation](/agents).

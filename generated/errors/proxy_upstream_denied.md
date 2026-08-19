@@ -5,7 +5,7 @@ description: "The proxy upstream is on a denied network and cannot be used."
 
 The proxy upstream is on a denied network and cannot be used.
 
-**How to resolve:** Proxy only to public HTTPS upstreams. Private and internal addresses are blocked.
+**How to resolve:** Proxy only to public HTTPS upstreams. Spacefast blocks private and internal addresses.
 
 <div data-pagefind-ignore>
 

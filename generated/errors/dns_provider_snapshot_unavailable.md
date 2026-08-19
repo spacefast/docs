@@ -5,7 +5,7 @@ description: "Spacefast cannot cache the latest DNS provider snapshot."
 
 Spacefast cannot cache the latest DNS provider snapshot.
 
-**How to resolve:** Retry refresh after the cache or provider recovers. Do not edit connected-provider records from stale data.
+**How to resolve:** Retry the refresh after the cache or provider recovers. Do not edit connected-provider records from stale data.
 
 <div data-pagefind-ignore>
 
