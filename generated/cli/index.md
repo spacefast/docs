@@ -1450,7 +1450,7 @@ EXAMPLES
 
   Run a job whose handler checks the shared secret.
 
-    $ sf crons run api-digest --header 'authorization: Bearer $CRON_SECRET'
+    $ sf crons run api-digest --header "authorization: Bearer $CRON_SECRET"
 ```
 
 _See code: [src/commands/crons/run.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons/run.ts)_

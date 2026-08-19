@@ -48,12 +48,13 @@ The flags that shape a remote build:
 | `--[no-]auto-finalize`      | Finalize the remote build automatically after staging its output.            |
 
 The `--prebuilt` flag publishes a prebuilt directory or archive without
-installing or building anything. Detection overrides such as
-`--build-command` and `--output-directory` work here too; the full set is
-in the [`sf publish` reference](/cli#sf-publish-dir). For a space that also
-has a repository connection, `sf builds detect` shows the detected app and
-build settings, with ranked candidates when the repository holds more than
-one app.
+installing or building anything. Use `--output-directory` to select a
+directory within the prebuilt input. `--build-command` applies only when
+Spacefast runs a build. The full option set is in the
+[`sf publish` reference](/cli#sf-publish-dir). For a space that also has a
+repository connection, `sf builds detect` shows the detected app and build
+settings, with ranked candidates when the repository holds more than one
+app.
 
 To run the same detect-build-and-pack step on your own machine instead,
 see [local builds](/publish/git#local-builds).
