@@ -8,7 +8,7 @@ description: Declare cron entries in sf.jsonc, and Spacefast requests your space
 A cron entry asks Spacefast to request one of your space's own paths on a
 schedule. There is no separate job runner to configure. The scheduled
 request goes through the same routing a visitor gets, so the path can be a
-[Zero](/zero) route, a [Functions](/functions) handler, or anything else
+[Zero](/zero-runtime) route, a [Functions](/functions) handler, or anything else
 your space serves.
 
 Crons live in [`sf.jsonc`](/serve/settings), so they travel with the

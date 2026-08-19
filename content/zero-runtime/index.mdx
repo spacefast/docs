@@ -3,7 +3,7 @@ title: Zero
 description: Build apps with a database, storage, authentication, and typed server functions.
 ---
 
-Zero is the full-stack Spacefast runtime. One project contains a Preact client,
+Zero is Spacefast's full-stack runtime. One project contains a Preact client,
 a typed server capsule, a database schema, authentication, and storage. One
 publish command makes the whole app live as a normal space version.
 Zero is generally available.
@@ -145,6 +145,9 @@ Every handler receives `ctx` with:
 - **`ctx.db`**: the declared tables.
 - **`ctx.env`**: server-only variables.
 - **`ctx.log`**: structured logging.
+- **`ctx.email`**, **`ctx.spam`**, **`ctx.gravatar`**: platform services with
+  no credential to configure — see
+  [Email, spam, and Gravatar](/services).
 
 Call named handlers from the client with hooks:
 
@@ -166,14 +169,15 @@ client-side routes.
 ## A complete app
 
 A guestbook that uses the whole runtime: a schema, a live query, a validated
-mutation, a webhook, hosted sign-in, a photo upload to storage, two
+mutation with a spam check and Gravatar avatars, an action that emails a
+digest, a webhook, hosted sign-in, a photo upload to storage, two
 client-side routes, and a stats chart — styled with the platform kit and
 Tailwind classes. Two files are the whole app.
 
 <CodeGroup>
 
 ```ts server/index.ts
-import { capsule, endpoint, json, mutation, query, string, table, text }
+import { action, capsule, endpoint, json, mutation, query, string, table, text }
   from "@spacefast/zero/server";
 
 export default capsule({
@@ -182,6 +186,7 @@ export default capsule({
     entries: table({
       body: string(),
       photoUrl: string().default(""),
+      avatarUrl: string().default(""),
       authorId: string(),
       authorName: string(),
     }),
@@ -195,11 +200,35 @@ export default capsule({
     sign: mutation(async (ctx, body: string, photoUrl: string) => {
       const trimmed = body.trim().slice(0, 500);
       if (!trimmed) return;
+      const verdict = await ctx.spam.check({
+        content: trimmed,
+        type: "comment",
+        authorName: ctx.auth.displayName,
+      });
+      if (verdict.spam) return;
       await ctx.db.entries.insert({
         body: trimmed,
         photoUrl,
+        avatarUrl: ctx.auth.email
+          ? ctx.gravatar.avatarUrl(ctx.auth.email, { size: 64, default: "retro" })
+          : "",
         authorId: ctx.auth.userId,
         authorName: ctx.auth.displayName,
+      });
+    }),
+  },
+  actions: {
+    emailDigest: action(async (ctx) => {
+      if (ctx.auth.isGuest || !ctx.auth.email) return;
+      const recent = await ctx.db.entries
+        .withIndex("by_creation").order("desc").take(10);
+      await ctx.email.send({
+        from: { email: "guestbook@example.com", name: "Guestbook" },
+        to: ctx.auth.email,
+        subject: `Your guestbook digest: ${recent.length} recent entries`,
+        text: recent
+          .map((entry) => `${entry.authorName}: ${entry.body}`)
+          .join("\n"),
       });
     }),
   },
@@ -224,7 +253,7 @@ export default capsule({
 
 ```tsx client/index.tsx
 import { Link, Route, Router, Routes, SignInWithGoogle, signOut, storage,
-  useAuth, useMutation, useQuery } from "@spacefast/zero/client";
+  useAction, useAuth, useMutation, useQuery } from "@spacefast/zero/client";
 import { Sparkline } from "@spacefast/zero/charts";
 import { Button, Card, EmptyState, Input, Spinner } from "@spacefast/zero/kit";
 import { useState } from "preact/hooks";
@@ -233,6 +262,7 @@ type Entry = {
   id: string;
   body: string;
   photoUrl: string;
+  avatarUrl: string;
   authorId: string;
   authorName: string;
   createdAt: string;
@@ -284,6 +314,13 @@ function HomePage() {
             <li key={entry.id}>
               <Card>
                 <p class="text-sm">
+                  {entry.avatarUrl ? (
+                    <img
+                      class="mr-1 inline h-5 w-5 rounded-full align-text-bottom"
+                      src={entry.avatarUrl}
+                      alt=""
+                    />
+                  ) : null}
                   <strong>{entry.authorName}</strong> {entry.body}
                 </p>
                 {entry.photoUrl ? (
@@ -299,7 +336,9 @@ function HomePage() {
 }
 
 function StatsPage() {
+  const auth = useAuth();
   const entries = useQuery<Entry[]>("entries");
+  const emailDigest = useAction<[], void>("emailDigest");
   const perDay = [...Array(7)].map((_, index) => {
     const day = new Date(Date.now() - (6 - index) * 86_400_000).toDateString();
     return entries.filter((entry) => new Date(entry.createdAt).toDateString() === day).length;
@@ -307,6 +346,11 @@ function StatsPage() {
   return (
     <Card title="Last 7 days" subtitle={`${entries.length} signatures so far`}>
       <Sparkline values={perDay} width={280} height={48} />
+      {auth.isAuthenticated ? (
+        <Button variant="ghost" size="sm" onClick={() => emailDigest()}>
+          Email me this digest
+        </Button>
+      ) : null}
     </Card>
   );
 }
@@ -355,6 +399,16 @@ Everything on the page is one of the runtime's features doing its job:
   write a row and every live query that reads it refreshes on its own.
 - **Validation lives on the server.** The `sign` mutation trims and caps the
   body; the client never writes rows directly.
+- **Spam checking is one call.** `ctx.spam.check()` classifies the entry
+  before it is written. The runtime supplies the visitor's network evidence
+  from the trusted request envelope — a browser cannot claim its own IP.
+- **Avatars come from Gravatar.** `ctx.gravatar.avatarUrl()` is synchronous
+  and credential-free; the mutation stores the URL with the row.
+- **Actions send email.** The `emailDigest` action reads the same tables and
+  sends through `ctx.email.send()` — no mail credential to configure, and
+  `useAction()` wires it to a button. In a mutation, a send commits
+  transactionally with the writes. See
+  [Email, spam, and Gravatar](/services).
 - **Sign-in is one component.** `SignInWithGoogle` upgrades the visitor's
   guest identity; `signOut()` drops back to it.
 - **Uploads are one call.** `storage.upload(photo)` returns a read URL the

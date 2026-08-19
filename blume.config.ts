@@ -114,9 +114,9 @@ export default defineConfig({
         },
         {
           label: "Primitives",
-          root: "/zero",
+          root: "/zero-runtime",
           items: [
-            "/zero",
+            "/zero-runtime",
             "/functions",
             "/functions/php",
             "/database",

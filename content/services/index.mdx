@@ -5,7 +5,7 @@ search:
 description: "Send email, check submissions for spam, and read Gravatar profiles from any Zero handler without holding a credential."
 ---
 
-Every [Zero](/zero) handler context carries three platform services:
+Every [Zero](/zero-runtime) handler context carries three platform services:
 `ctx.gravatar` reads public profiles, `ctx.spam` classifies visitor
 submissions, and `ctx.email` sends mail. The runtime brokers each call and
 attaches the credential outside your code. There is no mail password, spam

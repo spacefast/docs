@@ -348,6 +348,16 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
 ]);
 const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
+const movedZeroRoute = resolveRedirect(`${deploymentBase}/zero`, routingRules);
+if (
+  movedZeroRoute.destination !== "/zero-runtime" ||
+  movedZeroRoute.hops.length !== 2 ||
+  movedZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero-runtime` ||
+  movedZeroRoute.hops[0]?.status !== 301 ||
+  movedZeroRoute.hops[1]?.status !== 200
+) {
+  throw new Error("The former Zero docs route does not redirect through the Docs mount.");
+}
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
   .join("\n")}\n`;
