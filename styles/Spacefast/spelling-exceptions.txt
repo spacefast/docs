@@ -32,6 +32,8 @@ config
 configs
 cowork
 cron
+crons
+crontab
 cutover
 debounced
 dedupe
@@ -53,6 +55,7 @@ globals
 Gravatar
 grayscale
 gzip
+hostability
 hostname
 hostnames
 http

@@ -5,7 +5,7 @@ description: "The declared runtime has no entry module to compile."
 
 The declared runtime has no entry module to compile.
 
-**How to resolve:** Name the entry in sf.jsonc: runtime.entry for functions, runtime.server and runtime.client for zero. Remove the runtime block to publish static files instead.
+**How to resolve:** Name the entry in sf.jsonc: runtime.entry for functions, runtime.server and runtime.client for zero. Remove the runtime block to publish files without a runtime instead.
 
 <div data-pagefind-ignore>
 

@@ -1,9 +1,9 @@
 ---
 title: "Connect Pi to Spacefast"
-description: "Pi reads the shared skills folder — one install and every session can publish from the terminal."
+description: "One skill install and Pi publishes from any session."
 ---
 
-Pi reads the shared skills folder — one install and every session can publish from the terminal.
+One skill install and Pi publishes from any session.
 
 **Skill** — Installs into ~/.agents/skills, which Pi reads natively — every later session knows the flow.
 

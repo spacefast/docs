@@ -1,0 +1,126 @@
+---
+search:
+  tags: [auth, verify, token, backend, grants]
+title: Verify visitors in your own backend
+sidebar:
+  label: Verify visitors
+description: Verify Spacefast visitor tokens offline in your own service with @spacefast/auth.
+---
+
+When your own service runs behind a Spacefast-protected space — an API your
+pages call, a WebSocket backend, a companion app — requests arrive carrying
+a Spacefast visitor token. The `@spacefast/auth` package verifies that
+token offline and returns the identity contract every Spacefast surface
+shares, including the capabilities the visitor's [Grants](/share) allow,
+such as `page.view` and `comments.write`.
+
+The package has two entry points and never mints — identity always comes
+from the platform:
+
+- `@spacefast/auth/server` verifies a visitor token offline.
+- `@spacefast/auth/tokens` keeps any short-lived credential fresh without
+  refresh code of your own.
+
+## Install
+
+```package-install
+npm install @spacefast/auth
+```
+
+## Verify on the server
+
+The full relying-party profile is mandatory. A signing key alone only says
+who signed a token — issuer, audience, host, purpose, and claim version are
+what make it yours. The JWKS is data you already have, never a URL: no
+network round-trip hides in your request path.
+
+```ts
+import { createVerifier } from "@spacefast/auth/server";
+
+const verify = createVerifier({
+  jwks, // { keys: [...] } — Ed25519 public keys
+  issuer: "spacefast-api",
+  audience: "spc_1234", // your space
+  host: "docs.example.com", // the host this token must be bound to
+  purpose: "handoff", // tokens minted for any other lane never pass
+  claimVersion: 1,
+});
+
+const auth = await verify(request); // AuthContext | null
+
+// AuthContext — the shared contract:
+// { principal: "account:usr_8m2p" | "person:per_…" | "guest:local",
+//   authorities: ["member:usr_8m2p"],
+//   capabilities: ["page.view", "comments.write"],
+//   isGuest, isAuthenticated, displayName, email?, emailVerified?, picture? }
+```
+
+`verify` accepts a `Request` (it reads `Authorization: Bearer` or
+`X-SF-Authorization`) or a raw token string. Gate your own responses on
+`capabilities`: it lists what the visitor's Grants allow on the space.
+
+### The four states
+
+`null` is fine for the main path — anything that isn't a verified identity
+is a guest. When you need to know why, ask for the outcome:
+
+```ts
+import { guestContext } from "@spacefast/auth/server";
+
+const outcome = await verify.outcome(request);
+// { state: "verified", auth }        the token proves an identity
+// { state: "no-token" }              nothing to verify
+// { state: "invalid-token", reason } provably not acceptable here
+// { state: "verifier-unavailable", reason }
+//                                    this process can't render a verdict —
+//                                    for example a key id your JWKS doesn't
+//                                    know yet
+
+const auth = outcome.state === "verified" ? outcome.auth : guestContext();
+```
+
+Fail open to guest: every non-verified state serves the guest experience.
+The states exist so your logs can tell a forged token from a stale key
+deployment. An unknown `kid` is deliberately unavailable, not invalid —
+during key rotation the honest answer is "I can't know", never "forged".
+
+Defaults worth knowing: 5 seconds of clock skew on `exp` and `nbf`; `azp`
+is checked only when you pass `authorizedParties`; a malformed claim — even
+an optional one — makes the whole token invalid. Bad data fails loud, not
+soft.
+
+## Keep a credential fresh
+
+`@spacefast/auth/tokens` manages any short-lived credential your app holds:
+
+```ts
+import { createTokenManager, TokenRefusedError } from "@spacefast/auth/tokens";
+
+const tickets = createTokenManager({
+  mint: async () => {
+    const response = await fetch("/__spacefast/collab/ticket", { method: "POST" });
+    if (response.status === 403) throw new TokenRefusedError("forbidden");
+    if (!response.ok) throw new Error(`ticket ${response.status}`); // transient
+    const { data } = await response.json();
+    return { token: data.token, expiresAt: data.expiresAt };
+  },
+});
+
+await tickets.current(); // mints once, then stays warm
+tickets.onToken((token) => reconnect(token));
+tickets.onRefusal((code) => teardown(code)); // "no" is terminal, not a retry
+tickets.stop(); // cancels everything, leaks nothing
+```
+
+The manager refreshes proactively at 80% of each token's lifetime, backs
+off with jitter when minting fails transiently while it keeps serving any
+unexpired token, and shares one in-flight mint across concurrent
+`current()` calls. A caller with no live token during an outage gets a
+`TokenOfflineError`, never a `null` that reads as "no access"; refusals
+throw `TokenRefusedError` with the code the minter gave.
+
+## Related
+
+- [Control who can visit](/share): Grants, roles, and the capabilities a
+  visitor token carries.
+- [SDK](/reference/sdk): typed calls against the Spacefast REST API.

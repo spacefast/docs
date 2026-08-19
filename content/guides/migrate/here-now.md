@@ -21,7 +21,7 @@ sf publish ./dist --spa true
 
 - Static artifacts within the target space's file-size limit. Uploaded files
   are served as content; request-time code runs only through a declared
-  [Function](/apps/functions).
+  [Function](/functions).
 - Single-page apps (SPAs), after you enable the Spacefast SPA fallback for
   client-side routes.
 - Custom domains, after you add the domain in Spacefast and move DNS. Move DNS

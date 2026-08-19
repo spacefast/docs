@@ -1,9 +1,9 @@
 ---
 title: "Connect Codex to Spacefast"
-description: "One paste and Codex can publish, with the plugin kept fresh from the marketplace."
+description: "One paste installs the plugin — the publish skill plus MCP tools in one go."
 ---
 
-One paste and Codex can publish, with the plugin kept fresh from the marketplace.
+One paste installs the plugin — the publish skill plus MCP tools in one go.
 
 **Plugin** — The $spacefast skill plus MCP in one install — or type /plugins inside Codex and pick Spacefast.
 

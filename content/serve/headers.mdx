@@ -3,12 +3,19 @@ title: Headers
 description: Set and remove response headers with the _headers file.
 ---
 
-Add `_headers` at the publish root to set or remove response headers.
+`_headers` is a convention file: put it at the publish root to set or
+remove response headers, and it travels with the files it describes.
 Spacefast compiles the file when a publish finishes and attaches the rules
 to that immutable version, so nothing parses the file per request — and the
 file itself is never served.
 
-```text
+The same rules are also an [`sf.jsonc`](/serve/settings) key, useful when
+the config is generated. Both forms compile to the same rules, and a
+`_headers` block wins over a config rule for the same header.
+
+<CodeGroup>
+
+```text _headers
 /*
   X-Frame-Options: DENY
   Referrer-Policy: no-referrer
@@ -16,6 +23,32 @@ file itself is never served.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 ```
+
+```jsonc sf.jsonc
+{
+  "headers": [
+    {
+      "source": "/*",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+      ],
+    },
+    {
+      "source": "/assets/*",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+      ],
+    },
+  ],
+}
+```
+
+</CodeGroup>
+
+`_headers` sits beside the other convention files that publish with a
+version: [`_redirects`](/serve/redirects), [`sf.jsonc`](/serve/settings),
+and the [`_layout.html` and `_pages/` visitor pages](/serve/pages).
 
 ## Block syntax
 

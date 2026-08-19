@@ -12,40 +12,74 @@ Spacefast Zero is based on the capsule apps concept created by the
 [Lakebed](https://docs.lakebed.dev/) project — close enough that a Lakebed
 capsule compiles unchanged. See [Compare to Lakebed](#compare-to-lakebed).
 
+<CardGroup cols={3}>
+  <Card title="Database" href="#database" icon="database">
+    A schema in code, migrations on publish, live queries in the client.
+  </Card>
+  <Card title="Authentication" href="#authentication" icon="key-round">
+    Guest identity for every visitor, hosted sign-in to upgrade it.
+  </Card>
+  <Card title="Storage" href="#storage" icon="folder">
+    Browser uploads with revocable read URLs and no credential setup.
+  </Card>
+  <Card title="Styling" href="#styling" icon="palette">
+    Tailwind classes in JSX, the platform kit, and SVG charts.
+  </Card>
+  <Card title="Endpoints" href="#the-capsule" icon="webhook">
+    Raw HTTP routes for webhooks, feeds, and generated images.
+  </Card>
+  <Card title="Operations" href="#operate-a-live-app" icon="terminal">
+    Status, logs, backups, and rollbacks through the `sf` CLI.
+  </Card>
+</CardGroup>
+
 ## Quick start
 
-```bash
-sf init my-app --runtime zero
-cd my-app
-sf dev
-```
+<Steps>
+  <Step title="Create and run">
 
-Open `http://localhost:4173`. Edit `client/index.tsx` and `server/index.ts`.
-The local server reloads when you save a file. State is in memory unless you
-pass `--state-backend sqlite`.
+    ```bash
+    sf init my-app --runtime zero
+    cd my-app
+    sf dev
+    ```
 
-```bash
-sf publish
-```
+    Open `http://localhost:4173`. Edit `client/index.tsx` and
+    `server/index.ts`; the local server reloads when you save a file. State is
+    in memory unless you pass `--state-backend sqlite`.
 
-The publish command compiles the capsule, plans and applies the database
-migration, uploads the client, and activates the version.
+  </Step>
+  <Step title="Publish">
+
+    ```bash
+    sf publish
+    ```
+
+    The publish command compiles the capsule, plans and applies the database
+    migration, uploads the client, and activates the version.
+
+  </Step>
+</Steps>
 
 ## Project layout
 
-```text
-my-app/
-  client/index.tsx
-  server/index.ts
-  shared/
-  .env.server
-  sf.jsonc
-  package.json
-```
+<FileTree>
+
+- my-app/
+  - client/
+    - index.tsx
+  - server/
+    - index.ts
+  - shared/
+  - .env.server
+  - sf.jsonc
+  - package.json
+
+</FileTree>
 
 The runtime is explicit:
 
-```jsonc
+```jsonc sf.jsonc
 {
   "$schema": "https://spacefast.com/schemas/sf.json",
   "name": "My app",
@@ -65,8 +99,7 @@ entry. Spacefast does not expose the source as static files.
 A capsule is the default export of the Zero server entry. It declares the
 database schema and every callable server handler.
 
-```ts
-// server/index.ts
+```ts server/index.ts
 import { boolean, capsule, mutation, query, string, table }
   from "@spacefast/zero/server";
 
@@ -102,9 +135,9 @@ Handler types:
 - **`action()`**: performs a one-shot server call.
 - **`endpoint()`**: exposes a raw HTTP method and path.
 
-Endpoint helpers include `json()`, `text()`, `empty()`, and `redirect()`.
-Paths begin with `/`. Spacefast reserves the authentication and platform
-namespaces.
+Endpoint helpers include `json()`, `text()`, `empty()`, `redirect()`, and
+`ImageResponse` for images rendered from Preact nodes. Paths begin with `/`.
+Spacefast reserves the authentication and platform namespaces.
 
 Every handler receives `ctx` with:
 
@@ -115,7 +148,7 @@ Every handler receives `ctx` with:
 
 Call named handlers from the client with hooks:
 
-```tsx
+```tsx client/index.tsx
 import { useAction, useMutation, useQuery } from "@spacefast/zero/client";
 
 const todos = useQuery<Todo[]>("todos");
@@ -132,15 +165,14 @@ client-side routes.
 
 ## A complete app
 
-A guestbook shows the pieces working together: a schema, a live query, a
-validated mutation, a raw HTTP webhook, and a Preact client with hosted
-sign-in — plus the Spacefast extras: the platform kit, utility styling, and
-scoped live-query refreshes. Two files are the whole app.
+A guestbook that uses the whole runtime: a schema, a live query, a validated
+mutation, a webhook, hosted sign-in, a photo upload to storage, two
+client-side routes, and a stats chart — styled with the platform kit and
+Tailwind classes. Two files are the whole app.
 
-The server declares the data and every way to change it:
+<CodeGroup>
 
-```ts
-// server/index.ts
+```ts server/index.ts
 import { capsule, endpoint, json, mutation, query, string, table, text }
   from "@spacefast/zero/server";
 
@@ -149,6 +181,7 @@ export default capsule({
   schema: {
     entries: table({
       body: string(),
+      photoUrl: string().default(""),
       authorId: string(),
       authorName: string(),
     }),
@@ -159,15 +192,15 @@ export default capsule({
     ),
   },
   mutations: {
-    sign: mutation(async (ctx, body: string) => {
+    sign: mutation(async (ctx, body: string, photoUrl: string) => {
       const trimmed = body.trim().slice(0, 500);
       if (!trimmed) return;
       await ctx.db.entries.insert({
         body: trimmed,
+        photoUrl,
         authorId: ctx.auth.userId,
         authorName: ctx.auth.displayName,
       });
-      ctx.invalidate("entries");
     }),
   },
   endpoints: {
@@ -179,78 +212,70 @@ export default capsule({
         const payload = await req.json<{ body: string }>();
         await ctx.db.entries.insert({
           body: payload.body,
+          photoUrl: "",
           authorId: "webhook",
           authorName: "Webhook",
         });
-        ctx.log.info("entry accepted", { source: "webhook" });
         return json({ ok: true });
       }),
   },
 });
 ```
 
-The `sign` mutation validates on the server; the client never writes rows
-directly. `ctx.invalidate("entries")` narrows the refresh this mutation
-triggers to `entries` subscriptions — declaring nothing is also safe and
-refreshes every live query on the page. The webhook checks a shared secret
-from `.env.server` before it writes, and answers with the endpoint helpers.
-
-The client calls the same handlers by name. Styling is Tailwind classes on
-the `class` attribute, and the interface pieces come from the platform kit:
-
-```tsx
-// client/index.tsx
-import { SignInWithGoogle, signOut, useAuth, useMutation, useQuery }
-  from "@spacefast/zero/client";
+```tsx client/index.tsx
+import { Link, Route, Router, Routes, SignInWithGoogle, signOut, storage,
+  useAuth, useMutation, useQuery } from "@spacefast/zero/client";
+import { Sparkline } from "@spacefast/zero/charts";
 import { Button, Card, EmptyState, Input, Spinner } from "@spacefast/zero/kit";
 import { useState } from "preact/hooks";
 
 type Entry = {
   id: string;
   body: string;
+  photoUrl: string;
   authorId: string;
   authorName: string;
   createdAt: string;
   updatedAt: string;
 };
 
-export function App() {
-  const auth = useAuth();
-  const entries = useQuery<Entry[]>("entries");
-  const sign = useMutation<[body: string], void>("sign");
+function SignForm() {
+  const sign = useMutation<[body: string, photoUrl: string], void>("sign");
   const [draft, setDraft] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
 
   return (
-    <main class="mx-auto max-w-lg space-y-4 p-6">
-      <header class="flex items-center justify-between">
-        <h1 class="text-lg font-semibold">Guestbook</h1>
-        {auth.isLoading ? (
-          <Spinner size="sm" />
-        ) : auth.isGuest ? (
-          <SignInWithGoogle />
-        ) : (
-          <Button variant="ghost" size="sm" onClick={() => signOut()}>
-            Sign out {auth.displayName}
-          </Button>
-        )}
-      </header>
+    <form
+      class="flex items-center gap-2"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const uploaded = photo ? await storage.upload(photo) : null;
+        await sign(draft, uploaded?.url ?? "");
+        setDraft("");
+        setPhoto(null);
+      }}
+    >
+      <Input
+        value={draft}
+        onInput={(event) => setDraft(event.currentTarget.value)}
+        placeholder="Leave a note"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        class="text-sm"
+        onChange={(event) => setPhoto(event.currentTarget.files?.[0] ?? null)}
+      />
+      <Button type="submit">Sign</Button>
+    </form>
+  );
+}
 
-      <form
-        class="flex gap-2"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void sign(draft);
-          setDraft("");
-        }}
-      >
-        <Input
-          value={draft}
-          onInput={(event) => setDraft(event.currentTarget.value)}
-          placeholder="Leave a note"
-        />
-        <Button type="submit">Sign</Button>
-      </form>
-
+function HomePage() {
+  const entries = useQuery<Entry[]>("entries");
+  return (
+    <div class="space-y-4">
+      <SignForm />
       {entries.length === 0 ? (
         <EmptyState title="No entries yet" description="Be the first to sign." />
       ) : (
@@ -261,19 +286,85 @@ export function App() {
                 <p class="text-sm">
                   <strong>{entry.authorName}</strong> {entry.body}
                 </p>
+                {entry.photoUrl ? (
+                  <img class="mt-2 max-h-40 rounded" src={entry.photoUrl} alt="" />
+                ) : null}
               </Card>
             </li>
           ))}
         </ul>
       )}
-    </main>
+    </div>
+  );
+}
+
+function StatsPage() {
+  const entries = useQuery<Entry[]>("entries");
+  const perDay = [...Array(7)].map((_, index) => {
+    const day = new Date(Date.now() - (6 - index) * 86_400_000).toDateString();
+    return entries.filter((entry) => new Date(entry.createdAt).toDateString() === day).length;
+  });
+  return (
+    <Card title="Last 7 days" subtitle={`${entries.length} signatures so far`}>
+      <Sparkline values={perDay} width={280} height={48} />
+    </Card>
+  );
+}
+
+export function App() {
+  const auth = useAuth();
+  return (
+    <Router>
+      <main class="mx-auto max-w-lg space-y-4 p-6">
+        <header class="flex items-center justify-between">
+          <nav class="flex items-baseline gap-3">
+            <h1 class="text-lg font-semibold">
+              <Link to="/">Guestbook</Link>
+            </h1>
+            <Link class="text-sm text-ink-muted" to="/stats">
+              Stats
+            </Link>
+          </nav>
+          {auth.isLoading ? (
+            <Spinner size="sm" />
+          ) : auth.isGuest ? (
+            <SignInWithGoogle />
+          ) : (
+            <Button variant="ghost" size="sm" onClick={() => signOut()}>
+              Sign out {auth.displayName}
+            </Button>
+          )}
+        </header>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/stats" element={<StatsPage />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 ```
 
-A `useQuery()` list starts as an empty array, so the first render needs no
-loading branch. It re-renders whenever a mutation changes the rows — including
-rows the webhook writes — and every open tab updates live.
+</CodeGroup>
+
+Everything on the page is one of the runtime's features doing its job:
+
+- **Live queries.** `useQuery("entries")` starts as an empty array and
+  re-renders whenever a mutation changes the rows — including rows the
+  webhook writes — in every open tab. There is no cache wiring anywhere:
+  write a row and every live query that reads it refreshes on its own.
+- **Validation lives on the server.** The `sign` mutation trims and caps the
+  body; the client never writes rows directly.
+- **Sign-in is one component.** `SignInWithGoogle` upgrades the visitor's
+  guest identity; `signOut()` drops back to it.
+- **Uploads are one call.** `storage.upload(photo)` returns a read URL the
+  row can keep. The photo is optional — the form works without it.
+- **Routing is included.** `Router`, `Routes`, and `Link` give the app two
+  pages without a dependency.
+- **Charts are included.** The stats page derives a week of counts from the
+  same live query and hands them to `Sparkline`.
+- **The webhook is plain HTTP.** It checks a shared secret from
+  `.env.server` before it writes, and answers with the endpoint helpers.
 
 Run it:
 
@@ -313,14 +404,39 @@ The client also ships batteries:
 - **`@spacefast/zero/charts`**: `LineChart`, `BarChart`, and `Sparkline`,
   drawn as plain SVG with no charting library.
 
+```tsx client/index.tsx
+import { LineChart } from "@spacefast/zero/charts";
+import { Badge, Card } from "@spacefast/zero/kit";
+
+<Card title="Signups" subtitle="Last quarter">
+  <Badge tone="success">Live</Badge>
+  <LineChart
+    data={[
+      { month: "Jan", signups: 12 },
+      { month: "Feb", signups: 31 },
+      { month: "Mar", signups: 48 },
+    ]}
+    x="month"
+    series={["signups"]}
+  />
+</Card>;
+```
+
 ## Authentication
 
 Every Zero visitor starts with a stable guest identity: enough to own rows,
 return to them later, and keep anonymous users separate. Hosted sign-in
 upgrades the same browser session to an authenticated identity.
 
-```tsx
+```tsx client/index.tsx
 import { SignInWithGoogle, signOut, useAuth } from "@spacefast/zero/client";
+
+function AuthControls() {
+  const auth = useAuth();
+  if (auth.isLoading) return null;
+  if (auth.isGuest) return <SignInWithGoogle />;
+  return <button onClick={() => signOut()}>Sign out {auth.displayName}</button>;
+}
 ```
 
 Hosted sign-in uses Gravatar; `SignInWithGoogle` is a compatibility alias that
@@ -330,9 +446,17 @@ renders the "Sign in with Gravatar" button. `useAuth()` returns `userId`,
 
 On the server, the same identity is `ctx.auth` in every handler. Check
 `ctx.auth.isGuest` when a handler requires sign-in. For row ownership, store
-`ctx.auth.userId` with the row, filter reads through an owner index, and verify
-that value before an update or delete. Do not accept an owner id from client
-arguments.
+`ctx.auth.userId` with the row, filter reads through an owner index, and
+verify that value before an update or delete — never accept an owner id from
+client arguments:
+
+```ts server/index.ts
+setDone: mutation(async (ctx, id: string, done: boolean) => {
+  const todo = await ctx.db.todos.get(id);
+  if (!todo || todo.ownerId !== ctx.auth.userId) return;
+  await ctx.db.todos.update(id, { done });
+}),
+```
 
 `sf dev` supplies a local guest identity, so authorization logic works the same
 locally and hosted.
@@ -346,11 +470,23 @@ migration. Fields support `string()`, `boolean()`, and `id(table)`, with
 
 Every table has a built-in `by_creation` index that reads rows in insertion
 order. Add `.index(name, fields)` for your own indexed reads with
-`.withIndex()`.
+`.withIndex()`:
 
-Read a row with `.get(id)`, or start an indexed query with `.withIndex()` and
-finish it with `.collect()`, `.take(count)`, `.first()`, or `.paginate()`.
-Indexed queries support `.order("asc")` and `.order("desc")`. Mutation
+```ts server/index.ts
+// One row, by id.
+const todo = await ctx.db.todos.get(id);
+
+// Newest rows first, via the built-in creation index.
+const latest = await ctx.db.todos.withIndex("by_creation").order("desc").take(20);
+
+// An owner's rows, via a declared index.
+const mine = await ctx.db.todos
+  .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+  .collect();
+```
+
+Indexed queries finish with `.collect()`, `.take(count)`, `.first()`, or
+`.paginate()`, and support `.order("asc")` and `.order("desc")`. Mutation
 contexts add `.insert()`, `.update(id, patch)`, and `.delete(id)`.
 
 Normal additive changes apply during `sf publish`. Destructive changes require
@@ -383,10 +519,11 @@ credential. Objects are addressed by a random 128-bit id. Read URLs carry a
 runtime read key that Spacefast can rotate; rotation immediately invalidates
 every URL minted under the old key.
 
-```tsx
+```tsx client/index.tsx
 import { storage } from "@spacefast/zero/client";
 
 const uploaded = await storage.upload(file);
+uploaded.url; // a read URL to store or render
 await storage.delete(uploaded.id);
 ```
 
@@ -406,7 +543,7 @@ plan's storage limit.
 
 Keep server-only values in `.env.server`:
 
-```dotenv
+```dotenv .env.server
 RESEND_API_KEY=re_1234567890
 ```
 
@@ -460,5 +597,3 @@ What Zero adds beyond Lakebed:
 
 - The platform kit and charts — see [Styling](#styling).
 - `empty()`, `redirect()`, and `ImageResponse` endpoint helpers.
-- `ctx.log` structured logging and `ctx.invalidate()` for scoped live-query
-  refreshes.

@@ -28,6 +28,15 @@ Each publish receipt carries two addresses. The **live URL** is the space's
 stable address, and its content changes when you publish or roll back. The
 **version URL** serves exactly the bytes you published, forever.
 
+```mermaid
+flowchart LR
+  A[Upload files] --> B{Finalize}
+  B -->|validates and compiles| C[Version ready]
+  C -->|atomic| D[live channel moves]
+  B -->|fails| E[Live site unchanged]
+  D --> F[Immutable version URL kept forever]
+```
+
 ## The live URL is a pointer
 
 That pointer is called a **channel**. A successful publish moves the `live`
@@ -44,12 +53,13 @@ is compiled into the snapshot and restored on rollback:
 - [`sf.jsonc`](/serve/settings), the space configuration.
 - [`_redirects`](/serve/redirects) and [`_headers`](/serve/headers) rules.
 - [Custom visitor pages and layouts](/serve/pages).
-- [Runtime code](/apps), when the space runs Zero or Functions.
+- [Zero](/zero) or [Functions](/functions) code, when the space runs a
+  runtime.
 
 Other things belong to the space rather than the version, and do not roll
 back: [domains](/domains), [variables](/publish/variables),
-[access Grants](/share), comment threads, and — for apps — database rows and
-stored objects.
+[access Grants](/share), comment threads, and — for spaces that run code —
+database rows and stored objects.
 
 ## Access and claiming
 

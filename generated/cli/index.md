@@ -39,7 +39,7 @@ SPACE SELECTION FLAGS
 
 AUTHENTICATION FLAGS
   --claim-token=<value>  [env: SPACEFAST_CLAIM_TOKEN] Anonymous space claim token.
-  --token=<value>        [env: SPACEFAST_TOKEN] Access token for non-interactive auth.
+  --token=<value>        [env: SPACEFAST_TOKEN] API key for non-interactive auth.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -81,6 +81,9 @@ GLOBAL FLAGS
 - [`sf comments settings set`](#sf-comments-settings-set)
 - [`sf comments unarchive COMMENT`](#sf-comments-unarchive-comment)
 - [`sf continue`](#sf-continue)
+- [`sf crons`](#sf-crons)
+- [`sf crons ls`](#sf-crons-ls)
+- [`sf crons run TARGET`](#sf-crons-run-target)
 - [`sf db [TARGET]`](#sf-db-target)
 - [`sf db console [TARGET]`](#sf-db-console-target)
 - [`sf db dump [TARGET]`](#sf-db-dump-target)
@@ -124,6 +127,9 @@ GLOBAL FLAGS
 - [`sf git build`](#sf-git-build)
 - [`sf git connect`](#sf-git-connect)
 - [`sf git disconnect`](#sf-git-disconnect)
+- [`sf git github`](#sf-git-github)
+- [`sf git github installations`](#sf-git-github-installations)
+- [`sf git github repos [INSTALLATION]`](#sf-git-github-repos-installation)
 - [`sf git ls`](#sf-git-ls)
 - [`sf git origin`](#sf-git-origin)
 - [`sf git sync`](#sf-git-sync)
@@ -662,11 +668,11 @@ EXAMPLES
   $ sf autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.2.53/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.2.56/src/commands/autocomplete/index.ts)_
 
 ## `sf build [DIR]`
 
-Build and pack static output.
+Build and pack project output.
 
 ```text
 USAGE
@@ -702,10 +708,10 @@ EXECUTION FLAGS
   --[no-]stream     With --json, emit a JSONL build event stream. Use --no-stream for a single result blob.
 
 DESCRIPTION
-  Build and pack static output.
+  Build and pack project output.
 
-  Detect build settings, run the build, and pack the static output. A zero runtime compiles the capsule instead and
-  leaves the app shell `sf publish` would upload.
+  Detect build settings, run the build, and pack its output. A zero runtime compiles the capsule instead and leaves the
+  app shell `sf publish` would upload.
 
 EXAMPLES
   Detect build settings, run the build, and pack the output archive.
@@ -995,7 +1001,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Show channel history.
 
-  Show a channel's promotion history (the deploy log), newest first.
+  Show what this channel has gone live with, newest first.
 
 EXAMPLES
   Show promotion history for the live channel.
@@ -1348,7 +1354,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Continue publishing after claim.
 
-  Exchange a saved space key for a durable space access token after the space is claimed.
+  Exchange a saved space key for a durable space API key once the space is claimed.
 
 EXAMPLES
   Continue publishing to the claimed space saved in this directory.
@@ -1357,6 +1363,97 @@ EXAMPLES
 ```
 
 _See code: [src/commands/continue.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/continue.ts)_
+
+## `sf crons`
+
+Manage scheduled jobs.
+
+```text
+USAGE
+  $ sf crons [--profile <value>] [-y]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage scheduled jobs.
+
+  Inspect and exercise a space's scheduled jobs.
+```
+
+_See code: [src/commands/crons.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons.ts)_
+
+## `sf crons ls`
+
+List scheduled jobs.
+
+```text
+USAGE
+  $ sf crons ls [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List scheduled jobs.
+
+  List the scheduled jobs the live version declares, with the last failure reported for each. Crons are declared in
+  sf.jsonc, so publishing is how you change them.
+
+ALIASES
+  $ sf crons list
+
+EXAMPLES
+  List scheduled jobs for the docs space.
+
+    $ sf crons ls --space docs
+```
+
+_See code: [src/commands/crons/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons/ls.ts)_
+
+## `sf crons run TARGET`
+
+Run a scheduled job now.
+
+```text
+USAGE
+  $ sf crons run TARGET [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [--header <value>...]
+
+ARGUMENTS
+  TARGET  Cron key or path, as shown by `sf crons ls`.
+
+FLAGS
+  --header=<value>...  Request header as 'name: value'. Repeat for multiple headers.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Run a scheduled job now.
+
+  Requests the declared path over HTTPS right now, so you can see what the schedule sees without waiting for it. This is
+  the same request minus the platform's own cron header, which only the schedule can send: a handler that checks
+  CRON_SECRET still needs --header 'authorization: Bearer <secret>'. Exits non-zero when the path answers 400 or worse.
+
+EXAMPLES
+  Request the path declared for the digest job.
+
+    $ sf crons run /api/digest
+
+  Run a job whose handler checks the shared secret.
+
+    $ sf crons run api-digest --header 'authorization: Bearer $CRON_SECRET'
+```
+
+_See code: [src/commands/crons/run.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons/run.ts)_
 
 ## `sf db [TARGET]`
 
@@ -2656,7 +2753,7 @@ _See code: [src/commands/env/set.ts](https://github.com/spacefast/monorepo/blob/
 
 ## `sf feedback`
 
-Send support feedback.
+Send feedback to Spacefast.
 
 ```text
 USAGE
@@ -2678,9 +2775,9 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Send support feedback.
+  Send feedback to Spacefast.
 
-  Send feedback to Spacefast support.
+  Send feedback to Spacefast with optional error, request, space, or URL context.
 
 EXAMPLES
   Send docs feedback.
@@ -2861,26 +2958,31 @@ REPOSITORY FLAGS
                                API.
   --default-branch=<value>     Repository default branch.
   --[no-]detect-urls           Detect clone and upstream URLs from the origin remote.
-  --installation-id=<value>    [env: SPACEFAST_REPOSITORY_INSTALLATION_ID] Repository app installation ID for external
-                               statuses.
+  --installation-id=<value>    [env: SPACEFAST_REPOSITORY_INSTALLATION_ID] GitHub App installation ID. Resolved from
+                               your installations when omitted; pass it to pick one when several grant the repository.
   --production-branch=<value>  Branch that publishes to production.
   --provider=<option>          Repository host.
                                <options: github|gitlab|bitbucket|generic>
   --ref=<value>                [env: SPACEFAST_BUILD_REF] Ref, branch, tag, or commit to sync or build after connecting.
   --repository=<value>         Repository full name, for example owner/repo. Defaults to the origin remote.
-  --repository-id=<value>      Repository ID from the host.
+  --repository-id=<value>      Repository ID from the host. Resolved from GitHub when omitted.
   --repository-name=<value>    Repository name from the host.
   --upstream-url=<value>       Upstream repository URL.
 
 DESCRIPTION
   Connect repository.
 
-  Create or replace a repository connection.
+  Create or replace a repository connection. GitHub connections resolve their installation and repository IDs from your
+  GitHub App installations, so --repository owner/repo is enough.
 
 EXAMPLES
   Connect a GitHub repository.
 
     $ sf git connect --space docs --provider github --repository owner/repo
+
+  Pick the installation when more than one grants the repository.
+
+    $ sf git connect --space docs --provider github --repository owner/repo --installation-id 12345678
 
   Connect a repository, set the production branch, and sync.
 
@@ -2919,6 +3021,84 @@ EXAMPLES
 ```
 
 _See code: [src/commands/git/disconnect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/disconnect.ts)_
+
+## `sf git github`
+
+Manage GitHub App setup.
+
+```text
+USAGE
+  $ sf git github [--profile <value>] [-y]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage GitHub App setup.
+
+  Inspect GitHub App installations and repositories.
+```
+
+_See code: [src/commands/git/github.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github.ts)_
+
+## `sf git github installations`
+
+List GitHub installations.
+
+```text
+USAGE
+  $ sf git github installations [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List GitHub installations.
+
+  List GitHub App installations available to the current user.
+
+EXAMPLES
+  List GitHub App installations for the current user.
+
+    $ sf git github installations
+```
+
+_See code: [src/commands/git/github/installations.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github/installations.ts)_
+
+## `sf git github repos [INSTALLATION]`
+
+List GitHub repositories.
+
+```text
+USAGE
+  $ sf git github repos [INSTALLATION] [--profile <value>] [-y]
+    [-o <value>] [--space <value>]
+
+ARGUMENTS
+  [INSTALLATION]  GitHub App installation ID.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List GitHub repositories.
+
+  List repositories available to a GitHub App installation.
+
+EXAMPLES
+  List repositories for a GitHub App installation.
+
+    $ sf git github repos 12345678
+```
+
+_See code: [src/commands/git/github/repos.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github/repos.ts)_
 
 ## `sf git ls`
 
@@ -3101,7 +3281,7 @@ DESCRIPTION
   Display help for sf.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.53/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.58/src/commands/help.ts)_
 
 ## `sf init [NAME]`
 
@@ -3254,7 +3434,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Log in to Spacefast.
 
-  Authenticate this machine with browser device login, or save a provided access token.
+  Log this machine in through the browser, or save an API key you already have.
 
 ALIASES
   $ sf auth login
@@ -3557,11 +3737,15 @@ Show local MCP daemon status.
 
 ```text
 USAGE
-  $ sf mcp status [--json] [--repair]
+  $ sf mcp status [--profile <value>] [-y] [--repair]
 
 FLAGS
-  --json    Print machine-readable daemon status.
   --repair  Remove a stale local daemon manifest and print recovery steps.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show local MCP daemon status.
@@ -3804,7 +3988,7 @@ DESCRIPTION
   Create or update a provider profile.
 
   Create or update a named provider profile. Pass --api-url for the provider endpoint and --token to bind a credential
-  to it. Pass --token "" to clear a saved token.
+  to it. Pass --token "" to clear a saved key.
 
 EXAMPLES
   $ sf profiles set acme --api-url https://api.acme-host.example --token st_...
@@ -3967,10 +4151,10 @@ BUILD FLAGS
 
 VERSION FLAGS
   --immutable-asset-prefix=<value>...  Path prefix whose files are content-addressed and kept from the previous version,
-                                       so a tab loaded before this deploy can still fetch its chunks. Snapshot mode
+                                       so a tab loaded before this publish can still fetch its chunks. Snapshot mode
                                        only. Repeat for multiple prefixes.
-  --publish-mode=<option>              Replace the whole site (snapshot, default) or add to what is already deployed
-                                       (additive).
+  --publish-mode=<option>              Replace everything in the space (snapshot, default) or add to what is already
+                                       published (additive).
                                        <options: additive|snapshot>
 
 OUTPUT FLAGS
@@ -3989,7 +4173,7 @@ ALIASES
   $ sf deploy
 
 EXAMPLES
-  Publish a file or static directory directly.
+  Publish a file or directory directly.
 
     $ sf publish ./dist
 
@@ -4001,7 +4185,7 @@ EXAMPLES
 
     $ sf publish --remote
 
-  Deploy a static archive, or build a detected project archive remotely.
+  Publish a file archive, or build a detected project archive remotely.
 
     $ sf publish ./site.zip
 
@@ -4133,10 +4317,10 @@ GLOBAL FLAGS
 DESCRIPTION
   Compute routing.
 
-  Resolve the latest deployment's _redirects and _headers with current variables.
+  Resolve the latest version's _redirects and _headers with current variables.
 
 EXAMPLES
-  Resolve the latest deployment's redirects and headers.
+  Resolve the latest version's redirects and headers.
 
     $ sf routing compute --space docs
 ```
@@ -4153,7 +4337,7 @@ USAGE
     <value>...]
 
 FLAGS
-  -r, --routing=<value>  [default: .] Directory containing _redirects and _headers to inspect.
+  -r, --routing=<value>  [default: .] Directory containing _redirects, _headers, and sf.jsonc to inspect.
       --url=<value>...   URL or path to match against local routing rules. Repeat for multiple URLs.
 
 GLOBAL FLAGS
@@ -4164,10 +4348,10 @@ GLOBAL FLAGS
 DESCRIPTION
   Inspect local routing files.
 
-  Compile local _redirects and _headers files and optionally match URLs against the compiled rules.
+  Compile local _redirects, _headers, and sf.jsonc routing rules and optionally match URLs against the merged rules.
 
 EXAMPLES
-  Compile _redirects and _headers in the current directory.
+  Compile the routing files in the current directory.
 
     $ sf routing inspect
 
@@ -5124,7 +5308,7 @@ EXAMPLES
 
     $ sf share people invite person@example.com --role commenter --scope /docs --scope /assets
 
-  Invite someone to one immutable Version instead of the live site.
+  Invite someone to one immutable version instead of the live space.
 
     $ sf share people invite client@example.com --role viewer --target version:ver_123
 ```
@@ -5915,7 +6099,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Rotate an anonymous Space's key.
 
-  Replace an anonymous Space's key, site link, and claim link without changing recipient Links.
+  Replace an anonymous space's key, live URL, and claim link without changing recipient Links.
 
 EXAMPLES
   Rotate the anonymous Space saved in the current directory.
@@ -7223,7 +7407,7 @@ GLOBAL FLAGS
 DESCRIPTION
   List space versions.
 
-  List space versions and mark the live and currently deploying entries.
+  List space versions, marking the live one and any still publishing.
 
 ALIASES
   $ sf versions list

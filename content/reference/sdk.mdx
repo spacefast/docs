@@ -11,7 +11,7 @@ codes behave exactly as in the [REST API guide](/api).
 
 ## Install
 
-```bash
+```package-install
 npm install @spacefast/sdk
 ```
 
@@ -19,7 +19,9 @@ Pin the version you install. The SDK requires Node.js 20 or newer.
 
 ## Create a client
 
-```ts
+```ts twoslash
+// @types: node
+// ---cut---
 import { createSpacefastClient } from "@spacefast/sdk";
 
 const token = process.env.SPACEFAST_TOKEN;

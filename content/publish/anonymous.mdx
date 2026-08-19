@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [claim, expire, no-account]
 title: Publish without an account
 description: Publish by upload or Git push with no account, then claim the space before it expires.
 ---
@@ -45,10 +47,16 @@ An unclaimed space works, with limits:
 [push.new](https://push.new) turns a Git push into a live site, with no
 Spacefast CLI and no account:
 
-1. Open [push.new](https://push.new).
-2. Copy the `git remote add` command shown there.
-3. Run it inside the repository you want to publish.
-4. Push your current commit.
+<Steps>
+  <Step title="Open push.new">
+    Open [push.new](https://push.new) in your browser.
+  </Step>
+  <Step title="Add the remote">
+    Copy the `git remote add` command shown there and run it inside the
+    repository you want to publish.
+  </Step>
+  <Step title="Push">Push your current commit.</Step>
+</Steps>
 
 The commands look like this, but use the signed remote from your own
 session:

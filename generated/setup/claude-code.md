@@ -1,9 +1,9 @@
 ---
 title: "Connect Claude Code to Spacefast"
-description: "One paste and Claude Code can publish, with the plugin kept fresh from the marketplace."
+description: "One plugin install ships the publish skill plus MCP — the recommended lane."
 ---
 
-One paste and Claude Code can publish, with the plugin kept fresh from the marketplace.
+One plugin install ships the publish skill plus MCP — the recommended lane.
 
 **Plugin** — The /spacefast skill plus MCP in one install — or run /plugin marketplace add spacefast/plugins inside Claude Code.
 

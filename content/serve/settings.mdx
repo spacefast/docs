@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [sf.jsonc, config, spa]
 title: Space settings
 description: Configure a space in the file that publishes and rolls back with it, and apply saved settings with sf apply.
 ---
@@ -6,7 +8,8 @@ description: Configure a space in the file that publishes and rolls back with it
 `sf.jsonc` at the publish root is the space configuration that travels with
 your files: Spacefast validates it during publish, applies it atomically
 with the version, and restores it on rollback. The file itself is never
-served.
+served. `spacefast.jsonc`, `spacefast.json`, and `sf.json` are accepted
+names for the same file; the docs use `sf.jsonc`.
 
 ```bash
 sf init
@@ -47,6 +50,95 @@ for autocomplete. The playground produces a valid starting point:
 }
 ```
 
+## Key reference
+
+<TypeTable
+  type={{
+    $schema: {
+      type: "string",
+      description:
+        "The schema URL editors and agents use for autocomplete. `sf init` adds it.",
+    },
+    space: {
+      type: "string",
+      description: "The space this config targets.",
+    },
+    name: {
+      type: "string",
+      description: "The space display name.",
+    },
+    index: {
+      type: "string | false",
+      default: '"index.html"',
+      description:
+        "The homepage file. `false` disables directory indexes for a file tree.",
+    },
+    fallback: {
+      type: "string | { path, status }",
+      description:
+        "SPA fallback or custom not-found page. The object form needs both `path` and `status`.",
+    },
+    cleanUrls: {
+      type: "boolean",
+      description:
+        "Serve `/about.html` at `/about`. Defaults on for static sites, off for a 200-status SPA fallback.",
+    },
+    listing: {
+      type: "boolean",
+      description: "Serve a browsable file tree.",
+    },
+    meta: {
+      type: "object",
+      description:
+        "`title`, `description`, `image`, and `favicon` for listings, social cards, and browser icons.",
+    },
+    theme: {
+      type: "object",
+      description:
+        "Tokens for the designed access, error, and system pages. See Visitor pages.",
+    },
+    access: {
+      type: '"public" | { public: string[] }',
+      description:
+        "Make the space or selected paths public. Inert until an anonymous space is claimed.",
+    },
+    redirects: {
+      type: "array",
+      description:
+        "Config-form redirect rules. `_redirects` file rules match first.",
+    },
+    rewrites: {
+      type: "array",
+      description:
+        "Config-form rewrites; an absolute-URL destination is a proxy.",
+    },
+    headers: {
+      type: "array",
+      description:
+        "Config-form response headers. A `_headers` block wins for the same header.",
+    },
+    templates: {
+      type: "string[]",
+      description:
+        "Files that receive `{{ vars.NAME }}` substitution at publish.",
+    },
+    superpowers: {
+      type: "object",
+      description: "Injected scripts: analytics built-ins and your own tags.",
+    },
+    runtime: {
+      type: "object",
+      description:
+        "Declares Zero (`server`, `client`) or Functions (`entry`, `database`, `compatibilityDate`).",
+    },
+    build: {
+      type: "object",
+      description:
+        "`buildCommand`, `outputDirectory`, and friends for Git builds.",
+    },
+  }}
+/>
+
 ## Serving behavior
 
 Website behavior is the default: Spacefast resolves published files and
@@ -75,7 +167,11 @@ index matches first. It defaults to on for static sites and off for a
 
 ## Metadata and visitor pages
 
-`name` is the space display name. `meta.title`, `meta.description`,
+`name` is the space display name. While the live version's `sf.jsonc` sets
+`name`, the API refuses to rename the space and returns
+[`name_managed_by_config`](/errors/name_managed_by_config) — rename by
+changing the file and publishing, or remove `name` from the file to rename
+through the API. `meta.title`, `meta.description`,
 `meta.image`, and `meta.favicon` supply listing, social, and browser-icon
 metadata, and `theme` styles the designed access, error, and system pages.
 [Visitor pages](/serve/pages) covers `theme.json`, `DESIGN.md`,
@@ -196,6 +292,6 @@ By default the CLI waits until queued work finishes; tune the ceiling with
   [`_headers`](/serve/headers).
 - Build settings (`build.buildCommand`, `build.outputDirectory`, and
   friends) are covered in [Build from Git](/publish/git), and runtimes
-  (`runtime.kind`) in [Apps](/apps).
+  (`runtime.kind`) in [Zero](/zero) and [Functions](/functions).
 - Cloud and runtime variables are managed with
   [`sf env`](/publish/variables).

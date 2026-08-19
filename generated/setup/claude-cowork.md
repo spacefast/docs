@@ -1,9 +1,9 @@
 ---
 title: "Connect Claude Cowork to Spacefast"
-description: "An admin adds the connector once; every Cowork conversation can publish after that."
+description: "One admin click adds the org connector — every Cowork conversation can publish."
 ---
 
-An admin adds the connector once; every Cowork conversation can publish after that.
+One admin click adds the org connector — every Cowork conversation can publish.
 
 **[Add to your Claude org](https://claude.ai/admin-settings/connectors?modal=add-custom-connector&connectorName=Spacefast&connectorUrl=https%3A%2F%2Fmcp.spacefast.com)**
 

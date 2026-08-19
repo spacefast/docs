@@ -1,9 +1,9 @@
 ---
 title: "Connect Hermes to Spacefast"
-description: "Publishing from Hermes is one command away — from a chat channel or a script."
+description: "One command adds hosted MCP; the skill teaches scripts and channels the flow."
 ---
 
-Publishing from Hermes is one command away — from a chat channel or a script.
+One command adds hosted MCP; the skill teaches scripts and channels the flow.
 
 **Hosted MCP** — One command connects hosted MCP; sign in once on first tool use.
 

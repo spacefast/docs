@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [feedback, review]
 title: Comments
 description: Leave comments directly on a Spacefast preview, threaded, anchored to the page, and triaged from a shared inbox.
 ---

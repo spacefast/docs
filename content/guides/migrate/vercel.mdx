@@ -56,6 +56,27 @@ sf publish ./out
 - Convert `vercel.json` redirects and rewrites into root `_redirects`. External
   rewrites become absolute-URL `200` proxy rules. They require the corresponding
   entitlement.
+
+  <CodeGroup>
+
+  ```json vercel.json
+  {
+    "redirects": [
+      { "source": "/old-blog", "destination": "/blog", "permanent": true }
+    ],
+    "rewrites": [
+      { "source": "/api/:path*", "destination": "https://api.example.com/:path*" }
+    ]
+  }
+  ```
+
+  ```text _redirects
+  /old-blog /blog 301
+  /api/* https://api.example.com/:splat 200
+  ```
+
+  </CodeGroup>
+
 - Convert `vercel.json` headers into root `_headers`.
 - Replace server-only framework features with static generation, external APIs,
   or client code before publishing.
@@ -80,9 +101,10 @@ These Vercel and Next.js features need removal, build-time precomputation, or
 another service:
 
 - Request-time compute does not execute: Vercel Functions, Edge Functions,
-  Middleware, Cron Jobs, serverless API routes, server-side rendering (SSR),
+  Middleware, serverless API routes, server-side rendering (SSR),
   `getServerSideProps`, Draft Mode, ISR with on-demand revalidation, and
-  dynamic rendering from cookies or headers.
+  dynamic rendering from cookies or headers. Vercel Cron Jobs have a direct
+  equivalent: declare them as [scheduled jobs](/serve/crons) in `sf.jsonc`.
 - Next.js static export drops API Routes, default Image Optimization (including
   the `/_next/image` and `/_vercel/image` endpoints), internationalized
   routing, framework rewrites, redirects, headers, and `getStaticPaths` with

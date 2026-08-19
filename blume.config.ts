@@ -16,6 +16,8 @@ export default defineConfig({
   title: "Spacefast Docs",
   description: "Publish sites and build apps with Spacefast through the CLI, API, SDK, and MCP.",
   logo: { href: "/", text: "Spacefast Docs" },
+  // Site-wide announcement bar; enable with launch copy when there is news:
+  // banner: "Spacefast is in early access.",
   theme: {
     accent: { dark: "#ff7657", light: "#d93614" },
     background: { dark: "#111114", light: "#fbfaf7" },
@@ -83,6 +85,7 @@ export default defineConfig({
             "/publish",
             "/publish/versions",
             "/publish/git",
+            "/publish/remote",
             "/publish/anonymous",
             "/publish/variables",
           ],
@@ -94,6 +97,7 @@ export default defineConfig({
             "/serve/settings",
             "/serve/redirects",
             "/serve/headers",
+            "/serve/crons",
             "/serve/pages",
             "/serve/images",
           ],
@@ -101,17 +105,24 @@ export default defineConfig({
         {
           label: "Domains",
           root: "/domains",
-          items: ["/domains"],
+          items: ["/domains", "/domains/dns", "/domains/registration"],
         },
         {
           label: "Share",
           root: "/share",
-          items: ["/share", "/share/comments"],
+          items: ["/share", "/share/comments", "/share/verify"],
         },
         {
-          label: "Apps",
-          root: "/apps",
-          items: ["/apps", "/apps/zero", "/apps/functions"],
+          label: "Primitives",
+          root: "/zero",
+          items: [
+            "/zero",
+            "/functions",
+            "/functions/php",
+            "/database",
+            "/storage",
+            "/services",
+          ],
         },
         {
           label: "Agents",
@@ -171,6 +182,7 @@ export default defineConfig({
             "/account",
             "/account/teams",
             "/account/api-keys",
+            "/account/plans",
           ],
         },
         {

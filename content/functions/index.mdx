@@ -47,6 +47,10 @@ Spacefast detects the first matching worker entry:
 | Any route module under `functions/`          | File router; Spacefast          |
 |                                              | synthesizes the dispatcher      |
 
+A `.php` file under `functions/` takes a different lane: it executes at
+its derived route with the `sf_*` prelude, with no worker and no runtime
+declaration. See [Functions for PHP](/functions/php).
+
 Declare an entry when the file is in another location, or when you want to
 pin the runtime settings:
 
@@ -55,7 +59,7 @@ pin the runtime settings:
   "$schema": "https://spacefast.com/schemas/sf.json",
   "runtime": {
     "kind": "functions",
-    "entry": "build/worker.js",
+    "entry": "build/worker.js", // [!code highlight]
     "database": true,
     "compatibilityDate": "2026-07-01",
   },
@@ -79,7 +83,7 @@ Outbound network access is fail-closed: Spacefast denies it unless the
 published version holds the `fetch` capability, so a `fetch()` call in your
 code does not silently add network authority. Today no Functions publish
 grants that capability; outbound `fetch` is available only to
-[Zero](/apps/zero) actions. Check which capabilities a published version
+[Zero](/zero) actions. Check which capabilities a published version
 holds with `sf runtime status`.
 
 ## Variables
@@ -98,7 +102,7 @@ instead.
 ## Storage
 
 Every worker receives `env.STORAGE`, the same durable, unversioned object
-store that [Zero](/apps/zero#storage) uses. `upload(file)` takes a `Blob`
+store that [Zero](/zero#storage) uses. `upload(file)` takes a `Blob`
 and returns an object with `id`, `contentType`, `size`, and `url`;
 `get(id)` returns a `Response`; `delete(id)` removes the object. Objects
 belong to the space and survive rollbacks.
@@ -156,3 +160,18 @@ compatibility date, capabilities, and dispatch state.
 
 - Worker bundle: 8 MiB maximum.
 - Request execution: 30 seconds maximum.
+
+## Zero or Functions
+
+Functions gives you direct control over request handling with Web APIs and
+npm packages. If the database, authentication, and storage are the app,
+[Zero](/zero) builds all three in:
+
+|                   | [Zero](/zero)                      | Functions                    |
+| ----------------- | ---------------------------------- | ---------------------------- |
+| You write         | Capsule: schema and named handlers | Worker: one `fetch` handler  |
+| Database          | Built in                           | Optional `env.DB` binding    |
+| Authentication    | Built in                           | Bring your own flow          |
+| Storage           | Built in                           | Built in (`env.STORAGE`)     |
+| Framework         | Zero client and server APIs        | Web APIs and npm packages    |
+| Local development | `sf dev`                           | Your framework's dev server  |

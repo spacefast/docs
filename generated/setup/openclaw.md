@@ -1,9 +1,9 @@
 ---
 title: "Connect OpenClaw to Spacefast"
-description: "One command connects the hosted tools, one sign-in approves them — then publish from WhatsApp, Telegram, Discord, or a cron job."
+description: "Send one message from WhatsApp, Telegram, Discord — or a cron job."
 ---
 
-One command connects the hosted tools, one sign-in approves them — then publish from WhatsApp, Telegram, Discord, or a cron job.
+Send one message from WhatsApp, Telegram, Discord — or a cron job.
 
 **Hosted MCP** — One command connects hosted MCP. Then `openclaw mcp login spacefast` prints an authorization URL — approve it and pass the code back with `--code`.
 

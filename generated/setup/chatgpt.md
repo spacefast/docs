@@ -1,9 +1,9 @@
 ---
 title: "Connect ChatGPT to Spacefast"
-description: "In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up. No account needed."
+description: "In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up."
 ---
 
-In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up. No account needed.
+In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up.
 
 Paste into ChatGPT (Work mode or the desktop app):
 

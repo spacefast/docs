@@ -1,20 +1,49 @@
 ---
+search:
+  tags: [rewrites, proxy, "404"]
 title: Redirects
 description: Redirect, rewrite, proxy, and 404 rules in the _redirects file.
 ---
 
-Add `_redirects` at the publish root to redirect, rewrite, proxy, or return
-custom 404 responses. Spacefast compiles the file when a publish finishes
-and attaches the rules to that immutable version, so nothing parses the
-file per request — and the file itself is never served.
+`_redirects` is a convention file: put it at the publish root to redirect,
+rewrite, proxy, or return custom 404 responses, and it travels with the
+files it routes. Spacefast compiles the file when a publish finishes and
+attaches the rules to that immutable version, so nothing parses the file
+per request — and the file itself is never served.
 
-```text
+The same rules are also [`sf.jsonc`](/serve/settings) keys, useful when the
+config is generated. Both forms compile to the same rules and count against
+the same [caps](#rule-capacity); `_redirects` file rules match before
+config `redirects`, then config `rewrites`.
+
+<CodeGroup>
+
+```text _redirects
 /old /new 301
 /blog/* /news/:splat 302
 /app/* /index.html 200
 /api/* https://api.example.com/:splat 200
 /missing /404.html 404
 ```
+
+```jsonc sf.jsonc
+{
+  "redirects": [
+    { "source": "/old", "destination": "/new", "status": 301 },
+    { "source": "/blog/*", "destination": "/news/:splat", "status": 302 },
+  ],
+  "rewrites": [
+    { "source": "/app/*", "destination": "/index.html" },
+    { "source": "/api/*", "destination": "https://api.example.com/:splat" },
+  ],
+}
+```
+
+</CodeGroup>
+
+`_redirects` sits beside the other convention files that publish with a
+version: [`_headers`](/serve/headers), [`sf.jsonc`](/serve/settings), and
+the [`_layout.html` and `_pages/` visitor pages](/serve/pages).
 
 Vite spaces can also define these rules in `vite.config.ts` with the
 Spacefast Vite plugin, which merges config rules with `_redirects`, applies

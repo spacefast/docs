@@ -5,7 +5,7 @@ description: "The space was claimed and its owner kept agent publishing enabled;
 
 The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher.
 
-**How to resolve:** POST /v1/claim/exchange with this space key as bearer auth. Save the returned API key (e.g. .spacefast/state.json), then retry the request with it as Authorization: Bearer. Do not publish a new space.
+**How to resolve:** POST /v1/claim/exchange with this space key as bearer auth. Save the returned API key (for example in `.spacefast/state.json`), then retry the request with it as Authorization: Bearer. Do not publish a new space.
 
 <div data-pagefind-ignore>
 

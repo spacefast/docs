@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [access, password, protection, auth, private]
 title: Control who can visit
 sidebar:
   label: Access
@@ -156,6 +158,10 @@ sf share identity create --type oidc --name "Company login" --issuer https://log
 ```bash
 sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --role commenter --path '/docs/**'
 ```
+
+Connections are team-owned, not per-space: the API manages them under
+`/v1/teams/{teamId}/identity-connections`, and external audience Grants on
+any of the team's spaces can reference the same connection.
 
 - Signer rotation can overlap old and new keys.
 - Revoking a connection revokes its external Grants and admitted sessions.

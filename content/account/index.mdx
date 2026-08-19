@@ -33,7 +33,9 @@ lifecycles — revoking one does not revoke the others. After losing a
 device, also review [API keys](/account/api-keys) and remove keys the lost
 computer could still hold.
 
-Product and marketing email is a per-user notification setting.
+Product and marketing email, and every other notification preference, are
+per-user settings on your account, with unsubscribe controls in the same
+place.
 
 ## Two-factor authentication and device approvals
 
@@ -42,17 +44,15 @@ sign-ins use device authorization: `sf login` shows a code, and the browser
 asks you to approve the device. Approve only sign-ins you started; if a
 code appears that you did not request, deny it.
 
-## Notifications
-
-The dashboard has a notification inbox behind the bell in the top bar.
-Email notification preferences and unsubscribe controls live on your
-account.
-
 ## Multiple accounts in the CLI
 
-`sf profiles` lists the CLI's configured provider profiles, and the global
-`--profile` flag picks one per command, so one machine can work against
-several accounts.
+`sf profiles` lists the CLI's configured provider profiles; a profile binds
+an API base URL and credential, so one machine can work against several
+accounts. `sf profiles set` creates or updates a profile — pass `--api-url`
+for the endpoint and `--token` to bind a credential. `sf profiles use`
+selects the profile used when no `--profile` flag or `SPACEFAST_PROFILE`
+variable is set, and `sf profiles rm` deletes a profile and its stored
+credential. The global `--profile` flag picks a profile per command.
 
 ## Teams and keys
 

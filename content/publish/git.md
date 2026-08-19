@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [ci, previews, deploy, builds]
 title: Build from Git
 description: Connect a Git repository so Spacefast builds and publishes your space on every push, with branch previews and pull-request previews.
 ---
@@ -150,4 +152,6 @@ instead of adding a second one.
 writes a `.spacefast/build-output.tgz` you can publish with `sf publish`. It
 is useful for debugging build settings, or for CI that wants to build before
 uploading. Local builds are separate from cloud builds and never touch a
-repository connection.
+repository connection. To run the cloud build without connecting a
+repository at all, upload your source with
+[`sf publish --remote`](/publish/remote).

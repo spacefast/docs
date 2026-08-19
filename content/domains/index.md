@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [dns, ssl, https, hostname]
 title: Custom domains
 description: Attach a hostname you own, verify its DNS, and let Spacefast issue and renew SSL automatically.
 ---
@@ -6,6 +8,9 @@ description: Attach a hostname you own, verify its DNS, and let Spacefast issue 
 Connect a hostname you already own so a space serves at your address. Once
 the Domain Name System (DNS) records are in place, Spacefast issues and
 renews Secure Sockets Layer (SSL) certificates automatically.
+
+No domain yet? [Search, buy, and manage domain names](/domains/registration)
+covers finding and registering one.
 
 Anonymous spaces cannot use custom domains;
 [claim the space](/publish/anonymous) first.
@@ -54,11 +59,9 @@ own certificate is not available.
 
 ## Manage DNS at Spacefast
 
-When Spacefast is the domain's DNS host, manage records from the CLI with
-`sf domains dns add|update|rm|ls|export|refresh`, delegate with
-`sf domains nameservers set`, and check name availability with
-`sf domains search`. See the
-[CLI reference](/cli#sf-domains-dns-add-domain).
+When Spacefast is the domain's DNS host, you manage records, delegation,
+batches, and zone exports from the CLI.
+[Host DNS at Spacefast](/domains/dns) covers the whole workflow.
 
 ## List or remove hostnames
 

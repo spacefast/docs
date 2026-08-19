@@ -1,9 +1,9 @@
 ---
 title: "Connect Cursor to Spacefast"
-description: "One click adds the hosted tools. Approve once in the browser, nothing to install."
+description: "One click adds the hosted tools — approve once in the browser, nothing to install."
 ---
 
-One click adds the hosted tools. Approve once in the browser, nothing to install.
+One click adds the hosted tools — approve once in the browser, nothing to install.
 
 **[Add to Cursor](https://cursor.com/install-mcp?name=spacefast&config=eyJ1cmwiOiJodHRwczovL21jcC5zcGFjZWZhc3QuY29tIn0%3D)**
 

@@ -13,10 +13,9 @@ does not require an account.
 
 If you have a coding agent open, paste this:
 
-```text
-fetch https://spacefast.com/setup.md
-and publish this space to Spacefast
-```
+<Prompt description="Publish this space to Spacefast" actions={["copy"]}>
+  fetch https://spacefast.com/setup.md and publish this space to Spacefast
+</Prompt>
 
 The agent fetches the instructions, publishes, and reports back the live URL
 and the permanent version URL. If it published without an account, it also
@@ -59,7 +58,7 @@ URL for every future publish and get full
 :::tip
 Spacefast looks for `index.html` at the root of what you publish. It never
 runs server-executable files; everything is served as static content unless
-you declare a [runtime](/apps).
+you declare a [Zero](/zero) or [Functions](/functions) runtime.
 :::
 
 ## No terminal at all

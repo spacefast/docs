@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [rollback, revert, channels, promote]
 title: Versions, channels, and rollback
 sidebar:
   label: Versions and rollback

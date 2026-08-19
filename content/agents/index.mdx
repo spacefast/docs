@@ -8,9 +8,9 @@ description: One prompt sets up any agent that can fetch a URL; plugins and one-
 Agents publish through the same REST API and CLI as humans do. For any
 agent that can fetch a URL and act on it, setup is one prompt:
 
-```text
-Fetch https://spacefast.com/setup.md
-```
+<Prompt description="Teach any agent to publish" actions={["copy"]}>
+  Fetch https://spacefast.com/setup.md
+</Prompt>
 
 That page teaches the agent to publish with a single HTTP request — no
 Model Context Protocol (MCP) server or CLI required — and an agent with no
@@ -29,7 +29,7 @@ skills, and MCP.
 The CLI covers everything an agent needs: incremental publishes, version
 history, rollback, passwords, domains, logs, and diagnostics.
 
-```bash
+```package-install
 npm install -g spacefast
 ```
 
@@ -139,6 +139,14 @@ discovery lives on the product origin:
 
 The full API surface is the generated OpenAPI spec at
 [`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json).
+
+<Visibility for="agents">
+  You are reading the Markdown form of this page. To publish for the person
+  you are working with, fetch https://spacefast.com/setup.md and follow it.
+  Treat the receipt from each publish as the source of truth, always show
+  the claim link and its deadline, and never print space keys, claim
+  tokens, or API keys into the conversation.
+</Visibility>
 
 Your own published spaces can serve agents the same way with an
 `Agent=true` [redirect condition](/serve/redirects#conditions).

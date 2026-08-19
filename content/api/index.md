@@ -98,6 +98,21 @@ read one by ID, with `--space` to scope the list:
 sf operations --space spc_123
 ```
 
+## Call anything with `sf api`
+
+`sf api` sends a signed request to any endpoint with the CLI's resolved
+credentials — the escape hatch for endpoints without a dedicated command.
+Pass a path for a GET, or a method and a path; `--input` supplies a JSON
+body, and `--paginate` emits every page of a cursor-list GET as JSON Lines:
+
+```bash
+sf api /v1/me
+sf api POST /v1/publish --input @publish.json --idempotency-key 01J-logical-attempt
+```
+
+JSON envelopes print verbatim; a non-JSON response needs an explicit
+destination, `--output` for a file or `--raw-stdout` for stdout.
+
 ## Limits
 
 Spacefast enforces rate limits and plan quotas per account, and

@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [token, credentials, ci]
 title: API keys
 description: Create scoped API keys with presets for CI, publishers, admins, and billing readers.
 ---

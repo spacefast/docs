@@ -31,8 +31,18 @@ sf spaces ls --team acme
 sf spaces get --space docs
 ```
 
-Dashboard URLs: `my.spacefast.com/acme/docs`. Old dashboard links that
-contain `/~/` are legacy-only and permanently redirect to the canonical URL.
+Dashboard URLs: `my.spacefast.com/acme/docs`.
+
+### Data location
+
+`POST /v1/spaces` and `PATCH /v1/spaces/{spaceId}` accept a `dataLocation`
+field, and responses report the resolved data-location region (for example
+`"dca"`) — fixed when the space is created and immutable afterwards. An
+unsupported region fails with
+[`invalid_data_location`](/errors/invalid_data_location): pick a documented
+region, or use `auto`. Changing the region later fails with
+[`data_location_immutable`](/errors/data_location_immutable); create a new
+space in the region you want.
 
 ## Claim
 
@@ -78,6 +88,12 @@ Content-Type: application/json
 - Repeated renames never create a redirect chain.
 - Custom domains, immutable version URLs, published versions, access
   settings, and content stay the same.
+
+The display name has one trap: while the live version's `sf.jsonc` sets
+`name`, the API refuses to rename the space and returns
+[`name_managed_by_config`](/errors/name_managed_by_config). Change `name`
+in the file and publish, or remove it from the file to rename through the
+API.
 
 If the space has a live version, the rename returns an operation that
 updates the runtime and provider hostnames; `--wait` waits for it, and

@@ -8,9 +8,17 @@ produce the same receipt.
 
 ## Publish with curl
 
-```bash
+<CodeGroup>
+
+```bash curl
 curl -F "files=@index.html" https://api.spacefast.com/v1/publish
 ```
+
+```bash CLI
+sf publish --json
+```
+
+</CodeGroup>
 
 To publish a folder, zip it first and send it as `-F archive=@site.zip`.
 The response is a JSON envelope whose `data` is the receipt, and the

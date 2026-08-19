@@ -1,4 +1,6 @@
 ---
+search:
+  tags: [env, environment-variables, secrets]
 title: Variables
 description: Manage build and runtime configuration without committing secrets.
 ---

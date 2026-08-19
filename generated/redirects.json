@@ -370,6 +370,11 @@
     "to": "/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/api/operations/getv1spacesbyspaceidcrons",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/api/operations/getv1spacesbyspaceiddata-sources",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -1020,11 +1025,6 @@
     "to": "/api/reference/spaces/postv1publish"
   },
   {
-    "from": "/api/operations/postv1repository-connectionsinstallationsclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
-  },
-  {
     "from": "/api/operations/postv1spacesbyspaceidapply",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidapply"
@@ -1388,6 +1388,11 @@
     "from": "/api/operations/postv1webhooksbywebhookidrotate-secret",
     "status": 301,
     "to": "/api/reference/activity/postv1webhooksbywebhookidrotate-secret"
+  },
+  {
+    "from": "/api/operations/preflightteamdomain",
+    "status": 301,
+    "to": "/api/reference/domains/preflightteamdomain"
   },
   {
     "from": "/api/operations/putv1meemail-preferences",
@@ -1928,6 +1933,11 @@
     "from": "/api/reference/operations/getv1spacesbyspaceidcommentsexport",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
+  },
+  {
+    "from": "/api/reference/operations/getv1spacesbyspaceidcrons",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidcrons"
   },
   {
     "from": "/api/reference/operations/getv1spacesbyspaceiddata-sources",
@@ -2580,11 +2590,6 @@
     "to": "/api/reference/spaces/postv1publish"
   },
   {
-    "from": "/api/reference/operations/postv1repository-connectionsinstallationsclaim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
-  },
-  {
     "from": "/api/reference/operations/postv1spacesbyspaceidapply",
     "status": 301,
     "to": "/api/reference/spaces/postv1spacesbyspaceidapply"
@@ -2948,6 +2953,11 @@
     "from": "/api/reference/operations/postv1webhooksbywebhookidrotate-secret",
     "status": 301,
     "to": "/api/reference/activity/postv1webhooksbywebhookidrotate-secret"
+  },
+  {
+    "from": "/api/reference/operations/preflightteamdomain",
+    "status": 301,
+    "to": "/api/reference/domains/preflightteamdomain"
   },
   {
     "from": "/api/reference/operations/putv1meemail-preferences",
@@ -3515,6 +3525,11 @@
     "to": "/api/reference/domains/postv1teamsbyteamiddomainsbydomainidsslretry"
   },
   {
+    "from": "/api/reference/resources/domains/methods/preflight_team_domain",
+    "status": 301,
+    "to": "/api/reference/domains/preflightteamdomain"
+  },
+  {
     "from": "/api/reference/resources/domains/methods/remove_team_domain",
     "status": 301,
     "to": "/api/reference/domains/removeteamdomain"
@@ -3725,6 +3740,11 @@
     "to": "/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_crons",
+    "status": 301,
+    "to": "/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_data_sources",
     "status": 301,
     "to": "/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -3903,11 +3923,6 @@
     "from": "/api/reference/resources/spaces/methods/post_v1_publish",
     "status": 301,
     "to": "/api/reference/spaces/postv1publish"
-  },
-  {
-    "from": "/api/reference/resources/spaces/methods/post_v1_repository_connections_installations_claim",
-    "status": 301,
-    "to": "/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
   },
   {
     "from": "/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
@@ -5095,6 +5110,11 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/platform-api/operations/getv1spacesbyspaceidcrons",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/platform-api/operations/getv1spacesbyspaceiddata-sources",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -5750,11 +5770,6 @@
     "to": "/platforms/api/reference/spaces/postv1publish"
   },
   {
-    "from": "/platform-api/operations/postv1repository-connectionsinstallationsclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
-  },
-  {
     "from": "/platform-api/operations/postv1spacesbyspaceidapply",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidapply"
@@ -6118,6 +6133,11 @@
     "from": "/platform-api/operations/postv1webhooksbywebhookidrotate-secret",
     "status": 301,
     "to": "/platforms/api/reference/activity/postv1webhooksbywebhookidrotate-secret"
+  },
+  {
+    "from": "/platform-api/operations/preflightteamdomain",
+    "status": 301,
+    "to": "/platforms/api/reference/domains/preflightteamdomain"
   },
   {
     "from": "/platform-api/operations/putv1meemail-preferences",
@@ -6730,6 +6750,11 @@
     "to": "/platforms/api/reference/domains/postv1teamsbyteamiddomainsbydomainidsslretry"
   },
   {
+    "from": "/platform-api/resources/domains/methods/preflight_team_domain",
+    "status": 301,
+    "to": "/platforms/api/reference/domains/preflightteamdomain"
+  },
+  {
     "from": "/platform-api/resources/domains/methods/remove_team_domain",
     "status": 301,
     "to": "/platforms/api/reference/domains/removeteamdomain"
@@ -6960,6 +6985,11 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_crons",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/platform-api/resources/spaces/methods/get_v1_spaces_by_space_id_data_sources",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -7138,11 +7168,6 @@
     "from": "/platform-api/resources/spaces/methods/post_v1_publish",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1publish"
-  },
-  {
-    "from": "/platform-api/resources/spaces/methods/post_v1_repository_connections_installations_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
   },
   {
     "from": "/platform-api/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
@@ -8325,6 +8350,11 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/platforms/api/reference/operations/getv1spacesbyspaceidcrons",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/platforms/api/reference/operations/getv1spacesbyspaceiddata-sources",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -8980,11 +9010,6 @@
     "to": "/platforms/api/reference/spaces/postv1publish"
   },
   {
-    "from": "/platforms/api/reference/operations/postv1repository-connectionsinstallationsclaim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
-  },
-  {
     "from": "/platforms/api/reference/operations/postv1spacesbyspaceidapply",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1spacesbyspaceidapply"
@@ -9348,6 +9373,11 @@
     "from": "/platforms/api/reference/operations/postv1webhooksbywebhookidrotate-secret",
     "status": 301,
     "to": "/platforms/api/reference/activity/postv1webhooksbywebhookidrotate-secret"
+  },
+  {
+    "from": "/platforms/api/reference/operations/preflightteamdomain",
+    "status": 301,
+    "to": "/platforms/api/reference/domains/preflightteamdomain"
   },
   {
     "from": "/platforms/api/reference/operations/putv1meemail-preferences",
@@ -9960,6 +9990,11 @@
     "to": "/platforms/api/reference/domains/postv1teamsbyteamiddomainsbydomainidsslretry"
   },
   {
+    "from": "/platforms/api/reference/resources/domains/methods/preflight_team_domain",
+    "status": 301,
+    "to": "/platforms/api/reference/domains/preflightteamdomain"
+  },
+  {
     "from": "/platforms/api/reference/resources/domains/methods/remove_team_domain",
     "status": 301,
     "to": "/platforms/api/reference/domains/removeteamdomain"
@@ -10190,6 +10225,11 @@
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcommentsexport"
   },
   {
+    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_crons",
+    "status": 301,
+    "to": "/platforms/api/reference/spaces/getv1spacesbyspaceidcrons"
+  },
+  {
     "from": "/platforms/api/reference/resources/spaces/methods/get_v1_spaces_by_space_id_data_sources",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getv1spacesbyspaceiddata-sources"
@@ -10368,11 +10408,6 @@
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_publish",
     "status": 301,
     "to": "/platforms/api/reference/spaces/postv1publish"
-  },
-  {
-    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_repository_connections_installations_claim",
-    "status": 301,
-    "to": "/platforms/api/reference/spaces/postv1repository-connectionsinstallationsclaim"
   },
   {
     "from": "/platforms/api/reference/resources/spaces/methods/post_v1_spaces_by_space_id_apply",
