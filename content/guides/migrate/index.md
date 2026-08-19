@@ -1,0 +1,96 @@
+---
+title: Move to Spacefast
+sidebar:
+  label: Start here
+description: Migration guidance for moving static sites and previews from other hosting providers to Spacefast.
+---
+
+Every migration is the same two commands: publish the static output your
+current host serves, then attach the domain. Keep root `_redirects` and
+`_headers` files when the source host already uses them.
+
+```bash
+sf publish ./dist
+```
+
+```bash
+sf domains add www.example.com --wait
+```
+
+## Choose a guide
+
+- [Migrate from Vercel](/guides/migrate/vercel)
+- [Migrate from Netlify](/guides/migrate/netlify)
+- [Migrate from GitHub Pages](/guides/migrate/github-pages)
+- [Migrate from Cloudflare Pages](#cloudflare-pages)
+- [Migrate from here.now](/guides/migrate/here-now)
+
+## Check capacity before the move
+
+Open the target team's **Usage & billing** page in the dashboard and
+compare its storage, routing, domain, and publish limits with the site you
+move.
+
+## What carries over
+
+Spacefast hosts static output. `_redirects` and `_headers` files, SPA
+fallbacks, custom 404 pages, and external proxies (plan-gated) carry over,
+and HTTPS certificates are automatic. If the source site needs request-time
+code, compile that work away, keep it in an external service, or use
+[Apps](/apps).
+
+You can publish built output from continuous integration (CI), an agent,
+or the CLI, or [connect a Git repository](/publish/git) so Spacefast builds
+on every push, with branch previews, PR preview comments, and status
+checks. For Next.js, start with the
+[Next.js integration](/guides/frameworks/nextjs).
+
+## Migration safety
+
+- Every publish is an immutable version, so you can roll back to any
+  previous version with `sf rollback` or from the dashboard.
+- Anonymous publishing works without an account; claim the space within 6
+  hours to keep it.
+- Any space version's files can be downloaded with `sf spaces download`.
+
+## Cloudflare Pages
+
+Cloudflare Pages sites that build to static files republish directly. Keep
+`_redirects` and `_headers` at the publish root: path redirects, splats,
+placeholders, local `200` rewrites, and supported response headers carry
+over, and omitted redirect statuses still default to `302`.
+
+```text
+# _redirects
+/docs/* /guides/:splat 301
+/app/* /index.html 200
+```
+
+```bash
+sf publish ./dist
+```
+
+Cloudflare-specific notes:
+
+- Replace Pages Functions, `_worker.js`, Workers bindings, Bulk Redirects,
+  and `_routes.json` behavior with static output, external services, or
+  application code; none of these run on Spacefast.
+- For rewrites to public upstream APIs, use external `200`
+  [proxy rules](/serve/redirects#proxy-routes). Cloudflare-specific request
+  mutation, bindings, and private credential injection do not carry over.
+- Basic Auth in `_headers` and external proxies depend on the target
+  team's routing entitlements; check them in the dashboard before relying
+  on either.
+- To keep building on push, [connect the repo](/publish/git):
+  `sf git connect --platform-preset cloudflare-pages` imports build
+  settings from your existing Pages config.
+- Remove platform-owned headers and Cloudflare cache headers from
+  `_headers`; Spacefast rejects them with diagnostics.
+
+## Cutover checklist
+
+1. Build the current static artifact.
+2. Publish to a test Spacefast space.
+3. Check routing, headers, redirects, and image paths.
+4. Add the production domain and wait for the DNS and certificate checks.
+5. Keep the previous host available until the new domain is healthy.

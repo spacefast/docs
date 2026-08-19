@@ -1,15 +1,31 @@
 ---
-title: Apps
+title: Run code on a space
 sidebar:
-  label: Choose a runtime
+  label: How apps work
 description: Add application code to a space with Zero or Functions.
 ---
 
-A space serves static files by default. Add a `runtime` block to `sf.jsonc`
-when the version needs code as well. Two runtimes exist: [Zero](/apps/zero), a
-full-stack runtime with a built-in database, authentication, and storage, and
-[Functions](/apps/functions), a single Web-standard `fetch` worker beside your
-static files. This page helps you pick one.
+A space serves static files by default. When a version needs code as well,
+declare a `runtime` block in [`sf.jsonc`](/serve/settings). The publish
+command compiles the code with the files, everything serves from the same
+hostname, and promoting an older version restores its code and runtime
+settings along with its content. There is no separate deploy pipeline for
+the app half of a site.
+
+Two runtimes exist:
+
+- **[Zero](/apps/zero)** is the full-stack runtime. One project contains a
+  Preact client, a typed server capsule, a database schema, authentication,
+  and storage, and one publish makes the whole app live.
+- **[Functions](/apps/functions)** is a single Web-standard `fetch` worker
+  beside your static files. Spacefast serves published files first and
+  routes the remaining requests to the worker.
+
+## Which one to pick
+
+Pick Zero when the database, authentication, and storage are the app. Pick
+Functions when you already have a worker or an SSR build, or when you want
+direct control over request handling.
 
 |                   | [Zero](/apps/zero)                 | [Functions](/apps/functions) |
 | ----------------- | ---------------------------------- | ---------------------------- |
@@ -20,13 +36,24 @@ static files. This page helps you pick one.
 | Framework         | Zero client and server APIs        | Web APIs and npm packages    |
 | Local development | `sf dev`                           | Your framework's dev server  |
 
-Pick Zero when the database, authentication, and storage are the app. Pick
-Functions when you already have a worker or an SSR build, or when you want
-direct control over request handling.
+## Code belongs to the version, data belongs to the space
 
-The runtime block belongs to the version. The publish command compiles it with
-the files. When you promote an older version, Spacefast restores its code and
-runtime settings.
+The runtime block, the compiled bundle, and the runtime settings are part of
+the immutable [version](/publish/versions), so a rollback restores the exact
+code that served before. Database rows and stored objects belong to the
+space: they persist across versions and do not rewind when you roll back.
+Check the current schema before rolling back across a migration.
 
-Both runtimes use the normal commands: `sf publish`, `sf runtime status`, and
-`sf logs runtime --follow`. Each runtime page has its own quick start.
+## Operate a running app
+
+Both runtimes use the normal commands:
+
+```bash
+sf publish
+sf runtime status
+sf logs runtime --follow
+```
+
+`sf runtime status` reports what the published version is running;
+[`sf logs runtime`](/operate/monitoring) follows the code's output. Each
+runtime page has its own quick start.

@@ -3,11 +3,10 @@ title: SDK
 description: Install @spacefast/sdk and make typed calls against the Spacefast REST API.
 ---
 
-The Spacefast SDK is a typed TypeScript client. Spacefast generates it from the
-same OpenAPI document as the [REST API reference](/api/reference). Use it when
-you want request and response types, and you do not want to write HTTP by hand.
-
-The API remains the contract. Authentication, envelopes, idempotency, and error
+The Spacefast SDK is a typed TypeScript client generated from the same
+OpenAPI document as the [REST API reference](/api/reference). Use it when
+you want request and response types without writing HTTP by hand. The API
+remains the contract: authentication, envelopes, idempotency, and error
 codes behave exactly as in the [REST API guide](/api).
 
 ## Install
@@ -32,9 +31,10 @@ const client = createSpacefastClient({
 });
 ```
 
-The client sends `apiKey` as `Authorization: Bearer …`. For browser sessions
-that rely on cookies, pass `credentials: "include"` instead of an API key. Mint
-keys with [`sf api-keys`](/account/api-keys) or the dashboard.
+The client sends `apiKey` as `Authorization: Bearer …`. For browser
+sessions that rely on cookies, pass `credentials: "include"` instead of an
+API key. Mint keys with [`sf api-keys`](/account/api-keys) or the
+dashboard.
 
 ## One typed call
 
@@ -64,10 +64,10 @@ const detail = await client.get("/v1/spaces/{spaceId}", {
 });
 ```
 
-The client unwraps successful JSON envelopes to the `data` payload. Failures
-throw `SpacefastApiError` carrying the problem document: `status`, `code`,
-`type` (the docs URL), `detail` as the message, `pointer` on validation
-errors, `requestId`, and `retry`.
+The client unwraps successful JSON envelopes to the `data` payload.
+Failures throw `SpacefastApiError` carrying the problem document:
+`status`, `code`, `type` (the docs URL), `detail` as the message,
+`pointer` on validation errors, `requestId`, and `retry`.
 
 ## Exports
 
@@ -78,9 +78,9 @@ errors, `requestId`, and `retry`.
 | `@spacefast/sdk/transport`  | Envelope helpers and transport types         |
 | `@spacefast/sdk/openapi.json` | The generated OpenAPI document            |
 
-If a capability is missing from the generated release that you installed, call
-the documented REST endpoint with `sf api` or `fetch`. Do not guess a method
-name.
+If a capability is missing from the generated release that you installed,
+call the documented REST endpoint with `sf api` or `fetch` rather than
+guessing a method name.
 
 ## Related
 

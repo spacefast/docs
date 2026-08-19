@@ -1,0 +1,188 @@
+---
+title: Headers
+description: Set and remove response headers with the _headers file.
+---
+
+Add `_headers` at the publish root to set or remove response headers.
+Spacefast compiles the file when a publish finishes and attaches the rules
+to that immutable version, so nothing parses the file per request — and the
+file itself is never served.
+
+```text
+/*
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+## Block syntax
+
+Each block starts with a path or URL matcher. Indented lines apply to
+matching responses.
+
+```text
+matcher
+  Header-Name: value
+  ! Header-To-Remove
+```
+
+The space after `!` is optional.
+
+- Lines beginning with `#` are comments.
+- Matchers must start at the beginning of the line. Indent header operations
+  with a space or a tab.
+- Header names may contain letters, numbers, and `-`.
+- Each line can be up to 2,000 characters.
+- A publish can include up to 100 header matcher blocks.
+
+## Matchers
+
+Matchers can be absolute paths beginning with `/` or absolute `http`/`https`
+URLs. URL matchers can include host patterns but not ports.
+
+```text
+/*
+  X-Content-Type-Options: nosniff
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+https://www.example.com/docs/*
+  X-Robots-Tag: index, follow
+
+https://*.example.com/private/*
+  X-Robots-Tag: noindex
+```
+
+Patterns support `*` splats and named placeholders such as `:slug`. Wildcard
+prefixes inside a segment, such as `*.example.com`, work only in
+absolute-URL matchers; in a bare path a `*` must be its own segment or end
+one.
+
+```text
+/blog/:slug
+  Link: </feed.xml>; rel="alternate"
+  X-Page-Slug: :slug
+
+https://*.example.com/files/*
+  Content-Disposition: inline
+
+https://:team.example.com/app/*
+  X-Team-Site: :team
+```
+
+Matchers otherwise follow the same wildcard and placeholder rules as
+[redirect patterns](/serve/redirects).
+
+## Set headers
+
+Set a header with an indented `Name: value` line. Spacefast canonicalizes
+header names: `x-frame-options` becomes `X-Frame-Options`.
+
+```text
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: geolocation=(), microphone=()
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/fonts/*
+  Access-Control-Allow-Origin: *
+  Timing-Allow-Origin: *
+```
+
+## Remove headers
+
+Prefix the header name with `!` to remove a response header from matching
+paths.
+
+```text
+/downloads/*
+  ! X-Robots-Tag
+  Cache-Control: no-store
+
+/legacy/*
+  !Link
+```
+
+## Runtime order
+
+All matching blocks apply in file order against the original request path.
+Captures from path and host matchers expand in header values. Spacefast
+joins duplicate set operations for the same header with commas. Remove
+operations delete previously applied values. A later set can add the header
+again.
+
+```text
+/*
+  X-Trace: base
+
+/docs/:slug
+  X-Trace: docs
+  X-Page: :slug
+
+/docs/private
+  ! X-Trace
+  X-Trace: private
+```
+
+Headers apply to runtime-served file responses, including internal rewrites
+and custom 404 files. They do not apply to browser redirects or external
+proxy responses.
+
+## No Basic Auth
+
+`Basic-Auth` is not a response header, and Spacefast rejects it on every
+plan with the `header_basic_auth_unsupported` publish diagnostic. To protect
+paths, use [Spacefast sharing](/share): passwords, links, people, and path
+rules.
+
+## Unsupported headers
+
+Spacefast manages connection, transport, cookie, redirect, range, and edge
+cache behavior. You cannot change these headers from `_headers`.
+
+| Header group     | Headers                                                                                                                                                                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Platform-managed | `Accept-Ranges`, `Age`, `Allow`, `Alt-Svc`, `Connection`, `Content-Encoding`, `Content-Length`, `Content-Range`, `Date`, `Location`, `Server`, `Set-Cookie`, `Strict-Transport-Security`, `Trailer`, `Transfer-Encoding`, and `Upgrade`. |
+| Edge cache       | `CDN-Cache-Control`, `Cloudflare-CDN-Cache-Control`, `Netlify-CDN-Cache-Control`, and `Surrogate-Control`.                                                                                                                               |
+
+Spacefast allows `Cache-Control` with a publish warning
+(`header_cache_control_platform_managed`); a rule that sets it replaces the
+platform cache policy, and serving honors your value verbatim for public
+file responses. Without a rule, HTML gets
+`public, s-maxage=31536000, max-age=0, must-revalidate`, other revalidating
+files get `public, max-age=0, must-revalidate`, and immutable assets get
+`public, max-age=31536000, immutable`. Spacefast tells the edge whether the
+final response is shared-cacheable; the browser can revalidate while the
+edge serves repeat requests.
+
+## Invalid rules
+
+```text
+# Matcher must start with / or use an absolute URL
+assets/*
+  Cache-Control: public
+
+# Header operations must be inside a matcher block
+  X-Frame-Options: DENY
+
+# Header operations need Name: value
+/*
+  X-Frame-Options DENY
+
+# URL matchers cannot include ports
+https://example.com:8443/*
+  X-Robots-Tag: noindex
+
+# These are managed by Spacefast
+/*
+  Set-Cookie: session=abc
+  Strict-Transport-Security: max-age=31536000
+  CDN-Cache-Control: max-age=60
+```
+
+Redirects, rewrites, proxy routes, and custom 404 rules use a separate
+[Redirects](/serve/redirects) page.

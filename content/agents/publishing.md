@@ -3,7 +3,7 @@ title: Publish as an agent
 description: The one-call publish flow, the receipt fields that matter, and how to keep publishing after a space is claimed.
 ---
 
-One curl call publishes; the [CLI](/cli) covers the full surface. Both
+One curl call publishes, and the [CLI](/cli) covers the full surface. Both
 produce the same receipt.
 
 ## Publish with curl
@@ -12,41 +12,43 @@ produce the same receipt.
 curl -F "files=@index.html" https://api.spacefast.com/v1/publish
 ```
 
-To publish a folder, zip it first. Send it as `-F archive=@site.zip`. The
-response is a JSON envelope; `data` is the receipt, and it contains everything
-that matters:
+To publish a folder, zip it first and send it as `-F archive=@site.zip`.
+The response is a JSON envelope whose `data` is the receipt, and the
+receipt contains everything that matters:
 
 - **`data.space.liveUrl`**: the live site.
 - **`data.version.immutableUrl`**: the published bytes, frozen, reserved in
   the initial receipt.
-- **`data.next`**: the one normative next step. Branch on `data.next.action`:
-  `done` (stop), `upload` (PUT the files in `data.upload.targets`, then POST
-  `data.next.url`), `finalize` (POST `data.next.url`), `poll` (GET
-  `data.next.url` after `data.next.retryAfter` seconds).
-- **`data.activation.outcome`**: whether the version is serving. Liveness is a
-  channel pointer; never infer it from a version status.
-- **`data.claim.claimUrl`** and **`data.claim.expiresAt`**: anonymous spaces
-  expire unless claimed within 6 hours. Always show the user the claim link and
-  the deadline.
+- **`data.next`**: the one normative next step. Branch on
+  `data.next.action`: `done` (stop), `upload` (PUT the files in
+  `data.upload.targets`, then POST `data.next.url`), `finalize` (POST
+  `data.next.url`), or `poll` (GET `data.next.url` after
+  `data.next.retryAfter` seconds).
+- **`data.activation.outcome`**: whether the version is serving. Liveness
+  is a channel pointer; never infer it from a version status.
+- **`data.claim.claimUrl`** and **`data.claim.expiresAt`**: anonymous
+  spaces expire unless claimed within 6 hours. Always show the user the
+  claim link and the deadline.
 
-MCP callers also get `shareBlurb`, a paste-ready one-liner. The HTTP receipt
-does not carry it.
+MCP callers also get `shareBlurb`, a paste-ready one-liner that the HTTP
+receipt does not carry.
 
 For anonymous spaces, send the receipt's `data.claim.key` (the space key,
 `sfc_...`) as `Authorization: Bearer sfc_...` when you poll, read
-`data.links.inspect` / `data.links.version`, finalize uploads, or update the
-same `spaceId`. Never print the key back to the user. Errors are RFC 9457
-problem documents: branch on the stable `code` and follow `type` for the
-recovery page.
+`data.links.inspect` / `data.links.version`, finalize uploads, or update
+the same `spaceId` — and never print the key back to the user. Errors are
+RFC 9457 problem documents: branch on the stable `code` and follow `type`
+for the recovery page.
 
 ## Continue after claim
 
 Claiming ends the space key's publish rights. When the owner keeps agent
 continuation on (the default at claim time), the key becomes a one-time
-exchange voucher. The next publish with it fails with
-`409 space_claimed_credential_available` — the signal to run the exchange once.
-CLI agents run [`sf continue`](/cli#sf-continue) to exchange the saved space
-key for a durable credential in one command. API-only agents:
+exchange voucher: the next publish with it fails with
+`409 space_claimed_credential_available`, which is the signal to run the
+exchange once. CLI agents run [`sf continue`](/cli#sf-continue) to exchange
+the saved space key for a durable credential in one command. API-only
+agents:
 
 1. Call `POST /v1/claim/exchange` with the same bearer auth. It returns
    `data.credential.accessToken`, a durable publish-only key scoped to that
@@ -54,29 +56,29 @@ key for a durable credential in one command. API-only agents:
 2. Save the key to `.spacefast/state.json`.
 3. Retry the publish with the new key as the bearer credential.
 
-The owner can see and revoke the key under the team's **Settings → Developer →
-API keys**. If they turned continuation off, ask them to mint an API key in the
-dashboard instead.
+The owner can see and revoke the key under the team's **Settings →
+Developer → API keys**. If they turned continuation off, ask them to mint
+an API key in the dashboard instead.
 
 ## Agent-safe behavior
 
 - Incremental uploads send only changed files after the first publish.
-- Finalize is the completion boundary for live publishes. Refresh upload URLs
-  without restarting a version.
+- Finalize is the completion boundary for live publishes. Refresh upload
+  URLs without restarting a version.
 - Space metadata, password protection, and SPA mode survive redeploys.
-- Plan limits surface as diagnostics: publish the intended artifact, then read
-  and report what the API or CLI says.
+- Plan limits surface as diagnostics: publish the intended artifact, then
+  read and report what the API or CLI says.
 - Never print secrets into transcripts; the full rules live in
   [Auth and accounts](/agents#auth-and-accounts).
 
-Use `--json` on any CLI command when you parse the output, for example
+Use `--json` on any CLI command when you parse the output — for example
 `sf publish --json` for repeat local updates. Publishing the same directory
 again updates the space saved in `.spacefast/state.json`.
 
 ## Related
 
 - **[Set up an agent](/agents)**: CLI, skill, and MCP in one command.
-- **[Auth and accounts](/agents#auth-and-accounts)**: which credential to use
-  where.
+- **[Auth and accounts](/agents#auth-and-accounts)**: which credential to
+  use where.
 - **[REST API guide](/api)**: the envelope, idempotency, and the granular
   flow.

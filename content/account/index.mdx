@@ -12,40 +12,41 @@ This page covers signing in and keeping your account secure. The
 ## Sign in
 
 Spacefast sign-in is WordPress.com sign-in: use it at
-[spacefast.com](https://spacefast.com), and your teams and spaces appear under
-`my.spacefast.com/<team>`. The CLI authenticates separately with
-[`sf login`](/cli#sf-login). A browser session does not authenticate your
+[spacefast.com](https://spacefast.com), and your teams and spaces appear
+under `my.spacefast.com/<team>`. The CLI authenticates separately with
+[`sf login`](/cli#sf-login) — a browser session does not authenticate your
 terminal. For CI and scripts, use an [API key](/account/api-keys) instead.
 
 ## Protect your account
 
-The security page lists the sessions that can currently use your account, with
-your current session marked. Revoke any session you do not recognize; that
-device must sign in again. **Sign out all other sessions** covers a lost device
-or a shared browser.
+The security page lists the sessions that can currently use your account,
+with your current session marked. Revoke any session you do not recognize,
+and that device must sign in again; **Sign out all other sessions** covers
+a lost device or a shared browser.
 
 Connected apps are services you authorized to act with your Spacefast
 identity. Revoke an app when you no longer use or recognize it. Revocation
 stops future access but does not undo changes the app already made.
 
 Browser sessions, OAuth connections, and CLI API keys have separate
-lifecycles: revoking one does not revoke the others. After losing a device,
-also review [API keys](/account/api-keys) and remove keys the lost computer
-could still hold.
+lifecycles — revoking one does not revoke the others. After losing a
+device, also review [API keys](/account/api-keys) and remove keys the lost
+computer could still hold.
 
 Product and marketing email is a per-user notification setting.
 
 ## Two-factor authentication and device approvals
 
-Enroll a second factor on the account security page. CLI and agent sign-ins
-use device authorization: `sf login` shows a code, and the browser asks you
-to approve the device. Approve only sign-ins you started; if a code appears
-that you did not request, deny it.
+Enroll a second factor on the account security page. CLI and agent
+sign-ins use device authorization: `sf login` shows a code, and the browser
+asks you to approve the device. Approve only sign-ins you started; if a
+code appears that you did not request, deny it.
 
 ## Notifications
 
-The dashboard has a notification inbox behind the bell in the top bar. Email
-notification preferences and unsubscribe controls live on your account.
+The dashboard has a notification inbox behind the bell in the top bar.
+Email notification preferences and unsubscribe controls live on your
+account.
 
 ## Multiple accounts in the CLI
 

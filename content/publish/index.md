@@ -1,0 +1,92 @@
+---
+title: Publish a site
+sidebar:
+  label: How publishing works
+description: How publishing works in Spacefast, including CLI and agent publishes, immutable versions, updates, and the dashboard Drop uploader.
+---
+
+A publish sends a directory or a single file to a space. When the content
+changed, Spacefast creates an immutable [version](/publish/versions) with
+its own URL and moves the live URL to it once the upload completes; when the
+content is identical to the current version, the publish is a no-op. Earlier
+versions stay available for [rollback](/publish/versions).
+
+Directory publishes preserve relative paths and can carry `_redirects`,
+`_headers`, and [`sf.jsonc`](/serve/settings), so serving rules ship with
+the files they describe. Spacefast serves everything as inert static
+content; request-time code runs only through a declared
+[runtime](/apps). The CLI and dashboard warn you early about files that the
+runtime safety policy blocks.
+
+New spaces are private by default. The publish receipt returns an Open link
+that grants access, and [access settings](/share) make the space public when
+you are ready.
+
+## Three ways in
+
+| Path                | Best for                                     |
+| ------------------- | -------------------------------------------- |
+| `sf publish ./dist` | Local projects, agents, incremental updates  |
+| `POST /v1/publish`  | One-shot HTTP from scripts (see [API](/api)) |
+| Dashboard Drop      | No tooling at hand, zip or `index.html`      |
+
+The [CLI](/cli) is the main path: incremental uploads, `--json` receipts,
+CI, and dry-runs. It is also what [agents](/agents) run for you, and where
+the [quickstart](/start) starts.
+
+```bash
+sf publish ./dist
+```
+
+Add `--space docs` to target a space explicitly, `--json` for a
+machine-readable receipt, or `--dry-run` to preview what would upload.
+
+Drop is the dashboard uploader and the no-tooling escape hatch: drag a
+folder, a zip archive, or a standalone `index.html` onto a space and
+publish. Uploads resume if interrupted, zips are expanded before publishing,
+and `index.html` belongs at the archive root unless you want a file
+listing. To publish this way without an account, use
+[drop.website](https://drop.website); the upload creates an
+[anonymous space](/publish/anonymous) with a claim link.
+
+## What serves the homepage
+
+The space mode decides:
+
+- Website mode, the default, serves root `index.html` as the homepage when
+  it is present. Turn on the SPA fallback (`--spa true`) to route unmatched
+  paths to it.
+- Files mode serves a browsable file tree and does not support SPA
+  fallback.
+
+## First publish vs update
+
+The first publish creates a space and saves the space reference locally in
+`.spacefast/state.json`. Later publishes update that space, or the one named
+with `--space`. Updates compare `sha256` and size against the current
+version, so unchanged files are never uploaded again. When the upload
+finishes, the [live channel](/publish/versions) moves to the new version
+atomically.
+
+Publishes and builds draw from the team's resolved capacity, and CLI pushes
+and CI builds count the same.
+
+## Content scanning
+
+Spacefast scans published content for malware and abusive material. A
+publish can be held briefly while a scan finishes, surfaced as
+[`scan_pending`](/errors/scan_pending), and a scan that finds malware blocks
+the publish with [`malware_detected`](/errors/malware_detected).
+
+Takedowns remove serving for abusive content, and affected requests return
+[`abuse_takedown`](/errors/abuse_takedown). Abusive sites can be reported
+through the API; see the [API reference](/api/reference).
+
+## Related
+
+- [Versions, channels, and rollback](/publish/versions) explains what a
+  publish creates and how live moves.
+- [Build from Git](/publish/git) lets Spacefast run the build on every
+  push.
+- [Publish without an account](/publish/anonymous) covers anonymous spaces
+  and claiming.

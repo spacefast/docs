@@ -1,0 +1,201 @@
+---
+title: Space settings
+description: Configure a space in the file that publishes and rolls back with it, and apply saved settings with sf apply.
+---
+
+`sf.jsonc` at the publish root is the space configuration that travels with
+your files: Spacefast validates it during publish, applies it atomically
+with the version, and restores it on rollback. The file itself is never
+served.
+
+```bash
+sf init
+```
+
+`sf init` creates the file with the schema URL that editors and agents use
+for autocomplete. The playground produces a valid starting point:
+
+<ConfigPlayground />
+
+## Example
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "space": "docs",
+  "name": "Product docs",
+  "index": "index.html",
+  "fallback": { "path": "/404.html", "status": 404 },
+  "cleanUrls": true,
+  "listing": false,
+  "meta": {
+    "title": "Product docs",
+    "description": "Everything about the product.",
+    "image": "/og.png",
+    "favicon": "/favicon.svg",
+  },
+  "theme": {
+    "accent": "#ff603d",
+    "background": "#faf9f7",
+    "font": "Haskoy, system-ui, sans-serif",
+    "logo": "/logo.svg",
+    "name": "Product docs",
+  },
+  "access": {
+    "public": ["/assets/**", "/favicon.ico"],
+  },
+}
+```
+
+## Serving behavior
+
+Website behavior is the default: Spacefast resolves published files and
+directory indexes. For a browsable file tree instead, disable indexes and
+enable listings:
+
+```jsonc
+{ "index": false, "listing": true }
+```
+
+Use `fallback` for a single-page app (SPA) or a custom not-found page:
+
+```jsonc
+{ "fallback": "/index.html" }
+```
+
+```jsonc
+{ "fallback": { "path": "/404.html", "status": 404 } }
+```
+
+The object form needs both `path` and `status`.
+
+`cleanUrls` serves `/about.html` at `/about` when no file or directory
+index matches first. It defaults to on for static sites and off for a
+200-status SPA fallback, so set it explicitly when you use an SPA fallback.
+
+## Metadata and visitor pages
+
+`name` is the space display name. `meta.title`, `meta.description`,
+`meta.image`, and `meta.favicon` supply listing, social, and browser-icon
+metadata, and `theme` styles the designed access, error, and system pages.
+[Visitor pages](/serve/pages) covers `theme.json`, `DESIGN.md`,
+`_layout.html`, and complete `_pages` takeovers.
+
+## Routing and headers
+
+`_redirects` and `_headers` files work everywhere. The same rules also
+exist as `sf.jsonc` keys, which is useful when the config is generated:
+
+```jsonc
+{
+  "redirects": [{ "source": "/old", "destination": "/new", "status": 301 }],
+  "rewrites": [{ "source": "/api/*", "destination": "https://api.example.com/*" }],
+  "headers": [
+    { "source": "/*", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] },
+  ],
+}
+```
+
+`redirects[].status` accepts 301, 302, 303, 307, or 308 and defaults to
+302. `rewrites` take no status: a path destination is a rewrite, and an
+absolute URL is a proxy. `_redirects` file rules match before config
+`redirects`, then config `rewrites`, and a `_headers` block wins over a
+config rule for the same header. All sources count against the same
+[rule caps](/serve/redirects#rule-capacity).
+
+## Templates
+
+List files that should receive `{{ vars.NAME }}` substitution at publish:
+
+```jsonc
+{ "templates": ["config.js"] }
+```
+
+Values come from [variables](/publish/variables). Secret variables are
+refused in templates, and the publish fails with
+[`secret_variable_in_template`](/errors/secret_variable_in_template).
+
+## Access
+
+Make the whole space public (`"public"` is the only string form):
+
+```jsonc
+{ "access": "public" }
+```
+
+Or expose selected paths while everything else stays private:
+
+```jsonc
+{
+  "access": {
+    "public": ["/assets/**", "/favicon.ico", "!/assets/private/**"],
+  },
+}
+```
+
+Wildcards match whole path segments, and a list that is all negations is
+invalid. On an unclaimed space the block is inert until the space is
+claimed. For people, links, passwords, machine credentials, and policy
+rules, use [Access](/share).
+
+## Superpowers
+
+The `superpowers` block controls every script Spacefast injects into served
+pages: `enabled` is the master switch, `googleAnalytics` and
+`googleTagManager` cover the built-ins, and `javascriptTags` holds your own
+snippets. Released tags from [Tag Manager](/guides/tag-manager) are
+injected scripts too.
+
+```jsonc
+{
+  "superpowers": {
+    "enabled": true,
+    "disable_all_injection": false,
+    "googleAnalytics": { "enabled": true, "measurementId": "G-1234567890" },
+    "googleTagManager": { "enabled": false, "containerId": "GTM-1234567" },
+    "javascriptTags": [{ "name": "Banner", "enabled": true, "code": "..." }],
+  },
+}
+```
+
+The dashboard exposes the same controls under the space settings as
+**Superpowers**. To stop platform-injected analytics and tags from
+appearing at all, set `disable_all_injection` to `true`.
+
+## Apply saved settings
+
+Serving settings edited in the dashboard or through the API save first and
+go live when you apply them; until then the UI shows them as saved but not
+live. `sf apply` pushes already-saved settings onto the serving runtime
+without creating a new content version — a publish is the path that uploads
+files, and it can carry `sf.jsonc` with a version.
+
+```bash
+sf apply
+```
+
+Queue an apply for a specific space without waiting:
+
+```bash
+sf apply --space docs --no-wait
+```
+
+By default the CLI waits until queued work finishes; tune the ceiling with
+`--wait-timeout` (default 900 seconds).
+
+| Goal                                      | Command                                                                      |
+| ----------------------------------------- | ---------------------------------------------------------------------------- |
+| Publish new or changed files              | [`sf publish`](/publish)                                                     |
+| Move live/preview to an existing version  | [`sf promote`](/publish/versions) / [`sf rollback`](/publish/versions#promote-and-roll-back) |
+| Push saved settings that are not live yet | `sf apply`                                                                   |
+
+## What does not belong here
+
+- Rule syntax and limits for redirects, rewrites, proxies, and response
+  headers live in [`_redirects`](/serve/redirects) and
+  [`_headers`](/serve/headers).
+- Build settings (`build.buildCommand`, `build.outputDirectory`, and
+  friends) are covered in [Build from Git](/publish/git), and runtimes
+  (`runtime.kind`) in [Apps](/apps).
+- Cloud and runtime variables are managed with
+  [`sf env`](/publish/variables).

@@ -3,11 +3,10 @@ title: Teams
 description: Create teams, invite members, switch context, and set defaults for new spaces.
 ---
 
-A team is the billing and ownership boundary for spaces, domains, API keys, and
-plan limits. Your personal login can belong to many teams. CLI and dashboard
-commands run against the team you select.
-
-Dashboard teams live at `my.spacefast.com/<team>`.
+A team is the billing and ownership boundary for spaces, domains, API
+keys, and plan limits. Your personal login can belong to many teams, and
+CLI and dashboard commands run against the team you select. Dashboard teams
+live at `my.spacefast.com/<team>`.
 
 ## Create and list
 
@@ -16,7 +15,8 @@ sf teams create "Acme Inc"
 sf teams ls
 ```
 
-`sf whoami` and `sf status` show the login and the CLI's current default team.
+`sf whoami` and `sf status` show the login and the CLI's current default
+team.
 
 ## Switch teams
 
@@ -24,8 +24,8 @@ sf teams ls
 sf switch acme
 ```
 
-`sf teams switch` is the same operation. Pass `-o` / `--team` on any command to
-override the default for one call, or set `SPACEFAST_TEAM`.
+`sf teams switch` is the same operation. Pass `-o` / `--team` on any
+command to override the default for one call, or set `SPACEFAST_TEAM`.
 
 ## Invite members
 
@@ -51,8 +51,7 @@ sf teams members ls
 sf teams members rm jane@example.com
 ```
 
-The selected team's entitlements report its current member
-capacity.
+The selected team's entitlements report its current member capacity.
 
 ## Access defaults for new spaces
 
@@ -64,17 +63,18 @@ sf teams defaults
 sf teams defaults private
 ```
 
-This affects only the spaces you create after the change. Existing space Grants
-do not change. Use [Access](/spaces/access) to change them.
+Changing the default affects only spaces you create afterward. Existing
+space Grants do not change; use [Access](/share) for those.
 
 ## Audit log
 
-Each team keeps an audit log of team-level events: find it in the dashboard
-under **Settings → Activity**. For activity inside a single space, use
-[monitoring](/spaces/monitoring) instead.
+Each team keeps an audit log of team-level events, in the dashboard under
+**Settings → Activity**. For activity inside a single space, use
+[monitoring](/operate/monitoring) instead.
 
 ## Related
 
 - [API keys](/account/api-keys) for machine access scoped to a team.
-- [Spaces](/spaces) for creating and transferring spaces into a team.
+- [Manage spaces](/operate/spaces) for creating and transferring spaces
+  into a team.
 - [`sf login`](/cli#sf-login) for logging the CLI into the right account.
