@@ -21,7 +21,7 @@ individual values above it. A limit resolves to a number, or to
 
 The plans are Free, Personal, Work, and Enterprise, and API responses
 carry the team's plan as a `planCode`. Do not hard-code limit values in
-scripts; read the resolved entitlements instead, because a grant can
+scripts. Read the resolved entitlements instead, because a grant can
 change them without a plan change.
 
 ## Where to see entitlements and usage
@@ -96,7 +96,7 @@ compute seconds, bandwidth bytes, emails sent, and function invocations
 meter: the average bytes actually on disk during the period, not the
 size of what was uploaded. The infrastructure that serves the space
 measures these numbers, and they lag. The response carries the exact
-period it describes and when it was read; nothing in it means
+period it describes and when it was read. Nothing in it means
 "right now". A space that has never served reports `usage: null`.
 
 ## What happens at a limit
@@ -122,9 +122,9 @@ Each limit has a stable error code, so scripts can react precisely:
 | An unpaid balance | [`tenant_past_due`](/errors/tenant_past_due) |
 
 Not every limit fails the request. The plan policy lists **disabled
-behaviors**: things the plan disables instead of failing publishes,
-currently `free_external_proxy_disabled` and `routing_rules_over_plan`.
-Each entry states how the disabled behavior appears: as a warning, as a
+behaviors**: things the plan disables instead of failing publishes.
+Those behaviors are `free_external_proxy_disabled` and
+`routing_rules_over_plan`. Each entry states how the disabled behavior appears: as a warning, as a
 platform page, or ignored. `log_retention_clamped` clamps the log range
 to what the plan retains instead of rejecting the query.
 

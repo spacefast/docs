@@ -15,8 +15,8 @@ writes. To attach a hostname to a space, start at
 
 DNS hosting requires the domain to be delegated to Spacefast
 nameservers. Until delegation propagates, zone operations fail with
-[`nameserver_delegation_required`](/errors/nameserver_delegation_required);
-update the nameservers at the registrar, then retry.
+[`nameserver_delegation_required`](/errors/nameserver_delegation_required).
+Update the nameservers at the registrar, then retry.
 
 Check the domain's delegation status:
 
@@ -95,11 +95,11 @@ Split the change.
 Some records in the zone exist because a binding or feature created
 them, for example the records that route your hostname to a space. You
 cannot edit those directly
-([`dns_record_managed`](/errors/dns_record_managed)); change the
+([`dns_record_managed`](/errors/dns_record_managed)). Change the
 binding or feature that owns the record instead. A record of your own
 that collides with a managed one is rejected with
 [`dns_record_conflicts_with_managed`](/errors/dns_record_conflicts_with_managed).
-Managed records cannot be overridden, so remove or adjust the
+You cannot override managed records, so remove or adjust the
 conflicting record.
 
 ## Snapshots, capabilities, and connected providers
@@ -132,15 +132,15 @@ commands and a few error codes make that model visible:
 
 Two more guardrails protect against losing records. An operation can
 require exporting the current records first
-([`dns_export_required`](/errors/dns_export_required)); export the
+([`dns_export_required`](/errors/dns_export_required)). Export the
 zone, confirm the snapshot, and retry. A DNS import that cannot see
 the full zone refuses to run
 ([`dns_import_partial_visibility`](/errors/dns_import_partial_visibility)),
 because importing partial data would lose records. Verify delegation
 and retry when the full zone is visible.
 
-If another team already controls the domain's DNS, operations are
-blocked with
+If another team already controls the domain's DNS, Spacefast blocks
+operations with
 [`incumbent_controls_dns`](/errors/incumbent_controls_dns). Prove
 control by completing domain verification, or coordinate with the
 incumbent.

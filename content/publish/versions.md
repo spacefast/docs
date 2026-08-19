@@ -114,6 +114,6 @@ on their own.
 
 Saved space settings that are not yet on the serving runtime move with a
 different command, [`sf apply`](/serve/settings#apply-saved-settings).
-Source builds that produce versions are covered in
-[Build from Git](/publish/git), and promotions also appear in the analytics,
+[Build from Git](/publish/git) covers source builds that produce
+versions, and promotions also appear in the analytics,
 logs, and activity feed under [Monitoring](/operate/monitoring).

@@ -23,7 +23,7 @@ reference deliberately does not show.
   live URL, and has immutable versions, rollback, passwords, routing,
   and domains.
 
-Map your data model onto tenants and spaces once; the rest is API calls.
+Map your data model onto tenants and spaces once. The rest is API calls.
 Spaces on your platform have every feature that the consumer product has.
 
 ## Server-side keys
@@ -72,7 +72,7 @@ across requests. The `principal` field attributes resources, quotas, and
 audit history to that customer. To keep the mapping durable, store the
 Spacefast identifiers beside your own customer and project records. Your
 backend calls the Platform API and returns only the product data that
-your UI needs; customers do not need a separate Spacefast account.
+your UI needs. Customers do not need a separate Spacefast account.
 
 ## Operational guarantees
 

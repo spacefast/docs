@@ -27,7 +27,7 @@ Read a space's traffic summary:
 sf analytics --space docs
 ```
 
-The default window is 7 days; choose `48h`, `7d`, or `30d` with `--window`,
+The default window is 7 days. Choose `48h`, `7d`, or `30d` with `--window`,
 and add `--json` for scripts and agents.
 
 ## Logs
@@ -78,7 +78,7 @@ sf activity --space docs
 ```
 
 Filter by taxonomy code (for example `--code version.promoted`), or read
-account-wide events with `--all` and `--since`. Paginate with `--cursor`;
+account-wide events with `--all` and `--since`. Paginate with `--cursor`.
 `--limit` defaults to 50 (max 100).
 
 Activity is not a traffic graph, and it is not the channel promotion log.

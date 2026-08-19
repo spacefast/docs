@@ -9,7 +9,7 @@ successful publish creates an immutable version URL. This page covers the
 lifecycle operations on that identity.
 
 The [REST API reference](/api/reference) has exact request and response
-shapes; the CLI exposes the same resources with human-friendly commands.
+shapes. The CLI exposes the same resources with human-friendly commands.
 
 ## Create
 
@@ -39,9 +39,9 @@ Dashboard URLs follow the pattern `my.spacefast.com/acme/docs`.
 field, and responses report the resolved data-location region (for example
 `"dca"`). The region is fixed when the space is created and immutable
 afterwards. An unsupported region fails with
-[`invalid_data_location`](/errors/invalid_data_location); pick a documented
+[`invalid_data_location`](/errors/invalid_data_location). Pick a documented
 region, or use `auto`. Changing the region later fails with
-[`data_location_immutable`](/errors/data_location_immutable); create a new
+[`data_location_immutable`](/errors/data_location_immutable). Create a new
 space in the region you want.
 
 ## Claim
@@ -61,7 +61,7 @@ and continuation after claim.
 ## Rename
 
 A rename changes the human-facing slug and the managed `view.fast`
-hostname; the immutable space ID stays the same, so use the ID in
+hostname. The immutable space ID stays the same, so use the ID in
 integrations that rename spaces.
 
 In the dashboard, open **Space Settings → General → Managed address**, enter
@@ -110,7 +110,7 @@ Duplicate downloads a version and publishes those files as a new space:
 sf spaces duplicate --space docs --slug docs-copy
 ```
 
-Duplicate defaults to the live version; pass `--version`, `--title`, and
+Duplicate defaults to the live version. Pass `--version`, `--title`, and
 `--wait` as needed. The copy has the same content and a new identity.
 
 ## Transfer to another team

@@ -68,7 +68,7 @@ const local = createWordPressClient({ url: "https://example.wordpress.com" });
 Install the Spacefast plugin in WordPress. In WordPress **Settings →
 Spacefast**, choose **Headless CMS**, continue to Spacefast, authorize one
 team on the consent screen, and select the space. The consent screen requires
-space management (`spaces:write`); you cannot remove that scope.
+space management (`spaces:write`). You cannot remove that scope.
 
 Public content changes then wait for a 60-second quiet window before one
 production build starts. **Build now** is immediate, in both the WordPress
@@ -77,7 +77,7 @@ plugin and the Spacefast dashboard.
 The plugin authenticates with OAuth 2 and PKCE. Access is bounded by the
 signed-in user's live team role, the one team approved on the consent screen,
 and the Headless CMS scope (`builds:trigger` plus team and space discovery).
-**Disconnect** in the plugin revokes refresh access; the team's **Connected
+**Disconnect** in the plugin revokes refresh access. The team's **Connected
 Apps** page revokes the grant immediately.
 
 The plugin also has a **Static WordPress** mode: it publishes a

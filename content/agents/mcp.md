@@ -46,7 +46,7 @@ on disk. Install and configure it with the CLI:
 sf mcp install --agent claude-code
 ```
 
-For a client that should use hosted MCP with OAuth:
+To point a client at hosted MCP with OAuth:
 
 ```bash
 sf mcp install --agent cursor --remote --oauth
@@ -54,7 +54,7 @@ sf mcp install --agent cursor --remote --oauth
 
 Confirm the daemon with `sf mcp status`, and add `--repair` to clear a
 stale daemon manifest. `sf mcp daemon` and `sf mcp http` run the server
-manually; the [CLI reference](/cli#sf-mcp-daemon) covers both. Credentials stay
+manually. The [CLI reference](/cli#sf-mcp-daemon) covers both. Credentials stay
 in supported Spacefast state files, and the secret-handling rules live in
 [Auth and accounts](/agents#auth-and-accounts).
 
@@ -87,14 +87,14 @@ Tools manage the same spaces, versions, access, and domains as the
 mutations. Spacefast redacts tool results and persisted session
 transcripts before the model sees them.
 
-The docs tools read the published documentation corpus — the same pages
-this site serves — so a connected agent can answer product questions from
+The docs tools read the published documentation corpus, the same pages
+this site serves, so a connected agent can answer product questions from
 the docs without scraping HTML or leaving the session. The same lookups
 work over plain HTTP without a token: `GET /v1/docs/search` and
 `GET /v1/docs/page` on the [REST API](/api).
 
 For durable automation outside MCP, use an agent account or a `ci_deploy`
-API key; see [Auth and accounts](/agents#auth-and-accounts).
+API key. See [Auth and accounts](/agents#auth-and-accounts).
 
 ## Related
 

@@ -6,7 +6,7 @@ description: Search names and check availability from the CLI or API, look up TL
 ---
 
 Spacefast can find you a domain name and manage its registration. You
-search and research from the CLI and API; the purchase itself happens
+search and research from the CLI and API. The purchase itself happens
 in the dashboard. When you own the name, host its records with
 [Host DNS at Spacefast](/domains/dns) and attach it to a space with
 [custom domains](/domains).
@@ -83,7 +83,7 @@ Every domain your teams work with is an inventory record, whether it
 is registered at Spacefast or brought from outside:
 
 - `GET /v1/domains` lists inventory records across your teams, newest
-  first; pass `teamId` to limit to one team.
+  first. Pass `teamId` to limit to one team.
 - `POST /v1/domains` adds an apex or concrete hostname you already own.
   Assign it to a space with
   `PATCH /v1/teams/{teamId}/domains/{domainId}`.
@@ -94,7 +94,7 @@ is registered at Spacefast or brought from outside:
 - `POST /v1/domains/{domainId}/verify` checks the domain's DNS for
   proof of control and updates verification state.
 - `DELETE /v1/domains/{domainId}` deletes an unbound domain and its DNS
-  data; unbind bound domains first.
+  data. Unbind bound domains first.
 
 ## Automate the lifecycle
 

@@ -38,7 +38,7 @@ network round-trip hides in your request path.
 import { createVerifier } from "@spacefast/auth/server";
 
 const verify = createVerifier({
-  jwks, // { keys: [...] } — Ed25519 public keys
+  jwks, // { keys: [...] }, Ed25519 public keys
   issuer: "spacefast-api",
   audience: "spc_1234", // your space
   host: "docs.example.com", // the host this token must be bound to
@@ -48,7 +48,7 @@ const verify = createVerifier({
 
 const auth = await verify(request); // AuthContext | null
 
-// AuthContext — the shared contract:
+// AuthContext, the shared contract:
 // { principal: "account:usr_8m2p" | "person:per_…" | "guest:local",
 //   authorities: ["member:usr_8m2p"],
 //   capabilities: ["page.view", "comments.write"],
@@ -72,7 +72,7 @@ const outcome = await verify.outcome(request);
 // { state: "no-token" }              nothing to verify
 // { state: "invalid-token", reason } provably not acceptable here
 // { state: "verifier-unavailable", reason }
-//                                    this process can't render a verdict —
+//                                    this process can't render a verdict,
 //                                    for example a key id your JWKS doesn't
 //                                    know yet
 
@@ -114,7 +114,7 @@ tickets.onRefusal((code) => teardown(code)); // "no" is terminal, not a retry
 tickets.stop(); // cancels everything, leaks nothing
 ```
 
-The manager refreshes each token proactively at 80% of its lifetime. When
+The manager refreshes each token at 80% of its lifetime. When
 minting fails transiently, it backs off with jitter and keeps serving any
 unexpired token. Concurrent `current()` calls share one in-flight mint.
 During an outage, a caller with no live token gets a `TokenOfflineError`,

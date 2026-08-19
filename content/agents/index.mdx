@@ -38,7 +38,7 @@ the binary's SHA-256 before you install it.
 
 ## Run the setup command
 
-From the project the agent should work in, run:
+From the project where the agent will work, run:
 
 ```bash
 sf setup agent
@@ -53,7 +53,7 @@ sf setup agent -y --agent cursor --remote --oauth
 ```
 
 The [CLI reference](/cli#sf-setup-agent) lists every supported client and
-option. Cloud and browser agents that cannot run local commands should use
+option. Cloud and browser agents that cannot run local commands use
 [hosted MCP](/agents/mcp) at `https://mcp.spacefast.com` instead.
 
 ## Supported agents
@@ -96,7 +96,7 @@ one-click extension from the
 have no setup page. `github-copilot` and `factory-droid` get skills plus
 MCP. `gemini-cli`, `windsurf`, `cline`, and `continue` are skills-only and
 need `--skip-mcp`. Use `generic` for any client that reads `AGENTS.md`. In
-that command, `--agent claude` means Claude Code; the Claude app connects
+that command, `--agent claude` means Claude Code. The Claude app connects
 with the connector deeplink in the table. Any other agent that can fetch a
 URL can use [hosted MCP](/agents/mcp) or the
 [HTTP publish flow](/agents/publishing).
@@ -135,8 +135,9 @@ discovery lives on the product origin:
 - [MCP server card](https://spacefast.com/.well-known/mcp/server-card.json)
 - [agent-skills index](https://spacefast.com/.well-known/agent-skills/index.json)
 
-The full API surface is the generated OpenAPI spec at
-[`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json).
+The generated OpenAPI spec at
+[`https://api.spacefast.com/openapi.json`](https://api.spacefast.com/openapi.json)
+describes the full API.
 
 <Visibility for="agents">
   You are reading the Markdown form of this page. To publish for the person
@@ -176,14 +177,14 @@ For durable automation, create an agent account instead of sharing a broad
 personal API key. Scope the account to the teams and capabilities it
 needs. Create one in the dashboard under **Settings → Developer → Agents**.
 Agent accounts authenticate with OAuth `private_key_jwt`, and the CLI or
-on-device MCP loads them through `SPACEFAST_AGENT_CONFIG`; see
+on-device MCP loads them through `SPACEFAST_AGENT_CONFIG`. See
 [API keys](/account/api-keys) for presets and rotation. For a one-off CI
 deploy, a masked `ci_deploy` API key is the smaller option.
 
 ### Secret handling
 
 Treat space keys (`sfc_...`), upload tokens, device codes, API keys,
-[share-Link URLs](/share), and `.spacefast` state as credentials. Do not
+[share-link URLs](/share), and `.spacefast` state as credentials. Do not
 print, commit, archive, or include them in logs and chat, and avoid shell
 tracing when secrets are present. Pass credentials through the environment
 or the target platform's secret store, and clear temporary copies after

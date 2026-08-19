@@ -20,7 +20,7 @@ JEKYLL_ENV=production BUNDLE_PATH=.spacefast/cache/jekyll-bundle \
   bundle exec jekyll build --config _config.yml
 ```
 
-Without a `Gemfile`, it installs Jekyll itself
+Without a `Gemfile`, Spacefast installs Jekyll itself
 (`GEM_HOME=.spacefast/cache/jekyll-gems gem install jekyll --no-document`) and
 builds with the same `JEKYLL_ENV=production ... jekyll build --config` form.
 The `--config` argument names the detected file: `_config.yml`,
@@ -31,7 +31,7 @@ directory to the same path.
 
 ## Check the detected build
 
-Once the space has a repository connection:
+Once the space has a repository connection, run the detection:
 
 ```bash
 sf builds detect --space docs
@@ -47,7 +47,7 @@ sf builds detect --space docs --root-directory docs
 
 ## Publish from your computer
 
-To build without connecting a repository, send the source to the remote
+To build without a repository connection, send the source to the remote
 builder:
 
 ```bash

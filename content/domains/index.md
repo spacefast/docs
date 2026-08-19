@@ -12,8 +12,8 @@ renews Secure Sockets Layer (SSL) certificates automatically.
 If you don't own a name yet, see
 [Search, buy, and manage domain names](/domains/registration).
 
-Anonymous spaces cannot use custom domains;
-[claim the space](/publish/anonymous) first.
+Anonymous spaces cannot use custom domains.
+[Claim the space](/publish/anonymous) first.
 
 ## Attach the hostname
 

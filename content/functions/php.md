@@ -13,7 +13,7 @@ JSON, and reach the same brokered [database](/database), spam, and
 [email](/services) services the other runtimes get.
 
 ```php
-<?php // functions/hello.php — serves at /hello
+<?php // functions/hello.php serves at /hello
 sf_json(['hello' => sf_body()['name'] ?? 'world']);
 ```
 
@@ -65,9 +65,9 @@ gets, with two deliberate differences:
 - **Spam evidence: explicit values win.** Both lanes fill `userIp`,
   `userAgent`, and `referrer` from the visitor's request. The IP comes from
   the platform-resolved trusted peer, never from a client-settable header. In
-  a Zero mutation those values are host-owned and final; a PHP handler may
-  name any of them explicitly and its value is taken, which is what a
-  handler needs when it relays a submission it received from another
+  a Zero mutation those values are host-owned and final; a PHP handler can
+  name any of them explicitly, and the platform takes its value. That is
+  what a handler needs when it relays a submission it received from another
   visitor. The corrections
   (`sf_report_spam`, `sf_report_ham`) default nothing: a correction
   describes an earlier request, so its submission carries its own

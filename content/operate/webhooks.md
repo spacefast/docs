@@ -26,7 +26,7 @@ curl -X POST https://api.spacefast.com/v1/webhooks \
   }'
 ```
 
-The endpoint URL must be public HTTPS; Spacefast rejects `http://` and
+The endpoint URL must be public HTTPS. Spacefast rejects `http://` and
 private or internal hosts. The response includes the signing secret
 (`whsec_123`) exactly once. Store it now, because Spacefast never shows it
 again. To receive every event, leave `events` unset or set it to `["*"]`.
@@ -120,7 +120,7 @@ function verify(rawBody, header, secret) {
 ```
 
 During a secret rotation, the header carries two `v1=` entries, one per
-secret; accept a callback when any entry matches.
+secret. Accept a callback when any entry matches.
 
 ## Rotate the secret
 
@@ -141,8 +141,8 @@ immediately, pass `expireNow: true`.
 
 - `GET /v1/webhooks/:id/deliveries` lists attempts, newest first, and
   `GET /v1/webhook-deliveries/:deliveryId` shows one.
-- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event;
-  the dashboard attempt log has a **Resend** button that does the same.
+- `POST /v1/webhook-deliveries/:deliveryId/redeliver` replays an event.
+  The dashboard attempt log has a **Resend** button that does the same.
 - Each attempt has a 10-second timeout, follows no redirects, and reads at
   most 64 KiB of your response. Return a `2xx` to acknowledge.
 - Failed attempts retry with exponential backoff, and an attempt that never

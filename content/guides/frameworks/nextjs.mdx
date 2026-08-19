@@ -42,7 +42,7 @@ or through a [proxy route](/serve/redirects#proxy-routes).
 
 ## Functions with OpenNext
 
-Use this path when the app needs request-time Next.js features. Remove
+Use Functions with OpenNext when the app needs request-time Next.js features. Remove
 `output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
 into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
 so also remove any `export const runtime = "edge"` declarations.
@@ -85,8 +85,8 @@ a custom loader (see the Next.js
 [static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization)).
 
 For public images, use the [Site Accelerator API](/serve/images).
-It transforms images through `i0.wp.com`, handling width, quality, crop, fit,
-filters, and metadata at the CDN layer.
+It transforms images through `i0.wp.com` and handles width, quality, crop,
+fit, filters, and metadata at the CDN layer.
 
 Install the shared image package:
 
@@ -118,7 +118,7 @@ export default nextConfig;
 `next.config.ts` so that pnpm, Yarn PnP, and hoisted workspaces locate the
 package.
 
-Use absolute public image URLs for images that should go through Site
+Use absolute public image URLs for images that you want to go through Site
 Accelerator. Spacefast emits relative images in `public/` as static files, and
 the loader returns them unchanged.
 
@@ -139,7 +139,7 @@ export function HeroImage() {
 }
 ```
 
-This outputs image URLs like:
+The loader outputs image URLs like:
 
 ```text
 https://i0.wp.com/example.com/uploads/hero.jpg?quality=85&strip=all&w=1200

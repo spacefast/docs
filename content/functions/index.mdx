@@ -78,7 +78,7 @@ request. Next and OpenNext builds get `nodejs_compat` automatically.
 
 Outbound network access is fail-closed. Spacefast denies it unless the
 published version holds the `fetch` capability, so a `fetch()` call in your
-code does not silently add network authority. Today no Functions publish
+code does not silently add network authority. No Functions publish
 grants that capability; outbound `fetch` is available only to
 [Zero](/zero) actions. To check which capabilities a published version
 holds, run `sf runtime status`.
@@ -144,7 +144,7 @@ assets from disk and routes SSR and route handlers to the worker. See
 
 ## Develop and inspect
 
-Functions do not run inside `sf dev` yet. Use your framework's dev server,
+Functions does not run inside `sf dev` yet. Use your framework's dev server,
 then publish a version to test the Spacefast runtime.
 
 ```bash

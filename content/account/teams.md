@@ -64,7 +64,7 @@ sf teams defaults private
 ```
 
 Changing the default affects only spaces that you create afterward.
-Existing space Grants do not change; to change them, use
+Existing space Grants do not change. To change them, use
 [Access](/share).
 
 ## Audit log

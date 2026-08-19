@@ -4,7 +4,8 @@ description: Move a static site from GitHub Pages to Spacefast.
 ---
 
 Move the static site that GitHub Pages served. Spacefast can build Jekyll from
-the repository, or publish an artifact that you already build elsewhere.
+the repository, or you can publish an artifact that you already build
+elsewhere.
 
 ```bash
 # If GitHub Pages built the site with Jekyll
@@ -25,7 +26,7 @@ sf publish ./_site
 - If Pages builds Jekyll for you, connect the repository and let Spacefast
   detect Jekyll. Or build locally and publish `./_site`.
 
-## Before switching DNS
+## Before you switch DNS
 
 - Open the generated directory and check that it has `index.html` at the
   publish root. Pages can start from Markdown or `README.md`; publish
@@ -42,7 +43,7 @@ sf publish ./_site
   add a root `_redirects` file. Before you move a large ruleset, check the
   team's routing entitlement in the dashboard.
 - Recreate the custom domain in Spacefast, open the test space URL, and confirm
-  the new version serves. Then move DNS away from the GitHub Pages records. SSL
+  that the new version serves. Then move DNS away from the GitHub Pages records. SSL
   is automatic, and the cutover is reversible.
 
 ## What carries over
@@ -85,7 +86,7 @@ These parts of a GitHub Pages setup do not become part of the Spacefast space:
   resulting `_site` directory.
 - GitHub Actions workflow state (build logs, Pages environments and artifacts,
   and branch publishing settings) stays in GitHub.
-- GitHub Pages picks content types for you. Spacefast may pick differently for
+- GitHub Pages picks content types for you. Spacefast might pick differently for
   uncommon extensions, so test them before cutover.
 - If the repository also contains backend code, that code was not running on
   GitHub Pages. Keep it hosted separately. Publish only the static output.

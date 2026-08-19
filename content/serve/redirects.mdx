@@ -85,7 +85,7 @@ https://:subdomain.example.com/* /sites/:subdomain/:splat 200
 ```
 
 URL sources are host-specific. If a space has assigned hostnames, each exact
-URL host must belong to the space. Host patterns may use `*` or
+URL host must belong to the space. Host patterns can use `*` or
 placeholders.
 
 ## Patterns
@@ -126,7 +126,7 @@ resolve `{{ vars.NAME }}` from non-secret [variables](/publish/variables).
 
 A proxy route is a `200` rule with an absolute `http` or `https`
 destination. Use it for public endpoints that do not need Spacefast to
-inject private credentials; secret injection is not supported. Keep
+inject private credentials. Secret injection is not supported. Keep
 secret-bearing logic behind your own API, Worker, Function, or service,
 then proxy to that public endpoint. Internal rewrites to pages in the same
 space do not need an external proxy route.
@@ -142,7 +142,7 @@ proxy routes.
 
 To migrate from Cloudflare or Netlify functions, make these changes:
 
-- Move proxy manifest entries into root `_redirects` as `200` rules;
+- Move proxy manifest entries into root `_redirects` as `200` rules.
   Spacefast has no separate proxy manifest.
 - Keep response headers in root `_headers`.
 - Point rules at a real upstream URL for Cloudflare Pages Functions,
@@ -152,7 +152,7 @@ To migrate from Cloudflare or Netlify functions, make these changes:
 ## Query captures
 
 Query captures sit between source and destination. Use `name=:capture`.
-Both names must start with a letter. The query parameter name may include
+Both names must start with a letter. The query parameter name can include
 letters, numbers, underscores, or hyphens. The capture name after `:`
 allows only letters, numbers, and underscores.
 
@@ -187,14 +187,14 @@ values must be two-letter country codes.
 
 Spacefast supports only these four condition names. It rejects Netlify and
 Cloudflare spellings such as `nf_country` and `cf_ipcountry` with a
-`redirect_condition_unsupported` error that blocks the publish; rename them
+`redirect_condition_unsupported` error that blocks the publish. Rename them
 to `Country=` or `Language=`. Spacefast rejects `Role=` conditions with
 `redirect_role_unsupported`.
 
-Conditions combine with `AND`; comma-separated values inside one condition
+Conditions combine with `AND`. Comma-separated values inside one condition
 combine with `OR`.
 
-When a URL should serve a plain-text version to AI agents, use `Agent=true`
+When you want a URL to serve a plain-text version to AI agents, use `Agent=true`
 (accepted values are `true`, `yes`, and `1`). The same URL keeps the
 browser version for humans. Spacefast treats a request as agent-like when
 it prefers `text/plain` or `text/markdown` without asking for HTML, or when

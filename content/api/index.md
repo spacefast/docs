@@ -30,7 +30,7 @@ field.
 }
 ```
 
-Match on `code`, never on `detail`. Messages may improve over time, but
+Match on `code`, never on `detail`. Messages might improve over time, but
 Spacefast never renames or removes a code. The [error reference](/errors)
 lists every code.
 

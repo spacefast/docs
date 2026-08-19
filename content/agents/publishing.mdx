@@ -35,7 +35,7 @@ receipt contains everything that matters:
   - `finalize`: POST `data.next.url`.
   - `poll`: GET `data.next.url` after `data.next.retryAfter` seconds.
 - **`data.activation.outcome`**: whether the version is serving. Liveness
-  is a channel pointer; never infer it from a version status.
+  is a channel pointer. Never infer it from a version status.
 - **`data.claim.claimUrl`** and **`data.claim.expiresAt`**: anonymous
   spaces expire unless claimed within 6 hours. Always show the user the
   claim link and the deadline.
@@ -47,7 +47,7 @@ For anonymous spaces, send the receipt's `data.claim.key` (the space key,
 `sfc_...`) as `Authorization: Bearer sfc_...` when you poll, read
 `data.links.inspect` or `data.links.version`, finalize uploads, or update
 the same `spaceId`. Never print the key back to the user. Errors are
-RFC 9457 problem documents; branch on the stable `code` and follow `type`
+RFC 9457 problem documents. Branch on the stable `code` and follow `type`
 for the recovery page.
 
 ## Continue after claim
@@ -78,7 +78,7 @@ an API key in the dashboard instead.
 - Space metadata, password protection, and SPA mode survive redeploys.
 - Plan limits appear as diagnostics: publish the intended artifact, then
   read and report what the API or CLI says.
-- Never print secrets into transcripts; the full rules live in
+- Never print secrets into transcripts. The full rules live in
   [Auth and accounts](/agents#auth-and-accounts).
 
 When you parse CLI output, add `--json`, for example `sf publish --json`

@@ -32,7 +32,7 @@ export default defineConfig({
 
 ## TanStack Start static site
 
-When you know every route at build time, prerender them all. This fits
+When you know every route at build time, prerender them all. Prerendering fits
 marketing pages, docs, and blogs.
 
 ```ts
@@ -56,7 +56,7 @@ export default defineConfig({
 });
 ```
 
-TanStack can still build an internal server bundle for prerendering; Spacefast
+TanStack Start can still build an internal server bundle for prerendering; Spacefast
 publishes only the static files.
 
 ## TanStack Start SPA
@@ -86,8 +86,8 @@ export default defineConfig({
 
 TanStack Start emits its SPA shell as `dist/client/_shell.html`, plus any
 prerendered route files such as `index.html`. Spacefast auto-detects
-`_shell.html` as the fallback on direct publishes. In repository builds, make
-that explicit:
+`_shell.html` as the fallback on direct publishes. In repository builds, set
+the fallback explicitly:
 
 ```jsonc
 {

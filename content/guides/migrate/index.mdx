@@ -28,15 +28,15 @@ sf domains add www.example.com --wait
 ## Check capacity before the move
 
 Open the target team's **Usage & billing** page in the dashboard and
-compare its storage, routing, domain, and publish limits with the site you
-move.
+compare its storage, routing, domain, and publish limits with the needs of
+the site you move.
 
 ## What carries over
 
 Spacefast hosts static output. `_redirects` and `_headers` files, SPA
 fallbacks, custom 404 pages, and external proxies (plan-gated) carry over,
 and HTTPS certificates are automatic. If the source site needs request-time
-code, compile that work away, keep it in an external service, or add
+code, move that work to build time, keep it in an external service, or add
 [Functions](/functions).
 
 You can publish built output from continuous integration (CI), an agent,

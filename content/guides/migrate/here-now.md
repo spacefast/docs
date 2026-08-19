@@ -13,7 +13,7 @@ sf publish ./dist
 ```
 
 ```bash
-# Force the SPA fallback; the default --spa auto detects it for you
+# Force the SPA fallback; the default --spa auto-detects it for you
 sf publish ./dist --spa true
 ```
 
@@ -33,9 +33,9 @@ sf publish ./dist --spa true
 
 ## What carries over
 
-- Static artifacts within the target space's file-size limit. Uploaded files
-  are served as content; request-time code runs only through a declared
-  [Function](/functions).
+- Static artifacts within the target space's file-size limit. Spacefast
+  serves uploaded files as content; request-time code runs only through a
+  declared [Function](/functions).
 - Single-page apps (SPAs), after you enable the Spacefast SPA fallback for
   client-side routes.
 - Custom domains, after you add the domain in Spacefast and move DNS when the
