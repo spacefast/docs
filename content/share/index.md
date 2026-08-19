@@ -7,10 +7,10 @@ sidebar:
 description: Keep a space private, then grant access to people, links, passwords, machines, or the public.
 ---
 
-Claimed spaces start private with an owning-team Grant, and a URL by itself
-identifies content without granting access to it. To admit anyone else — a
-person, a review link, a password, a machine, or the whole public internet —
-you create a Grant.
+Claimed spaces start private with an owning-team Grant. A URL by itself
+identifies content; it does not grant access. To admit anyone else, you
+create a Grant for a person, a review link, a password, a machine, or the
+whole public internet.
 
 ## Grants
 
@@ -26,8 +26,9 @@ Five dimensions define a Grant:
 - **Constraints**: Optional time, use-count, email, IP, country, or
   user-agent limits.
 
-Access is additive: Spacefast allows a request when one active Grant matches
-every required dimension, and an exclusion applies only to its own Grant.
+Access is additive. Spacefast allows a request when one active Grant
+matches every required dimension, and an exclusion applies only to its own
+Grant.
 
 Let the owning team view a subtree:
 
@@ -35,8 +36,8 @@ Let the owning team view a subtree:
 sf share grant --to team --role viewer --path '/docs/**'
 ```
 
-Make the whole live space public; add `--target all-versions` to make
-immutable version URLs public too:
+Make the whole live space public. To make immutable version URLs public
+too, add `--target all-versions`:
 
 ```bash
 sf share grant --to public --role viewer --path '/**'
@@ -75,12 +76,12 @@ sf share request approve req_123
 sf share request deny req_123
 ```
 
-- Approval creates a Person Grant; it does not make the space public.
-- Responses do not reveal whether an unknown private space exists.
+Approval creates a Person Grant; it does not make the space public.
+Responses do not reveal whether an unknown private space exists.
 
 ## Links
 
-A Link is a revocable browser credential backed by one Grant; it can cover
+A Link is a revocable browser credential backed by one Grant. It can cover
 multiple paths, allow comments, expire, limit uses, or target live content
 or versions.
 
@@ -129,9 +130,9 @@ Rotate a compromised token:
 sf share token rotate mch_123 --show-secret
 ```
 
-- Treat password proofs, Link URLs, and machine tokens as secrets.
-- CLI JSON and non-interactive output mask them unless you explicitly use
-  `--show-secret`.
+Treat password proofs, Link URLs, and machine tokens as secrets. CLI JSON
+and non-interactive output mask them unless you explicitly use
+`--show-secret`.
 
 ## Script reads of a private space
 
@@ -159,12 +160,12 @@ sf share identity create --type oidc --name "Company login" --issuer https://log
 sf share identity grant --connection con_123 --subject user@example.com --name "Docs reviewer" --role commenter --path '/docs/**'
 ```
 
-Connections are team-owned, not per-space: the API manages them under
+Connections are team-owned, not per-space. The API manages them under
 `/v1/teams/{teamId}/identity-connections`, and external audience Grants on
 any of the team's spaces can reference the same connection.
 
-- Signer rotation can overlap old and new keys.
-- Revoking a connection revokes its external Grants and admitted sessions.
+Signer rotation can overlap old and new keys. Revoking a connection
+revokes its external Grants and admitted sessions.
 
 ## Public paths in sf.jsonc
 
@@ -184,9 +185,9 @@ Make the whole space public:
 { "access": "public" }
 ```
 
-On an unclaimed space this block is inert until the space is claimed.
+On an unclaimed space, this block is inert until the space is claimed.
 
-Public responses are cacheable; Spacefast never stores private or
+Public responses are cacheable. Spacefast never stores private or
 credential-bearing responses in the public cache, and a change to access
 purges the affected entries.
 
@@ -213,14 +214,14 @@ The three credential URLs work differently:
 
 ## The access page
 
-A private page renders its access page on the space's own domain, offering
-only the methods that the space's Grants allow: Spacefast sign-in, company
-single sign-on (SSO), a password, or an invite request. If only one SSO lane
-exists, Spacefast can go straight to that provider.
+A private page renders its access page on the space's own domain. The page
+offers only the methods that the space's Grants allow: Spacefast sign-in,
+company single sign-on (SSO), a password, or an invite request. If only
+one SSO lane exists, Spacefast can go straight to that provider.
 
 Theme the page with the `theme` section of `sf.jsonc`, or, on a paid plan,
 replace it with `_pages/access.html`. A custom access page must render
-`<sf-access-lanes>`. See [Visitor pages](/serve/pages).
+`<sf-access-lanes>`. For details, see [Visitor pages](/serve/pages).
 
 ## Network constraints and logout
 

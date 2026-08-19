@@ -4,12 +4,13 @@ description: Build and publish a Jekyll site from Git or the Spacefast CLI.
 ---
 
 Connect the repository and let Spacefast build the site, or build locally and
-publish `_site`. Detection recognizes Jekyll from `_config.yml`,
-`_config.yaml`, or `_config.toml` and publishes `_site` by default.
+publish `_site`. Spacefast detects Jekyll from `_config.yml`, `_config.yaml`,
+or `_config.toml` and publishes `_site` by default.
 
 ## Publish from Git
 
-[Connect the repository](/publish/git), then check these settings:
+[Connect the repository](/publish/git). Spacefast then chooses the install
+and build commands from the project.
 
 With a `Gemfile`, Spacefast installs with
 `BUNDLE_PATH=.spacefast/cache/jekyll-bundle bundle install` and builds with:
@@ -46,7 +47,8 @@ sf builds detect --space docs --root-directory docs
 
 ## Publish from your computer
 
-You can send the source to the remote builder without connecting a repository:
+To build without connecting a repository, send the source to the remote
+builder:
 
 ```bash
 sf publish --remote

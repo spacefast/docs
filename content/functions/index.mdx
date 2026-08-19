@@ -4,12 +4,11 @@ description: Run a worker on a Spacefast space, beside its static files and on t
 ---
 
 Functions adds one Web-standard `fetch` handler to a space. Spacefast
-serves static files first, and requests that no file answers go to the
-worker — for the paths the worker's compiled route table claims.
-Hand-written handlers claim the whole site, Next builds derive a narrower
-table, and unclaimed paths return 404 without waking the worker. The worker
-and the files publish as one version on one hostname, and they roll back
-together.
+serves static files first. Requests that no file answers go to the worker,
+on the paths that the worker's compiled route table claims. Hand-written
+handlers claim the whole site, and Next builds derive a narrower table.
+Unclaimed paths return 404 without waking the worker. The worker and the
+files publish as one version on one hostname, and they roll back together.
 
 ## Quick start
 
@@ -44,10 +43,9 @@ Spacefast detects the first matching worker entry:
 | -------------------------------------------- | ------------------------------- |
 | `.open-next/worker.js`                       | Next.js built with OpenNext     |
 | `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker               |
-| Any route module under `functions/`          | File router; Spacefast          |
-|                                              | synthesizes the dispatcher      |
+| Any route module under `functions/`          | File router; Spacefast synthesizes the dispatcher |
 
-A `.php` file under `functions/` takes a different lane: it executes at
+A `.php` file under `functions/` takes a different lane. It executes at
 its derived route with the `sf_*` prelude, with no worker and no runtime
 declaration. See [Functions for PHP](/functions/php).
 
@@ -66,31 +64,30 @@ pin the runtime settings:
 }
 ```
 
-A declared `runtime.kind: "functions"` with no detectable entry fails the
-publish with
-[`config_runtime_entry_missing`](/errors/config_runtime_entry_missing),
-while a directory with no declaration and no detected entry remains a
-static space.
+If you declare `runtime.kind: "functions"` and Spacefast finds no entry,
+the publish fails with
+[`config_runtime_entry_missing`](/errors/config_runtime_entry_missing).
+A directory with no declaration and no detected entry remains a static
+space.
 
 ## Runtime contract
 
 Handlers use `Request`, `Response`, streams, and `crypto`. Hand-written
-handlers cannot import Node built-ins — the build fails rather than the
-request — while Next and OpenNext builds get `nodejs_compat`
-automatically.
+handlers cannot import Node built-ins; the build fails rather than the
+request. Next and OpenNext builds get `nodejs_compat` automatically.
 
-Outbound network access is fail-closed: Spacefast denies it unless the
+Outbound network access is fail-closed. Spacefast denies it unless the
 published version holds the `fetch` capability, so a `fetch()` call in your
 code does not silently add network authority. Today no Functions publish
 grants that capability; outbound `fetch` is available only to
-[Zero](/zero) actions. Check which capabilities a published version
-holds with `sf runtime status`.
+[Zero](/zero) actions. To check which capabilities a published version
+holds, run `sf runtime status`.
 
 ## Variables
 
 Put server-only values in `.env.server`. The publish syncs them into the
-space as secret [variables](/publish/variables), never uploads the file,
-and the worker reads them from `env`:
+space as secret [variables](/publish/variables) and never uploads the
+file. The worker reads them from `env`:
 
 ```dotenv
 STRIPE_SECRET_KEY=sk_live_1234567890
@@ -102,10 +99,13 @@ instead.
 ## Storage
 
 Every worker receives `env.STORAGE`, the same durable, unversioned object
-store that [Zero](/zero#storage) uses. `upload(file)` takes a `Blob`
-and returns an object with `id`, `contentType`, `size`, and `url`;
-`get(id)` returns a `Response`; `delete(id)` removes the object. Objects
-belong to the space and survive rollbacks.
+store that [Zero](/zero#storage) uses. Objects belong to the space and
+survive rollbacks. The binding has three methods:
+
+- `upload(file)` takes a `Blob` and returns an object with `id`,
+  `contentType`, `size`, and `url`.
+- `get(id)` returns a `Response`.
+- `delete(id)` removes the object.
 
 ## Database
 
@@ -131,8 +131,8 @@ export default {
 ```
 
 Use `prepare().bind()` with `.all()`, `.first()`, `.run()`, or `.raw()`.
-`env.DB.exec()` runs DDL (data definition language) statements,
-`env.DB.batch()` groups statements, and `sf db console` opens a full SQL
+`env.DB.exec()` runs DDL (data definition language) statements, and
+`env.DB.batch()` groups statements. `sf db console` opens a full SQL
 session.
 
 ## Next.js
@@ -144,7 +144,7 @@ assets from disk and routes SSR and route handlers to the worker. See
 
 ## Develop and inspect
 
-Functions do not run inside `sf dev` yet: use the framework's dev server,
+Functions do not run inside `sf dev` yet. Use your framework's dev server,
 then publish a version to test the Spacefast runtime.
 
 ```bash
@@ -153,7 +153,7 @@ sf logs runtime --follow
 sf logs runtime --request-id req_9f21
 ```
 
-Runtime status reports the published entry, bundle digest and size,
+`sf runtime status` reports the published entry, bundle digest and size,
 compatibility date, capabilities, and dispatch state.
 
 ## Limits

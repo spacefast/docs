@@ -1,6 +1,6 @@
 ---
 title: Manage spaces
-description: Create, claim, rename, duplicate, transfer, download, and delete spaces, the durable resource behind a Spacefast site.
+description: Create, claim, rename, duplicate, transfer, download, and delete the spaces behind your Spacefast sites.
 ---
 
 A space is the durable resource behind a Spacefast site. A publish changes a
@@ -37,9 +37,9 @@ Dashboard URLs: `my.spacefast.com/acme/docs`.
 
 `POST /v1/spaces` and `PATCH /v1/spaces/{spaceId}` accept a `dataLocation`
 field, and responses report the resolved data-location region (for example
-`"dca"`) — fixed when the space is created and immutable afterwards. An
-unsupported region fails with
-[`invalid_data_location`](/errors/invalid_data_location): pick a documented
+`"dca"`). The region is fixed when the space is created and immutable
+afterwards. An unsupported region fails with
+[`invalid_data_location`](/errors/invalid_data_location); pick a documented
 region, or use `auto`. Changing the region later fails with
 [`data_location_immutable`](/errors/data_location_immutable); create a new
 space in the region you want.
@@ -81,25 +81,26 @@ Content-Type: application/json
 ```
 
 - Every former managed hostname redirects to the current one with a path-
-  and query-preserving `307 Temporary Redirect`; former branch aliases
-  redirect to their counterpart under the current hostname.
+  and query-preserving `307 Temporary Redirect`.
+- Former branch aliases redirect to their counterpart under the current
+  hostname.
 - Former managed addresses remain attached for the life of the space unless
   Spacefast explicitly releases one.
 - Repeated renames never create a redirect chain.
 - Custom domains, immutable version URLs, published versions, access
   settings, and content stay the same.
 
-The display name has one trap: while the live version's `sf.jsonc` sets
-`name`, the API refuses to rename the space and returns
+The display name has one constraint. When the live version's `sf.jsonc`
+sets `name`, the API refuses to rename the space and returns
 [`name_managed_by_config`](/errors/name_managed_by_config). Change `name`
 in the file and publish, or remove it from the file to rename through the
 API.
 
 If the space has a live version, the rename returns an operation that
-updates the runtime and provider hostnames; `--wait` waits for it, and
-repeating the same rename resumes an interrupted one. Spacefast refuses a
-rename while a space is moving, transferring, or deleting. The caller needs
-`spaces:rename` permission.
+updates the runtime and provider hostnames. `--wait` waits for that
+operation, and repeating the same rename resumes an interrupted one.
+Spacefast refuses a rename while a space is moving, transferring, or
+deleting. The caller needs `spaces:rename` permission.
 
 ## Duplicate
 
@@ -110,7 +111,7 @@ sf spaces duplicate --space docs --slug docs-copy
 ```
 
 Duplicate defaults to the live version; pass `--version`, `--title`, and
-`--wait` as needed. It is the same-content, new-identity path.
+`--wait` as needed. The copy has the same content and a new identity.
 
 ## Transfer to another team
 
@@ -123,7 +124,7 @@ sf transfers accept trf_123
 sf transfers cancel trf_123
 ```
 
-- Pending transfers expire, after 7 days by default.
+- Pending transfers expire after 7 days by default.
 - Both teams must live in the same tenant.
 
 ## Download files
@@ -138,12 +139,14 @@ Pass `--version` to pick a version other than live.
 
 ## Delete
 
+Delete a space from the CLI:
+
 ```bash
 sf spaces rm --space docs
 ```
 
-Spacefast queues the deletion. The CLI asks you to confirm unless you pass
-`--yes`.
+Spacefast queues the deletion. Unless you pass `--yes`, the CLI asks you
+to confirm.
 
 ## Related
 

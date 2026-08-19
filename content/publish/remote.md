@@ -7,9 +7,9 @@ description: Upload source with sf publish --remote and let Spacefast run the bu
 
 [Publishing](/publish) uploads output you already have, and
 [Build from Git](/publish/git) builds a connected repository on every push.
-`sf publish --remote` is the path between them: upload your source as it
-sits on disk, and Spacefast runs the build in the cloud — no repository
-connection, no local build tools.
+`sf publish --remote` sits between them. You upload your source as it is on
+disk, and Spacefast runs the build in the cloud, with no repository
+connection and no local build tools.
 
 Use it when the machine holding the source should not run the build: a
 laptop without the project's build tools, a CI job that only checks out code,
@@ -21,9 +21,9 @@ or an agent working in a sandbox.
 sf publish --remote
 ```
 
-The CLI uploads a source archive, and the remote runner detects the
-framework, install command, and build command, runs the build, and sends
-the output through the normal publish path — a successful build produces a
+The CLI uploads a source archive. The remote runner detects the framework,
+install command, and build command, runs the build, and sends the output
+through the normal publish path. A successful build produces a
 [version](/publish/versions) like any other publish. When the app lives in
 a repository subdirectory, point at it:
 
@@ -31,7 +31,7 @@ a repository subdirectory, point at it:
 sf publish --remote --root-directory apps/web
 ```
 
-Archives take this path on their own: `sf publish ./site.zip` always uses
+Archives take this path on their own. `sf publish ./site.zip` always uses
 remote detection, which packs static content unchanged and builds detected
 applications.
 
@@ -47,21 +47,21 @@ The flags that shape a remote build:
 | `--skip-build`              | Skip the build command and publish the selected directory unless `--output-directory` is set. |
 | `--[no-]auto-finalize`      | Finalize the remote build automatically after staging its output.            |
 
-`--prebuilt` is the opposite move: publish a prebuilt directory or archive
-without installing or building anything. Detection overrides such as
+The `--prebuilt` flag publishes a prebuilt directory or archive without
+installing or building anything. Detection overrides such as
 `--build-command` and `--output-directory` work here too; the full set is
 in the [`sf publish` reference](/cli#sf-publish-dir). For a space that also
 has a repository connection, `sf builds detect` shows the detected app and
 build settings, with ranked candidates when the repository holds more than
 one app.
 
-## Local builds, remote builds
+## Local builds
 
 `sf build` runs the same detect-build-and-pack step
 [locally](/publish/git#local-builds) and writes
-`.spacefast/build-output.tgz` for a plain `sf publish`. Reach for
-`--remote` when the build should run on Spacefast's runner instead of your
-machine; the result is the same kind of version either way.
+`.spacefast/build-output.tgz` for a plain `sf publish`. Use `--remote` when
+the build should run on Spacefast's runner instead of your machine. The
+result is the same kind of version either way.
 
 ## Watch the build
 
@@ -72,7 +72,7 @@ In scripts, `sf publish --remote --json --stream` emits a JSONL stream of
 build and publish events. If a source upload stalls,
 `sf builds resume-upload bld_123` refreshes the upload instruction.
 
-## The API underneath
+## API operations
 
 `POST /v1/spaces/{spaceId}/builds` creates a build from a repository or
 source archive: repository inputs use the saved connection, and source

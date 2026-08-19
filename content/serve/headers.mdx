@@ -3,11 +3,11 @@ title: Headers
 description: Set and remove response headers with the _headers file.
 ---
 
-`_headers` is a convention file: put it at the publish root to set or
-remove response headers, and it travels with the files it describes.
-Spacefast compiles the file when a publish finishes and attaches the rules
-to that immutable version, so nothing parses the file per request — and the
-file itself is never served.
+`_headers` is a convention file. Put it at the publish root to set or
+remove response headers, and it travels with the files it describes. When a
+publish finishes, Spacefast compiles the file and attaches the rules to
+that immutable version, so nothing parses the file per request. The file
+itself is never served.
 
 The same rules are also an [`sf.jsonc`](/serve/settings) key, useful when
 the config is generated. Both forms compile to the same rules, and a
@@ -72,8 +72,8 @@ The space after `!` is optional.
 
 ## Matchers
 
-Matchers can be absolute paths beginning with `/` or absolute `http`/`https`
-URLs. URL matchers can include host patterns but not ports.
+Matchers can be absolute paths beginning with `/` or absolute `http` or
+`https` URLs. URL matchers can include host patterns but not ports.
 
 ```text
 /*
@@ -89,9 +89,9 @@ https://*.example.com/private/*
   X-Robots-Tag: noindex
 ```
 
-Patterns support `*` splats and named placeholders such as `:slug`. Wildcard
-prefixes inside a segment, such as `*.example.com`, work only in
-absolute-URL matchers; in a bare path a `*` must be its own segment or end
+Patterns support `*` splats and named placeholders such as `:slug`.
+Wildcard prefixes inside a segment, such as `*.example.com`, work only in
+absolute-URL matchers. In a bare path, a `*` must be its own segment or end
 one.
 
 ```text
@@ -183,14 +183,16 @@ cache behavior. You cannot change these headers from `_headers`.
 | Edge cache       | `CDN-Cache-Control`, `Cloudflare-CDN-Cache-Control`, `Netlify-CDN-Cache-Control`, and `Surrogate-Control`.                                                                                                                               |
 
 Spacefast allows `Cache-Control` with a publish warning
-(`header_cache_control_platform_managed`); a rule that sets it replaces the
+(`header_cache_control_platform_managed`). A rule that sets it replaces the
 platform cache policy, and serving honors your value verbatim for public
-file responses. Without a rule, HTML gets
-`public, s-maxage=31536000, max-age=0, must-revalidate`, other revalidating
-files get `public, max-age=0, must-revalidate`, and immutable assets get
-`public, max-age=31536000, immutable`. Spacefast tells the edge whether the
-final response is shared-cacheable; the browser can revalidate while the
-edge serves repeat requests.
+file responses. Without a rule, Spacefast applies these defaults:
+
+- HTML gets `public, s-maxage=31536000, max-age=0, must-revalidate`.
+- Other revalidating files get `public, max-age=0, must-revalidate`.
+- Immutable assets get `public, max-age=31536000, immutable`.
+
+Spacefast tells the edge whether the final response is shared-cacheable.
+The browser can revalidate while the edge serves repeat requests.
 
 ## Invalid rules
 
@@ -217,5 +219,5 @@ https://example.com:8443/*
   CDN-Cache-Control: max-age=60
 ```
 
-Redirects, rewrites, proxy routes, and custom 404 rules use a separate
-[Redirects](/serve/redirects) page.
+For redirects, rewrites, proxy routes, and custom 404 rules, see
+[Redirects](/serve/redirects).

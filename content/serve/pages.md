@@ -6,9 +6,8 @@ description: Theme Spacefast's visitor pages, add site chrome, or take system pa
 Every version publishes with five visitor-facing pages: `404`, `denied`,
 `access`, `index`, and `preview`. The defaults are responsive, support dark
 mode, use the right HTTP status and cache policy, and pick up your theme
-automatically — so most spaces never touch them. When you do want control,
-three layers exist, and the smallest one that solves the job is the right
-one:
+automatically, so most spaces never touch them. When you do want control,
+use the smallest of three layers that solves the job:
 
 1. `sf.jsonc` supplies basic metadata and theme tokens.
 2. `theme.json` and `_layout.html` define reusable presentation and site
@@ -32,11 +31,11 @@ Set the common values in the canonical `sf.jsonc` file:
 }
 ```
 
-These tokens style access, error, and platform-owned pages without taking
-over their form logic. The team's entitlements decide whether the space can
-hide Spacefast branding or use a complete `_pages` takeover. Spacefast can
-infer palette and font values from a compatible `theme.json`, and explicit
-`theme` values always win.
+These tokens style the access, error, and system pages without taking over
+their form logic. The team's entitlements decide whether the space can hide
+Spacefast branding or use a complete `_pages` takeover. Spacefast can infer
+palette and font values from a compatible `theme.json`. Explicit `theme`
+values always win.
 
 ## DESIGN.md and generated files
 
@@ -48,16 +47,16 @@ files:
 sf design generate
 ```
 
-The command writes `theme.json` and `_layout.html`; pass `--force` to
-replace existing generated files. Spacefast does not read `DESIGN.md`
-during a publish or during serving, so commit the generated files to keep
-the version reproducible.
+The command writes `theme.json` and `_layout.html`. To replace existing
+generated files, pass `--force`. Spacefast does not read `DESIGN.md` during
+a publish or during serving, so commit the generated files to keep the
+version reproducible.
 
 ## Site chrome with a shared layout
 
-Put `_layout.html` at the publish root or inside a directory; the nearest
+Put `_layout.html` at the publish root or inside a directory. The nearest
 layout wins for that directory and its children. Spacefast wraps default
-pages and site fragments in it, and a complete document beginning with
+pages and site fragments in it. A complete document beginning with
 `<!doctype html>` opts out. Layouts do not nest in v1.
 
 ```html
@@ -81,9 +80,9 @@ In an entitled space, commit complete documents at `_pages/404.html`,
 `_pages/preview.html`, or `_pages/collab.html`. Spacefast expands a custom
 page, then serves it as written and never wraps it.
 
-A custom `access` page must render `<sf-access-lanes>` so visitors keep a
-way in, and any CSP it declares must allow `form-action 'self'`; the
-publish fails otherwise.
+A custom `access` page must render `<sf-access-lanes>` so that visitors
+keep a way in. Any Content Security Policy (CSP) the page declares must
+allow `form-action 'self'`. Otherwise, the publish fails.
 
 ```html
 <!-- _pages/404.html -->
@@ -102,7 +101,7 @@ Spacefast resolves a page in this order:
 2. The nearest `_pages/<id>.html`.
 3. The designed default with the nearest `_layout.html`.
 
-A literal `404.html` never needs an entitlement; Spacefast serves it
+A literal `404.html` never needs an entitlement. Spacefast serves it
 verbatim.
 
 ## Pages elements
@@ -130,8 +129,8 @@ A layout accepts exactly one `<sf-content>`, plus `<sf-logo>`, `<sf-name>`,
 publish.
 
 The runtime owns the sign-in and password lane markup inside
-`<sf-access-lanes>`; you retheme around it. Password checking, throttling,
-cookies, and redirects remain server-owned.
+`<sf-access-lanes>`, and you retheme around it. Password checking,
+throttling, cookies, and redirects remain server-owned.
 
 ## Machine responses
 

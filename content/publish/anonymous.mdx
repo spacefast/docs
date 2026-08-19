@@ -7,21 +7,21 @@ description: Publish by upload or Git push with no account, then claim the space
 
 Publishing without an API key creates an anonymous space. The response
 includes the space key (`sfc_...`), an Open link that serves the space, a
-claim link, and an expiration time. Save them immediately: Spacefast
-returns the key and links only once.
+claim link, and an expiration time. Save them immediately, because
+Spacefast returns the key and links only once.
 
 Claim the space within 6 hours or it expires. Each successful anonymous
 update resets the deadline to 6 hours out, capped at 30 days after the
-space creation date; opening the claim page with a valid link extends the
-current deadline toward one hour from that visit, and those extensions total
-at most 6 hours.
+space creation date. Opening the claim page with a valid link extends the
+current deadline toward one hour from that visit, and those extensions
+total at most 6 hours.
 
 There are two anonymous paths: a direct publish (the CLI,
 `POST /v1/publish`, or a drag onto [drop.website](https://drop.website)),
 and a Git push through [push.new](#publish-with-a-git-push) with nothing to
 install.
 
-## Before claim
+## Before you claim
 
 An unclaimed space works, with limits:
 
@@ -38,7 +38,7 @@ An unclaimed space works, with limits:
 - Spacefast accepts and scans uploads like any publish, but unclaimed
   spaces serve web content only: text, images, fonts, JSON (including web
   manifests), XML (including RSS and Atom feeds), JavaScript, and gzip.
-  Other files are stored and served after you claim the space.
+  Spacefast stores other files and serves them after you claim the space.
 - External proxy execution and custom domains are not available on
   anonymous spaces.
 
@@ -74,8 +74,8 @@ and gives you a link to keep the anonymous space in your account.
 
 :::warning[Keep the generated remote private]
 The signed Git remote is a temporary credential. Do not paste it into chat,
-logs, documentation, or a committed Git configuration, and remove it when
-you are done with `git remote remove pushnew`.
+logs, documentation, or a committed Git configuration. When you are done,
+remove it with `git remote remove pushnew`.
 :::
 
 Spacefast detects the project, runs a supported static build when needed,
@@ -109,10 +109,10 @@ claim.
 
 ## If a space expires
 
-An unclaimed space that reaches its deadline is disabled: live access
-stops, the content enters a 7-day claim-only recovery window, and deletion
-is queued after that window. Claiming during the window restores the space,
-and a space you deleted yourself can be restored with its space key through
-`POST /v1/spaces/{spaceId}/restore`. The hostname serves an expired page
+When an unclaimed space reaches its deadline, Spacefast disables it. Live
+access stops, the content enters a 7-day claim-only recovery window, and
+deletion is queued after that window. Claiming during the window restores
+the space. To restore a space you deleted yourself, call
+`POST /v1/spaces/{spaceId}/restore` with its space key. The hostname serves an expired page
 from then on and is never re-issued to someone else, so nobody can take
 over stale links.

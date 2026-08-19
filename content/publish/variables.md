@@ -6,7 +6,7 @@ description: Manage build and runtime configuration without committing secrets.
 ---
 
 Space variables hold configuration and secrets for builds and runtimes. New
-values are write-only by default: the API accepts them but never prints
+values are write-only by default. The API accepts them but never prints
 them back.
 
 To set a secret, pipe the value in so it never reaches shell history or the
@@ -16,7 +16,7 @@ process list:
 printf %s "$API_TOKEN" | sf env set API_TOKEN --value-from-stdin --space docs
 ```
 
-Non-secret values are set explicitly:
+To set a non-secret value, pass `--no-secret`:
 
 ```bash
 sf env set PUBLIC_ORIGIN https://www.example.com --no-secret --space docs
@@ -59,8 +59,8 @@ In CI, print them to stdout instead of writing a file:
 sf env pull --space docs --stdout > .env
 ```
 
-Spacefast refuses to overwrite an existing file unless you pass `--force`,
-and a pull never turns write-only credentials back into plaintext.
+Unless you pass `--force`, Spacefast refuses to overwrite an existing file.
+A pull never turns write-only credentials back into plaintext.
 
 ## Environments and branches
 
@@ -92,9 +92,9 @@ reference values as `{{ vars.NAME }}`:
 const API_ORIGIN = "{{ vars.API_ORIGIN }}";
 ```
 
-Substitution happens at publish. Secrets are refused in templates — the
-publish fails with
-[`secret_variable_in_template`](/errors/secret_variable_in_template) — and
+Substitution happens at publish. Templates refuse secrets, and a template
+that references one fails the publish with
+[`secret_variable_in_template`](/errors/secret_variable_in_template).
 [`_redirects`](/serve/redirects) destinations resolve `{{ vars.NAME }}` the
 same way.
 
