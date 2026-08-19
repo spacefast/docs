@@ -129,6 +129,7 @@ Rotation is one API call and returns the replacement secret:
 ```bash
 curl -X POST https://api.spacefast.com/v1/webhooks/whk_123/rotate-secret \
   -H "Authorization: Bearer $SPACEFAST_TOKEN" \
+  -H "Content-Type: application/json" \
   -d '{ "expireNow": false }'
 ```
 

@@ -61,8 +61,9 @@ const auth = await verify(request); // AuthContext | null
 
 ### Verification outcomes
 
-For the main path, `null` is enough; anything that is not a verified
-identity is a guest. When you need to know why, ask for the outcome:
+On a route that already allows guests, `null` is enough. When the route needs
+to distinguish a missing token from a bad token or verifier outage, ask for
+the outcome:
 
 ```ts
 import { guestContext } from "@spacefast/auth/server";
@@ -76,13 +77,20 @@ const outcome = await verify.outcome(request);
 //                                    for example a key id your JWKS doesn't
 //                                    know yet
 
-const auth = outcome.state === "verified" ? outcome.auth : guestContext();
+const auth =
+  outcome.state === "verified"
+    ? outcome.auth
+    : outcome.state === "no-token"
+      ? guestContext()
+      : null;
 ```
 
-Fail open to guest. Every non-verified state serves the guest experience.
-The states exist so your logs can tell a forged token from a stale key
-deployment. An unknown `kid` is deliberately unavailable, not invalid.
-During key rotation, the honest answer is "I can't know", not "forged".
+Use guest fallback only on routes that already allow guests. On a protected
+route, reject `invalid-token` and return an authentication error or `503` for
+`verifier-unavailable`. The states let your logs tell a forged token from a
+stale key deployment. An unknown `kid` is deliberately unavailable, not
+invalid. During key rotation, the honest answer is "I can't know", not
+"forged".
 
 The verifier applies these defaults:
 

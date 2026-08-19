@@ -93,7 +93,7 @@ sf crons run /api/digest
 ```
 
 ```bash
-sf crons run api-digest --header 'authorization: Bearer $CRON_SECRET'
+sf crons run api-digest --header "authorization: Bearer $CRON_SECRET"
 ```
 
 The target is a cron key or path, as shown by `sf crons ls`. When the path
@@ -108,4 +108,3 @@ answers 400 or above, the command exits non-zero.
   `config_cron_too_many`, `config_cron_invalid_path`,
   `config_cron_invalid_schedule`, and `config_cron_duplicate_path` name the
   exact entry and field.
-

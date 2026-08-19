@@ -5,9 +5,11 @@ sidebar:
 description: Move static sites and previews from other hosting providers to Spacefast.
 ---
 
-Every migration is the same two commands: publish the static output your
-current host serves, then attach the domain. When the source host already
-uses root `_redirects` and `_headers` files, keep them.
+For a static site, the basic migration is two commands: publish the static
+output your current host serves, then attach the domain. When the source host
+already uses root `_redirects` and `_headers` files, keep them. Use the
+[provider-specific guide](#choose-a-guide) to convert platform features before
+cutover.
 
 ```bash
 sf publish ./dist

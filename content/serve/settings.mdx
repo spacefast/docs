@@ -186,7 +186,7 @@ exist as `sf.jsonc` keys, which is useful when the config is generated:
 ```jsonc
 {
   "redirects": [{ "source": "/old", "destination": "/new", "status": 301 }],
-  "rewrites": [{ "source": "/api/*", "destination": "https://api.example.com/*" }],
+  "rewrites": [{ "source": "/api/*", "destination": "https://api.example.com/:splat" }],
   "headers": [
     { "source": "/*", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] },
   ],

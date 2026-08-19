@@ -53,14 +53,23 @@ Pull readable effective values into `.env.local`:
 sf env pull --space docs
 ```
 
-In CI, print them to stdout instead of writing a file:
+In CI, print them to stdout when the next command consumes the output directly:
 
 ```bash
-sf env pull --space docs --stdout > .env
+sf env pull --space docs --stdout
 ```
 
-Unless you pass `--force`, Spacefast refuses to overwrite an existing file.
-A pull never turns write-only credentials back into plaintext.
+If the job needs a file, let the CLI write it so overwrite protection stays in
+effect:
+
+```bash
+sf env pull .env.ci --space docs
+```
+
+Unless you pass `--force`, Spacefast refuses to overwrite a file that the CLI
+writes. Shell redirection opens and may truncate its destination before the CLI
+runs, so that protection does not apply to `--stdout > file`. A pull never
+turns write-only credentials back into plaintext.
 
 ## Environments and branches
 

@@ -83,7 +83,7 @@ re-uploaded. Version lists, diffs, and logs are plain GET requests.
 
 ## Idempotency and retries
 
-Mutating requests honor an `Idempotency-Key` header: retrying a request
+`POST /v1/publish` honors an `Idempotency-Key` header: retrying a publish
 with the same key returns the original result without repeating the side
 effect. Publishing identical content is a recognized no-op success
 (`noop_publish`) rather than a wasted version.
