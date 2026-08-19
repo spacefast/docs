@@ -407,7 +407,7 @@ Everything on the page is one of the runtime's features doing its job:
 - **Actions send email.** The `emailDigest` action reads the same tables and
   sends through `ctx.email.send()` — no mail credential to configure, and
   `useAction()` wires it to a button. In a mutation, a send commits
-  transactionally with the writes. See
+  atomically with the writes. See
   [Email, spam, and Gravatar](/services).
 - **Sign-in is one component.** `SignInWithGoogle` upgrades the visitor's
   guest identity; `signOut()` drops back to it.
