@@ -5,7 +5,7 @@ description: "This space key can no longer be exchanged for an API key."
 
 This space key can no longer be exchanged for an API key.
 
-**How to resolve:** If the space is claimed, ask its owner for an API key (dashboard: Account → API keys). If it is still unclaimed, keep using the space key as bearer auth instead of exchanging it. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** If the space is claimed, ask its owner for an API key (dashboard: Account → API keys). If it is still unclaimed, keep using the space key as bearer auth instead of exchanging it. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 

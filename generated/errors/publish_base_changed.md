@@ -5,7 +5,7 @@ description: "Someone published new space settings after the base you loaded, so
 
 Someone published new space settings after the base you loaded, so saving would overwrite their change.
 
-**How to resolve:** Reload the latest settings, review the difference, and save again. Pass force only to overwrite deliberately.
+**How to resolve:** Reload the latest settings, review the difference, and save again. Pass `force` only to overwrite deliberately.
 
 <div data-pagefind-ignore>
 

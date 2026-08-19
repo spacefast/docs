@@ -5,7 +5,7 @@ description: "A hosting-provider job timed out while processing this operation."
 
 A hosting-provider job timed out while processing this operation.
 
-**How to resolve:** Retry the operation. If the provider is slow right now, wait and retry again.
+**How to resolve:** Retry the operation. If the provider is slow, wait and retry again.
 
 <div data-pagefind-ignore>
 

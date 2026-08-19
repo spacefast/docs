@@ -5,7 +5,7 @@ description: "The runtime token signature did not verify."
 
 The runtime token signature did not verify.
 
-**How to resolve:** Mint a fresh token. Verify clocks and JWKS freshness if it persists.
+**How to resolve:** Mint a fresh runtime token. If the error persists, verify clocks and JWKS freshness.
 
 <div data-pagefind-ignore>
 

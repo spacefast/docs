@@ -5,7 +5,7 @@ description: "The background job was not found."
 
 The background job was not found.
 
-**How to resolve:** Verify the job id. Completed jobs are eventually pruned.
+**How to resolve:** Verify the job id. Spacefast eventually prunes completed jobs.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "This operation requires the domain to be delegated to Spacefast na
 
 This operation requires the domain to be delegated to Spacefast nameservers.
 
-**How to resolve:** Update the domain's nameservers at the registrar, then retry once delegation propagates.
+**How to resolve:** Update the domain's nameservers at the registrar. After delegation propagates, retry.
 
 <div data-pagefind-ignore>
 

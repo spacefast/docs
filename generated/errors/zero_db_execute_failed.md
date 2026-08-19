@@ -5,7 +5,7 @@ description: "A Zero database write failed."
 
 A Zero database write failed.
 
-**How to resolve:** Inspect the mutation, schema, and database logs, then retry after fixing the SQL issue.
+**How to resolve:** Inspect the mutation, schema, and database logs. Fix the SQL issue, then retry.
 
 <div data-pagefind-ignore>
 

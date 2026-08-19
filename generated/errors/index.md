@@ -5,8 +5,8 @@ description: "Every Spacefast API error is a problem document with a stable code
 
 Every Spacefast API error is an RFC 9457 problem document (`application/problem+json`).
 It carries a stable `code` and a `type` URI that links to one of the pages below. Match on
-`code` in clients: the meaning of a `code` stays stable, while `detail` text can change.
-Retired codes leave with their owning API surface.
+`code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
+Retired codes leave with the API that owns them.
 
 There are 458 error codes in the registry.
 
@@ -23,7 +23,7 @@ There are 458 error codes in the registry.
 | [`ambiguous_space_slug`](/errors/ambiguous_space_slug) | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
 | [`anonymous_expired`](/errors/anonymous_expired) | This anonymous space expired before it was claimed. |
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
-| [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed Spaces. |
+| [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed spaces. |
 | [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |

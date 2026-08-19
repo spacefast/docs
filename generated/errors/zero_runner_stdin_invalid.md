@@ -5,7 +5,7 @@ description: "The Zero runner cannot read its request envelope."
 
 The Zero runner cannot read its request envelope.
 
-**How to resolve:** Retry. Report the runtime bridge failure if it persists.
+**How to resolve:** Retry. If the runtime bridge failure persists, report it.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The file behind this download link no longer exists."
 
 The file behind this download link no longer exists.
 
-**How to resolve:** Ask the owner for a fresh link; the underlying object was deleted.
+**How to resolve:** The underlying object was deleted. Ask the owner for a fresh link.
 
 <div data-pagefind-ignore>
 

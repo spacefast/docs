@@ -5,7 +5,7 @@ description: "The Zero runner cannot install the database host bridge."
 
 The Zero runner cannot install the database host bridge.
 
-**How to resolve:** Rebuild with a current runner and report the failure if it repeats.
+**How to resolve:** Rebuild with a current runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 

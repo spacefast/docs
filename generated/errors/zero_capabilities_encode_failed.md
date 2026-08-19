@@ -5,7 +5,7 @@ description: "The runtime cannot encode the Zero endpoint capabilities."
 
 The runtime cannot encode the Zero endpoint capabilities.
 
-**How to resolve:** Rebuild with valid capability metadata. Report the failure if it persists.
+**How to resolve:** Rebuild with valid capability metadata. If the failure persists, report it.
 
 <div data-pagefind-ignore>
 

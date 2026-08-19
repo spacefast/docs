@@ -5,7 +5,7 @@ description: "This plan grant was already revoked."
 
 This plan grant was already revoked.
 
-**How to resolve:** Nothing to do. Create a new grant if the team should regain the plan.
+**How to resolve:** No action is needed. If the team should regain the plan, create a new grant.
 
 <div data-pagefind-ignore>
 

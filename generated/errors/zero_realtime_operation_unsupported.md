@@ -5,7 +5,7 @@ description: "The Zero realtime websocket operation is unsupported."
 
 The Zero realtime websocket operation is unsupported.
 
-**How to resolve:** Use a supported Zero realtime operation such as query.subscribe or query.unsubscribe.
+**How to resolve:** Use a supported Zero realtime operation such as `query.subscribe` or `query.unsubscribe`.
 
 <div data-pagefind-ignore>
 

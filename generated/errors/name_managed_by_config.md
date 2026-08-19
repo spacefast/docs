@@ -5,7 +5,7 @@ description: "The space name is managed by sf.jsonc while its live version decla
 
 The space name is managed by sf.jsonc while its live version declares one.
 
-**How to resolve:** Change name in sf.jsonc and publish, or remove name from the file to rename the space through the API.
+**How to resolve:** Change `name` in `sf.jsonc` and publish, or remove `name` from the file to rename the space through the API.
 
 <div data-pagefind-ignore>
 

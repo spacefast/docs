@@ -5,7 +5,7 @@ description: "The requested resource was not found."
 
 The requested resource was not found.
 
-**How to resolve:** Verify the id and that your credential can access the resource.
+**How to resolve:** Verify that the id is correct and that your credential can access the resource.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The space does not serve a published version yet, so it has no run
 
 The space does not serve a published version yet, so it has no runtime data to read.
 
-**How to resolve:** Publish a version first. If a publish is already running, wait for it — the operation receipt reports progress.
+**How to resolve:** Publish a version first. If a publish is already running, wait for it. The operation receipt reports progress.
 
 <div data-pagefind-ignore>
 

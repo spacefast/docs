@@ -5,7 +5,7 @@ description: "The Zero endpoint returned a malformed runner response."
 
 The Zero endpoint returned a malformed runner response.
 
-**How to resolve:** Return a valid Response or supported Zero handler result.
+**How to resolve:** Return a valid `Response` or supported Zero handler result.
 
 <div data-pagefind-ignore>
 

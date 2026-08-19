@@ -5,7 +5,7 @@ description: "The Zero endpoint index cannot be read."
 
 The Zero endpoint index cannot be read.
 
-**How to resolve:** Verify the version finalized with zero/endpoints-index.json present.
+**How to resolve:** Verify the version finalized with `zero/endpoints-index.json` present.
 
 <div data-pagefind-ignore>
 

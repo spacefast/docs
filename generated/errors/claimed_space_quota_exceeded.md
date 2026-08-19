@@ -5,7 +5,7 @@ description: "Claiming this space would exceed the target team's space quota."
 
 Claiming this space would exceed the target team's space quota.
 
-**How to resolve:** Delete unused spaces, then claim again. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Delete unused spaces, then claim again. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 

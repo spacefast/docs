@@ -5,7 +5,7 @@ description: "The DNS import cannot see the full zone, so importing would lose r
 
 The DNS import cannot see the full zone, so importing would lose records.
 
-**How to resolve:** Verify delegation and retry once the full zone is visible.
+**How to resolve:** Verify delegation. Once the full zone is visible, retry the import.
 
 <div data-pagefind-ignore>
 

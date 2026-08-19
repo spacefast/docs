@@ -5,7 +5,7 @@ description: "The upload manifest declares the same path more than once."
 
 The upload manifest declares the same path more than once.
 
-**How to resolve:** Deduplicate paths. Comparisons use the canonical (decoded, NFC) form.
+**How to resolve:** Deduplicate paths. Comparisons use the canonical form: decoded and NFC-normalized.
 
 <div data-pagefind-ignore>
 

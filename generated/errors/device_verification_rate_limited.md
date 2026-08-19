@@ -5,7 +5,7 @@ description: "Too many incorrect device codes were entered in a short window."
 
 Too many incorrect device codes were entered in a short window.
 
-**How to resolve:** Wait for the lockout to pass, then enter the code shown by your CLI exactly.
+**How to resolve:** Wait for the lockout to pass, then enter the code exactly as your CLI shows it.
 
 <div data-pagefind-ignore>
 

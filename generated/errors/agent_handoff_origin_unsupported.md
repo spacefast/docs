@@ -5,7 +5,7 @@ description: "The dashboard origin this deployment is configured with cannot min
 
 The dashboard origin this deployment is configured with cannot mint canonical agent handoff links.
 
-**How to resolve:** Point SPACEFAST_DASHBOARD_URL at a valid HTTP(S) origin. If you cannot change it, contact support.
+**How to resolve:** Point SPACEFAST_DASHBOARD_URL at a valid HTTP or HTTPS origin. If you cannot change it, contact support.
 
 <div data-pagefind-ignore>
 

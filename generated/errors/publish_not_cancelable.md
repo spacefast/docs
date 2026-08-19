@@ -5,7 +5,7 @@ description: "The publish is past the point where it can be canceled."
 
 The publish is past the point where it can be canceled.
 
-**How to resolve:** Wait for the publish to finish, then roll back by promoting a previous version if needed.
+**How to resolve:** Wait for the publish to finish. To roll back, promote a previous version.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "This space was disabled by an abuse takedown and cannot be served 
 
 This space was disabled by an abuse takedown and cannot be served or modified.
 
-**How to resolve:** If you believe this is a mistake, contact support with the space id.
+**How to resolve:** If you believe the takedown is a mistake, contact support with the space id.
 
 <div data-pagefind-ignore>
 

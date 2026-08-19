@@ -5,7 +5,7 @@ description: "A Zero realtime query subscription did not include a query name."
 
 A Zero realtime query subscription did not include a query name.
 
-**How to resolve:** Send a query.subscribe frame with a valid query name.
+**How to resolve:** Send a `query.subscribe` frame with a valid query name.
 
 <div data-pagefind-ignore>
 

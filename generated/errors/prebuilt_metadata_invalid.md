@@ -5,7 +5,7 @@ description: "The metadata file next to the prebuilt archive exists but cannot b
 
 The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown.
 
-**How to resolve:** Re-run `sf build` to regenerate the archive and its metadata together, or delete the metadata file if the archive contains plain files.
+**How to resolve:** Re-run `sf build` to regenerate the archive and its metadata together. If the archive contains plain files, delete the metadata file.
 
 <div data-pagefind-ignore>
 

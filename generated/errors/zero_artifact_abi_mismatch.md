@@ -5,7 +5,7 @@ description: "The Zero endpoint artifact was built for a different runner ABI."
 
 The Zero endpoint artifact was built for a different runner ABI.
 
-**How to resolve:** Rebuild and republish the Zero project with the current Spacefast CLI and runtime.
+**How to resolve:** Rebuild the Zero project with the current Spacefast CLI and runtime, then publish it again.
 
 <div data-pagefind-ignore>
 

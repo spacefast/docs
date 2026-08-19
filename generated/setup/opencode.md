@@ -3,9 +3,9 @@ title: "Connect OpenCode to Spacefast"
 description: "Remote MCP with a browser sign-in, or the skill for terminal-driven publishes."
 ---
 
-Remote MCP with a browser sign-in, or the skill for terminal-driven publishes.
+Connect hosted MCP with a browser sign-in, or install the skill for terminal-driven publishes.
 
-**Hosted MCP** — Merge this OpenCode V2 config into `~/.config/opencode/opencode.json`, then run `opencode mcp auth spacefast`.
+**Hosted MCP.** Merge this OpenCode V2 config into `~/.config/opencode/opencode.json`, and then run `opencode mcp auth spacefast`.
 
 ```json
 {

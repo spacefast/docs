@@ -5,7 +5,7 @@ description: "A theme value in the configuration is outside the allowed grammar.
 
 A theme value in the configuration is outside the allowed grammar.
 
-**How to resolve:** Use allowed CSS values. The offending key is dropped with a warning otherwise.
+**How to resolve:** Use allowed CSS values. Otherwise the offending key is dropped with a warning.
 
 <div data-pagefind-ignore>
 

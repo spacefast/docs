@@ -5,7 +5,7 @@ description: "The selected move target no longer has capacity for the space."
 
 The selected move target no longer has capacity for the space.
 
-**How to resolve:** Retry the move with a different target or after capacity is freed.
+**How to resolve:** Retry the move with a different target, or retry after capacity is freed.
 
 <div data-pagefind-ignore>
 

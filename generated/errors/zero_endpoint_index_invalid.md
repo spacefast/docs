@@ -5,7 +5,7 @@ description: "The Zero endpoint index does not contain valid endpoint mappings."
 
 The Zero endpoint index does not contain valid endpoint mappings.
 
-**How to resolve:** Rebuild and republish the Zero project.
+**How to resolve:** Rebuild the Zero project and publish it again.
 
 <div data-pagefind-ignore>
 

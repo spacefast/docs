@@ -5,7 +5,7 @@ description: "The proxy upstream hostname cannot be resolved."
 
 The proxy upstream hostname cannot be resolved.
 
-**How to resolve:** Verify the upstream DNS name resolves publicly, then publish again.
+**How to resolve:** Verify that the upstream DNS name resolves publicly, then publish again.
 
 <div data-pagefind-ignore>
 

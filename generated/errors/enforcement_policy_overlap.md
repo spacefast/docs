@@ -5,7 +5,7 @@ description: "Enforcement policy severity ranges overlap within a category."
 
 Enforcement policy severity ranges overlap within a category.
 
-**How to resolve:** Adjust the category ranges so each severity is covered by at most one policy.
+**How to resolve:** Adjust the category ranges so at most one policy covers each severity.
 
 <div data-pagefind-ignore>
 

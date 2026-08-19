@@ -5,7 +5,7 @@ description: "The Zero runner cannot connect to the configured database."
 
 The Zero runner cannot connect to the configured database.
 
-**How to resolve:** Verify DATABASE_URL or the generated MySQL connection variables and retry.
+**How to resolve:** Verify `DATABASE_URL` or the generated MySQL connection variables and retry.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The request to the runtime carried no valid credential."
 
 The request to the runtime carried no valid credential.
 
-**How to resolve:** Send the runtime JWT in the Authorization header.
+**How to resolve:** Send the runtime token in the Authorization header.
 
 <div data-pagefind-ignore>
 

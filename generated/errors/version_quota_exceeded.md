@@ -5,7 +5,7 @@ description: "The space is at its version quota."
 
 The space is at its version quota.
 
-**How to resolve:** Delete old versions. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Delete old versions. If the quota error persists, `POST /v1/feedback` with the error code and request id.
 
 <div data-pagefind-ignore>
 

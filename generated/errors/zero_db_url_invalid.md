@@ -5,7 +5,7 @@ description: "The Zero database URL is malformed."
 
 The Zero database URL is malformed.
 
-**How to resolve:** Set DATABASE_URL or the generated database variables to a valid MySQL connection URL.
+**How to resolve:** Set `DATABASE_URL` or the generated database variables to a valid MySQL connection URL.
 
 <div data-pagefind-ignore>
 

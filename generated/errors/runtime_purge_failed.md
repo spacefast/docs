@@ -5,7 +5,7 @@ description: "Content updated but the edge cache purge did not confirm."
 
 Content updated but the edge cache purge did not confirm.
 
-**How to resolve:** The runtime retries automatically; recent visitors may briefly see the previous version.
+**How to resolve:** The runtime retries automatically. Recent visitors may briefly see the previous version.
 
 <div data-pagefind-ignore>
 

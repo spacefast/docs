@@ -5,7 +5,7 @@ description: "The inject config key is malformed."
 
 The inject config key is malformed.
 
-**How to resolve:** Make inject an object whose head/bodyStart/bodyEnd/noscript entries are arrays of up to 16 strings.
+**How to resolve:** Make inject an object whose head, bodyStart, bodyEnd, and noscript entries are arrays of up to 16 strings.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "Proxy routes to external upstreams are not available on the Free p
 
 Proxy routes to external upstreams are not available on the Free plan.
 
-**How to resolve:** Remove the proxy rules before publishing. Still stuck? POST /v1/feedback with the error code and request id.
+**How to resolve:** Remove the proxy rules before publishing. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 

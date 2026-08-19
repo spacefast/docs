@@ -5,7 +5,7 @@ description: "A space reference is required for this operation."
 
 A space reference is required for this operation.
 
-**How to resolve:** Pass a spc_ id, slug, or hostname.
+**How to resolve:** Pass a `spc_` id, slug, or hostname.
 
 <div data-pagefind-ignore>
 

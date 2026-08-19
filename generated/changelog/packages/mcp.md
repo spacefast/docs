@@ -121,7 +121,7 @@ Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on
 
 ## 0.0.7
 
-- Removed the deprecated `search` tool — use `search_docs` instead.
+- Removed the deprecated `search` tool. Use `search_docs` instead.
 - Unknown tool presets now return a clear error.
 
 ## 0.0.6

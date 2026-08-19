@@ -5,7 +5,7 @@ description: "This is a system-managed view.fast hostname and cannot be mutated 
 
 This is a system-managed view.fast hostname and cannot be mutated like a custom domain.
 
-**How to resolve:** Use it as a read-only managed hostname, or add a custom domain if you need editable DNS and binding controls.
+**How to resolve:** Use the hostname as a read-only managed hostname. If you need editable DNS and binding controls, add a custom domain.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "Devin publishes from its cloud workspace with hosted MCP or the sk
 
 Devin publishes from its cloud workspace with hosted MCP or the skill.
 
-**Hosted MCP** — Add the endpoint in Devin's MCP settings; approve once on first tool use.
+**Hosted MCP.** Add the endpoint in Devin's MCP settings. Approve once on the first tool use.
 
 ```text
 https://mcp.spacefast.com

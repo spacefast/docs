@@ -5,7 +5,7 @@ description: "The runtime cannot read or persist object storage."
 
 The runtime cannot read or persist object storage.
 
-**How to resolve:** Retry on a healthy runtime. Contact support if the failure persists.
+**How to resolve:** Retry on a healthy runtime. If the failure persists, contact support.
 
 <div data-pagefind-ignore>
 

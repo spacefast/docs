@@ -5,7 +5,7 @@ description: "The invitation is no longer pending."
 
 The invitation is no longer pending.
 
-**How to resolve:** Create a new invitation if the member still needs to join.
+**How to resolve:** If the member still needs to join, create a new invitation.
 
 <div data-pagefind-ignore>
 

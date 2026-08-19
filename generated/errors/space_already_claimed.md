@@ -5,7 +5,7 @@ description: "The space was already claimed. A claim can only succeed once."
 
 The space was already claimed. A claim can only succeed once.
 
-**How to resolve:** If you published this space, exchange your space key once at POST /v1/claim/exchange. Keep publishing to the same spaceId with that durable API key. Otherwise ask the owner for access — do not publish a duplicate space.
+**How to resolve:** If you published this space, exchange your space key once at `POST /v1/claim/exchange`. Keep publishing to the same `spaceId` with that durable API key. Otherwise ask the owner for access. Do not publish a duplicate space.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "This account is suspended for a policy or abuse violation and cann
 
 This account is suspended for a policy or abuse violation and cannot be used.
 
-**How to resolve:** Contact support to review the suspension if you believe it is a mistake.
+**How to resolve:** If you believe the suspension is a mistake, contact support to review it.
 
 <div data-pagefind-ignore>
 

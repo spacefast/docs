@@ -5,7 +5,7 @@ description: "This feature is not available on this deployment or plan."
 
 This feature is not available on this deployment or plan.
 
-**How to resolve:** Check the feature's availability and try again when it is enabled for your team.
+**How to resolve:** Check the feature's availability. When the feature is enabled for your team, try again.
 
 <div data-pagefind-ignore>
 

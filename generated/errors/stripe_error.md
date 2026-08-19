@@ -5,7 +5,7 @@ description: "The billing provider reported an error."
 
 The billing provider reported an error.
 
-**How to resolve:** Retry. If it persists, check the team's billing settings.
+**How to resolve:** Retry. If the error persists, check the team's billing settings.
 
 <div data-pagefind-ignore>
 

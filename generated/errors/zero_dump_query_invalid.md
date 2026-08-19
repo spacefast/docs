@@ -5,7 +5,7 @@ description: "The Zero database dump query parameters are invalid."
 
 The Zero database dump query parameters are invalid.
 
-**How to resolve:** Use valid table, limit, and cursor parameters.
+**How to resolve:** Use valid `table`, `limit`, and `cursor` parameters.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The hosted Zero realtime replay query is invalid."
 
 The hosted Zero realtime replay query is invalid.
 
-**How to resolve:** Use a valid afterEventId cursor and numeric limit.
+**How to resolve:** Use a valid `afterEventId` cursor and numeric limit.
 
 <div data-pagefind-ignore>
 

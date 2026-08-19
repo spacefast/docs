@@ -5,7 +5,7 @@ description: "Another request with the same Idempotency-Key is still in flight."
 
 Another request with the same Idempotency-Key is still in flight.
 
-**How to resolve:** Wait for the original request to finish. Its response will be replayed.
+**How to resolve:** Wait for the original request to finish. The API will replay that request's response.
 
 <div data-pagefind-ignore>
 

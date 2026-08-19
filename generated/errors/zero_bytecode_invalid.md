@@ -5,7 +5,7 @@ description: "The Zero endpoint bytecode cannot be loaded by QuickJS."
 
 The Zero endpoint bytecode cannot be loaded by QuickJS.
 
-**How to resolve:** Rebuild the project with the current Zero runner and redeploy.
+**How to resolve:** Rebuild the project with the current Zero runner and publish again.
 
 <div data-pagefind-ignore>
 
