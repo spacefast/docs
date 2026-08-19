@@ -2,19 +2,19 @@
 search:
   tags: [rewrites, proxy, "404"]
 title: Redirects
-description: Redirect, rewrite, proxy, and 404 rules in the _redirects file.
+description: Define redirect, rewrite, proxy, and custom 404 rules in the _redirects file.
 ---
 
-`_redirects` is a convention file: put it at the publish root to redirect,
+`_redirects` is a convention file. Put it at the publish root to redirect,
 rewrite, proxy, or return custom 404 responses, and it travels with the
-files it routes. Spacefast compiles the file when a publish finishes and
+files it routes. When a publish finishes, Spacefast compiles the file and
 attaches the rules to that immutable version, so nothing parses the file
-per request — and the file itself is never served.
+per request. The file itself is never served.
 
-The same rules are also [`sf.jsonc`](/serve/settings) keys, useful when the
-config is generated. Both forms compile to the same rules and count against
-the same [caps](#rule-capacity); `_redirects` file rules match before
-config `redirects`, then config `rewrites`.
+The same rules are also [`sf.jsonc`](/serve/settings) keys, which is useful
+when the config is generated. Both forms compile to the same rules and
+count against the same [caps](#rule-capacity). `_redirects` file rules
+match before config `redirects`, then config `rewrites`.
 
 <CodeGroup>
 
@@ -67,15 +67,15 @@ source [query=:capture ...] destination [status[!]] [Condition=value,... ...]
 ## Rule capacity
 
 A publish can include up to 2,100 routing rules: 2,000 static rules and 100
-dynamic rules. `_redirects` and `sf.jsonc` `redirects`/`rewrites` count
-against the same caps. Within that ceiling, the team's entitlements set its
-routing-rule capacity. The compiler parses the complete file, and
-diagnostics identify the exact rules when the result is over capacity.
+dynamic rules. `_redirects` rules and `sf.jsonc` `redirects` and `rewrites`
+count against the same caps. Within that ceiling, the team's entitlements
+set its routing-rule capacity. The compiler parses the complete file. When
+the result is over capacity, diagnostics identify the exact rules.
 
 ## Sources
 
-A source must be an absolute path beginning with `/` or an absolute
-`http`/`https` URL. Exact sources match with or without a trailing slash.
+A source must be an absolute path beginning with `/` or an absolute `http`
+or `https` URL. Exact sources match with or without a trailing slash.
 
 ```text
 /docs /guides 301
@@ -115,7 +115,7 @@ include any wildcard, placeholder, or host constraint.
 | --------------------------------- | ---------------- | ---------------------------- |
 | `301`, `302`, `303`, `307`, `308` | Redirect         | Path or absolute URL.        |
 | `200`                             | Rewrite          | Local path.                  |
-| `200`                             | Proxy            | Absolute `http`/`https` URL. |
+| `200`                             | Proxy            | Absolute `http` or `https` URL. |
 | `404`                             | Custom not found | Local path.                  |
 
 External proxy rules (`200` with an absolute URL destination) require the
@@ -126,20 +126,21 @@ resolve `{{ vars.NAME }}` from non-secret [variables](/publish/variables).
 
 A proxy route is a `200` rule with an absolute `http` or `https`
 destination. Use it for public endpoints that do not need Spacefast to
-inject private credentials; secret injection is not supported. Add
-`cache=shared` after the status to let the shared cache store upstream
-responses; it is valid only on absolute-URL `200` rules. Keep secret-bearing
-logic behind your own API, Worker, Function, or service, then proxy to that
-public endpoint. Internal rewrites to pages in the same space do not need an
-external proxy route.
+inject private credentials; secret injection is not supported. Keep
+secret-bearing logic behind your own API, Worker, Function, or service,
+then proxy to that public endpoint. Internal rewrites to pages in the same
+space do not need an external proxy route.
 
-External proxy execution is an entitlement. A rule still compiles when the
-team does not have it, but visitors receive a Spacefast information page
+To let the shared cache store upstream responses, add `cache=shared` after
+the status. The option is valid only on absolute-URL `200` rules.
+
+External proxy execution is an entitlement. When the team does not have it,
+a rule still compiles, but visitors receive a Spacefast information page
 instead of the upstream response. Enabling the entitlement applies to the
 live space without another publish. Anonymous spaces never execute external
 proxy routes.
 
-Migrating from Cloudflare or Netlify functions:
+To migrate from Cloudflare or Netlify functions, make these changes:
 
 - Move proxy manifest entries into root `_redirects` as `200` rules;
   Spacefast has no separate proxy manifest.
@@ -152,8 +153,8 @@ Migrating from Cloudflare or Netlify functions:
 
 Query captures sit between source and destination. Use `name=:capture`.
 Both names must start with a letter. The query parameter name may include
-letters, numbers, underscores, or hyphens; the capture name after `:` allows
-letters, numbers, and underscores only.
+letters, numbers, underscores, or hyphens. The capture name after `:`
+allows only letters, numbers, and underscores.
 
 ```text
 /search q=:q /results/:q 302
@@ -184,28 +185,28 @@ values must be two-letter country codes.
 /ai /ai.txt 200! Agent=true
 ```
 
-Spacefast supports only the condition names above and rejects Netlify and
+Spacefast supports only these four condition names. It rejects Netlify and
 Cloudflare spellings such as `nf_country` and `cf_ipcountry` with a
-`redirect_condition_unsupported` error that blocks the publish. Rename them
-to `Country=` / `Language=`; `Role=` conditions are rejected with
+`redirect_condition_unsupported` error that blocks the publish; rename them
+to `Country=` or `Language=`. Spacefast rejects `Role=` conditions with
 `redirect_role_unsupported`.
 
 Conditions combine with `AND`; comma-separated values inside one condition
 combine with `OR`.
 
-Use `Agent=true` when a URL should serve a plain-text version to AI agents
-(accepted values: `true`, `yes`, `1`). The same URL keeps the browser
-version for humans. Spacefast treats a request as agent-like when it prefers
-`text/plain` or `text/markdown` without asking for HTML, or when it carries
-a known agent user agent. Shell fetches like `curl` and `wget` count as
-agents.
+When a URL should serve a plain-text version to AI agents, use `Agent=true`
+(accepted values are `true`, `yes`, and `1`). The same URL keeps the
+browser version for humans. Spacefast treats a request as agent-like when
+it prefers `text/plain` or `text/markdown` without asking for HTML, or when
+it carries a known agent user agent. Shell fetches such as `curl` and
+`wget` count as agents.
 
 ## Runtime order
 
 Rules run in file order. Browser redirects and external proxy rules run as
-soon as they match. Spacefast skips local rewrites and custom 404 rules when
-the original request resolves to a file. A rule with `!` in the status still
-runs.
+soon as they match. When the original request resolves to a file, Spacefast
+skips local rewrites and custom 404 rules. A rule with `!` in the status
+still runs.
 
 ```text
 /app/* /app/index.html 200
@@ -236,4 +237,4 @@ Spacefast rejects rules that are ambiguous, unsafe, or likely to loop.
 /docs /docs 301
 ```
 
-Custom response headers use a separate [Headers](/serve/headers) page.
+For custom response headers, see [Headers](/serve/headers).

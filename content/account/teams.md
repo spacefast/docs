@@ -55,7 +55,7 @@ The selected team's entitlements report its current member capacity.
 
 ## Access defaults for new spaces
 
-When the team creates a space, Spacefast materializes a root Grant from the
+When the team creates a space, Spacefast creates a root Grant from the
 team default: `private`, `team`, or `public`. New teams default to `team`.
 
 ```bash
@@ -63,8 +63,9 @@ sf teams defaults
 sf teams defaults private
 ```
 
-Changing the default affects only spaces you create afterward. Existing
-space Grants do not change; use [Access](/share) for those.
+Changing the default affects only spaces that you create afterward.
+Existing space Grants do not change; to change them, use
+[Access](/share).
 
 ## Audit log
 
@@ -74,7 +75,8 @@ Each team keeps an audit log of team-level events, in the dashboard under
 
 ## Related
 
-- [API keys](/account/api-keys) for machine access scoped to a team.
-- [Manage spaces](/operate/spaces) for creating and transferring spaces
-  into a team.
-- [`sf login`](/cli#sf-login) for logging the CLI into the right account.
+- [API keys](/account/api-keys) covers machine access scoped to a team.
+- [Manage spaces](/operate/spaces) covers creating and transferring
+  spaces into a team.
+- [`sf login`](/cli#sf-login) covers logging the CLI into the right
+  account.

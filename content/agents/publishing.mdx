@@ -1,9 +1,9 @@
 ---
 title: Publish as an agent
-description: The one-call publish flow, the receipt fields that matter, and how to keep publishing after a space is claimed.
+description: Publish with one API call, read the receipt fields that matter, and keep publishing after a space is claimed.
 ---
 
-One curl call publishes, and the [CLI](/cli) covers the full surface. Both
+One curl call publishes, and the [CLI](/cli) covers every operation. Both
 produce the same receipt.
 
 ## Publish with curl
@@ -25,13 +25,15 @@ The response is a JSON envelope whose `data` is the receipt, and the
 receipt contains everything that matters:
 
 - **`data.space.liveUrl`**: the live site.
-- **`data.version.immutableUrl`**: the published bytes, frozen, reserved in
-  the initial receipt.
+- **`data.version.immutableUrl`**: the published bytes, frozen and reserved
+  in the initial receipt.
 - **`data.next`**: the one normative next step. Branch on
-  `data.next.action`: `done` (stop), `upload` (PUT the files in
-  `data.upload.targets`, then POST `data.next.url`), `finalize` (POST
-  `data.next.url`), or `poll` (GET `data.next.url` after
-  `data.next.retryAfter` seconds).
+  `data.next.action`:
+  - `done`: stop.
+  - `upload`: PUT the files in `data.upload.targets`, then POST
+    `data.next.url`.
+  - `finalize`: POST `data.next.url`.
+  - `poll`: GET `data.next.url` after `data.next.retryAfter` seconds.
 - **`data.activation.outcome`**: whether the version is serving. Liveness
   is a channel pointer; never infer it from a version status.
 - **`data.claim.claimUrl`** and **`data.claim.expiresAt`**: anonymous
@@ -43,20 +45,20 @@ receipt does not carry.
 
 For anonymous spaces, send the receipt's `data.claim.key` (the space key,
 `sfc_...`) as `Authorization: Bearer sfc_...` when you poll, read
-`data.links.inspect` / `data.links.version`, finalize uploads, or update
-the same `spaceId` — and never print the key back to the user. Errors are
-RFC 9457 problem documents: branch on the stable `code` and follow `type`
+`data.links.inspect` or `data.links.version`, finalize uploads, or update
+the same `spaceId`. Never print the key back to the user. Errors are
+RFC 9457 problem documents; branch on the stable `code` and follow `type`
 for the recovery page.
 
 ## Continue after claim
 
 Claiming ends the space key's publish rights. When the owner keeps agent
 continuation on (the default at claim time), the key becomes a one-time
-exchange voucher: the next publish with it fails with
+exchange voucher. The next publish with it fails with
 `409 space_claimed_credential_available`, which is the signal to run the
 exchange once. CLI agents run [`sf continue`](/cli#sf-continue) to exchange
 the saved space key for a durable credential in one command. API-only
-agents:
+agents exchange it in three steps:
 
 1. Call `POST /v1/claim/exchange` with the same bearer auth. It returns
    `data.credential.accessToken`, a durable publish-only key scoped to that
@@ -74,14 +76,14 @@ an API key in the dashboard instead.
 - Finalize is the completion boundary for live publishes. Refresh upload
   URLs without restarting a version.
 - Space metadata, password protection, and SPA mode survive redeploys.
-- Plan limits surface as diagnostics: publish the intended artifact, then
+- Plan limits appear as diagnostics: publish the intended artifact, then
   read and report what the API or CLI says.
 - Never print secrets into transcripts; the full rules live in
   [Auth and accounts](/agents#auth-and-accounts).
 
-Use `--json` on any CLI command when you parse the output — for example
-`sf publish --json` for repeat local updates. Publishing the same directory
-again updates the space saved in `.spacefast/state.json`.
+When you parse CLI output, add `--json`, for example `sf publish --json`
+for repeat local updates. Publishing the same directory again updates the
+space saved in `.spacefast/state.json`.
 
 ## Related
 

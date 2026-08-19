@@ -13,8 +13,8 @@ URLs.
 
 ## Connect a repository
 
-GitHub is the fastest path — install the Spacefast GitHub App and pick a
-repository — and Spacefast detects your framework and build settings:
+GitHub is the fastest path. Install the Spacefast GitHub App, pick a
+repository, and Spacefast detects your framework and build settings:
 
 ```bash
 sf git connect --provider github --repository owner/repo
@@ -25,7 +25,7 @@ people set at connect time:
 
 | Flag                                       | What it does                                                                           |
 | ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `--production-branch <name>`               | Branch whose builds publish to the live channel (defaults to the repo default branch). |
+| `--production-branch <name>`               | Branch whose builds publish to the live channel (defaults to the repository default branch). |
 | `--build-command`, `--output-directory`    | Override detected build settings.                                                      |
 | `--build-now`                              | Queue a build immediately after connecting.                                            |
 
@@ -33,15 +33,14 @@ The full flag set, including platform presets, auto-deploy toggles, and
 `sf.jsonc` config, is in the
 [`sf git connect` reference](/cli#sf-git-connect).
 
-GitHub is the first-class provider: the App install and repository picker
-handle authentication for you. GitLab, Bitbucket, and plain Git remotes work
-too, but they have no app or OAuth flow — connect them with
-`--clone-url <url>` and a `--credential` (or set
-`SPACEFAST_REPOSITORY_CREDENTIAL`). Inspect the connection with
-`sf git ls`, change settings with `sf git update`, and remove it with
-`sf git disconnect`.
+For GitHub, the App install and repository picker handle authentication for
+you. GitLab, Bitbucket, and plain Git remotes work too, but they have no
+app or OAuth flow. Connect them with `--clone-url <url>` and a
+`--credential`, or set `SPACEFAST_REPOSITORY_CREDENTIAL`. Inspect the
+connection with `sf git ls`, change settings with `sf git update`, and
+remove it with `sf git disconnect`.
 
-Building from a repo requires the static runtime. Spacefast runs your build,
+Building from a repository requires the static runtime. Spacefast runs your build,
 packs the static output, and creates a version through the normal publish
 path.
 
@@ -50,21 +49,21 @@ path.
 Once connected, Spacefast listens for repository events:
 
 - **A push to the production branch** builds the commit. If
-  `auto-deploy-production` is on, the new version is promoted to your
-  `live` channel — a real publish.
+  `auto-deploy-production` is on, Spacefast promotes the new version to
+  your `live` channel, which is a real publish.
 - **A push to any other branch** builds a preview version when
-  `auto-deploy-previews` is on. The preview gets its own branch subdomain:
+  `auto-deploy-previews` is on. The preview gets its own branch subdomain.
   Spacefast slugifies the branch name (any character outside `a-z0-9-`
   becomes a dash, truncated to 16 characters) and uses the slug as a
-  hostname label in front of your space's hostname, so branch `feature/nav`
+  hostname label in front of your space's hostname. Branch `feature/nav`
   previews at `https://br-feature-nav--<your-space-host>/`. Deleting the
   branch retires its preview.
 - **A pull request** (opened, reopened, synchronized, or marked ready for
   review) builds a PR preview. Closing the pull request retires it.
 
 Spacefast skips pushes that do not touch your app root or install
-directory, so an unrelated change never triggers a rebuild. **It also skips
-pull requests from forks**: build secrets are never exposed to untrusted
+directory, so an unrelated change never triggers a rebuild. It also skips
+pull requests from forks, so build secrets are never exposed to untrusted
 code.
 
 ## Trigger a build manually
@@ -107,7 +106,7 @@ terminal state.
 
 ## When a build fails
 
-A failed build carries a stable error code: `sf builds get` shows the code,
+A failed build carries a stable error code. `sf builds get` shows the code,
 `sf builds logs` shows what happened, and each code has its own page.
 
 - [`build_command_missing`](/errors/build_command_missing): Spacefast could not find a build or install command.
@@ -132,8 +131,8 @@ repository:
 
 ## Push-to-deploy without a connection
 
-If you would rather push straight to Spacefast than wire up a provider,
-install a signed push remote:
+To push straight to Spacefast without connecting a provider, install a
+signed push remote:
 
 ```bash
 sf git origin            # adds a `spacefast` remote next to your `origin`
@@ -148,7 +147,7 @@ instead of adding a second one.
 
 ## Local builds
 
-`sf build [dir]` runs the same detect-build-and-pack step **locally** and
+`sf build [dir]` runs the same detect-build-and-pack step locally and
 writes a `.spacefast/build-output.tgz` you can publish with `sf publish`. It
 is useful for debugging build settings, or for CI that wants to build before
 uploading. Local builds are separate from cloud builds and never touch a

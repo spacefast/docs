@@ -2,11 +2,11 @@
 title: Publish your first site
 sidebar:
   label: Quickstart
-description: Hand your project to your coding agent or run one CLI command and get a live URL in seconds, no account required.
+description: Hand your project to your coding agent or run one CLI command, and get a live URL in seconds without an account.
 ---
 
 Publish a folder, a zip, or a single `index.html`, and Spacefast serves it
-at a permanent URL seconds after the upload completes. The first publish
+at a stable URL seconds after the upload completes. The first publish
 does not require an account.
 
 ## Tell your agent
@@ -19,10 +19,10 @@ If you have a coding agent open, paste this:
 
 The agent fetches the instructions, publishes, and reports back the live URL
 and the permanent version URL. If it published without an account, it also
-hands you a claim link. To make the setup permanent — CLI, skill, and MCP —
-see [Set up an agent](/agents).
+hands you a claim link. To give the agent a permanent setup with the CLI,
+skill, and MCP, see [Set up an agent](/agents).
 
-## Or run the CLI yourself
+## Run the CLI yourself
 
 Install the CLI once:
 
@@ -36,22 +36,22 @@ Then publish your build output:
 sf publish ./dist --name docs
 ```
 
-`--name` sets the space title, and `--spa true` forces the single-page-app
-fallback if Spacefast guesses your setup wrong. The receipt prints the live
-URL, the permanent version URL, and — without an account — a claim link. The
-full command surface is in the [CLI reference](/cli).
+`--name` sets the space title. If Spacefast guesses your setup wrong,
+`--spa true` forces the single-page-app fallback. The receipt prints the
+live URL and the permanent version URL. Without an account, it also prints
+a claim link. The full command set is in the [CLI reference](/cli).
 
 The first publish writes `.spacefast/state.json` next to the folder, so
 later publishes from the same directory update the same space at the same
-URL. Each changed publish creates a new immutable version, unchanged files
-are never uploaded twice, and [`sf rollback`](/publish/versions) promotes an
-earlier version with no rebuild.
+URL. Each changed publish creates a new immutable version, and unchanged
+files are never uploaded twice. [`sf rollback`](/publish/versions) promotes
+an earlier version with no rebuild.
 
 ## Claim your space
 
 A space published without an account expires unless you claim it within 6
-hours: open the claim link and sign in. After claiming, you keep the same
-URL for every future publish and get full
+hours. To claim it, open the claim link and sign in. After claiming, you
+keep the same URL for every future publish and get full
 [version history](/publish/versions). The details are on
 [Publish without an account](/publish/anonymous).
 
@@ -61,7 +61,7 @@ runs server-executable files; everything is served as static content unless
 you declare a [Zero](/zero) or [Functions](/functions) runtime.
 :::
 
-## No terminal at all
+## Publish without a terminal
 
 Open [drop.website](https://drop.website) and drag a folder, a zip, or an
 `index.html` file onto the page. The upload publishes the same way as the
@@ -79,11 +79,11 @@ cd /workspace/site
 sf publish .
 ```
 
-Run `sf --help` to explore, or `sf login` to manage spaces already in your
-account; the terminal opens the device-login page in a new tab. It is a
-browser sandbox rather than your computer, so commands that need local
-files, installed packages, or a full operating system belong in the
-[real CLI](/cli).
+Run `sf --help` to explore. To manage spaces already in your account, run
+`sf login`; the terminal opens the device-login page in a new tab. The
+terminal is a browser sandbox rather than your computer, so commands that
+need local files, installed packages, or a full operating system belong in
+the [installed CLI](/cli).
 
 ## Next
 

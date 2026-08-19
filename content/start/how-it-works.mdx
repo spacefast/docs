@@ -1,6 +1,6 @@
 ---
 title: How Spacefast works
-description: "The model behind every Spacefast feature: spaces, publishes, versions, teams, domains, and variables."
+description: "Learn the model behind every Spacefast feature: spaces, publishes, versions, teams, domains, and variables."
 ---
 
 Spacefast's model is small. Six nouns carry the whole product, and every
@@ -19,10 +19,10 @@ page in these docs describes an operation on one of them.
 
 A [publish](/publish) uploads files and then finalizes. Finalization
 validates the complete snapshot, compiles its serving rules, and promotes it
-atomically. A request never sees half of a release: until the new version is
+atomically. A request never sees half of a release. Until the new version is
 ready, the live URL serves the old one, and a failed publish leaves the
-current site alone. Publishing content identical to the current version is a
-recognized no-op rather than a wasted version.
+current site alone. If you publish content identical to the current version,
+Spacefast records a no-op instead of creating a new version.
 
 Each publish receipt carries two addresses. The **live URL** is the space's
 stable address, and its content changes when you publish or roll back. The
@@ -39,10 +39,10 @@ flowchart LR
 
 ## The live URL is a pointer
 
-That pointer is called a **channel**. A successful publish moves the `live`
-channel to the new version. [Rollback and promote](/publish/versions) move
-the same pointer to a version that already exists, so recovery takes
-seconds: nothing is rebuilt or re-uploaded. Channel history records every
+The live URL is a pointer called a **channel**. A successful publish moves
+the `live` channel to the new version. [Rollback and promote](/publish/versions)
+move the same pointer to a version that already exists, so recovery takes
+seconds. Nothing is rebuilt or re-uploaded. Channel history records every
 move.
 
 ## What rolls back with a version
@@ -56,10 +56,13 @@ is compiled into the snapshot and restored on rollback:
 - [Zero](/zero) or [Functions](/functions) code, when the space runs a
   runtime.
 
-Other things belong to the space rather than the version, and do not roll
-back: [domains](/domains), [variables](/publish/variables),
-[access Grants](/share), comment threads, and — for spaces that run code —
-database rows and stored objects.
+Other things belong to the space rather than the version, and they do not
+roll back:
+
+- [Domains](/domains).
+- [Variables](/publish/variables).
+- [Grants](/share) and comment threads.
+- Database rows and stored objects, for spaces that run code.
 
 ## Access and claiming
 
@@ -69,14 +72,14 @@ public, per path and per role.
 
 You can also publish before you have an account. An [anonymous
 publish](/publish/anonymous) creates a working space and returns a claim
-link; claim the space within 6 hours to keep it. Agents use this flow by
-default: publish first, then hand the claim link to the person they work
-for.
+link. To keep the space, claim it within 6 hours. Agents use this flow by
+default. They publish first, then hand the claim link to the person they
+work for.
 
 ## One API underneath
 
 The dashboard, the [CLI](/cli), the [SDK](/reference/sdk), and
-[agents](/agents) all drive the same [REST API](/api). Anything one surface
+[agents](/agents) all drive the same [REST API](/api). Anything one of them
 can do, the others can too, and every mutation returns a receipt you can
 treat as the source of truth.
 

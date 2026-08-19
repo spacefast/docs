@@ -1,6 +1,6 @@
 ---
 title: Vite
-description: How to use Vite, TanStack Start, and optional Spacefast local routing helpers.
+description: Publish plain Vite and TanStack Start output, with the optional Spacefast plugin for local routing parity.
 ---
 
 Spacefast publishes plain Vite and TanStack Start static output without
@@ -32,8 +32,8 @@ export default defineConfig({
 
 ## TanStack Start static site
 
-Prerender every route when you know them all at build time: marketing pages,
-docs, and blogs.
+When you know every route at build time, prerender them all. This fits
+marketing pages, docs, and blogs.
 
 ```ts
 import { defineConfig } from "vite";
@@ -61,7 +61,7 @@ publishes only the static files.
 
 ## TanStack Start SPA
 
-Enable the SPA shell when routes render on the client.
+When routes render on the client, enable the SPA shell.
 
 ```ts
 import { defineConfig } from "vite";

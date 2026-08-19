@@ -7,7 +7,7 @@ description: Create scoped API keys with presets for CI, publishers, admins, and
 
 API keys are bearer credentials for the [REST API](/api), the CLI
 (`SPACEFAST_TOKEN` / `sf login --token`), and automation. Spacefast shows
-the secret only once, when you create the key — store it in a secret
+the secret only once, when you create the key. Store it in a secret
 manager, never in git or chat.
 
 ## Create and list
@@ -17,8 +17,8 @@ sf api-keys create --name ci --preset ci_deploy
 sf api-keys ls
 ```
 
-Keys belong to the selected [team](/account/teams); pass `--team` when the
-default team is wrong.
+Keys belong to the selected [team](/account/teams). If the default team is
+wrong, pass `--team`.
 
 ## Presets
 
@@ -39,7 +39,7 @@ key under one of these presets.
 
 ## Rotation
 
-A secret cannot be rotated in place under the same id. Instead:
+You cannot rotate a secret in place under the same id. Instead:
 
 1. Create a replacement key.
 2. Update CI or your local environment.
@@ -52,7 +52,7 @@ sf api-keys revoke key_123
 
 `delete` and `rm` are aliases of revoke.
 
-## CI vs agents
+## Credentials for CI and agents
 
 - **CI or one-off publish**: use `ci_deploy` or another tight preset, mask
   it in the pipeline, and inject it as `SPACEFAST_TOKEN`.
@@ -62,10 +62,10 @@ sf api-keys revoke key_123
 - **Hosted MCP**: uses OAuth, so do not paste API keys into prompts. See
   [MCP](/agents/mcp).
 
-Claiming an anonymous space with agent continuation on lets the agent
+If you claim an anonymous space with agent continuation on, the agent can
 exchange the space key (`sfc_...`) once for a publish-only key scoped to
 that space. See [Publish as an agent](/agents/publishing).
 
 ## Related
 
-- [`sf login`](/cli#sf-login): device login and `--token` storage.
+- [`sf login`](/cli#sf-login) covers device login and `--token` storage.

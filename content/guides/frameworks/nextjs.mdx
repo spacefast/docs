@@ -24,8 +24,8 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-Set `trailingSlash: true` if you want `/about/index.html` instead of
-`/about.html`.
+If you want `/about/index.html` instead of `/about.html`, set
+`trailingSlash: true`.
 
 Build and publish the generated directory:
 
@@ -36,10 +36,9 @@ sf publish ./out
 
 Static export works best when you know all routes at build time. Avoid
 server-only features such as API Routes, Middleware, `getServerSideProps`,
-ISR, and request-time redirects and rewrites. Two of these have static
-answers: redirects and rewrites move to [`_redirects`](/serve/redirects), and
-API calls can target your backend directly or through a
-[proxy route](/serve/redirects#proxy-routes).
+ISR, and request-time redirects and rewrites. Redirects and rewrites move to
+[`_redirects`](/serve/redirects). API calls can target your backend directly
+or through a [proxy route](/serve/redirects#proxy-routes).
 
 ## Functions with OpenNext
 
@@ -56,13 +55,13 @@ sf publish
 
 Spacefast detects the Next.js project, builds it with a pinned OpenNext
 Cloudflare adapter, and publishes the worker with the generated static assets.
-No adapter install, no `open-next.config.ts`, no extra package script. Keep an
-`open-next.config.ts` only when you need to override the defaults; Spacefast
-preserves yours. Confirm the plan before anything uploads with
-`sf publish --dry-run`.
+You do not install the adapter, write an `open-next.config.ts`, or add a
+package script. Keep an `open-next.config.ts` only when you need to override
+the defaults; Spacefast preserves yours. To confirm the plan before anything
+uploads, run `sf publish --dry-run`.
 
-Requests for a published file are served from disk first; SSR, Route Handlers,
-and other misses reach the worker. You can pin the detected entry explicitly:
+Spacefast serves published files from disk first; SSR, Route Handlers, and
+other misses reach the worker. You can pin the detected entry explicitly:
 
 ```jsonc
 {
@@ -80,8 +79,8 @@ guide's Cloudflare deployment and binding configuration does not apply here.
 
 ## Image optimization
 
-Next.js default image optimization requires a Next.js server at runtime;
-static export needs `images.unoptimized`, pre-generated responsive assets, or
+Next.js default image optimization requires a Next.js server at runtime.
+Static export needs `images.unoptimized`, pre-generated responsive assets, or
 a custom loader (see the Next.js
 [static export image optimization section](https://nextjs.org/docs/pages/guides/static-exports#image-optimization)).
 
@@ -115,8 +114,9 @@ export default nextConfig;
 ```
 
 `spacefastNextImageConfig` includes the shared `loader: "custom"` and
-`qualities` settings; resolve `@spacefast/image/next-loader` from your own
-`next.config.ts` so pnpm, Yarn PnP, and hoisted workspaces locate the package.
+`qualities` settings. Resolve `@spacefast/image/next-loader` from your own
+`next.config.ts` so that pnpm, Yarn PnP, and hoisted workspaces locate the
+package.
 
 Use absolute public image URLs for images that should go through Site
 Accelerator. Spacefast emits relative images in `public/` as static files, and
@@ -147,14 +147,14 @@ https://i0.wp.com/example.com/uploads/hero.jpg?quality=85&strip=all&w=1200
 
 For per-component control, pass `spacefastNextImageLoader` from
 `@spacefast/image/next` as the `loader` prop. For advanced Site Accelerator
-options, see [Image acceleration](/serve/images), and put them in
-one URL helper so components do not rebuild image URLs differently.
+options, see [Image acceleration](/serve/images). Put those options in one
+URL helper so that components do not rebuild image URLs differently.
 
-## Publishing checklist
+## Checklist before you publish
 
 - For a static export, check that `next build` creates an `out` directory with `index.html` at the root.
 - For Functions, check that the OpenNext build creates `.open-next/worker.js`.
-- Replace request-time features when you publish a static export. Keep them when you use Functions.
-- Put `_redirects` and `_headers` in the exported output if the space needs
-  Spacefast routing or response headers.
+- When you publish a static export, replace request-time features. When you use Functions, keep them.
+- If the space needs Spacefast routing or response headers, put `_redirects`
+  and `_headers` in the exported output.
 - Use Site Accelerator URLs only for public images that the CDN can fetch.

@@ -2,14 +2,14 @@
 title: Publish a site
 sidebar:
   label: How publishing works
-description: How publishing works in Spacefast, including CLI and agent publishes, immutable versions, updates, and the dashboard Drop uploader.
+description: Learn how publishing works in Spacefast, including CLI and agent publishes, immutable versions, updates, and the dashboard Drop uploader.
 ---
 
-A publish sends a directory or a single file to a space. When the content
-changed, Spacefast creates an immutable [version](/publish/versions) with
-its own URL and moves the live URL to it once the upload completes; when the
-content is identical to the current version, the publish is a no-op. Earlier
-versions stay available for [rollback](/publish/versions).
+A publish sends a directory or a single file to a space. A publish that
+changes the content creates an immutable [version](/publish/versions) with
+its own URL. When the upload completes, the live URL moves to that version.
+A publish with identical content is a no-op. Earlier versions stay
+available for [rollback](/publish/versions).
 
 Directory publishes preserve relative paths and can carry `_redirects`,
 `_headers`, and [`sf.jsonc`](/serve/settings), so serving rules ship with
@@ -22,7 +22,7 @@ New spaces are private by default. The publish receipt returns an Open link
 that grants access, and [access settings](/share) make the space public when
 you are ready.
 
-## Four ways in
+## Ways to publish
 
 | Path                  | Best for                                                     |
 | --------------------- | ------------------------------------------------------------ |
@@ -31,9 +31,9 @@ you are ready.
 | `POST /v1/publish`    | One-shot HTTP from scripts (see [API](/api))                 |
 | Dashboard Drop        | No tooling at hand, zip or `index.html`                      |
 
-The [CLI](/cli) is the main path: incremental uploads, `--json` receipts,
-CI, and dry-runs. It is also what [agents](/agents) run for you, and where
-the [quickstart](/start) starts. The same publish is one HTTP call:
+The [CLI](/cli) is the main path. It handles incremental uploads, `--json`
+receipts, CI, and dry runs. It is also what [agents](/agents) run for you,
+and what the [quickstart](/start) uses. The same publish is one HTTP call:
 
 <CodeGroup>
 
@@ -48,14 +48,15 @@ curl -F archive=@site.zip https://api.spacefast.com/v1/publish
 </CodeGroup>
 
 Add `--space docs` to target a space explicitly, `--json` for a
-machine-readable receipt, or `--dry-run` to preview what would upload.
+machine-readable receipt, or `--dry-run` to preview the upload without
+publishing.
 
-Drop is the dashboard uploader and the no-tooling escape hatch: drag a
+Drop is the dashboard uploader for when you have no tooling at hand. Drag a
 folder, a zip archive, or a standalone `index.html` onto a space and
-publish. Uploads resume if interrupted, zips are expanded before publishing,
-and `index.html` belongs at the archive root unless you want a file
-listing. Keep the tab open during a browser upload until it hands off to
-the server. To publish this way without an account, use
+publish. Interrupted uploads resume, and Spacefast expands zip archives
+before publishing. Unless you want a file listing, put `index.html` at the
+archive root. During a browser upload, keep the tab open until the upload
+hands off to the server. To publish this way without an account, use
 [drop.website](https://drop.website); the upload creates an
 [anonymous space](/publish/anonymous) with a claim link.
 
@@ -71,14 +72,14 @@ The space mode decides:
 
 ## What never serves
 
-Configuration travels with the publish but is not content: `sf.jsonc`,
+Configuration travels with the publish but is not content. `sf.jsonc`,
 `_redirects`, `_headers`, `theme.json`, `_layout.html`, and `_pages/` are
-compile inputs, and requesting one returns 404. Files and directories
-whose names start with a dot are private too, with one exception — a root
-`.well-known/` directory publishes normally, so verification files and
-discovery manifests work.
+compile inputs, and requesting one returns 404. Files and directories whose
+names start with a dot are private too. The one exception is a root
+`.well-known/` directory, which publishes normally so that verification
+files and discovery manifests work.
 
-## First publish vs update
+## First publish and updates
 
 The first publish creates a space and saves the space reference locally in
 `.spacefast/state.json`. Later publishes update that space, or the one named
@@ -87,29 +88,31 @@ version, so unchanged files are never uploaded again. When the upload
 finishes, the [live channel](/publish/versions) moves to the new version
 atomically.
 
-A few flags shape what an update creates. `--publish-mode` replaces the
-whole site (`snapshot`, the default) or adds to what is already deployed
-(`additive`). In snapshot mode, `--immutable-asset-prefix /assets/` names
-a path prefix whose files are content-addressed and kept from the previous
-version, so a tab loaded before the deploy can still fetch its chunks.
-`--config-only` publishes a config-only version that carries the prior
-artifact forward without building or uploading content. And
-`-m "Rework the nav"` records a plain-language changelog entry for the
-version, shown in version history in place of the detected git commit
-message.
+A few flags shape what an update creates:
+
+- `--publish-mode` replaces the whole site (`snapshot`, the default) or
+  adds to what is already deployed (`additive`).
+- In snapshot mode, `--immutable-asset-prefix /assets/` names a path prefix
+  whose files are content-addressed and kept from the previous version, so
+  a tab loaded before the deploy can still fetch its chunks.
+- `--config-only` publishes a config-only version that carries the prior
+  artifact forward without building or uploading content.
+- `-m "Rework the nav"` records a plain-language changelog entry for the
+  version, shown in version history in place of the detected git commit
+  message.
 
 Publishes and builds draw from the team's resolved capacity, and CLI pushes
 and CI builds count the same.
 
 ## Content scanning
 
-Spacefast scans published content for malware and abusive material. A
-publish can be held briefly while a scan finishes, surfaced as
-[`scan_pending`](/errors/scan_pending), and a scan that finds malware blocks
+Spacefast scans published content for malware and abusive material. While a
+scan finishes, a publish can be held briefly and surfaces as
+[`scan_pending`](/errors/scan_pending). A scan that finds malware blocks
 the publish with [`malware_detected`](/errors/malware_detected).
 
 Takedowns remove serving for abusive content, and affected requests return
-[`abuse_takedown`](/errors/abuse_takedown). Abusive sites can be reported
+[`abuse_takedown`](/errors/abuse_takedown). You can report abusive sites
 through the API; see the [API reference](/api/reference).
 
 ## Related

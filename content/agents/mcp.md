@@ -6,14 +6,14 @@ description: Connect hosted or on-device MCP so agents use the same Spacefast AP
 The Model Context Protocol (MCP) gives agents typed Spacefast tools over
 the same public API that the CLI and dashboard use.
 
-## Hosted vs on-device
+## Hosted or on-device
 
-|          | Hosted MCP                  | On-device MCP                        |
-| -------- | --------------------------- | ------------------------------------ |
-| Endpoint | `https://mcp.spacefast.com` | Local process via CLI                |
-| Auth     | OAuth to the signed-in user | Local Spacefast login / agent config |
-| Files    | Inline files in the call    | Bounded local root                   |
-| Best for | Cloud and browser agents    | Agents that must read/publish disk   |
+|          | Hosted MCP                  | On-device MCP                         |
+| -------- | --------------------------- | ------------------------------------- |
+| Endpoint | `https://mcp.spacefast.com` | Local process via CLI                 |
+| Auth     | OAuth to the signed-in user | Local Spacefast login or agent config |
+| Files    | Inline files in the call    | Bounded local root                    |
+| Best for | Cloud and browser agents    | Agents that read and publish disk     |
 
 Machine-readable discovery:
 
@@ -21,7 +21,7 @@ Machine-readable discovery:
 https://spacefast.com/.well-known/mcp/server-card.json
 ```
 
-The server speaks streamable HTTP. Clients discover auth from
+The server uses streamable HTTP. Clients discover auth from
 `https://mcp.spacefast.com/.well-known/oauth-protected-resource`, which
 points at the authorization server at
 `https://api.spacefast.com/v1/auth`.
@@ -39,8 +39,8 @@ user.
 
 ## On-device MCP
 
-On-device MCP runs a local server for agents that must see the real
-checkout. Install and configure it with the CLI:
+On-device MCP runs a local server for agents that read and publish files
+on disk. Install and configure it with the CLI:
 
 ```bash
 sf mcp install --agent claude-code
@@ -53,8 +53,8 @@ sf mcp install --agent cursor --remote --oauth
 ```
 
 Confirm the daemon with `sf mcp status`, and add `--repair` to clear a
-stale daemon manifest. `sf mcp daemon` and `sf mcp http` run the server by
-hand; the [CLI reference](/cli#sf-mcp-daemon) covers both. Credentials stay
+stale daemon manifest. `sf mcp daemon` and `sf mcp http` run the server
+manually; the [CLI reference](/cli#sf-mcp-daemon) covers both. Credentials stay
 in supported Spacefast state files, and the secret-handling rules live in
 [Auth and accounts](/agents#auth-and-accounts).
 
@@ -64,10 +64,10 @@ For the complete skill and MCP setup in one command, use
 ## Publish files
 
 Hosted MCP publishes the files supplied inline in the tool call. On-device
-MCP reads a bounded local root (`SPACEFAST_MCP_WORKSPACE_ROOT`, default:
-the working directory) to collect the publish upload and refuses paths
-outside it. Keep the publish root narrow, and never add `.spacefast/`,
-credential files, or unrelated repository content to it.
+MCP collects the publish upload from a bounded local root
+(`SPACEFAST_MCP_WORKSPACE_ROOT`, default: the working directory) and
+refuses paths outside it. Keep the publish root narrow, and never add
+`.spacefast/`, credential files, or unrelated repository content to it.
 
 ## Tools and scopes
 
@@ -79,9 +79,9 @@ The server registers four tools:
 - **`publish`**: publish files as a new version.
 
 Tools manage the same spaces, versions, access, and domains as the
-[REST API](/api). Prefer receipts from tool calls as the authority for
-mutations; tool results and persisted session transcripts are redacted
-before the model sees them.
+[REST API](/api). Treat receipts from tool calls as the authority for
+mutations. Spacefast redacts tool results and persisted session
+transcripts before the model sees them.
 
 For durable automation outside MCP, use an agent account or a `ci_deploy`
 API key; see [Auth and accounts](/agents#auth-and-accounts).

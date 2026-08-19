@@ -5,18 +5,20 @@ title: Space settings
 description: Configure a space in the file that publishes and rolls back with it, and apply saved settings with sf apply.
 ---
 
-`sf.jsonc` at the publish root is the space configuration that travels with
-your files: Spacefast validates it during publish, applies it atomically
-with the version, and restores it on rollback. The file itself is never
-served. `spacefast.jsonc`, `spacefast.json`, and `sf.json` are accepted
-names for the same file; the docs use `sf.jsonc`.
+`sf.jsonc` at the publish root is the space configuration, and it travels
+with your files. Spacefast validates it during publish, applies it
+atomically with the version, and restores it on rollback. The file itself
+is never served. `spacefast.jsonc`, `spacefast.json`, and `sf.json` are
+accepted names for the same file. The docs use `sf.jsonc`.
+
+To create the file with the schema URL that editors and agents use for
+autocomplete, run `sf init`:
 
 ```bash
 sf init
 ```
 
-`sf init` creates the file with the schema URL that editors and agents use
-for autocomplete. The playground produces a valid starting point:
+The playground produces a valid starting point:
 
 <ConfigPlayground />
 
@@ -134,16 +136,16 @@ for autocomplete. The playground produces a valid starting point:
     build: {
       type: "object",
       description:
-        "`buildCommand`, `outputDirectory`, and friends for Git builds.",
+        "`buildCommand`, `outputDirectory`, and the other Git build settings.",
     },
   }}
 />
 
 ## Serving behavior
 
-Website behavior is the default: Spacefast resolves published files and
-directory indexes. For a browsable file tree instead, disable indexes and
-enable listings:
+By default, Spacefast serves a website: it resolves published files and
+directory indexes. To serve a browsable file tree instead, disable indexes
+and enable listings:
 
 ```jsonc
 { "index": false, "listing": true }
@@ -161,21 +163,22 @@ Use `fallback` for a single-page app (SPA) or a custom not-found page:
 
 The object form needs both `path` and `status`.
 
-`cleanUrls` serves `/about.html` at `/about` when no file or directory
-index matches first. It defaults to on for static sites and off for a
-200-status SPA fallback, so set it explicitly when you use an SPA fallback.
+When no file or directory index matches first, `cleanUrls` serves
+`/about.html` at `/about`. It defaults to on for static sites and off for a
+200-status SPA fallback. When you use an SPA fallback, set it explicitly.
 
 ## Metadata and visitor pages
 
 `name` is the space display name. While the live version's `sf.jsonc` sets
 `name`, the API refuses to rename the space and returns
-[`name_managed_by_config`](/errors/name_managed_by_config) — rename by
-changing the file and publishing, or remove `name` from the file to rename
-through the API. `meta.title`, `meta.description`,
-`meta.image`, and `meta.favicon` supply listing, social, and browser-icon
-metadata, and `theme` styles the designed access, error, and system pages.
-[Visitor pages](/serve/pages) covers `theme.json`, `DESIGN.md`,
-`_layout.html`, and complete `_pages` takeovers.
+[`name_managed_by_config`](/errors/name_managed_by_config). To rename the
+space, change the file and publish. To rename through the API instead,
+remove `name` from the file.
+
+`meta.title`, `meta.description`, `meta.image`, and `meta.favicon` supply
+listing, social, and browser-icon metadata. `theme` styles the designed
+access, error, and system pages. [Visitor pages](/serve/pages) covers
+`theme.json`, `DESIGN.md`, `_layout.html`, and complete `_pages` takeovers.
 
 ## Routing and headers
 
@@ -193,10 +196,10 @@ exist as `sf.jsonc` keys, which is useful when the config is generated:
 ```
 
 `redirects[].status` accepts 301, 302, 303, 307, or 308 and defaults to
-302. `rewrites` take no status: a path destination is a rewrite, and an
+302. `rewrites` take no status. A path destination is a rewrite, and an
 absolute URL is a proxy. `_redirects` file rules match before config
-`redirects`, then config `rewrites`, and a `_headers` block wins over a
-config rule for the same header. All sources count against the same
+`redirects`, then config `rewrites`. For the same header, a `_headers`
+block wins over a config rule. All sources count against the same
 [rule caps](/serve/redirects#rule-capacity).
 
 ## Templates
@@ -207,8 +210,8 @@ List files that should receive `{{ vars.NAME }}` substitution at publish:
 { "templates": ["config.js"] }
 ```
 
-Values come from [variables](/publish/variables). Secret variables are
-refused in templates, and the publish fails with
+Values come from [variables](/publish/variables). If a template references
+a secret variable, the publish fails with
 [`secret_variable_in_template`](/errors/secret_variable_in_template).
 
 ## Access
@@ -229,18 +232,22 @@ Or expose selected paths while everything else stays private:
 }
 ```
 
-Wildcards match whole path segments, and a list that is all negations is
-invalid. On an unclaimed space the block is inert until the space is
-claimed. For people, links, passwords, machine credentials, and policy
-rules, use [Access](/share).
+Wildcards match whole path segments. A list that is all negations is
+invalid. The block is inert until an anonymous space is claimed. For
+people, links, passwords, machine credentials, and policy rules, use
+[Access](/share).
 
 ## Superpowers
 
 The `superpowers` block controls every script Spacefast injects into served
-pages: `enabled` is the master switch, `googleAnalytics` and
-`googleTagManager` cover the built-ins, and `javascriptTags` holds your own
-snippets. Released tags from [Tag Manager](/guides/tag-manager) are
-injected scripts too.
+pages:
+
+- `enabled` is the master switch.
+- `googleAnalytics` and `googleTagManager` cover the built-ins.
+- `javascriptTags` holds your own snippets.
+
+Released tags from [Tag Manager](/guides/tag-manager) are injected scripts
+too.
 
 ```jsonc
 {
@@ -261,9 +268,9 @@ appearing at all, set `disable_all_injection` to `true`.
 ## Apply saved settings
 
 Serving settings edited in the dashboard or through the API save first and
-go live when you apply them; until then the UI shows them as saved but not
+go live when you apply them. Until then, the UI shows them as saved but not
 live. `sf apply` pushes already-saved settings onto the serving runtime
-without creating a new content version — a publish is the path that uploads
+without creating a new content version. A publish is the path that uploads
 files, and it can carry `sf.jsonc` with a version.
 
 ```bash
@@ -276,8 +283,8 @@ Queue an apply for a specific space without waiting:
 sf apply --space docs --no-wait
 ```
 
-By default the CLI waits until queued work finishes; tune the ceiling with
-`--wait-timeout` (default 900 seconds).
+By default, the CLI waits until queued work finishes. To change the
+ceiling, set `--wait-timeout` (default 900 seconds).
 
 | Goal                                      | Command                                                                      |
 | ----------------------------------------- | ---------------------------------------------------------------------------- |
@@ -290,8 +297,9 @@ By default the CLI waits until queued work finishes; tune the ceiling with
 - Rule syntax and limits for redirects, rewrites, proxies, and response
   headers live in [`_redirects`](/serve/redirects) and
   [`_headers`](/serve/headers).
-- Build settings (`build.buildCommand`, `build.outputDirectory`, and
-  friends) are covered in [Build from Git](/publish/git), and runtimes
-  (`runtime.kind`) in [Zero](/zero) and [Functions](/functions).
+- Build settings (`build.buildCommand`, `build.outputDirectory`, and the
+  rest of the `build` block) are covered in [Build from Git](/publish/git).
+  Runtimes (`runtime.kind`) are covered in [Zero](/zero) and
+  [Functions](/functions).
 - Cloud and runtime variables are managed with
   [`sf env`](/publish/variables).

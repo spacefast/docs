@@ -5,28 +5,28 @@ title: Custom domains
 description: Attach a hostname you own, verify its DNS, and let Spacefast issue and renew SSL automatically.
 ---
 
-Connect a hostname you already own so a space serves at your address. Once
+Attach a hostname you already own so a space serves at your address. After
 the Domain Name System (DNS) records are in place, Spacefast issues and
 renews Secure Sockets Layer (SSL) certificates automatically.
 
-No domain yet? [Search, buy, and manage domain names](/domains/registration)
-covers finding and registering one.
+If you don't own a name yet, see
+[Search, buy, and manage domain names](/domains/registration).
 
 Anonymous spaces cannot use custom domains;
 [claim the space](/publish/anonymous) first.
 
 ## Attach the hostname
 
-In the dashboard, open the space, choose **Domains**, add the hostname, and
-create the DNS records Spacefast shows at your DNS provider. The same flow
-from the CLI:
+In the dashboard, open the space, choose **Domains**, and add the hostname.
+Then create the DNS records Spacefast shows at your DNS provider. The CLI
+does the same:
 
 ```bash
 sf domains add example.com --space docs
 ```
 
-To make one hostname redirect to another — `www` to the apex, for example —
-declare that when you add it:
+To redirect one hostname to another, for example `www` to the apex, declare
+the redirect when you add the hostname:
 
 ```bash
 sf domains add www.example.com --space docs --role redirect --redirect-to example.com
@@ -34,13 +34,13 @@ sf domains add www.example.com --space docs --role redirect --redirect-to exampl
 
 ## Verify DNS and SSL
 
-After changing DNS, ask Spacefast to check it:
+After you change DNS records, ask Spacefast to check them:
 
 ```bash
 sf domains check example.com --space docs
 ```
 
-For the records Spacefast can see and the current SSL state:
+Diagnostics shows the records Spacefast can see and the current SSL state:
 
 ```bash
 sf domains diagnostics example.com --space docs
@@ -54,8 +54,8 @@ and you have tested the site.
 
 Certificates are automatic. If issuance fails, retry it from the domain's
 page in the dashboard or with
-`POST /v1/spaces/{spaceId}/domains/{domainId}/ssl/retry`. Uploading your
-own certificate is not available.
+`POST /v1/spaces/{spaceId}/domains/{domainId}/ssl/retry`. You cannot upload
+your own certificate.
 
 ## Manage DNS at Spacefast
 
@@ -65,9 +65,13 @@ batches, and zone exports from the CLI.
 
 ## List or remove hostnames
 
+List the hostnames attached to a space:
+
 ```bash
 sf domains ls --space docs
 ```
+
+Remove a hostname:
 
 ```bash
 sf domains rm example.com --space docs
