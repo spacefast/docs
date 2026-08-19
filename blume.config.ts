@@ -43,7 +43,7 @@ export default defineConfig({
                 indexWeight: 1.15,
                 mergeFilter: { source: "Docs" },
               });
-              await pagefind.mergeIndex("https://spacefast.com/pagefind", {
+              await pagefind.mergeIndex("/pagefind", {
                 indexWeight: 1,
                 mergeFilter: { source: "Spacefast" },
               });
