@@ -5,6 +5,14 @@ const mountRewriteRules = [
   { from: `${deploymentBase}/*`, status: 200, to: "/:splat" },
 ];
 
+const authoredRedirectRules = [
+  {
+    from: `${deploymentBase}/zero`,
+    status: 301,
+    to: `${deploymentBase}/zero-runtime`,
+  },
+];
+
 const aliasFamilies = [
   {
     sourcePrefix: "/platform-api/operations/",
@@ -74,6 +82,7 @@ function applyRule(rule, source) {
 // then map the remaining based URLs back onto the flat files.
 export function buildRoutingRules(redirects) {
   return [
+    ...authoredRedirectRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,

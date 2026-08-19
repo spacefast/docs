@@ -80,7 +80,7 @@ Outbound network access is fail-closed. Spacefast denies it unless the
 published version holds the `fetch` capability, so a `fetch()` call in your
 code does not silently add network authority. No Functions publish
 grants that capability; outbound `fetch` is available only to
-[Zero](/zero) actions. To check which capabilities a published version
+[Zero](/zero-runtime) actions. To check which capabilities a published version
 holds, run `sf runtime status`.
 
 ## Variables
@@ -99,7 +99,7 @@ instead.
 ## Storage
 
 Every worker receives `env.STORAGE`, the same space
-[object store](/storage) that [Zero](/zero#storage) uses. The binding has
+[object store](/storage) that [Zero](/zero-runtime#storage) uses. The binding has
 three methods:
 
 - `upload(file)` takes a `Blob` and returns an object with `id`,
@@ -158,9 +158,9 @@ compatibility date, capabilities, and dispatch state.
 
 Functions gives you direct control over request handling with Web APIs and
 npm packages. If the database, authentication, and storage are the app,
-[Zero](/zero) builds all three in:
+[Zero](/zero-runtime) builds all three in:
 
-|                   | [Zero](/zero)                      | Functions                    |
+|                   | [Zero](/zero-runtime)              | Functions                    |
 | ----------------- | ---------------------------------- | ---------------------------- |
 | You write         | Capsule: schema and named handlers | Worker: one `fetch` handler  |
 | Database          | Built in                           | Optional `env.DB` binding    |
