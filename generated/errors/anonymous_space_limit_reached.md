@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/anonymous_space_limit_reached",
   "title": "Anonymous space limit reached",
   "status": 400,
-  "detail": "This client already holds the maximum number of unclaimed Spaces.",
+  "detail": "This client already holds the maximum number of unclaimed spaces.",
   "code": "anonymous_space_limit_reached",
   "requestId": "req_4mz0v8qk"
 }

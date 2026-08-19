@@ -96361,6 +96361,341 @@
         ]
       }
     },
+    "/v1/docs/search": {
+      "get": {
+        "operationId": "searchDocs",
+        "summary": "Search the published documentation",
+        "description": "Searches the published Spacefast documentation and returns ranked pages with a short excerpt around the first match. An exact slug or path returns that single page; an empty query lists every page in the requested tier and kind.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Free-text query. An exact slug or path returns that single page; an empty query lists every eligible page.",
+              "type": "string",
+              "maxLength": 512
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Maximum results to return, up to 25. Defaults to the corpus rank.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 25
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Restrict to one docs area: `guide`, `cli`, `api`, `recipe`, `workflow`, or `error`.",
+              "type": "string",
+              "enum": [
+                "guide",
+                "cli",
+                "api",
+                "recipe",
+                "workflow",
+                "error"
+              ]
+            }
+          },
+          {
+            "name": "tier",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Disclosure tier ceiling (cumulative). Defaults to `reference`, which searches everything.",
+              "type": "string",
+              "enum": [
+                "essential",
+                "full",
+                "reference"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "$schema": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Canonical JSON Schema URL for this response body. The server also sends it in the `Link: rel=\"describedby\"` response header."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "revision": {
+                          "type": "string",
+                          "description": "Revision of the published docs corpus that served this search."
+                        },
+                        "query": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "description": "The trimmed query, or null when listing."
+                        },
+                        "exact": {
+                          "type": "boolean",
+                          "description": "True when the query matched one page's slug or path exactly, so only it is returned."
+                        },
+                        "count": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Number of results returned."
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "slug": {
+                                "type": "string",
+                                "description": "Stable page id, for example `publishing` or `api/reference/publish`."
+                              },
+                              "path": {
+                                "type": "string",
+                                "description": "Docs-site path, for example `/publishing`."
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "Canonical human-readable docs URL."
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "kind": {
+                                "type": "string",
+                                "enum": [
+                                  "guide",
+                                  "cli",
+                                  "api",
+                                  "recipe",
+                                  "workflow",
+                                  "error"
+                                ]
+                              },
+                              "tier": {
+                                "type": "string",
+                                "enum": [
+                                  "essential",
+                                  "full",
+                                  "reference"
+                                ]
+                              },
+                              "summary": {
+                                "type": "string"
+                              },
+                              "excerpt": {
+                                "type": "string",
+                                "description": "Short window of the page body around the first query match."
+                              }
+                            },
+                            "required": [
+                              "slug",
+                              "path",
+                              "url",
+                              "title",
+                              "kind",
+                              "tier",
+                              "summary",
+                              "excerpt"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "revision",
+                        "query",
+                        "exact",
+                        "count",
+                        "results"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Problem details (RFC 9457). Any 4xx/5xx response is one `application/problem+json` document.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Docs"
+        ]
+      }
+    },
+    "/v1/docs/page": {
+      "get": {
+        "operationId": "getDocsPage",
+        "summary": "Read one published documentation page",
+        "description": "Returns one published documentation page with its full Markdown body, addressed by its docs-site `path` or its `slug`. Pass exactly one of the two.",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Docs-site path, for example `/publishing`.",
+              "type": "string",
+              "maxLength": 512
+            }
+          },
+          {
+            "name": "slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Stable page id, for example `api/spaces`.",
+              "type": "string",
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "$schema": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Canonical JSON Schema URL for this response body. The server also sends it in the `Link: rel=\"describedby\"` response header."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "revision": {
+                          "type": "string",
+                          "description": "Revision of the published docs corpus that served this page."
+                        },
+                        "page": {
+                          "type": "object",
+                          "properties": {
+                            "slug": {
+                              "type": "string",
+                              "description": "Stable page id, for example `publishing` or `api/reference/publish`."
+                            },
+                            "path": {
+                              "type": "string",
+                              "description": "Docs-site path, for example `/publishing`."
+                            },
+                            "url": {
+                              "type": "string",
+                              "format": "uri",
+                              "description": "Canonical human-readable docs URL."
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "kind": {
+                              "type": "string",
+                              "enum": [
+                                "guide",
+                                "cli",
+                                "api",
+                                "recipe",
+                                "workflow",
+                                "error"
+                              ]
+                            },
+                            "tier": {
+                              "type": "string",
+                              "enum": [
+                                "essential",
+                                "full",
+                                "reference"
+                              ]
+                            },
+                            "summary": {
+                              "type": "string"
+                            },
+                            "body": {
+                              "type": "string",
+                              "description": "Full Markdown body of the page."
+                            }
+                          },
+                          "required": [
+                            "slug",
+                            "path",
+                            "url",
+                            "title",
+                            "kind",
+                            "tier",
+                            "summary",
+                            "body"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "revision",
+                        "page"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Problem details (RFC 9457). Any 4xx/5xx response is one `application/problem+json` document.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Docs"
+        ]
+      }
+    },
     "/v1/docs": {
       "get": {
         "operationId": "listDocs",

@@ -165,6 +165,11 @@
     "to": "/api/reference/docs/getdoc"
   },
   {
+    "from": "/api/operations/getdocspage",
+    "status": 301,
+    "to": "/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/api/operations/getspace",
     "status": 301,
     "to": "/api/reference/spaces/getspace"
@@ -1480,6 +1485,11 @@
     "to": "/api/reference/teams/revoketeaminvitation"
   },
   {
+    "from": "/api/operations/searchdocs",
+    "status": 301,
+    "to": "/api/reference/docs/searchdocs"
+  },
+  {
     "from": "/api/operations/tags/account",
     "status": 301,
     "to": "/api/reference#account"
@@ -1728,6 +1738,11 @@
     "from": "/api/reference/operations/getdoc",
     "status": 301,
     "to": "/api/reference/docs/getdoc"
+  },
+  {
+    "from": "/api/reference/operations/getdocspage",
+    "status": 301,
+    "to": "/api/reference/docs/getdocspage"
   },
   {
     "from": "/api/reference/operations/getspace",
@@ -3045,6 +3060,11 @@
     "to": "/api/reference/teams/revoketeaminvitation"
   },
   {
+    "from": "/api/reference/operations/searchdocs",
+    "status": 301,
+    "to": "/api/reference/docs/searchdocs"
+  },
+  {
     "from": "/api/reference/operations/tags/account",
     "status": 301,
     "to": "/api/reference#account"
@@ -3435,6 +3455,11 @@
     "to": "/api/reference/docs/getdoc"
   },
   {
+    "from": "/api/reference/resources/docs/methods/get_docs_page",
+    "status": 301,
+    "to": "/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/api/reference/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/api/reference/docs/listdocs"
@@ -3443,6 +3468,11 @@
     "from": "/api/reference/resources/docs/methods/post_v1_docs_ask",
     "status": 301,
     "to": "/api/reference/docs/postv1docsask"
+  },
+  {
+    "from": "/api/reference/resources/docs/methods/search_docs",
+    "status": 301,
+    "to": "/api/reference/docs/searchdocs"
   },
   {
     "from": "/api/reference/resources/domains",
@@ -4870,6 +4900,11 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
+    "from": "/platform-api/operations/getdocspage",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/platform-api/operations/getspace",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getspace"
@@ -6230,6 +6265,11 @@
     "to": "/platforms/api/reference/teams/revoketeaminvitation"
   },
   {
+    "from": "/platform-api/operations/searchdocs",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/searchdocs"
+  },
+  {
     "from": "/platform-api/operations/tags/account",
     "status": 301,
     "to": "/platforms/api/reference#account"
@@ -6625,6 +6665,11 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
+    "from": "/platform-api/resources/docs/methods/get_docs_page",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/platform-api/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/platforms/api/reference/docs/listdocs"
@@ -6633,6 +6678,11 @@
     "from": "/platform-api/resources/docs/methods/post_v1_docs_ask",
     "status": 301,
     "to": "/platforms/api/reference/docs/postv1docsask"
+  },
+  {
+    "from": "/platform-api/resources/docs/methods/search_docs",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/searchdocs"
   },
   {
     "from": "/platform-api/resources/domains",
@@ -8110,6 +8160,11 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
+    "from": "/platforms/api/reference/operations/getdocspage",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/platforms/api/reference/operations/getspace",
     "status": 301,
     "to": "/platforms/api/reference/spaces/getspace"
@@ -9470,6 +9525,11 @@
     "to": "/platforms/api/reference/teams/revoketeaminvitation"
   },
   {
+    "from": "/platforms/api/reference/operations/searchdocs",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/searchdocs"
+  },
+  {
     "from": "/platforms/api/reference/operations/tags/account",
     "status": 301,
     "to": "/platforms/api/reference#account"
@@ -9865,6 +9925,11 @@
     "to": "/platforms/api/reference/docs/getdoc"
   },
   {
+    "from": "/platforms/api/reference/resources/docs/methods/get_docs_page",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/getdocspage"
+  },
+  {
     "from": "/platforms/api/reference/resources/docs/methods/list_docs",
     "status": 301,
     "to": "/platforms/api/reference/docs/listdocs"
@@ -9873,6 +9938,11 @@
     "from": "/platforms/api/reference/resources/docs/methods/post_v1_docs_ask",
     "status": 301,
     "to": "/platforms/api/reference/docs/postv1docsask"
+  },
+  {
+    "from": "/platforms/api/reference/resources/docs/methods/search_docs",
+    "status": 301,
+    "to": "/platforms/api/reference/docs/searchdocs"
   },
   {
     "from": "/platforms/api/reference/resources/domains",

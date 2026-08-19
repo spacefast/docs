@@ -1,9 +1,9 @@
 ---
 title: "Connect Raycast to Spacefast"
-description: "Install MCP Server, paste the endpoint — then Raycast AI publishes on a hotkey."
+description: "Install MCP Server, paste the endpoint, and ask Raycast AI to publish."
 ---
 
-Run Install MCP Server, paste the endpoint, and Raycast AI publishes on a hotkey.
+Run Install MCP Server, paste the endpoint, and ask Raycast AI to publish.
 
 **Hosted MCP.** Run Install MCP Server in Raycast, pick HTTP, and paste the endpoint. Approve once in the browser. There is nothing else to install.
 

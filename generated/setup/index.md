@@ -17,7 +17,7 @@ same Spacefast account works across all of them.
 - [OpenClaw](/setup/openclaw): Send one message from WhatsApp, Telegram, Discord, or a cron job.
 - [OpenCode](/setup/opencode): Connect hosted MCP with a browser sign-in, or install the skill for terminal-driven publishes.
 - [Hermes](/setup/hermes): One command adds hosted MCP. The skill teaches the publish flow for scripts and channels.
-- [Raycast](/setup/raycast): Run Install MCP Server, paste the endpoint, and Raycast AI publishes on a hotkey.
+- [Raycast](/setup/raycast): Run Install MCP Server, paste the endpoint, and ask Raycast AI to publish.
 - [Pi](/setup/pi): Install the skill once, and Pi publishes from any session.
 - [Cognition Devin](/setup/devin): Devin publishes from its cloud workspace with hosted MCP or the skill.
 - [Poke](/setup/poke): Text Poke the prompt, and it publishes and texts back the link.
