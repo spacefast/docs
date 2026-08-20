@@ -38,6 +38,10 @@ sf publish ./dist
   response headers. Omitted redirect statuses still default to `302`, and the
   `301`, `302`, `303`, `307`, and `308` statuses all carry over.
 - Header rules scoped to a path, and header removal with `! `.
+- `Cache-Control` rules, honored verbatim on public file responses. The publish
+  reports `header_cache_control_platform_managed` to flag that your rule replaces
+  Spacefast's [default cache policy](/serve/headers#unsupported-headers), which is
+  a warning rather than a failure.
 - Custom 404 pages and single-page app fallbacks.
 - Static framework output from Astro, Eleventy, Hugo, Vite, and similar build
   tools when the generated files need no Cloudflare runtime.
@@ -65,13 +69,12 @@ uploads the output as-is and reads no Wrangler config.
 - Move CDN cache headers out of `_headers`. `CDN-Cache-Control`,
   `Cloudflare-CDN-Cache-Control`, and `Surrogate-Control` fail the publish with
   `header_cdn_cache_unsupported`, because they carry no Spacefast semantics.
-- Plain `Cache-Control` still applies to browser responses, but Spacefast manages
-  edge caching itself, so a `Cache-Control` rule reports
-  `header_cache_control_platform_managed` as a warning. See
-  [response headers](/serve/headers).
+  Spacefast decides what the edge caches. See
+  [unsupported headers](/serve/headers#unsupported-headers).
 - Drop headers the platform owns. `Set-Cookie`, `Content-Encoding`,
   `Content-Length`, and the transport headers fail the publish with
-  `header_name_unsupported`.
+  `header_name_unsupported`. The same
+  [unsupported headers](/serve/headers#unsupported-headers) table lists them all.
 - Spacefast rejects `Basic-Auth` in `_headers` on every plan and fails the
   publish with `header_basic_auth_unsupported`. Use
   [Spacefast sharing](/share) instead.
