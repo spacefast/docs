@@ -75,9 +75,10 @@ uploads the output as-is and reads no Wrangler config.
   `Content-Length`, and the transport headers fail the publish with
   `header_name_unsupported`. The same
   [unsupported headers](/serve/headers#unsupported-headers) table lists them all.
-- Spacefast rejects `Basic-Auth` in `_headers` on every plan and fails the
-  publish with `header_basic_auth_unsupported`. Use
-  [Spacefast sharing](/share) instead.
+- Spacefast rejects `Basic-Auth` in `_headers` on every plan with the
+  [`header_basic_auth_unsupported`](/serve/headers#no-basic-auth) diagnostic,
+  because it is not a response header. Use [Spacefast sharing](/share) instead:
+  passwords, links, people, and path rules.
 - For rewrites to public upstream APIs, use external `200`
   [proxy rules](/serve/redirects#proxy-routes). Cloudflare serves relative
   rewrites only, so these are new rules to write rather than rules to move.
