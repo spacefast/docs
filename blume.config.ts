@@ -159,6 +159,7 @@ export default defineConfig({
                 "/guides/migrate",
                 "/guides/migrate/vercel",
                 "/guides/migrate/netlify",
+                "/guides/migrate/cloudflare-pages",
                 "/guides/migrate/github-pages",
                 "/guides/migrate/here-now",
               ],
