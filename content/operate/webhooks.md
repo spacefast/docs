@@ -108,7 +108,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 function verify(rawBody, header, secret) {
   const parts = Object.fromEntries(header.split(",").map((p) => p.trim().split("=")));
   const expected = createHmac("sha256", secret).update(`${parts.t}.${rawBody}`).digest("hex");
-  // A header can carry more than one v1= during secret rotation; accept any match.
+  // A header can carry more than one v1= during secret rotation. Accept any match.
   const signatures = header.match(/v1=([0-9a-f]+)/g)?.map((s) => s.slice(3)) ?? [];
   const ok = signatures.some(
     (sig) =>

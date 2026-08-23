@@ -6,7 +6,7 @@ description: Learn how the Spacefast REST API handles authentication, responses,
 ---
 
 Everything Spacefast does is one REST API at `https://api.spacefast.com`.
-This page explains how the API behaves; the
+This page explains how the API behaves. The
 [full endpoint reference](/api/reference) lists every operation, parameter,
 and schema.
 
@@ -78,7 +78,7 @@ same receipt shape.
 
 Every publish freezes an immutable version, and the live URL is a pointer
 that moves atomically (see [Versions and channels](/publish/versions)). To
-roll back, send a `POST` that promotes an earlier version; nothing is
+roll back, send a `POST` that promotes an earlier version. Nothing is
 re-uploaded. Version lists, diffs, and logs are plain GET requests.
 
 ## Idempotency and retries
@@ -93,7 +93,7 @@ effect. Publishing identical content is a recognized no-op success
 Some mutations outlive the request. Renames, settings applies, transfers,
 and domain changes return an operation that you poll until it finishes. The
 CLI covers this with `sf operations`. List recent async operations, or
-read one by ID; `--space` scopes the list:
+read one by ID. `--space` scopes the list:
 
 ```bash
 sf operations --space spc_123
@@ -103,7 +103,7 @@ sf operations --space spc_123
 
 `sf api` sends a signed request to any endpoint with the CLI's resolved
 credentials. Use it for endpoints without a dedicated command. Pass a path
-for a GET, or a method and a path; `--input` supplies a JSON body, and
+for a GET, or a method and a path. `--input` supplies a JSON body, and
 `--paginate` emits every page of a cursor-list GET as JSON Lines:
 
 ```bash
@@ -119,7 +119,7 @@ destination: `--output` for a file or `--raw-stdout` for stdout.
 Spacefast enforces rate limits and plan quotas per account, and
 rate-limited responses return a problem document with a `Retry-After`
 header. During maintenance windows, mutating requests return `503` with
-code `maintenance_in_progress` and a `Retry-After` header; reads keep
+code `maintenance_in_progress` and a `Retry-After` header. Reads keep
 working, so retry the mutation after the header's delay.
 
 ## For agents
@@ -141,4 +141,4 @@ Connected MCP agents get the same lookups as the `search_docs` and
 
 You may host sites for **your own customers**, with your platform as a
 tenant acting on behalf of end users. That is a separate, larger API with
-its own guide and reference; see [Platforms](/platforms).
+its own guide and reference. See [Platforms](/platforms).

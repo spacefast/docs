@@ -14,7 +14,7 @@ verifies that token offline and returns the identity contract that all of
 Spacefast shares, including the capabilities the visitor's
 [Grants](/share) allow, such as `page.view` and `comments.write`.
 
-The package never mints tokens; identity always comes from the platform.
+The package never mints tokens. Identity always comes from the platform.
 It has two entry points:
 
 - `@spacefast/auth/server` verifies a visitor token offline.
@@ -30,7 +30,7 @@ npm install @spacefast/auth
 ## Verify on the server
 
 The full relying-party profile is mandatory. A signing key alone only says
-who signed a token; issuer, audience, host, purpose, and claim version are
+who signed a token. Issuer, audience, host, purpose, and claim version are
 what make it yours. The JWKS is data you already have, not a URL, so no
 network round-trip hides in your request path.
 

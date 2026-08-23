@@ -9,12 +9,12 @@ description: Learn how immutable versions work, how the live and preview channel
 
 Every changed publish creates an immutable version with a permanent URL. The
 space's live URL is a pointer, called a channel, that moves only when a
-publish is ready. Publishing and rollback move the channel; neither ever
+publish is ready. Publishing and rollback move the channel. Neither ever
 rewrites the version it used to serve.
 
 ## The release boundary
 
-Uploading the bytes alone does not complete a publish; finalization
+Uploading the bytes alone does not complete a publish. Finalization
 promotes the validated snapshot atomically, as
 [How Spacefast works](/start/how-it-works) explains. The publish receipt
 carries both URLs. The API names them `space.liveUrl` and
@@ -101,7 +101,7 @@ rollback and `sf spaces download` keep working either way.
 Committed file bytes across versions count toward the team's storage quota.
 Reaching the quota blocks new publishes but never takes the live site down.
 To free up room, delete old versions or add storage. Spacefast keeps
-versions until you delete them; only never-finalized draft uploads expire
+versions until you delete them. Only never-finalized draft uploads expire
 on their own.
 
 ## Related

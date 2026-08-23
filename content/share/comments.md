@@ -8,7 +8,7 @@ description: Leave threaded comments anchored to the page on any Spacefast previ
 Comments turn any version URL into a place to give feedback. A reviewer
 opens a preview, clicks the part of the page they mean, and leaves a
 thread. On version previews, each comment anchors to the page and to the
-exact [version](/publish/versions); on the live site, threads anchor to the
+exact [version](/publish/versions). On the live site, threads anchor to the
 page.
 
 ## Turn on comments

@@ -43,7 +43,7 @@ Spacefast detects the first matching worker entry:
 | -------------------------------------------- | ------------------------------- |
 | `.open-next/worker.js`                       | Next.js built with OpenNext     |
 | `handler.ts`, `handler.js`, or `handler.mjs` | Standalone worker               |
-| Any route module under `functions/`          | File router; Spacefast synthesizes the dispatcher |
+| Any route module under `functions/`          | File router. Spacefast synthesizes the dispatcher |
 
 A `.php` file under `functions/` takes a different lane. It executes at
 its derived route with the `sf_*` prelude, with no worker and no runtime
@@ -73,13 +73,13 @@ space.
 ## Runtime contract
 
 Handlers use `Request`, `Response`, streams, and `crypto`. Hand-written
-handlers cannot import Node built-ins; the build fails rather than the
+handlers cannot import Node built-ins. The build fails rather than the
 request. Next and OpenNext builds get `nodejs_compat` automatically.
 
 Outbound network access is fail-closed. Spacefast denies it unless the
 published version holds the `fetch` capability, so a `fetch()` call in your
 code does not silently add network authority. No Functions publish
-grants that capability; outbound `fetch` is available only to
+grants that capability. Outbound `fetch` is available only to
 [Zero](/zero-runtime) actions. To check which capabilities a published version
 holds, run `sf runtime status`.
 
@@ -93,7 +93,7 @@ file. The worker reads them from `env`:
 STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
 
-Spacefast withholds database connection strings; use the database binding
+Spacefast withholds database connection strings. Use the database binding
 instead.
 
 ## Storage

@@ -87,7 +87,7 @@ overrides. Imports accept `--production`, `--preview`, and repeatable
 
 Teams can hold shared variables that spaces inherit, and a space value
 overrides the team value with the same name. Manage them in the dashboard
-under the team's **Settings → Developer → Variables**; `sf env` targets a
+under the team's **Settings → Developer → Variables**. `sf env` targets a
 space.
 
 ## Templates
@@ -110,7 +110,7 @@ same way.
 ## Runtime files
 
 Zero and Functions projects can keep server-only values in `.env.server`
-next to `sf.jsonc`. The CLI never uploads that file as a static asset; on
+next to `sf.jsonc`. The CLI never uploads that file as a static asset. On
 publish it syncs the entries into the space as secrets.
 
 For an existing project, generate a dotenv template from detected platform

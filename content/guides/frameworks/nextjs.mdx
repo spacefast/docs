@@ -43,7 +43,7 @@ or through a [proxy route](/serve/redirects#proxy-routes).
 ## Functions with OpenNext
 
 Use Functions with OpenNext when the app needs request-time Next.js features. Remove
-`output: "export"` from `next.config.ts`; OpenNext builds the Next.js server
+`output: "export"` from `next.config.ts`. OpenNext builds the Next.js server
 into a worker instead. OpenNext's Cloudflare adapter uses the Node.js runtime,
 so also remove any `export const runtime = "edge"` declarations.
 
@@ -57,10 +57,10 @@ Spacefast detects the Next.js project, builds it with a pinned OpenNext
 Cloudflare adapter, and publishes the worker with the generated static assets.
 You do not install the adapter, write an `open-next.config.ts`, or add a
 package script. Keep an `open-next.config.ts` only when you need to override
-the defaults; Spacefast preserves yours. To confirm the plan before anything
+the defaults. Spacefast preserves yours. To confirm the plan before anything
 uploads, run `sf publish --dry-run`.
 
-Spacefast serves published files from disk first; SSR, Route Handlers, and
+Spacefast serves published files from disk first. SSR, Route Handlers, and
 other misses reach the worker. You can pin the detected entry explicitly:
 
 ```jsonc
@@ -74,7 +74,7 @@ other misses reach the worker. You can pin the detected entry explicitly:
 ```
 
 See OpenNext's [Cloudflare adapter setup](https://opennext.js.org/cloudflare/get-started)
-for framework-specific requirements; Spacefast owns the publish step, so that
+for framework-specific requirements. Spacefast owns the publish step, so that
 guide's Cloudflare deployment and binding configuration does not apply here.
 
 ## Image optimization

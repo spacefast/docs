@@ -94,7 +94,7 @@ external service, or [Functions](/functions) before you publish.
 
 When Spacefast runs the build, Wrangler bindings stop it before it starts:
 `kv_namespaces`, `r2_buckets`, `d1_databases`, `durable_objects`, `services`,
-`queues`, and `vars`. Note that `vars` counts here too, so plain build-time
+`queues`, and `vars`. `vars` counts here too, so plain build-time
 values need recreating in your build settings.
 
 Also refused, though a Pages project rarely sets them: `main`, and the

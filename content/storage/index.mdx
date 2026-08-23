@@ -23,7 +23,7 @@ await storage.delete(uploaded.id);
 ```
 
 Objects are addressed by a random 128-bit id. Read URLs carry a runtime
-read key that Spacefast can rotate; rotation immediately invalidates every
+read key that Spacefast can rotate. Rotation immediately invalidates every
 URL minted under the old key. Uploads require an identified visitor, except
 for anonymous commenters admitted by Comments. Those uploads count against
 the 200 MiB rolling daily budget. Only the uploader can delete an object.

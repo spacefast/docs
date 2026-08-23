@@ -13,7 +13,7 @@ stay available for [rollback](/publish/versions).
 Directory publishes preserve relative paths and can carry `_redirects`,
 `_headers`, and [`sf.jsonc`](/serve/settings), so serving rules ship with
 the files they describe. Spacefast serves everything as inert static
-content; request-time code runs only through a declared [Zero](/zero-runtime) or
+content. Request-time code runs only through a declared [Zero](/zero-runtime) or
 [Functions](/functions) runtime. The CLI and dashboard warn you early about
 files that the runtime safety policy blocks.
 
@@ -56,7 +56,7 @@ publish. Interrupted uploads resume, and Spacefast expands zip archives
 before publishing. Unless you want a file listing, put `index.html` at the
 archive root. During a browser upload, keep the tab open until the upload
 hands off to the server. To publish this way without an account, use
-[drop.website](https://drop.website); the upload creates an
+[drop.website](https://drop.website). The upload creates an
 [anonymous space](/publish/anonymous) with a claim link.
 
 ## What serves the homepage
