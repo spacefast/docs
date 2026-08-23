@@ -24,7 +24,7 @@ sf domains add www.example.com --wait
 - [Migrate from Vercel](/guides/migrate/vercel)
 - [Migrate from Netlify](/guides/migrate/netlify)
 - [Migrate from GitHub Pages](/guides/migrate/github-pages)
-- [Migrate from Cloudflare Pages](#cloudflare-pages)
+- [Migrate from Cloudflare Pages](/guides/migrate/cloudflare-pages)
 - [Migrate from here.now](/guides/migrate/here-now)
 
 ## Check capacity and entitlements
@@ -53,39 +53,6 @@ To build on every push, with branch previews and status checks,
 - Anonymous publishing works without an account. To keep the space, claim
   it within 6 hours.
 - You can download any space version's files with `sf spaces download`.
-
-## Cloudflare Pages
-
-Cloudflare Pages sites that build to static files republish directly. Keep
-`_redirects` and `_headers` at the publish root. Path redirects, splats,
-placeholders, local `200` rewrites, and supported response headers carry
-over, and omitted redirect statuses still default to `302`.
-
-```text
-# _redirects
-/docs/* /guides/:splat 301
-/app/* /index.html 200
-```
-
-```bash
-sf publish ./dist
-```
-
-Account for these Cloudflare-specific differences:
-
-- Pages Functions, `_worker.js`, Workers bindings, Bulk Redirects, and
-  `_routes.json` behavior do not run on Spacefast. Replace them with static
-  output, external services, or application code.
-- For rewrites to public upstream APIs, use external `200`
-  [proxy rules](/serve/redirects#proxy-routes). Cloudflare-specific request
-  mutation, bindings, and private credential injection do not carry over.
-- Spacefast rejects `_headers` Basic Auth on every plan; use
-  [Spacefast sharing](/share).
-- To keep building on push, [connect the repository](/publish/git).
-  `sf git connect --platform-preset cloudflare-pages` imports build
-  settings from your existing Pages config.
-- Remove platform-owned headers and Cloudflare cache headers from
-  `_headers`; Spacefast rejects them with diagnostics.
 
 ## Cutover checklist
 
