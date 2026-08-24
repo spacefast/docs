@@ -250,9 +250,31 @@ if (
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error("Sitemap contains duplicate URLs.");
 }
-if (indexedPages !== sitemapUrls.length + 1) {
+// Every page is searchable on this site; only the indexable ones are advertised
+// to crawlers. The generated `/setup/*` pages are deliberately `noindex` — www
+// owns that content for search (spec §5.1) — so they stay findable in our own
+// search while staying out of the sitemap, and the count has to allow for
+// exactly that many. The `+1` is the home page, listed at the docs root rather
+// than at its canonical origin.
+const noindexRoutes = [];
+for (const file of await htmlFilesUnder(dist)) {
+  const html = await readBuilt(file);
+  if (!/<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) continue;
+  noindexRoutes.push(
+    `${docsRoot}/${file.replace(/(?:^|\/)index\.html$/u, "")}`.replace(/\/$/u, ""),
+  );
+}
+if (noindexRoutes.length === 0) {
+  throw new Error("Expected the generated setup pages to be noindex; none are.");
+}
+for (const route of noindexRoutes) {
+  if (sitemapUrls.some((url) => url.replace(/\/$/u, "") === route)) {
+    throw new Error(`Noindex page ${route} is advertised in the sitemap.`);
+  }
+}
+if (indexedPages !== sitemapUrls.length + noindexRoutes.length + 1) {
   throw new Error(
-    `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,
+    `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap, ${noindexRoutes.length} noindex.`,
   );
 }
 const robots = await readBuilt("robots.txt");

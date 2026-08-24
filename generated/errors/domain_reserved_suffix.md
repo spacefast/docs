@@ -5,7 +5,7 @@ description: "The hostname is under a Spacefast-managed suffix and cannot be add
 
 The hostname is under a Spacefast-managed suffix and cannot be added as a domain.
 
-**How to resolve:** Use a domain you own. Spacefast assigns default and management hostnames automatically.
+**How to resolve:** Use a domain you own. Spacefast assigns default hostnames automatically.
 
 <div data-pagefind-ignore>
 

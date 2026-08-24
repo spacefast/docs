@@ -64,12 +64,13 @@ The [setup index](/setup) lists every supported agent. Claude Desktop
 installs as a one-click extension from the
 [`spacefast/plugins` releases](https://github.com/spacefast/plugins/releases).
 
-`sf setup agent --agent` also configures editor and terminal clients that
-have no setup page. `github-copilot` and `factory-droid` get skills plus
-MCP. `gemini-cli`, `windsurf`, `cline`, and `continue` are skills-only and
-need `--skip-mcp`. Use `generic` for any client that reads `AGENTS.md`. In
-that command, `--agent claude` means Claude Code. The Claude app connects
-with the connector deeplink on [its setup page](/setup/claude). Any other
+`sf setup agent --agent` configures the same clients from the terminal.
+`github-copilot` and `factory-droid` get skills plus MCP. `gemini-cli`,
+`devin-desktop`, `cline`, and `continue` are skills-only and need
+`--skip-mcp`. Use `generic` for any client that reads `AGENTS.md`. In that
+command, `--agent claude` means Claude Code. Claude on the web and mobile
+connects with the connector deeplink on [its setup page](/setup/claude-app),
+and the desktop app has [its own page](/setup/claude-desktop). Any other
 agent that can fetch a URL can use [hosted MCP](/agents/mcp) or the
 [HTTP publish flow](/agents/publishing).
 

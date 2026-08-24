@@ -5,6 +5,21 @@ description: "Release history for @spacefast/domain-search-terminal on npm."
 
 Published as [`@spacefast/domain-search-terminal`](https://www.npmjs.com/package/@spacefast/domain-search-terminal) on npm.
 
+## 0.0.26
+
+#### Patch Changes
+
+- @spacefast/common@0.0.26
+- @spacefast/sdk@0.0.26
+
+## 0.0.25
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/sdk@0.0.25
+  - @spacefast/common@0.0.25
+
 ## 0.0.24
 
 #### Patch Changes

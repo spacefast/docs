@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 458 error codes in the registry.
+There are 481 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -27,6 +27,7 @@ There are 458 error codes in the registry.
 | [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
+| [`authorization_level_not_allowed`](/errors/authorization_level_not_allowed) | This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept. |
 | [`authorization_pending`](/errors/authorization_pending) | The device login is not approved yet. |
 | [`blob_gate_record_missing`](/errors/blob_gate_record_missing) | The file behind this download link no longer exists. |
 | [`blob_gate_token_invalid`](/errors/blob_gate_token_invalid) | The download token is invalid or expired. |
@@ -57,16 +58,27 @@ There are 458 error codes in the registry.
 | [`config_runtime_entry_missing`](/errors/config_runtime_entry_missing) | The declared runtime has no entry module to compile. |
 | [`config_runtime_invalid_kind`](/errors/config_runtime_invalid_kind) | The runtime block in the space configuration declares an unknown kind. |
 | [`config_templates_over_limit`](/errors/config_templates_over_limit) | The configuration declares more template files than the plan allows. |
+| [`confirmation_denied`](/errors/confirmation_denied) | A person reviewed this exact action and denied it. The denial is terminal. |
+| [`confirmation_expired`](/errors/confirmation_expired) | The confirmation for this action expired before a person decided it. |
+| [`confirmation_mismatch`](/errors/confirmation_mismatch) | The continuation token is bound to different action terms or a different resource revision than the request presenting it. |
+| [`confirmation_required`](/errors/confirmation_required) | This action destroys live content or spends money, so a person must approve this exact action before it runs. |
+| [`confirmation_token_required`](/errors/confirmation_token_required) | This exact action already has a decision, and an untokened retry cannot clear the gate. |
 | [`continuation_unavailable`](/errors/continuation_unavailable) | This space key can no longer be exchanged for an API key. |
 | [`continuation_used`](/errors/continuation_used) | This space key was already exchanged for a durable API key. |
 | [`credential_expired`](/errors/credential_expired) | The credential used for this request is expired. |
 | [`credential_not_yet_valid`](/errors/credential_not_yet_valid) | The credential is not valid yet because its start time is in the future. |
 | [`credential_retired`](/errors/credential_retired) | This request used a retired Spacefast token format or authentication header. |
 | [`credential_revoked`](/errors/credential_revoked) | The credential used for this request was revoked. |
+| [`credential_sponsor_inactive`](/errors/credential_sponsor_inactive) | The person who authorized this machine credential is no longer an active member of the team it acts for. |
 | [`csam_blocked`](/errors/csam_blocked) | The content was blocked because it matched known child sexual abuse material. |
 | [`csam_policy_floor`](/errors/csam_policy_floor) | CSAM enforcement policy cannot be set below the mandatory account-suspend floor. |
+| [`dashboard_prefs_key_invalid`](/errors/dashboard_prefs_key_invalid) | A dashboard preference key is empty or longer than the 64-character limit. |
+| [`dashboard_prefs_too_large`](/errors/dashboard_prefs_too_large) | The merged dashboard preferences would exceed the 16KB serialized size limit. |
+| [`dashboard_prefs_too_many_keys`](/errors/dashboard_prefs_too_many_keys) | The merged dashboard preferences would hold more than the 50 allowed keys. |
 | [`data_location_immutable`](/errors/data_location_immutable) | This request tried to change data location through an immutable path. |
 | [`db_not_available`](/errors/db_not_available) | The live version has no database to read. |
+| [`decision_execution_lost`](/errors/decision_execution_lost) | The approved action's execution lease is no longer held, so its result cannot be recorded. |
+| [`decision_in_progress`](/errors/decision_in_progress) | This approved action is already executing. |
 | [`device_authorization_failed`](/errors/device_authorization_failed) | The device login request failed and cannot be completed. |
 | [`device_verification_rate_limited`](/errors/device_verification_rate_limited) | Too many incorrect device codes were entered in a short window. |
 | [`dns_export_required`](/errors/dns_export_required) | This operation requires exporting the current DNS records first. |
@@ -120,6 +132,9 @@ There are 458 error codes in the registry.
 | [`domain_wildcard_not_enabled`](/errors/domain_wildcard_not_enabled) | Wildcard hostnames are not enabled for this domain or plan. |
 | [`download_required`](/errors/download_required) | This content is too large to return inline and must be downloaded. |
 | [`duplicate_version_path`](/errors/duplicate_version_path) | The version upload declares the same file path twice. |
+| [`elevation_not_required`](/errors/elevation_not_required) | The grant already includes every scope the elevation asked for. |
+| [`email_already_claimed`](/errors/email_already_claimed) | That email address is already verified on an account. |
+| [`email_verification_code_invalid`](/errors/email_verification_code_invalid) | The emailed confirmation code is wrong, expired, or already used. |
 | [`enforcement_policy_overlap`](/errors/enforcement_policy_overlap) | Enforcement policy severity ranges overlap within a category. |
 | [`event_payload_too_large`](/errors/event_payload_too_large) | The event payload exceeds the maximum size. |
 | [`event_rate_limited`](/errors/event_rate_limited) | Too many event submissions came from this client in a short window. |
@@ -134,13 +149,16 @@ There are 458 error codes in the registry.
 | [`ingest_admission_exceeded`](/errors/ingest_admission_exceeded) | Too many concurrent uploads for this space. |
 | [`inject_invalid`](/errors/inject_invalid) | The inject config key is malformed. |
 | [`inject_snippet_too_large`](/errors/inject_snippet_too_large) | An inject snippet exceeds the per-snippet size limit. |
+| [`insufficient_scope`](/errors/insufficient_scope) | The credential authenticated, but its granted scopes do not include a set this operation accepts. |
 | [`internal_error`](/errors/internal_error) | Something went wrong on our side. |
 | [`invalid_claim_token`](/errors/invalid_claim_token) | The space key is invalid or does not match this space. |
 | [`invalid_continuation_token`](/errors/invalid_continuation_token) | The continuation token is invalid, expired, or already finished. |
 | [`invalid_data_location`](/errors/invalid_data_location) | The requested data location is not a supported region. |
+| [`invalid_decision_state`](/errors/invalid_decision_state) | The decision record is in a state this endpoint cannot interpret. |
 | [`invalid_device_code`](/errors/invalid_device_code) | The device code is invalid or expired. |
 | [`invalid_domain`](/errors/invalid_domain) | The domain reference is invalid. |
 | [`invalid_domain_name`](/errors/invalid_domain_name) | The domain name is not a valid registrable hostname. |
+| [`invalid_elevation_request`](/errors/invalid_elevation_request) | An elevation request needs at least one scope and a rationale of 1 to 1024 characters. |
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
 | [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
@@ -187,6 +205,8 @@ There are 458 error codes in the registry.
 | [`noop_publish`](/errors/noop_publish) | The publish matched the live version exactly, so nothing changed. |
 | [`not_enrolled`](/errors/not_enrolled) | This account is not enrolled in the private beta, so the API cannot be used yet. |
 | [`not_found`](/errors/not_found) | The requested resource was not found. |
+| [`password_already_set`](/errors/password_already_set) | The account already has a password. |
+| [`password_compromised`](/errors/password_compromised) | The password appears in a public breach corpus. |
 | [`path_case_collision`](/errors/path_case_collision) | Two file paths differ only by letter case, which collides on serving. |
 | [`path_too_long`](/errors/path_too_long) | A file path exceeds the maximum length. |
 | [`placement_invalid_burstable`](/errors/placement_invalid_burstable) | The placement burstable option was used with an unsupported placement mode. |
@@ -195,6 +215,7 @@ There are 458 error codes in the registry.
 | [`platform_tenant_immutable_client`](/errors/platform_tenant_immutable_client) | The tenant's provider client cannot be changed. |
 | [`policy_exceeds_grantor`](/errors/policy_exceeds_grantor) | The requested key policy grants more than your own credential allows. |
 | [`prebuilt_metadata_invalid`](/errors/prebuilt_metadata_invalid) | The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown. |
+| [`primary_email_not_removable`](/errors/primary_email_not_removable) | The primary email address cannot be removed while it is the primary. |
 | [`principal_space_mismatch`](/errors/principal_space_mismatch) | The space does not belong to the principal in the request. |
 | [`promote_admission_exceeded`](/errors/promote_admission_exceeded) | Too many archived files are being restored for this space right now. |
 | [`provider_error`](/errors/provider_error) | WP Cloud reported an error. |
@@ -234,7 +255,7 @@ There are 458 error codes in the registry.
 | [`review_item_claimed`](/errors/review_item_claimed) | Another reviewer already claimed this review item. |
 | [`routing_rules_over_plan`](/errors/routing_rules_over_plan) | The published _redirects and _headers exceed the plan's routing-rule allowance. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
-| [`runtime_api_not_found`](/errors/runtime_api_not_found) | The runtime management endpoint was not found. |
+| [`runtime_api_not_found`](/errors/runtime_api_not_found) | The requested runtime action was not found. |
 | [`runtime_callback_forbidden`](/errors/runtime_callback_forbidden) | The runtime callback cannot be authenticated. |
 | [`runtime_dev_unsupported`](/errors/runtime_dev_unsupported) | `sf dev` cannot run this runtime locally yet. |
 | [`runtime_hostname_unassigned`](/errors/runtime_hostname_unassigned) | The hostname is not assigned to a runtime, so the request cannot be routed. |
@@ -259,6 +280,7 @@ There are 458 error codes in the registry.
 | [`secret_variable_in_template`](/errors/secret_variable_in_template) | A secret variable was referenced in a template, which is blocked. |
 | [`service_booting`](/errors/service_booting) | The process that received this request is still starting and cannot serve it yet. |
 | [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature cannot be verified. |
+| [`session_not_fresh`](/errors/session_not_fresh) | This action needs a recent identity confirmation. |
 | [`site_already_deleted`](/errors/site_already_deleted) | The site was already deleted. |
 | [`site_has_live_spaces`](/errors/site_has_live_spaces) | The site still has live spaces assigned to it, so it cannot be deleted. |
 | [`site_not_static`](/errors/site_not_static) | This operation only applies to static-runtime sites. |
@@ -306,6 +328,7 @@ There are 458 error codes in the registry.
 | [`storage_quota_exceeded`](/errors/storage_quota_exceeded) | The operation would exceed its storage allowance. |
 | [`storage_unavailable`](/errors/storage_unavailable) | The runtime cannot read or persist object storage. |
 | [`stripe_error`](/errors/stripe_error) | The billing provider reported an error. |
+| [`superadmin_two_factor_required`](/errors/superadmin_two_factor_required) | The user must have two-factor authentication enrolled before being granted superadmin. |
 | [`superseded_by_publish`](/errors/superseded_by_publish) | A newer publish superseded this operation, so it was skipped. |
 | [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere. A takeover notice window applies. |
 | [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded) | Inviting this person would exceed the team's seat limit. |

@@ -32,7 +32,9 @@ field.
 
 Match on `code`, never on `detail`. Messages might improve over time, but
 Spacefast never renames or removes a code. The [error reference](/errors)
-lists every code.
+lists every code. Endpoints get the same treatment:
+[Versioning and deprecation](/api/versioning) covers what changes inside
+`/v1` and the headers an operation sends before it goes away.
 
 ## Authentication
 

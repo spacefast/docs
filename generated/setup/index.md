@@ -1,26 +1,36 @@
 ---
 title: "Agent setup"
 description: "Connect Codex, Claude, ChatGPT, Cursor, VS Code, or OpenClaw to publish and manage spaces."
+seo:
+  noindex: true
 ---
 
 Pick the agent you already use. Every page is one action, a click or a paste, and the
 same Spacefast account works across all of them.
 
-- [Claude Code](/setup/claude-code): One plugin install adds the publish skill and the MCP tools. The plugin is the recommended way to connect.
-- [Claude](/setup/claude): One click adds the connector, and Claude publishes from web, desktop, and mobile.
-- [Claude Cowork](/setup/claude-cowork): One admin click adds the org connector, and every Cowork conversation can publish.
-- [Cursor](/setup/cursor): One click adds the hosted tools. Approve once in the browser. There is nothing to install.
-- [Codex](/setup/codex): One paste installs the plugin, which adds the publish skill and the MCP tools.
-- [ChatGPT](/setup/chatgpt): In Work mode or the desktop app, one pasted prompt sets ChatGPT up to publish.
-- [ChatGPT Work](/setup/chatgpt-work): The Spacefast plugin brings publishing to every ChatGPT Work conversation.
-- [VS Code](/setup/vscode): One click adds hosted MCP for Copilot agent mode.
-- [OpenClaw](/setup/openclaw): Send one message from WhatsApp, Telegram, Discord, or a cron job.
-- [OpenCode](/setup/opencode): Connect hosted MCP with a browser sign-in, or install the skill for terminal-driven publishes.
-- [Hermes](/setup/hermes): One command adds hosted MCP. The skill teaches the publish flow for scripts and channels.
-- [Raycast](/setup/raycast): Run Install MCP Server, paste the endpoint, and ask Raycast AI to publish.
-- [Pi](/setup/pi): Install the skill once, and Pi publishes from any session.
-- [Cognition Devin](/setup/devin): Devin publishes from its cloud workspace with hosted MCP or the skill.
-- [Poke](/setup/poke): Text Poke the prompt, and it publishes and texts back the link.
-- [Indent](/setup/indent): Add the endpoint once, org-wide or just for you, and Indent can publish.
+- [Claude Code](/setup/claude-code): Publish, host, and operate Spacefast artifacts from Claude Code.
+- [Claude](/setup/claude-app): Connect Spacefast to Claude on the web, mobile, and Cowork with one click.
+- [Claude Desktop](/setup/claude-desktop): Install Spacefast in Claude Desktop as a signed local extension.
+- [Cursor](/setup/cursor): Publish and host from Cursor with its plugin, skills, and hosted MCP.
+- [Codex](/setup/codex): Publish and host from Codex locally or in the cloud.
+- [ChatGPT](/setup/chatgpt): Use Spacefast from ChatGPT and ChatGPT Work through the app directory.
+- [VS Code](/setup/vscode): Add Spacefast MCP to VS Code and Copilot agent mode.
+- [GitHub Copilot](/setup/github-copilot): Publish from Copilot CLI and coding agent with native plugin and MCP support.
+- [Devin Desktop](/setup/devin-desktop): Connect the local Devin desktop and CLI configuration plane.
+- [Devin Cloud](/setup/devin-cloud): Connect Spacefast in Devin's cloud-only integrations plane.
+- [Zed](/setup/zed): Connect Spacefast as a custom context server in Zed.
+- [Gemini CLI](/setup/gemini-cli): Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
+- [OpenCode](/setup/opencode): Connect Spacefast to OpenCode with native OAuth MCP and skills.
+- [Amp](/setup/amp): Install Spacefast skills with bundled MCP support in Amp.
+- [Warp](/setup/warp): Use Spacefast skills and MCP in Warp agents.
+- [Factory Droid](/setup/factory-droid): Install Spacefast as a Droid plugin or native OAuth MCP server.
+- [Cline](/setup/cline): Install Spacefast from the Cline marketplace or connect OAuth MCP.
+- [Continue](/setup/continue): Use the Spacefast skill in discontinued Continue installations.
+- [Raycast](/setup/raycast): Connect Spacefast to Raycast AI using its native OAuth MCP form.
+- [Poke](/setup/poke): Prefill a Spacefast integration in Poke and authorize with OAuth.
+- [Pi](/setup/pi): Install the third-party Pi MCP extension for Spacefast.
+- [Indent](/setup/indent): Connect Spacefast through Indent's native OAuth MCP integration.
+- [Hermes](/setup/hermes): Install Spacefast from the Hermes MCP catalog and Agent Skills.
+- [OpenClaw](/setup/openclaw): Install Spacefast from ClawHub and connect streamable OAuth MCP.
 
 Anything else that can fetch a URL can publish too: point it at the [agent documentation](/agents).

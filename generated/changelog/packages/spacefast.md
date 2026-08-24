@@ -7,6 +7,36 @@ Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
 
+## 0.0.26
+
+#### Patch Changes
+
+- Release the complete Spacefast package and plugin set through trusted publishing.
+  - @spacefast/common@0.0.26
+  - @spacefast/domain-search-terminal@0.0.26
+  - @spacefast/mcp@0.0.26
+  - @spacefast/routing@0.0.26
+  - @spacefast/sdk@0.0.26
+  - @spacefast/zero@0.0.26
+  - @spacefast/zero-compile@0.0.26
+  - @spacefast/build-output@0.0.26
+  - @spacefast/next-adapter@0.0.26
+
+## 0.0.25
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/sdk@0.0.25
+  - @spacefast/domain-search-terminal@0.0.25
+  - @spacefast/mcp@0.0.25
+  - @spacefast/common@0.0.25
+  - @spacefast/routing@0.0.25
+  - @spacefast/zero@0.0.25
+  - @spacefast/zero-compile@0.0.25
+  - @spacefast/build-output@0.0.25
+  - @spacefast/next-adapter@0.0.25
+
 ## 0.0.24
 
 #### Patch Changes

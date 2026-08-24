@@ -1,11 +1,11 @@
 ---
 title: "runtime_api_not_found"
-description: "The runtime management endpoint was not found."
+description: "The requested runtime action was not found."
 ---
 
-The runtime management endpoint was not found.
+The requested runtime action was not found.
 
-**How to resolve:** Send the request with the management hostname as the Host header. Spacefast does not serve management routes on public hostnames.
+**How to resolve:** Use a supported runtime action and a token scoped for that action.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_api_not_found",
   "title": "Runtime api not found",
   "status": 400,
-  "detail": "The runtime management endpoint was not found.",
+  "detail": "The requested runtime action was not found.",
   "code": "runtime_api_not_found",
   "requestId": "req_4mz0v8qk"
 }
