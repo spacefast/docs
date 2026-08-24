@@ -386,6 +386,16 @@ if (
 ) {
   throw new Error("The former Zero docs route does not redirect through the Docs mount.");
 }
+const appsZeroRoute = resolveRedirect(`${deploymentBase}/apps/zero`, routingRules);
+if (
+  appsZeroRoute.destination !== "/zero-runtime" ||
+  appsZeroRoute.hops.length !== 2 ||
+  appsZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero-runtime` ||
+  appsZeroRoute.hops[0]?.status !== 301 ||
+  appsZeroRoute.hops[1]?.status !== 200
+) {
+  throw new Error("The former apps/zero docs route does not redirect through the Docs mount.");
+}
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
   .join("\n")}\n`;
