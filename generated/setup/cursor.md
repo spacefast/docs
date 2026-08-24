@@ -2,7 +2,7 @@
 title: "Connect Cursor to Spacefast"
 description: "Publish and host from Cursor with its plugin, skills, and hosted MCP."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/cursor/"
 ---
 
 Publish and host from Cursor with its plugin, skills, and hosted MCP.

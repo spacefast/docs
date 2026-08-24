@@ -2,7 +2,7 @@
 title: "Connect ChatGPT to Spacefast"
 description: "Use Spacefast from ChatGPT and ChatGPT Work through the app directory."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/chatgpt/"
 ---
 
 Use Spacefast from ChatGPT and ChatGPT Work through the app directory.

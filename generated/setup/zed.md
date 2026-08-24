@@ -2,7 +2,7 @@
 title: "Connect Zed to Spacefast"
 description: "Connect Spacefast as a custom context server in Zed."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/zed/"
 ---
 
 Connect Spacefast as a custom context server in Zed.

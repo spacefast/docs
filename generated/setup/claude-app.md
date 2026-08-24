@@ -2,7 +2,7 @@
 title: "Connect Claude to Spacefast"
 description: "Connect Spacefast to Claude on the web, mobile, and Cowork with one click."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/claude-app/"
 ---
 
 Connect Spacefast to Claude on the web, mobile, and Cowork with one click.

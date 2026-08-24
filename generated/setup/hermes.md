@@ -2,7 +2,7 @@
 title: "Connect Hermes to Spacefast"
 description: "Install Spacefast from the Hermes MCP catalog and Agent Skills."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/hermes/"
 ---
 
 Install Spacefast from the Hermes MCP catalog and Agent Skills.
@@ -38,7 +38,7 @@ npm install -g spacefast && sf setup agent --agent hermes
 npx -y spacefast@0.0.26 setup agent --agent hermes -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 hermes mcp add spacefast --url https://mcp.spacefast.com --auth oauth

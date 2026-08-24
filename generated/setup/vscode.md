@@ -2,7 +2,7 @@
 title: "Connect VS Code to Spacefast"
 description: "Add Spacefast MCP to VS Code and Copilot agent mode."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/vscode/"
 ---
 
 Add Spacefast MCP to VS Code and Copilot agent mode.

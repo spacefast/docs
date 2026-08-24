@@ -2,7 +2,7 @@
 title: "Connect Gemini CLI to Spacefast"
 description: "Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/gemini-cli/"
 ---
 
 Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
@@ -40,7 +40,7 @@ npm install -g spacefast && sf setup agent --agent gemini-cli
 npx -y spacefast@0.0.26 setup agent --agent gemini-cli -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 gemini mcp add spacefast https://mcp.spacefast.com -t http

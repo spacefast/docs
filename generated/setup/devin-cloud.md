@@ -2,7 +2,7 @@
 title: "Connect Devin Cloud to Spacefast"
 description: "Connect Spacefast in Devin's cloud-only integrations plane."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/devin-cloud/"
 ---
 
 Connect Spacefast in Devin's cloud-only integrations plane.

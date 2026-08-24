@@ -2,7 +2,7 @@
 title: "Connect Pi to Spacefast"
 description: "Install the third-party Pi MCP extension for Spacefast."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/pi/"
 ---
 
 Install the third-party Pi MCP extension for Spacefast.

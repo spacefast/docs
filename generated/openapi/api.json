@@ -5603,7 +5603,19 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "minLength": 1
+                      "enum": [
+                        "teams:read",
+                        "teams:create",
+                        "spaces:read",
+                        "spaces:write",
+                        "spaces:rename",
+                        "publish:write",
+                        "domains:read",
+                        "domains:write",
+                        "spaces:publish",
+                        "builds:trigger",
+                        "mcp:tools"
+                      ]
                     },
                     "description": "OAuth scopes the approver granted, from the same checklist consent uses. The server compiles them into a policy; the compiled policy must be a subset of the approver's team-role policy."
                   },
@@ -5695,7 +5707,19 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "minLength": 1
+                      "enum": [
+                        "teams:read",
+                        "teams:create",
+                        "spaces:read",
+                        "spaces:write",
+                        "spaces:rename",
+                        "publish:write",
+                        "domains:read",
+                        "domains:write",
+                        "spaces:publish",
+                        "builds:trigger",
+                        "mcp:tools"
+                      ]
                     },
                     "description": "OAuth scopes the approver granted, from the same checklist consent uses. The server compiles them into a policy; the compiled policy must be a subset of the approver's team-role policy."
                   },
@@ -5787,7 +5811,19 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "minLength": 1
+                      "enum": [
+                        "teams:read",
+                        "teams:create",
+                        "spaces:read",
+                        "spaces:write",
+                        "spaces:rename",
+                        "publish:write",
+                        "domains:read",
+                        "domains:write",
+                        "spaces:publish",
+                        "builds:trigger",
+                        "mcp:tools"
+                      ]
                     },
                     "description": "OAuth scopes the approver granted, from the same checklist consent uses. The server compiles them into a policy; the compiled policy must be a subset of the approver's team-role policy."
                   },
@@ -29835,6 +29871,11 @@
         "security": [
           {
             "bearerAuth": []
+          },
+          {
+            "oauth2": [
+              "spaces:write"
+            ]
           }
         ],
         "requestBody": {

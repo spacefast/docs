@@ -2,7 +2,7 @@
 title: "Connect GitHub Copilot to Spacefast"
 description: "Publish from Copilot CLI and coding agent with native plugin and MCP support."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/github-copilot/"
 ---
 
 Publish from Copilot CLI and coding agent with native plugin and MCP support.
@@ -31,7 +31,7 @@ npm install -g spacefast && sf setup agent --agent github-copilot
 npx -y spacefast@0.0.26 setup agent --agent github-copilot -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 copilot mcp add --transport http spacefast https://mcp.spacefast.com

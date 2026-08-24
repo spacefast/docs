@@ -2,7 +2,7 @@
 title: "Connect OpenClaw to Spacefast"
 description: "Install Spacefast from ClawHub and connect streamable OAuth MCP."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/openclaw/"
 ---
 
 Install Spacefast from ClawHub and connect streamable OAuth MCP.
@@ -38,7 +38,7 @@ npm install -g spacefast && sf setup agent --agent openclaw
 npx -y spacefast@0.0.26 setup agent --agent openclaw -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 openclaw mcp add spacefast --url https://mcp.spacefast.com --transport streamable-http --auth oauth && openclaw mcp login spacefast

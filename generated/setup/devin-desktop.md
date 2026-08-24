@@ -2,7 +2,7 @@
 title: "Connect Devin Desktop to Spacefast"
 description: "Connect the local Devin desktop and CLI configuration plane."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/devin-desktop/"
 ---
 
 Connect the local Devin desktop and CLI configuration plane.
@@ -34,7 +34,7 @@ npm install -g spacefast && sf setup agent --agent devin-desktop
 npx -y spacefast@0.0.26 setup agent --agent devin-desktop -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 devin mcp add https://mcp.spacefast.com && devin mcp login spacefast

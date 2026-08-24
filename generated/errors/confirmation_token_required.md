@@ -1,9 +1,9 @@
 ---
 title: "confirmation_token_required"
-description: "This exact action already has a decision, and an untokened retry cannot clear the gate."
+description: "This exact action already has a decision, and a retry without its continuation token cannot clear the gate."
 ---
 
-This exact action already has a decision, and an untokened retry cannot clear the gate.
+This exact action already has a decision, and a retry without its continuation token cannot clear the gate.
 
 **How to resolve:** Resume the existing decision with its continuation token instead of repeating the original request.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_token_required",
   "title": "Confirmation token required",
   "status": 400,
-  "detail": "This exact action already has a decision, and an untokened retry cannot clear the gate.",
+  "detail": "This exact action already has a decision, and a retry without its continuation token cannot clear the gate.",
   "code": "confirmation_token_required",
   "requestId": "req_4mz0v8qk"
 }

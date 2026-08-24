@@ -2,7 +2,7 @@
 title: "Connect OpenCode to Spacefast"
 description: "Connect Spacefast to OpenCode with native OAuth MCP and skills."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/opencode/"
 ---
 
 Connect Spacefast to OpenCode with native OAuth MCP and skills.
@@ -35,7 +35,7 @@ npm install -g spacefast && sf setup agent --agent opencode
 npx -y spacefast@0.0.26 setup agent --agent opencode -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 opencode mcp add spacefast --url https://mcp.spacefast.com

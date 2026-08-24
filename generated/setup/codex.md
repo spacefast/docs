@@ -2,7 +2,7 @@
 title: "Connect Codex to Spacefast"
 description: "Publish and host from Codex locally or in the cloud."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/codex/"
 ---
 
 Publish and host from Codex locally or in the cloud.
@@ -40,7 +40,7 @@ npx -y spacefast@0.0.26 setup agent --agent codex -y
 npx -y plugins@1.3.4 add spacefast/plugins -t codex -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 codex mcp add spacefast --url https://mcp.spacefast.com && codex mcp login spacefast

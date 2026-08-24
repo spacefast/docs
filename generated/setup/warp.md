@@ -2,7 +2,7 @@
 title: "Connect Warp to Spacefast"
 description: "Use Spacefast skills and MCP in Warp agents."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/warp/"
 ---
 
 Use Spacefast skills and MCP in Warp agents.

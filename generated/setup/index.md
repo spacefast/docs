@@ -2,7 +2,7 @@
 title: "Agent setup"
 description: "Connect Codex, Claude, ChatGPT, Cursor, VS Code, or OpenClaw to publish and manage spaces."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/"
 ---
 
 Pick the agent you already use. Every page is one action, a click or a paste, and the

@@ -2,7 +2,7 @@
 title: "Connect Factory Droid to Spacefast"
 description: "Install Spacefast as a Droid plugin or native OAuth MCP server."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/factory-droid/"
 ---
 
 Install Spacefast as a Droid plugin or native OAuth MCP server.
@@ -27,7 +27,7 @@ npm install -g spacefast && sf setup agent --agent factory-droid
 npx -y spacefast@0.0.26 setup agent --agent factory-droid -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 droid mcp add spacefast https://mcp.spacefast.com --type http

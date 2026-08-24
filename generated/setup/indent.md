@@ -2,7 +2,7 @@
 title: "Connect Indent to Spacefast"
 description: "Connect Spacefast through Indent's native OAuth MCP integration."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/indent/"
 ---
 
 Connect Spacefast through Indent's native OAuth MCP integration.

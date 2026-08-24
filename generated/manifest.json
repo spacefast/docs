@@ -1,5 +1,5 @@
 {
-  "contentDigest": "b642831a2298908ec6331881094031c65ca4958e94f2b23849e434a22294aaa3",
+  "contentDigest": "1f98740a5a595f8169c7ac86f187f9d9308c171bf1d2a297db7a4d7bb9cb3a6a",
   "counts": {
     "apiOperations": 319,
     "changelogPackages": 20,
@@ -476,9 +476,9 @@
       "sha256": "3f30de445c4f22befb06331e34035b0c32a938b333fafbd8aec70e91a80ce7b0"
     },
     {
-      "bytes": 1265,
+      "bytes": 1325,
       "path": "errors/confirmation_token_required.md",
-      "sha256": "0ff18b40831f22496ecd4672bcb02e5118bbf182541fcf23ae7e7e3f7f420a46"
+      "sha256": "255599388ce13b773f9d47fd4eddac46aff54b8bcb59682f991318c1bd14df80"
     },
     {
       "bytes": 1321,
@@ -896,9 +896,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 61368,
+      "bytes": 61388,
       "path": "errors/index.md",
-      "sha256": "8fc5bc458f34d1ce26e0cd9045892c234fa1df62a50aaffcac331beda76ce373"
+      "sha256": "effc77e010bea729e4b4bb4f457a6f6b40134b5625fe3ffc9a3e7dc541919583"
     },
     {
       "bytes": 1112,
@@ -2636,14 +2636,14 @@
       "sha256": "7b816c8b09da7e153ac1a1c685d1ef4c0d141b008ade9a48d4132527d27bf89e"
     },
     {
-      "bytes": 6143165,
+      "bytes": 6144634,
       "path": "openapi/api.json",
-      "sha256": "04584fa65e842edf6e7d82b4de62da979d3a4888179c75a0018bd08cec605c70"
+      "sha256": "157e4680250301e81b2785efb65ca0147db9818cc6917796f635fcf7fb1962fb"
     },
     {
-      "bytes": 6282267,
+      "bytes": 6283736,
       "path": "openapi/platform.json",
-      "sha256": "7bd5cc4d26527ce567aaf51648dd0b5eaf26bc2080093851317b7dd19e04f6a2"
+      "sha256": "786c70608c49d67967702dca34d66d5a2f883293110ded5f21aed722cf1940b7"
     },
     {
       "bytes": 379845,
@@ -2651,129 +2651,129 @@
       "sha256": "eee1fd1e8c019ba196b431bfbdd1ca72867006d4c9649bde0cef8c10668dc3bc"
     },
     {
-      "bytes": 1623,
+      "bytes": 1660,
       "path": "setup/amp.md",
-      "sha256": "262e801f0535e81bc8f3d6c4b0c13efc27ef6d3796af99692b954f36351c3573"
+      "sha256": "0c26306443d8416064e9c868bdaea7cf428b52a59c094f28c8bcf2566040a9e7"
     },
     {
-      "bytes": 1038,
+      "bytes": 1074,
       "path": "setup/chatgpt.md",
-      "sha256": "f7e726a4a3af783795d977964fd4d7a5f2193d33c40981d3b7bb158a67341353"
+      "sha256": "38e06020a536ff6d39205e4900d0b2bb90497ed3046e50bca3e9f13aa97141bb"
     },
     {
-      "bytes": 807,
+      "bytes": 846,
       "path": "setup/claude-app.md",
-      "sha256": "8bfd8db925c25e2ebc0bfcf409d6a1cf946d8eeb4212a4d320c96d03da188526"
+      "sha256": "c56472ca8df2388bd09fb3eaeeb4f5de698761b1f9297b73c55ec50be2fa1bca"
     },
     {
-      "bytes": 1876,
+      "bytes": 1921,
       "path": "setup/claude-code.md",
-      "sha256": "7aa309c00b85f576861e0cccbbc2c43873cc64ef97656d7047b2b4092eced8fd"
+      "sha256": "bbf7b8641a5035f3a44dde8435f4cdefc7ef587978c856db8ce190cdad50a260"
     },
     {
-      "bytes": 1021,
+      "bytes": 1064,
       "path": "setup/claude-desktop.md",
-      "sha256": "169f95a12e36330e8748cdb9e3222f740cc63621df645ffe7b835608d7a7ebb8"
+      "sha256": "508068f91e023121ccb97e5aa79e54004a5d0ef256321ed41b1cd0dabb06e303"
     },
     {
-      "bytes": 1693,
+      "bytes": 1727,
       "path": "setup/cline.md",
-      "sha256": "f9df558c1825290d2fe169711a327348d24b3cf8bc7b706d2b03ee0ec6fb15f4"
+      "sha256": "57a9d71b3bf71c684f8bee8154700ff3461a3f2c2dab0f97194c78b384aa6dd7"
     },
     {
-      "bytes": 1993,
+      "bytes": 2032,
       "path": "setup/codex.md",
-      "sha256": "939447ff8ce3fdf3def206399c523ee4aabf780ab289de3fc5122e497b8efb43"
+      "sha256": "57bb0374dafe66ffbf347faedc8777b6ffee46eff4f0a7441bf0525b4702c1f5"
     },
     {
-      "bytes": 1275,
+      "bytes": 1312,
       "path": "setup/continue.md",
-      "sha256": "77ddde5878f0fcf50dcba25e199539ce8fc2a94c7cb93254a170f97c86746d12"
+      "sha256": "a6736dd2796e918760f9b6e1d819c3bf57c8c411c077800e07166986fda167e9"
     },
     {
-      "bytes": 2111,
+      "bytes": 2146,
       "path": "setup/cursor.md",
-      "sha256": "632bf5b4f74dacbb2f8711fb1e21278d8463a10f05849fadbbbe504f91bee9ef"
+      "sha256": "3eca8547e7e0c66db5f329e39a18ee0e3ab19533073de04248b13bf61428bbf5"
     },
     {
-      "bytes": 909,
+      "bytes": 949,
       "path": "setup/devin-cloud.md",
-      "sha256": "e2645c4881075d5e137f45e0e70edf22fdce02d6b78d36b3f6d184bd84abac72"
+      "sha256": "6e39f6b43f48063a34c9ee92c8789c2078d563bc3a41d741f89bb8cb6780ccfa"
     },
     {
-      "bytes": 1717,
+      "bytes": 1764,
       "path": "setup/devin-desktop.md",
-      "sha256": "7c2570c8619b3bc4c9b5e6be1b25ef30ce2884ac7f251a21f506d17008b9fe64"
+      "sha256": "bb96162da2c3ba276dcaff21fcd20de24a579dcc03893c95aa8983dbf2552d2c"
     },
     {
-      "bytes": 1671,
+      "bytes": 1718,
       "path": "setup/factory-droid.md",
-      "sha256": "a48460053ca76ca21838893bfbf651910a0df02fb1d403f9244be028bf67d5b8"
+      "sha256": "41ade7792fe20630394ff3445b6acd7246539c6dbbcff75a9f1ad7dd4590f023"
+    },
+    {
+      "bytes": 1950,
+      "path": "setup/gemini-cli.md",
+      "sha256": "ad281622cba1ab8118118a7b9382d18d1d1c580e1f6a1fb7011f965930781f6a"
+    },
+    {
+      "bytes": 1963,
+      "path": "setup/github-copilot.md",
+      "sha256": "ec16617e7e0ae3524609c7e9742f8bc70c07be67581ce50655d29f995c628d8a"
     },
     {
       "bytes": 1906,
-      "path": "setup/gemini-cli.md",
-      "sha256": "1c62648fe2902c368b246843f501c96c7da9fb3def2efb9b1d0ae80e96bb3efe"
-    },
-    {
-      "bytes": 1915,
-      "path": "setup/github-copilot.md",
-      "sha256": "ba3ed0e62324faa258622c537340e0664f8de8fc375fa0ccee0d8d531843c083"
-    },
-    {
-      "bytes": 1866,
       "path": "setup/hermes.md",
-      "sha256": "8ae1ea1b3750119db1806c1bae7ce909e010ceb9f2bae73f46a7bf19e4a0068e"
+      "sha256": "6e9ab49c287db15b2187f8e82a90aeaadc446e0293deea1053ca0529235109e4"
     },
     {
-      "bytes": 967,
+      "bytes": 1002,
       "path": "setup/indent.md",
-      "sha256": "bb8f4cd044768419c4e8775578018ee9ab807ac6e04f7ad9ee6aa84fd87a1b88"
+      "sha256": "03f5520993c3c90051a8e789805b69999dfee39416a0811872ae02234fa1316c"
     },
     {
-      "bytes": 2634,
+      "bytes": 2662,
       "path": "setup/index.md",
-      "sha256": "53e4e48a9f56c279a31aa3cae0328da8a1699fc340d23ba3bb0e8c33a823e1ed"
+      "sha256": "becd08be39c6e0b57bdea51a60b7a9bdf8da0a8e7ae09cce6cb3e156fca263a3"
     },
     {
-      "bytes": 1928,
+      "bytes": 1970,
       "path": "setup/openclaw.md",
-      "sha256": "5ba66c59333b6eea1dbdc57ff586c8811065b203b52a61bb6b3803748a625b17"
+      "sha256": "b2398efc775a6baec452d113e79af5db5394cdb79aad4271b2198b105e1df90a"
     },
     {
-      "bytes": 1700,
+      "bytes": 1742,
       "path": "setup/opencode.md",
-      "sha256": "2f8827bc5f670a103865f09e8f874e1c3e51897ca3ec2c62723cb1e033f817ab"
+      "sha256": "59dd4ec64db4650240fea1564aede985d1c91b803b94f2d9bfe283f62c6fb543"
     },
     {
-      "bytes": 1459,
+      "bytes": 1490,
       "path": "setup/pi.md",
-      "sha256": "f67140bcb1e335da6629279c4bae29760f7130a4bdfef44cf7ba27e08b4e2618"
+      "sha256": "f67d1877156de4de5d4c49338f8e31cc0c32748cd33f27745ede5086b31003b5"
     },
     {
-      "bytes": 967,
+      "bytes": 1000,
       "path": "setup/poke.md",
-      "sha256": "574039ec7a4e0b00b3fb73adf8775bf044859f57ad3380353c03da080e67b0b1"
+      "sha256": "0277333b20668548285fdc93e2c5211af4cad20b5b6055762cc6c52791100205"
     },
     {
-      "bytes": 989,
+      "bytes": 1025,
       "path": "setup/raycast.md",
-      "sha256": "63b3a630a931e9c3d438a916cffee273863d703dde5d56497476c63fe2eafc82"
+      "sha256": "41737e7756b96443a4c55ed888201f8ea3f23e7843bc685a6dc046b1e68fe07d"
     },
     {
-      "bytes": 1943,
+      "bytes": 1978,
       "path": "setup/vscode.md",
-      "sha256": "ec5ad658346fba67a5a5ecd7c5ae1c476186b5ce6713f627313f95a90d3e60b5"
+      "sha256": "9554076055b473fa9d4c577e606f0cc30b06991cbcb7761ea64313e85a4abcbb"
     },
     {
-      "bytes": 1610,
+      "bytes": 1643,
       "path": "setup/warp.md",
-      "sha256": "19cab4a9d445974eab20a85c6b3a4b1ae53337ca3523d784a7a54d9e23e4d482"
+      "sha256": "bac8a48c386972048e0795a8dcc6a673ae473a4a5b96499a9e44ddf2ff9f2321"
     },
     {
-      "bytes": 1518,
+      "bytes": 1550,
       "path": "setup/zed.md",
-      "sha256": "4223f37410a6399cbcbb17c6d17db36380f7cea9e5cea3376094f7ac049f3633"
+      "sha256": "785607a33919fe73fc738b0fe88e57ce2a2d4c9fa4805d4f529b55113c8ceb10"
     }
   ],
   "generator": "spacefast-public-docs",

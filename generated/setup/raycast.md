@@ -2,7 +2,7 @@
 title: "Connect Raycast to Spacefast"
 description: "Connect Spacefast to Raycast AI using its native OAuth MCP form."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/raycast/"
 ---
 
 Connect Spacefast to Raycast AI using its native OAuth MCP form.

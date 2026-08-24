@@ -2,7 +2,7 @@
 title: "Connect Cline to Spacefast"
 description: "Install Spacefast from the Cline marketplace or connect OAuth MCP."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/cline/"
 ---
 
 Install Spacefast from the Cline marketplace or connect OAuth MCP.

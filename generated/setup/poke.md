@@ -2,7 +2,7 @@
 title: "Connect Poke to Spacefast"
 description: "Prefill a Spacefast integration in Poke and authorize with OAuth."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/poke/"
 ---
 
 Prefill a Spacefast integration in Poke and authorize with OAuth.

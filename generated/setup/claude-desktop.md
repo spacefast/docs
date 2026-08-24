@@ -2,7 +2,7 @@
 title: "Connect Claude Desktop to Spacefast"
 description: "Install Spacefast in Claude Desktop as a signed local extension."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/claude-desktop/"
 ---
 
 Install Spacefast in Claude Desktop as a signed local extension.

@@ -2,7 +2,7 @@
 title: "Connect Amp to Spacefast"
 description: "Install Spacefast skills with bundled MCP support in Amp."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/amp/"
 ---
 
 Install Spacefast skills with bundled MCP support in Amp.
@@ -34,7 +34,7 @@ npm install -g spacefast && sf setup agent --agent amp
 npx -y spacefast@0.0.26 setup agent --agent amp -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 amp mcp add spacefast https://mcp.spacefast.com

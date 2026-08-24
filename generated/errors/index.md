@@ -62,7 +62,7 @@ There are 481 error codes in the registry.
 | [`confirmation_expired`](/errors/confirmation_expired) | The confirmation for this action expired before a person decided it. |
 | [`confirmation_mismatch`](/errors/confirmation_mismatch) | The continuation token is bound to different action terms or a different resource revision than the request presenting it. |
 | [`confirmation_required`](/errors/confirmation_required) | This action destroys live content or spends money, so a person must approve this exact action before it runs. |
-| [`confirmation_token_required`](/errors/confirmation_token_required) | This exact action already has a decision, and an untokened retry cannot clear the gate. |
+| [`confirmation_token_required`](/errors/confirmation_token_required) | This exact action already has a decision, and a retry without its continuation token cannot clear the gate. |
 | [`continuation_unavailable`](/errors/continuation_unavailable) | This space key can no longer be exchanged for an API key. |
 | [`continuation_used`](/errors/continuation_used) | This space key was already exchanged for a durable API key. |
 | [`credential_expired`](/errors/credential_expired) | The credential used for this request is expired. |

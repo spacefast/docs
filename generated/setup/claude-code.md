@@ -2,7 +2,7 @@
 title: "Connect Claude Code to Spacefast"
 description: "Publish, host, and operate Spacefast artifacts from Claude Code."
 seo:
-  noindex: true
+  canonical: "https://spacefast.com/setup/claude-code/"
 ---
 
 Publish, host, and operate Spacefast artifacts from Claude Code.
@@ -33,7 +33,7 @@ npx -y spacefast@0.0.26 setup agent --agent claude-code -y
 npx -y plugins@1.3.4 add spacefast/plugins -t claude-code -y
 ```
 
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in in the browser.
+**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
 
 ```bash
 claude mcp add --transport http spacefast https://mcp.spacefast.com
