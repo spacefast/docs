@@ -9,7 +9,7 @@ publish command makes the whole app live as a normal space version.
 Zero is generally available.
 
 Spacefast Zero is based on the capsule apps concept created by the
-[Lakebed](https://docs.lakebed.dev/) project — close enough that a Lakebed
+[Lakebed](https://docs.lakebed.dev/) project, close enough that a Lakebed
 capsule compiles unchanged. See [Compare to Lakebed](#compare-to-lakebed).
 
 <CardGroup cols={3}>
@@ -45,7 +45,7 @@ capsule compiles unchanged. See [Compare to Lakebed](#compare-to-lakebed).
     ```
 
     Open `http://localhost:4173`. Edit `client/index.tsx` and
-    `server/index.ts`; the local server reloads when you save a file. State is
+    `server/index.ts`. The local server reloads when you save a file. State is
     in memory unless you pass `--state-backend sqlite`.
 
   </Step>
@@ -146,7 +146,7 @@ Every handler receives `ctx` with:
 - **`ctx.env`**: server-only variables.
 - **`ctx.log`**: structured logging.
 - **`ctx.email`**, **`ctx.spam`**, **`ctx.gravatar`**: platform services with
-  no credential to configure — see
+  no credential to configure. See
   [Email, spam, and Gravatar](/services).
 
 Call named handlers from the client with hooks:
@@ -171,7 +171,7 @@ client-side routes.
 A guestbook that uses the whole runtime: a schema, a live query, a validated
 mutation with a spam check and Gravatar avatars, an action that emails a
 digest, a webhook, hosted sign-in, a photo upload to storage, two
-client-side routes, and a stats chart — styled with the platform kit and
+client-side routes, and a stats chart, styled with the platform kit and
 Tailwind classes. Two files are the whole app.
 
 <CodeGroup>
@@ -394,25 +394,25 @@ export function App() {
 Everything on the page is one of the runtime's features doing its job:
 
 - **Live queries.** `useQuery("entries")` starts as an empty array and
-  re-renders whenever a mutation changes the rows — including rows the
-  webhook writes — in every open tab. There is no cache wiring anywhere:
+  re-renders in every open tab whenever a mutation changes the rows,
+  including rows the webhook writes. There is no cache wiring anywhere:
   write a row and every live query that reads it refreshes on its own.
 - **Validation lives on the server.** The `sign` mutation trims and caps the
-  body; the client never writes rows directly.
+  body. The client never writes rows directly.
 - **Spam checking is one call.** `ctx.spam.check()` classifies the entry
   before it is written. The runtime supplies the visitor's network evidence
-  from the trusted request envelope — a browser cannot claim its own IP.
+  from the trusted request envelope. A browser cannot claim its own IP.
 - **Avatars come from Gravatar.** `ctx.gravatar.avatarUrl()` is synchronous
-  and credential-free; the mutation stores the URL with the row.
+  and credential-free. The mutation stores the URL with the row.
 - **Actions send email.** The `emailDigest` action reads the same tables and
-  sends through `ctx.email.send()` — no mail credential to configure, and
+  sends through `ctx.email.send()` with no mail credential to configure, and
   `useAction()` wires it to a button. In a mutation, a send commits
   atomically with the writes. See
   [Email, spam, and Gravatar](/services).
 - **Sign-in is one component.** `SignInWithGoogle` upgrades the visitor's
-  guest identity; `signOut()` drops back to it.
+  guest identity, and `signOut()` drops back to it.
 - **Uploads are one call.** `storage.upload(photo)` returns a read URL the
-  row can keep. The photo is optional — the form works without it.
+  row can keep. The photo is optional, and the form works without it.
 - **Routing is included.** `Router`, `Routes`, and `Link` give the app two
   pages without a dependency.
 - **Charts are included.** The stats page derives a week of counts from the
@@ -443,18 +443,18 @@ curl -X POST http://localhost:4173/webhooks/entries \
 
 ## Styling
 
-Write Tailwind utility classes directly in JSX on the `class` attribute —
-there is nothing to install or configure. Zero compiles every class used
+Write Tailwind utility classes directly in JSX on the `class` attribute.
+There is nothing to install or configure. Zero compiles every class used
 anywhere in `client/`, `server/`, and `shared/` into the app's stylesheet,
-light and dark variants included; classes nobody uses produce nothing. A
+light and dark variants included. Classes nobody uses produce nothing. A
 `theme.json` at the project root adjusts the palette and typography the
 utilities compile against.
 
 The client also ships batteries:
 
-- **`@spacefast/zero/kit`**: the platform interface kit — `Button`, `Card`,
-  `Input`, `Badge`, `Tabs`, `Table`, `CodeBlock`, and more, plus `Icon` with
-  the Lucide icon set.
+- **`@spacefast/zero/kit`**: the platform interface kit, with `Button`,
+  `Card`, `Input`, `Badge`, `Tabs`, `Table`, `CodeBlock`, and more, plus
+  `Icon` with the Lucide icon set.
 - **`@spacefast/zero/charts`**: `LineChart`, `BarChart`, and `Sparkline`,
   drawn as plain SVG with no charting library.
 
@@ -493,7 +493,7 @@ function AuthControls() {
 }
 ```
 
-Hosted sign-in uses Gravatar; `SignInWithGoogle` is a compatibility alias that
+Hosted sign-in uses Gravatar. `SignInWithGoogle` is a compatibility alias that
 renders the "Sign in with Gravatar" button. `useAuth()` returns `userId`,
 `displayName`, `provider` (`"guest"` or `"gravatar"`), `isGuest`,
 `isAuthenticated`, `email`, `picture`, and `isLoading`.
@@ -501,7 +501,7 @@ renders the "Sign in with Gravatar" button. `useAuth()` returns `userId`,
 On the server, the same identity is `ctx.auth` in every handler. Check
 `ctx.auth.isGuest` when a handler requires sign-in. For row ownership, store
 `ctx.auth.userId` with the row, filter reads through an owner index, and
-verify that value before an update or delete — never accept an owner id from
+verify that value before an update or delete. Never accept an owner id from
 client arguments:
 
 ```ts server/index.ts
@@ -517,9 +517,9 @@ locally and hosted.
 
 ## Database
 
-Every Zero app has its own database. Declare the schema in the capsule; the
-publish command compares the declaration with the live schema and applies the
-migration. Fields support `string()`, `boolean()`, and `id(table)`, with
+Every Zero app has its own database. Declare the schema in the capsule, and
+the publish command compares the declaration with the live schema and applies
+the migration. Fields support `string()`, `boolean()`, and `id(table)`, with
 `.default(value)`. Every row also has `id`, `createdAt`, and `updatedAt`.
 
 Every table has a built-in `by_creation` index that reads rows in insertion
@@ -544,7 +544,7 @@ Indexed queries finish with `.collect()`, `.take(count)`, `.first()`, or
 contexts add `.insert()`, `.update(id, patch)`, and `.delete(id)`.
 
 Normal additive changes apply during `sf publish`. Destructive changes require
-an explicit migration command; a publish cannot silently drop data. Express
+an explicit migration command, because a publish cannot silently drop data. Express
 the rename or drop in the capsule schema first, then allow the planned
 migration to include it with the matching boolean flag:
 
@@ -563,14 +563,14 @@ sf db export --out ./backup.json
 
 The export contains every declared table in a versioned JSON format and only
 replaces the destination file after the complete export succeeds. A rollback
-promotes older code; it does not rewind database rows. Check the current
+promotes older code. It does not rewind database rows. Check the current
 schema before you roll back across a migration.
 
 ## Storage
 
 Zero client storage handles browser uploads without a separate storage
 credential. Objects are addressed by a random 128-bit id. Read URLs carry a
-runtime read key that Spacefast can rotate; rotation immediately invalidates
+runtime read key that Spacefast can rotate. Rotation immediately invalidates
 every URL minted under the old key.
 
 ```tsx client/index.tsx
@@ -581,11 +581,11 @@ uploaded.url; // a read URL to store or render
 await storage.delete(uploaded.id);
 ```
 
-Uploads and deletes require an identified visitor; anonymous commenters are
+Uploads and deletes require an identified visitor. Anonymous commenters are
 admitted where Comments admits them, against the daily anonymous budget. Only
 the uploader can delete an object. The space owner gets an inventory across
 uploaders with `sf storage ls` and can force-delete with
-`sf storage rm 0123456789abcdef0123456789abcdef --yes`; that delete is
+`sf storage rm 0123456789abcdef0123456789abcdef --yes`. That delete is
 destructive and unrecoverable.
 
 Safety and limits: 5 MiB per object, a 200 MiB rolling daily budget for
@@ -615,9 +615,9 @@ sf logs runtime --follow
 ```
 
 Every space already has its own site, so a capsule publish onto an existing
-space is an ordinary publish; nothing migrates. Code belongs to the version;
-database rows and stored objects belong to the space and do not roll back with
-it.
+space is an ordinary publish, and nothing migrates. Code belongs to the
+version. Database rows and stored objects belong to the space and do not roll
+back with it.
 
 The compiled server bundle is capped at 768 KiB and the client bundle at
 8 MiB.
@@ -644,12 +644,12 @@ locally and `sf publish` instead of a deploy.
 
 What changes on Spacefast:
 
-- Hosted sign-in is Gravatar; `SignInWithGoogle` renders the "Sign in with
-  Gravatar" button.
+- Hosted sign-in is Gravatar, and `SignInWithGoogle` renders the "Sign in
+  with Gravatar" button.
 - The project is a space: `sf.jsonc` config, versions, rollback, custom
   domains, and the rest of the platform.
 
 What Zero adds beyond Lakebed:
 
-- The platform kit and charts — see [Styling](#styling).
+- The platform kit and charts, covered in [Styling](#styling).
 - `empty()`, `redirect()`, and `ImageResponse` endpoint helpers.

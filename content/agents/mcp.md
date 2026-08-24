@@ -49,10 +49,9 @@ To point a client at hosted MCP with OAuth:
 sf mcp install --agent cursor --remote --oauth
 ```
 
-Confirm the daemon with `sf mcp status`, and add `--repair` to clear a
-stale daemon manifest. `sf mcp daemon` and `sf mcp http` run the server
-manually. The [CLI reference](/cli#sf-mcp-daemon) covers both. Credentials stay
-in supported Spacefast state files, and the secret-handling rules live in
+Run the server manually with [`sf mcp`](/cli#sf-mcp), which serves MCP over
+stdio for the connected client. Credentials stay in supported Spacefast
+state files, and the secret-handling rules live in
 [Auth and accounts](/agents#auth-and-accounts).
 
 For the complete skill and MCP setup in one command, use

@@ -9,7 +9,7 @@ pull-request comments, and status checks. Before you rely on gated routing
 features, check the target team's
 [entitlements](/guides/migrate#check-capacity-and-entitlements).
 
-Before switching DNS, audit the project for Vercel-only behavior; see
+Before switching DNS, audit the project for Vercel-only behavior. See
 [What does not run on Spacefast](#what-does-not-run-on-spacefast).
 
 ## Static Next.js export
@@ -80,7 +80,7 @@ another service:
   the `/_next/image` and `/_vercel/image` endpoints), internationalized
   routing, framework rewrites, redirects, headers, and `getStaticPaths` with
   `fallback: true` or `fallback: "blocking"`. Recreate routing and headers with
-  Spacefast `_redirects` and `_headers`; serve images with the
+  Spacefast `_redirects` and `_headers`. Serve images with the
   [Next.js Site Accelerator loader](/guides/frameworks/nextjs),
   `unoptimized`, or pre-generated responsive assets.
 - Vercel platform products (analytics, storage, edge config, firewall and

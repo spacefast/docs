@@ -1,9 +1,11 @@
 ---
 title: "Connect Poke to Spacefast"
-description: "Text Poke the prompt — it publishes and texts back the link."
+description: "Prefill a Spacefast integration in Poke and authorize with OAuth."
+seo:
+  canonical: "https://spacefast.com/setup/poke/"
 ---
 
-Text Poke the prompt, and it publishes and texts back the link.
+Prefill a Spacefast integration in Poke and authorize with OAuth.
 
 **[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)**
 
@@ -13,4 +15,27 @@ If nothing happens, add the endpoint in Poke yourself:
 https://mcp.spacefast.com
 ```
 
-[Agent documentation](/agents) · [Poke's MCP docs](https://poke.com/docs/mcp-servers)
+## Other ways to connect
+
+**Configure an MCP client configuration.** Merge the hosted Spacefast server into the client MCP configuration.
+
+```json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "http",
+      "url": "https://mcp.spacefast.com"
+    }
+  }
+}
+```
+
+Prefer to hand this off? Copy setup prompt:
+
+```text
+Fetch https://spacefast.com/setup.md and set up Spacefast.
+```
+
+Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Agent documentation](/agents) · [Poke documentation](https://poke.com/docs/mcp-servers)

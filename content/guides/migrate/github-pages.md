@@ -30,7 +30,7 @@ sf publish ./_site
   publish root. Pages can start from Markdown or `README.md`; publish
   generated HTML to Spacefast.
 - Test asset paths. GitHub Pages project sites serve under the repository path,
-  such as `/your_repository_name/`; user and organization sites serve from the
+  such as `/your_repository_name/`. User and organization sites serve from the
   root. A Spacefast custom domain serves from `/`. Update router base paths,
   canonical URLs, and absolute asset URLs to match the new URL.
 - If the site uses a custom not-found page, keep `404.html` in the publish
@@ -64,7 +64,7 @@ sf publish ./_site
 - GitHub Pages has no native `_redirects` or `_headers` files. If you used
   JavaScript, meta refresh tags, or an external CDN to fill that gap, replace
   that behavior. Use Spacefast routing and header files where possible.
-  Spacefast rejects `_headers` Basic Auth on every plan; use
+  Spacefast rejects `_headers` Basic Auth on every plan. Use
   [Spacefast sharing](/share).
 - Retire the Pages deploy workflow. The best replacement is to
   [connect the repository](/publish/git). Spacefast then builds on every

@@ -55,8 +55,8 @@ export default defineConfig({
 });
 ```
 
-TanStack Start can still build an internal server bundle for prerendering; Spacefast
-publishes only the static files.
+TanStack Start can still build an internal server bundle for prerendering.
+Spacefast publishes only the static files.
 
 ## TanStack Start SPA
 

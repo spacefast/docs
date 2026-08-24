@@ -250,6 +250,34 @@ if (
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error("Sitemap contains duplicate URLs.");
 }
+// Owner rule: this site never ships a noindex page. Every page is indexable,
+// searchable, and advertised in the sitemap. The generated `/setup/*` pages
+// are the one place content is duplicated across surfaces (spec §5.1) — they
+// stay indexable and instead declare a canonical straight at the www copy
+// that owns that content for search, which the audit accepts and the sitemap
+// still lists.
+for (const file of await htmlFilesUnder(dist)) {
+  const html = await readBuilt(file);
+  if (/<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
+    throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
+  }
+}
+const setupFiles = (await htmlFilesUnder(dist)).filter((file) =>
+  /^setup\/[^/]+\/index\.html$/u.test(file),
+);
+if (setupFiles.length === 0) {
+  throw new Error("Expected generated /setup pages in the build; none are present.");
+}
+for (const file of setupFiles) {
+  const html = await readBuilt(file);
+  const id = file.split("/")[1];
+  const expected = `<link rel="canonical" href="https://spacefast.com/setup/${id}/">`;
+  if (!html.includes(expected)) {
+    throw new Error(`dist/${file} does not declare its www canonical (${expected}).`);
+  }
+}
+// The `+1` is the home page, listed at the docs root rather than at its
+// canonical origin.
 if (indexedPages !== sitemapUrls.length + 1) {
   throw new Error(
     `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,

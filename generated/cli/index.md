@@ -21,7 +21,7 @@ $ npm install -g spacefast
 $ sf COMMAND
 running command...
 $ sf (--version)
-spacefast/0.0.24
+spacefast/0.0.26
 $ sf --help [COMMAND]
 USAGE
   $ sf COMMAND
@@ -89,8 +89,6 @@ GLOBAL FLAGS
 - [`sf db dump [TARGET]`](#sf-db-dump-target)
 - [`sf db export [TARGET]`](#sf-db-export-target)
 - [`sf db migrate [SOURCE]`](#sf-db-migrate-source)
-- [`sf demo`](#sf-demo)
-- [`sf demo agent`](#sf-demo-agent)
 - [`sf design`](#sf-design)
 - [`sf design generate`](#sf-design-generate)
 - [`sf dev`](#sf-dev)
@@ -141,17 +139,16 @@ GLOBAL FLAGS
 - [`sf login`](#sf-login)
 - [`sf logout`](#sf-logout)
 - [`sf logs [TARGET] [KIND]`](#sf-logs-target-kind)
+- [`sf map`](#sf-map)
 - [`sf mcp`](#sf-mcp)
-- [`sf mcp daemon`](#sf-mcp-daemon)
-- [`sf mcp http`](#sf-mcp-http)
 - [`sf mcp install`](#sf-mcp-install)
 - [`sf mcp proxy`](#sf-mcp-proxy)
-- [`sf mcp status`](#sf-mcp-status)
 - [`sf open [TARGET]`](#sf-open-target)
 - [`sf operations [ID]`](#sf-operations-id)
 - [`sf pages`](#sf-pages)
 - [`sf pages pull [TARGET]`](#sf-pages-pull-target)
 - [`sf pages validate`](#sf-pages-validate)
+- [`sf plugins`](#sf-plugins)
 - [`sf profiles`](#sf-profiles)
 - [`sf profiles rm NAME`](#sf-profiles-rm-name)
 - [`sf profiles set NAME`](#sf-profiles-set-name)
@@ -255,6 +252,7 @@ GLOBAL FLAGS
 - [`sf teams switch [TEAM]`](#sf-teams-switch-team)
 - [`sf transfers accept ID`](#sf-transfers-accept-id)
 - [`sf transfers cancel ID`](#sf-transfers-cancel-id)
+- [`sf unlink`](#sf-unlink)
 - [`sf versions`](#sf-versions)
 - [`sf versions get [VERSION]`](#sf-versions-get-version)
 - [`sf versions ls`](#sf-versions-ls)
@@ -263,24 +261,34 @@ GLOBAL FLAGS
 
 ## `sf access`
 
-Manage emergency visitor-session revocation.
+Revoke visitor sessions.
 
 ```text
 USAGE
-  $ sf access [--profile <value>] [-y]
+  $ sf access [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
-  Manage emergency visitor-session revocation.
+  Revoke visitor sessions.
 
   Revoke active visitor sessions. Use `sf share` to manage who can open a space.
+
+EXAMPLES
+  Revoke visitor sessions.
+
+    $ sf access
 ```
 
-_See code: [src/commands/access.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/access.ts)_
+_See code: [src/commands/access.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/access.ts)_
 
 ## `sf access logout-all`
 
@@ -288,13 +296,18 @@ Revoke all visitor sessions.
 
 ```text
 USAGE
-  $ sf access logout-all [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf access logout-all [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke all visitor sessions.
@@ -307,7 +320,7 @@ EXAMPLES
     $ sf access logout-all --space docs
 ```
 
-_See code: [src/commands/access/logout-all.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/access/logout-all.ts)_
+_See code: [src/commands/access/logout-all.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/access/logout-all.ts)_
 
 ## `sf activity`
 
@@ -315,9 +328,9 @@ Show activity events.
 
 ```text
 USAGE
-  $ sf activity [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--all] [--code <value>] [--since <value>] [--until <value>] [--limit
-    <value>] [--cursor <value>]
+  $ sf activity [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--all] [--code <value>] [--since <value>] [--until <value>]
+    [--limit <value>] [--cursor <value>]
 
 FLAGS
   --all             Read account-wide activity instead of a single space.
@@ -330,7 +343,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show activity events.
@@ -345,7 +363,7 @@ EXAMPLES
   $ sf activity --all --since 2026-06-01T00:00:00Z
 ```
 
-_See code: [src/commands/activity.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/activity.ts)_
+_See code: [src/commands/activity.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/activity.ts)_
 
 ## `sf agents init`
 
@@ -353,12 +371,17 @@ Write Spacefast AGENTS.md guidance.
 
 ```text
 USAGE
-  $ sf agents init [--profile <value>] [-y]
+  $ sf agents init [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Write Spacefast AGENTS.md guidance.
@@ -371,7 +394,7 @@ EXAMPLES
     $ sf agents init
 ```
 
-_See code: [src/commands/agents/init.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/agents/init.ts)_
+_See code: [src/commands/agents/init.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/agents/init.ts)_
 
 ## `sf analytics`
 
@@ -379,8 +402,8 @@ Print runtime analytics.
 
 ```text
 USAGE
-  $ sf analytics [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--window 48h|7d|30d]
+  $ sf analytics [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--window 48h|7d|30d]
 
 FLAGS
   --window=<option>  [default: 7d] Analytics window.
@@ -389,7 +412,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Print runtime analytics.
@@ -406,7 +434,7 @@ EXAMPLES
     $ sf analytics --space docs --window 30d
 ```
 
-_See code: [src/commands/analytics.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/analytics.ts)_
+_See code: [src/commands/analytics.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/analytics.ts)_
 
 ## `sf api METHODORPATH [PATH]`
 
@@ -415,7 +443,8 @@ Call the Spacefast API directly.
 ```text
 USAGE
   $ sf api METHODORPATH [PATH] [--profile <value>] [-y]
-    [-i <value>] [--idempotency-key <value>] [--include] [--output <value> | --raw-stdout] [--paginate]
+    [--rationale <value>] [-i <value>] [--idempotency-key <value>] [--include] [--output <value> | --raw-stdout]
+    [--paginate]
 
 ARGUMENTS
   METHODORPATH  HTTP method (GET, POST, PATCH, PUT, DELETE) or request path.
@@ -432,13 +461,18 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Call the Spacefast API directly.
 
-  Send a signed request to the core public API contract using the resolved profile credentials. JSON envelopes print
-  verbatim; non-JSON responses require an explicit output destination.
+  Send a signed request to the public API using the resolved profile credentials. JSON envelopes print verbatim;
+  non-JSON responses need --output or --raw-stdout.
 
 EXAMPLES
   $ sf api /v1/me
@@ -450,7 +484,7 @@ EXAMPLES
   $ sf api GET /v1/spaces/spc_123/versions/ver_123/archive --output site.tar.gz
 ```
 
-_See code: [src/commands/api.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/api.ts)_
 
 ## `sf api-keys`
 
@@ -458,20 +492,30 @@ Manage API keys.
 
 ```text
 USAGE
-  $ sf api-keys [--profile <value>] [-y]
+  $ sf api-keys [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage API keys.
 
   Manage platform API keys.
+
+EXAMPLES
+  Manage API keys.
+
+    $ sf api-keys
 ```
 
-_See code: [src/commands/api-keys.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/api-keys.ts)_
+_See code: [src/commands/api-keys.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/api-keys.ts)_
 
 ## `sf api-keys create`
 
@@ -479,8 +523,8 @@ Create an API key.
 
 ```text
 USAGE
-  $ sf api-keys create [--profile <value>] [-y] [-n <value>] [--preset
-    ci_deploy|space_publisher|space_admin|site_admin|domain_manager|team_admin|billing_viewer]
+  $ sf api-keys create [--profile <value>] [-y] [--rationale <value>]
+    [-n <value>] [--preset ci_deploy|space_publisher|space_admin|site_admin|domain_manager|team_admin|billing_viewer]
 
 FLAGS
   -n, --name=<value>     Human-readable API key name.
@@ -491,7 +535,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create an API key.
@@ -511,7 +560,7 @@ EXAMPLES
     $ sf api-keys create --name ci --preset full_access
 ```
 
-_See code: [src/commands/api-keys/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/api-keys/create.ts)_
+_See code: [src/commands/api-keys/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/api-keys/create.ts)_
 
 ## `sf api-keys list`
 
@@ -519,8 +568,8 @@ List API keys.
 
 ```text
 USAGE
-  $ sf api-keys list [--profile <value>] [-y] [-o <value>] [--limit
-    <value>]
+  $ sf api-keys list [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--limit <value>]
 
 FLAGS
   --limit=<value>  Maximum number of API keys to return (default 50, max 100).
@@ -528,7 +577,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List API keys.
@@ -544,7 +598,7 @@ EXAMPLES
     $ sf api-keys ls
 ```
 
-_See code: [src/commands/api-keys/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/api-keys/list.ts)_
+_See code: [src/commands/api-keys/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/api-keys/list.ts)_
 
 ## `sf api-keys revoke ID`
 
@@ -552,7 +606,8 @@ Revoke an API key.
 
 ```text
 USAGE
-  $ sf api-keys revoke ID [--profile <value>] [-y]
+  $ sf api-keys revoke ID [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   ID  API key id.
@@ -560,7 +615,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke an API key.
@@ -578,7 +638,7 @@ EXAMPLES
     $ sf api-keys revoke key_123
 ```
 
-_See code: [src/commands/api-keys/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/api-keys/revoke.ts)_
+_See code: [src/commands/api-keys/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/api-keys/revoke.ts)_
 
 ## `sf apply`
 
@@ -586,13 +646,18 @@ Apply saved changes to the live runtime.
 
 ```text
 USAGE
-  $ sf apply [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>]
+  $ sf apply [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -613,7 +678,7 @@ EXAMPLES
     $ sf apply --space docs --no-wait
 ```
 
-_See code: [src/commands/apply.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/apply.ts)_
+_See code: [src/commands/apply.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/apply.ts)_
 
 ## `sf auth`
 
@@ -621,12 +686,17 @@ Authenticate the CLI.
 
 ```text
 USAGE
-  $ sf auth [--profile <value>] [-y]
+  $ sf auth [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Authenticate the CLI.
@@ -637,7 +707,7 @@ EXAMPLES
   $ sf auth login
 ```
 
-_See code: [src/commands/auth.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/auth.ts)_
+_See code: [src/commands/auth.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/auth.ts)_
 
 ## `sf autocomplete [SHELL]`
 
@@ -676,9 +746,9 @@ Build and pack project output.
 
 ```text
 USAGE
-  $ sf build [DIR] [--profile <value>] [-y]
-    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
-    [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--skip-install]
+  $ sf build [DIR] [--profile <value>] [-y] [--rationale
+    <value>] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
+    <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--skip-install]
     [--skip-build] [--prebuilt] [--output <value>] [--dry-run] [--stream]
 
 ARGUMENTS
@@ -687,6 +757,7 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
@@ -707,6 +778,10 @@ EXECUTION FLAGS
   --output=<value>  [default: .spacefast/build-output.tgz] Archive path to write.
   --[no-]stream     With --json, emit a JSONL build event stream. Use --no-stream for a single result blob.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Build and pack project output.
 
@@ -723,7 +798,7 @@ EXAMPLES
     $ sf build --root-directory apps/web --output ./apps/web.tgz
 ```
 
-_See code: [src/commands/build.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/build.ts)_
+_See code: [src/commands/build.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/build.ts)_
 
 ## `sf builds cancel BUILD`
 
@@ -731,7 +806,8 @@ Cancel a build.
 
 ```text
 USAGE
-  $ sf builds cancel BUILD [--profile <value>] [-y]
+  $ sf builds cancel BUILD [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
@@ -739,20 +815,23 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Cancel a build.
 
-  Cancel a build. Idempotent: terminal builds are returned unchanged in their terminal state.
+  Cancel a build. Idempotent: a build already in a terminal state is returned unchanged.
 
 EXAMPLES
-  Cancel a build.
-
-    $ sf builds cancel bld_123
+  $ sf builds cancel bld_123
 ```
 
-_See code: [src/commands/builds/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/cancel.ts)_
+_See code: [src/commands/builds/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/cancel.ts)_
 
 ## `sf builds detect`
 
@@ -760,13 +839,14 @@ Detect framework and build settings.
 
 ```text
 USAGE
-  $ sf builds detect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--root-directory
-    <value>] [--apply-best]
+  $ sf builds detect [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>]
+    [--root-directory <value>] [--apply-best]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
@@ -777,6 +857,10 @@ REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
   --ref=<value>               Git ref to inspect.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Detect framework and build settings.
@@ -794,7 +878,7 @@ EXAMPLES
     $ sf builds detect --space docs --root-directory apps/web --apply-best
 ```
 
-_See code: [src/commands/builds/detect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/detect.ts)_
+_See code: [src/commands/builds/detect.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/detect.ts)_
 
 ## `sf builds get BUILD`
 
@@ -802,7 +886,8 @@ Show a build.
 
 ```text
 USAGE
-  $ sf builds get BUILD [--profile <value>] [-y]
+  $ sf builds get BUILD [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
@@ -810,7 +895,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show a build.
@@ -823,7 +913,7 @@ EXAMPLES
     $ sf builds get bld_123
 ```
 
-_See code: [src/commands/builds/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/get.ts)_
+_See code: [src/commands/builds/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/get.ts)_
 
 ## `sf builds logs BUILD`
 
@@ -831,8 +921,8 @@ Print build logs.
 
 ```text
 USAGE
-  $ sf builds logs BUILD [--profile <value>] [-y] [--limit
-    <value>] [--cursor <value>] [-f]
+  $ sf builds logs BUILD [--profile <value>] [-y] [--rationale
+    <value>] [--limit <value>] [--cursor <value>] [-f]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
@@ -845,7 +935,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Print build logs.
@@ -862,7 +957,7 @@ EXAMPLES
     $ sf builds logs bld_123 --follow
 ```
 
-_See code: [src/commands/builds/logs.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/logs.ts)_
+_See code: [src/commands/builds/logs.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/logs.ts)_
 
 ## `sf builds ls`
 
@@ -870,8 +965,8 @@ List builds.
 
 ```text
 USAGE
-  $ sf builds ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
+  $ sf builds ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 FLAGS
   --cursor=<value>  Pagination cursor from a previous response.
@@ -880,7 +975,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List builds.
@@ -900,7 +1000,7 @@ EXAMPLES
     $ sf builds ls --space docs --limit 5
 ```
 
-_See code: [src/commands/builds/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/ls.ts)_
+_See code: [src/commands/builds/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/ls.ts)_
 
 ## `sf builds resume-upload BUILD`
 
@@ -908,7 +1008,8 @@ Refresh source archive upload.
 
 ```text
 USAGE
-  $ sf builds resume-upload BUILD [--profile <value>] [-y]
+  $ sf builds resume-upload BUILD [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   BUILD  Build ID (bld_...) waiting for source archive upload.
@@ -916,12 +1017,17 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Refresh source archive upload.
 
-  Refresh the source archive upload instruction for a build that is waiting for source archive upload.
+  Refresh the upload instruction for a build waiting on its source archive.
 
 EXAMPLES
   Refresh the source archive upload instruction for a build.
@@ -929,7 +1035,7 @@ EXAMPLES
     $ sf builds resume-upload bld_123
 ```
 
-_See code: [src/commands/builds/resume-upload.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/resume-upload.ts)_
+_See code: [src/commands/builds/resume-upload.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/resume-upload.ts)_
 
 ## `sf builds retry BUILD`
 
@@ -937,7 +1043,8 @@ Retry a terminal build.
 
 ```text
 USAGE
-  $ sf builds retry BUILD [--profile <value>] [-y]
+  $ sf builds retry BUILD [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   BUILD  Build ID (bld_...) to retry.
@@ -945,7 +1052,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Retry a terminal build.
@@ -953,12 +1065,10 @@ DESCRIPTION
   Retry a terminal build with the same input, settings, and target.
 
 EXAMPLES
-  Retry a terminal build.
-
-    $ sf builds retry bld_123
+  $ sf builds retry bld_123
 ```
 
-_See code: [src/commands/builds/retry.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/builds/retry.ts)_
+_See code: [src/commands/builds/retry.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/builds/retry.ts)_
 
 ## `sf channels`
 
@@ -966,20 +1076,30 @@ Manage channels.
 
 ```text
 USAGE
-  $ sf channels [--profile <value>] [-y]
+  $ sf channels [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage channels.
 
   List channels and inspect their promotion history.
+
+EXAMPLES
+  Manage channels.
+
+    $ sf channels
 ```
 
-_See code: [src/commands/channels.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/channels.ts)_
+_See code: [src/commands/channels.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/channels.ts)_
 
 ## `sf channels history [NAME]`
 
@@ -987,7 +1107,7 @@ Show channel history.
 
 ```text
 USAGE
-  $ sf channels history [NAME] [--profile <value>] [-y] [--claim-token
+  $ sf channels history [NAME] [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -996,7 +1116,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show channel history.
@@ -1013,7 +1138,7 @@ EXAMPLES
     $ sf channels history preview --space docs
 ```
 
-_See code: [src/commands/channels/history.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/channels/history.ts)_
+_See code: [src/commands/channels/history.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/channels/history.ts)_
 
 ## `sf channels ls`
 
@@ -1021,13 +1146,18 @@ List channels.
 
 ```text
 USAGE
-  $ sf channels ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf channels ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List channels.
@@ -1043,7 +1173,7 @@ EXAMPLES
     $ sf channels ls --space docs
 ```
 
-_See code: [src/commands/channels/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/channels/ls.ts)_
+_See code: [src/commands/channels/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/channels/ls.ts)_
 
 ## `sf comments`
 
@@ -1057,9 +1187,14 @@ DESCRIPTION
   Manage comments.
 
   List, export, and update persistent Space comments, and set where Comments run.
+
+EXAMPLES
+  Manage comments.
+
+    $ sf comments
 ```
 
-_See code: [src/commands/comments.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments.ts)_
+_See code: [src/commands/comments.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments.ts)_
 
 ## `sf comments archive COMMENT`
 
@@ -1067,7 +1202,7 @@ Archive a comment.
 
 ```text
 USAGE
-  $ sf comments archive COMMENT [--profile <value>] [-y] [--claim-token
+  $ sf comments archive COMMENT [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -1076,7 +1211,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Archive a comment.
@@ -1084,12 +1224,10 @@ DESCRIPTION
   Archive a comment thread.
 
 EXAMPLES
-  Archive a comment thread.
-
-    $ sf comments archive cmt_123
+  $ sf comments archive cmt_123
 ```
 
-_See code: [src/commands/comments/archive.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/archive.ts)_
+_See code: [src/commands/comments/archive.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/archive.ts)_
 
 ## `sf comments export`
 
@@ -1097,8 +1235,9 @@ Export comments.
 
 ```text
 USAGE
-  $ sf comments export [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--format markdown|json] [--status open|archived]
+  $ sf comments export [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--version <value>] [--format markdown|json] [--status
+    open|archived]
 
 FLAGS
   --format=<option>  [default: markdown] Export format.
@@ -1110,7 +1249,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Export comments.
@@ -1127,7 +1271,7 @@ EXAMPLES
     $ sf comments export --version v3 --status open --format json
 ```
 
-_See code: [src/commands/comments/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/export.ts)_
+_See code: [src/commands/comments/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/export.ts)_
 
 ## `sf comments get COMMENT`
 
@@ -1135,7 +1279,7 @@ Show a comment.
 
 ```text
 USAGE
-  $ sf comments get COMMENT [--profile <value>] [-y] [--claim-token
+  $ sf comments get COMMENT [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -1144,7 +1288,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show a comment.
@@ -1152,12 +1301,10 @@ DESCRIPTION
   Show one comment thread.
 
 EXAMPLES
-  Show one comment thread.
-
-    $ sf comments get cmt_123
+  $ sf comments get cmt_123
 ```
 
-_See code: [src/commands/comments/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/get.ts)_
+_See code: [src/commands/comments/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/get.ts)_
 
 ## `sf comments list`
 
@@ -1165,9 +1312,9 @@ List comments.
 
 ```text
 USAGE
-  $ sf comments list [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--status open|archived] [--path <value>] [--limit
-    <value>]
+  $ sf comments list [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--version <value>] [--status open|archived] [--path <value>]
+    [--limit <value>]
 
 FLAGS
   --limit=<value>    Maximum comments to return.
@@ -1179,7 +1326,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List comments.
@@ -1199,7 +1351,7 @@ EXAMPLES
     $ sf comments list --version v3
 ```
 
-_See code: [src/commands/comments/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/list.ts)_
+_See code: [src/commands/comments/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/list.ts)_
 
 ## `sf comments reply COMMENT`
 
@@ -1208,7 +1360,7 @@ Reply to a comment.
 ```text
 USAGE
   $ sf comments reply COMMENT --body <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+    [--rationale <value>] [-o <value>] [--space <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   COMMENT  Comment id, for example cmt_123.
@@ -1220,7 +1372,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Reply to a comment.
@@ -1228,12 +1385,10 @@ DESCRIPTION
   Reply to a comment thread.
 
 EXAMPLES
-  Reply to a comment thread.
-
-    $ sf comments reply cmt_123 --body "Fixed in v4."
+  $ sf comments reply cmt_123 --body "Fixed in v4."
 ```
 
-_See code: [src/commands/comments/reply.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/reply.ts)_
+_See code: [src/commands/comments/reply.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/reply.ts)_
 
 ## `sf comments settings`
 
@@ -1241,13 +1396,18 @@ Show Comments settings.
 
 ```text
 USAGE
-  $ sf comments settings [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments settings [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show Comments settings.
@@ -1261,7 +1421,7 @@ EXAMPLES
     $ sf comments settings
 ```
 
-_See code: [src/commands/comments/settings.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/settings.ts)_
+_See code: [src/commands/comments/settings.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/settings.ts)_
 
 ## `sf comments settings set`
 
@@ -1269,18 +1429,23 @@ Change Comments settings.
 
 ```text
 USAGE
-  $ sf comments settings set [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--surface off|previews|everywhere] [--embed-allow <value>...]
-    [--embed-remove <value>...]
+  $ sf comments settings set [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--surface off|previews|everywhere] [--embed-allow
+    <value>...] [--embed-remove <value>...]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EMBEDDING FLAGS
   --embed-allow=<value>...   Site allowed to embed this Space's Comments, e.g. https://docs.example.com.
   --embed-remove=<value>...  Site to cut off from embedding this Space's Comments.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 COMMENTS FLAGS
   --surface=<option>  Where Comments run: off, previews, or everywhere.
@@ -1306,7 +1471,7 @@ EXAMPLES
     $ sf comments settings set --embed-remove https://docs.example.com
 ```
 
-_See code: [src/commands/comments/settings/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/settings/set.ts)_
+_See code: [src/commands/comments/settings/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/settings/set.ts)_
 
 ## `sf comments unarchive COMMENT`
 
@@ -1314,7 +1479,7 @@ Unarchive a comment.
 
 ```text
 USAGE
-  $ sf comments unarchive COMMENT [--profile <value>] [-y] [--claim-token
+  $ sf comments unarchive COMMENT [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -1323,7 +1488,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Unarchive a comment.
@@ -1331,12 +1501,10 @@ DESCRIPTION
   Unarchive a comment thread.
 
 EXAMPLES
-  Unarchive a comment thread.
-
-    $ sf comments unarchive cmt_123
+  $ sf comments unarchive cmt_123
 ```
 
-_See code: [src/commands/comments/unarchive.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/comments/unarchive.ts)_
+_See code: [src/commands/comments/unarchive.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/comments/unarchive.ts)_
 
 ## `sf continue`
 
@@ -1344,12 +1512,18 @@ Continue publishing after claim.
 
 ```text
 USAGE
-  $ sf continue [--profile <value>] [-y]
+  $ sf continue [--profile <value>] [-y] [--rationale <value>]
+
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Continue publishing after claim.
@@ -1362,7 +1536,7 @@ EXAMPLES
     $ sf continue
 ```
 
-_See code: [src/commands/continue.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/continue.ts)_
+_See code: [src/commands/continue.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/continue.ts)_
 
 ## `sf crons`
 
@@ -1370,20 +1544,30 @@ Manage scheduled jobs.
 
 ```text
 USAGE
-  $ sf crons [--profile <value>] [-y]
+  $ sf crons [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage scheduled jobs.
 
   Inspect and exercise a space's scheduled jobs.
+
+EXAMPLES
+  Manage scheduled jobs.
+
+    $ sf crons
 ```
 
-_See code: [src/commands/crons.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons.ts)_
+_See code: [src/commands/crons.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/crons.ts)_
 
 ## `sf crons ls`
 
@@ -1391,13 +1575,18 @@ List scheduled jobs.
 
 ```text
 USAGE
-  $ sf crons ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf crons ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List scheduled jobs.
@@ -1414,7 +1603,7 @@ EXAMPLES
     $ sf crons ls --space docs
 ```
 
-_See code: [src/commands/crons/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons/ls.ts)_
+_See code: [src/commands/crons/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/crons/ls.ts)_
 
 ## `sf crons run TARGET`
 
@@ -1422,7 +1611,7 @@ Run a scheduled job now.
 
 ```text
 USAGE
-  $ sf crons run TARGET [--profile <value>] [-y] [--claim-token
+  $ sf crons run TARGET [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--header <value>...]
 
 ARGUMENTS
@@ -1434,14 +1623,19 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Run a scheduled job now.
 
-  Requests the declared path over HTTPS right now, so you can see what the schedule sees without waiting for it. This is
-  the same request minus the platform's own cron header, which only the schedule can send: a handler that checks
-  CRON_SECRET still needs --header 'authorization: Bearer <secret>'. Exits non-zero when the path answers 400 or worse.
+  Request the declared path over HTTPS now, without waiting for the schedule. The platform's own cron header cannot be
+  sent, so a handler that checks CRON_SECRET needs --header 'authorization: Bearer <secret>'. Exits non-zero when the
+  path answers 400 or worse.
 
 EXAMPLES
   Request the path declared for the digest job.
@@ -1453,7 +1647,7 @@ EXAMPLES
     $ sf crons run api-digest --header "authorization: Bearer $CRON_SECRET"
 ```
 
-_See code: [src/commands/crons/run.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/crons/run.ts)_
+_See code: [src/commands/crons/run.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/crons/run.ts)_
 
 ## `sf db [TARGET]`
 
@@ -1461,8 +1655,8 @@ Inspect a space's database.
 
 ```text
 USAGE
-  $ sf db [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
+  $ sf db [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -1470,11 +1664,16 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Read from a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect a space's database.
@@ -1495,7 +1694,7 @@ EXAMPLES
     $ sf db --port 8787
 ```
 
-_See code: [src/commands/db.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/db.ts)_
+_See code: [src/commands/db.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/db.ts)_
 
 ## `sf db console [TARGET]`
 
@@ -1503,8 +1702,8 @@ Open a database console.
 
 ```text
 USAGE
-  $ sf db console [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--show-secret]
+  $ sf db console [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--show-secret]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -1512,7 +1711,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 OPEN FLAGS
   --show-secret  Print the single-use console URL instead of opening it.
@@ -1520,8 +1724,8 @@ OPEN FLAGS
 DESCRIPTION
   Open a database console.
 
-  Open a phpMyAdmin console on the space's own database — the escape hatch for anything `sf db` and `sf db dump` cannot
-  answer. The URL grants full SQL authority, so it is opened rather than printed unless you ask for it.
+  Open a phpMyAdmin console on the space's database, for anything `sf db` and `sf db dump` cannot answer. The URL grants
+  full SQL authority, so it opens in a browser instead of printing.
 
 EXAMPLES
   Open the console in a browser.
@@ -1533,7 +1737,7 @@ EXAMPLES
     $ sf db console --show-secret
 ```
 
-_See code: [src/commands/db/console.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/db/console.ts)_
+_See code: [src/commands/db/console.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/db/console.ts)_
 
 ## `sf db dump [TARGET]`
 
@@ -1541,9 +1745,9 @@ Dump database rows.
 
 ```text
 USAGE
-  $ sf db dump [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--table <value>]
-    [--limit <value>]
+  $ sf db dump [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--table
+    <value>] [--limit <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -1551,6 +1755,7 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
@@ -1558,6 +1763,10 @@ RUNTIME FLAGS
   --local-url=<value>  Read from a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
   --table=<value>      Restrict the dump to one table.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Dump database rows.
@@ -1574,7 +1783,7 @@ EXAMPLES
     $ sf db dump --table todos --limit 100
 ```
 
-_See code: [src/commands/db/dump.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/db/dump.ts)_
+_See code: [src/commands/db/dump.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/db/dump.ts)_
 
 ## `sf db export [TARGET]`
 
@@ -1582,8 +1791,9 @@ Export a complete database backup.
 
 ```text
 USAGE
-  $ sf db export [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--out <value>]
+  $ sf db export [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--out
+    <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -1591,6 +1801,7 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
@@ -1599,6 +1810,10 @@ RUNTIME FLAGS
 
 OUTPUT FLAGS
   --out=<value>  Backup file path (default spacefast-backup-<space>-<timestamp>.json).
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Export a complete database backup.
@@ -1620,7 +1835,7 @@ EXAMPLES
     $ sf db export --port 8787
 ```
 
-_See code: [src/commands/db/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/db/export.ts)_
+_See code: [src/commands/db/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/db/export.ts)_
 
 ## `sf db migrate [SOURCE]`
 
@@ -1628,8 +1843,8 @@ Apply database schema migrations.
 
 ```text
 USAGE
-  $ sf db migrate [SOURCE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--previous-artifact <value>] [--drop | --rename]
+  $ sf db migrate [SOURCE] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--previous-artifact <value>] [--drop | --rename]
 
 ARGUMENTS
   [SOURCE]  [default: .] Capsule source directory.
@@ -1637,12 +1852,17 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --drop                       Allow the planned migration to include explicit drop operations.
   --previous-artifact=<value>  Diff against this artifact or finalize payload instead of the live schema.
   --rename                     Allow the planned migration to include explicit rename operations.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Apply database schema migrations.
@@ -1660,60 +1880,7 @@ EXAMPLES
     $ sf db migrate --drop
 ```
 
-_See code: [src/commands/db/migrate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/db/migrate.ts)_
-
-## `sf demo`
-
-Run Spacefast demos.
-
-```text
-USAGE
-  $ sf demo
-
-DESCRIPTION
-  Run Spacefast demos.
-
-  Run local Spacefast demonstrations. Use `spacefast demo agent` for the agent/MCP dogfood check.
-```
-
-_See code: [src/commands/demo.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/demo.ts)_
-
-## `sf demo agent`
-
-Run the local agent/MCP dogfood demo.
-
-```text
-USAGE
-  $ sf demo agent [--profile <value>] [-y] [--port <value>]
-    [--publish]
-
-FLAGS
-  --port=<value>  Temporary On-Device MCP HTTP port for the demo.
-  --publish       Keep the generated workspace and print the publish command. Does not publish without an explicit later
-                  `sf publish`.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Run the local agent/MCP dogfood demo.
-
-  Run a local dogfood check for Spacefast agent UX: On-Device MCP health, generated API operations, and local
-  publishing.
-
-EXAMPLES
-  Run the local agent/MCP dogfood demo.
-
-    $ sf demo agent
-
-  Keep the generated workspace and print the publish command.
-
-    $ sf demo agent --publish
-```
-
-_See code: [src/commands/demo/agent.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/demo/agent.ts)_
+_See code: [src/commands/db/migrate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/db/migrate.ts)_
 
 ## `sf design`
 
@@ -1721,20 +1888,30 @@ Generate design files from DESIGN.md.
 
 ```text
 USAGE
-  $ sf design [--profile <value>] [-y]
+  $ sf design [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Generate design files from DESIGN.md.
 
   Generate committed presentation files (theme.json and _layout.html) from an authoring-time DESIGN.md.
+
+EXAMPLES
+  Generate design files from DESIGN.md.
+
+    $ sf design
 ```
 
-_See code: [src/commands/design.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/design.ts)_
+_See code: [src/commands/design.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/design.ts)_
 
 ## `sf design generate`
 
@@ -1742,7 +1919,8 @@ Generate theme and layout files from DESIGN.md.
 
 ````text
 USAGE
-  $ sf design generate [--profile <value>] [-y] [-f]
+  $ sf design generate [--profile <value>] [-y] [--rationale <value>]
+    [-f]
 
 EXECUTION FLAGS
   -f, --force  Overwrite existing generated files.
@@ -1750,7 +1928,12 @@ EXECUTION FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Generate theme and layout files from DESIGN.md.
@@ -1769,7 +1952,7 @@ EXAMPLES
     $ sf design generate --force
 ````
 
-_See code: [src/commands/design/generate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/design/generate.ts)_
+_See code: [src/commands/design/generate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/design/generate.ts)_
 
 ## `sf dev`
 
@@ -1777,9 +1960,9 @@ Start the local dev server.
 
 ```text
 USAGE
-  $ sf dev [--profile <value>] [-y] [-p <value>] [-d
-    <value>] [--host <value>] [--allow-network] [--state-backend memory|sqlite|mysql] [--watch] [--watch-interval
-    <value>] [--dry-run]
+  $ sf dev [--profile <value>] [-y] [--rationale <value>]
+    [-p <value>] [-d <value>] [--host <value>] [--allow-network] [--state-backend memory|sqlite|mysql] [--watch]
+    [--watch-interval <value>] [--dry-run]
 
 FLAGS
   -d, --dir=<value>   [default: .] Project directory.
@@ -1788,6 +1971,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
@@ -1799,14 +1983,23 @@ RUNTIME FLAGS
   --[no-]watch              Poll source files and reload the runtime after changes.
   --watch-interval=<value>  [default: 1000] Source polling interval in milliseconds.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Start the local dev server.
 
   Run this project locally. A zero runtime starts the capsule dev server; anything else previews Pages with sample data
   and the publish-time expander.
+
+EXAMPLES
+  Start the local dev server.
+
+    $ sf dev
 ```
 
-_See code: [src/commands/dev.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/dev.ts)_
+_See code: [src/commands/dev.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/dev.ts)_
 
 ## `sf docs [QUERY]`
 
@@ -1814,8 +2007,8 @@ Search the bundled docs (offline).
 
 ```text
 USAGE
-  $ sf docs [QUERY...] [--profile <value>] [-y] [--full]
-    [--all]
+  $ sf docs [QUERY...] [--profile <value>] [-y]
+    [--rationale <value>] [--full] [--all]
 
 ARGUMENTS
   [QUERY...]  Search terms, or an exact topic slug to print (e.g. `publish`).
@@ -1823,17 +2016,21 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DISCLOSURE FLAGS
   --all   Include every doc, reference tier included.
   --full  Include full-tier docs (everything but advanced reference).
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Search the bundled docs (offline).
 
-  Search the bundled Spacefast docs offline — guides, CLI, API reference, and recipes. Essential topics show by default;
-  pass --full or --all to widen. An exact topic slug prints that page.
+  Search the bundled docs offline: guides, CLI, API reference, and recipes. An exact topic slug prints that page.
 
 EXAMPLES
   List the essential docs.
@@ -1857,7 +2054,7 @@ EXAMPLES
     $ sf docs --all --json
 ```
 
-_See code: [src/commands/docs.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/docs.ts)_
+_See code: [src/commands/docs.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/docs.ts)_
 
 ## `sf doctor`
 
@@ -1865,13 +2062,18 @@ Diagnose Spacefast CLI setup.
 
 ```text
 USAGE
-  $ sf doctor [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf doctor [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Diagnose Spacefast CLI setup.
@@ -1888,7 +2090,7 @@ EXAMPLES
     $ sf doctor --space docs
 ```
 
-_See code: [src/commands/doctor.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/doctor.ts)_
+_See code: [src/commands/doctor.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/doctor.ts)_
 
 ## `sf domains`
 
@@ -1896,20 +2098,30 @@ Manage domains.
 
 ```text
 USAGE
-  $ sf domains [--profile <value>] [-y]
+  $ sf domains [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage domains.
 
   Manage space domains.
+
+EXAMPLES
+  Manage domains.
+
+    $ sf domains
 ```
 
-_See code: [src/commands/domains.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains.ts)_
+_See code: [src/commands/domains.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains.ts)_
 
 ## `sf domains add HOSTNAME`
 
@@ -1917,9 +2129,9 @@ Attach a domain.
 
 ```text
 USAGE
-  $ sf domains add HOSTNAME [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--redirect-to <value>
-    --role standard|redirect] [--redirect-status 301|302|307|308 ]
+  $ sf domains add HOSTNAME [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--redirect-to
+    <value> --role standard|primary|redirect] [--redirect-status 301|302|307|308 ]
 
 ARGUMENTS
   HOSTNAME  Hostname to attach.
@@ -1927,14 +2139,19 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DOMAIN BEHAVIOR FLAGS
   --redirect-status=<option>  HTTP status for redirect domains.
                               <options: 301|302|307|308>
   --redirect-to=<value>       Destination for redirect domains.
-  --role=<option>             How the domain should behave.
-                              <options: standard|redirect>
+  --role=<option>             How the domain should behave; primary makes it the space's main address.
+                              <options: standard|primary|redirect>
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -1953,12 +2170,16 @@ EXAMPLES
 
     $ sf domains add example.com --space docs
 
+  Attach a domain and make it the space's primary address.
+
+    $ sf domains add example.com --space docs --role primary
+
   Attach a redirect domain.
 
     $ sf domains add www.example.com --space docs --role redirect --redirect-to example.com
 ```
 
-_See code: [src/commands/domains/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/add.ts)_
+_See code: [src/commands/domains/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/add.ts)_
 
 ## `sf domains check DOMAIN`
 
@@ -1966,7 +2187,7 @@ Check a domain.
 
 ```text
 USAGE
-  $ sf domains check DOMAIN [--profile <value>] [-y] [--claim-token
+  $ sf domains check DOMAIN [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
@@ -1975,7 +2196,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -1992,7 +2218,7 @@ EXAMPLES
     $ sf domains check example.com --space docs
 ```
 
-_See code: [src/commands/domains/check.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/check.ts)_
+_See code: [src/commands/domains/check.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/check.ts)_
 
 ## `sf domains diagnostics DOMAIN`
 
@@ -2000,7 +2226,7 @@ Inspect domain diagnostics.
 
 ```text
 USAGE
-  $ sf domains diagnostics DOMAIN [--profile <value>] [-y] [--claim-token
+  $ sf domains diagnostics DOMAIN [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -2009,7 +2235,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect domain diagnostics.
@@ -2017,12 +2248,10 @@ DESCRIPTION
   Read live DNS and SSL diagnostics for an attached domain.
 
 EXAMPLES
-  Read live DNS and SSL diagnostics for an attached domain.
-
-    $ sf domains diagnostics app.example.com --space docs
+  $ sf domains diagnostics app.example.com --space docs
 ```
 
-_See code: [src/commands/domains/diagnostics.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/diagnostics.ts)_
+_See code: [src/commands/domains/diagnostics.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/diagnostics.ts)_
 
 ## `sf domains dns`
 
@@ -2030,21 +2259,31 @@ Manage domain DNS records.
 
 ```text
 USAGE
-  $ sf domains dns [--profile <value>] [-y]
+  $ sf domains dns [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage domain DNS records.
 
   Manage DNS records for a domain zone. See `domains dns ls`, `capabilities`, `refresh`, `add`, `update`, `rm`, `batch`,
   and `export`.
+
+EXAMPLES
+  Manage domain DNS records.
+
+    $ sf domains dns
 ```
 
-_See code: [src/commands/domains/dns.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns.ts)_
+_See code: [src/commands/domains/dns.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns.ts)_
 
 ## `sf domains dns add DOMAIN`
 
@@ -2052,9 +2291,9 @@ Add a DNS record.
 
 ```text
 USAGE
-  $ sf domains dns add DOMAIN [--profile <value>] [-y] [--type
-    A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl <value>] [--priority <value>] [-o
-    <value>]
+  $ sf domains dns add DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [--type A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl <value>]
+    [--priority <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2070,7 +2309,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Add a DNS record.
@@ -2084,7 +2328,7 @@ EXAMPLES
   $ sf domains dns add example.com --type MX --name @ --value mail.example.com --priority 10
 ```
 
-_See code: [src/commands/domains/dns/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/add.ts)_
+_See code: [src/commands/domains/dns/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/add.ts)_
 
 ## `sf domains dns batch DOMAIN`
 
@@ -2092,8 +2336,8 @@ Apply a DNS record batch.
 
 ```text
 USAGE
-  $ sf domains dns batch DOMAIN -i <value> [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains dns batch DOMAIN -i <value> [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2104,7 +2348,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Apply a DNS record batch.
@@ -2117,7 +2366,7 @@ EXAMPLES
   $ sf domains dns batch example.com --input '{"posts":[{"type":"TXT","name":"@","value":"v=spf1 -all"}]}'
 ```
 
-_See code: [src/commands/domains/dns/batch.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/batch.ts)_
+_See code: [src/commands/domains/dns/batch.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/batch.ts)_
 
 ## `sf domains dns capabilities DOMAIN`
 
@@ -2125,8 +2374,8 @@ Show DNS capabilities.
 
 ```text
 USAGE
-  $ sf domains dns capabilities DOMAIN [--profile <value>] [-y] [-o
-  <value>]
+  $ sf domains dns capabilities DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2134,7 +2383,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show DNS capabilities.
@@ -2142,12 +2396,10 @@ DESCRIPTION
   Show DNS provider capabilities for a domain.
 
 EXAMPLES
-  Show DNS provider capabilities for a domain.
-
-    $ sf domains dns capabilities example.com
+  $ sf domains dns capabilities example.com
 ```
 
-_See code: [src/commands/domains/dns/capabilities.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/capabilities.ts)_
+_See code: [src/commands/domains/dns/capabilities.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/capabilities.ts)_
 
 ## `sf domains dns export DOMAIN`
 
@@ -2155,7 +2407,8 @@ Export the DNS zone.
 
 ```text
 USAGE
-  $ sf domains dns export DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains dns export DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2163,7 +2416,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Export the DNS zone.
@@ -2176,7 +2434,7 @@ EXAMPLES
     $ sf domains dns export example.com
 ```
 
-_See code: [src/commands/domains/dns/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/export.ts)_
+_See code: [src/commands/domains/dns/export.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/export.ts)_
 
 ## `sf domains dns ls DOMAIN`
 
@@ -2184,8 +2442,8 @@ List DNS records.
 
 ```text
 USAGE
-  $ sf domains dns ls DOMAIN [--profile <value>] [-y] [-o <value>]
-    [--limit <value>] [--cursor <value>]
+  $ sf domains dns ls DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2197,7 +2455,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List DNS records.
@@ -2213,7 +2476,7 @@ EXAMPLES
     $ sf domains dns ls example.com
 ```
 
-_See code: [src/commands/domains/dns/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/ls.ts)_
+_See code: [src/commands/domains/dns/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/ls.ts)_
 
 ## `sf domains dns refresh DOMAIN`
 
@@ -2221,7 +2484,8 @@ Refresh DNS provider snapshot.
 
 ```text
 USAGE
-  $ sf domains dns refresh DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains dns refresh DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2229,7 +2493,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Refresh DNS provider snapshot.
@@ -2242,7 +2511,7 @@ EXAMPLES
     $ sf domains dns refresh example.com
 ```
 
-_See code: [src/commands/domains/dns/refresh.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/refresh.ts)_
+_See code: [src/commands/domains/dns/refresh.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/refresh.ts)_
 
 ## `sf domains dns rm DOMAIN RECORD`
 
@@ -2250,8 +2519,8 @@ Delete a DNS record.
 
 ```text
 USAGE
-  $ sf domains dns rm DOMAIN RECORD [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains dns rm DOMAIN RECORD [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2260,7 +2529,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Delete a DNS record.
@@ -2277,7 +2551,7 @@ EXAMPLES
     $ sf domains dns rm example.com rec_123
 ```
 
-_See code: [src/commands/domains/dns/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/rm.ts)_
+_See code: [src/commands/domains/dns/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/rm.ts)_
 
 ## `sf domains dns update DOMAIN RECORD`
 
@@ -2285,9 +2559,9 @@ Update a DNS record.
 
 ```text
 USAGE
-  $ sf domains dns update DOMAIN RECORD [--profile <value>] [-y] [--type
-    A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl <value>] [--priority <value>] [-o
-    <value>]
+  $ sf domains dns update DOMAIN RECORD [--profile <value>] [-y]
+    [--rationale <value>] [--type A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl
+    <value>] [--priority <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2304,7 +2578,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Update a DNS record.
@@ -2317,7 +2596,7 @@ EXAMPLES
     $ sf domains dns update example.com rec_123 --value 1.2.3.4 --ttl 3600
 ```
 
-_See code: [src/commands/domains/dns/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/dns/update.ts)_
+_See code: [src/commands/domains/dns/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/dns/update.ts)_
 
 ## `sf domains ls`
 
@@ -2325,13 +2604,18 @@ List space domains.
 
 ```text
 USAGE
-  $ sf domains ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf domains ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List space domains.
@@ -2342,12 +2626,10 @@ ALIASES
   $ sf domains list
 
 EXAMPLES
-  List domains attached to a space.
-
-    $ sf domains ls --space docs
+  $ sf domains ls --space docs
 ```
 
-_See code: [src/commands/domains/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/ls.ts)_
+_See code: [src/commands/domains/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/ls.ts)_
 
 ## `sf domains nameservers DOMAIN`
 
@@ -2355,7 +2637,8 @@ Show domain nameservers.
 
 ```text
 USAGE
-  $ sf domains nameservers DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains nameservers DOMAIN [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -2363,7 +2646,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show domain nameservers.
@@ -2376,7 +2664,7 @@ EXAMPLES
     $ sf domains nameservers example.com
 ```
 
-_See code: [src/commands/domains/nameservers.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/nameservers.ts)_
+_See code: [src/commands/domains/nameservers.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/nameservers.ts)_
 
 ## `sf domains nameservers set DOMAIN NAMESERVERS`
 
@@ -2384,8 +2672,8 @@ Set domain nameservers.
 
 ```text
 USAGE
-  $ sf domains nameservers set DOMAIN NAMESERVERS [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains nameservers set DOMAIN NAMESERVERS [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   DOMAIN       Domain ID or hostname.
@@ -2394,7 +2682,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Set domain nameservers.
@@ -2406,7 +2699,7 @@ EXAMPLES
   $ sf domains nameservers set example.com ns1.example-dns.com,ns2.example-dns.com
 ```
 
-_See code: [src/commands/domains/nameservers/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/nameservers/set.ts)_
+_See code: [src/commands/domains/nameservers/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/nameservers/set.ts)_
 
 ## `sf domains rm DOMAIN`
 
@@ -2414,7 +2707,7 @@ Remove a domain.
 
 ```text
 USAGE
-  $ sf domains rm DOMAIN [--profile <value>] [-y] [--claim-token
+  $ sf domains rm DOMAIN [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--wait]
 
 ARGUMENTS
@@ -2423,7 +2716,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -2443,7 +2741,7 @@ EXAMPLES
     $ sf domains rm example.com --space docs
 ```
 
-_See code: [src/commands/domains/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/rm.ts)_
+_See code: [src/commands/domains/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/rm.ts)_
 
 ## `sf domains search [QUERY]`
 
@@ -2451,8 +2749,8 @@ Search domain names.
 
 ```text
 USAGE
-  $ sf domains search [QUERY] [--profile <value>] [-y]
-    [--interactive] [--limit <value>]
+  $ sf domains search [QUERY] [--profile <value>] [-y] [--rationale
+    <value>] [--interactive] [--limit <value>]
 
 ARGUMENTS
   [QUERY]  Brand, idea, or full domain to search.
@@ -2464,7 +2762,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Search domain names.
@@ -2481,7 +2784,7 @@ EXAMPLES
     $ sf domains search acme --interactive
 ```
 
-_See code: [src/commands/domains/search.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/domains/search.ts)_
+_See code: [src/commands/domains/search.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/domains/search.ts)_
 
 ## `sf env`
 
@@ -2489,20 +2792,30 @@ Manage env vars.
 
 ```text
 USAGE
-  $ sf env [--profile <value>] [-y]
+  $ sf env [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage env vars.
 
   Manage space environment variables.
+
+EXAMPLES
+  Manage env vars.
+
+    $ sf env
 ```
 
-_See code: [src/commands/env.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env.ts)_
+_See code: [src/commands/env.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env.ts)_
 
 ## `sf env export-template [DIR]`
 
@@ -2510,8 +2823,8 @@ Create a dotenv import template from platform config.
 
 ```text
 USAGE
-  $ sf env export-template [DIR] [--profile <value>] [-y] [--format
-    env|json]
+  $ sf env export-template [DIR] [--profile <value>] [-y] [--rationale
+    <value>] [--format env|json]
 
 ARGUMENTS
   [DIR]  Project directory to inspect. Defaults to the current directory.
@@ -2523,7 +2836,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create a dotenv import template from platform config.
@@ -2540,7 +2858,7 @@ EXAMPLES
     $ sf env export-template ./app --format json
 ```
 
-_See code: [src/commands/env/export-template.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/export-template.ts)_
+_See code: [src/commands/env/export-template.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/export-template.ts)_
 
 ## `sf env import FILE`
 
@@ -2548,9 +2866,9 @@ Import variables from a .env file.
 
 ```text
 USAGE
-  $ sf env import FILE [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--[no-]secret] [--production] [--preview] [--branch <value>...] [--from
-    dotenv|vercel|netlify|cloudflare]
+  $ sf env import FILE [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--[no-]secret] [--production] [--preview] [--branch
+    <value>...] [--from dotenv|vercel|netlify|cloudflare]
 
 ARGUMENTS
   FILE  .env file to import.
@@ -2568,7 +2886,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Import variables from a .env file.
@@ -2585,7 +2908,7 @@ EXAMPLES
     $ sf env import public.env --space docs --no-secret
 ```
 
-_See code: [src/commands/env/import.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/import.ts)_
+_See code: [src/commands/env/import.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/import.ts)_
 
 ## `sf env ls`
 
@@ -2593,8 +2916,8 @@ List space variables.
 
 ```text
 USAGE
-  $ sf env ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--show-values]
+  $ sf env ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--show-values]
 
 FLAGS
   --show-values  Print plaintext variable values.
@@ -2602,7 +2925,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List space variables.
@@ -2618,7 +2946,7 @@ EXAMPLES
     $ sf env ls --space docs
 ```
 
-_See code: [src/commands/env/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/ls.ts)_
+_See code: [src/commands/env/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/ls.ts)_
 
 ## `sf env pull [FILE]`
 
@@ -2626,7 +2954,7 @@ Pull variables.
 
 ```text
 USAGE
-  $ sf env pull [FILE] [--profile <value>] [-y] [--claim-token
+  $ sf env pull [FILE] [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--format env|json] [--force] [--stdout]
 
 ARGUMENTS
@@ -2641,13 +2969,18 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Pull variables.
 
   Pull effective space and shared variables into a local env file (default .env.local). Refuses to overwrite an existing
-  file unless --force. Use --stdout to print instead.
+  file unless --force.
 
 EXAMPLES
   Write variables to .env.local.
@@ -2667,7 +3000,7 @@ EXAMPLES
     $ sf env pull --space docs --stdout --format json
 ```
 
-_See code: [src/commands/env/pull.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/pull.ts)_
+_See code: [src/commands/env/pull.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/pull.ts)_
 
 ## `sf env rm NAME`
 
@@ -2675,7 +3008,7 @@ Delete a space variable.
 
 ```text
 USAGE
-  $ sf env rm NAME [--profile <value>] [-y] [--claim-token
+  $ sf env rm NAME [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -2684,7 +3017,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Delete a space variable.
@@ -2701,7 +3039,7 @@ EXAMPLES
     $ sf env rm API_URL --space docs
 ```
 
-_See code: [src/commands/env/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/rm.ts)_
+_See code: [src/commands/env/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/rm.ts)_
 
 ## `sf env set NAME [VALUE]`
 
@@ -2710,8 +3048,8 @@ Set a space variable.
 ```text
 USAGE
   $ sf env set NAME [VALUE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--value-from-stdin] [--[no-]secret] [--production-value <value>]
-    [--preview-value <value>] [--branch-value <value>...]
+    [--rationale <value>] [-o <value>] [--space <value>] [--value-from-stdin] [--[no-]secret]
+    [--production-value <value>] [--preview-value <value>] [--branch-value <value>...]
 
 ARGUMENTS
   NAME     Variable name.
@@ -2725,6 +3063,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
@@ -2733,11 +3072,15 @@ BUILD FLAGS
   --preview-value=<value>     Value to inject for preview builds.
   --production-value=<value>  Value to inject for production builds.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Set a space variable.
 
-  Create or update a space variable. Values are sent to the API and are not printed back. A value given as an argument
-  is visible in your shell history and process list, so pipe secrets in with --value-from-stdin.
+  Create or update a space variable. Values are sent to the API and are not printed back. Pipe secrets in with
+  --value-from-stdin to keep them out of your shell history.
 
 EXAMPLES
   Set a write-only space variable without putting it in the command line.
@@ -2749,7 +3092,7 @@ EXAMPLES
     $ sf env set PUBLIC_ORIGIN https://www.example.com --no-secret --space docs
 ```
 
-_See code: [src/commands/env/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/env/set.ts)_
+_See code: [src/commands/env/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/env/set.ts)_
 
 ## `sf feedback`
 
@@ -2757,8 +3100,9 @@ Send feedback to Spacefast.
 
 ```text
 USAGE
-  $ sf feedback -m <value> [--profile <value>] [-y] [--category
-    bug|docs|limit|idea|other] [--error-code <value>] [--request-id <value>] [--space-id <value>] [--url <value>]
+  $ sf feedback -m <value> [--profile <value>] [-y]
+    [--rationale <value>] [--category bug|docs|limit|idea|other] [--error-code <value>] [--request-id <value>]
+    [--space-id <value>] [--url <value>]
 
 FLAGS
   -m, --message=<value>     (required) Feedback message.
@@ -2772,7 +3116,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Send feedback to Spacefast.
@@ -2790,7 +3139,7 @@ EXAMPLES
       --request-id req_123 --json
 ```
 
-_See code: [src/commands/feedback.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/feedback.ts)_
+_See code: [src/commands/feedback.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/feedback.ts)_
 
 ## `sf fetch [PATH]`
 
@@ -2798,8 +3147,9 @@ Fetch private content.
 
 ```text
 USAGE
-  $ sf fetch [PATH] --output <value> [--profile <value>]
-    [-y] [-o <value>] [--space <value>]
+  $ sf fetch [PATH] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--headers] [--output <value>] [--status] [--verify
+    <value>]
 
 ARGUMENTS
   [PATH]  Canonical route to fetch. Defaults to /.
@@ -2807,10 +3157,20 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
+VERIFICATION FLAGS
+  --headers         Include response headers, excluding credential-bearing headers.
+  --status          Report the HTTP status without requiring a body output file.
+  --verify=<value>  Require a successful response serving this exact version ID.
+
 OUTPUT FLAGS
-  --output=<value>  (required) File to write the response body into.
+  --output=<value>  File to write the response body into.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Fetch private content.
@@ -2821,9 +3181,17 @@ EXAMPLES
   Fetch /docs from the linked Space.
 
     $ sf fetch /docs --output ./docs.html
+
+  Inspect an authenticated response without writing its body.
+
+    $ sf fetch / --status --headers --json
+
+  Verify that a private route serves an exact published version.
+
+    $ sf fetch / --verify ver_123 --json
 ```
 
-_See code: [src/commands/fetch.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/fetch.ts)_
+_See code: [src/commands/fetch.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/fetch.ts)_
 
 ## `sf git`
 
@@ -2831,20 +3199,30 @@ Manage repository connections.
 
 ```text
 USAGE
-  $ sf git [--profile <value>] [-y]
+  $ sf git [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage repository connections.
 
   Manage repository connections and Git push deploys.
+
+EXAMPLES
+  Manage repository connections.
+
+    $ sf git
 ```
 
-_See code: [src/commands/git.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git.ts)_
+_See code: [src/commands/git.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git.ts)_
 
 ## `sf git build`
 
@@ -2852,16 +3230,17 @@ Build repository source.
 
 ```text
 USAGE
-  $ sf git build [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--branch <value>]
-    [--commit <value>] [--pull-request <value>] [--config <value>] [--target production|preview] [--root-directory
-    <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>] [--output-directory
-    <value>] [--ignored-build-command <value>] [--auto-finalize] [--allow-unsupported-platform-features] [--wait]
-    [--wait-timeout <value>]
+  $ sf git build [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>]
+    [--branch <value>] [--commit <value>] [--pull-request <value>] [--config <value>] [--target production|preview]
+    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
+    [--output-directory <value>] [--ignored-build-command <value>] [--auto-finalize]
+    [--allow-unsupported-platform-features] [--wait] [--wait-timeout <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
@@ -2892,6 +3271,10 @@ REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Build repository source.
 
@@ -2907,7 +3290,7 @@ EXAMPLES
     $ sf git build --space docs --branch preview --target preview --wait
 ```
 
-_See code: [src/commands/git/build.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/build.ts)_
+_See code: [src/commands/git/build.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/build.ts)_
 
 ## `sf git connect`
 
@@ -2915,18 +3298,20 @@ Connect repository.
 
 ```text
 USAGE
-  $ sf git connect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--provider github|gitlab|bitbucket|generic] [--connection-type
-    connected|hosted] [--repository <value>] [--repository-id <value>] [--repository-name <value>] [--clone-url <value>]
-    [--upstream-url <value>] [--detect-urls] [--installation-id <value>] [--credential <value>] [--default-branch
-    <value>] [--production-branch <value>] [--ref <value>] [--config <value>] [--auto-deploy-production]
-    [--auto-deploy-previews] [--root-directory <value>] [--install-directory <value>] [--install-command <value>]
-    [--build-command <value>] [--ignored-build-command <value>] [--output-directory <value>] [--framework-preset
-    <value>] [--platform-preset <value>] [--allow-unsupported-platform-features] [--apply-best] [--sync] [--build-now]
+  $ sf git connect [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--provider github|gitlab|bitbucket|generic]
+    [--connection-type connected|hosted] [--repository <value>] [--repository-id <value>] [--repository-name <value>]
+    [--clone-url <value>] [--upstream-url <value>] [--detect-urls] [--installation-id <value>] [--credential <value>]
+    [--default-branch <value>] [--production-branch <value>] [--ref <value>] [--config <value>]
+    [--auto-deploy-production] [--auto-deploy-previews] [--root-directory <value>] [--install-directory <value>]
+    [--install-command <value>] [--build-command <value>] [--ignored-build-command <value>] [--output-directory <value>]
+    [--framework-preset <value>] [--platform-preset <value>] [--allow-unsupported-platform-features] [--apply-best]
+    [--sync] [--build-now]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
@@ -2969,6 +3354,10 @@ REPOSITORY FLAGS
   --repository-name=<value>    Repository name from the host.
   --upstream-url=<value>       Upstream repository URL.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Connect repository.
 
@@ -2989,7 +3378,7 @@ EXAMPLES
     $ sf git connect --space docs --repository owner/repo --production-branch main --sync
 ```
 
-_See code: [src/commands/git/connect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/connect.ts)_
+_See code: [src/commands/git/connect.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/connect.ts)_
 
 ## `sf git disconnect`
 
@@ -2997,17 +3386,22 @@ Disconnect repository.
 
 ```text
 USAGE
-  $ sf git disconnect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted]
+  $ sf git disconnect [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Disconnect repository.
@@ -3020,7 +3414,7 @@ EXAMPLES
     $ sf git disconnect --space docs
 ```
 
-_See code: [src/commands/git/disconnect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/disconnect.ts)_
+_See code: [src/commands/git/disconnect.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/disconnect.ts)_
 
 ## `sf git github`
 
@@ -3028,20 +3422,30 @@ Manage GitHub App setup.
 
 ```text
 USAGE
-  $ sf git github [--profile <value>] [-y]
+  $ sf git github [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage GitHub App setup.
 
   Inspect GitHub App installations and repositories.
+
+EXAMPLES
+  Manage GitHub App setup.
+
+    $ sf git github
 ```
 
-_See code: [src/commands/git/github.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github.ts)_
+_See code: [src/commands/git/github.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/github.ts)_
 
 ## `sf git github installations`
 
@@ -3049,13 +3453,18 @@ List GitHub installations.
 
 ```text
 USAGE
-  $ sf git github installations [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf git github installations [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List GitHub installations.
@@ -3068,7 +3477,7 @@ EXAMPLES
     $ sf git github installations
 ```
 
-_See code: [src/commands/git/github/installations.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github/installations.ts)_
+_See code: [src/commands/git/github/installations.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/github/installations.ts)_
 
 ## `sf git github repos [INSTALLATION]`
 
@@ -3077,7 +3486,7 @@ List GitHub repositories.
 ```text
 USAGE
   $ sf git github repos [INSTALLATION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+    [--rationale <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
   [INSTALLATION]  GitHub App installation ID.
@@ -3085,7 +3494,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List GitHub repositories.
@@ -3098,7 +3512,7 @@ EXAMPLES
     $ sf git github repos 12345678
 ```
 
-_See code: [src/commands/git/github/repos.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/github/repos.ts)_
+_See code: [src/commands/git/github/repos.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/github/repos.ts)_
 
 ## `sf git ls`
 
@@ -3106,17 +3520,22 @@ Show repository connection.
 
 ```text
 USAGE
-  $ sf git ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted]
+  $ sf git ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show repository connection.
@@ -3129,7 +3548,7 @@ EXAMPLES
     $ sf git ls --space docs
 ```
 
-_See code: [src/commands/git/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/ls.ts)_
+_See code: [src/commands/git/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/ls.ts)_
 
 ## `sf git origin`
 
@@ -3137,13 +3556,18 @@ Install Spacefast git remote.
 
 ```text
 USAGE
-  $ sf git origin [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--set-origin]
+  $ sf git origin [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--set-origin]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 GIT FLAGS
   --set-origin  Update origin instead of adding or updating the Spacefast remote.
@@ -3163,7 +3587,7 @@ EXAMPLES
     $ sf git origin --set-origin
 ```
 
-_See code: [src/commands/git/origin.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/origin.ts)_
+_See code: [src/commands/git/origin.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/origin.ts)_
 
 ## `sf git sync`
 
@@ -3171,13 +3595,14 @@ Sync remote repository source.
 
 ```text
 USAGE
-  $ sf git sync [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--ttl-seconds <value>]
-    [--read-only-ref <value>...]
+  $ sf git sync [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>]
+    [--ttl-seconds <value>] [--read-only-ref <value>...]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
@@ -3186,6 +3611,10 @@ REPOSITORY FLAGS
   --read-only-ref=<value>...  Ref pattern to protect during repository sync. Repeat for multiple patterns.
   --ref=<value>               Ref, branch, or tag to sync.
   --ttl-seconds=<value>       Signed source remote TTL in seconds, up to 86400.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Sync remote repository source.
@@ -3202,7 +3631,7 @@ EXAMPLES
     $ sf git sync --space docs --ref main
 ```
 
-_See code: [src/commands/git/sync.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/sync.ts)_
+_See code: [src/commands/git/sync.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/sync.ts)_
 
 ## `sf git update`
 
@@ -3210,16 +3639,18 @@ Update repository connection.
 
 ```text
 USAGE
-  $ sf git update [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--clone-url <value>] [--upstream-url
-    <value>] [--production-branch <value>] [--credential <value>] [--clear-credential] [--auto-deploy-production]
-    [--auto-deploy-previews] [--config <value>] [--root-directory <value>] [--install-directory <value>]
-    [--install-command <value>] [--build-command <value>] [--ignored-build-command <value>] [--output-directory <value>]
-    [--framework-preset <value>] [--platform-preset <value>] [--allow-unsupported-platform-features]
+  $ sf git update [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--connection-type connected|hosted] [--clone-url <value>]
+    [--upstream-url <value>] [--production-branch <value>] [--credential <value>] [--clear-credential]
+    [--auto-deploy-production] [--auto-deploy-previews] [--config <value>] [--root-directory <value>]
+    [--install-directory <value>] [--install-command <value>] [--build-command <value>] [--ignored-build-command
+    <value>] [--output-directory <value>] [--framework-preset <value>] [--platform-preset <value>]
+    [--allow-unsupported-platform-features]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
@@ -3250,6 +3681,10 @@ REPOSITORY FLAGS
   --production-branch=<value>  Branch that publishes to production.
   --upstream-url=<value>       Upstream repository URL.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Update repository connection.
 
@@ -3261,7 +3696,7 @@ EXAMPLES
     $ sf git update --space docs --production-branch main
 ```
 
-_See code: [src/commands/git/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/git/update.ts)_
+_See code: [src/commands/git/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/git/update.ts)_
 
 ## `sf help [COMMAND]`
 
@@ -3279,6 +3714,11 @@ FLAGS
 
 DESCRIPTION
   Display help for sf.
+
+EXAMPLES
+  Display help for sf.
+
+    $ sf help [command]
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.58/src/commands/help.ts)_
@@ -3289,9 +3729,9 @@ Create a Spacefast project.
 
 ```text
 USAGE
-  $ sf init [NAME] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template todo|guestbook|contact]
-    [--title <value>] [--no-git]
+  $ sf init [NAME] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template
+    todo|guestbook|contact] [--title <value>] [--no-git]
 
 ARGUMENTS
   [NAME]  Directory name for a new project. Omit to initialize the current directory.
@@ -3302,6 +3742,7 @@ EXECUTION FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 ZERO FLAGS
@@ -3309,6 +3750,10 @@ ZERO FLAGS
   --template=<option>  Zero starter template to scaffold.
                        <options: todo|guestbook|contact>
   --title=<value>      Zero starter app title.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 PROJECT FLAGS
   --runtime=<option>  [default: static] Project runtime to scaffold.
@@ -3342,7 +3787,7 @@ EXAMPLES
     $ sf init --runtime functions
 ```
 
-_See code: [src/commands/init.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/init.ts)_
+_See code: [src/commands/init.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/init.ts)_
 
 ## `sf inspect [TARGET]`
 
@@ -3350,7 +3795,8 @@ Inspect a space by ID, slug, URL, or domain.
 
 ```text
 USAGE
-  $ sf inspect [TARGET] [--profile <value>] [-y] [-o <value>]
+  $ sf inspect [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain.
@@ -3358,7 +3804,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect a space by ID, slug, URL, or domain.
@@ -3379,7 +3830,7 @@ EXAMPLES
     $ sf inspect spc_abc123 --team acme
 ```
 
-_See code: [src/commands/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/inspect.ts)_
+_See code: [src/commands/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/inspect.ts)_
 
 ## `sf link`
 
@@ -3387,13 +3838,18 @@ Link the current directory to a space.
 
 ```text
 USAGE
-  $ sf link [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf link [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Link the current directory to a space.
@@ -3411,7 +3867,7 @@ EXAMPLES
     $ sf link --space prj_abc123 --team acme
 ```
 
-_See code: [src/commands/link.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/link.ts)_
+_See code: [src/commands/link.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/link.ts)_
 
 ## `sf login`
 
@@ -3419,17 +3875,22 @@ Log in to Spacefast.
 
 ```text
 USAGE
-  $ sf login [--profile <value>] [-y] [--handoff] [-o
-    <value>]
+  $ sf login [--profile <value>] [-y] [--rationale <value>]
+    [--handoff] [-o <value>]
 
 FLAGS
-  --handoff  Redeem a one-use agent handoff link from the dashboard. The link is read from stdin — pipe it or paste it
-             at the hidden prompt; never pass it as an argument.
+  --handoff  Redeem a one-use agent handoff link from the dashboard. Read from stdin: pipe it or paste it at the hidden
+             prompt, never as an argument.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Log in to Spacefast.
@@ -3453,7 +3914,7 @@ EXAMPLES
     printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
 ```
 
-_See code: [src/commands/login.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/login.ts)_
 
 ## `sf logout`
 
@@ -3461,12 +3922,17 @@ Log out of Spacefast.
 
 ```text
 USAGE
-  $ sf logout [--profile <value>] [-y]
+  $ sf logout [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Log out of Spacefast.
@@ -3479,7 +3945,7 @@ EXAMPLES
     $ sf logout
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/logout.ts)_
 
 ## `sf logs [TARGET] [KIND]`
 
@@ -3488,8 +3954,8 @@ Read a space's request and handler logs.
 ```text
 USAGE
   $ sf logs [TARGET] [KIND] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--limit <value>] [-f] [--cursor <value>] [--request-id
-    <value>] [--handler <value>]
+    [--rationale <value>] [-o <value>] [--space <value>] [--limit <value>] [-f] [--cursor
+    <value>] [--request-id <value>] [--handler <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -3498,22 +3964,26 @@ ARGUMENTS
 FLAGS
   -f, --follow              Poll for new log entries every 2 seconds until interrupted (Ctrl-C).
       --cursor=<value>      Continue from the cursor printed by the previous page.
-      --handler=<value>     Runtime logs only: one handler — a Zero mutation or a Functions handler.
+      --handler=<value>     Runtime logs only: lines from one Zero mutation or Functions handler.
       --limit=<value>       [default: 50] Maximum number of log entries.
       --request-id=<value>  Runtime logs only: everything logged while serving one request.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Read a space's request and handler logs.
 
-  Read a space's logs. `access` is every request the edge served; `runtime` is what your own code wrote — a Zero
-  mutation or a Functions handler — with the request id and handler that produced each line. Runtime lines are collected
-  after the response returns and indexed off the box, so a line you just triggered takes a while to show up; an empty
-  page means not yet, not broken. Pass a target to read any space without --space.
+  Read a space's logs. `access` is every request the edge served; `runtime` is what your code logged, with the request
+  id and handler for each line. Runtime lines are indexed after the response returns, so a line you just triggered takes
+  a while to appear; an empty page means not yet, not broken. Pass a target to read any space without --space.
 
 EXAMPLES
   Recent requests for the linked space.
@@ -3545,7 +4015,46 @@ EXAMPLES
     $ sf logs runtime --follow --json
 ```
 
-_See code: [src/commands/logs.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/logs.ts)_
+_See code: [src/commands/logs.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/logs.ts)_
+
+## `sf map`
+
+Print the machine-readable command map.
+
+```text
+USAGE
+  $ sf map [--profile <value>] [-y] [--rationale <value>]
+    [--paths]
+
+FLAGS
+  --paths  Print only canonical command invocations.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
+DESCRIPTION
+  Print the machine-readable command map.
+
+  List the flat CLI command surface for agents and other programmatic callers.
+
+EXAMPLES
+  Return canonical commands, aliases, and invocations as JSON.
+
+    $ sf map --json
+
+  Print one canonical command invocation per line.
+
+    $ sf map --paths
+```
+
+_See code: [src/commands/map.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/map.ts)_
 
 ## `sf mcp`
 
@@ -3553,22 +4062,11 @@ Run the Spacefast MCP server.
 
 ```text
 USAGE
-  $ sf mcp [--transport stdio|http|streamable-http] [--host <value>] [--port <value>] [--path <value>]
-    [--profile <value>] [--http-token <value>] [--cors-origin <value>...]
-    [--workspace-root <value>]
+  $ sf mcp [--profile <value>] [--workspace-root <value>]
 
 FLAGS
   --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
-  --cors-origin=<value>...  [env: SPACEFAST_MCP_CORS_ORIGIN] Allowed browser Origin for local streamable HTTP. Defaults
-                            to loopback origins only.
-  --host=<value>            [default: 127.0.0.1, env: SPACEFAST_MCP_HOST] Host for streamable HTTP.
-  --http-token=<value>      [env: SPACEFAST_MCP_HTTP_TOKEN] Bearer token required by the local streamable HTTP server.
-                            Required when binding outside loopback.
-  --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
-  --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
-  --transport=<option>      MCP transport to run. `http` is streamable HTTP.
-                            <options: stdio|http|streamable-http>
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
 GLOBAL FLAGS
@@ -3577,92 +4075,13 @@ GLOBAL FLAGS
 DESCRIPTION
   Run the Spacefast MCP server.
 
-  Run the Spacefast MCP server from the CLI package. Defaults to stdio for MCP clients; use the HTTP transport for
-  embedded streamable HTTP.
+  Run the Spacefast On-Device MCP server over stdio for MCP clients.
 
 EXAMPLES
   $ sf mcp
-
-  $ sf mcp daemon
-
-  $ sf mcp status
-
-  $ sf mcp --transport http --port 3945
-
-  $ sf mcp http --host 0.0.0.0 --path /mcp --http-token $SPACEFAST_MCP_HTTP_TOKEN
 ```
 
-_See code: [src/commands/mcp.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp.ts)_
-
-## `sf mcp daemon`
-
-Run the local MCP daemon.
-
-```text
-USAGE
-  $ sf mcp daemon [--host <value>] [--port <value>] [--path <value>] [--profile <value>]
-    [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
-
-FLAGS
-  --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
-  --cors-origin=<value>...  [env: SPACEFAST_MCP_CORS_ORIGIN] Allowed browser Origin for local streamable HTTP. Defaults
-                            to loopback origins only.
-  --host=<value>            [default: 127.0.0.1, env: SPACEFAST_MCP_HOST] Host for streamable HTTP.
-  --http-token=<value>      [env: SPACEFAST_MCP_HTTP_TOKEN] Bearer token required by the local streamable HTTP server.
-                            Required when binding outside loopback.
-  --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
-  --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
-  --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
-  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
-
-GLOBAL FLAGS
-  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Run the local MCP daemon.
-
-  Run a persistent local streamable HTTP MCP server and write its connection manifest.
-
-EXAMPLES
-  $ sf mcp daemon --port 3945
-```
-
-_See code: [src/commands/mcp/daemon.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp/daemon.ts)_
-
-## `sf mcp http`
-
-Run MCP over streamable HTTP.
-
-```text
-USAGE
-  $ sf mcp http [--host <value>] [--port <value>] [--path <value>] [--profile <value>]
-    [--http-token <value>] [--cors-origin <value>...] [--workspace-root <value>]
-
-FLAGS
-  --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
-  --cors-origin=<value>...  [env: SPACEFAST_MCP_CORS_ORIGIN] Allowed browser Origin for local streamable HTTP. Defaults
-                            to loopback origins only.
-  --host=<value>            [default: 127.0.0.1, env: SPACEFAST_MCP_HOST] Host for streamable HTTP.
-  --http-token=<value>      [env: SPACEFAST_MCP_HTTP_TOKEN] Bearer token required by the local streamable HTTP server.
-                            Required when binding outside loopback.
-  --path=<value>            [default: /mcp, env: SPACEFAST_MCP_PATH] HTTP path for streamable HTTP.
-  --port=<value>            [default: 3945, env: SPACEFAST_MCP_PORT] Port for streamable HTTP.
-  --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
-  --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
-
-GLOBAL FLAGS
-  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Run MCP over streamable HTTP.
-
-  Run the MCP server over streamable HTTP.
-
-EXAMPLES
-  $ sf mcp http --host 0.0.0.0 --path /mcp --http-token $SPACEFAST_MCP_HTTP_TOKEN
-```
-
-_See code: [src/commands/mcp/http.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp/http.ts)_
+_See code: [src/commands/mcp.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/mcp.ts)_
 
 ## `sf mcp install`
 
@@ -3670,21 +4089,31 @@ Install MCP client config.
 
 ```text
 USAGE
-  $ sf mcp install [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
-    |cline|continue|claude|copilot...] [--oauth --remote]
+  $ sf mcp install [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf...] [--local | --remote | --oauth]
 
 FLAGS
   --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
-                       <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|curs
-                       or|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+                       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|gith
+                       ub-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continu
+                       e|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.
+                       ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
+  --local              Use checkout-aware local stdio MCP instead of the hosted proxy.
   --oauth              With --remote, connect directly and let the editor handle OAuth.
   --remote             Use hosted MCP through `sf mcp proxy` and the current CLI login.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Install MCP client config.
@@ -3692,7 +4121,7 @@ DESCRIPTION
   Install Spacefast MCP config into detected or selected coding agents.
 
 EXAMPLES
-  Install local stdio MCP for Claude Code.
+  Install hosted MCP through the signed-in Spacefast proxy.
 
     $ sf mcp install --agent claude-code
 
@@ -3701,7 +4130,7 @@ EXAMPLES
     $ sf mcp install --agent cursor --remote --oauth
 ```
 
-_See code: [src/commands/mcp/install.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp/install.ts)_
+_See code: [src/commands/mcp/install.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/mcp/install.ts)_
 
 ## `sf mcp proxy`
 
@@ -3709,8 +4138,8 @@ Run the authenticated remote MCP proxy.
 
 ```text
 USAGE
-  $ sf mcp proxy [--profile <value>] [-y] [--endpoint <value>]
-    [--allow-credential-origin <value>...]
+  $ sf mcp proxy [--profile <value>] [-y] [--rationale <value>]
+    [--endpoint <value>] [--allow-credential-origin <value>...]
 
 FLAGS
   --allow-credential-origin=<value>...  [env: SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN] Send your Spacefast login to this
@@ -3723,44 +4152,22 @@ GLOBAL FLAGS
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Run the authenticated remote MCP proxy.
 
   Proxy remote Spacefast MCP over stdio using the current CLI login.
-```
-
-_See code: [src/commands/mcp/proxy.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp/proxy.ts)_
-
-## `sf mcp status`
-
-Show local MCP daemon status.
-
-```text
-USAGE
-  $ sf mcp status [--profile <value>] [-y] [--repair]
-
-FLAGS
-  --repair  Remove a stale local daemon manifest and print recovery steps.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show local MCP daemon status.
-
-  Show whether the local MCP daemon is running and how to connect or recover.
 
 EXAMPLES
-  $ sf mcp status
+  Run the authenticated remote MCP proxy.
 
-  $ sf mcp status --json
-
-  $ sf mcp status --repair
+    $ sf mcp proxy
 ```
 
-_See code: [src/commands/mcp/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/mcp/status.ts)_
+_See code: [src/commands/mcp/proxy.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/mcp/proxy.ts)_
 
 ## `sf open [TARGET]`
 
@@ -3768,8 +4175,8 @@ Open a private Space.
 
 ```text
 USAGE
-  $ sf open [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--path <value>] [--show-secret]
+  $ sf open [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--path <value>] [--show-secret]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, Version URL, or domain. Defaults to the linked space.
@@ -3777,11 +4184,16 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OPEN FLAGS
   --path=<value>  [default: /] Clean route to open after the exchange.
   --show-secret   Print the temporary handoff URL instead of opening it.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Open a private Space.
@@ -3798,7 +4210,7 @@ EXAMPLES
     $ sf open docs
 ```
 
-_See code: [src/commands/open.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/open.ts)_
+_See code: [src/commands/open.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/open.ts)_
 
 ## `sf operations [ID]`
 
@@ -3806,8 +4218,8 @@ Inspect async operations.
 
 ```text
 USAGE
-  $ sf operations [ID] [--profile <value>] [-y] [--space <value>]
-    [--limit <value>] [--cursor <value>]
+  $ sf operations [ID] [--profile <value>] [-y] [--rationale
+    <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   [ID]  Operation ID. Omit to list recent operations.
@@ -3819,7 +4231,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect async operations.
@@ -3837,7 +4254,7 @@ EXAMPLES
   $ sf operations --space spc_123
 ```
 
-_See code: [src/commands/operations.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/operations.ts)_
+_See code: [src/commands/operations.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/operations.ts)_
 
 ## `sf pages`
 
@@ -3845,20 +4262,30 @@ Manage Pages templates.
 
 ```text
 USAGE
-  $ sf pages [--profile <value>] [-y]
+  $ sf pages [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage Pages templates.
 
   Pull, validate, and preview Spacefast-authored pages.
+
+EXAMPLES
+  Manage Pages templates.
+
+    $ sf pages
 ```
 
-_See code: [src/commands/pages.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/pages.ts)_
+_See code: [src/commands/pages.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/pages.ts)_
 
 ## `sf pages pull [TARGET]`
 
@@ -3866,7 +4293,8 @@ Own a default page template.
 
 ```text
 USAGE
-  $ sf pages pull [TARGET] [--profile <value>] [-y]
+  $ sf pages pull [TARGET] [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   [TARGET]  Page id, layout, or all.
@@ -3874,15 +4302,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Own a default page template.
 
   Copy Spacefast's readable default page HTML into your project.
+
+EXAMPLES
+  Own a default page template.
+
+    $ sf pages pull [target]
 ```
 
-_See code: [src/commands/pages/pull.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/pages/pull.ts)_
+_See code: [src/commands/pages/pull.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/pages/pull.ts)_
 
 ## `sf pages validate`
 
@@ -3890,7 +4328,8 @@ Validate local Pages templates.
 
 ```text
 USAGE
-  $ sf pages validate [--profile <value>] [-y] [-d <value>]
+  $ sf pages validate [--profile <value>] [-y] [--rationale <value>]
+    [-d <value>]
 
 FLAGS
   -d, --dir=<value>  [default: .] Project directory.
@@ -3898,15 +4337,76 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Validate local Pages templates.
 
   Run the same structural Pages checks used by publish.
+
+EXAMPLES
+  Validate local Pages templates.
+
+    $ sf pages validate
 ```
 
-_See code: [src/commands/pages/validate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/pages/validate.ts)_
+_See code: [src/commands/pages/validate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/pages/validate.ts)_
+
+## `sf plugins`
+
+Install the Spacefast agent plugin.
+
+```text
+USAGE
+  $ sf plugins [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf] [--dry-run]
+
+FLAGS
+  --agent=<option>  [default: claude-code] Plugin-capable agent to configure.
+                    <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-
+                    copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|rayc
+                    ast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhu
+                    b|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
+  --dry-run         Print the pinned installer command without changing agent configuration.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
+DESCRIPTION
+  Install the Spacefast agent plugin.
+
+  Install the Spacefast plugin lane for agents that support plugins.
+
+EXAMPLES
+  Install the first-party Spacefast plugin for Cursor.
+
+    $ sf plugins --agent cursor
+
+  Install the Spacefast plugin for Claude Code.
+
+    $ sf plugins --agent claude-code
+
+  Print the pinned installer command without running it.
+
+    $ sf plugins --agent codex --dry-run
+```
+
+_See code: [src/commands/plugins.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/plugins.ts)_
 
 ## `sf profiles`
 
@@ -3914,12 +4414,17 @@ List provider profiles.
 
 ```text
 USAGE
-  $ sf profiles [--profile <value>] [-y]
+  $ sf profiles [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List provider profiles.
@@ -3933,7 +4438,7 @@ EXAMPLES
     $ sf profiles
 ```
 
-_See code: [src/commands/profiles.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/profiles.ts)_
+_See code: [src/commands/profiles.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/profiles.ts)_
 
 ## `sf profiles rm NAME`
 
@@ -3941,7 +4446,8 @@ Remove a provider profile.
 
 ```text
 USAGE
-  $ sf profiles rm NAME [--profile <value>] [-y]
+  $ sf profiles rm NAME [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   NAME  Profile name.
@@ -3949,7 +4455,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Remove a provider profile.
@@ -3966,7 +4477,7 @@ EXAMPLES
     $ sf profiles rm staging
 ```
 
-_See code: [src/commands/profiles/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/profiles/rm.ts)_
+_See code: [src/commands/profiles/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/profiles/rm.ts)_
 
 ## `sf profiles set NAME`
 
@@ -3974,7 +4485,8 @@ Create or update a provider profile.
 
 ```text
 USAGE
-  $ sf profiles set NAME [--profile <value>] [-y]
+  $ sf profiles set NAME [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   NAME  Profile name.
@@ -3982,7 +4494,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  Provider API base URL for this profile.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create or update a provider profile.
@@ -3996,7 +4513,7 @@ EXAMPLES
   $ sf profiles set acme --token ""
 ```
 
-_See code: [src/commands/profiles/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/profiles/set.ts)_
+_See code: [src/commands/profiles/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/profiles/set.ts)_
 
 ## `sf profiles use NAME`
 
@@ -4004,7 +4521,8 @@ Select the active provider profile.
 
 ```text
 USAGE
-  $ sf profiles use NAME [--profile <value>] [-y]
+  $ sf profiles use NAME [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   NAME  Profile name.
@@ -4012,7 +4530,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Select the active provider profile.
@@ -4025,7 +4548,7 @@ EXAMPLES
     $ sf profiles use staging
 ```
 
-_See code: [src/commands/profiles/use.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/profiles/use.ts)_
+_See code: [src/commands/profiles/use.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/profiles/use.ts)_
 
 ## `sf promote [VERSION]`
 
@@ -4033,8 +4556,9 @@ Promote a version to a channel.
 
 ```text
 USAGE
-  $ sf promote [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
+  $ sf promote [VERSION] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout
+    <value>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
@@ -4042,12 +4566,17 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
   --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Promote a version to a channel.
@@ -4069,7 +4598,7 @@ EXAMPLES
     $ sf promote ver_123 --no-wait --json
 ```
 
-_See code: [src/commands/promote.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/promote.ts)_
+_See code: [src/commands/promote.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/promote.ts)_
 
 ## `sf publish [DIR]`
 
@@ -4077,22 +4606,22 @@ Publish files or built projects to Spacefast.
 
 ```text
 USAGE
-  $ sf publish [DIR] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa
-    auto|true|false] [-m <value>] [--git-branch <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository
-    <value>] [--source-type direct-upload|git] [--mode website|files] [--target production|preview] [--dry-run]
-    [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote] [--prebuilt]
-    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
-    [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include <value>...]
-    [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
+  $ sf publish [DIR] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [-n <value>] [--slug <value>] [--hostname-scope
+    team|global] [--spa auto|true|false] [-m <value>] [--git-branch <value>] [--git-commit <value>] [--git-ref <value>]
+    [--git-repository <value>] [--source-type direct-upload|git] [--mode website|files] [--target production|preview]
+    [--dry-run] [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote]
+    [--prebuilt] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
+    <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include
+    <value>...] [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
     [--allow-unsupported-platform-features] [--auto-finalize]
 
 ARGUMENTS
   [DIR]  File, directory, project, or .zip/.tar.gz archive to publish. Defaults to the current directory.
 
 VERSION SOURCE FLAGS
-  -m, --message=<value>         [env: SPACEFAST_PUBLISH_MESSAGE] Plain-language changelog entry for this version, shown
-                                in version history. Overrides the detected git commit message.
+  -m, --message=<value>         [env: SPACEFAST_PUBLISH_MESSAGE] Changelog entry shown in version history. Overrides the
+                                detected git commit message.
       --git-branch=<value>      [env: SPACEFAST_GIT_BRANCH] Git branch name to record on the version.
       --git-commit=<value>      [env: SPACEFAST_GIT_COMMIT] Git commit SHA to record on the version.
       --git-ref=<value>         [env: SPACEFAST_GIT_REF] Git ref to record on the version.
@@ -4115,6 +4644,7 @@ SPACE METADATA FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
@@ -4157,9 +4687,12 @@ VERSION FLAGS
                                        published (additive).
                                        <options: additive|snapshot>
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 OUTPUT FLAGS
-  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
-                 default.
+  --show-secret  Print the access URL and claim link in JSON or non-interactive output.
 
 DESCRIPTION
   Publish files or built projects to Spacefast.
@@ -4189,16 +4722,16 @@ EXAMPLES
 
     $ sf publish ./site.zip
 
-  Publish a preview and print one machine-readable receipt.
+  Publish a preview with the audit rationale required by agent credentials.
 
-    $ sf publish --target preview --json
+    $ sf publish --target preview --rationale "Share the reviewed preview" --json
 
   Stream JSONL build and publish events.
 
     $ sf publish --json --stream
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/publish.ts)_
 
 ## `sf redeploy [BUILD]`
 
@@ -4206,7 +4739,7 @@ Retry the latest build (alias of `sf builds retry`).
 
 ```text
 USAGE
-  $ sf redeploy [BUILD] [--profile <value>] [-y] [--claim-token
+  $ sf redeploy [BUILD] [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -4215,7 +4748,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Retry the latest build (alias of `sf builds retry`).
@@ -4234,7 +4772,7 @@ EXAMPLES
     $ sf redeploy bld_123
 ```
 
-_See code: [src/commands/redeploy.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/redeploy.ts)_
+_See code: [src/commands/redeploy.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/redeploy.ts)_
 
 ## `sf rollback [VERSION]`
 
@@ -4242,8 +4780,9 @@ Roll back to a previous version.
 
 ```text
 USAGE
-  $ sf rollback [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout <value>]
+  $ sf rollback [VERSION] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--channel <value>] [--wait] [--wait-timeout
+    <value>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
@@ -4251,12 +4790,17 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --channel=<value>       [default: live] Channel to point at this version (default "live").
   --[no-]wait             Wait until queued work finishes before returning.
   --wait-timeout=<value>  [default: 900] Seconds to wait for the version to become live.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Roll back to a previous version.
@@ -4277,7 +4821,7 @@ EXAMPLES
     $ sf rollback 12 --space docs
 ```
 
-_See code: [src/commands/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/rollback.ts)_
+_See code: [src/commands/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/rollback.ts)_
 
 ## `sf routing`
 
@@ -4285,20 +4829,30 @@ Routing utilities.
 
 ```text
 USAGE
-  $ sf routing [--profile <value>] [-y]
+  $ sf routing [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Routing utilities.
 
   Inspect routing configuration and compute redirects/headers.
+
+EXAMPLES
+  Routing utilities.
+
+    $ sf routing
 ```
 
-_See code: [src/commands/routing.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/routing.ts)_
+_See code: [src/commands/routing.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/routing.ts)_
 
 ## `sf routing compute`
 
@@ -4306,13 +4860,18 @@ Compute routing.
 
 ```text
 USAGE
-  $ sf routing compute [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf routing compute [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Compute routing.
@@ -4325,7 +4884,7 @@ EXAMPLES
     $ sf routing compute --space docs
 ```
 
-_See code: [src/commands/routing/compute.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/routing/compute.ts)_
+_See code: [src/commands/routing/compute.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/routing/compute.ts)_
 
 ## `sf routing inspect`
 
@@ -4333,8 +4892,8 @@ Inspect local routing files.
 
 ```text
 USAGE
-  $ sf routing inspect [--profile <value>] [-y] [-r <value>] [--url
-    <value>...]
+  $ sf routing inspect [--profile <value>] [-y] [--rationale <value>]
+    [-r <value>] [--url <value>...]
 
 FLAGS
   -r, --routing=<value>  [default: .] Directory containing _redirects, _headers, and sf.jsonc to inspect.
@@ -4343,7 +4902,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect local routing files.
@@ -4360,7 +4924,7 @@ EXAMPLES
     $ sf routing inspect --routing ./dist --url /old-path
 ```
 
-_See code: [src/commands/routing/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/routing/inspect.ts)_
+_See code: [src/commands/routing/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/routing/inspect.ts)_
 
 ## `sf runtime`
 
@@ -4368,20 +4932,30 @@ Inspect a space's runtime.
 
 ```text
 USAGE
-  $ sf runtime [--profile <value>] [-y]
+  $ sf runtime [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Inspect a space's runtime.
 
   Inspect what a space is serving and what runs it.
+
+EXAMPLES
+  Inspect a space's runtime.
+
+    $ sf runtime
 ```
 
-_See code: [src/commands/runtime.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/runtime.ts)_
+_See code: [src/commands/runtime.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/runtime.ts)_
 
 ## `sf runtime status`
 
@@ -4389,21 +4963,26 @@ Show what a space is serving.
 
 ```text
 USAGE
-  $ sf runtime status [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf runtime status [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show what a space is serving.
 
-  Show what a space is serving: its live version, the URL it answers on, and — when the live version ships code —
-  everything that version deployed. A capsule lists its tables, queries, mutations, actions, migration count and schema
-  digest; a worker its entry, bundle digest, routes, endpoints and declared capabilities. All of it is read from version
-  metadata, so it answers while the space's runtime is asleep or moving.
+  Show what a space is serving: its live version, the URL it answers on, and what the live version deployed when it
+  ships code. A capsule lists tables, queries, mutations, actions, migration count and schema digest; a worker lists
+  entry, bundle digest, routes, endpoints and capabilities. All of it comes from version metadata, so it answers while
+  the runtime is asleep or moving.
 
 EXAMPLES
   What the linked space is serving right now.
@@ -4415,7 +4994,7 @@ EXAMPLES
     $ sf runtime status --space docs
 ```
 
-_See code: [src/commands/runtime/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/runtime/status.ts)_
+_See code: [src/commands/runtime/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/runtime/status.ts)_
 
 ## `sf setup`
 
@@ -4423,20 +5002,30 @@ Generate setup instructions.
 
 ```text
 USAGE
-  $ sf setup [--profile <value>] [-y]
+  $ sf setup [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Generate setup instructions.
 
   Generate setup instructions for agents and integrations.
+
+EXAMPLES
+  Generate setup instructions.
+
+    $ sf setup
 ```
 
-_See code: [src/commands/setup.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/setup.ts)_
+_See code: [src/commands/setup.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/setup.ts)_
 
 ## `sf setup agent`
 
@@ -4444,23 +5033,33 @@ Install Spacefast agent tooling.
 
 ```text
 USAGE
-  $ sf setup agent [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
-    |cline|continue|claude|copilot...] [-p] [--oauth --remote] [--skip-mcp] [--force] [--handoff]
+  $ sf setup agent [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf...] [-p] [--local | --remote | --oauth] [--skip-mcp] [--force] [--handoff]
 
 FLAGS
   -p, --project            Install skills into this project instead of global agent directories.
   -y, --yes                Skip prompts, auto-detect agents, and accept local stdio MCP.
       --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
-                           <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
+                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
+                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
+                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
       --force              Overwrite locally modified or unverified Spacefast skill files.
       --handoff            Redeem a one-use agent handoff link from the dashboard before generating setup. The link is
                            read from stdin.
+      --local              Use checkout-aware local stdio MCP instead of the hosted proxy.
       --oauth              With --remote, connect directly and let the editor handle OAuth.
       --remote             Use hosted MCP through `sf mcp proxy` and the current CLI login.
       --skip-mcp           Install skills without configuring MCP.
+  --json             Format output as json.
   --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Install Spacefast agent tooling.
@@ -4468,7 +5067,7 @@ DESCRIPTION
   Detect agent clients and configure Spacefast skills plus MCP in one idempotent flow.
 
 EXAMPLES
-  Configure detected agents with local stdio MCP.
+  Configure detected agents with hosted MCP through the CLI login.
 
     $ sf setup agent -y
 
@@ -4477,7 +5076,7 @@ EXAMPLES
     $ sf setup agent -y --agent cursor --remote --oauth
 ```
 
-_See code: [src/commands/setup/agent.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/setup/agent.ts)_
+_See code: [src/commands/setup/agent.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/setup/agent.ts)_
 
 ## `sf share`
 
@@ -4485,21 +5084,31 @@ Manage Space Grants.
 
 ```text
 USAGE
-  $ sf share [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage Space Grants.
 
   List every active Grant. Use `sf share grant`, `link`, `password`, `token`, or `oidc` to add access.
+
+EXAMPLES
+  Manage Space Grants.
+
+    $ sf share
 ```
 
-_See code: [src/commands/share.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share.ts)_
+_See code: [src/commands/share.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share.ts)_
 
 ## `sf share check`
 
@@ -4507,10 +5116,11 @@ Explain effective Grant access.
 
 ```text
 USAGE
-  $ sf share check [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--path <value>] [--as public|team|person|link|password|machine|external]
-    [--person <value>] [--link <value>] [--password <value>] [--machine <value>] [--issuer <value>] [--subject <value>]
-    [--verified-email] [--ip <value>] [--target live|version|branch] [--target-id <value>]
+  $ sf share check [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--path <value>] [--as
+    public|team|person|link|password|machine|external] [--person <value>] [--link <value>] [--password <value>]
+    [--machine <value>] [--issuer <value>] [--subject <value>] [--verified-email] [--ip <value>] [--target
+    live|version|branch] [--target-id <value>]
 
 FLAGS
   --as=<option>        [default: public] Audience to simulate.
@@ -4531,15 +5141,25 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Explain effective Grant access.
 
   Explain the exact additive Grants and capabilities matching one route, audience, and target.
+
+EXAMPLES
+  Explain effective Grant access.
+
+    $ sf share check
 ```
 
-_See code: [src/commands/share/check.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/check.ts)_
+_See code: [src/commands/share/check.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/check.ts)_
 
 ## `sf share grant`
 
@@ -4548,13 +5168,14 @@ Create a Space Grant.
 ```text
 USAGE
   $ sf share grant --to public|team --role viewer|commenter|editor|manager --path <value>... [--api-url
-    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>] [--wait]
-    [--exclude <value>...] [--target <value>] [--name <value>] [--expires <value>] [--network <value>...] [--country
-    <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...]
+    <value>] [--profile <value>] [-y] [--rationale <value>] [-o <value>]
+    [--space <value>] [--wait] [--exclude <value>...] [--target <value>] [--name <value>] [--expires <value>] [--network
+    <value>...] [--country <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -4573,6 +5194,10 @@ GRANT FLAGS
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
   --to=<option>         (required) Audience: public or team.
                         <options: public|team>
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -4597,7 +5222,7 @@ EXAMPLES
     $ sf share grant --to public --role viewer --path '/**' --target all-versions
 ```
 
-_See code: [src/commands/share/grant.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/grant.ts)_
+_See code: [src/commands/share/grant.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/grant.ts)_
 
 ## `sf share grant edit ID`
 
@@ -4605,10 +5230,11 @@ Edit a direct managed Grant.
 
 ```text
 USAGE
-  $ sf share grant edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--name <value>] [--role viewer|commenter|editor|manager]
-    [--exclude <value>... --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>...
-    | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
+  $ sf share grant edit ID [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--wait] [--name <value>] [--role
+    viewer|commenter|editor|manager] [--exclude <value>... --path <value>...] [--target <value>] [--expires <value> |
+    --no-expiry] [--network <value>... | --no-network] [--country <value>... | ] [--exclude-country <value>... | ]
+    [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
   ID  Managed Grant id.
@@ -4626,6 +5252,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -4635,6 +5262,10 @@ CONSTRAINTS FLAGS
   --network=<value>...             Replace allowed IP addresses or CIDRs. Repeatable.
   --no-network                     Remove every network constraint from this Grant.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
 
@@ -4642,9 +5273,14 @@ DESCRIPTION
   Edit a direct managed Grant.
 
   Replace editable dimensions of a direct managed Grant while preserving its stable id.
+
+EXAMPLES
+  Edit a direct managed Grant.
+
+    $ sf share grant edit <id>
 ```
 
-_See code: [src/commands/share/grant/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/grant/edit.ts)_
+_See code: [src/commands/share/grant/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/grant/edit.ts)_
 
 ## `sf share identity`
 
@@ -4652,20 +5288,30 @@ Manage external identity access.
 
 ```text
 USAGE
-  $ sf share identity [--profile <value>] [-y]
+  $ sf share identity [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage external identity access.
 
   Connect OIDC or a white-label signer, then grant external subjects precise capabilities and paths.
+
+EXAMPLES
+  Manage external identity access.
+
+    $ sf share identity
 ```
 
-_See code: [src/commands/share/identity.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity.ts)_
+_See code: [src/commands/share/identity.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity.ts)_
 
 ## `sf share identity create`
 
@@ -4674,8 +5320,8 @@ Create an identity connection.
 ```text
 USAGE
   $ sf share identity create --type oidc|signer --name <value> --issuer <value> [--profile
-    <value>] [-y] [-o <value>] [--client-id <value>] [--client-secret <value>] [--authorize-url
-    <value>] [--key <value>...]
+    <value>] [-y] [--rationale <value>] [-o <value>] [--client-id <value>] [--client-secret <value>]
+    [--authorize-url <value>] [--key <value>...]
 
 FLAGS
   --authorize-url=<value>
@@ -4690,15 +5336,25 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create an identity connection.
 
   Create an OIDC connection or a white-label Ed25519 signer connection for a Team.
+
+EXAMPLES
+  Create an identity connection.
+
+    $ sf share identity create --type <type> --name <name> --issuer <issuer>
 ```
 
-_See code: [src/commands/share/identity/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity/create.ts)_
+_See code: [src/commands/share/identity/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity/create.ts)_
 
 ## `sf share identity grant`
 
@@ -4707,7 +5363,7 @@ Create an external identity Grant.
 ```text
 USAGE
   $ sf share identity grant --connection <value> --subject <value> --name <value> [--profile
-    <value>] [-y] [-o <value>] [--space <value>] [--role
+    <value>] [-y] [--rationale <value>] [-o <value>] [--space <value>] [--role
     viewer|commenter|editor|manager] [--path <value>...] [--except <value>...] [--target <value>] [--not-before <value>]
     [--expires <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country
     <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
@@ -4725,6 +5381,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -4737,13 +5394,22 @@ CONSTRAINTS FLAGS
   --not-before=<value>             Do not admit this Grant before this ISO date-time.
   --require-verified-email         Require email verification for this credential.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Create an external identity Grant.
 
   Grant one externally proven subject precise capabilities and paths on a Space.
+
+EXAMPLES
+  Create an external identity Grant.
+
+    $ sf share identity grant --connection <connection> --subject <subject> --name <name>
 ```
 
-_See code: [src/commands/share/identity/grant.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity/grant.ts)_
+_See code: [src/commands/share/identity/grant.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity/grant.ts)_
 
 ## `sf share identity ls`
 
@@ -4751,12 +5417,18 @@ List identity connections.
 
 ```text
 USAGE
-  $ sf share identity ls [--profile <value>] [-y] [-o <value>]
+  $ sf share identity ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List identity connections.
@@ -4765,9 +5437,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share identity list
+
+EXAMPLES
+  List identity connections.
+
+    $ sf share identity ls
 ```
 
-_See code: [src/commands/share/identity/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity/ls.ts)_
+_See code: [src/commands/share/identity/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity/ls.ts)_
 
 ## `sf share identity revoke CONNECTION`
 
@@ -4775,8 +5452,8 @@ Revoke an identity connection.
 
 ```text
 USAGE
-  $ sf share identity revoke CONNECTION [--profile <value>] [-y] [-o
-  <value>]
+  $ sf share identity revoke CONNECTION [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   CONNECTION  Identity connection id.
@@ -4784,15 +5461,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke an identity connection.
 
   Revoke an identity connection, its external Grants, and admitted sessions.
+
+EXAMPLES
+  Revoke an identity connection.
+
+    $ sf share identity revoke <connection>
 ```
 
-_See code: [src/commands/share/identity/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity/revoke.ts)_
+_See code: [src/commands/share/identity/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity/revoke.ts)_
 
 ## `sf share identity update CONNECTION`
 
@@ -4800,9 +5487,9 @@ Update or rotate an identity connection.
 
 ```text
 USAGE
-  $ sf share identity update CONNECTION [--profile <value>] [-y] [-o
-    <value>] [--name <value>] [--client-id <value>] [--client-secret <value>] [--authorize-url <value>] [--key
-    <value>...] [--session-ttl <value>]
+  $ sf share identity update CONNECTION [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>] [--name <value>] [--client-id <value>] [--client-secret <value>] [--authorize-url
+    <value>] [--key <value>...] [--session-ttl <value>]
 
 ARGUMENTS
   CONNECTION  Identity connection id.
@@ -4819,15 +5506,25 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Update or rotate an identity connection.
 
   Rotate OIDC secrets or signer keys and update connection settings without changing external Grants.
+
+EXAMPLES
+  Update or rotate an identity connection.
+
+    $ sf share identity update <connection>
 ```
 
-_See code: [src/commands/share/identity/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/identity/update.ts)_
+_See code: [src/commands/share/identity/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/identity/update.ts)_
 
 ## `sf share link`
 
@@ -4835,21 +5532,31 @@ Manage Links.
 
 ```text
 USAGE
-  $ sf share link [--profile <value>] [-y]
+  $ sf share link [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage Links.
 
   Create, list, edit, copy, and revoke named Links. Each Link owns one Grant with paths, exclusions, capabilities, and a
   serving target.
+
+EXAMPLES
+  Manage Links.
+
+    $ sf share link
 ```
 
-_See code: [src/commands/share/link.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link.ts)_
+_See code: [src/commands/share/link.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link.ts)_
 
 ## `sf share link copy ID`
 
@@ -4857,7 +5564,7 @@ Copy a Link.
 
 ```text
 USAGE
-  $ sf share link copy ID [--profile <value>] [-y] [--claim-token
+  $ sf share link copy ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--show-secret]
 
 ARGUMENTS
@@ -4866,7 +5573,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 LINK FLAGS
   --show-secret  Print the share URL even when output is JSON or non-interactive.
@@ -4882,7 +5594,7 @@ EXAMPLES
     $ sf share link copy lnk_123
 ```
 
-_See code: [src/commands/share/link/copy.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link/copy.ts)_
+_See code: [src/commands/share/link/copy.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link/copy.ts)_
 
 ## `sf share link create`
 
@@ -4891,14 +5603,15 @@ Create a Link.
 ```text
 USAGE
   $ sf share link create --name <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--landing <value>] [--path <value>...] [--exclude
-    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses
-    <value>] [--require-verified-email] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
-    [--exclude-user-agent <value>...] [--show-secret]
+    [--rationale <value>] [-o <value>] [--space <value>] [--landing <value>] [--path <value>...]
+    [--exclude <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>] [--expires <value>]
+    [--max-uses <value>] [--require-verified-email] [--network <value>...] [--country <value>...] [--exclude-country
+    <value>...] [--exclude-user-agent <value>...] [--show-secret]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -4921,6 +5634,10 @@ LINK FLAGS
   --show-secret         Print the share URL even when output is JSON or non-interactive.
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Create a Link.
 
@@ -4933,7 +5650,7 @@ EXAMPLES
       --role commenter --name "Client review" --expires 7d
 ```
 
-_See code: [src/commands/share/link/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link/create.ts)_
+_See code: [src/commands/share/link/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link/create.ts)_
 
 ## `sf share link edit ID`
 
@@ -4941,12 +5658,12 @@ Edit Link metadata.
 
 ```text
 USAGE
-  $ sf share link edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--name <value>] [--landing <value>] [--exclude <value>... --path
-    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value> | --no-not-before] [--expires <value>
-    | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email | --allow-unverified-email] [--network
-    <value>... | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent
-    <value>... | ]
+  $ sf share link edit ID [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--name <value>] [--landing <value>] [--exclude
+    <value>... --path <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value> | --no-not-before]
+    [--expires <value> | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email |
+    --allow-unverified-email] [--network <value>... | --no-network] [--country <value>... | ] [--exclude-country
+    <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
   ID  Link id.
@@ -4954,6 +5671,7 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -4980,13 +5698,22 @@ LINK FLAGS
                         <options: viewer|commenter>
   --target=<value>      Replace the target: live, all-versions, version:<id>, or branch:<name>.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Edit Link metadata.
 
   Replace a Link's metadata or Grant dimensions without rotating its stable URL.
+
+EXAMPLES
+  Edit Link metadata.
+
+    $ sf share link edit <id>
 ```
 
-_See code: [src/commands/share/link/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link/edit.ts)_
+_See code: [src/commands/share/link/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link/edit.ts)_
 
 ## `sf share link ls`
 
@@ -4994,13 +5721,18 @@ List Links.
 
 ```text
 USAGE
-  $ sf share link ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share link ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List Links.
@@ -5016,7 +5748,7 @@ EXAMPLES
     $ sf share link ls --space docs
 ```
 
-_See code: [src/commands/share/link/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link/ls.ts)_
+_See code: [src/commands/share/link/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link/ls.ts)_
 
 ## `sf share link revoke ID`
 
@@ -5024,7 +5756,7 @@ Revoke a Link.
 
 ```text
 USAGE
-  $ sf share link revoke ID [--profile <value>] [-y] [--claim-token
+  $ sf share link revoke ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5033,13 +5765,18 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke a Link.
 
-  Revoke a share link. Structural: the link's grant drops from the compiled rule set in the same write, so every
-  outstanding URL stops working on the next request.
+  Revoke a share link. The grant drops from the compiled rule set in the same write, so every outstanding URL stops
+  working on the next request.
 
 EXAMPLES
   Revoke a share link.
@@ -5047,7 +5784,7 @@ EXAMPLES
     $ sf share link revoke lnk_123
 ```
 
-_See code: [src/commands/share/link/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/link/revoke.ts)_
+_See code: [src/commands/share/link/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/link/revoke.ts)_
 
 ## `sf share list`
 
@@ -5055,13 +5792,18 @@ List Space Grants.
 
 ```text
 USAGE
-  $ sf share list [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share list [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List Space Grants.
@@ -5070,9 +5812,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share ls
+
+EXAMPLES
+  List Space Grants.
+
+    $ sf share list
 ```
 
-_See code: [src/commands/share/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/list.ts)_
+_See code: [src/commands/share/list.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/list.ts)_
 
 ## `sf share password`
 
@@ -5080,20 +5827,30 @@ Manage password access.
 
 ```text
 USAGE
-  $ sf share password [--profile <value>] [-y]
+  $ sf share password [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage password access.
 
   Create, list, rotate, and revoke named password Grants. Passwords never live in sf.jsonc.
+
+EXAMPLES
+  Manage password access.
+
+    $ sf share password
 ```
 
-_See code: [src/commands/share/password.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/password.ts)_
+_See code: [src/commands/share/password.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/password.ts)_
 
 ## `sf share password create`
 
@@ -5102,10 +5859,10 @@ Create password access.
 ```text
 USAGE
   $ sf share password create --name <value> --path <value>... [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--password <value>] [--password-from-stdin]
-    [--role viewer|commenter] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>]
-    [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
-    [--exclude-user-agent <value>...] [--require-verified-email]
+    <value>] [-y] [--rationale <value>] [-o <value>] [--space <value>] [--password <value>]
+    [--password-from-stdin] [--role viewer|commenter] [--exclude <value>...] [--target <value>] [--not-before <value>]
+    [--expires <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country
+    <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
   --exclude=<value>...   [default: ] Local exclusion pattern.
@@ -5120,6 +5877,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -5132,13 +5890,22 @@ CONSTRAINTS FLAGS
   --not-before=<value>             Do not admit this Grant before this ISO date-time.
   --require-verified-email         Require email verification for this credential.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Create password access.
 
   Create a named scoped password Grant. The verifier is Argon2id and rotation fences existing sessions.
+
+EXAMPLES
+  Create password access.
+
+    $ sf share password create --name <name> --path <path>
 ```
 
-_See code: [src/commands/share/password/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/password/create.ts)_
+_See code: [src/commands/share/password/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/password/create.ts)_
 
 ## `sf share password ls`
 
@@ -5146,13 +5913,18 @@ List password access.
 
 ```text
 USAGE
-  $ sf share password ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share password ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List password access.
@@ -5161,9 +5933,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share password list
+
+EXAMPLES
+  List password access.
+
+    $ sf share password ls
 ```
 
-_See code: [src/commands/share/password/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/password/ls.ts)_
+_See code: [src/commands/share/password/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/password/ls.ts)_
 
 ## `sf share password revoke ID`
 
@@ -5171,7 +5948,7 @@ Revoke password access.
 
 ```text
 USAGE
-  $ sf share password revoke ID [--profile <value>] [-y] [--claim-token
+  $ sf share password revoke ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5180,15 +5957,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke password access.
 
   Revoke password access and its canonical Grant.
+
+EXAMPLES
+  Revoke password access.
+
+    $ sf share password revoke <id>
 ```
 
-_See code: [src/commands/share/password/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/password/revoke.ts)_
+_See code: [src/commands/share/password/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/password/revoke.ts)_
 
 ## `sf share password rotate ID`
 
@@ -5196,7 +5983,7 @@ Rotate a password.
 
 ```text
 USAGE
-  $ sf share password rotate ID [--profile <value>] [-y] [--claim-token
+  $ sf share password rotate ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--password <value>] [--password-from-stdin]
 
 ARGUMENTS
@@ -5209,15 +5996,25 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Rotate a password.
 
   Replace a password and immediately fence sessions using the old one.
+
+EXAMPLES
+  Rotate a password.
+
+    $ sf share password rotate <id>
 ```
 
-_See code: [src/commands/share/password/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/password/rotate.ts)_
+_See code: [src/commands/share/password/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/password/rotate.ts)_
 
 ## `sf share people`
 
@@ -5225,20 +6022,30 @@ Manage People.
 
 ```text
 USAGE
-  $ sf share people [--profile <value>] [-y]
+  $ sf share people [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage People.
 
   Invite, list, resend, edit, and remove People. A Person can hold roles on multiple route subtrees.
+
+EXAMPLES
+  Manage People.
+
+    $ sf share people
 ```
 
-_See code: [src/commands/share/people.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people.ts)_
+_See code: [src/commands/share/people.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people.ts)_
 
 ## `sf share people edit PERSON`
 
@@ -5247,7 +6054,7 @@ Edit a Person's scoped roles.
 ```text
 USAGE
   $ sf share people edit PERSON --grant <value>... [--profile <value>]
-    [-y] [-o <value>] [--space <value>] [--target <value>]
+    [-y] [--rationale <value>] [-o <value>] [--space <value>] [--target <value>]
 
 ARGUMENTS
   PERSON  Person id or email address.
@@ -5255,11 +6062,16 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 PEOPLE FLAGS
   --grant=<value>...  (required) Scoped role in <path>=<role> form. Repeat to replace the full grant set.
   --target=<value>    [default: live] live, all-versions, version:<id>, or branch:<name>.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Edit a Person's scoped roles.
@@ -5272,7 +6084,7 @@ EXAMPLES
     $ sf share people edit person@example.com --grant /=viewer --grant /docs=editor
 ```
 
-_See code: [src/commands/share/people/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people/edit.ts)_
+_See code: [src/commands/share/people/edit.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people/edit.ts)_
 
 ## `sf share people invite EMAIL`
 
@@ -5280,9 +6092,9 @@ Invite a Person.
 
 ```text
 USAGE
-  $ sf share people invite EMAIL [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>...] [--target
-    <value>]
+  $ sf share people invite EMAIL [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope
+    <value>...] [--target <value>]
 
 ARGUMENTS
   EMAIL  Email address to invite.
@@ -5290,7 +6102,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 PEOPLE FLAGS
   --role=<option>     [default: viewer] Role granted on every supplied scope.
@@ -5313,7 +6130,7 @@ EXAMPLES
     $ sf share people invite client@example.com --role viewer --target version:ver_123
 ```
 
-_See code: [src/commands/share/people/invite.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people/invite.ts)_
+_See code: [src/commands/share/people/invite.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people/invite.ts)_
 
 ## `sf share people ls`
 
@@ -5321,13 +6138,18 @@ List People.
 
 ```text
 USAGE
-  $ sf share people ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share people ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List People.
@@ -5336,9 +6158,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share people list
+
+EXAMPLES
+  List People.
+
+    $ sf share people ls
 ```
 
-_See code: [src/commands/share/people/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people/ls.ts)_
+_See code: [src/commands/share/people/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people/ls.ts)_
 
 ## `sf share people remove PERSON`
 
@@ -5346,7 +6173,7 @@ Remove a Person.
 
 ```text
 USAGE
-  $ sf share people remove PERSON [--profile <value>] [-y] [--claim-token
+  $ sf share people remove PERSON [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5355,15 +6182,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Remove a Person.
 
   Remove a Person and all of their scoped grants.
+
+EXAMPLES
+  Remove a Person.
+
+    $ sf share people remove <person>
 ```
 
-_See code: [src/commands/share/people/remove.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people/remove.ts)_
+_See code: [src/commands/share/people/remove.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people/remove.ts)_
 
 ## `sf share people resend PERSON`
 
@@ -5371,7 +6208,7 @@ Resend a Person invitation.
 
 ```text
 USAGE
-  $ sf share people resend PERSON [--profile <value>] [-y] [--claim-token
+  $ sf share people resend PERSON [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5380,15 +6217,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Resend a Person invitation.
 
   Replace a pending Person invitation and send a fresh accountless acceptance email.
+
+EXAMPLES
+  Resend a Person invitation.
+
+    $ sf share people resend <person>
 ```
 
-_See code: [src/commands/share/people/resend.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/people/resend.ts)_
+_See code: [src/commands/share/people/resend.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/people/resend.ts)_
 
 ## `sf share request`
 
@@ -5396,20 +6243,30 @@ Manage access requests.
 
 ```text
 USAGE
-  $ sf share request [--profile <value>] [-y]
+  $ sf share request [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage access requests.
 
   List, approve, and deny inbox-verified access requests.
+
+EXAMPLES
+  Manage access requests.
+
+    $ sf share request
 ```
 
-_See code: [src/commands/share/request.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/request.ts)_
+_See code: [src/commands/share/request.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/request.ts)_
 
 ## `sf share request approve ID`
 
@@ -5417,8 +6274,9 @@ Approve an access request.
 
 ```text
 USAGE
-  $ sf share request approve ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>]
+  $ sf share request approve ID [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope
+    <value>]
 
 ARGUMENTS
   ID  Access request id.
@@ -5426,7 +6284,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 APPROVE FLAGS
   --role=<option>  Approved role. Defaults to the requested role.
@@ -5437,9 +6300,14 @@ DESCRIPTION
   Approve an access request.
 
   Approve an access request into the canonical People list. Override the requested role or route scopes when needed.
+
+EXAMPLES
+  Approve an access request.
+
+    $ sf share request approve <id>
 ```
 
-_See code: [src/commands/share/request/approve.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/request/approve.ts)_
+_See code: [src/commands/share/request/approve.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/request/approve.ts)_
 
 ## `sf share request deny ID`
 
@@ -5447,7 +6315,7 @@ Deny an access request.
 
 ```text
 USAGE
-  $ sf share request deny ID [--profile <value>] [-y] [--claim-token
+  $ sf share request deny ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5456,15 +6324,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Deny an access request.
 
   Deny a pending access request.
+
+EXAMPLES
+  Deny an access request.
+
+    $ sf share request deny <id>
 ```
 
-_See code: [src/commands/share/request/deny.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/request/deny.ts)_
+_See code: [src/commands/share/request/deny.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/request/deny.ts)_
 
 ## `sf share request ls`
 
@@ -5472,13 +6350,18 @@ List access requests.
 
 ```text
 USAGE
-  $ sf share request ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share request ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List access requests.
@@ -5487,9 +6370,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share request list
+
+EXAMPLES
+  List access requests.
+
+    $ sf share request ls
 ```
 
-_See code: [src/commands/share/request/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/request/ls.ts)_
+_See code: [src/commands/share/request/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/request/ls.ts)_
 
 ## `sf share revoke ID`
 
@@ -5497,7 +6385,7 @@ Revoke a Space Grant.
 
 ```text
 USAGE
-  $ sf share revoke ID [--profile <value>] [-y] [--claim-token
+  $ sf share revoke ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--wait]
 
 ARGUMENTS
@@ -5506,7 +6394,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -5514,11 +6407,16 @@ EXECUTION FLAGS
 DESCRIPTION
   Revoke a Space Grant.
 
-  Revoke one managed Grant. Config Grants must be changed in sf.jsonc; credential Grants are normally revoked through
-  their credential command.
+  Revoke one managed Grant. Change config Grants in sf.jsonc. Credential Grants normally revoke through their credential
+  command.
+
+EXAMPLES
+  Revoke a Space Grant.
+
+    $ sf share revoke <id>
 ```
 
-_See code: [src/commands/share/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/revoke.ts)_
+_See code: [src/commands/share/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/revoke.ts)_
 
 ## `sf share token`
 
@@ -5526,20 +6424,30 @@ Manage machine access.
 
 ```text
 USAGE
-  $ sf share token [--profile <value>] [-y]
+  $ sf share token [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage machine access.
 
-  Create, list, rotate, and revoke header-only machine credentials backed by scoped Grants.
+  Manage header-only machine credentials backed by scoped Grants.
+
+EXAMPLES
+  Manage machine access.
+
+    $ sf share token
 ```
 
-_See code: [src/commands/share/token.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/token.ts)_
+_See code: [src/commands/share/token.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/token.ts)_
 
 ## `sf share token create`
 
@@ -5548,9 +6456,10 @@ Create a machine credential.
 ```text
 USAGE
   $ sf share token create --name <value> --path <value>... [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager]
-    [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network
-    <value>...] [--country <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...] [--show-secret]
+    <value>] [-y] [--rationale <value>] [-o <value>] [--space <value>] [--role
+    viewer|commenter|editor|manager] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires
+    <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
+    [--exclude-user-agent <value>...] [--show-secret]
 
 FLAGS
   --exclude=<value>...  [default: ] Local exclusion pattern.
@@ -5564,6 +6473,7 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
@@ -5575,13 +6485,22 @@ CONSTRAINTS FLAGS
   --network=<value>...             [default: ] Allowed IP address or CIDR. Repeatable.
   --not-before=<value>             Do not admit this Grant before this ISO date-time.
 
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
 DESCRIPTION
   Create a machine credential.
 
   Create a named header-only machine credential and scoped Grant. The token is returned once.
+
+EXAMPLES
+  Create a machine credential.
+
+    $ sf share token create --name <name> --path <path>
 ```
 
-_See code: [src/commands/share/token/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/token/create.ts)_
+_See code: [src/commands/share/token/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/token/create.ts)_
 
 ## `sf share token ls`
 
@@ -5589,13 +6508,18 @@ List machine access.
 
 ```text
 USAGE
-  $ sf share token ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share token ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List machine access.
@@ -5604,9 +6528,14 @@ DESCRIPTION
 
 ALIASES
   $ sf share token list
+
+EXAMPLES
+  List machine access.
+
+    $ sf share token ls
 ```
 
-_See code: [src/commands/share/token/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/token/ls.ts)_
+_See code: [src/commands/share/token/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/token/ls.ts)_
 
 ## `sf share token revoke ID`
 
@@ -5614,7 +6543,7 @@ Revoke machine access.
 
 ```text
 USAGE
-  $ sf share token revoke ID [--profile <value>] [-y] [--claim-token
+  $ sf share token revoke ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -5623,15 +6552,25 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Revoke machine access.
 
   Revoke a machine credential and its canonical Grant.
+
+EXAMPLES
+  Revoke machine access.
+
+    $ sf share token revoke <id>
 ```
 
-_See code: [src/commands/share/token/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/token/revoke.ts)_
+_See code: [src/commands/share/token/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/token/revoke.ts)_
 
 ## `sf share token rotate ID`
 
@@ -5639,7 +6578,7 @@ Rotate a machine credential.
 
 ```text
 USAGE
-  $ sf share token rotate ID [--profile <value>] [-y] [--claim-token
+  $ sf share token rotate ID [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--show-secret]
 
 ARGUMENTS
@@ -5651,15 +6590,25 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Rotate a machine credential.
 
   Rotate a machine credential, fence the old token, and return the replacement once.
+
+EXAMPLES
+  Rotate a machine credential.
+
+    $ sf share token rotate <id>
 ```
 
-_See code: [src/commands/share/token/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/share/token/rotate.ts)_
+_See code: [src/commands/share/token/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/share/token/rotate.ts)_
 
 ## `sf skills`
 
@@ -5667,27 +6616,36 @@ Install or update Spacefast agent skills.
 
 ```text
 USAGE
-  $ sf skills [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
-    |cline|continue|claude|copilot...] [-p] [-l] [--force]
+  $ sf skills [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf...] [-p] [-l] [--force]
 
 FLAGS
   -l, --list               List bundled skill files without installing.
   -p, --project            Install into this project instead of the agent's global skills directory.
       --agent=<option>...  Agent to install for. `auto` configures detected agents plus .agents/skills.
-                           <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
+                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
+                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
+                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
       --force              Overwrite locally modified or unverified Spacefast skill files.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Install or update Spacefast agent skills.
 
-  Install or safely update the Spacefast agent skill bundled with this CLI.
+  Install or update the Spacefast agent skill bundled with this CLI.
 
 ALIASES
   $ sf skills install
@@ -5706,7 +6664,7 @@ EXAMPLES
     $ sf skills --agent all
 ```
 
-_See code: [src/commands/skills.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/skills.ts)_
+_See code: [src/commands/skills.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/skills.ts)_
 
 ## `sf skills remove`
 
@@ -5714,21 +6672,30 @@ Remove Spacefast agent skills.
 
 ```text
 USAGE
-  $ sf skills remove [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
-    |cline|continue|claude|copilot...] [-p] [--force]
+  $ sf skills remove [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf...] [-p] [--force]
 
 FLAGS
   -p, --project            Remove project-local skills instead of global skills.
       --agent=<option>...  Agent to remove from. Repeat to remove from more than one.
-                           <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
+                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
+                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
+                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
       --force              Remove locally modified or unverified Spacefast skill files.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Remove Spacefast agent skills.
@@ -5749,7 +6716,7 @@ EXAMPLES
     $ sf skills remove --project --agent claude-code
 ```
 
-_See code: [src/commands/skills/remove.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/skills/remove.ts)_
+_See code: [src/commands/skills/remove.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/skills/remove.ts)_
 
 ## `sf skills status`
 
@@ -5757,20 +6724,29 @@ Check Spacefast skill installation.
 
 ```text
 USAGE
-  $ sf skills status [--profile <value>] [-y] [--agent
-    auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|cursor|vscode|gemini-cli|windsurf
-    |cline|continue|claude|copilot...] [-p]
+  $ sf skills status [--profile <value>] [-y] [--rationale <value>]
+    [--agent auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-des
+    ktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|opencla
+    w|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.
+    dev|windsurf...] [-p]
 
 FLAGS
   -p, --project            Check project-local skills instead of global skill directories.
       --agent=<option>...  Agent to check. `auto` checks detected agents plus .agents/skills.
-                           <options: auto|all|generic|universal|claude-code|codex|opencode|github-copilot|factory-droid|
-                           cursor|vscode|gemini-cli|windsurf|cline|continue|claude|copilot>
+                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
+                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
+                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
+                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Check Spacefast skill installation.
@@ -5794,7 +6770,7 @@ EXAMPLES
     $ sf skills status --project --agent claude-code
 ```
 
-_See code: [src/commands/skills/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/skills/status.ts)_
+_See code: [src/commands/skills/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/skills/status.ts)_
 
 ## `sf spaces`
 
@@ -5802,20 +6778,30 @@ Manage spaces.
 
 ```text
 USAGE
-  $ sf spaces [--profile <value>] [-y]
+  $ sf spaces [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage spaces.
 
   Manage Spacefast spaces.
+
+EXAMPLES
+  Manage spaces.
+
+    $ sf spaces
 ```
 
-_See code: [src/commands/spaces.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces.ts)_
+_See code: [src/commands/spaces.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces.ts)_
 
 ## `sf spaces add`
 
@@ -5823,9 +6809,9 @@ Create an empty space.
 
 ```text
 USAGE
-  $ sf spaces add [--profile <value>] [-y] [-o <value>] [-n
-    <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode website|files]
-    [--save-state] [--show-secret]
+  $ sf spaces add [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode
+    website|files] [--save-state] [--show-secret]
 
 SPACE METADATA FLAGS
   -n, --name=<value>             Set the space title.
@@ -5840,14 +6826,18 @@ SPACE METADATA FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]save-state  Write the created space to .spacefast/state.json.
 
 OUTPUT FLAGS
-  --show-secret  Print access and Claim capabilities. Secrets are hidden from JSON and non-interactive output by
-                 default.
+  --show-secret  Print the access URL and claim link in JSON or non-interactive output.
 
 DESCRIPTION
   Create an empty space.
@@ -5858,12 +6848,10 @@ ALIASES
   $ sf spaces create
 
 EXAMPLES
-  Create an empty space.
-
-    $ sf spaces add --name docs
+  $ sf spaces add --name docs
 ```
 
-_See code: [src/commands/spaces/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/add.ts)_
+_See code: [src/commands/spaces/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/add.ts)_
 
 ## `sf spaces claim`
 
@@ -5871,13 +6859,18 @@ Claim an anonymous space.
 
 ```text
 USAGE
-  $ sf spaces claim [--profile <value>] [-y] [--claim-token
-    <value>] [--keep-publishing] [--space <value>] [-o <value>] [--wait]
+  $ sf spaces claim [--profile <value>] [-y] [--rationale <value>]
+    [--keep-publishing] [--space <value>] [-o <value>] [--wait]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -5885,7 +6878,7 @@ EXECUTION FLAGS
 DESCRIPTION
   Claim an anonymous space.
 
-  Move a saved anonymous space into your account. If needed, the CLI starts browser login first.
+  Move a saved anonymous space into your account. Starts browser login if needed.
 
 EXAMPLES
   Claim the space saved in the current directory.
@@ -5897,7 +6890,7 @@ EXAMPLES
     $ sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
 ```
 
-_See code: [src/commands/spaces/claim.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/claim.ts)_
+_See code: [src/commands/spaces/claim.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/claim.ts)_
 
 ## `sf spaces download`
 
@@ -5905,8 +6898,8 @@ Download a space version.
 
 ```text
 USAGE
-  $ sf spaces download [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--output <value>] [--overwrite] [-j <value>] [-v <value>]
+  $ sf spaces download [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--output <value>] [--overwrite] [-j <value>] [-v <value>]
 
 FLAGS
   -j, --concurrency=<value>  [default: 10] Number of files to download at the same time.
@@ -5917,7 +6910,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Download a space version.
@@ -5934,22 +6932,27 @@ EXAMPLES
     $ sf spaces download --space docs --version v3 --overwrite
 ```
 
-_See code: [src/commands/spaces/download.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/download.ts)_
+_See code: [src/commands/spaces/download.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/download.ts)_
 
 ## `sf spaces duplicate`
 
-Duplicate a space with a download-and-publish copy.
+Duplicate a space.
 
 ```text
 USAGE
-  $ sf spaces duplicate [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--slug <value>] [--title <value>] [--version <value>] [--wait]
-    [--wait-timeout <value>]
+  $ sf spaces duplicate [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--slug <value>] [--title <value>] [--version <value>]
+    [--wait] [--wait-timeout <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DUPLICATE TARGET FLAGS
   --slug=<value>   Slug for the duplicate space.
@@ -5963,7 +6966,7 @@ EXECUTION FLAGS
   --wait-timeout=<value>  [default: 900] Seconds to wait for the duplicate to become ready.
 
 DESCRIPTION
-  Duplicate a space with a download-and-publish copy.
+  Duplicate a space.
 
   Download an existing space version and publish those files as a new space.
 
@@ -5973,7 +6976,7 @@ EXAMPLES
     $ sf spaces duplicate --space docs --slug docs-copy
 ```
 
-_See code: [src/commands/spaces/duplicate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/duplicate.ts)_
+_See code: [src/commands/spaces/duplicate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/duplicate.ts)_
 
 ## `sf spaces get`
 
@@ -5981,19 +6984,23 @@ Show a space.
 
 ```text
 USAGE
-  $ sf spaces get [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf spaces get [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show a space.
 
-  Resolve a space from --space or .spacefast/state.json and print its live runtime state, current version, and runtime
-  details.
+  Print a space's live runtime state and current version.
 
 EXAMPLES
   Show the space linked to the current directory.
@@ -6005,7 +7012,7 @@ EXAMPLES
     $ sf spaces get --space docs
 ```
 
-_See code: [src/commands/spaces/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/get.ts)_
+_See code: [src/commands/spaces/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/get.ts)_
 
 ## `sf spaces ls`
 
@@ -6013,8 +7020,8 @@ List spaces.
 
 ```text
 USAGE
-  $ sf spaces ls [--profile <value>] [-y] [-o <value>] [--limit
-    <value>]
+  $ sf spaces ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--limit <value>]
 
 FLAGS
   --limit=<value>  Maximum number of spaces to return (default 50, max 100).
@@ -6022,7 +7029,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List spaces.
@@ -6042,7 +7054,7 @@ EXAMPLES
     $ sf spaces ls --team acme
 ```
 
-_See code: [src/commands/spaces/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/ls.ts)_
+_See code: [src/commands/spaces/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/ls.ts)_
 
 ## `sf spaces rm`
 
@@ -6050,13 +7062,18 @@ Delete a space.
 
 ```text
 USAGE
-  $ sf spaces rm [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait]
+  $ sf spaces rm [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--wait]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -6080,7 +7097,7 @@ EXAMPLES
     $ sf spaces rm --space docs --yes
 ```
 
-_See code: [src/commands/spaces/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/rm.ts)_
+_See code: [src/commands/spaces/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/rm.ts)_
 
 ## `sf spaces rotate-claim`
 
@@ -6088,13 +7105,18 @@ Rotate an anonymous Space's key.
 
 ```text
 USAGE
-  $ sf spaces rotate-claim [--profile <value>] [-y] [--claim-token
-    <value>] [--space <value>]
+  $ sf spaces rotate-claim [--profile <value>] [-y] [--rationale <value>]
+    [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Rotate an anonymous Space's key.
@@ -6107,7 +7129,7 @@ EXAMPLES
     $ sf spaces rotate-claim
 ```
 
-_See code: [src/commands/spaces/rotate-claim.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/rotate-claim.ts)_
+_See code: [src/commands/spaces/rotate-claim.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/rotate-claim.ts)_
 
 ## `sf spaces transfer TEAM`
 
@@ -6115,7 +7137,7 @@ Transfer a space to another team.
 
 ```text
 USAGE
-  $ sf spaces transfer TEAM [--profile <value>] [-y] [--claim-token
+  $ sf spaces transfer TEAM [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -6124,19 +7146,23 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Transfer a space to another team.
 
-  Request a transfer of the selected space to another team. The transfer applies after a member of the target team
-  accepts it.
+  Request a transfer of the selected space to another team. It applies once the target team accepts.
 
 EXAMPLES
   $ sf spaces transfer acme --space spc_123
 ```
 
-_See code: [src/commands/spaces/transfer.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/transfer.ts)_
+_See code: [src/commands/spaces/transfer.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/transfer.ts)_
 
 ## `sf spaces update`
 
@@ -6144,10 +7170,10 @@ Rename or update a space.
 
 ```text
 USAGE
-  $ sf spaces update [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--mode website|files] [--spa
-    auto|true|false] [--slug <value>] [-n <value>] [--viewer-description <value>] [--viewer-og-image-path <value>]
-    [--viewer-title <value>]
+  $ sf spaces update [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--mode website|files]
+    [--spa auto|true|false] [--slug <value>] [-n <value>] [--viewer-description <value>] [--viewer-og-image-path
+    <value>] [--viewer-title <value>]
 
 SITE METADATA FLAGS
   -n, --name=<value>   Space title.
@@ -6159,7 +7185,12 @@ SITE METADATA FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 IDENTITY FLAGS
   --slug=<value>  New space slug. Must be sent without other update flags.
@@ -6192,7 +7223,7 @@ EXAMPLES
     $ sf spaces update --space docs --mode files --spa false
 ```
 
-_See code: [src/commands/spaces/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/spaces/update.ts)_
+_See code: [src/commands/spaces/update.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/spaces/update.ts)_
 
 ## `sf status`
 
@@ -6200,15 +7231,21 @@ Show CLI status.
 
 ```text
 USAGE
-  $ sf status [--profile <value>] [-y] [--include-claim-url]
+  $ sf status [--profile <value>] [-y] [--rationale <value>]
+    [--include-claim-url]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
   --include-claim-url  Include the still-pending claim link.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show CLI status.
@@ -6225,7 +7262,7 @@ EXAMPLES
     $ sf status --include-claim-url
 ```
 
-_See code: [src/commands/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/status.ts)_
+_See code: [src/commands/status.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/status.ts)_
 
 ## `sf storage [TARGET]`
 
@@ -6233,8 +7270,8 @@ List a space's stored objects.
 
 ```text
 USAGE
-  $ sf storage [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
+  $ sf storage [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -6246,7 +7283,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List a space's stored objects.
@@ -6263,7 +7305,7 @@ EXAMPLES
     $ sf storage docs --limit 10
 ```
 
-_See code: [src/commands/storage.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/storage.ts)_
+_See code: [src/commands/storage.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/storage.ts)_
 
 ## `sf storage ls [TARGET]`
 
@@ -6271,8 +7313,8 @@ List a space's stored objects.
 
 ```text
 USAGE
-  $ sf storage ls [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
+  $ sf storage ls [TARGET] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -6284,13 +7326,23 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 ALIASES
   $ sf storage list
+
+EXAMPLES
+  List a space's stored objects.
+
+    $ sf storage ls [target]
 ```
 
-_See code: [src/commands/storage/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/storage/ls.ts)_
+_See code: [src/commands/storage/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/storage/ls.ts)_
 
 ## `sf storage rm [ID]`
 
@@ -6298,7 +7350,7 @@ Delete a stored object.
 
 ```text
 USAGE
-  $ sf storage rm [ID] [--profile <value>] [-y] [--claim-token
+  $ sf storage rm [ID] [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -6307,7 +7359,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Delete a stored object.
@@ -6324,7 +7381,7 @@ EXAMPLES
     $ sf storage rm 0123456789abcdef0123456789abcdef --yes
 ```
 
-_See code: [src/commands/storage/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/storage/rm.ts)_
+_See code: [src/commands/storage/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/storage/rm.ts)_
 
 ## `sf switch [TEAM]`
 
@@ -6332,7 +7389,8 @@ Switch teams.
 
 ```text
 USAGE
-  $ sf switch [TEAM] [--profile <value>] [-y] [-o <value>]
+  $ sf switch [TEAM] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   [TEAM]  Team slug, ID, or name.
@@ -6340,7 +7398,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Switch teams.
@@ -6353,7 +7416,7 @@ EXAMPLES
     $ sf switch acme
 ```
 
-_See code: [src/commands/switch.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/switch.ts)_
+_See code: [src/commands/switch.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/switch.ts)_
 
 ## `sf tags`
 
@@ -6361,8 +7424,8 @@ List effective tags.
 
 ```text
 USAGE
-  $ sf tags [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--environment <value>]
+  $ sf tags [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--environment <value>]
 
 FLAGS
   --environment=<value>  Release environment to inspect.
@@ -6370,7 +7433,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List effective tags.
@@ -6387,7 +7455,7 @@ EXAMPLES
     $ sf tags --space docs --environment production
 ```
 
-_See code: [src/commands/tags.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags.ts)_
+_See code: [src/commands/tags.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags.ts)_
 
 ## `sf tags apply FILE`
 
@@ -6395,9 +7463,9 @@ Apply declarative tags.
 
 ```text
 USAGE
-  $ sf tags apply FILE [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--submit] [--release <value>]
-    [--expected-current-version <value>] [--idempotency-key <value>]
+  $ sf tags apply FILE [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--submit] [--release
+    <value>] [--expected-current-version <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   FILE  spacefast.tags.json file.
@@ -6413,7 +7481,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Apply declarative tags.
@@ -6430,7 +7503,7 @@ EXAMPLES
     $ sf tags apply spacefast.tags.json --space docs --submit --release production
 ```
 
-_See code: [src/commands/tags/apply.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/apply.ts)_
+_See code: [src/commands/tags/apply.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/apply.ts)_
 
 ## `sf tags debug`
 
@@ -6438,9 +7511,9 @@ Create a tag debug session.
 
 ```text
 USAGE
-  $ sf tags debug [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--revoke-session <value>] [--url <value>]
-    [--environment <value>] [--idempotency-key <value>]
+  $ sf tags debug [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--version <value>] [--revoke-session <value>] [--url
+    <value>] [--environment <value>] [--idempotency-key <value>]
 
 FLAGS
   --environment=<value>      Release environment to debug.
@@ -6452,7 +7525,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create a tag debug session.
@@ -6465,7 +7543,7 @@ EXAMPLES
     $ sf tags debug --space docs --url https://docs.view.fast
 ```
 
-_See code: [src/commands/tags/debug.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/debug.ts)_
+_See code: [src/commands/tags/debug.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/debug.ts)_
 
 ## `sf tags releases`
 
@@ -6473,13 +7551,18 @@ List tag releases.
 
 ```text
 USAGE
-  $ sf tags releases [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf tags releases [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List tag releases.
@@ -6492,7 +7575,7 @@ EXAMPLES
     $ sf tags releases --space docs
 ```
 
-_See code: [src/commands/tags/releases.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/releases.ts)_
+_See code: [src/commands/tags/releases.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/releases.ts)_
 
 ## `sf tags releases get ENVIRONMENT`
 
@@ -6501,7 +7584,7 @@ Read a tag release.
 ```text
 USAGE
   $ sf tags releases get ENVIRONMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+    [--rationale <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
@@ -6509,7 +7592,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Read a tag release.
@@ -6522,7 +7610,7 @@ EXAMPLES
     $ sf tags releases get production --space docs
 ```
 
-_See code: [src/commands/tags/releases/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/releases/get.ts)_
+_See code: [src/commands/tags/releases/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/releases/get.ts)_
 
 ## `sf tags releases rollback ENVIRONMENT VERSION`
 
@@ -6531,8 +7619,8 @@ Roll back a tag release.
 ```text
 USAGE
   $ sf tags releases rollback ENVIRONMENT VERSION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--expected-current-version <value>] [--notes <value>]
-    [--idempotency-key <value>]
+    [--rationale <value>] [-o <value>] [--space <value>] [--expected-current-version <value>]
+    [--notes <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
@@ -6546,7 +7634,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Roll back a tag release.
@@ -6559,7 +7652,7 @@ EXAMPLES
     $ sf tags releases rollback production tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/releases/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/releases/rollback.ts)_
+_See code: [src/commands/tags/releases/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/releases/rollback.ts)_
 
 ## `sf tags releases set ENVIRONMENT VERSION`
 
@@ -6568,8 +7661,8 @@ Set a tag release.
 ```text
 USAGE
   $ sf tags releases set ENVIRONMENT VERSION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--expected-current-version <value>] [--notes <value>]
-    [--idempotency-key <value>]
+    [--rationale <value>] [-o <value>] [--space <value>] [--expected-current-version <value>]
+    [--notes <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
@@ -6583,7 +7676,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Set a tag release.
@@ -6596,7 +7694,7 @@ EXAMPLES
     $ sf tags releases set production tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/releases/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/releases/set.ts)_
+_See code: [src/commands/tags/releases/set.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/releases/set.ts)_
 
 ## `sf tags templates`
 
@@ -6604,12 +7702,17 @@ List tag templates.
 
 ```text
 USAGE
-  $ sf tags templates [--profile <value>] [-y]
+  $ sf tags templates [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List tag templates.
@@ -6622,7 +7725,7 @@ EXAMPLES
     $ sf tags templates
 ```
 
-_See code: [src/commands/tags/templates.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/templates.ts)_
+_See code: [src/commands/tags/templates.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/templates.ts)_
 
 ## `sf tags versions`
 
@@ -6630,8 +7733,8 @@ List tag versions.
 
 ```text
 USAGE
-  $ sf tags versions [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--status <value>] [--cursor <value>] [--limit <value>]
+  $ sf tags versions [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--status <value>] [--cursor <value>] [--limit <value>]
 
 FLAGS
   --cursor=<value>  Pagination cursor.
@@ -6641,7 +7744,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List tag versions.
@@ -6658,7 +7766,7 @@ EXAMPLES
     $ sf tags versions --space docs --status draft
 ```
 
-_See code: [src/commands/tags/versions.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions.ts)_
+_See code: [src/commands/tags/versions.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions.ts)_
 
 ## `sf tags versions abandon VERSION`
 
@@ -6666,7 +7774,7 @@ Abandon a tag version.
 
 ```text
 USAGE
-  $ sf tags versions abandon VERSION [--profile <value>] [-y] [--claim-token
+  $ sf tags versions abandon VERSION [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--idempotency-key <value>]
 
 ARGUMENTS
@@ -6678,7 +7786,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Abandon a tag version.
@@ -6686,12 +7799,10 @@ DESCRIPTION
   Abandon a mutable tag version.
 
 EXAMPLES
-  Abandon a mutable tag version.
-
-    $ sf tags versions abandon tver_123 --space docs
+  $ sf tags versions abandon tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/versions/abandon.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/abandon.ts)_
+_See code: [src/commands/tags/versions/abandon.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/abandon.ts)_
 
 ## `sf tags versions approve VERSION`
 
@@ -6699,7 +7810,7 @@ Approve a tag version.
 
 ```text
 USAGE
-  $ sf tags versions approve VERSION [--profile <value>] [-y] [--claim-token
+  $ sf tags versions approve VERSION [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--idempotency-key <value>]
 
 ARGUMENTS
@@ -6711,7 +7822,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Approve a tag version.
@@ -6719,12 +7835,10 @@ DESCRIPTION
   Approve a tag version after validation and policy gates pass.
 
 EXAMPLES
-  Approve a tag version.
-
-    $ sf tags versions approve tver_123 --space docs
+  $ sf tags versions approve tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/versions/approve.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/approve.ts)_
+_See code: [src/commands/tags/versions/approve.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/approve.ts)_
 
 ## `sf tags versions create`
 
@@ -6732,9 +7846,9 @@ Create a tag version.
 
 ```text
 USAGE
-  $ sf tags versions create [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--base-version <value>] [-i <value>]
-    [--template <value>] [--field <value>...] [--trigger <value>...] [--tag-id <value>] [--name <value>]
+  $ sf tags versions create [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--base-version <value>] [-i
+    <value>] [--template <value>] [--field <value>...] [--trigger <value>...] [--tag-id <value>] [--name <value>]
     [--idempotency-key <value>]
 
 FLAGS
@@ -6752,7 +7866,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create a tag version.
@@ -6772,7 +7891,7 @@ EXAMPLES
     $ sf tags versions create --space docs --template google-analytics --field measurementId=G-123
 ```
 
-_See code: [src/commands/tags/versions/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/create.ts)_
+_See code: [src/commands/tags/versions/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/create.ts)_
 
 ## `sf tags versions diff VERSION`
 
@@ -6780,7 +7899,7 @@ Diff a tag version.
 
 ```text
 USAGE
-  $ sf tags versions diff VERSION [--profile <value>] [-y] [--claim-token
+  $ sf tags versions diff VERSION [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
@@ -6789,7 +7908,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Diff a tag version.
@@ -6802,7 +7926,7 @@ EXAMPLES
     $ sf tags versions diff tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/versions/diff.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/diff.ts)_
+_See code: [src/commands/tags/versions/diff.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/diff.ts)_
 
 ## `sf tags versions submit VERSION`
 
@@ -6810,7 +7934,7 @@ Submit a tag version.
 
 ```text
 USAGE
-  $ sf tags versions submit VERSION [--profile <value>] [-y] [--claim-token
+  $ sf tags versions submit VERSION [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--idempotency-key <value>]
 
 ARGUMENTS
@@ -6822,7 +7946,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Submit a tag version.
@@ -6835,7 +7964,7 @@ EXAMPLES
     $ sf tags versions submit tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/versions/submit.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/submit.ts)_
+_See code: [src/commands/tags/versions/submit.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/submit.ts)_
 
 ## `sf tags versions validate VERSION`
 
@@ -6843,7 +7972,7 @@ Validate a tag version.
 
 ```text
 USAGE
-  $ sf tags versions validate VERSION [--profile <value>] [-y] [--claim-token
+  $ sf tags versions validate VERSION [--profile <value>] [-y] [--rationale
     <value>] [-o <value>] [--space <value>] [--idempotency-key <value>]
 
 ARGUMENTS
@@ -6855,7 +7984,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Validate a tag version.
@@ -6868,7 +8002,7 @@ EXAMPLES
     $ sf tags versions validate tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/versions/validate.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/tags/versions/validate.ts)_
+_See code: [src/commands/tags/versions/validate.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/tags/versions/validate.ts)_
 
 ## `sf teams`
 
@@ -6876,20 +8010,30 @@ Manage teams.
 
 ```text
 USAGE
-  $ sf teams [--profile <value>] [-y]
+  $ sf teams [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage teams.
 
   Manage teams and members.
+
+EXAMPLES
+  Manage teams.
+
+    $ sf teams
 ```
 
-_See code: [src/commands/teams.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams.ts)_
+_See code: [src/commands/teams.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams.ts)_
 
 ## `sf teams accept INVITATION`
 
@@ -6898,6 +8042,7 @@ Accept a team invitation.
 ```text
 USAGE
   $ sf teams accept INVITATION [--profile <value>] [-y]
+    [--rationale <value>]
 
 ARGUMENTS
   INVITATION  Invitation id from the invite link.
@@ -6905,7 +8050,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Accept a team invitation.
@@ -6913,12 +8063,10 @@ DESCRIPTION
   Accept a team invitation and join the team as the current login.
 
 EXAMPLES
-  Accept a team invitation.
-
-    $ sf teams accept inv_123
+  $ sf teams accept inv_123
 ```
 
-_See code: [src/commands/teams/accept.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/accept.ts)_
+_See code: [src/commands/teams/accept.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/accept.ts)_
 
 ## `sf teams create NAME`
 
@@ -6926,7 +8074,8 @@ Create a team.
 
 ```text
 USAGE
-  $ sf teams create NAME [--profile <value>] [-y]
+  $ sf teams create NAME [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   NAME  Display name for the new team.
@@ -6934,7 +8083,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create a team.
@@ -6950,7 +8104,7 @@ EXAMPLES
     $ sf teams create "Acme Inc"
 ```
 
-_See code: [src/commands/teams/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/create.ts)_
+_See code: [src/commands/teams/create.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/create.ts)_
 
 ## `sf teams defaults [ROOTACCESS]`
 
@@ -6958,8 +8112,8 @@ Manage future-space defaults.
 
 ```text
 USAGE
-  $ sf teams defaults [ROOTACCESS] [--profile <value>] [-y] [-o
-    <value>]
+  $ sf teams defaults [ROOTACCESS] [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   [ROOTACCESS]  Future Space Grant preset: private, team, or public.
@@ -6967,7 +8121,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage future-space defaults.
@@ -6984,7 +8143,7 @@ EXAMPLES
     $ sf teams defaults private
 ```
 
-_See code: [src/commands/teams/defaults.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/defaults.ts)_
+_See code: [src/commands/teams/defaults.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/defaults.ts)_
 
 ## `sf teams invitations`
 
@@ -6992,20 +8151,30 @@ Manage team invitations.
 
 ```text
 USAGE
-  $ sf teams invitations [--profile <value>] [-y]
+  $ sf teams invitations [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage team invitations.
 
   Manage team invitations.
+
+EXAMPLES
+  Manage team invitations.
+
+    $ sf teams invitations
 ```
 
-_See code: [src/commands/teams/invitations.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/invitations.ts)_
+_See code: [src/commands/teams/invitations.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/invitations.ts)_
 
 ## `sf teams invitations add EMAIL`
 
@@ -7013,8 +8182,8 @@ Create a team invitation.
 
 ```text
 USAGE
-  $ sf teams invitations add EMAIL [--profile <value>] [-y] [-o <value>]
-    [--role owner|admin|member]
+  $ sf teams invitations add EMAIL [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--role owner|admin|member]
 
 ARGUMENTS
   EMAIL  Email address to invite.
@@ -7026,7 +8195,12 @@ FLAGS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Create a team invitation.
@@ -7042,7 +8216,7 @@ EXAMPLES
     $ sf teams invitations add jane@example.com --role member
 ```
 
-_See code: [src/commands/teams/invitations/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/invitations/add.ts)_
+_See code: [src/commands/teams/invitations/add.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/invitations/add.ts)_
 
 ## `sf teams invitations cancel INVITATION`
 
@@ -7050,8 +8224,8 @@ Cancel a team invitation.
 
 ```text
 USAGE
-  $ sf teams invitations cancel INVITATION [--profile <value>] [-y] [-o
-  <value>]
+  $ sf teams invitations cancel INVITATION [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   INVITATION  Invitation id.
@@ -7059,7 +8233,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Cancel a team invitation.
@@ -7067,12 +8246,10 @@ DESCRIPTION
   Cancel a team invitation.
 
 EXAMPLES
-  Cancel a team invitation.
-
-    $ sf teams invitations cancel inv_123
+  $ sf teams invitations cancel inv_123
 ```
 
-_See code: [src/commands/teams/invitations/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/invitations/cancel.ts)_
+_See code: [src/commands/teams/invitations/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/invitations/cancel.ts)_
 
 ## `sf teams invitations ls`
 
@@ -7080,12 +8257,18 @@ List team invitations.
 
 ```text
 USAGE
-  $ sf teams invitations ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams invitations ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List team invitations.
@@ -7096,12 +8279,10 @@ ALIASES
   $ sf teams invitations list
 
 EXAMPLES
-  List team invitations.
-
-    $ sf teams invitations ls
+  $ sf teams invitations ls
 ```
 
-_See code: [src/commands/teams/invitations/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/invitations/ls.ts)_
+_See code: [src/commands/teams/invitations/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/invitations/ls.ts)_
 
 ## `sf teams invitations resend INVITATION`
 
@@ -7109,8 +8290,8 @@ Resend a team invitation.
 
 ```text
 USAGE
-  $ sf teams invitations resend INVITATION [--profile <value>] [-y] [-o
-  <value>]
+  $ sf teams invitations resend INVITATION [--profile <value>] [-y]
+    [--rationale <value>] [-o <value>]
 
 ARGUMENTS
   INVITATION  Invitation id.
@@ -7118,7 +8299,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Resend a team invitation.
@@ -7126,12 +8312,10 @@ DESCRIPTION
   Resend a pending team invitation.
 
 EXAMPLES
-  Resend a pending team invitation.
-
-    $ sf teams invitations resend inv_123
+  $ sf teams invitations resend inv_123
 ```
 
-_See code: [src/commands/teams/invitations/resend.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/invitations/resend.ts)_
+_See code: [src/commands/teams/invitations/resend.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/invitations/resend.ts)_
 
 ## `sf teams ls`
 
@@ -7139,12 +8323,17 @@ List teams.
 
 ```text
 USAGE
-  $ sf teams ls [--profile <value>] [-y]
+  $ sf teams ls [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List teams.
@@ -7155,12 +8344,10 @@ ALIASES
   $ sf teams list
 
 EXAMPLES
-  List teams available to the current login.
-
-    $ sf teams ls
+  $ sf teams ls
 ```
 
-_See code: [src/commands/teams/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/ls.ts)_
+_See code: [src/commands/teams/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/ls.ts)_
 
 ## `sf teams members`
 
@@ -7168,20 +8355,30 @@ Manage team members.
 
 ```text
 USAGE
-  $ sf teams members [--profile <value>] [-y]
+  $ sf teams members [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage team members.
 
   Manage team members.
+
+EXAMPLES
+  Manage team members.
+
+    $ sf teams members
 ```
 
-_See code: [src/commands/teams/members.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/members.ts)_
+_See code: [src/commands/teams/members.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/members.ts)_
 
 ## `sf teams members ls`
 
@@ -7189,12 +8386,18 @@ List team members.
 
 ```text
 USAGE
-  $ sf teams members ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams members ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List team members.
@@ -7205,12 +8408,10 @@ ALIASES
   $ sf teams members list
 
 EXAMPLES
-  List members in a team.
-
-    $ sf teams members ls
+  $ sf teams members ls
 ```
 
-_See code: [src/commands/teams/members/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/members/ls.ts)_
+_See code: [src/commands/teams/members/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/members/ls.ts)_
 
 ## `sf teams members rm MEMBER`
 
@@ -7218,7 +8419,8 @@ Remove a team member.
 
 ```text
 USAGE
-  $ sf teams members rm MEMBER [--profile <value>] [-y] [-o <value>]
+  $ sf teams members rm MEMBER [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   MEMBER  Member id or email.
@@ -7226,7 +8428,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Remove a team member.
@@ -7238,12 +8445,10 @@ ALIASES
   $ sf teams members delete
 
 EXAMPLES
-  Remove a member from a team.
-
-    $ sf teams members rm jane@example.com
+  $ sf teams members rm jane@example.com
 ```
 
-_See code: [src/commands/teams/members/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/members/rm.ts)_
+_See code: [src/commands/teams/members/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/members/rm.ts)_
 
 ## `sf teams switch [TEAM]`
 
@@ -7251,7 +8456,8 @@ Set default team.
 
 ```text
 USAGE
-  $ sf teams switch [TEAM] [--profile <value>] [-y] [-o <value>]
+  $ sf teams switch [TEAM] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>]
 
 ARGUMENTS
   [TEAM]  Team slug, ID, or name.
@@ -7259,7 +8465,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Set default team.
@@ -7272,7 +8483,7 @@ EXAMPLES
     $ sf teams switch acme
 ```
 
-_See code: [src/commands/teams/switch.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/teams/switch.ts)_
+_See code: [src/commands/teams/switch.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/teams/switch.ts)_
 
 ## `sf transfers accept ID`
 
@@ -7280,7 +8491,8 @@ Accept a space transfer.
 
 ```text
 USAGE
-  $ sf transfers accept ID [--profile <value>] [-y]
+  $ sf transfers accept ID [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   ID  Transfer ID.
@@ -7288,12 +8500,17 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Accept a space transfer.
 
-  Accept a pending space transfer as a member of the target team. The space then moves to the new team.
+  Accept a pending space transfer as a member of the target team.
 
 ALIASES
   $ sf transfers confirm
@@ -7304,7 +8521,7 @@ EXAMPLES
     $ sf transfers accept trf_123
 ```
 
-_See code: [src/commands/transfers/accept.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/transfers/accept.ts)_
+_See code: [src/commands/transfers/accept.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/transfers/accept.ts)_
 
 ## `sf transfers cancel ID`
 
@@ -7312,7 +8529,8 @@ Cancel a space transfer.
 
 ```text
 USAGE
-  $ sf transfers cancel ID [--profile <value>] [-y]
+  $ sf transfers cancel ID [--profile <value>] [-y] [--rationale
+    <value>]
 
 ARGUMENTS
   ID  Transfer ID.
@@ -7320,7 +8538,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Cancel a space transfer.
@@ -7328,12 +8551,45 @@ DESCRIPTION
   Cancel a pending space transfer.
 
 EXAMPLES
-  Cancel a pending space transfer.
-
-    $ sf transfers cancel trf_123
+  $ sf transfers cancel trf_123
 ```
 
-_See code: [src/commands/transfers/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/transfers/cancel.ts)_
+_See code: [src/commands/transfers/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/transfers/cancel.ts)_
+
+## `sf unlink`
+
+Unlink this checkout from its space.
+
+```text
+USAGE
+  $ sf unlink [--profile <value>] [-y] [--rationale <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
+
+DESCRIPTION
+  Unlink this checkout from its space.
+
+  Remove this checkout's Spacefast link and private local publish state.
+
+EXAMPLES
+  Review and remove the nearest checkout link.
+
+    $ sf unlink
+
+  Remove the link non-interactively and print the removed files.
+
+    $ sf unlink --yes --json
+```
+
+_See code: [src/commands/unlink.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/unlink.ts)_
 
 ## `sf versions`
 
@@ -7341,20 +8597,30 @@ Manage versions.
 
 ```text
 USAGE
-  $ sf versions [--profile <value>] [-y]
+  $ sf versions [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Manage versions.
 
   List, promote, and roll back space versions.
+
+EXAMPLES
+  Manage versions.
+
+    $ sf versions
 ```
 
-_See code: [src/commands/versions.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/versions.ts)_
+_See code: [src/commands/versions.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/versions.ts)_
 
 ## `sf versions get [VERSION]`
 
@@ -7362,8 +8628,8 @@ Show a version.
 
 ```text
 USAGE
-  $ sf versions get [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf versions get [VERSION] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number, for example ver_123, v12, or 12.
@@ -7371,7 +8637,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show a version.
@@ -7388,7 +8659,7 @@ EXAMPLES
     $ sf versions get ver_123 --space docs --json
 ```
 
-_See code: [src/commands/versions/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/versions/get.ts)_
+_See code: [src/commands/versions/get.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/versions/get.ts)_
 
 ## `sf versions ls`
 
@@ -7396,13 +8667,18 @@ List space versions.
 
 ```text
 USAGE
-  $ sf versions ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf versions ls [--profile <value>] [-y] [--rationale <value>]
+    [-o <value>] [--space <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   List space versions.
@@ -7422,7 +8698,7 @@ EXAMPLES
     $ sf versions ls --space docs
 ```
 
-_See code: [src/commands/versions/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/versions/ls.ts)_
+_See code: [src/commands/versions/ls.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/versions/ls.ts)_
 
 ## `sf versions rm [VERSION]`
 
@@ -7430,8 +8706,8 @@ Delete a version.
 
 ```text
 USAGE
-  $ sf versions rm [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf versions rm [VERSION] [--profile <value>] [-y] [--rationale
+    <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number, for example ver_123, v12, or 12.
@@ -7439,7 +8715,12 @@ ARGUMENTS
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Delete a version.
@@ -7461,7 +8742,7 @@ EXAMPLES
     $ sf versions rm ver_123 --space docs --yes
 ```
 
-_See code: [src/commands/versions/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/versions/rm.ts)_
+_See code: [src/commands/versions/rm.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/versions/rm.ts)_
 
 ## `sf whoami`
 
@@ -7469,12 +8750,17 @@ Show the current Spacefast account.
 
 ```text
 USAGE
-  $ sf whoami [--profile <value>] [-y]
+  $ sf whoami [--profile <value>] [-y] [--rationale <value>]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+AUTHORIZATION FLAGS
+  --rationale=<value>  [env: SPACEFAST_RATIONALE] Why this authenticated write is needed (1-1024 characters). Required
+                       for agents and non-interactive runs; optional at a terminal.
 
 DESCRIPTION
   Show the current Spacefast account.
@@ -7491,4 +8777,4 @@ EXAMPLES
     $ sf whoami --json
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/spacefast/monorepo/blob/v0.0.24/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/spacefast/monorepo/blob/v0.0.26/src/commands/whoami.ts)_

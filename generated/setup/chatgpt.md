@@ -1,20 +1,30 @@
 ---
 title: "Connect ChatGPT to Spacefast"
-description: "In Work mode or the desktop app, one prompt publishes — ChatGPT sets itself up."
+description: "Use Spacefast from ChatGPT and ChatGPT Work through the app directory."
+seo:
+  canonical: "https://spacefast.com/setup/chatgpt/"
 ---
 
-In Work mode or the desktop app, one pasted prompt sets ChatGPT up to publish.
+Use Spacefast from ChatGPT and ChatGPT Work through the app directory.
 
-In Work mode or the desktop app, paste this into ChatGPT:
+**Add the hosted MCP server.** Add Spacefast as a custom connector and approve OAuth in the browser. Web only; write tools need a Business or Enterprise workspace, and consumer Pro is read-only.
 
 ```text
-Fetch https://spacefast.com/setup.md
+https://mcp.spacefast.com
 ```
-
-ChatGPT fetches the page and sets itself up. There is nothing to install. On a plan without Work mode, ChatGPT tells you what unlocks publishing.
 
 ## Other ways to connect
 
-**Plugin.** Install Spacefast from the Plugin Directory: switch to Work, open Plugins, search "Spacefast", press +, and then start a new chat.
+**Find Spacefast in ChatGPT — Soon.** Install from the ChatGPT and Codex plugin directory — the only lane that reaches consumer accounts with write tools.
 
-[Agent documentation](/agents) · [ChatGPT's plugin docs](https://learn.chatgpt.com/docs/plugins)
+Use the working manual option below while the directory listing is in review.
+
+Prefer to hand this off? Copy setup prompt:
+
+```text
+Fetch https://spacefast.com/setup.md and set up Spacefast.
+```
+
+Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Agent documentation](/agents) · [ChatGPT documentation](https://platform.openai.com/docs/guides/developer-mode)

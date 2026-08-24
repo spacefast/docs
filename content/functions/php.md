@@ -19,7 +19,7 @@ sf_json(['hello' => sf_body()['name'] ?? 'world']);
 
 Only files under `functions/` execute. Spacefast serves a stray `.php`
 file anywhere else in the publish as inert text, like any other upload.
-The handler source itself never serves; requesting `/functions/hello.php`
+The handler source itself never serves. Requesting `/functions/hello.php`
 returns 404.
 
 ## Routes
@@ -48,7 +48,7 @@ win over it. This is the same precedence the
 | `sf_json($data, $status = 200)` | Send `$data` as a JSON response and finish the request.         |
 | `sf_auth()`           | The verified visitor identity, in the exact shape a Zero endpoint's `auth` context has: `user`, `userId`, `provider`, `isGuest`, `isAuthenticated`, and the profile fields when identified. |
 | `sf_db()`             | The space's [database](/database). A space with no database attached returns a 503 with `php_function_database_unavailable`, because the missing database is a publish-time fact, not a handler error. |
-| `sf_spam($submission)` | Classify one visitor submission; returns `['spam' => bool, 'discard' => bool]`. |
+| `sf_spam($submission)` | Classify one visitor submission and return `['spam' => bool, 'discard' => bool]`. |
 | `sf_report_spam($submission)` | File a correction: something the verdict let through was spam after all. |
 | `sf_report_ham($submission)` | The opposite correction: something flagged was legitimate. |
 | `sf_email($message)`  | Queue one message through the space's outbox and return its id.           |
@@ -65,7 +65,7 @@ gets, with two deliberate differences:
 - **Spam evidence: explicit values win.** Both lanes fill `userIp`,
   `userAgent`, and `referrer` from the visitor's request. The IP comes from
   the platform-resolved trusted peer, never from a client-settable header. In
-  a Zero mutation those values are host-owned and final; a PHP handler can
+  a Zero mutation those values are host-owned and final. A PHP handler can
   name any of them explicitly, and the platform takes its value. That is
   what a handler needs when it relays a submission it received from another
   visitor. The corrections
@@ -103,5 +103,5 @@ logs:
 sf logs runtime --follow
 ```
 
-The team's entitlements set the number of PHP workers per serving site;
-see [Plans, limits, and usage](/account/plans).
+The team's entitlements set the number of PHP workers per serving site.
+See [Plans, limits, and usage](/account/plans).

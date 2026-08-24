@@ -79,7 +79,7 @@ mutations: {
 },
 ```
 
-You supply the content; the runtime supplies the network evidence. The
+You supply the content. The runtime supplies the network evidence. The
 visitor's IP, user agent, referrer, and page URL come from the trusted
 request envelope, never from handler arguments, so a browser cannot claim
 its own IP through a mutation's inputs. IP and user agent are the heaviest
@@ -110,7 +110,7 @@ visitor request, so they take the complete submission, including a
 ## Email
 
 `ctx.email.send(message)` accepts one message and returns
-`{ messageId }`. The identifier names the message; it is not a claim that
+`{ messageId }`. The identifier names the message. It is not a claim that
 anything was delivered.
 
 ```ts
@@ -139,12 +139,12 @@ The message shape:
 
 | Field               | What it carries                                                    |
 | ------------------- | ------------------------------------------------------------------ |
-| `from`, `to`        | Required. An address string or `{ email, name }`; `to` also takes an array. |
+| `from`, `to`        | Required. An address string or `{ email, name }`. `to` also takes an array. |
 | `subject`           | Required.                                                          |
-| `text`, `html`      | The body. At least one is required; both is fine.                  |
+| `text`, `html`      | The body. At least one is required, and sending both is fine.      |
 | `cc`, `bcc`         | More recipients, same shapes as `to`.                              |
 | `replyTo`           | One address.                                                       |
-| `headers`           | Extra headers as string pairs. Names and values are validated; line breaks are refused. |
+| `headers`           | Extra headers as string pairs. Spacefast validates names and values, and refuses line breaks. |
 
 Email is metered per space. See
 [Plans, limits, and usage](/account/plans#what-usage-is-metered) and
@@ -152,8 +152,8 @@ Email is metered per space. See
 
 ## What the platform handles
 
-- **Delivery.** Queued mail goes out through the platform's own sender;
-  there is no SMTP relay to stand up.
+- **Delivery.** Queued mail goes out through the platform's own sender.
+  There is no SMTP relay to stand up.
 - **Validation.** Malformed input throws in your handler with the code
   `service_payload_invalid` before anything leaves the runtime. That
   covers an avatar size over 2048, a message with no body, and a header

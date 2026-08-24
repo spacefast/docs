@@ -13,7 +13,7 @@ sf publish ./dist
 ```
 
 ```bash
-# Force the SPA fallback; the default --spa auto-detects it for you
+# Force the SPA fallback. The default --spa auto-detects it for you.
 sf publish ./dist --spa true
 ```
 
@@ -56,7 +56,7 @@ sf publish ./dist --spa true
 - Replace here.now password protection, payment gating, forking metadata,
   auto-viewer pages, and directory listings with explicit Spacefast
   configuration or static pages. Spacefast rejects `_headers` Basic Auth on
-  every plan; use [Spacefast sharing](/share).
+  every plan. Use [Spacefast sharing](/share).
 
 ## What Spacefast cannot import
 

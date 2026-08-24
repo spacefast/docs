@@ -192,6 +192,7 @@ export default defineConfig({
           items: [
             "/reference",
             "/api",
+            "/api/versioning",
             { label: "REST API reference", href: "/api/reference" },
             { label: "Platform API reference", href: "/platforms/api/reference" },
             "/cli",

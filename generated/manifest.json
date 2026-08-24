@@ -1,114 +1,119 @@
 {
-  "contentDigest": "7836e000575f7d4747b155e8fdbc8eb0cf8a6815f1524d5d3272538c43aceb0c",
+  "contentDigest": "1f98740a5a595f8169c7ac86f187f9d9308c171bf1d2a297db7a4d7bb9cb3a6a",
   "counts": {
-    "apiOperations": 302,
-    "changelogPackages": 19,
-    "changelogVersions": 19,
-    "errorCodes": 458,
-    "platformOperations": 312,
-    "redirects": 2250,
-    "setupPages": 16
+    "apiOperations": 319,
+    "changelogPackages": 20,
+    "changelogVersions": 21,
+    "errorCodes": 481,
+    "platformOperations": 329,
+    "redirects": 2369,
+    "setupPages": 24
   },
   "files": [
     {
-      "bytes": 237,
+      "bytes": 396,
       "path": "changelog/packages/adapter-kit.md",
-      "sha256": "18295224cd115143b3fd326bca80479b92097c070ca483cda891e620e10b028e"
+      "sha256": "962392f9cfef6fa798f76805f465cb89c8ec72fab5cf4688ab62c5138adde71e"
     },
     {
-      "bytes": 1383,
+      "bytes": 1567,
       "path": "changelog/packages/astro.md",
-      "sha256": "94db57d9ce43171756ced153fa72a7fa4f94d1755ad8919430043bd523d5d6ff"
+      "sha256": "dcccca187ff285adad834c316e6b3253a9e9cc325a7e26c045cda3a614053752"
     },
     {
-      "bytes": 278,
+      "bytes": 374,
       "path": "changelog/packages/auth.md",
-      "sha256": "6685710ce6cada46e4155fdcf7b5ce1e18c09612def56ec21a990169d275bcfd"
+      "sha256": "9aa9de8f23ff39a30ae5a9f5bbb4eea9ddaf47969d6188f16b564fd04b85400b"
     },
     {
-      "bytes": 241,
+      "bytes": 310,
       "path": "changelog/packages/build-output.md",
-      "sha256": "4926915bfe88bd9727a510ed7bac49043580da0f991a584a748fa08404c7a6c7"
+      "sha256": "3b7f553632243f566fc2301a7922db9b431dc502bdfdb84b18a577713684d7b8"
     },
     {
-      "bytes": 1643,
+      "bytes": 1739,
       "path": "changelog/packages/common.md",
-      "sha256": "de5503b65a9722addb53b1a84d0e7ab5700bdae0438d94e55fdc5156d407f52c"
+      "sha256": "8fd009371ff0e47944638e7d6426a4d35d1205cb0fbf135fc4007defdc2d315f"
     },
     {
-      "bytes": 414,
+      "bytes": 528,
       "path": "changelog/packages/compat-lakebed.md",
-      "sha256": "4cd7235913fe2f50b7e643e8acb629433b32c6a21d13ba9d884730b4be726600"
+      "sha256": "b55a6057da50f269aefa2c7867a5813b74dda601d7318bd3780e0117a6b40d3a"
     },
     {
-      "bytes": 1731,
+      "bytes": 1924,
       "path": "changelog/packages/domain-search-terminal.md",
-      "sha256": "c181a2fdb91eccd40e7de7519f876b3326184440535af433b4f9c58b65b0f9ef"
+      "sha256": "7651d9bd218f69cc4f91114f7692a79d31cd8a36a79f6280c4852a804acdb831"
     },
     {
-      "bytes": 1435,
+      "bytes": 1553,
       "path": "changelog/packages/domain-services.md",
-      "sha256": "4778b6fd3fddd37b5112b12cca5a4ff93d8870688791cbe69dc565c3fb7bb7de"
+      "sha256": "56abaa46219c77cf16c37b846dc4b1da21b1beaca8115481c9ac9749580bb1e0"
     },
     {
-      "bytes": 1169,
+      "bytes": 1265,
       "path": "changelog/packages/image.md",
-      "sha256": "f74a16eb443af417200f9ab6d2364d6788a86065c8f78717264159273a16b933"
+      "sha256": "2b29b5ddc431bfdf691c6faa31cd109a65c27319e32bb5fc8e18a71f02b7e763"
     },
     {
-      "bytes": 3075,
+      "bytes": 3212,
       "path": "changelog/packages/index.md",
-      "sha256": "1cb6b94ddaf26d59a41a8c9353ccb9b9bded418553dd10929a772bbdb485c2c4"
+      "sha256": "e560c333b83ffc30e8c5f08c4793a4209a49925d63f98eee84c95f5c499eb264"
     },
     {
-      "bytes": 2987,
+      "bytes": 3306,
       "path": "changelog/packages/mcp.md",
-      "sha256": "02f8689b485e0a4cb04e5a394d27e1754e9c5e6f322d200364a4f687058dd88b"
+      "sha256": "5470fa5c571c491f73cba56bd5655a4982493816a239cdaccb27ab4f40316118"
     },
     {
-      "bytes": 241,
+      "bytes": 408,
       "path": "changelog/packages/next-adapter.md",
-      "sha256": "5be1a61accd69c5949eab927cc96e950e01c886ff1cc3ce2c474993c493c0694"
+      "sha256": "9a5491027716aa341a2b0eaf43fdfdc459fc5b39eb108fc9a586165d145a5c4d"
     },
     {
-      "bytes": 1546,
+      "bytes": 1664,
       "path": "changelog/packages/routing.md",
-      "sha256": "97bceb40e85138ed52f321e4583efd92bc79cb25ba7eef2e5a83d34c4c60906d"
+      "sha256": "201220365448ff0eb1e50bb1370453fc4f8f1d20d3f292ece2f97d051b6366a2"
     },
     {
-      "bytes": 1161,
+      "bytes": 1577,
       "path": "changelog/packages/sdk.md",
-      "sha256": "ffb73bd58e2cd85129846bfdd63217f6610557a325da24f583d5900aab7f08f9"
+      "sha256": "de4211f29a26f2fe41d1474fd7d415b9b84ff43f387dbe86b5c43f0e38d450f6"
     },
     {
-      "bytes": 5130,
+      "bytes": 225,
+      "path": "changelog/packages/setup-ui.md",
+      "sha256": "34a849703d62961b190e83fc5e90d1585faa33d40aa9c7b133dd6413fe0fa5ef"
+    },
+    {
+      "bytes": 5877,
       "path": "changelog/packages/spacefast.md",
-      "sha256": "742e77b7a8889f48a0bfc9a6cc37bb8fbca1f22db198aff96dfb65278164f01d"
+      "sha256": "8858d3478402bebc870745039523695534dd083fe1cde205199cba7e35938d8d"
     },
     {
-      "bytes": 1407,
+      "bytes": 1591,
       "path": "changelog/packages/vite-plugin.md",
-      "sha256": "20236dc972a2ffc2837cde0f2e4d5ace882ad24db50d19c1bd8f5a6260641ad0"
+      "sha256": "9bc752b52616995e3b05ffc21071349fae1a2564241c5af5a2b3b0520d78b23d"
     },
     {
-      "bytes": 891,
+      "bytes": 987,
       "path": "changelog/packages/wordpress.md",
-      "sha256": "3fb24e053b1ecb9b69cbc9f87b496b00b303edd6c4e3dd0efb1ae184eddd9883"
+      "sha256": "4e7957f1bc09674ce27e9f404991b58c6c69f6c9acf65a6c9f9036a5f1ae9b97"
     },
     {
-      "bytes": 1195,
+      "bytes": 1291,
       "path": "changelog/packages/wpcloud-sdk.md",
-      "sha256": "84f6624dbea2ea91c377d875696f10444fac40375fb686a071dd99d7a8e2bb2c"
+      "sha256": "1d2ce42f65bd3b44267293a5098f49d86c1899e035422b9c2dfd76a56c689cb7"
     },
     {
-      "bytes": 346,
+      "bytes": 514,
       "path": "changelog/packages/zero-compile.md",
-      "sha256": "f3439f03dd29571603985e5a517a6d43efdaf3ee6eb11445bda5539b2e199e66"
+      "sha256": "e880700a82a583d708f30136a8a873586242e14d60fbda605b8201268f5f00bd"
     },
     {
-      "bytes": 1492,
+      "bytes": 1610,
       "path": "changelog/packages/zero.md",
-      "sha256": "bfb0f70fc21243a9f21182527db47d21fdad50f38dfb26edf17e9e3ea325d5fc"
+      "sha256": "13a7c2158ae2f5f3af1068209b61573cf10241ee2ec5030a3b7298cbcbd27d7d"
     },
     {
       "bytes": 614,
@@ -186,6 +191,16 @@
       "sha256": "d2bc6b5806847e9e0bdb6c9ea83be5eb49a354ca1fbd7f7f37b410cf841ca48a"
     },
     {
+      "bytes": 2044,
+      "path": "changelog/v0-0-25.md",
+      "sha256": "7eac6069b0809110418219f9e1718b0dba888dfe3750e94f81ab7a9881703a4a"
+    },
+    {
+      "bytes": 1749,
+      "path": "changelog/v0-0-26.md",
+      "sha256": "1855a5d3aa7ee782786a09c144bb87172083b0e0c8da5f37c19b81c5ee76e2e1"
+    },
+    {
       "bytes": 579,
       "path": "changelog/v0-0-6.md",
       "sha256": "67bfc426f93b9fff6b1182761bf5b1a1f85ed081ca785adfe81d2369f13ac835"
@@ -206,9 +221,9 @@
       "sha256": "2cf3ea9a35e425c12d7eec39e0f59110e23d99a5962f8fda296e9ac9cceae809"
     },
     {
-      "bytes": 241201,
+      "bytes": 302433,
       "path": "cli/index.md",
-      "sha256": "35aee5b2ccbbceec1b1d6550658b6b22a69cf07acbaa6f7306b9678ea7bd980d"
+      "sha256": "735621d346829e0e3c9e3f9ec67b8ce631351ecb0d41582983f676228e1e72ad"
     },
     {
       "bytes": 1224,
@@ -284,6 +299,11 @@
       "bytes": 1086,
       "path": "errors/auth_code_required.md",
       "sha256": "e342353cb72752f1befd75941aa4628f9804185733ccf88e0d192eb11094982c"
+    },
+    {
+      "bytes": 1441,
+      "path": "errors/authorization_level_not_allowed.md",
+      "sha256": "4d0e0172ccd545758d3697312f7b39cbaa9957144ca084cc0bdde054a462f00f"
     },
     {
       "bytes": 1065,
@@ -436,6 +456,31 @@
       "sha256": "b81293df10236982dbe42faf4c0d4a74f546c403001d94b79243aa1d646a8a04"
     },
     {
+      "bytes": 1199,
+      "path": "errors/confirmation_denied.md",
+      "sha256": "9b28c3449fe995bb0c718f50799b8a3c542e748b04e0c9f24644c108fa1855f5"
+    },
+    {
+      "bytes": 1189,
+      "path": "errors/confirmation_expired.md",
+      "sha256": "7691e28a25d617ffeae3ce639c42391819b35a414190e6247b04b42d1461ae76"
+    },
+    {
+      "bytes": 1322,
+      "path": "errors/confirmation_mismatch.md",
+      "sha256": "a7cc990d6b2ac9d627c68418e8ae612d72841549c331735f0f62e60e6a1381fd"
+    },
+    {
+      "bytes": 1414,
+      "path": "errors/confirmation_required.md",
+      "sha256": "3f30de445c4f22befb06331e34035b0c32a938b333fafbd8aec70e91a80ce7b0"
+    },
+    {
+      "bytes": 1325,
+      "path": "errors/confirmation_token_required.md",
+      "sha256": "255599388ce13b773f9d47fd4eddac46aff54b8bcb59682f991318c1bd14df80"
+    },
+    {
       "bytes": 1321,
       "path": "errors/continuation_unavailable.md",
       "sha256": "8419d1650b5abf9867561853d01db6476f879e3b4a1f78197d0427e97b74cc48"
@@ -466,6 +511,11 @@
       "sha256": "d7311cd814f048034b5f2843059f2dc102b9aab8a5cd1612e983d3c20a6b2239"
     },
     {
+      "bytes": 1316,
+      "path": "errors/credential_sponsor_inactive.md",
+      "sha256": "1e07058290daecef3a4aa6e992957f0980169881120587e5fdae4044a7666386"
+    },
+    {
       "bytes": 1143,
       "path": "errors/csam_blocked.md",
       "sha256": "a468d2840ad73b5236b378c9328ab672b42b7348f839db5c83908cdcf8076b84"
@@ -476,6 +526,21 @@
       "sha256": "1e88b0fa60918c47c961b19f78118d240eb7524510138e958a365c60e0f7ff1f"
     },
     {
+      "bytes": 1190,
+      "path": "errors/dashboard_prefs_key_invalid.md",
+      "sha256": "c52c5f1d4cd2ff67530514b2d0ca5e0d54034a8e761642c459b28fdb98aebcf7"
+    },
+    {
+      "bytes": 1215,
+      "path": "errors/dashboard_prefs_too_large.md",
+      "sha256": "c902f6516306f0c5e5bf220c35c6a438e543addd9caa467c1ed403d1210569ae"
+    },
+    {
+      "bytes": 1216,
+      "path": "errors/dashboard_prefs_too_many_keys.md",
+      "sha256": "2094ecee580ee16f74a87d93b0c4d5e67aa0e78f44934123d0eeebe18c06a308"
+    },
+    {
       "bytes": 1221,
       "path": "errors/data_location_immutable.md",
       "sha256": "d6d485c00738de4e76cd71752b8da73a753a3b57fd072062e2eaf578309a2d06"
@@ -484,6 +549,16 @@
       "bytes": 1082,
       "path": "errors/db_not_available.md",
       "sha256": "e27679eb85a00cdfb087e840a5fb402e09d13953ae210dc7d29ad13370b0d86f"
+    },
+    {
+      "bytes": 1253,
+      "path": "errors/decision_execution_lost.md",
+      "sha256": "f29c6a92ea19bc409dcc75f98f5aabee08d9f7bdc079788cea5d740fed8cceb5"
+    },
+    {
+      "bytes": 1107,
+      "path": "errors/decision_in_progress.md",
+      "sha256": "0714a6d35787c905da40d92dca7c280844c73c076131c4e1b36820e9fc0d6735"
     },
     {
       "bytes": 1103,
@@ -721,9 +796,9 @@
       "sha256": "baa7542608c11420a98caf9554fd9783f4f063e5a1d75392e02a1a5c933c6a51"
     },
     {
-      "bytes": 1215,
+      "bytes": 1200,
       "path": "errors/domain_reserved_suffix.md",
-      "sha256": "53545d292afe73e1e96e08025d5a3d738ea501b39578ce1a73fb90113014afe6"
+      "sha256": "5e983602ee2cc6db54a7d7f4477bef2fb573e70dc8b83183fb46ec9392c08162"
     },
     {
       "bytes": 1147,
@@ -749,6 +824,21 @@
       "bytes": 1097,
       "path": "errors/duplicate_version_path.md",
       "sha256": "f82ccddd028a221df0e999b11440f4d18b33c23d3f212fbbf39dd4e734d36565"
+    },
+    {
+      "bytes": 1155,
+      "path": "errors/elevation_not_required.md",
+      "sha256": "ac0bd3dceba7e1f6b45cfbf867b3fed70bea3f179e151d3ec893b74a3f51e462"
+    },
+    {
+      "bytes": 1114,
+      "path": "errors/email_already_claimed.md",
+      "sha256": "82441fdedd3f88bca398354e5c16be118b425bcad8da7068c1ba8445c0307287"
+    },
+    {
+      "bytes": 1182,
+      "path": "errors/email_verification_code_invalid.md",
+      "sha256": "de47d1518f8f2e15a3fb0459fa59ab2b596b7007f9c0276dc350e7e1dfd9f0c3"
     },
     {
       "bytes": 1154,
@@ -806,9 +896,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 58009,
+      "bytes": 61388,
       "path": "errors/index.md",
-      "sha256": "8dc5b07ba9e6d7e0ada76eeee92687900aa06285130ef528bc322eae0117c8ee"
+      "sha256": "effc77e010bea729e4b4bb4f457a6f6b40134b5625fe3ffc9a3e7dc541919583"
     },
     {
       "bytes": 1112,
@@ -824,6 +914,11 @@
       "bytes": 1094,
       "path": "errors/inject_snippet_too_large.md",
       "sha256": "2c7383def362994382f2631be2d1233b080bc3d40b90978bb47e0b2260119c28"
+    },
+    {
+      "bytes": 1268,
+      "path": "errors/insufficient_scope.md",
+      "sha256": "051e54782fe9956b8da12f43b504d6e70e7602b6a4d4ca79b9ebeef63da73c6b"
     },
     {
       "bytes": 1029,
@@ -846,6 +941,11 @@
       "sha256": "142848cb4fe6ea05b6d18843ddf3af9ccae9bcbf0c6f108c6342f7fdeaf4732b"
     },
     {
+      "bytes": 1130,
+      "path": "errors/invalid_decision_state.md",
+      "sha256": "0492721c6679706f85858cc4e109d5ffea549d27cff840751d2f69e5bcf97b26"
+    },
+    {
       "bytes": 1017,
       "path": "errors/invalid_device_code.md",
       "sha256": "d81bf3dda58495997671f569cd637703a710c21c63f0ce9dc760801b6a001ed9"
@@ -859,6 +959,11 @@
       "bytes": 1086,
       "path": "errors/invalid_domain_name.md",
       "sha256": "de55c61d14fc4674e106d625b2238106f2fc123a591f050f35e24097fc6aa796"
+    },
+    {
+      "bytes": 1220,
+      "path": "errors/invalid_elevation_request.md",
+      "sha256": "8910a0fd1bd715c80c0d17f7e106926279e15c6155ba70bf41f4e6fed78aa732"
     },
     {
       "bytes": 1084,
@@ -1091,6 +1196,16 @@
       "sha256": "ffe153ab504cc9686e7444632e7daa6708e95cb38fbdc676461dd7da453607b1"
     },
     {
+      "bytes": 1040,
+      "path": "errors/password_already_set.md",
+      "sha256": "c5380eb27dbd87a9ef06d198c86f4325a093b32ca54157acf0069b6c302f8d01"
+    },
+    {
+      "bytes": 1082,
+      "path": "errors/password_compromised.md",
+      "sha256": "9441c48d50a842d6133ba42d96f187847091bb80b63b4c2f564182e4bdf826d4"
+    },
+    {
       "bytes": 1148,
       "path": "errors/path_case_collision.md",
       "sha256": "802740f762dfd84e8ab741b54c14825e2e56a16cb6d97498d6143965fead179e"
@@ -1129,6 +1244,11 @@
       "bytes": 1402,
       "path": "errors/prebuilt_metadata_invalid.md",
       "sha256": "ed23f0a8202d1ec88f75908d2af3375adf6dfd310feec65d6892f46aa04553be"
+    },
+    {
+      "bytes": 1175,
+      "path": "errors/primary_email_not_removable.md",
+      "sha256": "f2c2102758dcb192a42af783dd1edb37daf952e13e98dfa9b3d9cb49b365a179"
     },
     {
       "bytes": 1126,
@@ -1326,9 +1446,9 @@
       "sha256": "2f82a309100ee1da2cfcf5be2a5bf9a05bf37408b0427d65931d7f9baf2eb379"
     },
     {
-      "bytes": 1148,
+      "bytes": 1076,
       "path": "errors/runtime_api_not_found.md",
-      "sha256": "c62c2bf04ebc1e246628b43b23f62a6cbc627c844876c7357293d7ceede30ddd"
+      "sha256": "574cffe8ac12a7cde29322b7ccf33776986e66bccaf0f8946417a0c47f19be3f"
     },
     {
       "bytes": 1094,
@@ -1449,6 +1569,11 @@
       "bytes": 1123,
       "path": "errors/service_signature_invalid.md",
       "sha256": "906702ac4afd0d26e2fc33cafd00e4a87693daa3881dd7238f2d8c139984ceec"
+    },
+    {
+      "bytes": 1110,
+      "path": "errors/session_not_fresh.md",
+      "sha256": "6ea6c90a0da862f5d86f917d58bff51b88657c13e0f1ccd0ec3605207f7025b6"
     },
     {
       "bytes": 1002,
@@ -1684,6 +1809,11 @@
       "bytes": 1026,
       "path": "errors/stripe_error.md",
       "sha256": "87f1467b1c28fd72a3f8e462d152d90284951e72e51df0c68b6ca27ac11d0d4e"
+    },
+    {
+      "bytes": 1256,
+      "path": "errors/superadmin_two_factor_required.md",
+      "sha256": "07ceae6b7d64891ade72c8da40b9eb0b84a54c67e32e40284080066894cee2b2"
     },
     {
       "bytes": 1130,
@@ -2506,104 +2636,144 @@
       "sha256": "7b816c8b09da7e153ac1a1c685d1ef4c0d141b008ade9a48d4132527d27bf89e"
     },
     {
-      "bytes": 5674528,
+      "bytes": 6144634,
       "path": "openapi/api.json",
-      "sha256": "2f06106b98e047e788d759dcec8b2f15dcdc9308e6f4cc7f63e79205c209d7f2"
+      "sha256": "157e4680250301e81b2785efb65ca0147db9818cc6917796f635fcf7fb1962fb"
     },
     {
-      "bytes": 5808053,
+      "bytes": 6283736,
       "path": "openapi/platform.json",
-      "sha256": "ca1e1bff6f404d148a36c79f196e77b7070b47386f59f73d7967650256bd87ba"
+      "sha256": "786c70608c49d67967702dca34d66d5a2f883293110ded5f21aed722cf1940b7"
     },
     {
-      "bytes": 414766,
+      "bytes": 379845,
       "path": "redirects.json",
-      "sha256": "3603b6744bed9f3f93104fca73c8da57339810a5935bd91df0938ab2bd0f67bb"
+      "sha256": "eee1fd1e8c019ba196b431bfbdd1ca72867006d4c9649bde0cef8c10668dc3bc"
     },
     {
-      "bytes": 700,
-      "path": "setup/chatgpt-work.md",
-      "sha256": "e70024928c87477a3fdec4f3b5c66d5589b86c8e6c20b9e8a35ac0a73ab9723a"
+      "bytes": 1660,
+      "path": "setup/amp.md",
+      "sha256": "0c26306443d8416064e9c868bdaea7cf428b52a59c094f28c8bcf2566040a9e7"
     },
     {
-      "bytes": 748,
+      "bytes": 1074,
       "path": "setup/chatgpt.md",
-      "sha256": "da7b3334abff9b3161ba40d19d533464a7b7feae758ef26878aaebde6d8c3a7a"
+      "sha256": "38e06020a536ff6d39205e4900d0b2bb90497ed3046e50bca3e9f13aa97141bb"
     },
     {
-      "bytes": 623,
+      "bytes": 846,
+      "path": "setup/claude-app.md",
+      "sha256": "c56472ca8df2388bd09fb3eaeeb4f5de698761b1f9297b73c55ec50be2fa1bca"
+    },
+    {
+      "bytes": 1921,
       "path": "setup/claude-code.md",
-      "sha256": "cdfa854d65a77c475f13f15c27be0085a0c330c0eb422c65a299e70f9041f45f"
+      "sha256": "bbf7b8641a5035f3a44dde8435f4cdefc7ef587978c856db8ce190cdad50a260"
+    },
+    {
+      "bytes": 1064,
+      "path": "setup/claude-desktop.md",
+      "sha256": "508068f91e023121ccb97e5aa79e54004a5d0ef256321ed41b1cd0dabb06e303"
+    },
+    {
+      "bytes": 1727,
+      "path": "setup/cline.md",
+      "sha256": "57a9d71b3bf71c684f8bee8154700ff3461a3f2c2dab0f97194c78b384aa6dd7"
+    },
+    {
+      "bytes": 2032,
+      "path": "setup/codex.md",
+      "sha256": "57bb0374dafe66ffbf347faedc8777b6ffee46eff4f0a7441bf0525b4702c1f5"
+    },
+    {
+      "bytes": 1312,
+      "path": "setup/continue.md",
+      "sha256": "a6736dd2796e918760f9b6e1d819c3bf57c8c411c077800e07166986fda167e9"
+    },
+    {
+      "bytes": 2146,
+      "path": "setup/cursor.md",
+      "sha256": "3eca8547e7e0c66db5f329e39a18ee0e3ab19533073de04248b13bf61428bbf5"
     },
     {
       "bytes": 949,
-      "path": "setup/claude-cowork.md",
-      "sha256": "4a0ae5d5b51ed6e8f3656ced9d0a206dafd76541e71f098d912ea90e7bfa1b5f"
+      "path": "setup/devin-cloud.md",
+      "sha256": "6e39f6b43f48063a34c9ee92c8789c2078d563bc3a41d741f89bb8cb6780ccfa"
     },
     {
-      "bytes": 600,
-      "path": "setup/claude.md",
-      "sha256": "13e1f89697752c5c054177eaa31f197891d4649ad5f52093abd559b9ec1a7ae4"
+      "bytes": 1764,
+      "path": "setup/devin-desktop.md",
+      "sha256": "bb96162da2c3ba276dcaff21fcd20de24a579dcc03893c95aa8983dbf2552d2c"
     },
     {
-      "bytes": 776,
-      "path": "setup/codex.md",
-      "sha256": "426f4b8b82517f5d7c862cd2c5446b68a0122e903f5189ff8c7072e102845e18"
+      "bytes": 1718,
+      "path": "setup/factory-droid.md",
+      "sha256": "41ade7792fe20630394ff3445b6acd7246539c6dbbcff75a9f1ad7dd4590f023"
     },
     {
-      "bytes": 574,
-      "path": "setup/cursor.md",
-      "sha256": "e5cf316d8ae10fd0f286598b6c834eaa5274b8a34bd7a7529b56e96899d0d00f"
+      "bytes": 1950,
+      "path": "setup/gemini-cli.md",
+      "sha256": "ad281622cba1ab8118118a7b9382d18d1d1c580e1f6a1fb7011f965930781f6a"
     },
     {
-      "bytes": 443,
-      "path": "setup/devin.md",
-      "sha256": "b88ecc818cdf130022fdfc623f1011f79d1e706dd34e167c14180e8db1ae7a9d"
+      "bytes": 1963,
+      "path": "setup/github-copilot.md",
+      "sha256": "ec16617e7e0ae3524609c7e9742f8bc70c07be67581ce50655d29f995c628d8a"
     },
     {
-      "bytes": 521,
+      "bytes": 1906,
       "path": "setup/hermes.md",
-      "sha256": "f03635fe2b69080a56a260509e53e3b9a9c4d46cc97e0a5e2479cc68595b3ae1"
+      "sha256": "6e9ab49c287db15b2187f8e82a90aeaadc446e0293deea1053ca0529235109e4"
     },
     {
-      "bytes": 484,
+      "bytes": 1002,
       "path": "setup/indent.md",
-      "sha256": "37d7032a639681070ec647672561e233746b531e54e1c3cd37eba767a4f9d20a"
+      "sha256": "03f5520993c3c90051a8e789805b69999dfee39416a0811872ae02234fa1316c"
     },
     {
-      "bytes": 2087,
+      "bytes": 2662,
       "path": "setup/index.md",
-      "sha256": "606092c93e05486748d6a8602bab7ed00b75d955d941a683d6af1d2cf368591c"
+      "sha256": "becd08be39c6e0b57bdea51a60b7a9bdf8da0a8e7ae09cce6cb3e156fca263a3"
     },
     {
-      "bytes": 585,
+      "bytes": 1970,
       "path": "setup/openclaw.md",
-      "sha256": "e74ef6a0105abf9378f9e0a36c1ff24730dfd7ae376218a80d5b477b56d07948"
+      "sha256": "b2398efc775a6baec452d113e79af5db5394cdb79aad4271b2198b105e1df90a"
     },
     {
-      "bytes": 658,
+      "bytes": 1742,
       "path": "setup/opencode.md",
-      "sha256": "6ad493e6b9794300ec0f7581485cbcd52c86334b6cf63c4833b490cff7f9c255"
+      "sha256": "59dd4ec64db4650240fea1564aede985d1c91b803b94f2d9bfe283f62c6fb543"
     },
     {
-      "bytes": 460,
+      "bytes": 1490,
       "path": "setup/pi.md",
-      "sha256": "9e6474e50ae094807fdcd7409d5c5e1bc19cb8f44812147025ae43a632a18fa6"
+      "sha256": "f67d1877156de4de5d4c49338f8e31cc0c32748cd33f27745ede5086b31003b5"
     },
     {
-      "bytes": 474,
+      "bytes": 1000,
       "path": "setup/poke.md",
-      "sha256": "92081087bac979b45c7ab3175c9496a1bc3c35fd082aad700c872b0527c625bd"
+      "sha256": "0277333b20668548285fdc93e2c5211af4cad20b5b6055762cc6c52791100205"
     },
     {
-      "bytes": 709,
+      "bytes": 1025,
       "path": "setup/raycast.md",
-      "sha256": "0f19b5f065ac73ac48cce99824946c42a037011b82f31d0b9f77fe0a0adb1daf"
+      "sha256": "41737e7756b96443a4c55ed888201f8ea3f23e7843bc685a6dc046b1e68fe07d"
     },
     {
-      "bytes": 553,
+      "bytes": 1978,
       "path": "setup/vscode.md",
-      "sha256": "928f22fb286fb115bc630a512f06dd536c7e55219fd7a9d95853249e2ce184ad"
+      "sha256": "9554076055b473fa9d4c577e606f0cc30b06991cbcb7761ea64313e85a4abcbb"
+    },
+    {
+      "bytes": 1643,
+      "path": "setup/warp.md",
+      "sha256": "bac8a48c386972048e0795a8dcc6a673ae473a4a5b96499a9e44ddf2ff9f2321"
+    },
+    {
+      "bytes": 1550,
+      "path": "setup/zed.md",
+      "sha256": "785607a33919fe73fc738b0fe88e57ce2a2d4c9fa4805d4f529b55113c8ceb10"
     }
   ],
   "generator": "spacefast-public-docs",

@@ -5,6 +5,18 @@ description: "Release history for @spacefast/domain-services on npm."
 
 Published as [`@spacefast/domain-services`](https://www.npmjs.com/package/@spacefast/domain-services) on npm.
 
+## 0.0.26
+
+#### Patch Changes
+
+- @spacefast/common@0.0.26
+
+## 0.0.25
+
+#### Patch Changes
+
+- @spacefast/common@0.0.25
+
 ## 0.0.24
 
 #### Patch Changes

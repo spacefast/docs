@@ -8,7 +8,7 @@ description: Keep a space private, then grant access to people, links, passwords
 ---
 
 Claimed spaces start private with an owning-team Grant. A URL by itself
-identifies content; it does not grant access. To admit anyone else, you
+identifies content. It does not grant access. To admit anyone else, you
 create a Grant for a person, a review link, a password, a machine, or the
 whole public internet.
 
@@ -76,7 +76,7 @@ sf share request approve req_123
 sf share request deny req_123
 ```
 
-Approval creates a Person Grant; it does not make the space public.
+Approval creates a Person Grant. It does not make the space public.
 Responses do not reveal whether an unknown private space exists.
 
 ## Links
@@ -225,7 +225,7 @@ replace it with `_pages/access.html`. A custom access page must render
 
 ## Network constraints and logout
 
-Network limits apply to one Grant; they do not deny access that another
+Network limits apply to one Grant. They do not deny access that another
 matching Grant allows.
 
 ```bash

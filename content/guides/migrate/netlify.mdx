@@ -45,7 +45,7 @@ sf publish ./dist
 ## What to change
 
 - Write explicit `301` statuses for permanent redirects. Netlify treats omitted
-  statuses as `301`; Spacefast defaults them to `302`:
+  statuses as `301`. Spacefast defaults them to `302`:
 
   <Diff
     lang="text"
@@ -59,7 +59,7 @@ sf publish ./dist
   `_headers`.
 - Replace Netlify Functions, Edge Functions, Identity, signed proxy redirects,
   and `Role` conditions before publishing protected content.
-- Spacefast rejects `_headers` Basic Auth on every plan; use
+- Spacefast rejects `_headers` Basic Auth on every plan. Use
   [Spacefast sharing](/share).
 
 ## What does not run on Spacefast

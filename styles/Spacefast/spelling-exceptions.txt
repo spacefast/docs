@@ -97,6 +97,7 @@ pnpm
 pollable
 preact
 precomputation
+prefill
 prefills
 prerender
 prerendered
@@ -139,6 +140,7 @@ subdomains
 subprotocol
 subtree
 subtrees
+superadmin
 superset
 takedown
 takedowns
