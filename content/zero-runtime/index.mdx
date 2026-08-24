@@ -595,15 +595,17 @@ plan's storage limit.
 
 ## Variables
 
-Keep server-only values in `.env.server`:
+Keep secrets that belong to your app in `.env.server`. The guestbook's webhook
+uses one to authenticate incoming requests:
 
 ```dotenv .env.server
-RESEND_API_KEY=your_resend_api_key
+WEBHOOK_SECRET=replace_with_a_random_secret
 ```
 
-The publish command syncs the file as secret variables. Read values through
-`ctx.env`. See [Variables](/publish/variables) for shared and space-level
-management.
+The publish command syncs the file as secret variables, and server handlers
+read them through `ctx.env`. Platform services are already configured: use
+`ctx.email`, `ctx.spam`, and `ctx.gravatar` without SMTP or provider API keys.
+See [Variables](/publish/variables) for shared and space-level management.
 
 ## Operate a live app
 
