@@ -22,6 +22,14 @@ that have no effects outside the database:
 | `mutation` | Yes            | `check` plus corrections    | Yes, transactional  |
 | `action`   | Yes            | `check` plus corrections    | Yes                 |
 
+`sf dev` brokers none of them. A local call to `ctx.email`, `ctx.spam`, or
+`ctx.gravatar.profile` throws `zero_email_unavailable`,
+`zero_spam_unavailable`, or `zero_gravatar_unavailable`, so a handler that
+reaches one on every write cannot run locally end to end: guard it, or publish
+the Space and exercise it there. `ctx.gravatar.avatarUrl` is the exception --
+it is a hash and a query string, so it works offline like everything else that
+never leaves the process.
+
 ## Gravatar
 
 `ctx.gravatar.avatarUrl(email, options)` builds an avatar URL. An avatar
@@ -134,6 +142,13 @@ row and the message together. When you want to scope that boundary
 explicitly, use `ctx.transaction(handler)`. Actions run outside a parent
 transaction because they exist to touch the world. Their sends go out when
 the handler succeeds, not atomically with database writes.
+
+Under `sf dev` the boundary is the whole invocation rather than the block you
+declared: a mutation or endpoint that throws rolls back everything it wrote,
+including writes made outside `ctx.transaction()`, and an error you catch
+yourself leaves that block's writes in place. Actions get no rollback at all
+locally. Publish the capsule when a test depends on the exact transaction
+boundary.
 
 The message shape:
 

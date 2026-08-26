@@ -1,16 +1,21 @@
 ---
 title: Astro
-description: Add @spacefast/astro for local routing parity, validation, and merged _redirects and _headers files in the build output.
+description: Add @spacefast/astro for redirect and header parity in dev, routing validation, and merged _redirects and _headers files in the build output.
 ---
 
 Spacefast publishes ordinary Astro static output without a framework-specific
 host adapter. Build the site, then run `sf publish dist`. Any `_redirects` and
 `_headers` files you place in the project or `public/` directory ship with
 that build without configuration changes. The optional `@spacefast/astro`
-integration mirrors [`@spacefast/vite-plugin`](/guides/frameworks/vite). It
-validates those files, serves the resulting redirects, rewrites, proxy rules,
-and response headers in the dev server, and emits the merged files into the
-build output.
+integration validates those files, applies the resulting redirects and
+response headers in the `astro dev` server, and emits the merged files into
+the build output.
+
+Rewrites and proxy rules fall through to Astro's own dev server, which renders
+the route it knows; the platform applies them once the version is published.
+[`@spacefast/vite-plugin`](/guides/frameworks/vite) serves all four locally, so
+that is the one to reach for when you want a dev server that answers exactly
+like production.
 
 ## Install the integration
 

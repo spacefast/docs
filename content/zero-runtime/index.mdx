@@ -44,9 +44,18 @@ capsule compiles unchanged. See [Compare to Lakebed](#compare-to-lakebed).
     sf dev
     ```
 
-    Open `http://localhost:4173`. Edit `client/index.tsx` and
-    `server/index.ts`. The local server reloads when you save a file. State is
-    in memory unless you pass `--state-backend sqlite`.
+    Open the private URL `sf dev` prints, not `http://localhost:4173`: the
+    dev server is capability-gated, and the printed URL carries the capability
+    in its fragment. `http://localhost:4173` on its own serves a page that
+    tells you to go back and copy it.
+
+    ```
+    Open this private URL: http://127.0.0.1:4173/#zero-dev-capability=<capability>
+    ```
+
+    Edit `client/index.tsx` and `server/index.ts`. The local server reloads
+    when you save a file. State is in memory unless you pass
+    `--state-backend sqlite`.
 
   </Step>
   <Step title="Publish">
@@ -429,14 +438,21 @@ echo 'WEBHOOK_SECRET=pick-a-long-random-value' > .env.server
 sf dev
 ```
 
-Open `http://localhost:4173` and leave an entry, then post one from outside:
+Open the private URL `sf dev` prints and leave an entry, then post one from
+outside. Every route on the dev server needs the capability, so send it as a
+bearer token alongside the webhook's own secret:
 
 ```bash
 curl -X POST http://localhost:4173/webhooks/entries \
+  -H "authorization: Bearer <capability>" \
   -H "content-type: application/json" \
   -H "x-webhook-secret: pick-a-long-random-value" \
   -d '{"body":"hello from a webhook"}'
 ```
+
+The capability is the `zero-dev-capability` value in the URL `sf dev` printed.
+A published Space needs no capability: there the endpoint's own secret is the
+only check.
 
 `sf publish` makes it live: the capsule compiles, the migration applies,
 `.env.server` syncs as secret variables, and the version activates.
