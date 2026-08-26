@@ -11,7 +11,7 @@ integration validates those files, applies the resulting redirects and
 response headers in the `astro dev` server, and emits the merged files into
 the build output.
 
-Rewrites and proxy rules fall through to Astro's own dev server, which renders
+Rewrites and proxy rules fall through to the Astro dev server, which renders
 the route it knows; the platform applies them once the version is published.
 [`@spacefast/vite-plugin`](/guides/frameworks/vite) serves all four locally, so
 that is the one to reach for when you want a dev server that answers exactly
