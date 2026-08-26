@@ -438,9 +438,12 @@ echo 'WEBHOOK_SECRET=pick-a-long-random-value' > .env.server
 sf dev
 ```
 
-Open the private URL `sf dev` prints and leave an entry, then post one from
-outside. Every route on the dev server needs the capability, so send it as a
-bearer token alongside the webhook's own secret:
+Open the private URL `sf dev` prints. Signing the guestbook from the browser
+calls `ctx.spam.check`, which `sf dev` does not broker, so that path answers
+`zero_spam_unavailable` until you publish; the webhook writes without it.
+
+Post an entry from outside. Application routes need the capability, so send it
+as a bearer token alongside the webhook's own secret:
 
 ```bash
 curl -X POST http://localhost:4173/webhooks/entries \
