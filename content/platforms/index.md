@@ -24,7 +24,9 @@ reference deliberately does not show.
   and domains.
 
 Map your data model onto tenants and spaces once. Spaces on your platform
-have every feature that the consumer product has.
+have every feature that the consumer product has. For `principal`, `tenant`,
+and the rest of the vocabulary on this page, see the
+[glossary](/start/glossary).
 
 ## Server-side keys
 

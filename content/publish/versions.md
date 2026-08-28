@@ -4,7 +4,7 @@ search:
 title: Versions, channels, and rollback
 sidebar:
   label: Versions and rollback
-description: Learn how immutable versions work, how the live and preview channels point at them, and how to roll back.
+description: Learn how immutable versions work, how the live channel points at them, and how to roll back.
 ---
 
 Every changed publish creates an immutable version with a permanent URL. The

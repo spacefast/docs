@@ -15,10 +15,12 @@ Spacefast resolves entitlements per team as **plan limits plus any
 additive grants**. A limit resolves to a number, or to
 `"unlimited"` when the plan does not bound that axis.
 
-The plans are Free, Personal, Work, and Enterprise, and API responses
-carry the team's plan as a `planCode`. Do not hard-code limit values in
-scripts. Read the resolved entitlements instead, because a grant can
-change them without a plan change.
+The plans are Free, Plus, Pro, and Enterprise. API responses carry the
+team's plan as a `planCode`, and those codes are stable rather than
+matching the plan names: Plus is `personal` and Pro is `work`. Branch on
+the code, not the name. Do not hard-code limit values in scripts. Read the
+resolved entitlements instead, because a grant can change them without a
+plan change.
 
 ## Where to see entitlements and usage
 
@@ -66,10 +68,10 @@ Entitlements also carry feature switches:
 - the number of PHP workers per serving site
 - whether version diagnostics are included
 
-Every team receives its own dedicated runtime site on every plan.
+Every space owns its own runtime site, on every plan.
 
-Request logs go back 48 hours on Free, 30 days on Personal, and are
-unlimited on Work and Enterprise. For details, see
+Request logs go back 48 hours on Free, 30 days on Plus, and are
+unlimited on Pro and Enterprise. For details, see
 [monitoring](/operate/monitoring).
 
 ## What usage is metered
