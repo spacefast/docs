@@ -76,7 +76,7 @@ export default defineConfig({
         {
           label: "Get started",
           root: "/start",
-          items: ["/start", "/start/how-it-works"],
+          items: ["/start", "/start/how-it-works", "/start/glossary"],
         },
         {
           label: "Publish",

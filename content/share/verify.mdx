@@ -108,7 +108,7 @@ import { createTokenManager, TokenRefusedError } from "@spacefast/auth/tokens";
 
 const tickets = createTokenManager({
   mint: async () => {
-    const response = await fetch("/__spacefast/collab/ticket", { method: "POST" });
+    const response = await fetch("/__spacefast/comments/ticket", { method: "POST" });
     if (response.status === 403) throw new TokenRefusedError("forbidden");
     if (!response.ok) throw new Error(`ticket ${response.status}`); // transient
     const { data } = await response.json();

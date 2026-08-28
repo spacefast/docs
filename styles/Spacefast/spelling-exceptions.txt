@@ -68,6 +68,7 @@ IPs
 joinable
 keyset
 Lakebed
+letterboxed
 letterboxing
 liveness
 lockfile
