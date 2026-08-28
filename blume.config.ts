@@ -169,6 +169,7 @@ export default defineConfig({
               root: "/guides/wordpress",
               items: ["/guides/wordpress", "/guides/tag-manager"],
             },
+            "/guides/local-development",
           ],
         },
         {
