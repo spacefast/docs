@@ -1,0 +1,194 @@
+---
+title: Local development
+description: What sf dev runs, what your framework's dev server runs, and which parts of Spacefast only exist once you publish.
+---
+
+Local development on Spacefast is mostly your own framework's dev server. `sf dev` covers the
+two things a framework cannot: the Zero runtime, and Spacefast's own visitor pages. What it
+runs depends on the `runtime.kind` your `sf.jsonc` declares.
+
+| Your project | `sf dev` starts | Run your site with |
+| --- | --- | --- |
+| A static site or a framework build | The visitor-page preview only | Your framework's dev server |
+| `runtime.kind` `zero` | The capsule dev server: HTTP, realtime, a local database | `sf dev` |
+| `runtime.kind` `functions` | Nothing. It stops with an error | Your framework's dev server |
+
+The first row surprises people, so it is worth stating plainly: **`sf dev` is not a static file
+server.** On a static project it serves the five visitor pages and nothing else. Requests for
+your own files return the 404 page.
+
+## Checked locally, served in production
+
+Your configuration gets read on your machine and applied on the platform, and those are two
+different things.
+
+**Checked locally.** `sf dev` compiles `sf.jsonc` before it starts anything. A bad value stops
+it with [`config_invalid`](/errors/config_invalid), and an unrecognized key becomes a warning
+and is ignored, so a typo shows up on the first run rather than after a publish. Your
+`_redirects` and `_headers` files are a separate step: `sf dev` does not read them, and
+`sf routing inspect` and `sf publish --dry-run` are what report a broken rule.
+
+**Served in production.** Redirects, headers, `cleanUrls`, directory listings, SPA fallback,
+access rules, crons, and image transforms are all applied by the platform. `sf dev` applies
+none of them. So a clean local run tells you your configuration parses. It does not show you
+your configuration working, and the framework plugins below are the closest you get.
+
+## Static sites and framework builds
+
+Use your framework's dev server for the site itself, then reach for these three commands.
+
+`sf dev` previews the visitor pages with sample data, at `/_spacefast/pages/<id>`:
+
+```bash
+sf dev
+```
+
+It prints the preview URL and the page IDs it serves: `404`, `denied`, `access`, `index`, and
+`preview`. A custom `_pages/<id>.html` takes over that page, a root `_layout.html` wraps the
+default body, and both are expanded with the same code that runs at publish time. Template
+edits show up on the next request, so there is nothing to restart. See
+[Visitor pages and theming](/serve/pages) for what you can put in them.
+
+`sf pages validate` runs the publish-time structural checks:
+
+```bash
+sf pages validate
+```
+
+It rejects unknown Pages elements and missing required ones, and exits non-zero so you can
+gate a commit on it. `sf dev` runs the same checks and refuses to start if any fail.
+
+`sf routing inspect` compiles your `_redirects` and `_headers` and matches a path against the
+result. Point it at your build output:
+
+```bash
+sf routing inspect --routing dist --url /old-path
+```
+
+It reports the rule that matched, the action, the status, and the headers that would be added,
+and it names the file and line of any rule it rejects. It runs the platform's own routing
+compiler, so it catches what a publish catches: an unsupported status, a competitor's condition
+spelling, a response header the platform reserves for itself.
+
+To see the build Spacefast would run, without running it:
+
+```bash
+sf build --dry-run
+```
+
+## Zero apps
+
+For a Zero capsule, `sf dev` is the real thing: your server module, the client bundle, a live
+database, and a realtime websocket.
+
+```bash
+sf init my-app --runtime zero
+cd my-app
+sf dev
+```
+
+:::note[Open the private URL, not the bare host]
+`sf dev` prints a one-off URL carrying a capability token, and every route except the landing
+page requires it. Opening the host on its own gives you a page that asks for the private URL
+instead of your app. Use the URL the command prints, and expect a new one each time you start
+the server.
+:::
+
+Saving a source file reloads the runtime in place, and the printed URL keeps working. The local
+sign-in identity is a guest, so ownership checks and per-user queries behave the way they will
+once published.
+
+### Where local state lives
+
+`--state-backend` decides what happens to your rows when the server stops.
+
+| Value | Behavior |
+| --- | --- |
+| `memory` | The default. Rows are gone when `sf dev` exits |
+| `sqlite` | Rows persist in `.spacefast/zero/dev-state.sqlite` across restarts |
+| `mysql` | Not a local option. `sf dev` stops and tells you to pick one of the other two |
+
+```bash
+sf dev --state-backend sqlite
+```
+
+The local store is a development engine, not the database a published space gets. It is enough
+to build against, and two differences are worth holding on to. A failed `ctx.transaction()`
+does not roll back locally, so writes made inside it survive an error that would undo them in
+production. And the local engine has its own ceilings on rows, values, and stored objects,
+which are development guard rails rather than product limits. For those, see
+[Plans](/account/plans).
+
+## Functions
+
+`sf dev` cannot run a worker yet. It stops with
+[`runtime_dev_unsupported`](/errors/runtime_dev_unsupported) rather than serving a static shell
+that answers none of your routes.
+
+Develop against your framework's own dev server, publish, then inspect the deployed worker:
+
+```bash
+sf runtime status
+sf logs runtime --follow
+```
+
+## Inspect a running dev server
+
+Three commands read a live `sf dev` Zero server instead of a published version. Pass the port
+`sf dev` is using:
+
+```bash
+sf db --port 4173
+sf db dump --port 4173
+sf db export --port 4173 --out ./local-backup.json
+```
+
+`--local-url` takes a full address if you changed the host. `sf db` reports the tables and
+columns your capsule declared, so it is the quickest way to confirm a schema change landed.
+
+## What does not work locally
+
+Everything here is available once you publish. Locally it is absent, and most of it fails loudly
+rather than quietly.
+
+| Capability | Locally | What to do instead |
+| --- | --- | --- |
+| Sending email | Throws | Publish, then test against the space |
+| Spam checks | Throws | Publish |
+| Gravatar profiles | Throws. Avatar URLs still build | Publish |
+| AI completions | Throws | Publish |
+| Hosted sign-in | No sign-in route. You are a guest | Publish |
+| Redirects, headers, rewrites | Not served by `sf dev` | `sf routing inspect`, or a framework plugin |
+| Access rules and Grants | Not evaluated | Publish, then use a share link |
+| Crons | No local scheduler | `sf crons run` against a published version |
+| Image transforms | Remote only | Publish |
+| PHP | No local engine | Publish |
+| Custom domains | Production only | Publish |
+
+Storage is the exception worth naming: a Zero capsule's blob reads and writes work locally, and
+uploads are held in memory for the life of the server rather than persisted.
+
+## Framework plugins
+
+Two optional packages apply your routing files inside a framework dev server, which is the gap
+`sf dev` leaves on a static project.
+
+[`@spacefast/vite-plugin`](/guides/frameworks/vite) applies response headers, redirects,
+rewrites, and proxy rules in the Vite dev server, and writes the merged `_redirects` and
+`_headers` into your build output.
+
+[`@spacefast/astro`](/guides/frameworks/astro) writes the same merged files into the build
+output. In the dev server it applies redirects and response headers.
+
+Neither plugin evaluates access rules. Configure access through Spacefast and test it on a
+published space.
+
+## Flags worth knowing
+
+`--state-backend`, `--watch`, `--watch-interval`, and `--allow-network` are accepted on any
+project but only change behavior for a Zero capsule. On a static project they do nothing, so
+there is no point reaching for `--state-backend` on a site that has no state.
+
+`--port` defaults to `4173` in every mode, and `--host` to `127.0.0.1`. `--dry-run` prints what
+the server would do and starts nothing, which is the quickest way to confirm which of the three
+modes your project is in.
