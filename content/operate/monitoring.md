@@ -16,7 +16,7 @@ traffic graphs under **Traffic**, request logs under **Traffic →
 Requests**, and the audit feed under **Settings → Advanced**.
 
 Plan tier controls how far back logs go: 48 hours on Free, 30 days on
-Personal, unlimited on Work and Enterprise. Analytics windows and their
+Plus, unlimited on Pro and Enterprise. Analytics windows and their
 granularity are the same on every plan.
 
 ## Analytics
