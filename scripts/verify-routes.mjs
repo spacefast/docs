@@ -7,6 +7,7 @@ import {
   deploymentBase,
   resolveRedirect,
 } from "./redirect-rules.mjs";
+import { routesFromSidebar } from "./sidebar-routes.mjs";
 
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
@@ -18,17 +19,6 @@ const corpusKey = (url) => {
   return normalized === site ? docsRoot : normalized;
 };
 const checked = [];
-
-function routesFromSidebar(source) {
-  const start = source.indexOf("sidebar:");
-  const end = source.indexOf("openapi:", start);
-  if (start < 0 || end < 0) {
-    throw new Error("Could not locate the sidebar in blume.config.ts.");
-  }
-  return new Set(
-    [...source.slice(start, end).matchAll(/["'](\/[^"']*)["']/gu)].map((match) => match[1]),
-  );
-}
 
 async function exists(value) {
   try {
@@ -300,15 +290,64 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
   );
 }
 
+// llms.txt is a curated index, not a mirror of the sitemap: the generated error
+// pages, API operations, and per-release changelog entries are collapsed to
+// their index pages by scripts/build-llms-index.mjs, because ~1,100 operation
+// titles ahead of anything actionable is worse than useless to an agent. What
+// survives is the sidebar plus the generated agent setup pages, and that is the
+// invariant checked here. Only link targets count; the preamble's prose and
+// code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
-const llmsPageUrls = [...llmsIndex.matchAll(/https:\/\/spacefast\.com\/docs[^\s)>]*/gu)]
-  .map((match) => match[0])
+const llmsPageUrls = llmsIndex
+  .split("\n")
+  .filter((line) => line.startsWith("- ["))
+  .flatMap((line) => [...line.matchAll(/\]\((https:\/\/[^)]+)\)/gu)].map((match) => match[1]))
   .filter((url) => !url.endsWith("/rss.xml"));
+if (llmsPageUrls.length === 0) {
+  throw new Error("llms.txt lists no pages.");
+}
 if (
-  llmsPageUrls.length !== llmSitemapUrls.length ||
   llmsPageUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot && url !== site)
 ) {
-  throw new Error("llms.txt has missing or non-docs page URLs.");
+  throw new Error("llms.txt has non-docs page URLs.");
+}
+const llmsRoutes = new Set(
+  llmsPageUrls.map((url) => {
+    const route = url.slice(docsRoot.length).replace(/\/$/u, "");
+    return route === "" ? "/" : route;
+  }),
+);
+const strayLlmsRoutes = [...llmsRoutes].filter(
+  (route) => !requiredIaRoutes.includes(route) && !route.startsWith("/setup"),
+);
+if (strayLlmsRoutes.length > 0) {
+  throw new Error(
+    `llms.txt lists routes that are neither in the sidebar nor generated agent setup pages: ${strayLlmsRoutes.join(", ")}`,
+  );
+}
+const missingLlmsRoutes = requiredIaRoutes.filter((route) => !llmsRoutes.has(route));
+if (missingLlmsRoutes.length > 0) {
+  throw new Error(`llms.txt is missing sidebar routes: ${missingLlmsRoutes.join(", ")}`);
+}
+for (const route of llmsRoutes) {
+  if (!(await exists(path.join(dist, localTargetFor(route))))) {
+    throw new Error(`llms.txt links a page that is not in the build: ${docsRoot}${route}`);
+  }
+}
+// Each collapsed family contributes its index page and nothing more. This is
+// what stops the "## Other" pile from quietly returning.
+for (const collapsed of ["/errors", "/api/reference", "/platforms/api/reference", "/changelog"]) {
+  const descendants = [...llmsRoutes].filter((route) => route.startsWith(`${collapsed}/`));
+  const unexpected = descendants.filter((route) => !requiredIaRoutes.includes(route));
+  if (unexpected.length > 0) {
+    throw new Error(
+      `llms.txt enumerates generated pages under ${collapsed} instead of linking its index: ${unexpected.slice(0, 5).join(", ")}`,
+    );
+  }
+}
+const llmsBytes = Buffer.byteLength(llmsIndex, "utf8");
+if (llmsBytes > 32 * 1024) {
+  throw new Error(`llms.txt is ${llmsBytes} bytes. It is an index for agents, not a sitemap.`);
 }
 
 const llmsFull = await readBuilt("llms-full.txt");
