@@ -53,10 +53,8 @@ start with `bld_`. See [Build from Git](/publish/git).
 
 ### Capsule
 
-One Zero app: a schema plus its queries, mutations, actions, and endpoints,
-compiled into a single artifact. Everything in a capsule runs inside one
-database transaction, which is what separates Zero from Functions. See
-[Zero](/zero-runtime).
+One Zero app: a schema plus its queries, mutations, and endpoints, compiled
+into one artifact. See [Zero](/zero-runtime).
 
 ### CDN
 

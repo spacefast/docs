@@ -113,9 +113,7 @@ sf dev --state-backend sqlite
 ```
 
 The local store is a development engine, not the database a published space gets. It is enough
-to build against, and two differences are worth holding on to. A failed `ctx.transaction()`
-does not roll back locally, so writes made inside it survive an error that would undo them in
-production. And the local engine has its own ceilings on rows, values, and stored objects,
+to build against. The local engine has its own ceilings on rows, values, and stored objects,
 which are development guard rails rather than product limits. For those, see
 [Plans](/account/plans).
 

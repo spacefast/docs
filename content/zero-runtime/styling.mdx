@@ -1,0 +1,86 @@
+---
+title: Style a Zero app
+description: Use compiled Tailwind classes, semantic tokens, theme.json, the component kit, and charts.
+---
+
+Zero compiles Tailwind classes from your client source. Do not add a Tailwind,
+PostCSS, or CSS build step.
+
+## Write complete class names
+
+Use static class strings so the compiler can find them:
+
+```tsx
+const toneClass = urgent ? "bg-danger text-white" : "bg-surface text-ink";
+
+return <div class={toneClass}>Status</div>;
+```
+
+Do not construct part of a class name, such as `bg-${tone}-500`. The compiler
+cannot discover that class.
+
+## Use semantic tokens
+
+Use `canvas` for the page, `surface` for panels, `ink` and `ink-muted` for
+text, `line` for borders, and `accent` for the main action. Zero also provides
+`success`, `warning`, and `danger`.
+
+```tsx
+<main class="min-h-dvh bg-canvas p-6 text-ink">
+  <section class="rounded-xl border border-line bg-surface p-4">
+    <p class="text-ink-muted">Last updated just now</p>
+    <button class="mt-3 rounded-md bg-accent px-3 py-2 text-white">Save</button>
+  </section>
+</main>
+```
+
+These tokens adapt to light and dark color schemes. Common `shadcn` names such
+as `bg-background`, `text-muted-foreground`, and `border-border` map to the
+same roles.
+
+## Change tokens with theme.json
+
+Add `theme.json` at the capsule root to override tokens or add named presets:
+
+```json
+{
+  "version": 3,
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "accent", "color": "#7a1fa2", "name": "Accent" },
+        { "slug": "brand", "color": "#b3592a", "name": "Brand" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        { "slug": "display", "fontFamily": "Georgia, serif", "name": "Display" }
+      ]
+    }
+  }
+}
+```
+
+The example changes `bg-accent` and adds `bg-brand` and `font-display`.
+
+## Use the component kit
+
+Import pre-styled controls from the platform kit:
+
+```tsx
+import { Button, Card, Dialog, Input, Table } from "@spacefast/zero/kit";
+```
+
+The kit uses the same semantic tokens, so `theme.json` changes both your
+classes and the kit components.
+
+## Add charts and icons
+
+Use the Zero chart components for common charts:
+
+```tsx
+import { BarChart, LineChart, Sparkline, StatTile } from "@spacefast/zero/charts";
+```
+
+Zero also provides `recharts`, `lucide-react`, and Preact as platform imports.
+Import only what the client uses. Do not add an install step for these modules.

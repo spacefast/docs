@@ -1,0 +1,193 @@
+---
+title: Build a Zero to-do app
+description: Build and publish a to-do app with a live query, mutations, and a read endpoint.
+---
+
+This tutorial builds a to-do app whose rows belong to the current visitor. The
+client updates after each mutation, and a read endpoint reports that the
+capsule is running.
+
+## Create the capsule
+
+Run:
+
+```bash
+sf init zero-todos --runtime zero
+cd zero-todos
+```
+
+Keep the generated `package.json`. Zero supplies its client, server, kit, and
+Preact modules when it builds the capsule.
+
+## Declare the entries
+
+Set `sf.jsonc` to:
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "name": "Zero todos",
+  "runtime": {
+    "kind": "zero",
+    "server": "server/index.ts",
+    "client": "client/index.tsx"
+  }
+}
+```
+
+Zero only accepts capsule source from `client/`, `server/`, and `shared/`.
+
+## Create the server capsule
+
+Replace `server/index.ts` with:
+
+```ts
+import {
+  boolean,
+  capsule,
+  endpoint,
+  mutation,
+  query,
+  string,
+  table,
+  text,
+} from "@spacefast/zero/server";
+
+export default capsule({
+  name: "Zero todos",
+  schema: {
+    todos: table({
+      text: string(),
+      done: boolean().default(false),
+      ownerId: string(),
+    }).index("by_owner", ["ownerId"]),
+  },
+  queries: {
+    todos: query(async (ctx) =>
+      ctx.db.todos
+        .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+        .order("desc")
+        .collect()
+    ),
+  },
+  mutations: {
+    addTodo: mutation(async (ctx, text: string) => {
+      const cleanText = text.trim().slice(0, 160);
+      if (!cleanText) return;
+      await ctx.db.todos.insert({
+        text: cleanText,
+        done: false,
+        ownerId: ctx.auth.userId,
+      });
+      ctx.invalidate("todos");
+    }),
+    setDone: mutation(async (ctx, id: string, done: boolean) => {
+      const todo = await ctx.db.todos.get(id);
+      if (!todo || todo.ownerId !== ctx.auth.userId) return;
+      await ctx.db.todos.update(id, { done });
+      ctx.invalidate("todos");
+    }),
+  },
+  endpoints: {
+    status: endpoint(
+      { mode: "read", method: "GET", path: "/api/status" },
+      () => text("ok")
+    ),
+  },
+});
+```
+
+The endpoint declares a literal method, a literal path, and `mode: "read"`.
+Read endpoints and queries get read-only database access. Use `mode: "write"`
+when an endpoint must write.
+
+Each mutation calls `ctx.invalidate("todos")`. Zero then refreshes every live
+subscription opened under the `todos` query name.
+
+## Create the client
+
+Replace `client/index.tsx` with:
+
+```tsx
+import { useMutation, useQuery } from "@spacefast/zero/client";
+import { Button, Card, Checkbox, EmptyState, Input } from "@spacefast/zero/kit";
+
+type Todo = {
+  id: string;
+  text: string;
+  done: boolean;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export function App() {
+  const todos = useQuery<Todo[]>("todos");
+  const addTodo = useMutation<[text: string], void>("addTodo");
+  const setDone = useMutation<[id: string, done: boolean], void>("setDone");
+
+  async function onSubmit(event: SubmitEvent) {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const text = String(new FormData(form).get("text") ?? "");
+    await addTodo(text);
+    form.reset();
+  }
+
+  return (
+    <main class="mx-auto min-h-dvh max-w-xl p-6">
+      <Card title="Todos" subtitle="Each visitor sees their own list.">
+        <form class="flex gap-2" onSubmit={(event) => void onSubmit(event)}>
+          <Input name="text" placeholder="Add a todo" aria-label="New todo" />
+          <Button type="submit">Add</Button>
+        </form>
+        {todos.length === 0 ? (
+          <div class="mt-4">
+            <EmptyState title="Nothing to do" description="Add the first todo above." />
+          </div>
+        ) : (
+          <ul class="mt-4 divide-y divide-line">
+            {todos.map((todo) => (
+              <li key={todo.id} class="flex items-center gap-3 py-2.5">
+                <Checkbox
+                  checked={todo.done}
+                  onChange={() => void setDone(todo.id, !todo.done)}
+                />
+                <span class={todo.done ? "text-ink-muted line-through" : "text-ink"}>
+                  {todo.text}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
+    </main>
+  );
+}
+```
+
+## Run the app
+
+Start the capsule:
+
+```bash
+sf dev
+```
+
+Open the private URL from the command output. Do not remove its
+`#zero-dev-capability=...` fragment. Add a to-do item, then open another tab at the
+same private URL. Both tabs update after a mutation.
+
+Check the endpoint at `/api/status` on the same private URL. It returns `ok`.
+
+## Publish the app
+
+Run:
+
+```bash
+sf publish
+```
+
+Open the live URL from the publish receipt. The published capsule has durable
+database state, while the default `sf dev` database resets when the process
+stops.

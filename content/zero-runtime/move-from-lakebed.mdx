@@ -1,0 +1,67 @@
+---
+title: Move a Lakebed capsule to Zero
+description: Move a core Lakebed capsule to Spacefast Zero imports and publish it with sf.
+---
+
+Spacefast supports the core Lakebed client and server APIs used by capsules
+with schemas, queries, and mutations. Move to the canonical Spacefast imports
+before you publish. Treat any Lakebed feature outside that core as a separate
+migration.
+
+## Put source in the Zero roots
+
+Keep the client entry under `client/`, the server entry under `server/`, and
+shared pure TypeScript under `shared/`.
+
+Declare both entries in `sf.jsonc`:
+
+```jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "name": "My capsule",
+  "runtime": {
+    "kind": "zero",
+    "server": "server/index.ts",
+    "client": "client/index.tsx"
+  }
+}
+```
+
+## Replace the imports
+
+Replace `lakebed/server` or `@spacefast/compat-lakebed/server` with:
+
+```ts
+import { capsule, mutation, query, string, table } from "@spacefast/zero/server";
+```
+
+Replace `lakebed/client` or `@spacefast/compat-lakebed/client` with:
+
+```ts
+import { useMutation, useQuery } from "@spacefast/zero/client";
+```
+
+Use `@spacefast/zero/kit` and `@spacefast/zero/charts` for Spacefast client
+components. Do not keep compatibility imports in new code.
+
+## Run the capsule locally
+
+Run:
+
+```bash
+sf dev
+```
+
+Open the private URL that the command prints. Exercise every query and mutation
+that you moved.
+
+## Publish the capsule
+
+Run:
+
+```bash
+sf publish
+```
+
+Open the live URL from the publish receipt and repeat the checks against the
+published database and identity.

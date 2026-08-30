@@ -117,6 +117,10 @@ export default defineConfig({
           root: "/zero-runtime",
           items: [
             "/zero-runtime",
+            "/zero-runtime/build",
+            "/zero-runtime/authentication",
+            "/zero-runtime/styling",
+            "/zero-runtime/move-from-lakebed",
             "/functions",
             "/functions/php",
             "/database",
