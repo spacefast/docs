@@ -1,0 +1,147 @@
+---
+title: Zero server API
+description: Declare a capsule, database schema, queries, mutations, and handler contexts.
+---
+
+`@spacefast/zero/server` defines the code that runs inside the Zero runtime.
+The compiler reads the capsule, compiles its handlers, and applies its database
+schema when you publish.
+
+## Declare a capsule
+
+Export one `capsule()` call from the configured server entry:
+
+```ts
+import { capsule } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "Project board",
+  favicon: "/favicon.svg",
+  schema: {},
+  queries: {},
+  mutations: {},
+  endpoints: {},
+});
+```
+
+The GA declarations are `name`, `favicon`, `schema`, `queries`, `mutations`,
+and `endpoints`. `collections`, `pages`, and `sync` belong to
+[managed content](/zero-runtime/managed-content), which is internal and default
+off.
+
+## Define the database schema
+
+Use `table`, `string`, `boolean`, and `id`:
+
+```ts
+import { boolean, id, string, table } from "@spacefast/zero/server";
+
+const rooms = table({
+  name: string(),
+});
+
+const messages = table({
+  roomId: id("rooms"),
+  authorId: string(),
+  body: string(),
+  pinned: boolean().default(false),
+}).index("by_room", ["roomId"]);
+```
+
+Every row also has `id`, `createdAt`, and `updatedAt`. Do not declare those
+field names. The database also reserves the `by_creation` index.
+
+`id("rooms")` records the referenced table in the generated type. It does not
+add an automatic join.
+
+## Read rows
+
+A query gets read-only database access:
+
+```ts
+queries: {
+  messages: query(async (ctx, roomId: string) =>
+    ctx.db.messages
+      .withIndex("by_room", (range) => range.eq("roomId", roomId))
+      .order("desc")
+      .take(50)
+  ),
+},
+```
+
+| API | Result |
+| --- | --- |
+| `table.get(id)` | One row or `null` |
+| `table.withIndex(name, range?)` | A query builder for a declared index |
+| `range.eq`, `gt`, `gte`, `lt`, `lte` | An index range |
+| `query.order("asc" | "desc")` | The same builder with an order |
+| `query.collect()` | All matching rows |
+| `query.take(count)` | Up to `count` rows |
+| `query.first()` | The first row or `null` |
+| `query.paginate(options)` | One cursor page |
+
+For pagination, accept one object that contains `pagination`:
+
+```ts
+import type { PaginationOptions } from "@spacefast/zero/server";
+
+messages: query(
+  async (
+    ctx,
+    input: { roomId: string; pagination: PaginationOptions },
+  ) =>
+    ctx.db.messages
+      .withIndex("by_room", (range) => range.eq("roomId", input.roomId))
+      .order("desc")
+      .paginate(input.pagination),
+),
+```
+
+The matching client call uses `usePaginatedQuery`. See the
+[Zero client API](/zero-runtime/client#paginate-a-query).
+
+## Write rows
+
+A mutation gets `insert`, `update`, and `delete` in addition to every read
+operation:
+
+```ts
+mutations: {
+  pinMessage: mutation(async (ctx, id: string, pinned: boolean) => {
+    const message = await ctx.db.messages.get(id);
+    if (!message || message.authorId !== ctx.auth.userId) return null;
+
+    const updated = await ctx.db.messages.update(id, { pinned });
+    ctx.invalidate("messages");
+    return updated;
+  }),
+},
+```
+
+`insert(value)` returns the new row. `update(id, patch)` returns the updated row
+or `null`. `delete(id)` returns whether it deleted a row.
+
+Call `ctx.invalidate()` with the query names that changed. If a mutation calls
+no invalidation, Zero refreshes every live query on the page. Narrow
+invalidation avoids unnecessary reads.
+
+## Handler contexts
+
+| Context value | Query or read endpoint | Mutation or write endpoint |
+| --- | --- | --- |
+| `ctx.db` | Read only | Read and write |
+| `ctx.auth` | Yes | Yes |
+| `ctx.env` | Yes | Yes |
+| `ctx.log` | Yes | Yes |
+| `ctx.gravatar` | Yes | Yes |
+| `ctx.spam.check` | Yes | Yes |
+| Spam corrections | No | Yes |
+| `ctx.email` | No | Yes |
+| `ctx.invalidate` | No | Yes |
+
+Read [Email, spam, and Gravatar](/services) for the service contracts and local
+development limits. Read [Zero endpoints](/zero-runtime/endpoints) for request
+and response handling.
+
+Zero server code cannot call `fetch`. Use [Functions](/functions) when the
+server must call an arbitrary HTTP service.

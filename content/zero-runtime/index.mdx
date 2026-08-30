@@ -5,8 +5,8 @@ description: Choose the full-stack runtime for apps built around shared data, id
 
 Zero is Spacefast's full-stack runtime. A Zero capsule puts a Preact client,
 server handlers, a typed database schema, authentication, and storage in one
-space. Its public server declarations are `schema`, `queries`, `mutations`, and
-`endpoints`. Zero is generally available.
+space. Zero is generally available. Managed content is internal and default
+off.
 
 Choose Zero when the app is built around shared data. Queries keep the client
 current, mutations write to the database, and every visitor gets an identity.
@@ -42,6 +42,18 @@ client, and activates the new version.
     Run a complete capsule with a schema, live query, mutations, and an HTTP
     endpoint.
   </Card>
+  <Card title="Use the client API" href="/zero-runtime/client" icon="monitor-smartphone">
+    Use the typed client, live and paginated queries, mutations, routing,
+    identity, storage, and error boundaries.
+  </Card>
+  <Card title="Use the server API" href="/zero-runtime/server" icon="server-cog">
+    Declare the capsule, database schema, queries, mutations, and handler
+    contexts.
+  </Card>
+  <Card title="Add HTTP endpoints" href="/zero-runtime/endpoints" icon="waypoints">
+    Declare read and write routes, inspect requests, and return text, JSON,
+    redirects, empty responses, or generated images.
+  </Card>
   <Card title="Add authentication" href="/zero-runtime/authentication" icon="key-round">
     Use guest identity, hosted Gravatar sign-in, and server-side ownership
     checks.
@@ -49,6 +61,17 @@ client, and activates the new version.
   <Card title="Style the client" href="/zero-runtime/styling" icon="palette">
     Use static Tailwind classes, semantic tokens, the component kit, and
     charts.
+  </Card>
+  <Card title="Browse components" href="/zero-runtime/components" icon="panels-top-left">
+    Look up every component, chart, and rendering helper bundled with Zero.
+  </Card>
+  <Card title="Use the Zero CLI" href="/zero-runtime/commands" icon="terminal">
+    List and call Abilities, generate live types, and import Payload CMS or
+    EmDash projects.
+  </Card>
+  <Card title="Use managed content" href="/zero-runtime/managed-content" icon="files">
+    Declare collections, pages, file sync, and generated Abilities. This
+    feature is internal and default off.
   </Card>
   <Card title="Move from Lakebed" href="/zero-runtime/move-from-lakebed" icon="move-right">
     Move a core Lakebed capsule to the canonical Spacefast imports.
@@ -58,5 +81,9 @@ client, and activates the new version.
   </Card>
   <Card title="Store files" href="/storage" icon="folder">
     Upload objects from the client and manage them with the CLI.
+  </Card>
+  <Card title="Use managed services" href="/services" icon="send">
+    Send email, check spam, read Gravatar profiles, use server variables, and
+    write runtime logs.
   </Card>
 </CardGroup>

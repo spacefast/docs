@@ -109,22 +109,17 @@ subscription opened under the `todos` query name.
 Replace `client/index.tsx` with:
 
 ```tsx
-import { useMutation, useQuery } from "@spacefast/zero/client";
+import { createClient, useQuery } from "@spacefast/zero/client";
 import { Button, Card, Checkbox, EmptyState, Input } from "@spacefast/zero/kit";
 
-type Todo = {
-  id: string;
-  text: string;
-  done: boolean;
-  ownerId: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type app from "../server/index";
+
+const api = createClient<typeof app>();
 
 export function App() {
-  const todos = useQuery<Todo[]>("todos");
-  const addTodo = useMutation<[text: string], void>("addTodo");
-  const setDone = useMutation<[id: string, done: boolean], void>("setDone");
+  const todos = useQuery(api.todos());
+  const addTodo = api.useMutation("addTodo");
+  const setDone = api.useMutation("setDone");
 
   async function onSubmit(event: SubmitEvent) {
     event.preventDefault();
@@ -165,6 +160,11 @@ export function App() {
   );
 }
 ```
+
+`createClient<typeof app>()` carries the capsule's query names, mutation names,
+arguments, and results into the client without importing server code at
+runtime. The compiler rejects a misspelled handler name or an argument with the
+wrong type.
 
 ## Run the app
 

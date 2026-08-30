@@ -1,0 +1,157 @@
+---
+title: Managed content in Zero
+description: Declare collections, pages, file sync, generated Abilities, and CMS imports in a Zero capsule.
+---
+
+::::warning[Internal and default off]
+Managed content requires the Spacefast team to activate it and a compatible
+runtime. General customer spaces cannot publish these declarations yet. The GA
+Zero runtime does not require managed content.
+::::
+
+Managed content compiles capsule declarations into a version-bound WordPress
+content model. Publishing activates that model. Promoting or rolling back a
+version activates the model stored with that version.
+
+## Declare collections
+
+Add literal `collections` to the capsule:
+
+```ts
+import { capsule } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "Journal",
+  collections: {
+    posts: {
+      label: "Writing",
+      fields: {
+        deck: {
+          kind: "text",
+          label: "Deck",
+          required: true,
+          maxLength: 200,
+        },
+        body: {
+          kind: "blocks",
+          source: "content/posts/*.md",
+        },
+      },
+    },
+    projects: {
+      publicRead: true,
+      fields: {
+        status: {
+          kind: "enum",
+          values: ["draft", "shipped"],
+        },
+        lead: {
+          kind: "reference",
+          to: "posts",
+        },
+        cover: {
+          kind: "media",
+          multiple: true,
+        },
+      },
+    },
+  },
+});
+```
+
+WordPress supplies native `posts`, `pages`, and `media` collections. Declaring
+`posts` or `pages` adds fields to that native collection. Another collection
+becomes its own managed WordPress resource.
+
+A custom collection is private by default. Set `publicRead: true` to allow
+anonymous reads. Native `posts`, `pages`, and `media` stay public unless the
+declaration sets another policy.
+
+## Field kinds
+
+| Kind | Options |
+| --- | --- |
+| `text` | `multiline`, `maxLength` |
+| `number` | Common field options |
+| `boolean` | Common field options |
+| `datetime` | Common field options |
+| `blocks` | `allowed`, `source` |
+| `media` | `multiple` |
+| `reference` | Required `to`, optional `multiple` |
+| `enum` | Required `values`, optional `multiple` |
+
+Every field accepts `label` and `required`. A reference must name another
+declared collection.
+
+The compiler reads content declarations without running the server module.
+Use literal objects, arrays, strings, numbers, and boolean values. The compiler
+refuses helper calls, object spreads, variable references, and interpolated
+source paths.
+
+## Bind repository files
+
+A `source` on a `blocks` field binds Markdown or HTML files to that field:
+
+```ts
+body: {
+  kind: "blocks",
+  source: "content/posts/*.md",
+},
+```
+
+The glob can match files in one directory. The compiler creates one sync
+binding per file. Use `.md` for Markdown or `.html` for HTML. Another extension
+fails the build.
+
+Use `sync` when the field-level shorthand does not fit:
+
+```ts
+sync: {
+  homeBody: {
+    collection: "pages",
+    field: "body",
+    source: "content/home.md",
+  },
+},
+```
+
+The sync ledger reconciles the repository file and the WordPress field after
+publish.
+
+## Declare rendered pages
+
+Map a page name to a client component:
+
+```ts
+pages: {
+  projects: "client/ProjectsPage.tsx",
+  handbook: {
+    component: "client/HandbookPage.tsx",
+    path: "/docs/start",
+    title: "Handbook",
+  },
+},
+```
+
+The string form uses the page name as its route. `projects` serves
+`/projects`. The object form sets the component, route, and title explicitly.
+
+## Use generated Abilities and types
+
+The compiler publishes read and write Abilities for the content model. Inspect
+the live catalog and generate its types:
+
+```bash
+sf zero abilities
+sf zero types
+```
+
+Call an Ability by name:
+
+```bash
+sf zero call content.posts.list
+sf zero call content.posts.get --input '{"slug":"hello"}'
+```
+
+Read [Zero CLI commands](/zero-runtime/commands) for tokens, type checks, input
+files, and CMS import commands.

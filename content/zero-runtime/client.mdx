@@ -1,0 +1,155 @@
+---
+title: Zero client API
+description: Use the typed client, live queries, pagination, mutations, routing, identity, storage, and error boundaries.
+---
+
+`@spacefast/zero/client` is the browser API for a Zero capsule. It connects the
+Preact client to the capsule's declared queries and mutations, the hosted
+identity, realtime updates, and the space's object store.
+
+## Create the typed client
+
+Import the capsule as a type, then pass that type to `createClient`:
+
+```tsx
+import { createClient, useQuery } from "@spacefast/zero/client";
+
+import type app from "../server/index";
+
+const api = createClient<typeof app>();
+
+function MessageList({ topic }: { topic: string }) {
+  const messages = useQuery(api.messages({ topic }));
+  return <p>{messages.length} messages</p>;
+}
+```
+
+The type-only import adds no server code to the client bundle. The client knows
+each query name, argument list, result, mutation name, and mutation argument
+list from the capsule type.
+
+The string form remains available for Lakebed compatibility:
+
+```tsx
+const messages = useQuery<Message[]>("messages", { topic });
+```
+
+Use the typed client in new code. It catches a renamed handler or a wrong
+argument before publish.
+
+## Run mutations
+
+Get a typed mutation function from the client:
+
+```tsx
+const sendMessage = api.useMutation("sendMessage");
+await sendMessage(roomId, body);
+```
+
+The returned promise resolves to the mutation result. A mutation error rejects
+the promise.
+
+## Paginate a query
+
+A paginated query accepts one object argument with a `pagination` field and
+returns `PaginationResult<T>` on the server. The client supplies the pagination
+field:
+
+```tsx
+const messages = api.usePaginatedQuery(
+  "messages",
+  { roomId },
+  { initialNumItems: 20 },
+);
+
+return (
+  <>
+    {messages.page.map((message) => (
+      <p key={message.id}>{message.body}</p>
+    ))}
+    {!messages.isDone && <button onClick={messages.loadMore}>Load more</button>}
+  </>
+);
+```
+
+`page` contains all loaded rows. `continueCursor` is the next server cursor.
+`loadMore()` requests the next page, and `reset()` returns to the first page.
+
+## Route between pages
+
+The built-in router handles same-origin navigation without a page reload:
+
+```tsx
+import {
+  Link,
+  Route,
+  Router,
+  Routes,
+  useParams,
+} from "@spacefast/zero/client";
+
+function Project() {
+  const { id } = useParams() as { id?: string };
+  return <p>Project {id}</p>;
+}
+
+export function App() {
+  return (
+    <Router>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/projects/alpha">Project</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<p>Home</p>} />
+        <Route path="/projects/:id" element={<Project />} />
+        <Route path="*" element={<p>Not found</p>} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+Routes support literal segments, `:name` parameters, and `*` wildcards. The
+router also exports `navigate`, `useNavigate`, `useLocation`, and `useParams`.
+`Link` uses client navigation for same-origin URLs and normal browser
+navigation for external URLs.
+
+## Catch render errors
+
+Wrap a section with `ErrorBoundary` when the user can recover without
+reloading the whole app:
+
+```tsx
+import { ErrorBoundary } from "@spacefast/zero/client";
+
+<ErrorBoundary
+  fallback={(error, retry) => (
+    <button onClick={retry}>Retry after {error.message}</button>
+  )}
+>
+  <MessageList topic="launch" />
+</ErrorBoundary>;
+```
+
+The fallback receives the error and a function that resets the boundary.
+
+## Use identity and storage
+
+Use [`useAuth`, hosted sign-in, and sign-out](/zero-runtime/authentication) for
+the current visitor. `getIdentity()` reads the stored identity token metadata,
+and `decodeIdentityClaims()` decodes claims without verifying authorization.
+Server handlers must still enforce access with `ctx.auth`.
+
+The exported `storage` client supports `upload`, `get`, and `delete`. See
+[Storage](/storage) for object limits, authorization, and CLI operations.
+
+## Client exports
+
+| Group | Exports |
+| --- | --- |
+| Typed data | `createClient`, `useQuery`, `usePaginatedQuery`, `useMutation` |
+| Routing | `Router`, `Routes`, `Route`, `Link`, `navigate`, `useNavigate`, `useLocation`, `useParams` |
+| Authentication | `useAuth`, `SignInWithGoogle`, `signInWithGoogle`, `signOut`, `getIdentity`, `decodeIdentityClaims` |
+| Files | `storage` |
+| Recovery | `ErrorBoundary` |

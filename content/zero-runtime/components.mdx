@@ -1,0 +1,102 @@
+---
+title: Zero components and charts
+description: Reference every component, chart, and rendering helper bundled with the Zero client.
+---
+
+Zero bundles a Preact component kit and chart library. Import them from
+`@spacefast/zero/kit` and `@spacefast/zero/charts`. Do not add copies of these
+packages to the capsule.
+
+## Forms and actions
+
+| Export | Use |
+| --- | --- |
+| `Button` | Primary, secondary, ghost, destructive, link, and icon actions |
+| `Field` | A label, control, description, and validation message |
+| `Input` | Single-line input |
+| `TextArea` | Text input with multiple lines |
+| `Select` | Native select control |
+| `Label` | A form label |
+| `Checkbox` | Boolean checkbox |
+| `Switch` | Boolean switch |
+| `RadioGroup`, `RadioGroupItem` | One choice from a set |
+
+## Status and feedback
+
+| Export | Use |
+| --- | --- |
+| `Alert`, `AlertTitle`, `AlertDescription` | Informational, success, warning, or danger message |
+| `Badge` | Neutral, accent, success, warning, or danger label |
+| `EmptyState` | Empty result with an optional action |
+| `Spinner` | Indeterminate work |
+| `Skeleton` | Loading placeholder |
+| `Progress` | Determinate progress |
+
+## Content and layout
+
+| Export | Use |
+| --- | --- |
+| `Card` | Titled panel with optional subtitle and footer |
+| `Avatar` | Image or generated initials |
+| `Icon` | A bundled Lucide icon by name |
+| `Separator` | Horizontal or vertical divider |
+| `Kbd` | Keyboard input label |
+| `CodeBlock` | Highlighted code |
+| `Markdown` | Parsed and sanitized Markdown |
+| `Breadcrumb` | Path navigation |
+| `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableCaption` | Data table parts |
+
+## Disclosure and overlays
+
+| Export | Use |
+| --- | --- |
+| `Accordion`, `AccordionItem` | Collapsible sections |
+| `Tooltip` | Hover or focus description |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | Tabbed content |
+| `Dialog` | Modal content |
+
+## Rendering helpers
+
+| Export | Result |
+| --- | --- |
+| `avatarInitials(name)` | Initials for an avatar fallback |
+| `highlightCode(code, language?)` | Highlighted code tokens |
+| `sanitizeUrl(url, kind?)` | A safe link or image URL, or `null` |
+| `parseMarkdownInline(source)` | Inline Markdown nodes |
+| `parseMarkdown(source, options?)` | Block Markdown nodes |
+| `markdownHeadingId(text)` | A heading ID |
+
+## Charts
+
+| Export | Use |
+| --- | --- |
+| `LineChart` | One or more line series |
+| `BarChart` | One or more bar series |
+| `Sparkline` | Compact trend line |
+| `StatTile` | Label, value, and optional trend |
+
+The chart module also exports `seriesColor`, `formatCompactValue`, `niceTicks`,
+`lineChartLayout`, `barChartLayout`, and `chartInk` for custom chart rendering.
+
+```tsx
+import { LineChart, StatTile } from "@spacefast/zero/charts";
+
+<StatTile
+  label="Requests"
+  value={12400}
+  delta={8}
+  deltaLabel="vs last week"
+  trend={[41, 43, 42, 48, 57]}
+/>;
+<LineChart
+  data={[
+    { day: "Mon", requests: 42 },
+    { day: "Tue", requests: 57 },
+  ]}
+  x="day"
+  series={["requests"]}
+/>;
+```
+
+Read [Style a Zero app](/zero-runtime/styling) for Tailwind compilation,
+semantic tokens, and `theme.json`.
