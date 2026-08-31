@@ -1,4 +1,8 @@
+import { readFileSync } from "node:fs";
+
 import { defineConfig } from "blume";
+import { componentSlug } from "blume/components/slug.ts";
+import { extractOperations } from "blume/openapi/model.ts";
 
 const deploymentBase = "/docs";
 const haskoy = {
@@ -11,6 +15,89 @@ const haskoy = {
     },
   ],
 };
+
+/**
+ * Sidebar groups for one OpenAPI spec: a collapsible group per tag, holding
+ * that tag's operation pages in spec order.
+ *
+ * Blume generates those pages and their routes from the spec, so the sidebar
+ * reads the same spec through Blume's own extractor rather than a hand-kept
+ * list that drifts every time an endpoint lands.
+ */
+const referenceGroups = (spec: string, route: string) => {
+  const { operations, tags } = extractOperations(
+    JSON.parse(readFileSync(spec, "utf8")),
+    route
+  );
+  return tags.map((tag) => ({
+    collapsed: true,
+    display: "group" as const,
+    items: operations
+      .filter((operation) => operation.tagSlug === tag.slug)
+      .map((operation) => operation.route),
+    label: tag.name,
+  }));
+};
+
+/**
+ * Sidebar entries for the CLI: one group per top-level command, holding that
+ * command's subcommands.
+ *
+ * The CLI reference is a single generated page with a heading per command, so
+ * the entries link to heading anchors and are read back out of that page —
+ * a command that ships is in the sidebar without anyone editing this file.
+ * Anchors are slugged the way Blume slugs headings, so they always agree.
+ */
+const cliCommands = () => {
+  let page: string;
+  try {
+    page = readFileSync("./content/cli/index.md", "utf8");
+  } catch {
+    // The page is an ignored build overlay, so a bare `blume` run without the
+    // prepare step would otherwise fail here as a bare ENOENT.
+    throw new Error(
+      "content/cli/index.md is missing. Run scripts/prepare-generated.mjs before Blume; the CLI sidebar is built from that page."
+    );
+  }
+  const commands = [...page.matchAll(/^## `sf ([^`]+)`$/gmu)].map((heading) => ({
+    href: `/cli#${componentSlug(`sf ${heading[1]}`)}`,
+    // Argument placeholders (`BUILD`, `[PATH]`) name the call, not the
+    // command, so they are dropped from the label and the grouping.
+    words: heading[1].split(/\s+/u).filter((word) => !/^[A-Z[]/u.test(word)),
+  }));
+
+  const groups = new Map<string, typeof commands>();
+  for (const command of commands) {
+    const name = command.words[0];
+    groups.set(name, [...(groups.get(name) ?? []), command]);
+  }
+
+  return [...groups].map(([name, entries]) => {
+    const [first] = entries;
+    if (entries.length === 1) {
+      return { href: first.href, label: `sf ${first.words.join(" ")}` };
+    }
+    return {
+      collapsed: true,
+      display: "group" as const,
+      items: entries.map((entry) => ({
+        href: entry.href,
+        label:
+          entry.words.length === 1 ? "Overview" : entry.words.slice(1).join(" "),
+      })),
+      label: `sf ${name}`,
+    };
+  });
+};
+
+const restReference = referenceGroups(
+  "./generated/openapi/api.json",
+  "/api/reference"
+);
+const platformReference = referenceGroups(
+  "./generated/openapi/platform.json",
+  "/platforms/api/reference"
+);
 
 export default defineConfig({
   title: "Spacefast Docs",
@@ -69,6 +156,17 @@ export default defineConfig({
       { label: "Agent setup", href: "/agents", icon: "bot" },
     ],
     repo: true,
+    // Header sections. A tab's `path` is a URL prefix, and the sidebar group
+    // rooted at that prefix is the section it scopes to — so reading the CLI
+    // reference shows CLI navigation, not the whole site. The `/` tab spans
+    // everything the others don't claim.
+    tabs: [
+      { label: "Platform", path: "/" },
+      { label: "Zero", path: "/zero-runtime" },
+      { label: "CLI", path: "/cli" },
+      { label: "API", path: "/api" },
+      { label: "Platform API", path: "/platforms" },
+    ],
     sidebar: {
       display: "flat",
       items: [
@@ -114,19 +212,8 @@ export default defineConfig({
         },
         {
           label: "Primitives",
-          root: "/zero-runtime",
+          root: "/functions",
           items: [
-            "/zero-runtime",
-            "/zero-runtime/build",
-            "/zero-runtime/client",
-            "/zero-runtime/server",
-            "/zero-runtime/endpoints",
-            "/zero-runtime/authentication",
-            "/zero-runtime/styling",
-            "/zero-runtime/components",
-            "/zero-runtime/commands",
-            "/zero-runtime/managed-content",
-            "/zero-runtime/move-from-lakebed",
             "/functions",
             "/functions/php",
             "/database",
@@ -183,11 +270,6 @@ export default defineConfig({
           ],
         },
         {
-          label: "Platforms",
-          root: "/platforms",
-          items: ["/platforms"],
-        },
-        {
           label: "Account & teams",
           root: "/account",
           items: [
@@ -202,15 +284,53 @@ export default defineConfig({
           root: "/reference",
           items: [
             "/reference",
-            "/api",
-            "/api/versioning",
-            { label: "REST API reference", href: "/api/reference" },
-            { label: "Platform API reference", href: "/platforms/api/reference" },
-            "/cli",
             "/reference/sdk",
             "/errors",
             { label: "Changelog", href: "/changelog" },
             "/changelog/packages",
+          ],
+        },
+        // Header-tab sections. Each is rooted at the matching tab's path, which
+        // is what scopes the sidebar to it.
+        {
+          label: "Zero",
+          root: "/zero-runtime",
+          items: [
+            "/zero-runtime",
+            "/zero-runtime/build",
+            "/zero-runtime/client",
+            "/zero-runtime/server",
+            "/zero-runtime/endpoints",
+            "/zero-runtime/authentication",
+            "/zero-runtime/styling",
+            "/zero-runtime/components",
+            "/zero-runtime/commands",
+            "/zero-runtime/managed-content",
+            "/zero-runtime/move-from-lakebed",
+          ],
+        },
+        {
+          label: "CLI",
+          root: "/cli",
+          items: ["/cli", ...cliCommands()],
+        },
+        {
+          label: "API",
+          root: "/api",
+          items: [
+            "/api",
+            "/api/versioning",
+            { label: "All endpoints", href: "/api/reference" },
+            ...restReference,
+          ],
+        },
+        {
+          label: "Platform API",
+          root: "/platforms",
+          items: [
+            "/platforms",
+            { label: "All endpoints", href: "/platforms/api/reference" },
+            ...platformReference,
           ],
         },
       ],

@@ -11,15 +11,29 @@ Assume every commit and every line of history will be public.
   an encyclopedia of alternatives.
 - Do not add navigation to a section until that section has a real page or
   generated source.
-- The sidebar in `blume.config.ts` is the public route manifest.
-  `bun run verify:routes` checks every sidebar route against the built output.
+- The routes written as string literals in the `blume.config.ts` sidebar are
+  the public route manifest. `bun run verify:routes` checks every one against
+  the built output, and `scripts/build-llms-index.mjs` keeps exactly those
+  entries in `llms.txt`. Both read the config source between `sidebar:` and
+  `openapi:`, so the generated sections — API operations, CLI commands — are
+  computed above the config object and spread into the sidebar. Writing one of
+  those routes as a literal inside the sidebar would claim a manifest entry it
+  cannot keep, and break both.
+- Header tabs are the top-level sections: Platform (`/`), Zero, CLI, API, and
+  Platform API. A tab's `path` is a URL prefix, and the sidebar group rooted at
+  that same path is the section the tab scopes the sidebar to — a new tab means
+  both, or it renders an empty sidebar. Frozen generated prefixes are what make
+  tabs work here: they are already stable section roots, so no route moves.
+- Reference navigation is derived, never hand-listed. The API sections read the
+  OpenAPI snapshot through Blume's own extractor, and the CLI section reads the
+  command headings out of the generated CLI page, so an endpoint or command
+  that ships appears in the sidebar without an edit here.
 - Route policy: one page per task, not one page per toggle; a page lives in one
   primary place and is cross-linked elsewhere. Authored URLs may move freely
   before launch, without compatibility redirects. Generated routes are frozen
   public contracts and can never move: `/api/reference`,
   `/platforms/api/reference`, `/cli`, `/errors` (RFC 9457 error type URIs point
-  at `/errors/<code>`), and `/changelog`. Because those prefixes can never be
-  unified, the site uses a single sidebar with no tabs.
+  at `/errors/<code>`), and `/changelog`.
 - Test behavior and built output. Do not read implementation source and assert
   that a string exists as a substitute for exercising the result.
 
