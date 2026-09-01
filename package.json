@@ -18,7 +18,7 @@
     "doctor": "blume doctor"
   },
   "dependencies": {
-    "blume": "1.5.1"
+    "blume": "1.5.3"
   },
   "devDependencies": {
     "@spacefast/sdk": "^0.0.24",

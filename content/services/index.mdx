@@ -2,25 +2,26 @@
 title: Email, spam, and Gravatar
 search:
   tags: [email, spam, gravatar, avatars, akismet]
-description: "Send email, check submissions for spam, and read Gravatar profiles from any Zero handler without holding a credential."
+description: "Use email, spam checks, and Gravatar from the Zero handlers that receive each service."
 ---
 
-Every [Zero](/zero-runtime) handler context carries three platform services:
-`ctx.gravatar` reads public profiles, `ctx.spam` classifies visitor
-submissions, and `ctx.email` sends mail. The runtime brokers each call and
-attaches the credential outside your code. There is no mail password, spam
-API key, or Gravatar token to configure, and none can leak from a
-published bundle.
+Zero handler contexts carry platform services without exposing their
+credentials. `ctx.gravatar` reads public profiles, `ctx.spam` classifies
+visitor submissions, and `ctx.email` sends mail. There is no mail password,
+spam API key, or Gravatar token to configure.
 
 What a handler receives follows what it can do. A query can be replayed or
 re-run to refresh a live subscription, so a query receives only the calls
 that have no effects outside the database:
 
-| Handler    | `ctx.gravatar` | `ctx.spam`                  | `ctx.email`         |
-| ---------- | -------------- | --------------------------- | ------------------- |
-| `query`    | Yes            | `check` only                | No                  |
-| `mutation` | Yes            | `check` plus corrections    | Yes, transactional  |
-| `action`   | Yes            | `check` plus corrections    | Yes                 |
+Every handler gets `ctx.auth`, `ctx.env`, `ctx.gravatar`, `ctx.log`, and
+`ctx.spam.check`. Mutations and write endpoints add write access,
+`ctx.email`, spam corrections, and `ctx.invalidate`.
+
+| Handler | Database | `ctx.gravatar` | `ctx.spam` | `ctx.email` | `ctx.invalidate` |
+| --- | --- | --- | --- | --- | --- |
+| `query` or read endpoint | Read only | Yes | `check` only | No | No |
+| `mutation` or write endpoint | Read and write | Yes | `check` plus corrections | Yes | Yes |
 
 `sf dev` brokers none of them. A local call to `ctx.email`, `ctx.spam`, or
 `ctx.gravatar.profile` throws `zero_email_unavailable`,
@@ -108,7 +109,7 @@ The verdict has two fields. `spam` says the submission classifies as spam
 and belongs in a review queue. `discard` flags blatant, pervasive spam that
 is safe to drop outright instead of holding for review.
 
-Mutations and actions also get the corrections. Call
+Mutations and write endpoints also get the corrections. Call
 `ctx.spam.reportSpam(submission)` when something passed that should not
 have. Call `ctx.spam.reportHam(submission)` when something was held that
 should not have been. Corrections usually run later, outside the original
@@ -135,20 +136,10 @@ mutations: {
 },
 ```
 
-In a mutation, the send is accepted into the space's outbox on the
-handler's own transaction. A mutation that writes a row and queues its
-mail commits both or neither, and a throw after `send()` rolls back the
-row and the message together. When you want to scope that boundary
-explicitly, use `ctx.transaction(handler)`. Actions run outside a parent
-transaction because they exist to touch the world. Their sends go out when
-the handler succeeds, not atomically with database writes.
-
-Under `sf dev` the boundary is the whole invocation rather than the block you
-declared: a mutation or endpoint that throws rolls back everything it wrote,
-including writes made outside `ctx.transaction()`, and an error you catch
-yourself leaves that block's writes in place. Actions get no rollback at all
-locally. Publish the capsule when a test depends on the exact transaction
-boundary.
+In a mutation or write endpoint, the send enters the space's outbox in the
+handler's transaction. A handler that writes a row and queues mail commits
+both or neither. If the handler throws after `send()`, Zero rolls back the row
+and the message.
 
 The message shape:
 

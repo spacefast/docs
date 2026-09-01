@@ -1,0 +1,115 @@
+---
+title: Zero endpoints
+description: Declare HTTP routes, inspect requests, and return text, JSON, redirects, empty responses, or generated images.
+---
+
+An endpoint exposes an HTTP route from the capsule. Declare its method, path,
+and execution mode as literals so the compiler can build the route index.
+
+## Declare a read endpoint
+
+```ts
+import { endpoint, json } from "@spacefast/zero/server";
+
+endpoints: {
+  status: endpoint(
+    { mode: "read", method: "GET", path: "/api/status" },
+    (ctx, request) =>
+      json({
+        ok: true,
+        requestId: request.headers.get("x-request-id"),
+        userId: ctx.auth.userId,
+      }),
+  ),
+},
+```
+
+A read endpoint receives read-only `ctx.db`. It also receives `ctx.auth`,
+`ctx.env`, `ctx.log`, `ctx.gravatar`, and `ctx.spam.check`.
+
+## Declare a write endpoint
+
+Use `mode: "write"` when the endpoint changes data or uses a write-only
+service:
+
+```ts
+import { endpoint, json } from "@spacefast/zero/server";
+
+endpoints: {
+  createMessage: endpoint(
+    { mode: "write", method: "POST", path: "/api/messages" },
+    async (ctx, request) => {
+      if (ctx.auth.isGuest) {
+        return json({ error: "Sign in required" }, { status: 401 });
+      }
+      const input = await request.json<{ body: string }>();
+      const message = await ctx.db.messages.insert({
+        authorId: ctx.auth.userId,
+        body: input.body.trim(),
+      });
+      ctx.invalidate("messages");
+      return json(message, { status: 201 });
+    },
+  ),
+},
+```
+
+Write endpoints get the same context as mutations, including `ctx.email`, spam
+corrections, and `ctx.invalidate`.
+
+## Read the request
+
+| Value | Type or result |
+| --- | --- |
+| `request.method` | Uppercase HTTP method |
+| `request.path` | Request path |
+| `request.url` | Complete request URL |
+| `request.headers` | `get`, `has`, and `entries` |
+| `request.query` | `URLSearchParams` |
+| `request.text()` | UTF-8 request body |
+| `request.json<T>()` | Parsed JSON body |
+| `request.bytes()` | Request body as `Uint8Array` |
+
+Validate untrusted input before writing it. A TypeScript type argument on
+`request.json<T>()` does not validate the body at runtime.
+
+## Return a response
+
+| Helper | Default result |
+| --- | --- |
+| `json(value, options?)` | JSON body, status `200`, JSON content type |
+| `text(value, options?)` | Text body, status `200`, UTF-8 text content type |
+| `empty(options?)` | Empty body, status `204` |
+| `redirect(url, options?)` | Empty body, status `302`, `Location` header |
+
+Each `options` object accepts `status` and `headers`. Returning `null` or
+`undefined` also produces an empty `204` response. A string, number, or boolean
+becomes text. Another JSON-compatible value becomes JSON.
+
+## Generate an image
+
+`ImageResponse` renders a Preact element into an image:
+
+```ts
+import { h } from "preact";
+import { endpoint, ImageResponse } from "@spacefast/zero/server";
+
+endpoints: {
+  card: endpoint(
+    { mode: "read", method: "GET", path: "/card.png" },
+    () =>
+      new ImageResponse(
+        h(
+          "div",
+          { style: { background: "#111", color: "white", padding: 64 } },
+          "Project board",
+        ),
+        { width: 1200, height: 630 },
+      ),
+  ),
+},
+```
+
+The options accept `width`, `height`, `status`, and `headers`. Images default to
+1200 by 630 pixels and one hour of public caching. Set a `cache-control` header
+to replace that default.

@@ -36,7 +36,7 @@ suffix removed. A trailing `index` segment also drops:
 Routes are literal. A segment that is empty, contains `[` or `]`, or starts
 with `:` or `.` is not routed in this lane, so a pattern-named file such
 as `functions/[id].php` stays an inert upload. A file you commit at the
-same key outranks the PHP route, and redirects and [Zero](/zero-runtime) actions
+same key outranks the PHP route, and redirects and [Zero](/zero-runtime) endpoints
 win over it. This is the same precedence the
 [JavaScript Functions](/functions) lane gets.
 

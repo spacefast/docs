@@ -1,0 +1,79 @@
+---
+title: Zero CLI commands
+description: List and call Zero Abilities, generate live types, and import Payload CMS or EmDash projects.
+---
+
+The `sf zero` command group works with a published Zero capsule and with local
+CMS projects. Use `--space` when the current directory is not linked to the
+target space.
+
+## List Abilities
+
+```bash
+sf zero abilities
+```
+
+The result lists every Ability published by the live capsule. The table shows
+the Ability name, category, read or write mode, and required authorization. Use
+`--json` to read each Ability's input and output schema.
+
+## Generate live types
+
+```bash
+sf zero types
+```
+
+The command writes `zero-types.ts` by default. The file contains the live
+content model types, the Ability catalog, the authorization required by each
+Ability, and a row type for each Zero database table.
+
+Commit the file, then check it in CI:
+
+```bash
+sf zero types --check
+```
+
+Use `--out <path>` to choose another destination.
+
+## Call an Ability
+
+```bash
+sf zero call content.posts.list
+```
+
+Pass input as inline JSON or from a file:
+
+```bash
+sf zero call content.posts.get --input '{"slug":"hello"}'
+sf zero call content.posts.save --input @post.json
+```
+
+The CLI mints a short-lived token, calls the Ability through the space's own
+WordPress REST API, and never prints the token. If the space has more than one
+machine credential, pass `--credential <id>`.
+
+## Import another CMS
+
+Translate a Payload CMS project:
+
+```bash
+sf zero import payloadcms ../my-payload-app --out .
+```
+
+Translate an EmDash project:
+
+```bash
+sf zero import emdash ../my-emdash-site --out .
+```
+
+The import writes an authored Zero capsule and any supported content files.
+Payload CMS import refuses the whole write when the config contains a construct
+that Zero cannot represent. EmDash import reports mapped, renamed, downgraded,
+and refused data so omitted content is visible.
+
+Use `--capsule <path>` to choose the server module. Use `--force` only when you
+intend to replace existing files.
+
+Imported content declarations require the internal
+[managed content](/zero-runtime/managed-content) feature when you publish them.
+See the complete flags and JSON behavior in the [CLI reference](/cli).

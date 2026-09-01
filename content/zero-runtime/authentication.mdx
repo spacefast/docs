@@ -1,0 +1,101 @@
+---
+title: Add authentication to a Zero app
+description: Show the current identity, add hosted sign-in, and enforce row ownership on the server.
+---
+
+Every Zero visitor has an identity. New visitors start as guests, so you can
+store per-visitor data before they sign in.
+
+## Add the sign-in control
+
+Import the authentication helpers in the client:
+
+```tsx
+import {
+  SignInWithGoogle,
+  signOut,
+  useAuth,
+} from "@spacefast/zero/client";
+import { Button, Spinner } from "@spacefast/zero/kit";
+```
+
+Render a control for the current state:
+
+```tsx
+function AuthControls() {
+  const auth = useAuth();
+
+  if (auth.isLoading) return <Spinner size="sm" />;
+  if (auth.isGuest) return <SignInWithGoogle />;
+
+  return (
+    <div class="flex items-center gap-2">
+      <span class="text-sm text-ink-muted">{auth.displayName}</span>
+      <Button variant="ghost" size="sm" onClick={() => signOut()}>
+        Sign out
+      </Button>
+    </div>
+  );
+}
+```
+
+`SignInWithGoogle` is the compatibility name for the hosted Gravatar sign-in
+button. `signOut()` returns the client to a guest identity. Hosted sign-in is
+unavailable under `sf dev`, so publish the capsule to test this flow.
+
+## Require sign-in
+
+A guest is an identity, not the absence of one: a signed-out visitor reaches
+your handler with a real `ctx.auth.userId` of its own. Testing that field
+therefore rejects nobody. Check `ctx.auth.isGuest` when a handler needs a
+signed-in visitor:
+
+```ts
+if (ctx.auth.isGuest) {
+  return json({ error: "Sign in required" }, { status: 401 });
+}
+```
+
+## Scope reads to the visitor
+
+Store the server identity with each user-owned row, then filter the query by
+`ctx.auth.userId`:
+
+```ts
+queries: {
+  todos: query(async (ctx) =>
+    ctx.db.todos
+      .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+      .collect()
+  ),
+},
+```
+
+Declare the matching index on the table:
+
+```ts
+todos: table({
+  text: string(),
+  ownerId: string(),
+}).index("by_owner", ["ownerId"]),
+```
+
+## Check ownership before every write
+
+Do not trust a row ID from the client. Read the row in the mutation and compare
+its owner before you update or delete it:
+
+```ts
+mutations: {
+  renameTodo: mutation(async (ctx, id: string, text: string) => {
+    const todo = await ctx.db.todos.get(id);
+    if (!todo || todo.ownerId !== ctx.auth.userId) return;
+    await ctx.db.todos.update(id, { text: text.trim().slice(0, 160) });
+    ctx.invalidate("todos");
+  }),
+},
+```
+
+Client state is presentation, not authorization. Hiding a button from a guest
+does not protect a row. The query and each write handler must enforce ownership
+with `ctx.auth`.

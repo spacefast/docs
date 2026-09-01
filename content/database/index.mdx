@@ -36,7 +36,7 @@ In a Functions worker, opt in through `sf.jsonc`:
 The worker then receives `env.DB`. Use `prepare().bind()` with `.all()`,
 `.first()`, `.run()`, or `.raw()`. `env.DB.exec()` runs DDL (data
 definition language) statements, and `env.DB.batch()` groups statements.
-For the typed query contract, see [Zero's database](/zero-runtime#database).
+For a complete typed example, [build a Zero to-do app](/zero-runtime/build).
 
 ## Migrations
 
