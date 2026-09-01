@@ -39,7 +39,7 @@ endpoints: {
   createMessage: endpoint(
     { mode: "write", method: "POST", path: "/api/messages" },
     async (ctx, request) => {
-      if (!ctx.auth.userId) {
+      if (ctx.auth.isGuest) {
         return json({ error: "Sign in required" }, { status: 401 });
       }
       const input = await request.json<{ body: string }>();

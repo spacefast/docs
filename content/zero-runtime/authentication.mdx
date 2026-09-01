@@ -43,6 +43,19 @@ function AuthControls() {
 button. `signOut()` returns the client to a guest identity. Hosted sign-in is
 unavailable under `sf dev`, so publish the capsule to test this flow.
 
+## Require sign-in
+
+A guest is an identity, not the absence of one: a signed-out visitor reaches
+your handler with a real `ctx.auth.userId` of its own. Testing that field
+therefore rejects nobody. Check `ctx.auth.isGuest` when a handler needs a
+signed-in visitor:
+
+```ts
+if (ctx.auth.isGuest) {
+  return json({ error: "Sign in required" }, { status: 401 });
+}
+```
+
 ## Scope reads to the visitor
 
 Store the server identity with each user-owned row, then filter the query by
