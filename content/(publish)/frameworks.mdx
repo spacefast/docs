@@ -1,0 +1,231 @@
+---
+title: Frameworks and builds
+description: Publish your framework's output directly, or hand Spacefast the source and let it install, build, and publish the result
+sidebar:
+  order: 2
+---
+
+After this page you know which directory your framework produces, when to publish that directory yourself versus letting Spacefast build, how detection picks commands, and where to read a failing build.
+
+## Two paths
+
+**Publish the output.** You run the build, Spacefast takes the directory. This is the fast path and the recommended default. Your machine or your CI already has the toolchain warm, failures show up where you can debug them, and the publish is a file upload.
+
+```bash
+npm run build
+sf publish ./dist
+```
+
+**Let Spacefast build.** You hand over source, Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
+
+```bash
+sf publish --remote
+```
+
+With no flags, `sf publish` builds a detected project, and publishes the directory as-is if there is nothing to build. `--prebuilt` forces the upload path. `--build` forces the build path. Archives are always classified remotely, so a `.tar.gz` is always a build.
+
+## Which directory to publish
+
+Detection uses this table for both paths. The output directory column is what to hand `sf publish` when you build yourself.
+
+| Framework | Detected by | Default build command | Output directory |
+| --- | --- | --- | --- |
+| Nextra | `nextra` dependency | `next build` | `out` |
+| Next.js | `next` dependency | `next build` | `out` |
+| TanStack Start | `@tanstack/react-start` dependency | package script | `dist/client` |
+| Nuxt | `nuxt` dependency | `nuxt generate` | `.output/public` |
+| Astro | `astro` dependency or `astro.config.*` | `astro build` | `dist` |
+| VitePress | `vitepress` dependency | `vitepress build docs` | `docs/.vitepress/dist` |
+| SvelteKit | `@sveltejs/kit` dependency | package script | `build` |
+| SolidStart | `@solidjs/start` dependency | `vinxi build` | `.output/public` |
+| Qwik | `@builder.io/qwik-city` dependency | package script | `dist` |
+| Gatsby | `gatsby` dependency | package script | `public` |
+| Remix | `@remix-run/dev` dependency | package script | `build/client` |
+| Docusaurus | `@docusaurus/core` dependency | package script | `build` |
+| RedwoodJS | `@redwoodjs/core` dependency or `redwood.toml` | `redwood build web` | `web/dist` |
+| Angular | `@angular/cli` dependency or `angular.json` | `ng build` | `dist` |
+| Ember | `ember-cli` dependency or `ember-cli-build.js` | `ember build` | `dist` |
+| Gridsome | `gridsome` dependency or `gridsome.config.js` | `gridsome build` | `dist` |
+| Eleventy | `@11ty/eleventy` dependency or `.eleventy.js`, `eleventy.config.*` | `eleventy` | `_site` |
+| Hexo | `hexo` dependency | `hexo generate` | `public` |
+| Vite | `vite` dependency or `vite.config.*` | `vite build` | `dist` |
+| Zola | `config.toml` plus a `templates` directory | `zola build` | `public` |
+| Hugo | `hugo.toml` or `config.toml` | `hugo` | `public` |
+| Jekyll | `_config.yml`, `_config.yaml`, or `_config.toml` | `bundle exec jekyll build --config <detected config>` | `_site`, or `destination` from the config |
+| MkDocs | `mkdocs.yml` or `mkdocs.yaml` | `mkdocs build` | `site` |
+| Sphinx | `conf.py` | `sphinx-build -M html . _build` | `_build/html` |
+| Middleman | `config.rb` plus a `source` directory | `bundle exec middleman build` | `build` |
+
+Where the table says "package script", the build command comes from your `package.json` `build` script.
+
+### How detection picks a row
+
+1. The first row whose dependency appears in `dependencies` or `devDependencies`, with all its required files present. A dependency match wins outright.
+2. Only if no dependency matched, the first row whose config file is present.
+3. Otherwise nothing is detected, and the output directory falls back to `dist` if a `dist` directory exists.
+
+A `vercel.json`, `netlify.toml`, or `wrangler.toml` is read **after** framework detection and overrides whatever it set for root directory, install command, build command, and output directory. Vercel's `framework` field also overrides the detected framework. Redirects, rewrites, headers, and crons in those files are converted into `_redirects`, `_headers`, and `sf.jsonc` crons. Anything Spacefast cannot convert, such as Vercel functions or Netlify edge functions, is flagged, and `--allow-unsupported-platform-features` publishes anyway.
+
+### Install commands
+
+The install command comes from the lockfile, not the framework.
+
+| Lockfile | Install command |
+| --- | --- |
+| `bun.lock` or `bun.lockb` | `bun install --frozen-lockfile` |
+| `pnpm-lock.yaml` | `corepack enable && pnpm install --frozen-lockfile` |
+| `yarn.lock` | `corepack enable && yarn install --immutable` with a `--frozen-lockfile` fallback |
+| `package-lock.json` or a shrinkwrap | `npm ci` |
+| A `package.json` with no lockfile | `npm install` |
+| No `package.json` | Nothing |
+
+Jekyll gets a second install appended, `bundle install` when a `Gemfile` is present, otherwise a `gem install jekyll`.
+
+There is no Node version field. Set `NODE_OPTIONS` as a build variable if you need to change the heap.
+
+## Overriding the detected settings
+
+Every field is optional, and an empty field means "decide from the framework".
+
+| Setting | CLI flag | What it does |
+| --- | --- | --- |
+| `rootDirectory` | `--root-directory` | Subdirectory holding the app |
+| `installDirectory` | `--install-directory` | Subdirectory to install from, for a workspace root |
+| `installCommand` | `--install-command` | Replaces the lockfile-derived command |
+| `buildCommand` | `--build-command` | Replaces the detected build command |
+| `outputDirectory` | `--output-directory` | Directory to publish, relative to the app root |
+| `ignoredBuildCommand` | `--ignored-build-command` | Skips the build when it exits `0` |
+| `allowUnsupportedPlatformFeatures` | `--allow-unsupported-platform-features` | Publishes despite unconvertible imported config |
+| `timeoutSeconds` | Not exposed on the CLI | 60 to 7200 seconds, default 900 |
+
+`--skip-install` and `--skip-build` cut the corresponding step out entirely.
+
+For a connected repository, the same fields live on the Space. Open **Builds**, then **Build settings**, and fill in **Root directory**, **Install command**, **Build command**, and **Output directory**. Each placeholder reads **Auto**, and the note under them says **Leave a field empty and the builder decides from the detected framework.** **Detect build settings** runs detection against your repo and offers ranked candidates with an **Apply** button.
+
+## Variables during a build
+
+Build variables come from three scopes, and the narrower one wins: team, then external customer, then Space. Within one variable, a branch-specific value beats a target value, which beats the base value.
+
+```bash
+sf env set API_URL https://api.example.com --space docs
+sf env set API_URL --preview-value https://staging.api.example.com --space docs
+sf env set API_URL --branch-value release=https://api.example.com --space docs
+printf %s "$TOKEN" | sf env set BUILD_TOKEN --value-from-stdin --space docs
+```
+
+`--value-from-stdin` keeps a secret out of your shell history. New values are write-only by default, and `--no-secret` makes one readable.
+
+Secrets are redacted from build logs. Every non-empty resolved value becomes a redaction string, along with its base64 and URI-encoded forms, so a value that gets encoded mid-build still comes out masked. What Spacefast stores about a variable on the build is its name, a hash of the value, whether it is secret, and which scope it came from. Never the value.
+
+Two variables are injected for you, and only on builds that are not going to `live`, and only when you have not defined them yourself:
+
+| Variable | Value |
+| --- | --- |
+| `PUBLIC_PREVIEW` | `true` |
+| `SPACEFAST_BUILD_TARGET` | `preview` or `production` |
+
+## Build states
+
+| State | Meaning |
+| --- | --- |
+| `waiting_for_source` | The build exists, the source archive has not arrived |
+| `uploading_source` | The archive is landing |
+| `queued` | Waiting for a runner |
+| `running` | Installing and building |
+| `succeeded` | Done, with a version produced or an identical one reused |
+| `failed` | The build stopped on an error |
+| `canceled` | You stopped it |
+| `skipped` | The runner decided not to run it at all |
+
+`skipped` is normal, not an error. A push that touched nothing under `rootDirectory` is skipped, and so is a build a newer build for the same branch has already overtaken.
+
+A build whose output is byte-identical to the live version succeeds without minting a version. It records the version it reused, and the dashboard shows **No changes. Reused v12.**
+
+## Reading logs
+
+<Tabs>
+<Tab title="CLI">
+
+```bash
+sf builds ls --space docs
+sf builds logs bld_7c3e0a19d84b42f0916d5ac8b7e21f34 --follow
+```
+
+`--follow` streams until the build reaches a terminal state.
+
+</Tab>
+<Tab title="Dashboard">
+
+**Builds** lists runs newest first under **Runs**. Open one for the log pane, which says **Streaming while the build runs.** while it is live. The meta strip carries **Source**, **Commit**, **Started**, **Duration**, **Artifact**, and either **Will become** or **Produced**. **Cancel** and **Retry build** are in the header.
+
+</Tab>
+<Tab title="API">
+
+```bash
+curl -N https://api.spacefast.com/v1/builds/bld_7c3e.../events \
+  -H "Accept: text/event-stream" \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+[`listBuildEvents`](/api/reference/builds/listbuildevents) streams `build.log` and `build` events over server-sent events, and resumes from `Last-Event-ID`. Without the `Accept` header it returns a page of log lines instead. [`listBuildLogs`](/api/reference/builds/listbuildlogs) is the plain paginated read.
+
+</Tab>
+</Tabs>
+
+Logs are capped at 500 entries and 512 KiB per build. Past that the oldest entries drop.
+
+## Timeouts and retries
+
+| What | Value |
+| --- | --- |
+| Build timeout | 900 seconds by default, 60 to 7200 |
+| Per-phase timeout | 180 seconds |
+| Build output archive | 512 MiB by default |
+
+Your build commands are never retried automatically. A crashed run fails the build deterministically instead of silently running your commands a second time. Only infrastructure failures that happen before the build starts are requeued, at most twice.
+
+Retrying is explicit and makes a **new** build, linked back to the original and reusing its exact input and settings snapshot.
+
+```bash
+sf builds retry bld_7c3e0a19d84b42f0916d5ac8b7e21f34
+```
+
+In the dashboard it is **Retry build**. A build that is still running cannot be retried, and the refusal is `build_retry_requires_terminal_state`. Cancel it first, with `sf builds cancel` or the **Cancel** button.
+
+## Adapter packages
+
+Three packages let a framework tell Spacefast what its build produced, rather than having it inferred. All three are optional. A plain static build publishes fine without them.
+
+### `@spacefast/astro`
+
+```js astro.config.mjs
+import { defineConfig } from "astro/config";
+import spacefastAstro from "@spacefast/astro";
+
+export default defineConfig({
+  integrations: [spacefastAstro()],
+});
+```
+
+It merges inline `redirects` and `headers` options with the `_redirects` and `_headers` files in your project root, public directory, and any `publishDir` you name, compiles them, applies them in `astro dev` so local behavior matches production, and writes the merged files into the build output. A routing error fails the build, because `failOnRoutingError` defaults to `true`. Needs Astro 6 or newer.
+
+For server-rendered Astro there is a second integration at `@spacefast/astro/adapter`, `spacefastAstroAdapter()`, which records route facts and emits the server entry. Sharp runs at build time only.
+
+### `@spacefast/vite-plugin`
+
+```ts vite.config.ts
+import { defineConfig } from "vite";
+import spacefast from "@spacefast/vite-plugin";
+
+export default defineConfig({
+  plugins: [spacefast()],
+});
+```
+
+Same routing conventions as the Astro integration, plus a check that the build is actually publishable. `mode` defaults to `static`, and a static build with no `.html` file anywhere in the output fails rather than deploying a blank site. `mode: "spa"` writes an `/index.html` fallback for `/*` instead. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`. Needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`.
+
+### `@spacefast/next-adapter`
+
+Wired for you. When `sf publish` runs `next build`, it points Next at the bundled adapter through `NEXT_ADAPTER_PATH`, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
+
+Next 16.2 or newer is required for server-rendered builds, because that is the version where Next gained the `experimental.adapterPath` hook the adapter runs on. On an older Next, build with `output: "export"` and publish the export directory yourself.

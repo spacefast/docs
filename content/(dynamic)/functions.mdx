@@ -1,0 +1,157 @@
+---
+title: Functions
+description: Ship a worker with your site. A single handler, a functions/ file router, or an OpenNext build, detected at publish and dispatched only for the paths it claims.
+sidebar:
+  order: 1
+---
+
+After this page you can add a worker to a Space, know which file layout the publish detects, write a handler with the right signature, and find its logs.
+
+Functions runs your code as a worker. Use it when you need npm packages, framework output like OpenNext Next.js, or outbound HTTP. If you want a database next to your handlers and live queries in the browser, use [Zero](/zero) instead. One version declares one runtime.
+
+Functions is on for every account.
+
+## Where the code lives
+
+Detection is the normal case. `sf publish` looks at the tree and picks the first match, in this order.
+
+| Layout | What it is | Route table |
+| --- | --- | --- |
+| `.open-next/worker.js` | An OpenNext build of a Next.js app | The build's own classified routes, or the whole site when the publish did not run the build |
+| `handler.ts`, `handler.js`, `handler.mjs` | One hand-written worker at the root | The whole site |
+| `functions/` with at least one route module | A file router | Exactly the routes its files declare |
+
+A directory matching none of these is a static site, which is the safe default.
+
+The OpenNext build wins over a stray `handler.ts`, because framework output is the thing the build produced while a loose file may be a leftover.
+
+### The `functions/` file router
+
+A module's filename is its route and the HTTP methods it exports are the methods it answers. Nothing is inferred from a module graph, so the table is exact.
+
+<FileTree>
+- functions/
+  - index.ts
+  - hello.ts
+  - blog/
+    - index.ts
+  - haiku/
+    - "[topic].ts"
+  - posts/
+    - "[...rest].ts"
+</FileTree>
+
+| File | Route |
+| --- | --- |
+| `functions/index.ts` | `/` |
+| `functions/hello.ts` | `/hello` |
+| `functions/blog/index.ts` | `/blog` |
+| `functions/haiku/[topic].ts` | `/haiku/:topic` |
+| `functions/posts/[...rest].ts` | `/posts` and everything under it |
+
+Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed, and neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
+
+A path that exists at other methods answers 405 with an `Allow` header. A path in no file's table is a plain 404 and the worker never wakes.
+
+## The handler
+
+A file-router module exports one function per method it answers, or a default export that answers every method.
+
+```ts functions/haiku/[topic].ts
+export async function GET(request: Request, context: { params: Record<string, string> }) {
+  return Response.json({ topic: context.params.topic });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  return Response.json({ received: body }, { status: 201 });
+}
+```
+
+`context` carries `params`, `env`, and `ctx`. A catch-all binds the remainder of the path as `params.splat`.
+
+A root worker default-exports a plain handler object instead, the shape Workers already expects.
+
+```ts handler.ts
+export default {
+  async fetch(request: Request, env: Record<string, string>): Promise<Response> {
+    const url = new URL(request.url);
+    if (url.pathname === "/api/hello") return Response.json({ hello: "world" });
+    return new Response("Not found", { status: 404 });
+  },
+};
+```
+
+`sf init my-app --runtime functions` writes exactly that file plus the matching `sf.jsonc`.
+
+Requests and responses are the standard `Request` and `Response`. There is no Spacefast wrapper around either.
+
+## Declare it
+
+Detection means most projects need no `runtime` block at all. Declare one when detection cannot guess the layout, or when you want a capability.
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "runtime": {
+    "kind": "functions",
+    "entry": "handler.ts",
+    "database": true,
+    "fetch": true,
+    "compatibilityDate": "2026-07-01"
+  }
+}
+```
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `entry` | string | detected | Path to the worker entry. Naming a file that does not exist fails the publish rather than falling back to a static publish |
+| `database` | boolean | `false` | Adds `env.DB` |
+| `fetch` | boolean | see below | Allows outbound HTTP from the worker |
+| `compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | The runtime semantics this worker was written against |
+
+Capabilities are declared, never detected. Authority an author did not ask for is authority they cannot see.
+
+`fetch` has no schema default. An OpenNext build gets it unless you set `fetch: false`, because SSR fetches while it renders. A hand-written handler and a `functions/` router reach nothing until you declare it. Without the capability, `fetch()` inside the worker is refused.
+
+## What is on `env`
+
+`env` carries the space's environment variables. See [Environment variables](/environment-variables) for how to set them.
+
+Two names are added when you declare them.
+
+- `env.DB`, with `database: true`. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
+- Nothing else is injected. A capability you did not declare is absent, not empty.
+
+Two groups of variable names never reach a worker, dropped rather than blanked so your code reads them as absent instead of as "configured, but empty".
+
+| Withheld | Why |
+| --- | --- |
+| `DATABASE_URL`, `DATABASE_URI`, `MYSQL_URL`, `MYSQL_URI`, `MYSQL_DSN`, `POSTGRES_URL`, `POSTGRES_URI`, `POSTGRESQL_URL`, `POSTGRESQL_URI` | A worker reaches the database through the broker or not at all |
+| Anything starting with `SPACEFAST_` or `ZERO_` | The platform's own namespace |
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Compiled bundle | 8 MiB |
+| Routes per version | 256 |
+| Next cache seed, one entry | 2 MiB minus 8192 bytes |
+| Next cache seed, total | 8 MiB |
+
+Per-request CPU and memory are the isolate's own and are not restated here.
+
+## Local development
+
+`sf dev` does not run a worker. It refuses `runtime.kind: "functions"` with `runtime_dev_unsupported` and exit code 2, rather than serving a static shell and none of your routes. Run your framework's own dev server (`next dev`, `vite`), then `sf publish`.
+
+## Logs
+
+Everything your handler writes lands in the runtime log stream, with the handler name and request id on each line.
+
+```bash
+sf logs runtime --follow
+sf logs runtime --handler checkout
+```
+
+See [Logs](/logs) for filters, retention, and the paging rule.

@@ -1,0 +1,62 @@
+---
+title: Vite
+description: Build a plain Vite app and publish dist, with the optional plugin that refuses to ship an unpublishable build
+---
+
+Vite is detected by its `vite` dependency, or by a `vite.config` file in `.js`, `.ts`, `.mjs`, `.mts`, `.cjs`, or `.cts`.
+
+A framework built on Vite matches its own row first. Astro, VitePress, Nuxt, SvelteKit, SolidStart, and TanStack Start all sit above Vite in the table, so this recipe is for a plain Vite app.
+
+## What to build
+
+The default `vite build`.
+
+## The output directory
+
+`dist`.
+
+## Publish
+
+```bash
+sf publish
+```
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Live URL      https://quiet-harbor.view.fast
+  Version URL   https://v1--quiet-harbor.view.fast
+  Version       v1 (ready)
+  Files         31
+```
+
+Vite emits hashed filenames like `index-DiwrgTda.js`, and Spacefast serves those with a one-year immutable cache. See [Caching](/caching).
+
+## The plugin
+
+`@spacefast/vite-plugin` is optional. It compiles `_redirects` and `_headers` the same way the Astro integration does, and it checks the build before you find out in production.
+
+```ts vite.config.ts
+import { defineConfig } from "vite";
+import spacefast from "@spacefast/vite-plugin";
+
+export default defineConfig({
+  plugins: [spacefast()],
+});
+```
+
+## The gotcha
+
+The plugin's `mode` defaults to `static`, and a static build whose output holds no `.html` file anywhere fails the build. A blank site is a real outcome of a misconfigured Vite entry, and failing is more useful than deploying it.
+
+For a single-page app, say so:
+
+```ts vite.config.ts
+spacefast({ mode: "spa" });
+```
+
+That writes an `/index.html` fallback for `/*` into the output, and then checks the fallback file actually exists. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`.
+
+The plugin needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`. More on [Frameworks and builds](/frameworks).

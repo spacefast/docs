@@ -1,0 +1,109 @@
+---
+title: sf setup agent
+description: Configure MCP and install the Spacefast skill for every agent on your machine with one CLI command
+---
+
+After this page you can point every agent client on your machine at Spacefast with one command, know exactly which files it touches, and drive it non-interactively in a script.
+
+## The command
+
+```bash
+sf setup agent
+```
+
+It detects the agent clients you have installed, writes each one's MCP config, and installs the Spacefast skill. It is idempotent, so running it again is safe.
+
+Run it without arguments and it asks two questions. First a checkbox list of the clients it found. Then how MCP should connect.
+
+| Choice | What it writes |
+|---|---|
+| Remote (default) | `sf mcp proxy` over stdio, using your CLI login |
+| Local | `sf mcp`, a checkout-aware stdio server |
+| Remote (OAuth) | The hosted URL directly, and your editor handles OAuth |
+| Skip | Nothing. Skills only |
+
+Then ask your agent for something read-only to confirm the config landed.
+
+<Prompt description="Use the Spacefast MCP server to search the docs for version rollback." actions={["copy"]}>
+Use the Spacefast MCP server to search the docs for version rollback.
+</Prompt>
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+## Non-interactive
+
+```bash
+sf setup agent -y
+```
+
+`--yes` skips both prompts, auto-detects your clients, and configures **remote proxy** MCP. That is the same default the interactive picker offers.
+
+:::warning
+The `--yes` flag's own help text says it accepts local stdio MCP. That text is wrong. The default is the remote proxy. Pass `--local` when you actually want the local stdio server.
+:::
+
+## Flags
+
+| Flag | What it does |
+|---|---|
+| `--agent <id>` | Configure one client. Repeat for more. `auto` detects, `all` covers everything, `generic` writes a project `.mcp.json` |
+| `--yes`, `-y` | Skip prompts and auto-detect |
+| `--project`, `-p` | Install skills into this project instead of the client's global skills directory |
+| `--remote` | Hosted MCP through `sf mcp proxy` and your CLI login |
+| `--local` | Local stdio MCP instead of the proxy. Cannot be combined with `--remote` or `--oauth` |
+| `--oauth` | With `--remote`, connect to the hosted URL directly and let the editor handle OAuth. Requires `--remote` |
+| `--skip-mcp` | Install skills without configuring MCP |
+| `--force` | Overwrite locally modified or unverified Spacefast skill files |
+| `--handoff` | Redeem a one-use handoff link from the dashboard before generating setup. The link is read from stdin |
+
+```bash
+sf setup agent -y --agent cursor --remote --oauth
+```
+
+:::warning[Never pass a handoff link as an argument]
+Command arguments land in shell history and in the process list. `sf` aborts before parsing if it sees a handoff link on the command line. Pipe it to `--handoff` on stdin instead.
+:::
+
+## What it writes into your project
+
+Skills are the only thing that lands in your project, and only with `--project`. Everything else goes to the client's global config, with two exceptions. VS Code's MCP config is project-scoped at `<project>/.vscode/mcp.json`, and `--agent generic` writes `<project>/.mcp.json`.
+
+With `--project`, the skill goes into that client's project skills directory. For most clients that is `<project>/.agents/skills/spacefast/`.
+
+Config merges are careful. Only the client's own root key is rewritten, and every other top-level key in the file passes through untouched. JSONC input parses, but comments are not preserved on write. A symlinked or non-file config is refused rather than followed, with `Refusing symbolic link or non-file MCP config`.
+
+If `--agent auto` detects nothing, it falls back to the universal `.agents` target and writes no MCP config at all.
+
+## Related commands
+
+### `sf mcp install`
+
+MCP config only, with no skill install.
+
+```bash
+sf mcp install --agent claude-code
+sf mcp install --agent cursor --remote --oauth
+```
+
+Same method resolution. `--oauth` gives the direct hosted URL, `--local` gives `sf mcp`, and anything else gives the proxy.
+
+### `sf agents init`
+
+Writes a Spacefast block into `AGENTS.md` in the current directory, wrapped in `<!-- SPACEFAST START -->` and `<!-- SPACEFAST END -->` markers. Running it again replaces the block in place and leaves the rest of the file alone. Broken or duplicated markers make it stop rather than guess.
+
+```bash
+sf agents init
+```
+
+### `sf plugins`
+
+Runs the universal plugin installer against a pinned version.
+
+```bash
+sf plugins --agent claude-code
+sf plugins --agent codex --dry-run
+```
+
+`--agent` defaults to `claude-code`. `--dry-run` prints the installer command without running it. Clients with no installer target are refused with a message pointing you back at `sf setup agent`.

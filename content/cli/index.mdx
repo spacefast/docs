@@ -1,0 +1,203 @@
+---
+title: sf CLI
+description: "Install sf, sign in, and learn the contract every command shares: global flags, JSON receipts, exit codes, and how the CLI picks a Space"
+sidebar:
+  order: 1
+---
+
+`sf` publishes folders and projects to Spacefast, and manages everything that follows: versions, domains, access, teams, keys. Every command reads the same global flags, prints the same `--json` receipt, and exits with the same code table. Learn that once here and every command page is short.
+
+## Install
+
+```bash
+npm install -g spacefast
+```
+
+The package is `spacefast` and it installs two binaries, `spacefast` and `sf`. Homebrew (`brew install spacefast`) and standalone binaries for macOS (arm64, x64), Linux (arm64, x64), and Windows (x64) are also available.
+
+The CLI needs Node.js 20.3 or newer. Check the install:
+
+```bash
+sf --version
+```
+
+```text
+spacefast/0.3.0 darwin-arm64 node-v26.7.0
+```
+
+## First login
+
+```bash
+sf login
+sf whoami
+sf publish ./dist
+```
+
+`sf login` prints a code and a link, opens your browser, and polls until you approve. See [Authentication](/cli/login) for the read-only variant and for signing in with an API key.
+
+Bare `sf` runs `sf status`, so typing `sf` in a project tells you who you are, which team is default, and which Space the directory is linked to.
+
+## Global flags
+
+Every command accepts these.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--json` | off | Print a machine receipt instead of human output. Success goes to stdout, failure to stderr. |
+| `--api-url=<url>` | resolved, see below | Spacefast API base URL. Env `SPACEFAST_API_URL`. |
+| `--profile=<name>` | current profile | Named provider profile from `sf profiles`. Env `SPACEFAST_PROFILE`. |
+| `--token=<key>` | none | API key for non-interactive auth. Env `SPACEFAST_TOKEN`. |
+| `-y, --yes` | `false` | Skip confirmation prompts. Env `SPACEFAST_YES`. |
+| `--cwd=<path>` | current directory | Change directory before the command runs. Parsed before anything else, so it applies to Space resolution too. |
+
+Commands that act on a Space add `--space`, `-o, --team`, and `--claim-token`. Commands that queue work add `--wait` / `--no-wait` and `--wait-timeout=<seconds>` (default 900).
+
+## JSON receipts
+
+`--json` prints `{ data }` on stdout when the command succeeds, and nothing else. It prints `{ error }` on stderr when it fails. Piping stdout into a parser can never turn a failure into data.
+
+```json
+{
+  "data": {
+    "account": {
+      "id": "usr_0123456789abcdef",
+      "email": "dev@example.com",
+      "name": "Dev Example"
+    },
+    "teams": [{ "id": "team_0123456789abcdef", "name": "Acme", "slug": "acme", "role": "owner" }]
+  }
+}
+```
+
+```json
+{
+  "error": {
+    "code": "credential_expired",
+    "message": "The credential used for this request is expired.",
+    "type": "https://spacefast.com/docs/errors/credential_expired",
+    "title": "Credential expired",
+    "status": 401,
+    "retryable": false,
+    "recovery": "sf login",
+    "requestId": "req_0123456789abcdef",
+    "suggestions": ["Create a new API key or sign in again."]
+  }
+}
+```
+
+`error.code` is stable, `error.retryable` says whether re-running the same command unchanged could work, and `error.recovery` is one runnable hint. Validation failures add `error.pointer`, an RFC 6901 JSON Pointer into the failing input. List endpoints pass their `{ data, pagination }` envelope through without double-wrapping. Capability query parameters and blob paths are replaced with `[redacted]`.
+
+## Exit codes
+
+| Code | Name | Meaning |
+| --- | --- | --- |
+| `0` | ok | Success. |
+| `1` | unknown | Unexpected or uncategorized failure. |
+| `2` | validation | Bad flags or arguments, or validation failure (HTTP 422). |
+| `10` | auth | Authentication or authorization failure (HTTP 401/403). Run `sf login`. |
+| `20` | not-found | Resource not found or gone (HTTP 404/410). |
+| `30` | conflict | Request conflicts with the resource's current state (HTTP 409). |
+| `40` | network | Network failure reaching the API. Retryable. |
+| `50` | timeout | Timed out waiting for queued work. Retryable. |
+| `130` | cancelled | Interrupted with Ctrl-C, or a confirmation prompt was declined. |
+
+`sf doctor` is the one exception: it exits `1` when any check fails, without classifying.
+
+## Interactive and non-interactive
+
+The CLI prompts only when stdin and stdout are both TTYs, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
+
+Destructive actions need an answer either way. Pass `--yes` (or set `SPACEFAST_YES=1`) to proceed without a prompt. Without it, a non-interactive run fails with `confirmation_required` and exit 2. Declining a prompt exits 130.
+
+Setting `SF_AGENT=1`, or running anywhere `CI` is set, appends `--json` to your command for you and suppresses prompts. It never implies `--yes`: remote destructive actions still demand an explicit `--yes` on every invocation. `SF_AGENT_ALLOW_DESTRUCTIVE=1` auto-confirms local protection-removing actions only, like `sf unlink`.
+
+Some commands are exempt from the automatic `--json`: `sf mcp`, help and `--version`, and `sf api`, which has its own output contract.
+
+## How the CLI finds your Space
+
+In order, highest first:
+
+1. `--space` or `SPACEFAST_SPACE`.
+2. Anonymous claim state in `.spacefast/state.json`, unless the committed link names a different Space ID.
+3. The `space` field in `.spacefast/space.json`.
+4. The cached `spaceId` in `.spacefast/state.json`.
+
+If nothing selects a Space and your account has exactly one, the CLI uses it, in agent mode too. With several, it prompts when interactive and fails with `no_space_selected` (exit 2) when not. A blank or whitespace-only `--space` is an error, not "absent", so a misconfigured CI variable cannot silently create a second Space.
+
+## Environment variables
+
+| Variable | What it does |
+| --- | --- |
+| `SPACEFAST_TOKEN` | API key to authenticate with. Same as `--token`. |
+| `SPACEFAST_SPACE` | Space ID, live URL, domain, or slug. Same as `--space`. |
+| `SPACEFAST_TEAM` | Team slug, ID, or name. Same as `--team`. |
+| `SPACEFAST_CLAIM_TOKEN` | Space key (`sfc_…`) for an unclaimed anonymous Space. |
+| `SPACEFAST_API_URL` | API base URL. Same as `--api-url`. |
+| `SPACEFAST_PROFILE` | Profile to use. Same as `--profile`. |
+| `SPACEFAST_YES` | `1`, `true`, or `yes` skips confirmation prompts. |
+| `SPACEFAST_NON_INTERACTIVE` | Any value stops the CLI from ever prompting. |
+| `SF_AGENT` | `1`, `true`, or `yes` turns on agent mode. |
+| `SF_AGENT_ALLOW_DESTRUCTIVE` | Lets agent mode auto-confirm local protection-removing actions. |
+| `SPACEFAST_HOME` | CLI state directory, default `~/.spacefast`. |
+| `SPACEFAST_CREDENTIAL_STORE` | `keyring` forces the OS keyring, `plaintext` forces the file fallback. |
+| `SF_DEBUG` | Turns on diagnostics on stderr. Add `LOG_FORMAT=json` for JSON lines. |
+| `DO_NOT_TRACK`, `SPACEFAST_TELEMETRY_DISABLED` | `1`, `true`, `yes`, or `on` disables agent-setup telemetry. |
+| `NO_COLOR`, `FORCE_COLOR` | Color control. |
+
+## API URL resolution
+
+| Order | Source |
+| --- | --- |
+| 1 | `--api-url` passed on the command line |
+| 2 | The `apiUrl` of an explicitly named `--profile` |
+| 3 | `SPACEFAST_API_URL` |
+| 4 | The provider recorded in `.spacefast/state.json` |
+| 5 | `apiBaseUrl` in `.spacefast/space.json` |
+| 6 | The `apiUrl` of the currently selected profile |
+| 7 | The `apiUrl` of your stored login |
+| 8 | `https://api.spacefast.com` |
+
+Every credential is bound to the base URL it was issued for. Point the CLI somewhere else and it will not send that credential along.
+
+## Where credentials live
+
+On macOS the login goes into the Keychain as a generic password under the service `Spacefast CLI`. On Linux it goes into the Secret Service through `secret-tool`. Anywhere else, including Windows, there is no keyring and the CLI writes `~/.spacefast/auth.json`, telling you it did.
+
+The keyring wins when both exist. A stale plaintext copy is deleted after the keyring is read. If the keyring is locked, the CLI fails with `credential_keyring_unavailable` (exit 10). Open the keyring, or set `SPACEFAST_CREDENTIAL_STORE=plaintext`. Under `CI`, the plaintext store is the default.
+
+Other files the CLI owns:
+
+| Path | Contents |
+| --- | --- |
+| `~/.spacefast/config.json` | Profiles and defaults, including your default team |
+| `~/.spacefast/credentials/profile-*.json` | One credential file per profile |
+| `.spacefast/space.json` | Committable link: which Space, team, and API base URL |
+| `.spacefast/state.json` | Local cache and credentials. Never commit it, and `sf` adds it to `.gitignore` for you |
+| `sf.jsonc` | Project config written by `sf init` |
+
+## Update checks
+
+The CLI checks npm for a newer version every 7 days and prints the exact upgrade command for how you installed it. It skips the check whenever the invocation looks machine-driven: `--json` anywhere in the arguments, an `mcp` invocation, or a non-TTY stderr.
+
+## Command reference
+
+<CardGroup cols={2}>
+  <Card title="Authentication" href="/cli/login" icon="key">
+    `login`, `logout`, `whoami`, `auth`, `access`
+  </Card>
+  <Card title="Project setup" href="/cli/project" icon="folder">
+    `init`, `link`, `unlink`, `switch`, `profiles`, `open`, `status`
+  </Card>
+  <Card title="API keys" href="/cli/api-keys" icon="lock">
+    `api-keys create`, `list`, `revoke`
+  </Card>
+  <Card title="Raw API access" href="/cli/api" icon="braces">
+    `sf api`
+  </Card>
+  <Card title="Operations and activity" href="/cli/operations" icon="activity">
+    `operations`, `activity`
+  </Card>
+  <Card title="Inspection and agent helpers" href="/cli/agent-commands" icon="wrench">
+    `inspect`, `fetch`, `apply`, `continue`, `map`, `docs`, `doctor`, `feedback`, `plugins`
+  </Card>
+</CardGroup>

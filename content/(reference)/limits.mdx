@@ -1,0 +1,132 @@
+---
+title: Limits
+description: Every enforced Spacefast limit in one table, with the error code you get when you cross it
+sidebar:
+  order: 1
+---
+
+Find any limit, see which plan changes it, and know exactly which error code comes back. Where a plan says "unlimited" but a platform ceiling still applies, this page gives you the ceiling.
+
+## Limits by plan
+
+| Limit | Free | Plus | Pro | Enterprise | When you hit it |
+| --- | --- | --- | --- | --- | --- |
+| Editors | 1 | 3 included | 10 included | Unlimited | `409` `team_member_quota_exceeded` |
+| Custom domain groups | 3 | 10 | Unlimited | Unlimited | `409` `domain_quota_exceeded` |
+| Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited | Metered and shown. Nothing blocks |
+| Files per version | 20,000 | 100,000 | 100,000 | 100,000 | `422` `manifest_too_many_files` |
+| Largest single file | 50 MiB | 1 GiB | 64 MiB | 64 MiB | `422` `version_file_too_large` |
+| Versions kept per space | 200 | No cap | No cap | No cap | `422` `version_quota_exceeded` |
+| Publishes per month | 100 | 1,000 | Unlimited | Unlimited | Activity event, once per month. Publishing continues |
+| Routing rules | 10 | 1,000 | Unlimited | Unlimited | `routing_rules_over_plan` warning. Over-limit rules still serve |
+| Activity feed history | 48 hours | 30 days | Unlimited | Unlimited | Older events are deleted hourly |
+| Access log history | 48 hours | 30 days | Unlimited | Unlimited | Read window clamped, `log_retention_clamped` warning |
+| Bandwidth per space per day | 100 GiB | 100 GiB | 100 GiB | 100 GiB | Measured hourly and recorded |
+| PHP workers per site | 2 | 4 | 4 | 4 | Serving concurrency, no error |
+| Publishable file types | Web content only | Any | Any | Any | Other files drop with a diagnostic. `422` `version_no_publishable_files` if every file drops |
+| Free spaces claimed per account | 50 per 30 days | Not applied | Not applied | Not applied | `429` `claimed_space_quota_exceeded` |
+
+Three of these deserve a second look.
+
+Pro and Enterprise cap a single file at **64 MiB**, below Plus's 1 GiB. A plan that does not name a per-file number falls back to the platform default, and the platform default is 64 MiB.
+
+"Unlimited" files per version is **100,000**. The manifest validator clamps at that ceiling on every plan.
+
+"Unlimited" bandwidth is **100 GiB per space per day**. That is the platform ceiling a plan value collapses into.
+
+An editor limit of "3 included" is not a wall. On Plus and Pro with an active subscription you can add editors past the included count and each is billed automatically. Free stops dead at one. Pending invitations hold a seat, so a team can be blocked with fewer members than the number suggests.
+
+## Same on every plan
+
+| Limit | Value | When you hit it |
+| --- | --- | --- |
+| Total bytes per version | 2 GiB | `422` `version_total_bytes_exceeded` |
+| Inline publish archive | 128 MiB | `publish_archive_too_large` |
+| Archive compression ratio | 100:1 | `publish_archive_compression_ratio_exceeded` |
+| Archive expanded size | 2 GiB | `publish_archive_expanded_size_exceeded` |
+| File path length | 1,024 bytes | `path_too_long` |
+| Manifest body | 16 MiB | `manifest_body_too_large` |
+| `sf.jsonc` file size | 256 KiB | Config validation error |
+| Templates in `sf.jsonc` | 100 | `config_templates_over_limit` |
+| Cron jobs per space | 8 | Config validation error |
+| Data sources in `sf.jsonc` | 32 | Config validation error |
+| Inject snippets | 16, each 8 KiB | Config validation error |
+| Redirect rules compiled | 2,100 total, 2,000 static, 100 dynamic | Routing compile error |
+| Header rules compiled | 100 | Routing compile error |
+| Storage object upload | 5 MiB | `storage_file_too_large` |
+| Webhook deliveries per hour, per team | 10,000 | Delivery recorded as failed with `webhook_delivery_budget_exceeded` |
+
+Every key in the config file is documented on [Config file](/config-file). Routing rule syntax is on [Routing](/routing).
+
+## Anonymous publish caps
+
+Publishing without an account runs on its own cap table, tighter than Free on every axis.
+
+| Cap | Value | When you hit it |
+| --- | --- | --- |
+| Largest single file | 50 MiB | `422` `version_file_too_large` |
+| Total bytes per version | 100 MiB | `422` `version_total_bytes_exceeded` |
+| Files per version | 1,000 | `422` `manifest_too_many_files` |
+| Inline publish body | 100 MiB | `publish_inline_limit_exceeded` |
+| Publishes per IP per hour | 20 | `429` `anonymous_publish_rate_limited` |
+| Publishes per network fingerprint per hour | 60 | `429` `anonymous_publish_rate_limited` |
+| Publishes per space per hour | 20 | `429` `anonymous_publish_rate_limited` |
+| Unclaimed spaces open at once | 10 per fingerprint | `429` `anonymous_space_limit_reached` |
+
+Until a space is claimed, the runtime serves a restricted set of content types: text, images, fonts, JSON, web manifests, JavaScript, gzip, XML, RSS, and Atom. Anything outside that list uploads but does not serve. Claim the space and it serves normally. See [Publish without an account](/anonymous-and-claim).
+
+## Retention windows
+
+| What | Window | What happens at the end |
+| --- | --- | --- |
+| Unclaimed space | 6 hours from publish | The space stops serving |
+| Claiming an expired anonymous space | 7 more days | The claim link stops working |
+| Unfinished publish drafts | 24 hours | The draft is swept |
+| Deleted team | 30 days | The team is reaped |
+| Past-due account | 7 days | The account is suspended and its spaces go dark |
+| Activity events | Plan window, 48 hours on Free | Events are deleted |
+| HTTP access logs | Plan window, 48 hours on Free | Reads are clamped to the window |
+
+The two anonymous rows work together. A space that stops serving at 6 hours is still recoverable through the claim link for another 7 days. See [Publish without an account](/anonymous-and-claim).
+
+## What a paused or removed space serves
+
+A space that stops serving does not fall back to a blank 404. The status code and the body say which situation you are in.
+
+| Situation | Status | Body | Writes to the space |
+| --- | --- | --- | --- |
+| Account past due, inside the grace period | Serves normally | Your site | `402` `tenant_past_due` |
+| Account suspended | `402` | `This space is paused.` | `403` `tenant_suspended` |
+| Space disabled, expired, or taken down | `404` | `This space is no longer available.` | `409` with the disable reason |
+| Removed after a legal complaint | `451` | `This content is unavailable for legal reasons.` | `409` |
+| Removed under the strictest safety category | `503` | `This space hasn't been published yet.` | `409` |
+
+Reads are never blocked by account state. Only writes are. A past-due account keeps serving every site at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
+
+The 451 and 404 pages are customizable like any other error page. The 503 case is byte-identical to a host that has never published anything.
+
+## Rate limits
+
+Exceeding one returns `429` `rate_limited`. The response headers that tell you the ceiling, what is left, and when to retry are on [Rate limits](/api/rate-limits#headers).
+
+The general budget is per fixed 60-second window.
+
+| Caller | Requests per minute |
+| --- | --- |
+| Authenticated, per credential | 600 |
+| Anonymous, per IP | 300 |
+
+Publishing, building, and creating spaces carry their own hourly budgets that scale with your plan. Each has an actor bucket, which contains one credential, and an account bucket, which contains a whole team.
+
+| Action | Free | Plus | Pro | Enterprise |
+| --- | --- | --- | --- | --- |
+| Publishes per hour, per credential | 120 | 600 | 1,800 | 6,000 |
+| Publishes per hour, per account | 240 | 1,200 | 6,000 | 20,000 |
+| Builds per hour, per credential | 20 | 100 | 500 | 2,000 |
+| Builds per hour, per account | 60 | 300 | 2,000 | 10,000 |
+| Spaces created per hour, per credential | 20 | 60 | 200 | 600 |
+| Spaces created per hour, per account | 40 | 150 | 600 | 3,000 |
+
+These are platform protection, not entitlements you buy. A plan change is picked up by the limiter within about five seconds.
+
+Full rate limit behavior, including what happens when the accounting backend is down, is on the [Rate limits](/api/rate-limits). For what each error code means and whether it is worth retrying, see [Error codes](/api/errors).

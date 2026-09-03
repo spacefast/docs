@@ -4,9 +4,9 @@
 dist/
 .spacefast/
 node_modules/
-content/cli/
-content/errors/
-content/changelog/
+content/cli/reference.md
+content/(reference)/errors/
+content/(reference)/changelog/
 content/setup/
 public/_redirects
 .env

@@ -24,9 +24,8 @@ import { readSidebarRoutes } from "./sidebar-routes.mjs";
 const SITE = "https://spacefast.com";
 const DOCS_ROOT = `${SITE}${deploymentBase}`;
 
-// Prefixes whose descendants are generated one page per error code, per API
-// operation, or per release. Each root is itself a sidebar route, so the
-// sidebar carve-out below keeps the index page without a special case.
+// Prefixes generated one page per error code, API operation, or release.
+// A root stays in the index only when the authored navigation includes it.
 //
 // The rule keys on route, never on heading. Blume decides a page's section by
 // walking the sidebar, so moving these under a named section instead of
@@ -84,7 +83,7 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
     const route = routeOf(line);
     if (!route || route.endsWith(".xml")) return false;
     if (sidebarRoutes.has(route)) return false;
-    return COLLAPSED_ROOTS.some((root) => route.startsWith(`${root}/`));
+    return COLLAPSED_ROOTS.some((root) => route === root || route.startsWith(`${root}/`));
   };
 
   const kept = [];

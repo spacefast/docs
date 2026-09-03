@@ -1,0 +1,105 @@
+---
+title: Plans and billing
+description: What each Spacefast plan costs and includes, how editor seats are billed, and where to upgrade, downgrade, or cancel
+sidebar:
+  order: 3
+---
+
+Pick the plan that fits, know what an extra editor costs, and find the exact place in the dashboard to upgrade or cancel. Every price on this page is the price the product charges.
+
+## Plans
+
+| Plan | Monthly | Yearly | Included editors | Extra editor |
+| --- | --- | --- | --- | --- |
+| Free | $0 | $0 | 1 | Not offered |
+| Plus | $4.99 | $49.99 | 3 | $4.99/mo or $49.99/yr |
+| Pro | $49.99 | $499 | 10 | $4.99/mo or $49.99/yr |
+| Enterprise | Custom | Custom | Unlimited | Included |
+
+Every new team starts on Free. Plus and Pro are self-serve. Enterprise is arranged with us.
+
+:::note
+Paid plans are not switched on for every account yet. When checkout is unavailable your team stays on Free and the billing page tells you so.
+:::
+
+### Plan codes in the API
+
+The API reports the plan as a code, not the display name. `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` both return a `planCode` field.
+
+| Display name | `planCode` |
+| --- | --- |
+| Free | `free` |
+| Plus | `personal` |
+| Pro | `work` |
+| Enterprise | `enterprise` |
+
+The codes are stable. They stay the same when a plan is renamed.
+
+## What changes between plans
+
+| | Free | Plus | Pro | Enterprise |
+| --- | --- | --- | --- | --- |
+| Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited |
+| Editors | 1 | 3 included | 10 included | Unlimited |
+| Custom domain groups | 3 | 10 | Unlimited | Unlimited |
+| Files per version | 20,000 | 100,000 | 100,000 | 100,000 |
+| Largest single file | 50 MiB | 1 GiB | 64 MiB | 64 MiB |
+| Publishes per month | 100 | 1,000 | Unlimited | Unlimited |
+| Activity and access log history | 48 hours | 30 days | Unlimited | Unlimited |
+| Routing rules | 10 | 1,000 | Unlimited | Unlimited |
+| PHP workers per site | 2 | 4 | 4 | 4 |
+| External proxy rules | No | Yes | Yes | Yes |
+| Full-page templates under `_pages/` | No | Yes | Yes | Yes |
+| Hide the Spacefast badge | No | Yes | Yes | Yes |
+| File types you can publish | Web content only | Any | Any | Any |
+
+The largest-single-file row is not a typo. Pro and Enterprise cap a single file at 64 MiB, below Plus's 1 GiB. See [Limits](/limits) for what each number does when you cross it, and which limits block a publish versus warn.
+
+A domain group is one registrable apex plus all of its subdomains, so `example.com`, `www.example.com`, and `docs.example.com` count as one.
+
+## Seats and extra editors
+
+Every team member is a billable seat, whatever their role. Owners, admins, and members all count. Reviewers, agents, API keys, device tokens, and per-Space grants are not memberships and are never billed.
+
+Pending invitations hold a seat before anyone accepts them. A team can hit its seat limit with fewer real members than the plan allows, so cancel stale invitations before buying another seat.
+
+Free caps the team at one editor and will not go past it. On Plus and Pro with an active subscription you can add editors beyond the included count. Each one is added automatically at the extra editor price, and the charge updates when team membership changes.
+
+## Upgrade
+
+<Steps>
+<Step title="Open Settings → Billing">
+In the dashboard, open your team's **Settings**, then **Billing**. Only team owners and admins can change billing.
+</Step>
+<Step title="Choose a plan">
+Under **Choose a plan**, pick Plus or Pro and a Monthly or Yearly interval.
+</Step>
+<Step title="Finish checkout">
+**Upgrade plan** sends you to a hosted checkout. When it completes, the new plan and its limits apply immediately. Rate limits pick up the new plan within about five seconds.
+</Step>
+</Steps>
+
+## Downgrade or cancel
+
+Once a team has a paid subscription, **Settings → Billing** shows **Open billing portal**. That hosted portal holds invoices, payment methods, receipts, plan changes, and cancellation. Spacefast keeps no separate invoice list.
+
+Cancelling takes effect at the end of the current billing period, not on the spot. The billing page then labels the period date **Ends** instead of **Renews**. When the period closes, the team falls back to Free and the Free plan limits apply.
+
+A plan change is prorated against the remainder of the current period.
+
+## When a payment fails
+
+Your sites keep serving through a grace period, but you cannot change anything.
+
+| Stage | How long | What visitors get | What you get |
+| --- | --- | --- | --- |
+| Past due | 7 days from the failed payment | Sites serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
+| Suspended | After the grace period ends | Every space serves `402` and the text `This space is paused.` | Reads work. Every write returns `403` with code `tenant_suspended` |
+
+Reading is never blocked in either state. Settle the payment from the billing portal to lift the block and light the spaces back up.
+
+## Billing is dashboard-only
+
+Plans, checkout, and cancellation live in the dashboard. There is no `sf` command and no API endpoint for changing a plan, and API keys and agent credentials cannot reach billing at all.
+
+Reading is a different story. An agent can pull the resolved plan and limits from `GET /v1/teams/{teamId}/entitlements`, current counters from `GET /v1/teams/{teamId}/usage`, and the limits as they are enforced at publish time from `GET /v1/teams/{teamId}/plan-policy`. See [Usage](/usage) for what those numbers mean.

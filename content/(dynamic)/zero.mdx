@@ -1,0 +1,212 @@
+---
+title: Dynamic sites with Zero
+description: Zero is the runtime a Space gets when its project declares it. A database, HTTP endpoints, live queries, crons, and storage, from one TypeScript app.
+sidebar:
+  order: 0
+---
+
+After this page you can tell whether your project needs Zero, declare it in `sf.jsonc`, write the smallest app that works, and know which page owns each piece.
+
+## What Zero is
+
+Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, and HTTP endpoints, and `sf publish` compiles it into a **capsule** the platform installs on the space.
+
+Zero is on for every account. There is nothing to enable.
+
+The other runtime is [Functions](/functions), a worker for npm-heavy code and framework output like OpenNext. One version declares one runtime, not both.
+
+## Declare it
+
+Zero is never inferred. A runtime that owns a database does not spring into existence from a directory shape, so both entry paths are required.
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "name": "my-app",
+  "runtime": {
+    "kind": "zero",
+    "server": "server/index.ts",
+    "client": "client/index.tsx"
+  }
+}
+```
+
+The fastest way to get that file plus a working app is the scaffold.
+
+```bash
+sf init my-app --runtime zero --template todo
+cd my-app
+sf dev
+sf publish
+```
+
+`--template` accepts `todo`, `guestbook`, or `contact`. The client entry is optional on disk. If no file backs it, the build generates a shell and the capsule is server-only. The server entry is not optional.
+
+## What you get
+
+| Piece | What it is | Page |
+| --- | --- | --- |
+| Database | The space's own MySQL. Your capsule declares the tables; the platform migrates them when a version finalizes. | [Database](/database) |
+| Endpoints | Plain HTTP routes in your capsule, for webhooks and callers outside the app. | This page |
+| Queries and mutations | The read and write path your client calls. Queries are live. | This page |
+| Environment variables | `ctx.env`, from `.env.server` or `sf env`. | [Environment variables](/environment-variables) |
+| Crons | Scheduled GETs against your own paths, declared in `sf.jsonc`. | [Crons](/crons) |
+| Storage | Runtime object storage for visitor uploads. | [Storage](/storage) |
+| Logs | What your handlers wrote, plus every request the edge served. | [Logs](/logs) |
+
+## The `@spacefast/zero` package
+
+The scaffold's `package.json` pins the package to the compiler's own version. Nothing you install reaches the page. The build resolves the SDK, preact, and the rest from the platform, so these dependencies exist for types and editor completion.
+
+| Import | Use it from | What it holds |
+| --- | --- | --- |
+| `@spacefast/zero/server` | `server/` | `capsule`, `query`, `mutation`, `endpoint`, `table`, field constructors, response helpers |
+| `@spacefast/zero/client` | `client/` | `useQuery`, `usePaginatedQuery`, `useMutation`, `useAuth`, `storage`, `Router` and friends |
+| `@spacefast/zero/kit` | `client/` | The component set: `Button`, `Card`, `Input`, `Dialog`, `Table`, and about 30 more |
+| `@spacefast/zero/charts` | `client/` | `LineChart`, `BarChart`, `Sparkline`, `StatTile` |
+
+## The minimal app
+
+Server code declares the schema and the handlers.
+
+```ts server/index.ts
+import { boolean, capsule, endpoint, mutation, query, string, table, text } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "notes",
+  schema: {
+    notes: table({
+      body: string(),
+      done: boolean().default(false),
+      ownerId: string(),
+    }).index("by_owner", ["ownerId"]),
+  },
+  queries: {
+    notes: query(async (ctx) =>
+      ctx.db.notes
+        .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+        .order("desc")
+        .collect(),
+    ),
+  },
+  mutations: {
+    addNote: mutation(async (ctx, body: string) => {
+      await ctx.db.notes.insert({ body, done: false, ownerId: ctx.auth.userId });
+      ctx.invalidate("notes");
+    }),
+  },
+  endpoints: {
+    status: endpoint({ mode: "read", method: "GET", path: "/api/status" }, () => text("ok")),
+  },
+});
+```
+
+Client code reads through queries and writes through mutations.
+
+```tsx client/index.tsx
+import { useMutation, useQuery } from "@spacefast/zero/client";
+import { Button, Card } from "@spacefast/zero/kit";
+
+export function App() {
+  const notes = useQuery<{ id: string; body: string }[]>("notes");
+  const addNote = useMutation<[body: string], void>("addNote");
+  return (
+    <Card title="Notes">
+      <Button onClick={() => void addNote("hello")}>Add</Button>
+      <ul>{notes.map((note) => <li key={note.id}>{note.body}</li>)}</ul>
+    </Card>
+  );
+}
+```
+
+`capsule()` takes `name`, `favicon`, `schema`, `queries`, `mutations`, and `endpoints`, and throws on a key it does not know.
+
+### Tables
+
+`table(fields)` takes three field constructors: `string()`, `boolean()`, and `id("otherTable")`. Store numbers and dates as strings for now. `.default(value)` makes a field optional on insert. Every row gets `id`, `createdAt`, and `updatedAt`, so those three names are reserved, as is the built-in `by_creation` index. Field and index names must match `/^[A-Za-z][A-Za-z0-9_]*$/`. Declare an index with `.index(name, fields)` and read it through `withIndex`.
+
+### Handler context
+
+Every query, mutation, and endpoint handler takes `ctx` first.
+
+| On `ctx` | Queries | Mutations and write endpoints | What it is |
+| --- | --- | --- | --- |
+| `db` | read only | read and write | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
+| `auth` | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
+| `env` | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
+| `log` | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
+| `invalidate` | no | yes | Names the live queries this mutation changed |
+
+A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
+
+`invalidate()` takes **query names, not table names**. `ctx.invalidate("notes")` refreshes every `notes` subscription whatever arguments it carries. Calling it with nothing is the safe default and refreshes every live query on the page.
+
+### Endpoints
+
+`endpoint(route, handler)` takes `{ method, path, mode }`, where `mode` is `"read"` or `"write"`. Both `method` and `path` must be literal strings, because the compiler reads them from source without running it. The handler gets `(ctx, req)`, where `req` carries `method`, `path`, `url`, `headers`, `query`, and `text()` / `json()` / `bytes()`.
+
+Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for a 204, `redirect(url)` for a 302, or `new ImageResponse(element)` for a rendered 1200x630 image.
+
+## The request lifecycle
+
+1. Static bytes win. Anything committed in the version serves from disk without waking your code.
+2. Platform paths are reserved. First segments `__spacefast`, `__stattic`, and `__span` belong to the platform, as do `/auth/` and `/_spacefast/` inside the app.
+3. Your endpoint table matches. A hit runs the handler in the QuickJS runner on the space's own machine, in one transaction with the database.
+4. Everything else falls to the app shell, which serves your client bundle.
+
+Queries and mutations do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event and every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
+
+An endpoint cannot claim `/`, `/index.html`, `/client.js`, `/auth/callback`, anything under `/auth/`, or anything under `/_spacefast/`. The shell, the client bundle, and the sign-in flow already answer those.
+
+## What a capsule is, and what compiles
+
+A capsule is the value `capsule({...})` returns. `sf publish` runs esbuild over your tree and produces one ESM server bundle for the runner, one browser client bundle, and a migration plan for the tables you declared. Rolling a version back rolls all three back together, because they travel with the version.
+
+Only three source roots are read: `client/`, `server/`, and `shared/`. Beyond them the compile admits `package.json`, `.env.server`, and `.env.lakebed.server` and nothing else. `shared/` imports its own relative files only, no packages at all. Client code cannot import the server SDK, and server code cannot import client files.
+
+| Limit | Value |
+| --- | --- |
+| Server bundle | 768 KiB |
+| Client bundle, your code and your npm packages | 8 MiB |
+| Server imports | `@spacefast/zero/server`, `preact`, `preact/jsx-runtime`, `preact/jsx-dev-runtime` |
+| Client imports | Anything except the server SDK and `node:*` built-ins |
+| Endpoint request body | 2 MiB |
+| Rejected everywhere | `eval`, `Function`, `require()`, dynamic `import()`, `process`, `__dirname`, `__filename`, `Bun`, `Deno` |
+| Rejected in `server/` and `shared/` | `window`, `document`, `localStorage`, `fetch` has no polyfill, `WebSocket`, `Worker`, `XMLHttpRequest`, `globalThis` |
+
+Platform modules do not count against your client cap. The SDK, kit, charts, preact, recharts, and lucide serve from immutable same-origin URLs the browser keeps across publishes.
+
+:::warning[There is no outbound fetch in a Zero handler]
+The runner defines `Headers`, `Response`, `URL`, and `URLSearchParams`, but no `fetch`. A handler that needs to call an external API belongs in [Functions](/functions).
+:::
+
+## Styling
+
+Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected, and `theme.json` plus utility classes are the whole styling story.
+
+Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS at all and the capsule ships unstyled. Branch to whole literals instead.
+
+Prefer the semantic tokens, which re-skin from `theme.json` and handle light and dark on their own: `canvas`, `surface`, `ink`, `ink-muted`, `line`, `accent`, `success`, `warning`, `danger`. The shadcn names (`bg-background`, `text-muted-foreground`, `bg-primary`) alias onto the same tokens.
+
+## Run it locally
+
+```bash
+sf dev
+```
+
+`sf dev` starts the capsule dev server on `http://127.0.0.1:4173`. State lives in memory and resets on restart. Pass `--state-backend sqlite` to keep it between runs. `--watch` is on by default and reloads the runtime when a source file changes. A non-loopback `--host` needs `--allow-network`.
+
+<CardGroup cols={2}>
+  <Card title="Database" href="/database" icon="database">
+    Migrations, dumps, exports, and the SQL console.
+  </Card>
+  <Card title="Functions" href="/functions" icon="zap">
+    Workers, the `functions/` file router, and OpenNext.
+  </Card>
+  <Card title="sf.jsonc reference" href="/config-file" icon="file-json">
+    Every key the config schema accepts.
+  </Card>
+  <Card title="Logs" href="/logs" icon="scroll-text">
+    Follow what your handlers log.
+  </Card>
+</CardGroup>

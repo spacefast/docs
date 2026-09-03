@@ -1,61 +1,63 @@
 ---
-title: Spacefast documentation
+title: Spacefast
+description: Publish the sites your agents build. One command, a live URL, immutable versions, custom domains.
 sidebar:
-  label: Home
-description: Publish static sites, build apps, and manage every Spacefast space from the dashboard, CLI, API, SDK, or an agent.
+  order: 0
 ---
 
-Spacefast turns static files and app builds into live URLs. Publish with
-your coding agent, one CLI command, or a drag onto
-[drop.website](https://drop.website), before you even have an account.
-Claim the space afterward to keep it.
+Spacefast hosts the sites people build with AI agents. You hand it a folder, it hands back a URL. Everything you can do in the dashboard you can also do from the `sf` CLI, the HTTP API, or an MCP server, so the agent that built the site can publish it too.
+
+## Publish in one command
+
+```bash
+npm install -g spacefast
+```
+
+```bash
+sf publish ./dist
+```
+
+No account needed for the first publish. The CLI creates a Space, uploads the files, and prints a live URL plus a claim link. Sign in later to keep it.
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Open          https://quiet-harbor.view.fast
+  Version URL   https://v1--quiet-harbor.view.fast
+  Version       v1 (ready)
+  Files         12
+  Duration      3.2s
+```
+
+Or ask the agent that built it.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+## How it fits together
+
+A **Space** is one site with a stable hostname. Every publish creates a new **version**, an immutable snapshot with its own URL that never changes. The `live` channel points at one version. Promoting or rolling back moves that pointer. Nothing gets rebuilt.
+
+Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs opt into the Zero runtime with one line of config.
 
 <CardGroup cols={2}>
-  <Card title="Publish your first site" href="/start" icon="rocket">
-    Hand your project to your agent or run one command. Get a live URL.
+  <Card title="Quickstart" href="/quickstart" icon="rocket">
+    Install, sign in, publish, and attach a domain in five minutes.
   </Card>
-  <Card title="How Spacefast works" href="/start/how-it-works" icon="compass">
-    Spaces, versions, channels, and the atomic release boundary.
+  <Card title="Publishing" href="/publish" icon="upload">
+    What gets uploaded, how versions work, and how to roll back.
   </Card>
-  <Card title="Set up an agent" href="/agents" icon="bot">
-    Give your coding agent the CLI, skills, and MCP it needs.
-  </Card>
-  <Card title="Move to Spacefast" href="/guides/migrate" icon="arrow-right-left">
-    Bring a site from Netlify, Vercel, GitHub Pages, and more.
-  </Card>
-</CardGroup>
-
-## By area
-
-<CardGroup cols={2}>
-  <Card title="Publish" href="/publish" icon="upload">
-    Uploads, Git builds, versions, channels, and rollback.
-  </Card>
-  <Card title="Serve" href="/serve/settings" icon="globe">
-    Space settings, redirects, headers, scheduled jobs, and visitor pages.
-  </Card>
-  <Card title="Share" href="/share" icon="lock">
-    Spaces are private by default. Grant access to people, links,
-    passwords, or the public, and collect comments on previews.
-  </Card>
-  <Card title="Primitives" href="/zero-runtime" icon="server">
-    Zero, Functions, and the space's database, storage, and email.
-  </Card>
-  <Card title="Domains" href="/domains" icon="globe-lock">
-    Attach your own hostname. DNS checks and SSL are automatic.
+  <Card title="Custom domains" href="/domains" icon="globe">
+    DNS records, verification, TLS, and the primary domain.
   </Card>
   <Card title="Agents" href="/agents" icon="bot">
-    Setup, the publish flow, receipts, and MCP.
+    Connect Claude Code, Cursor, Codex, or any MCP client.
   </Card>
-  <Card title="Operate" href="/operate/spaces" icon="activity">
-    Space lifecycle, analytics, logs, and webhooks.
+  <Card title="CLI reference" href="/cli" icon="terminal">
+    Every `sf` command, flag, and exit code.
   </Card>
-  <Card title="Platforms" href="/platforms" icon="building-2">
-    Host customer sites through Spacefast behind your own brand.
+  <Card title="API" href="/api" icon="braces">
+    Auth, envelopes, errors, and the full operation reference.
   </Card>
 </CardGroup>
-
-Identity, teams, credentials, and billing live in
-[Account and teams](/account). The exact CLI, API, SDK, error, and changelog
-contracts live in [Reference](/reference). For support beyond the product
-reference, browse the [recipes](https://spacefast.com/recipes).

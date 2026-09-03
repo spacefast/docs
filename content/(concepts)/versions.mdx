@@ -1,0 +1,151 @@
+---
+title: Versions and the live channel
+description: Every publish is an immutable version, the live channel is a pointer at one of them, and rolling back moves the pointer without rebuilding anything
+sidebar:
+  order: 2
+---
+
+After this page you know what a version holds, how it reaches `ready`, how the `live` pointer moves, and how to roll back to any earlier version in seconds.
+
+## A version is a snapshot
+
+Each publish creates a version. A version is the exact set of files plus the config it finalized with, frozen. Nothing rewrites a version after it is ready. Publishing again does not modify the old one, it makes a new one.
+
+Ids are `ver_` plus 32 hex characters. Once a version reaches `ready` it also gets a number, and the CLI and dashboard call it by that number.
+
+```text
+ver_4b81f0c2d9a7431e8c6d05fa27b3e914   v7
+```
+
+Numbers are handed out in the order versions become ready, not the order they were started. Two publishes racing each other get two distinct numbers, and a version that never reaches ready never takes one.
+
+## States
+
+| State | What it means |
+| --- | --- |
+| `created` | The manifest is declared, bytes are still expected |
+| `uploading` | Bytes are landing |
+| `uploaded` | Every declared file arrived |
+| `finalizing` | The version is being compiled into its served form |
+| `ready` | Done, numbered, addressable, promotable |
+| `failed` | Finalize or the build that fed it failed |
+| `canceled` | Stopped before it finished |
+| `expired` | A draft that ran out of time before finalize |
+
+The path is `created`, `uploading`, `uploaded`, `finalizing`, `ready`. `failed`, `canceled`, and `expired` are terminal, and so is `ready`. A version produced by a remote build reports the build's own progress on the Build, not here. See [Frameworks and builds](/frameworks).
+
+## The live channel
+
+A channel is a named pointer from the Space to one version. `live` is the only channel, and it is the one visitors follow. Your default hostname and every custom domain serve whatever `live` points at right now.
+
+A channel has a promotion policy.
+
+| Policy | What a publish does |
+| --- | --- |
+| `auto` (default) | Finalizing a version moves the pointer to it |
+| `manual` | The version becomes ready and the pointer stays put |
+
+On a manual channel an ordinary publish comes back with `activation.outcome` of `unpromoted` and `reason` `channel_promotion_manual`. Nothing failed. The version is ready and waiting for an explicit promote.
+
+```bash
+sf channels ls --space docs
+sf channels set live --promotion manual --space docs
+```
+
+## Promote and roll back
+
+Promoting points `live` at a ready version. That is the whole operation. No files move, nothing is rebuilt, and the previous version keeps its own URL.
+
+Rolling back is the same operation aimed backwards. There is no separate rollback mechanism, and no rebuild happens either way. The dashboard says it plainly: **Takes effect in seconds. Nothing is rebuilt.**
+
+<Tabs>
+<Tab title="CLI">
+
+```bash
+sf versions ls --space docs
+sf rollback v12 --space docs
+sf promote v14 --space docs
+```
+
+Both take a version id, a ref such as `v12`, or a bare number. Both wait for the pointer to settle by default. Pass `--no-wait` to get the operation handle back immediately.
+
+</Tab>
+<Tab title="Dashboard">
+
+Open **Versions**, find the row, and hit **Make live**. Confirm on **Make v12 live?**. The Overview page carries the same action as **Roll back to** next to the previous version.
+
+Afterwards the list narrates the state you are in, for example *Rolled back from v13. Make it live below to roll forward.*
+
+</Tab>
+<Tab title="API">
+
+```bash
+curl -X POST \
+  https://api.spacefast.com/v1/spaces/spc_9f2c.../versions/ver_4b81.../promote \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"channel":"live"}'
+```
+
+[`promoteSpaceVersion`](/api/reference/versions/promotespaceversion) waits by default and returns the version plus an operation handle. Add `?async=1` to get the handle without waiting. `channel` defaults to `live`, and any other name is rejected with `channel_unsupported`.
+
+</Tab>
+</Tabs>
+
+An explicit promote is never held by a manual policy. That hold only applies to promotions a publish asked for implicitly.
+
+## Per-version URLs
+
+Every version that reaches ready gets a permanent hostname of its own, computed once and stored:
+
+```text
+https://v7--my-site.view.fast/
+```
+
+It serves that exact snapshot no matter what is live, and it survives a rename, a transfer, and any number of rollbacks. The API reports it as `immutableUrl`, with `immutableUrlStatus` of `pending` until the hostname is routable.
+
+A version published from a connected Git branch also gets a branch hostname, `https://br-<alias>--my-site.view.fast/`, which follows the branch rather than the snapshot. The dashboard shows it on the version page as **Branch preview URL**. Full hostname rules are on [URLs and hostnames](/urls).
+
+## Drafts expire in 24 hours
+
+A version that is declared but never finalized is a draft. Drafts live for 24 hours. Past that they flip to `expired` and their file declaration is dropped, so an abandoned draft cannot be resumed. Publish again instead.
+
+This only affects versions still in `created`, `uploading`, or `uploaded`. A ready version has no clock on it.
+
+## How many versions are kept
+
+Ready versions stay until you delete them. Free Spaces cap at 200 versions, counting everything that is not failed, canceled, or expired, and the 201st publish comes back as `422` `version_quota_exceeded`. Paid plans have no cap. See [Limits](/limits).
+
+To delete one:
+
+```bash
+sf versions rm v12 --space docs
+```
+
+A version the `live` channel points at cannot be deleted, and neither can one a branch hostname serves. Promote something else first. The refusal is `version_in_use` and names what is holding it.
+
+## Compare what you uploaded with what is served
+
+A version stores two representations of every path. `uploaded` is the byte you sent, before any transform. `served` is the immutable byte the version answers with. They differ where Spacefast processes a file, and a private input such as `sf.jsonc` exists in `uploaded` and is absent from `served` entirely.
+
+[`listSpaceVersionFileLinks`](/api/reference/versions/listspaceversionfilelinks) mints short-lived read links for up to 200 paths at a time and takes `view=uploaded` or `view=served`. Fetch the same path both ways and diff them.
+
+```bash
+curl "https://api.spacefast.com/v1/spaces/spc_9f2c.../versions/ver_4b81.../files/links?path=index.html&view=served" \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+Link minting does not check whether the version holds the path. A path missing from the view you asked for fails as `version_file_not_found` when you follow the link.
+
+To browse rather than diff, [`listSpaceVersionFiles`](/api/reference/versions/listspaceversionfiles) lists one version's files and [`listSpaceFiles`](/api/reference/spaces/listspacefiles) lists whatever `live` currently serves. In the dashboard, **Code** browses any version, with `?version=` pinning an older one.
+
+## Where each thing lives
+
+| Task | CLI | Dashboard |
+| --- | --- | --- |
+| List versions | `sf versions ls` | **Versions** |
+| Inspect one | `sf versions get v12` | A version row, then the detail page |
+| Make one live | `sf promote v12` | **Make live** |
+| Go back | `sf rollback v12` | **Roll back to** on Overview |
+| Delete one | `sf versions rm v12` | Version detail page |
+| Change promotion policy | `sf channels set live --promotion manual` | Not in the dashboard |

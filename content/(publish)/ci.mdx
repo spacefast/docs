@@ -1,0 +1,146 @@
+---
+title: Publish from CI
+description: Run sf publish from GitHub Actions or GitLab CI with an API key, a pinned Space, and the live URL read out of the receipt
+sidebar:
+  order: 5
+---
+
+After this page your pipeline publishes on every push to your default branch, prints the live URL, and posts a preview version for pull requests without touching live traffic.
+
+## Set it up
+
+<Steps>
+  <Step title="Mint a key">
+
+    Create an API key scoped to publishing and nothing else.
+
+    ```bash
+    sf api-keys create --name "CI publish" --preset ci_deploy
+    ```
+
+    The `sfa_` secret prints once, in human output only. Copy it and store it as a secret named `SPACEFAST_TOKEN` in your CI provider. Presets, scopes, and rotation are on [API keys and tokens](/api-keys).
+
+  </Step>
+  <Step title="Pin the Space">
+
+    Commit `.spacefast/space.json`. It records which Space, team, and API base URL this checkout publishes to, and it is written for you by the first `sf publish` or by `sf link`. Never commit `.spacefast/state.json`.
+
+    If you would rather not commit the link, set `SPACEFAST_SPACE` to the Space id or slug in your CI environment instead. A blank value is an error, not "absent", so a misconfigured variable cannot silently create a second Space.
+
+  </Step>
+  <Step title="Add the workflow">
+
+    Install the CLI, build, publish, and read the URL back out of the receipt.
+
+  </Step>
+</Steps>
+
+## The workflow
+
+<Tabs>
+<Tab title="GitHub Actions">
+
+```yaml .github/workflows/publish.yml
+name: Publish
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build
+      - run: npm install -g spacefast
+      - name: Publish
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: |
+          sf publish ./dist --json > receipt.json
+          echo "Live: $(jq -r '.data.space.liveUrl' receipt.json)"
+```
+
+</Tab>
+<Tab title="GitLab CI">
+
+```yaml .gitlab-ci.yml
+publish:
+  image: node:22
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - apt-get update -qq && apt-get install -y -qq jq
+    - npm ci
+    - npm run build
+    - npm install -g spacefast
+    - sf publish ./dist --json > receipt.json
+    - echo "Live: $(jq -r '.data.space.liveUrl' receipt.json)"
+```
+
+`SPACEFAST_TOKEN` goes in **Settings → CI/CD → Variables**, masked. GitLab puts it in the job environment for you.
+
+</Tab>
+</Tabs>
+
+The CLI needs Node.js 20.3 or newer. `sf publish` waits until the version is ready and live before it exits, so the job fails when the publish fails.
+
+## What `CI` changes
+
+GitHub Actions and GitLab CI both set `CI` for you, and a truthy `CI` puts the CLI in agent mode. Three things follow.
+
+| Change | Detail |
+| --- | --- |
+| `--json` is appended | Every command prints `{ data }` on stdout, `{ error }` on stderr. Passing `--json` yourself is redundant, and worth writing anyway so the pipeline reads the same locally |
+| Prompts are off | The CLI never asks a question it cannot get an answer to |
+| `--yes` is still yours | Agent mode never implies it |
+
+That last one bites. A destructive command in CI without `--yes` fails with `confirmation_required` and exit code 2, every time. Add `--yes` to the command that needs it rather than setting it globally.
+
+Credentials also behave differently under `CI`. The plaintext credential store is the default there, so a locked or absent OS keyring never wedges a job.
+
+## Version provenance
+
+You do not pass any of it. On GitHub Actions the CLI reads the branch, commit SHA, ref, repository, run id, run attempt, run URL, workflow, job, actor, and event name from the environment, plus the pull request number when the ref starts `refs/pull/`. On GitLab CI it reads the equivalents, and takes the commit title as the version message. Bitbucket Pipelines is detected too.
+
+Every value shows up on the version, so version history says which commit and which run produced each build. Override any of them with `--git-branch`, `--git-commit`, `--git-ref`, `--git-repository`, or `--message`. Full flag table on [`sf publish`](/cli/publish).
+
+## Previews on pull requests
+
+`--target preview` creates a ready version and leaves the `live` channel alone. Add `pull_request` to the workflow's `on:` triggers, then swap the publish step for this one.
+
+```yaml
+      - name: Publish preview
+        if: github.event_name == 'pull_request'
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: |
+          sf publish ./dist --target preview --json > receipt.json
+          echo "Preview: $(jq -r '.data.version.immutableUrl' receipt.json)"
+```
+
+`version.immutableUrl` is that version's permanent hostname, which keeps serving that exact build no matter what goes live later. `activation.outcome` comes back `unpromoted`, and promoting it later is one call to the URL in `links.promote`.
+
+A preview on an existing Space refuses `--name`, `--mode`, and a non-`auto` `--spa`, because a preview must not change settings live traffic shares.
+
+## Reading the receipt
+
+The fields worth branching on in a script:
+
+| Field | Use |
+| --- | --- |
+| `data.space.liveUrl` | The URL to print or comment on the PR |
+| `data.version.ref` | `v12`, the human version label |
+| `data.version.immutableUrl` | The per-version URL, for previews |
+| `data.next.action` | `done` when there is nothing left to do |
+| `data.diagnostics` | Dropped paths, warnings, and `noop_publish` |
+
+A publish whose files reproduce the live version byte for byte creates no version and reports the `noop_publish` diagnostic. That is a success, not a failure. The whole receipt is documented on [Publishing](/publish).
+
+## Rate limits
+
+Publishing is capped per hour, per credential and per account, with the numbers set by your plan. A pipeline that publishes on every push to a busy repository can reach them. A `429` carries `Retry-After` in seconds. See [Rate limits](/api/rate-limits).

@@ -1,0 +1,119 @@
+---
+title: Teams and members
+description: How teams own Spaces, what each role can do, and how to invite people, move Spaces between teams, and set the default access for new Spaces
+sidebar:
+  order: 3
+---
+
+After this page you can read the role table without guessing, invite and remove people, set what new Spaces start out as, and move a Space to another team.
+
+## What a team is
+
+A team is the thing that owns work. Spaces, custom domains, API keys, billing, and members all hang off it. Every claimed Space belongs to exactly one team, even when you are its only member, so there is no separate personal container to reason about.
+
+A team has a name and a slug. The slug is the first segment of its dashboard URLs and you can change it in **Team settings → General**, where a live check tells you whether the new one is free.
+
+| Slug rule | Value |
+|---|---|
+| Characters | Lowercase letters, digits, and hyphens |
+| Length | 3 to 63 characters |
+| Leading or trailing hyphen | Not allowed |
+| Double hyphen (`--`) | Not allowed, it separates version hostnames |
+| All digits | Not allowed |
+| Reserved names | Platform, product, and trademark names are refused, as are dashboard route names |
+
+## Roles
+
+Three roles, and the one you hold in a team caps everything you do there, whether through the dashboard, the CLI, the API, or an agent acting for you.
+
+| Action | Owner | Admin | Member |
+|---|---|---|---|
+| Read the team, its Spaces and versions | Yes | Yes | Yes |
+| Create Spaces, publish, rename a Space | Yes | Yes | Yes |
+| Promote or roll back a version, download one | Yes | Yes | Yes |
+| Start a build | Yes | Yes | Yes |
+| Read domains | Yes | Yes | Yes |
+| Read billing and usage | Yes | Yes | Yes |
+| Delete a Space or a version, export, import | Yes | Yes | No |
+| Add, verify, or assign domains and DNS | Yes | Yes | No |
+| Team variables and webhooks | Yes | Yes | No |
+| Transfer a Space to another team | Yes | Yes | No |
+| Change billing | Yes | Yes | No |
+| Invite, remove, and re-role members | Yes | Yes | No |
+| Create API keys and OAuth clients | Yes | Yes | No |
+| Delete the team | Yes | Yes | No |
+| Grant the owner role | Yes | No | No |
+| Transfer ownership | Yes | No | No |
+
+Owner and admin differ in exactly one place. An admin can hand out `admin` and `member`, but only an owner can make someone else an owner.
+
+## Invite someone
+
+<Steps>
+  <Step title="Open Members">
+    Go to the team and open **Members**. The page has **Members** and **Pending** tabs.
+  </Step>
+  <Step title="Send the invite">
+    Press **Invite member**, type the address, pick **Owner**, **Admin**, or **Member**, and press **Send invite**. They get an email with a join link.
+  </Step>
+  <Step title="They accept">
+    The link opens an accept page. Someone without an account gets **Create account & join** with no code to type, because following the invite link already proved the inbox.
+  </Step>
+</Steps>
+
+From a terminal, `sf teams invitations add teammate@example.com --role member`, plus `ls`, `resend`, and `cancel`.
+
+Things that catch people out:
+
+- **Invitations expire after 7 days.** Resending re-stamps a fresh 7 days.
+- **Pending invitations count against your seat limit.** Members plus pending invites are measured against your plan's team member limit. At the cap, remove a member or cancel an invitation first. See [billing](/billing).
+- **Any account with that verified address can accept**, including someone who added it as a secondary address. If the signed-in account does not hold the address, the page offers to sign in with the invited email or add the address to the current account.
+- **An agent cannot accept an invitation for you.** Accept it in the dashboard and the credentials you already approved pick the team up automatically.
+
+## Change a role or remove someone
+
+On **Members**, each row has role and removal actions for owners and admins. Removing someone takes away their access to the team and every Space in it. Anything they published stays where it is, and you can invite them back later.
+
+Two guards you cannot talk your way past:
+
+- The last owner cannot be removed, and cannot be demoted. Add another owner first.
+- An admin cannot create an owner.
+
+To hand the team over, use **Team settings → Danger zone → Transfer ownership**, pick the new owner, and type the team slug to confirm. You become an admin in the same move.
+
+## Default access for new Spaces
+
+**Team settings → Access** sets how new Spaces on this team start. It applies to Spaces created after the change, and never touches Spaces that already exist.
+
+| Preset | What a new Space gets |
+|---|---|
+| `private` | No access grant at all. Only the team's own access reaches it |
+| `team` | A grant named "Team", so everyone in the team can open it |
+| `public` | A grant named "Public", so anyone with the URL can open it |
+
+The default is `team`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [access and share links](/access).
+
+## Move a Space to another team
+
+Open the Space, then **Space settings → General → Transfer this space** and press **Transfer space…**. Pick the destination team.
+
+- If you are an owner or admin of the destination, the button reads **Move space** and it happens immediately. The Space keeps serving at its current address.
+- Otherwise the button reads **Request transfer**. Owners and admins of the destination team have 7 days to accept, nothing changes until they do, and you can cancel any time before then.
+
+From a terminal:
+
+```bash
+sf spaces transfer <team>
+sf transfers accept <transfer-id>
+sf transfers cancel <transfer-id>
+```
+
+Only owners and admins can transfer a Space. Two consequences to plan for: the old team's Space-scoped API keys stop working the moment the transfer completes, and custom domains keep serving but stay owned by the original team.
+
+## Leave or delete a team
+
+**Team settings → Danger zone** holds both.
+
+**Leave team** is blocked while you are the only member ("Add another owner before you can leave") or the only owner ("Transfer ownership before you can leave").
+
+**Delete this team** asks you to type the team slug. A team that still has Spaces refuses to be deleted, so delete or move its Spaces first. The delete itself is reversible for 30 days, after which it is final.

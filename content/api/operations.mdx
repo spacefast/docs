@@ -1,0 +1,135 @@
+---
+title: Operations
+description: How the Spacefast API handles work that outlives a request, the operation handle, its states, and the polling loop
+sidebar:
+  order: 7
+---
+
+Publishing, promoting, and domain changes can take longer than one HTTP request. After this page you know when the API waits for you, when it hands back a handle instead, and how to follow that handle to a terminal state.
+
+## Waiting is the default
+
+`POST /v1/publish`, `POST /v1/spaces/{spaceId}/versions/{versionId}/finalize`, and `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` all hold the request open until the work settles, then return the finished result. That is the default and it is usually what you want.
+
+Set `?async=1` when you would rather have a handle immediately. `async` accepts `0`, `false`, `1`, and `true`, and defaults to `0`.
+
+:::warning[Give a synchronous publish room]
+A client with a short HTTP timeout will give up on a slow publish while the server keeps going. Either raise the timeout or pass `async=1` and poll.
+:::
+
+Project archives always return a durable build receipt with a poll link instead of holding the request open, whatever `async` says.
+
+## The mutation envelope
+
+Any operation that can outlive its request answers with `operation` alongside `data`:
+
+```json
+{
+  "data": { "id": "ver_8c1d4a7f2e6b0c3d9a5f1e8b4c7d2a6f", "status": "ready", "number": 7 },
+  "operation": null
+}
+```
+
+`operation` is `null` when the work finished inside the request. When it is not null, you have a handle:
+
+```json
+{
+  "data": { "id": "ver_8c1d4a7f2e6b0c3d9a5f1e8b4c7d2a6f", "status": "finalizing", "number": 7 },
+  "operation": {
+    "id": "op_2f6a9d4c1e7b0a3f8d5c2e6b9a4f1d7c",
+    "kind": "version_finalize",
+    "status": "running",
+    "resources": [{ "type": "version", "id": "ver_8c1d4a7f2e6b0c3d9a5f1e8b4c7d2a6f" }],
+    "createdAt": "2026-08-31T09:14:02.111Z"
+  }
+}
+```
+
+The field is always present on those routes, so the wire shape does not change between the fast path and the slow one.
+
+## The operation resource
+
+| Field | Type | What it carries |
+| --- | --- | --- |
+| `id` | `op_…` | The handle. |
+| `kind` | string | What the work is. See the list below. |
+| `status` | enum | `queued`, `running`, `succeeded`, `failed`, `canceled`. |
+| `resources` | array | The `{ type, id }` pairs this operation touches. |
+| `progress` | object | `{ total, completed, failed }` when the work has countable steps. |
+| `diagnostics` | array | Warnings and errors raised along the way. |
+| `createdAt` | ISO 8601 | When it was queued. |
+| `finishedAt` | ISO 8601 | When it reached a terminal state. |
+
+`succeeded`, `failed`, and `canceled` are terminal. `queued` and `running` are not.
+
+Kinds you can see on the public API:
+
+```text
+version_finalize      version_promote_live   version_delete
+build_start           domain_check           domain_ssl_retry
+domain_registration_submit                   domain_transfer_submit
+domain_dns_apply      domain_lifecycle       webhook_deliver
+integration_release
+```
+
+## Poll one operation
+
+```bash
+curl -sS https://api.spacefast.com/v1/operations/op_2f6a9d4c1e7b0a3f8d5c2e6b9a4f1d7c \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+```json
+{
+  "data": {
+    "id": "op_2f6a9d4c1e7b0a3f8d5c2e6b9a4f1d7c",
+    "kind": "version_promote_live",
+    "status": "succeeded",
+    "resources": [{ "type": "version", "id": "ver_8c1d4a7f2e6b0c3d9a5f1e8b4c7d2a6f" }],
+    "progress": { "total": 3, "completed": 3, "failed": 0 },
+    "createdAt": "2026-08-31T09:14:02.111Z",
+    "finishedAt": "2026-08-31T09:14:09.884Z"
+  }
+}
+```
+
+A publish receipt makes this easier still. Its `next` block names one step: `done` (stop), `upload` (push the upload targets, then follow the finalize link), `finalize` (`POST` the url), or `poll` (`GET` the url after `next.retryAfter` seconds).
+
+```ts
+async function settle(operationId: string) {
+  for (;;) {
+    const op = await client.get("/v1/operations/{operationId}", {
+      path: { operationId },
+    });
+    if (op.status !== "queued" && op.status !== "running") return op;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+}
+```
+
+Start at a few hundred milliseconds and back off toward a second. The publish helpers in `@spacefast/sdk` already do this, with a 900 second budget by default.
+
+## List operations
+
+```bash
+curl -sS "https://api.spacefast.com/v1/operations?spaceId=spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c&limit=20" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+| Filter | What it selects |
+| --- | --- |
+| `spaceId` | One Space's own operations plus those of its versions and builds. |
+| `resourceType` | Everything touching one resource type, for example `space`. |
+| `resourceId` | Everything touching one resource. |
+
+The list is cursor-paginated like every other list. See [Pagination](/api/pagination).
+
+Authorization is checked per row through the resource each operation touches, so the feed never shows work your credential could not already reach.
+
+## Cancelling
+
+There is no cancel endpoint on an operation. Builds have their own: `POST /v1/builds/{buildId}/cancel`. A canceled build's operation settles as `canceled`.
+
+## When an operation fails
+
+The operation's `status` becomes `failed` and its `diagnostics` say why. The resource in `data` also carries its own status, so a failed finalize leaves the version at `failed` rather than `ready`. Read the resource, not only the handle, before you decide what to retry. A retry of the original request with the same [idempotency key](/api/idempotency) is safe.

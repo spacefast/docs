@@ -1,0 +1,89 @@
+---
+title: URLs and hostnames
+description: Every hostname a Space answers on, which one counts as the live URL, and what changes when a custom domain takes over
+sidebar: { order: 1 }
+---
+
+After this page you know every hostname a Space answers on, which one the CLI and API report as the live URL, and what happens to the rest once a custom domain is primary.
+
+## The default hostname
+
+Every Space gets one hostname the moment it exists:
+
+```text
+https://{label}.view.fast/
+```
+
+The label comes from the Space slug, lowercased, with every character outside `a-z`, `0-9` and `-` replaced by `-`, runs of hyphens collapsed, and a 63-character cap. A Space with slug `my-site` serves at `https://my-site.view.fast/`.
+
+The default hostname keeps serving for the life of the Space. Adding a custom domain never retires it.
+
+A slug cannot contain `--`, because `--` is the separator between a version or branch label and the Space label in the hostnames below.
+
+## Version URLs
+
+Every version that reaches ready gets a permanent hostname of its own:
+
+```text
+https://v{number}--{label}.view.fast/
+```
+
+Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready and stored on the version row, so it survives a slug rename and keeps serving that exact build no matter what is live now.
+
+The API and the CLI report it as `immutableUrl`, with an `immutableUrlStatus` of `pending` until the hostname is routable.
+
+Version hostnames always carry `X-Robots-Tag: noindex, nofollow`, and their `/robots.txt` is a deny-all that outranks any `robots.txt` you published. Search engines index the live hostname, not the snapshots.
+
+## Branch preview URLs
+
+A version published from a connected Git branch also gets a branch hostname:
+
+```text
+https://br-{alias}--{label}.view.fast/
+```
+
+The alias is clamped to 16 characters. Branch hostnames follow the branch: pushing again repoints the same URL at the newer version. They are noindex for the same reason version hostnames are.
+
+## What the live URL points at
+
+`liveUrl` is the field the publish receipt, the CLI, and the dashboard all report. It resolves through exactly one rule.
+
+| Space state | `liveUrl` |
+| --- | --- |
+| No custom domain | `https://{label}.view.fast/` |
+| Primary domain, state `active` | `https://{primary hostname}/` |
+| Primary domain still verifying, or blocked | `https://{label}.view.fast/` |
+
+It is always `https`, always with a trailing slash on the root, so the same host produces a byte-identical URL everywhere. A primary domain that has not reached `active` does not displace the default hostname, which is why a half-configured domain never publishes a link nobody can load.
+
+## After a custom domain becomes primary
+
+Both hostnames serve. The default hostname stays in the Space's serving set permanently, and requests to it keep returning content, not a redirect. What changes is the URL Spacefast reports for the Space.
+
+If you want the `view.fast` hostname to stop answering with content, there is no switch for it. Point people at the custom domain instead.
+
+The apex and `www` pair is different. When one of them serves, the other gets an automatic 308 to it. See [Custom domains](/domains).
+
+## Renaming a Space
+
+Renaming the slug moves the default hostname to the new label. The old hostname keeps a temporary 307 to the new one, preserving path and query, so links you already handed out still land. Branch hostnames under the old label get the same 307.
+
+Version URLs do not change on a rename. They were computed once and stay put.
+
+## Share links
+
+A share link is the page you want with the secret in the query string:
+
+```text
+https://my-site.view.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+One request returns that page. There is no redirect and no interstitial, so `curl` and an agent get the same document a browser does. Creating, scoping, and revoking them is on [Access and sharing](/access).
+
+## Hostnames you cannot claim
+
+Any hostname ending in `.view.fast` is refused as a custom domain with `domain_reserved_suffix`. Default hostnames pass DNS verification automatically, so allowing them as custom domains would let one team claim an address owned by another team.
+
+## Hostnames that do not serve
+
+A request to a hostname Spacefast does not route, or to a Space that has never published, answers `503` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` It is deliberately not a 404, so a monitoring check can tell "nothing here yet" apart from "this page is missing".

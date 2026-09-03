@@ -1,0 +1,269 @@
+---
+title: sf build and sf builds
+description: Build and pack a project locally, then list, inspect, follow, cancel, and retry the builds Spacefast runs for you
+sidebar:
+  order: 3
+---
+
+After this page you can pack a build output archive on your own machine, and drive every remote build a Space has: list them, read their logs live, cancel one, and retry a finished one.
+
+A build is the thing that turns source into a version. `sf publish --remote` and repository pushes create builds; `sf build` runs the same build locally and leaves you an archive. See [Frameworks and builds](/frameworks) for detection and the build settings model.
+
+## sf build
+
+Build and pack project output.
+
+```text
+sf build [DIR]
+```
+
+Detects build settings, runs the build, and packs the output into an archive. A `zero` runtime compiles the capsule instead and leaves the app shell that `sf publish` would upload. This command talks to your filesystem, not to a Space.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[DIR]` | `.` | Project directory to build |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--root-directory=<value>` | project root | Project subdirectory that contains the app |
+| `--install-directory=<value>` | app root | Project subdirectory to run dependency installation from |
+| `--install-command=<value>` | package-manager detection | Install command |
+| `--build-command=<value>` | framework and package script detection | Build command |
+| `--output-directory=<value>` | framework default | Build output directory relative to the app root |
+| `--env-file=<value>` | none | Local dotenv file to load for install and build commands. Repeatable |
+| `--ignored-build-command=<value>` | none | Command that exits 0 when this build should be skipped |
+| `--skip-install` | off | Skip the install command |
+| `--skip-build` | off | Skip the build command and pack the selected directory unless `--output-directory` is set |
+| `--prebuilt` | off | Pack an already-built output directory. Skips install and build |
+| `--output=<value>` | `.spacefast/build-output.tgz` | Archive path to write |
+| `--dry-run` | off | Print the detected build plan without installing, building, or packing |
+| `--stream` / `--no-stream` | `--stream` | With `--json`, emit a JSONL build event stream. `--no-stream` gives a single result blob |
+
+`sf build --json` streams by default. `sf publish --json` does the opposite and needs `--stream` to opt in.
+
+### Examples
+
+```bash
+sf build
+sf build --root-directory apps/web --output ./apps/web.tgz
+sf build --dry-run
+```
+
+### Output
+
+Human output is the build plan and the build's own stdout, then the archive path. With `--json --stream` each line is one event (`build.started`, `build.log`, `build.succeeded`, `build.failed`).
+
+## sf builds ls
+
+List builds. Alias: `sf builds list`.
+
+```text
+sf builds ls
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--limit=<value>` | `20` | Maximum builds to return. 1 to 100 |
+| `--cursor=<value>` | none | Pagination cursor from a previous response |
+
+### Examples
+
+```bash
+sf builds ls --space docs
+sf builds ls --space docs --limit 5
+```
+
+### Output
+
+Newest first, as a table of `ID`, `STATUS`, `INPUT`, `VERSION`, `CREATED`. When more pages exist, the CLI prints the next `--cursor` to pass. `--json` returns `{ data: [...], pagination: { nextCursor, hasMore } }`.
+
+Build statuses are `waiting_for_source`, `uploading_source`, `queued`, `running`, `succeeded`, `failed`, `canceled`, and `skipped`. The first four are in flight; the rest are terminal. `skipped` means the runner decided not to run the build at all, for example because a newer build for the same branch superseded it.
+
+## sf builds get
+
+Show a build.
+
+```text
+sf builds get BUILD
+```
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<build>` | required | Build ID (`bld_…`) |
+
+### Example
+
+```bash
+sf builds get bld_123
+```
+
+### Output
+
+`Build`, `Space`, `Status`, `Input`, `Root directory`, `Install directory`, `Command`, `Produced version`, `Reused version`, `Created`, `Finished`, then one line per diagnostic. `--json` returns `{ build }`.
+
+## sf builds logs
+
+Print build logs.
+
+```text
+sf builds logs BUILD
+```
+
+Prints build runner log lines, newest first. With `--follow` it streams until the build reaches a terminal state.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<build>` | required | Build ID (`bld_…`) |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-f, --follow` | off | Follow live build logs until the build reaches a terminal state |
+| `--limit=<value>` | server default | Maximum number of log lines. 1 to 100 |
+| `--cursor=<value>` | none | Pagination cursor from a previous response |
+
+### Examples
+
+```bash
+sf builds logs bld_123
+sf builds logs bld_123 --follow
+```
+
+### Output
+
+One line per entry, `timestamp level message`. With `--follow`, `--json` returns `{ build }` for the terminal build once the stream ends.
+
+## sf builds cancel
+
+Cancel a build.
+
+```text
+sf builds cancel BUILD
+```
+
+Idempotent: a build already in a terminal state comes back unchanged. A build that has passed the publish boundary refuses to cancel.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<build>` | required | Build ID (`bld_…`) |
+
+### Example
+
+```bash
+sf builds cancel bld_123
+```
+
+### Output
+
+The same build block `sf builds get` prints, in its new state. `--json` returns `{ build }`.
+
+## sf builds retry
+
+Retry a terminal build.
+
+```text
+sf builds retry BUILD
+```
+
+Retries a terminal build with the same input, settings, and target. The retry is a new build that reuses the original immutable input.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<build>` | required | Build ID (`bld_…`) to retry |
+
+### Example
+
+```bash
+sf builds retry bld_123
+```
+
+### Output
+
+`Retry queued: bld_…` plus the build block, or `Retry waiting for source archive upload` with an `Upload URL` and `Upload expires` when the retry needs its source archive again. `--json` returns `{ build, upload }`.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `build_retry_requires_terminal_state` | 2 | The build is still running. Wait, or cancel it first |
+
+## sf builds refresh-upload
+
+Refresh source archive upload.
+
+```text
+sf builds refresh-upload BUILD
+```
+
+Refreshes the upload instruction for a build waiting on its source archive. Source-archive upload URLs expire after 60 minutes; this mints a new one without creating a new build.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<build>` | required | Build ID (`bld_…`) waiting for source archive upload |
+
+### Example
+
+```bash
+sf builds refresh-upload bld_123
+```
+
+### Output
+
+`Upload instruction refreshed: bld_…` with the new `Upload URL` and `Upload expires`, or `Build no longer needs source archive upload` when the archive already landed. `--json` returns `{ build, upload }`.
+
+## sf builds detect
+
+Detect framework and build settings.
+
+```text
+sf builds detect
+```
+
+Inspects a Space's repository connection and shows the detected app, ranked candidates when the repository holds more than one, and any platform config it found that Spacefast cannot convert. This reads the repository, not your working directory.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--connection-type=connected\|hosted` | `connected` | Repository connection type |
+| `--ref=<value>` | default branch | Git ref to inspect |
+| `--root-directory=<value>` | repository root | App root directory to inspect |
+| `--apply-best` | off | Save the highest-ranked detected candidate as the repository build settings |
+
+### Examples
+
+```bash
+sf builds detect --space docs
+sf builds detect --space docs --root-directory apps/web --apply-best
+```
+
+### Output
+
+Two tables. Candidates, as `ROOT`, `INSTALL`, `SCORE`, `FRAMEWORK`, `BUILD`, `OUTPUT`, `REASONS`; and unsupported platform config, as `PLATFORM`, `ROOT`, `BUILD`, `OUTPUT`, `UNSUPPORTED`. Candidates score higher for a matched framework preset and for a build script.
+
+## sf redeploy
+
+`sf redeploy` retries the latest build without naming it. It is documented with the other version commands on the [versions page](/cli/versions).

@@ -7,7 +7,7 @@ import {
   deploymentBase,
   resolveRedirect,
 } from "./redirect-rules.mjs";
-import { routesFromSidebar } from "./sidebar-routes.mjs";
+import { readSidebarRoutes } from "./sidebar-routes.mjs";
 
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
@@ -119,40 +119,31 @@ function representativeRedirect(redirect) {
 if (!(await exists(dist))) {
   throw new Error("Missing dist/. Run `bun run build` first.");
 }
-// The sidebar in blume.config.ts is the route manifest: every entry must
-// build an indexable page, and nothing ships outside it.
-const requiredIaRoutes = [
-  ...(await readFile(path.join(root, "blume.config.ts"), "utf8").then(routesFromSidebar)),
-];
+// Every authored route and generated reference index must build an indexable page.
+const requiredIaRoutes = [...(await readSidebarRoutes(root))];
 if (requiredIaRoutes.length === 0) {
-  throw new Error("The blume.config.ts sidebar declares no routes.");
+  throw new Error("The content directory declares no routes.");
 }
 const representativePages = [
-  // Blume canonicalizes the home page to the bare site origin; every other
-  // page carries the deployment base.
-  ["index.html", site, "Spacefast documentation"],
-  ["start/index.html", `${docsRoot}/start`, "Tell your agent"],
-  ["operate/spaces/index.html", `${docsRoot}/operate/spaces`, "Manage spaces"],
-  ["publish/versions/index.html", `${docsRoot}/publish/versions`, "The release boundary"],
-  ["agents/mcp/index.html", `${docsRoot}/agents/mcp`, "Hosted or on-device"],
-  ["api/index.html", `${docsRoot}/api`, "The response envelope"],
-  ["api/reference/index.html", `${docsRoot}/api/reference`, "REST API"],
-  ["cli/index.html", `${docsRoot}/cli`, "CLI reference"],
+  ["index.html", docsRoot, "Spacefast hosts"],
+  ["quickstart/index.html", `${docsRoot}/quickstart`, "Before you start"],
+  ["publish/index.html", `${docsRoot}/publish`, "What gets uploaded"],
+  ["versions/index.html", `${docsRoot}/versions`, "immutable"],
+  ["agents/mcp-server/index.html", `${docsRoot}/agents/mcp-server`, "MCP"],
+  ["api/index.html", `${docsRoot}/api`, "Response envelopes"],
+  ["api/reference/index.html", `${docsRoot}/api/reference`, "Spacefast API"],
+  ["cli/index.html", `${docsRoot}/cli`, "Global flags"],
+  ["cli/reference/index.html", `${docsRoot}/cli/reference`, "CLI reference"],
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
-  ["guides/frameworks/vite/index.html", `${docsRoot}/guides/frameworks/vite`, "Plain Vite"],
-  [
-    "guides/migrate/vercel/index.html",
-    `${docsRoot}/guides/migrate/vercel`,
-    "Static Next.js export",
-  ],
-  ["platforms/api/reference/index.html", `${docsRoot}/platforms/api/reference`, "Platform API"],
+  ["recipes/vite/index.html", `${docsRoot}/recipes/vite`, "Vite"],
+  ["zero/index.html", `${docsRoot}/zero`, "What Zero is"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);
 }
 for (const route of requiredIaRoutes) {
-  await requirePage(localTargetFor(route), route === "/" ? site : `${docsRoot}${route}`);
+  await requirePage(localTargetFor(route), route === "/" ? docsRoot : `${docsRoot}${route}`);
 }
 
 const notFound = await readBuilt("404.html");
@@ -163,10 +154,11 @@ if (!notFound.includes("Page not found") || !notFound.includes(`href="${deployme
 for (const artifact of [
   "index.md",
   "index.mdx",
-  "start.md",
-  "start.mdx",
+  "quickstart.md",
+  "quickstart.mdx",
   "api/reference.md",
   "cli.md",
+  "cli/reference.md",
   "errors/rate_limited.md",
   "llms.txt",
   "llms-full.txt",
@@ -223,10 +215,7 @@ if (
 
 const sitemap = await readBuilt("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/gu)].map((match) => match[1]);
-// The home page canonicalizes to the bare origin but is listed at the base.
-const sitemapExpected = representativePages.map(([, canonical]) =>
-  canonical === site ? docsRoot : canonical,
-);
+const sitemapExpected = representativePages.map(([, canonical]) => canonical);
 for (const expected of sitemapExpected) {
   if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === expected)) {
     throw new Error(`Sitemap is missing ${expected}`);
@@ -240,15 +229,16 @@ if (
 if (new Set(sitemapUrls).size !== sitemapUrls.length) {
   throw new Error("Sitemap contains duplicate URLs.");
 }
-// Owner rule: this site never ships a noindex page. Every page is indexable,
-// searchable, and advertised in the sitemap. The generated `/setup/*` pages
-// are the one place content is duplicated across surfaces (spec §5.1) — they
-// stay indexable and instead declare a canonical straight at the www copy
-// that owns that content for search, which the audit accepts and the sitemap
-// still lists.
+// Owner rule: every content page is indexable, searchable, and advertised in
+// the sitemap. Redirect documents are not content pages and Blume correctly
+// marks them noindex. The generated `/setup/*` pages are the one place content
+// is duplicated across surfaces (spec §5.1) — they stay indexable and instead
+// declare a canonical straight at the www copy that owns that content for
+// search, which the audit accepts and the sitemap still lists.
 for (const file of await htmlFilesUnder(dist)) {
   const html = await readBuilt(file);
-  if (/<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
+  const isRedirect = /<meta\s+http-equiv="refresh"/u.test(html);
+  if (!isRedirect && /<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
     throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
   }
 }
@@ -294,7 +284,7 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 // pages, API operations, and per-release changelog entries are collapsed to
 // their index pages by scripts/build-llms-index.mjs, because ~1,100 operation
 // titles ahead of anything actionable is worse than useless to an agent. What
-// survives is the sidebar plus the generated agent setup pages, and that is the
+// survives is the authored route set plus the generated agent setup pages, and that is the
 // invariant checked here. Only link targets count; the preamble's prose and
 // code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
@@ -322,12 +312,12 @@ const strayLlmsRoutes = [...llmsRoutes].filter(
 );
 if (strayLlmsRoutes.length > 0) {
   throw new Error(
-    `llms.txt lists routes that are neither in the sidebar nor generated agent setup pages: ${strayLlmsRoutes.join(", ")}`,
+    `llms.txt lists routes that are neither authored nor generated agent setup pages: ${strayLlmsRoutes.join(", ")}`,
   );
 }
 const missingLlmsRoutes = requiredIaRoutes.filter((route) => !llmsRoutes.has(route));
 if (missingLlmsRoutes.length > 0) {
-  throw new Error(`llms.txt is missing sidebar routes: ${missingLlmsRoutes.join(", ")}`);
+  throw new Error(`llms.txt is missing authored routes: ${missingLlmsRoutes.join(", ")}`);
 }
 for (const route of llmsRoutes) {
   if (!(await exists(path.join(dist, localTargetFor(route))))) {
@@ -336,7 +326,7 @@ for (const route of llmsRoutes) {
 }
 // Each collapsed family contributes its index page and nothing more. This is
 // what stops the "## Other" pile from quietly returning.
-for (const collapsed of ["/errors", "/api/reference", "/platforms/api/reference", "/changelog"]) {
+for (const collapsed of ["/errors", "/api/reference", "/changelog"]) {
   const descendants = [...llmsRoutes].filter((route) => route.startsWith(`${collapsed}/`));
   const unexpected = descendants.filter((route) => !requiredIaRoutes.includes(route));
   if (unexpected.length > 0) {
@@ -461,10 +451,6 @@ for (const redirect of generatedRedirects) {
     );
   }
 }
-if (await exists(path.join(dist, "api/operations/index.html"))) {
-  throw new Error("Compatibility redirects must not become indexed HTML pages.");
-}
-
 const htmlFiles = await htmlFilesUnder(dist);
 for (const file of htmlFiles) {
   const html = await readFile(path.join(dist, file), "utf8");

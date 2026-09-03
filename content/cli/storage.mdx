@@ -1,0 +1,140 @@
+---
+title: storage and logs
+description: List and delete the objects a Space's app uploaded, and read the request and handler logs the Space produced
+sidebar:
+  order: 23
+---
+
+After this page you can list what your app has stored, delete an object as the Space owner, page through the requests the edge served, and follow what your own code logged.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+## sf storage
+
+List object metadata and quota usage for files uploaded by a Space's app.
+
+This is runtime object storage, not your published files. Only a Space with a runtime app has any. Objects are addressed by a bare 32-character hex id. There is no key and no per-object visibility.
+
+```text
+sf storage [target] [--space <value>] [--limit <n>] [--cursor <value>]
+```
+
+`sf storage ls` is the same command with the same flags, aliased as `sf storage list`.
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--limit=<n>` | `50` | Maximum objects to return. Maximum 100 |
+| `--cursor=<value>` | none | Continue from the opaque cursor returned by the last page |
+
+```bash
+sf storage
+sf storage docs --limit 10
+sf storage ls --space docs
+```
+
+### Output
+
+A table of `Id | Size | Type | Uploaded by | Created`, or "No stored objects." A further page prints as `Next cursor: <value>`.
+
+With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
+
+There is no `sf storage upload`. Uploading is an API call, or `storage.upload()` from the client SDK inside your app.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--limit` or `--cursor` did not parse. Raised before the request |
+
+## sf storage rm
+
+Force-delete an app storage object as the Space owner, regardless of who uploaded it. Aliased as `sf storage remove` and `sf storage delete`.
+
+```text
+sf storage rm [id] [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[id]` | Object id, for example `0123456789abcdef0123456789abcdef` |
+
+No command-specific flags.
+
+The id must be the 32-character hex id `sf storage` lists. A path-shaped value is rejected. This is a destructive remote action, so it prompts unless you pass `-y`. Delete is idempotent: an already-gone object prints "`<id>` was already gone."
+
+```bash
+sf storage rm 0123456789abcdef0123456789abcdef --yes
+```
+
+### Output
+
+With `--json`, `data` carries `deleted`.
+
+## sf logs
+
+Read a Space's logs.
+
+`access` is every request the edge served. `runtime` is what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
+
+Runtime lines are written on the origin, shipped, and indexed before they can be read back, so a line you just triggered takes a while to appear. **An empty page means not yet, not broken.** A page can come back empty while there is still more to read, so keep paging while the cursor is there.
+
+```text
+sf logs [target] [kind] [--space <value>] [--limit <n>] [-f] [--cursor <value>]
+  [--request-id <value>] [--handler <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+| `[kind]` | `access` or `runtime`. Defaults to `access` |
+
+A bare kind in the first slot works: `sf logs runtime` is the same as `sf logs --space <linked> runtime`.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--limit=<n>` | `50` | Maximum number of log entries. Minimum 1, maximum 100 |
+| `-f, --follow` | `false` | Poll for new entries every 2 seconds until interrupted with Ctrl-C |
+| `--cursor=<value>` | none | Continue from the cursor printed by the previous page |
+| `--request-id=<value>` | none | Runtime logs only. Everything logged while serving one request |
+| `--handler=<value>` | none | Runtime logs only. Lines from one Zero mutation or Functions handler |
+
+`--follow` polls, it does not stream over a socket. It dedupes by the whole entry and remembers up to 5,000 keys.
+
+```bash
+sf logs
+sf logs runtime --follow
+sf logs docs runtime
+sf logs runtime --request-id req_9f21
+sf logs runtime --follow --json
+```
+
+### Output
+
+Access entries carry `timestamp`, `host`, `method`, `path`, `status`, and `bytes`. Runtime entries carry `id`, `timestamp`, `level` (`debug`, `info`, `warn`, or `error`), `requestId`, `versionId`, `handlerName`, `message`, and `metadata`.
+
+Paged human output ends with `More: --cursor <value>` when there is another page, otherwise "Nothing logged yet." or "No requests yet."
+
+`--follow --json` emits one JSON object per line, then a final `{"data":{"followed":true,"kind":"..."}}` when you interrupt it. That makes it safe to pipe into `jq`.
+
+Log history is a plan limit. A request that reaches past your retention window is clamped to the effective start, with a `log_retention_clamped` warning naming it. See [limits](/limits).
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `kind` is not `access` or `runtime` |
+| `validation_error` | 2 | `--request-id` or `--handler` passed with the access log |

@@ -1,0 +1,54 @@
+---
+title: Next.js
+description: Build a Next.js app with the bundled Spacefast adapter, or publish a static export from an older Next
+---
+
+Next.js is detected by its `next` dependency. A project that also depends on `nextra` matches the Nextra row instead, which builds and outputs the same way.
+
+## What to build
+
+The default `next build`. Before it runs, the CLI points Next at the bundled `@spacefast/next-adapter` through the `NEXT_ADAPTER_PATH` environment variable, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
+
+## The output directory
+
+`out`.
+
+## Publish
+
+```bash
+sf publish
+```
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Live URL      https://quiet-harbor.view.fast
+  Version URL   https://v3--quiet-harbor.view.fast
+  Version       v3 (ready)
+  Files         212
+```
+
+## The gotcha
+
+Automatic Next builds require **Next 16.2 or newer**. 16.2 is the version where Next gained the adapter hook the Spacefast adapter runs on, and the facts that adapter records are what turn the build into a serving plan. On anything older the CLI refuses before it builds:
+
+```text
+next_version_unsupported
+```
+
+That is exit code 2. There is no fallback below the floor, because a publish classified from guessed facts is worse than a refused one.
+
+On an older Next, do the export yourself and upload it:
+
+```js next.config.js
+module.exports = { output: "export" };
+```
+
+```bash
+npx next build
+sf publish ./out --prebuilt
+```
+
+One related failure mode. If a custom build command runs `next build` in a way that loses the environment the CLI set, the adapter never runs, and the publish stops with `build_failed` saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.

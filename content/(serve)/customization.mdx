@@ -1,0 +1,117 @@
+---
+title: Customization
+description: Theme the pages Spacefast draws, set the title and image links unfurl with, add an analytics tag, and run one site-wide script
+---
+
+After this page you can brand the pages Spacefast draws for your Space, control how a link to it unfurls, add a Google Analytics or Tag Manager id, and run one script on every published page.
+
+Open the Space and go to **Customization**. Four tabs, in order: **Theme**, **Search & sharing**, **Google Analytics**, and **Custom JS**. A large live preview sits beside the controls, labelled **Visitor sees**, painted from your unsaved draft.
+
+## What lives on the Space, not the version
+
+Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published `sf.jsonc`: the Space's `theme` replaces the file's rather than merging with it, so a project that sets `theme` in its config and then edits Theme here keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
+
+Theme and share metadata apply without republishing. Save, and the next request gets them. **Custom JS** is the exception, and its own field note says so: a script change takes effect on the next publish.
+
+Everything the four tabs write is `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
+
+## Theme
+
+Blank means the platform default. The tab's own lead says everything here is optional and suggests starting with an accent.
+
+| Group | Field | Config key | What it does |
+| --- | --- | --- | --- |
+| Brand | **Logo** | `theme.logo` | Shown at 28px beside your name on every Spacefast-drawn page. An `https://` URL or a root-relative path, up to 2000 characters |
+| Brand | **Display name** | `theme.name` | The name in the brand row, 1 to 120 characters |
+| Color | **Accent** | `theme.accent` | Buttons and fills. Placeholder `#ea580c` |
+| Color | **Background** | `theme.background` | Page background. Blank follows the visitor |
+| Type | **Font stack** | `theme.font` | A plain CSS font-family stack, no imports, up to 256 characters |
+| Badge | **Hide "Powered by Spacefast"** | `theme.hideSpacefastBranding` | Removes the badge from the pages Spacefast draws |
+
+Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names, up to 64 characters. Uploading a logo stages the file, and the field says it uploads to your Space when you save. A logo path that is not in the live version warns "This path isn't in your live version yet."
+
+### The background pins the color scheme
+
+Leave **Background** blank and the pages follow each visitor's device, light or dark. The field's default note says exactly that.
+
+Set it, and it stops following. Spacefast reads the color you gave, decides whether it is light or dark, and serves that one scheme to everyone. The field flips to **Pinned.** with a line saying the color reads as dark or light so every visitor gets that scheme, plus **Clear to follow visitors again**. The preview's Auto/Light/Dark switcher is replaced by a locked **Pinned · Dark** or **Pinned · Light** chip, because there is no longer anything to simulate.
+
+### The badge is a paid-plan entitlement <Badge variant="accent">Plus and up</Badge>
+
+On the free plan the switch is disabled and reads "The badge stays on the free plan." with a link to billing. Plus, Pro, and Enterprise turn it on.
+
+The gate is enforced at publish too, not only in the dashboard. Publishing a version whose effective theme sets `hideSpacefastBranding` without the entitlement fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding requires a paid plan."
+
+### Code override
+
+A page your version ships as its own file is not repainted by these controls. The preview badges it **Code override.** and says the page ships from that file, with a hint pointing at `_pages/<id>.html`. See [Layout, theme, and site pages](/site-pages).
+
+## Search and sharing
+
+What a browser tab, a link unfurl, and a search result show.
+
+| Field | Config key | Cap |
+| --- | --- | --- |
+| **Title** | `meta.title` | 300 characters |
+| **Description** | `meta.description` | 1000 characters |
+| **Social image** | `meta.image` | 2000 characters |
+| **Favicon** | `meta.favicon` | 2000 characters |
+
+The Title help text reads "Browser tabs, link unfurls, and search results." The Social image note says 1200 × 630 fills the card exactly, with placeholder `/og.png`. Favicon takes an upload or a path, placeholder `/favicon.ico`. A value longer than what previews show appends ", cut off in most previews" under the field rather than refusing it.
+
+**Import from a live page** under **Shortcut** pulls title, description, and image from a page you have already published. Give it a path and press **Fetch**.
+
+Two previews sit beside the fields, **Link unfurl · iMessage, Slack, X** and **Search result**.
+
+## Analytics tags
+
+The **Google Analytics** tab holds two cards, **Google Analytics** and **Google Tag Manager**. Each has a **Collect analytics** switch and one id field.
+
+| Card | Field | Config key | Accepted |
+| --- | --- | --- | --- |
+| Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-` followed by 4 or more letters or digits |
+| Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-` followed by 4 or more letters or digits |
+
+An id that does not match is refused on save with "Enter a valid GA4 measurement ID." or "Enter a valid web container ID.", and the card's badge reads **Invalid ID**. A card with its switch off reads **Off** and says nothing is sent until you turn it on. With it on and the id valid, the badge reads **Enabled** and the field note becomes "This tool loads on every published page."
+
+### Page enhancements has to be on first
+
+Analytics and custom code both ride the Space's injection master switch. With it off, both tabs show the warning **Page enhancements is off.** / "Turn it on before analytics can load on published pages." and every control is disabled, with an **Enable page enhancements** button that flips it in place.
+
+The switch itself lives in **Settings** under **Page enhancements**, described as "Inject performance, SEO, analytics, and comment features into published pages." Turning it off keeps every saved setting ready to restore. When it is on, an **Active now** row lists what is being injected right now.
+
+## Custom JS
+
+One card, **Site-wide JavaScript**, with a **Run custom code** switch and a **JavaScript** textarea. The script applies to every published page view and is stored as the first entry in `superpowers.javascriptTags`.
+
+Do not include `<script>` tags. The field's own note says changes take effect on the next publish. A snippet is capped at 8 KiB.
+
+:::warning[Custom code runs with your page]
+Only paste code you trust. A broken script can break the page for visitors.
+:::
+
+## Copy as spacefast.jsonc
+
+The header's **Copy as spacefast.jsonc** button, titled "Theme and share metadata for your repo", copies the current draft as JSON. It emits exactly the `meta` and `theme` objects, with empty fields dropped:
+
+```jsonc sf.jsonc
+{
+  "meta": {
+    "title": "My App",
+    "description": "What this site is",
+    "image": "/og.png",
+    "favicon": "/favicon.ico"
+  },
+  "theme": {
+    "name": "My App",
+    "logo": "/logo.svg",
+    "accent": "#0d9488",
+    "background": "#ffffff",
+    "font": "Inter, system-ui, sans-serif"
+  }
+}
+```
+
+Paste it into your project's `sf.jsonc` and those two keys travel with the repository. `spacefast.jsonc` is the button's wording and a legacy filename the loader still accepts; the canonical name is `sf.jsonc`. The rest of the file is unaffected, and both keys work under either name.
+
+One thing to know before you paste it: as long as the Space also carries a `theme`, the Space keeps winning. Clear the Theme tab's fields if you want the file to be the source of truth.

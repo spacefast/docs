@@ -1,0 +1,58 @@
+---
+title: Plain HTML
+description: Publish a folder of HTML, CSS, and images with no build step and no package manager
+---
+
+A folder of HTML, CSS, images, and fonts publishes exactly as it sits on disk. No toolchain, no config file.
+
+## What to build
+
+Nothing. Write `index.html` and put the assets next to it.
+
+```text
+site/
+  index.html
+  about.html
+  styles.css
+  logo.svg
+```
+
+## The output directory
+
+The folder itself. There is no build output to find, so you hand `sf publish` the directory you wrote.
+
+## Publish
+
+```bash
+sf publish ./site
+```
+
+A single file works too. `sf publish ./index.html` sends one file and serves it at `/index.html`.
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Open          https://quiet-harbor.view.fast
+  Live URL      https://quiet-harbor.view.fast
+  Version URL   https://v1--quiet-harbor.view.fast
+  Version       v1 (ready)
+  Files         4
+```
+
+`about.html` answers `/about` as well as `/about.html`, because clean URLs are on by default. See [Redirects, rewrites, and headers](/routing) for that and for the `_redirects` and `_headers` files, which publish alongside your pages.
+
+## The gotcha
+
+`sf publish` decides between "upload this" and "build this" from the file names in the folder. A `package.json`, a lockfile, or a framework config file sitting next to your `index.html` flips it to the build path, and then it installs dependencies and looks for a build command you may not have.
+
+Force the upload path:
+
+```bash
+sf publish ./site --prebuilt
+```
+
+The same rule applies to a `.zip`. An archive publishes as static files when it holds an `index.html` and none of those build markers.
+
+Full detection rules are on [Frameworks and builds](/frameworks).

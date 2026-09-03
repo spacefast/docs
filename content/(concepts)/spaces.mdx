@@ -1,0 +1,158 @@
+---
+title: Spaces
+description: What a Space is, the slug rules the API enforces, who owns it, and what a rename or a delete does to the URLs you already handed out
+sidebar:
+  order: 1
+---
+
+After this page you can pick a slug the API will accept, find any Space from the CLI or the dashboard, and predict exactly what a rename or a delete does to links you already shared.
+
+## What a Space is
+
+A Space is one site. It owns a slug, a hostname, an owner, and one pointer that says which version visitors get. Everything you publish lands in a Space as a new immutable version, and the Space decides which of them is live.
+
+Ids are `spc_` plus 32 hex characters:
+
+```text
+spc_9f2c1ab34d5e4f6789ab01cd23ef4567
+```
+
+Anywhere the CLI takes `--space`, you can pass that id, the slug, the live URL, or a custom domain pointed at it.
+
+## Slug rules
+
+The slug is the name in the dashboard URL and the label in every hostname the Space answers on.
+
+| Rule | Value |
+| --- | --- |
+| Characters | `a-z`, `0-9`, and `-` |
+| Length | 3 to 55 characters |
+| Leading or trailing `-` | Rejected |
+| `--` anywhere | Rejected |
+| All digits | Rejected |
+
+Spacefast trims whitespace, strips diacritics, and lowercases your input. It reshapes nothing else, so `My Site` is rejected and `my-site` passes. A failing slug comes back as `slug_invalid` with a sentence saying which rule you hit.
+
+`--` is out because it separates a version or branch label from the Space label in hostnames. See [URLs and hostnames](/urls).
+
+### Reserved slugs
+
+Four classes come back as `slug_reserved`:
+
+- Infrastructure names, such as `www`, `mail`, `cdn`, `ns1`, and `ftp`.
+- Spacefast product and platform names, such as `api`, `app`, `dashboard`, `login`, `mcp`, and `cli`.
+- Well-known brand names held against impersonation, such as `google`, `github`, and `stripe`.
+- Any slug containing `spacefast`, `stattic`, `automattic`, `wordpress`, or `paypal` as a substring.
+
+The substring class survives numeric suffixing, so `paypal-2` fails for the same reason `paypal` does. Pick a different base word instead of adding a number.
+
+Dashboard route names are reserved too, and the reservation is scoped to the position. `settings` is refused as a Space slug and accepted as a team slug. Refused as Space slugs: `agents`, `api-keys`, `billing`, `connect`, `domains`, `drop`, `handoffs`, `members`, `new`, `partners`, `resume`, `settings`, `variables`, `webhooks`. The `422` carries a `details.suggestion` you can take as-is.
+
+A retired slug stays taken. After a rename the old slug belongs to that Space forever, and anyone else asking for it gets `422` `slug_unavailable`.
+
+Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getslugavailability).
+
+## The default hostname
+
+Every Space answers at `https://<slug>.view.fast/` from the moment it exists, and keeps that hostname for life. Adding a custom domain never retires it. Version and branch hostnames, the live URL rule, and what a rename does to each are on [URLs and hostnames](/urls).
+
+## Who owns a Space
+
+Exactly one owner, one of two kinds:
+
+- **A team.** The normal case. Team members reach the Space by their role, and slugs are unique per team rather than globally, so two teams can both own `docs`.
+- **A space key.** A Space published without an account is owned by its `sfc_` key until someone claims it. See [Publish without an account](/anonymous-and-claim).
+
+To move a Space to another team, run `sf spaces transfer <team> --space docs`, or open **Space settings → General → Transfer this space → Transfer space…**. If you are an owner or admin of both teams the move is instant and the Space keeps serving at its current address. Otherwise the target team has 7 days to accept, and nothing changes until they do. Roles and membership are on [Teams](/teams).
+
+## Access when you create one
+
+A new Space starts at one of three presets.
+
+| Preset | Who can open the live site |
+| --- | --- |
+| `private` | Only people you name |
+| `team` | Everyone in the owning team |
+| `public` | Anyone with the URL |
+
+Set it on the request that creates the Space, with `sf publish --access public` or the `access` field on `createPublish` and [`createSpace`](/api/reference/spaces/createspace). Sending `access` together with a `spaceId` is a validation error, because the field only applies at creation. Omit it and the Space takes the owning team's default for new Spaces.
+
+Everything after that, including people, share links, passwords, and access requests, is on [Access and sharing](/access).
+
+## Find your Spaces
+
+<Tabs>
+<Tab title="CLI">
+
+```bash
+sf spaces ls
+sf spaces ls --team acme --limit 100
+sf spaces get --space docs
+```
+
+`sf spaces get` prints the live runtime state and the current version. `sf status` tells you which Space the current directory is linked to.
+
+</Tab>
+<Tab title="Dashboard">
+
+The team page lists every Space you can reach, and **Add space** starts a new one. Open a Space to land on **Overview**, which carries the live address, the last publish, and a **Roll back to** shortcut.
+
+</Tab>
+<Tab title="API">
+
+```bash
+curl https://api.spacefast.com/v1/spaces \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+[`listSpaces`](/api/reference/spaces/listspaces) is cursor paginated. [`resolveSpace`](/api/reference/spaces/resolvespace) turns an id, hostname, URL, or slug into one Space.
+
+</Tab>
+</Tabs>
+
+## Renaming
+
+A rename moves the slug and the managed hostname together.
+
+```bash
+sf spaces update --space docs --slug developers
+```
+
+In the dashboard it is **Space settings → General → Managed address → Change managed address**. Over HTTP, `PATCH /v1/spaces/{spaceId}` takes `slug` and refuses it alongside any other field, so send it by itself.
+
+What changes:
+
+- The default hostname moves to the new slug.
+- The old hostname keeps a temporary `307` that preserves path and query.
+- The old slug stays reserved for this Space.
+- Version URLs do not move. They were computed once and stored.
+
+One thing blocks a rename. While `name` is set in your `sf.jsonc`, the API refuses to rename the Space, because the file would win back the old name on the next publish. Remove the key or rename it in the file. See [Config file](/config-file).
+
+## Deleting and restoring
+
+Deleting is a takedown, and it takes effect at once.
+
+```bash
+sf spaces rm --space docs
+```
+
+In the dashboard it is **Space settings → General → Delete this space → Delete space**. Over HTTP it is [`deleteSpace`](/api/reference/spaces/deletespace).
+
+| What | What happens |
+| --- | --- |
+| The live URL | Stops serving immediately |
+| Custom domains assigned here | Stop routing and become unassigned |
+| The slug and every hostname it held | Stay retired, so nobody picks up your old address |
+| Content and versions | Retained behind the takedown, not erased on the spot |
+| Undo | Not available to you once a team-owned Space is deleted |
+
+:::warning[There is no undo for a team-owned Space]
+Deleting a Space you own is final from your side. Transfer it instead if someone else should keep it.
+:::
+
+The one reversible case is a Space you deleted with its space key. [`restoreSpace`](/api/reference/spaces/restorespace) accepts that same key while the key is still valid and brings the Space back. Any other credential, or any other reason the Space went dark, answers `space_not_restorable`.
+
+## Published without an account
+
+A Space created by an anonymous publish runs on a 6-hour clock and a single `sfc_` key. Claiming it moves it into a team and keeps its hostname. That whole path is on [Publish without an account](/anonymous-and-claim).

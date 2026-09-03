@@ -1,0 +1,97 @@
+---
+title: sf api
+description: Call any public Spacefast API endpoint with the credential the CLI already has, including cursor pagination and binary downloads
+sidebar:
+  order: 11
+---
+
+`sf api` sends a signed request to the public API using whatever credential the CLI already resolved, so you never build an `Authorization` header by hand. Use it for endpoints that have no dedicated command yet, and for scripting against the raw contract.
+
+Call the Spacefast API directly.
+
+```text
+sf api [METHOD] PATH [-i <body>] [--idempotency-key <key>] [--include] [--paginate] [--output <file> | --raw-stdout]
+```
+
+## Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `<methodOrPath>` | HTTP method (`GET`, `POST`, `PATCH`, `PUT`, `DELETE`) or the request path. |
+| `[path]` | Request path, for example `/v1/spaces/{spaceId}/versions`. Required when the first argument is a method. |
+
+If the first argument matches a method it is treated as one and the second argument becomes the path. Otherwise the method defaults to `GET`. A missing path fails with `Usage: sf api [METHOD] /v1/<path>`.
+
+## Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-i, --input=<value>` | none | JSON request body. A literal string, `@file`, or `-` for stdin. |
+| `--idempotency-key=<value>` | none | Replay-safe logical-attempt key for retryable mutations. Sent as the idempotency header. |
+| `--include` | off | Write the HTTP status and a safe subset of response headers to stderr. |
+| `--paginate` | off | Emit every page of a cursor-paginated list `GET` as JSON Lines. |
+| `--output=<file>` | none | Write a non-JSON response body to a file. Exclusive with `--raw-stdout`. |
+| `--raw-stdout` | off | Write a non-JSON response body to stdout. Exclusive with `--output`. |
+
+Global flags apply, with one exception. `sf api --help` lists `--json` because every command inherits it, but `sf api` never renders a `{ data }` envelope. It prints the response from the API. Agent mode knows this and does not append `--json` to `sf api`.
+
+## Examples
+
+```bash
+sf api /v1/me
+sf api GET /v1/spaces/spc_123/versions --paginate
+sf api POST /v1/publish --input @publish.json --idempotency-key 01J-logical-attempt
+echo '{"name":"x"}' | sf api POST /v1/teams --input -
+sf api GET /v1/spaces/spc_123/versions/ver_123/archive --output site.tar.gz
+```
+
+## What it will not call
+
+`sf api` calls the public contract and nothing else. It takes an API-relative path, never an absolute URL or an origin.
+
+| Path | Result |
+| --- | --- |
+| Anything outside `/v1/` | `path_not_public` (exit 2) |
+| `/v1/mcp…` | `audience_not_callable` (exit 2) |
+| `/v1/auth/agent-handoffs…` | `audience_not_callable` (exit 2) |
+| `/v1/teams/{teamId}/billing…` | `audience_not_callable` (exit 2), manage billing in the dashboard |
+| `/v1/internal…` | `audience_not_callable` (exit 2) |
+
+Paths are also normalized before they go out. A URL fragment, a backslash, a `.` or `..` segment, an encoded separator, or invalid percent-encoding each fails with `validation_error` (exit 2) rather than being sent.
+
+## Pagination
+
+`--paginate` works only on cursor-paginated list endpoints, the ones declared as cursor lists in the published OpenAPI spec. See [pagination](/api/pagination) for which those are and how the cursor works.
+
+It follows `pagination.nextCursor` until it runs out and prints one page per line as JSON Lines:
+
+```bash
+sf api GET /v1/spaces/spc_123/versions --paginate
+```
+
+```json
+{"data":[{"id":"ver_1"}],"pagination":{"nextCursor":"c2","hasMore":true}}
+{"data":[{"id":"ver_2"}],"pagination":{"nextCursor":null,"hasMore":false}}
+```
+
+On a non-GET request it fails with `--paginate is only valid for GET requests.` On a path that is not a declared cursor list it fails with `--paginate requires a cursor-list GET operation declared in the bundled public OpenAPI spec.` Both are exit 2.
+
+## Output
+
+A JSON response prints verbatim on stdout, envelope and all, so a success is `{ data }` from the API and a failure is its problem document. A `204`, `205`, or `304` has no body, so `sf api` prints `{"data":null}` instead of reporting an un-downloadable response.
+
+A non-JSON response needs somewhere to go. Pass `--output <file>` to write it to disk or `--raw-stdout` to stream it, or the command fails rather than dumping bytes into your terminal.
+
+`--include` writes the status line and these headers to stderr, leaving stdout parseable: `content-type`, `content-length`, `etag`, `cache-control`, `retry-after`, `ratelimit-limit`, `ratelimit-remaining`, `ratelimit-reset`, `idempotency-replayed`, `x-request-id`, `deprecation`, `sunset`, `link`.
+
+## Errors
+
+The exit code follows the HTTP status the same way every other command does. See [exit codes](/cli#exit-codes). Anything the table does not classify exits 1.
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `path_not_public` | 2 | The path is outside `/v1/`. |
+| `audience_not_callable` | 2 | The path belongs to a non-public audience. |
+| `absolute_url_not_allowed` | 2 | You passed a full URL or an origin instead of a path. |
+| `binary_output_requires_destination` | 2 | A non-JSON response with no `--output` or `--raw-stdout`. |
+| `pagination_response_invalid` | 1 | A cursor list returned no pagination envelope, invalid JSON, a non-JSON body, or a repeated cursor. |

@@ -1,0 +1,108 @@
+---
+title: Crons
+description: Schedule a GET against one of your own paths. Declared in sf.jsonc, applied by publishing, with failures reported in the dashboard and sf crons.
+sidebar:
+  order: 4
+---
+
+After this page you can schedule recurring work, write a valid schedule the first time, trigger a job by hand, and find out why one failed.
+
+## How a run happens
+
+A cron is a scheduled `GET` against a path on your own site. It goes through the same front door a visitor gets, so whatever serves that path answers it: a [Zero](/zero) endpoint, a [Functions](/functions) route, or a static file.
+
+A response under 400 is a success and is silent. A response of 400 or worse, or a fatal error, is a failure and is reported.
+
+| Rule | Behavior |
+| --- | --- |
+| Timing | Fires approximately on schedule, on the provider clock, jittered. Real fire times are never surfaced |
+| Overlap | Still running when the next fire comes? That fire is skipped, not queued |
+| Concurrency | 3 runs at once, at most |
+| Run ceiling | 8 hours per run |
+| Retries | None. The next fire is the retry |
+
+## Declare it
+
+There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free.
+
+```jsonc sf.jsonc
+{
+  "crons": [
+    { "path": "/api/digest", "schedule": "daily" },
+    { "path": "/api/poll", "schedule": "*/15 * * * *" }
+  ]
+}
+```
+
+```bash
+sf publish
+sf crons ls
+```
+
+Validation is blocking. A bad cron fails the publish rather than shipping a schedule that never fires.
+
+## Schedule syntax
+
+Three grammars. Pick whichever reads best.
+
+| Kind | Examples | Notes |
+| --- | --- | --- |
+| Named | `hourly`, `daily`, `twicedaily`, `weekly` | The provider picks the moment |
+| Shorthand | `3h`, `2d`, `1w` | Hours up to 12, days up to 23, weeks up to 6. `N` is at least 1 |
+| Crontab | `30 16 * * 1-5`, `*/15 * * * *` | Five fields, down to every minute |
+
+Crontab fields are minute `0-59`, hour `0-23`, day of month `1-31`, month `1-12`, weekday `0-7`. Lists (`1,15`), ranges (`1-5`), `*`, and a `/step` over a span are supported.
+
+There are no `@daily` macros and no month or day names. `@daily` and `mon` are rejected.
+
+Your schedule string is stored verbatim and never normalized.
+
+## Paths
+
+| Rule | Value |
+| --- | --- |
+| Shape | Starts with `/`, matching `/^\/[^*:?#\s\\]*$/` |
+| Length | 512 characters |
+| Not allowed | Query strings, fragments, `*` splats, `:placeholders` |
+| Substitution | `{{ vars.NAME }}` resolves when the version publishes |
+| Requirement | At least one letter or digit after slug normalization |
+
+Each entry gets a **key** derived by slugging its path. `/api/cron/digest` becomes `api-cron-digest`. Two paths that slug to the same key are rejected at publish.
+
+A Space can declare at most **8** crons.
+
+## List and trigger
+
+```bash
+sf crons ls
+sf crons run api-cron-digest
+sf crons run /api/digest --header "authorization: Bearer $CRON_SECRET"
+```
+
+`sf crons run` takes a key or an exact path, and the argument is required. A leading `/` is slugged to a key first. An unknown target exits `20` with `cron_not_found`.
+
+`--header` repeats and takes `name: value`. A value with no colon, or a colon at position zero, exits `2`.
+
+The run prints a receipt with the URL, status, duration, content type, byte count, and a 200-character body preview. An HTTP status of 400 or worse exits `1` with `cron_run_failed` and the whole receipt as details.
+
+:::note
+`sf crons run` cannot send the platform's own `x-spacefast-cron` header. A handler that gates on it will refuse a manual run, which is why the example above passes a shared secret explicitly.
+:::
+
+Before the first publish, `sf crons ls` prints:
+
+```text
+No scheduled jobs declared. Add a `crons` block to sf.jsonc.
+```
+
+## Failures
+
+The dashboard's **Crons** page and `sf crons ls` both report recent failures per cron, plus failures that could not be attributed to one. A failure carries the time it occurred, an exit code when there is one, and a reason when the provider gave one. Some rows read only "no detail", which means the provider said only that it failed.
+
+Run output is never echoed. A response body can carry secrets and response data, so it is not stored.
+
+Only the newest failures are kept, with no history behind them. A real failure and a skipped overlap are stored identically today, so read a row as "this fire did not complete".
+
+## API
+
+[`listSpaceCrons`](/api/reference/spaces/listspacecrons) is `GET /v1/spaces/{spaceId}/crons`. It returns the version the schedules came from, which is `null` before the first publish, and one entry per cron with its key, path, schedule, and recent failures.

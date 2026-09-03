@@ -1,0 +1,347 @@
+---
+title: sf teams
+description: Create teams, switch the default one, invite and remove members, and set the access preset new Spaces get
+sidebar:
+  order: 6
+---
+
+After this page you can create a team, pick which one your publishes land in, invite people and manage those invitations, remove members, and decide what access new Spaces start with.
+
+A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
+
+Most subcommands accept `-o, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
+
+## sf teams ls
+
+List teams. Alias: `sf teams list`.
+
+```text
+sf teams ls
+```
+
+Lists teams available to the current login.
+
+### Example
+
+```bash
+sf teams ls
+```
+
+### Output
+
+A table of `TEAM` and `ID`, with `*` marking the default team. `--json` returns `{ teams, defaultTeamId }`, each team carrying `id`, `name`, `slug`, and `role`.
+
+## sf teams switch
+
+Set default team.
+
+```text
+sf teams switch [TEAM]
+```
+
+Sets the default team for future CLI publishes. The selection is stored per login and cleared when you log in again, so it can never outlive the identity that made it.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[team]` | prompted | Team slug, ID, or name |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | none | Team slug, ID, or name, as an alternative to the positional. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams switch acme
+```
+
+### Output
+
+`Default team: acme`. `--json` returns `{ team }`.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `validation_error` | 2 | No stored login. Run `sf login` first |
+
+## sf teams create
+
+Create a team. Alias: `sf teams add`.
+
+```text
+sf teams create NAME
+```
+
+Creates a team owned by the current login.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<name>` | required | Display name for the new team |
+
+### Example
+
+```bash
+sf teams create "Acme Inc"
+```
+
+### Output
+
+```text
+Created team acme.
+Team: team_…
+```
+
+`--json` returns `{ team }`.
+
+## sf teams accept
+
+Accept a team invitation.
+
+```text
+sf teams accept INVITATION
+```
+
+Accepts an invitation and joins the team as the current login.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<invitation>` | required | Invitation ID from the invite link |
+
+### Example
+
+```bash
+sf teams accept inv_123
+```
+
+### Output
+
+```text
+Joined team acme as member.
+Team: team_…
+```
+
+`--json` returns `{ team }` with `teamId`, `teamSlug`, `userId`, and `role`.
+
+## sf teams defaults
+
+Manage future-space defaults.
+
+```text
+sf teams defaults [ROOTACCESS]
+```
+
+Shows or sets the access preset materialized for Spaces this team creates in the future. It never changes an existing Space.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[rootAccess]` | show only | Future Space preset: `private`, `team`, or `public` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Examples
+
+```bash
+sf teams defaults
+sf teams defaults private
+```
+
+### Output
+
+```text
+New Spaces: private
+This setting affects future spaces only.
+```
+
+`--json` returns `{ teamId, defaults }`. To override the preset for one publish, pass `sf publish --access`. To change an existing Space, use [`sf share`](/cli/share).
+
+## sf teams members ls
+
+List team members. Alias: `sf teams members list`.
+
+```text
+sf teams members ls
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams members ls
+```
+
+### Output
+
+A table of `USER`, `NAME`, `ROLE`, `MEMBER ID`. `--json` returns `{ data: [...] }`.
+
+## sf teams members rm
+
+Remove a team member. Aliases: `sf teams members remove`, `sf teams members delete`.
+
+```text
+sf teams members rm MEMBER
+```
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<member>` | required | Member ID or email |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams members rm jane@example.com
+```
+
+### Output
+
+`Removed team member jane@example.com.` `--json` returns `{ removed: true, member }`.
+
+## sf teams invitations ls
+
+List team invitations. Alias: `sf teams invitations list`.
+
+```text
+sf teams invitations ls
+```
+
+Lists pending and historical invitations.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams invitations ls
+```
+
+### Output
+
+A table of `EMAIL`, `ROLE`, `STATUS`, `INVITATION ID`. `--json` returns `{ data: [...] }`.
+
+## sf teams invitations add
+
+Create a team invitation. Alias: `sf teams invitations create`.
+
+```text
+sf teams invitations add EMAIL
+```
+
+Invites a person to the team. They join with the role you set once they accept.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<email>` | required | Email address to invite |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams invitations add jane@example.com --role member
+```
+
+### Output
+
+```text
+Invited jane@example.com as member.
+Invitation: inv_…
+```
+
+`--json` returns `{ invitation }`.
+
+## sf teams invitations resend
+
+Resend a team invitation.
+
+```text
+sf teams invitations resend INVITATION
+```
+
+Resends a pending invitation.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<invitation>` | required | Invitation ID |
+
+### Example
+
+```bash
+sf teams invitations resend inv_123
+```
+
+### Output
+
+`Resent invitation to jane@example.com.` `--json` returns `{ invitation }`.
+
+## sf teams invitations cancel
+
+Cancel a team invitation.
+
+```text
+sf teams invitations cancel INVITATION
+```
+
+Cancels a pending invitation. The invitee can no longer accept it. This one always confirms: agent mode cannot auto-approve it, so scripts must pass `--yes`.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<invitation>` | required | Invitation ID |
+
+### Example
+
+```bash
+sf teams invitations cancel inv_123 --yes
+```
+
+### Output
+
+`Canceled invitation inv_123.` `--json` returns `{ canceled: true, invitation }`.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `confirmation_required` | 2 | Non-interactive run without `--yes`. Pass `--yes` |
+| `cancelled` | 130 | You declined the prompt |

@@ -1,0 +1,374 @@
+---
+title: MCP server
+description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its nine tools, execute sandbox, and approval model
+---
+
+After this page you can connect any MCP client to Spacefast, read every tool's input schema, write `execute` programs against the whole Spacefast API, and know exactly when a call will stop and ask you for approval.
+
+## Two runtimes, one tool set
+
+The same server ships in two runtimes. Both register the same nine tools. The difference is the filesystem.
+
+| | Hosted | Local |
+|---|---|---|
+| Transport | Streamable HTTP | stdio |
+| Endpoint or command | `https://mcp.spacefast.com` | `sf mcp`, or `npx -y spacefast mcp` |
+| Filesystem | None. `publish` requires inline `files` | Reads your workspace. `publish` takes a `path` or publishes the current workspace |
+| Auth | OAuth, per client | Your CLI login, or `SPACEFAST_TOKEN` |
+| Where it runs | Spacefast | Your machine |
+
+The hosted endpoint also answers on `/mcp` and `/mcp/`. Only the `mcp.` hostname serves MCP; the path `/mcp` on the API host does not.
+
+There is a third lane, `sf mcp proxy`, which speaks stdio to your editor and HTTPS to the hosted endpoint using your CLI login. It is what `sf setup agent` writes by default. See [other clients](/agents/other-clients).
+
+## Authentication
+
+### Hosted
+
+The hosted server is an OAuth 2.0 protected resource. It is never anonymous. A request with no token gets a `401` and a `WWW-Authenticate` challenge that points at the resource metadata document, and your client walks the rest from there. Bearer and DPoP are both accepted; a DPoP-shaped request gets a DPoP challenge back.
+
+The resource identifier is the MCP origin itself. A platform OAuth token that was not bound to the MCP resource is rejected at this endpoint even though it is a valid Spacefast token.
+
+By default a client asks for these scopes.
+
+| Scope | What it grants |
+|---|---|
+| `teams:read` | Read the teams the account belongs to |
+| `teams:create` | Create teams |
+| `spaces:read` | Read spaces, versions, and build status |
+| `spaces:write` | Create and update spaces and their settings |
+| `spaces:rename` | Rename space slugs and managed addresses |
+| `publish:write` | Publish new immutable versions |
+| `domains:read` | Read domain inventory and DNS diagnostics |
+| `domains:write` | Attach, verify, and mutate domains and DNS records |
+| `offline_access` | Refresh access without another sign-in |
+
+Each tool declares the scopes it needs, and clients can read them from `tools/list` before calling.
+
+| Tool | Required scopes |
+|---|---|
+| `publish` | `publish:write` |
+| `show_space_deployments` | `spaces:read` |
+| `show_space_analytics` | `spaces:read` |
+| `show_space_domains` | `spaces:read`, `domains:read` |
+| `operation_status` | `spaces:read` |
+| `execute`, `skills`, `resume_execution`, `search_docs` | none of their own |
+
+A scope shortfall is per tool, not per session. `show_space_domains` can return a `403` on a session where `show_space_analytics` works.
+
+Your client never receives a Spacefast API token. Each authenticated request mints an internal delegation token that lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session cannot be replayed against the wider API.
+
+Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
+
+### Local
+
+The local server takes its credential from the process, never from client config. `sf mcp` resolves your CLI login and hands it to the in-process server. Standalone runs read `SPACEFAST_TOKEN`.
+
+| Variable | Effect |
+|---|---|
+| `SPACEFAST_TOKEN` | Bearer token for API calls |
+| `SPACEFAST_API_URL` | API base URL |
+| `SPACEFAST_MCP_WORKSPACE_ROOT` | Pins the one directory `publish` may read from |
+
+## The tools
+
+| Tool | What it does | Key inputs | Returns |
+|---|---|---|---|
+| `publish` | Uploads files and creates a new immutable version | `path` or `files`, `spaceId`, `teamId`, `access` | Live URL, immutable URL, receipt, and a poll handle when still running |
+| `operation_status` | Checks a publish that is still running | `operationId` | Status, progress, diagnostics, `done` |
+| `show_space_deployments` | Deployment history and build status | `space`, `cursor` | Deployment list with pagination |
+| `show_space_domains` | Domains, DNS records, TLS status | `space`, `cursor` | Domain list with pagination |
+| `show_space_analytics` | Traffic over a window | `space`, `window` | Analytics for the window |
+| `search_docs` | Searches the Spacefast docs | `query`, `limit`, `offset`, `kind`, `tier` | Ranked results, plus the full page body on an exact slug or path hit |
+| `execute` | Runs one JavaScript program against the whole API catalog | `code` | Program result, or a pause that needs approval |
+| `skills` | Returns the guide for writing `execute` programs | `name` | The `execute` guide |
+| `resume_execution` | Continues a paused `execute` program | `executionId`, and `action` plus `content` in model mode | The continued program's result |
+
+Every result is capped at 24,000 characters across the whole structured value, with an explicit truncation marker when it hits the cap.
+
+Three requests that exercise the typed tools.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+<Prompt description="Show me the deployments for this Space and whether the last build passed." actions={["copy"]}>
+Show me the deployments for this Space and whether the last build passed.
+</Prompt>
+
+<Prompt description="Point docs.example.com at this Space and tell me which DNS records to add." actions={["copy"]}>
+Point docs.example.com at this Space and tell me which DNS records to add.
+</Prompt>
+
+### publish
+
+`publish` is synchronous by default. It waits for the version to finalize and returns the receipt.
+
+| Field | Type | What it does |
+|---|---|---|
+| `path` | string | Local runtime only. One local directory, file, or archive. Omit `path` and `files` to publish the current workspace |
+| `files` | array of 1 to 1000 | Inline files. Required on hosted. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
+| `spaceId` | string starting `spc_` | Update this Space. Omit to create one, or on local to use the Space linked to this workspace |
+| `teamId` | string | Destination team id or slug for a new Space. Send one after a `team_required` error |
+| `access` | `private`, `team`, or `public` | Initial root access for a Space this publish creates. Invalid with `spaceId` |
+| `createNew` | boolean, default `false` | Local runtime only. Forces a separate Space. Invalid with `spaceId` |
+| `slug` | string, 2 to 55 | Slug for a new Space |
+| `title` | string, 1 to 255 | Title for a new Space |
+| `description` | string, up to 2000 | Changelog for this version. It does not change the Space description |
+| `requestId` | string, 16 to 200 | Idempotency handle. Reuse the same value only when retrying a call that timed out |
+
+```json
+{
+  "path": "dist",
+  "description": "Fix the pricing table"
+}
+```
+
+The result carries `status` of `publishing` or `published`, `liveUrl`, `immutableUrl`, and a `receipt` with the Space, the version, and any diagnostics. When `status` is `publishing`, `result.job.poll.operationId` is the handle for `operation_status`.
+
+Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
+
+### operation_status
+
+| Field | Type | What it does |
+|---|---|---|
+| `operationId` | string, required | Copy `publish.result.job.poll.operationId` |
+
+```json
+{ "operationId": "opr_7f2b8c1d4e5a6b7c" }
+```
+
+Poll about every two seconds. Stop when `result.done` is true. Report success only when `result.status` is `succeeded`; the other terminal states are `failed` and `canceled`.
+
+### show_space_deployments
+
+| Field | Type | What it does |
+|---|---|---|
+| `space` | string | Space id, slug, hostname, or URL. Required on hosted. On local, omit it to use the Space linked to this workspace |
+| `team` | string | Team id or slug, only when `space` is an ambiguous slug |
+| `cursor` | string | Copy `pagination.nextCursor` from the previous result |
+
+```json
+{ "space": "spc_4a91c0de2f3b" }
+```
+
+### show_space_domains
+
+Same inputs as `show_space_deployments`. It returns each domain with its DNS and TLS state.
+
+```json
+{ "space": "docs.example.com" }
+```
+
+### show_space_analytics
+
+| Field | Type | What it does |
+|---|---|---|
+| `space` | string | Space id, slug, hostname, or URL. Required on hosted |
+| `team` | string | Team id or slug, only when `space` is an ambiguous slug |
+| `window` | `48h`, `7d`, or `30d`, default `7d` | Time window |
+
+```json
+{ "space": "my-notes", "window": "30d" }
+```
+
+### search_docs
+
+| Field | Type | What it does |
+|---|---|---|
+| `query` | string, up to 512 | A question, or an exact page slug or path |
+| `limit` | integer, 1 to 25 | Ranked results to return, default 8 |
+| `offset` | integer | Continuation only. Copy `nextOffset` |
+| `kind` | `guide`, `cli`, `api`, `recipe`, `workflow`, or `error` | Restrict to one docs area |
+| `tier` | `essential`, `full`, or `reference` | Disclosure ceiling, default `reference` |
+
+```json
+{ "query": "custom domain DNS records" }
+```
+
+An exact slug or path hit short-circuits to that one page and returns its full body in `page.body`. `search_docs` bypasses the credential ladder entirely, so documentation lookup keeps working when you are signed out or your token has expired.
+
+### execute
+
+| Field | Type | What it does |
+|---|---|---|
+| `code` | string, required | One complete JavaScript program |
+
+See the sandbox contract below.
+
+### skills
+
+| Field | Type | What it does |
+|---|---|---|
+| `name` | `"execute"` | Omit it only to ask which guides exist |
+
+```json
+{ "name": "execute" }
+```
+
+One guide exists. It is the `execute` program contract.
+
+### resume_execution
+
+The input depends on where the approval decision is made.
+
+In browser mode, which is what the hosted server uses, the model cannot decide for you.
+
+| Field | Type | What it does |
+|---|---|---|
+| `executionId` | string, required | The id from the paused `execute` result |
+
+```json
+{ "executionId": "exe_9c3f1b7a20d4" }
+```
+
+In model mode, which stdio connections use by default, the client supplies the decision.
+
+| Field | Type | What it does |
+|---|---|---|
+| `executionId` | string, required | The id from the paused `execute` result |
+| `action` | `accept`, `decline`, or `cancel` | The decision |
+| `content` | string, default `"{}"` | JSON-encoded form response. Leave the default when the pause has no form fields |
+
+## The execute sandbox
+
+`execute` runs your program in QuickJS inside a worker. The whole Spacefast OpenAPI catalog is mounted as a lazy `tools` proxy, so every API operation is reachable without an allowlist.
+
+| Limit | Value |
+|---|---|
+| Runtime | 30 seconds |
+| Memory | 64 MiB |
+| Stack | 1 MiB |
+| Network | No `fetch`. Only `tools.*` |
+
+Three things exist in the program.
+
+- `tools.search({ query, limit })` returns `{ items, hasMore, nextOffset }`.
+- `tools.describe.tool({ path })` returns the operation's shape, including `inputTypeScript`.
+- `tools[item.path](input)` calls the operation. Input groups are `path`, `query`, and `body`.
+
+Every call returns `{ ok: true, data, http }` or `{ ok: false, error }`. Check `ok`. A successful call puts the HTTP body in `result.data`, never in `result.result`. Return one compact value at the end; returning the search page or the schema wastes the result budget.
+
+`emit` delivers user-visible content and files. A Space file is delivered by emitting its minted link as `{ type: "resource_link", uri, name }`. Returning the link object does not deliver the file.
+
+Do not enumerate or spread `tools`, and do not use `fetch`. Credentials, scopes, and approvals are applied by `tools.*`, not by you.
+
+Cancelling a runaway program terminates the worker, not the session. The connection stays usable.
+
+### Find the Space, then publish to it
+
+`execute` is not the publish path. Use it to resolve which Space you want, then call `publish` with the id.
+
+```js
+const page = await tools.search({ query: "list spaces", limit: 10 });
+const match = page.items.find((item) => item.path.endsWith(".spaces.listSpaces"));
+if (!match) return { error: "No matching list-spaces operation." };
+
+const shape = await tools.describe.tool({ path: match.path });
+if (shape.error) return { error: shape.error };
+
+const result = await tools[match.path]({});
+if (!result.ok) return { error: result.error };
+
+const spaces = result.data?.data ?? result.data;
+return spaces.map((space) => ({ id: space.id, slug: space.slug }));
+```
+
+Then, with the id in hand:
+
+```json
+{ "spaceId": "spc_4a91c0de2f3b", "path": "dist" }
+```
+
+### Add a domain, then watch it
+
+One program creates the domain and binds it to the Space. Polling for DNS and TLS afterwards is `show_space_domains`, not another `execute` call.
+
+```js
+const found = await tools.search({ query: "create domain for space", limit: 10 });
+const create = found.items.find((item) => item.path.endsWith(".domains.createDomain"));
+if (!create) return { error: "No matching create-domain operation." };
+
+const shape = await tools.describe.tool({ path: create.path });
+if (shape.error) return { error: shape.error };
+
+const added = await tools[create.path]({
+  body: { name: "docs.example.com", teamId: "tm_2b7d40a9" },
+});
+if (!added.ok) return { error: added.error };
+const domain = added.data?.data ?? added.data;
+
+const page = await tools.search({ query: "assign domain to space", limit: 10 });
+const bind = page.items.find((item) => item.path.endsWith(".domains.updateDomain"));
+if (!bind) return { error: "No matching update-domain operation." };
+
+const bound = await tools[bind.path]({
+  path: { domainId: domain.id },
+  body: { spaceId: "spc_4a91c0de2f3b", primary: true },
+});
+return bound.ok ? { domainId: domain.id, name: domain.name } : { error: bound.error };
+```
+
+Then watch the DNS and TLS state with a read tool until it settles.
+
+```json
+{ "space": "spc_4a91c0de2f3b" }
+```
+
+## Approvals
+
+A write inside an `execute` program can pause before its HTTP request goes out.
+
+<Steps>
+  <Step title="The program pauses">
+    `execute` returns `status: "user_approval_required"` with an `executionId`, an `approvalUrl`, and a `resumePrompt`.
+  </Step>
+  <Step title="You review it in the browser">
+    The `approvalUrl` opens the approvals page in the dashboard, which shows the exact action the program wants to run. Accept, decline, or cancel.
+  </Step>
+  <Step title="The agent resumes">
+    The agent calls `resume_execution` with the same `executionId`. That call blocks until your decision lands, then the saved program continues from where it stopped.
+  </Step>
+</Steps>
+
+You have four minutes to decide. The agent must reuse the `executionId`; starting a second `execute` call throws away the pause.
+
+Choosing "always allow" is deliberately narrow. Only a plain confirmation gate, a pause with nothing to fill in, can be auto-approved later. A pause that asks you to open a URL, or one that wants form content, always comes back to you.
+
+If the request changes between the pause and your decision, the resume fails with "This approval no longer matches the request. Run execute again."
+
+Tools also declare how risky they are, and clients use that to decide what to confirm on their own. `publish`, `execute`, and `resume_execution` are marked destructive. `search_docs`, `skills`, `operation_status`, and the three `show_space_*` tools are marked read-only.
+
+## Local file access
+
+Only the local runtime reads files, and it reads them from exactly one directory.
+
+The workspace root is resolved in this order.
+
+1. `SPACEFAST_MCP_WORKSPACE_ROOT`, or the `--workspace-root` flag on `sf mcp`.
+2. The first `file:` root your MCP client advertises. The server asks once per session and remembers the answer, so changing roots mid-session has no effect.
+3. The directory the server process started in.
+
+Setting the environment variable turns off root discovery. The variable wins and your client's advertised root is ignored.
+
+Inside that root, `publish` refuses a few things outright.
+
+- Absolute paths. Every `path` must be relative to the workspace root.
+- Any path that escapes the root.
+- Symbolic links, and anything that is not a regular file or a directory.
+- Paths that look like credential material.
+
+Some files never upload, at any depth. `.env` and every `.env.*`, `.git`, `node_modules`, `.ssh`, `.aws`, `.npmrc`, `.netrc`, `.DS_Store`, key material such as `*.pem`, `*.key`, `id_rsa`, and `.spacefast/state.json`.
+
+Size caps are checked before any bytes are read.
+
+| Cap | Value |
+|---|---|
+| Total upload | 128 MiB |
+| One file | 64 MiB |
+| File count | 100,000 |
+| One path | 1,024 bytes |
+
+:::warning[Anonymous publishes fail closed]
+When the local runtime publishes anonymously but cannot save the Space key to `.spacefast/state.json`, the tool call fails instead of printing the credential. Fix the directory permissions and publish again.
+:::

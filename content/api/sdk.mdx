@@ -1,0 +1,184 @@
+---
+title: TypeScript SDK
+description: Install @spacefast/sdk, construct a client, call any operation by path with full type inference, and handle errors and retries
+sidebar:
+  order: 9
+---
+
+`@spacefast/sdk` is a typed client generated from the same OpenAPI document that produces [the reference](/api/reference). After this page you can make any call in the API with path params, query params, request body, and response body all checked at compile time.
+
+## Install
+
+```bash
+npm i @spacefast/sdk
+```
+
+ESM only, Node 20 or newer, MIT licensed. The one runtime dependency is `@spacefast/common`. `@tanstack/react-query` is an optional peer, needed only for the `/query` entry point.
+
+## Construct a client
+
+```ts
+import { createSpacefastClient } from "@spacefast/sdk";
+
+const client = createSpacefastClient({
+  baseUrl: "https://api.spacefast.com",
+  apiKey: "<api-key>",
+});
+```
+
+| Option | Type | What it does |
+| --- | --- | --- |
+| `baseUrl` | string | Required. The API origin. |
+| `apiKey` | string | Sent as `Authorization: Bearer <apiKey>`. |
+| `headers` | record | Merged under per-call headers. |
+| `credentials` | `RequestCredentials` | Passed to `fetch`. |
+| `fetch` | fetch implementation | Swap in your own. |
+
+Any credential from [Authentication](/api/authentication) goes in `apiKey`, including a Space key or a machine credential. The name is about the header it sets, not the credential kind.
+
+## Call by path, not by method name
+
+The client has five methods, `get`, `post`, `patch`, `put`, and `delete`. Each takes an OpenAPI path template and an options object. Types come from the spec, so a wrong path param or an unknown body field is a compile error.
+
+```ts
+// Read one Space. A pure { data } body unwraps to the resource.
+const space = await client.get("/v1/spaces/{spaceId}", {
+  path: { spaceId: "spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c" },
+});
+console.log(space.slug, space.liveUrl);
+```
+
+```ts
+// List versions. A paginated body passes through whole.
+const page = await client.get("/v1/spaces/{spaceId}/versions", {
+  path: { spaceId },
+  query: { limit: 50, cursor },
+});
+page.data;                    // Version[]
+page.pagination.nextCursor;   // string | null
+page.pagination.hasMore;      // boolean
+```
+
+```ts
+// Publish. A mutation body passes through whole so you can see the operation.
+const receipt = await client.post("/v1/publish", {
+  body: { spaceId, files: [{ path: "index.html", size: 128, sha256 }] },
+  idempotencyKey: attemptId,
+});
+```
+
+```ts
+// Roll back by promoting an earlier ready version.
+const promoted = await client.post("/v1/spaces/{spaceId}/versions/{versionId}/promote", {
+  path: { spaceId, versionId: previousVersionId },
+  body: { channel: "live" },
+  idempotencyKey: crypto.randomUUID(),
+});
+if (promoted.operation) await settle(promoted.operation.id);
+```
+
+Per-call options are `path`, `query`, `body`, `contentType`, `headers`, `signal`, `idempotencyKey`, and `retry`. Undefined query values are dropped from the URL. Path params are percent-encoded, and `""`, `"."`, and `".."` are rejected before the request leaves.
+
+### When `data` unwraps
+
+The client unwraps only a pure `{ data }` body, ignoring `$schema`. Anything with a sibling passes through untouched.
+
+| Response | You get |
+| --- | --- |
+| `{ data }` | the resource |
+| `{ data, pagination }` | the whole envelope |
+| `{ data, operation }` | the whole envelope |
+| `204` | `undefined` |
+
+### Operation ids, if you need them
+
+Every `operationId` is exported as data rather than as a method. `OPERATION_INDEX` maps each id to `{ operationId, method, path, summary, tag, requestMediaType, responseMode }`, which is useful for building tooling over the API.
+
+## Errors
+
+A failure throws `SpacefastApiError`, parsed straight from the [problem document](/api/errors).
+
+```ts
+import { SpacefastApiError } from "@spacefast/sdk";
+
+try {
+  await client.post("/v1/spaces", { body: { teamId, slug } });
+} catch (error) {
+  if (!(error instanceof SpacefastApiError)) throw error;
+
+  switch (error.code) {
+    case "slug_unavailable":
+      return retryWithAnotherSlug();
+    case "validation_error":
+      return reportBadField(error.pointer);
+    case "rate_limited":
+      return sleep((error.retry.afterSeconds ?? 30) * 1000);
+    default:
+      console.error(error.code, error.status, error.requestId);
+      throw error;
+  }
+}
+```
+
+The error carries `status`, `code`, `message`, `pointer`, `type`, `details`, `suggestions`, `next`, `issues`, `actions`, `requestId`, and `retry`. A failure body that is not a problem document degrades to `code: "request_failed"` while keeping the status, request id, and `Retry-After`. A caller abort throws `SpacefastApiAbortError`, a subclass with `status: 499` and `code: "client_request_aborted"`.
+
+## Retries are off by default
+
+Each call makes exactly one attempt unless you ask for more.
+
+```ts
+const page = await client.get("/v1/spaces", {
+  retry: { maxAttempts: 3, baseDelayMs: 200, maxDelayMs: 5000, deadlineMs: 30000 },
+});
+```
+
+Those are the defaults once you opt in: up to 3 attempts, 200 ms doubling to a 5 second ceiling with jitter, and a 30 second overall deadline.
+
+The transport retries only requests that are safe to repeat, meaning `GET`, `HEAD`, `OPTIONS`, or any method carrying an `idempotencyKey`. It retries on `429`, `502`, `503`, `504`, and transient network errors, and never on `400`, `401`, `403`, `409`, or `422`. The one exception is a `409 idempotency_conflict_in_progress` answering your own key, which it treats as "still running" and keeps retrying into the stored response.
+
+## Pagination
+
+There is no built-in iterator. Walk the cursor yourself, as shown in [Pagination](/api/pagination). Undefined `cursor` is dropped, so the same call works for the first page and every page after it.
+
+## Publish helpers
+
+`@spacefast/sdk/publish` is a purpose-built pipeline for the publish flow, above the generic client. It exports `publishDirect` for the one-request shortcut, `createVersionIntent`, `refreshVersionUploads`, `uploadSessionFiles`, and `finalizeVersion` for the staged path, `pollPublishContinuation` and `waitForArchiveBuild` for following work to a terminal state, `claimFromReceipt`, and `receiptReportsNoChanges`. The default wait budget is 900 seconds with a poll cadence starting at 300 ms and settling at 1 second.
+
+`@spacefast/sdk/publish/node` adds `collectManifest`, which walks a directory. It is a separate entry point because it pulls in `node:fs`, so the rest of the publish helpers stay browser-safe.
+
+## Other entry points
+
+| Import | What it is |
+| --- | --- |
+| `@spacefast/sdk` | the typed path client and the error types |
+| `@spacefast/sdk/schema` | the raw generated `paths` types |
+| `@spacefast/sdk/transport` | the zero-dependency HTTP core |
+| `@spacefast/sdk/publish` | the publish pipeline |
+| `@spacefast/sdk/query` | TanStack Query option and mutation factories |
+| `@spacefast/sdk/openapi.json` | the spec itself |
+
+The query layer defaults to browser session cookies against the production API. Point it elsewhere once, before the first request:
+
+```ts
+import { configureSpacefastQuery } from "@spacefast/sdk/query";
+
+configureSpacefastQuery({
+  requestOrigin: "https://api.spacefast.com",
+  apiKey: "<api-key>",
+  credentials: "omit",
+});
+```
+
+It covers every operation except `GET /v1/builds/{buildId}/events`, which is a live event stream and stays on the hand-written client.
+
+## `sf api` maps onto the same calls
+
+The CLI's passthrough sends the same request with your resolved profile credential, so a shell one-liner and an SDK call are the same operation.
+
+| CLI | SDK |
+| --- | --- |
+| `sf api /v1/me` | `client.get("/v1/me")` |
+| `sf api GET /v1/spaces/spc_.../versions --paginate` | the cursor walk in [Pagination](/api/pagination) |
+| `sf api POST /v1/publish --input @publish.json --idempotency-key 01J8ZQ` | `client.post("/v1/publish", { body, idempotencyKey: "01J8ZQ" })` |
+
+`sf api` calls `/v1/` paths only. It rejects absolute URLs, dot segments, and anything outside the public contract. `--paginate` works on `GET` requests to declared cursor lists and streams every page as JSON Lines.

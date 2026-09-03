@@ -1,0 +1,124 @@
+---
+title: API keys and tokens
+description: Create, scope, use, and rotate Spacefast API keys, and tell them apart from the other credentials the platform hands you
+sidebar:
+  order: 2
+---
+
+After this page you can mint an API key with the right permissions, use it against the API, rotate it without downtime, and recognize every other credential Spacefast hands you by its prefix.
+
+## Create an API key
+
+Keys belong to a team, and only that team's owners and admins can mint them.
+
+<Steps>
+  <Step title="Open the team's Agents page">
+    In the dashboard, go to your team and open **Agents**. Keys live in the **API keys** section. Older addresses like `/<team>/api-keys` redirect here.
+  </Step>
+  <Step title="Fill in the form">
+    **Name** is what you will recognize it by later, for example `CLI on my laptop`. **Policy preset** bounds what the key can do. **Expires** is optional and blank means no expiry.
+  </Step>
+  <Step title="Copy the secret">
+    Press **Create credential**. The secret appears once, under "Copy this key now. It won't be shown again." It survives closing the modal, but not leaving the page. After that the list only shows a preview like `sfa_abcd...wxyz`.
+  </Step>
+</Steps>
+
+From a terminal:
+
+```bash
+sf api-keys create --name "CI publish" --preset ci_deploy
+sf api-keys list
+sf api-keys revoke <key-id>
+```
+
+`sf api-keys create` defaults to the `space_publisher` preset and always scopes the key to your current team. It prints the secret only in human output. Under `--json` the receipt masks it, so copy it from the terminal.
+
+## Use a key
+
+One header, on every request:
+
+```bash
+curl https://api.spacefast.com/v1/spaces \
+  -H "Authorization: Bearer sfa_xxxxxxxx"
+```
+
+An `sfa_` key is 56 characters after the prefix. Spacefast stores only a hash of it, which is why nobody can read a key back to you, ever.
+
+## Presets
+
+A preset is a named bundle of permissions. Pick the narrowest one that does the job.
+
+| Preset | Label in the dashboard | What it can do |
+|---|---|---|
+| `space_publisher` | Space publisher | Publish updates and roll back spaces |
+| `ci_deploy` | CI publish | Publish versions from CI pipelines |
+| `space_admin` | Space admin | Manage spaces, domains, and webhooks |
+| `domain_manager` | Domain manager | Manage domains, DNS, and SSL bindings |
+| `billing_viewer` | Billing viewer | Read team and billing information, nothing else |
+| `team_admin` | Team admin | Everything this team can do |
+
+`space_publisher` and `ci_deploy` carry the same publish permissions. `space_admin` is the default when a request names no preset, and it deliberately stops short of `team_admin`: it can never mint keys, manage members, or touch billing.
+
+## How permissions compile
+
+A credential authorizes through a policy of allow and deny statements over two things: **actions** (`spaces:publish`, `domains:write`, `versions:promote`, and so on) and **resources** (a team's subtree, or one Space). An explicit deny always wins, an explicit allow permits, and anything not mentioned is denied.
+
+Your own browser session has no stored policy. Spacefast compiles one per team from your live role:
+
+| Role | Compiles to |
+|---|---|
+| `owner` | Every action (`*`) |
+| `admin` | Every action (`*`) |
+| `member` | A fixed list: read, create, update, rename, and publish spaces; read, promote, and download versions; read domains; read, trigger, and create builds; read the team; read billing |
+
+Two rules follow from that:
+
+- **A key can never grant more than you have.** Minting a key whose policy exceeds your own is refused with `policy_exceeds_grantor`. A member cannot mint a key at all, because minting credentials is not on the member list.
+- **A key follows your role, not a snapshot of it.** Keys that follow team membership pin the exact permissions they were granted, so redefining a preset later never quietly widens an existing key.
+
+Keys created through the API can also be scoped to a single Space instead of the whole team, which narrows the policy to exactly that Space.
+
+## What an agent grant cannot do
+
+Some actions are reserved for a signed-in person, at every permission level. No API key, agent grant, or OAuth token can do them:
+
+- Invite a member, cancel or resend an invitation
+- Change a member's role
+- Remove a member
+- Accept a team invitation
+
+A credential that tries gets a `403` with `authorization_level_not_allowed`. Do those in the dashboard. Once you accept an invitation there, the device credentials you already approved pick the new team up on their own. More detail in [what agents are allowed to do](/agents/permissions).
+
+## Rotate a key
+
+A secret is immutable, so rotation means a new key. In the dashboard, **Replace key…** mints a fresh key with the same policy and then offers to revoke the old one once your integrations have moved over.
+
+Revoking is immediate. Anything using that key fails on its next request, and the row stays in the list marked revoked so the audit trail survives.
+
+## Every credential, by prefix
+
+Spacefast puts a prefix on each credential so you always know what you are holding.
+
+| Prefix | What it is | Where you get it |
+|---|---|---|
+| `sfa_` | API key. The credential for the CLI, CI, and server-to-server calls | The team's **Agents** page, `sf api-keys create`, or `sf login` |
+| `sfm_` | Space machine credential. Lets a script or service fetch a private Space's pages | `sf share token create`, shown once, rotatable |
+| `sfc_` | Space key. Proves you published an anonymous Space, keeps updating it, and claims it later | The publish receipt, and the fragment of the claim URL |
+| `sfl_` | Share link token. Rides in the `?__=` query of a share URL | `sf share link create`, or the dashboard access panel |
+| `sfp_` | Git push credential, embedded in the push remote URL | The dashboard, inside the `git remote add` line it gives you |
+| `sfresume_` | Continuation token. An agent holds it while a call waits on your decision | Handed to the agent automatically, nothing to store |
+
+Lifetimes differ by kind:
+
+| Credential | Lifetime |
+|---|---|
+| API key from the dashboard or `sf api-keys create` | The **Expires** date you set, otherwise no expiry |
+| API key from `sf login` | 30 days, or 7 days without use |
+| Space key for an unclaimed Space | Matches that Space's unclaimed window. If you claim with **Claim & keep access**, it keeps working for another 7 days |
+| Continuation token | 30 minutes at most |
+
+Share links, passwords, and machine credentials are the Space access model. They are covered in [access and share links](/access).
+
+:::warning[Treat every one of these as a password]
+They go in a secret manager or an environment variable, never in a repository, a screenshot, or a chat message. A key pasted anywhere public should be revoked, not rotated later.
+:::

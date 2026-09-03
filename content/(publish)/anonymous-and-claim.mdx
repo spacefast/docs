@@ -1,0 +1,141 @@
+---
+title: Publish without an account
+description: Publish a folder with no login, get a live URL and a space key, and move the Space into a team later without changing its hostname
+sidebar:
+  order: 3
+---
+
+After this page you can put a site online with no signup, know how long it stays up, and move it into a team later while keeping the same URL.
+
+## Publish with no login
+
+```bash
+sf publish ./dist
+```
+
+If you are not signed in, the CLI publishes anyway. The server creates a Space owned by nothing except a secret it hands back, and prints a live URL you can open right now.
+
+What comes back is a `claim` block. Four fields:
+
+| Field | What it is |
+| --- | --- |
+| `key` | The space key, `sfc_` plus 22 characters. The only credential for this Space |
+| `url` | The site door. Opening it exchanges the key for a private view session |
+| `claimUrl` | The dashboard claim page, with the key in the URL fragment |
+| `expiresAt` | When the Space stops serving unless someone claims it |
+
+```text
+sfc_Kd2mQ7xR4tYb9wLp1sVn3F
+https://swift-otter-4821.view.fast/__/sfc_Kd2mQ7xR4tYb9wLp1sVn3F
+https://my.spacefast.com/claim#sfc_Kd2mQ7xR4tYb9wLp1sVn3F
+```
+
+The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later. Lose the folder and lose the key, and the Space runs out its clock.
+
+In `--json` or non-interactive output the key and the claim link are masked. Pass `--show-secret` to print them.
+
+The claim link is a fragment URL on purpose. Browsers never send a fragment to a server, so the key reaches the claim page without being logged anywhere in between.
+
+From the dashboard, **Drop** does the same thing while signed out. The eyebrow reads **Anonymous drop · Claim it later**, and the result carries a **Claim this space** button.
+
+## The clock
+
+An anonymous Space serves for **6 hours**, then stops.
+
+It is recoverable after that. The key stays valid for another **7 days**, during which you can still claim the Space and bring it back. After that window the Space is gone.
+
+Opening the claim page buys time. Each load adds an hour, up to 6 extra hours total, and no anonymous Space lives longer than 30 days from creation no matter how often the page is opened.
+
+To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted, and it is never written to logs.
+
+## Caps
+
+Anonymous publishing runs a tighter table than Free on every axis.
+
+| Cap | Value |
+| --- | --- |
+| Largest single file | 50 MiB |
+| Total bytes per version | 100 MiB |
+| Files per version | 1,000 |
+| Inline publish body | 100 MiB |
+| Publishes per IP per hour | 20 |
+| Unclaimed Spaces open at once | 10 per client fingerprint |
+
+Hitting the last one is `429` `anonymous_space_limit_reached`, and the count only includes Spaces that still exist. Retrying a failed publish within 60 seconds lands on the Space the first attempt created rather than making a second one.
+
+One more difference. An unclaimed Space accepts any file type a Free Space accepts, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, gzip, XML, RSS, and Atom. Anything else uploads and returns `403` until the Space is claimed. Full numbers are on [Limits](/limits).
+
+## Claim it
+
+<Steps>
+<Step title="Open the claim link">
+
+Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from.
+
+The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the site while you decide.
+
+</Step>
+<Step title="Sign in">
+
+Signed out, the button reads **Sign in & claim**. Signed in, it reads **Claim**, or **Claim & keep access** when the agent that published the Space can stay connected.
+
+The CLI equivalent starts a browser login for you if you are not signed in.
+
+</Step>
+<Step title="Pick a team">
+
+If you belong to exactly one team you can write to, that team is used. Otherwise the claim comes back asking which one, with the choices attached, and you repeat the request with your answer.
+
+```bash
+sf spaces claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567 --team acme
+```
+
+</Step>
+<Step title="Choose what people see">
+
+After the claim lands the page says **&lt;space&gt; is yours.** and offers a **Choose what people see** chooser with **Keep private**, **Share with team**, and **Publish website**, plus **Copy live link** and **Open your space**.
+
+</Step>
+</Steps>
+
+## What changes when you claim
+
+| Thing | Before | After |
+| --- | --- | --- |
+| Owner | The space key | The team you picked |
+| Hostname | `<slug>.view.fast` | Unchanged |
+| Version URLs | Live | Unchanged |
+| Expiry | 6 hours | Gone. The Space is permanent |
+| Served content types | Restricted allowlist | Everything |
+| Space key | The only credential | Demoted, see below |
+| Explicit people and links | Active | Survive unchanged |
+
+The dashboard says the last row out loud, under **Sharing that stays with this space**. Claiming changes ownership, not who you already shared with.
+
+Two things can block a claim. Your account is capped at 50 claimed free Spaces, which comes back as `claimed_space_quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
+
+## Keeping your agent publishing
+
+An agent that published the Space for you loses its credential the moment you claim, which would leave it unable to ship the next change. So a claim does not destroy the space key, it demotes it into a one-time voucher.
+
+On the claim page that is the **Claim & keep access** button. On the CLI it is `sf spaces claim --keep-publishing`. Either way the choice is yours, explicitly, and the server decides whether the Space is even eligible.
+
+If you say yes, the agent's next request trades the demoted key for a real API key scoped to the Space, using `exchangeSpaceClaim`. That key is shown exactly once. If you say no, the old key stops working and the agent has to be reconnected the normal way.
+
+## Rotating the key
+
+If the key leaked, replace it:
+
+```bash
+sf spaces rotate-claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
+```
+
+You get a fresh `claim` receipt. The old key, its site door, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
+
+## Checking on it
+
+```bash
+sf status --include-claim-url
+```
+
+Over HTTP, `getSpaceClaimStatus` with the space key as bearer returns the publish status, the live URL, the current version, and the claim state and deadline.

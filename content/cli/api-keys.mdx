@@ -1,0 +1,145 @@
+---
+title: sf api-keys
+description: Create, list, and revoke the API keys that authenticate CI jobs, scripts, and agents against Spacefast
+sidebar:
+  order: 10
+---
+
+API keys authenticate anything that cannot run a browser login: CI jobs, scripts, servers, agents. A key belongs to a team and carries the permissions of the preset you created it with. After this page you can mint one, see what exists, and turn one off.
+
+All three subcommands need a login or a `--token` of their own, and they act on your default team unless you name another. Every command here also takes the [global flags](/cli#global-flags).
+
+## sf api-keys create
+
+Create an API key and print its one-time secret.
+
+```text
+sf api-keys create [-n <name>] [--preset <preset>]
+```
+
+Alias: `sf api-keys add`.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-n, --name=<value>` | none | Human-readable API key name. Worth setting, it is how you tell keys apart later. |
+| `--preset=<value>` | `space_publisher` | Access preset compiled into the key's policy. One of `ci_deploy`, `space_publisher`, `space_admin`, `domain_manager`, `team_admin`, `billing_viewer`. |
+
+### Presets
+
+| Preset | What a key with it can do |
+| --- | --- |
+| `space_publisher` | Publish to Spaces and read the team that owns them. The default. |
+| `ci_deploy` | The same permissions as `space_publisher`, named for CI. |
+| `space_admin` | Everything publishing does, plus rename, delete, transfer, export and import Spaces, delete versions, manage domains and webhooks, and set Space access policy. |
+| `domain_manager` | Manage domains and DNS. Nothing else. |
+| `billing_viewer` | Read the team and its billing. |
+| `team_admin` | Everything the team can do. |
+
+### Examples
+
+```bash
+sf api-keys create --name ci
+sf api-keys create --name domains-bot --preset domain_manager
+```
+
+### Output
+
+```text
+Created API key ci.
+ID: key_0123456789abcdef
+Permissions: publish:write, teams:read
+Secret: sfa_xxxxxxxxxxxx
+Store this secret now. It is only shown once.
+```
+
+The secret appears once and is never retrievable. Copy it straight into your secret store.
+
+With `--json`, `data` carries `apiKey` and the compiled `permissions` array, and the secret is replaced with a note saying it was shown once. Run the command without `--json` when you need the value, or pipe the human output where you want it.
+
+Use the key by exporting `SPACEFAST_TOKEN`, passing `--token`, or storing it with `sf login --token`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | Not authenticated. "Run `sf login` or pass --token before managing API keys." |
+| `validation_error` | 2 | No team resolved. "Choose a default team with `sf teams switch <slug>` first." |
+
+## sf api-keys list
+
+List API keys for the selected team.
+
+```text
+sf api-keys list [-o <team>] [--limit <n>]
+```
+
+Aliases: `sf api-keys ls`.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--limit=<n>` | `50` | Maximum keys to return. Between 1 and 100. |
+
+```bash
+sf api-keys ls
+sf api-keys ls --team acme
+```
+
+### Output
+
+A table of keys, and with `--json` the list envelope from the API straight through:
+
+```json
+{
+  "data": [
+    {
+      "id": "key_0123456789abcdef",
+      "name": "ci",
+      "preset": "space_publisher",
+      "enabled": true,
+      "revokedAt": null,
+      "secretPreview": "sfa_...cdef",
+      "lastUsedAt": null,
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z"
+    }
+  ],
+  "pagination": { "nextCursor": null, "hasMore": false }
+}
+```
+
+`secretPreview` is the only fragment of the secret you ever see again. `lastUsedAt` tells you which keys are dead weight.
+
+## sf api-keys revoke
+
+Revoke an API key.
+
+```text
+sf api-keys revoke ID [-y]
+```
+
+Aliases: `sf api-keys delete`, `sf api-keys remove`, `sf api-keys rm`.
+
+| Argument | What it does |
+| --- | --- |
+| `<id>` | API key ID, for example `key_0123456789abcdef`. Take it from `sf api-keys ls`. |
+
+```bash
+sf api-keys revoke key_0123456789abcdef
+```
+
+It confirms first: `Revoke API key <id>? Every integration using it stops working immediately.` The effect is immediate and there is no undo, so mint the replacement before you revoke the old one.
+
+This is a remote destructive action. Agent mode never auto-confirms it, and a non-interactive run needs an explicit `--yes` or fails with `confirmation_required` (exit 2).
+
+### Output
+
+```text
+Revoked API key key_0123456789abcdef.
+```
+
+`--json` returns `{ "data": { "id": "key_0123456789abcdef", "revoked": true } }`.
+
+Revoking a key does not sign you out of the CLI. `sf logout` handles the credential the CLI minted for itself.

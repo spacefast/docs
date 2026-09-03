@@ -1,0 +1,210 @@
+---
+title: Publishing
+description: What one sf publish actually does, which files it sends, how change-only uploads work, and what the receipt tells you
+sidebar:
+  order: 1
+---
+
+After this page you can publish a folder from the CLI, the dashboard, or the API, predict which files make it and which get dropped, and read a receipt well enough to know whether your site is live.
+
+## The mental model
+
+One publish is four steps.
+
+1. **Declare.** The client lists every file it wants the version to hold, with a size and usually a `sha256`.
+2. **Upload.** The server answers with upload targets for the bytes it does not already have. Everything else is reused.
+3. **Finalize.** The version compiles into its served form and becomes `ready`.
+4. **Promote.** The `live` pointer moves to it.
+
+`sf publish` runs all four and prints a URL. `POST /v1/publish` collapses all four into one request and returns a receipt. The steps are separately addressable when you need them, which is how a resumed upload and a promote-later flow work.
+
+## Publish
+
+<Tabs>
+<Tab title="CLI">
+
+```bash
+sf publish ./dist
+```
+
+With no argument it publishes the current directory, building it first if it detects a project. `--message` records a changelog entry on the version. `--target preview` creates a ready version without moving `live`.
+
+```bash
+sf publish ./dist --message "Fix pricing table"
+sf publish --target preview --json
+```
+
+</Tab>
+<Tab title="Dashboard">
+
+**Drop** takes a folder, a `.zip`, or a single `index.html`. Drag it onto the window, or use **Choose a folder** or **Choose files**. Pick a **Team**, a **Destination** of **New space** or **Existing space**, and for an existing Space either **Add & update** or **Replace all**. Progress runs **Prepare → Upload → Build → Go live**.
+
+For a Space you already have open, the topbar **Publish** button asks **How do you want to publish?** and offers **Publish from Git**, **Drop files**, **Use the Spacefast CLI**, or an agent.
+
+</Tab>
+<Tab title="API">
+
+```bash
+curl -X POST https://api.spacefast.com/v1/publish \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/zip" \
+  --data-binary @site.zip
+```
+
+`createPublish` also takes a JSON manifest, multipart form data, a single HTML document, or raw bytes for one file. See [What the API accepts](#what-the-api-accepts).
+
+</Tab>
+</Tabs>
+
+## What gets uploaded
+
+Publishing walks the directory and builds a manifest. Three things can happen to a path.
+
+### Dropped without complaint
+
+Some paths are never worth failing a whole publish over, so they are dropped and counted instead. Exact names at any depth:
+
+```text
+.DS_Store  .gitignore  .npmrc  .netrc
+.env  .env.local  .env.production  .env.development  .env.test
+_routes.json  .spacefast/state.json  .stattic/state.json
+```
+
+Whole directories at any depth: `.git`, `.hg`, `.svn`, `.ssh`, `.aws`, `.cache`, `.turbo`, `.vercel`, `.netlify`, `.wrangler`, `node_modules`, and `.next/cache`.
+
+Anything that looks like a credential is dropped the same way: names starting `.env.`, SSH private keys (`id_rsa`, `id_ed25519`, and friends), files named like a private key, and any `.pem`, `.key`, `.p12`, or `.pfx`.
+
+Symlinks are skipped, not followed. The CLI prints `Warning: skipped symlink <path> (symlinks are not published).` for each one.
+
+`_headers` and `_redirects` are convention files and always publish. See [Routing](/routing).
+
+### Rejected with an error
+
+These fail the publish rather than getting dropped, because silently ignoring them would change what your site does.
+
+| Path | Error code |
+| --- | --- |
+| Untrimmed, starting `/`, containing `\` or `//`, or not canonical | `invalid_file_path` |
+| A segment ending in `.` or a space | `invalid_file_path` |
+| Canonical path over 1,024 bytes | `path_too_long` |
+| Named `.htaccess` or `.user.ini` | `static_control_file_not_supported` |
+| Under a runtime control prefix, such as a top-level `__sf` or `__spacefast` | `static_runtime_control_path_not_supported` |
+| Two entries that canonicalize to the same path | `manifest_duplicate_path` |
+
+Two artifacts claiming the same request route also stop the publish, so a lookup-order coin flip never decides which one visitors get.
+
+### Size and count
+
+| Limit | Value | Error |
+| --- | --- | --- |
+| Files per version | 100,000, lowered to 20,000 on Free | `manifest_too_many_files` |
+| Largest single file | 64 MiB, 50 MiB on Free, 1 GiB on Plus | `version_file_too_large` |
+| Total bytes per version | 2 GiB | `version_total_bytes_exceeded` |
+| Manifest request body | 16 MiB | `manifest_body_too_large` |
+| Inline archive body | 128 MiB | `publish_archive_too_large` |
+
+Plan policy can only lower the file-count ceiling, never raise it. Anonymous publishes run a tighter table again. Both are on [Limits](/limits).
+
+Free Spaces publish web content only. Other file types upload fine and are then ignored with a diagnostic, and the receipt lists them under `ignoredPaths`, so a stray binary never blocks the publish.
+
+## Only changed bytes travel
+
+Every declared file carries a `sha256`. The server compares your declaration against the version you are replacing, keeps the bytes it already has, and asks for the rest. The upload instructions come with a `summary` counting exactly that:
+
+```json
+{ "upload": 3, "reused": 41, "ignored": 0 }
+```
+
+Deleting a file means leaving it out of the declaration. There is no delete list. That has one consequence worth knowing:
+
+| Mode | What your file list means |
+| --- | --- |
+| `snapshot` | The complete site. Paths you leave out are removed |
+| `additive` | Additions and replacements. Paths you leave out stay |
+
+`sf publish` defaults to `snapshot`. `POST /v1/publish` defaults to `additive`. Set it with `--publish-mode` or the `publishMode` field, and in the dashboard Drop it is the **Add & update** and **Replace all** choice.
+
+## Nothing changed
+
+If your declaration reproduces the live version byte for byte, no version is created. The response comes back with a null version id and one info diagnostic:
+
+```text
+noop_publish
+```
+
+That diagnostic is the only signal. There is no separate boolean.
+
+One catch. A file declared without a `sha256` cannot prove it is unchanged, so a manifest missing any hash always materializes a new version.
+
+## Waiting, or not
+
+A publish holds one HTTP request open while the work runs, up to a 240 second ceiling. Past that the receipt degrades to `next.action` of `poll` and the work carries on in the background. You did not lose the publish.
+
+Add `?async=1` to skip the wait and get an operation handle immediately. Only `async=1` and `async=true` do that. `async=0`, `async=false`, and leaving it off all wait.
+
+On the CLI it is `--wait` (on by default), `--no-wait`, and `--wait-timeout` in seconds.
+
+## Reading the receipt
+
+The parts you actually read:
+
+| Field | What it tells you |
+| --- | --- |
+| `space.id`, `space.slug` | Which Space this landed in |
+| `space.liveUrl` | The URL to open |
+| `version.id`, `version.ref`, `version.number` | The version this publish created |
+| `version.status` | `ready` means finalized |
+| `version.immutableUrl` | The permanent per-version URL, null while finalizing |
+| `activation.outcome` | `activated`, `unpromoted`, `superseded`, or `pending` |
+| `next.action` | `done`, `upload`, `finalize`, or `poll` |
+| `next.url` | Where to go for that action |
+| `diagnostics` | Warnings, dropped paths, and `noop_publish` |
+| `operation` | The handle to poll when finalize kept running |
+
+`next.action` is the field to branch on. `done` means there is nothing left to do, and the `hint` says why, for example `Live. Nothing left to do.` An `unpromoted` outcome with `done` means the version is ready and you need to promote it yourself, and the promote URL is right there in `links.promote`.
+
+Anonymous publishes add a `claim` block instead of the `access` link. See [Publish without an account](/anonymous-and-claim).
+
+## What the API accepts
+
+`POST /v1/publish` sniffs the content type.
+
+| Content type | Body |
+| --- | --- |
+| `application/json` | A file manifest plus metadata |
+| `application/zip`, `application/x-tar`, `application/gzip` | A project archive |
+| `multipart/form-data` | One binary part per file, or one `archive` part, plus an optional `payload` JSON part |
+| `text/html` | A single document, published as `index.html` |
+| `application/octet-stream` | Raw bytes for one file, path from the `x-spacefast-path` header |
+
+Anything else answers `unsupported_publish_media_type`.
+
+## Static zip or a build
+
+An archive takes one of two paths, decided from the file names alone without unpacking it.
+
+A zip publishes directly as static files when it contains an `index.html` **and** no build markers. A build marker is a lockfile, a workspace root file, a framework config file, or a `vercel.json`, `netlify.toml`, or `wrangler.toml`. A `package.json` next to your `index.html` is enough to make it a build.
+
+Everything else becomes a Build that installs and builds your project, then publishes the output. Tar and tar.gz are always builds, only zip has the static path.
+
+Before classification, a single wrapper directory is stripped, and `__MACOSX` and `.DS_Store` entries are dropped. Zipping a folder rather than its contents works fine.
+
+An archive that needs a build returns a receipt with a `build` object and `next.action` of `poll`. Follow `links.status` until it settles. See [Frameworks and builds](/frameworks).
+
+## When a publish fails
+
+| Code | What happened | Fix |
+| --- | --- | --- |
+| `manifest_too_many_files` | More files than your plan allows | Publish a built output directory, not a source tree |
+| `version_file_too_large` | One file over the per-plan ceiling | Host the asset elsewhere, or move up a plan |
+| `version_total_bytes_exceeded` | The version is over 2 GiB | Split the site, or drop unused assets |
+| `manifest_duplicate_path` | Two entries canonicalize to one path | Two files differ only by encoding or case folding. Rename one |
+| `invalid_file_path` | A path Spacefast cannot canonicalize | Remove backslashes, doubled slashes, and trailing dots or spaces |
+| `static_control_file_not_supported` | An `.htaccess` or `.user.ini` shipped | Delete it. Use `_redirects` and `_headers` instead |
+| `unsupported_publish_media_type` | The content type is not one of the five above | Send a zip or a JSON manifest |
+| `publish_archive_compression_ratio_exceeded` | The archive expands over 100 times its size | Repack without the zip bomb shaped content |
+| `slug_reserved`, `slug_unavailable` | The slug you asked for is taken or held | Take the `details.suggestion` |
+| `version_quota_exceeded` | A Free Space is at 200 versions | Delete old versions, or move up a plan |
+| `space_selection_conflict` | You passed both a Space and a creation-only flag such as `--access` | Drop the creation flag |
+
+Every code, with whether it is worth retrying, is on [Error codes](/api/errors).

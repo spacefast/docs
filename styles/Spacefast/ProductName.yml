@@ -2,6 +2,8 @@ extends: existence
 message: "Spacefast is capitalized in prose. Identifiers (@spacefast/…, /spacefast, $spacefast, spacefast.com) stay lowercase — backtick them."
 level: error
 ignorecase: false
+exceptions:
+  - git push spacefast HEAD
 # nonword: the leading (?:^|[\s(]) must be allowed to sit after punctuation;
 # Vale's default \b-wrapping would silently skip "Also, spacefast".
 nonword: true

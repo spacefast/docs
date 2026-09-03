@@ -1,5 +1,7 @@
 import { defineConfig } from "blume";
 
+import { redirects } from "./redirects.ts";
+
 const deploymentBase = "/docs";
 const haskoy = {
   name: "Haskoy",
@@ -14,10 +16,8 @@ const haskoy = {
 
 export default defineConfig({
   title: "Spacefast Docs",
-  description: "Publish sites and build apps with Spacefast through the CLI, API, SDK, and MCP.",
+  description: "Publish and host the sites your agents build.",
   logo: { href: "/", text: "Spacefast Docs" },
-  // Site-wide announcement bar; enable with launch copy when there is news:
-  // banner: "Spacefast is in early access.",
   theme: {
     accent: { dark: "#ff7657", light: "#d93614" },
     background: { dark: "#111114", light: "#fbfaf7" },
@@ -53,9 +53,7 @@ export default defineConfig({
       },
     ],
   },
-  content: {
-    root: "content",
-  },
+  content: { root: "content" },
   export: true,
   github: {
     owner: "spacefast",
@@ -63,151 +61,24 @@ export default defineConfig({
     branch: "main",
   },
   lastModified: true,
+  markdown: { imageZoom: true, code: { icons: true, wrap: false } },
   navigation: {
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
       { label: "Agent setup", href: "/agents", icon: "bot" },
     ],
     repo: true,
-    sidebar: {
-      display: "flat",
-      items: [
-        "/",
-        {
-          label: "Get started",
-          root: "/start",
-          items: ["/start", "/start/how-it-works", "/start/glossary"],
-        },
-        {
-          label: "Publish",
-          root: "/publish",
-          items: [
-            "/publish",
-            "/publish/versions",
-            "/publish/git",
-            "/publish/remote",
-            "/publish/anonymous",
-            "/publish/variables",
-          ],
-        },
-        {
-          label: "Serve",
-          root: "/serve/settings",
-          items: [
-            "/serve/settings",
-            "/serve/redirects",
-            "/serve/headers",
-            "/serve/crons",
-            "/serve/pages",
-            "/serve/images",
-          ],
-        },
-        {
-          label: "Domains",
-          root: "/domains",
-          items: ["/domains", "/domains/dns", "/domains/registration"],
-        },
-        {
-          label: "Share",
-          root: "/share",
-          items: ["/share", "/share/comments", "/share/verify"],
-        },
-        {
-          label: "Primitives",
-          root: "/zero-runtime",
-          items: [
-            "/zero-runtime",
-            "/functions",
-            "/functions/php",
-            "/database",
-            "/storage",
-            "/services",
-          ],
-        },
-        {
-          label: "Agents",
-          root: "/agents",
-          items: ["/agents", "/agents/publishing", "/agents/mcp"],
-        },
-        {
-          label: "Operate",
-          root: "/operate/spaces",
-          items: [
-            "/operate/spaces",
-            "/operate/monitoring",
-            "/operate/webhooks",
-          ],
-        },
-        {
-          label: "Guides",
-          root: "/guides/frameworks/nextjs",
-          items: [
-            {
-              label: "Frameworks",
-              root: "/guides/frameworks/nextjs",
-              items: [
-                "/guides/frameworks/nextjs",
-                "/guides/frameworks/astro",
-                "/guides/frameworks/vite",
-                "/guides/frameworks/jekyll",
-              ],
-            },
-            {
-              label: "Move from another host",
-              root: "/guides/migrate",
-              items: [
-                "/guides/migrate",
-                "/guides/migrate/vercel",
-                "/guides/migrate/netlify",
-                "/guides/migrate/cloudflare-pages",
-                "/guides/migrate/github-pages",
-                "/guides/migrate/here-now",
-              ],
-            },
-            {
-              label: "Integrations",
-              root: "/guides/wordpress",
-              items: ["/guides/wordpress", "/guides/tag-manager"],
-            },
-            "/guides/local-development",
-          ],
-        },
-        {
-          label: "Platforms",
-          root: "/platforms",
-          items: ["/platforms"],
-        },
-        {
-          label: "Account & teams",
-          root: "/account",
-          items: [
-            "/account",
-            "/account/teams",
-            "/account/api-keys",
-            "/account/plans",
-          ],
-        },
-        {
-          label: "Reference",
-          root: "/reference",
-          items: [
-            "/reference",
-            "/api",
-            "/api/versioning",
-            { label: "REST API reference", href: "/api/reference" },
-            { label: "Platform API reference", href: "/platforms/api/reference" },
-            "/cli",
-            "/reference/sdk",
-            "/errors",
-            { label: "Changelog", href: "/changelog" },
-            "/changelog/packages",
-          ],
-        },
-      ],
-    },
+    sidebar: { display: "flat" },
+    tabs: [
+      { label: "Docs", path: "/", icon: "book-open" },
+      { label: "CLI", path: "/cli", icon: "terminal" },
+      { label: "API", path: "/api", icon: "braces" },
+      { label: "Agents", path: "/agents", icon: "bot" },
+    ],
   },
   openapi: {
     enabled: true,
+    codeSamples: ["curl", "js", "python"],
     sources: [
       {
         label: "REST API",
@@ -224,9 +95,9 @@ export default defineConfig({
   search: {
     provider: "pagefind",
     popular: [
-      { label: "Quickstart", href: "/start", icon: "rocket" },
-      { label: "How publishing works", href: "/publish", icon: "upload" },
-      { label: "MCP", href: "/agents/mcp", icon: "bot" },
+      { label: "Quickstart", href: "/quickstart", icon: "rocket" },
+      { label: "Publishing", href: "/publish", icon: "upload" },
+      { label: "MCP server", href: "/agents/mcp-server", icon: "bot" },
       { label: "API reference", href: "/api/reference", icon: "braces" },
     ],
   },
@@ -240,23 +111,17 @@ export default defineConfig({
         { label: "How do I roll back a version?", icon: "undo-2" },
       ],
     },
-    llmsTxt: {
-      enabled: true,
-      openapi: true,
-    },
-    mcp: {
-      enabled: false,
-    },
+    llmsTxt: { enabled: true, openapi: true },
+    mcp: { enabled: false },
   },
   seo: {
     agentReadability: true,
-    og: {
-      enabled: true,
-    },
+    og: { enabled: true },
     robots: true,
     sitemap: true,
     structuredData: true,
   },
+  redirects,
   deployment: {
     output: "static",
     site: "https://spacefast.com",

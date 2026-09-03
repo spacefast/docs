@@ -1,0 +1,94 @@
+---
+title: Pagination
+description: One cursor scheme for every list in the Spacefast API, with defaults, limits, and the loop that walks a whole collection
+sidebar:
+  order: 4
+---
+
+Every list in this API pages the same way. After this page you can walk a collection to the end without writing a special case for any endpoint.
+
+## Request
+
+Two optional query parameters.
+
+| Parameter | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `limit` | integer, 1 to 100 | 20 | How many items to return. |
+| `cursor` | string, up to 4096 characters | none | The `nextCursor` from the previous page. |
+
+Both are optional. The generated spec marks `limit` as required because the schema supplies its own default, but a request that omits it gets 20.
+
+## Response
+
+A list body adds a `pagination` object next to `data`.
+
+```json
+{
+  "data": [],
+  "pagination": {
+    "nextCursor": "eyJjcmVhdGVkQXQiOiIyMDI2LTA4LTMxVDA5OjE0OjAyLjExMVoiLCJpZCI6InZlcl84YzFkIn0",
+    "hasMore": true
+  }
+}
+```
+
+| Field | Type | What it means |
+| --- | --- | --- |
+| `nextCursor` | string or null | Pass it back as `cursor` for the next page. `null` when there is nothing after this page. |
+| `hasMore` | boolean | Whether another page exists. |
+
+Lists are newest first, ordered by creation time and then by id, so a stable sort holds across pages even when two rows share a timestamp.
+
+## Cursors are opaque
+
+A cursor is a base64url-encoded keyset. Do not parse it, build one, or store it as a durable bookmark. Pass back exactly what you got.
+
+## The loop
+
+Stop when `nextCursor` is `null`. Never re-send a cursor you have already used. If the response hands back the same cursor you sent, that is a broken page rather than the end, and looping on it spins forever. Treat it as an error.
+
+The same walk with curl and [the SDK](/api/sdk).
+
+<CodeGroup>
+
+```bash curl
+curl -sS "https://api.spacefast.com/v1/spaces/spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c/versions?limit=50" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+
+curl -sS "https://api.spacefast.com/v1/spaces/spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c/versions?limit=50&cursor=eyJjcmVhdGVkQXQiOiIyMDI2LTA4LTMxVDA5OjE0OjAyLjExMVoiLCJpZCI6InZlcl84YzFkIn0" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+```ts SDK
+async function allVersions(spaceId: string) {
+  const versions = [];
+  let cursor: string | undefined;
+  const seen = new Set<string>();
+
+  for (;;) {
+    const page = await client.get("/v1/spaces/{spaceId}/versions", {
+      path: { spaceId },
+      query: { limit: 100, cursor },
+    });
+    versions.push(...page.data);
+    if (!page.pagination.hasMore || page.pagination.nextCursor === null) break;
+    if (seen.has(page.pagination.nextCursor)) throw new Error("Cursor repeated.");
+    seen.add(page.pagination.nextCursor);
+    cursor = page.pagination.nextCursor;
+  }
+
+  return versions;
+}
+```
+
+</CodeGroup>
+
+The `sf` CLI does the same walk for you with `sf api GET <path> --paginate`, which streams every page as JSON Lines and fails when a cursor repeats.
+
+## The one exception
+
+`GET /v1/docs/search` pages by offset rather than by cursor. It takes `limit` (up to 25) and `offset`, and answers with `nextOffset` and `hasMore`. Every other list on the public API uses the cursor scheme above.
+
+## Filters compose with paging
+
+Most lists accept their own filters alongside `limit` and `cursor`. `GET /v1/operations` takes `resourceType`, `resourceId`, and `spaceId`. `GET /v1/activity` takes `spaceId`, `code`, `actorType`, `actorId`, `since`, and `until`. `GET /v1/spaces/{spaceId}/versions` takes `gitCommitSha`. Keep the filters identical across a walk, since a cursor is only meaningful against the query that produced it.

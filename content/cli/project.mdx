@@ -1,0 +1,323 @@
+---
+title: Project setup
+description: Create a project, bind a directory to a Space, switch teams, point the CLI at another provider, and open a private Space
+sidebar:
+  order: 9
+---
+
+After this page you can scaffold a project, link a directory to a Space so `sf publish` needs no flags, read that link back, and move between teams and providers.
+
+Two files carry the link. `.spacefast/space.json` is the committable one: which Space, which team, which API base URL. `.spacefast/state.json` is the local cache and holds credentials, so it never gets committed and the CLI adds it to `.gitignore` for you.
+
+Every command here also takes the [global flags](/cli#global-flags).
+
+## sf init
+
+Create a Spacefast project.
+
+```text
+sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functions]
+```
+
+### Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `[name]` | Directory name for a new project. Omit to initialize the current directory. `sf init .` means "here", not "a project named `.`". |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-f, --force` | `false` | Overwrite existing generated files. |
+| `--runtime=<static\|zero\|functions>` | `static` | Project runtime to scaffold. |
+| `--template=<todo\|guestbook\|contact>` | none | Zero starter template to scaffold. |
+| `--title=<value>` | none | Zero starter app title. |
+| `--no-git` | off | Skip initializing git for a Zero starter app. |
+| `--space=<value>` | none | Space ID, live URL, domain, or slug to link the directory to. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+### Examples
+
+```bash
+sf init
+sf init my-site
+sf init --space docs
+sf init my-app --runtime zero --template guestbook
+```
+
+### What it writes
+
+`sf init` writes `sf.jsonc`, commented out down to the keys you are likely to want:
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  // Project link: .spacefast/space.json (written by sf init --space, sf link, or sf publish).
+  // "index": "index.html",
+  // "fallback": "/index.html", // SPA fallback; or { "path": "/404.html", "status": 404 }
+  // "listing": false,
+  // "access": "public", // whole live space public; or { "public": ["/assets/**", "!/assets/private/**"] }
+  // "meta": { "title": "", "description": "", "image": "/og.png", "favicon": "/favicon.svg" },
+  // "templates": [], // files that receive {{ vars.NAME }} substitution
+  // "build": { "rootDirectory": ".", "buildCommand": "npm run build", "outputDirectory": "dist" },
+}
+```
+
+With `--space` it also writes `.spacefast/space.json` and refreshes `.spacefast/state.json`. If the cache write fails you get a warning, not a failure, because the committed link is the source of truth.
+
+Other config filenames still work, in this precedence order: `sf.jsonc`, `spacefast.jsonc`, `spacefast.json`, `sf.json`, `.sf/sf.json`, `.sf/config.jsonc`, `.sf/config.json`. The highest one present wins and the rest produce a warning naming the winner.
+
+`sf init` refuses to overwrite an existing config without `--force`, and refuses a symlinked or non-regular config outright. `sf init <name>` removes the directory it created if init fails.
+
+### Output
+
+```text
+{ "data": { "created": true, "configPath": "…/sf.jsonc" } }
+```
+
+With `--space`, `data` also carries `linkPath`, `space`, `statePath`, and `stateSaved`.
+
+## sf link
+
+Link the current directory to a Space.
+
+```text
+sf link --space <value> [-o <team>] [--claim-token <value>]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | none | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+```bash
+sf link --space my-space
+sf link --space prj_abc123 --team acme
+```
+
+It resolves the Space, then writes `.spacefast/space.json` with the slug, the team slug, and the API base URL it resolved through. Commit that file and every checkout of the repo publishes to the same Space. A committed link is inherited by every directory under it.
+
+### Output
+
+```text
+Linked my-space (spc_abc123) → .spacefast/space.json
+```
+
+`--json` returns `{ "data": { "linked": true, "linkPath": "…", "statePath": "…", "space": { … } } }`.
+
+## sf unlink
+
+Remove this checkout's Spacefast link and private local publish state.
+
+```text
+sf unlink [-y]
+```
+
+Takes only the global flags.
+
+```bash
+sf unlink
+sf unlink --yes --json
+```
+
+It finds the nearest link, confirms, and removes both the committed link and the local state file. Nothing on the server changes. This is a local destructive action, so in agent mode it needs `--yes` or `SF_AGENT_ALLOW_DESTRUCTIVE=1`.
+
+### Output
+
+```text
+Unlinked .
+Removed .spacefast/space.json.
+Removed .spacefast/state.json.
+```
+
+`--json` returns `{ "data": { "root": "…", "removed": ["…"] } }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | "This checkout is not linked to a Spacefast space." |
+| `cancelled` | 130 | You declined the prompt. |
+
+## sf switch
+
+Switch teams.
+
+```text
+sf switch [TEAM] [-o <team>]
+```
+
+| Argument | What it does |
+| --- | --- |
+| `[team]` | Team slug, ID, or name. Omit it to pick from a list when interactive. |
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | none | Same as the positional argument. Env `SPACEFAST_TEAM`. |
+
+```bash
+sf switch acme
+```
+
+It stores the default team in `~/.spacefast/config.json`, and every later command that needs a team uses it. Signing in or out clears it, so a default can never outlive the identity that set it. If you belong to exactly one team, `sf switch` with no argument picks it.
+
+### Output
+
+```text
+Default team: Acme (acme)
+```
+
+`--json` returns `{ "data": { "team": { … } } }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | Not logged in, no accessible team, an unknown team name, or no team named in a non-interactive run. |
+
+## sf profiles
+
+List named provider profiles.
+
+```text
+sf profiles
+```
+
+A profile binds an API base URL and a credential together, so the CLI can publish to any Spacefast-compatible control plane. Most people never need one.
+
+```text
+PROFILE   API URL                          TOKEN
+acme *    https://api.acme-host.example    yes
+```
+
+The starred profile is the current one. `--json` returns `{ "data": { "currentProfile": "acme", "profiles": { "acme": { "apiUrl": "…", "hasToken": true } } } }`. Tokens are never printed, only whether a usable one is bound.
+
+Profiles live in `~/.spacefast/config.json`, and each credential in its own `~/.spacefast/credentials/profile-*.json`. A `--profile` naming a profile that does not exist fails. `SPACEFAST_PROFILE` naming a missing one is tolerated by the `profiles` commands alone, so they stay usable as the way out.
+
+### sf profiles set
+
+Create or update a provider profile.
+
+```text
+sf profiles set NAME [--api-url <url>] [--token <key>]
+```
+
+| Argument | What it does |
+| --- | --- |
+| `<name>` | Profile name. Starts with a letter or number, then up to 64 letters, numbers, dots, underscores, or hyphens. |
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--api-url=<url>` | none | Provider API base URL for this profile. Required when creating one. Only the origin is stored. No env binding. |
+| `--token=<key>` | none | API key bound to this profile. Pass `""` to clear a saved key. No env binding. |
+
+```bash
+sf profiles set acme --api-url https://api.acme-host.example --token sfa_xxxxxxxxxxxx
+sf profiles set acme --token ""
+```
+
+Neither flag reads an environment variable here, so an exported `SPACEFAST_TOKEN` cannot be captured into a profile by accident and `--token ""` keeps meaning "clear it". An `--api-url` with embedded credentials is rejected.
+
+### sf profiles use
+
+Select the active provider profile.
+
+```text
+sf profiles use NAME
+```
+
+```bash
+sf profiles use staging
+```
+
+Sets the profile used when no `--profile` flag or `SPACEFAST_PROFILE` is present. Fails with `unknown_profile` (exit 2) if the profile is not configured.
+
+### sf profiles rm
+
+Remove a provider profile.
+
+```text
+sf profiles rm NAME [-y]
+```
+
+```bash
+sf profiles rm staging
+```
+
+Deletes the profile and its stored credential after confirming. It refuses with `profile_selected` (exit 2) if the profile is the current one and others exist. Run `sf profiles use <other>` first.
+
+## sf open
+
+Open a private Space.
+
+```text
+sf open [TARGET] [--path <route>] [--show-secret] [-o <team>] [--claim-token <value>]
+```
+
+### Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, version URL, or domain. Defaults to the linked Space. |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--path=<route>` | `/` | Clean route to open after the exchange. |
+| `--show-secret` | `false` | Print the temporary handoff URL instead of opening it. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+```bash
+sf open
+sf open docs
+sf open docs --path /pricing
+```
+
+It mints a temporary handoff for you as the author and opens the browser at it. It never creates a link anyone else could use. To share a private Space with someone, use `sf share`.
+
+### Output
+
+```text
+Opened privately: https://docs.view.fast
+```
+
+Without a terminal, and without `--show-secret`, the URL is withheld: `Temporary Open URL hidden. Run in a terminal or pass --show-secret.` `--json` returns `{ "data": { "space": { "id", "slug", "liveUrl" }, "open": …, "opened": true } }` with the secret masked.
+
+## sf status
+
+Show CLI status.
+
+```text
+sf status [--include-claim-url]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--include-claim-url` | off | Include the still-pending claim link. |
+
+Bare `sf` runs this.
+
+```bash
+sf status
+sf status --include-claim-url
+```
+
+### Output
+
+```text
+User:   dev@example.com
+Default team: acme
+Space:  spc_abc123 (acme)
+        .spacefast/space.json
+
+Run `sf --help` for commands.
+```
+
+`data` carries `authenticated`, `apiUrl`, `user`, `defaultTeam`, `linked` (`spaceId`, `teamSlug`, `claimPending`, `expiresAt`), `statePath`, and `linkPath`.
+
+The claim link for an anonymous Space is withheld unless you pass `--include-claim-url`, since it is a credential. When the claim window has passed, the line reads `Claim: expired` instead.

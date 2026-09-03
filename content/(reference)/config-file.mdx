@@ -1,0 +1,279 @@
+---
+title: sf.jsonc reference
+description: Every key sf.jsonc accepts, what it does, and which defaults the finalizer actually computes
+sidebar:
+  order: 1
+---
+
+`sf.jsonc` is the project config Spacefast reads when a version finalizes. This page lists every key the schema accepts. After it you can write the file by hand and know which defaults are real.
+
+## A full example
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+
+  // Which Space this project publishes to, and what it is called.
+  "space": "my-app",
+  "name": "My App",
+
+  // Serving shape.
+  "index": "index.html",
+  "fallback": { "path": "index.html", "status": 200 },
+  "cleanUrls": true,
+  "listing": false,
+
+  // Listing, sharing, and browser icon metadata.
+  "meta": {
+    "title": "My App",
+    "description": "What this site is",
+    "image": "/og.png",
+    "favicon": "/favicon.ico"
+  },
+
+  // Visual tokens for Spacefast-authored pages (404, access, index).
+  "theme": { "accent": "#0d9488", "background": "#ffffff", "name": "My App" },
+
+  // Files that receive {{ vars.NAME }} substitution at finalize.
+  "templates": ["index.html"],
+
+  // Analytics tags and custom snippets.
+  "superpowers": {
+    "googleAnalytics": { "enabled": true, "measurementId": "G-XXXXXXX" }
+  },
+
+  // Settings for builds the platform runs from a connected repository.
+  "build": {
+    "rootDirectory": "apps/web",
+    "installCommand": "pnpm install",
+    "buildCommand": "pnpm build",
+    "outputDirectory": "dist",
+    "timeoutSeconds": 900
+  },
+
+  // Run code alongside the files.
+  "runtime": { "kind": "zero", "server": "server/index.ts", "client": "client/index.tsx" },
+
+  // Scheduled GETs against this space's own paths.
+  "crons": [{ "path": "/api/digest", "schedule": "daily" }],
+
+  // Paths that stay public even on a restricted Space.
+  "access": { "public": ["/health", "/assets/**"] },
+
+  // Routing rules; see the routing page.
+  "redirects": [{ "source": "/old", "destination": "/new", "status": 301 }],
+  "headers": [{ "source": "/assets/*", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] }]
+}
+```
+
+## Where the file lives
+
+The canonical name is `sf.jsonc` at the root of the directory you publish. Six aliases are accepted too. The first file found wins, in this order.
+
+1. `sf.jsonc`
+2. `spacefast.jsonc`
+3. `spacefast.json`
+4. `sf.json`
+5. `.sf/sf.json`
+6. `.sf/config.jsonc`
+7. `.sf/config.json`
+
+All seven are private files. They are never served. Keep exactly one, since two config files in the same tree is an error.
+
+The file is JSON with comments, capped at 256 KiB. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation.
+
+## Identity
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `$schema` | string | none | Editor pointer to the published JSON Schema |
+| `space` | string | none | The Space this project publishes to, as a slug or an `spc_` id |
+| `name` | string, 1 to 255 chars | none | Display name for the Space |
+
+While `name` is set in the file, the API refuses to rename the Space. The file wins, so a rename means editing the file and publishing.
+
+## Serving
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `index` | string or `false` | inferred, see below | The directory index file. `false` disables index resolution |
+| `fallback` | string, or `{ path, status }` | none | The committed file served when no exact route matches. `status` is 100 to 599 |
+| `cleanUrls` | boolean | `true`, unless a 200-status `fallback` is set | Serves `about.html` at `/about` |
+| `listing` | boolean | on when no index could be inferred and the version runs no worker | Automatic directory listings |
+
+`index` defaults to `index.html` when the version has one at the root. Otherwise, if the version publishes exactly one HTML file, that file. Otherwise, if there is exactly one HTML file at the root, that one. Otherwise `false`.
+
+`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it also turns `cleanUrls` and `listing` off unless you set them yourself. A `fallback` path that is not a committed file fails the publish.
+
+## Metadata and appearance
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `meta.title` | string, up to 300 chars | none | Title for listings, sharing, and the viewer |
+| `meta.description` | string, up to 1000 chars | none | Description for the same |
+| `meta.image` | string, up to 2000 chars | none | Sharing image |
+| `meta.favicon` | string, up to 2000 chars | none | Browser icon |
+| `theme.accent` | color | none | Accent color on Spacefast-authored pages |
+| `theme.background` | color | none | Background color on the same |
+| `theme.name` | string, 1 to 120 chars | none | Display name in the brand row |
+| `theme.logo` | string, up to 2000 chars | none | An `https://` URL or a root-relative path |
+| `theme.font` | string, up to 256 chars | none | A plain font-family stack. No `url()` or `src` |
+
+Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names. `theme` is a closed object, so an unknown key is an error.
+
+A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero) capsule's Tailwind compile reads the same file.
+
+What these tokens paint, and how to replace those pages outright, is on [Layout, theme, and site pages](/site-pages).
+
+## Templates
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `templates` | string array, up to 100 entries | none | Files whose `{{ vars.NAME }}` tokens are substituted at finalize |
+
+See [Environment variables](/environment-variables) for where the values come from.
+
+## Superpowers
+
+Platform-managed script injection and your own snippets.
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `superpowers.enabled` | boolean | on unless set to `false` | Master switch for platform-managed injections |
+| `superpowers.disable_all_injection` | boolean | none | When true, suppresses every managed injection |
+| `superpowers.googleAnalytics.enabled` | boolean | none | Turns the tag on |
+| `superpowers.googleAnalytics.measurementId` | string, up to 64 chars | none | The `G-` measurement id |
+| `superpowers.googleTagManager.enabled` | boolean | none | Turns the container on |
+| `superpowers.googleTagManager.containerId` | string, up to 64 chars | none | The `GTM-` container id |
+| `superpowers.javascriptTags` | array, up to 16 entries | none | Custom snippets. Each has `code` (up to 8 KiB) plus optional `id`, `name`, `enabled` |
+
+Injection is on unless `enabled` is `false` or `disable_all_injection` is `true`.
+
+## Build
+
+Settings for builds the platform runs from a connected repository. They do nothing for a folder publish. See [Publish from Git](/git).
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `build.rootDirectory` | string | none | Directory the build runs in |
+| `build.installDirectory` | string | none | Directory the install runs in, when it differs |
+| `build.installCommand` | string | none | Overrides the detected install command |
+| `build.buildCommand` | string | none | Overrides the detected build command |
+| `build.outputDirectory` | string | none | Where the build wrote its output |
+| `build.ignoredBuildCommand` | string | none | A command whose exit code decides whether to skip the build |
+| `build.frameworkPreset` | string | none | Pins the framework instead of detecting it |
+| `build.platformPreset` | string | none | Pins the source platform preset |
+| `build.allowUnsupportedPlatformFeatures` | boolean | none | Proceeds past unsupported migration features |
+| `build.timeoutSeconds` | integer, 60 to 7200 | none | Build timeout |
+
+Every field is nullable, and `build` is a closed object.
+
+## Placement
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `placement.burstable` | boolean | none | Whether the site may burst its PHP workers |
+
+Data location is chosen once, when the Space is created, and never changes.
+
+## Runtime
+
+One runtime per version, discriminated on `kind`. Omit the block for a static site.
+
+### `kind: "zero"`
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `runtime.server` | string, required | none | Server entry, relative to the published directory |
+| `runtime.client` | string, required | none | Client entry, relative to the published directory |
+
+Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero).
+
+### `kind: "functions"`
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `runtime.entry` | string | detected | Worker entry. Naming a file that does not exist fails the publish |
+| `runtime.database` | boolean | `false` | Adds `env.DB` |
+| `runtime.fetch` | boolean | no schema default | Allows outbound HTTP. An OpenNext build gets it unless set to `false`; a hand-written handler does not until you ask |
+| `runtime.compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | Runtime semantics this worker was written against |
+
+See [Functions](/functions).
+
+## Crons
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `crons` | array, up to 8 entries | none | Scheduled requests |
+| `crons[].path` | string, up to 512 chars | none | Path to GET. Starts with `/`, no query, no wildcards, no `:placeholders` |
+| `crons[].schedule` | string | none | A named schedule, a shorthand, or a five-field crontab |
+
+`sf.jsonc` is the only writer. See [Crons](/crons) for the schedule grammar.
+
+## Access
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `access` | `"public"` or `{ public: string[] }` | none | Live paths that stay public whatever the Space's access setting is |
+
+`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed. See [Access](/access).
+
+## Routing
+
+`redirects`, `rewrites`, and `headers` are real `sf.jsonc` keys, owned by the routing compiler and merged behind the `_redirects` and `_headers` files. Their grammar, precedence, and every rule field live on one page.
+
+See [Redirects, rewrites, and headers](/routing).
+
+## Accepted but not yet enforced
+
+| Key | Type | What it does |
+| --- | --- | --- |
+| `markdownNegotiation` | boolean | Accepted by the schema. Runtime enforcement ships separately, so setting it changes nothing today |
+
+## Parser caps
+
+| Cap | Value |
+| --- | --- |
+| File size | 256 KiB |
+| `templates` entries | 100 |
+| `crons` entries | 8 |
+| `crons[].path` | 512 characters |
+| `name` | 255 characters |
+| `meta.title` | 300 characters |
+| `meta.description` | 1000 characters |
+| `meta.image`, `meta.favicon` | 2000 characters |
+| `superpowers.javascriptTags` entries | 16, each `code` up to 8 KiB |
+
+A plan may lower these caps. None of them can be raised.
+
+## The strict v1 shape
+
+There is a second, stricter contract for the same filename, selected by a top-level `"version": 1`. Its schema is published separately at `https://spacefast.com/schemas/sf.v1.json`, and `sf routing inspect` compiles against it.
+
+In that shape the serving keys move into a `serve` block.
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.v1.json",
+  "version": 1,
+  "serve": {
+    "index": "index.html",
+    "spaFallback": "index.html",
+    "cleanUrls": true,
+    "directoryListing": false
+  }
+}
+```
+
+Under `version: 1` the flat spellings are rejected. Four of them get `config_unknown_key` with the replacement named in the message.
+
+| Flat key | v1 spelling |
+| --- | --- |
+| `index` | `serve.index` |
+| `fallback` | `serve.spaFallback` |
+| `cleanUrls` | `serve.cleanUrls` |
+| `meta` | `metadata` |
+
+The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error: `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`, and `space` reports `config_identity_moved`.
+
+The flat shape above is what the finalizer reads and what the CLI writes. Use `version: 1` only if you want the stricter contract.

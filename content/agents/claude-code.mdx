@@ -1,0 +1,119 @@
+---
+title: Claude Code
+description: Install the Spacefast plugin in Claude Code, what it adds to your session, and the prompts that work
+---
+
+After this page Claude Code can publish your project, read its deployments, domains, and traffic, and manage the rest of your account without you leaving the terminal.
+
+## Install
+
+```bash
+claude plugin marketplace add spacefast/plugins
+claude plugin install spacefast@spacefast
+```
+
+The plugin does not assume the `sf` CLI is installed. You sign in the first time the hosted server is used, through your client's OAuth flow.
+
+Two other lanes exist. `npx -y plugins add spacefast/plugins -t claude-code -y` installs the same plugin, and `sf setup agent --agent claude-code` writes MCP config into `~/.claude.json` and installs the skill into `~/.claude/skills/spacefast/` instead. See [sf setup agent](/agents/sf-setup).
+
+## What the plugin adds
+
+### MCP servers
+
+Two entries, hosted and local.
+
+```json .mcp.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "http",
+      "url": "https://mcp.spacefast.com"
+    },
+    "spacefast-local": {
+      "command": "npx",
+      "args": ["-y", "spacefast@<version>", "mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio, which is what lets `publish` read a folder instead of taking inline files. The version in `args` is stamped at release; the shipped file pins whatever the release built.
+
+The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
+
+### The Spacefast skill
+
+`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool, sets the publish then poll then report loop, and holds the rules about never printing claim credentials. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
+
+### One SessionStart hook
+
+```json hooks.json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${GROK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/hooks/session-start.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The script reads `.spacefast/space.json` in your working directory. If that file names a Space, it writes one line into the session and nothing else.
+
+```text
+Spacefast project detected. This directory is linked to <space> at <liveUrl>. Use the Spacefast skill and preserve .spacefast/space.json. Treat .spacefast/state.json as credential material: never print, commit, or archive it.
+```
+
+The live URL is appended only when it starts with `https://`. If the file is missing or holds no Space, the hook prints nothing. It makes no network calls and sends no telemetry.
+
+## Verify it works
+
+Ask for something read-only first. `search_docs` needs no credential, so it answers even before you sign in.
+
+<Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
+Use the Spacefast MCP server to search the docs for custom domains.
+</Prompt>
+
+If the tools are wired up, Claude Code names the tool it called. Then try a publish.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+A first publish with no account returns a claim link. Claim it in the browser to keep the Space. See [Publish without an account](/anonymous-and-claim).
+
+## Typical prompts
+
+<Prompt description="Publish ./dist to Spacefast and tell me the live URL and the version URL." actions={["copy"]}>
+Publish ./dist to Spacefast and tell me the live URL and the version URL.
+</Prompt>
+
+<Prompt description='Ship a new version of this site with the changelog "fix the pricing table".' actions={["copy"]}>
+Ship a new version of this site with the changelog "fix the pricing table".
+</Prompt>
+
+<Prompt description="Show me the last few deployments for this Space and whether the latest build passed." actions={["copy"]}>
+Show me the last few deployments for this Space and whether the latest build passed.
+</Prompt>
+
+<Prompt description="Point docs.example.com at this Space and tell me which DNS records to add." actions={["copy"]}>
+Point docs.example.com at this Space and tell me which DNS records to add.
+</Prompt>
+
+<Prompt description="How much traffic did this Space get in the last 30 days?" actions={["copy"]}>
+How much traffic did this Space get in the last 30 days?
+</Prompt>
+
+<Prompt description="Roll this Space back to the previous version." actions={["copy"]}>
+Roll this Space back to the previous version.
+</Prompt>
+
+The first five map to typed tools. The rollback goes through `execute`, which may pause and ask you to approve the write in the browser before it runs. See [approvals](/agents/mcp-server).

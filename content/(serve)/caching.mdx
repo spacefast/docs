@@ -1,0 +1,112 @@
+---
+title: Caching
+description: The two cache policies a published Space sends, which files get which, and what a publish does to copies already out there
+sidebar: { order: 4 }
+---
+
+After this page you know exactly which `Cache-Control` header each file in your Space gets, what a publish invalidates, and how to get a fresh response when you need one.
+
+## Two policies
+
+A published Space sends one of two headers on its static files. There is nothing in between.
+
+| Policy | `Cache-Control` |
+| --- | --- |
+| Immutable | `public, max-age=31536000, immutable` |
+| Everything else | `public, s-maxage=600, max-age=0, must-revalidate` |
+
+The second one is worth reading closely. `max-age=0` means the browser revalidates on every load, and the ETag turns that revalidation into a 304 when nothing changed. `s-maxage=600` means shared caches hold a copy for ten minutes. So a visitor sees a new publish immediately once the shared copy is refreshed, and never serves a stale page out of their own browser cache.
+
+**HTML gets the second policy, together with ordinary assets.** There is no separate HTML rule.
+
+## Which files are immutable
+
+A file gets the one-year immutable policy when either of these is true.
+
+**Its name carries a content hash.** Detection is deliberately strict, so a rename does not accidentally freeze a file for a year.
+
+| Filename | Immutable | Why |
+| --- | --- | --- |
+| `app.3f9c2d1a4b5e6f70.js` | Yes | A hex digest with both letters and digits |
+| `index-DiwrgTda.js` | Yes | A chunk id with an uppercase and a lowercase character |
+| `jquery-3.7.1.min.js` | No | A version number, not a digest |
+| `photo_20240115.jpg` | No | A date |
+| `hero-image1.jpg` | No | A counter |
+
+**Or it sits under a known build output directory** and is not `.html`, `.htm`, `.php`, `.txt` or `.xml`. Those directories are `_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`, and `_spacefast/platform/`.
+
+A build that emits unhashed filenames gets the ten-minute shared policy on everything. That is correct behavior for it, not a misconfiguration, but hashed filenames are what make repeat visits cheap.
+
+A precompressed sidecar such as `app.js.gz` is served at its own literal URL and is never selected as the answer for `app.js`.
+
+## Overriding the policy
+
+A `Cache-Control` header rule that matches a file wins, and its value is sent verbatim:
+
+```text _headers
+/data/*.json
+  Cache-Control: public, max-age=60
+```
+
+Publish warns with `header_cache_control_platform_managed`, because the header you set applies to browser responses while shared caching stays managed. Full rules for header files are on [Redirects, rewrites, and headers](/routing).
+
+## Responses that are never cached
+
+| Response | `Cache-Control` |
+| --- | --- |
+| Anything on a protected Space, or served to an admitted visitor | `private, no-store` |
+| Any URL carrying a share-link token in `?__=` | `private, no-store` |
+| Any request that is not `GET` or `HEAD` | `private, no-store` |
+| Any URL a conditional routing rule touches | `no-store` |
+| The 405 page | `no-store` |
+
+The non-GET rule is absolute. The shared cache in front of a Space keys on host, path and query without reading the method, so a cacheable answer to a `POST` could be replayed to a `GET`.
+
+## Vary is not part of the cache key
+
+The edge keys a stored response on **host, path, and query**. It does not read `Vary`.
+
+That single fact explains a behavior that surprises people. A routing rule with a `Country=`, `Language=`, `Cookie=` or `Agent=` condition would otherwise let one visitor's response be handed to the next, so any URL a conditional rule touches is forced to `no-store` for everyone, whether the condition matched or not.
+
+If a page needs to differ by country, language or client, give each variant its own URL rather than one URL with a condition on it. That keeps the whole set shared-cacheable.
+
+## What a publish does
+
+Activating a new version repoints the Space's hostnames at it and purges the edge for every hostname the Space serves on. Purging is **whole-host**. There is no way to purge one URL, because the cache key includes the query string and an enumerated purge could not name every variant a page lives under.
+
+Immutable version hostnames are deliberately not purged. Their bytes never change.
+
+The purge is a best-effort accelerator, not the correctness mechanism. The ten-minute shared lifetime is the backstop, so the worst case for a page whose purge did not land is that it refreshes within ten minutes.
+
+For the browser, a publish changes nothing that needs waiting on. `max-age=0` means every navigation revalidates, so a returning visitor picks up the new version on their next request. Files whose names carry a content hash are the exception, and they do not need invalidating: a new build emits new names.
+
+## Getting a fresh response
+
+<Steps>
+  <Step title="Republish">
+    A publish purges every serving hostname. This is the normal answer.
+  </Step>
+  <Step title="Check the version you are actually looking at">
+    Every response carries `X-Spacefast-Runtime: 1`, and `X-Spacefast-Version` names the version that answered.
+
+    ```bash
+    curl -sI https://my-site.view.fast/ | grep -i x-spacefast
+    ```
+  </Step>
+  <Step title="Bypass the shared copy while you compare">
+    Add a unique query parameter. The query is part of the cache key, so `?cachebust=1` is a different entry.
+
+    ```bash
+    curl -sI "https://my-site.view.fast/?cachebust=$(date +%s)"
+    ```
+  </Step>
+  <Step title="Open the version URL">
+    Every version keeps a permanent hostname of its own, which serves that exact build regardless of what is live. See [URLs and hostnames](/urls).
+  </Step>
+</Steps>
+
+## Validators
+
+An `ETag` is sent on every 200. Its value is derived from the file's content, not from a clock, so republishing identical bytes produces the same tag.
+
+Conditional requests are answered by the edge, not by the origin, so a revalidation that finds nothing changed comes back as a 304 without reaching your files. Static responses carry no `Last-Modified`.
