@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_feature_unavailable"
-description: "The requested DNS provider field or feature is not available for this zone."
+description: "The domain's current DNS provider does not offer this feature action or service template."
 ---
 
-The requested DNS provider field or feature is not available for this zone.
+The domain's current DNS provider does not offer this feature action or service template.
 
-**How to resolve:** Check the DNS capabilities response and remove unsupported fields.
+**How to resolve:** Choose a feature or template the provider supports, or move the zone to a provider that offers it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_feature_unavailable",
   "title": "Dns provider feature unavailable",
   "status": 400,
-  "detail": "The requested DNS provider field or feature is not available for this zone.",
+  "detail": "The domain's current DNS provider does not offer this feature action or service template.",
   "code": "dns_provider_feature_unavailable",
   "requestId": "req_4mz0v8qk"
 }

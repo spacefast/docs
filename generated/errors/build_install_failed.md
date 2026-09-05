@@ -1,11 +1,11 @@
 ---
 title: "build_install_failed"
-description: "The dependency install step failed during the build run."
+description: "The dependency install step of the build failed."
 ---
 
-The dependency install step failed during the build run.
+The dependency install step of the build failed.
 
-**How to resolve:** Inspect the build logs for the install error, fix the lockfile or install command, and start a new build.
+**How to resolve:** Read the streamed install output for the package manager error, fix the dependency, then retry the build.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_install_failed",
   "title": "Build install failed",
   "status": 400,
-  "detail": "The dependency install step failed during the build run.",
+  "detail": "The dependency install step of the build failed.",
   "code": "build_install_failed",
   "requestId": "req_4mz0v8qk"
 }

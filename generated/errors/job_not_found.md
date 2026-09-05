@@ -1,11 +1,11 @@
 ---
 title: "job_not_found"
-description: "The background job was not found."
+description: "No job with that ID exists on this Space."
 ---
 
-The background job was not found.
+No job with that ID exists on this Space.
 
-**How to resolve:** Verify the job id. Spacefast eventually prunes completed jobs.
+**How to resolve:** List the Space's jobs and use an ID from that list.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/job_not_found",
   "title": "Job not found",
   "status": 400,
-  "detail": "The background job was not found.",
+  "detail": "No job with that ID exists on this Space.",
   "code": "job_not_found",
   "requestId": "req_4mz0v8qk"
 }

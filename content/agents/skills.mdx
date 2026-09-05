@@ -25,16 +25,16 @@ The trigger line is the frontmatter `description`. Your client matches it agains
 <Tabs param="client">
 <Tab title="Claude Code">
 
-The MCP variant, verbatim.
+The MCP variant routes publishing, inspection, and management requests to the current tools.
 
 ```text
-Publish and inspect Spacefast spaces with direct MCP tools. Use publish for deploys. Use show_space_deployments for deployments and builds. Use show_space_domains for domains, DNS, and TLS. Use show_space_analytics for traffic. Use one execute call for other management tasks. Use search_docs only for documentation questions. Trigger when an agent must publish, host, deploy, share, update, claim, inspect, roll back, or configure a space.
+Use publish for local files or a new inline artifact, operation_status for an active publish, and show_space for read-only views. Use execute for documentation, API reads, and mutations. Use resume_execution to continue a paused program.
 ```
 
 </Tab>
 <Tab title="Codex">
 
-The Codex variant is identical except it reads "Trigger when Codex must publish, host, deploy...".
+The Codex variant follows the same tool routing and includes Codex-specific environment notes.
 
 </Tab>
 <Tab title="Cursor">
@@ -67,23 +67,19 @@ Show me the deployments for this Space and whether the last build passed.
 
 ## What it instructs
 
-The skill's job is routing and conduct. The MCP variant opens with this tool routing table, verbatim.
+The skill's job is routing and conduct. The MCP variant follows these tool choices.
 
 | Job | Tool |
 |---|---|
-| Documentation questions | `search_docs` |
-| Publish or update | `publish` |
-| Deployments and builds | `show_space_deployments` |
-| Domains, DNS, and TLS | `show_space_domains` |
-| Traffic analytics | `show_space_analytics` |
-| Check an active publish operation | `operation_status` |
-| Other API management | `execute` with `tools.search` and `tools.describe` inside code mode |
-| Detailed `execute` guide | `skills` |
+| Publish local files or a new inline artifact | `publish` |
+| View deployments, domains, analytics, source, or build logs | `show_space` |
+| Check an active publish | `operation_status` |
+| Documentation, account context, other API reads, and mutations | `execute` |
 | Continue an approval | `resume_execution` |
 
 The rest sets behavior the tools alone do not enforce.
 
-- Call the matching typed tool first. Do not reach for `skills` or `search_docs` ahead of it.
+- Call the matching tool first. Inside `execute`, search for and describe each operation before calling it.
 - Reuse the `.spacefast/` link in the current directory. Do not list Spaces before an ordinary publish, and set `createNew` only when you asked for a separate Space.
 - Publish once, then poll `operation_status` until it settles, then read the deployment, then report.
 - Report the live URL, the immutable version URL, and the access URL. For an anonymous publish, state the claim expiry and point at the claim action rather than copying the credential into the transcript.
@@ -94,7 +90,7 @@ The rest sets behavior the tools alone do not enforce.
 
 ## Kept in sync with the tools
 
-A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The skill you install always names exactly the nine tools the server registers.
+A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The skill you install always names exactly the five tools the server registers.
 
 ## Install it on its own
 

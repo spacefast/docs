@@ -1,11 +1,11 @@
 ---
 title: "config_meta_too_long"
-description: "A meta field in the space configuration exceeds its maximum length."
+description: "A `meta` value in the Space config is longer than its character limit."
 ---
 
-A meta field in the space configuration exceeds its maximum length.
+A `meta` value in the Space config is longer than its character limit.
 
-**How to resolve:** Shorten the meta title, description, or other reported field.
+**How to resolve:** Shorten the `meta` field named in the failure to its character limit.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_meta_too_long",
   "title": "Config meta too long",
   "status": 400,
-  "detail": "A meta field in the space configuration exceeds its maximum length.",
+  "detail": "A `meta` value in the Space config is longer than its character limit.",
   "code": "config_meta_too_long",
   "requestId": "req_4mz0v8qk"
 }

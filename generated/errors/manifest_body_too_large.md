@@ -1,11 +1,11 @@
 ---
 title: "manifest_body_too_large"
-description: "The upload manifest body exceeds the maximum size."
+description: "The manifest request body is larger than the byte cap."
 ---
 
-The upload manifest body exceeds the maximum size.
+The manifest request body is larger than the byte cap.
 
-**How to resolve:** Keep the manifest under 16 MB. Split very large publishes into batches.
+**How to resolve:** Split the manifest across several requests so each body fits the cap.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/manifest_body_too_large",
   "title": "Manifest body too large",
   "status": 400,
-  "detail": "The upload manifest body exceeds the maximum size.",
+  "detail": "The manifest request body is larger than the byte cap.",
   "code": "manifest_body_too_large",
   "requestId": "req_4mz0v8qk"
 }

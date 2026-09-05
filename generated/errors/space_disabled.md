@@ -1,11 +1,11 @@
 ---
 title: "space_disabled"
-description: "The space is disabled and cannot be served or modified."
+description: "The Space is disabled, so this action is unavailable."
 ---
 
-The space is disabled and cannot be served or modified.
+The Space is disabled, so this action is unavailable.
 
-**How to resolve:** Check the disabled reason on the space. The reason explains how to restore the space.
+**How to resolve:** Restore the Space, or contact Spacefast support if it was disabled by enforcement.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_disabled",
   "title": "Space disabled",
   "status": 400,
-  "detail": "The space is disabled and cannot be served or modified.",
+  "detail": "The Space is disabled, so this action is unavailable.",
   "code": "space_disabled",
   "requestId": "req_4mz0v8qk"
 }

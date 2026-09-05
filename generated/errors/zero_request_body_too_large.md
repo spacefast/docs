@@ -1,11 +1,11 @@
 ---
 title: "zero_request_body_too_large"
-description: "The Zero request body exceeds the runtime size limit."
+description: "The Zero request body is larger than the runtime's limit."
 ---
 
-The Zero request body exceeds the runtime size limit.
+The Zero request body is larger than the runtime's limit.
 
-**How to resolve:** Send a smaller request body or move large payloads to blob or object storage.
+**How to resolve:** Send a smaller body, or move the bytes into Space storage and pass a reference.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_request_body_too_large",
   "title": "Zero request body too large",
   "status": 400,
-  "detail": "The Zero request body exceeds the runtime size limit.",
+  "detail": "The Zero request body is larger than the runtime's limit.",
   "code": "zero_request_body_too_large",
   "requestId": "req_4mz0v8qk"
 }

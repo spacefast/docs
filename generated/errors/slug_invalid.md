@@ -1,11 +1,11 @@
 ---
 title: "slug_invalid"
-description: "The slug does not meet the structural rules for managed names."
+description: "The slug does not satisfy the slug rules."
 ---
 
-The slug does not meet the structural rules for managed names.
+The slug does not satisfy the slug rules.
 
-**How to resolve:** Use lowercase letters, numbers, and single dashes within the allowed length. The error message identifies the failed rule.
+**How to resolve:** Use 3 or more lowercase letters, numbers, and dashes, with no leading or trailing dash, no `--`, and not all digits.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/slug_invalid",
   "title": "Slug invalid",
   "status": 400,
-  "detail": "The slug does not meet the structural rules for managed names.",
+  "detail": "The slug does not satisfy the slug rules.",
   "code": "slug_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "runtime_unauthorized"
-description: "The request to the runtime carried no valid credential."
+description: "The runtime API request carried no authentication."
 ---
 
-The request to the runtime carried no valid credential.
+The runtime API request carried no authentication.
 
-**How to resolve:** Send the runtime token in the Authorization header.
+**How to resolve:** Send a runtime token as a bearer credential in the `Authorization` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_unauthorized",
   "title": "Runtime unauthorized",
   "status": 400,
-  "detail": "The request to the runtime carried no valid credential.",
+  "detail": "The runtime API request carried no authentication.",
   "code": "runtime_unauthorized",
   "requestId": "req_4mz0v8qk"
 }

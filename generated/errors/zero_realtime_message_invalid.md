@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_message_invalid"
-description: "The Zero realtime websocket message is malformed."
+description: "The realtime message is not one the protocol defines."
 ---
 
-The Zero realtime websocket message is malformed.
+The realtime message is not one the protocol defines.
 
-**How to resolve:** Send a supported JSON realtime frame.
+**How to resolve:** Send a message the Zero realtime protocol defines.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_message_invalid",
   "title": "Zero realtime message invalid",
   "status": 400,
-  "detail": "The Zero realtime websocket message is malformed.",
+  "detail": "The realtime message is not one the protocol defines.",
   "code": "zero_realtime_message_invalid",
   "requestId": "req_4mz0v8qk"
 }

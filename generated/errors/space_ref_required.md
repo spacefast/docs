@@ -1,11 +1,11 @@
 ---
 title: "space_ref_required"
-description: "A space reference is required for this operation."
+description: "The request did not name a Space."
 ---
 
-A space reference is required for this operation.
+The request did not name a Space.
 
-**How to resolve:** Pass a `spc_` id, slug, or hostname.
+**How to resolve:** Send `ref` as a `spc_` ID, slug, hostname, or URL.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_ref_required",
   "title": "Space ref required",
   "status": 400,
-  "detail": "A space reference is required for this operation.",
+  "detail": "The request did not name a Space.",
   "code": "space_ref_required",
   "requestId": "req_4mz0v8qk"
 }

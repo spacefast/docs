@@ -1,11 +1,11 @@
 ---
 title: "version_expired"
-description: "The version's upload session expired before it was finalized."
+description: "The draft version expired before it was finalized."
 ---
 
-The version's upload session expired before it was finalized.
+The draft version expired before it was finalized.
 
-**How to resolve:** Start a new version and finalize within the session window.
+**How to resolve:** Start a new publish; bytes already committed can be re-declared for free.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_expired",
   "title": "Version expired",
   "status": 400,
-  "detail": "The version's upload session expired before it was finalized.",
+  "detail": "The draft version expired before it was finalized.",
   "code": "version_expired",
   "requestId": "req_4mz0v8qk"
 }

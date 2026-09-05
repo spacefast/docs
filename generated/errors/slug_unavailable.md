@@ -1,11 +1,11 @@
 ---
 title: "slug_unavailable"
-description: "The slug is already in use within the relevant ownership scope."
+description: "Another team or Space already uses that slug."
 ---
 
-The slug is already in use within the relevant ownership scope.
+Another team or Space already uses that slug.
 
-**How to resolve:** Choose another slug or use the available suggestion returned by the API.
+**How to resolve:** Choose a different slug and retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/slug_unavailable",
   "title": "Slug unavailable",
   "status": 400,
-  "detail": "The slug is already in use within the relevant ownership scope.",
+  "detail": "Another team or Space already uses that slug.",
   "code": "slug_unavailable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "confirmation_mismatch"
-description: "The continuation token is bound to different action terms or a different resource revision than the request presenting it."
+description: "The confirmation does not match the action terms it was issued for."
 ---
 
-The continuation token is bound to different action terms or a different resource revision than the request presenting it.
+The confirmation does not match the action terms it was issued for.
 
-**How to resolve:** Request a fresh confirmation for the action you actually intend to perform.
+**How to resolve:** Request a new confirmation for this exact action, or send the exact `confirmation` value the request asks for.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_mismatch",
   "title": "Confirmation mismatch",
   "status": 400,
-  "detail": "The continuation token is bound to different action terms or a different resource revision than the request presenting it.",
+  "detail": "The confirmation does not match the action terms it was issued for.",
   "code": "confirmation_mismatch",
   "requestId": "req_4mz0v8qk"
 }

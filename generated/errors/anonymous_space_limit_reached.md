@@ -1,11 +1,11 @@
 ---
 title: "anonymous_space_limit_reached"
-description: "This client already holds the maximum number of unclaimed spaces."
+description: "This client already holds the maximum number of unclaimed Spaces."
 ---
 
-This client already holds the maximum number of unclaimed spaces.
+This client already holds the maximum number of unclaimed Spaces.
 
-**How to resolve:** Sign in and publish into your account, or claim or delete one of the unclaimed spaces you already have.
+**How to resolve:** Claim or delete one of the unclaimed Spaces, or run `sf login` and publish into a team.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/anonymous_space_limit_reached",
   "title": "Anonymous space limit reached",
   "status": 400,
-  "detail": "This client already holds the maximum number of unclaimed spaces.",
+  "detail": "This client already holds the maximum number of unclaimed Spaces.",
   "code": "anonymous_space_limit_reached",
   "requestId": "req_4mz0v8qk"
 }

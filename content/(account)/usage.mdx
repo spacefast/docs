@@ -11,7 +11,7 @@ Read your team's storage, seats, domains, and publish count, know how stale each
 
 In the dashboard, open your team's **Settings**, then **Usage**. The page lists every limit your plan carries, with the current value against it. Axes your plan does not include show as **Not included in this plan**.
 
-**Settings → Billing** carries a shorter set of meters next to the plan card: Storage, Team members, Custom domains, and Builds this month. Each one highlights when you reach 80% of the limit.
+**Settings → Billing** carries a shorter set of meters next to the plan card: Storage, Team members, Custom domains, and Publishes today. Each one highlights when you reach 80% of the limit.
 
 Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage` gives team counters plus a per-space storage breakdown. `GET /v1/spaces/{spaceId}/usage` gives one space's measured period.
 
@@ -21,13 +21,13 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 | Meter | Field | What it counts | At the limit |
 | --- | --- | --- | --- |
-| Spaces | `spaces` | Live spaces in the team | No plan limit |
+| Spaces | `spaces` | Live spaces in the team | Blocks on Free. `409` `space_quota_exceeded` |
 | Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` `domain_quota_exceeded` |
 | Team members | `members` | Billable seats, live members plus pending invitations | Blocks on Free. `409` `team_member_quota_exceeded` |
 | Storage | `storageBytes` | Disk your spaces occupy | Displayed only. Nothing blocks |
-| Builds and deploys | `buildsDeploysThisMonth` | Publishes this month, your pushes and CI builds pooled | Warns only. Publishing continues |
+| Publishes | `deploysToday` | Publishes since the UTC day started, your pushes and CI builds pooled | Warns only. Publishing continues |
 
-The response also carries `storageQuotaBytes`, `storageOverageBytes`, and `meterStartedAt` so you can compute headroom and know when the month rolled over.
+The response also carries `storageQuotaBytes`, `storageOverageBytes`, `deploysDaily`, and `meterStartedAt` so you can compute headroom and know when the metering day rolled over.
 
 ### Per-space measurements
 
@@ -58,9 +58,11 @@ Function invocation counts are pushed after each request finishes, so they can a
 
 Your plan carries a storage figure, the dashboard draws a meter against it, and the API reports `storageOverageBytes` when you pass it. No publish path blocks on storage today. Going over shows up as a red meter and nothing else.
 
-## Publishes per month warn, they never block
+## Publishes per day warn, they never block
 
-Free includes 100 publishes a month, Plus 1,000, Pro and Enterprise unlimited. Passing the number writes one entry to your team activity feed for the month and then gets out of the way. Publishing keeps working and the meter resets at the start of the next month.
+Free includes 100 publishes a day, Plus 6,000, Pro and Enterprise unlimited. Your pushes and CI builds are pooled into the one count. Passing the number writes one `team.deploy_quota_exceeded` entry to your team activity feed for the day and then gets out of the way. Publishing keeps working and the meter resets at 00:00 UTC.
+
+Spaces are the opposite. Free holds 200 live Spaces, and the create — or the claim, which is a create — fails with `409` `space_quota_exceeded` once you are there.
 
 ## Activity and log retention
 

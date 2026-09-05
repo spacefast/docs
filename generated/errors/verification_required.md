@@ -1,11 +1,11 @@
 ---
 title: "verification_required"
-description: "Domain verification is required before this operation."
+description: "DNS control for this hostname has to be proven before it keeps serving."
 ---
 
-Domain verification is required before this operation.
+DNS control for this hostname has to be proven before it keeps serving.
 
-**How to resolve:** Add the verification DNS record, then run verify on the domain.
+**How to resolve:** Add the verification record the domain response lists, then verify the domain.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/verification_required",
   "title": "Verification required",
   "status": 400,
-  "detail": "Domain verification is required before this operation.",
+  "detail": "DNS control for this hostname has to be proven before it keeps serving.",
   "code": "verification_required",
   "requestId": "req_4mz0v8qk"
 }

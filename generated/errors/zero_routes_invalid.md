@@ -1,11 +1,11 @@
 ---
 title: "zero_routes_invalid"
-description: "The Zero routes artifact is invalid."
+description: "The capsule's compiled route table is not valid."
 ---
 
-The Zero routes artifact is invalid.
+The capsule's compiled route table is not valid.
 
-**How to resolve:** Rebuild the generated routes and publish the version again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_routes_invalid",
   "title": "Zero routes invalid",
   "status": 400,
-  "detail": "The Zero routes artifact is invalid.",
+  "detail": "The capsule's compiled route table is not valid.",
   "code": "zero_routes_invalid",
   "requestId": "req_4mz0v8qk"
 }

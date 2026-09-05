@@ -1,11 +1,11 @@
 ---
 title: "domain_not_bound"
-description: "The domain is not bound to this space."
+description: "The domain is not assigned to a Space."
 ---
 
-The domain is not bound to this space.
+The domain is not assigned to a Space.
 
-**How to resolve:** Bind the domain to the space first.
+**How to resolve:** Assign the domain to a Space by setting `spaceId`, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_not_bound",
   "title": "Domain not bound",
   "status": 400,
-  "detail": "The domain is not bound to this space.",
+  "detail": "The domain is not assigned to a Space.",
   "code": "domain_not_bound",
   "requestId": "req_4mz0v8qk"
 }

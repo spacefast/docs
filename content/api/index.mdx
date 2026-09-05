@@ -154,3 +154,15 @@ Stop when `data.status` is `succeeded`, `failed`, or `canceled`. Then read `spac
     Every operation, generated from the spec.
   </Card>
 </CardGroup>
+
+## Find documentation
+
+`GET /v1/docs/search` searches the published documentation without authentication. Set `q` to a question for ranked results, or to an exact page slug to read the full page. An empty `q` lists pages; `tier` and `kind` narrow the result. Continue with `nextOffset` while `hasMore` is true.
+
+`POST /v1/docs/ask` streams an answer grounded in the documentation.
+
+## Connect external tools
+
+Connectors make OpenAPI, GraphQL, and remote MCP tools available to a team. Register a connector, connect an account, then choose which tools a policy allows. Account credentials remain server-side.
+
+Use the [connector reference](/api/reference/connectors/registerconnector) to register a source, [create a connection](/api/reference/connectors/createconnection), and [run a tool or program](/api/reference/connectors/createconnectorrun). A policy can require approval before a run proceeds. Read the run's result before reporting success.

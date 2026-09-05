@@ -41,15 +41,15 @@ test("turns Blume's agent-readable output into ranked corpus records", () => {
   assert.match(pages[1].body, /## Install/u);
 });
 
-test("includes the Platform API in the unified developer corpus", () => {
-  const pages = parseLlmsFull(`# Platform API
-Source: https://spacefast.com/docs/platforms/api/reference
+test("includes the Partner API at the reference tier", () => {
+  const pages = parseLlmsFull(`# Partner API
+Source: https://spacefast.com/docs/partners/api/reference
 
 Tenant and customer operations.
 `);
   assert.deepEqual(
     pages.map(({ path, tier }) => ({ path, tier })),
-    [{ path: "/platforms/api/reference", tier: "full" }],
+    [{ path: "/partners/api/reference", tier: "reference" }],
   );
 });
 

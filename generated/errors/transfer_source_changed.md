@@ -1,11 +1,11 @@
 ---
 title: "transfer_source_changed"
-description: "The space changed since the transfer was created, so it must be re-confirmed."
+description: "The Space's owner changed after the transfer was created, so it cannot be applied."
 ---
 
-The space changed since the transfer was created, so it must be re-confirmed.
+The Space's owner changed after the transfer was created, so it cannot be applied.
 
-**How to resolve:** Review the space's current state and confirm the transfer again.
+**How to resolve:** Cancel the transfer and start a new one from the current owner.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/transfer_source_changed",
   "title": "Transfer source changed",
   "status": 400,
-  "detail": "The space changed since the transfer was created, so it must be re-confirmed.",
+  "detail": "The Space's owner changed after the transfer was created, so it cannot be applied.",
   "code": "transfer_source_changed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,67 +1,36 @@
 ---
 title: "Connect Hermes to Spacefast"
-description: "Install Spacefast from the Hermes MCP catalog and Agent Skills."
+description: "Give Hermes the Spacefast setup guide, or install its skill with the CLI."
 seo:
   canonical: "https://spacefast.com/setup/hermes/"
 ---
 
-Install Spacefast from the Hermes MCP catalog and Agent Skills.
+Give Hermes the Spacefast setup guide, or install its skill with the CLI.
 
-**Configure an MCP client configuration.** Merge the hosted Spacefast server into the client MCP configuration.
+**Copy setup prompt.** Give the agent one prompt that lets it choose and complete the best setup lane.
 
-```json
-{
-  "mcpServers": {
-    "spacefast": {
-      "type": "http",
-      "url": "https://mcp.spacefast.com"
-    }
-  }
-}
+```text
+Fetch https://spacefast.com/setup.md
 ```
 
 ## Other ways to connect
 
-**Install from the plugin marketplace — Soon.** The public marketplace listing is not live yet.
-
-Use the working manual option below while the directory listing is in review.
-
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Set up with the Spacefast CLI.** Install the CLI once, then let it install the Spacefast skill for this agent.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent hermes
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set up without installing.** Install the same Spacefast skill in one shot, with nothing left behind.
 
 ```bash
-npx -y spacefast@0.0.26 setup agent --agent hermes -y
-```
-
-**Connect hosted MCP.** Connect the hosted Spacefast MCP server and sign in through the browser.
-
-```bash
-hermes mcp add spacefast --url https://mcp.spacefast.com --auth oauth
-```
-
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
-
-```bash
-npx -y skills@1.5.23 add https://spacefast.com/SKILL.md -y
+npx -y spacefast setup agent --agent hermes -y
 ```
 
 **Push to deploy.** Push to deploy — output returns your live and claim links.
 
 ```bash
-git remote add spacefast https://t:{{token}}@push.new/{{space}}.git && git push spacefast main
+git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
 ```
 
-Prefer to hand this off? Copy setup prompt:
-
-```text
-Fetch https://spacefast.com/setup.md and set up Spacefast.
-```
-
-Give the agent one prompt that lets it choose and complete the best setup lane.
-
-[Agent documentation](/agents) · [Hermes documentation](https://github.com/NousResearch/hermes-agent)
+[Agent documentation](/agents) · [Hermes documentation](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/work-with-skills.md)

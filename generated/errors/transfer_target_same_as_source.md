@@ -1,11 +1,11 @@
 ---
 title: "transfer_target_same_as_source"
-description: "The transfer target is the same principal that already owns the space."
+description: "The transfer's receiving principal is the one that already owns the Space."
 ---
 
-The transfer target is the same principal that already owns the space.
+The transfer's receiving principal is the one that already owns the Space.
 
-**How to resolve:** Pick a different target team or account.
+**How to resolve:** Choose a different receiving team or principal.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/transfer_target_same_as_source",
   "title": "Transfer target same as source",
   "status": 400,
-  "detail": "The transfer target is the same principal that already owns the space.",
+  "detail": "The transfer's receiving principal is the one that already owns the Space.",
   "code": "transfer_target_same_as_source",
   "requestId": "req_4mz0v8qk"
 }

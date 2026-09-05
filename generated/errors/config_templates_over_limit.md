@@ -1,11 +1,11 @@
 ---
 title: "config_templates_over_limit"
-description: "The configuration declares more template files than the plan allows."
+description: "The Space config lists more `templates` entries than the limit allows."
 ---
 
-The configuration declares more template files than the plan allows.
+The Space config lists more `templates` entries than the limit allows.
 
-**How to resolve:** Reduce the number of template entries in sf.jsonc. If you are still stuck, POST /v1/feedback with the error code and requestId.
+**How to resolve:** Remove `templates` entries until the list fits the limit.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_templates_over_limit",
   "title": "Config templates over limit",
   "status": 400,
-  "detail": "The configuration declares more template files than the plan allows.",
+  "detail": "The Space config lists more `templates` entries than the limit allows.",
   "code": "config_templates_over_limit",
   "requestId": "req_4mz0v8qk"
 }

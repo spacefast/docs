@@ -1,11 +1,11 @@
 ---
 title: "ip_blocked"
-description: "Requests from this IP address are blocked for abuse or policy reasons."
+description: "Requests from this network are blocked."
 ---
 
-Requests from this IP address are blocked for abuse or policy reasons.
+Requests from this network are blocked.
 
-**How to resolve:** If you believe this block is a mistake, contact support with your IP address.
+**How to resolve:** Contact Spacefast support with the `requestId` to have the block reviewed.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/ip_blocked",
   "title": "Ip blocked",
   "status": 400,
-  "detail": "Requests from this IP address are blocked for abuse or policy reasons.",
+  "detail": "Requests from this network are blocked.",
   "code": "ip_blocked",
   "requestId": "req_4mz0v8qk"
 }

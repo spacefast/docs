@@ -1,11 +1,11 @@
 ---
 title: "zero_response_too_large"
-description: "The Zero endpoint response exceeds the runtime size limit."
+description: "The handler's response is larger than the runtime serves."
 ---
 
-The Zero endpoint response exceeds the runtime size limit.
+The handler's response is larger than the runtime serves.
 
-**How to resolve:** Return a smaller response body or paginate the data.
+**How to resolve:** Return a smaller response, or stream the bytes from Space storage.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_response_too_large",
   "title": "Zero response too large",
   "status": 400,
-  "detail": "The Zero endpoint response exceeds the runtime size limit.",
+  "detail": "The handler's response is larger than the runtime serves.",
   "code": "zero_response_too_large",
   "requestId": "req_4mz0v8qk"
 }

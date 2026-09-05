@@ -61,7 +61,7 @@ After this page you can wire Spacefast into an MCP client that has no first-part
 
 Some clients use different key names. `mcp` for OpenCode, `servers` for VS Code, `context_servers` for Zed, and Amp puts the server map at the top level with no root key at all. `sf setup agent` knows each dialect, so let it write the file when you can.
 
-Whichever transport you picked, ask for a docs lookup first. `search_docs` needs no credential, so an answer proves the connection before auth is in play.
+Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
 
 <Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
 Use the Spacefast MCP server to search the docs for custom domains.

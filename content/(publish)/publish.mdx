@@ -97,15 +97,15 @@ Two artifacts claiming the same request route also stop the publish, so a lookup
 
 | Limit | Value | Error |
 | --- | --- | --- |
-| Files per version | 100,000, lowered to 20,000 on Free | `manifest_too_many_files` |
-| Largest single file | 64 MiB, 50 MiB on Free, 1 GiB on Plus | `version_file_too_large` |
+| Files per version | 100,000, 1,000 for an anonymous publish | `manifest_too_many_files` |
+| Largest single file | 1 GiB, 50 MiB for an anonymous publish | `version_file_too_large` |
 | Total bytes per version | 2 GiB | `version_total_bytes_exceeded` |
 | Manifest request body | 16 MiB | `manifest_body_too_large` |
 | Inline archive body | 128 MiB | `publish_archive_too_large` |
 
-Plan policy can only lower the file-count ceiling, never raise it. Anonymous publishes run a tighter table again. Both are on [Limits](/limits).
+The file count is a platform ceiling: every claimed plan gets the same 100,000. Anonymous publishes run a tighter table, on [Limits](/limits).
 
-Free Spaces publish web content only. Other file types upload fine and are then ignored with a diagnostic, and the receipt lists them under `ignoredPaths`, so a stray binary never blocks the publish.
+Every plan publishes every file type. A PDF, a video, or a zip lands in the version like an HTML page does; only the size and count table above applies.
 
 ## Only changed bytes travel
 
@@ -204,7 +204,6 @@ An archive that needs a build returns a receipt with a `build` object and `next.
 | `unsupported_publish_media_type` | The content type is not one of the five above | Send a zip or a JSON manifest |
 | `publish_archive_compression_ratio_exceeded` | The archive expands over 100 times its size | Repack without the zip bomb shaped content |
 | `slug_reserved`, `slug_unavailable` | The slug you asked for is taken or held | Take the `details.suggestion` |
-| `version_quota_exceeded` | A Free Space is at 200 versions | Delete old versions, or move up a plan |
 | `space_selection_conflict` | You passed both a Space and a creation-only flag such as `--access` | Drop the creation flag |
 
 Every code, with whether it is worth retrying, is on [Error codes](/api/errors).

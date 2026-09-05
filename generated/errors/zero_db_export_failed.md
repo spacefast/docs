@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_failed"
-description: "The runtime cannot read a database export page."
+description: "The database export did not return usable rows."
 ---
 
-The runtime cannot read a database export page.
+The database export did not return usable rows.
 
-**How to resolve:** Retry the export. If it repeats, inspect the live database and runtime logs.
+**How to resolve:** Retry the export.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_failed",
   "title": "Zero db export failed",
   "status": 400,
-  "detail": "The runtime cannot read a database export page.",
+  "detail": "The database export did not return usable rows.",
   "code": "zero_db_export_failed",
   "requestId": "req_4mz0v8qk"
 }

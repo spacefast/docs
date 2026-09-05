@@ -1,11 +1,11 @@
 ---
 title: "name_managed_by_config"
-description: "The space name is managed by sf.jsonc while its live version declares one."
+description: "The Space name comes from its `sf.jsonc`, so the API will not change it."
 ---
 
-The space name is managed by sf.jsonc while its live version declares one.
+The Space name comes from its `sf.jsonc`, so the API will not change it.
 
-**How to resolve:** Change `name` in `sf.jsonc` and publish, or remove `name` from the file to rename the space through the API.
+**How to resolve:** Change `name` in `sf.jsonc` and publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/name_managed_by_config",
   "title": "Name managed by config",
   "status": 400,
-  "detail": "The space name is managed by sf.jsonc while its live version declares one.",
+  "detail": "The Space name comes from its `sf.jsonc`, so the API will not change it.",
   "code": "name_managed_by_config",
   "requestId": "req_4mz0v8qk"
 }

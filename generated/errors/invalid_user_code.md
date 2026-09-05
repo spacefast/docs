@@ -1,11 +1,11 @@
 ---
 title: "invalid_user_code"
-description: "The user code does not match a pending device login."
+description: "The user code is unknown or was already handled."
 ---
 
-The user code does not match a pending device login.
+The user code is unknown or was already handled.
 
-**How to resolve:** Enter the code exactly as your CLI shows it. Codes expire after a few minutes.
+**How to resolve:** Run `sf login` again and enter the fresh code it prints.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_user_code",
   "title": "Invalid user code",
   "status": 400,
-  "detail": "The user code does not match a pending device login.",
+  "detail": "The user code is unknown or was already handled.",
   "code": "invalid_user_code",
   "requestId": "req_4mz0v8qk"
 }

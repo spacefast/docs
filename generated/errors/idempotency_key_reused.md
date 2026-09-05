@@ -1,11 +1,11 @@
 ---
 title: "idempotency_key_reused"
-description: "The Idempotency-Key was reused with a different request body."
+description: "This idempotency key was already used with a different request body."
 ---
 
-The Idempotency-Key was reused with a different request body.
+This idempotency key was already used with a different request body.
 
-**How to resolve:** Use a fresh key for new requests. Keys bind to one exact request body.
+**How to resolve:** Send a new `Idempotency-Key`, or replay the exact body the key was first used with.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/idempotency_key_reused",
   "title": "Idempotency key reused",
   "status": 400,
-  "detail": "The Idempotency-Key was reused with a different request body.",
+  "detail": "This idempotency key was already used with a different request body.",
   "code": "idempotency_key_reused",
   "requestId": "req_4mz0v8qk"
 }

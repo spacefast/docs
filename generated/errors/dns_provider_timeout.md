@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_timeout"
-description: "The DNS provider did not accept the change within the bounded wait."
+description: "The DNS provider did not answer before the request timed out."
 ---
 
-The DNS provider did not accept the change within the bounded wait.
+The DNS provider did not answer before the request timed out.
 
-**How to resolve:** Check the operation status before retrying to avoid duplicate changes.
+**How to resolve:** Retry the operation.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_timeout",
   "title": "Dns provider timeout",
   "status": 400,
-  "detail": "The DNS provider did not accept the change within the bounded wait.",
+  "detail": "The DNS provider did not answer before the request timed out.",
   "code": "dns_provider_timeout",
   "requestId": "req_4mz0v8qk"
 }

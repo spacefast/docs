@@ -139,7 +139,7 @@ Every rule object rejects unknown keys.
 
 Rewrites carry no status of their own, because they are the `200` rule of `_redirects`.
 
-<Badge variant="accent">Plus and up</Badge> Proxy rules are plan-gated. On a free plan they publish and serve a plan-restriction page instead of relaying, and they start relaying on upgrade without a republish. Upstream hosts are checked at publish and can be refused with `proxy_upstream_denied`.
+Proxy rules serve on every plan. On an unclaimed Space they publish and serve a restriction page instead of relaying, and they start relaying the moment the Space is claimed, without a republish. Upstream hosts are checked at publish and can be refused with `proxy_upstream_denied`.
 
 ### `headers[]`
 
@@ -281,8 +281,6 @@ Compiled redirects are the exception. They accept every method.
 | `_headers` line length | 2,000 characters | Error |
 | `_redirects` and `_headers` file size | 2 MiB each | Read cap |
 | `sf.jsonc` file size | 256 KiB | Error |
-
-Plan limits on rule counts are separate and soft. Over-limit rules keep serving, with a `routing_rules_over_plan` warning at publish.
 
 ## Checking your rules
 

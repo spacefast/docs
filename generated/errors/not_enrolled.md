@@ -1,11 +1,11 @@
 ---
 title: "not_enrolled"
-description: "This account is not enrolled in the private beta, so the API cannot be used yet."
+description: "The account is not enrolled in the Spacefast private beta."
 ---
 
-This account is not enrolled in the private beta, so the API cannot be used yet.
+The account is not enrolled in the Spacefast private beta.
 
-**How to resolve:** Join the waitlist or open your beta invite link, then sign in again.
+**How to resolve:** Request beta access, then retry once the account is enrolled.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/not_enrolled",
   "title": "Not enrolled",
   "status": 400,
-  "detail": "This account is not enrolled in the private beta, so the API cannot be used yet.",
+  "detail": "The account is not enrolled in the Spacefast private beta.",
   "code": "not_enrolled",
   "requestId": "req_4mz0v8qk"
 }

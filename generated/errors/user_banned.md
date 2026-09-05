@@ -1,11 +1,11 @@
 ---
 title: "user_banned"
-description: "This user is banned for a policy or abuse violation and cannot perform this action."
+description: "The user is banned, so their access was disconnected."
 ---
 
-This user is banned for a policy or abuse violation and cannot perform this action.
+The user is banned, so their access was disconnected.
 
-**How to resolve:** If you believe the ban is a mistake, contact support to appeal it.
+**How to resolve:** Contact Spacefast support if the ban looks wrong.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/user_banned",
   "title": "User banned",
   "status": 400,
-  "detail": "This user is banned for a policy or abuse violation and cannot perform this action.",
+  "detail": "The user is banned, so their access was disconnected.",
   "code": "user_banned",
   "requestId": "req_4mz0v8qk"
 }

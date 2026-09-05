@@ -1,11 +1,11 @@
 ---
 title: "decision_in_progress"
-description: "This approved action is already executing."
+description: "The approved action is already being executed."
 ---
 
-This approved action is already executing.
+The approved action is already being executed.
 
-**How to resolve:** Poll the continuation instead of retrying the action; the original receipt is returned once it finishes.
+**How to resolve:** Poll the continuation with `continuationToken` instead of retrying the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/decision_in_progress",
   "title": "Decision in progress",
   "status": 400,
-  "detail": "This approved action is already executing.",
+  "detail": "The approved action is already being executed.",
   "code": "decision_in_progress",
   "requestId": "req_4mz0v8qk"
 }

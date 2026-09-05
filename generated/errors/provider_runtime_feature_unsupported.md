@@ -1,11 +1,11 @@
 ---
 title: "provider_runtime_feature_unsupported"
-description: "WP Cloud does not support this runtime feature."
+description: "The publish declares a provider runtime feature Spacefast does not execute, so it ships as inert static content."
 ---
 
-WP Cloud does not support this runtime feature.
+The publish declares a provider runtime feature Spacefast does not execute, so it ships as inert static content.
 
-**How to resolve:** Check the feature's availability for this site's runtime.
+**How to resolve:** Remove the file, or move the behavior into a Spacefast runtime the platform executes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_runtime_feature_unsupported",
   "title": "Provider runtime feature unsupported",
   "status": 400,
-  "detail": "WP Cloud does not support this runtime feature.",
+  "detail": "The publish declares a provider runtime feature Spacefast does not execute, so it ships as inert static content.",
   "code": "provider_runtime_feature_unsupported",
   "requestId": "req_4mz0v8qk"
 }

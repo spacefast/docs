@@ -1,11 +1,11 @@
 ---
 title: "build_output_contains_server_bundle"
-description: "The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download."
+description: "The publish output contains a compiled server bundle."
 ---
 
-The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download.
+The publish output contains a compiled server bundle.
 
-**How to resolve:** This app needs the Spacefast Functions pipeline: run `sf publish` in the project with the Spacefast CLI so the worker deploys as a Function, or point the output directory at a browser-ready export.
+**How to resolve:** Publish with `sf publish` so the server code goes through the functions pipeline, or point the output directory at a browser-ready export.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_output_contains_server_bundle",
   "title": "Build output contains server bundle",
   "status": 400,
-  "detail": "The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download.",
+  "detail": "The publish output contains a compiled server bundle.",
   "code": "build_output_contains_server_bundle",
   "requestId": "req_4mz0v8qk"
 }

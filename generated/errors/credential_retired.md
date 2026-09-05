@@ -1,11 +1,11 @@
 ---
 title: "credential_retired"
-description: "This request used a retired Spacefast token format or authentication header."
+description: "The credential was retired and does not authenticate."
 ---
 
-This request used a retired Spacefast token format or authentication header.
+The credential was retired and does not authenticate.
 
-**How to resolve:** Run sf login again and send the new sfa_ key as Authorization: Bearer.
+**How to resolve:** Create a new API key and retry with it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/credential_retired",
   "title": "Credential retired",
   "status": 400,
-  "detail": "This request used a retired Spacefast token format or authentication header.",
+  "detail": "The credential was retired and does not authenticate.",
   "code": "credential_retired",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_unavailable"
-description: "The Zero runner process cannot be started."
+description: "The Zero runner process could not be started."
 ---
 
-The Zero runner process cannot be started.
+The Zero runner process could not be started.
 
-**How to resolve:** Verify the runner binary is installed and executable in the runtime.
+**How to resolve:** Publish the capsule again so the runner binary is restored.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_unavailable",
   "title": "Zero runner unavailable",
   "status": 400,
-  "detail": "The Zero runner process cannot be started.",
+  "detail": "The Zero runner process could not be started.",
   "code": "zero_runner_unavailable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "abuse_report_invalid_transition"
-description: "The abuse report cannot move to the requested status from its current status."
+description: "The abuse report cannot move from its current status to the requested one."
 ---
 
-The abuse report cannot move to the requested status from its current status.
+The abuse report cannot move from its current status to the requested one.
 
-**How to resolve:** Fetch the report to see its current status and apply a valid transition.
+**How to resolve:** Read the report's current `status`, then send a `status` that is reachable from it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/abuse_report_invalid_transition",
   "title": "Abuse report invalid transition",
   "status": 400,
-  "detail": "The abuse report cannot move to the requested status from its current status.",
+  "detail": "The abuse report cannot move from its current status to the requested one.",
   "code": "abuse_report_invalid_transition",
   "requestId": "req_4mz0v8qk"
 }

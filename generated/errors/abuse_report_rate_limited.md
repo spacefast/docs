@@ -1,11 +1,11 @@
 ---
 title: "abuse_report_rate_limited"
-description: "Too many abuse reports were submitted from this client in a short window."
+description: "Too many abuse reports were submitted from this IP address in the past hour."
 ---
 
-Too many abuse reports were submitted from this client in a short window.
+Too many abuse reports were submitted from this IP address in the past hour.
 
-**How to resolve:** Wait for the window in the Retry-After header to pass before reporting again.
+**How to resolve:** Wait for the window in the `Retry-After` header to pass, then submit the report again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/abuse_report_rate_limited",
   "title": "Abuse report rate limited",
   "status": 400,
-  "detail": "Too many abuse reports were submitted from this client in a short window.",
+  "detail": "Too many abuse reports were submitted from this IP address in the past hour.",
   "code": "abuse_report_rate_limited",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "config_runtime_entry_missing"
-description: "The declared runtime has no entry module to compile."
+description: "The Space config declares a runtime but its entry file was not found."
 ---
 
-The declared runtime has no entry module to compile.
+The Space config declares a runtime but its entry file was not found.
 
-**How to resolve:** Name the entry in sf.jsonc: runtime.entry for functions, runtime.server and runtime.client for zero. Remove the runtime block to publish files without a runtime instead.
+**How to resolve:** Publish a directory that contains the runtime entry file, or remove `runtime` from `sf.jsonc`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_runtime_entry_missing",
   "title": "Config runtime entry missing",
   "status": 400,
-  "detail": "The declared runtime has no entry module to compile.",
+  "detail": "The Space config declares a runtime but its entry file was not found.",
   "code": "config_runtime_entry_missing",
   "requestId": "req_4mz0v8qk"
 }

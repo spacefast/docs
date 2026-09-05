@@ -1,11 +1,11 @@
 ---
 title: "channel_name_reserved"
-description: "The channel name collides with a reserved hostname suffix and cannot be used."
+description: "The requested channel name is reserved."
 ---
 
-The channel name collides with a reserved hostname suffix and cannot be used.
+The requested channel name is reserved.
 
-**How to resolve:** Choose a different channel name. V-prefixed numeric names and ver- prefixes are reserved.
+**How to resolve:** Choose a channel name that is not reserved.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/channel_name_reserved",
   "title": "Channel name reserved",
   "status": 400,
-  "detail": "The channel name collides with a reserved hostname suffix and cannot be used.",
+  "detail": "The requested channel name is reserved.",
   "code": "channel_name_reserved",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_db_host_install_failed"
-description: "The Zero runner cannot install the database host bridge."
+description: "Installing the database host for this Space failed."
 ---
 
-The Zero runner cannot install the database host bridge.
+Installing the database host for this Space failed.
 
-**How to resolve:** Rebuild with a current runner. If the failure repeats, report it.
+**How to resolve:** Publish the Space again to retry provisioning.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_host_install_failed",
   "title": "Zero db host install failed",
   "status": 400,
-  "detail": "The Zero runner cannot install the database host bridge.",
+  "detail": "Installing the database host for this Space failed.",
   "code": "zero_db_host_install_failed",
   "requestId": "req_4mz0v8qk"
 }

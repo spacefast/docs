@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_missing_permission"
-description: "The connected DNS provider account lacks the required permission."
+description: "The connected DNS provider account lacks permission on this zone."
 ---
 
-The connected DNS provider account lacks the required permission.
+The connected DNS provider account lacks permission on this zone.
 
-**How to resolve:** Reconnect with the required scope or use a provider credential that can edit this zone.
+**How to resolve:** Grant DNS edit access for the zone, or reconnect with the required provider scope.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_missing_permission",
   "title": "Dns provider missing permission",
   "status": 400,
-  "detail": "The connected DNS provider account lacks the required permission.",
+  "detail": "The connected DNS provider account lacks permission on this zone.",
   "code": "dns_provider_missing_permission",
   "requestId": "req_4mz0v8qk"
 }

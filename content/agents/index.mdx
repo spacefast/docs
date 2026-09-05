@@ -7,18 +7,15 @@ Connect your coding agent to Spacefast once, then ask it to publish. This page c
 
 ## What an agent can do
 
-Anything you can do in the dashboard, an agent can do over MCP. The Spacefast MCP server registers nine tools.
-
-Six are typed tools for the jobs agents do all day.
+Anything you can do in the dashboard, an agent can do over MCP. The Spacefast MCP server exposes five tools.
 
 - `publish` uploads a folder, a file, an archive, or inline files and returns the live URL and the immutable version URL.
-- `operation_status` polls a publish that is still running.
-- `show_space_deployments` reads deployment history and build status.
-- `show_space_domains` reads domains, DNS records, and TLS status.
-- `show_space_analytics` reads traffic over a 48h, 7d, or 30d window.
-- `search_docs` searches the Spacefast documentation and works without a credential.
+- `operation_status` checks a publish that is still running.
+- `show_space` opens a read-only view of deployments, domains, analytics, source files, changes, history, comparisons, or build logs.
+- `execute` runs one JavaScript program against the Spacefast API catalog. Use it for documentation, account information, API reads without a visual view, and mutations.
+- `resume_execution` continues the same program after it pauses for your approval.
 
-The other three cover everything else. `execute` runs one JavaScript program in a sandbox against the whole Spacefast API catalog, so teams, access rules, rollback, domain changes, and claim continuation need no dedicated tool. `skills` returns the guide for writing those programs. `resume_execution` continues a program that paused for your approval.
+Inside `execute`, search for an operation with `tools.search`, read its contract with `tools.describe`, then call it. Check each write with a read before reporting success.
 
 <Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
 Publish this folder to Spacefast and give me the live URL.

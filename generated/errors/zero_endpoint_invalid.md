@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_invalid"
-description: "A Zero endpoint definition or its database metadata is invalid."
+description: "A Zero endpoint entry is not shaped the way the runtime expects."
 ---
 
-A Zero endpoint definition or its database metadata is invalid.
+A Zero endpoint entry is not shaped the way the runtime expects.
 
-**How to resolve:** Fix the endpoint method, route, source, capabilities, or database metadata and publish again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_invalid",
   "title": "Zero endpoint invalid",
   "status": 400,
-  "detail": "A Zero endpoint definition or its database metadata is invalid.",
+  "detail": "A Zero endpoint entry is not shaped the way the runtime expects.",
   "code": "zero_endpoint_invalid",
   "requestId": "req_4mz0v8qk"
 }

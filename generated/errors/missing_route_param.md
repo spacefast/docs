@@ -1,11 +1,11 @@
 ---
 title: "missing_route_param"
-description: "A required route parameter is missing from the request path."
+description: "A path segment in the request URL is empty."
 ---
 
-A required route parameter is missing from the request path.
+A path segment in the request URL is empty.
 
-**How to resolve:** Check the endpoint path in the API reference and include every parameter.
+**How to resolve:** Fill in the named route parameter and call the URL again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/missing_route_param",
   "title": "Missing route param",
   "status": 400,
-  "detail": "A required route parameter is missing from the request path.",
+  "detail": "A path segment in the request URL is empty.",
   "code": "missing_route_param",
   "requestId": "req_4mz0v8qk"
 }

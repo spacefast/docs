@@ -1,11 +1,11 @@
 ---
 title: "runtime_jti_missing"
-description: "The runtime token is missing its replay-protection id."
+description: "The runtime token carries no token ID."
 ---
 
-The runtime token is missing its replay-protection id.
+The runtime token carries no token ID.
 
-**How to resolve:** Mint a fresh runtime token. Tokens must carry a `jti` claim.
+**How to resolve:** Mint the runtime token with a `jti` claim.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_jti_missing",
   "title": "Runtime jti missing",
   "status": 400,
-  "detail": "The runtime token is missing its replay-protection id.",
+  "detail": "The runtime token carries no token ID.",
   "code": "runtime_jti_missing",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "version_failed"
-description: "The version failed and cannot be used."
+description: "The version failed before it went live."
 ---
 
-The version failed and cannot be used.
+The version failed before it went live.
 
-**How to resolve:** Check the version diagnostics, fix the cause, and publish again.
+**How to resolve:** Read the version's diagnostics for the failing check, fix the source, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_failed",
   "title": "Version failed",
   "status": 400,
-  "detail": "The version failed and cannot be used.",
+  "detail": "The version failed before it went live.",
   "code": "version_failed",
   "requestId": "req_4mz0v8qk"
 }

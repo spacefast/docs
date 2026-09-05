@@ -1,11 +1,11 @@
 ---
 title: "agent_handoff_origin_unsupported"
-description: "The dashboard origin this deployment is configured with cannot mint canonical agent handoff links."
+description: "The configured dashboard origin cannot mint canonical agent handoff links."
 ---
 
-The dashboard origin this deployment is configured with cannot mint canonical agent handoff links.
+The configured dashboard origin cannot mint canonical agent handoff links.
 
-**How to resolve:** Point SPACEFAST_DASHBOARD_URL at a valid HTTP or HTTPS origin. If you cannot change it, contact support.
+**How to resolve:** Point `SPACEFAST_AGENT_HANDOFF_URL` at an HTTP or HTTPS origin, or contact Spacefast support.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/agent_handoff_origin_unsupported",
   "title": "Agent handoff origin unsupported",
   "status": 400,
-  "detail": "The dashboard origin this deployment is configured with cannot mint canonical agent handoff links.",
+  "detail": "The configured dashboard origin cannot mint canonical agent handoff links.",
   "code": "agent_handoff_origin_unsupported",
   "requestId": "req_4mz0v8qk"
 }

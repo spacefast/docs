@@ -1,11 +1,11 @@
 ---
 title: "space_no_live_version"
-description: "The space has no live version, so this operation has nothing to act on."
+description: "The Space has no live version to act on."
 ---
 
-The space has no live version, so this operation has nothing to act on.
+The Space has no live version to act on.
 
-**How to resolve:** Publish a version to the space, then retry.
+**How to resolve:** Publish the Space, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_no_live_version",
   "title": "Space no live version",
   "status": 400,
-  "detail": "The space has no live version, so this operation has nothing to act on.",
+  "detail": "The Space has no live version to act on.",
   "code": "space_no_live_version",
   "requestId": "req_4mz0v8qk"
 }

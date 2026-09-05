@@ -39,21 +39,18 @@ The codes are stable. They stay the same when a plan is renamed.
 
 | | Free | Plus | Pro | Enterprise |
 | --- | --- | --- | --- | --- |
+| Spaces | 200 | Unlimited | Unlimited | Unlimited |
 | Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited |
 | Editors | 1 | 3 included | 10 included | Unlimited |
-| Custom domain groups | 3 | 10 | Unlimited | Unlimited |
-| Files per version | 20,000 | 100,000 | 100,000 | 100,000 |
-| Largest single file | 50 MiB | 1 GiB | 64 MiB | 64 MiB |
-| Publishes per month | 100 | 1,000 | Unlimited | Unlimited |
+| Custom domain groups | 50 | 100 | Unlimited | Unlimited |
+| Files per version | 100,000 | 100,000 | 100,000 | 100,000 |
+| Publishes per day | 100 | 6,000 | Unlimited | Unlimited |
 | Activity and access log history | 48 hours | 30 days | Unlimited | Unlimited |
-| Routing rules | 10 | 1,000 | Unlimited | Unlimited |
 | PHP workers per site | 2 | 4 | 4 | 4 |
-| External proxy rules | No | Yes | Yes | Yes |
 | Full-page templates under `_pages/` | No | Yes | Yes | Yes |
 | Hide the Spacefast badge | No | Yes | Yes | Yes |
-| File types you can publish | Web content only | Any | Any | Any |
 
-The largest-single-file row is not a typo. Pro and Enterprise cap a single file at 64 MiB, below Plus's 1 GiB. See [Limits](/limits) for what each number does when you cross it, and which limits block a publish versus warn.
+Files per version is a platform ceiling, not something a plan buys. The daily publish figure is a soft meter: it warns and resets at 00:00 UTC, it never blocks. A single file can be 1 GiB and a version 2 GiB on every plan, and every plan serves external proxy rules. See [Limits](/limits) for what each number does when you cross it, and which limits block a publish versus warn.
 
 A domain group is one registrable apex plus all of its subdomains, so `example.com`, `www.example.com`, and `docs.example.com` count as one.
 

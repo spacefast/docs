@@ -2,6 +2,7 @@ import { copyFile, cp, lstat, mkdir, readFile, rm, writeFile } from "node:fs/pro
 import path from "node:path";
 
 import { buildRoutingRules } from "./redirect-rules.mjs";
+import { redirects as authoredRedirects } from "../redirects.ts";
 
 const root = path.resolve(process.cwd());
 const markerName = ".spacefast-generated-copy";
@@ -42,6 +43,12 @@ for (const tree of trees) {
     await rm(target, { recursive: true });
   }
   await cp(source, target, { recursive: true });
+  if (tree.source === "generated/errors") {
+    for (const { from } of authoredRedirects) {
+      const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
+      if (match) await rm(path.join(target, `${match[1]}.md`), { force: true });
+    }
+  }
   await writeFile(marker, "spacefast-public-docs\n");
 }
 

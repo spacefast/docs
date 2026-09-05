@@ -1,11 +1,11 @@
 ---
 title: "zero_db_tls_required"
-description: "The application Zero database cannot be connected with verified pinned TLS."
+description: "The database connection has to use TLS."
 ---
 
-The application Zero database cannot be connected with verified pinned TLS.
+The database connection has to use TLS.
 
-**How to resolve:** Use the provider-managed database until verified external database TLS is supported.
+**How to resolve:** Use a database URL that enables TLS.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_tls_required",
   "title": "Zero db tls required",
   "status": 400,
-  "detail": "The application Zero database cannot be connected with verified pinned TLS.",
+  "detail": "The database connection has to use TLS.",
   "code": "zero_db_tls_required",
   "requestId": "req_4mz0v8qk"
 }

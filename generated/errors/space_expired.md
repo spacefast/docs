@@ -1,11 +1,11 @@
 ---
 title: "space_expired"
-description: "The space expired and is no longer served."
+description: "The anonymous Space passed its claim deadline and cannot be claimed."
 ---
 
-The space expired and is no longer served.
+The anonymous Space passed its claim deadline and cannot be claimed.
 
-**How to resolve:** If the space is within the recovery window, claim or restore it. Otherwise publish again.
+**How to resolve:** Publish a new Space and claim it before its deadline.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_expired",
   "title": "Space expired",
   "status": 400,
-  "detail": "The space expired and is no longer served.",
+  "detail": "The anonymous Space passed its claim deadline and cannot be claimed.",
   "code": "space_expired",
   "requestId": "req_4mz0v8qk"
 }

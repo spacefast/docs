@@ -1,11 +1,11 @@
 ---
 title: "zero_js_context_init_failed"
-description: "The Zero runner cannot initialize a QuickJS context."
+description: "The JavaScript context for the Zero handler could not be created."
 ---
 
-The Zero runner cannot initialize a QuickJS context.
+The JavaScript context for the Zero handler could not be created.
 
-**How to resolve:** Retry or rebuild the runner. Report persistent runtime initialization failures.
+**How to resolve:** Retry the request. If it keeps failing, publish the capsule again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_context_init_failed",
   "title": "Zero js context init failed",
   "status": 400,
-  "detail": "The Zero runner cannot initialize a QuickJS context.",
+  "detail": "The JavaScript context for the Zero handler could not be created.",
   "code": "zero_js_context_init_failed",
   "requestId": "req_4mz0v8qk"
 }

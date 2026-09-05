@@ -1,11 +1,11 @@
 ---
 title: "data_location_immutable"
-description: "This request tried to change data location through an immutable path."
+description: "A Space's data location cannot change after the Space is created."
 ---
 
-This request tried to change data location through an immutable path.
+A Space's data location cannot change after the Space is created.
 
-**How to resolve:** Data location is fixed when the space is created and cannot be changed afterwards. Create a new space in the region you want.
+**How to resolve:** Omit `dataLocation`, or send the Space's current value.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/data_location_immutable",
   "title": "Data location immutable",
   "status": 400,
-  "detail": "This request tried to change data location through an immutable path.",
+  "detail": "A Space's data location cannot change after the Space is created.",
   "code": "data_location_immutable",
   "requestId": "req_4mz0v8qk"
 }

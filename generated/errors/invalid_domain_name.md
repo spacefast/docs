@@ -1,11 +1,11 @@
 ---
 title: "invalid_domain_name"
-description: "The domain name is not a valid registrable hostname."
+description: "The hostname is empty or is not a valid domain name."
 ---
 
-The domain name is not a valid registrable hostname.
+The hostname is empty or is not a valid domain name.
 
-**How to resolve:** Check the spelling and use a fully qualified domain name.
+**How to resolve:** Send a hostname such as `app.example.com`, with no scheme, port, or trailing dot.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_domain_name",
   "title": "Invalid domain name",
   "status": 400,
-  "detail": "The domain name is not a valid registrable hostname.",
+  "detail": "The hostname is empty or is not a valid domain name.",
   "code": "invalid_domain_name",
   "requestId": "req_4mz0v8qk"
 }

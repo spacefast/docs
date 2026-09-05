@@ -63,7 +63,7 @@ for (const entry of manifest.files) {
 
 if (
   manifest.counts.apiOperations < 1 ||
-  manifest.counts.platformOperations < 1 ||
+  manifest.counts.partnerOperations < 1 ||
   manifest.counts.errorCodes < 1 ||
   manifest.counts.redirects < 1 ||
   manifest.counts.setupPages < 1 ||
@@ -112,5 +112,5 @@ if (
 }
 
 console.log(
-  `Generated references verified: ${manifest.files.length} artifacts, ${manifest.counts.apiOperations} API operations, ${manifest.counts.platformOperations} platform operations, ${manifest.counts.errorCodes} error codes, ${manifest.counts.changelogPackages} packages, ${manifest.counts.changelogVersions} releases, ${manifest.counts.redirects} redirects.`,
+  `Generated references verified: ${manifest.files.length} artifacts, ${manifest.counts.apiOperations} API operations, ${manifest.counts.partnerOperations} partner operations, ${manifest.counts.errorCodes} error codes, ${manifest.counts.changelogPackages} packages, ${manifest.counts.changelogVersions} releases, ${manifest.counts.redirects} redirects.`,
 );

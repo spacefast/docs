@@ -1,11 +1,11 @@
 ---
 title: "publish_archive_too_large"
-description: "The uploaded archive exceeds the maximum allowed size."
+description: "The uploaded archive is larger than the inline publish body cap."
 ---
 
-The uploaded archive exceeds the maximum allowed size.
+The uploaded archive is larger than the inline publish body cap.
 
-**How to resolve:** Reduce the archive size or use a version upload session for big publishes.
+**How to resolve:** Compress the archive further, or publish through an upload session.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_archive_too_large",
   "title": "Publish archive too large",
   "status": 400,
-  "detail": "The uploaded archive exceeds the maximum allowed size.",
+  "detail": "The uploaded archive is larger than the inline publish body cap.",
   "code": "publish_archive_too_large",
   "requestId": "req_4mz0v8qk"
 }

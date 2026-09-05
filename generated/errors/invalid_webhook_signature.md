@@ -1,11 +1,11 @@
 ---
 title: "invalid_webhook_signature"
-description: "The webhook signature did not verify."
+description: "The webhook signature is missing or does not verify."
 ---
 
-The webhook signature did not verify.
+The webhook signature is missing or does not verify.
 
-**How to resolve:** Verify with the current webhook secret over `{t}.{rawBody}` and reject stale timestamps.
+**How to resolve:** Sign the delivery with the configured webhook secret and include the signature, timestamp, and salt fields.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_webhook_signature",
   "title": "Invalid webhook signature",
   "status": 400,
-  "detail": "The webhook signature did not verify.",
+  "detail": "The webhook signature is missing or does not verify.",
   "code": "invalid_webhook_signature",
   "requestId": "req_4mz0v8qk"
 }

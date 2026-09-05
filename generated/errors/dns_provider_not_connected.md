@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_not_connected"
-description: "This domain has no connected DNS provider zone."
+description: "No DNS provider zone is connected to this domain."
 ---
 
-This domain has no connected DNS provider zone.
+No DNS provider zone is connected to this domain.
 
-**How to resolve:** Attach a provider zone or move the domain to Spacefast-managed DNS before retrying.
+**How to resolve:** Connect a DNS provider zone to the domain, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_not_connected",
   "title": "Dns provider not connected",
   "status": 400,
-  "detail": "This domain has no connected DNS provider zone.",
+  "detail": "No DNS provider zone is connected to this domain.",
   "code": "dns_provider_not_connected",
   "requestId": "req_4mz0v8qk"
 }

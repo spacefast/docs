@@ -1,11 +1,11 @@
 ---
 title: "dns_record_not_found"
-description: "The DNS record was not found in this zone."
+description: "No DNS record with that ID exists in the zone."
 ---
 
-The DNS record was not found in this zone.
+No DNS record with that ID exists in the zone.
 
-**How to resolve:** List the zone's records to confirm the record id.
+**How to resolve:** List the zone's records and send an ID from the current snapshot.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_record_not_found",
   "title": "Dns record not found",
   "status": 400,
-  "detail": "The DNS record was not found in this zone.",
+  "detail": "No DNS record with that ID exists in the zone.",
   "code": "dns_record_not_found",
   "requestId": "req_4mz0v8qk"
 }

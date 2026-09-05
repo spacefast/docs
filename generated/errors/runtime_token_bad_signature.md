@@ -1,11 +1,11 @@
 ---
 title: "runtime_token_bad_signature"
-description: "The runtime token signature did not verify."
+description: "The runtime token's signature does not verify."
 ---
 
-The runtime token signature did not verify.
+The runtime token's signature does not verify.
 
-**How to resolve:** Mint a fresh runtime token. If the error persists, verify clocks and JWKS freshness.
+**How to resolve:** Mint a fresh runtime token signed with a current key.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_token_bad_signature",
   "title": "Runtime token bad signature",
   "status": 400,
-  "detail": "The runtime token signature did not verify.",
+  "detail": "The runtime token's signature does not verify.",
   "code": "runtime_token_bad_signature",
   "requestId": "req_4mz0v8qk"
 }

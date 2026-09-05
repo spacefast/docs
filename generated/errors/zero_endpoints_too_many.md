@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoints_too_many"
-description: "The Zero endpoints payload exceeds the supported endpoint count."
+description: "The capsule declares more Zero endpoints than the runtime allows."
 ---
 
-The Zero endpoints payload exceeds the supported endpoint count.
+The capsule declares more Zero endpoints than the runtime allows.
 
-**How to resolve:** Reduce the project to at most 128 Zero endpoints, then publish again.
+**How to resolve:** Cut the number of endpoints, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoints_too_many",
   "title": "Zero endpoints too many",
   "status": 400,
-  "detail": "The Zero endpoints payload exceeds the supported endpoint count.",
+  "detail": "The capsule declares more Zero endpoints than the runtime allows.",
   "code": "zero_endpoints_too_many",
   "requestId": "req_4mz0v8qk"
 }

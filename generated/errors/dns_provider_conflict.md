@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_conflict"
-description: "The DNS provider rejected the change because it conflicts with existing provider state."
+description: "The DNS provider rejected the change as conflicting with a record it already holds."
 ---
 
-The DNS provider rejected the change because it conflicts with existing provider state.
+The DNS provider rejected the change as conflicting with a record it already holds.
 
-**How to resolve:** Refresh the provider snapshot, resolve the conflicting record or setting, and retry.
+**How to resolve:** Read the zone's current records at the provider, resolve the conflict, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_conflict",
   "title": "Dns provider conflict",
   "status": 400,
-  "detail": "The DNS provider rejected the change because it conflicts with existing provider state.",
+  "detail": "The DNS provider rejected the change as conflicting with a record it already holds.",
   "code": "dns_provider_conflict",
   "requestId": "req_4mz0v8qk"
 }

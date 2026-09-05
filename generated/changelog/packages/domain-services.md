@@ -5,6 +5,46 @@ description: "Release history for @spacefast/domain-services on npm."
 
 Published as [`@spacefast/domain-services`](https://www.npmjs.com/package/@spacefast/domain-services) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- @spacefast/common@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/common@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- @spacefast/common@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -118,4 +158,3 @@ Published as [`@spacefast/domain-services`](https://www.npmjs.com/package/@space
 ## 0.0.6
 
 - Various bug fixes and improvements.
-

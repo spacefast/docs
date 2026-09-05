@@ -1,11 +1,11 @@
 ---
 title: "build_oom"
-description: "The build process was killed, most likely after running out of memory."
+description: "The build was killed after exhausting the memory available to it."
 ---
 
-The build process was killed, most likely after running out of memory.
+The build was killed after exhausting the memory available to it.
 
-**How to resolve:** Reduce the build's memory usage or concurrency, then start a new build.
+**How to resolve:** Lower the build's memory use or its concurrency, then retry the build.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_oom",
   "title": "Build oom",
   "status": 400,
-  "detail": "The build process was killed, most likely after running out of memory.",
+  "detail": "The build was killed after exhausting the memory available to it.",
   "code": "build_oom",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_mismatch"
-description: "The requested Zero endpoint does not match the endpoint artifact."
+description: "The requested Zero endpoint does not match the one the compiled index holds."
 ---
 
-The requested Zero endpoint does not match the endpoint artifact.
+The requested Zero endpoint does not match the one the compiled index holds.
 
-**How to resolve:** Rebuild routes and artifacts together, then publish the version again.
+**How to resolve:** Publish the current build so the served index matches the client.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_mismatch",
   "title": "Zero endpoint mismatch",
   "status": 400,
-  "detail": "The requested Zero endpoint does not match the endpoint artifact.",
+  "detail": "The requested Zero endpoint does not match the one the compiled index holds.",
   "code": "zero_endpoint_mismatch",
   "requestId": "req_4mz0v8qk"
 }

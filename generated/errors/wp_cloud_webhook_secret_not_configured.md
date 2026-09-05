@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_webhook_secret_not_configured"
-description: "The infra webhook secret is not configured on this deployment."
+description: "The WP Cloud webhook verification key is not configured on the server."
 ---
 
-The infra webhook secret is not configured on this deployment.
+The WP Cloud webhook verification key is not configured on the server.
 
-**How to resolve:** Set the infra webhook secret in the control-plane environment.
+**How to resolve:** Contact Spacefast support; the webhook secret has to be set in the control plane environment.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_webhook_secret_not_configured",
   "title": "Wp cloud webhook secret not configured",
   "status": 400,
-  "detail": "The infra webhook secret is not configured on this deployment.",
+  "detail": "The WP Cloud webhook verification key is not configured on the server.",
   "code": "wp_cloud_webhook_secret_not_configured",
   "requestId": "req_4mz0v8qk"
 }

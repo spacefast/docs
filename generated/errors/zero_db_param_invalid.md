@@ -1,11 +1,11 @@
 ---
 title: "zero_db_param_invalid"
-description: "A Zero database query parameter has an unsupported value."
+description: "A Zero database parameter is not a scalar JSON value."
 ---
 
-A Zero database query parameter has an unsupported value.
+A Zero database parameter is not a scalar JSON value.
 
-**How to resolve:** Pass JSON-serializable scalar values or nulls to generated database helpers.
+**How to resolve:** Pass strings, numbers, booleans, or null as statement parameters.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_param_invalid",
   "title": "Zero db param invalid",
   "status": 400,
-  "detail": "A Zero database query parameter has an unsupported value.",
+  "detail": "A Zero database parameter is not a scalar JSON value.",
   "code": "zero_db_param_invalid",
   "requestId": "req_4mz0v8qk"
 }

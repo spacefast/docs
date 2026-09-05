@@ -1,11 +1,11 @@
 ---
 title: "zero_db_too_many_params"
-description: "The Zero database operation has too many parameters."
+description: "The statement carries more parameters than the broker allows."
 ---
 
-The Zero database operation has too many parameters.
+The statement carries more parameters than the broker allows.
 
-**How to resolve:** Reduce the number of bound parameters or split the operation.
+**How to resolve:** Split the statement so each one stays within the parameter limit.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_too_many_params",
   "title": "Zero db too many params",
   "status": 400,
-  "detail": "The Zero database operation has too many parameters.",
+  "detail": "The statement carries more parameters than the broker allows.",
   "code": "zero_db_too_many_params",
   "requestId": "req_4mz0v8qk"
 }

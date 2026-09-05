@@ -1,11 +1,11 @@
 ---
 title: "managed_domain_protected"
-description: "This is a system-managed view.fast hostname and cannot be mutated like a custom domain."
+description: "The hostname is a managed Spacefast hostname and cannot be added as a custom domain."
 ---
 
-This is a system-managed view.fast hostname and cannot be mutated like a custom domain.
+The hostname is a managed Spacefast hostname and cannot be added as a custom domain.
 
-**How to resolve:** Use the hostname as a read-only managed hostname. If you need editable DNS and binding controls, add a custom domain.
+**How to resolve:** Add a hostname on a domain the caller controls instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/managed_domain_protected",
   "title": "Managed domain protected",
   "status": 400,
-  "detail": "This is a system-managed view.fast hostname and cannot be mutated like a custom domain.",
+  "detail": "The hostname is a managed Spacefast hostname and cannot be added as a custom domain.",
   "code": "managed_domain_protected",
   "requestId": "req_4mz0v8qk"
 }

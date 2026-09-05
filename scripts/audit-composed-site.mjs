@@ -32,10 +32,11 @@ export function unexpectedAuditErrors(diagnostics, dependencies) {
 }
 
 async function runAudit() {
-  const child = spawn(process.execPath, [blumeCli, "audit", "--json"], {
-    cwd: process.cwd(),
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  const child = spawn(
+    process.execPath,
+    ["--max-old-space-size=6144", blumeCli, "audit", "--json"],
+    { cwd: process.cwd(), stdio: ["ignore", "pipe", "pipe"] },
+  );
   let stdout = "";
   let stderr = "";
   child.stdout.setEncoding("utf8");

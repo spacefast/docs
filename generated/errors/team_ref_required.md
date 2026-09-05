@@ -1,11 +1,11 @@
 ---
 title: "team_ref_required"
-description: "A team reference is required for this operation."
+description: "The request did not name a team."
 ---
 
-A team reference is required for this operation.
+The request did not name a team.
 
-**How to resolve:** Pass the team id or slug.
+**How to resolve:** Send `teamRef` as a team ID or slug.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/team_ref_required",
   "title": "Team ref required",
   "status": 400,
-  "detail": "A team reference is required for this operation.",
+  "detail": "The request did not name a team.",
   "code": "team_ref_required",
   "requestId": "req_4mz0v8qk"
 }

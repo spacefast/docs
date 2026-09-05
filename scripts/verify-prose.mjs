@@ -41,7 +41,7 @@ const markdownTargets = walk(join(root, "content")).map((p) => relative(root, p)
 
 // --- extract OpenAPI prose ---------------------------------------------------
 
-const specs = ["generated/openapi/api.json", "generated/openapi/platform.json"];
+const specs = ["generated/openapi/api.json", "generated/openapi/partner.json"];
 const escapePointer = (part) => String(part).replaceAll("~", "~0").replaceAll("/", "~1");
 
 // text -> [{ spec, pointer }]

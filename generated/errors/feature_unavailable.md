@@ -1,11 +1,11 @@
 ---
 title: "feature_unavailable"
-description: "This feature is not available on this deployment or plan."
+description: "The feature this request needs is not enabled for the team."
 ---
 
-This feature is not available on this deployment or plan.
+The feature this request needs is not enabled for the team.
 
-**How to resolve:** Check the feature's availability. When the feature is enabled for your team, try again.
+**How to resolve:** Read `feature` in the error details and ask a team admin to enable it, or use a plan that includes it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/feature_unavailable",
   "title": "Feature unavailable",
   "status": 400,
-  "detail": "This feature is not available on this deployment or plan.",
+  "detail": "The feature this request needs is not enabled for the team.",
   "code": "feature_unavailable",
   "requestId": "req_4mz0v8qk"
 }

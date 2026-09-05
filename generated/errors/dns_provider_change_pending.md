@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_change_pending"
-description: "The DNS provider accepted the change but propagation or provider completion is still pending."
+description: "A DNS change is still pending at the provider."
 ---
 
-The DNS provider accepted the change but propagation or provider completion is still pending.
+A DNS change is still pending at the provider.
 
-**How to resolve:** Wait and re-check the pollable DNS operation before submitting another conflicting change.
+**How to resolve:** Wait for the pending change to settle, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_change_pending",
   "title": "Dns provider change pending",
   "status": 400,
-  "detail": "The DNS provider accepted the change but propagation or provider completion is still pending.",
+  "detail": "A DNS change is still pending at the provider.",
   "code": "dns_provider_change_pending",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_index_invalid"
-description: "The Zero endpoint index does not contain valid endpoint mappings."
+description: "The compiled Zero endpoint index does not satisfy its schema."
 ---
 
-The Zero endpoint index does not contain valid endpoint mappings.
+The compiled Zero endpoint index does not satisfy its schema.
 
-**How to resolve:** Rebuild the Zero project and publish it again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_index_invalid",
   "title": "Zero endpoint index invalid",
   "status": 400,
-  "detail": "The Zero endpoint index does not contain valid endpoint mappings.",
+  "detail": "The compiled Zero endpoint index does not satisfy its schema.",
   "code": "zero_endpoint_index_invalid",
   "requestId": "req_4mz0v8qk"
 }

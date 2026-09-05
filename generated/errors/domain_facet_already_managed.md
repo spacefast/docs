@@ -1,11 +1,11 @@
 ---
 title: "domain_facet_already_managed"
-description: "This facet of the domain is already managed by Spacefast."
+description: "Another domain record already manages this facet for the same zone cut."
 ---
 
-This facet of the domain is already managed by Spacefast.
+Another domain record already manages this facet for the same zone cut.
 
-**How to resolve:** No action is needed. The facet is already active.
+**How to resolve:** Manage the facet through the domain record that already owns the zone cut.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_facet_already_managed",
   "title": "Domain facet already managed",
   "status": 400,
-  "detail": "This facet of the domain is already managed by Spacefast.",
+  "detail": "Another domain record already manages this facet for the same zone cut.",
   "code": "domain_facet_already_managed",
   "requestId": "req_4mz0v8qk"
 }

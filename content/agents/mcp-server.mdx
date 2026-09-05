@@ -1,13 +1,13 @@
 ---
 title: MCP server
-description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its nine tools, execute sandbox, and approval model
+description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its five tools, execute sandbox, and approval model
 ---
 
 After this page you can connect any MCP client to Spacefast, read every tool's input schema, write `execute` programs against the whole Spacefast API, and know exactly when a call will stop and ask you for approval.
 
 ## Two runtimes, one tool set
 
-The same server ships in two runtimes. Both register the same nine tools. The difference is the filesystem.
+The same server ships in two runtimes. Both register the same five tools. The difference is the filesystem.
 
 | | Hosted | Local |
 |---|---|---|
@@ -48,13 +48,11 @@ Each tool declares the scopes it needs, and clients can read them from `tools/li
 | Tool | Required scopes |
 |---|---|
 | `publish` | `publish:write` |
-| `show_space_deployments` | `spaces:read` |
-| `show_space_analytics` | `spaces:read` |
-| `show_space_domains` | `spaces:read`, `domains:read` |
 | `operation_status` | `spaces:read` |
-| `execute`, `skills`, `resume_execution`, `search_docs` | none of their own |
+| `show_space` | The scopes required by the selected view |
+| `execute`, `resume_execution` | The called API operation checks the credential's scopes |
 
-A scope shortfall is per tool, not per session. `show_space_domains` can return a `403` on a session where `show_space_analytics` works.
+A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
 Your client never receives a Spacefast API token. Each authenticated request mints an internal delegation token that lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session cannot be replayed against the wider API.
 
@@ -74,15 +72,11 @@ The local server takes its credential from the process, never from client config
 
 | Tool | What it does | Key inputs | Returns |
 |---|---|---|---|
-| `publish` | Uploads files and creates a new immutable version | `path` or `files`, `spaceId`, `teamId`, `access` | Live URL, immutable URL, receipt, and a poll handle when still running |
+| `publish` | Uploads files and creates an immutable version | `path` or `files`, `spaceId`, `teamId`, `access` | Publish receipt and status |
 | `operation_status` | Checks a publish that is still running | `operationId` | Status, progress, diagnostics, `done` |
-| `show_space_deployments` | Deployment history and build status | `space`, `cursor` | Deployment list with pagination |
-| `show_space_domains` | Domains, DNS records, TLS status | `space`, `cursor` | Domain list with pagination |
-| `show_space_analytics` | Traffic over a window | `space`, `window` | Analytics for the window |
-| `search_docs` | Searches the Spacefast docs | `query`, `limit`, `offset`, `kind`, `tier` | Ranked results, plus the full page body on an exact slug or path hit |
-| `execute` | Runs one JavaScript program against the whole API catalog | `code` | Program result, or a pause that needs approval |
-| `skills` | Returns the guide for writing `execute` programs | `name` | The `execute` guide |
-| `resume_execution` | Continues a paused `execute` program | `executionId`, and `action` plus `content` in model mode | The continued program's result |
+| `show_space` | Opens a read-only Space view | `request.view`, `request.input` | The selected view and its data |
+| `execute` | Runs a JavaScript program against the API catalog | `code` | Program result or a pause for approval |
+| `resume_execution` | Continues a paused program | `executionId` and the requested decision fields | The continued program's result |
 
 Every result is capped at 24,000 characters across the whole structured value, with an explicit truncation marker when it hits the cap.
 
@@ -140,53 +134,32 @@ Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
 Poll about every two seconds. Stop when `result.done` is true. Report success only when `result.status` is `succeeded`; the other terminal states are `failed` and `canceled`.
 
-### show_space_deployments
+### show_space
 
-| Field | Type | What it does |
-|---|---|---|
-| `space` | string | Space id, slug, hostname, or URL. Required on hosted. On local, omit it to use the Space linked to this workspace |
-| `team` | string | Team id or slug, only when `space` is an ambiguous slug |
-| `cursor` | string | Copy `pagination.nextCursor` from the previous result |
+Choose a view, then provide the input that view requires. Detailed views require a claimed Space.
 
-```json
-{ "space": "spc_4a91c0de2f3b" }
-```
-
-### show_space_domains
-
-Same inputs as `show_space_deployments`. It returns each domain with its DNS and TLS state.
-
-```json
-{ "space": "docs.example.com" }
-```
-
-### show_space_analytics
-
-| Field | Type | What it does |
-|---|---|---|
-| `space` | string | Space id, slug, hostname, or URL. Required on hosted |
-| `team` | string | Team id or slug, only when `space` is an ambiguous slug |
-| `window` | `48h`, `7d`, or `30d`, default `7d` | Time window |
+| View | What it shows |
+|---|---|
+| `deployments` | Deployment history and build status |
+| `domains` | Domains, DNS records, and TLS status |
+| `analytics` | Traffic over the selected window |
+| `source_files` | Repository files and folders |
+| `source_changes` | Pending source workspace changes |
+| `source_history` | Repository commits |
+| `source_comparison` | Differences between source commits |
+| `deployment_comparison` | Differences between published versions |
+| `build_logs` | Logs from one build |
 
 ```json
-{ "space": "my-notes", "window": "30d" }
+{
+  "request": {
+    "view": "deployments",
+    "input": { "space": "docs.example.com" }
+  }
+}
 ```
 
-### search_docs
-
-| Field | Type | What it does |
-|---|---|---|
-| `query` | string, up to 512 | A question, or an exact page slug or path |
-| `limit` | integer, 1 to 25 | Ranked results to return, default 8 |
-| `offset` | integer | Continuation only. Copy `nextOffset` |
-| `kind` | `guide`, `cli`, `api`, `recipe`, `workflow`, or `error` | Restrict to one docs area |
-| `tier` | `essential`, `full`, or `reference` | Disclosure ceiling, default `reference` |
-
-```json
-{ "query": "custom domain DNS records" }
-```
-
-An exact slug or path hit short-circuits to that one page and returns its full body in `page.body`. `search_docs` bypasses the credential ladder entirely, so documentation lookup keeps working when you are signed out or your token has expired.
+Read the input schema from `tools/list` before selecting another view. `show_space` never changes source, deployments, domains, or settings. Use `execute` for those changes.
 
 ### execute
 
@@ -196,17 +169,11 @@ An exact slug or path hit short-circuits to that one page and returns its full b
 
 See the sandbox contract below.
 
-### skills
+### Find documentation
 
-| Field | Type | What it does |
-|---|---|---|
-| `name` | `"execute"` | Omit it only to ask which guides exist |
+Use `execute` to discover the generated documentation operation with `tools.search`. Read its schema with `tools.describe`, then call it with the documentation query. The documentation API supports ranked search, an exact page slug, and listing pages with an empty query.
 
-```json
-{ "name": "execute" }
-```
-
-One guide exists. It is the `execute` program contract.
+For an error, open the problem document's `type` URL to read the matching error page.
 
 ### resume_execution
 
@@ -282,7 +249,7 @@ Then, with the id in hand:
 
 ### Add a domain, then watch it
 
-One program creates the domain and binds it to the Space. Polling for DNS and TLS afterwards is `show_space_domains`, not another `execute` call.
+One program creates the domain and binds it to the Space. Use `show_space` with the `domains` view to inspect DNS and TLS afterward.
 
 ```js
 const found = await tools.search({ query: "create domain for space", limit: 10 });
@@ -337,7 +304,7 @@ Choosing "always allow" is deliberately narrow. Only a plain confirmation gate, 
 
 If the request changes between the pause and your decision, the resume fails with "This approval no longer matches the request. Run execute again."
 
-Tools also declare how risky they are, and clients use that to decide what to confirm on their own. `publish`, `execute`, and `resume_execution` are marked destructive. `search_docs`, `skills`, `operation_status`, and the three `show_space_*` tools are marked read-only.
+Tools also declare how risky they are, and clients use that to decide what to confirm on their own. `publish`, `execute`, and `resume_execution` are marked destructive. `operation_status` and `show_space` are marked read-only.
 
 ## Local file access
 

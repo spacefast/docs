@@ -1,11 +1,11 @@
 ---
 title: "domain_lookup_rate_limited"
-description: "Too many domain lookups were made in a short window."
+description: "Too many domain lookup requests came from this client."
 ---
 
-Too many domain lookups were made in a short window.
+Too many domain lookup requests came from this client.
 
-**How to resolve:** Wait for the window in the Retry-After header to pass before searching again.
+**How to resolve:** Wait for the window in the `Retry-After` header to pass, then look the domain up again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_lookup_rate_limited",
   "title": "Domain lookup rate limited",
   "status": 400,
-  "detail": "Too many domain lookups were made in a short window.",
+  "detail": "Too many domain lookup requests came from this client.",
   "code": "domain_lookup_rate_limited",
   "requestId": "req_4mz0v8qk"
 }

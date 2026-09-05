@@ -1,11 +1,11 @@
 ---
 title: "tenant_past_due"
-description: "The tenant is past due. Mutations are rejected while serving continues."
+description: "The account is past due, so changes are blocked while serving continues through the grace period."
 ---
 
-The tenant is past due. Mutations are rejected while serving continues.
+The account is past due, so changes are blocked while serving continues through the grace period.
 
-**How to resolve:** Settle the outstanding balance to restore full access.
+**How to resolve:** Settle the outstanding payment, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_past_due",
   "title": "Tenant past due",
   "status": 400,
-  "detail": "The tenant is past due. Mutations are rejected while serving continues.",
+  "detail": "The account is past due, so changes are blocked while serving continues through the grace period.",
   "code": "tenant_past_due",
   "requestId": "req_4mz0v8qk"
 }

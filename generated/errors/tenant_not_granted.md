@@ -1,11 +1,11 @@
 ---
 title: "tenant_not_granted"
-description: "Your credential has no grant on the requested tenant."
+description: "The credential is not granted the tenant this request addresses."
 ---
 
-Your credential has no grant on the requested tenant.
+The credential is not granted the tenant this request addresses.
 
-**How to resolve:** Use a credential issued for this tenant.
+**How to resolve:** Drop `X-Spacefast-Tenant-Id`, or send a tenant the credential's policy grants.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_not_granted",
   "title": "Tenant not granted",
   "status": 400,
-  "detail": "Your credential has no grant on the requested tenant.",
+  "detail": "The credential is not granted the tenant this request addresses.",
   "code": "tenant_not_granted",
   "requestId": "req_4mz0v8qk"
 }

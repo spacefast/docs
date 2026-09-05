@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_page_too_large"
-description: "One database export page exceeded the 16 MiB response limit."
+description: "The export page is larger than 16 MiB."
 ---
 
-One database export page exceeded the 16 MiB response limit.
+The export page is larger than 16 MiB.
 
-**How to resolve:** Retry with a smaller export page size.
+**How to resolve:** Retry the export with a smaller `limit`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_page_too_large",
   "title": "Zero db export page too large",
   "status": 400,
-  "detail": "One database export page exceeded the 16 MiB response limit.",
+  "detail": "The export page is larger than 16 MiB.",
   "code": "zero_db_export_page_too_large",
   "requestId": "req_4mz0v8qk"
 }

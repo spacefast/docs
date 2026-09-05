@@ -1,11 +1,11 @@
 ---
 title: "dns_record_conflicts_with_managed"
-description: "The DNS change conflicts with a record Spacefast manages for this domain."
+description: "The record conflicts with a Spacefast-managed record at the same name."
 ---
 
-The DNS change conflicts with a record Spacefast manages for this domain.
+The record conflicts with a Spacefast-managed record at the same name.
 
-**How to resolve:** Remove or adjust the conflicting record. Managed records cannot be overridden.
+**How to resolve:** Use a different name, or change the record so it stops colliding with the managed one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_record_conflicts_with_managed",
   "title": "Dns record conflicts with managed",
   "status": 400,
-  "detail": "The DNS change conflicts with a record Spacefast manages for this domain.",
+  "detail": "The record conflicts with a Spacefast-managed record at the same name.",
   "code": "dns_record_conflicts_with_managed",
   "requestId": "req_4mz0v8qk"
 }

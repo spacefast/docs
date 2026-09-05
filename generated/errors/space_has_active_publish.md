@@ -1,11 +1,11 @@
 ---
 title: "space_has_active_publish"
-description: "The space has a publish in progress, which blocks this operation."
+description: "A publish is already running on this Space."
 ---
 
-The space has a publish in progress, which blocks this operation.
+A publish is already running on this Space.
 
-**How to resolve:** Wait for the publish to finish or cancel it, then retry.
+**How to resolve:** Wait for the running publish to settle, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_has_active_publish",
   "title": "Space has active publish",
   "status": 400,
-  "detail": "The space has a publish in progress, which blocks this operation.",
+  "detail": "A publish is already running on this Space.",
   "code": "space_has_active_publish",
   "requestId": "req_4mz0v8qk"
 }

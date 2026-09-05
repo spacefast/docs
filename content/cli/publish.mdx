@@ -135,11 +135,11 @@ Publish drops state, secret, and vendor-tooling files before it hashes anything.
 
 A remote source archive uses a different policy: it honors `.gitignore` including nested files and `!` negations, and in a git checkout it takes the file list from git itself. `--source-include` adds a path back.
 
-Limits that fail a publish: 100,000 files per version, 64 MiB per file, 2 GiB total, 1024 bytes per canonical path. Full rules live in [Publishing](/publish) and [Limits](/limits).
+Limits that fail a publish: 100,000 files per version, 1 GiB per file, 2 GiB total, 1024 bytes per canonical path. Full rules live in [Publishing](/publish) and [Limits](/limits).
 
 ## Building
 
-With no build flags, `sf publish` in a project directory detects the framework, runs its build, and publishes the output. Detection covers Next.js, Astro, Nuxt, SvelteKit, Vite, Docusaurus, Hugo, Jekyll, and about twenty more. The list and the default output directory for each preset are in [Frameworks and builds](/frameworks).
+With no build flags, `sf publish` in a project directory detects the framework, runs its build, and publishes the output. Detection covers Next.js, Astro, Nuxt, SvelteKit, Vite, Docusaurus, Hugo, Jekyll, and about twenty more. The list and default output directory for each preset are in [Frameworks and builds](/frameworks).
 
 Three ways to build:
 
@@ -277,7 +277,6 @@ Publish uses the shared [exit codes](/cli#exit-codes).
 | `validation_error` | 2 | Conflicting flags or a missing input path. The message names the flag |
 | `invalid_publish_archive` | 2 | The archive failed safety checks. See below |
 | `upload_too_large` | 2 | The archive is over the remote upload limit |
-| `version_no_publishable_files` | 2 | Every file was dropped by policy. Free Spaces publish web content only |
 | `unauthorized` | 10 | `--access` without a login, or an expired token. Run `sf login` |
 | `space_unclaimed` | 10 | The Space still needs its key. Pass `--claim-token`, or run `sf spaces claim` |
 | `checkout_state_conflict` | 30 | Another process re-linked this checkout mid-command. Re-run |

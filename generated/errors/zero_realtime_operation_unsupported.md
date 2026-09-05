@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_operation_unsupported"
-description: "The Zero realtime websocket operation is unsupported."
+description: "The realtime operation is not one this runtime serves."
 ---
 
-The Zero realtime websocket operation is unsupported.
+The realtime operation is not one this runtime serves.
 
-**How to resolve:** Use a supported Zero realtime operation such as `query.subscribe` or `query.unsubscribe`.
+**How to resolve:** Use a realtime operation the Zero runtime supports.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_operation_unsupported",
   "title": "Zero realtime operation unsupported",
   "status": 400,
-  "detail": "The Zero realtime websocket operation is unsupported.",
+  "detail": "The realtime operation is not one this runtime serves.",
   "code": "zero_realtime_operation_unsupported",
   "requestId": "req_4mz0v8qk"
 }

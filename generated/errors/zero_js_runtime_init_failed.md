@@ -1,11 +1,11 @@
 ---
 title: "zero_js_runtime_init_failed"
-description: "The Zero runner cannot initialize QuickJS."
+description: "The JavaScript runtime for the Zero handler could not start."
 ---
 
-The Zero runner cannot initialize QuickJS.
+The JavaScript runtime for the Zero handler could not start.
 
-**How to resolve:** Retry on a healthy runtime or rebuild the runner binary.
+**How to resolve:** Retry the request. If it keeps failing, publish the capsule again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_runtime_init_failed",
   "title": "Zero js runtime init failed",
   "status": 400,
-  "detail": "The Zero runner cannot initialize QuickJS.",
+  "detail": "The JavaScript runtime for the Zero handler could not start.",
   "code": "zero_js_runtime_init_failed",
   "requestId": "req_4mz0v8qk"
 }

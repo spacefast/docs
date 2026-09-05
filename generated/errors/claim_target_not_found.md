@@ -1,11 +1,11 @@
 ---
 title: "claim_target_not_found"
-description: "The team or account to claim the space into was not found."
+description: "No team was resolved to claim the Space into."
 ---
 
-The team or account to claim the space into was not found.
+No team was resolved to claim the Space into.
 
-**How to resolve:** Verify the claim target and that your credential can act for it.
+**How to resolve:** Pass the `teamId` of a team the caller can write to.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/claim_target_not_found",
   "title": "Claim target not found",
   "status": 400,
-  "detail": "The team or account to claim the space into was not found.",
+  "detail": "No team was resolved to claim the Space into.",
   "code": "claim_target_not_found",
   "requestId": "req_4mz0v8qk"
 }

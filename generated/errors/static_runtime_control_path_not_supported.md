@@ -1,11 +1,11 @@
 ---
 title: "static_runtime_control_path_not_supported"
-description: "This control path is not supported by the static runtime."
+description: "The publish contains a reserved runtime control path a static publish cannot upload."
 ---
 
-This control path is not supported by the static runtime.
+The publish contains a reserved runtime control path a static publish cannot upload.
 
-**How to resolve:** Remove the path from the upload.
+**How to resolve:** Rename or remove the reserved file at the root of the publish directory, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/static_runtime_control_path_not_supported",
   "title": "Static runtime control path not supported",
   "status": 400,
-  "detail": "This control path is not supported by the static runtime.",
+  "detail": "The publish contains a reserved runtime control path a static publish cannot upload.",
   "code": "static_runtime_control_path_not_supported",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,6 +5,47 @@ description: "Release history for @spacefast/routing on npm."
 
 Published as [`@spacefast/routing`](https://www.npmjs.com/package/@spacefast/routing) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- @spacefast/common@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/common@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- @spacefast/common@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Fold a run of root dots when normalizing a host, matching the Rust compiler. `normalize_hostname` and `parse_absolute_url` in `stattic-runtime-core` trim every trailing dot, while the TypeScript lane trimmed one in each — so a host carrying three of them compiled to a rule on one lane and a `redirect_hostname_unassigned` diagnostic on the other. The canonical normalizer now ships as `@spacefast/routing/hostname`, alongside `normalizeHostAuthority` for `Host`-header values that carry a port.
+- Updated dependencies
+  - @spacefast/common@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -120,4 +161,3 @@ _No noted changes in this release._
 ## 0.0.6
 
 _No noted changes in this release._
-

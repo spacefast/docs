@@ -1,11 +1,11 @@
 ---
 title: "inject_invalid"
-description: "The inject config key is malformed."
+description: "The `inject` block in the Space config is not shaped as placement keys holding snippet arrays."
 ---
 
-The inject config key is malformed.
+The `inject` block in the Space config is not shaped as placement keys holding snippet arrays.
 
-**How to resolve:** Make `inject` an object whose `head`, `bodyStart`, `bodyEnd`, and `noscript` entries are arrays of up to 16 strings.
+**How to resolve:** Make `inject` an object whose keys hold arrays of snippet strings, and keep each array within its snippet cap.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/inject_invalid",
   "title": "Inject invalid",
   "status": 400,
-  "detail": "The inject config key is malformed.",
+  "detail": "The `inject` block in the Space config is not shaped as placement keys holding snippet arrays.",
   "code": "inject_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_replay_query_invalid"
-description: "The hosted Zero realtime replay query is invalid."
+description: "The realtime replay query is larger than the byte limit, or is otherwise invalid."
 ---
 
-The hosted Zero realtime replay query is invalid.
+The realtime replay query is larger than the byte limit, or is otherwise invalid.
 
-**How to resolve:** Use a valid `afterEventId` cursor and numeric limit.
+**How to resolve:** Shorten the replay query string, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_replay_query_invalid",
   "title": "Zero replay query invalid",
   "status": 400,
-  "detail": "The hosted Zero realtime replay query is invalid.",
+  "detail": "The realtime replay query is larger than the byte limit, or is otherwise invalid.",
   "code": "zero_replay_query_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "version_live"
-description: "The version is live and cannot be deleted."
+description: "The version is the live one on its channel."
 ---
 
-The version is live and cannot be deleted.
+The version is the live one on its channel.
 
-**How to resolve:** Promote another version to live first.
+**How to resolve:** Promote another version to the channel first, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_live",
   "title": "Version live",
   "status": 400,
-  "detail": "The version is live and cannot be deleted.",
+  "detail": "The version is the live one on its channel.",
   "code": "version_live",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_unavailable"
-description: "Zero realtime helpers are unavailable for this endpoint."
+description: "Realtime is not available for this Space."
 ---
 
-Zero realtime helpers are unavailable for this endpoint.
+Realtime is not available for this Space.
 
-**How to resolve:** Enable realtime capability for the handler and rebuild the project.
+**How to resolve:** Enable realtime in the Space's Zero config, then publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_unavailable",
   "title": "Zero realtime unavailable",
   "status": 400,
-  "detail": "Zero realtime helpers are unavailable for this endpoint.",
+  "detail": "Realtime is not available for this Space.",
   "code": "zero_realtime_unavailable",
   "requestId": "req_4mz0v8qk"
 }

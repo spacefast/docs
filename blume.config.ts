@@ -86,9 +86,9 @@ export default defineConfig({
         spec: "./generated/openapi/api.json",
       },
       {
-        label: "Platform API",
+        label: "Partner API",
         route: "/platforms/api/reference",
-        spec: "./generated/openapi/platform.json",
+        spec: "./generated/openapi/partner.json",
       },
     ],
   },

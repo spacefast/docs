@@ -1,11 +1,11 @@
 ---
 title: "member_already_exists"
-description: "This user is already a member of the team."
+description: "That user is already a member of this team."
 ---
 
-This user is already a member of the team.
+That user is already a member of this team.
 
-**How to resolve:** Update the existing member's role instead of inviting again.
+**How to resolve:** Change the existing member's role instead of adding them again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/member_already_exists",
   "title": "Member already exists",
   "status": 400,
-  "detail": "This user is already a member of the team.",
+  "detail": "That user is already a member of this team.",
   "code": "member_already_exists",
   "requestId": "req_4mz0v8qk"
 }

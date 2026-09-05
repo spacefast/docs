@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_index_path_invalid"
-description: "The Zero endpoint index path is invalid."
+description: "The Zero endpoint index path is not a safe path."
 ---
 
-The Zero endpoint index path is invalid.
+The Zero endpoint index path is not a safe path.
 
-**How to resolve:** Verify the runtime bundle was finalized with the standard Zero layout.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_index_path_invalid",
   "title": "Zero endpoint index path invalid",
   "status": 400,
-  "detail": "The Zero endpoint index path is invalid.",
+  "detail": "The Zero endpoint index path is not a safe path.",
   "code": "zero_endpoint_index_path_invalid",
   "requestId": "req_4mz0v8qk"
 }

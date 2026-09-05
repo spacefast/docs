@@ -1,11 +1,11 @@
 ---
 title: "move_target_capacity_lost"
-description: "The selected move target no longer has capacity for the space."
+description: "The box chosen for this move lost its capacity before the move ran."
 ---
 
-The selected move target no longer has capacity for the space.
+The box chosen for this move lost its capacity before the move ran.
 
-**How to resolve:** Retry the move with a different target, or retry after capacity is freed.
+**How to resolve:** Retry the move so a fresh target is selected.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/move_target_capacity_lost",
   "title": "Move target capacity lost",
   "status": 400,
-  "detail": "The selected move target no longer has capacity for the space.",
+  "detail": "The box chosen for this move lost its capacity before the move ran.",
   "code": "move_target_capacity_lost",
   "requestId": "req_4mz0v8qk"
 }

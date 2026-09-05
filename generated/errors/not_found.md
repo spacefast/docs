@@ -1,11 +1,11 @@
 ---
 title: "not_found"
-description: "The requested resource was not found."
+description: "No resource matches the identifier in the request."
 ---
 
-The requested resource was not found.
+No resource matches the identifier in the request.
 
-**How to resolve:** Verify that the id is correct and that your credential can access the resource.
+**How to resolve:** Check the ID and the endpoint path, then call again with a resource the credential can reach.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/not_found",
   "title": "Not found",
   "status": 400,
-  "detail": "The requested resource was not found.",
+  "detail": "No resource matches the identifier in the request.",
   "code": "not_found",
   "requestId": "req_4mz0v8qk"
 }

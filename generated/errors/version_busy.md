@@ -1,11 +1,11 @@
 ---
 title: "version_busy"
-description: "The version is busy with another operation."
+description: "The version is finalizing, so it cannot be changed or deleted yet."
 ---
 
-The version is busy with another operation.
+The version is finalizing, so it cannot be changed or deleted yet.
 
-**How to resolve:** Wait for the in-flight operation to finish, then retry.
+**How to resolve:** Wait for the version to reach `ready` or `failed`, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_busy",
   "title": "Version busy",
   "status": 400,
-  "detail": "The version is busy with another operation.",
+  "detail": "The version is finalizing, so it cannot be changed or deleted yet.",
   "code": "version_busy",
   "requestId": "req_4mz0v8qk"
 }

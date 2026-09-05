@@ -1,11 +1,11 @@
 ---
 title: "superadmin_two_factor_required"
-description: "The user must have two-factor authentication enrolled before being granted superadmin."
+description: "The user has no two-factor authentication enrolled."
 ---
 
-The user must have two-factor authentication enrolled before being granted superadmin.
+The user has no two-factor authentication enrolled.
 
-**How to resolve:** Ask them to enrol a second factor in account security, then grant the role again.
+**How to resolve:** Have the user enroll two-factor authentication, then grant the role again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/superadmin_two_factor_required",
   "title": "Superadmin two factor required",
   "status": 400,
-  "detail": "The user must have two-factor authentication enrolled before being granted superadmin.",
+  "detail": "The user has no two-factor authentication enrolled.",
   "code": "superadmin_two_factor_required",
   "requestId": "req_4mz0v8qk"
 }

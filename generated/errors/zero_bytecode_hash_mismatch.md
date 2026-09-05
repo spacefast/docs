@@ -1,11 +1,11 @@
 ---
 title: "zero_bytecode_hash_mismatch"
-description: "The Zero endpoint bytecode hash does not match its artifact metadata."
+description: "The Zero bytecode does not hash to what the compiled index declares."
 ---
 
-The Zero endpoint bytecode hash does not match its artifact metadata.
+The Zero bytecode does not hash to what the compiled index declares.
 
-**How to resolve:** Rebuild and publish again so bytecode and endpoint metadata are from the same build.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_bytecode_hash_mismatch",
   "title": "Zero bytecode hash mismatch",
   "status": 400,
-  "detail": "The Zero endpoint bytecode hash does not match its artifact metadata.",
+  "detail": "The Zero bytecode does not hash to what the compiled index declares.",
   "code": "zero_bytecode_hash_mismatch",
   "requestId": "req_4mz0v8qk"
 }

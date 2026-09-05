@@ -1,11 +1,11 @@
 ---
 title: "space_person_invitation_pending"
-description: "A Person invitation is already pending for this email."
+description: "That address already has a pending invitation to this Space."
 ---
 
-A Person invitation is already pending for this email.
+That address already has a pending invitation to this Space.
 
-**How to resolve:** Resend or update the pending invitation instead of creating another one.
+**How to resolve:** Revoke the pending invitation, or wait for it to be accepted, before inviting again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_person_invitation_pending",
   "title": "Space person invitation pending",
   "status": 400,
-  "detail": "A Person invitation is already pending for this email.",
+  "detail": "That address already has a pending invitation to this Space.",
   "code": "space_person_invitation_pending",
   "requestId": "req_4mz0v8qk"
 }

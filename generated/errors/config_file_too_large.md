@@ -1,11 +1,11 @@
 ---
 title: "config_file_too_large"
-description: "The sf.jsonc configuration file exceeds the maximum size."
+description: "The Space config overlay is larger than the allowed byte cap."
 ---
 
-The sf.jsonc configuration file exceeds the maximum size.
+The Space config overlay is larger than the allowed byte cap.
 
-**How to resolve:** Keep the configuration file at or under 256 KB.
+**How to resolve:** Remove entries from the Space config until it fits the byte cap named in the failure.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_file_too_large",
   "title": "Config file too large",
   "status": 400,
-  "detail": "The sf.jsonc configuration file exceeds the maximum size.",
+  "detail": "The Space config overlay is larger than the allowed byte cap.",
   "code": "config_file_too_large",
   "requestId": "req_4mz0v8qk"
 }

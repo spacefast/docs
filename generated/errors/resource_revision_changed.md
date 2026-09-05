@@ -1,11 +1,11 @@
 ---
 title: "resource_revision_changed"
-description: "The resource changed after you loaded it, so the stale write was rejected."
+description: "The resource changed after the revision in this request was read."
 ---
 
-The resource changed after you loaded it, so the stale write was rejected.
+The resource changed after the revision in this request was read.
 
-**How to resolve:** Use the current resource returned in `error.details.current`, reapply the intended fields, and send its revision as `expectedRevision`.
+**How to resolve:** Reload the resource, review the current values, then retry with the fresh `expectedRevision`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/resource_revision_changed",
   "title": "Resource revision changed",
   "status": 400,
-  "detail": "The resource changed after you loaded it, so the stale write was rejected.",
+  "detail": "The resource changed after the revision in this request was read.",
   "code": "resource_revision_changed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_conflict"
-description: "Two Zero routes resolve to the same runtime path."
+description: "Two Zero endpoints claim the same route."
 ---
 
-Two Zero routes resolve to the same runtime path.
+Two Zero endpoints claim the same route.
 
-**How to resolve:** Remove the duplicate generated or explicit lookup route and publish again.
+**How to resolve:** Give each endpoint a distinct route, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_conflict",
   "title": "Zero endpoint conflict",
   "status": 400,
-  "detail": "Two Zero routes resolve to the same runtime path.",
+  "detail": "Two Zero endpoints claim the same route.",
   "code": "zero_endpoint_conflict",
   "requestId": "req_4mz0v8qk"
 }

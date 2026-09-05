@@ -1,11 +1,11 @@
 ---
 title: "dns_field_conflict"
-description: "Two DNS fields cannot be used together for this provider or record type."
+description: "A CNAME or ALIAS record cannot sit beside other records at the same name."
 ---
 
-Two DNS fields cannot be used together for this provider or record type.
+A CNAME or ALIAS record cannot sit beside other records at the same name.
 
-**How to resolve:** Follow the capability rule in the error details and submit only the compatible fields.
+**How to resolve:** Remove the conflicting records at that name, or change the record type.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_field_conflict",
   "title": "Dns field conflict",
   "status": 400,
-  "detail": "Two DNS fields cannot be used together for this provider or record type.",
+  "detail": "A CNAME or ALIAS record cannot sit beside other records at the same name.",
   "code": "dns_field_conflict",
   "requestId": "req_4mz0v8qk"
 }

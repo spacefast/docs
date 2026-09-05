@@ -1,11 +1,11 @@
 ---
 title: "site_already_deleted"
-description: "The site was already deleted."
+description: "The provider site is already deleted."
 ---
 
-The site was already deleted.
+The provider site is already deleted.
 
-**How to resolve:** No action is needed. The site is gone.
+**How to resolve:** Skip the delete; the site is gone.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/site_already_deleted",
   "title": "Site already deleted",
   "status": 400,
-  "detail": "The site was already deleted.",
+  "detail": "The provider site is already deleted.",
   "code": "site_already_deleted",
   "requestId": "req_4mz0v8qk"
 }

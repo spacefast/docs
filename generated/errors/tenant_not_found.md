@@ -1,11 +1,11 @@
 ---
 title: "tenant_not_found"
-description: "The tenant was not found."
+description: "No tenant matches the identifier in the request."
 ---
 
-The tenant was not found.
+No tenant matches the identifier in the request.
 
-**How to resolve:** Verify the tenant id.
+**How to resolve:** Send a tenant ID that exists.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_not_found",
   "title": "Tenant not found",
   "status": 400,
-  "detail": "The tenant was not found.",
+  "detail": "No tenant matches the identifier in the request.",
   "code": "tenant_not_found",
   "requestId": "req_4mz0v8qk"
 }

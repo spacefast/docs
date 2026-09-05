@@ -1,11 +1,11 @@
 ---
 title: "files_mode_does_not_support_spa"
-description: "SPA fallback cannot be combined with files-listing mode."
+description: "Directory listing and single-page-app fallback cannot both be on for one Space."
 ---
 
-SPA fallback cannot be combined with files-listing mode.
+Directory listing and single-page-app fallback cannot both be on for one Space.
 
-**How to resolve:** Remove the SPA fallback or serve the space as a site instead of a file listing.
+**How to resolve:** Turn off `listing` or clear the SPA `fallback` in the Space settings.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/files_mode_does_not_support_spa",
   "title": "Files mode does not support spa",
   "status": 400,
-  "detail": "SPA fallback cannot be combined with files-listing mode.",
+  "detail": "Directory listing and single-page-app fallback cannot both be on for one Space.",
   "code": "files_mode_does_not_support_spa",
   "requestId": "req_4mz0v8qk"
 }

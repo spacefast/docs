@@ -11,28 +11,24 @@ Find any limit, see which plan changes it, and know exactly which error code com
 
 | Limit | Free | Plus | Pro | Enterprise | When you hit it |
 | --- | --- | --- | --- | --- | --- |
+| Spaces | 200 | Unlimited | Unlimited | Unlimited | `409` `space_quota_exceeded` |
 | Editors | 1 | 3 included | 10 included | Unlimited | `409` `team_member_quota_exceeded` |
-| Custom domain groups | 3 | 10 | Unlimited | Unlimited | `409` `domain_quota_exceeded` |
+| Custom domain groups | 50 | 100 | Unlimited | Unlimited | `409` `domain_quota_exceeded` |
 | Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited | Metered and shown. Nothing blocks |
-| Files per version | 20,000 | 100,000 | 100,000 | 100,000 | `422` `manifest_too_many_files` |
-| Largest single file | 50 MiB | 1 GiB | 64 MiB | 64 MiB | `422` `version_file_too_large` |
-| Versions kept per space | 200 | No cap | No cap | No cap | `422` `version_quota_exceeded` |
-| Publishes per month | 100 | 1,000 | Unlimited | Unlimited | Activity event, once per month. Publishing continues |
-| Routing rules | 10 | 1,000 | Unlimited | Unlimited | `routing_rules_over_plan` warning. Over-limit rules still serve |
+| Files per version | 100,000 | 100,000 | 100,000 | 100,000 | `422` `manifest_too_many_files` |
+| Versions kept per space | 200 | No cap | No cap | No cap | The oldest versions nothing serves expire on their own. Publishing continues |
+| Publishes per day | 100 | 6,000 | Unlimited | Unlimited | Activity event, once per day. Publishing continues |
 | Activity feed history | 48 hours | 30 days | Unlimited | Unlimited | Older events are deleted hourly |
 | Access log history | 48 hours | 30 days | Unlimited | Unlimited | Read window clamped, `log_retention_clamped` warning |
-| Bandwidth per space per day | 100 GiB | 100 GiB | 100 GiB | 100 GiB | Measured hourly and recorded |
 | PHP workers per site | 2 | 4 | 4 | 4 | Serving concurrency, no error |
-| Publishable file types | Web content only | Any | Any | Any | Other files drop with a diagnostic. `422` `version_no_publishable_files` if every file drops |
-| Free spaces claimed per account | 50 per 30 days | Not applied | Not applied | Not applied | `429` `claimed_space_quota_exceeded` |
 
-Three of these deserve a second look.
+Every number in that table is the number. Where a plan says unlimited there is no ceiling behind it. The one axis that never says unlimited is files per version: the manifest validator stops at 100,000, and that is the platform ceiling rather than something a plan buys.
 
-Pro and Enterprise cap a single file at **64 MiB**, below Plus's 1 GiB. A plan that does not name a per-file number falls back to the platform default, and the platform default is 64 MiB.
+The daily publish meter is soft. It counts your pushes and CI builds together, warns once a day when you go past the number, and resets at 00:00 UTC. It never refuses a publish.
 
-"Unlimited" files per version is **100,000**. The manifest validator clamps at that ceiling on every plan.
+The space limit is not soft. Creating a Space past 200 on Free fails, and so does claiming an anonymous Space into a team that is already at the limit — a claim is a create as far as the limit is concerned.
 
-"Unlimited" bandwidth is **100 GiB per space per day**. That is the platform ceiling a plan value collapses into.
+The Free version cap never refuses a publish. Once a publish takes a Free Space past 200 versions, the oldest ready versions that nothing serves expire in the background. A version the live pointer or a branch alias serves is never touched, however old it is.
 
 An editor limit of "3 included" is not a wall. On Plus and Pro with an active subscription you can add editors past the included count and each is billed automatically. Free stops dead at one. Pending invitations hold a seat, so a team can be blocked with fewer members than the number suggests.
 
@@ -40,7 +36,9 @@ An editor limit of "3 included" is not a wall. On Plus and Pro with an active su
 
 | Limit | Value | When you hit it |
 | --- | --- | --- |
+| Largest single file | 1 GiB | `422` `version_file_too_large` |
 | Total bytes per version | 2 GiB | `422` `version_total_bytes_exceeded` |
+| Bandwidth per space per day | 100 GiB | Measured hourly and recorded |
 | Inline publish archive | 128 MiB | `publish_archive_too_large` |
 | Archive compression ratio | 100:1 | `publish_archive_compression_ratio_exceeded` |
 | Archive expanded size | 2 GiB | `publish_archive_expanded_size_exceeded` |
@@ -73,7 +71,7 @@ Publishing without an account runs on its own cap table, tighter than Free on ev
 | Publishes per space per hour | 20 | `429` `anonymous_publish_rate_limited` |
 | Unclaimed spaces open at once | 10 per fingerprint | `429` `anonymous_space_limit_reached` |
 
-Until a space is claimed, the runtime serves a restricted set of content types: text, images, fonts, JSON, web manifests, JavaScript, gzip, XML, RSS, and Atom. Anything outside that list uploads but does not serve. Claim the space and it serves normally. See [Publish without an account](/anonymous-and-claim).
+Until a space is claimed, the runtime serves a restricted set of content types: text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Anything outside that list uploads but does not serve. Claim the space and it serves normally. See [Publish without an account](/anonymous-and-claim).
 
 ## Retention windows
 

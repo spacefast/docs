@@ -1,11 +1,11 @@
 ---
 title: "zero_run_operation_unsupported"
-description: "The hosted Zero runtime does not support this run operation yet."
+description: "The Zero run operation has no generated run handler."
 ---
 
-The hosted Zero runtime does not support this run operation yet.
+The Zero run operation has no generated run handler.
 
-**How to resolve:** Use a generated endpoint or deploy a generated run handler for this operation.
+**How to resolve:** Run `sf build` so the handler is generated, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_run_operation_unsupported",
   "title": "Zero run operation unsupported",
   "status": 400,
-  "detail": "The hosted Zero runtime does not support this run operation yet.",
+  "detail": "The Zero run operation has no generated run handler.",
   "code": "zero_run_operation_unsupported",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "channel_pointer_moved"
-description: "The channel was promoted to a different version since you read it."
+description: "The live channel moved to another version while this activation was in flight."
 ---
 
-The channel was promoted to a different version since you read it.
+The live channel moved to another version while this activation was in flight.
 
-**How to resolve:** Re-read the channel pointer and retry the promote with the current version id.
+**How to resolve:** Read the channel's current live version, then retry the promotion against it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/channel_pointer_moved",
   "title": "Channel pointer moved",
   "status": 400,
-  "detail": "The channel was promoted to a different version since you read it.",
+  "detail": "The live channel moved to another version while this activation was in flight.",
   "code": "channel_pointer_moved",
   "requestId": "req_4mz0v8qk"
 }

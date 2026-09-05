@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_client_in_use"
-description: "The provider client is in use and cannot be removed."
+description: "The WP Cloud client still has sites or assignments attached."
 ---
 
-The provider client is in use and cannot be removed.
+The WP Cloud client still has sites or assignments attached.
 
-**How to resolve:** Reassign or delete the dependent sites first.
+**How to resolve:** Move or delete the client's sites before removing it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_client_in_use",
   "title": "Wp cloud client in use",
   "status": 400,
-  "detail": "The provider client is in use and cannot be removed.",
+  "detail": "The WP Cloud client still has sites or assignments attached.",
   "code": "wp_cloud_client_in_use",
   "requestId": "req_4mz0v8qk"
 }

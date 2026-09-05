@@ -5,6 +5,78 @@ description: "Release history for @spacefast/mcp on npm."
 
 Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.3.0
+  - @spacefast/sdk@0.3.0
+  - @spacefast/common@0.3.0
+  - @spacefast/routing@0.3.0
+  - @spacefast/zero@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/common@0.2.2
+  - @spacefast/routing@0.2.2
+  - @spacefast/sdk@0.2.2
+  - @spacefast/zero@0.2.2
+  - @spacefast/zero-compile@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/sdk@0.2.1
+  - @spacefast/common@0.2.1
+  - @spacefast/routing@0.2.1
+  - @spacefast/zero@0.2.1
+  - @spacefast/zero-compile@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Consolidate the MCP docs surface into a single `search_docs` tool: a query that is exactly one page's slug or path now returns that page in full, replacing `get_page`.
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.2.0
+  - @spacefast/routing@0.2.0
+  - @spacefast/sdk@0.2.0
+  - @spacefast/zero@0.2.0
+  - @spacefast/zero-compile@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.1.0
+  - @spacefast/sdk@0.1.0
+  - @spacefast/routing@0.1.0
+  - @spacefast/zero@0.1.0
+  - @spacefast/zero-compile@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Consolidate the MCP docs surface into a single `search_docs` tool: a query that is exactly one page's slug or path now returns that page in full, replacing `get_page`.
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.0.27
+  - @spacefast/routing@0.0.27
+  - @spacefast/sdk@0.0.27
+  - @spacefast/zero@0.0.27
+  - @spacefast/zero-compile@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -146,4 +218,3 @@ Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on
 ## 0.0.6
 
 - Various bug fixes and improvements.
-

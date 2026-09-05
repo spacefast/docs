@@ -1,11 +1,11 @@
 ---
 title: "elevation_not_required"
-description: "The grant already includes every scope the elevation asked for."
+description: "The grant already carries every scope the elevation asked for."
 ---
 
-The grant already includes every scope the elevation asked for.
+The grant already carries every scope the elevation asked for.
 
-**How to resolve:** Retry the operation with the credential you already have; no elevation is needed.
+**How to resolve:** Drop the elevation request and call the operation with the grant as it stands.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/elevation_not_required",
   "title": "Elevation not required",
   "status": 400,
-  "detail": "The grant already includes every scope the elevation asked for.",
+  "detail": "The grant already carries every scope the elevation asked for.",
   "code": "elevation_not_required",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "log_retention_clamped"
-description: "The requested log range exceeds the plan's retention and was clamped."
+description: "The requested log window reaches further back than the plan retains logs."
 ---
 
-The requested log range exceeds the plan's retention and was clamped.
+The requested log window reaches further back than the plan retains logs.
 
-**How to resolve:** Narrow the range.
+**How to resolve:** Read the effective `since` in the diagnostic, or move the team to a plan with longer log retention.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/log_retention_clamped",
   "title": "Log retention clamped",
   "status": 400,
-  "detail": "The requested log range exceeds the plan's retention and was clamped.",
+  "detail": "The requested log window reaches further back than the plan retains logs.",
   "code": "log_retention_clamped",
   "requestId": "req_4mz0v8qk"
 }

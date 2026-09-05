@@ -1,11 +1,11 @@
 ---
 title: "zero_replay_failed"
-description: "The hosted Zero runtime cannot fetch realtime replay events."
+description: "The realtime replay request to the upstream failed."
 ---
 
-The hosted Zero runtime cannot fetch realtime replay events.
+The realtime replay request to the upstream failed.
 
-**How to resolve:** Retry shortly. If the failure persists, check the central realtime and control-plane logs.
+**How to resolve:** Retry the replay.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_replay_failed",
   "title": "Zero replay failed",
   "status": 400,
-  "detail": "The hosted Zero runtime cannot fetch realtime replay events.",
+  "detail": "The realtime replay request to the upstream failed.",
   "code": "zero_replay_failed",
   "requestId": "req_4mz0v8qk"
 }

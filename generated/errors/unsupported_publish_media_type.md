@@ -1,11 +1,11 @@
 ---
 title: "unsupported_publish_media_type"
-description: "The publish content-type is not supported."
+description: "The publish body's content type is not one the endpoint accepts."
 ---
 
-The publish content-type is not supported.
+The publish body's content type is not one the endpoint accepts.
 
-**How to resolve:** Send JSON, multipart form data, or a zip archive.
+**How to resolve:** Send JSON, multipart form data, zip, tar, tar.gz, `text/html`, or `application/octet-stream`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/unsupported_publish_media_type",
   "title": "Unsupported publish media type",
   "status": 400,
-  "detail": "The publish content-type is not supported.",
+  "detail": "The publish body's content type is not one the endpoint accepts.",
   "code": "unsupported_publish_media_type",
   "requestId": "req_4mz0v8qk"
 }

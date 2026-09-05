@@ -5,6 +5,49 @@ description: "Release history for @spacefast/vite-plugin on npm."
 
 Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast/vite-plugin) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.3.0
+  - @spacefast/routing@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.2.2
+  - @spacefast/routing@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.2.1
+  - @spacefast/routing@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/routing@0.2.0
+  - @spacefast/adapter-kit@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.1.0
+- @spacefast/adapter-kit@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- @spacefast/routing@0.0.27
+- @spacefast/adapter-kit@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -119,4 +162,3 @@ Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast
 ## 0.0.6
 
 - Various bug fixes and improvements.
-

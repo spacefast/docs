@@ -1,11 +1,11 @@
 ---
 title: "version_not_found"
-description: "The version was not found."
+description: "No version with that ID exists on this Space."
 ---
 
-The version was not found.
+No version with that ID exists on this Space.
 
-**How to resolve:** List the space's versions to confirm the id.
+**How to resolve:** List the Space's versions and use an ID from that list.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_not_found",
   "title": "Version not found",
   "status": 400,
-  "detail": "The version was not found.",
+  "detail": "No version with that ID exists on this Space.",
   "code": "version_not_found",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "storage_auth_required"
-description: "This storage operation requires an authenticated visitor."
+description: "The storage request carried no signed-in identity."
 ---
 
-This storage operation requires an authenticated visitor.
+The storage request carried no signed-in identity.
 
-**How to resolve:** Sign in to the space, then retry the storage operation.
+**How to resolve:** Sign in, then repeat the storage request with the session.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_auth_required",
   "title": "Storage auth required",
   "status": 400,
-  "detail": "This storage operation requires an authenticated visitor.",
+  "detail": "The storage request carried no signed-in identity.",
   "code": "storage_auth_required",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_dev_endpoint_failed"
-description: "A local Zero dev endpoint failed while handling the request."
+description: "The Zero endpoint threw while the local dev server was serving it."
 ---
 
-A local Zero dev endpoint failed while handling the request.
+The Zero endpoint threw while the local dev server was serving it.
 
-**How to resolve:** Check the local dev console output and fix the endpoint implementation.
+**How to resolve:** Read the thrown message in the detail, fix the handler, then reload.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_dev_endpoint_failed",
   "title": "Zero dev endpoint failed",
   "status": 400,
-  "detail": "A local Zero dev endpoint failed while handling the request.",
+  "detail": "The Zero endpoint threw while the local dev server was serving it.",
   "code": "zero_dev_endpoint_failed",
   "requestId": "req_4mz0v8qk"
 }

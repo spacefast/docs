@@ -1,11 +1,11 @@
 ---
 title: "zero_db_sql_invalid"
-description: "The Zero runner rejected unsafe or unsupported SQL."
+description: "The statement's SQL is empty or contains a null byte."
 ---
 
-The Zero runner rejected unsafe or unsupported SQL.
+The statement's SQL is empty or contains a null byte.
 
-**How to resolve:** Use generated Zero query helpers and avoid multiple statements or unsupported SQL forms.
+**How to resolve:** Send a non-empty SQL string with no null bytes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_sql_invalid",
   "title": "Zero db sql invalid",
   "status": 400,
-  "detail": "The Zero runner rejected unsafe or unsupported SQL.",
+  "detail": "The statement's SQL is empty or contains a null byte.",
   "code": "zero_db_sql_invalid",
   "requestId": "req_4mz0v8qk"
 }

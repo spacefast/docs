@@ -1,11 +1,11 @@
 ---
 title: "runtime_upload_required"
-description: "This step requires uploaded content, but that content is not uploaded yet."
+description: "The publish still has files that have to go through the runtime upload session."
 ---
 
-This step requires uploaded content, but that content is not uploaded yet.
+The publish still has files that have to go through the runtime upload session.
 
-**How to resolve:** Complete the uploads for this session, then retry the step.
+**How to resolve:** Upload the remaining files through the upload session, then finalize the version.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_upload_required",
   "title": "Runtime upload required",
   "status": 400,
-  "detail": "This step requires uploaded content, but that content is not uploaded yet.",
+  "detail": "The publish still has files that have to go through the runtime upload session.",
   "code": "runtime_upload_required",
   "requestId": "req_4mz0v8qk"
 }

@@ -164,8 +164,11 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 | --- | --- | --- | --- |
 | `rate_limited` | wait | yes | Too many requests were made in a short window. |
 | `anonymous_publish_rate_limited` | wait | yes | Too many anonymous publishes came from this network in a short window. |
-| `quota_exceeded` | fix_input | no | This action would exceed a quota on the plan assigned to the owning customer. The problem details name which quota (for example, the spaces cap) and its limit. |
-| `claimed_space_quota_exceeded` | fix_input | no | Claiming this space would exceed the target team's space quota. |
+| `space_quota_exceeded` | fix_input | no | Creating or claiming this space would exceed the owner's space allowance. |
+| `storage_quota_exceeded` | fix_input | no | The operation would exceed its storage allowance. |
+| `team_member_quota_exceeded` | fix_input | no | Inviting this person would exceed the team's seat limit. |
+| `deploy_quota_exceeded` | wait | yes | The owner has used its daily publish allowance. It resets at 00:00 UTC. |
+| `build_minutes_quota_exceeded` | fix_input | no | This build would exceed the owner's build minutes for the month. |
 | `idempotency_key_reused` | fix_input | no | The Idempotency-Key was reused with a different request body. |
 | `idempotency_conflict_in_progress` | wait | yes | Another request with the same Idempotency-Key is still in flight. |
 | `invalid_idempotency_key` | fix_input | no | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
@@ -176,7 +179,7 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 | --- | --- | --- | --- |
 | `internal_error` | retry | yes | Something went wrong on our side. |
 | `maintenance_in_progress` | wait | yes | This change is temporarily unavailable while maintenance finishes. |
-| `provider_error` | retry | yes | Spacefast infra reported an error. |
+| `provider_error` | retry | yes | Spacefast could not complete the operation. |
 | `provider_job_failed` | retry | yes | A hosting-provider job failed while processing this operation. |
 | `provider_job_timeout` | retry | yes | A hosting-provider job timed out while processing this operation. |
 | `space_disabled` | fix_input | no | The space is disabled and cannot be served or modified. |

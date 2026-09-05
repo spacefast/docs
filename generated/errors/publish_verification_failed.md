@@ -1,11 +1,11 @@
 ---
 title: "publish_verification_failed"
-description: "Post-publish verification did not see the new content serving."
+description: "The published version did not answer its verification request."
 ---
 
-Post-publish verification did not see the new content serving.
+The published version did not answer its verification request.
 
-**How to resolve:** Retry. If the space still serves stale content, contact support.
+**How to resolve:** Publish again. The error details name the host that was probed and what answered.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_verification_failed",
   "title": "Publish verification failed",
   "status": 400,
-  "detail": "Post-publish verification did not see the new content serving.",
+  "detail": "The published version did not answer its verification request.",
   "code": "publish_verification_failed",
   "requestId": "req_4mz0v8qk"
 }

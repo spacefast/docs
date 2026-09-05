@@ -1,11 +1,11 @@
 ---
 title: "plan_grant_already_active"
-description: "The team already holds an active operator grant for this plan."
+description: "The team already holds an active grant for this plan."
 ---
 
-The team already holds an active operator grant for this plan.
+The team already holds an active grant for this plan.
 
-**How to resolve:** Revoke the existing grant first, or grant a different plan.
+**How to resolve:** Revoke the active grant first, or grant a different plan.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/plan_grant_already_active",
   "title": "Plan grant already active",
   "status": 400,
-  "detail": "The team already holds an active operator grant for this plan.",
+  "detail": "The team already holds an active grant for this plan.",
   "code": "plan_grant_already_active",
   "requestId": "req_4mz0v8qk"
 }

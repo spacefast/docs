@@ -1,11 +1,11 @@
 ---
 title: "runtime_dev_unsupported"
-description: "`sf dev` cannot run this runtime locally yet."
+description: "The local dev server cannot serve this Space's runtime kind."
 ---
 
-`sf dev` cannot run this runtime locally yet.
+The local dev server cannot serve this Space's runtime kind.
 
-**How to resolve:** Run your framework's own dev server, such as `next dev` or `vite`. When you are ready, publish with `sf publish`.
+**How to resolve:** Publish the Space and use its live URL, or switch to a runtime kind `sf dev` serves.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_dev_unsupported",
   "title": "Runtime dev unsupported",
   "status": 400,
-  "detail": "`sf dev` cannot run this runtime locally yet.",
+  "detail": "The local dev server cannot serve this Space's runtime kind.",
   "code": "runtime_dev_unsupported",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "job_not_removable"
-description: "The job cannot be removed in its current state."
+description: "The job is still running, so it cannot be removed."
 ---
 
-The job cannot be removed in its current state.
+The job is still running, so it cannot be removed.
 
-**How to resolve:** Wait for the job to settle before removing it.
+**How to resolve:** Wait for the job to finish, then remove it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/job_not_removable",
   "title": "Job not removable",
   "status": 400,
-  "detail": "The job cannot be removed in its current state.",
+  "detail": "The job is still running, so it cannot be removed.",
   "code": "job_not_removable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "storage_file_too_large"
-description: "The storage object exceeds the 5 MiB file limit."
+description: "The storage upload is larger than the per-object byte cap."
 ---
 
-The storage object exceeds the 5 MiB file limit.
+The storage upload is larger than the per-object byte cap.
 
-**How to resolve:** Upload a smaller object.
+**How to resolve:** Upload a smaller file; storage objects are capped at 5 MiB.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_file_too_large",
   "title": "Storage file too large",
   "status": 400,
-  "detail": "The storage object exceeds the 5 MiB file limit.",
+  "detail": "The storage upload is larger than the per-object byte cap.",
   "code": "storage_file_too_large",
   "requestId": "req_4mz0v8qk"
 }

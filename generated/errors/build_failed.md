@@ -1,11 +1,11 @@
 ---
 title: "build_failed"
-description: "The build run failed before producing a version."
+description: "The build ran and ended in failure."
 ---
 
-The build run failed before producing a version.
+The build ran and ended in failure.
 
-**How to resolve:** Inspect the build logs, fix the failure, and start a new build.
+**How to resolve:** Read the build logs for the failing step, fix the source, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_failed",
   "title": "Build failed",
   "status": 400,
-  "detail": "The build run failed before producing a version.",
+  "detail": "The build ran and ended in failure.",
   "code": "build_failed",
   "requestId": "req_4mz0v8qk"
 }

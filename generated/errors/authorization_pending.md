@@ -1,11 +1,11 @@
 ---
 title: "authorization_pending"
-description: "The device login is not approved yet."
+description: "The device authorization is still waiting for the user to approve it."
 ---
 
-The device login is not approved yet.
+The device authorization is still waiting for the user to approve it.
 
-**How to resolve:** Keep polling at the advised interval until the user approves the request.
+**How to resolve:** Keep polling the token endpoint at the interval the device authorization response returned.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/authorization_pending",
   "title": "Authorization pending",
   "status": 400,
-  "detail": "The device login is not approved yet.",
+  "detail": "The device authorization is still waiting for the user to approve it.",
   "code": "authorization_pending",
   "requestId": "req_4mz0v8qk"
 }

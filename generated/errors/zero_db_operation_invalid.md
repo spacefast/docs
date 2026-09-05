@@ -1,11 +1,11 @@
 ---
 title: "zero_db_operation_invalid"
-description: "The Zero database bridge received an invalid operation payload."
+description: "The Zero database operation could not be parsed or encoded."
 ---
 
-The Zero database bridge received an invalid operation payload.
+The Zero database operation could not be parsed or encoded.
 
-**How to resolve:** Use the generated Zero database client instead of constructing bridge calls manually.
+**How to resolve:** Send the operation as a JSON object the database broker accepts.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_operation_invalid",
   "title": "Zero db operation invalid",
   "status": 400,
-  "detail": "The Zero database bridge received an invalid operation payload.",
+  "detail": "The Zero database operation could not be parsed or encoded.",
   "code": "zero_db_operation_invalid",
   "requestId": "req_4mz0v8qk"
 }

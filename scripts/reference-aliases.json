@@ -1,0 +1,812 @@
+[
+  {
+    "from": "/api/operations/deletev1authemailsbyemailid",
+    "to": "/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/getv1authdevice",
+    "to": "/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/getv1authemails",
+    "to": "/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/getv1repository-connectionsinstallations",
+    "to": "/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1actionsresume",
+    "to": "/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1approvals",
+    "to": "/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authdevice",
+    "to": "/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authdeviceapprove",
+    "to": "/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authdevicedeny",
+    "to": "/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authdevicepoll",
+    "to": "/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authemails",
+    "to": "/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authemailsbyemailidprimary",
+    "to": "/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authemailsverify",
+    "to": "/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1authpassword",
+    "to": "/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/postv1publish",
+    "to": "/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/releasespacetagversion",
+    "to": "/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/operations/releaseteamtagversion",
+    "to": "/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/deletev1authemailsbyemailid",
+    "to": "/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/getv1authdevice",
+    "to": "/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/getv1authemails",
+    "to": "/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authdevice",
+    "to": "/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authdeviceapprove",
+    "to": "/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authdevicedeny",
+    "to": "/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authdevicepoll",
+    "to": "/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authemails",
+    "to": "/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authemailsbyemailidprimary",
+    "to": "/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authemailsverify",
+    "to": "/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/account/postv1authpassword",
+    "to": "/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/deletev1authemailsbyemailid",
+    "to": "/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/getv1authdevice",
+    "to": "/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/getv1authemails",
+    "to": "/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/getv1repository-connectionsinstallations",
+    "to": "/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1actionsresume",
+    "to": "/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1approvals",
+    "to": "/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authdevice",
+    "to": "/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authdeviceapprove",
+    "to": "/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authdevicedeny",
+    "to": "/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authdevicepoll",
+    "to": "/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authemails",
+    "to": "/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authemailsbyemailidprimary",
+    "to": "/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authemailsverify",
+    "to": "/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1authpassword",
+    "to": "/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/postv1publish",
+    "to": "/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/releasespacetagversion",
+    "to": "/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/operations/releaseteamtagversion",
+    "to": "/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/delete_v1_auth_emails_by_email_id",
+    "to": "/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/get_v1_auth_device",
+    "to": "/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/get_v1_auth_emails",
+    "to": "/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_device",
+    "to": "/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_device_approve",
+    "to": "/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_device_deny",
+    "to": "/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_device_poll",
+    "to": "/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_emails",
+    "to": "/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_emails_by_email_id_primary",
+    "to": "/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_emails_verify",
+    "to": "/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/account/methods/post_v1_auth_password",
+    "to": "/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_v1_repository_connections_installations",
+    "to": "/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_v1_repository_connections_installations_by_installation_id_repositories",
+    "to": "/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/post_v1_actions_resume",
+    "to": "/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/post_v1_approvals",
+    "to": "/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/post_v1_publish",
+    "to": "/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/tags/methods/release_space_tag_version",
+    "to": "/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/resources/tags/methods/release_team_tag_version",
+    "to": "/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/spaces/getv1repository-connectionsinstallations",
+    "to": "/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/spaces/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/spaces/postv1actionsresume",
+    "to": "/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/spaces/postv1approvals",
+    "to": "/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/spaces/postv1publish",
+    "to": "/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/tags/releasespacetagversion",
+    "to": "/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/api/reference/tags/releaseteamtagversion",
+    "to": "/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/deletev1authemailsbyemailid",
+    "to": "/platforms/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/getv1authdevice",
+    "to": "/platforms/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/getv1authemails",
+    "to": "/platforms/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/getv1repository-connectionsinstallations",
+    "to": "/platforms/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/platforms/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1actionsresume",
+    "to": "/platforms/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1approvals",
+    "to": "/platforms/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authdevice",
+    "to": "/platforms/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authdeviceapprove",
+    "to": "/platforms/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authdevicedeny",
+    "to": "/platforms/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authdevicepoll",
+    "to": "/platforms/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authemails",
+    "to": "/platforms/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authemailsbyemailidprimary",
+    "to": "/platforms/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authemailsverify",
+    "to": "/platforms/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1authpassword",
+    "to": "/platforms/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/postv1publish",
+    "to": "/platforms/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/releasespacetagversion",
+    "to": "/platforms/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/operations/releaseteamtagversion",
+    "to": "/platforms/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/delete_v1_auth_emails_by_email_id",
+    "to": "/platforms/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/get_v1_auth_device",
+    "to": "/platforms/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/get_v1_auth_emails",
+    "to": "/platforms/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_device",
+    "to": "/platforms/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_device_approve",
+    "to": "/platforms/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_device_deny",
+    "to": "/platforms/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_device_poll",
+    "to": "/platforms/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_emails",
+    "to": "/platforms/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_emails_by_email_id_primary",
+    "to": "/platforms/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_emails_verify",
+    "to": "/platforms/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/account/methods/post_v1_auth_password",
+    "to": "/platforms/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/get_v1_repository_connections_installations",
+    "to": "/platforms/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/get_v1_repository_connections_installations_by_installation_id_repositories",
+    "to": "/platforms/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/post_v1_actions_resume",
+    "to": "/platforms/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/post_v1_approvals",
+    "to": "/platforms/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/spaces/methods/post_v1_publish",
+    "to": "/platforms/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/tags/methods/release_space_tag_version",
+    "to": "/platforms/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platform-api/resources/tags/methods/release_team_tag_version",
+    "to": "/platforms/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/deletev1authemailsbyemailid",
+    "to": "/platforms/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/getv1authdevice",
+    "to": "/platforms/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/getv1authemails",
+    "to": "/platforms/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authdevice",
+    "to": "/platforms/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authdeviceapprove",
+    "to": "/platforms/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authdevicedeny",
+    "to": "/platforms/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authdevicepoll",
+    "to": "/platforms/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authemails",
+    "to": "/platforms/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authemailsbyemailidprimary",
+    "to": "/platforms/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authemailsverify",
+    "to": "/platforms/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/account/postv1authpassword",
+    "to": "/platforms/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/deletev1authemailsbyemailid",
+    "to": "/platforms/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/getv1authdevice",
+    "to": "/platforms/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/getv1authemails",
+    "to": "/platforms/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/getv1repository-connectionsinstallations",
+    "to": "/platforms/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/platforms/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1actionsresume",
+    "to": "/platforms/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1approvals",
+    "to": "/platforms/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authdevice",
+    "to": "/platforms/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authdeviceapprove",
+    "to": "/platforms/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authdevicedeny",
+    "to": "/platforms/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authdevicepoll",
+    "to": "/platforms/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authemails",
+    "to": "/platforms/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authemailsbyemailidprimary",
+    "to": "/platforms/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authemailsverify",
+    "to": "/platforms/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1authpassword",
+    "to": "/platforms/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/postv1publish",
+    "to": "/platforms/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/releasespacetagversion",
+    "to": "/platforms/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/operations/releaseteamtagversion",
+    "to": "/platforms/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/delete_v1_auth_emails_by_email_id",
+    "to": "/platforms/api/reference/account/deleteaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/get_v1_auth_device",
+    "to": "/platforms/api/reference/account/getdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/get_v1_auth_emails",
+    "to": "/platforms/api/reference/account/listaccountemails",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_device",
+    "to": "/platforms/api/reference/account/startdeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_device_approve",
+    "to": "/platforms/api/reference/account/approvedeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_device_deny",
+    "to": "/platforms/api/reference/account/denydeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_device_poll",
+    "to": "/platforms/api/reference/account/polldeviceauthorization",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_emails",
+    "to": "/platforms/api/reference/account/addaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_emails_by_email_id_primary",
+    "to": "/platforms/api/reference/account/setprimaryaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_emails_verify",
+    "to": "/platforms/api/reference/account/verifyaccountemail",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/account/methods/post_v1_auth_password",
+    "to": "/platforms/api/reference/account/setaccountpassword",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_repository_connections_installations",
+    "to": "/platforms/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/get_v1_repository_connections_installations_by_installation_id_repositories",
+    "to": "/platforms/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_actions_resume",
+    "to": "/platforms/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_approvals",
+    "to": "/platforms/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/spaces/methods/post_v1_publish",
+    "to": "/platforms/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/tags/methods/release_space_tag_version",
+    "to": "/platforms/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/resources/tags/methods/release_team_tag_version",
+    "to": "/platforms/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/spaces/getv1repository-connectionsinstallations",
+    "to": "/platforms/api/reference/git/listgithubinstallations",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/spaces/getv1repository-connectionsinstallationsbyinstallationidrepositories",
+    "to": "/platforms/api/reference/git/listgithubinstallationrepositories",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/spaces/postv1actionsresume",
+    "to": "/platforms/api/reference/agent/resumeaction",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/spaces/postv1approvals",
+    "to": "/platforms/api/reference/agent/requestapproval",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/spaces/postv1publish",
+    "to": "/platforms/api/reference/publishing/createpublish",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/tags/releasespacetagversion",
+    "to": "/platforms/api/reference/tags/releasespacetagrevision",
+    "status": 301
+  },
+  {
+    "from": "/platforms/api/reference/tags/releaseteamtagversion",
+    "to": "/platforms/api/reference/tags/releaseteamtagrevision",
+    "status": 301
+  }
+]

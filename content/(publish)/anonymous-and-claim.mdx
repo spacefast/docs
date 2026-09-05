@@ -63,7 +63,7 @@ Anonymous publishing runs a tighter table than Free on every axis.
 
 Hitting the last one is `429` `anonymous_space_limit_reached`, and the count only includes Spaces that still exist. Retrying a failed publish within 60 seconds lands on the Space the first attempt created rather than making a second one.
 
-One more difference. An unclaimed Space accepts any file type a Free Space accepts, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, gzip, XML, RSS, and Atom. Anything else uploads and returns `403` until the Space is claimed. Full numbers are on [Limits](/limits).
+One more difference. An unclaimed Space accepts every file type, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Anything else, such as a zip or an executable, uploads and returns `403` until the Space is claimed. Full numbers are on [Limits](/limits).
 
 ## Claim it
 
@@ -112,7 +112,7 @@ After the claim lands the page says **&lt;space&gt; is yours.** and offers a **C
 
 The dashboard says the last row out loud, under **Sharing that stays with this space**. Claiming changes ownership, not who you already shared with.
 
-Two things can block a claim. Your account is capped at 50 claimed free Spaces, which comes back as `claimed_space_quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
+Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create — a Free team already holding 200 Spaces answers `space_quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
 
 ## Keeping your agent publishing
 

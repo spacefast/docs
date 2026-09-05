@@ -1,11 +1,11 @@
 ---
 title: "runtime_api_not_found"
-description: "The requested runtime action was not found."
+description: "The runtime API route in this request does not exist."
 ---
 
-The requested runtime action was not found.
+The runtime API route in this request does not exist.
 
-**How to resolve:** Use a supported runtime action and a token scoped for that action.
+**How to resolve:** Call a documented runtime API path.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_api_not_found",
   "title": "Runtime api not found",
   "status": 400,
-  "detail": "The requested runtime action was not found.",
+  "detail": "The runtime API route in this request does not exist.",
   "code": "runtime_api_not_found",
   "requestId": "req_4mz0v8qk"
 }

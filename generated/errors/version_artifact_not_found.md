@@ -1,11 +1,11 @@
 ---
 title: "version_artifact_not_found"
-description: "The requested version artifact was not found."
+description: "The version does not carry the requested convention artifact."
 ---
 
-The requested version artifact was not found.
+The version does not carry the requested convention artifact.
 
-**How to resolve:** List the version's convention artifacts to see what exists.
+**How to resolve:** Publish a version that includes `_headers` or `_redirects`, then read the artifact.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_artifact_not_found",
   "title": "Version artifact not found",
   "status": 400,
-  "detail": "The requested version artifact was not found.",
+  "detail": "The version does not carry the requested convention artifact.",
   "code": "version_artifact_not_found",
   "requestId": "req_4mz0v8qk"
 }

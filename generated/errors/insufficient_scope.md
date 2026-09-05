@@ -1,11 +1,11 @@
 ---
 title: "insufficient_scope"
-description: "The credential authenticated, but its granted scopes do not include a set this operation accepts."
+description: "The grant does not carry a scope this operation accepts."
 ---
 
-The credential authenticated, but its granted scopes do not include a set this operation accepts.
+The grant does not carry a scope this operation accepts.
 
-**How to resolve:** Read the `WWW-Authenticate` challenge for the missing scopes, then request elevation or reconnect with them.
+**How to resolve:** Re-authorize the grant with the scopes listed in the `WWW-Authenticate` challenge, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/insufficient_scope",
   "title": "Insufficient scope",
   "status": 400,
-  "detail": "The credential authenticated, but its granted scopes do not include a set this operation accepts.",
+  "detail": "The grant does not carry a scope this operation accepts.",
   "code": "insufficient_scope",
   "requestId": "req_4mz0v8qk"
 }

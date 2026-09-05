@@ -1,11 +1,11 @@
 ---
 title: "storage_bucket_unavailable"
-description: "No usable internal storage bucket is configured for this operation."
+description: "No usable storage bucket is configured for this operation."
 ---
 
-No usable internal storage bucket is configured for this operation.
+No usable storage bucket is configured for this operation.
 
-**How to resolve:** Check the storage bucket registry and credential environment references, then retry.
+**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_bucket_unavailable",
   "title": "Storage bucket unavailable",
   "status": 400,
-  "detail": "No usable internal storage bucket is configured for this operation.",
+  "detail": "No usable storage bucket is configured for this operation.",
   "code": "storage_bucket_unavailable",
   "requestId": "req_4mz0v8qk"
 }

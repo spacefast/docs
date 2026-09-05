@@ -36,6 +36,7 @@ const fixture = [
   entry("/errors"),
   entry("/api/reference"),
   entry("/platforms/api/reference"),
+  entry("/partners/api/reference"),
   entry("/changelog/packages"),
   "",
   "## Other",
@@ -44,6 +45,7 @@ const fixture = [
   entry("/errors/build_failed"),
   entry("/api/reference/spaces/create"),
   entry("/platforms/api/reference/tenants/list"),
+  entry("/partners/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
   entry("/setup/claude-code"),
@@ -59,7 +61,7 @@ const build = (overrides = {}) =>
 
 test("collapses generated descendants and keeps only navigated index pages", () => {
   const { text, dropped } = build();
-  assert.equal(dropped, 7);
+  assert.equal(dropped, 9);
   const routes = text
     .split("\n")
     .filter((line) => line.startsWith("- ["))

@@ -1,11 +1,11 @@
 ---
 title: "runtime_action_forbidden"
-description: "The runtime credential does not allow this action."
+description: "The runtime token does not authorize the action this request performs."
 ---
 
-The runtime credential does not allow this action.
+The runtime token does not authorize the action this request performs.
 
-**How to resolve:** Use a runtime token scoped for this action.
+**How to resolve:** Mint a runtime management token whose `action` claim matches the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_action_forbidden",
   "title": "Runtime action forbidden",
   "status": 400,
-  "detail": "The runtime credential does not allow this action.",
+  "detail": "The runtime token does not authorize the action this request performs.",
   "code": "runtime_action_forbidden",
   "requestId": "req_4mz0v8qk"
 }

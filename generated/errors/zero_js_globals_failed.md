@@ -1,11 +1,11 @@
 ---
 title: "zero_js_globals_failed"
-description: "The Zero runner cannot install runtime globals for the endpoint."
+description: "The Zero handler's globals could not be installed."
 ---
 
-The Zero runner cannot install runtime globals for the endpoint.
+The Zero handler's globals could not be installed.
 
-**How to resolve:** Rebuild with a current runner. If the failure repeats, report it.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_globals_failed",
   "title": "Zero js globals failed",
   "status": 400,
-  "detail": "The Zero runner cannot install runtime globals for the endpoint.",
+  "detail": "The Zero handler's globals could not be installed.",
   "code": "zero_js_globals_failed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_db_url_invalid"
-description: "The Zero database URL is malformed."
+description: "The database URL or its source label is not one the runtime accepts."
 ---
 
-The Zero database URL is malformed.
+The database URL or its source label is not one the runtime accepts.
 
-**How to resolve:** Set `DATABASE_URL` or the generated database variables to a valid MySQL connection URL.
+**How to resolve:** Set `SPACEFAST_ZERO_DATABASE_URL_SOURCE` to `application` or `provider` and give a valid URL.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_url_invalid",
   "title": "Zero db url invalid",
   "status": 400,
-  "detail": "The Zero database URL is malformed.",
+  "detail": "The database URL or its source label is not one the runtime accepts.",
   "code": "zero_db_url_invalid",
   "requestId": "req_4mz0v8qk"
 }

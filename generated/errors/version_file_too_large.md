@@ -1,11 +1,11 @@
 ---
 title: "version_file_too_large"
-description: "A file exceeds the plan's maximum file size."
+description: "A file in the version is larger than the plan's per-file byte limit."
 ---
 
-A file exceeds the plan's maximum file size.
+A file in the version is larger than the plan's per-file byte limit.
 
-**How to resolve:** Reduce the file size.
+**How to resolve:** Shrink or drop the file at `path` in the error details, or move the team to a plan with a higher limit.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_file_too_large",
   "title": "Version file too large",
   "status": 400,
-  "detail": "A file exceeds the plan's maximum file size.",
+  "detail": "A file in the version is larger than the plan's per-file byte limit.",
   "code": "version_file_too_large",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "team_required"
-description: "This operation requires an acting team."
+description: "This operation needs a team-owned resource or an explicit team."
 ---
 
-This operation requires an acting team.
+This operation needs a team-owned resource or an explicit team.
 
-**How to resolve:** Choose a team or pass a team reference.
+**How to resolve:** Pass `teamId`, or claim the Space or domain into a team first.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/team_required",
   "title": "Team required",
   "status": 400,
-  "detail": "This operation requires an acting team.",
+  "detail": "This operation needs a team-owned resource or an explicit team.",
   "code": "team_required",
   "requestId": "req_4mz0v8qk"
 }

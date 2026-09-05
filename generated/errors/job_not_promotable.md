@@ -1,11 +1,11 @@
 ---
 title: "job_not_promotable"
-description: "The job cannot be promoted in its current state."
+description: "The job is in a state that cannot be promoted."
 ---
 
-The job cannot be promoted in its current state.
+The job is in a state that cannot be promoted.
 
-**How to resolve:** Only delayed jobs can be promoted to run immediately.
+**How to resolve:** Read the job's current status, then promote a job that has finished successfully.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/job_not_promotable",
   "title": "Job not promotable",
   "status": 400,
-  "detail": "The job cannot be promoted in its current state.",
+  "detail": "The job is in a state that cannot be promoted.",
   "code": "job_not_promotable",
   "requestId": "req_4mz0v8qk"
 }

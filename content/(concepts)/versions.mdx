@@ -114,7 +114,7 @@ This only affects versions still in `created`, `uploading`, or `uploaded`. A rea
 
 ## How many versions are kept
 
-Ready versions stay until you delete them. Free Spaces cap at 200 versions, counting everything that is not failed, canceled, or expired, and the 201st publish comes back as `422` `version_quota_exceeded`. Paid plans have no cap. See [Limits](/limits).
+Ready versions stay until you delete them, with one exception. Free Spaces keep 200 versions, counting everything that is not failed, canceled, or expired. The publish that takes a Free Space past 200 still goes through, and the oldest ready versions that nothing serves expire in the background: their bytes are purged and their history stays. A version the live pointer or a branch alias serves is never expired. Paid plans have no cap. See [Limits](/limits).
 
 To delete one:
 

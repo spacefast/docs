@@ -1,11 +1,11 @@
 ---
 title: "zero_db_execute_failed"
-description: "A Zero database write failed."
+description: "The Zero database rejected the mutation."
 ---
 
-A Zero database write failed.
+The Zero database rejected the mutation.
 
-**How to resolve:** Inspect the mutation, schema, and database logs. Fix the SQL issue, then retry.
+**How to resolve:** Read the driver message in the detail, correct the SQL or its parameters, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_execute_failed",
   "title": "Zero db execute failed",
   "status": 400,
-  "detail": "A Zero database write failed.",
+  "detail": "The Zero database rejected the mutation.",
   "code": "zero_db_execute_failed",
   "requestId": "req_4mz0v8qk"
 }

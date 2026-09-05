@@ -1,11 +1,11 @@
 ---
 title: "publish_archive_expanded_size_exceeded"
-description: "The archive expands beyond the maximum allowed total size."
+description: "The archive expands to more bytes than a version may hold."
 ---
 
-The archive expands beyond the maximum allowed total size.
+The archive expands to more bytes than a version may hold.
 
-**How to resolve:** Reduce the content size.
+**How to resolve:** Remove files from the archive until the expanded content fits the version byte cap.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_archive_expanded_size_exceeded",
   "title": "Publish archive expanded size exceeded",
   "status": 400,
-  "detail": "The archive expands beyond the maximum allowed total size.",
+  "detail": "The archive expands to more bytes than a version may hold.",
   "code": "publish_archive_expanded_size_exceeded",
   "requestId": "req_4mz0v8qk"
 }

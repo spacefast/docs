@@ -1,11 +1,11 @@
 ---
 title: "blob_gate_token_invalid"
-description: "The download token is invalid or expired."
+description: "The blob gate token is not valid for this blob."
 ---
 
-The download token is invalid or expired.
+The blob gate token is not valid for this blob.
 
-**How to resolve:** Request a fresh download link and use it within its lifetime.
+**How to resolve:** Request a fresh blob gate token and retry the fetch with it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/blob_gate_token_invalid",
   "title": "Blob gate token invalid",
   "status": 400,
-  "detail": "The download token is invalid or expired.",
+  "detail": "The blob gate token is not valid for this blob.",
   "code": "blob_gate_token_invalid",
   "requestId": "req_4mz0v8qk"
 }

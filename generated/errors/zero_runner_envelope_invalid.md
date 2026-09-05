@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_envelope_invalid"
-description: "The Zero runner request envelope is malformed."
+description: "The runner returned an envelope the runtime cannot read."
 ---
 
-The Zero runner request envelope is malformed.
+The runner returned an envelope the runtime cannot read.
 
-**How to resolve:** Use the generated runtime bridge. If generated files are stale, publish again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_envelope_invalid",
   "title": "Zero runner envelope invalid",
   "status": 400,
-  "detail": "The Zero runner request envelope is malformed.",
+  "detail": "The runner returned an envelope the runtime cannot read.",
   "code": "zero_runner_envelope_invalid",
   "requestId": "req_4mz0v8qk"
 }

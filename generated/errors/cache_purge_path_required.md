@@ -1,11 +1,11 @@
 ---
 title: "cache_purge_path_required"
-description: "A purge request must name at least one path."
+description: "The cache purge request did not name a path."
 ---
 
-A purge request must name at least one path.
+The cache purge request did not name a path.
 
-**How to resolve:** Pass one or more request paths to purge.
+**How to resolve:** Send the path to purge in the request body.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/cache_purge_path_required",
   "title": "Cache purge path required",
   "status": 400,
-  "detail": "A purge request must name at least one path.",
+  "detail": "The cache purge request did not name a path.",
   "code": "cache_purge_path_required",
   "requestId": "req_4mz0v8qk"
 }

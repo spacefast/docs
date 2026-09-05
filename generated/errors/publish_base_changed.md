@@ -1,11 +1,11 @@
 ---
 title: "publish_base_changed"
-description: "Someone published new space settings after the base you loaded, so saving would overwrite their change."
+description: "The Space settings changed after the base digest in this request was read."
 ---
 
-Someone published new space settings after the base you loaded, so saving would overwrite their change.
+The Space settings changed after the base digest in this request was read.
 
-**How to resolve:** Reload the latest settings, review the difference, and save again. Pass `force` only to overwrite deliberately.
+**How to resolve:** Reload the Space, compare the settings, then save again with the fresh `baseSettingsDigest`, or send `force` to overwrite.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_base_changed",
   "title": "Publish base changed",
   "status": 400,
-  "detail": "Someone published new space settings after the base you loaded, so saving would overwrite their change.",
+  "detail": "The Space settings changed after the base digest in this request was read.",
   "code": "publish_base_changed",
   "requestId": "req_4mz0v8qk"
 }

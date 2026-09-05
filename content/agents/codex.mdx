@@ -81,7 +81,7 @@ args = ["mcp", "proxy"]
 Use the Spacefast MCP server to search the docs for anonymous publishing.
 </Prompt>
 
-`search_docs` answers without a credential, so a working answer proves the transport before auth is in play. Then publish.
+Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
 
 <Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
 Publish this folder to Spacefast and give me the live URL.

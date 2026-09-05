@@ -1,11 +1,11 @@
 ---
 title: "credential_not_yet_valid"
-description: "The credential is not valid yet because its start time is in the future."
+description: "The API key is not valid until its `notBefore` time."
 ---
 
-The credential is not valid yet because its start time is in the future.
+The API key is not valid until its `notBefore` time.
 
-**How to resolve:** Wait until the credential's notBefore time, or adjust the notBefore value.
+**How to resolve:** Wait until the key's `notBefore` time passes, or use a key that is already active.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/credential_not_yet_valid",
   "title": "Credential not yet valid",
   "status": 400,
-  "detail": "The credential is not valid yet because its start time is in the future.",
+  "detail": "The API key is not valid until its `notBefore` time.",
   "code": "credential_not_yet_valid",
   "requestId": "req_4mz0v8qk"
 }

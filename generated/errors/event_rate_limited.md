@@ -1,11 +1,11 @@
 ---
 title: "event_rate_limited"
-description: "Too many event submissions came from this client in a short window."
+description: "Too many event submissions came from this address in the past minute."
 ---
 
-Too many event submissions came from this client in a short window.
+Too many event submissions came from this address in the past minute.
 
-**How to resolve:** Drop or batch events. Event delivery is best-effort and never required.
+**How to resolve:** Retry after the seconds in the `Retry-After` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/event_rate_limited",
   "title": "Event rate limited",
   "status": 400,
-  "detail": "Too many event submissions came from this client in a short window.",
+  "detail": "Too many event submissions came from this address in the past minute.",
   "code": "event_rate_limited",
   "requestId": "req_4mz0v8qk"
 }

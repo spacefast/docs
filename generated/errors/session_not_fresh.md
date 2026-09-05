@@ -1,11 +1,11 @@
 ---
 title: "session_not_fresh"
-description: "This action needs a recent identity confirmation."
+description: "This action needs a session that was recently re-verified."
 ---
 
-This action needs a recent identity confirmation.
+This action needs a session that was recently re-verified.
 
-**How to resolve:** Confirm it's you (password, authenticator code, or a code sent to your primary email), then retry.
+**How to resolve:** Re-verify the signed-in user, then retry within the freshness window.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/session_not_fresh",
   "title": "Session not fresh",
   "status": 400,
-  "detail": "This action needs a recent identity confirmation.",
+  "detail": "This action needs a session that was recently re-verified.",
   "code": "session_not_fresh",
   "requestId": "req_4mz0v8qk"
 }

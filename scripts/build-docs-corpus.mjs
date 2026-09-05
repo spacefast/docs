@@ -27,7 +27,11 @@ function normalizePath(url) {
 }
 
 function pageMetadata(path) {
-  if (path.startsWith("/api/reference")) return { kind: "api", tier: "reference" };
+  if (
+    ["/api/reference", "/partners/api/reference", "/platforms/api/reference"].some(
+      (prefix) => path === prefix || path.startsWith(`${prefix}/`),
+    )
+  ) return { kind: "api", tier: "reference" };
   if (path === "/api") return { kind: "api", tier: "full" };
   if (path === "/cli" || path.startsWith("/cli/")) return { kind: "cli", tier: "full" };
   if (path === "/errors" || path.startsWith("/errors/")) {

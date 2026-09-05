@@ -1,11 +1,11 @@
 ---
 title: "forbidden"
-description: "The credential is valid but does not allow this action."
+description: "The credential is not allowed to perform this action."
 ---
 
-The credential is valid but does not allow this action.
+The credential is not allowed to perform this action.
 
-**How to resolve:** Use a credential whose policy grants this action on this resource.
+**How to resolve:** Retry with a credential that holds the required permission, such as an interactive session or a team-admin API key.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/forbidden",
   "title": "Forbidden",
   "status": 400,
-  "detail": "The credential is valid but does not allow this action.",
+  "detail": "The credential is not allowed to perform this action.",
   "code": "forbidden",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "source_archive_decompression_timeout"
-description: "The uploaded source archive did not finish decompressing within the validation limit."
+description: "Decompressing the source archive took longer than allowed."
 ---
 
-The uploaded source archive did not finish decompressing within the validation limit.
+Decompressing the source archive took longer than allowed.
 
-**How to resolve:** Reduce the archive's compressed complexity or split it into a smaller source upload, then retry.
+**How to resolve:** Retry the upload with a smaller archive.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/source_archive_decompression_timeout",
   "title": "Source archive decompression timeout",
   "status": 400,
-  "detail": "The uploaded source archive did not finish decompressing within the validation limit.",
+  "detail": "Decompressing the source archive took longer than allowed.",
   "code": "source_archive_decompression_timeout",
   "requestId": "req_4mz0v8qk"
 }

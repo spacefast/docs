@@ -1,11 +1,11 @@
 ---
 title: "ingest_admission_exceeded"
-description: "Too many concurrent uploads for this space."
+description: "Ingest requests to this Space were shed by the admission limiter."
 ---
 
-Too many concurrent uploads for this space.
+Ingest requests to this Space were shed by the admission limiter.
 
-**How to resolve:** Wait for the Retry-After window, then resume. At most 4 uploads run per space at once.
+**How to resolve:** Retry after the seconds in the `Retry-After` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/ingest_admission_exceeded",
   "title": "Ingest admission exceeded",
   "status": 400,
-  "detail": "Too many concurrent uploads for this space.",
+  "detail": "Ingest requests to this Space were shed by the admission limiter.",
   "code": "ingest_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }

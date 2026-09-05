@@ -1,11 +1,11 @@
 ---
 title: "zero_runs_invalid"
-description: "The Zero run-handler payload is invalid."
+description: "The finalize request's `zero_runs` value is not an array."
 ---
 
-The Zero run-handler payload is invalid.
+The finalize request's `zero_runs` value is not an array.
 
-**How to resolve:** Send a valid array of generated run handlers and publish again.
+**How to resolve:** Send `zero_runs` as an array of run handler entries.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runs_invalid",
   "title": "Zero runs invalid",
   "status": 400,
-  "detail": "The Zero run-handler payload is invalid.",
+  "detail": "The finalize request's `zero_runs` value is not an array.",
   "code": "zero_runs_invalid",
   "requestId": "req_4mz0v8qk"
 }

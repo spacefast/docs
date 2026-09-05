@@ -1,11 +1,11 @@
 ---
 title: "invalid_idempotency_key"
-description: "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal."
+description: "The idempotency key on this request is missing its required namespace."
 ---
 
-The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.
+The idempotency key on this request is missing its required namespace.
 
-**How to resolve:** Send a non-empty Idempotency-Key of at most 255 characters. Credential-free publish retries also need a stable, secret X-Spacefast-Idempotency-Principal containing 64 hexadecimal characters.
+**How to resolve:** Send `X-Spacefast-Idempotency-Principal` with 64 hexadecimal characters alongside `Idempotency-Key`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_idempotency_key",
   "title": "Invalid idempotency key",
   "status": 400,
-  "detail": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
+  "detail": "The idempotency key on this request is missing its required namespace.",
   "code": "invalid_idempotency_key",
   "requestId": "req_4mz0v8qk"
 }

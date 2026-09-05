@@ -1,11 +1,11 @@
 ---
 title: "scan_pending"
-description: "The content is still being scanned for safety and cannot be served yet."
+description: "The content safety scan for this Space has not finished."
 ---
 
-The content is still being scanned for safety and cannot be served yet.
+The content safety scan for this Space has not finished.
 
-**How to resolve:** Wait for the scan to finish. Serving resumes automatically once the scan clears.
+**How to resolve:** Retry once the scan finishes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/scan_pending",
   "title": "Scan pending",
   "status": 400,
-  "detail": "The content is still being scanned for safety and cannot be served yet.",
+  "detail": "The content safety scan for this Space has not finished.",
   "code": "scan_pending",
   "requestId": "req_4mz0v8qk"
 }

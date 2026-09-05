@@ -1,11 +1,11 @@
 ---
 title: "zero_js_execution_failed"
-description: "The Zero endpoint JavaScript threw during execution."
+description: "The Zero handler threw while it was running."
 ---
 
-The Zero endpoint JavaScript threw during execution.
+The Zero handler threw while it was running.
 
-**How to resolve:** Inspect the endpoint error and fix the handler code.
+**How to resolve:** Read the thrown message in the detail, fix the handler, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_execution_failed",
   "title": "Zero js execution failed",
   "status": 400,
-  "detail": "The Zero endpoint JavaScript threw during execution.",
+  "detail": "The Zero handler threw while it was running.",
   "code": "zero_js_execution_failed",
   "requestId": "req_4mz0v8qk"
 }

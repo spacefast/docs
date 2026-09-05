@@ -1,11 +1,11 @@
 ---
 title: "ssl_renewal_blocked"
-description: "SSL certificate renewal is blocked for this hostname."
+description: "A DNS record, often a CAA record, is blocking certificate issuance for this hostname."
 ---
 
-SSL certificate renewal is blocked for this hostname.
+A DNS record, often a CAA record, is blocking certificate issuance for this hostname.
 
-**How to resolve:** Verify DNS still points at Spacefast, then retry SSL issuance.
+**How to resolve:** Fix the blocking record at the DNS provider, then retry SSL provisioning.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/ssl_renewal_blocked",
   "title": "Ssl renewal blocked",
   "status": 400,
-  "detail": "SSL certificate renewal is blocked for this hostname.",
+  "detail": "A DNS record, often a CAA record, is blocking certificate issuance for this hostname.",
   "code": "ssl_renewal_blocked",
   "requestId": "req_4mz0v8qk"
 }

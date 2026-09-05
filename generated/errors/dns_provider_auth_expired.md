@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_auth_expired"
-description: "The connected DNS provider authorization expired or was revoked."
+description: "The stored DNS provider authorization expired."
 ---
 
-The connected DNS provider authorization expired or was revoked.
+The stored DNS provider authorization expired.
 
-**How to resolve:** Reconnect the provider account for the affected connection, refresh the zone, then retry the DNS operation.
+**How to resolve:** Reconnect the DNS provider account, then refresh the provider zone.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_auth_expired",
   "title": "Dns provider auth expired",
   "status": 400,
-  "detail": "The connected DNS provider authorization expired or was revoked.",
+  "detail": "The stored DNS provider authorization expired.",
   "code": "dns_provider_auth_expired",
   "requestId": "req_4mz0v8qk"
 }

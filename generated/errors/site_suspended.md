@@ -1,11 +1,11 @@
 ---
 title: "site_suspended"
-description: "The site is suspended, so its spaces cannot be served or modified."
+description: "The Space is suspended, so it is not served and cannot be changed."
 ---
 
-The site is suspended, so its spaces cannot be served or modified.
+The Space is suspended, so it is not served and cannot be changed.
 
-**How to resolve:** Resolve the suspension reason with support or the owning tenant.
+**How to resolve:** Contact Spacefast support, or have the partner lift the suspension.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/site_suspended",
   "title": "Site suspended",
   "status": 400,
-  "detail": "The site is suspended, so its spaces cannot be served or modified.",
+  "detail": "The Space is suspended, so it is not served and cannot be changed.",
   "code": "site_suspended",
   "requestId": "req_4mz0v8qk"
 }

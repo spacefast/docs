@@ -1,11 +1,11 @@
 ---
 title: "zero_artifact_invalid"
-description: "The Zero endpoint artifact is missing required runtime metadata."
+description: "The Zero run artifact is malformed."
 ---
 
-The Zero endpoint artifact is missing required runtime metadata.
+The Zero run artifact is malformed.
 
-**How to resolve:** Rebuild the Zero project and verify the generated zero endpoint artifacts are uploaded.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_artifact_invalid",
   "title": "Zero artifact invalid",
   "status": 400,
-  "detail": "The Zero endpoint artifact is missing required runtime metadata.",
+  "detail": "The Zero run artifact is malformed.",
   "code": "zero_artifact_invalid",
   "requestId": "req_4mz0v8qk"
 }

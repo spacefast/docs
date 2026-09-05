@@ -1,11 +1,11 @@
 ---
 title: "auth_code_required"
-description: "An authorization code is required to complete this step."
+description: "A domain transfer-in was requested without the registrar authorization code."
 ---
 
-An authorization code is required to complete this step.
+A domain transfer-in was requested without the registrar authorization code.
 
-**How to resolve:** Pass the code returned by the authorization step.
+**How to resolve:** Send the transfer authorization code from the current registrar in `authCode`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/auth_code_required",
   "title": "Auth code required",
   "status": 400,
-  "detail": "An authorization code is required to complete this step.",
+  "detail": "A domain transfer-in was requested without the registrar authorization code.",
   "code": "auth_code_required",
   "requestId": "req_4mz0v8qk"
 }

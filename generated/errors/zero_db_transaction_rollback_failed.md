@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_rollback_failed"
-description: "The Zero database transaction cannot be rolled back cleanly."
+description: "Rolling back the Zero database transaction failed."
 ---
 
-The Zero database transaction cannot be rolled back cleanly.
+Rolling back the Zero database transaction failed.
 
-**How to resolve:** Inspect the affected database state before retrying, then report the failure.
+**How to resolve:** Retry the request. The connection is reset before it is reused.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_rollback_failed",
   "title": "Zero db transaction rollback failed",
   "status": 400,
-  "detail": "The Zero database transaction cannot be rolled back cleanly.",
+  "detail": "Rolling back the Zero database transaction failed.",
   "code": "zero_db_transaction_rollback_failed",
   "requestId": "req_4mz0v8qk"
 }

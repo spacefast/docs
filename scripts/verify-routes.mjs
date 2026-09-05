@@ -1,3 +1,5 @@
+import referenceAliases from "./reference-aliases.json" with { type: "json" };
+
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
@@ -434,15 +436,19 @@ if (
 ) {
   throw new Error("Built redirects do not match the generated compatibility map.");
 }
-for (const redirect of generatedRedirects) {
+for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   const example = representativeRedirect(redirect);
-  const target = localTargetFor(example.destination);
+  const canonicalDestination = example.destination.replace(
+    "/partners/api/reference",
+    "/platforms/api/reference",
+  );
+  const target = localTargetFor(canonicalDestination);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
   }
   const resolved = resolveRedirect(example.source, compatibilityRules);
   if (
-    resolved.destination !== example.destination ||
+    resolved.destination !== canonicalDestination ||
     resolved.hops.length < 1 ||
     resolved.hops.some(({ status }) => status !== redirect.status)
   ) {
@@ -468,5 +474,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length} compatibility URLs, and every root-relative URL resolves.`,
+  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length + referenceAliases.length} compatibility URLs, and every root-relative URL resolves.`,
 );

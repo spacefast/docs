@@ -1,11 +1,11 @@
 ---
 title: "runtime_scope_forbidden"
-description: "The runtime token's scope does not cover this path or action."
+description: "The runtime token's scope claims do not match this request."
 ---
 
-The runtime token's scope does not cover this path or action.
+The runtime token's scope claims do not match this request.
 
-**How to resolve:** Use the token minted for this exact session, space, and step.
+**How to resolve:** Mint a runtime token whose claims cover the Space and resource being called.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_scope_forbidden",
   "title": "Runtime scope forbidden",
   "status": 400,
-  "detail": "The runtime token's scope does not cover this path or action.",
+  "detail": "The runtime token's scope claims do not match this request.",
   "code": "runtime_scope_forbidden",
   "requestId": "req_4mz0v8qk"
 }
