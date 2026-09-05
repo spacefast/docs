@@ -51,6 +51,21 @@ const DISCOVERY_ROUTES = new Set([
 ]);
 export const isDiscoveryResource = (route) => route.endsWith(".xml") || DISCOVERY_ROUTES.has(route);
 
+export function discoveryFileForUrl(url) {
+  if (!url.startsWith(`${DOCS_ROOT}/`)) return undefined;
+  const route = url.slice(DOCS_ROOT.length);
+  if (!isDiscoveryResource(route)) return undefined;
+  if (
+    new URL(url).href !== url ||
+    route.includes("\\") ||
+    route.slice(1).split("/").some((segment) => !segment || [".", ".."].includes(decodeURIComponent(segment)))
+  ) {
+    throw new Error(`Non-canonical discovery URL: ${url}`);
+  }
+  return route.slice(1);
+}
+
+
 const MAX_BYTES = 32 * 1024;
 
 const isEntry = (line) => line.startsWith("- [");

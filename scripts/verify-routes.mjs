@@ -9,7 +9,7 @@ import {
   deploymentBase,
   resolveRedirect,
 } from "./redirect-rules.mjs";
-import { isDiscoveryResource } from "./build-llms-index.mjs";
+import { discoveryFileForUrl } from "./build-llms-index.mjs";
 import { readSidebarRoutes } from "./sidebar-routes.mjs";
 
 const root = path.resolve(process.cwd());
@@ -292,16 +292,14 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 // code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
 for (const match of llmsIndex.matchAll(/\]\((https:\/\/[^)]+)\)/gu)) {
-  const url = match[1];
-  if (!url.startsWith(docsRoot)) continue;
-  const route = url.slice(docsRoot.length);
-  if (isDiscoveryResource(route)) await requireFile(route.slice(1));
+  const file = discoveryFileForUrl(match[1]);
+  if (file !== undefined) await requireFile(file);
 }
 const llmsPageUrls = llmsIndex
   .split("\n")
   .filter((line) => line.startsWith("- ["))
   .flatMap((line) => [...line.matchAll(/\]\((https:\/\/[^)]+)\)/gu)].map((match) => match[1]))
-  .filter((url) => !isDiscoveryResource(url.slice(docsRoot.length)));
+  .filter((url) => discoveryFileForUrl(url) === undefined);
 if (llmsPageUrls.length === 0) {
   throw new Error("llms.txt lists no pages.");
 }
