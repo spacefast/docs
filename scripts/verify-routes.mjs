@@ -9,6 +9,7 @@ import {
   deploymentBase,
   resolveRedirect,
 } from "./redirect-rules.mjs";
+import { isDiscoveryResource } from "./build-llms-index.mjs";
 import { readSidebarRoutes } from "./sidebar-routes.mjs";
 
 const root = path.resolve(process.cwd());
@@ -290,11 +291,17 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 // invariant checked here. Only link targets count; the preamble's prose and
 // code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
+for (const match of llmsIndex.matchAll(/\]\((https:\/\/[^)]+)\)/gu)) {
+  const url = match[1];
+  if (!url.startsWith(docsRoot)) continue;
+  const route = url.slice(docsRoot.length);
+  if (isDiscoveryResource(route)) await requireFile(route.slice(1));
+}
 const llmsPageUrls = llmsIndex
   .split("\n")
   .filter((line) => line.startsWith("- ["))
   .flatMap((line) => [...line.matchAll(/\]\((https:\/\/[^)]+)\)/gu)].map((match) => match[1]))
-  .filter((url) => !url.endsWith("/rss.xml"));
+  .filter((url) => !isDiscoveryResource(url.slice(docsRoot.length)));
 if (llmsPageUrls.length === 0) {
   throw new Error("llms.txt lists no pages.");
 }

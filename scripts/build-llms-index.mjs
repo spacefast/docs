@@ -42,6 +42,15 @@ const COLLAPSED_ROOTS = [
 // the generated per-agent setup pages.
 const ALLOWED_NON_SIDEBAR_PREFIX = "/setup";
 
+// Blume's agent discovery endpoints belong in the index alongside page links.
+const DISCOVERY_ROUTES = new Set([
+  "/llms-full.txt",
+  "/index.md",
+  "/.well-known/api-catalog",
+  "/agent-readability.json",
+]);
+export const isDiscoveryResource = (route) => route.endsWith(".xml") || DISCOVERY_ROUTES.has(route);
+
 const MAX_BYTES = 32 * 1024;
 
 const isEntry = (line) => line.startsWith("- [");
@@ -82,7 +91,7 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
   // Feed URLs (the RSS section) are not pages and are never collapsed.
   const shouldDrop = (line) => {
     const route = routeOf(line);
-    if (!route || route.endsWith(".xml")) return false;
+    if (!route || isDiscoveryResource(route)) return false;
     if (sidebarRoutes.has(route)) return false;
     return COLLAPSED_ROOTS.some((root) => route === root || route.startsWith(`${root}/`));
   };
@@ -127,7 +136,7 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
       const strays = sectionEntries.filter((line) => {
         const route = routeOf(line);
         if (!route) return false;
-        return !sidebarRoutes.has(route) && !route.startsWith(ALLOWED_NON_SIDEBAR_PREFIX);
+        return !isDiscoveryResource(route) && !sidebarRoutes.has(route) && !route.startsWith(ALLOWED_NON_SIDEBAR_PREFIX);
       });
       if (strays.length > 0) {
         throw new Error(
@@ -162,7 +171,7 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
   const unexpected = survivors.filter(
     (route) =>
       route &&
-      !route.endsWith(".xml") &&
+      !isDiscoveryResource(route) &&
       !sidebarRoutes.has(route) &&
       !route.startsWith(ALLOWED_NON_SIDEBAR_PREFIX),
   );

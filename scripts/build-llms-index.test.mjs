@@ -50,6 +50,9 @@ const fixture = [
   entry("/changelog/packages/sdk"),
   entry("/setup/claude-code"),
   "",
+  "## Discovery",
+  ...["/llms-full.txt", "/index.md", "/.well-known/api-catalog", "/agent-readability.json"].map((route) => entry(route)),
+  "",
   "## RSS Feeds",
   "",
   "- [Changelog](https://spacefast.com/docs/changelog/rss.xml)",
@@ -104,7 +107,9 @@ test("relabels the leftover bucket and drops emptied headings", () => {
   assert.ok(!text.includes("## Other"), "the Other label should not survive");
   assert.ok(text.includes("## Agent setup"));
   assert.ok(text.includes("## RSS Feeds"), "feeds are not pages and are never collapsed");
-  assert.ok(text.includes("https://spacefast.com/docs/changelog/rss.xml"));
+  for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/.well-known/api-catalog", "/agent-readability.json"]) {
+    assert.ok(text.includes(`https://spacefast.com/docs${route}`));
+  }
 });
 
 test("splices the preamble between the summary and the first section", () => {
