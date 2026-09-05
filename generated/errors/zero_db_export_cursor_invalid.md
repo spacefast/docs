@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_cursor_invalid"
-description: "The local database export cursor is invalid or belongs to another export."
+description: "The export cursor does not fit this table and schema."
 ---
 
-The local database export cursor is invalid or belongs to another export.
+The export cursor does not fit this table and schema.
 
-**How to resolve:** Start a fresh export and use only cursors returned by that same table and schema.
+**How to resolve:** Start a fresh export without a cursor.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_cursor_invalid",
   "title": "Zero db export cursor invalid",
   "status": 400,
-  "detail": "The local database export cursor is invalid or belongs to another export.",
+  "detail": "The export cursor does not fit this table and schema.",
   "code": "zero_db_export_cursor_invalid",
   "requestId": "req_4mz0v8qk"
 }

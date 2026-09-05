@@ -1,11 +1,11 @@
 ---
 title: "invalid_publish_archive"
-description: "The uploaded archive cannot be read as a valid zip."
+description: "The publish archive could not be read as a valid archive."
 ---
 
-The uploaded archive cannot be read as a valid zip.
+The publish archive could not be read as a valid archive.
 
-**How to resolve:** Re-create the archive as a standard zip and upload again.
+**How to resolve:** Re-create the archive as a well-formed zip or tar and upload it again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_publish_archive",
   "title": "Invalid publish archive",
   "status": 400,
-  "detail": "The uploaded archive cannot be read as a valid zip.",
+  "detail": "The publish archive could not be read as a valid archive.",
   "code": "invalid_publish_archive",
   "requestId": "req_4mz0v8qk"
 }

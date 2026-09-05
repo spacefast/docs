@@ -1,11 +1,11 @@
 ---
 title: "zero_response_header_invalid"
-description: "A Zero endpoint response header is invalid or exceeds the header limits."
+description: "A response header the handler set is not a valid header."
 ---
 
-A Zero endpoint response header is invalid or exceeds the header limits.
+A response header the handler set is not a valid header.
 
-**How to resolve:** Use ASCII header names, keep values under the size limits, and avoid duplicate names.
+**How to resolve:** Correct the header name or value in the handler, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_response_header_invalid",
   "title": "Zero response header invalid",
   "status": 400,
-  "detail": "A Zero endpoint response header is invalid or exceeds the header limits.",
+  "detail": "A response header the handler set is not a valid header.",
   "code": "zero_response_header_invalid",
   "requestId": "req_4mz0v8qk"
 }

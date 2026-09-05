@@ -1,11 +1,11 @@
 ---
 title: "job_not_retryable"
-description: "The job cannot be retried in its current state."
+description: "The job is in a state that cannot be retried."
 ---
 
-The job cannot be retried in its current state.
+The job is in a state that cannot be retried.
 
-**How to resolve:** Only failed jobs can be retried.
+**How to resolve:** Start a new job instead of retrying this one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/job_not_retryable",
   "title": "Job not retryable",
   "status": 400,
-  "detail": "The job cannot be retried in its current state.",
+  "detail": "The job is in a state that cannot be retried.",
   "code": "job_not_retryable",
   "requestId": "req_4mz0v8qk"
 }

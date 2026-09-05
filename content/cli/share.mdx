@@ -1,0 +1,334 @@
+---
+title: sf share
+description: Grant access to a Space with links, passwords, machine tokens, named People, and external identity, all from the terminal
+sidebar:
+  order: 7
+---
+
+After this page you can open a Space to the public or to your team, send someone a link that expires, put a password on a route subtree, mint a token for a machine, invite a named person to one path, and explain exactly why a given visitor can or cannot see a URL.
+
+## The model in one minute
+
+Access is a list of **Grants**. Each Grant says who (audience), what they may do (role), which routes (paths and exclusions), and against which target. Grants are additive: a visitor gets the union of every Grant that matches. Nothing is subtracted, so a Space with no Grants is private.
+
+- **Roles**: `viewer`, `commenter`, `editor`, `manager`. A public Grant may only be `viewer` or `commenter`; anything higher is refused before the request leaves your machine.
+- **Targets**: `live`, `all-versions`, `version:<id>`, or `branch:<name>`.
+- **Paths**: glob patterns such as `/docs/**`. `--path` is repeatable for disjoint subtrees; `--exclude` carves holes local to that one Grant.
+
+Credential-backed audiences get their own commands (`link`, `password`, `token`, `identity`) so the proof and its Grant are created in one write. `sf share grant` is for the two audiences that need no proof: `public` and `team`.
+
+See [Access and sharing](/access) for the concepts.
+
+## Space selection flags
+
+Every command takes `--space` (env `SPACEFAST_SPACE`), `-o, --team` (env `SPACEFAST_TEAM`), and `--claim-token` (env `SPACEFAST_CLAIM_TOKEN`), plus the global flags. The exceptions are `sf share identity create`, `ls`, `update`, and `revoke`, which are team-scoped and take `-o, --team` only. `sf share identity grant` is space-scoped like everything else.
+
+`sf share grant`, `sf share grant edit`, and `sf share revoke` also take `--wait` / `--no-wait`, default `--wait`, which holds until queued work finishes.
+
+## Constraints
+
+These flags narrow when and from where a Grant admits a visitor. Commands below say which set they accept.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--not-before=<iso>` | none | Do not admit before this ISO date-time |
+| `--expires=<duration>` | never | Expire after a duration such as `7d` or `30m` |
+| `--max-uses=<n>` | unlimited | Maximum successful admissions. 1 to 1,000,000 |
+| `--network=<ip\|cidr>` | any | Allowed IP address or CIDR. Repeatable |
+| `--country=<code>` | any | Allowed ISO country code. Repeatable |
+| `--exclude-country=<code>` | none | Blocked ISO country code. Repeatable |
+| `--exclude-user-agent=<text>` | none | Block user agents containing this text. Repeatable |
+| `--require-verified-email` | off | Admit only a session with a verified email |
+
+## sf share list
+
+List every active Grant, including config, team, Person, Link, password, machine, and external identity access. Alias: `sf share ls`.
+
+```bash
+sf share list --space docs
+```
+
+Prints `ID`, `WHO`, `CAN`, `WHAT`, `TARGET`, `SOURCE`, `EXPIRES`. An empty Space prints `No Grants. This Space is private.`
+
+## sf share check
+
+Explain the exact additive Grants and capabilities that match one route, audience, and target. This is the command for "why can't I see this page".
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--path=<value>` | `/` | Canonical route to check |
+| `--as=public\|team\|person\|link\|password\|machine\|external` | `public` | Audience to simulate |
+| `--person=<value>` | none | Person ID. Required with `--as person` |
+| `--link=<value>` | none | Link ID. Required with `--as link` |
+| `--password=<value>` | none | Password credential ID. Required with `--as password` |
+| `--machine=<value>` | none | Machine credential ID. Required with `--as machine` |
+| `--issuer=<value>` | none | External identity issuer. Required with `--as external` |
+| `--subject=<value>` | none | External identity subject. Required with `--as external` |
+| `--verified-email` | off | Simulate a principal with a verified email |
+| `--ip=<value>` | none | IP address to evaluate against network constraints |
+| `--target=live\|version\|branch` | `live` | Published target kind |
+| `--target-id=<value>` | none | Version ID or branch name. Required when `--target` is not `live` |
+
+```bash
+sf share check --path /docs/internal --as public
+sf share check --path /docs --as person --person psn_123
+sf share check --path / --as link --link lnk_123 --ip 203.0.113.4
+```
+
+## sf share grant
+
+Create one additive Grant for an audience that needs no credential.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--to=public\|team` | required | Audience |
+| `--role=viewer\|commenter\|editor\|manager` | required | Role. `public` may only be `viewer` or `commenter` |
+| `--path=<pattern>` | required | Included route pattern. Repeatable |
+| `--exclude=<pattern>` | none | Excluded route pattern local to this Grant. Repeatable |
+| `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+| `--name=<value>` | audience label | Human-readable Grant name |
+| `--expires=<duration>` | never | Expire after a duration such as `7d` or `30m` |
+
+Also accepts `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` from [Constraints](#constraints).
+
+```bash
+sf share grant --to team --role viewer --path '/docs/**'
+sf share grant --to public --role commenter --path '/proposal/**' --exclude '/proposal/internal/**'
+sf share grant --to public --role viewer --path '/**' --target all-versions
+```
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `validation_error` | 2 | No `--path`. Use `--path '/**'` for the whole Space |
+| `validation_error` | 2 | A public Grant above `commenter`. Public Grants can view or comment only |
+
+## sf share grant edit
+
+`sf share grant edit ID` replaces the editable dimensions of a managed Grant while keeping its ID. Every flag replaces rather than merges, so pass the full set you want to keep. It takes the same `--name`, `--role`, `--path`, `--exclude`, `--target`, `--expires`, `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` flags as `sf share grant`, where each defaults to unchanged, plus:
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--no-expiry` | off | Remove the Grant expiry. Exclusive with `--expires` |
+| `--no-network` | off | Remove every network constraint. Exclusive with `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` |
+
+`--exclude` requires `--path`. Passing no field at all is a validation error.
+
+## sf share revoke
+
+`sf share revoke ID` revokes one managed Grant by its ID from `sf share list`. Grants that come from `sf.jsonc` are changed there instead, and credential-backed Grants normally revoke through their own credential command.
+
+```bash
+sf share revoke gnt_123
+```
+
+## sf share link create
+
+Create a named Link backed by one Grant. A Link is the "send this to a client" surface: one durable URL, optional expiry, open limits, and its own path set.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name=<value>` | required | Human name shown in the Links list |
+| `--landing=<path>` | `/` | Clean route opened after exchange |
+| `--path=<pattern>` | `/**` | Included route pattern. Repeatable |
+| `--exclude=<pattern>` | none | Excluded route pattern local to this Link. Repeatable |
+| `--role=viewer\|commenter` | `commenter` | Role granted to link holders |
+| `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+| `--show-secret` | off | Print the share URL even in JSON or non-interactive output |
+
+Accepts the full [constraint set](#constraints).
+
+```bash
+sf share link create \
+  --landing /docs \
+  --path "/docs/**" --path "/assets/**" \
+  --exclude "/docs/internal/**" \
+  --role commenter \
+  --name "Client review" \
+  --expires 7d
+```
+
+The output is the Link row plus its share URL. The URL is `[REDACTED]` in JSON and non-interactive output unless you pass `--show-secret`.
+
+## sf share link ls, copy, edit, revoke
+
+`sf share link ls` lists named Links with their Grant paths, capabilities, target, expiry, and lifecycle. Alias: `sf share link list`. List reads never carry credentials, so the share URL is not in the response. The columns are `ID`, `NAME`, `LANDING`, `CAN`, `PATHS`, `TARGET`, `OPENS`, `LIMIT`, `LAST USED`, `STARTS`, `EXPIRES`, `EMAIL`, `NETWORKS`, `ACTIVE`.
+
+`sf share link copy ID` prints a Link's durable share URL. It takes `--show-secret` with the same meaning as on `create`.
+
+`sf share link edit ID` replaces a Link's metadata or Grant dimensions without rotating its URL. It takes the same `--name`, `--landing`, `--path`, `--exclude`, `--role`, and `--target` flags as `create` and the full constraint set, each defaulting to unchanged, plus the clear flags below. Every flag replaces rather than merges, `--exclude` requires `--path`, and passing no field is a validation error.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--no-not-before` | off | Remove the earliest admission time. Exclusive with `--not-before` |
+| `--no-expiry` | off | Remove the Link expiry. Exclusive with `--expires` |
+| `--no-max-uses` | off | Remove the open limit. Exclusive with `--max-uses` |
+| `--allow-unverified-email` | off | Remove the verified-email requirement. Exclusive with `--require-verified-email` |
+| `--no-network` | off | Remove network restrictions. Exclusive with `--network` |
+
+`sf share link revoke ID` drops the Grant from the compiled rule set in the same write, so every outstanding URL stops working on the next request.
+
+```bash
+sf share link ls --space docs
+sf share link copy lnk_123
+sf share link revoke lnk_123
+```
+
+## sf share password create
+
+Create a named password Grant. The verifier is Argon2id, and rotation fences existing sessions. Passwords never live in `sf.jsonc`.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name=<value>` | required | Human-readable password name |
+| `--path=<pattern>` | required | Included route pattern. Repeatable |
+| `--exclude=<pattern>` | none | Local exclusion pattern. Repeatable |
+| `--password=<value>` | none | The password. Env `SPACEFAST_SHARE_PASSWORD` |
+| `--password-from-stdin` | off | Read the password from standard input |
+| `--role=viewer\|commenter` | `commenter` | Role granted to password holders |
+| `--target=<value>` | `live` | Published target selector |
+
+Accepts the full [constraint set](#constraints).
+
+Pass exactly one of `--password`, `SPACEFAST_SHARE_PASSWORD`, or `--password-from-stdin`. Prefer stdin in scripts. An argv value lands in shell history and process lists.
+
+```bash
+printf '%s' "$PASSWORD" | sf share password create \
+  --name "Beta testers" --path '/beta/**' --password-from-stdin --expires 30d
+```
+
+## sf share password ls, rotate, revoke
+
+`sf share password ls` lists password proof metadata and the Grants they admit, as `ID`, `NAME`, `CAN`, `PATHS`, `LAST USED`, `ROTATED`. Alias: `sf share password list`. Empty prints `No password Grants.`
+
+`sf share password rotate ID` replaces a password and fences sessions using the old one immediately. It takes `--password` (env `SPACEFAST_SHARE_PASSWORD`) and `--password-from-stdin`, same rules as `create`.
+
+`sf share password revoke ID` revokes password access and its canonical Grant.
+
+## sf share token create
+
+Create a named header-only machine credential and its scoped Grant. Use it when a service, not a person, needs to read a private Space. The token is returned once.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name=<value>` | required | Human-readable machine name |
+| `--path=<pattern>` | required | Included route pattern. Repeatable |
+| `--exclude=<pattern>` | none | Local exclusion pattern. Repeatable |
+| `--role=viewer\|commenter\|editor\|manager` | `viewer` | Role granted to this machine |
+| `--target=<value>` | `live` | Published target selector |
+| `--show-secret` | off | Print the one-time token in JSON or non-interactive output |
+
+Accepts `--not-before`, `--expires`, `--max-uses`, `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` from [Constraints](#constraints). It does not take `--require-verified-email`.
+
+```bash
+sf share token create --name "search indexer" --path '/**' --role viewer --show-secret
+```
+
+Without `--show-secret` the token reads `null` in machine output, with the note `Token hidden. Re-run with --show-secret.` There is no way to read it back later. Rotate instead.
+
+## sf share token ls, rotate, revoke
+
+`sf share token ls` lists machine credential metadata and the Grants they admit, as `ID`, `NAME`, `TOKEN`, `CAN`, `PATHS`, `LAST USED`. Alias: `sf share token list`. The `TOKEN` column is a hint, not the secret.
+
+`sf share token rotate ID` rotates the credential, fences the old token, and returns the replacement once. It takes `--show-secret`.
+
+`sf share token revoke ID` revokes a machine credential and its canonical Grant.
+
+## sf share people invite
+
+`sf share people invite EMAIL` invites one Person to a Space. They do not need a Spacefast account. Repeat `--scope` to grant the same role on several route subtrees.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=viewer\|commenter\|editor\|manager` | `viewer` | Role granted on every supplied scope |
+| `--scope=<path>` | `/` | Canonical route subtree. Repeatable |
+| `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+
+```bash
+sf share people invite person@example.com --role commenter --scope /docs --scope /assets
+sf share people invite client@example.com --role viewer --target version:ver_123
+```
+
+## sf share people ls, edit, resend, remove
+
+`sf share people ls` lists People and every scoped role they hold, as `ID`, `NAME`, `EMAIL`, `STATUS`, `GRANTS`, where each grant reads `scope:role`. Alias: `sf share people list`. When the team's own membership reaches this Space, a second table lists `MEMBERSHIP`, `NAME`, `EMAIL`, `SOURCE`, `TEAM RULES`, `ROLE` first.
+
+`sf share people edit PERSON` replaces a Person's scoped roles in one write, addressing them by Person ID or email. Repeat `--grant` for every subtree they should keep; anything you leave out is removed.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--grant=<path>=<role>` | required | Scoped role. Repeatable, and replaces the full grant set |
+| `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+
+`sf share people resend PERSON` replaces a pending invitation and sends a fresh accountless acceptance email.
+
+`sf share people remove PERSON` removes a Person and all of their scoped grants.
+
+```bash
+sf share people edit person@example.com --grant /=viewer --grant /docs=editor
+sf share people remove person@example.com
+```
+
+## sf share request ls, approve, deny
+
+`sf share request ls` lists pending, inbox-verified access requests with the role and route scope each one asked for, as `ID`, `NAME`, `EMAIL`, `SCOPE`, `ROLE`, `MESSAGE`, `CREATED`. Alias: `sf share request list`. Empty prints `No pending access requests.`
+
+`sf share request approve ID` approves a request into the canonical People list. Override the requested role or scope when the request asked for more than you want to give.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=viewer\|commenter\|editor\|manager` | requested role | Approved role |
+| `--scope=<path>` | requested scope | Approved route subtree |
+
+`sf share request deny ID` denies a pending request.
+
+```bash
+sf share request approve req_123 --role viewer --scope /docs
+sf share request deny req_123
+```
+
+## sf share identity create
+
+Connect a team to an external identity provider, either an OIDC provider or a white-label Ed25519 signer you run yourself. Once a connection exists, `sf share identity grant` gives individual external subjects access to a Space.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--type=oidc\|signer` | required | Connection kind |
+| `--name=<value>` | required | Display name for the connection |
+| `--issuer=<value>` | required | Issuer identifier the incoming proof must carry |
+| `--client-id=<value>` | none | OIDC client ID. Required for `--type oidc` |
+| `--client-secret=<value>` | none | OIDC client secret. Required for `--type oidc` |
+| `--authorize-url=<value>` | none | Authorize URL. Required for `--type signer` |
+| `--key=<kid:key>` | none | Signer key as `kid:base64url-public-key`. Required for `--type signer`, repeatable during rotation |
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `validation_error` | 2 | `--type oidc` without `--client-id` and `--client-secret` |
+| `validation_error` | 2 | `--type signer` without `--authorize-url` and at least one `--key` |
+
+## sf share identity ls, update, revoke
+
+`sf share identity ls` lists a team's OIDC and white-label signer connections. Alias: `sf share identity list`.
+
+`sf share identity update CONNECTION` rotates OIDC secrets or signer keys and updates connection settings. External Grants are untouched. It takes `--name`, `--client-id`, `--client-secret`, `--authorize-url`, and `--key` with the same meaning as on `create`, each defaulting to unchanged, plus `--session-ttl=<duration>` for the admitted session lifetime, for example `30m` or `8h`. `--key` is a complete replacement key set; repeat it to overlap old and new keys during rotation. Passing none of them is a validation error.
+
+`sf share identity revoke CONNECTION` revokes the connection, its external Grants, and every session it admitted.
+
+## sf share identity grant
+
+Grant one externally proven subject specific capabilities and paths on a Space.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection=<value>` | required | Identity connection ID |
+| `--subject=<value>` | required | Subject as the provider spells it |
+| `--name=<value>` | required | Human-readable Grant name |
+| `--role=viewer\|commenter\|editor\|manager` | `viewer` | Role granted to this subject |
+| `--path=<pattern>` | `/**` | Included route pattern. Repeatable |
+| `--except=<pattern>` | none | Excluded route pattern. Repeatable |
+| `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+
+Accepts the full [constraint set](#constraints).

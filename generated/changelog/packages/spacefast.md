@@ -7,6 +7,109 @@ Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
 
+## 0.3.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.3.0
+  - @spacefast/sdk@0.3.0
+  - @spacefast/zero-compat-payloadcms@0.3.0
+  - @spacefast/zero-compat-emdash@0.3.0
+  - @spacefast/mcp@0.3.0
+  - @spacefast/domain-search-terminal@0.3.0
+  - @spacefast/build-output@0.3.0
+  - @spacefast/common@0.3.0
+  - @spacefast/next-adapter@0.3.0
+  - @spacefast/routing@0.3.0
+  - @spacefast/zero@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- Republish the workspace through trusted publishing. v0.2.1's npm publication
+  was interrupted by the first-publish bootstrap of @spacefast/content and
+  @spacefast/setup-ui; both packages now exist with trusted publishing
+  configured, so this release publishes every package from CI's reproducible
+  build again.
+- @spacefast/build-output@0.2.2
+  - @spacefast/common@0.2.2
+  - @spacefast/domain-search-terminal@0.2.2
+  - @spacefast/mcp@0.2.2
+  - @spacefast/next-adapter@0.2.2
+  - @spacefast/routing@0.2.2
+  - @spacefast/sdk@0.2.2
+  - @spacefast/zero@0.2.2
+  - @spacefast/zero-compile@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/sdk@0.2.1
+  - @spacefast/domain-search-terminal@0.2.1
+  - @spacefast/mcp@0.2.1
+  - @spacefast/build-output@0.2.1
+  - @spacefast/common@0.2.1
+  - @spacefast/next-adapter@0.2.1
+  - @spacefast/routing@0.2.1
+  - @spacefast/zero@0.2.1
+  - @spacefast/zero-compile@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.2.0
+  - @spacefast/common@0.2.0
+  - @spacefast/routing@0.2.0
+  - @spacefast/domain-search-terminal@0.2.0
+  - @spacefast/sdk@0.2.0
+  - @spacefast/zero@0.2.0
+  - @spacefast/zero-compile@0.2.0
+  - @spacefast/next-adapter@0.2.0
+  - @spacefast/build-output@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.1.0
+  - @spacefast/sdk@0.1.0
+  - @spacefast/domain-search-terminal@0.1.0
+  - @spacefast/mcp@0.1.0
+  - @spacefast/routing@0.1.0
+  - @spacefast/zero@0.1.0
+  - @spacefast/zero-compile@0.1.0
+  - @spacefast/next-adapter@0.1.0
+  - @spacefast/build-output@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.0.27
+  - @spacefast/common@0.0.27
+  - @spacefast/domain-search-terminal@0.0.27
+  - @spacefast/routing@0.0.27
+  - @spacefast/sdk@0.0.27
+  - @spacefast/zero@0.0.27
+  - @spacefast/zero-compile@0.0.27
+  - @spacefast/next-adapter@0.0.27
+  - @spacefast/build-output@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -162,7 +265,7 @@ Install with `npm install -g spacefast`. Standalone binaries are also published 
 - Add complete Zero database exports plus owner storage listing and deletion across the CLI, API, SDK, and dashboard.
 - List MCP daemon, HTTP, and status commands in canonical CLI help.
 - Run Lakebed 0.0.29 core capsules without import rewrites through Spacefast Zero, including actions, runtime-backed object storage, declared indexes, and the database v1 query API.
-- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted execution, and Cast-backed realtime updates.
+- Make Zero generally available on every plan, including local development, hosted execution, and Cast-backed realtime updates.
 - Add Railway-style agent setup with repeated client targeting, optional project-scoped skills, integrated auth health, safe install/update/removal, popular agent consumers, local/remote-proxy/remote-OAuth connection methods, and direct variable, domain, and repository MCP lifecycle tools.
 - Updated dependencies
 - Updated dependencies
@@ -211,4 +314,3 @@ Install with `npm install -g spacefast`. Standalone binaries are also published 
 ## 0.0.6
 
 - Various bug fixes and improvements.
-

@@ -1,11 +1,11 @@
 ---
 title: "dns_export_required"
-description: "This operation requires exporting the current DNS records first."
+description: "Records still have to be created at the DNS provider before this domain works."
 ---
 
-This operation requires exporting the current DNS records first.
+Records still have to be created at the DNS provider before this domain works.
 
-**How to resolve:** Export the zone, confirm the snapshot, and retry the operation.
+**How to resolve:** Create the records listed in the response's required actions at the DNS provider.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_export_required",
   "title": "Dns export required",
   "status": 400,
-  "detail": "This operation requires exporting the current DNS records first.",
+  "detail": "Records still have to be created at the DNS provider before this domain works.",
   "code": "dns_export_required",
   "requestId": "req_4mz0v8qk"
 }

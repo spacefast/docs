@@ -1,0 +1,306 @@
+---
+title: Inspection and agent helpers
+description: Look up a Space, fetch private content, apply saved settings, and the small commands built for agents and scripts
+sidebar:
+  order: 27
+---
+
+The commands on this page answer questions and finish jobs rather than change what is published. After this page you can look up any Space you can reach, pull a private route from the terminal, push saved settings live, recover a publish after a claim, and diagnose a broken setup.
+
+Every command here also takes the [global flags](/cli#global-flags).
+
+## sf inspect
+
+Look up a Space by ID, slug, live URL, or attached domain.
+
+```text
+sf inspect TARGET [-o <team>]
+```
+
+### Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Required. |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+
+```bash
+sf inspect docs
+sf inspect https://spacefast.com
+sf inspect spc_abc123 --team acme
+```
+
+Unlike most commands, `sf inspect` takes its target as an argument rather than `--space`, so you can point it at anything without linking or unlinking a directory. Paste a live URL you were given and find out which Space serves it.
+
+### Output
+
+A summary of the Space, then its live version and runtime state, or `Live version: none`. `--json` returns `{ "data": { "space": …, "runtime": …, "liveVersion": … } }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | No target passed. "Space target is required." |
+| `not_found` | 20 | Nothing you can reach matches the target. |
+
+## sf fetch
+
+Fetch private Space content through the same exchange and host-only cookie flow a browser uses.
+
+```text
+sf fetch [PATH] (--output <file> | --status | --headers | --verify <versionId>) [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `[path]` | Canonical route to fetch. Defaults to `/`. |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--output=<file>` | none | File to write the response body into. |
+| `--status` | off | Report the HTTP status without needing an output file. |
+| `--headers` | off | Include response headers, minus any that carry credentials. |
+| `--verify=<versionId>` | none | Require a successful response serving this exact version ID. |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+You must pass at least one of `--output`, `--status`, `--headers`, or `--verify`, or the command fails rather than guessing what to do with the response.
+
+```bash
+sf fetch /docs --output ./docs.html
+sf fetch / --status --headers --json
+sf fetch / --verify ver_123 --json
+```
+
+`--verify` is the one to reach for in a publish script. It asserts that a private route really serves the version you published, end to end, through the same path a visitor takes.
+
+### Output
+
+```text
+HTTP 200 OK
+content-type: text/html; charset=utf-8
+Fetched /docs → ./docs.html (18342 bytes).
+```
+
+`data` carries `spaceId`, `path`, `status`, `statusText`, and, when you asked for them, `headers`, `output`, `bytes`, and `verification.versionId`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | None of `--output`, `--status`, `--headers`, `--verify` was passed. |
+| `private_fetch_verification_failed` | 1 | The response did not serve the version `--verify` named. |
+
+To open a private Space in a browser instead, use [`sf open`](/cli/project#sf-open).
+
+## sf apply
+
+Push saved Space settings that are not live yet onto the serving runtime.
+
+```text
+sf apply [--space <value>] [--no-wait] [--wait-timeout <seconds>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--wait` / `--no-wait` | `--wait` | Wait until the apply finishes before returning. |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait. Minimum 1. |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+```bash
+sf apply
+sf apply --space docs --no-wait
+```
+
+### Output
+
+One line, depending on what it found: `Everything saved is already live.`, `Applied the saved changes.`, `Applying the saved changes.`, or `Waiting to apply the saved changes.`
+
+`--json` returns `{ "data": { "applied": true, "applyState": { … } } }`. `applied` is true when the saved state is live or an apply that will make it live is running.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `apply_failed` | 1 | The runtime could not apply the saved changes. Re-run once the Space is out of a failed state. |
+| `timeout_error` | 50 | The wait budget ran out. The apply may still finish. |
+
+## sf continue
+
+Exchange a saved space key for a durable Space API key once the Space is claimed.
+
+```text
+sf continue [--claim-token <value>]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+```bash
+sf continue
+```
+
+This is the last step of the anonymous flow. You published without an account, someone claimed the Space, and the space key in `.spacefast/state.json` stopped being the right credential. `sf continue` trades it for a durable key bound to the claimed Space, in place, so the same directory keeps publishing.
+
+Run it from the directory you published from.
+
+### Output
+
+```text
+Continued: https://docs.view.fast
+Saved a durable API key to .spacefast/state.json.
+```
+
+`data` carries `space`, `credential` (`accessTokenId`, `label`, `teamId`, never the secret), and `statePath`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | "No saved space key found. Run `sf continue` from the published directory, or pass --claim-token." |
+| `checkout_state_conflict` | 30 | Another process changed the checkout credential mid-command. Re-run it. |
+
+## sf doctor
+
+Check local CLI state, auth, API reachability, and Space selection for the current directory.
+
+```text
+sf doctor [--space <value>] [-o <team>] [--claim-token <value>]
+```
+
+```bash
+sf doctor
+sf doctor --space docs
+```
+
+It runs these checks in order: `state`, `project-config`, `auth`, `api` (a health request against the resolved API URL), `schema`, `account`, and, when a Space is selected, `space`, `runtime`, and `publish`. Each HTTP probe gets 10 seconds.
+
+### Output
+
+```text
+ok  auth      API key available for https://api.spacefast.com.
+ok  api       API reachable: https://api.spacefast.com
+ok  account   Authenticated as dev@example.com
+```
+
+Each line is `ok` or `fail`, the check name, and what it found.
+
+`data` carries `ok`, the `checks` array, and `space`, `runtime`, `latestVersion` when a Space was checked.
+
+`sf doctor` exits `1` if any check fails. It is the one command that does not use the classified [exit codes](/cli#exit-codes).
+
+## sf docs
+
+Search the bundled docs offline: guides, CLI, API reference, and recipes.
+
+```text
+sf docs [QUERY...] [--full] [--all]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--full` | off | Include full-tier docs, everything but advanced reference. |
+| `--all` | off | Include every doc, reference tier included. |
+
+```bash
+sf docs
+sf docs rollback
+sf docs domains --full
+sf docs --all --json
+```
+
+The index ships inside the CLI, so this works with no network and no login. A multi-word query works without quoting. An exact topic slug prints the whole page instead of a result list.
+
+### Output
+
+Matching titles and summaries, or one full topic. `data` carries `query`, `tier`, `topic` (null unless the query hit a topic exactly), and `results`. `sf docs --all --json` is the whole catalog in one call, which is the fast way for an agent to find the right page.
+
+## sf map
+
+Print the machine-readable command map.
+
+```text
+sf map [--paths]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--paths` | off | Print only canonical command invocations, one per line. |
+
+```bash
+sf map --json
+sf map --paths
+```
+
+### Output
+
+Without `--paths`, one line per command with its usage and summary, and `data.commands[]` carrying `id`, `usage`, `description`, `aliases`, and `hidden` for every canonical command. With `--paths`, `data.paths[]` is a plain list of invocations, suited to shell completion or a menu.
+
+## sf feedback
+
+Send feedback to Spacefast with optional error, request, Space, or URL context.
+
+```text
+sf feedback -m <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space-id <id>] [--url <url>]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-m, --message=<value>` | required | The feedback itself. |
+| `--category=<value>` | `other` | One of `bug`, `docs`, `limit`, `idea`, `other`. |
+| `--error-code=<value>` | none | Related API error code, straight from an `{ error }` receipt. |
+| `--request-id=<value>` | none | Related API request ID, also from the receipt. |
+| `--space-id=<value>` | none | Related Space ID. |
+| `--url=<value>` | none | Related URL. |
+
+```bash
+sf feedback -m "The continuation docs are unclear" --category docs
+sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id req_123
+```
+
+Every failure receipt carries `error.code` and `error.requestId`. Passing both turns a complaint into something traceable.
+
+### Output
+
+```text
+Feedback ref: fb_0123456789abcdef
+Delivered — thanks!
+```
+
+`data` carries `ref` and `delivered`.
+
+## sf plugins
+
+Install the Spacefast plugin lane for agents that support plugins.
+
+```text
+sf plugins [--agent <agent>] [--dry-run]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--agent=<value>` | `claude-code` | Which agent to configure. `auto` detects, `all` does every one it finds. `sf plugins --help` lists every accepted name. |
+| `--dry-run` | off | Print the pinned installer command without changing any agent configuration. |
+
+```bash
+sf plugins --agent claude-code
+sf plugins --agent cursor
+sf plugins --agent codex --dry-run
+```
+
+`--dry-run` first is a good habit: it shows you the exact command that would run before anything touches your editor's configuration. For skills and MCP setup rather than the plugin lane, see [mcp, setup, skills, agents](/cli/agents).

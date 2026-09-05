@@ -1,11 +1,11 @@
 ---
 title: "event_payload_too_large"
-description: "The event payload exceeds the maximum size."
+description: "The event body is larger than the byte cap."
 ---
 
-The event payload exceeds the maximum size.
+The event body is larger than the byte cap.
 
-**How to resolve:** Send smaller batches.
+**How to resolve:** Send smaller batches so each body fits the `capBytes` in the error details.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/event_payload_too_large",
   "title": "Event payload too large",
   "status": 400,
-  "detail": "The event payload exceeds the maximum size.",
+  "detail": "The event body is larger than the byte cap.",
   "code": "event_payload_too_large",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "registration_expiring"
-description: "The domain registration is about to expire, which blocks this operation."
+description: "The domain registration expires soon."
 ---
 
-The domain registration is about to expire, which blocks this operation.
+The domain registration expires soon.
 
-**How to resolve:** Renew the domain first, then retry.
+**How to resolve:** Renew the registration, or turn auto-renew on for the domain.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/registration_expiring",
   "title": "Registration expiring",
   "status": 400,
-  "detail": "The domain registration is about to expire, which blocks this operation.",
+  "detail": "The domain registration expires soon.",
   "code": "registration_expiring",
   "requestId": "req_4mz0v8qk"
 }

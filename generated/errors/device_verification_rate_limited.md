@@ -1,11 +1,11 @@
 ---
 title: "device_verification_rate_limited"
-description: "Too many incorrect device codes were entered in a short window."
+description: "Too many device verification attempts came from this caller."
 ---
 
-Too many incorrect device codes were entered in a short window.
+Too many device verification attempts came from this caller.
 
-**How to resolve:** Wait for the lockout to pass, then enter the code exactly as your CLI shows it.
+**How to resolve:** Wait for the window in the `Retry-After` header to pass, then verify again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/device_verification_rate_limited",
   "title": "Device verification rate limited",
   "status": 400,
-  "detail": "Too many incorrect device codes were entered in a short window.",
+  "detail": "Too many device verification attempts came from this caller.",
   "code": "device_verification_rate_limited",
   "requestId": "req_4mz0v8qk"
 }

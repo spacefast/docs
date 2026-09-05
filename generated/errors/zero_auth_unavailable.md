@@ -1,11 +1,11 @@
 ---
 title: "zero_auth_unavailable"
-description: "Hosted Zero auth is not configured for this deployment."
+description: "Zero hosted auth is not configured for this Space."
 ---
 
-Hosted Zero auth is not configured for this deployment.
+Zero hosted auth is not configured for this Space.
 
-**How to resolve:** Finalize the Zero version with hosted auth URLs, or use guest or local auth.
+**How to resolve:** Set a valid `signInUrl` in the Space's Zero auth config, then publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_auth_unavailable",
   "title": "Zero auth unavailable",
   "status": 400,
-  "detail": "Hosted Zero auth is not configured for this deployment.",
+  "detail": "Zero hosted auth is not configured for this Space.",
   "code": "zero_auth_unavailable",
   "requestId": "req_4mz0v8qk"
 }

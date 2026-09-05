@@ -1,11 +1,11 @@
 ---
 title: "credential_expired"
-description: "The credential used for this request is expired."
+description: "The credential on this request is past its expiry."
 ---
 
-The credential used for this request is expired.
+The credential on this request is past its expiry.
 
-**How to resolve:** Create a new API key or sign in again.
+**How to resolve:** Run `sf login`, or create a new API key and send it in the `Authorization` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/credential_expired",
   "title": "Credential expired",
   "status": 400,
-  "detail": "The credential used for this request is expired.",
+  "detail": "The credential on this request is past its expiry.",
   "code": "credential_expired",
   "requestId": "req_4mz0v8qk"
 }

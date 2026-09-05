@@ -1,11 +1,11 @@
 ---
 title: "invalid_publish_payload"
-description: "The publish payload is malformed."
+description: "The publish request body is not shaped the way this publish mode requires."
 ---
 
-The publish payload is malformed.
+The publish request body is not shaped the way this publish mode requires.
 
-**How to resolve:** Check the request against the publish schema in the API docs.
+**How to resolve:** Send the multipart metadata part as a JSON object, and set `access` only when creating a team-owned Space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_publish_payload",
   "title": "Invalid publish payload",
   "status": 400,
-  "detail": "The publish payload is malformed.",
+  "detail": "The publish request body is not shaped the way this publish mode requires.",
   "code": "invalid_publish_payload",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "unauthorized"
-description: "The request carried no valid credential."
+description: "The request carried no usable credential."
 ---
 
-The request carried no valid credential.
+The request carried no usable credential.
 
-**How to resolve:** Send a bearer API key, use an agent OAuth client, or sign in.
+**How to resolve:** Sign in, or send an API key in the `Authorization` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/unauthorized",
   "title": "Unauthorized",
   "status": 400,
-  "detail": "The request carried no valid credential.",
+  "detail": "The request carried no usable credential.",
   "code": "unauthorized",
   "requestId": "req_4mz0v8qk"
 }

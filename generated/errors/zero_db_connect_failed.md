@@ -1,11 +1,11 @@
 ---
 title: "zero_db_connect_failed"
-description: "The Zero runner cannot connect to the configured database."
+description: "The Zero database connection could not be established."
 ---
 
-The Zero runner cannot connect to the configured database.
+The Zero database connection could not be established.
 
-**How to resolve:** Verify `DATABASE_URL` or the generated MySQL connection variables and retry.
+**How to resolve:** Retry the request. If it keeps failing, check the database the Space points at.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_connect_failed",
   "title": "Zero db connect failed",
   "status": 400,
-  "detail": "The Zero runner cannot connect to the configured database.",
+  "detail": "The Zero database connection could not be established.",
   "code": "zero_db_connect_failed",
   "requestId": "req_4mz0v8qk"
 }

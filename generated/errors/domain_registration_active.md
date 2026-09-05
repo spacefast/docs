@@ -1,11 +1,11 @@
 ---
 title: "domain_registration_active"
-description: "The domain has an active registration, which blocks this operation."
+description: "The domain's registration state blocks this action."
 ---
 
-The domain has an active registration, which blocks this operation.
+The domain's registration state blocks this action.
 
-**How to resolve:** Wait for or cancel the registration before retrying.
+**How to resolve:** Read the registration `status` in the error details and finish or cancel the registration first.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_registration_active",
   "title": "Domain registration active",
   "status": 400,
-  "detail": "The domain has an active registration, which blocks this operation.",
+  "detail": "The domain's registration state blocks this action.",
   "code": "domain_registration_active",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "invalid_claim_token"
-description: "The space key is invalid or does not match this space."
+description: "The claim token or Space key does not match the requested Space."
 ---
 
-The space key is invalid or does not match this space.
+The claim token or Space key does not match the requested Space.
 
-**How to resolve:** Use the exact space key or claim link returned by the publish that created the space.
+**How to resolve:** Send the `sfc_` Space key from the publish receipt in the `Authorization` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_claim_token",
   "title": "Invalid claim token",
   "status": 400,
-  "detail": "The space key is invalid or does not match this space.",
+  "detail": "The claim token or Space key does not match the requested Space.",
   "code": "invalid_claim_token",
   "requestId": "req_4mz0v8qk"
 }

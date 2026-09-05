@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_commit_failed"
-description: "The Zero database transaction cannot be committed."
+description: "Committing the Zero database transaction failed."
 ---
 
-The Zero database transaction cannot be committed.
+Committing the Zero database transaction failed.
 
-**How to resolve:** Retry after checking database connectivity and transaction conflicts.
+**How to resolve:** Retry the transaction.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_commit_failed",
   "title": "Zero db transaction commit failed",
   "status": 400,
-  "detail": "The Zero database transaction cannot be committed.",
+  "detail": "Committing the Zero database transaction failed.",
   "code": "zero_db_transaction_commit_failed",
   "requestId": "req_4mz0v8qk"
 }

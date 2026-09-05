@@ -1,11 +1,11 @@
 ---
 title: "config_functions_key_removed"
-description: "The sf.jsonc configuration still uses the removed top-level functions key."
+description: "The Space config still sets the retired `functions` key."
 ---
 
-The sf.jsonc configuration still uses the removed top-level functions key.
+The Space config still sets the retired `functions` key.
 
-**How to resolve:** Replace the functions block with a runtime block: set runtime.kind to "functions" and move entry, compatibilityDate, and database under it.
+**How to resolve:** Delete `functions` from `sf.jsonc` and declare the server code under `runtime` instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_functions_key_removed",
   "title": "Config functions key removed",
   "status": 400,
-  "detail": "The sf.jsonc configuration still uses the removed top-level functions key.",
+  "detail": "The Space config still sets the retired `functions` key.",
   "code": "config_functions_key_removed",
   "requestId": "req_4mz0v8qk"
 }

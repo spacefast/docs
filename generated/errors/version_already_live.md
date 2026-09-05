@@ -1,11 +1,11 @@
 ---
 title: "version_already_live"
-description: "The version is already live on this channel."
+description: "The version is already the live one on this channel."
 ---
 
-The version is already live on this channel.
+The version is already the live one on this channel.
 
-**How to resolve:** No action is needed.
+**How to resolve:** Skip the promotion, or promote a different version.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_already_live",
   "title": "Version already live",
   "status": 400,
-  "detail": "The version is already live on this channel.",
+  "detail": "The version is already the live one on this channel.",
   "code": "version_already_live",
   "requestId": "req_4mz0v8qk"
 }

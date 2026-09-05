@@ -1,11 +1,11 @@
 ---
 title: "dns_import_partial_visibility"
-description: "The DNS import cannot see the full zone, so importing would lose records."
+description: "The DNS import could observe only part of the zone."
 ---
 
-The DNS import cannot see the full zone, so importing would lose records.
+The DNS import could observe only part of the zone.
 
-**How to resolve:** Verify delegation. Once the full zone is visible, retry the import.
+**How to resolve:** Re-create records on other names, DNSSEC material, and proprietary record types by hand before switching nameservers.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_import_partial_visibility",
   "title": "Dns import partial visibility",
   "status": 400,
-  "detail": "The DNS import cannot see the full zone, so importing would lose records.",
+  "detail": "The DNS import could observe only part of the zone.",
   "code": "dns_import_partial_visibility",
   "requestId": "req_4mz0v8qk"
 }

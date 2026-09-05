@@ -1,11 +1,11 @@
 ---
 title: "provider_site_id_required"
-description: "A provider site id is required for this internal operation."
+description: "The request did not carry a WP Cloud provider site ID."
 ---
 
-A provider site id is required for this internal operation.
+The request did not carry a WP Cloud provider site ID.
 
-**How to resolve:** Pass the provider site id.
+**How to resolve:** Send a non-empty provider site ID in the route path.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_site_id_required",
   "title": "Provider site id required",
   "status": 400,
-  "detail": "A provider site id is required for this internal operation.",
+  "detail": "The request did not carry a WP Cloud provider site ID.",
   "code": "provider_site_id_required",
   "requestId": "req_4mz0v8qk"
 }

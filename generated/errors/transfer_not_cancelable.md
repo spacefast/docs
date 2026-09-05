@@ -5,7 +5,7 @@ description: "The transfer is past the point where it can be canceled."
 
 The transfer is past the point where it can be canceled.
 
-**How to resolve:** Wait for the transfer to finish.
+**How to resolve:** Let the transfer finish, then transfer the Space back.
 
 <div data-pagefind-ignore>
 

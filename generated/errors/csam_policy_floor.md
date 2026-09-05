@@ -1,11 +1,11 @@
 ---
 title: "csam_policy_floor"
-description: "CSAM enforcement policy cannot be set below the mandatory account-suspend floor."
+description: "A CSAM enforcement policy was set below the tier the policy floor requires."
 ---
 
-CSAM enforcement policy cannot be set below the mandatory account-suspend floor.
+A CSAM enforcement policy was set below the tier the policy floor requires.
 
-**How to resolve:** Set the CSAM category enforcement tier to account suspension.
+**How to resolve:** Set the `csam` category's `tier` to the `floor` value in the error details.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/csam_policy_floor",
   "title": "Csam policy floor",
   "status": 400,
-  "detail": "CSAM enforcement policy cannot be set below the mandatory account-suspend floor.",
+  "detail": "A CSAM enforcement policy was set below the tier the policy floor requires.",
   "code": "csam_policy_floor",
   "requestId": "req_4mz0v8qk"
 }

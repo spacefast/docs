@@ -1,0 +1,226 @@
+---
+title: Access and sharing
+description: Make a Space public, hand out scoped share links or a password, invite people, and revoke any of it
+sidebar: { order: 5 }
+---
+
+After this page you can decide who opens a Space, hand out a link or a password scoped to part of it, and take any of that access back.
+
+## Access is a list, not a switch
+
+A Space has no public or private flag. Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A visitor is admitted when at least one grant matches. Removing every grant makes a Space private, because nothing admits anyone.
+
+That model is why a Space can be public at `/docs/**` and closed everywhere else, and why revoking a share link takes effect on the next request rather than at the next publish.
+
+The dashboard puts the three common shapes behind one control, and the CLI and API let you write any grant you want.
+
+| Audience | Who it admits |
+| --- | --- |
+| `public` | Anyone on the web |
+| `team` | Every member of the owning team |
+| `person` | One invited person, by email |
+| `link` | Whoever holds a share link |
+| `password` | Whoever knows a password |
+| `machine` | Whatever holds a bearer token |
+| `external` | An identity from a connected SSO or signer connection |
+
+## Roles
+
+A role is a named bundle of capabilities. Every grant carries one.
+
+| Role | Can |
+| --- | --- |
+| `viewer` | View pages |
+| `commenter` | View, read comments, write comments |
+| `editor` | The above, plus publish |
+| `manager` | The above, plus manage access |
+
+Share links and passwords are forwardable secrets, so they cap at `viewer` or `commenter`. Neither can be given `manage`.
+
+## In the dashboard
+
+Open the Space and go to **Access**. The page header reads "Decide who can open this space."
+
+The **General access** card holds a segmented control with three options:
+
+| Option | What it does |
+| --- | --- |
+| **Private** | "Only people listed below can open it." |
+| **Share link** | "The share link is the key. Anyone who has it can open it, no account needed." |
+| **Public** | "Anyone on the web can open it." |
+
+A second control, **What visitors can do**, sets the role that option grants. Everything else on the page is a card of its own: **People**, **Share link**, **Password**, **Machine credentials**, **Access requests**, **Path rules**, and **SSO and identity**. Anything more specific than the three-way control lives under the **Advanced** disclosure, and a Space with path-scoped rules shows the hint "Some paths have their own rules. See Advanced."
+
+## Make a Space public
+
+```bash
+sf share grant --to public --role viewer --path '/**' --space my-site
+```
+
+Scope it instead of opening everything:
+
+```bash
+sf share grant --to public --role viewer --path '/docs/**' --exclude '/docs/internal/**' --space my-site
+```
+
+`--to team` does the same for the owning team. Patterns use `*` for one segment and `**` for zero or more. A grant takes up to 100 include patterns and 100 excludes.
+
+A public grant cannot carry publish or manage capabilities.
+
+## Share links
+
+A share link is a durable URL that opens exactly the paths you scoped it to, with no account needed. The secret rides in the query string, so the link is the page:
+
+```text
+https://my-site.view.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+One request returns that document. There is no redirect and no interstitial, so `curl`, an agent, and a browser all get the same page.
+
+### Create one
+
+```bash
+sf share link create \
+  --space my-site \
+  --name "Client review" \
+  --landing /docs \
+  --path '/docs/**' \
+  --path '/assets/**' \
+  --exclude '/docs/internal/**' \
+  --role commenter \
+  --expires 7d
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name` | required | The name shown in the links list |
+| `--landing` | `/` | The clean route the link opens at. It has to be inside the link's paths |
+| `--path` | `/**` | An included pattern. Repeat for disjoint subtrees |
+| `--exclude` | none | An excluded pattern, local to this link |
+| `--role` | `commenter` | `viewer` or `commenter` |
+| `--target` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
+| `--not-before` | none | Do not admit anyone before this timestamp |
+| `--expires` | never | A duration such as `30m`, `24h`, `7d` |
+| `--max-uses` | unlimited | Successful opens before the link stops working, 1 to 1,000,000 |
+| `--require-verified-email` | off | Admit only visitors whose session has a verified email |
+| `--network` | none | An allowed IP address or CIDR. Repeatable |
+| `--country` / `--exclude-country` | none | Allowed or blocked ISO country codes |
+| `--exclude-user-agent` | none | Block user agents containing this text |
+
+In the dashboard, the **Share link** card's **Create share link** button opens a sheet with the same fields, labelled **Name**, **What link holders can do**, **What the link opens**, **Opens at**, **Paths**, **Starts**, **Expires**, **Maximum opens**, and a **Require a verified email** toggle.
+
+### List, copy, revoke
+
+```bash
+sf share link ls --space my-site
+sf share link copy lnk_xxxxxxxx --space my-site --show-secret
+sf share link revoke lnk_xxxxxxxx --space my-site
+```
+
+List reads never carry the secret. The URL is returned only to callers who may manage the Space's access, and `--show-secret` is what prints it in a non-interactive shell.
+
+Revoking drops the grant in the same write, so every outstanding copy of the URL stops working on the next request. The dashboard confirms with "Anyone using this link will immediately lose access."
+
+`sf share link edit` changes a link's scope, role, target and constraints without rotating its URL, so a link you already sent can be narrowed rather than replaced.
+
+A Space that has not been claimed yet may keep up to 50 active links, and further creates return `anonymous_share_link_limit`.
+
+## Passwords
+
+A password is a separate audience with its own scope, not a lock on the whole Space. Several named passwords can coexist, each covering different paths.
+
+```bash
+sf share password create \
+  --space my-site \
+  --name "Beta testers" \
+  --path '/**' \
+  --role viewer \
+  --password-from-stdin
+```
+
+Pass the value on stdin, or through `SPACEFAST_SHARE_PASSWORD`. It never goes into `sf.jsonc`. The verifier is Argon2id.
+
+```bash
+sf share password ls --space my-site
+sf share password rotate pwd_xxxxxxxx --space my-site --password-from-stdin
+sf share password revoke pwd_xxxxxxxx --space my-site
+```
+
+Rotating keeps the grant and its scope, and immediately signs out sessions that used the old password. Revoking removes the grant, so those sessions lose access too.
+
+The dashboard's **Password** card carries **Set password**, **Change** and **Remove**, with **Expires**, **Paths** and **What password holders can do** under **Password options**. It manages one password; the card's own footnote points at the CLI and API for more.
+
+## Inviting people
+
+```bash
+sf share people invite person@example.com --space my-site --role commenter --scope /docs
+sf share people ls --space my-site
+sf share people remove person@example.com --space my-site
+```
+
+`--scope` defaults to `/` and is repeatable, so one invitation can grant the same role on several subtrees. `--target` picks what they get, defaulting to `live`.
+
+In the dashboard, the **People** card takes an email, a **What they can do** role, and a **What they get access to** scope. Pending rows show **Invitation pending** with **Resend** and **Remove** actions.
+
+A person can hold up to 32 scoped grants on one Space, so one collaborator can have different roles on different subtrees.
+
+## Machine credentials
+
+For a script or a job, issue a bearer token rather than sharing a link:
+
+```bash
+sf share token create --space my-site --name "Nightly export" --path '/exports/**'
+sf share token ls --space my-site
+sf share token rotate mch_xxxxxxxx --space my-site
+sf share token revoke mch_xxxxxxxx --space my-site
+```
+
+The token is shown once, right after creation. The dashboard says it plainly: "Copy it now. It won't be shown again." Rotating keeps the grant and its scope and invalidates the old token immediately.
+
+## Access requests
+
+A visitor who lands on a Space they cannot open can ask for access. Requests show up in the **Access requests** card and in the CLI:
+
+```bash
+sf share request ls --space my-site
+sf share request approve arq_xxxxxxxx --space my-site
+sf share request deny arq_xxxxxxxx --space my-site
+```
+
+Approving invites the requester to the path they asked about.
+
+## What a visitor sees
+
+**On a public Space**, the page loads. No access code runs at all.
+
+**With a share link**, the link is the page. The token is redeemed before anything is read from disk, so the first request returns the document. The response is never stored in any cache, and it carries `Referrer-Policy: no-referrer` so the secret does not leak through the referrer header on outbound clicks.
+
+**On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page offers whichever lanes you configured: a password box, an email code, a request-access form, or a sign-in with a Spacefast account.
+
+**Signing in** sends the visitor to Spacefast, then back. The path they originally asked for is carried through the round trip, so they land on the page they wanted rather than the homepage.
+
+**Submitting a password** posts it from the same origin, checks it against the platform rather than anything on the box, and on success sets the visitor's session cookie and sends a **303** back to where they were. Passwords are capped at 1024 bytes. Failures come back as rate limited, invalid password, or exchange unavailable.
+
+A visitor session is idle-expiring after 7 days and absolutely expiring after 30 days.
+
+Two behaviors are worth knowing because they look like bugs and are not. A rewrite cannot widen access: both the URL the visitor asked for and the path it rewrote to have to be admitted. And a directory listing on a protected Space silently omits the rows that visitor cannot reach, rather than showing them and challenging.
+
+## Revoking everything at once
+
+```bash
+sf access logout-all --space my-site
+```
+
+This ends every active visitor session on the Space, whatever admitted them: share link, password, private open, or signed-in account. It takes effect immediately, without a republish. Grants themselves are untouched, so anyone still holding a valid link or password can open the Space again on their next visit. Revoke the grant when you want the credential itself dead.
+
+## Defaults for new Spaces
+
+A team decides what its new Spaces start as. In the dashboard, open team settings and go to **Access**, headed "Choose how new spaces on this team start."
+
+| Preset | New Spaces start with |
+| --- | --- |
+| `private` | No grant at all |
+| `team` | A grant admitting the owning team to view and comment on everything |
+| `public` | A grant admitting the whole web to view and comment on everything |
+
+The default is `team`. Changing it applies only to Spaces created after the change.

@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_websocket_forbidden"
-description: "The Zero realtime websocket credential is invalid."
+description: "The realtime WebSocket handshake was refused."
 ---
 
-The Zero realtime websocket credential is invalid.
+The realtime WebSocket handshake was refused.
 
-**How to resolve:** Send the configured realtime client token by query, header, bearer token, or websocket subprotocol.
+**How to resolve:** Connect with a valid realtime credential for this Space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_websocket_forbidden",
   "title": "Zero realtime websocket forbidden",
   "status": 400,
-  "detail": "The Zero realtime websocket credential is invalid.",
+  "detail": "The realtime WebSocket handshake was refused.",
   "code": "zero_realtime_websocket_forbidden",
   "requestId": "req_4mz0v8qk"
 }

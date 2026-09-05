@@ -1,11 +1,11 @@
 ---
 title: "invalid_device_code"
-description: "The device code is invalid or expired."
+description: "The device code is unknown to the authorization server."
 ---
 
-The device code is invalid or expired.
+The device code is unknown to the authorization server.
 
-**How to resolve:** Start a new device login flow.
+**How to resolve:** Run `sf login` again to start a new device flow.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_device_code",
   "title": "Invalid device code",
   "status": 400,
-  "detail": "The device code is invalid or expired.",
+  "detail": "The device code is unknown to the authorization server.",
   "code": "invalid_device_code",
   "requestId": "req_4mz0v8qk"
 }

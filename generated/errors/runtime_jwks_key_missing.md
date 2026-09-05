@@ -1,11 +1,11 @@
 ---
 title: "runtime_jwks_key_missing"
-description: "No signing key matching the token's key id was found."
+description: "The signing key the runtime token names is not in the published key set."
 ---
 
-No signing key matching the token's key id was found.
+The signing key the runtime token names is not in the published key set.
 
-**How to resolve:** Refresh the runtime JWKS to load the current signing keys.
+**How to resolve:** Mint the token with a key the JWKS endpoint publishes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_jwks_key_missing",
   "title": "Runtime jwks key missing",
   "status": 400,
-  "detail": "No signing key matching the token's key id was found.",
+  "detail": "The signing key the runtime token names is not in the published key set.",
   "code": "runtime_jwks_key_missing",
   "requestId": "req_4mz0v8qk"
 }

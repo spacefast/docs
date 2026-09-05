@@ -1,11 +1,11 @@
 ---
 title: "superseded_by_publish"
-description: "A newer publish superseded this operation, so it was skipped."
+description: "A newer publish replaced the version this request targets."
 ---
 
-A newer publish superseded this operation, so it was skipped.
+A newer publish replaced the version this request targets.
 
-**How to resolve:** No action is needed. The newer publish already carries the change.
+**How to resolve:** Act on the current live version instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/superseded_by_publish",
   "title": "Superseded by publish",
   "status": 400,
-  "detail": "A newer publish superseded this operation, so it was skipped.",
+  "detail": "A newer publish replaced the version this request targets.",
   "code": "superseded_by_publish",
   "requestId": "req_4mz0v8qk"
 }

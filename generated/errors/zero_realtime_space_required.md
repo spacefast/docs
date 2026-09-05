@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_space_required"
-description: "The Zero realtime request does not identify a space."
+description: "The realtime connection did not name a Space."
 ---
 
-The Zero realtime request does not identify a space.
+The realtime connection did not name a Space.
 
-**How to resolve:** Use a `/spaces/{spaceId}` realtime URL or include a valid `spaceId` query parameter.
+**How to resolve:** Include the Space in the realtime connection request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_space_required",
   "title": "Zero realtime space required",
   "status": 400,
-  "detail": "The Zero realtime request does not identify a space.",
+  "detail": "The realtime connection did not name a Space.",
   "code": "zero_realtime_space_required",
   "requestId": "req_4mz0v8qk"
 }

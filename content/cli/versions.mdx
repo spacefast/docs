@@ -1,0 +1,367 @@
+---
+title: sf versions, promote, and rollback
+description: List and inspect versions, move the live channel with promote and rollback, retry the last build, and set a channel's promotion policy
+sidebar:
+  order: 4
+---
+
+After this page you can find any version a Space has published, move live traffic to it, roll back after a bad publish, delete a version you no longer want served, and switch the live channel between automatic and promote-driven deploys.
+
+Every publish creates one immutable version. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer; they never rebuild anything. See [Versions](/versions) for the model.
+
+## sf versions ls
+
+List space versions. Alias: `sf versions list`.
+
+```text
+sf versions ls
+```
+
+Lists versions newest first, marking the live one and any still publishing.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--commit=<value>` | none | Only versions published from this commit. Full 40-character SHA; short SHAs are rejected |
+
+### Examples
+
+```bash
+sf versions ls
+sf versions ls --space docs
+sf versions ls --commit $(git rev-parse HEAD)
+```
+
+### Output
+
+The Space summary, then one block per version:
+
+```text
+* v13 (live) status=ready source=git@a1b2c3d4e5f6a7b8 mode=website
+    version url: https://v13--docs.view.fast
+    updated: 2026-06-02T00:00:00.000Z
+  v12 status=ready source=direct_upload mode=website
+    version url: https://v12--docs.view.fast
+    updated: 2026-06-01T00:00:00.000Z
+```
+
+`*` marks the live version, `>` marks one still deploying. `--json` returns `{ space, runtime, versions }`, where each version carries `id`, `ref`, `number`, `status`, `source`, `immutableUrl`, `isCurrentProduction`, `manifestHash`, `fileCount`, `totalBytes`, and `diagnostics`.
+
+Version statuses are `created`, `uploading`, `uploaded`, `finalizing`, `ready`, and the terminal `failed`, `canceled`, `expired`. `ref` and `number` are null until the version is ready.
+
+## sf versions get
+
+Show a version.
+
+```text
+sf versions get [VERSION]
+```
+
+Shows one version's status, source, version URL, diagnostics, and failure details.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[version]` | live version | Version ID, ref, or number, for example `ver_123`, `v12`, or `12` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Examples
+
+```bash
+sf versions get v12
+sf versions get ver_123 --space docs --json
+```
+
+## sf versions rm
+
+Delete a version. Aliases: `sf versions remove`, `sf versions delete`.
+
+```text
+sf versions rm [VERSION]
+```
+
+Deletes a version and purges its files. Its version URL then serves a tombstone. A version a channel points at cannot be deleted; promote another version first.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[version]` | prompted | Version ID, ref, or number |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Examples
+
+```bash
+sf versions rm v12
+sf versions rm ver_123 --space docs --yes
+```
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `version_in_use` | 30 | Promote another version to the channel first, then delete this one |
+| `confirmation_required` | 2 | Non-interactive run without `--yes`. Pass `--yes` |
+| `cancelled` | 130 | You declined the prompt |
+
+## sf promote
+
+Promote a version to a channel.
+
+```text
+sf promote [VERSION]
+```
+
+Points the channel at an existing ready version. Use `sf rollback` to go backwards instead. Promote is not treated as destructive, so agents and CI can run it without an extra acknowledgement.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[version]` | required | Version ID, ref, or number to make live, for example `ver_123`, `v12`, or `12` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--channel=<value>` | `live` | Channel to point at this version |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
+
+### Examples
+
+```bash
+sf promote v12
+sf promote v12 --channel live
+sf promote ver_123 --no-wait --json
+```
+
+### Output
+
+With `--wait`, the Space summary and the version summary once the pointer has moved. With `--no-wait`:
+
+```text
+Promotion queued for v12.
+Operation: op_… (queued)
+```
+
+Promoting the version that is already live short-circuits and prints `Already live`.
+
+`--json` returns `{ space, version, runtime, operation, promoted, alreadyLive }`. `promoted` is `false` when the work is still queued, and `operation` carries `id`, `kind`, `status`, `resources`, `diagnostics`, and `progress`.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `channel_unsupported` | 2 | Only the `live` channel exists today. Use `live` |
+| `validation_error` | 2 | No version given. Name one, `sf versions ls` lists them |
+| `timeout_error` | 50 | The wait budget elapsed. Re-run with `--no-wait` and poll the operation |
+
+## sf rollback
+
+Roll back to a previous version.
+
+```text
+sf rollback [VERSION]
+```
+
+Rolls live traffic back to an existing ready version. Same mechanism as promote, different intent, and unlike promote it is treated as destructive: a non-interactive run needs an explicit `--yes` before the channel moves.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[version]` | required | Version ID, ref, or number to make live |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--channel=<value>` | `live` | Channel to point at this version |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
+
+### Examples
+
+```bash
+sf versions ls              # find the version to roll back to
+sf rollback v12
+sf rollback 12 --space docs
+```
+
+### Output
+
+Same shape as `sf promote`. With `--no-wait` the headline reads `Rollback queued for v12.`
+
+## sf redeploy
+
+Retry the latest build. Does the same work as `sf builds retry`.
+
+```text
+sf redeploy [BUILD]
+```
+
+Retries a terminal build with the same input, settings, and target. Without a build ID it retries the Space's most recent build.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[build]` | most recent build | Build ID (`bld_…`) to retry |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Examples
+
+```bash
+sf redeploy
+sf redeploy bld_123
+```
+
+### Output
+
+`Retry queued: bld_…` and the build block. `--json` returns `{ build, upload }`. See [`sf builds`](/cli/builds) for the fields.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `no_builds_found` | 20 | The Space has never built. Run `sf publish --remote` or `sf build` first |
+| `build_not_terminal` | 30 | The latest build is still running. Follow it with `sf builds logs <id> --follow`, or cancel it |
+
+## sf channels ls
+
+List channels. Alias: `sf channels list`.
+
+```text
+sf channels ls
+```
+
+Lists a Space's channels and where each one points.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Example
+
+```bash
+sf channels ls --space docs
+```
+
+### Output
+
+A table of `CHANNEL`, `PROMOTION`, `CURRENT`, `PREVIOUS`, `URL`, `UPDATED`. `--json` returns the channel list as `data`.
+
+## sf channels set
+
+Set a channel's promotion policy.
+
+```text
+sf channels set NAME --promotion auto|manual
+```
+
+The policy decides what goes live without you asking. Promoting a version by hand always works, whichever policy is set.
+
+- `auto`: publishes and green builds go live.
+- `manual`: publishes and green builds stay ready until you promote them.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<name>` | required | Channel name. `live` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--promotion=auto\|manual` | required | Promotion policy for the channel |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Examples
+
+```bash
+sf channels set live --promotion manual --space dashboard
+sf channels set live --promotion auto
+```
+
+### Output
+
+```text
+live promotion → manual
+Publishes and green builds stay ready until you promote them.
+```
+
+A publish held by a `manual` policy reports the hold in its receipt: `activation.outcome` is `unpromoted` and the human headline reads `Held`, not `Published`.
+
+## sf channels history
+
+Show channel history.
+
+```text
+sf channels history [NAME]
+```
+
+Shows what this channel has gone live with, newest first.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[name]` | `live` | Channel name |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Example
+
+```bash
+sf channels history --space docs
+```
+
+### Output
+
+A table of `VERSION`, `PREVIOUS`, `ACTOR`, `ACTOR ID`, `AT`. An empty channel prints `No promotions found for channel "live".`

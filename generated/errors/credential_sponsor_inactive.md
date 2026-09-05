@@ -1,11 +1,11 @@
 ---
 title: "credential_sponsor_inactive"
-description: "The person who authorized this machine credential is no longer an active member of the team it acts for."
+description: "The person who authorized this machine credential is not an active team member."
 ---
 
-The person who authorized this machine credential is no longer an active member of the team it acts for.
+The person who authorized this machine credential is not an active team member.
 
-**How to resolve:** A team admin must re-authorize the credential, or point it at a live member, before it works again.
+**How to resolve:** Ask a team admin to re-authorize the machine credential.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/credential_sponsor_inactive",
   "title": "Credential sponsor inactive",
   "status": 400,
-  "detail": "The person who authorized this machine credential is no longer an active member of the team it acts for.",
+  "detail": "The person who authorized this machine credential is not an active team member.",
   "code": "credential_sponsor_inactive",
   "requestId": "req_4mz0v8qk"
 }

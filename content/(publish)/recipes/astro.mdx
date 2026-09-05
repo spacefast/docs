@@ -1,0 +1,61 @@
+---
+title: Astro
+description: Build an Astro site and publish dist, with the optional integration that compiles _redirects and _headers
+---
+
+Astro is detected by its `astro` dependency, or by an `astro.config` file in `.mjs`, `.js`, `.ts`, `.cjs`, `.mts`, or `.cts`.
+
+## What to build
+
+The default `astro build`. Spacefast uses that command when your `package.json` has no `build` script of its own.
+
+## The output directory
+
+`dist`.
+
+## Publish
+
+```bash
+sf publish
+```
+
+That detects Astro, installs, runs the build, and uploads `dist`. If you would rather build yourself:
+
+```bash
+npm run build
+sf publish ./dist --prebuilt
+```
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Live URL      https://quiet-harbor.view.fast
+  Version URL   https://v2--quiet-harbor.view.fast
+  Version       v2 (ready)
+  Files         64
+```
+
+Only changed files upload. The second publish of the same site sends the handful of bytes that moved.
+
+## Routing files
+
+`@spacefast/astro` is optional. Add it when you keep `_redirects` or `_headers` in the project and want them checked and served in `astro dev` instead of discovered in production.
+
+```js astro.config.mjs
+import { defineConfig } from "astro/config";
+import spacefastAstro from "@spacefast/astro";
+
+export default defineConfig({
+  integrations: [spacefastAstro()],
+});
+```
+
+## The gotcha
+
+The integration's `failOnRoutingError` defaults to `true`. A malformed line in `_redirects` or `_headers` stops `astro build` with an error rather than shipping a site whose routing quietly does nothing. That is the point of it, but it does mean adding the integration can break a build that used to pass. Set `failOnRoutingError: false` to downgrade it to a log line while you fix the file.
+
+The integration needs Astro 6 or newer. Everything else on this page works on any Astro version, because publishing `dist` is a file upload.
+
+More on both integrations, including the server-rendered one at `@spacefast/astro/adapter`, is on [Frameworks and builds](/frameworks).

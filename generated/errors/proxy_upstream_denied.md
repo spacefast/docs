@@ -1,11 +1,11 @@
 ---
 title: "proxy_upstream_denied"
-description: "The proxy upstream is on a denied network and cannot be used."
+description: "A proxy rule points at a hostname that cannot be used as an upstream."
 ---
 
-The proxy upstream is on a denied network and cannot be used.
+A proxy rule points at a hostname that cannot be used as an upstream.
 
-**How to resolve:** Proxy only to public HTTPS upstreams. Spacefast blocks private and internal addresses.
+**How to resolve:** Use a public HTTP or HTTPS origin; Spacefast serving and infrastructure hostnames are not valid upstreams.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/proxy_upstream_denied",
   "title": "Proxy upstream denied",
   "status": 400,
-  "detail": "The proxy upstream is on a denied network and cannot be used.",
+  "detail": "A proxy rule points at a hostname that cannot be used as an upstream.",
   "code": "proxy_upstream_denied",
   "requestId": "req_4mz0v8qk"
 }

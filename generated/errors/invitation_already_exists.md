@@ -1,11 +1,11 @@
 ---
 title: "invitation_already_exists"
-description: "An invitation for this email already exists on the team."
+description: "That address already has a pending invitation to this team."
 ---
 
-An invitation for this email already exists on the team.
+That address already has a pending invitation to this team.
 
-**How to resolve:** Resend the existing invitation instead of creating a new one.
+**How to resolve:** Resend or cancel the pending invitation instead of creating a second one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invitation_already_exists",
   "title": "Invitation already exists",
   "status": 400,
-  "detail": "An invitation for this email already exists on the team.",
+  "detail": "That address already has a pending invitation to this team.",
   "code": "invitation_already_exists",
   "requestId": "req_4mz0v8qk"
 }

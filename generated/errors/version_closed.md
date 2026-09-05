@@ -1,11 +1,11 @@
 ---
 title: "version_closed"
-description: "The version's upload session is closed. No more files can be added."
+description: "The version is past the state where it accepts uploads or refreshed instructions."
 ---
 
-The version's upload session is closed. No more files can be added.
+The version is past the state where it accepts uploads or refreshed instructions.
 
-**How to resolve:** Start a new version for additional changes.
+**How to resolve:** Start a new publish; bytes already committed can be re-declared for free.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_closed",
   "title": "Version closed",
   "status": 400,
-  "detail": "The version's upload session is closed. No more files can be added.",
+  "detail": "The version is past the state where it accepts uploads or refreshed instructions.",
   "code": "version_closed",
   "requestId": "req_4mz0v8qk"
 }

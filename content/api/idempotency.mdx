@@ -1,0 +1,108 @@
+---
+title: Idempotency
+description: Send Idempotency-Key on any POST to make it safe to retry, with 24-hour replay, conflict rules, and the anonymous publish principal
+sidebar:
+  order: 6
+---
+
+A dropped connection on a publish should not create two versions. After this page you can retry any `POST` and know exactly which of the two possible answers you will get: the original result replayed, or a conflict telling you the first attempt is still running.
+
+## Send a key
+
+<CodeGroup>
+
+```bash curl
+curl -sS -X POST https://api.spacefast.com/v1/publish \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Idempotency-Key: 01J8ZQ7WYX3M4N5P6R7S8T9V0W" \
+  -H "Content-Type: application/json" \
+  -d '{"spaceId":"spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c","files":[{"path":"index.html","size":128}]}'
+```
+
+```ts SDK
+const receipt = await client.post("/v1/publish", {
+  body: { spaceId, files },
+  idempotencyKey: "01J8ZQ7WYX3M4N5P6R7S8T9V0W",
+});
+```
+
+</CodeGroup>
+
+Every `POST` honours the header, not only the ones that document it. Generate one key per logical attempt, a UUID or ULID, and reuse it for every retry of that attempt.
+
+| Property | Value |
+| --- | --- |
+| Header | `Idempotency-Key` |
+| Methods | `POST` only |
+| Maximum length | 255 characters |
+| Retention | 24 hours |
+| Scope | Your tenant, your credential, and the exact `METHOD path` |
+
+:::warning[A key over 255 characters is ignored, not rejected]
+The request runs normally and non-idempotently, and you get no error saying so. Keep keys short.
+:::
+
+## What a retry returns
+
+**The first attempt finished.** The server replays the stored status, headers, and body, and adds `Idempotency-Replayed: true`. Nothing executes a second time.
+
+**The first attempt is still in flight.** You get `409 idempotency_conflict_in_progress`. This is not a failure. Wait and ask again with the same key until it resolves into the stored response.
+
+**You changed the body.** You get `409 idempotency_key_reused`. One key means one request payload.
+
+## What is not stored
+
+Some outcomes deliberately release the key so the next attempt actually re-executes.
+
+| Outcome | Behaviour |
+| --- | --- |
+| `5xx` or `429` | Not cached. The key is released, so a retry runs again. Caching a 500 would poison the operation for the whole 24-hour window. |
+| Deterministic `4xx` | Cached and replayed. Sending the same bytes would earn the same rejection anyway. |
+| Response larger than 4 MiB | The key is released and the response is returned unstored. |
+
+Two header rules on a replay. `content-length`, `transfer-encoding`, `RateLimit-*`, and `Retry-After` are never replayed, because the live request has real values for those. `set-cookie` is never stored at all. Stored bodies are encrypted at rest.
+
+## Scope, in detail
+
+A key is scoped so two callers cannot collide, and so one caller's retry always finds its own record:
+
+- An API key scopes by key id.
+- A signed-in session scopes by user id, which stays stable across a re-login.
+- A credential-free caller scopes by a principal it supplies itself. See below.
+
+Because the scope includes `METHOD path`, the same key value on `POST /v1/publish` and on a finalize are two independent records.
+
+## Anonymous publishing needs a principal
+
+`POST /v1/publish` accepts no credential at all, which leaves nothing to scope a key by. If you send an `Idempotency-Key` on a credential-free publish, you must also send:
+
+```http
+X-Spacefast-Idempotency-Principal: 3f9a1c7e5b2d8a4f6c0e2b8d1a5f7c3e9b4d6a0f2c8e1b5d7a3f9c4e6b0d2a8f
+```
+
+Exactly 64 hexadecimal characters, stable across every retry of that attempt, and known only to you. Without it the request fails:
+
+```json
+{
+  "status": 400,
+  "code": "invalid_idempotency_key",
+  "detail": "Anonymous publish retries require X-Spacefast-Idempotency-Principal with 64 hexadecimal characters."
+}
+```
+
+The header is a secret, not an identifier. An anonymous publish receipt contains one-time claim and upload credentials, and the principal is what stops another anonymous caller from replaying your receipt out of a shared scope. Generate 32 random bytes per attempt and hex-encode them.
+
+## Where it matters most
+
+Four operations document the header because a duplicate is expensive:
+
+| Operation | Why |
+| --- | --- |
+| `POST /v1/publish` | A retry without a key can create a second Space or a second version. |
+| `POST /v1/spaces/{spaceId}/builds` | A retry can queue a second build. Required when the build is triggered from managed source. |
+| `POST /v1/spaces/{spaceId}/versions/{versionId}/finalize` | Finalize waits by default, so a client timeout is exactly when you want to retry. |
+| `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` | A retry can move a channel twice. |
+
+## From the SDK
+
+Passing `idempotencyKey` also makes the call eligible for the retry policy in the SDK, which otherwise only retries `GET`, `HEAD`, and `OPTIONS`. The transport treats a `409 idempotency_conflict_in_progress` answering your own key as "still running, ask again" and keeps polling into the stored response. See [the SDK page](/api/sdk).

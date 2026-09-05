@@ -1,11 +1,11 @@
 ---
 title: "domain_quota_exceeded"
-description: "Adding this domain would exceed the plan's external domain allowance."
+description: "The team reached its plan's cap on custom domains."
 ---
 
-Adding this domain would exceed the plan's external domain allowance.
+The team reached its plan's cap on custom domains.
 
-**How to resolve:** Remove unused domains. If you are still stuck, POST /v1/feedback with the error code and requestId.
+**How to resolve:** Delete a custom domain to free a slot, or move the team to a plan with a higher cap.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_quota_exceeded",
   "title": "Domain quota exceeded",
   "status": 400,
-  "detail": "Adding this domain would exceed the plan's external domain allowance.",
+  "detail": "The team reached its plan's cap on custom domains.",
   "code": "domain_quota_exceeded",
   "requestId": "req_4mz0v8qk"
 }

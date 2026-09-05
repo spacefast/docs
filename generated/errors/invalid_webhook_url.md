@@ -1,11 +1,11 @@
 ---
 title: "invalid_webhook_url"
-description: "The webhook URL is not an allowed public HTTPS endpoint."
+description: "The webhook endpoint URL is malformed or is not HTTPS."
 ---
 
-The webhook URL is not an allowed public HTTPS endpoint.
+The webhook endpoint URL is malformed or is not HTTPS.
 
-**How to resolve:** Use a public HTTPS URL. Private networks and link-local addresses are blocked.
+**How to resolve:** Send an absolute `https://` URL as the webhook endpoint.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_webhook_url",
   "title": "Invalid webhook url",
   "status": 400,
-  "detail": "The webhook URL is not an allowed public HTTPS endpoint.",
+  "detail": "The webhook endpoint URL is malformed or is not HTTPS.",
   "code": "invalid_webhook_url",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,6 +5,46 @@ description: "Release history for @spacefast/zero on npm."
 
 Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- @spacefast/common@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/common@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- @spacefast/common@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -66,7 +106,7 @@ _No noted changes in this release._
 #### Patch Changes
 
 - Run Lakebed 0.0.29 core capsules without import rewrites through Spacefast Zero, including actions, runtime-backed object storage, declared indexes, and the database v1 query API.
-- Make Zero generally available on eligible dedicated-runtime plans, including local development, hosted execution, and Cast-backed realtime updates.
+- Make Zero generally available on every plan, including local development, hosted execution, and Cast-backed realtime updates.
 
 ## 0.0.13
 
@@ -99,4 +139,3 @@ _No noted changes in this release._
 ## 0.0.6
 
 _No noted changes in this release._
-

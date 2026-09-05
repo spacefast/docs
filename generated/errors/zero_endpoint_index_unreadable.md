@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_index_unreadable"
-description: "The Zero endpoint index cannot be read."
+description: "The Zero endpoint index could not be read from the version."
 ---
 
-The Zero endpoint index cannot be read.
+The Zero endpoint index could not be read from the version.
 
-**How to resolve:** Verify the version finalized with `zero/endpoints-index.json` present.
+**How to resolve:** Publish the version again so the index is re-uploaded.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_index_unreadable",
   "title": "Zero endpoint index unreadable",
   "status": 400,
-  "detail": "The Zero endpoint index cannot be read.",
+  "detail": "The Zero endpoint index could not be read from the version.",
   "code": "zero_endpoint_index_unreadable",
   "requestId": "req_4mz0v8qk"
 }

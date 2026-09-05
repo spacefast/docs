@@ -1,11 +1,11 @@
 ---
 title: "tenant_id_mismatch"
-description: "The resource belongs to a different tenant than the request."
+description: "The tenant in the request does not match the one the credential acts for."
 ---
 
-The resource belongs to a different tenant than the request.
+The tenant in the request does not match the one the credential acts for.
 
-**How to resolve:** Use a credential and tenant header matching the resource's tenant.
+**How to resolve:** Call with a credential rooted in the tenant being addressed.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_id_mismatch",
   "title": "Tenant id mismatch",
   "status": 400,
-  "detail": "The resource belongs to a different tenant than the request.",
+  "detail": "The tenant in the request does not match the one the credential acts for.",
   "code": "tenant_id_mismatch",
   "requestId": "req_4mz0v8qk"
 }

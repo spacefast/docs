@@ -1,11 +1,11 @@
 ---
 title: "email_verification_code_invalid"
-description: "The emailed confirmation code is wrong, expired, or already used."
+description: "The verification code is wrong, expired, or already used up."
 ---
 
-The emailed confirmation code is wrong, expired, or already used.
+The verification code is wrong, expired, or already used up.
 
-**How to resolve:** Request a new code and enter the six digits from the newest email.
+**How to resolve:** Request a new code, then send it in `code`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/email_verification_code_invalid",
   "title": "Email verification code invalid",
   "status": 400,
-  "detail": "The emailed confirmation code is wrong, expired, or already used.",
+  "detail": "The verification code is wrong, expired, or already used up.",
   "code": "email_verification_code_invalid",
   "requestId": "req_4mz0v8qk"
 }

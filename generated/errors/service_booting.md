@@ -1,11 +1,11 @@
 ---
 title: "service_booting"
-description: "The process that received this request is still starting and cannot serve it yet."
+description: "The process holding this port is still starting up."
 ---
 
-The process that received this request is still starting and cannot serve it yet.
+The process holding this port is still starting up.
 
-**How to resolve:** Wait for the `Retry-After` window, then send the same request again.
+**How to resolve:** Retry the request in a few seconds.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/service_booting",
   "title": "Service booting",
   "status": 400,
-  "detail": "The process that received this request is still starting and cannot serve it yet.",
+  "detail": "The process holding this port is still starting up.",
   "code": "service_booting",
   "requestId": "req_4mz0v8qk"
 }

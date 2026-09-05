@@ -1,11 +1,11 @@
 ---
 title: "source_archive_expansion_ratio_exceeded"
-description: "The uploaded source archive expands too much relative to its compressed size."
+description: "The source archive expands far more than its compressed size allows."
 ---
 
-The uploaded source archive expands too much relative to its compressed size.
+The source archive expands far more than its compressed size allows.
 
-**How to resolve:** Rebuild the archive without highly compressible filler or generated content, then upload it again.
+**How to resolve:** Remove the highly compressible content, then upload the archive again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/source_archive_expansion_ratio_exceeded",
   "title": "Source archive expansion ratio exceeded",
   "status": 400,
-  "detail": "The uploaded source archive expands too much relative to its compressed size.",
+  "detail": "The source archive expands far more than its compressed size allows.",
   "code": "source_archive_expansion_ratio_exceeded",
   "requestId": "req_4mz0v8qk"
 }

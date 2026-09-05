@@ -1,11 +1,11 @@
 ---
 title: "path_too_long"
-description: "A file path exceeds the maximum length."
+description: "A file path is longer than the byte cap for canonical paths."
 ---
 
-A file path exceeds the maximum length.
+A file path is longer than the byte cap for canonical paths.
 
-**How to resolve:** Keep each file path at or under 1024 bytes.
+**How to resolve:** Shorten the directory names or file name so the canonical path fits the cap.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/path_too_long",
   "title": "Path too long",
   "status": 400,
-  "detail": "A file path exceeds the maximum length.",
+  "detail": "A file path is longer than the byte cap for canonical paths.",
   "code": "path_too_long",
   "requestId": "req_4mz0v8qk"
 }

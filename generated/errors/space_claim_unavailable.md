@@ -1,11 +1,11 @@
 ---
 title: "space_claim_unavailable"
-description: "This space cannot be claimed."
+description: "The Space has no active claim token, so it cannot be claimed or assigned."
 ---
 
-This space cannot be claimed.
+The Space has no active claim token, so it cannot be claimed or assigned.
 
-**How to resolve:** Only anonymous, unexpired spaces with a valid space key can be claimed.
+**How to resolve:** Publish a new Space and share its fresh claim link.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_claim_unavailable",
   "title": "Space claim unavailable",
   "status": 400,
-  "detail": "This space cannot be claimed.",
+  "detail": "The Space has no active claim token, so it cannot be claimed or assigned.",
   "code": "space_claim_unavailable",
   "requestId": "req_4mz0v8qk"
 }

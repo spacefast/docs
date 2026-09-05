@@ -1,0 +1,90 @@
+---
+title: Claude Desktop
+description: Install the Spacefast desktop extension for Claude Desktop, or paste the hosted MCP server into your config
+---
+
+After this page Claude Desktop can publish files to Spacefast and read your Spaces, either through a double-click extension that runs the server on your machine or through the hosted endpoint.
+
+## Install the extension
+
+Download `claude-desktop.mcpb` from the latest release of `github.com/spacefast/plugins` and open it. Claude Desktop installs it as a desktop extension.
+
+<Steps>
+  <Step title="Download the bundle">
+    Grab `claude-desktop.mcpb` from the releases page.
+  </Step>
+  <Step title="Double-click it">
+    Claude Desktop reads the manifest and offers to install the extension.
+  </Step>
+  <Step title="Leave the token blank, or paste one">
+    The extension has one setting, a Spacefast API token. Leave it empty to publish anonymously and claim the Space later.
+  </Step>
+</Steps>
+
+Then ask for something small to prove the extension is live.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+<Prompt description="List my Spacefast Spaces." actions={["copy"]}>
+List my Spacefast Spaces.
+</Prompt>
+
+## What the manifest declares
+
+The bundle is a manifest version `0.2` extension with a Node server. Its entry point is `server/index.js`, which is a thin spawner. It launches the Spacefast MCP server over stdio through `npx`, so the extension itself carries no server code.
+
+```json manifest.json
+"mcp_config": {
+  "command": "node",
+  "args": ["${__dirname}/server/index.js"],
+  "env": {
+    "SPACEFAST_TOKEN": "${user_config.api_token}"
+  }
+}
+```
+
+Because the server runs locally, it can read files. `publish` takes a path or the current directory, not only inline files.
+
+| Fact | Value |
+|---|---|
+| Manifest version | `0.2` |
+| Server type | `node` |
+| Platforms | macOS, Windows, Linux |
+| Node | 20 or newer |
+| License | MIT |
+| Tools declared | The nine Spacefast MCP tools |
+
+## Authentication
+
+The extension exposes one user setting.
+
+| Setting | Type | Required | What it does |
+|---|---|---|---|
+| Spacefast API token | string, marked sensitive | No | "Your Spacefast account token (from spacefast.com/account/tokens). Leave blank to publish anonymously." |
+
+The value is passed to the server as `SPACEFAST_TOKEN` and never written into a config file you have to manage.
+
+Leaving it blank is a real workflow, not a degraded one. An anonymous publish returns a one-time claim link. Open it in the browser to take ownership of the Space, and the extension keeps publishing to it afterwards. See [Publish without an account](/anonymous-and-claim).
+
+## Or use the hosted server
+
+If you would rather connect to the hosted endpoint and sign in with OAuth, add this to `claude_desktop_config.json`.
+
+```json claude_desktop_config.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "http",
+      "url": "https://mcp.spacefast.com"
+    }
+  }
+}
+```
+
+The hosted server has no filesystem, so `publish` requires inline files. Connectors you add on claude.ai sync down to Desktop; the bundle is the desktop-only lane.
+
+:::note
+`sf setup agent --agent claude-desktop` writes nothing. Claude Desktop is not one of the clients the CLI knows how to configure. Use the extension or the config file above.
+:::

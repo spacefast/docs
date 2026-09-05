@@ -1,11 +1,11 @@
 ---
 title: "zero_migration_failed"
-description: "The Zero database migration command failed during finalize."
+description: "A Zero database migration failed to apply."
 ---
 
-The Zero database migration command failed during finalize.
+A Zero database migration failed to apply.
 
-**How to resolve:** Inspect the migration and database logs, fix the schema issue, and publish again.
+**How to resolve:** Fix the failing migration statement, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_migration_failed",
   "title": "Zero migration failed",
   "status": 400,
-  "detail": "The Zero database migration command failed during finalize.",
+  "detail": "A Zero database migration failed to apply.",
   "code": "zero_migration_failed",
   "requestId": "req_4mz0v8qk"
 }

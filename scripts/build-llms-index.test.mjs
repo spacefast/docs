@@ -12,7 +12,6 @@ const sidebarRoutes = new Set([
   "/publish",
   "/errors",
   "/api/reference",
-  "/platforms/api/reference",
   "/changelog",
   "/changelog/packages",
 ]);
@@ -37,6 +36,7 @@ const fixture = [
   entry("/errors"),
   entry("/api/reference"),
   entry("/platforms/api/reference"),
+  entry("/partners/api/reference"),
   entry("/changelog/packages"),
   "",
   "## Other",
@@ -45,6 +45,7 @@ const fixture = [
   entry("/errors/build_failed"),
   entry("/api/reference/spaces/create"),
   entry("/platforms/api/reference/tenants/list"),
+  entry("/partners/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
   entry("/setup/claude-code"),
@@ -58,17 +59,22 @@ const fixture = [
 const build = (overrides = {}) =>
   buildLlmsIndex({ source: fixture, preamble, sidebarRoutes, ...overrides });
 
-test("collapses generated descendants and keeps their index pages", () => {
+test("collapses generated descendants and keeps only navigated index pages", () => {
   const { text, dropped } = build();
-  assert.equal(dropped, 6);
+  assert.equal(dropped, 9);
   const routes = text
     .split("\n")
     .filter((line) => line.startsWith("- ["))
     .map(routeOf);
-  for (const kept of ["/errors", "/api/reference", "/platforms/api/reference", "/changelog/packages"]) {
+  for (const kept of ["/errors", "/api/reference", "/changelog/packages"]) {
     assert.ok(routes.includes(kept), `${kept} should survive as the family index`);
   }
-  for (const gone of ["/errors/rate_limited", "/api/reference/spaces/create", "/changelog/v0-0-24"]) {
+  for (const gone of [
+    "/errors/rate_limited",
+    "/api/reference/spaces/create",
+    "/platforms/api/reference",
+    "/changelog/v0-0-24",
+  ]) {
     assert.ok(!routes.includes(gone), `${gone} should be collapsed`);
   }
   assert.ok(routes.includes("/setup/claude-code"), "agent setup pages stay listed");

@@ -1,11 +1,11 @@
 ---
 title: "zero_runs_too_many"
-description: "The Zero run-handler payload exceeds the supported handler count."
+description: "The capsule declares more Zero run handlers than the runtime allows."
 ---
 
-The Zero run-handler payload exceeds the supported handler count.
+The capsule declares more Zero run handlers than the runtime allows.
 
-**How to resolve:** Reduce the project to at most 128 Zero run handlers, then publish again.
+**How to resolve:** Cut the number of run handlers, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runs_too_many",
   "title": "Zero runs too many",
   "status": 400,
-  "detail": "The Zero run-handler payload exceeds the supported handler count.",
+  "detail": "The capsule declares more Zero run handlers than the runtime allows.",
   "code": "zero_runs_too_many",
   "requestId": "req_4mz0v8qk"
 }

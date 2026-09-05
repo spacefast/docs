@@ -1,11 +1,11 @@
 ---
 title: "credential_revoked"
-description: "The credential used for this request was revoked."
+description: "The credential on this request was revoked."
 ---
 
-The credential used for this request was revoked.
+The credential on this request was revoked.
 
-**How to resolve:** Create a new API key and update your client.
+**How to resolve:** Run `sf login`, or create a new API key, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/credential_revoked",
   "title": "Credential revoked",
   "status": 400,
-  "detail": "The credential used for this request was revoked.",
+  "detail": "The credential on this request was revoked.",
   "code": "credential_revoked",
   "requestId": "req_4mz0v8qk"
 }

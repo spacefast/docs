@@ -1,0 +1,53 @@
+---
+title: Eleventy
+description: Build an Eleventy site and publish _site, and what to do when your config moves the output somewhere else
+---
+
+Eleventy is detected by its `@11ty/eleventy` dependency, or by one of four config files: `.eleventy.js`, `eleventy.config.js`, `eleventy.config.mjs`, or `eleventy.config.cjs`.
+
+## What to build
+
+The default `eleventy`. Spacefast runs the bare binary when your `package.json` has no `build` script, resolving it from the project's `node_modules/.bin`.
+
+## The output directory
+
+`_site`.
+
+## Publish
+
+```bash
+sf publish
+```
+
+Or build it yourself and upload the result:
+
+```bash
+npx @11ty/eleventy
+sf publish ./_site --prebuilt
+```
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.view.fast
+
+  Live URL      https://quiet-harbor.view.fast
+  Version URL   https://v4--quiet-harbor.view.fast
+  Version       v4 (ready)
+  Files         88
+```
+
+## The gotcha
+
+`_site` is a constant in the detection table. Nothing reads `dir.output` out of your Eleventy config, so a project that renders into `public` or `docs` builds fine and then publishes an empty directory. Name it yourself:
+
+```bash
+sf publish --output-directory public
+```
+
+Two smaller edges of the same rule:
+
+- `eleventy.config.ts` is not one of the four config names. A TypeScript config on its own does not identify the project. The `@11ty/eleventy` dependency does, and a dependency match always wins over a config-file match.
+- `_site` is also Jekyll's output directory. Jekyll is the one preset that does read its config, taking `destination` from `_config.yml` when it is set.
+
+The full table, the detection order, and every override flag are on [Frameworks and builds](/frameworks).

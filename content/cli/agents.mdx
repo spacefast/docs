@@ -1,0 +1,218 @@
+---
+title: mcp, setup, skills, agents
+description: Configure any coding agent for Spacefast, run the MCP server or its authenticated proxy, and manage the bundled agent skill
+sidebar:
+  order: 26
+---
+
+After this page you can point Claude Code, Cursor, Codex, or any other MCP client at Spacefast in one command, understand which transport you got and why, install or remove the bundled skill, and drop a Spacefast block into your project's `AGENTS.md`.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`). `sf mcp` and `sf mcp proxy` do not support `--json`, because stdout carries the MCP protocol.
+
+## Start here
+
+```bash
+sf setup agent -y
+```
+
+That detects your agent clients, installs the Spacefast skill, and writes MCP config for each one. If you only want the MCP config, use `sf mcp install`. If you only want the skill, use `sf skills`.
+
+## The three transports
+
+`sf setup agent` and `sf mcp install` write one of three configurations.
+
+| Method | What gets written | Who holds the credential |
+| --- | --- | --- |
+| `remote-proxy` (default) | `{"command": "sf", "args": ["mcp", "proxy"]}` | Your CLI login |
+| `remote-oauth` (`--remote --oauth`) | A direct HTTP connection to the hosted server | Your editor, through OAuth |
+| `local` (`--local`) | A local stdio server that can read your checkout | Your CLI login |
+
+**The default is `remote-proxy`, and here is what that means for you.** Your editor speaks stdio to `sf` on your machine. `sf` speaks HTTPS to the hosted MCP server using the login you already have. You never do an OAuth dance in the editor, and when you run `sf login` again, the proxy picks the new login up without an editor restart. The cost is that `sf` has to be on your `PATH` and you have to be logged in; an unauthenticated proxy answers JSON-RPC error `-32001` telling you to run `sf login`.
+
+Pick `--local` instead when you want the MCP server to publish files from your working directory. Pick `--remote --oauth` when you want the editor to own the credential rather than the CLI.
+
+For the tool list, scopes, the `execute` sandbox, and the approval model, see [the MCP server](/agents/mcp-server). For the long form of the setup flow, including what each client gets written where, see [sf setup agent](/agents/sf-setup).
+
+## sf mcp install
+
+Install Spacefast MCP config into detected or selected coding agents.
+
+```text
+sf mcp install [--agent <id>] [--remote] [--local] [--oauth]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--agent=<id>` | detect | Agent or client to configure. Repeatable |
+| `--remote` | `false` | Use hosted MCP through `sf mcp proxy` and the current CLI login |
+| `--local` | `false` | Use checkout-aware local stdio MCP instead of the hosted proxy. Exclusive with `--remote` and `--oauth` |
+| `--oauth` | `false` | With `--remote`, connect directly and let the editor handle OAuth. Requires `--remote` |
+
+`--agent` accepts:
+
+```text
+auto  all  generic  claude-code  claude-app  claude-desktop  cursor  codex  chatgpt
+vscode  github-copilot  devin-desktop  devin-cloud  zed  gemini-cli  opencode  amp
+warp  factory-droid  cline  continue  raycast  poke  pi  indent  hermes  openclaw
+app.devin.ai  chatgpt-work  claude  claude-code-cli  claude.ai  clawhub  copilot
+devin  droid  earendil  factory  gemini  pi.dev  windsurf
+```
+
+```bash
+sf mcp install --agent claude-code
+sf mcp install --agent cursor --remote --oauth
+```
+
+## sf mcp proxy
+
+Proxy remote Spacefast MCP over stdio using the current CLI login. You do not normally run this by hand. It is what the default config calls.
+
+```text
+sf mcp proxy [--endpoint <url>] [--allow-credential-origin <origin>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--endpoint=<url>` | the `mcp.` sibling of your login's API host, falling back to `https://mcp.spacefast.com` | Remote MCP endpoint. HTTPS is required except on loopback, and it may not carry credentials, a query, or a fragment. Env `SPACEFAST_MCP_URL` |
+| `--allow-credential-origin=<origin>` | none | Send your Spacefast credential to this MCP origin even though it was not issued for it. Repeatable. Env `SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN` |
+
+Your credential goes only to the issuer's API and MCP origins, to loopback, or to an origin you allowed explicitly. Anything else is refused with JSON-RPC error `-32002`. Each exchange is capped at 32 MiB and 30 seconds.
+
+## sf mcp
+
+Run the Spacefast On-Device MCP server over stdio for MCP clients. This is the `--local` lane's command. It does not support `--json`.
+
+```text
+sf mcp [--workspace-root <dir>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--workspace-root=<dir>` | the current working directory | Root allowed for On-Device MCP path publishing. Env `SPACEFAST_MCP_WORKSPACE_ROOT` |
+
+The server resolves your Space link and API client, then serves stdio. Publish paths are constrained to the workspace root: absolute paths, paths that escape the root, and symlinks are all refused.
+
+```bash
+sf mcp
+```
+
+## sf setup agent
+
+Detect agent clients and configure Spacefast skills plus MCP in one idempotent flow. This is the command to reach for.
+
+```text
+sf setup agent [-y] [--agent <id>] [-p] [--remote] [--local] [--oauth]
+  [--skip-mcp] [--force] [--handoff]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-y, --yes` | `false` | Skip prompts, auto-detect agents, and accept local stdio MCP |
+| `--agent=<id>` | detect | Agent or client to configure. Repeatable. Same values as `sf mcp install` |
+| `-p, --project` | `false` | Install skills into this project instead of global agent directories |
+| `--remote` | `false` | Use hosted MCP through `sf mcp proxy` and the current CLI login |
+| `--local` | `false` | Use checkout-aware local stdio MCP instead of the hosted proxy. Exclusive with `--remote` and `--oauth` |
+| `--oauth` | `false` | With `--remote`, connect directly and let the editor handle OAuth. Requires `--remote` |
+| `--skip-mcp` | `false` | Install skills without configuring MCP |
+| `--force` | `false` | Overwrite locally modified or unverified Spacefast skill files |
+| `--handoff` | `false` | Redeem a one-use agent handoff link from the dashboard before generating setup. The link is read from stdin |
+
+Interactively it shows a checkbox agent picker, then asks which transport you want. Whatever you pick, it always installs the skill afterwards.
+
+```bash
+sf setup agent -y
+sf setup agent -y --agent cursor --remote --oauth
+```
+
+## sf skills
+
+Install or update the Spacefast agent skill bundled with this CLI. Aliased as `sf skills install`.
+
+```text
+sf skills [--agent <id>] [-p] [-l] [--force]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--agent=<id>` | `auto` | Agent to install for. Repeatable. `auto` configures detected agents plus `.agents/skills` |
+| `-p, --project` | `false` | Install into this project instead of the agent's global skills directory |
+| `-l, --list` | `false` | List bundled skill files without installing |
+| `--force` | `false` | Overwrite locally modified or unverified Spacefast skill files |
+
+The skill is named `spacefast` everywhere. It tells the agent to reach for the MCP tools first, to publish once and then poll, and to report the live URL, the immutable version URL, and the access URL.
+
+```bash
+sf skills
+sf skills --agent codex
+sf skills --agent all
+```
+
+## sf skills status
+
+Check installed Spacefast skills against the revision bundled with this CLI. Aliased as `sf skills doctor`.
+
+```text
+sf skills status [--agent <id>] [-p]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--agent=<id>` | `auto` | Agent to check. Repeatable. `auto` checks detected agents plus `.agents/skills` |
+| `-p, --project` | `false` | Check project-local skills instead of global skill directories |
+
+```bash
+sf skills status
+sf skills doctor --agent codex
+sf skills status --project --agent claude-code
+```
+
+## sf skills remove
+
+Remove the Spacefast skill while preserving locally modified files unless forced. Aliased as `sf skills rm` and `sf skills uninstall`.
+
+```text
+sf skills remove [--agent <id>] [-p] [--force]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--agent=<id>` | detect | Agent to remove from. Repeatable |
+| `-p, --project` | `false` | Remove project-local skills instead of global skills |
+| `--force` | `false` | Remove locally modified or unverified Spacefast skill files |
+
+This confirms before removing unless you pass `-y`.
+
+```bash
+sf skills remove --agent codex
+sf skills remove --project --agent claude-code
+```
+
+## sf agents init
+
+Create or update the Spacefast block in `AGENTS.md`.
+
+```text
+sf agents init
+```
+
+No arguments, no command-specific flags.
+
+It writes `AGENTS.md` in the current directory with mode `0644`, inserting or refreshing a block delimited by `<!-- SPACEFAST START -->` and `<!-- SPACEFAST END -->`. Everything outside those markers is left alone, so running it again is safe.
+
+```bash
+sf agents init
+```

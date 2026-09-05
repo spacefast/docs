@@ -1,11 +1,11 @@
 ---
 title: "anonymous_publish_rate_limited"
-description: "Too many anonymous publishes came from this network in a short window."
+description: "Too many anonymous publishes came from this client in the rate limit window."
 ---
 
-Too many anonymous publishes came from this network in a short window.
+Too many anonymous publishes came from this client in the rate limit window.
 
-**How to resolve:** Wait for the window to pass, or sign in with an API key for higher limits.
+**How to resolve:** Wait for the window in the `Retry-After` header to pass, or run `sf login` and publish with an API key.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/anonymous_publish_rate_limited",
   "title": "Anonymous publish rate limited",
   "status": 400,
-  "detail": "Too many anonymous publishes came from this network in a short window.",
+  "detail": "Too many anonymous publishes came from this client in the rate limit window.",
   "code": "anonymous_publish_rate_limited",
   "requestId": "req_4mz0v8qk"
 }

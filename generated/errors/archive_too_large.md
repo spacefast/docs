@@ -1,11 +1,11 @@
 ---
 title: "archive_too_large"
-description: "The uploaded archive exceeds the maximum allowed size."
+description: "The uploaded archive is larger than the publish size limit."
 ---
 
-The uploaded archive exceeds the maximum allowed size.
+The uploaded archive is larger than the publish size limit.
 
-**How to resolve:** Reduce the archive size or upload files individually through a version upload session.
+**How to resolve:** Remove files from the archive, or upload them through a version upload session instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/archive_too_large",
   "title": "Archive too large",
   "status": 400,
-  "detail": "The uploaded archive exceeds the maximum allowed size.",
+  "detail": "The uploaded archive is larger than the publish size limit.",
   "code": "archive_too_large",
   "requestId": "req_4mz0v8qk"
 }

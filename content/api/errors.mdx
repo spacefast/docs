@@ -1,0 +1,191 @@
+---
+title: Errors
+description: RFC 9457 problem documents, the stable error code, pointer semantics, and every code the Spacefast API can return
+sidebar:
+  order: 3
+---
+
+Every failure from this API is an RFC 9457 problem document with a stable `code`. After this page you can branch on that code, point a user at the exact bad field, and decide whether to retry.
+
+## The shape
+
+Failures answer `Content-Type: application/problem+json`. Nothing else. That covers validation failures, rate limits, IP blocks, and the 404 catch-all alike.
+
+```json
+{
+  "$schema": "https://api.spacefast.com/schemas/error.json",
+  "type": "https://spacefast.com/docs/errors/validation_error",
+  "title": "Validation error",
+  "status": 422,
+  "detail": "files.37.path must be a relative POSIX path.",
+  "code": "validation_error",
+  "pointer": "/files/37/path",
+  "requestId": "01J8ZQ7WYX3M4N5P6R7S8T9V0W"
+}
+```
+
+| Field | Required | What it carries |
+| --- | --- | --- |
+| `type` | yes | Problem type URI, derived from `code` against the docs origin. |
+| `title` | yes | The code as a sentence. `version_not_found` becomes `Version not found`. |
+| `status` | yes | The HTTP status, repeated in the body. |
+| `detail` | yes | What went wrong on this occurrence. |
+| `code` | yes | The stable snake_case code. Branch on this. |
+| `requestId` | yes | The id to quote when you ask for help. Equals the `X-Request-Id` header. |
+| `pointer` | no | RFC 6901 JSON Pointer at the failing request field. |
+| `details` | no | Machine-readable context for this code. |
+| `suggestions` | no | Recovery steps safe to show in a UI. |
+| `next` | no | Copy-pasteable commands or requests to run next. |
+| `$schema` | no | JSON Schema URL for this body, also sent as a `Link: rel="describedby"` header. |
+
+The object is closed. No other members appear.
+
+## Branch on `code`, not on `status` or `detail`
+
+`code` is a typed union in the source, so the server cannot emit one outside the table below. `detail` is prose and may be reworded. `status` groups many codes together, and `title` and `type` are both mechanical functions of `code`, so they add nothing a branch can use.
+
+## `pointer`
+
+On a validation failure, `pointer` is an RFC 6901 JSON Pointer into your request body. Segments are escaped the RFC 6901 way, so `~` becomes `~0` and `/` becomes `~1`.
+
+```json
+{ "code": "validation_error", "status": 422, "pointer": "/files/37/path" }
+```
+
+That says the 38th entry of `files` has a bad `path`. When a required property is missing, its name is the last segment of the pointer.
+
+A Zod-level validation failure is `422 validation_error`. A request body that is not parseable JSON at all is `400 validation_error`.
+
+## HTTP statuses
+
+The API uses this set, and no others:
+
+| Status | Typical code | When |
+| --- | --- | --- |
+| 400 | `validation_error` | Unparseable body, or a bad header value. |
+| 401 | `unauthorized` | No valid credential. |
+| 402 | varies | Payment is required before this action. |
+| 403 | `forbidden`, `insufficient_scope` | Valid credential, action not allowed. |
+| 404 | `not_found` | No such resource, or no such endpoint. |
+| 405 | `method_not_allowed` | Real path, wrong method. The response carries an `Allow` header. |
+| 409 | varies | Conflict, or a quota that blocks the write. |
+| 410 | varies | The resource existed and is gone. |
+| 413 | `publish_archive_too_large` | The body is over its ceiling. |
+| 422 | `validation_error` | A field failed validation. |
+| 429 | `rate_limited` | See [Rate limits](/api/rate-limits). |
+| 500 | `internal_error` | Our fault. |
+| 501 | varies | Not implemented on this deployment. |
+| 503 | `maintenance_in_progress`, `provider_error` | Temporarily unavailable. Often carries `Retry-After`. |
+
+## `recovery` and `retryable`
+
+Every code carries two classifications in the shipped contract. They are not response fields. The `sf` CLI reads them to tell a caller what to do, and the tables on this page publish the same values so your own client can do the same.
+
+| `recovery` | What the caller does |
+| --- | --- |
+| `retry` | Transient or infrastructure failure. The same request may succeed now. |
+| `wait` | In progress, pending, or rate-limited. Retry after a delay. |
+| `re_auth` | Credential problem. Re-authenticate or re-authorize. |
+| `fix_input` | Validation, conflict, or not found. Change the request, then retry. |
+| `contact_support` | Enforcement or an unrecoverable client state. The caller cannot self-serve. |
+
+`retryable` is `yes` only for `retry` and `wait`. Anything else will fail again with the same bytes.
+
+Two retry rules that come from the wire rather than the table. A `429` carries `Retry-After` in seconds, so honour that number instead of guessing. A `409 idempotency_conflict_in_progress` answering your own `Idempotency-Key` means the first attempt is still running, so keep asking until it resolves.
+
+## The codes you will meet first
+
+### Request and routing
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `validation_error` | fix_input | no | A request field failed validation. |
+| `not_found` | fix_input | no | The requested resource was not found. |
+| `method_not_allowed` | fix_input | no | The requested HTTP method is not supported for this endpoint. |
+| `invalid_publish_payload` | fix_input | no | The publish payload is malformed. |
+| `invalid_publish_path` | fix_input | no | A file path in the publish payload is not allowed. |
+| `publish_path_invalid` | fix_input | no | A publish path is not a relative, normalized POSIX path. |
+| `ambiguous_space_slug` | fix_input | no | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
+| `slug_unavailable` | fix_input | no | Another resource already uses this slug. Offline spaces retain their slugs. |
+
+### Credentials and access
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `unauthorized` | re_auth | no | The request carried no valid credential. |
+| `forbidden` | re_auth | no | The credential is valid but does not allow this action. |
+| `insufficient_scope` | re_auth | no | The credential authenticated, but its granted scopes do not include a set this operation accepts. |
+| `authorization_pending` | wait | yes | The device login is not approved yet. |
+| `policy_exceeds_grantor` | fix_input | no | The requested key policy grants more than your own credential allows. |
+| `team_required` | fix_input | no | This operation requires an acting team. |
+| `anonymous_expired` | re_auth | no | This anonymous space expired before it was claimed. |
+| `claim_target_not_found` | fix_input | no | The team or account to claim the space into was not found. |
+
+### Publishing and versions
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `publish_bytes_missing` | fix_input | no | The publish has no complete staged content to materialize. |
+| `publish_file_missing` | fix_input | no | A declared file was never uploaded, so the publish cannot finalize. |
+| `publish_hash_mismatch` | fix_input | no | Publish content does not match its declared sha256. |
+| `publish_failed` | fix_input | no | The publish failed before going live. |
+| `publish_verification_failed` | retry | yes | Post-publish verification did not see the new content serving. |
+| `publish_archive_too_large` | fix_input | no | The uploaded archive exceeds the maximum allowed size. |
+| `publish_inline_limit_exceeded` | fix_input | no | The inline publish exceeds the file-count or total-size limit. |
+| `publish_path_collision` | fix_input | no | Two different artifacts would serve the same URL after directory-index or clean-URL resolution. |
+| `version_not_found` | fix_input | no | The version was not found. |
+| `version_file_not_found` | fix_input | no | The requested file does not exist in this version. |
+| `channel_pointer_moved` | fix_input | no | The channel was promoted to a different version since you read it. |
+
+### Builds
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `build_failed` | fix_input | no | The build run failed before producing a version. |
+| `build_timeout` | retry | yes | The build exceeded its time limit before producing a version. |
+| `build_no_index_html` | fix_input | no | The build produced output but no index.html at the site root. |
+| `build_output_dir_missing` | fix_input | no | The build finished but its output directory was not produced. |
+| `build_oom` | fix_input | no | The build process was killed, most likely after running out of memory. |
+| `build_output_contains_server_bundle` | fix_input | no | The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download. |
+
+### Domains
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `domain_already_exists` | fix_input | no | This domain is already present in your inventory. |
+| `domain_bound` | fix_input | no | The domain is currently bound to a space, which blocks this operation. |
+| `domain_not_bound` | fix_input | no | The domain is not bound to this space. |
+| `domain_quota_exceeded` | fix_input | no | Adding this domain would exceed the plan's external domain allowance. |
+| `domain_reserved_suffix` | fix_input | no | The hostname is under a Spacefast-managed suffix and cannot be added as a domain. |
+
+### Limits, quotas, and retries
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `rate_limited` | wait | yes | Too many requests were made in a short window. |
+| `anonymous_publish_rate_limited` | wait | yes | Too many anonymous publishes came from this network in a short window. |
+| `space_quota_exceeded` | fix_input | no | Creating or claiming this space would exceed the owner's space allowance. |
+| `storage_quota_exceeded` | fix_input | no | The operation would exceed its storage allowance. |
+| `team_member_quota_exceeded` | fix_input | no | Inviting this person would exceed the team's seat limit. |
+| `deploy_quota_exceeded` | wait | yes | The owner has used its daily publish allowance. It resets at 00:00 UTC. |
+| `build_minutes_quota_exceeded` | fix_input | no | This build would exceed the owner's build minutes for the month. |
+| `idempotency_key_reused` | fix_input | no | The Idempotency-Key was reused with a different request body. |
+| `idempotency_conflict_in_progress` | wait | yes | Another request with the same Idempotency-Key is still in flight. |
+| `invalid_idempotency_key` | fix_input | no | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
+
+### Platform
+
+| Code | Recovery | Retryable | Meaning |
+| --- | --- | --- | --- |
+| `internal_error` | retry | yes | Something went wrong on our side. |
+| `maintenance_in_progress` | wait | yes | This change is temporarily unavailable while maintenance finishes. |
+| `provider_error` | retry | yes | Spacefast could not complete the operation. |
+| `provider_job_failed` | retry | yes | A hosting-provider job failed while processing this operation. |
+| `provider_job_timeout` | retry | yes | A hosting-provider job timed out while processing this operation. |
+| `space_disabled` | fix_input | no | The space is disabled and cannot be served or modified. |
+
+## Every error code
+
+The full registry lives at [Error codes](/errors), grouped by prefix, one page per code. A code that is not there is not something this API emits.
+
+Each code's page is also the `type` URI in its problem document, so you can follow the link straight out of a failed response.

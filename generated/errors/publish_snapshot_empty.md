@@ -1,11 +1,11 @@
 ---
 title: "publish_snapshot_empty"
-description: "An empty snapshot was sent without an explicit base version."
+description: "The publish resolved to no files at all."
 ---
 
-An empty snapshot was sent without an explicit base version.
+The publish resolved to no files at all.
 
-**How to resolve:** Include at least one file, or declare the base version to intentionally publish an empty site.
+**How to resolve:** Point the publish at a directory that contains the files to serve.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_snapshot_empty",
   "title": "Publish snapshot empty",
   "status": 400,
-  "detail": "An empty snapshot was sent without an explicit base version.",
+  "detail": "The publish resolved to no files at all.",
   "code": "publish_snapshot_empty",
   "requestId": "req_4mz0v8qk"
 }

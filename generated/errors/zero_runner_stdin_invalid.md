@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_stdin_invalid"
-description: "The Zero runner cannot read its request envelope."
+description: "The runner could not read the request it was handed."
 ---
 
-The Zero runner cannot read its request envelope.
+The runner could not read the request it was handed.
 
-**How to resolve:** Retry. If the runtime bridge failure persists, report it.
+**How to resolve:** Retry the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_stdin_invalid",
   "title": "Zero runner stdin invalid",
   "status": 400,
-  "detail": "The Zero runner cannot read its request envelope.",
+  "detail": "The runner could not read the request it was handed.",
   "code": "zero_runner_stdin_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "publish_config_unsupported"
-description: "The publish carries configuration this endpoint does not support."
+description: "The publish declares a config this endpoint does not accept."
 ---
 
-The publish carries configuration this endpoint does not support.
+The publish declares a config this endpoint does not accept.
 
-**How to resolve:** Move the configuration into `sf.jsonc` or the space settings.
+**How to resolve:** Remove the unsupported keys from `sf.jsonc`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_config_unsupported",
   "title": "Publish config unsupported",
   "status": 400,
-  "detail": "The publish carries configuration this endpoint does not support.",
+  "detail": "The publish declares a config this endpoint does not accept.",
   "code": "publish_config_unsupported",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "takeover_notice_window"
-description: "The hostname was recently bound elsewhere. A takeover notice window applies."
+description: "The hostname takeover is still inside its notice window."
 ---
 
-The hostname was recently bound elsewhere. A takeover notice window applies.
+The hostname takeover is still inside its notice window.
 
-**How to resolve:** Retry after the notice window, or have the current holder release the binding.
+**How to resolve:** Wait for the notice window to close, then retry the takeover.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/takeover_notice_window",
   "title": "Takeover notice window",
   "status": 400,
-  "detail": "The hostname was recently bound elsewhere. A takeover notice window applies.",
+  "detail": "The hostname takeover is still inside its notice window.",
   "code": "takeover_notice_window",
   "requestId": "req_4mz0v8qk"
 }

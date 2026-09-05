@@ -5,7 +5,7 @@ description: "Another reviewer already claimed this review item."
 
 Another reviewer already claimed this review item.
 
-**How to resolve:** Pick a different item, or ask the current assignee to release it. The assignee's id is in `error.details.assignedToUserId`.
+**How to resolve:** Pick an unclaimed item from the review queue.
 
 <div data-pagefind-ignore>
 

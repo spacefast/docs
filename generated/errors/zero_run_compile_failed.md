@@ -1,11 +1,11 @@
 ---
 title: "zero_run_compile_failed"
-description: "The runtime cannot compile a Zero run handler."
+description: "A Zero run handler failed to compile."
 ---
 
-The runtime cannot compile a Zero run handler.
+A Zero run handler failed to compile.
 
-**How to resolve:** Inspect the compile diagnostics, fix the run-handler source, and publish again.
+**How to resolve:** Fix the run handler source, run `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_run_compile_failed",
   "title": "Zero run compile failed",
   "status": 400,
-  "detail": "The runtime cannot compile a Zero run handler.",
+  "detail": "A Zero run handler failed to compile.",
   "code": "zero_run_compile_failed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "confirmation_required"
-description: "This action destroys live content or spends money, so a person must approve this exact action before it runs."
+description: "A person must approve this exact action before it can run."
 ---
 
-This action destroys live content or spends money, so a person must approve this exact action before it runs.
+A person must approve this exact action before it can run.
 
-**How to resolve:** Send the person to the `url` in the error details, then poll `pollUrl` with the `continuationToken` every 5 seconds. Give up after 10 minutes and report back. No flag or environment variable can clear this.
+**How to resolve:** Open `url` from the error details so a person can approve, then poll `pollUrl` with `continuationToken` every 5 seconds. In the CLI this gate guards a local destructive action, so re-run with `--yes`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_required",
   "title": "Confirmation required",
   "status": 400,
-  "detail": "This action destroys live content or spends money, so a person must approve this exact action before it runs.",
+  "detail": "A person must approve this exact action before it can run.",
   "code": "confirmation_required",
   "requestId": "req_4mz0v8qk"
 }

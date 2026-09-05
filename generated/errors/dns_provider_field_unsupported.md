@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_field_unsupported"
-description: "The DNS provider does not support one of the requested record fields."
+description: "The DNS provider does not support a field in the requested record."
 ---
 
-The DNS provider does not support one of the requested record fields.
+The DNS provider does not support a field in the requested record.
 
-**How to resolve:** Remove the unsupported field or switch to a provider and plan whose capabilities allow it.
+**How to resolve:** Remove the unsupported field, or use a record type the provider handles.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_field_unsupported",
   "title": "Dns provider field unsupported",
   "status": 400,
-  "detail": "The DNS provider does not support one of the requested record fields.",
+  "detail": "The DNS provider does not support a field in the requested record.",
   "code": "dns_provider_field_unsupported",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "runtime_release_unverifiable"
-description: "The requested platform release could not be verified at its origin."
+description: "The runtime release could not be verified, so nothing was promoted and no box was changed."
 ---
 
-The requested platform release could not be verified at its origin.
+The runtime release could not be verified, so nothing was promoted and no box was changed.
 
-**How to resolve:** Check that the release exists and published its full set of artifacts, then request it again.
+**How to resolve:** Read `reason` in the error details, publish a verifiable release, then promote again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_release_unverifiable",
   "title": "Runtime release unverifiable",
   "status": 400,
-  "detail": "The requested platform release could not be verified at its origin.",
+  "detail": "The runtime release could not be verified, so nothing was promoted and no box was changed.",
   "code": "runtime_release_unverifiable",
   "requestId": "req_4mz0v8qk"
 }

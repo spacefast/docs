@@ -1,11 +1,11 @@
 ---
 title: "version_not_ready"
-description: "The version is not ready yet."
+description: "The version is not in a state this operation accepts."
 ---
 
-The version is not ready yet.
+The version is not in a state this operation accepts.
 
-**How to resolve:** Wait for finalize to complete. The operation receipt reports progress.
+**How to resolve:** Wait for the version to reach `ready`, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_not_ready",
   "title": "Version not ready",
   "status": 400,
-  "detail": "The version is not ready yet.",
+  "detail": "The version is not in a state this operation accepts.",
   "code": "version_not_ready",
   "requestId": "req_4mz0v8qk"
 }

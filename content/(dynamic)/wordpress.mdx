@@ -1,0 +1,149 @@
+---
+title: WordPress on every Space
+description: Every Space runs a WordPress behind its static files. Run WP-CLI against it, call its Abilities with a short-lived token, and open its database.
+---
+
+After this page you can run any WP-CLI command against a Space, call the Abilities its runtime publishes with a token you mint from the API, and know where the database console lives.
+
+Every Space is backed by a WordPress install. Your published files serve in front of it, so a static Space never touches it and never pays for it. It is there because it is what makes a Space more than a bucket: [Zero](/zero) apps run on it, [Storage](/storage) is its media library, and [Database](/database) is its MySQL. This page covers the two ways to reach that WordPress directly.
+
+## `sf wp`
+
+`sf wp` is the escape hatch under every named surface: whatever WP-CLI can do that Spacefast has not given its own command.
+
+```bash
+sf wp option get blogname
+sf wp --space docs plugin list --format=csv
+sf wp core version
+```
+
+Everything after `sf`'s own flags is handed to `wp` unchanged. `--format=csv` above reaches WP-CLI, not `sf`.
+
+### The `--` rule
+
+`sf` stops claiming flags at the first token that is not one of its own, and `--` ends the argument outright. So a `wp` flag can never collide with an `sf` flag by accident, and a `wp` command that genuinely needs `--path` or `--space` is still reachable by putting it after `--` or after any positional.
+
+```bash
+sf wp -- --version
+```
+
+Without the separator, `--version` would be read as `sf`'s own.
+
+### Remote and local behave differently
+
+| | Remote, the default | `--local` |
+| --- | --- | --- |
+| Runs against | The Space's WordPress | A WordPress on your machine |
+| WP-CLI's output | Not returned | Streamed straight through |
+| Exit code | 1 when the command failed | WP-CLI's own |
+| Needs | Write access to the Space | `php` on your `PATH` |
+
+The local path runs a pinned `wp-cli.phar` as a child process with inherited stdio, so it is a true passthrough. Interactive commands, pagers, and colored output all work.
+
+The remote path cannot be. The host runs WP-CLI as a job against the site and reports whether it exited zero, with no channel carrying what the command printed. Rather than fake a stream, `sf wp` says so:
+
+```text
+✓ wp option get blogname on docs in 1840ms
+The host runs WP-CLI as a job and does not return its output; only success or failure.
+Run with --local against a local WordPress to see what the command prints.
+```
+
+When you need the bytes, run the same command locally, or reach for `sf db` and the database console.
+
+```bash
+sf wp --local --path ./wordpress core version
+```
+
+`--path` implies `--local`. Missing PHP fails with `wp_cli_php_missing`; WP-CLI ships as a PHAR, so it needs PHP 7.2 or newer.
+
+### Flags, limits, and access
+
+`--mode limited` skips the site's own themes and plugins, so a core command still answers on a site whose own code is broken. `--mode full` is the default and is what most commands need.
+
+`--json` wraps only Spacefast's own errors, a Space that will not resolve or a host that will not answer. It never wraps `wp`'s output.
+
+| Limit | Value |
+| --- | --- |
+| Arguments per command | 64 |
+| Characters per argument | 4,096 |
+| Run time before the API gives up | 360 seconds, answering `wp_cli_timeout` |
+
+A remote run needs write access to the Space, because a `wp` command has unrestricted authority over the site's data. Every run is written to the Space's activity trail, successful or not, and a run whose outcome could not be determined is recorded as such. A Space that has not been provisioned yet answers `runtime_not_provisioned`.
+
+The API route is `runSpaceWpCliCommand`. It takes an already-split argument vector, `["option", "get", "blogname"]`, relayed verbatim. No shell parses it, so nothing re-splits, re-globs, or re-quotes what you send.
+
+## Abilities
+
+An Ability is a named operation with a schema that the Space's WordPress publishes for agents to call. Some come from the runtime itself and exist on every Space.
+
+```bash
+sf zero abilities
+```
+
+The table prints `ABILITY | CATEGORY | MODE | REQUIRES`. The `REQUIRES` column is what answers "why did that come back 403".
+
+### Storage Abilities
+
+Five Abilities in the `zero-storage` category are registered by the runtime, so every Space publishes them whether or not it has ever published an app. They are the media library, the same objects [Storage](/storage) manages.
+
+| Ability | Mode | Does | Needs |
+| --- | --- | --- | --- |
+| `zero/storage-list` | read | Lists the files in the Space, optionally within one folder | `upload_files` |
+| `zero/storage-get` | read | Reads one file's id, filename, URL, MIME type, folder, dimensions, and size | `upload_files` |
+| `zero/storage-upload` | write | Stores a file from base64 content, optionally in a folder | `upload_files` |
+| `zero/storage-move` | write | Moves a file into a folder, creating the folder path if needed | `edit_post` |
+| `zero/storage-delete` | write | Trashes a file. It leaves every listing and stays recoverable | `delete_post` |
+
+The "Needs" column is a WordPress capability. The Space projects it from the calling credential's Grant, so what a credential may do is decided per request against the path it asked for. See [Access and sharing](/access).
+
+WordPress decides which file types `zero/storage-upload` accepts.
+
+### Call one
+
+```bash
+sf zero call zero/storage-list
+sf zero call zero/storage-list --input '{"folder":"press","perPage":20}'
+sf zero call zero/storage-upload --input @upload.json
+```
+
+`sf zero call` mints a short-lived token for the Space, runs the Ability against the Space's own WordPress REST API, and prints the HTTP status and the JSON result. The token is never printed and never appears in the `--json` receipt.
+
+`--input` takes inline JSON or `@path` to read it from a file. `--credential mch_...` picks a machine credential when the Space has more than one. A non-2xx answer is `zero_ability_failed` and exits 1, with the whole receipt in `details`. A 403 means the credential's Grant does not permit that Ability.
+
+### Mint a token yourself
+
+An agent working from the API does the same thing in two calls.
+
+```bash
+curl -X POST https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/zero/token \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{ "credentialId": "mch_xxxxxxxx", "ttlSeconds": 900 }'
+```
+
+`createSpaceZeroToken` turns your platform credential into a bearer carrying one machine credential's authority. You never need that credential's own secret. The response carries the `token`, its `expiresAt`, the `host` it is bound to, the `endpoint` (the Space's `/wp-json` root), the `capabilities` it should get, and the WordPress `role` those project to.
+
+| Field | Value |
+| --- | --- |
+| `credentialId` | A live `mch_` machine credential of this Space. Required |
+| `ttlSeconds` | 60 to 3,600. Defaults to 900 |
+
+Send the token to the Space in `X-SF-Authorization`, never in `Authorization`:
+
+```bash
+curl -X POST \
+  https://my-site.view.fast/wp-json/wp-abilities/v1/abilities/zero/storage-list/run \
+  -H "X-SF-Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{ "perPage": 20 }'
+```
+
+The plain `Authorization` header belongs to your application and passes through untouched, which is why the platform's bearer takes a header of its own.
+
+The token is bound to the host the Space serves on, and the runtime re-derives what it may do from the credential's Grant on every request. The `capabilities` in the response are what to expect, not a promise: a credential scoped away from a path answers there with less, never with more.
+
+`listSpaceZeroAbilities` is the API side of `sf zero abilities`.
+
+## The database
+
+The same WordPress owns a MySQL database. `sf db` reads its schema and rows, and the dashboard mints a single-use SQL console URL for raw queries. See [Database](/database).

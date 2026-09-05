@@ -1,11 +1,11 @@
 ---
 title: "publish_inline_limit_exceeded"
-description: "The inline publish exceeds the file-count or total-size limit."
+description: "The publish is past the limits for an inline publish."
 ---
 
-The inline publish exceeds the file-count or total-size limit.
+The publish is past the limits for an inline publish.
 
-**How to resolve:** Trim the inline payload, or switch to an upload-based publish for larger content.
+**How to resolve:** Publish through an upload session instead of inline.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_inline_limit_exceeded",
   "title": "Publish inline limit exceeded",
   "status": 400,
-  "detail": "The inline publish exceeds the file-count or total-size limit.",
+  "detail": "The publish is past the limits for an inline publish.",
   "code": "publish_inline_limit_exceeded",
   "requestId": "req_4mz0v8qk"
 }

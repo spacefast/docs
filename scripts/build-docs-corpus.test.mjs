@@ -11,7 +11,7 @@ const fixture = `# Spacefast Docs
 > Build and publish static sites with Spacefast.
 
 # Quickstart
-Source: https://spacefast.com/docs/getting-started/quickstart
+Source: https://spacefast.com/docs/quickstart
 
 Publish a site in a few commands.
 
@@ -33,23 +33,23 @@ test("turns Blume's agent-readable output into ranked corpus records", () => {
     pages.map(({ kind, path, tier }) => ({ kind, path, tier })),
     [
       { kind: "api", path: "/api/reference", tier: "reference" },
-      { kind: "guide", path: "/getting-started/quickstart", tier: "essential" },
+      { kind: "guide", path: "/quickstart", tier: "essential" },
     ],
   );
-  assert.equal(pages[1].slug, "getting-started/quickstart");
+  assert.equal(pages[1].slug, "quickstart");
   assert.equal(pages[1].summary, "Publish a site in a few commands.");
   assert.match(pages[1].body, /## Install/u);
 });
 
-test("includes the Platform API in the unified developer corpus", () => {
-  const pages = parseLlmsFull(`# Platform API
-Source: https://spacefast.com/docs/platforms/api/reference
+test("includes the Partner API at the reference tier", () => {
+  const pages = parseLlmsFull(`# Partner API
+Source: https://spacefast.com/docs/partners/api/reference
 
 Tenant and customer operations.
 `);
   assert.deepEqual(
     pages.map(({ path, tier }) => ({ path, tier })),
-    [{ path: "/platforms/api/reference", tier: "full" }],
+    [{ path: "/partners/api/reference", tier: "reference" }],
   );
 });
 

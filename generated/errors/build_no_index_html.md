@@ -1,11 +1,11 @@
 ---
 title: "build_no_index_html"
-description: "The build produced output but no index.html at the site root."
+description: "The build output has no `index.html` at its root."
 ---
 
-The build produced output but no index.html at the site root.
+The build output has no `index.html` at its root.
 
-**How to resolve:** Ensure your build writes an index.html to the output directory. Otherwise point the output directory at the folder that contains index.html.
+**How to resolve:** Point the output directory at the folder that holds `index.html`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_no_index_html",
   "title": "Build no index html",
   "status": 400,
-  "detail": "The build produced output but no index.html at the site root.",
+  "detail": "The build output has no `index.html` at its root.",
   "code": "build_no_index_html",
   "requestId": "req_4mz0v8qk"
 }

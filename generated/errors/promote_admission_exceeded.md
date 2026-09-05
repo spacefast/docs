@@ -1,11 +1,11 @@
 ---
 title: "promote_admission_exceeded"
-description: "Too many archived files are being restored for this space right now."
+description: "Promotions to this Space were shed by the admission limiter."
 ---
 
-Too many archived files are being restored for this space right now.
+Promotions to this Space were shed by the admission limiter.
 
-**How to resolve:** Retry shortly. Spacefast limits restores to protect the host.
+**How to resolve:** Retry after the seconds in the `Retry-After` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promote_admission_exceeded",
   "title": "Promote admission exceeded",
   "status": 400,
-  "detail": "Too many archived files are being restored for this space right now.",
+  "detail": "Promotions to this Space were shed by the admission limiter.",
   "code": "promote_admission_exceeded",
   "requestId": "req_4mz0v8qk"
 }

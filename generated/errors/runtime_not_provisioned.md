@@ -1,11 +1,11 @@
 ---
 title: "runtime_not_provisioned"
-description: "The space does not serve a published version yet, so it has no runtime data to read."
+description: "The Space has not served a published version, so its runtime does not exist yet."
 ---
 
-The space does not serve a published version yet, so it has no runtime data to read.
+The Space has not served a published version, so its runtime does not exist yet.
 
-**How to resolve:** Publish a version first. If a publish is already running, wait for it. The operation receipt reports progress.
+**How to resolve:** Publish the Space, then retry once its first version is live.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_not_provisioned",
   "title": "Runtime not provisioned",
   "status": 400,
-  "detail": "The space does not serve a published version yet, so it has no runtime data to read.",
+  "detail": "The Space has not served a published version, so its runtime does not exist yet.",
   "code": "runtime_not_provisioned",
   "requestId": "req_4mz0v8qk"
 }

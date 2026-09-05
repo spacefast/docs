@@ -1,0 +1,209 @@
+---
+title: Authentication
+description: Sign this machine in with sf login, check who you are, sign out, and revoke visitor sessions on a Space
+sidebar:
+  order: 8
+---
+
+After this page you can sign in through the browser, sign in with an API key on a machine that has no browser, confirm which account and teams a credential reaches, and revoke it.
+
+Every command here also takes the [global flags](/cli#global-flags).
+
+## sf login
+
+Log this machine in through the browser, or save an API key you already have.
+
+```text
+sf login [--access read|agent] [--handoff] [-o <team>] [--token <key>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--access=<read\|agent>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
+| `--handoff` | off | Redeem a one-use agent handoff link from the dashboard. Read from stdin. Cannot be combined with `--token`. |
+| `--token=<key>` | none | Store an API key you already have instead of running the browser flow. Env `SPACEFAST_TOKEN`. |
+| `-o, --team=<value>` | none | Team slug, ID, or name to make the default after signing in. Env `SPACEFAST_TEAM`. |
+
+### The browser flow
+
+```bash
+sf login
+```
+
+```text
+Signing in to https://api.spacefast.com.
+Requesting Agent access — create and publish sites, manage domains and DNS, create teams, and use Spacefast tools.
+Complete device login in your browser.
+Code: XXXX-XXXX
+Link: https://…/device
+Opened your browser.
+```
+
+All of that goes to stderr. Only the approving side needs a browser, so this works over SSH and in containers. When the CLI cannot open one it says so, tells you to approve the link from any device, and waits. [Sign in and security](/authentication#log-the-cli-in) has the code lifetime, the poll cadence, and the lifetime of the credential you end up with.
+
+With `--json`, one line goes to stdout before the poll blocks, so an agent can hand the code to a person:
+
+```json
+{"requiresAction":{"actionType":"device_authorization","verificationUrl":"…","userCode":"…","interval":5,"expiresAt":"…"}}
+```
+
+### What you are asking for
+
+| `--access` | Grants |
+| --- | --- |
+| `read` | Read your teams, sites, and domains. Changes nothing. |
+| `agent` (default) | Create and publish sites, manage domains and DNS, create teams, and use Spacefast tools. It cannot delete sites, manage team members, change billing, or mint credentials. |
+
+The approval page shows the same scopes and lets you narrow them.
+
+### Signing in without a browser
+
+```bash
+sf login --token sfa_xxxxxxxxxxxx
+```
+
+This stores the key exactly as the browser flow would, so later commands need no `--token`. Create keys with [`sf api-keys create`](/cli/api-keys). In CI, exporting `SPACEFAST_TOKEN` is usually simpler than logging in at all.
+
+`sf login` ignores a linked project's provider and any implicitly selected profile, so a revoked stored token cannot trap you in a loop. An explicit `--api-url`, `SPACEFAST_API_URL`, or `--profile` still decides where you sign in. To bind a key to a named provider instead of the global login, use [`sf profiles set`](/cli/project#sf-profiles).
+
+### Resuming and re-authenticating
+
+An interrupted flow is picked up by the next `sf login`. A stale or already-consumed code rolls over to a fresh one automatically. `sf login --access read` never resumes a pending `agent` approval.
+
+Re-authenticating stores the new credential before revoking the old one, so a denied or expired re-auth never leaves you with nothing. Signing in also clears the stored default team, then sets it again from the new identity.
+
+### Examples
+
+```bash
+sf login
+sf login --access read
+sf login --token sfa_xxxxxxxxxxxx
+printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
+```
+
+Handoff links are refused as command arguments. Any argument that looks like one aborts with `handoff_link_in_argv` (exit 2) before anything runs, because arguments land in shell history and process lists.
+
+### Output
+
+Prints the account, its teams, the access you were granted, and when the credential expires. With `--json`, `data` carries `account`, `teams`, `access` (`profile`, `label`, `scopes`, `teams`), and `credential.expiresAt`.
+
+## sf whoami
+
+Verify the active token and print the authenticated account.
+
+```text
+sf whoami
+```
+
+Takes only the global flags.
+
+```bash
+sf whoami
+sf whoami --json
+```
+
+### Output
+
+```text
+You are logged in as Dev Example (dev@example.com) with access to the following teams:
+acme
+```
+
+The access line appears only when the credential in play is the stored login. An explicit `--token`, a profile credential, or a checkout credential prints the account without it.
+
+```json
+{
+  "data": {
+    "account": { "id": "usr_0123456789abcdef", "email": "dev@example.com", "name": "Dev Example" },
+    "teams": [{ "id": "team_0123456789abcdef", "name": "Acme", "slug": "acme", "role": "owner" }]
+  }
+}
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `auth_required` | 10 | No API key is available. Run `sf login`. |
+| `unauthorized` | 10 | The API rejected the key. Run `sf login` again. |
+| `credential_expired` | 10 | The key expired, usually after 7 days without use. Run `sf login` again. |
+
+## sf logout
+
+Delete the local login and revoke the CLI-minted token when possible.
+
+```text
+sf logout
+```
+
+Takes only the global flags.
+
+```bash
+sf logout
+```
+
+It clears your default team first, then deletes the credential, then asks the server to revoke it. Revocation is pinned to the base URL the token was created for, so an `--api-url` or profile override never sends your stored credential somewhere else.
+
+### Output
+
+Four receipts, depending on what was there:
+
+| Message | `data` |
+| --- | --- |
+| `No stored login.` | `{ "loggedOut": false, "remoteRevoked": false }` |
+| `Logged out.` | `{ "loggedOut": true, "remoteRevoked": true }` |
+| `Removed local login. Server token revocation was skipped because this token was not created by the CLI.` | `{ "loggedOut": true, "remoteRevoked": false, "reason": "token_not_minted_by_cli" }` |
+| Revocation failed | `{ "loggedOut": true, "remoteRevoked": false, "revokeError": … }` |
+
+Deleting the local login never deletes an API key you created yourself. Revoke those with [`sf api-keys revoke`](/cli/api-keys#sf-api-keys-revoke).
+
+## sf auth
+
+Authenticate the CLI.
+
+```text
+sf auth
+```
+
+A topic, not an action. Running it prints the help for its subcommands. `sf auth login` is an alias for `sf login` and renders identical help.
+
+## sf access
+
+Revoke visitor sessions. Use `sf share` to manage who can open a Space.
+
+```text
+sf access
+```
+
+Running it bare prints help.
+
+### sf access logout-all
+
+Revoke every active private-open, share-link, and signed-in visitor session for the Space.
+
+```text
+sf access logout-all [--space <value>] [-o <team>] [--claim-token <value>] [-y]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+| `-y, --yes` | `false` | Skip the confirmation prompt. Env `SPACEFAST_YES`. |
+
+```bash
+sf access logout-all --space docs
+```
+
+This is destructive and confirms first: `Revoke ALL opened visitor access for <slug>?`. Everyone currently reading a private Space is signed out, links included. In a non-interactive context, pass `--yes` or it fails with `confirmation_required` (exit 2).
+
+### Output
+
+```text
+All visitor access revoked (session version 4).
+```
+
+`--json` returns `{ "data": { "sessionVersion": 4 } }`. The number goes up by one each time, and every session issued before it stops working.

@@ -1,11 +1,11 @@
 ---
 title: "registration_expired"
-description: "The domain registration is expired."
+description: "The domain registration expired and is in its redemption window."
 ---
 
-The domain registration is expired.
+The domain registration expired and is in its redemption window.
 
-**How to resolve:** Renew the domain at its registrar before retrying.
+**How to resolve:** Renew the registration before the redemption window closes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/registration_expired",
   "title": "Registration expired",
   "status": 400,
-  "detail": "The domain registration is expired.",
+  "detail": "The domain registration expired and is in its redemption window.",
   "code": "registration_expired",
   "requestId": "req_4mz0v8qk"
 }

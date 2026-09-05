@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_controlled_desired_state"
-description: "This DNS provider is controlled through desired-state templates instead of direct record edits."
+description: "The DNS provider owns the desired record state for this zone."
 ---
 
-This DNS provider is controlled through desired-state templates instead of direct record edits.
+The DNS provider owns the desired record state for this zone.
 
-**How to resolve:** Use the provider workflow template or primary-domain action for this provider-managed zone.
+**How to resolve:** Change the records at the provider rather than through Spacefast.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_controlled_desired_state",
   "title": "Dns provider controlled desired state",
   "status": 400,
-  "detail": "This DNS provider is controlled through desired-state templates instead of direct record edits.",
+  "detail": "The DNS provider owns the desired record state for this zone.",
   "code": "dns_provider_controlled_desired_state",
   "requestId": "req_4mz0v8qk"
 }

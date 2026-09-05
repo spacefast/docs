@@ -1,11 +1,11 @@
 ---
 title: "upload_hash_mismatch"
-description: "An uploaded file's bytes do not match the declared sha256."
+description: "The uploaded bytes do not hash to the SHA-256 the manifest declares."
 ---
 
-An uploaded file's bytes do not match the declared sha256.
+The uploaded bytes do not hash to the SHA-256 the manifest declares.
 
-**How to resolve:** Re-hash the local file and upload it again.
+**How to resolve:** Re-upload the file, or declare the hash the bytes actually produce.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/upload_hash_mismatch",
   "title": "Upload hash mismatch",
   "status": 400,
-  "detail": "An uploaded file's bytes do not match the declared sha256.",
+  "detail": "The uploaded bytes do not hash to the SHA-256 the manifest declares.",
   "code": "upload_hash_mismatch",
   "requestId": "req_4mz0v8qk"
 }

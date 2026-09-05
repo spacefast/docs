@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_temporarily_unavailable"
-description: "The DNS provider is rate-limited, degraded, or temporarily unavailable."
+description: "The DNS provider is not reachable right now."
 ---
 
-The DNS provider is rate-limited, degraded, or temporarily unavailable.
+The DNS provider is not reachable right now.
 
-**How to resolve:** Wait for the retry time in the error details or operation receipt, then retry the DNS operation.
+**How to resolve:** Retry the operation once the provider recovers.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_temporarily_unavailable",
   "title": "Dns provider temporarily unavailable",
   "status": 400,
-  "detail": "The DNS provider is rate-limited, degraded, or temporarily unavailable.",
+  "detail": "The DNS provider is not reachable right now.",
   "code": "dns_provider_temporarily_unavailable",
   "requestId": "req_4mz0v8qk"
 }

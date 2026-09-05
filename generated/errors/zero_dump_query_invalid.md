@@ -1,11 +1,11 @@
 ---
 title: "zero_dump_query_invalid"
-description: "The Zero database dump query parameters are invalid."
+description: "The database dump query parameters are invalid."
 ---
 
-The Zero database dump query parameters are invalid.
+The database dump query parameters are invalid.
 
-**How to resolve:** Use valid `table`, `limit`, and `cursor` parameters.
+**How to resolve:** Correct the dump query parameters, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_dump_query_invalid",
   "title": "Zero dump query invalid",
   "status": 400,
-  "detail": "The Zero database dump query parameters are invalid.",
+  "detail": "The database dump query parameters are invalid.",
   "code": "zero_dump_query_invalid",
   "requestId": "req_4mz0v8qk"
 }

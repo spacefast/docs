@@ -1,0 +1,148 @@
+---
+title: Sign in and security
+description: Create a Spacefast account, add a password and two-factor, manage sessions, and log the sf CLI in from your terminal
+sidebar:
+  order: 1
+---
+
+After this page you can create an account, sign in the way that suits you, lock the account down with two-factor, see every signed-in device, and log the `sf` CLI in from a terminal.
+
+## Create an account
+
+Type your email address on the sign-in page and press **Continue**. If the address has no account yet, Spacefast mails you a six-digit code. Enter the code and the account exists. That is the whole signup.
+
+There is no password signup. Passwords are something you add later, from settings, once you already have an account.
+
+Two other ways in create an account for you:
+
+- A social provider. Spacefast supports WordPress.com, Google, and GitHub, and the sign-in page shows the ones that are turned on. The provider must have verified your email address, otherwise Spacefast refuses the sign-in and tells you to verify it with the provider or use a mailed code instead.
+- A team invitation link. The link already proves the inbox, so the accept page offers **Create account & join** with one optional **Name (optional)** field and no code to type.
+
+## Sign in
+
+One field, one button. Type the address, press **Continue**, and Spacefast picks the method for that account.
+
+| What you see | When |
+|---|---|
+| **Six-digit code** field, buttons **Verify** and **Resend code** | The account has no password, or the address is new |
+| **Password** field, button **Sign in** | The account has a password set |
+| **WordPress.com** / **Google** / **GitHub** buttons under **or continue with** | Always, for the providers that are turned on |
+
+The code is six digits and you get three tries. A fourth attempt stops working even with the correct code, so ask for a new one instead of guessing. Code sends are capped at five per ten minutes per address.
+
+Forgot the password you set? Sign in with a mailed code. Codes keep working whether or not a password exists.
+
+A secondary address on your account signs you into that same account, and the code goes to the inbox you typed.
+
+## Add a password
+
+Go to **Account settings → Security → Sign-in methods** and press **Set password**. Passwords are eight characters or more, and Spacefast rejects any password that appears in public breach lists.
+
+The same section lists **Email code**, **Password**, and one row per social provider with **Connect** or **Disconnect**. You cannot remove your last way in. Try it and you get "That's your only way in. Set a password or connect another method first."
+
+## Turn on two-factor
+
+Two-factor lives at **Account settings → Security → Two-factor authentication**.
+
+<Steps>
+  <Step title="Start enrollment">
+    Press **Turn on two-factor**. The dialog asks for your password.
+  </Step>
+  <Step title="Pair your authenticator app">
+    Scan the QR code, or open **Can't scan?** and copy the setup key into the app by hand.
+  </Step>
+  <Step title="Confirm the pairing">
+    Type the six digits from the app into **Code from the app** and press **Verify and turn on**.
+  </Step>
+  <Step title="Save your backup codes">
+    Spacefast shows the backup codes once. Each one works once. Store them somewhere other than the phone running the authenticator app.
+  </Step>
+</Steps>
+
+After that, signing in asks for a **Code** on a second screen. One field accepts three things: a code from your authenticator app, an emailed code (press **Send email code**), or a backup code. A checkbox reads **Remember this browser for 30 days** and is checked by default.
+
+**Regenerate** on the **Backup codes** row mints a fresh set. The old codes stop working the moment the new ones exist.
+
+:::warning[Lost your phone and your backup codes]
+There is no side door. Turn two-factor off, then set it up again for a fresh set. Turning it off needs a confirmation check first.
+:::
+
+## Confirm it's you
+
+Sensitive changes ask you to prove it's you again before they go through: setting or changing a password, connecting or disconnecting a provider, turning two-factor on or off, and adding, removing, or repointing account email addresses.
+
+The screen is titled **Confirm it's you** and takes your password, an emailed code, or your authenticator code. One confirmation covers the next ten minutes. A sign-in from the last 24 hours counts as fresh already, so most of the time you never see it.
+
+## Sessions
+
+A session lasts 30 days and refreshes every day you use it. You can keep up to five accounts signed in at once in the same browser and switch between them.
+
+**Account settings → Security → Sessions** lists every signed-in device with the browser, operating system, IP address, when it started, and when it expires. The one you are on is marked **This device**.
+
+- **Revoke** on a row signs that browser out immediately.
+- **Revoke other sessions** signs out everything except the device you are on.
+
+Sessions are separate from agent access. To cut off an agent or a CLI, use **Account settings → Connected apps**. See [what agents are allowed to do](/agents/permissions).
+
+## Log the CLI in
+
+`sf login` does not store a browser session. It walks a browser approval and ends up holding an API key scoped to what you approved.
+
+<Steps>
+  <Step title="Run the command">
+    Run `sf login`. Add `--access read` if you want a credential that changes nothing.
+  </Step>
+  <Step title="Take the code to the browser">
+    The CLI prints an eight-character code and a link, and opens your browser when it can.
+
+    ```text
+    Complete device login in your browser.
+    Code: ABCD-EFGH
+    Link: https://my.spacefast.com/device?user_code=ABCD-EFGH
+    ```
+
+    On a machine with no browser, open the link from your phone or laptop instead. Dashes and letter case in the code are ignored.
+  </Step>
+  <Step title="Approve it">
+    The page is titled **Authorize this device**. It shows the **Client**, the **Requested access**, the **Request origin** it was started from, and the line "This access expires after 30 days, or after 7 days unused."
+
+    Pick the team reach: **All teams** (including teams you join later), **Choose teams**, or **No team access** for sign-in only. Open **Customize what this device can do** to untick anything you would rather not hand over. You can narrow the request, never widen it.
+
+    Press **Approve**.
+  </Step>
+  <Step title="Back in the terminal">
+    The CLI picks the approval up within a few seconds and prints who you are and which teams the credential reaches. Run `sf whoami` any time to see it again.
+  </Step>
+</Steps>
+
+Facts worth knowing about that credential:
+
+| Fact | Value |
+|---|---|
+| Code lifetime | 30 minutes from `sf login` |
+| Poll cadence | The CLI asks every 5 seconds until you approve |
+| What the CLI receives | A one-time API key, not a session |
+| Access lifetime | 30 days after approval |
+| Idle lifetime | 7 days without use |
+| Where it is stored | The OS keychain on macOS and Linux, otherwise `~/.spacefast/auth.json` with `0600` permissions |
+
+Inside each team the credential can never do more than your own role allows there. Change your role and the same credential retunes itself on the next request.
+
+`sf logout` deletes the local login and revokes the key when the CLI minted it. To kill it from the browser instead, revoke the connection under **Account settings → Connected apps**.
+
+## Account settings
+
+The whole `/account` branch opens as a dialog over the dashboard.
+
+| Page | Path | What lives there |
+|---|---|---|
+| Profile | `/account/profile` | Name and photo from Gravatar, pending invitations, appearance, delete account |
+| Emails | `/account/emails` | Verified addresses, add an address, make one primary, remove one |
+| Security | `/account/security` | Sign-in methods, two-factor, sessions |
+| Notifications | `/account/notifications` | System notifications, Invitations, Announcements, Tips and offers |
+| Privacy | `/account/privacy` | Share usage information, do not sell or share my data, cookie preferences |
+| Connected apps | `/account/connected-apps` | Every app, agent, and CLI acting as you, plus **Stop all agent access** |
+
+Your primary address gets account mail, drives the Gravatar avatar, and is the address sign-in codes go to. Two-factor codes, password resets, and other security mail are never turned off by the notification switches.
+
+API keys are not on this branch. They live on the team page. See [API keys and tokens](/api-keys).

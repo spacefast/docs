@@ -1,11 +1,11 @@
 ---
 title: "idempotency_conflict_in_progress"
-description: "Another request with the same Idempotency-Key is still in flight."
+description: "Another request with this idempotency key is still running."
 ---
 
-Another request with the same Idempotency-Key is still in flight.
+Another request with this idempotency key is still running.
 
-**How to resolve:** Wait for the original request to finish. The API will replay that request's response.
+**How to resolve:** Wait for the first request to finish, then retry with the same `Idempotency-Key`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/idempotency_conflict_in_progress",
   "title": "Idempotency conflict in progress",
   "status": 400,
-  "detail": "Another request with the same Idempotency-Key is still in flight.",
+  "detail": "Another request with this idempotency key is still running.",
   "code": "idempotency_conflict_in_progress",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "primary_email_not_removable"
-description: "The primary email address cannot be removed while it is the primary."
+description: "The address being removed is the account's primary address."
 ---
 
-The primary email address cannot be removed while it is the primary.
+The address being removed is the account's primary address.
 
-**How to resolve:** Make another verified address primary first, then remove this one.
+**How to resolve:** Make another verified address primary, then remove this one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/primary_email_not_removable",
   "title": "Primary email not removable",
   "status": 400,
-  "detail": "The primary email address cannot be removed while it is the primary.",
+  "detail": "The address being removed is the account's primary address.",
   "code": "primary_email_not_removable",
   "requestId": "req_4mz0v8qk"
 }

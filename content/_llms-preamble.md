@@ -17,9 +17,9 @@ Add `.md` to any docs URL to get the raw Markdown instead of rendered HTML:
 https://spacefast.com/docs/publish      ->  https://spacefast.com/docs/publish.md
 ```
 
-Every authored page below works both ways. The two API reference pages are the
-exception: their Markdown is a section outline, and the operations themselves
-come from the sources named under Reference surfaces.
+Every authored page below works both ways. The API reference is the exception:
+its Markdown is a section outline, and the operations themselves come from the
+source named under Reference surfaces.
 
 ## Set up an agent
 
@@ -63,7 +63,7 @@ straight to the Markdown.
 
 ## Reference surfaces
 
-Four references are too large to list page by page, so each one appears here as
+Three references are too large to list page by page, so each one appears here as
 its index. The URLs under them are frozen contracts and will not move.
 
 - [Error reference](https://spacefast.com/docs/errors): every error code with
@@ -76,9 +76,6 @@ its index. The URLs under them are frozen contracts and will not move.
   is the machine-readable source, and it is what to parse. The
   [reference page](https://spacefast.com/docs/api/reference) renders the same
   spec for browsing.
-- [Platform API reference](https://spacefast.com/docs/platforms/api/reference):
-  the operations available to WP Cloud platform partners. These render on the
-  page rather than in its Markdown mirror, so request the HTML form.
 - [Changelog](https://spacefast.com/docs/changelog): what shipped and when.
   Per-package history is at
   [changelog/packages](https://spacefast.com/docs/changelog/packages).

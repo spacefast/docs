@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_index_malformed"
-description: "The Zero endpoint index cannot be parsed."
+description: "The compiled Zero endpoint index could not be parsed."
 ---
 
-The Zero endpoint index cannot be parsed.
+The compiled Zero endpoint index could not be parsed.
 
-**How to resolve:** Rebuild the generated endpoint index and publish again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_index_malformed",
   "title": "Zero endpoint index malformed",
   "status": 400,
-  "detail": "The Zero endpoint index cannot be parsed.",
+  "detail": "The compiled Zero endpoint index could not be parsed.",
   "code": "zero_endpoint_index_malformed",
   "requestId": "req_4mz0v8qk"
 }

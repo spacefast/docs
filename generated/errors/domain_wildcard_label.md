@@ -1,11 +1,11 @@
 ---
 title: "domain_wildcard_label"
-description: "The hostname uses a wildcard label in a position that is not allowed."
+description: "The hostname contains a wildcard label."
 ---
 
-The hostname uses a wildcard label in a position that is not allowed.
+The hostname contains a wildcard label.
 
-**How to resolve:** Use a single leading wildcard (*.example.com) or a concrete hostname.
+**How to resolve:** Add the apex or a concrete hostname, then turn on wildcard routing for it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_wildcard_label",
   "title": "Domain wildcard label",
   "status": 400,
-  "detail": "The hostname uses a wildcard label in a position that is not allowed.",
+  "detail": "The hostname contains a wildcard label.",
   "code": "domain_wildcard_label",
   "requestId": "req_4mz0v8qk"
 }

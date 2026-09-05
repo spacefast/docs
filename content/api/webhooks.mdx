@@ -1,0 +1,241 @@
+---
+title: Webhooks
+description: Register an HTTPS endpoint, filter the event taxonomy, verify the HMAC signature, and handle retries and redelivery
+sidebar:
+  order: 8
+---
+
+Spacefast `POST`s a signed JSON body to your endpoint whenever something happens in your team. After this page you can register an endpoint, verify a signature correctly through a secret rotation, and know when a delivery has given up.
+
+## Create an endpoint
+
+<CodeGroup>
+
+```bash curl
+curl -sS -X POST https://api.spacefast.com/v1/webhooks \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "teamId": "team_example",
+        "url": "https://hooks.example.com/spacefast",
+        "events": ["version.ready", "version.failed", "domain.*"]
+      }'
+```
+
+```ts SDK
+const endpoint = await client.post("/v1/webhooks", {
+  body: {
+    teamId: "team_example",
+    url: "https://hooks.example.com/spacefast",
+    events: ["version.ready", "version.failed", "domain.*"],
+  },
+});
+```
+
+</CodeGroup>
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `url` | HTTPS URL | Where deliveries go. Required. |
+| `events` | array of filters | Which events to send. Defaults to `["*"]`. |
+| `teamId` | string | The team the endpoint belongs to. Optional when the credential names one. |
+
+The response is the only place the signing secret ever appears:
+
+```json
+{
+  "data": {
+    "id": "whk_6b0d2a8f3c1e7b5d9a4f2c6e0b8d1a5f",
+    "url": "https://hooks.example.com/spacefast",
+    "events": ["version.ready", "version.failed", "domain.*"],
+    "status": "active",
+    "mode": "live",
+    "secret": "whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "secretPreview": "whsec_xx...xxxx",
+    "previousSecretExpiresAt": null,
+    "createdAt": "2026-08-31T09:14:02.111Z",
+    "updatedAt": "2026-08-31T09:14:02.111Z"
+  }
+}
+```
+
+Store `secret` now. Every later read returns `secretPreview` only.
+
+Endpoints must be public HTTPS. Non-HTTPS URLs are rejected, each connection is pinned to the DNS result that was validated, and redirects are refused.
+
+In the dashboard the same thing lives under **Webhooks** in the team sidebar. **Add webhook** asks for an **Endpoint URL**, then **Events** as either **All events** or **Choose events**, then a **Status** toggle.
+
+## Event filters
+
+`events` accepts three forms, matched against the activity taxonomy:
+
+| Filter | Matches |
+| --- | --- |
+| `version.ready` | That exact event. |
+| `version.*` | Every code under the `version` prefix. Wildcards only cut at a dot boundary. |
+| `*` | Everything. |
+
+Unknown codes and wildcard prefixes that name nothing real are rejected with `invalid_webhook_events`, so a filter can never drift from the taxonomy.
+
+The codes a publishing integration cares about:
+
+```text
+space.created            space.claimed             space.transferred
+space.expired            space.disabled            space.enabled
+space.deleted            space.config_updated      space.slug_updated
+space.share_link_created space.share_link_revoked  space.grant_created
+space.grant_updated      space.grant_revoked       space.access_request_created
+space.access_request_resolved                      space.access_logout_all
+
+version.created          version.ready             version.warning
+version.failed           version.expired           version.canceled
+version.deleted
+
+channel.promoted         channel.promotion_changed
+
+build.created            build.succeeded           build.failed
+build.canceled           build.skipped
+
+domain.created           domain.verified           domain.verification_failed
+domain.control_lost      domain.dns_updated        domain.nameservers_updated
+domain.attached          domain.activated          domain.blocked
+domain.detached          domain.deleted
+
+transfer.requested       transfer.confirmed        transfer.completed
+transfer.canceled        transfer.expired          transfer.failed
+
+cron.failed              variable.updated          variable.deleted
+api_key.created          api_key.updated           api_key.revoked
+webhook.created          webhook.updated           webhook.secret_rotated
+webhook.disabled         webhook.deleted
+
+team.updated             team.slug_updated         team.member_added
+team.member_removed      team.member_role_updated
+
+comment.created          comment.reply_created     comment.archived
+comment.unarchived
+```
+
+Only failed cron runs are reported. A successful run is silent. Variable events name the key and never the value.
+
+## The delivery
+
+Spacefast `POST`s `application/json` with three extra headers.
+
+| Header | Value |
+| --- | --- |
+| `spacefast-event-id` | The activity event id, `evt_…`. Use it to deduplicate. |
+| `spacefast-delivery-id` | The delivery attempt id, `whd_…`. |
+| `spacefast-signature` | `t=<unix-seconds>, v1=<hex>` and possibly a second `v1=`. |
+
+```json
+{
+  "version": "2026-06-10",
+  "event": {
+    "id": "evt_1a5f7c3e9b4d6a0f2c8e1b5d7a3f9c4e",
+    "sequence": 48213,
+    "mode": "live",
+    "principal": { "principalType": "team", "principalId": "team_example" },
+    "spaceId": "spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c",
+    "actor": { "type": "api_key", "id": "0d2a8f6b4c1e7b5d9a3f2c6e0b8d1a5f" },
+    "code": "version.ready",
+    "message": "Version 7 is ready.",
+    "details": { "versionId": "ver_8c1d4a7f2e6b0c3d9a5f1e8b4c7d2a6f", "number": 7 },
+    "createdAt": "2026-08-31T09:14:09.884Z"
+  }
+}
+```
+
+`actor.type` is one of `user`, `api_key`, `partner_token`, `oauth_client`, `anonymous_claim`, or `system`. `mode` is `live`, or `test` on a linked test tenant.
+
+## Verify the signature
+
+The signature is `HMAC-SHA256` over the timestamp, a literal `.`, and the raw request body, hex-encoded. Hash the bytes you received, not a re-serialized object.
+
+```js
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+const TOLERANCE_SECONDS = 300;
+
+export function verifySpacefastWebhook(rawBody, header, secret) {
+  const parts = header.split(",").map((part) => part.trim());
+  const timestamp = parts.find((part) => part.startsWith("t="))?.slice(2);
+  if (!timestamp) return false;
+
+  const age = Math.abs(Math.floor(Date.now() / 1000) - Number(timestamp));
+  if (!Number.isFinite(age) || age > TOLERANCE_SECONDS) return false;
+
+  const expected = createHmac("sha256", secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest("hex");
+  const expectedBytes = Buffer.from(expected, "hex");
+
+  // Several v1 entries can be present during a secret rotation. Any match is valid.
+  return parts
+    .filter((part) => part.startsWith("v1="))
+    .some((part) => {
+      const candidate = Buffer.from(part.slice(3), "hex");
+      return (
+        candidate.length === expectedBytes.length && timingSafeEqual(candidate, expectedBytes)
+      );
+    });
+}
+```
+
+Three things that break naive verifiers. The header can carry more than one `v1=` entry, so accept a match on any of them. The body must be the raw bytes. And the timestamp tolerance is yours to choose, since the header carries the signing time but the server does not enforce a window on your behalf.
+
+## Rotate the secret
+
+```bash
+curl -sS -X POST https://api.spacefast.com/v1/webhooks/whk_6b0d2a8f3c1e7b5d9a4f2c6e0b8d1a5f/rotate \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"expireNow": false}'
+```
+
+The response carries the new `secret` once. The old secret keeps signing a second `v1=` entry for 24 hours, so a verifier that accepts any entry needs no downtime. `previousSecretExpiresAt` says when the overlap ends. Pass `expireNow: true` to kill the old secret immediately, for example after a leak.
+
+## Retries and auto-disable
+
+| Rule | Value |
+| --- | --- |
+| Request timeout | 10 seconds |
+| Response body read | capped at 64 KiB |
+| Default backoff | 30 seconds, growing with each attempt |
+| Retry horizon | 72 hours, or 8 hours on a test tenant |
+| `active` becomes `failing` | after 8 consecutive failures |
+| `failing` becomes `disabled` | after 32 consecutive failures |
+
+Any success resets the failure counter. A delivery that runs out its horizon lands at `exhausted` and stops.
+
+Answer quickly with a `2xx` and do the work afterwards. Ten seconds is the whole budget, and a slow handler costs you retries.
+
+## Inspect and redeliver
+
+```bash
+curl -sS "https://api.spacefast.com/v1/webhooks/whk_6b0d2a8f3c1e7b5d9a4f2c6e0b8d1a5f/deliveries?limit=20" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+Each delivery carries `status` (`pending`, `succeeded`, `failed`, `exhausted`), `attempts`, `lastAttemptAt`, `lastResponseStatus`, `nextRetryAt`, `redeliveredFromId`, and `diagnostics`.
+
+Queue a fresh attempt for one event:
+
+```bash
+curl -sS -X POST \
+  "https://api.spacefast.com/v1/webhooks/whk_6b0d2a8f3c1e7b5d9a4f2c6e0b8d1a5f/deliveries/whd_2c6e0b8d1a5f3c1e7b5d9a4f6b0d2a8f/redeliver" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+The redelivered attempt records the original in `redeliveredFromId`. The dashboard shows the same history behind **Deliveries** on each endpoint row.
+
+## Managing endpoints
+
+| Operation | Path |
+| --- | --- |
+| List | [`GET /v1/webhooks`](/api/reference/activity/listwebhooks) |
+| Get | [`GET /v1/webhooks/{webhookId}`](/api/reference/activity/getwebhook) |
+| Update url, events, or status | [`PATCH /v1/webhooks/{webhookId}`](/api/reference/activity/updatewebhook) |
+| Delete | [`DELETE /v1/webhooks/{webhookId}`](/api/reference/activity/deletewebhook) |
+
+`PATCH` accepts `status` as `active` or `disabled`, which is how you re-enable an endpoint that auto-disabled after you fixed it.

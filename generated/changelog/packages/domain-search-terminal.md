@@ -5,6 +5,56 @@ description: "Release history for @spacefast/domain-search-terminal on npm."
 
 Published as [`@spacefast/domain-search-terminal`](https://www.npmjs.com/package/@spacefast/domain-search-terminal) on npm.
 
+## 0.3.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/sdk@0.3.0
+  - @spacefast/common@0.3.0
+
+## 0.2.2
+
+#### Patch Changes
+
+- @spacefast/common@0.2.2
+  - @spacefast/sdk@0.2.2
+
+## 0.2.1
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/sdk@0.2.1
+  - @spacefast/common@0.2.1
+
+## 0.2.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.2.0
+  - @spacefast/sdk@0.2.0
+
+## 0.1.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.1.0
+  - @spacefast/sdk@0.1.0
+
+## 0.0.27
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.0.27
+  - @spacefast/sdk@0.0.27
+
 ## 0.0.26
 
 #### Patch Changes
@@ -132,4 +182,3 @@ Published as [`@spacefast/domain-search-terminal`](https://www.npmjs.com/package
 ## 0.0.6
 
 - Various bug fixes and improvements.
-

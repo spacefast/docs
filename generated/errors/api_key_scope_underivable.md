@@ -1,11 +1,11 @@
 ---
 title: "api_key_scope_underivable"
-description: "A concrete access policy cannot be derived from the requested scope and permissions."
+description: "The requested scope and permissions do not resolve to a concrete access policy."
 ---
 
-A concrete access policy cannot be derived from the requested scope and permissions.
+The requested scope and permissions do not resolve to a concrete access policy.
 
-**How to resolve:** Point scope at a resource you can already reach (an existing space owned by a team). Request only permissions your credential already has.
+**How to resolve:** Set `scope` to a team-owned Space the caller can already reach, and keep it in the key's existing owning team and collection.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/api_key_scope_underivable",
   "title": "Api key scope underivable",
   "status": 400,
-  "detail": "A concrete access policy cannot be derived from the requested scope and permissions.",
+  "detail": "The requested scope and permissions do not resolve to a concrete access policy.",
   "code": "api_key_scope_underivable",
   "requestId": "req_4mz0v8qk"
 }

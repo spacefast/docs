@@ -1,11 +1,11 @@
 ---
 title: "invalid_zero_realtime_event"
-description: "The Zero realtime event payload is malformed or scoped to the wrong space."
+description: "The Zero realtime event is not one the runtime accepts."
 ---
 
-The Zero realtime event payload is malformed or scoped to the wrong space.
+The Zero realtime event is not one the runtime accepts.
 
-**How to resolve:** Send a valid Zero realtime event for the space in the request path.
+**How to resolve:** Send an event the Zero realtime protocol defines.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_zero_realtime_event",
   "title": "Invalid zero realtime event",
   "status": 400,
-  "detail": "The Zero realtime event payload is malformed or scoped to the wrong space.",
+  "detail": "The Zero realtime event is not one the runtime accepts.",
   "code": "invalid_zero_realtime_event",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_db_row_invalid"
-description: "A database row cannot be converted into a Zero response value."
+description: "A row returned by the Zero database could not be decoded."
 ---
 
-A database row cannot be converted into a Zero response value.
+A row returned by the Zero database could not be decoded.
 
-**How to resolve:** Check the table schema and stored values for unsupported data.
+**How to resolve:** Correct the column types the query selects, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_row_invalid",
   "title": "Zero db row invalid",
   "status": 400,
-  "detail": "A database row cannot be converted into a Zero response value.",
+  "detail": "A row returned by the Zero database could not be decoded.",
   "code": "zero_db_row_invalid",
   "requestId": "req_4mz0v8qk"
 }

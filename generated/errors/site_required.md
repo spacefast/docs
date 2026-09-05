@@ -1,11 +1,11 @@
 ---
 title: "site_required"
-description: "A site reference is required for this operation."
+description: "The request did not name a provider site."
 ---
 
-A site reference is required for this operation.
+The request did not name a provider site.
 
-**How to resolve:** Pass the site id.
+**How to resolve:** Send the provider site the operation should act on.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/site_required",
   "title": "Site required",
   "status": 400,
-  "detail": "A site reference is required for this operation.",
+  "detail": "The request did not name a provider site.",
   "code": "site_required",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "domain_reserved_suffix"
-description: "The hostname is under a Spacefast-managed suffix and cannot be added as a domain."
+description: "The hostname sits under a Spacefast-managed suffix and cannot be added as a custom domain."
 ---
 
-The hostname is under a Spacefast-managed suffix and cannot be added as a domain.
+The hostname sits under a Spacefast-managed suffix and cannot be added as a custom domain.
 
-**How to resolve:** Use a domain you own. Spacefast assigns default hostnames automatically.
+**How to resolve:** Add a hostname on a domain the caller controls instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_reserved_suffix",
   "title": "Domain reserved suffix",
   "status": 400,
-  "detail": "The hostname is under a Spacefast-managed suffix and cannot be added as a domain.",
+  "detail": "The hostname sits under a Spacefast-managed suffix and cannot be added as a custom domain.",
   "code": "domain_reserved_suffix",
   "requestId": "req_4mz0v8qk"
 }

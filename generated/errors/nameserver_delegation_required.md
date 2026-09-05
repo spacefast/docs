@@ -1,11 +1,11 @@
 ---
 title: "nameserver_delegation_required"
-description: "This operation requires the domain to be delegated to Spacefast nameservers."
+description: "The domain's nameservers do not point at the managed zone yet."
 ---
 
-This operation requires the domain to be delegated to Spacefast nameservers.
+The domain's nameservers do not point at the managed zone yet.
 
-**How to resolve:** Update the domain's nameservers at the registrar. After delegation propagates, retry.
+**How to resolve:** Set the nameservers listed in the diagnostic at the registrar; the managed zone serves once the delegation is observed.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/nameserver_delegation_required",
   "title": "Nameserver delegation required",
   "status": 400,
-  "detail": "This operation requires the domain to be delegated to Spacefast nameservers.",
+  "detail": "The domain's nameservers do not point at the managed zone yet.",
   "code": "nameserver_delegation_required",
   "requestId": "req_4mz0v8qk"
 }

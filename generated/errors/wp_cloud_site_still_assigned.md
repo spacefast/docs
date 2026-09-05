@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_site_still_assigned"
-description: "The provider site still has assignments and cannot be released."
+description: "The WP Cloud site is still bound to a Space or placement."
 ---
 
-The provider site still has assignments and cannot be released.
+The WP Cloud site is still bound to a Space or placement.
 
-**How to resolve:** Remove the site's assignments first.
+**How to resolve:** Unassign the site from its placement before deleting it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_site_still_assigned",
   "title": "Wp cloud site still assigned",
   "status": 400,
-  "detail": "The provider site still has assignments and cannot be released.",
+  "detail": "The WP Cloud site is still bound to a Space or placement.",
   "code": "wp_cloud_site_still_assigned",
   "requestId": "req_4mz0v8qk"
 }

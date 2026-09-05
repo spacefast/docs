@@ -1,11 +1,11 @@
 ---
 title: "provider_job_failed"
-description: "A hosting-provider job failed while processing this operation."
+description: "A provider job behind this request failed."
 ---
 
-A hosting-provider job failed while processing this operation.
+A provider job behind this request failed.
 
-**How to resolve:** Retry the operation. If it keeps failing, contact support with the operation id.
+**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_job_failed",
   "title": "Provider job failed",
   "status": 400,
-  "detail": "A hosting-provider job failed while processing this operation.",
+  "detail": "A provider job behind this request failed.",
   "code": "provider_job_failed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,0 +1,419 @@
+---
+title: sf spaces and sf transfers
+description: Create, list, inspect, rename, duplicate, download, claim, and delete Spaces, and move one to another team
+sidebar:
+  order: 5
+---
+
+After this page you can manage a Space's whole lifecycle from the terminal: create one before you publish, look up what it is serving, rename it, pull its files back down, claim an anonymous one into your account, retire it, and hand it to another team.
+
+A Space is one hosted site: a slug, a hostname, an owner, and a stack of versions. See [Spaces](/spaces) for the model.
+
+## How the CLI picks a Space
+
+Most subcommands take `--space`. When you leave it out, the CLI resolves in this order:
+
+1. `--space` or `SPACEFAST_SPACE`
+2. The anonymous Space saved in `.spacefast/state.json`, unless the committed link names a different Space ID
+3. The committed link in `.spacefast/space.json`
+4. A `space` entry in `sf.jsonc`
+5. The `spaceId` cached in `.spacefast/state.json`
+
+With nothing to go on and exactly one accessible Space, the CLI picks it, in scripts too. With several, an interactive terminal gets a prompt and a non-interactive one gets `no_space_selected` (exit 2). An empty `--space` or `SPACEFAST_SPACE` is an error, not "absent".
+
+## sf spaces ls
+
+List spaces. Alias: `sf spaces list`.
+
+```text
+sf spaces ls
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | all teams | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--limit=<value>` | `50` | Maximum spaces to return. 1 to 100 |
+
+### Examples
+
+```bash
+sf spaces ls
+sf spaces ls --team acme
+```
+
+### Output
+
+A table of `SLUG`, `ID`, `TEAM`, `LIVE URL`. `--json` returns `{ data: [...], pagination }`, one Space object per row with `id`, `slug`, `title`, `teamSlug`, `status`, `defaultHostname`, `liveUrl`, `anonymous`, `config`, and timestamps.
+
+## sf spaces get
+
+Show a space.
+
+```text
+sf spaces get
+```
+
+Prints the Space's live runtime state and its current version.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Examples
+
+```bash
+sf spaces get
+sf spaces get --space docs
+```
+
+### Output
+
+```text
+Space:    Docs
+Slug:     docs
+Status:   active
+Live URL: https://docs.view.fast
+Team:     acme
+Mode:     website
+```
+
+Then the live version summary, or `Live version: none`. An anonymous Space prints `Team: anonymous` and a `Claim expires:` line. `--json` returns `{ space, state, runtime, liveVersion }`.
+
+## sf spaces add
+
+Create an empty space. Alias: `sf spaces create`.
+
+```text
+sf spaces add
+```
+
+Creates the Space and saves it to `.spacefast/state.json`. You rarely need this: `sf publish` creates a Space when there is none.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-n, --name=<value>` | none | Set the Space title |
+| `--slug=<value>` | generated | Set the Space slug |
+| `--mode=website\|files` | `website` | Space serving mode |
+| `--spa=auto\|true\|false` | `auto` | Control single-page app fallback detection |
+| `--hostname-scope=team\|global` | server default | Managed hostname scope for newly created Spaces |
+| `--save-state` / `--no-save-state` | `--save-state` | Write the created Space to `.spacefast/state.json` |
+| `--show-secret` | off | Print the access URL and claim link in JSON or non-interactive output |
+
+### Example
+
+```bash
+sf spaces add --name docs
+```
+
+### Output
+
+The Space summary. `--json` returns the created Space with its state entry; the access URL and claim link are masked unless you pass `--show-secret`.
+
+## sf spaces update
+
+Rename or update a space.
+
+```text
+sf spaces update
+```
+
+Patches Space identity, serving metadata, and generated viewer metadata.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--slug=<value>` | unchanged | New Space slug. Must be sent without other update flags |
+| `-n, --name=<value>` | unchanged | Space title |
+| `--mode=website\|files` | unchanged | Serving mode |
+| `--spa=auto\|true\|false` | unchanged | Enable or disable SPA fallback. `auto` leaves the current setting alone |
+| `--viewer-title=<value>` | unchanged | Viewer page title. Pass `null` to clear |
+| `--viewer-description=<value>` | unchanged | Social preview description. Pass `null` to clear |
+| `--viewer-og-image-path=<value>` | unchanged | Social preview image path. Pass `null` to clear |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | server default | Seconds to wait for queued work to finish |
+
+### Examples
+
+```bash
+sf spaces update --space docs --slug developers --wait
+sf spaces update --space docs --name "Developer docs"
+sf spaces update --space docs --mode files --spa false
+```
+
+A slug change also renames the managed hostname. Version URLs are unaffected: they are minted once and survive renames. See [URLs and hostnames](/urls).
+
+## sf spaces download
+
+Download a space version.
+
+```text
+sf spaces download
+```
+
+Downloads the files of one version. Defaults to the latest.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `-v, --version=<value>` | `latest` | Version ID, ref, number, or `latest` |
+| `--output=<value>` | `.` | Directory to write downloaded files into |
+| `--overwrite` | off | Overwrite files that already exist in the output directory |
+| `-j, --concurrency=<value>` | `10` | Files to download at the same time. Minimum 1 |
+
+### Examples
+
+```bash
+sf spaces download --space docs --output ./out
+sf spaces download --space docs --version v3 --overwrite
+```
+
+### Output
+
+The Space summary, then `Downloaded 12 files from v3 to ./out`. `--json` returns `{ space, version, output, concurrency, fileCount, files }`.
+
+## sf spaces duplicate
+
+Duplicate a space.
+
+```text
+sf spaces duplicate
+```
+
+Downloads an existing version and publishes those files as a new Space.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Source Space. ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--version=<value>` | live version | Version to duplicate |
+| `--slug=<value>` | generated | Slug for the duplicate Space |
+| `--title=<value>` | source title | Title for the duplicate Space |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the duplicate to become ready |
+
+### Example
+
+```bash
+sf spaces duplicate --space docs --slug docs-copy
+```
+
+## sf spaces claim
+
+Claim an anonymous space.
+
+```text
+sf spaces claim
+```
+
+Moves a saved anonymous Space into your account, starting browser login if you are not signed in. The space key comes from `.spacefast/state.json` unless you pass `--claim-token`.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--space=<value>` | saved Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--keep-publishing` / `--no-keep-publishing` | prompted | Keep the agent that published this Space authorized to publish to it |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+
+### Examples
+
+```bash
+sf spaces claim
+sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
+```
+
+### Output
+
+```text
+Claimed: https://docs.view.fast
+
+This space is now saved to your account.
+Space spc_…
+Team acme
+```
+
+With `--keep-publishing`, one more line: `The publishing agent stays authorized for one credential upgrade.` Run `sf continue` afterwards to swap the saved space key for a durable API key. See [Anonymous publish and claiming](/anonymous-and-claim).
+
+## sf spaces rotate-claim
+
+Rotate an anonymous Space's key.
+
+```text
+sf spaces rotate-claim
+```
+
+Replaces an anonymous Space's key, live URL, and claim link. Recipient Links keep working. Use it when the old key leaked.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--space=<value>` | saved Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+
+### Example
+
+```bash
+sf spaces rotate-claim
+```
+
+### Output
+
+```text
+Rotated the space key for spc_….
+Claim link: https://…
+Saved the replacement space key to .spacefast/state.json.
+```
+
+## sf spaces rm
+
+Delete a space. Aliases: `sf spaces remove`, `sf spaces delete`.
+
+```text
+sf spaces rm
+```
+
+Takes the Space offline. The slug, versions, and data are retained rather than destroyed. The prompt names the resolved slug, and a non-interactive run needs `--yes`.
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
+
+### Examples
+
+```bash
+sf spaces rm --space docs
+sf spaces rm --space docs --yes
+```
+
+### Output
+
+```text
+Space spc_… is offline.
+Its slug, versions, and data are retained for operator cleanup.
+Operation: op_… (completed)
+```
+
+If the checkout was linked to that Space, the link is cleared.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `confirmation_required` | 2 | Non-interactive run without `--yes`. Pass `--yes` |
+| `cancelled` | 130 | You declined the prompt |
+
+## sf spaces transfer
+
+Transfer a space to another team.
+
+```text
+sf spaces transfer TEAM
+```
+
+Requests a transfer. It applies once a member of the target team accepts.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<team>` | required | Target team slug, ID, or name |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Source team. Slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+### Example
+
+```bash
+sf spaces transfer acme --space spc_123
+```
+
+### Output
+
+The transfer block (`Transfer`, `Space`, `Status`, `From team`, `To team`, `Expires`), then `Next: a member of the target team accepts with sf transfers accept <id>.` `--json` returns `{ transfer }`.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `validation_error` | 2 | No accessible team matches the name. Run `sf teams ls` |
+
+## sf transfers accept
+
+Accept a space transfer. Alias: `sf transfers confirm`.
+
+```text
+sf transfers accept ID
+```
+
+Accepts a pending transfer as a member of the target team.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<id>` | required | Transfer ID (`trf_…`) |
+
+### Example
+
+```bash
+sf transfers accept trf_123
+```
+
+## sf transfers cancel
+
+Cancel a space transfer.
+
+```text
+sf transfers cancel ID
+```
+
+Cancels a pending transfer.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<id>` | required | Transfer ID (`trf_…`) |
+
+### Example
+
+```bash
+sf transfers cancel trf_123
+```
+
+### Output
+
+Both commands print the transfer block and return `{ transfer }` under `--json`.

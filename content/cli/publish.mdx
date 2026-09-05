@@ -1,0 +1,314 @@
+---
+title: sf publish
+description: Publish a file, directory, project, or archive to a Space, with every flag, the receipt shape, and the errors publish can return
+sidebar:
+  order: 2
+---
+
+After this page you can publish a folder, build a framework project locally or remotely, publish without an account and claim the Space later, and parse the `--json` receipt in a script. `sf dev` is documented at the end because it runs a project locally, not a copy of what publish serves.
+
+## sf publish
+
+Publish files or built projects to Spacefast. `sf deploy` is an exact alias.
+
+```text
+sf publish [DIR]
+```
+
+A publish creates one immutable version. If the live channel promotes automatically (the default), that version goes live. See [Publishing](/publish) for the model and [Versions](/versions) for what happens after.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[DIR]` | `.` | File, directory, project, or `.zip`/`.tar.gz` archive to publish |
+
+### Space selection flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+
+A blank `--space` or `SPACEFAST_SPACE` fails with `validation_error` rather than being read as absent, because treating it as absent would create a new Space and orphan the one you meant.
+
+### Space metadata flags
+
+These apply when the publish creates the Space. On an existing Space with `--target preview`, `--name`, `--mode`, and a non-`auto` `--spa` are refused, because a preview must not change settings that live traffic shares.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-n, --name=<value>` | none | Set the Space title |
+| `--slug=<value>` | generated | Set the Space slug when creating a new Space. Fails with `space_selection_conflict` if a Space is already selected |
+| `--access=private\|team\|public` | team default | Set initial root access when this publish creates a team-owned Space. Requires a login or `--token`, and fails with `space_selection_conflict` if a Space is already selected |
+| `--hostname-scope=team\|global` | server default | Managed hostname scope for newly created Spaces |
+| `--spa=auto\|true\|false` | `auto` | Control single-page app fallback detection |
+| `--mode=website\|files` | `website` | Serve the Space as a website or as a raw file listing. Usually set in `sf.jsonc` |
+
+`--mode files` with `--spa true` is rejected: a file listing has no SPA fallback to serve.
+
+### Version source flags
+
+Every value here is recorded on the version. On GitHub Actions, GitLab CI, and Bitbucket the CLI detects these itself; the flags override the detection.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-m, --message=<value>` | git commit message | Changelog entry shown in version history. Env `SPACEFAST_PUBLISH_MESSAGE` |
+| `--git-branch=<value>` | detected | Git branch name to record. Env `SPACEFAST_GIT_BRANCH` |
+| `--git-commit=<value>` | detected | Git commit SHA to record. Env `SPACEFAST_GIT_COMMIT` |
+| `--git-ref=<value>` | detected | Git ref to record. Env `SPACEFAST_GIT_REF` |
+| `--git-repository=<value>` | detected | Repository to record, for example `owner/repo`. Env `SPACEFAST_GIT_REPOSITORY` |
+| `--source-type=direct-upload\|git` | detected | Version source type to record. Env `SPACEFAST_SOURCE_TYPE` |
+
+### Build flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--build` | off | Force build mode for directories. Archives always use remote detection |
+| `--remote` | off | Upload source and run the build remotely. Cannot combine with `--prebuilt` |
+| `--prebuilt` | off | Publish a prebuilt directory or archive without installing or building. Cannot combine with `--install-command`, `--build-command`, or `--remote` |
+| `--root-directory=<value>` | repository root | Repository subdirectory that contains the app |
+| `--install-directory=<value>` | app root | Repository subdirectory to run dependency installation from |
+| `--install-command=<value>` | package-manager detection | Install command |
+| `--build-command=<value>` | framework and package script detection | Build command |
+| `--output-directory=<value>` | framework default | Build output directory relative to the app root |
+| `--env-file=<value>` | none | Local dotenv file to load for install and build commands. Repeatable |
+| `--ignored-build-command=<value>` | none | For `--remote`, a command that skips the build when it exits 0 |
+| `--source-include=<value>` | none | Ignored file or directory to add back into a remote source archive. Repeatable |
+| `--skip-install` | off | Skip dependency installation |
+| `--skip-build` | off | Skip the build command and publish the selected directory unless `--output-directory` is set |
+
+### Version flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--publish-mode=additive\|snapshot` | `snapshot` | Replace everything in the Space, or add to what is already published |
+| `--immutable-asset-prefix=<value>` | none | Path prefix whose files are content-addressed and kept from the previous version, so a tab loaded before this publish can still fetch its chunks. Snapshot mode only. Repeatable |
+
+### Execution flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--target=production\|preview` | `production` | Publish to production (live), or create a preview version without changing live traffic or existing Space settings |
+| `--config-only` | off | Publish a config-only version that carries the prior artifact forward without building or uploading content |
+| `--dry-run` | off | Print the resolved publish plan without uploading files or writing state |
+| `--wait` / `--no-wait` | `--wait` | Wait until the version is ready and, for production, live before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become ready |
+| `--stream` / `--no-stream` | `--no-stream` | With `--json`, emit a JSONL publish event stream instead of a single result |
+| `--auto-finalize` / `--no-auto-finalize` | `--auto-finalize` | Finalize a remote build automatically after staging its output. Cannot combine with `--config-only` or `--target preview` |
+
+`--config-only` cannot be combined with any build flag: `--build`, `--remote`, `--prebuilt`, `--root-directory`, `--install-directory`, `--install-command`, `--build-command`, `--output-directory`, `--env-file`, `--skip-install`, `--skip-build`, `--ignored-build-command`, `--source-include`, or `--allow-unsupported-platform-features`.
+
+### Output and migration flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--show-secret` | off | Print the access URL and claim link in JSON or non-interactive output |
+| `--allow-unsupported-platform-features` | off | Publish even when imported platform config includes features Spacefast cannot convert |
+
+## How publish decides what to do
+
+The CLI resolves the input path before it touches the network.
+
+| Input | What publish does |
+| --- | --- |
+| Missing path | `validation_error`: "Input path does not exist" |
+| `.zip`, `.tar.gz`, or `.tgz` | Remote detection: static content is packed unchanged, a detected app is built remotely |
+| Any other file | Single-file publish |
+| Any other file plus `--build` or `--remote` | `validation_error`: those flags need a directory or an archive |
+| Directory plus `--remote` | Source archive uploaded, build runs remotely |
+| Directory with a detected build | Local build, then publish the output |
+| Directory plus `--build` with no build command | `validation_error`: configure `--build-command` or add a package build script |
+| Directory with no detected build | Uploads the directory as-is |
+
+An archive whose top level is a single directory is unwrapped to that directory. Archive input rejects flags it cannot honor: `--build-command`, `--ignored-build-command`, `--immutable-asset-prefix`, `--install-command`, `--install-directory`, `--output-directory`, `--publish-mode`, `--root-directory`, `--skip-build`, `--skip-install`, `--source-include`, and `--allow-unsupported-platform-features`.
+
+## What gets uploaded
+
+Publish drops state, secret, and vendor-tooling files before it hashes anything. The short version:
+
+- Always dropped: `.spacefast/state.json`, `.spacefast/space.json`, `.next/cache/**`, and Spacefast lock and temp files.
+- Dropped anywhere in the path: `.DS_Store`, `.gitignore`, `.env` and the whole `.env.*` family, `.npmrc`, `.netrc`, `_routes.json`, key material (`*.pem`, `*.key`, `*.p12`, `*.pfx`, `id_rsa` and friends).
+- Dropped as a directory: `.git`, `.hg`, `.svn`, `.ssh`, `.aws`, `node_modules`, `.cache`, `.turbo`, `.vercel`, `.netlify`, `.wrangler`.
+- Kept and interpreted: `_headers` and `_redirects`.
+
+A remote source archive uses a different policy: it honors `.gitignore` including nested files and `!` negations, and in a git checkout it takes the file list from git itself. `--source-include` adds a path back.
+
+Limits that fail a publish: 100,000 files per version, 1 GiB per file, 2 GiB total, 1024 bytes per canonical path. Full rules live in [Publishing](/publish) and [Limits](/limits).
+
+## Building
+
+With no build flags, `sf publish` in a project directory detects the framework, runs its build, and publishes the output. Detection covers Next.js, Astro, Nuxt, SvelteKit, Vite, Docusaurus, Hugo, Jekyll, and about twenty more. The list and default output directory for each preset are in [Frameworks and builds](/frameworks).
+
+Three ways to build:
+
+```bash
+sf publish                 # detect and build locally, then upload the output
+sf publish --remote        # upload source, build on Spacefast
+sf publish ./dist --prebuilt   # you built it, upload it unchanged
+```
+
+`--remote` creates a build you can follow with [`sf builds logs`](/cli/builds).
+
+## Access for a new Space
+
+`--access` sets root access at creation time only.
+
+```bash
+sf publish ./dist --slug internal-notes --access private
+```
+
+Passing it when a Space is already selected fails with `space_selection_conflict` (exit 2), and the error tells you to use `sf share` instead. Passing it without a login fails with `unauthorized` (exit 10), because there is no team to own the Space. To change access on an existing Space, see [`sf share`](/cli/share).
+
+The team-wide default for future Spaces is `sf teams defaults`, on the [teams page](/cli/teams).
+
+## Anonymous publish and the claim key
+
+With no login and no linked Space, publish creates an anonymous Space and saves its key (`sfc_…`), claim URL, and expiry in `.spacefast/state.json`, which the CLI adds to `.gitignore`. The claim link prints once, on the publish that created the Space. Later publishes point at `sf spaces claim` instead.
+
+```bash
+sf spaces claim                                  # claim the Space saved here
+sf continue                                      # swap the key for a durable API key
+```
+
+In `--json` or non-interactive output the key, its URL form, and the claim URL are all `[REDACTED]` unless you pass `--show-secret`. The `expiresAt` field is never masked, so a script can always tell an anonymous receipt from a permanent one. The clock, the caps, and the claim itself are on [Publish without an account](/anonymous-and-claim).
+
+## Examples
+
+```bash
+sf publish ./dist                       # publish a file or directory directly
+sf publish                              # build a detected project, or upload the directory
+sf publish --remote                     # upload source and build remotely
+sf publish ./site.zip                   # publish an archive
+sf publish --target preview --json      # unpromoted preview, no change to live
+sf publish --json --stream              # stream JSONL build and publish events
+```
+
+## Output
+
+Human output prints a preflight block, then the receipt:
+
+```text
+Preparing publish...
+Folder          dist
+Files           12
+Ignored         3
+Mode            website
+Auth            anonymous
+
+Published: https://<slug>.view.fast
+
+  Open          https://<slug>.view.fast
+  Live URL      https://<slug>.view.fast
+  Version URL   https://v1--<slug>.view.fast
+  Space         spc_…
+  Version       v1 (ready)
+  Version ID    ver_…
+  Files         12
+  Duration      3.2s
+  State         .spacefast/state.json
+```
+
+The headline verb is `Published`, `Updated`, `No changes`, `Ready`, or `Held`, depending on what happened to the channel.
+
+`--json` writes one receipt to stdout:
+
+```json
+{
+  "data": {
+    "space": {
+      "id": "spc_example",
+      "slug": "example",
+      "title": "Example",
+      "publicName": "example",
+      "liveUrl": null
+    },
+    "version": {
+      "id": "ver_example",
+      "status": "prepared",
+      "immutableUrl": null,
+      "ref": "v1",
+      "number": null,
+      "manifestHash": null
+    },
+    "activation": {
+      "channel": "live",
+      "outcome": "pending",
+      "currentLiveVersionId": null
+    },
+    "authMode": "authenticated",
+    "persistence": "managed",
+    "next": {
+      "action": "poll",
+      "url": "/v1/spaces/spc_example/versions/ver_example",
+      "retryAfter": 2,
+      "hint": "Poll until the version is ready."
+    },
+    "links": {
+      "inspect": "/v1/spaces/spc_example",
+      "version": "/v1/spaces/spc_example/versions/ver_example"
+    }
+  }
+}
+```
+
+`activation.outcome` is one of `activated`, `unpromoted`, `superseded`, or `pending`. `next.action` is `poll` while the version is still building and `done` once it is ready; when the version is ready but not live, `next.url` is the promote endpoint and `next.hint` says why. An anonymous receipt adds a `claim` block with `key`, `url`, `claimUrl`, and `expiresAt`.
+
+With `--stream`, stdout becomes JSONL, one event per line:
+
+```text
+{"type":"build.started","timestamp":"…","command":"publish","mode":"remote","buildId":"bld_…"}
+{"type":"build.log","timestamp":"…","message":"…","level":"stdout"}
+{"type":"build.succeeded","timestamp":"…"}
+{"type":"publish.completed","timestamp":"…","data":{ …the receipt above… }}
+```
+
+Failures arrive as `build.failed` or `publish.failed` with an `error` member. A flag-parse failure also produces one `publish.failed` line, so a stream consumer never sees silence.
+
+## Errors
+
+Publish uses the shared [exit codes](/cli#exit-codes).
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `no_space_selected` | 2 | Pass `--space`, set `SPACEFAST_SPACE`, or run from a linked directory |
+| `space_selection_conflict` | 2 | `--slug` or `--access` was passed while a Space is already selected. Drop the flag, or publish from an unlinked directory |
+| `validation_error` | 2 | Conflicting flags or a missing input path. The message names the flag |
+| `invalid_publish_archive` | 2 | The archive failed safety checks. See below |
+| `upload_too_large` | 2 | The archive is over the remote upload limit |
+| `unauthorized` | 10 | `--access` without a login, or an expired token. Run `sf login` |
+| `space_unclaimed` | 10 | The Space still needs its key. Pass `--claim-token`, or run `sf spaces claim` |
+| `checkout_state_conflict` | 30 | Another process re-linked this checkout mid-command. Re-run |
+| `build_failed` | 1 | The build command failed. Read the output, or `sf builds logs` for a remote build |
+| `timeout_error` | 50 | The wait budget elapsed. Re-run with `--no-wait` and inspect the version later |
+
+Archive input is checked before upload and rejected for encrypted entries, absolute or `..` paths, duplicate paths, non-UTF-8 names, Zip64 or multi-disk metadata, compression other than store and deflate, more than 100,000 files, expansion past 2 GiB, or a compression ratio above 200x.
+
+## sf dev
+
+Start the local dev server.
+
+```text
+sf dev
+```
+
+`sf dev` runs the project in this directory. It is not a local mirror of what publish serves: for a `zero` runtime it starts the capsule dev server, and for anything else it serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. There is no static file server for your site on that path, so for a framework project use that framework's own dev server (`next dev`, `vite`) and run `sf publish` when you are ready.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-d, --dir=<value>` | `.` | Project directory |
+| `-p, --port=<value>` | `4173` | Preview port. 1 to 65535 |
+| `--host=<value>` | `127.0.0.1` | Host interface for the local dev server |
+| `--allow-network` | off | Allow an explicit non-loopback binding |
+| `--state-backend=memory\|sqlite` | `memory` | Local state adapter for a runtime dev server |
+| `--watch` / `--no-watch` | `--watch` | Poll source files and reload the runtime after changes |
+| `--watch-interval=<ms>` | `1000` | Source polling interval in milliseconds |
+| `--dry-run` | off | Print the dev server plan without starting it |
+
+A non-loopback `--host` without `--allow-network` fails with `validation_error`. A project whose `sf.jsonc` declares the `functions` runtime fails with `runtime_dev_unsupported` (exit 2), which points you at your framework's dev server.
+
+```bash
+sf dev --port 5000
+sf dev --dry-run          # print Runtime, Root, Port, Preview and exit
+```

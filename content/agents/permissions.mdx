@@ -1,0 +1,98 @@
+---
+title: What agents are allowed to do
+description: How an agent gets access to your Spacefast account, what it can never do without you, and how approvals, handoffs, and revocation work
+---
+
+After this page you can decide how much access to hand an agent, recognize the moments where it has to come back to you, and cut it off in one click when you are done.
+
+## How an agent gets access
+
+Four lanes, all of them ending in something you approved in a browser.
+
+| Lane | How it starts | What the agent ends up holding |
+|---|---|---|
+| Device login | The agent runs `sf login` and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
+| API key | You mint one and paste it into the agent's config | A key with the permissions from the preset and your expiry |
+| Hosted MCP | The agent sends you to a consent screen | An OAuth token for the scopes and teams you allowed |
+| Handoff link | You mint a one-use link from the dashboard | An API key bound to one Space or one page |
+
+Device login is covered step by step in [sign in and security](/authentication). Keys and presets are in [API keys and tokens](/api-keys). For connecting over MCP, see [the Spacefast MCP server](/agents/mcp-server).
+
+## What you are approving
+
+Interactive approval screens ask for two things: how much the agent may do, and where.
+
+**Access.** The device page names the profile it asked for. **Read-only access** reads your teams, sites, and domains and changes nothing. **Agent access** can create and publish sites, manage domains and DNS, create teams, and use Spacefast tools. Its own limits line says it cannot delete sites, manage team members, change billing, or mint credentials.
+
+**Teams.** You pick **All teams** ("Includes teams you join or create later"), **Choose teams** with a picker, or **No team access** ("Sign-in only. This device can't touch any team").
+
+Open **Customize what this device can do** to untick individual permissions. The list only ever contains what the agent asked for. You can narrow the request, never widen it.
+
+Two behaviors matter more than the checkboxes:
+
+- **Your role is the real ceiling.** In each team the agent gets the smaller of what you approved and what your own role allows there. The approval page says so: "In each team, access is still capped by your role there." Get promoted and the same credential can do more. Get removed and it can do nothing there, with no re-approval either way.
+- **All teams means all teams, always.** A credential approved for all teams follows the teams you join later, and loses the ones you leave.
+
+## What always needs a person
+
+These are refused for every agent credential, at every permission level:
+
+- Inviting a member, or cancelling or resending an invitation
+- Changing a member's role
+- Removing a member
+- Accepting a team invitation
+- Approving or denying an approval request
+
+Accepting an invitation is the one that surprises people. Do it in the dashboard, and the agent credentials you already approved pick the new team up on their own.
+
+An agent that logged in with anything other than **All teams** also cannot create a team. Re-approve it for all teams, or create the team yourself.
+
+## Approvals
+
+When an agent hits something risky, it stops and asks. The request lands on the **Approvals** page and in the bell in the dashboard header.
+
+`/approvals` is titled **Approvals**, with "Waiting on you, highest impact first." Each pending row says what kind of decision it is:
+
+- "Standing access, it changes what the agent may do on its own." The agent is asking to hold a permission for a while.
+- "One suspended call, runs once after you approve." One paused operation, nothing more.
+
+Press **Review** to see the rationale the agent gave, which Space or domain it touches, and for standing access, what it already has next to what it is adding. Then approve or deny.
+
+- A decision is good for about 10 minutes, and never outlives the agent's own access.
+- **Denying is final.** The agent cannot re-ask on the same request. It has to start over.
+- Decided requests move to a **Decided** table with **What**, **Outcome**, and **Decided** columns, showing **Approved**, **Completed**, **Executing**, **Denied**, or **Expired**.
+
+Only genuinely risky operations prompt: publishing over a live site, deploying, rolling a version back, buying a domain, and changing DNS. Routine publishing does not, on purpose. An approval prompt on every publish is an approval prompt nobody reads.
+
+Ask for one of those to see the flow end to end.
+
+<Prompt description="Roll this Space back to the previous version." actions={["copy"]}>
+Roll this Space back to the previous version.
+</Prompt>
+
+## Handoffs
+
+A handoff is a one-use link that hands a local coding agent access to exactly one Space, or to the page you are looking at. You mint it, the agent redeems it, and the link is dead.
+
+<Steps>
+  <Step title="Mint the link">
+    Open **/start**, pick your agent, and follow the setup. Each agent has its own page at `/start/<agent>`. The link appears once, at creation, and is never shown again.
+  </Step>
+  <Step title="Hand it to the agent">
+    The agent redeems it with `sf login --handoff` and pastes the link when prompted, or pipes it on stdin. Passing a handoff link as a command argument is refused, because it would land in your shell history and in the process list.
+  </Step>
+  <Step title="Watch it land">
+    The team's **Agents** page has a **Handoff links** section. Rows show **Active**, **Redeemed**, **Expired**, or **Revoked**, which Space the link publishes to, when it was created, and how many times it was fetched.
+  </Step>
+</Steps>
+
+A handoff link lives 15 minutes and can be redeemed once. A team can have 10 pending at a time. **Revoke** on an active row stops it immediately, redeemed or not, though anything the agent already published stays where it is.
+
+## Turning access off
+
+**Account settings → Connected apps** lists everything acting as you, labelled **Agent**, **App**, **CLI**, **One-time handoff**, **API key**, or **Machine OAuth client**. Opening one shows which teams it reaches, which permissions it holds, and its recent activity.
+
+- Revoking one connection kills the whole thing: its API keys, its OAuth tokens, its handoff links, and any temporary elevation.
+- **Stop all agent access** is the account-wide emergency stop. It revokes everything acting as you and cancels handoff links that were never redeemed. Team-owned automation is not yours alone, so it survives.
+
+Team owners and admins have the same control from the team's **Agents** page, under **Who can act here**, where **Remove from team** takes an agent's reach into that one team away and leaves the rest alone.

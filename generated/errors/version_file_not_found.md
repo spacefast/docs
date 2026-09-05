@@ -1,11 +1,11 @@
 ---
 title: "version_file_not_found"
-description: "The requested file does not exist in this version."
+description: "The version does not carry that file in the requested view."
 ---
 
-The requested file does not exist in this version.
+The version does not carry that file in the requested view.
 
-**How to resolve:** List the version's files to confirm the path.
+**How to resolve:** List the version's files and request a path from that list.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_file_not_found",
   "title": "Version file not found",
   "status": 400,
-  "detail": "The requested file does not exist in this version.",
+  "detail": "The version does not carry that file in the requested view.",
   "code": "version_file_not_found",
   "requestId": "req_4mz0v8qk"
 }

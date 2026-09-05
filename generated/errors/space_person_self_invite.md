@@ -1,11 +1,11 @@
 ---
 title: "space_person_self_invite"
-description: "The inviter already belongs to the space."
+description: "The invitation names the person sending it."
 ---
 
-The inviter already belongs to the space.
+The invitation names the person sending it.
 
-**How to resolve:** Use your existing space access instead of inviting yourself.
+**How to resolve:** Invite a different address; the sender already has access.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_person_self_invite",
   "title": "Space person self invite",
   "status": 400,
-  "detail": "The inviter already belongs to the space.",
+  "detail": "The invitation names the person sending it.",
   "code": "space_person_self_invite",
   "requestId": "req_4mz0v8qk"
 }

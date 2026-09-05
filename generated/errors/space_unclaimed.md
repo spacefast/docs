@@ -1,11 +1,11 @@
 ---
 title: "space_unclaimed"
-description: "This operation requires a claimed space."
+description: "The Space is anonymous, so it has no owner this operation can act for."
 ---
 
-This operation requires a claimed space.
+The Space is anonymous, so it has no owner this operation can act for.
 
-**How to resolve:** Claim the space first using its claim URL.
+**How to resolve:** Claim the Space into a team, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_unclaimed",
   "title": "Space unclaimed",
   "status": 400,
-  "detail": "This operation requires a claimed space.",
+  "detail": "The Space is anonymous, so it has no owner this operation can act for.",
   "code": "space_unclaimed",
   "requestId": "req_4mz0v8qk"
 }

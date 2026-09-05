@@ -1,11 +1,11 @@
 ---
 title: "zero_db_operation_too_large"
-description: "The Zero database operation payload is too large."
+description: "The Zero database operation is larger than the request size limit."
 ---
 
-The Zero database operation payload is too large.
+The Zero database operation is larger than the request size limit.
 
-**How to resolve:** Reduce query parameters or batch size and retry.
+**How to resolve:** Split the operation into smaller statements or batches.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_operation_too_large",
   "title": "Zero db operation too large",
   "status": 400,
-  "detail": "The Zero database operation payload is too large.",
+  "detail": "The Zero database operation is larger than the request size limit.",
   "code": "zero_db_operation_too_large",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_ai_unavailable"
-description: "The local Zero AI service is not configured."
+description: "The AI service is not configured for this runtime."
 ---
 
-The local Zero AI service is not configured.
+The AI service is not configured for this runtime.
 
-**How to resolve:** Configure an AI handler in the project, then restart `sf dev` before calling the AI service.
+**How to resolve:** Publish the Space and call the endpoint on the live runtime; `sf dev` does not provide the AI service.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_ai_unavailable",
   "title": "Zero ai unavailable",
   "status": 400,
-  "detail": "The local Zero AI service is not configured.",
+  "detail": "The AI service is not configured for this runtime.",
   "code": "zero_ai_unavailable",
   "requestId": "req_4mz0v8qk"
 }

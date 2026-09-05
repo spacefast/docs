@@ -1,11 +1,11 @@
 ---
 title: "proxy_upstream_unresolved"
-description: "The proxy upstream hostname cannot be resolved."
+description: "The proxy upstream hostname does not resolve."
 ---
 
-The proxy upstream hostname cannot be resolved.
+The proxy upstream hostname does not resolve.
 
-**How to resolve:** Verify that the upstream DNS name resolves publicly, then publish again.
+**How to resolve:** Point the rule at a hostname that resolves in public DNS, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/proxy_upstream_unresolved",
   "title": "Proxy upstream unresolved",
   "status": 400,
-  "detail": "The proxy upstream hostname cannot be resolved.",
+  "detail": "The proxy upstream hostname does not resolve.",
   "code": "proxy_upstream_unresolved",
   "requestId": "req_4mz0v8qk"
 }

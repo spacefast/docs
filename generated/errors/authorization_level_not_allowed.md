@@ -1,11 +1,11 @@
 ---
 title: "authorization_level_not_allowed"
-description: "This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept."
+description: "The credential's authorization level does not allow this request."
 ---
 
-This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept.
+The credential's authorization level does not allow this request.
 
-**How to resolve:** This is not a scope problem and elevation will not clear it. Ask the person to perform the action in the dashboard.
+**How to resolve:** Call with a user-owned interactive agent grant, and set the grant's authorization level to `user` or `team`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/authorization_level_not_allowed",
   "title": "Authorization level not allowed",
   "status": 400,
-  "detail": "This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept.",
+  "detail": "The credential's authorization level does not allow this request.",
   "code": "authorization_level_not_allowed",
   "requestId": "req_4mz0v8qk"
 }

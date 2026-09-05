@@ -1,11 +1,11 @@
 ---
 title: "provider_error"
-description: "WP Cloud reported an error."
+description: "An upstream provider failed while serving this request."
 ---
 
-WP Cloud reported an error.
+An upstream provider failed while serving this request.
 
-**How to resolve:** Retry. If the error persists, contact support with the `requestId`.
+**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/provider_error",
   "title": "Provider error",
   "status": 400,
-  "detail": "WP Cloud reported an error.",
+  "detail": "An upstream provider failed while serving this request.",
   "code": "provider_error",
   "requestId": "req_4mz0v8qk"
 }

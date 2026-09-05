@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_invalid_body"
-description: "The Zero runner returned an invalid response body."
+description: "The Zero runner returned a body that is not a string or valid base64."
 ---
 
-The Zero runner returned an invalid response body.
+The Zero runner returned a body that is not a string or valid base64.
 
-**How to resolve:** Check the endpoint response and runner logs.
+**How to resolve:** Return a string or bytes from the handler, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_invalid_body",
   "title": "Zero runner invalid body",
   "status": 400,
-  "detail": "The Zero runner returned an invalid response body.",
+  "detail": "The Zero runner returned a body that is not a string or valid base64.",
   "code": "zero_runner_invalid_body",
   "requestId": "req_4mz0v8qk"
 }

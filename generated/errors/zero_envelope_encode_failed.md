@@ -1,11 +1,11 @@
 ---
 title: "zero_envelope_encode_failed"
-description: "The PHP bridge cannot encode the Zero runner request envelope."
+description: "The Zero request envelope could not be encoded for the runner."
 ---
 
-The PHP bridge cannot encode the Zero runner request envelope.
+The Zero request envelope could not be encoded for the runner.
 
-**How to resolve:** Retry with valid request data. If the issue persists, report it.
+**How to resolve:** Retry the request. If it keeps failing, check the handler's payload for values JSON cannot carry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_envelope_encode_failed",
   "title": "Zero envelope encode failed",
   "status": 400,
-  "detail": "The PHP bridge cannot encode the Zero runner request envelope.",
+  "detail": "The Zero request envelope could not be encoded for the runner.",
   "code": "zero_envelope_encode_failed",
   "requestId": "req_4mz0v8qk"
 }

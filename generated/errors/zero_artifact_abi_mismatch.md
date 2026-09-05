@@ -1,11 +1,11 @@
 ---
 title: "zero_artifact_abi_mismatch"
-description: "The Zero endpoint artifact was built for a different runner ABI."
+description: "The Zero artifact was built against a different runtime ABI than the box runs."
 ---
 
-The Zero endpoint artifact was built for a different runner ABI.
+The Zero artifact was built against a different runtime ABI than the box runs.
 
-**How to resolve:** Rebuild the Zero project with the current Spacefast CLI and runtime, then publish it again.
+**How to resolve:** Rebuild the capsule with the current toolchain, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_artifact_abi_mismatch",
   "title": "Zero artifact abi mismatch",
   "status": 400,
-  "detail": "The Zero endpoint artifact was built for a different runner ABI.",
+  "detail": "The Zero artifact was built against a different runtime ABI than the box runs.",
   "code": "zero_artifact_abi_mismatch",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "claim_blocked_takedown"
-description: "This space is under an abuse takedown and cannot be claimed."
+description: "The Space was taken down for abuse and cannot be claimed."
 ---
 
-This space is under an abuse takedown and cannot be claimed.
+The Space was taken down for abuse and cannot be claimed.
 
-**How to resolve:** If you believe the takedown is a mistake, contact support.
+**How to resolve:** Contact Spacefast support with the Space ID if the takedown looks wrong.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/claim_blocked_takedown",
   "title": "Claim blocked takedown",
   "status": 400,
-  "detail": "This space is under an abuse takedown and cannot be claimed.",
+  "detail": "The Space was taken down for abuse and cannot be claimed.",
   "code": "claim_blocked_takedown",
   "requestId": "req_4mz0v8qk"
 }

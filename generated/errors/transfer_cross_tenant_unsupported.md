@@ -1,11 +1,11 @@
 ---
 title: "transfer_cross_tenant_unsupported"
-description: "Spaces cannot be transferred across tenants."
+description: "The transfer would move the Space to a team in another tenant."
 ---
 
-Spaces cannot be transferred across tenants.
+The transfer would move the Space to a team in another tenant.
 
-**How to resolve:** Export the space and import it under the target tenant instead.
+**How to resolve:** Transfer to a team inside the same tenant.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/transfer_cross_tenant_unsupported",
   "title": "Transfer cross tenant unsupported",
   "status": 400,
-  "detail": "Spaces cannot be transferred across tenants.",
+  "detail": "The transfer would move the Space to a team in another tenant.",
   "code": "transfer_cross_tenant_unsupported",
   "requestId": "req_4mz0v8qk"
 }

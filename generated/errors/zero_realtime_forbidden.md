@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_forbidden"
-description: "The Zero realtime event intake credential is invalid."
+description: "The realtime replay token is not valid for this Space and live version."
 ---
 
-The Zero realtime event intake credential is invalid.
+The realtime replay token is not valid for this Space and live version.
 
-**How to resolve:** Send the configured bearer token or a valid signed realtime event.
+**How to resolve:** Request a fresh realtime replay token, then reconnect.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_forbidden",
   "title": "Zero realtime forbidden",
   "status": 400,
-  "detail": "The Zero realtime event intake credential is invalid.",
+  "detail": "The realtime replay token is not valid for this Space and live version.",
   "code": "zero_realtime_forbidden",
   "requestId": "req_4mz0v8qk"
 }

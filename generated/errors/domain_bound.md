@@ -1,11 +1,11 @@
 ---
 title: "domain_bound"
-description: "The domain is currently bound to a space, which blocks this operation."
+description: "The domain is already bound to a Space."
 ---
 
-The domain is currently bound to a space, which blocks this operation.
+The domain is already bound to a Space.
 
-**How to resolve:** Remove the domain's bindings first, then retry.
+**How to resolve:** Set the domain's `spaceId` to `null` before binding it somewhere else.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_bound",
   "title": "Domain bound",
   "status": 400,
-  "detail": "The domain is currently bound to a space, which blocks this operation.",
+  "detail": "The domain is already bound to a Space.",
   "code": "domain_bound",
   "requestId": "req_4mz0v8qk"
 }

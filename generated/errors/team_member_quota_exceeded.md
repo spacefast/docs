@@ -1,11 +1,11 @@
 ---
 title: "team_member_quota_exceeded"
-description: "Inviting this person would exceed the team's seat limit."
+description: "The team is at its seat limit, counting members and pending invitations."
 ---
 
-Inviting this person would exceed the team's seat limit.
+The team is at its seat limit, counting members and pending invitations.
 
-**How to resolve:** Remove a team member or cancel a pending invitation to free a seat. Pending invitations count toward the limit.
+**How to resolve:** Remove a member or cancel a pending invitation, or move the team to a plan with more seats.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/team_member_quota_exceeded",
   "title": "Team member quota exceeded",
   "status": 400,
-  "detail": "Inviting this person would exceed the team's seat limit.",
+  "detail": "The team is at its seat limit, counting members and pending invitations.",
   "code": "team_member_quota_exceeded",
   "requestId": "req_4mz0v8qk"
 }

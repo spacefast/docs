@@ -1,11 +1,11 @@
 ---
 title: "dns_field_not_applicable"
-description: "The DNS field is not writable for this provider, record type, or management mode."
+description: "A field in the record is not writable for this DNS provider or management mode."
 ---
 
-The DNS field is not writable for this provider, record type, or management mode.
+A field in the record is not writable for this DNS provider or management mode.
 
-**How to resolve:** Check the DNS capabilities response and remove fields that are not creatable or patchable.
+**How to resolve:** Remove the field at `path` from the record, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_field_not_applicable",
   "title": "Dns field not applicable",
   "status": 400,
-  "detail": "The DNS field is not writable for this provider, record type, or management mode.",
+  "detail": "A field in the record is not writable for this DNS provider or management mode.",
   "code": "dns_field_not_applicable",
   "requestId": "req_4mz0v8qk"
 }

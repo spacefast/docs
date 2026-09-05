@@ -1,11 +1,11 @@
 ---
 title: "ambiguous_space_slug"
-description: "The slug matches spaces in more than one of your teams, so it cannot be resolved."
+description: "The slug matches more than one Space the caller can reach."
 ---
 
-The slug matches spaces in more than one of your teams, so it cannot be resolved.
+The slug matches more than one Space the caller can reach.
 
-**How to resolve:** Pass a teamRef alongside the slug, or reference the space by its spc_ id.
+**How to resolve:** Pass `teamRef` alongside the slug, or reference the Space by its `spc_` ID or attached hostname.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/ambiguous_space_slug",
   "title": "Ambiguous space slug",
   "status": 400,
-  "detail": "The slug matches spaces in more than one of your teams, so it cannot be resolved.",
+  "detail": "The slug matches more than one Space the caller can reach.",
   "code": "ambiguous_space_slug",
   "requestId": "req_4mz0v8qk"
 }

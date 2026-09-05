@@ -1,11 +1,11 @@
 ---
 title: "template_variable_unresolved"
-description: "A template references a variable that has no value."
+description: "A template references a variable that is not defined."
 ---
 
-A template references a variable that has no value.
+A template references a variable that is not defined.
 
-**How to resolve:** Define the variable for the space, site, or team, or remove the reference.
+**How to resolve:** Define the variable in the Space's variables, or remove the reference from the template.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/template_variable_unresolved",
   "title": "Template variable unresolved",
   "status": 400,
-  "detail": "A template references a variable that has no value.",
+  "detail": "A template references a variable that is not defined.",
   "code": "template_variable_unresolved",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,0 +1,311 @@
+---
+title: zero, wp, runtime, pages, design, analytics
+description: Inspect and call a Space's Zero Abilities, generate types, run WP-CLI, see what a Space is serving, and read its traffic
+sidebar:
+  order: 25
+---
+
+After this page you can list what a Space's capsule lets an agent call, call one of those Abilities, generate TypeScript for what the platform owns, run any WP-CLI command against a Space, see exactly what is serving right now, own the default page templates, and read the traffic numbers.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). All except `sf zero import`, `sf pages pull`, `sf pages validate`, and `sf design generate` also take the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+## sf zero abilities
+
+List the Abilities the Space's live capsule publishes: what an agent can call, what category it belongs to, and whether it reads or writes. Aliased as `sf zero ls`.
+
+```text
+sf zero abilities [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+```bash
+sf zero abilities
+```
+
+### Output
+
+A table of `ABILITY | CATEGORY | MODE | REQUIRES`, or "This space publishes no Zero Abilities." The `REQUIRES` column is the capability or Grant capabilities the Ability needs, which is what answers "why did that come back 403".
+
+With `--json`, `data` is the array of Ability rows.
+
+## sf zero call
+
+Mint a short-lived Ability token for the Space and run the Ability against the Space's own WordPress REST API. The token is never printed and never appears in the `--json` receipt.
+
+```text
+sf zero call <ability> [--space <value>] [--credential <mch_...>] [--input <json>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<ability>` | Ability name, as shown by `sf zero abilities`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--credential=<mch_...>` | the only one, when there is exactly one | Machine credential id to mint the Ability token for |
+| `--input=<json>` | none | Ability input as inline JSON, or `@path` to read it from a file |
+
+The minted token travels in `X-SF-Authorization`, because the plain `Authorization` header belongs to your application and passes through untouched.
+
+```bash
+sf zero call content.posts.list
+sf zero call content.posts.get --input '{"slug":"hello"}'
+sf zero call content.posts.save --input @post.json
+```
+
+### Output
+
+The HTTP status, then the Ability's JSON result. With `--json`, `data` is `{ ability, spaceId, endpoint, credentialId, role, status, ok, result }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `zero_ability_failed` | 1 | The Ability answered a non-2xx status. The whole receipt rides along in `details`. A 403 means the credential's Grant does not permit this Ability |
+
+## sf zero types
+
+Generate TypeScript for everything the platform owns rather than your source: the live content model's types, the Ability catalog with the capability each one needs, and a row type per database table. Commit the result and use `--check` in CI.
+
+```text
+sf zero types [--space <value>] [--out <path>] [--check]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--out=<path>` | `zero-types.ts` | File to write, relative to the current directory |
+| `--check` | `false` | Compare instead of writing, and exit non-zero when the file is stale or missing |
+
+```bash
+sf zero types
+sf zero types --check
+```
+
+### Output
+
+With `--json`, `data` is `{ out, spaceId, versionId, contentModelRevision, abilities, tables, checked, drifted }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `zero_types_stale` | 2 | `--check` and the file is missing or no longer matches what the Space publishes |
+
+## sf zero import
+
+Translate a Payload CMS or EmDash project into an authored Zero capsule and its content files, and print the translation report. This is a local codegen step with no space flags.
+
+A Payload config carrying anything Zero cannot hold is refused outright and nothing is written, because a content model missing the fields that refused would publish a site that silently lost content.
+
+```text
+sf zero import <source> <directory> [--out <dir>] [--capsule <path>] [--force]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<source>` | Project format to translate: `payloadcms` or `emdash`. Required |
+| `<directory>` | Directory holding the project to translate. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--out=<dir>` | current directory | Directory to write the capsule and content into |
+| `--capsule=<path>` | `server/index.ts` | Capsule module to write, relative to `--out` |
+| `--force` | `false` | Overwrite files the import would otherwise refuse to replace |
+
+```bash
+sf zero import payloadcms ../my-payload-app
+sf zero import emdash ../my-emdash-site --out .
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `zero_import_refused` | 1 | The source config carries something Zero cannot hold. Nothing is written |
+
+## sf wp
+
+Run WP-CLI against a Space's WordPress, or against a local one with `--local`.
+
+Everything after the flags is passed to `wp` unchanged, so `sf wp plugin list --format=csv` runs exactly that. With `--local`, WP-CLI's own output and exit code pass through untouched. Against a Space, the command runs remotely and reports whether it succeeded and how long it took; the platform returns no stdout, so read state back with a follow-up command such as `sf wp option get`. `--json` wraps only Spacefast's own errors, never `wp`'s output. See [WordPress on every Space](/wordpress). Use `--` to pass a flag `sf` would otherwise claim.
+
+```text
+sf wp [--space <value>] [--local] [--path <dir>] [--mode full|limited] -- <wp args...>
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--local` | `false` | Run against a local WordPress instead of the Space's |
+| `--path=<dir>` | none | Path to the local WordPress install. Implies `--local` |
+| `--mode=<full\|limited>` | `full` | Remote only. `limited` skips the site's own themes and plugins, so a core command still answers on a broken site |
+
+```bash
+sf wp option get blogname
+sf wp --space docs plugin list --format=csv
+sf wp --local --path ./wordpress core version
+sf wp -- --version
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `wp_cli_php_missing` | 1 | `--local` and `php` could not be run. WP-CLI is a PHAR, so it needs PHP 7.2 or newer on your `PATH` |
+
+## sf runtime status
+
+Show what a Space is serving: its live version, the URL it answers on, and what the live version deployed when it ships code.
+
+A capsule lists tables, queries, mutations, endpoints, migration count, and schema digest. A worker lists entry, bundle digest, routes, endpoints, and capabilities. All of it comes from version metadata, so it answers while the runtime is asleep or moving.
+
+```text
+sf runtime status [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+```bash
+sf runtime status
+sf runtime status --space docs
+```
+
+### Output
+
+```text
+State: active
+Live version: ver_0123456789abcdef
+Pending version: none
+Live URL: https://docs.view.fast
+```
+
+Then one table per runtime section. A static Space has no app and prints nothing further.
+
+With `--json`, `data` carries `liveVersionId`, `pendingVersionId`, `liveUrl`, `runtimeState`, `liveVersionStatus`, `pendingVersionStatus`, `app` (with a `capsule` or a `worker`), and `operation`.
+
+## sf pages pull
+
+Copy Spacefast's readable default page HTML into your project. Fully local. No API call, no space flags.
+
+```text
+sf pages pull [target]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | `all`, `layout`, or a site page id. Defaults to `all` |
+
+The site page ids are `404`, `denied`, `access`, `index`, and `preview`. It writes `_layout.html` at the project root and `_pages/<id>.html` for each id. An existing file makes the write fail; there is no force flag, so move or delete the file first.
+
+```bash
+sf pages pull
+sf pages pull 404
+```
+
+`_layout.html` gives your site chrome on every plan. `_pages/*.html` full-page takeovers are a paid-plan entitlement <Badge variant="accent">Plus and up</Badge>. See [limits](/limits).
+
+## sf pages validate
+
+Run the same structural page checks publish runs. Fully local.
+
+```text
+sf pages validate [-d <dir>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-d, --dir=<dir>` | `.` | Project directory |
+
+Discovery skips `.git`, `.spacefast`, and `node_modules`, and collects only `_pages/**` and `_layout.html`. The theme is read from `theme.json`, then overridden by `sf.jsonc`'s `theme` key.
+
+```bash
+sf pages validate
+sf pages validate -d ./dist
+```
+
+The command sets exit code 2 when any diagnostic has severity `error`. Warnings do not change the exit code.
+
+## sf design generate
+
+Read `DESIGN.md`'s ` ```theme.json ` and ` ```layout.html ` fenced blocks and write `theme.json` plus `_layout.html`. Fully local, no API call.
+
+`theme.json` can seed Pages tokens and feeds a Zero capsule's Tailwind compile. `_layout.html` provides site chrome. `DESIGN.md` itself is never read at finalize or serve time; this is an authoring-time codegen step.
+
+```text
+sf design generate [-f]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-f, --force` | `false` | Overwrite existing generated files |
+
+The command also accepts ` ```json:theme.json ` and ` ```html:layout.html ` fences. The first matching fence wins. Each block is validated with the same finalizer publish uses, and an invalid block produces a warning and is not written. Without `--force`, an existing target is skipped rather than overwritten. Files are written with mode `0644`.
+
+```bash
+sf design generate
+sf design generate --force
+```
+
+### Output
+
+With `--json`, `data` is `{ written, skippedExisting, warnings }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | No `DESIGN.md` in the current directory, or no usable fence in it |
+| `design_doc_unreadable` | 1 | `DESIGN.md` exists but could not be read |
+| `validation_error` | 2 | The output target is a symlink and `--force` was not passed |
+
+## sf analytics
+
+Print a Space's runtime analytics series.
+
+The numbers are read live from the edge, not from a local store, and they cover every hostname mapped to the Space. `views` counts successful non-crawler requests, status under 400, assets included. Daily uniques are the finest resolution available and are never summed across days, which is why the per-day series prints instead of one total.
+
+```text
+sf analytics [--space <value>] [--window 48h|7d|30d]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--window=<48h\|7d\|30d>` | `7d` | Analytics window |
+
+```bash
+sf analytics --space docs
+sf analytics --space docs --window 30d
+```
+
+### Output
+
+```text
+Window: 7d (2026-08-26T00:00:00Z → 2026-09-02T00:00:00Z)
+Granularity: daily
+Views: 18422 Bandwidth: 903841122
+2026-08-26 visitors=612
+/docs/quickstart views=2210
+2026-08-26T00:00:00Z requests=3011 views=2874 bandwidth=140228311
+```
+
+With `--json`, `data` carries `spaceId`, `window`, `since`, `until`, `granularity` (`hourly` for `48h`, `daily` otherwise), `views`, `bandwidthBytes`, `visitorsByDay[]`, `topPaths[]` and `topHosts[]` (each capped at 10), and `series[]`.

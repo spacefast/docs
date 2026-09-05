@@ -1,11 +1,11 @@
 ---
 title: "build_output_dir_missing"
-description: "The build finished but its output directory was not produced."
+description: "The build finished without producing its output directory."
 ---
 
-The build finished but its output directory was not produced.
+The build finished without producing its output directory.
 
-**How to resolve:** Point the output directory setting at the folder your build writes (for example dist, build, out, or public).
+**How to resolve:** Point the output directory setting at the folder the build writes, such as `dist`, `build`, `out`, or `public`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_output_dir_missing",
   "title": "Build output dir missing",
   "status": 400,
-  "detail": "The build finished but its output directory was not produced.",
+  "detail": "The build finished without producing its output directory.",
   "code": "build_output_dir_missing",
   "requestId": "req_4mz0v8qk"
 }

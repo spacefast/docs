@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_response_encode_failed"
-description: "The Zero runner cannot encode its response."
+description: "The runner's response could not be encoded."
 ---
 
-The Zero runner cannot encode its response.
+The runner's response could not be encoded.
 
-**How to resolve:** Return JSON-serializable response metadata from the endpoint.
+**How to resolve:** Return values the response encoder can carry, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_response_encode_failed",
   "title": "Zero runner response encode failed",
   "status": 400,
-  "detail": "The Zero runner cannot encode its response.",
+  "detail": "The runner's response could not be encoded.",
   "code": "zero_runner_response_encode_failed",
   "requestId": "req_4mz0v8qk"
 }

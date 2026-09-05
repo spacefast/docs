@@ -30,7 +30,7 @@ same Spacefast account works across all of them.
 - [Poke](/setup/poke): Prefill a Spacefast integration in Poke and authorize with OAuth.
 - [Pi](/setup/pi): Install the third-party Pi MCP extension for Spacefast.
 - [Indent](/setup/indent): Connect Spacefast through Indent's native OAuth MCP integration.
-- [Hermes](/setup/hermes): Install Spacefast from the Hermes MCP catalog and Agent Skills.
-- [OpenClaw](/setup/openclaw): Install Spacefast from ClawHub and connect streamable OAuth MCP.
+- [Hermes](/setup/hermes): Give Hermes the Spacefast setup guide, or install its skill with the CLI.
+- [OpenClaw](/setup/openclaw): Give OpenClaw the Spacefast setup guide, or install its skill with the CLI.
 
 Anything else that can fetch a URL can publish too: point it at the [agent documentation](/agents).

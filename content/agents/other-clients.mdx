@@ -1,0 +1,143 @@
+---
+title: Any MCP client
+description: Connect any MCP client to Spacefast over hosted HTTP or local stdio, and what sf mcp proxy does
+---
+
+After this page you can wire Spacefast into an MCP client that has no first-party plugin, choose between the hosted endpoint and a local stdio server, and know what the CLI's default proxy lane actually does.
+
+## Pick a transport
+
+<Tabs>
+  <Tab title="Hosted HTTP">
+    The server runs at `https://mcp.spacefast.com`. Your client signs in with OAuth. There is no filesystem, so `publish` takes inline files.
+
+    ```json
+    {
+      "mcpServers": {
+        "spacefast": {
+          "type": "http",
+          "url": "https://mcp.spacefast.com"
+        }
+      }
+    }
+    ```
+
+    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright and VS Code reads one as a stdio command, so the short form is broken rather than smaller.
+  </Tab>
+  <Tab title="Local stdio">
+    The server runs on your machine and can read your working directory, so `publish` accepts a path.
+
+    ```json
+    {
+      "mcpServers": {
+        "spacefast": {
+          "command": "npx",
+          "args": ["-y", "spacefast", "mcp"],
+          "env": {}
+        }
+      }
+    }
+    ```
+
+    Set `SPACEFAST_TOKEN` in `env` to authenticate, or leave it empty to publish anonymously and claim the Space later.
+  </Tab>
+  <Tab title="CLI proxy">
+    The server runs hosted, but your CLI login carries the auth instead of an editor OAuth flow.
+
+    ```json
+    {
+      "mcpServers": {
+        "spacefast": {
+          "command": "sf",
+          "args": ["mcp", "proxy"]
+        }
+      }
+    }
+    ```
+
+    This is what `sf setup agent` writes by default.
+  </Tab>
+</Tabs>
+
+Some clients use different key names. `mcp` for OpenCode, `servers` for VS Code, `context_servers` for Zed, and Amp puts the server map at the top level with no root key at all. `sf setup agent` knows each dialect, so let it write the file when you can.
+
+Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+
+<Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
+Use the Spacefast MCP server to search the docs for custom domains.
+</Prompt>
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+## Hosted authentication
+
+The hosted endpoint is never anonymous. A request with no credential gets a `401` and a `WWW-Authenticate` challenge that names the protected-resource metadata document. Your client follows that pointer to the authorization server and runs a normal OAuth flow. Bearer and DPoP are both accepted.
+
+The resource identifier is the MCP origin. A Spacefast OAuth token issued for the API rather than for MCP is rejected here.
+
+Your client never holds a Spacefast API token. Each request mints an internal delegation token that lives five minutes and carries exactly the permissions of the credential behind it. Scopes are listed on [the MCP server page](/agents/mcp-server).
+
+## What `sf mcp proxy` does
+
+`sf mcp proxy` is a bridge. Your editor speaks stdio to the `sf` process on your machine, and `sf` speaks HTTPS to `https://mcp.spacefast.com` using the login you already have from `sf login`.
+
+That buys three things.
+
+- No editor-managed OAuth. Clients with weak or missing OAuth support still reach the hosted server.
+- No credential in your editor's config file. The token lives in the CLI's own state.
+- A fresh `sf login` is picked up without restarting your editor.
+
+If you are not logged in, the proxy answers with a JSON-RPC error telling you to run `sf login` and retry.
+
+Your login is origin-bound. The proxy sends it only to the API and MCP origins of the account that issued it, or to loopback. Pointing `--endpoint` at some other host fails unless you name that origin with `--allow-credential-origin`. The endpoint must be HTTPS except on loopback, and may not carry credentials, a query string, or a fragment.
+
+| Flag | Env | What it does |
+|---|---|---|
+| `--endpoint` | `SPACEFAST_MCP_URL` | Remote MCP endpoint. Defaults to the `mcp.` sibling of your login's API host |
+| `--allow-credential-origin` | `SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN` | Send your credential to this origin even though it was not issued for it. Repeatable |
+
+Each request and response pair is capped at 32 MiB and 30 seconds.
+
+## Running the local server directly
+
+`sf mcp` runs the On-Device server over stdio and hands it the same credential every other CLI command uses. It never writes that credential into client config.
+
+```bash
+sf mcp
+```
+
+| Flag | Env | What it does |
+|---|---|---|
+| `--api-url` | `SPACEFAST_API_URL` | API base URL for tool calls |
+| `--profile` | `SPACEFAST_PROFILE` | CLI profile to resolve the credential from |
+| `--token` | `SPACEFAST_TOKEN` | Token for tool calls |
+| `--workspace-root` | `SPACEFAST_MCP_WORKSPACE_ROOT` | The one directory `publish` may read from |
+
+Without `--workspace-root`, the server takes the first `file:` root your client advertises, and falls back to the directory it started in. Setting the flag or the environment variable turns off that discovery.
+
+Diagnostics go to stderr, because stdout carries the protocol.
+
+## Where each client keeps its config
+
+`sf setup agent --agent <id>` writes to these paths. `~` is your home directory.
+
+| Client | Config file |
+|---|---|
+| `claude-code` | `~/.claude.json` |
+| `cursor` | `~/.cursor/mcp.json` |
+| `codex` | `~/.codex/config.toml` |
+| `vscode` | `<project>/.vscode/mcp.json` |
+| `github-copilot` | `~/.copilot/mcp-config.json` |
+| `devin-desktop` | `~/.devin/mcp_config.json` |
+| `zed` | `~/.config/zed/settings.json` |
+| `gemini-cli` | `~/.gemini/settings.json` |
+| `opencode` | `~/.config/opencode/opencode.json` |
+| `amp` | `~/.config/amp/mcp.json` |
+| `warp` | `~/.warp/mcp.json` |
+| `factory-droid` | `~/.factory/mcp.json` |
+| `cline` | `~/.cline/data/settings/cline_mcp_settings.json` |
+| `generic` | `<project>/.mcp.json` |
+
+VS Code is the exception. Its MCP config is project-scoped while every other client's is global. `continue` takes skills but no MCP config.

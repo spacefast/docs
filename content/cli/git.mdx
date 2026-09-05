@@ -1,0 +1,285 @@
+---
+title: sf git
+description: Connect a repository to a Space, trigger and watch remote builds, and push straight to Spacefast
+sidebar:
+  order: 24
+---
+
+After this page you can connect a GitHub repository to a Space, trigger and watch a remote build, install a signed push remote, and list the GitHub App installations and repositories available to you.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+## Two connection types, two spellings
+
+There are two connection types. `connected` is an external Git host plus a webhook. `hosted` is a Spacefast-hosted signed remote you push to directly.
+
+The `sf git` commands take `--connection-type connected|hosted`, defaulting to `connected`.
+
+The `sf source` commands still take the older spelling, `--connection-type remote|push|import`, where `remote` is the same thing as `connected` and `push` is the same thing as `hosted`. `import` is the one-time ingestion remote and has no `sf git` equivalent. Most `sf source` commands default to `remote`; the ones that write require the flag outright.
+
+Use each command's own vocabulary. They are not interchangeable within one command. The `sf source` commands have their own page, [sf source](/cli/source).
+
+## sf git connect
+
+Create or replace a repository connection. GitHub connections resolve their installation and repository IDs from your GitHub App installations, so `--repository owner/repo` is enough.
+
+```text
+sf git connect [--space <value>] [--provider github|gitlab|bitbucket|generic]
+  [--connection-type connected|hosted] [--repository <owner/repo>] ...
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--provider=<github\|gitlab\|bitbucket\|generic>` | none | Repository host |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+| `--repository=<owner/repo>` | origin remote | Repository full name |
+| `--repository-id=<value>` | resolved from GitHub | Repository ID from the host |
+| `--repository-name=<value>` | none | Repository name from the host |
+| `--clone-url=<value>` | none | Clone URL when safe to expose |
+| `--upstream-url=<value>` | none | Upstream repository URL |
+| `--detect-urls` / `--no-detect-urls` | `true` | Detect clone and upstream URLs from the origin remote |
+| `--installation-id=<value>` | resolved | GitHub App installation ID. Env `SPACEFAST_REPOSITORY_INSTALLATION_ID`. Pass it when several installations grant the repository |
+| `--credential=<value>` | none | Generic Git clone token, stored encrypted by the API. Env `SPACEFAST_REPOSITORY_CREDENTIAL` |
+| `--default-branch=<value>` | none | Repository default branch |
+| `--production-branch=<value>` | none | Branch that publishes to production |
+| `--ref=<value>` | none | Ref, branch, tag, or commit to sync or build after connecting. Env `SPACEFAST_BUILD_REF` |
+| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--auto-deploy-production` / `--no-auto-deploy-production` | `true` | Automatically build pushes to the production branch |
+| `--auto-deploy-previews` / `--no-auto-deploy-previews` | `true` | Automatically build preview branches and pull requests |
+| `--root-directory=<value>` | none | App root directory |
+| `--install-directory=<value>` | none | Dependency install directory |
+| `--install-command=<value>` | none | Install command |
+| `--build-command=<value>` | none | Build command |
+| `--ignored-build-command=<value>` | none | Command that skips a build when it exits 0 |
+| `--output-directory=<value>` | none | Build output directory |
+| `--framework-preset=<value>` | none | Framework preset |
+| `--platform-preset=<value>` | none | Imported platform preset |
+| `--allow-unsupported-platform-features` | `false` | Allow unsupported migration features |
+| `--apply-best` | `false` | Detect and save the highest-ranked build settings after connecting |
+| `--sync` | `false` | Request repository sync after connecting |
+| `--build-now` | `false` | Queue a build after connecting |
+
+`--apply-best`, `--sync`, and `--build-now` require `--connection-type connected`. Passing neither `--repository` nor a local git origin is a validation error.
+
+The connection carries one `productionBranch`. Every other branch is a preview.
+
+```bash
+sf git connect --space docs --provider github --repository owner/repo
+sf git connect --space docs --provider github --repository owner/repo --installation-id 12345678
+sf git connect --space docs --repository owner/repo --production-branch main --sync
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `github_repository_integration_not_ready` | 30 | GitHub App integration is not ready yet |
+| `github_installation_not_found` | 20 | No matching installation |
+| `github_repository_not_authorized` | 20 | The installation does not grant that repository |
+| `github_installation_ambiguous` | 2 | More than one installation grants it. Pass `--installation-id` |
+
+## sf git ls
+
+Show a repository connection.
+
+```text
+sf git ls [--space <value>] [--connection-type connected|hosted]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+
+```bash
+sf git ls --space docs
+```
+
+### Output
+
+The connection resource, including `provider`, `repositoryFullName`, `defaultBranch`, `productionBranch`, `autoDeployProduction`, `autoDeployPreviews`, `buildSettings`, `syncStatus`, `providerAccessStatus`, and `lastSyncedAt`.
+
+## sf git update
+
+Update a repository connection. Only the flags you pass change. Passing a flag with an empty value clears it.
+
+```text
+sf git update [--space <value>] [--connection-type connected|hosted] ...
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+| `--clone-url=<value>` | unchanged | Clone URL when safe to expose |
+| `--upstream-url=<value>` | unchanged | Upstream repository URL |
+| `--production-branch=<value>` | unchanged | Branch that publishes to production |
+| `--credential=<value>` | unchanged | Generic Git clone token, stored encrypted by the API. Env `SPACEFAST_REPOSITORY_CREDENTIAL` |
+| `--clear-credential` | `false` | Clear the stored generic Git clone token |
+| `--auto-deploy-production` / `--no-auto-deploy-production` | unchanged | Automatically build pushes to the production branch |
+| `--auto-deploy-previews` / `--no-auto-deploy-previews` | unchanged | Automatically build preview branches and pull requests |
+| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--root-directory=<value>` | unchanged | App root directory |
+| `--install-directory=<value>` | unchanged | Dependency install directory |
+| `--install-command=<value>` | unchanged | Install command |
+| `--build-command=<value>` | unchanged | Build command |
+| `--ignored-build-command=<value>` | unchanged | Command that skips a build when it exits 0 |
+| `--output-directory=<value>` | unchanged | Build output directory |
+| `--framework-preset=<value>` | unchanged | Framework preset |
+| `--platform-preset=<value>` | unchanged | Imported platform preset |
+| `--allow-unsupported-platform-features` / `--no-allow-unsupported-platform-features` | unchanged | Allow unsupported migration features |
+
+`--credential` together with `--clear-credential` is a validation error.
+
+```bash
+sf git update --space docs --production-branch main
+```
+
+## sf git build
+
+Trigger a generic remote build from a repository connection.
+
+```text
+sf git build [--space <value>] [--connection-type connected|hosted] [--ref <value>]
+  [--target production|preview] [--wait] [--wait-timeout <seconds>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+| `--ref=<value>` | none | Repository ref, branch, tag, or commit to build. Env `SPACEFAST_BUILD_REF` |
+| `--branch=<value>` | none | Branch name for preview alias and production branch selection. Env `SPACEFAST_GIT_BRANCH` |
+| `--commit=<sha>` | none | Commit SHA to build. Env `SPACEFAST_GIT_COMMIT` |
+| `--pull-request=<n>` | none | Pull request number for preview builds. Minimum 1. Env `SPACEFAST_PULL_REQUEST` |
+| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--target=<production\|preview>` | from the branch | Force the build target |
+| `--root-directory=<value>` | saved setting | Override the app root directory for this build |
+| `--install-directory=<value>` | saved setting | Override the dependency install directory for this build |
+| `--install-command=<value>` | saved setting | Override the install command for this build |
+| `--build-command=<value>` | saved setting | Override the build command for this build |
+| `--output-directory=<value>` | saved setting | Override the build output directory for this build |
+| `--ignored-build-command=<value>` | saved setting | Override the ignored build command for this build |
+| `--auto-finalize` / `--no-auto-finalize` | none | Finalize the remote build automatically after staging the build output |
+| `--allow-unsupported-platform-features` / `--no-allow-unsupported-platform-features` | none | Allow unsupported Vercel or Cloudflare migration features for this build |
+| `--wait` / `--no-wait` | `true` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the repository build to finish. Minimum 1 |
+
+While waiting it polls the build once a second.
+
+```bash
+sf git build --space docs --ref main
+sf git build --space docs --branch preview --target preview --wait
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `git_build_missing_version` | 30 | The build finished without producing a version |
+| `git_build_skipped` | 30 | The ignored-build command skipped this build |
+| `git_build_failed` | 1 | The build failed |
+| `repository_build_failed` | 1 | The build failed on the repository side |
+
+## sf git disconnect
+
+Delete a repository connection.
+
+```text
+sf git disconnect [--space <value>] [--connection-type connected|hosted]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+
+Confirms before deleting unless you pass `-y`.
+
+```bash
+sf git disconnect --space docs
+```
+
+## sf git sync
+
+Sync the upstream repository for this Space.
+
+```text
+sf git sync [--space <value>] [--connection-type connected|hosted] [--ref <value>]
+  [--ttl-seconds <n>] [--read-only-ref <pattern>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
+| `--ref=<value>` | none | Ref, branch, or tag to sync |
+| `--ttl-seconds=<n>` | none | Signed source remote TTL in seconds, up to 86400 |
+| `--read-only-ref=<pattern>` | none | Ref pattern to protect during sync. Repeatable |
+
+```bash
+sf git sync --space docs
+sf git sync --space docs --ref main
+```
+
+## sf git origin
+
+Install a signed Spacefast push remote for direct Git push deploys.
+
+```text
+sf git origin [--space <value>] [--set-origin]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--set-origin` | `false` | Update `origin` instead of adding or updating the `spacefast` remote |
+
+The remote is named `origin` when you pass `--set-origin` or when no `origin` exists. Otherwise it is named `spacefast`.
+
+```bash
+sf git origin
+sf git origin --set-origin
+```
+
+## sf git github installations
+
+List GitHub App installations available to the current user.
+
+```text
+sf git github installations [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+```bash
+sf git github installations
+```
+
+## sf git github repos
+
+List repositories available to a GitHub App installation.
+
+```text
+sf git github repos <installation> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[installation]` | GitHub App installation ID. Required in practice; omitting it errors |
+
+No command-specific flags.
+
+```bash
+sf git github repos 12345678
+```

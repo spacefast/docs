@@ -1,11 +1,11 @@
 ---
 title: "zero_bootstrap_encode_failed"
-description: "The Zero runner cannot encode the JavaScript bootstrap data."
+description: "The Zero bootstrap payload could not be encoded."
 ---
 
-The Zero runner cannot encode the JavaScript bootstrap data.
+The Zero bootstrap payload could not be encoded.
 
-**How to resolve:** Retry with valid request metadata. If the issue persists, report it.
+**How to resolve:** Retry the request. If it keeps failing, publish the capsule again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_bootstrap_encode_failed",
   "title": "Zero bootstrap encode failed",
   "status": 400,
-  "detail": "The Zero runner cannot encode the JavaScript bootstrap data.",
+  "detail": "The Zero bootstrap payload could not be encoded.",
   "code": "zero_bootstrap_encode_failed",
   "requestId": "req_4mz0v8qk"
 }

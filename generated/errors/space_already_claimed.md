@@ -1,11 +1,11 @@
 ---
 title: "space_already_claimed"
-description: "The space was already claimed. A claim can only succeed once."
+description: "The Space has already been claimed by a team."
 ---
 
-The space was already claimed. A claim can only succeed once.
+The Space has already been claimed by a team.
 
-**How to resolve:** If you published this space, exchange your space key once at `POST /v1/claim/exchange`. Keep publishing to the same `spaceId` with that durable API key. Otherwise ask the owner for access. Do not publish a duplicate space.
+**How to resolve:** Publish with the team's API key, or ask the owner to create one for the agent.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_already_claimed",
   "title": "Space already claimed",
   "status": 400,
-  "detail": "The space was already claimed. A claim can only succeed once.",
+  "detail": "The Space has already been claimed by a team.",
   "code": "space_already_claimed",
   "requestId": "req_4mz0v8qk"
 }

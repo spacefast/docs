@@ -1,11 +1,11 @@
 ---
 title: "invalid_publish_path"
-description: "A file path in the publish payload is not allowed."
+description: "The publish contains a file path that is not safe to serve."
 ---
 
-A file path in the publish payload is not allowed.
+The publish contains a file path that is not safe to serve.
 
-**How to resolve:** Use forward-slash relative paths without traversal or control characters.
+**How to resolve:** Remove path traversal, absolute paths, and control characters from the file names. A raw single-file publish needs a `path` query parameter.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_publish_path",
   "title": "Invalid publish path",
   "status": 400,
-  "detail": "A file path in the publish payload is not allowed.",
+  "detail": "The publish contains a file path that is not safe to serve.",
   "code": "invalid_publish_path",
   "requestId": "req_4mz0v8qk"
 }

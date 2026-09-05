@@ -1,15 +1,15 @@
-import { cp, lstat, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, lstat, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { buildRoutingRules } from "./redirect-rules.mjs";
+import { redirects as authoredRedirects } from "../redirects.ts";
 
 const root = path.resolve(process.cwd());
 const markerName = ".spacefast-generated-copy";
 const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.\n";
 const trees = [
-  { source: "generated/cli", target: "content/cli" },
-  { source: "generated/errors", target: "content/errors" },
-  { source: "generated/changelog", target: "content/changelog" },
+  { source: "generated/errors", target: "content/(reference)/errors" },
+  { source: "generated/changelog", target: "content/(reference)/changelog" },
   { source: "generated/setup", target: "content/setup" },
 ];
 
@@ -43,8 +43,20 @@ for (const tree of trees) {
     await rm(target, { recursive: true });
   }
   await cp(source, target, { recursive: true });
+  if (tree.source === "generated/errors") {
+    for (const { from } of authoredRedirects) {
+      const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
+      if (match) await rm(path.join(target, `${match[1]}.md`), { force: true });
+    }
+  }
   await writeFile(marker, "spacefast-public-docs\n");
 }
+
+await mkdir(path.join(root, "content/cli"), { recursive: true });
+await copyFile(
+  path.join(root, "generated/cli/index.md"),
+  path.join(root, "content/cli/reference.md"),
+);
 
 const redirectsTarget = path.join(root, "public/_redirects");
 if (await exists(redirectsTarget)) {
@@ -71,5 +83,5 @@ await writeFile(
 );
 
 console.log(
-  `Prepared generated CLI, error-reference, changelog, agent setup, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
+  `Prepared the generated CLI reference, error reference, changelog, agent setup, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
 );

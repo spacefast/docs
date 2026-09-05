@@ -1,11 +1,11 @@
 ---
 title: "publish_hash_mismatch"
-description: "Publish content does not match its declared sha256."
+description: "An uploaded file's hash does not match the one the manifest declares."
 ---
 
-Publish content does not match its declared sha256.
+An uploaded file's hash does not match the one the manifest declares.
 
-**How to resolve:** Re-send the file with matching bytes, or correct the declared hash.
+**How to resolve:** Re-upload the file with the hash the manifest declares, then finalize again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_hash_mismatch",
   "title": "Publish hash mismatch",
   "status": 400,
-  "detail": "Publish content does not match its declared sha256.",
+  "detail": "An uploaded file's hash does not match the one the manifest declares.",
   "code": "publish_hash_mismatch",
   "requestId": "req_4mz0v8qk"
 }

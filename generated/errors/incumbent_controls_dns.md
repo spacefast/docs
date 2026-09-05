@@ -1,11 +1,11 @@
 ---
 title: "incumbent_controls_dns"
-description: "Another team controls this domain's DNS, so the operation is blocked."
+description: "The current provider still controls this domain's DNS."
 ---
 
-Another team controls this domain's DNS, so the operation is blocked.
+The current provider still controls this domain's DNS.
 
-**How to resolve:** Prove control by completing domain verification, or coordinate with the incumbent.
+**How to resolve:** Point the domain's nameservers at Spacefast, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/incumbent_controls_dns",
   "title": "Incumbent controls dns",
   "status": 400,
-  "detail": "Another team controls this domain's DNS, so the operation is blocked.",
+  "detail": "The current provider still controls this domain's DNS.",
   "code": "incumbent_controls_dns",
   "requestId": "req_4mz0v8qk"
 }

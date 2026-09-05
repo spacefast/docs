@@ -1,0 +1,127 @@
+---
+title: Build from a WordPress site
+description: Point a Space's repository build at a public WordPress site, read its content over the REST API during the build, and publish the static output
+---
+
+After this page you can name one or more public WordPress sites on a Space, read their content while your repository builds, and know exactly which environment variables the build receives.
+
+A data source is a public WordPress site a build reads content from. Nothing is copied into the Space and nothing is written back. The platform hands the build a URL and a source map, your build code fetches over the WordPress REST API, and the output publishes like any other static build.
+
+## What you need first
+
+Data sources reach **repository builds only**. A folder publish never sees them, and neither does a local `sf publish` of a built directory.
+
+So a Space needs a connected repository before a source does anything. See [Publish from Git](/git). Until one is connected, the dashboard shows **Connect a repository to use data sources** with a **Connect repository** button, and saved sources sit there doing nothing. Once it is connected the banner reads **Ready for repository builds**.
+
+Sources live on the Space, not in `sf.jsonc`. `dataSources` and `defaultDataSource` are not keys of the committed config file, and putting them there does nothing. A build's content source is a deployment fact, so it is set through the dashboard or the API.
+
+## Add a source
+
+<Tabs>
+<Tab title="Dashboard">
+
+Open the Space, go to **Settings**, then **Data sources**. The page header reads "Public WordPress sources are available only to repository builds."
+
+<Steps>
+  <Step title="Add the site">
+    In the **WordPress sources** card, click **Add source**. Fill in **Name** and **WordPress URL**. The URL placeholder is `https://example.com`.
+  </Step>
+  <Step title="Pick the default">
+    The **Default source** card holds one **Choose a source** select, described as "Used when a build asks for WordPress content without naming a source." The chosen entry is the one exposed as `WORDPRESS_URL`.
+  </Step>
+  <Step title="Save">
+    Save the form. The next build picks the values up.
+  </Step>
+</Steps>
+
+**Remove data source** deletes a row. An empty card reads "No data sources yet. Add a public WordPress site to get started."
+
+</Tab>
+<Tab title="API">
+
+Sources are part of the Space's config overlay, written with [`updateSpace`](/api/reference/spaces/updatespace).
+
+```bash
+curl -X PATCH https://api.spacefast.com/v1/spaces/spc_xxxxxxxx \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "config": {
+      "dataSources": {
+        "blog": { "kind": "wordpress", "url": "https://blog.example.com" },
+        "docs_site": { "kind": "wordpress", "url": "https://docs.example.com" }
+      },
+      "defaultDataSource": "blog"
+    }
+  }'
+```
+
+`config` **replaces** the stored overlay rather than merging into it, so send the keys you want to keep. Read the current sources back with [`listSpaceDataSources`](/api/reference/spaces/listspacedatasources), which returns each entry with a `default` flag.
+
+</Tab>
+</Tabs>
+
+### Fields
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `dataSources` | object, up to 32 entries | Named sources, keyed by name |
+| `dataSources.<name>.kind` | `"wordpress"` | The only source kind |
+| `dataSources.<name>.url` | string, up to 2048 chars | The site's public HTTPS root |
+| `defaultDataSource` | string | Name of the source exposed as `WORDPRESS_URL` |
+
+A name is 1 to 128 characters, starts with a letter or underscore, and holds only letters, numbers, and underscores. `__proto__`, `constructor`, and `prototype` are reserved and refused.
+
+A URL has to be lowercase `https://` with a DNS hostname, a canonical dotted-decimal IPv4 address, or a bracketed IPv6 address. A nonzero port and a path are allowed. Credentials, a query string, a fragment, whitespace, backslashes, and a trailing-dot host are all refused. What is stored is the canonical form: default port dropped, host lowercased, IDN normalized, dot segments resolved, trailing path slashes trimmed.
+
+`defaultDataSource` has to name a configured entry, otherwise the write fails with "defaultDataSource must name a configured dataSources entry." Leave it out and the first source in bytewise name order becomes the default.
+
+## What the build receives
+
+Two variables are injected into every repository build on a Space that has at least one source.
+
+| Variable | Value |
+| --- | --- |
+| `WORDPRESS_URL` | The default source's canonical URL |
+| `SPACEFAST_DATA_SOURCES` | JSON: `{"dataSources":{"<name>":{"kind":"wordpress","url":"..."}},"defaultDataSource":"<name>"}` |
+
+Your own build variables win. Defining `SPACEFAST_DATA_SOURCES` yourself, or the older spelling `SPACEFAST_DATASOURCES`, suppresses the generated map entirely and no `WORDPRESS_URL` is injected either. Defining `WORDPRESS_URL` alone overrides just the default URL and leaves the map intact. Set them with `sf env set`, described in [Frameworks and builds](/frameworks).
+
+The source map is serialized with names in bytewise order, so the value is stable across builds that changed nothing.
+
+## Read the content
+
+Any HTTP client works. The variables are ordinary environment variables and the endpoint is the standard WordPress REST API.
+
+```js scripts/fetch-posts.mjs
+const base = process.env.WORDPRESS_URL;
+const response = await fetch(`${base}/wp-json/wp/v2/posts?per_page=100&_embed=1`);
+if (!response.ok) {
+  throw new Error(`WordPress returned ${response.status}`);
+}
+const posts = await response.json();
+
+for (const post of posts) {
+  console.log(post.slug, post.title.rendered);
+}
+```
+
+Run it as part of your build, write the result wherever your framework reads data from, and publish the output directory as usual.
+
+There is also `@spacefast/wordpress`, a read-only REST client that discovers the URL for you.
+
+```ts
+import { createWordPressClient } from "@spacefast/wordpress";
+
+const wp = createWordPressClient();
+const { data: posts } = await wp.posts.list({ perPage: 100 });
+const about = await wp.pages.bySlug("about");
+```
+
+With no argument it reads `WORDPRESS_URL`, falling back to the default entry in `SPACEFAST_DATA_SOURCES`. Pass `{ source: "docs_site" }` to select a named entry, or `{ url }` to bypass discovery. It exposes `posts`, `pages`, `media`, `categories`, `tags`, `users`, and a `collection(path)` escape hatch, each with `list`, `get`, and `bySlug`. List responses carry `pagination.total` and `pagination.totalPages` from the `X-WP-Total` and `X-WP-TotalPages` headers.
+
+## Requirements on the site
+
+The URL has to serve the standard WordPress REST API at `/wp-json/` with pretty permalinks on. The content the build reads is whatever that API returns to an anonymous caller, so anything private stays private.
+
+A source is only read while a build runs. When published content changes, a new build is what picks it up. Open **Builds** and use **Build now** for an immediate refresh, or push to the production branch.

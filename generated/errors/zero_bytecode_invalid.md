@@ -1,11 +1,11 @@
 ---
 title: "zero_bytecode_invalid"
-description: "The Zero endpoint bytecode cannot be loaded by QuickJS."
+description: "The Zero bytecode could not be loaded."
 ---
 
-The Zero endpoint bytecode cannot be loaded by QuickJS.
+The Zero bytecode could not be loaded.
 
-**How to resolve:** Rebuild the project with the current Zero runner and publish again.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_bytecode_invalid",
   "title": "Zero bytecode invalid",
   "status": 400,
-  "detail": "The Zero endpoint bytecode cannot be loaded by QuickJS.",
+  "detail": "The Zero bytecode could not be loaded.",
   "code": "zero_bytecode_invalid",
   "requestId": "req_4mz0v8qk"
 }

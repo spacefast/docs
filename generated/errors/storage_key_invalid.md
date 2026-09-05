@@ -1,11 +1,11 @@
 ---
 title: "storage_key_invalid"
-description: "The storage object id is malformed."
+description: "The storage object ID is not a valid object identifier."
 ---
 
-The storage object id is malformed.
+The storage object ID is not a valid object identifier.
 
-**How to resolve:** Use the 32-character object id returned by `storage.upload`.
+**How to resolve:** Pass the 32-character hexadecimal object ID the upload returned.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_key_invalid",
   "title": "Storage key invalid",
   "status": 400,
-  "detail": "The storage object id is malformed.",
+  "detail": "The storage object ID is not a valid object identifier.",
   "code": "storage_key_invalid",
   "requestId": "req_4mz0v8qk"
 }

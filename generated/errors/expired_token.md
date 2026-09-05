@@ -1,11 +1,11 @@
 ---
 title: "expired_token"
-description: "The token is expired."
+description: "The device login expired before it was approved."
 ---
 
-The token is expired.
+The device login expired before it was approved.
 
-**How to resolve:** Request a new token and retry.
+**How to resolve:** Run `sf login` again and approve the request before it times out.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/expired_token",
   "title": "Expired token",
   "status": 400,
-  "detail": "The token is expired.",
+  "detail": "The device login expired before it was approved.",
   "code": "expired_token",
   "requestId": "req_4mz0v8qk"
 }

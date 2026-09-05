@@ -1,11 +1,11 @@
 ---
 title: "zero_db_query_failed"
-description: "A Zero database read failed."
+description: "The Zero database rejected the query."
 ---
 
-A Zero database read failed.
+The Zero database rejected the query.
 
-**How to resolve:** Inspect the query, schema, and database logs. Fix the SQL issue, then retry.
+**How to resolve:** Read the driver message in the detail, correct the SQL or its parameters, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_query_failed",
   "title": "Zero db query failed",
   "status": 400,
-  "detail": "A Zero database read failed.",
+  "detail": "The Zero database rejected the query.",
   "code": "zero_db_query_failed",
   "requestId": "req_4mz0v8qk"
 }

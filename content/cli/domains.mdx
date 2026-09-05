@@ -1,0 +1,235 @@
+---
+title: domains and routing
+description: Attach custom domains to a Space, check DNS and TLS readiness, and inspect the redirect and header rules a version serves
+sidebar:
+  order: 20
+---
+
+After this page you can attach a custom domain, make it primary or a redirect, watch DNS and TLS come up, take a hostname off a Space, and compile your `_redirects` and `_headers` before you publish them.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and, except `sf routing inspect`, the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli) for those.
+
+## sf domains add
+
+Attach a domain.
+
+```text
+sf domains add <hostname> [--space <value>] [--role standard|primary|redirect]
+  [--redirect-to <value>] [--redirect-status 301|302|307|308] [--wait] [--wait-timeout <seconds>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<hostname>` | Hostname to attach. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=<standard\|primary\|redirect>` | none | How the domain behaves. `primary` makes it the Space's main address |
+| `--redirect-to=<value>` | none | Destination for redirect domains. Requires `--role`. A value starting with `/` or carrying a scheme is kept verbatim, otherwise `https://` is prepended |
+| `--redirect-status=<301\|302\|307\|308>` | `308` | HTTP status for redirect domains. Requires `--role` |
+| `--wait` / `--no-wait` | `false` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work. Minimum 1 |
+
+The command makes three calls: it creates the domain in the Space's team, attaches it to the Space with the role you asked for, and queues a DNS check.
+
+`--wait` polls the Space's runtime until it is active with a live version, then sends a `HEAD` request to the hostname and requires the response to carry `x-spacefast-runtime: 1` and the live version id. Redirect-role domains skip that serve check.
+
+```bash
+sf domains add example.com --space docs
+sf domains add example.com --space docs --role primary
+sf domains add www.example.com --space docs --role redirect --redirect-to example.com
+```
+
+### Output
+
+```text
+Added domain example.com.
+ID: dom_xxxxxxxx
+Verification: pending
+
+Configure DNS for example.com:
+  TXT  _stattic-verify.example.com  stattic-team-verification=tm_xxxxxxxx
+  A    example.com                  192.0.79.132
+
+Next: `sf domains check example.com`
+```
+
+The DNS block comes from the domain's `verification.requiredRecords` and prints nothing when that list is empty.
+
+With `--json`, `data` is `{ domain, operations: { assignment, check } }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | The Space is anonymous. Claim it before managing domains |
+| `validation_error` | 2 | `--role redirect` without `--redirect-to`, or `--redirect-to` without `--role redirect` |
+| `validation_error` | 2 | `--redirect-status` is not 301, 302, 307, or 308 |
+
+## sf domains check
+
+Check a domain.
+
+```text
+sf domains check <domain> [--space <value>] [--wait] [--wait-timeout <seconds>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<domain>` | Domain ID or hostname. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--wait` / `--no-wait` | `false` | Wait until queued work finishes before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work. Minimum 1 |
+
+```bash
+sf domains check example.com --space docs
+```
+
+### Output
+
+```text
+Checked example.com.
+Verification: verified
+Operation: opr_xxxxxxxx
+```
+
+On `pending` or `failed` it reprints the required DNS records and tells you to rerun the check, or to run `sf domains diagnostics <name>` for the records it actually observed.
+
+## sf domains diagnostics
+
+Inspect domain diagnostics.
+
+```text
+sf domains diagnostics <domain> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<domain>` | Domain ID or hostname. Required |
+
+No command-specific flags.
+
+```bash
+sf domains diagnostics app.example.com --space docs
+```
+
+### Output
+
+One line per hostname, then required actions and any notices.
+
+```text
+Diagnostics for example.com:
+example.com      purpose=apex  dns=ok             txt=ok        ssl=active
+www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
+```
+
+`dns` is `ok` or `not_configured`. `txt` is `ok`, `missing`, or `not_required`.
+
+## sf domains ls
+
+List domains attached to a Space. Aliased as `sf domains list`.
+
+```text
+sf domains ls [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+```bash
+sf domains ls --space docs
+```
+
+### Output
+
+A table of `DOMAIN | VERIFICATION | KIND | LAST CHECKED`, or the line "No domains attached to this space."
+
+## sf domains rm
+
+Remove a domain assignment from a Space. Aliased as `sf domains remove` and `sf domains delete`.
+
+**This unassigns, it does not delete.** The command sends `{"spaceId": null}`, so the hostname stays in your team's domain inventory and can be attached to another Space. The Space pointer is cleared only after provider teardown finishes, so the record keeps pointing at the Space while it drains.
+
+```text
+sf domains rm <domain> [--space <value>] [--wait]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<domain>` | Domain ID or hostname. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--wait` / `--no-wait` | `true` | Wait until queued work finishes before returning |
+
+This is a destructive remote action. It prompts "Remove this domain from the space?" unless you pass `-y`. In agent mode it refuses with `confirmation_required` (exit 2) until you pass `-y` explicitly.
+
+```bash
+sf domains rm example.com --space docs
+```
+
+## sf routing compute
+
+Resolve the latest version's `_redirects` and `_headers` with current variables.
+
+```text
+sf routing compute [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+This previews the newest finalized rule set, pending version first and live version second, and only when that version's status is `ready`.
+
+```bash
+sf routing compute --space docs
+```
+
+### Output
+
+A `# _redirects` block, a `# _headers` block, then one `severity: file:line message` line per diagnostic. With `--json`, `data` carries `latestVersionId`, `redirects`, `headers`, `diagnostics`, `variableDependencies`, and `systemVariableDependencies`.
+
+## sf routing inspect
+
+Compile local `_redirects`, `_headers`, and `sf.jsonc` routing rules, and optionally match URLs against the merged result. This runs entirely on your machine. It takes no space selection flags and makes no API call.
+
+```text
+sf routing inspect [-r <dir>] [--url <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-r, --routing=<dir>` | `.` | Directory holding `_redirects`, `_headers`, and `sf.jsonc` |
+| `--url=<value>` | none | URL or path to match against the compiled rules. Repeatable |
+
+```bash
+sf routing inspect
+sf routing inspect --routing ./dist --url /old-path
+```
+
+### Output
+
+```text
+routing: /abs/path
+rules: 3 redirects, 1 header blocks
+error: _redirects:4 redirect_loop_invalid This rule points back to the same path and could create a loop.
+/old-path: {"status":301,"destination":"/new-path"} headers={}
+```
+
+The command sets exit code 2 when any routing diagnostic is an error.

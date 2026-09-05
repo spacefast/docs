@@ -1,0 +1,112 @@
+---
+title: Storage
+description: Object storage for a running app. Upload a file from the browser or the API, get back an id and a URL, list and delete from sf storage.
+sidebar:
+  order: 5
+---
+
+After this page you can accept a file upload in a running app, get its URL, list what a Space is holding, and delete an object.
+
+## What it is
+
+Storage holds files a running app uploaded, not the files you published. Only a Space with a runtime app has it. Version files are a different thing and live in [Publishing](/publish).
+
+An object is addressed by a bare 32-character hexadecimal id. There is no key, no path, and no visibility flag. The id is the identity.
+
+| Field | Notes |
+| --- | --- |
+| `id` | 32 hex characters, matching `/^[a-f0-9]{32}$/` |
+| `contentType` | From the uploaded object's `Content-Type`, up to 255 characters |
+| `filename` | Display and download name only. Optional |
+| `size` | Bytes |
+| `sha256` | Content digest |
+| `uploaderId` | Who uploaded it |
+| `createdAt` | Timestamp |
+| `url` | Path-relative, `/__stattic/u/<id>?k=<key>` |
+
+`url` is path-relative and carries the read key current at the time of the response. Absolutize it against whichever of the space's hostnames you are serving from.
+
+`filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
+
+## Upload from a capsule
+
+The client SDK is the upload path for a [Zero](/zero) app.
+
+```tsx client/upload.tsx
+import { storage } from "@spacefast/zero/client";
+
+async function onFile(file: File) {
+  const object = await storage.upload(file);
+  console.log(object.id, object.url);
+}
+```
+
+`storage` has three methods.
+
+| Method | Returns |
+| --- | --- |
+| `upload(file: Blob)` | `{ id, contentType, size, url }` |
+| `get(id: string)` | A `Response`, or `null` |
+| `delete(id: string)` | Nothing |
+
+In local `sf dev`, uploads live in memory.
+
+## Upload from the API
+
+The request body is the file itself. The `Content-Type` header becomes the object's content type, and `?filename=` sets the display name.
+
+```bash
+curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/storage?filename=receipt.pdf" \
+  -H "Authorization: Bearer $SPACEFAST_TOKEN" \
+  -H "Content-Type: application/pdf" \
+  --data-binary @receipt.pdf
+```
+
+A successful upload answers `201`.
+
+## List and delete
+
+```bash
+sf storage
+sf storage ls
+sf storage ls --limit 100
+sf storage ls --cursor <cursor>
+sf storage rm 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
+```
+
+`sf storage` and `sf storage ls` do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
+
+`sf storage rm` confirms first, and the id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
+
+There is no `sf storage upload`. Uploads go through the client SDK, the API, or the dashboard.
+
+## Dashboard
+
+Open **Storage** for the space. It has a **Choose files to upload** input and an **Upload files** button, and it prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| One file | 5 MiB |
+| Empty uploads | Refused with `storage_empty_file` |
+| Anonymous daily budget, per Space | 200 MiB rolling. Identified principals carry no budget |
+| `limit` on a list | 1 to 100, default 50 |
+| `cursor` | 2048 characters |
+| `filename` | 1 to 255 characters, no separators |
+
+:::warning[Active web content is refused]
+Storage serves files to visitors, so it will not accept anything that could execute in a browser or on the box. HTML, XHTML, PHP, anything whose type mentions JavaScript or ECMAScript, and executables (PE, ELF, Mach-O, JAR) are all rejected. The check reads the declared type, the first 512 bytes for magic numbers, and text prefixes like `#!`, `<!doctype html`, `<html`, `<script`, and `<?php`. An uploaded `.html` will not serve as a page.
+:::
+
+A Space whose runtime is not reachable answers `503` with `runtime_management_unavailable`.
+
+## API
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceStorageObjects`](/api/reference/spaces/listspacestorageobjects) | `GET /v1/spaces/{spaceId}/storage` |
+| `createSpaceStorageObject` | `POST /v1/spaces/{spaceId}/storage` |
+| [`deleteSpaceStorageObject`](/api/reference/spaces/deletespacestorageobject) | `DELETE /v1/spaces/{spaceId}/storage/{objectId}` |
+
+Listing needs the `versions:read` scope. As the Space owner you can delete any object, including one a visitor uploaded.

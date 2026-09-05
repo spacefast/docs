@@ -1,11 +1,11 @@
 ---
 title: "zero_bytecode_path_invalid"
-description: "The Zero endpoint bytecode path is invalid."
+description: "The Zero bytecode path in the compiled index is not a safe path."
 ---
 
-The Zero endpoint bytecode path is invalid.
+The Zero bytecode path in the compiled index is not a safe path.
 
-**How to resolve:** Rebuild the Zero routes so bytecode paths stay inside the version bundle.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_bytecode_path_invalid",
   "title": "Zero bytecode path invalid",
   "status": 400,
-  "detail": "The Zero endpoint bytecode path is invalid.",
+  "detail": "The Zero bytecode path in the compiled index is not a safe path.",
   "code": "zero_bytecode_path_invalid",
   "requestId": "req_4mz0v8qk"
 }

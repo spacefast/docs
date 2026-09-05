@@ -1,11 +1,11 @@
 ---
 title: "runtime_kind_mismatch"
-description: "This operation is only available for a different runtime kind."
+description: "The live version's runtime kind is not the one this operation works on."
 ---
 
-This operation is only available for a different runtime kind.
+The live version's runtime kind is not the one this operation works on.
 
-**How to resolve:** Check `sf runtime status` for what the live version actually runs, then use the operations that runtime supports.
+**How to resolve:** Call the surface that matches the runtime, or set `runtime.kind` in `sf.jsonc` and publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_kind_mismatch",
   "title": "Runtime kind mismatch",
   "status": 400,
-  "detail": "This operation is only available for a different runtime kind.",
+  "detail": "The live version's runtime kind is not the one this operation works on.",
   "code": "runtime_kind_mismatch",
   "requestId": "req_4mz0v8qk"
 }

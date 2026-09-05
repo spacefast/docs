@@ -1,11 +1,11 @@
 ---
 title: "build_command_missing"
-description: "A build or install command cannot be found during the build run."
+description: "A build or install command was not found in the build environment."
 ---
 
-A build or install command cannot be found during the build run.
+A build or install command was not found in the build environment.
 
-**How to resolve:** Check the command spelling and ensure its tool is declared in package.json or available in the build image.
+**How to resolve:** Check the command spelling and declare its tool in `package.json` so the build image installs it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_command_missing",
   "title": "Build command missing",
   "status": 400,
-  "detail": "A build or install command cannot be found during the build run.",
+  "detail": "A build or install command was not found in the build environment.",
   "code": "build_command_missing",
   "requestId": "req_4mz0v8qk"
 }

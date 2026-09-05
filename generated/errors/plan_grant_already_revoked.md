@@ -1,11 +1,11 @@
 ---
 title: "plan_grant_already_revoked"
-description: "This plan grant was already revoked."
+description: "The plan grant or add-on is already revoked."
 ---
 
-This plan grant was already revoked.
+The plan grant or add-on is already revoked.
 
-**How to resolve:** No action is needed. If the team should regain the plan, create a new grant.
+**How to resolve:** Grant it again if the team should keep the entitlement.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/plan_grant_already_revoked",
   "title": "Plan grant already revoked",
   "status": 400,
-  "detail": "This plan grant was already revoked.",
+  "detail": "The plan grant or add-on is already revoked.",
   "code": "plan_grant_already_revoked",
   "requestId": "req_4mz0v8qk"
 }

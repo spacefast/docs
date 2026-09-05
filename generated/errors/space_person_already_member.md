@@ -1,11 +1,11 @@
 ---
 title: "space_person_already_member"
-description: "The email already belongs to a member of the space."
+description: "The invited person already has access to this Space."
 ---
 
-The email already belongs to a member of the space.
+The invited person already has access to this Space.
 
-**How to resolve:** Use the existing member entry instead of sending another invitation.
+**How to resolve:** Change the existing person's capabilities instead of inviting them again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_person_already_member",
   "title": "Space person already member",
   "status": 400,
-  "detail": "The email already belongs to a member of the space.",
+  "detail": "The invited person already has access to this Space.",
   "code": "space_person_already_member",
   "requestId": "req_4mz0v8qk"
 }

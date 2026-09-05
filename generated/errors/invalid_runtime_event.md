@@ -1,11 +1,11 @@
 ---
 title: "invalid_runtime_event"
-description: "The runtime event payload is not recognized."
+description: "The runtime callback body is not a recognized runtime event."
 ---
 
-The runtime event payload is not recognized.
+The runtime callback body is not a recognized runtime event.
 
-**How to resolve:** Verify the event shape matches the runtime callback contract.
+**How to resolve:** Send a callback body whose `event` matches the runtime event contract.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_runtime_event",
   "title": "Invalid runtime event",
   "status": 400,
-  "detail": "The runtime event payload is not recognized.",
+  "detail": "The runtime callback body is not a recognized runtime event.",
   "code": "invalid_runtime_event",
   "requestId": "req_4mz0v8qk"
 }

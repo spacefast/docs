@@ -1,11 +1,11 @@
 ---
 title: "zero_runs_require_runtime_compiler"
-description: "Zero run handlers require the Rust runtime compiler."
+description: "The capsule declares run handlers but was published without the runtime compiler."
 ---
 
-Zero run handlers require the Rust runtime compiler.
+The capsule declares run handlers but was published without the runtime compiler.
 
-**How to resolve:** Install the current runtime compiler and finalize the version again.
+**How to resolve:** Build the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runs_require_runtime_compiler",
   "title": "Zero runs require runtime compiler",
   "status": 400,
-  "detail": "Zero run handlers require the Rust runtime compiler.",
+  "detail": "The capsule declares run handlers but was published without the runtime compiler.",
   "code": "zero_runs_require_runtime_compiler",
   "requestId": "req_4mz0v8qk"
 }

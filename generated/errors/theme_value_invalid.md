@@ -1,11 +1,11 @@
 ---
 title: "theme_value_invalid"
-description: "A theme value in the configuration is outside the allowed grammar."
+description: "A theme value in the Space config is not one the runtime accepts."
 ---
 
-A theme value in the configuration is outside the allowed grammar.
+A theme value in the Space config is not one the runtime accepts.
 
-**How to resolve:** Use allowed CSS values. Otherwise the offending key is dropped with a warning.
+**How to resolve:** Correct the theme value in `sf.jsonc`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/theme_value_invalid",
   "title": "Theme value invalid",
   "status": 400,
-  "detail": "A theme value in the configuration is outside the allowed grammar.",
+  "detail": "A theme value in the Space config is not one the runtime accepts.",
   "code": "theme_value_invalid",
   "requestId": "req_4mz0v8qk"
 }

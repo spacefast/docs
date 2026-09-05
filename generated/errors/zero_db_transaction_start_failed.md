@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_start_failed"
-description: "The Zero database transaction cannot be started."
+description: "Starting the Zero database transaction failed."
 ---
 
-The Zero database transaction cannot be started.
+Starting the Zero database transaction failed.
 
-**How to resolve:** Check database connectivity and retry the mutation.
+**How to resolve:** Retry the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_start_failed",
   "title": "Zero db transaction start failed",
   "status": 400,
-  "detail": "The Zero database transaction cannot be started.",
+  "detail": "Starting the Zero database transaction failed.",
   "code": "zero_db_transaction_start_failed",
   "requestId": "req_4mz0v8qk"
 }

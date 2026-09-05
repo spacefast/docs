@@ -1,11 +1,11 @@
 ---
 title: "domain_registration_not_renewable"
-description: "The domain registration cannot be renewed right now."
+description: "The domain has no Spacefast registration that can be renewed."
 ---
 
-The domain registration cannot be renewed right now.
+The domain has no Spacefast registration that can be renewed.
 
-**How to resolve:** Check the registration status and renewal window for the domain.
+**How to resolve:** Register or transfer the domain in before renewing it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_registration_not_renewable",
   "title": "Domain registration not renewable",
   "status": 400,
-  "detail": "The domain registration cannot be renewed right now.",
+  "detail": "The domain has no Spacefast registration that can be renewed.",
   "code": "domain_registration_not_renewable",
   "requestId": "req_4mz0v8qk"
 }

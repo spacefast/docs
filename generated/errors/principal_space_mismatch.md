@@ -1,11 +1,11 @@
 ---
 title: "principal_space_mismatch"
-description: "The space does not belong to the principal in the request."
+description: "The named principal does not own the target Space."
 ---
 
-The space does not belong to the principal in the request.
+The named principal does not own the target Space.
 
-**How to resolve:** Use the space's owning team or account in the request path.
+**How to resolve:** Send the principal that owns the Space, or drop `principal` from the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_space_mismatch",
   "title": "Principal space mismatch",
   "status": 400,
-  "detail": "The space does not belong to the principal in the request.",
+  "detail": "The named principal does not own the target Space.",
   "code": "principal_space_mismatch",
   "requestId": "req_4mz0v8qk"
 }

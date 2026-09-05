@@ -1,11 +1,11 @@
 ---
 title: "last_owner"
-description: "The last owner of a team cannot be removed or downgraded."
+description: "The action would leave a team with no owner, or the account still solely owns a paying team."
 ---
 
-The last owner of a team cannot be removed or downgraded.
+The action would leave a team with no owner, or the account still solely owns a paying team.
 
-**How to resolve:** Promote another member to owner first.
+**How to resolve:** Transfer ownership to another member, or cancel the team's subscription, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/last_owner",
   "title": "Last owner",
   "status": 400,
-  "detail": "The last owner of a team cannot be removed or downgraded.",
+  "detail": "The action would leave a team with no owner, or the account still solely owns a paying team.",
   "code": "last_owner",
   "requestId": "req_4mz0v8qk"
 }

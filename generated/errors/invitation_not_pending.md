@@ -1,11 +1,11 @@
 ---
 title: "invitation_not_pending"
-description: "The invitation is no longer pending."
+description: "The invitation is not pending, so it cannot be accepted or canceled."
 ---
 
-The invitation is no longer pending.
+The invitation is not pending, so it cannot be accepted or canceled.
 
-**How to resolve:** If the member still needs to join, create a new invitation.
+**How to resolve:** Ask a team admin to send a fresh invitation.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invitation_not_pending",
   "title": "Invitation not pending",
   "status": 400,
-  "detail": "The invitation is no longer pending.",
+  "detail": "The invitation is not pending, so it cannot be accepted or canceled.",
   "code": "invitation_not_pending",
   "requestId": "req_4mz0v8qk"
 }

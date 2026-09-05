@@ -1,11 +1,11 @@
 ---
 title: "domain_facet_external"
-description: "This facet of the domain is managed outside Spacefast."
+description: "The domain is registered at an external registrar, so this facet is not managed here."
 ---
 
-This facet of the domain is managed outside Spacefast.
+The domain is registered at an external registrar, so this facet is not managed here.
 
-**How to resolve:** Manage that facet at its external provider, or move it to Spacefast first.
+**How to resolve:** Make the change at the registrar that holds the domain.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_facet_external",
   "title": "Domain facet external",
   "status": 400,
-  "detail": "This facet of the domain is managed outside Spacefast.",
+  "detail": "The domain is registered at an external registrar, so this facet is not managed here.",
   "code": "domain_facet_external",
   "requestId": "req_4mz0v8qk"
 }

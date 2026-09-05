@@ -5,7 +5,7 @@ description: "The account already has a password."
 
 The account already has a password.
 
-**How to resolve:** Change the existing password instead of setting a new one.
+**How to resolve:** Change the existing password instead of setting one.
 
 <div data-pagefind-ignore>
 

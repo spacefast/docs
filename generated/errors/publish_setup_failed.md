@@ -1,11 +1,11 @@
 ---
 title: "publish_setup_failed"
-description: "Provisioning for this publish failed."
+description: "Preparing the live environment for the publish failed."
 ---
 
-Provisioning for this publish failed.
+Preparing the live environment for the publish failed.
 
-**How to resolve:** Retry the publish. If the error persists, contact support with the `requestId`.
+**How to resolve:** Publish again. If it keeps failing, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_setup_failed",
   "title": "Publish setup failed",
   "status": 400,
-  "detail": "Provisioning for this publish failed.",
+  "detail": "Preparing the live environment for the publish failed.",
   "code": "publish_setup_failed",
   "requestId": "req_4mz0v8qk"
 }

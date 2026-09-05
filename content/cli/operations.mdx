@@ -1,0 +1,140 @@
+---
+title: Operations and activity
+description: Follow background work with sf operations and read the audit trail of what changed with sf activity
+sidebar:
+  order: 12
+---
+
+Some work outlives the request that started it: a publish that finishes activating, a domain that finishes verifying. `sf operations` tracks those. `sf activity` is the separate, longer record of what happened to a Space or an account, and who did it.
+
+Neither command follows a stream. There is no `--follow`. To wait for queued work, use `--wait` on the command that queued it (for example [`sf apply`](/cli/agent-commands#sf-apply)); to watch after the fact, re-run `sf operations <id>`.
+
+Every command here also takes the [global flags](/cli#global-flags).
+
+## sf operations
+
+Inspect async operations.
+
+```text
+sf operations [ID] [--space <spaceId>] [--limit <n>] [--cursor <value>]
+```
+
+Alias: `sf ops`.
+
+### Arguments
+
+| Argument | What it does |
+| --- | --- |
+| `[id]` | Operation ID, for example `op_0123456789abcdef`. Omit it to list recent operations. |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--space=<spaceId>` | none | Scope the list to one Space. This one takes the Space ID, not a slug. Env `SPACEFAST_SPACE`. |
+| `--limit=<n>` | `50` | Maximum operations to return. Between 1 and 100. |
+| `--cursor=<value>` | none | Pagination cursor from a previous response. |
+
+### Examples
+
+```bash
+sf ops
+sf ops op_0123456789abcdef
+sf operations --space spc_0123456789abcdef
+```
+
+### Output
+
+Listing prints a table with ID, kind, status, resources, created, and finished. Reading one prints its fields and any diagnostics:
+
+```text
+Operation: op_0123456789abcdef
+Kind: space_publish
+Status: succeeded
+Resources: space:spc_0123456789abcdef
+Created: 2026-06-02T00:00:00.000Z
+Finished: 2026-06-02T00:01:00.000Z
+```
+
+Status is one of `queued`, `running`, `succeeded`, `failed`, `canceled`.
+
+With `--json`, a single operation returns `{ "data": { "operation": { … } } }`. A list returns the API envelope straight through:
+
+```json
+{
+  "data": [
+    {
+      "id": "op_0123456789abcdef",
+      "kind": "space_publish",
+      "status": "succeeded",
+      "resources": [{ "type": "space", "id": "spc_0123456789abcdef" }],
+      "diagnostics": [],
+      "progress": null,
+      "createdAt": "2026-06-02T00:00:00.000Z",
+      "finishedAt": "2026-06-02T00:01:00.000Z"
+    }
+  ],
+  "pagination": { "nextCursor": null, "hasMore": false }
+}
+```
+
+`progress` carries `total`, `completed`, and `failed` counts while work is running. Poll with the ID until `status` leaves `queued` or `running`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | Not authenticated. "Run `sf login` or pass --token before reading operations." |
+| `not_found` | 20 | No operation with that ID. |
+
+## sf activity
+
+Show activity events.
+
+```text
+sf activity [--all] [--code <code>] [--since <ts>] [--until <ts>] [--limit <n>] [--cursor <value>]
+```
+
+Without `--all` it reads the feed for the selected Space, resolved the [usual way](/cli#how-the-cli-finds-your-space).
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--all` | off | Read account-wide activity instead of one Space. |
+| `--code=<value>` | none | Filter to one event code, for example `version.created`. |
+| `--since=<value>` | none | Only events at or after this ISO timestamp. |
+| `--until=<value>` | none | Only events before this ISO timestamp. |
+| `--limit=<n>` | `50` | Maximum events to return. Between 1 and 100. |
+| `--cursor=<value>` | none | Pagination cursor from a previous response. |
+| `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
+| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+
+### Examples
+
+```bash
+sf activity
+sf activity --code version.created
+sf activity --all --since 2026-06-01T00:00:00Z
+```
+
+### Output
+
+```text
+TIME                      CODE             ACTOR              MESSAGE
+2026-06-02T00:01:00.000Z  version.created  user:usr_0123456…  Published version v12
+```
+
+When there is more, the CLI prints the exact flag to get it: `More: --cursor <value>`.
+
+With `--json` you get the list envelope from the API. Each event carries `id`, `sequence`, `spaceId`, `actor` (`type` and `id`), `code`, `message`, `details`, and `createdAt`. Actor types are `user`, `api_key`, `partner_token`, `oauth_client`, `anonymous_claim`, and `system`, so the feed tells you whether a person, a CI key, or the platform made a change.
+
+Codes are grouped by the thing they describe: `space.*`, `version.*`, `channel.*`, `build.*`, `domain.*`, and access events like `space.share_link_created`. Pass a full code to `--code`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--all` without authentication. "Run `sf login` or pass --token before reading activity." |
+| `no_space_selected` | 2 | No `--all` and no Space could be resolved. |

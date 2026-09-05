@@ -1,11 +1,11 @@
 ---
 title: "publish_archive_file_count_exceeded"
-description: "The archive contains more files than the allowed ceiling."
+description: "The archive holds more files than an inline publish supports."
 ---
 
-The archive contains more files than the allowed ceiling.
+The archive holds more files than an inline publish supports.
 
-**How to resolve:** Reduce the file count or split content across multiple spaces.
+**How to resolve:** Remove files, or publish through an upload session instead of inline.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_archive_file_count_exceeded",
   "title": "Publish archive file count exceeded",
   "status": 400,
-  "detail": "The archive contains more files than the allowed ceiling.",
+  "detail": "The archive holds more files than an inline publish supports.",
   "code": "publish_archive_file_count_exceeded",
   "requestId": "req_4mz0v8qk"
 }

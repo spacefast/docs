@@ -1,11 +1,11 @@
 ---
 title: "zero_blob_too_large"
-description: "The local Zero blob value exceeds the maximum allowed size."
+description: "The blob value is larger than the local byte limit."
 ---
 
-The local Zero blob value exceeds the maximum allowed size.
+The blob value is larger than the local byte limit.
 
-**How to resolve:** Store a smaller value or move the payload to external storage.
+**How to resolve:** Store a smaller value, or move the bytes into Space storage.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_blob_too_large",
   "title": "Zero blob too large",
   "status": 400,
-  "detail": "The local Zero blob value exceeds the maximum allowed size.",
+  "detail": "The blob value is larger than the local byte limit.",
   "code": "zero_blob_too_large",
   "requestId": "req_4mz0v8qk"
 }

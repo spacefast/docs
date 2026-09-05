@@ -1,0 +1,40 @@
+---
+title: "principal_suspended"
+description: "The customer is suspended, so changes to its Spaces are blocked."
+---
+
+The customer is suspended, so changes to its Spaces are blocked.
+
+**How to resolve:** Contact Spacefast support, or have the partner lift the suspension.
+
+<div data-pagefind-ignore>
+
+## Error shape
+
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
+
+```json
+{
+  "type": "https://spacefast.com/docs/errors/principal_suspended",
+  "title": "Principal suspended",
+  "status": 400,
+  "detail": "The customer is suspended, so changes to its Spaces are blocked.",
+  "code": "principal_suspended",
+  "requestId": "req_4mz0v8qk"
+}
+```
+
+See the full list of error codes in the [error reference](/errors).
+
+</div>

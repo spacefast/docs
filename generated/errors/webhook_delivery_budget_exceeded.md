@@ -1,11 +1,11 @@
 ---
 title: "webhook_delivery_budget_exceeded"
-description: "The webhook exhausted its delivery budget and was paused."
+description: "The account used up its hourly webhook delivery budget."
 ---
 
-The webhook exhausted its delivery budget and was paused.
+The account used up its hourly webhook delivery budget.
 
-**How to resolve:** Fix the receiving endpoint, then redeliver or re-enable the webhook.
+**How to resolve:** Wait for the hour to roll over, or cut the number of subscribed events.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/webhook_delivery_budget_exceeded",
   "title": "Webhook delivery budget exceeded",
   "status": 400,
-  "detail": "The webhook exhausted its delivery budget and was paused.",
+  "detail": "The account used up its hourly webhook delivery budget.",
   "code": "webhook_delivery_budget_exceeded",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_invalid_response"
-description: "The Zero runner output was not valid JSON."
+description: "The Zero runner's output could not be parsed as a response envelope."
 ---
 
-The Zero runner output was not valid JSON.
+The Zero runner's output could not be parsed as a response envelope.
 
-**How to resolve:** Inspect runner stderr. If the failure persists, rebuild the runner.
+**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_invalid_response",
   "title": "Zero runner invalid response",
   "status": 400,
-  "detail": "The Zero runner output was not valid JSON.",
+  "detail": "The Zero runner's output could not be parsed as a response envelope.",
   "code": "zero_runner_invalid_response",
   "requestId": "req_4mz0v8qk"
 }

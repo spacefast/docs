@@ -1,11 +1,11 @@
 ---
 title: "enforcement_policy_overlap"
-description: "Enforcement policy severity ranges overlap within a category."
+description: "Two enforcement policy ranges overlap inside the same category."
 ---
 
-Enforcement policy severity ranges overlap within a category.
+Two enforcement policy ranges overlap inside the same category.
 
-**How to resolve:** Adjust the category ranges so at most one policy covers each severity.
+**How to resolve:** Adjust the overlapping ranges in `policies` so each score falls in one range.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/enforcement_policy_overlap",
   "title": "Enforcement policy overlap",
   "status": 400,
-  "detail": "Enforcement policy severity ranges overlap within a category.",
+  "detail": "Two enforcement policy ranges overlap inside the same category.",
   "code": "enforcement_policy_overlap",
   "requestId": "req_4mz0v8qk"
 }

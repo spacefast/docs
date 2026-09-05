@@ -1,0 +1,103 @@
+---
+title: Logs
+description: Read the requests your Space served and the lines your own code wrote, with sf logs, including follow mode, filters, and the paging rule that trips people up
+sidebar:
+  order: 6
+---
+
+After this page you can tail what your handlers log, find every line one request wrote, and read a build's output.
+
+## Three streams
+
+| Stream | What it holds | How to read it |
+| --- | --- | --- |
+| Access | Every request the edge served | `sf logs`, dashboard **Logs** with source **Access** |
+| Runtime | Lines your own code wrote | `sf logs runtime`, dashboard **Logs** with source **App** |
+| Build | A build runner's output | `sf builds logs <bld_...>` |
+
+Access and runtime are per Space. Build logs belong to one build.
+
+## Read them
+
+```bash
+sf logs
+sf logs runtime
+sf logs docs runtime
+sf logs https://example.com access
+sf logs runtime --follow
+```
+
+The first positional is a target, which can be a Space id, slug, live URL, or custom domain. The second is the kind. The command shifts a bare kind out of the first slot, so `sf logs runtime` and `sf logs docs runtime` both work. The kind defaults to `access`, and anything other than `access` or `runtime` is refused.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--limit` | 50 | Entries per page, 1 to 100 |
+| `--follow`, `-f` | off | Polls every 2 seconds until Ctrl-C |
+| `--cursor` | none | Continues from the cursor the previous page printed |
+| `--request-id` | none | Runtime only. Everything logged while serving one request |
+| `--handler` | none | Runtime only. Lines from one Zero mutation or Functions handler |
+
+`--request-id` and `--handler` on the access log are refused rather than ignored, with `Flags --request-id and --handler only apply to \`sf logs runtime\`.`
+
+`--follow` polls. There is no websocket and no server-sent stream. Each poll prints only entries it has not seen, newest first, deduplicated against the last 5000 it remembers.
+
+`--follow --json` writes one JSON object per line, then a final `{"data":{"followed":true,"kind":"runtime"}}` when you interrupt it. That makes it pipeable.
+
+```bash
+sf logs runtime --follow --json | jq 'select(.data.level == "error")'
+```
+
+## What an entry carries
+
+Access entries carry the time, host, method, path, status, and byte count. The dashboard shows them as **Time**, **Host**, **Method**, **Path**, and **Status**.
+
+Runtime entries carry more.
+
+| Field | Notes |
+| --- | --- |
+| `timestamp` | When the line was written |
+| `level` | `debug`, `info`, `warn`, or `error` |
+| `requestId` | Nullable. Pass it to `--request-id` |
+| `handlerName` | Nullable. Zero names the mutation, Functions names the handler |
+| `versionId` | Nullable |
+| `message` | What you logged |
+| `metadata` | The data bag you passed |
+
+In a Zero capsule, `ctx.log.info(message, data)` writes here, as do `warn` and `error`. A static Space returns an empty runtime stream, because it runs no code.
+
+## Two things that surprise people
+
+:::warning[A line you just triggered will not be in the next page]
+A record is written on the origin, shipped off the box, and indexed before it can be read back. Runtime lines lag. The delay is the log provider's ingest lag and has not been measured, so no number is quoted here. If a line is missing, wait and page again.
+:::
+
+**An empty page does not mean the end of the log.** A response can carry `hasMore: true` with no entries, which means the scan stopped early rather than that there is nothing left. Keep following the cursor. The CLI prints `More: --cursor <nextCursor>` even for an empty page, for exactly this reason.
+
+## Filters
+
+`--request-id` and `--handler` are applied over pages already fetched, because the provider indexes neither. That makes them precise but not free, so give a `--limit` that covers the window you care about.
+
+The `since` and `until` window exists on the API query, but the CLI exposes no flags for it.
+
+## Retention
+
+Retention is a plan limit and it binds both the access and runtime streams. A request that reaches past your plan's window is not silently truncated. It answers with what it can plus a `log_retention_clamped` warning naming the effective `since`.
+
+See [Limits](/limits) for your plan's window.
+
+## Build logs
+
+```bash
+sf builds logs bld_123
+sf builds logs bld_123 --follow
+```
+
+`--limit` is 1 to 100, `--cursor` pages, and `--follow` streams until the build reaches a terminal state. In the dashboard, open **Builds**, pick a run, and the log pane streams while it runs.
+
+## API
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceAccessLogs`](/api/reference/activity/listspaceaccesslogs) | `GET /v1/spaces/{spaceId}/logs/access` |
+| [`listSpaceRuntimeLogs`](/api/reference/activity/listspaceruntimelogs) | `GET /v1/spaces/{spaceId}/logs/runtime` |
+| [`listBuildLogs`](/api/reference/builds/listbuildlogs) | `GET /v1/builds/{buildId}/logs` |

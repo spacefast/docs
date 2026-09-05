@@ -1,11 +1,11 @@
 ---
 title: "zero_replay_unavailable"
-description: "Realtime replay is not configured for this Zero version."
+description: "Realtime replay is not configured for this Space."
 ---
 
-Realtime replay is not configured for this Zero version.
+Realtime replay is not configured for this Space.
 
-**How to resolve:** Finalize the version with a Zero realtime replay URL or disable replay catch-up.
+**How to resolve:** Set a valid `replayUrl` in the Space's realtime config, then publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_replay_unavailable",
   "title": "Zero replay unavailable",
   "status": 400,
-  "detail": "Realtime replay is not configured for this Zero version.",
+  "detail": "Realtime replay is not configured for this Space.",
   "code": "zero_replay_unavailable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,0 +1,79 @@
+---
+title: Traffic stats
+description: Requests, views, unique visitors, and top paths for a Space, where the numbers come from, and how to read them from the CLI and the API
+---
+
+After this page you can read a Space's traffic in the dashboard, the CLI, or the API, and you know what each number counts and what it deliberately does not.
+
+## Where to look
+
+Open the Space and go to **Settings → Stats**. A segmented control labelled **Time period** switches between three windows.
+
+| Window | Buckets |
+| --- | --- |
+| 48 hours | Hourly |
+| 7 days | Daily |
+| 30 days | Daily |
+
+Thirty days is the widest window. There is no longer one.
+
+The page shows two totals, **Requests** and **Views**, then three sections.
+
+| Section | What it lists |
+| --- | --- |
+| Traffic by period | One row per bucket, with requests, views, and bandwidth |
+| Unique visitors | Distinct visitors per day |
+| Top paths | The busiest paths in the window |
+
+Buckets are labelled in UTC, not your timezone, because that is the boundary the edge measured. Bandwidth is available in the table's field picker but hidden by default, since bandwidth is unlimited on every plan.
+
+## What counts as a view
+
+A **request** is any HTTP request the Space answered. A **view** is a successful request from something that is not a crawler: status under 400, assets included. So `views` is always lower than `requests`, and the gap is redirects, 404s, and bots.
+
+**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total, which is why the page lists them one by one instead of showing one number.
+
+**Top paths** and top hosts are capped at 10 entries each.
+
+## Where the numbers come from
+
+The edge that serves your Space counts its own requests. Nothing is injected into your pages, no script runs in the visitor's browser, and there is no cookie. A static HTML file with no JavaScript in it is measured exactly like anything else.
+
+Every read goes straight to the edge on request. Spacefast keeps no copy, because a copy could only ever be stale. Two consequences worth knowing:
+
+- A Space that has never published a version has no runtime to read, and the request answers `runtime_not_provisioned`. Publish first.
+- When the measurement is unreachable the page says **Analytics are temporarily unavailable** and offers **Try again**. It does not show zeros. Your Space keeps serving either way.
+
+## From the CLI
+
+```bash
+sf analytics --space docs --window 30d
+```
+
+`--window` takes `48h`, `7d`, or `30d` and defaults to `7d`. The output prints the window, the granularity, the totals, then the per-day visitors, the top paths, and the series. Full flags and the `--json` shape are on [`sf analytics`](/cli/zero#sf-analytics).
+
+## From the API
+
+```bash
+curl "https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/analytics?window=7d" \
+  -H "Authorization: Bearer sfa_xxxxxxxx"
+```
+
+[`getSpaceAnalytics`](/api/reference/activity/getspaceanalytics) returns one object.
+
+| Field | What it holds |
+| --- | --- |
+| `window`, `since`, `until` | The window you asked for and the range it resolved to |
+| `granularity` | `hourly` for `48h`, `daily` otherwise |
+| `views` | Total views in the window |
+| `bandwidthBytes` | Total bytes served |
+| `series[]` | Per bucket: `bucket`, `requests`, `views`, `bandwidthBytes` |
+| `visitorsByDay[]` | Per day: `date`, `visitors` |
+| `topPaths[]` | `path` and `views`, up to 10 |
+| `topHosts[]` | `host` and `views`, up to 10 |
+
+There is no window-level request total in the payload. Sum `series[].requests` for it, which is what the dashboard does.
+
+## This is not Google Analytics
+
+These numbers are the edge's own accounting, and they are all you get from Spacefast. If you want page-level product analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id and injects it into every published page. That is a separate feature with a separate switch. See [Customization](/customization).

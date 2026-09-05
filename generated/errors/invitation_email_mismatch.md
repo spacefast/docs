@@ -1,11 +1,11 @@
 ---
 title: "invitation_email_mismatch"
-description: "This invitation was addressed to a different email than the accepting user."
+description: "The invitation was addressed to a different email than the signed-in account holds."
 ---
 
-This invitation was addressed to a different email than the accepting user.
+The invitation was addressed to a different email than the signed-in account holds.
 
-**How to resolve:** Sign in as the invited email, or ask an admin to invite your current address.
+**How to resolve:** Sign in as the invited address, or verify it on the current account, then accept again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invitation_email_mismatch",
   "title": "Invitation email mismatch",
   "status": 400,
-  "detail": "This invitation was addressed to a different email than the accepting user.",
+  "detail": "The invitation was addressed to a different email than the signed-in account holds.",
   "code": "invitation_email_mismatch",
   "requestId": "req_4mz0v8qk"
 }

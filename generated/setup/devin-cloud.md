@@ -18,13 +18,13 @@ https://mcp.spacefast.com
 **Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
 
 ```bash
-npx -y skills@1.5.23 add https://spacefast.com/SKILL.md -y
+npx -y skills add https://spacefast.com/SKILL.md -y
 ```
 
 Prefer to hand this off? Copy setup prompt:
 
 ```text
-Fetch https://spacefast.com/setup.md and set up Spacefast.
+Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.

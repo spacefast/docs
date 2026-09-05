@@ -1,11 +1,11 @@
 ---
 title: "internal_error"
-description: "Something went wrong on our side."
+description: "The request failed inside the API before it reached a result."
 ---
 
-Something went wrong on our side.
+The request failed inside the API before it reached a result.
 
-**How to resolve:** Retry the request. If the error persists, contact support with the requestId.
+**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/internal_error",
   "title": "Internal error",
   "status": 400,
-  "detail": "Something went wrong on our side.",
+  "detail": "The request failed inside the API before it reached a result.",
   "code": "internal_error",
   "requestId": "req_4mz0v8qk"
 }

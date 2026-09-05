@@ -1,11 +1,11 @@
 ---
 title: "zero_query_name_missing"
-description: "A Zero realtime query subscription did not include a query name."
+description: "The Zero query call did not name a query."
 ---
 
-A Zero realtime query subscription did not include a query name.
+The Zero query call did not name a query.
 
-**How to resolve:** Send a `query.subscribe` frame with a valid query name.
+**How to resolve:** Pass the query name in the request body.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_query_name_missing",
   "title": "Zero query name missing",
   "status": 400,
-  "detail": "A Zero realtime query subscription did not include a query name.",
+  "detail": "The Zero query call did not name a query.",
   "code": "zero_query_name_missing",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,0 +1,82 @@
+---
+title: Usage
+description: What Spacefast meters, where to read the numbers, how far behind they run, and which meters actually block you
+sidebar:
+  order: 4
+---
+
+Read your team's storage, seats, domains, and publish count, know how stale each number is, and tell the meters that block a publish apart from the ones that only warn.
+
+## Where to see it
+
+In the dashboard, open your team's **Settings**, then **Usage**. The page lists every limit your plan carries, with the current value against it. Axes your plan does not include show as **Not included in this plan**.
+
+**Settings → Billing** carries a shorter set of meters next to the plan card: Storage, Team members, Custom domains, and Publishes today. Each one highlights when you reach 80% of the limit.
+
+Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage` gives team counters plus a per-space storage breakdown. `GET /v1/spaces/{spaceId}/usage` gives one space's measured period.
+
+## What gets metered
+
+### Team counters
+
+| Meter | Field | What it counts | At the limit |
+| --- | --- | --- | --- |
+| Spaces | `spaces` | Live spaces in the team | Blocks on Free. `409` `space_quota_exceeded` |
+| Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` `domain_quota_exceeded` |
+| Team members | `members` | Billable seats, live members plus pending invitations | Blocks on Free. `409` `team_member_quota_exceeded` |
+| Storage | `storageBytes` | Disk your spaces occupy | Displayed only. Nothing blocks |
+| Publishes | `deploysToday` | Publishes since the UTC day started, your pushes and CI builds pooled | Warns only. Publishing continues |
+
+The response also carries `storageQuotaBytes`, `storageOverageBytes`, `deploysDaily`, and `meterStartedAt` so you can compute headroom and know when the metering day rolled over.
+
+### Per-space measurements
+
+`GET /v1/spaces/{spaceId}/usage` returns one settled period.
+
+| Field | What it measures |
+| --- | --- |
+| `storageBytes` | Average bytes on disk during the period, not the size of what you uploaded |
+| `computeSeconds` | Compute the space consumed |
+| `bandwidthBytes` | Bytes the space served |
+| `emailCount` | Emails the space sent |
+| `functionInvocations` | Function calls, counted where the space is known |
+| `functionErrors` | Those calls that ended in an error |
+
+None of these has a plan limit attached today. They are reporting, not gates.
+
+## How honest the numbers are
+
+Storage is measured by the infrastructure that serves your sites, and it lags the present by about an hour. `storageCalculatedAt` tells you how far back the weakest measurement behind the total reaches.
+
+Nothing is deduplicated. A file present in two spaces sits on two disks and counts twice in your team total.
+
+The newest measurement period is always dropped, because partial ingestion underreports it. When the measuring infrastructure is unreachable, usage comes back as `null` rather than a zero or a cached guess. A blank meter means unmeasured, not empty.
+
+Function invocation counts are pushed after each request finishes, so they can arrive late.
+
+## Storage is measured, not enforced
+
+Your plan carries a storage figure, the dashboard draws a meter against it, and the API reports `storageOverageBytes` when you pass it. No publish path blocks on storage today. Going over shows up as a red meter and nothing else.
+
+## Publishes per day warn, they never block
+
+Free includes 100 publishes a day, Plus 6,000, Pro and Enterprise unlimited. Your pushes and CI builds are pooled into the one count. Passing the number writes one `team.deploy_quota_exceeded` entry to your team activity feed for the day and then gets out of the way. Publishing keeps working and the meter resets at 00:00 UTC.
+
+Spaces are the opposite. Free holds 200 live Spaces, and the create — or the claim, which is a create — fails with `409` `space_quota_exceeded` once you are there.
+
+## Activity and log retention
+
+Your plan sets how far back your history goes.
+
+| Plan | Activity feed | HTTP access logs |
+| --- | --- | --- |
+| Free | 48 hours | 48 hours |
+| Plus | 30 days | 30 days |
+| Pro | Unlimited | Unlimited |
+| Enterprise | Unlimited | Unlimited |
+
+The two behave differently at the boundary. Activity events older than the window are deleted by an hourly sweep, so they are gone, not hidden. Log reads are clamped instead. Ask for a wider window and you get the entries that exist plus a `log_retention_clamped` warning telling you the timestamp it actually started from.
+
+Account security events such as sign-ins and two-factor changes are kept regardless of plan.
+
+For every enforced number in one table, see [Limits](/limits).

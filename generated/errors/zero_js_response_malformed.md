@@ -1,11 +1,11 @@
 ---
 title: "zero_js_response_malformed"
-description: "The Zero endpoint returned a malformed runner response."
+description: "The Zero handler returned a value the runtime cannot serve as a response."
 ---
 
-The Zero endpoint returned a malformed runner response.
+The Zero handler returned a value the runtime cannot serve as a response.
 
-**How to resolve:** Return a valid `Response` or supported Zero handler result.
+**How to resolve:** Return a `Response`, or a value the handler contract accepts, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_response_malformed",
   "title": "Zero js response malformed",
   "status": 400,
-  "detail": "The Zero endpoint returned a malformed runner response.",
+  "detail": "The Zero handler returned a value the runtime cannot serve as a response.",
   "code": "zero_js_response_malformed",
   "requestId": "req_4mz0v8qk"
 }

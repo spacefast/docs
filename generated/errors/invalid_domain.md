@@ -1,11 +1,11 @@
 ---
 title: "invalid_domain"
-description: "The domain reference is invalid."
+description: "The lookup input is not a domain name with a TLD."
 ---
 
-The domain reference is invalid.
+The lookup input is not a domain name with a TLD.
 
-**How to resolve:** Pass a valid domain id or name.
+**How to resolve:** Send a full domain name such as `example.com`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_domain",
   "title": "Invalid domain",
   "status": 400,
-  "detail": "The domain reference is invalid.",
+  "detail": "The lookup input is not a domain name with a TLD.",
   "code": "invalid_domain",
   "requestId": "req_4mz0v8qk"
 }

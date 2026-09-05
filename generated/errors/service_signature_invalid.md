@@ -1,11 +1,11 @@
 ---
 title: "service_signature_invalid"
-description: "The service request signature cannot be verified."
+description: "The service-to-service signature on this request did not verify."
 ---
 
-The service request signature cannot be verified.
+The service-to-service signature on this request did not verify.
 
-**How to resolve:** Sign the exact request method, path, body digest, timestamp, and a fresh nonce.
+**How to resolve:** Sign the request with the current service credential and retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/service_signature_invalid",
   "title": "Service signature invalid",
   "status": 400,
-  "detail": "The service request signature cannot be verified.",
+  "detail": "The service-to-service signature on this request did not verify.",
   "code": "service_signature_invalid",
   "requestId": "req_4mz0v8qk"
 }

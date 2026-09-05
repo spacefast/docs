@@ -1,11 +1,11 @@
 ---
 title: "confirmation_expired"
-description: "The confirmation for this action expired before a person decided it."
+description: "The confirmation for this action expired before it was used."
 ---
 
-The confirmation for this action expired before a person decided it.
+The confirmation for this action expired before it was used.
 
-**How to resolve:** Request the action again to get a fresh confirmation URL and continuation token. Do not retry the old token.
+**How to resolve:** Request a new decision and stop retrying the expired continuation token.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_expired",
   "title": "Confirmation expired",
   "status": 400,
-  "detail": "The confirmation for this action expired before a person decided it.",
+  "detail": "The confirmation for this action expired before it was used.",
   "code": "confirmation_expired",
   "requestId": "req_4mz0v8qk"
 }

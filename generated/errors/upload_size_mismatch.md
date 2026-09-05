@@ -1,11 +1,11 @@
 ---
 title: "upload_size_mismatch"
-description: "An uploaded file's size does not match the declared size."
+description: "The uploaded bytes do not match the size the manifest declares."
 ---
 
-An uploaded file's size does not match the declared size.
+The uploaded bytes do not match the size the manifest declares.
 
-**How to resolve:** Re-check the local file and upload it again.
+**How to resolve:** Re-upload the file, or declare the size the bytes actually have.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/upload_size_mismatch",
   "title": "Upload size mismatch",
   "status": 400,
-  "detail": "An uploaded file's size does not match the declared size.",
+  "detail": "The uploaded bytes do not match the size the manifest declares.",
   "code": "upload_size_mismatch",
   "requestId": "req_4mz0v8qk"
 }

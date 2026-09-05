@@ -7,11 +7,10 @@ const SITE_ORIGIN = "https://spacefast.com";
 const DOCS_BASE = "/docs";
 const ESSENTIAL_PATHS = new Set([
   "/",
-  "/getting-started/agents",
-  "/publishing/anonymous",
-  "/publishing",
-  "/getting-started/quickstart",
-  "/publishing/channels",
+  "/agents",
+  "/anonymous-and-claim",
+  "/publish",
+  "/quickstart",
 ]);
 
 function normalizePath(url) {
@@ -28,20 +27,20 @@ function normalizePath(url) {
 }
 
 function pageMetadata(path) {
-  if (path.startsWith("/api/reference")) return { kind: "api", tier: "reference" };
+  if (
+    ["/api/reference", "/partners/api/reference", "/platforms/api/reference"].some(
+      (prefix) => path === prefix || path.startsWith(`${prefix}/`),
+    )
+  ) return { kind: "api", tier: "reference" };
   if (path === "/api") return { kind: "api", tier: "full" };
   if (path === "/cli" || path.startsWith("/cli/")) return { kind: "cli", tier: "full" };
   if (path === "/errors" || path.startsWith("/errors/")) {
     return { kind: "error", tier: "reference" };
   }
-  if (
-    path === "/getting-started/agents" ||
-    path === "/publishing" ||
-    path === "/publishing/channels"
-  ) {
+  if (path === "/agents" || path === "/anonymous-and-claim" || path === "/publish") {
     return { kind: "workflow", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
   }
-  if (path.startsWith("/publishing/migrate/")) return { kind: "guide", tier: "full" };
+  if (path.startsWith("/recipes/")) return { kind: "recipe", tier: "full" };
   return { kind: "guide", tier: ESSENTIAL_PATHS.has(path) ? "essential" : "full" };
 }
 

@@ -1,0 +1,129 @@
+---
+title: Skills
+description: The Spacefast agent skill, what it tells your agent to do, and how to install or remove it with the sf CLI
+---
+
+After this page you know what the shipped skill instructs your agent to do, which clients get which variant, and how to install, check, or remove it.
+
+## One skill, called `spacefast`
+
+Every lane ships a skill named `spacefast`. It is two markdown files, `SKILL.md` and `references.md`, rendered from one template into per-client variants.
+
+| Lane | What lands | Bundled scripts |
+|---|---|---|
+| Claude Code plugin | `skills/spacefast/SKILL.md` and `references.md` | Seven bash scripts |
+| Codex plugin | The same two files, plus a section of Codex notes | Seven bash scripts |
+| Cursor plugin | `rules/spacefast.mdc` | None. A `.mdc` rule cannot bundle scripts |
+| `sf skills` | `spacefast/SKILL.md` and `references.md` in the client's skills directory | None |
+
+The plugin lanes carry the MCP variant, which routes work to the typed tools. The copy bundled with the CLI carries the curl and HTTP API variant instead, for agents that have no MCP connection at all. Same name, same product rules, different lane.
+
+## What triggers it
+
+The trigger line is the frontmatter `description`. Your client matches it against what you asked for.
+
+<Tabs param="client">
+<Tab title="Claude Code">
+
+The MCP variant routes publishing, inspection, and management requests to the current tools.
+
+```text
+Use publish for local files or a new inline artifact, operation_status for an active publish, and show_space for read-only views. Use execute for documentation, API reads, and mutations. Use resume_execution to continue a paused program.
+```
+
+</Tab>
+<Tab title="Codex">
+
+The Codex variant follows the same tool routing and includes Codex-specific environment notes.
+
+</Tab>
+<Tab title="Cursor">
+
+The Cursor rule carries a shorter one.
+
+```text
+Publish and manage Spacefast spaces when the user wants to deploy, host, publish, share, update, claim, inspect, roll back, or configure a site.
+```
+
+Cursor's rule sets `alwaysApply: false`, so it loads on a match instead of on every request.
+
+</Tab>
+<Tab title="Other">
+
+The curl variant that `sf skills` installs triggers on the same requests, phrased around publishing with curl. It fires on "publish this", "put this live", "host this folder", "make a live URL", and on updating, claiming, or inspecting a Space.
+
+</Tab>
+</Tabs>
+
+Two requests that match every variant.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+<Prompt description="Show me the deployments for this Space and whether the last build passed." actions={["copy"]}>
+Show me the deployments for this Space and whether the last build passed.
+</Prompt>
+
+## What it instructs
+
+The skill's job is routing and conduct. The MCP variant follows these tool choices.
+
+| Job | Tool |
+|---|---|
+| Publish local files or a new inline artifact | `publish` |
+| View deployments, domains, analytics, source, or build logs | `show_space` |
+| Check an active publish | `operation_status` |
+| Documentation, account context, other API reads, and mutations | `execute` |
+| Continue an approval | `resume_execution` |
+
+The rest sets behavior the tools alone do not enforce.
+
+- Call the matching tool first. Inside `execute`, search for and describe each operation before calling it.
+- Reuse the `.spacefast/` link in the current directory. Do not list Spaces before an ordinary publish, and set `createNew` only when you asked for a separate Space.
+- Publish once, then poll `operation_status` until it settles, then read the deployment, then report.
+- Report the live URL, the immutable version URL, and the access URL. For an anonymous publish, state the claim expiry and point at the claim action rather than copying the credential into the transcript.
+- Never print API keys, Space keys, upload tokens, or `.spacefast/state.json`.
+- Open the URL before claiming success, since a bare live URL is private until access is granted.
+
+`references.md` holds the deeper material, hosted versus On-Device differences, the update and claim flow, approvals and `resume_execution`, and signed uploads. The skill tells the agent to load it only when the question actually needs it.
+
+## Kept in sync with the tools
+
+A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The skill you install always names exactly the five tools the server registers.
+
+## Install it on its own
+
+If you want the skill without touching MCP config, the CLI installs the copy bundled with it.
+
+```bash
+sf skills
+```
+
+| Flag | What it does |
+|---|---|
+| `--agent <id>` | Install for one agent. Repeat for more. `auto` uses detected agents plus `.agents/skills`. `all` installs everywhere |
+| `--project`, `-p` | Install into this project instead of the agent's global skills directory |
+| `--list`, `-l` | List the bundled skill files without installing |
+| `--force` | Overwrite locally modified or unverified Spacefast skill files |
+
+Two sibling commands round it out.
+
+```bash
+sf skills status
+sf skills remove
+```
+
+`sf skills remove` confirms before it deletes, and with `--force` it removes only the files the install manifest owns. Your own files in the same directory survive.
+
+There is also a standalone installer that does not need the `sf` CLI.
+
+```bash
+npx -y skills add spacefast/plugins --skill spacefast -g -y
+```
+
+## Two behaviors worth knowing
+
+Installs are fail-closed. If the skill directory holds a file the manifest does not recognize, the CLI marks the state unverifiable and refuses to install or remove without `--force`. Only `.DS_Store`, `.localized`, `Thumbs.db`, and `desktop.ini` are exempt.
+
+The bundled skill refreshes itself. Almost every `sf` command upgrades an installed skill in the background, but only when the installation still matches its manifest. A copy you edited is left alone.

@@ -1,0 +1,108 @@
+---
+title: Codex
+description: Install the Spacefast plugin in Codex, or add the MCP server to config.toml by hand
+---
+
+After this page Codex can publish your project, check builds, domains, and traffic, and fall back to bundled curl scripts when MCP is unavailable.
+
+## Install
+
+```bash
+codex plugin marketplace add spacefast/plugins
+codex plugin add spacefast@spacefast
+```
+
+Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` installs the same plugin, and `sf setup agent --agent codex` writes the MCP table into `$CODEX_HOME/config.toml`, default `~/.codex/config.toml`, and installs the skill into `$CODEX_HOME/skills/spacefast/`.
+
+## What the plugin adds
+
+### MCP servers
+
+```json .mcp.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "streamable-http",
+      "url": "https://mcp.spacefast.com"
+    },
+    "spacefast-local": {
+      "command": "npx",
+      "args": ["-y", "spacefast@<version>", "mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+Codex uses the portable transport name `streamable-http` for the same endpoint that Claude Code and Cursor call `http`. The version in `args` is stamped at release.
+
+### The Spacefast skill
+
+`skills/spacefast/` holds `SKILL.md`, `references.md`, and the bundled scripts. The Codex variant is the same skill with one extra section of Codex notes. Its trigger line reads "Trigger when Codex must publish, host, deploy, share, update, claim, inspect, roll back, or configure a space."
+
+### Bash fallback scripts
+
+The plugin ships seven scripts next to the skill. They cover publish and update over plain curl, so Codex is not stuck when MCP is unreachable. Prefer the MCP tools; these are the fallback.
+
+| Script | What it does |
+|---|---|
+| `scripts/publish.sh [path]` | First publish. Defers to `update.sh` when saved state exists |
+| `scripts/update.sh [path]` | Publishes a new version to the saved Space. Self-corrects after a claim |
+| `scripts/status.sh [versionId] [--wait]` | Polls anonymous publish and claim status. `--wait` polls every 3 seconds for up to 2 minutes |
+| `scripts/continue.sh` | One-time credential exchange after you claim a Space. Rewrites the saved state |
+| `scripts/feedback.sh "message" [category]` | Sends feedback without echoing secrets |
+| `scripts/save-state.sh` | State writer the others call |
+| `scripts/lib.sh` | Shared helpers |
+
+### Agent manifest
+
+`agents/openai.yaml` declares the plugin's identity and its one dependency, the Spacefast MCP server over `streamable_http` at `https://mcp.spacefast.com`, with `allow_implicit_invocation: true`.
+
+## Manual config
+
+To skip the plugin and add only the MCP server, put this in `~/.codex/config.toml`.
+
+```toml ~/.codex/config.toml
+[mcp_servers.spacefast]
+url = "https://mcp.spacefast.com"
+```
+
+`sf setup agent --agent codex` writes the same table with an `oauth_resource` line, or the stdio form when you pick the proxy or local method.
+
+```toml ~/.codex/config.toml
+[mcp_servers.spacefast]
+command = "sf"
+args = ["mcp", "proxy"]
+```
+
+## Verify it works
+
+<Prompt description="Use the Spacefast MCP server to search the docs for anonymous publishing." actions={["copy"]}>
+Use the Spacefast MCP server to search the docs for anonymous publishing.
+</Prompt>
+
+Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+
+<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this folder to Spacefast and give me the live URL.
+</Prompt>
+
+## Typical prompts
+
+<Prompt description='Publish ./out to Spacefast with the changelog "rebuild the docs".' actions={["copy"]}>
+Publish ./out to Spacefast with the changelog "rebuild the docs".
+</Prompt>
+
+<Prompt description="Did the last Spacefast build for this Space succeed? Show me the deployments." actions={["copy"]}>
+Did the last Spacefast build for this Space succeed? Show me the deployments.
+</Prompt>
+
+<Prompt description="Show DNS and TLS status for every domain on this Space." actions={["copy"]}>
+Show DNS and TLS status for every domain on this Space.
+</Prompt>
+
+<Prompt description="Make this Space public and confirm the access setting afterwards." actions={["copy"]}>
+Make this Space public and confirm the access setting afterwards.
+</Prompt>
+
+The last one goes through `execute`, which can pause for your approval before the write lands.

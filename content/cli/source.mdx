@@ -1,0 +1,405 @@
+---
+title: sf source
+description: Browse, search, and change a connected repository from the terminal without cloning it
+sidebar:
+  order: 25
+---
+
+After this page you can list and read files in a Space's source repository, search it, diff and merge branches, commit from files or a unified diff, download an archive, and create tags, all without a local clone.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+The `--connection-type` values here are the older spelling, `remote|push|import`. `remote` is the same connection as `connected` on the `sf git` commands and `push` is the same as `hosted`. `import` is the one-time ingestion remote and has no `sf git` equivalent. See [two connection types, two spellings](/cli/git#two-connection-types-two-spellings).
+
+## sf source ls
+
+List files in a Space's source repository.
+
+```text
+sf source ls [--space <value>] [--connection-type remote|push|import] [--ref <value>]
+  [--path <dir>] [--recursive] [--metadata] [--limit <n>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--ref=<value>` | none | Branch, tag, commit, or ref to inspect |
+| `--path=<dir>` | repository root | Repository directory to list |
+| `--recursive` | `false` | List files recursively |
+| `--metadata` | `false` | Include size and last-commit metadata |
+| `--limit=<n>` | none | Maximum number of entries to return |
+
+```bash
+sf source ls --space docs --path src --recursive
+```
+
+## sf source cat
+
+Print a bounded text file from a Space's source repository.
+
+```text
+sf source cat <path> [--space <value>] [--connection-type remote|push|import]
+  [--ref <value>] [--max-bytes <n>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<path>` | Repository file path to print. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--ref=<value>` | none | Branch, tag, commit, or ref to inspect |
+| `--max-bytes=<n>` | none | Maximum bytes to read |
+
+```bash
+sf source cat README.md --space docs
+```
+
+## sf source search
+
+Search text across a Space's source repository.
+
+```text
+sf source search <pattern> [--space <value>] [--connection-type remote|push|import] ...
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<pattern>` | Text or pattern to search for. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--ref=<value>` | none | Branch, tag, commit, or ref to inspect |
+| `--path=<dir>` | repository root | Repository path to search |
+| `--include-glob=<glob>` | none | Glob to include in search |
+| `--exclude-glob=<glob>` | none | Glob to exclude from search |
+| `--extension=<ext>` | none | File extension filter |
+| `--case-sensitive` | `false` | Use case-sensitive matching |
+| `--context-before=<n>` | none | Context lines before each match |
+| `--context-after=<n>` | none | Context lines after each match |
+| `--max-lines=<n>` | none | Maximum matched lines to return |
+| `--max-matches-per-file=<n>` | none | Maximum matches per file |
+| `--cursor=<value>` | none | Pagination cursor |
+| `--limit=<n>` | none | Maximum files to return |
+
+```bash
+sf source search "TODO" --space docs --path src
+```
+
+## sf source diff
+
+Read changed files and stats for a repository branch.
+
+```text
+sf source diff --branch <name> [--space <value>] [--connection-type remote|push]
+  [--base <ref>] [--path <path>] [--ephemeral] [--ephemeral-base]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--branch=<name>` | none | Branch to diff. **Required** |
+| `--connection-type=<remote\|push>` | `remote` | Repository connection type |
+| `--base=<ref>` | none | Base branch, tag, commit, or ref |
+| `--path=<path>` | none | Repository path to diff |
+| `--ephemeral` | `false` | Treat the branch as ephemeral |
+| `--ephemeral-base` | `false` | Treat the base branch as ephemeral |
+
+```bash
+sf source diff --space docs --branch feature --base main
+```
+
+## sf source archive
+
+Download a `tar.gz` archive of a Space's source repository.
+
+```text
+sf source archive [--space <value>] [--connection-type remote|push|import] [--ref <value>]
+  [--output <path>] [--overwrite] ...
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--ref=<value>` | none | Branch, tag, commit, or ref to archive |
+| `--output=<path>` | none | Archive file path, or an existing directory to write the archive into |
+| `--overwrite` | `false` | Overwrite an existing archive file |
+| `--include-glob=<glob>` | none | Glob to include in the archive |
+| `--exclude-glob=<glob>` | none | Glob to exclude from the archive |
+| `--max-blob-size=<n>` | none | Maximum blob size to include |
+| `--archive-prefix=<dir>` | none | Directory prefix inside the archive |
+
+The download is written to a temp file and renamed, so a failed run leaves an existing file alone. An existing destination without `--overwrite` is refused.
+
+```bash
+sf source archive --space docs --ref main --output ./repo.tar.gz
+```
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `repository_archive_empty_response` | 1 | The archive stream came back empty |
+
+## sf source branch
+
+Create or delete an ephemeral repository branch.
+
+```text
+sf source branch --branch <name> [--space <value>] [--connection-type push|remote]
+  [--base-ref <ref>] [--base-branch <name>] [--remote] [--delete] [--ttl-seconds <n>]
+  [--read-only-ref <pattern>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--branch=<name>` | none | Ephemeral branch name. **Required** |
+| `--connection-type=<push\|remote>` | none | Repository connection to use. `import` is refused |
+| `--base-ref=<ref>` | none | Commit, tag, or ref to create the branch from |
+| `--base-branch=<name>` | none | Branch to create the branch from |
+| `--remote` | `false` | Also return a signed Git remote for the branch |
+| `--delete` | `false` | Delete the branch instead of creating it |
+| `--ttl-seconds=<n>` | none | Signed remote TTL in seconds, up to 86400 |
+| `--read-only-ref=<pattern>` | none | Ref pattern to protect. Repeatable |
+
+`--delete` prompts before removing the branch.
+
+```bash
+sf source branch --branch preview/my-change --remote
+sf source branch --branch preview/my-change --delete
+```
+
+## sf source merge
+
+Merge repository branches.
+
+```text
+sf source merge <source> <target> --connection-type remote|push [--space <value>]
+  [--strategy merge|ff_only|ff_prefer] ...
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<source>` | Source branch to merge from. Required |
+| `<target>` | Target branch to merge into. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push>` | none | Repository connection type. **Required** |
+| `--strategy=<merge\|ff_only\|ff_prefer>` | `ff_prefer` | Merge strategy |
+| `--source-ephemeral` | `false` | Treat the source branch as ephemeral |
+| `--target-ephemeral` | `false` | Treat the target branch as ephemeral |
+| `--expected-target-sha=<sha>` | none | Fail if the target branch no longer points at this SHA |
+| `--message=<text>` | none | Merge commit message |
+| `--allow-unrelated-histories` | `false` | Allow merging unrelated histories |
+| `--squash` | `false` | Create a squash merge |
+
+```bash
+sf source merge feature main --space docs --connection-type push
+```
+
+## sf source import
+
+Create a signed repository import remote for one-time source ingestion.
+
+```text
+sf source import [--space <value>] [--ttl-seconds <n>] [--read-only-ref <glob>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--ttl-seconds=<n>` | none | Signed import remote TTL |
+| `--read-only-ref=<glob>` | none | Ref glob to keep read-only on the signed remote. Repeatable |
+
+```bash
+sf source import
+```
+
+## sf source commits ls
+
+List commit history from a Space's source repository.
+
+```text
+sf source commits ls [--space <value>] [--connection-type remote|push|import]
+  [--branch <name>] [--path <path>] [--cursor <value>] [--limit <n>] [--ephemeral]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--branch=<name>` | none | Branch to list commits from |
+| `--path=<path>` | none | Repository path to filter commit history |
+| `--cursor=<value>` | none | Pagination cursor |
+| `--limit=<n>` | none | Maximum commits to return |
+| `--ephemeral` | `false` | Treat the branch as ephemeral |
+
+```bash
+sf source commits ls --space docs --branch main
+```
+
+## sf source commits get
+
+Read commit metadata from a Space's source repository.
+
+```text
+sf source commits get <sha> [--space <value>] [--connection-type remote|push|import]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<sha>` | Commit SHA to inspect. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+
+```bash
+sf source commits get a1b2c3d4e5f6a7b8 --space docs
+```
+
+## sf source commits create
+
+Create a repository commit from explicit file operations.
+
+```text
+sf source commits create --connection-type remote|push --target-branch <name>
+  --message <text> [--file <repo-path=local-path>] [--delete <repo-path>] ...
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push>` | none | Repository connection type. **Required** |
+| `--target-branch=<name>` | none | Branch to update. **Required** |
+| `--message=<text>` | none | Commit message. **Required** |
+| `--file=<repo-path=local-path>` | none | File operation. Repeatable |
+| `--delete=<repo-path>` | none | Repository path to delete. Repeatable |
+| `--mode=<100644\|100755\|120000\|160000>` | none | Mode for upserted files |
+| `--expected-head-sha=<sha>` | none | Fail if the target branch no longer points at this SHA |
+| `--base-branch=<name>` | none | Base branch for the commit |
+| `--ephemeral` | `false` | Treat the target branch as ephemeral |
+| `--ephemeral-base` | `false` | Treat the base branch as ephemeral |
+| `--author-name=<value>` | local `git config user.name` | Commit author name |
+| `--author-email=<value>` | local `git config user.email` | Commit author email |
+| `--committer-name=<value>` | none | Committer name |
+| `--committer-email=<value>` | none | Committer email |
+
+`--file` must be `repository-path=local-path`. A commit with zero operations, a missing local file, or no author identity from either the flags or local git config is a validation error. File contents are base64-encoded on the way out.
+
+```bash
+sf source commits create --space docs --connection-type push --target-branch main \
+  --message "Update" --file index.html=./index.html
+```
+
+## sf source commits apply
+
+Create a repository commit from a unified diff.
+
+```text
+sf source commits apply --connection-type remote|push --target-branch <name>
+  --message <text> --diff <path> ...
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push>` | none | Repository connection type. **Required** |
+| `--target-branch=<name>` | none | Branch to update. **Required** |
+| `--message=<text>` | none | Commit message. **Required** |
+| `--diff=<path>` | none | Path to a unified diff file. **Required** |
+| `--expected-head-sha=<sha>` | none | Fail if the target branch no longer points at this SHA |
+| `--base-branch=<name>` | none | Base branch for the commit |
+| `--ephemeral` | `false` | Treat the target branch as ephemeral |
+| `--ephemeral-base` | `false` | Treat the base branch as ephemeral |
+| `--author-name=<value>` | local `git config user.name` | Commit author name |
+| `--author-email=<value>` | local `git config user.email` | Commit author email |
+| `--committer-name=<value>` | none | Committer name |
+| `--committer-email=<value>` | none | Committer email |
+
+A missing or empty diff file is a validation error.
+
+```bash
+sf source commits apply --space docs --connection-type push --target-branch main \
+  --message "Patch" --diff ./change.patch
+```
+
+## sf source tags ls
+
+List tags in a Space's source repository.
+
+```text
+sf source tags ls [--space <value>] [--connection-type remote|push|import]
+  [--cursor <value>] [--limit <n>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
+| `--cursor=<value>` | none | Pagination cursor |
+| `--limit=<n>` | none | Maximum tags to return |
+
+```bash
+sf source tags ls --space docs
+```
+
+## sf source tags create
+
+Create a release tag in a Space's source repository.
+
+```text
+sf source tags create <name> --connection-type remote|push --target <ref> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<name>` | Tag name to create. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type=<remote\|push>` | none | Repository connection type. **Required** |
+| `--target=<ref>` | none | Commit SHA, branch, tag, or ref the tag should point at. **Required** |
+
+```bash
+sf source tags create v1.0.0 --space docs --connection-type push --target main
+```
+
+### Errors
+
+Numeric flags across the `sf source` family reject non-integers with "Flag `--<name>` must be an integer." (exit 2).

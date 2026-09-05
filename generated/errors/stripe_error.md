@@ -1,11 +1,11 @@
 ---
 title: "stripe_error"
-description: "The billing provider reported an error."
+description: "Stripe rejected the billing request."
 ---
 
-The billing provider reported an error.
+Stripe rejected the billing request.
 
-**How to resolve:** Retry. If the error persists, check the team's billing settings.
+**How to resolve:** Read the detail for what Stripe refused, correct the billing input, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/stripe_error",
   "title": "Stripe error",
   "status": 400,
-  "detail": "The billing provider reported an error.",
+  "detail": "Stripe rejected the billing request.",
   "code": "stripe_error",
   "requestId": "req_4mz0v8qk"
 }

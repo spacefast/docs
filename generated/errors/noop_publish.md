@@ -1,11 +1,11 @@
 ---
 title: "noop_publish"
-description: "The publish matched the live version exactly, so nothing changed."
+description: "The publish declares exactly what the live version holds, so no new version was created."
 ---
 
-The publish matched the live version exactly, so nothing changed.
+The publish declares exactly what the live version holds, so no new version was created.
 
-**How to resolve:** No action is needed. The existing live version already serves this content.
+**How to resolve:** Change a file and publish again if a new version was the goal.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/noop_publish",
   "title": "Noop publish",
   "status": 400,
-  "detail": "The publish matched the live version exactly, so nothing changed.",
+  "detail": "The publish declares exactly what the live version holds, so no new version was created.",
   "code": "noop_publish",
   "requestId": "req_4mz0v8qk"
 }

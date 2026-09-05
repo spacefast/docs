@@ -1,0 +1,107 @@
+---
+title: Quickstart
+description: Install the sf CLI, sign in, publish a folder, and put it on your own domain.
+sidebar:
+  order: 1
+---
+
+By the end of this page you have a site live on a `view.fast` hostname, a second version you can roll back to, and a custom domain pointed at it.
+
+## Before you start
+
+You need Node.js 20.3 or newer and a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
+
+<Steps>
+  <Step title="Install the CLI">
+
+    ```package-install
+    npm install -g spacefast
+    ```
+
+    Homebrew (`brew install spacefast`) and standalone binaries are also available. Check the install:
+
+    ```bash
+    sf --version
+    ```
+
+  </Step>
+  <Step title="Sign in">
+
+    ```bash
+    sf login
+    ```
+
+    The CLI prints a code and opens your browser. Approve the request there. The CLI receives an API key that lasts 30 days and expires after 7 days without use. Confirm with `sf whoami`.
+
+    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later, within 6 hours.
+
+  </Step>
+  <Step title="Publish">
+
+    ```bash
+    cd my-site
+    sf publish ./dist
+    ```
+
+    The CLI creates a Space, uploads the folder, and prints the URLs:
+
+    ```text
+    Published: https://quiet-harbor.view.fast
+
+      Open          https://quiet-harbor.view.fast
+      Live URL      https://quiet-harbor.view.fast
+      Version URL   https://v1--quiet-harbor.view.fast
+      Space         spc_…
+      Version       v1 (ready)
+      Files         12
+      Duration      3.2s
+    ```
+
+    The link between this folder and the Space is saved in `.spacefast/space.json`. Commit that file so the next `sf publish` from any machine updates the same Space.
+
+  </Step>
+  <Step title="Publish again, then roll back">
+
+    Change a file and run `sf publish ./dist` again. Only changed files upload. You get `v2`, and `live` now points at it. Version URLs keep working forever, so `v1--quiet-harbor.view.fast` still serves the old build.
+
+    ```bash
+    sf versions ls
+    sf rollback v1
+    ```
+
+    Rolling back moves the `live` channel to `v1`. Nothing is rebuilt. `sf promote v2` moves it forward again.
+
+  </Step>
+  <Step title="Add your domain">
+
+    ```bash
+    sf domains add example.com --role primary
+    ```
+
+    The command prints the DNS records to create at your DNS provider: a TXT record that proves you control the name, and A records that route traffic. Adding an apex also adds `www` and redirects it to the apex. Check progress with:
+
+    ```bash
+    sf domains check example.com
+    ```
+
+    Once the domain is `active`, the Live URL switches to `https://example.com`. The `view.fast` hostname keeps working. Details, states, and troubleshooting are in [Custom domains](/domains).
+
+  </Step>
+</Steps>
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Let your agent publish" href="/agents" icon="bot">
+    Install the Spacefast plugin for Claude Code, Cursor, or Codex.
+  </Card>
+  <Card title="Publish from Git" href="/git" icon="git-branch">
+    Push to a remote or connect GitHub and let Spacefast build.
+  </Card>
+  <Card title="Dynamic sites" href="/zero" icon="database">
+    Add a database, functions, and crons with the Zero runtime.
+  </Card>
+  <Card title="Run in CI" href="/cli" icon="workflow">
+    `CI=1` switches the CLI to JSON output and no prompts.
+  </Card>
+</CardGroup>

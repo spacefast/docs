@@ -1,11 +1,11 @@
 ---
 title: "zero_realtime_query_invalid"
-description: "The Zero realtime query subscription payload is invalid."
+description: "The realtime event query parameters are invalid."
 ---
 
-The Zero realtime query subscription payload is invalid.
+The realtime event query parameters are invalid.
 
-**How to resolve:** Include a valid query name and argument list.
+**How to resolve:** Correct the realtime query parameters, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_realtime_query_invalid",
   "title": "Zero realtime query invalid",
   "status": 400,
-  "detail": "The Zero realtime query subscription payload is invalid.",
+  "detail": "The realtime event query parameters are invalid.",
   "code": "zero_realtime_query_invalid",
   "requestId": "req_4mz0v8qk"
 }

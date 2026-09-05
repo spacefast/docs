@@ -1,11 +1,11 @@
 ---
 title: "zero_blob_store_full"
-description: "The local Zero blob store reached its configured size limit."
+description: "The local blob store is at its key limit."
 ---
 
-The local Zero blob store reached its configured size limit.
+The local blob store is at its key limit.
 
-**How to resolve:** Delete local blobs or raise the dev blob store limit.
+**How to resolve:** Delete blob keys in the dev store, or restart `sf dev` to clear it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_blob_store_full",
   "title": "Zero blob store full",
   "status": 400,
-  "detail": "The local Zero blob store reached its configured size limit.",
+  "detail": "The local blob store is at its key limit.",
   "code": "zero_blob_store_full",
   "requestId": "req_4mz0v8qk"
 }

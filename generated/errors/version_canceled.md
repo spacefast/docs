@@ -1,11 +1,11 @@
 ---
 title: "version_canceled"
-description: "The version was canceled and cannot be used."
+description: "The version was canceled before it went live."
 ---
 
-The version was canceled and cannot be used.
+The version was canceled before it went live.
 
-**How to resolve:** Start a new version.
+**How to resolve:** Publish again to create a fresh version.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_canceled",
   "title": "Version canceled",
   "status": 400,
-  "detail": "The version was canceled and cannot be used.",
+  "detail": "The version was canceled before it went live.",
   "code": "version_canceled",
   "requestId": "req_4mz0v8qk"
 }

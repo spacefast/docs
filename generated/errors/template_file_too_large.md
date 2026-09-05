@@ -1,11 +1,11 @@
 ---
 title: "template_file_too_large"
-description: "A template file exceeds the maximum size for substitution."
+description: "A template file is larger than the template byte cap."
 ---
 
-A template file exceeds the maximum size for substitution.
+A template file is larger than the template byte cap.
 
-**How to resolve:** Keep template files at or under 16 KB.
+**How to resolve:** Split the template into smaller files, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/template_file_too_large",
   "title": "Template file too large",
   "status": 400,
-  "detail": "A template file exceeds the maximum size for substitution.",
+  "detail": "A template file is larger than the template byte cap.",
   "code": "template_file_too_large",
   "requestId": "req_4mz0v8qk"
 }

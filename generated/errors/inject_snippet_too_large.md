@@ -1,11 +1,11 @@
 ---
 title: "inject_snippet_too_large"
-description: "An inject snippet exceeds the per-snippet size limit."
+description: "An `inject` snippet is larger than the per-snippet byte cap."
 ---
 
-An inject snippet exceeds the per-snippet size limit.
+An `inject` snippet is larger than the per-snippet byte cap.
 
-**How to resolve:** Keep each inject snippet at or under 8 KB.
+**How to resolve:** Shorten the snippet at the `path` in the failure, or move its content into a published file.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/inject_snippet_too_large",
   "title": "Inject snippet too large",
   "status": 400,
-  "detail": "An inject snippet exceeds the per-snippet size limit.",
+  "detail": "An `inject` snippet is larger than the per-snippet byte cap.",
   "code": "inject_snippet_too_large",
   "requestId": "req_4mz0v8qk"
 }

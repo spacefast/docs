@@ -1,0 +1,265 @@
+---
+title: db and crons
+description: Inspect a Space's database, dump or export rows, apply schema migrations, open a SQL console, and exercise scheduled jobs
+sidebar:
+  order: 22
+---
+
+After this page you can read a Space's tables and pending migration plan, pull rows out as JSON, take a full backup, apply a migration, open a real SQL console, and fire a scheduled job on demand.
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+`sf db`, `sf db dump`, and `sf db migrate` are Zero capsules only. A Functions worker declares no table set, so those routes answer `db_not_available` or `runtime_kind_mismatch`. There is no connection string anywhere in the CLI or the API. `sf db console` is the escape hatch.
+
+## sf db
+
+Inspect a Space's database. Unlike other topic commands, the bare `sf db` runs the inspect read instead of printing help.
+
+```text
+sf db [target] [--space <value>] [--local-url <value>] [--port <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--local-url=<value>` | none | Read from a local `sf dev` server instead of the live version. Must be `http:` or `https:` with hostname `localhost`, `127.0.0.1`, `::1`, or `[::1]` |
+| `--port=<value>` | none | Local `sf dev` server port. Shorthand for `--local-url http://127.0.0.1:<port>`. Integer 1 to 65535 |
+
+```bash
+sf db
+sf db docs
+sf db --port 4173
+```
+
+### Output
+
+Tables, columns, and the pending migration plan. With `--json`, `data` carries `versionId`, `artifactId`, `backend` (always `mysql`), `migrationMode` (`safe`, `drop`, or `rename`), `schemaHash`, `tables[]`, `migrations[]`, and `plan`. `plan.applied` is `null` when the control plane cannot prove the plan ran.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `network_error` | 40 | A local `sf dev` port refused the connection |
+
+## sf db dump
+
+Print rows from a Space's database, for debugging and export.
+
+```text
+sf db dump [target] [--space <value>] [--table <name>] [--limit <n>]
+  [--local-url <value>] [--port <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--table=<name>` | none | Restrict the dump to one table. Must match `^[A-Za-z_][A-Za-z0-9_]*$`, 1 to 128 characters |
+| `--limit=<n>` | `25` | Maximum rows per table. Maximum 100. Validated before the request |
+| `--local-url=<value>` | none | Read from a local `sf dev` server instead of the live version |
+| `--port=<value>` | none | Local `sf dev` server port |
+
+```bash
+sf db dump
+sf db dump --table todos --limit 100
+```
+
+### Output
+
+With `--json`, `data` is `{ versionId, artifactId, schemaHash, tables: [{ name, rows }] }`.
+
+## sf db export
+
+Export every declared table to one versioned JSON backup. Rows are read in stable keyset pages and the destination is replaced only after the complete export succeeds.
+
+```text
+sf db export [target] [--space <value>] [--out <path>] [--local-url <value>] [--port <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--out=<path>` | `spacefast-backup-<space>-<timestamp>.json` | Backup file path |
+| `--local-url=<value>` | none | Read from a local `sf dev` server instead of the live version |
+| `--port=<value>` | none | Local `sf dev` server port |
+
+The file is written to a temp path with mode `0600`, fsynced, then renamed. A failed export leaves an existing destination untouched and unlinks the temp file.
+
+```bash
+sf db export
+sf db export docs --out ./docs-backup.json
+sf db export --port 4173
+```
+
+### Output
+
+With `--json`, `data` is `{ spacefastBackup: 1, path, spaceId, versionId, exportedAt, schemaHash, tableCount, rowCount }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `zero_db_export_cursor_repeated` | 1 | A page returned the same cursor twice |
+
+## sf db migrate
+
+Apply the live version's schema migrations, and report what this source tree would change on top of them.
+
+```text
+sf db migrate [source] [--space <value>] [--previous-artifact <value>] [--drop] [--rename]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[source]` | Capsule source directory. Defaults to `.` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--previous-artifact=<value>` | none | Diff against this artifact or finalize payload instead of the live schema |
+| `--drop` | `false` | Allow the planned migration to include explicit drop operations. Exclusive with `--rename` |
+| `--rename` | `false` | Allow the planned migration to include explicit rename operations. Exclusive with `--drop` |
+
+`create_table`, `add_column`, and `add_index` are always allowed. `drop_table`, `drop_column`, and `drop_index` need `--drop`. `rename_table` and `rename_column` need `--rename`.
+
+The command checks the runtime kind locally before it sends anything, and confirms before applying.
+
+```bash
+sf db migrate
+sf db migrate --drop
+```
+
+### Output
+
+With `--json`, `data` is `{ plan, applied, operation }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `runtime_kind_mismatch` | 30 | `sf.jsonc` declares a runtime that is not a Zero capsule. Raised before any request |
+
+## sf db console
+
+Open a phpMyAdmin console on the Space's database, for anything `sf db` and `sf db dump` cannot answer.
+
+```text
+sf db console [target] [--space <value>] [--show-secret]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--show-secret` | `false` | Print the single-use console URL instead of opening it |
+
+The URL is short-lived, single-use, and grants full SQL authority, which is why it opens in a browser instead of printing. It requires write access.
+
+```bash
+sf db console
+sf db console --show-secret
+```
+
+### Output
+
+```json
+{
+  "data": {
+    "space": { "id": "spc_0123456789abcdef", "slug": "docs" },
+    "console": { "provider": "phpmyadmin", "url": null },
+    "opened": false
+  }
+}
+```
+
+`console.url` is `null` in the receipt unless you pass `--show-secret`.
+
+## sf crons ls
+
+List the scheduled jobs the live version declares, with the last failure reported for each. Aliased as `sf crons list`.
+
+Crons are declared in `sf.jsonc` and there is no write API. Publishing is how you change them, which is also why a rollback restores the previous schedules.
+
+```text
+sf crons ls [--space <value>]
+```
+
+No arguments, no command-specific flags.
+
+```bash
+sf crons ls --space docs
+```
+
+### Output
+
+One row per job with its key, path, schedule, and recent failures. A Space with none prints "No scheduled jobs declared. Add a `crons` block to sf.jsonc."
+
+With `--json`, `data` is `{ versionId, crons }`, where each cron carries `key`, `path`, `schedule`, `recentFailures[]`, and `unattributedFailures[]`. Run output is never echoed, because it can contain response bodies and secrets.
+
+## sf crons run
+
+Request the declared path over HTTPS now, without waiting for the schedule.
+
+```text
+sf crons run <target> [--space <value>] [--header 'name: value']
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<target>` | Cron key or path, as shown by `sf crons ls`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--header=<'name: value'>` | none | Request header. Repeatable |
+
+The platform's own `x-spacefast-cron` header cannot be sent from here, so a handler that gates on it will refuse. A handler that checks a shared secret needs the header passed explicitly.
+
+```bash
+sf crons run /api/digest
+sf crons run api-digest --header "authorization: Bearer $CRON_SECRET"
+```
+
+### Output
+
+With `--json`, `data` is `{ key, path, schedule, url, status, ok, durationMs, contentType, bytes, bodyPreview }`. `bodyPreview` is whitespace-collapsed and capped at 200 characters.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `cron_not_found` | 20 | No declared job matches the key or path |
+| `cron_run_failed` | 1 | The path answered HTTP 400 or worse. The whole receipt rides along in `details` |
+| `validation_error` | 2 | A `--header` value has no `:`, or `:` at position 0 |

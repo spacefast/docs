@@ -1,0 +1,130 @@
+---
+title: Troubleshooting
+description: The failures people actually hit, by symptom, each with the exact error code or state and the page that owns the fix
+sidebar:
+  order: 1.5
+---
+
+Find your symptom, get the code the platform actually returns, then go to the page that owns it. Every code here is one Spacefast emits.
+
+## Publishing
+
+### The publish says nothing changed
+
+Your declaration reproduced the live version byte for byte, so no version was created. The receipt carries a null version id and one info diagnostic, `noop_publish`. That is a success.
+
+If you expected a change, check you published the built output rather than a stale directory. One catch: a file declared without a `sha256` cannot prove it is unchanged, so a manifest missing any hash always mints a new version. See [Publishing](/publish).
+
+### The publish was rejected
+
+These fail the whole publish rather than dropping the file, because ignoring them would change what your site serves.
+
+| Code | What happened | Fix |
+| --- | --- | --- |
+| `version_file_too_large` | One file is over the per-plan ceiling | Host the asset elsewhere, or move up a plan |
+| `manifest_too_many_files` | More files than your plan allows | Publish the build output directory, not the source tree |
+| `invalid_file_path` | A path Spacefast cannot canonicalize | Remove backslashes, doubled slashes, and trailing dots or spaces |
+| `static_control_file_not_supported` | An `.htaccess` or `.user.ini` shipped | Delete it and use `_redirects` and `_headers` instead |
+
+Every limit and its number is on [Limits](/limits). Every code, with whether retrying helps, is on [Error codes](/api/errors).
+
+### The publish failed while provisioning
+
+`publish_setup_failed` means provisioning for this publish did not complete. It is not a limit and not something in your files. Retry the publish. If it persists, contact support with the `requestId` from the error.
+
+`publish_session_expired` is different. Declared uploads are kept for 24 hours, and a publish resumed after that has to start again.
+
+### The build failed
+
+Read the log before changing anything.
+
+```bash
+sf builds ls --space my-site
+sf builds logs bld_xxxxxxxx --follow
+```
+
+The codes name the stage. `build_failed` is your command exiting non-zero. `build_timeout` hit the time limit. `build_oom` was killed, most likely out of memory. `build_output_dir_missing` means the build finished but the output directory you named was never produced, and `build_no_index_html` means it produced output with no `index.html` at the root. Detection defaults, override flags, and the log limits are on [Frameworks and builds](/frameworks).
+
+## Serving
+
+### The site still shows the old version
+
+Shared caches hold a copy for ten minutes. Non-immutable files are sent with `public, s-maxage=600, max-age=0, must-revalidate`, so your own browser revalidates on every load but a shared copy can be up to ten minutes stale.
+
+A publish purges every hostname the Space serves, which normally makes that moot. When the purge does not confirm you get a `runtime_purge_failed` diagnostic, the runtime retries, and the ten-minute lifetime is the backstop. Check which version answered you:
+
+```bash
+curl -sI https://my-site.view.fast/ | grep -i x-spacefast-version
+```
+
+Full policy on [Caching](/caching).
+
+### A route 404s that works locally
+
+Three rules decide this, and your local dev server implements none of them.
+
+Clean URLs are on by default, so `about.html` answers `/about` and `/about/` redirects to `/about` with a 308. A directory serves its `index.html`. A single-page app needs an explicit `fallback` in `sf.jsonc`, and the fallback is skipped for around 110 asset extensions so a missing `.js` returns 404 instead of your HTML shell.
+
+If two files would answer the same URL after that resolution, the publish stops with `publish_path_collision` rather than letting lookup order decide. See [Redirects, rewrites, and headers](/routing).
+
+## Domains
+
+### The domain is stuck on `pending`
+
+`pending` means assigned and waiting for the records to appear in public DNS. Run the diagnostics first:
+
+```bash
+sf domains diagnostics example.com --space my-site
+```
+
+`dns_records_missing` means the records have not been observed yet. The usual cause is a leftover `A` record from your previous host sitting beside the correct one. Every observed `A` record has to point at Spacefast, so delete the old ones. Spacefast issues `A`, `AAAA`, and `TXT` records only, never a CNAME. See [Custom domains](/domains).
+
+### The domain went `failed` after working
+
+`failed` means there is no current proof of DNS control. Either the records were never observed, or the domain verified in the past and stopped. Almost always someone edited the zone.
+
+Verification failure never takes a live site down. Compiled routes and certificates stay in place while the domain re-proves itself. Run `sf domains diagnostics` to see which records are observed now, and restore the TXT record if it is the one that went missing.
+
+### The certificate is `broken`
+
+Issuance failed and something in the zone is blocking it. The usual cause is a CAA record that does not permit the issuing authority, which shows up as `ssl_renewal_blocked` in the diagnostics.
+
+Fix the CAA record, then retry. Verification and certificate retries are capped at 6 per hour per domain and 120 per hour per team, answering `rate_limited` past that. Looping the retry does not make a certificate issue faster.
+
+### `www` redirects when you wanted it to serve
+
+Adding an apex sets up its `www` twin, and adding `www` sets up the apex. One of the pair serves the Space and the other answers `308` to it. You do not write that redirect and you cannot have both serve.
+
+Set the one you want as **primary**, which releases the previous holder. A domain carrying a redirect cannot be primary, and promoting it without clearing the redirect fails with `domain_primary_redirect_conflict`. See [Custom domains](/domains).
+
+## Credentials and automation
+
+### `sf login` has no browser to open
+
+In a container or over SSH the CLI does not try to open anything. It prints the request line, the code, and the link, then polls. Open that link on any device, approve, and the CLI picks the approval up.
+
+For an unattended job, do not use device login at all. Mint an API key and pass it as `SPACEFAST_TOKEN` or `--token`. See [Publish from CI](/ci) and [API keys and tokens](/api-keys).
+
+### `confirmation_required` in CI
+
+A truthy `CI` puts the CLI in agent mode, which appends `--json` and turns prompts off. It never implies `--yes`. A destructive command with no way to ask therefore fails with `confirmation_required` and exit code 2.
+
+Add `--yes` to the specific command that needs it. `SPACEFAST_YES=1` works globally, and is a blunter instrument than it looks.
+
+### The credential stopped working after a week
+
+A credential from `sf login` lasts 30 days and expires after 7 days without use, whichever comes first. The API answers `401` with `credential_expired`. Run `sf login` again.
+
+`credential_revoked` means someone revoked it, in the dashboard or with `sf api-keys revoke`. `credential_retired` means an old token format. Both need a new credential rather than a retry. See [Authentication](/authentication).
+
+### An agent gets 403 on one tool
+
+Tools carry their own scope requirements, so a grant can cover most of a client and still refuse one call. `publish` needs `publish:write`. `show_space_deployments` and `show_space_analytics` need `spaces:read`. `show_space_domains` needs `spaces:read` and `domains:read`.
+
+The failure is `insufficient_scope`, and the `WWW-Authenticate` header names the scopes that were missing. Reconnect the client with those scopes. Some actions are reserved for a signed-in person at every level, and those answer `authorization_level_not_allowed` no matter what you grant. See [What agents are allowed to do](/agents/permissions).
+
+### You are being rate limited
+
+Every rate-limited response carries `RateLimit-Limit`, `RateLimit-Remaining`, and `RateLimit-Reset` in seconds. A `429` adds `Retry-After`, also in seconds. Wait that long. The code is `rate_limited`.
+
+When an hourly limiter is the one that rejected you, those headers describe the hourly window rather than the per-minute one, so the number can be much larger than you expect. Rate limiting fails open, so the headers are sometimes absent entirely and client code must not require them. See [Rate limits](/api/rate-limits).

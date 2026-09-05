@@ -1,11 +1,11 @@
 ---
 title: "zero_js_execution_timeout"
-description: "The Zero endpoint exceeded its JavaScript execution budget."
+description: "The Zero handler ran past its execution time limit."
 ---
 
-The Zero endpoint exceeded its JavaScript execution budget.
+The Zero handler ran past its execution time limit.
 
-**How to resolve:** Reduce synchronous work or database round trips in the handler.
+**How to resolve:** Cut the work the handler does per request, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_execution_timeout",
   "title": "Zero js execution timeout",
   "status": 400,
-  "detail": "The Zero endpoint exceeded its JavaScript execution budget.",
+  "detail": "The Zero handler ran past its execution time limit.",
   "code": "zero_js_execution_timeout",
   "requestId": "req_4mz0v8qk"
 }

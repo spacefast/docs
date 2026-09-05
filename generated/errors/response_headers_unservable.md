@@ -1,11 +1,11 @@
 ---
 title: "response_headers_unservable"
-description: "A file needs a response header that the platform cannot deliver for large files."
+description: "The response headers the runtime produced cannot be served."
 ---
 
-A file needs a response header that the platform cannot deliver for large files.
+The response headers the runtime produced cannot be served.
 
-**How to resolve:** Reduce the file below 100 MiB or drop the custom header.
+**How to resolve:** Remove the offending headers from the handler's response, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/response_headers_unservable",
   "title": "Response headers unservable",
   "status": 400,
-  "detail": "A file needs a response header that the platform cannot deliver for large files.",
+  "detail": "The response headers the runtime produced cannot be served.",
   "code": "response_headers_unservable",
   "requestId": "req_4mz0v8qk"
 }

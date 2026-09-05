@@ -1,11 +1,11 @@
 ---
 title: "dns_record_managed"
-description: "This DNS record is managed by Spacefast and cannot be edited directly."
+description: "The record is managed or protected, so the API will not write to it."
 ---
 
-This DNS record is managed by Spacefast and cannot be edited directly.
+The record is managed or protected, so the API will not write to it.
 
-**How to resolve:** Change the binding or feature that owns the record instead of editing it.
+**How to resolve:** Edit an unmanaged record instead, or detach the feature that owns this one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_record_managed",
   "title": "Dns record managed",
   "status": 400,
-  "detail": "This DNS record is managed by Spacefast and cannot be edited directly.",
+  "detail": "The record is managed or protected, so the API will not write to it.",
   "code": "dns_record_managed",
   "requestId": "req_4mz0v8qk"
 }

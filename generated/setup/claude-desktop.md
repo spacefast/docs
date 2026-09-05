@@ -29,7 +29,7 @@ Install Spacefast in Claude Desktop as a signed local extension.
 Prefer to hand this off? Copy setup prompt:
 
 ```text
-Fetch https://spacefast.com/setup.md and set up Spacefast.
+Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.

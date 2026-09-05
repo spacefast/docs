@@ -1,11 +1,11 @@
 ---
 title: "publish_file_missing"
-description: "A declared file was never uploaded, so the publish cannot finalize."
+description: "The inline publish did not carry a file the manifest declares."
 ---
 
-A declared file was never uploaded, so the publish cannot finalize.
+The inline publish did not carry a file the manifest declares.
 
-**How to resolve:** Upload every declared file, or resume the upload session to see what is missing.
+**How to resolve:** Include every declared file in the archive, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_file_missing",
   "title": "Publish file missing",
   "status": 400,
-  "detail": "A declared file was never uploaded, so the publish cannot finalize.",
+  "detail": "The inline publish did not carry a file the manifest declares.",
   "code": "publish_file_missing",
   "requestId": "req_4mz0v8qk"
 }

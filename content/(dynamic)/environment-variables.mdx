@@ -1,0 +1,163 @@
+---
+title: Environment variables
+description: Set variables on a Space or a team, keep secrets write-only, substitute them into files at build, and read them from a handler as ctx.env
+sidebar:
+  order: 3
+---
+
+After this page you can set a variable from the CLI or the dashboard, know when it reaches a running site, and pick the right lane for a server-only secret.
+
+## Two scopes
+
+| Scope | Where you set it | Who sees it |
+| --- | --- | --- |
+| Space | `sf env`, or the space's **Variables** page | That Space |
+| Team | The team's **Variables** page | Every Space in the team |
+
+A Space value wins over a team value with the same name. In the dashboard, the space page adds a **Source** column and an **Override** action for a value inherited from the team.
+
+Platform-provided `SPACEFAST_*` values also appear in reads, marked as system scope. They are read-only.
+
+## Set one
+
+```bash
+sf env set STRIPE_PUBLISHABLE_KEY pk_live_123
+sf env set STRIPE_SECRET_KEY --value-from-stdin < ./key.txt
+sf env ls
+sf env ls --show-values
+sf env rm STRIPE_SECRET_KEY
+```
+
+Pass the value as an argument or read it from stdin, never both and never neither. Stdin strips one trailing newline, and an empty stdin is an error.
+
+Passing a secret on the command line prints a warning naming the variable, because it lands in your shell history. Prefer `--value-from-stdin`.
+
+:::warning[A write applies at the next finalize]
+Setting or deleting a variable does not touch the running site. The live version keeps the values it was sealed with. The change reaches visitors when a version next finalizes, which the write itself queues.
+:::
+
+## Secret or plain
+
+Secret values are write-only. After creation, no API response, CLI output, dashboard field, log line, or activity entry returns one.
+
+`sf env set` decides in this order.
+
+1. An explicit `--secret` or `--no-secret` wins.
+2. Otherwise the existing Space variable keeps its current classification.
+3. Otherwise the new variable is **secret**.
+
+So a brand new variable with no flag is write-only. Pass `--no-secret` when you want to read it back later.
+
+## Naming rules
+
+| Rule | Value |
+| --- | --- |
+| Length | 1 to 128 characters |
+| Pattern | `/^[A-Za-z_][A-Za-z0-9_]*$/` |
+| Reserved | Names starting with `SPACEFAST_` |
+| Empty values | Refused. A variable always has a value |
+
+## Build time and runtime are different lanes
+
+### Build time, `{{ vars.NAME }}`
+
+List a file under `templates` in `sf.jsonc` and every `{{ vars.NAME }}` token in it is substituted when the version finalizes.
+
+```jsonc sf.jsonc
+{
+  "templates": ["index.html", "config.json"]
+}
+```
+
+Repository builds can take a different value per channel.
+
+```bash
+sf env set API_URL https://api.example.com --production-value https://api.example.com
+sf env set API_URL https://api.example.com --preview-value https://staging.example.com
+sf env set API_URL https://api.example.com --branch-value beta=https://beta.example.com
+```
+
+`--branch-value` takes `branch=value` and repeats. An empty branch or an empty value is a validation error.
+
+### Runtime, `ctx.env`
+
+Server-only values belong in `.env.server` next to your project. `sf publish` reads that file, syncs every key into the Space's variables **as secrets**, and never uploads the file itself. The shared publish denylist covers `.env.*`, so the bytes stay on your machine.
+
+```bash
+cat > .env.server <<'EOF'
+STRIPE_SECRET_KEY=sk_live_123
+EOF
+sf publish
+```
+
+A Zero handler reads it from `ctx.env`.
+
+```ts server/index.ts
+import { capsule, endpoint, json } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "billing",
+  endpoints: {
+    charge: endpoint({ mode: "write", method: "POST", path: "/api/charge" }, (ctx) =>
+      json({ configured: Boolean(ctx.env.STRIPE_SECRET_KEY) }),
+    ),
+  },
+});
+```
+
+A [Functions](/functions) worker reads the same values from `env`, its second handler argument.
+
+`.env.lakebed.server` is accepted as an alias for capsule portability.
+
+An anonymous first publish, before you have an account, syncs nothing and reports `skipped: "anonymous"`.
+
+#### Runtime caps
+
+| Cap | Value |
+| --- | --- |
+| Keys | 64 |
+| Name | 128 bytes |
+| One value | 16 KiB |
+| All values together | 64 KiB |
+| Refused prefixes | `SPACEFAST_`, `ZERO_` |
+
+## Pull and import
+
+```bash
+sf env pull
+sf env pull .env.development --force
+sf env pull --stdout --format json
+```
+
+`sf env pull` writes `.env.local` by default and refuses to overwrite an existing file without `--force`. The file is written `0600` through a temp file and a rename, and a pre-existing loose file gets tightened.
+
+Only non-secret values are pullable. Write-only names come back in `omittedWriteOnly` with a warning instead of a blank line. Team-scope values are written as `shared.<NAME>`.
+
+```bash
+sf env import .env.production
+sf env import .env --from vercel --no-secret
+```
+
+`sf env import` reads a dotenv file and sends one write per entry, in file order. It strips a BOM and a leading `export `, skips blank and `#` lines, requires quotes to close, and strips an inline `#` outside quotes. A later duplicate overwrites an earlier one. A missing `=` or an empty value is an error naming the line. `--from` accepts `dotenv`, `vercel`, `netlify`, and `cloudflare`, which all export dotenv files.
+
+```bash
+sf env export-template
+```
+
+`sf env export-template` is fully local and makes no API call. It reads `package.json`, `vercel.json`, `netlify.toml`, and `wrangler.toml` from a directory and writes a dotenv template of the names those platforms expect.
+
+## Dashboard
+
+Team variables live at **Variables** in the team nav. Space variables live at **Variables** for the space. The table columns are **Name**, **Value**, **Secret**, and, on a Space, **Source**.
+
+## API
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceVariables`](/api/reference/variables/listspacevariables) | `GET /v1/spaces/{spaceId}/variables` |
+| [`setSpaceVariable`](/api/reference/variables/setspacevariable) | `PUT /v1/spaces/{spaceId}/variables/{name}` |
+| [`deleteSpaceVariable`](/api/reference/variables/deletespacevariable) | `DELETE /v1/spaces/{spaceId}/variables/{name}` |
+| [`listTeamVariables`](/api/reference/variables/listteamvariables) | `GET /v1/teams/{teamId}/variables` |
+| [`setTeamVariable`](/api/reference/variables/setteamvariable) | `PUT /v1/teams/{teamId}/variables/{name}` |
+
+Each mutation returns a possibly-null `operation` handle for the debounced re-finalize it coalesced into.

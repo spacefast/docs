@@ -1,11 +1,11 @@
 ---
 title: "invalid_continuation_token"
-description: "The continuation token is invalid, expired, or already finished."
+description: "The continuation token is expired, malformed, or belongs to another credential."
 ---
 
-The continuation token is invalid, expired, or already finished.
+The continuation token is expired, malformed, or belongs to another credential.
 
-**How to resolve:** Restart the originating flow to obtain a fresh requiresAction envelope and continuation token.
+**How to resolve:** Restart the flow to get a fresh `continuationToken`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_continuation_token",
   "title": "Invalid continuation token",
   "status": 400,
-  "detail": "The continuation token is invalid, expired, or already finished.",
+  "detail": "The continuation token is expired, malformed, or belongs to another credential.",
   "code": "invalid_continuation_token",
   "requestId": "req_4mz0v8qk"
 }

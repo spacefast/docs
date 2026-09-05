@@ -1,11 +1,11 @@
 ---
 title: "runtime_management_unavailable"
-description: "The runtime management surface is unavailable for this site."
+description: "The Space's runtime did not answer the management call in time."
 ---
 
-The runtime management surface is unavailable for this site.
+The Space's runtime did not answer the management call in time.
 
-**How to resolve:** Retry shortly. If the site stays unreachable, contact support.
+**How to resolve:** Retry the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_management_unavailable",
   "title": "Runtime management unavailable",
   "status": 400,
-  "detail": "The runtime management surface is unavailable for this site.",
+  "detail": "The Space's runtime did not answer the management call in time.",
   "code": "runtime_management_unavailable",
   "requestId": "req_4mz0v8qk"
 }

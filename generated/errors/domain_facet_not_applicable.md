@@ -1,11 +1,11 @@
 ---
 title: "domain_facet_not_applicable"
-description: "The requested facet does not apply to this domain."
+description: "The facet does not exist on this domain record."
 ---
 
-The requested facet does not apply to this domain.
+The facet does not exist on this domain record.
 
-**How to resolve:** Check the domain's facets and use one that applies.
+**How to resolve:** Call the facet route on the apex record, or on a hostname whose own NS delegation is observed in public DNS.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_facet_not_applicable",
   "title": "Domain facet not applicable",
   "status": 400,
-  "detail": "The requested facet does not apply to this domain.",
+  "detail": "The facet does not exist on this domain record.",
   "code": "domain_facet_not_applicable",
   "requestId": "req_4mz0v8qk"
 }

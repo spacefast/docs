@@ -1,11 +1,11 @@
 ---
 title: "runtime_upload_operation_not_supported"
-description: "The runtime upload session does not support this operation."
+description: "The runtime upload lane does not serve this operation or method."
 ---
 
-The runtime upload session does not support this operation.
+The runtime upload lane does not serve this operation or method.
 
-**How to resolve:** Follow the upload instructions returned when the session was created.
+**How to resolve:** Use the publish-session blob, file, or URL-fetch operation with the method in the `Allow` header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_upload_operation_not_supported",
   "title": "Runtime upload operation not supported",
   "status": 400,
-  "detail": "The runtime upload session does not support this operation.",
+  "detail": "The runtime upload lane does not serve this operation or method.",
   "code": "runtime_upload_operation_not_supported",
   "requestId": "req_4mz0v8qk"
 }

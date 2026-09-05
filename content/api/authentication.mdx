@@ -1,0 +1,171 @@
+---
+title: Authentication
+description: Every credential the Spacefast API accepts, where each one is created, what it can reach, and which routes refuse it
+sidebar:
+  order: 2
+---
+
+The API takes one header. After this page you know which of the four credential shapes to mint for your case, how to scope it, and why a valid token still gets a 403 on some routes.
+
+## The header
+
+```http
+Authorization: Bearer <token>
+```
+
+The scheme match is case-sensitive, so `bearer` is not accepted. A `DPoP` scheme is also read, and always routes to the session and OAuth verifier.
+
+The server decides what a token is from its prefix before any verifier runs.
+
+| Prefix | Credential | Created by |
+| --- | --- | --- |
+| `sfa_` | Platform API key | `POST /v1/api-keys`, or the dashboard |
+| `sfc_` | Space key for an unclaimed anonymous Space | returned by an anonymous `POST /v1/publish` |
+| `sfm_` | Space machine credential | `POST /v1/spaces/{spaceId}/machine-credentials` |
+| no prefix | Signed-in session or OAuth access token | dashboard sign-in, device login, or the OAuth token endpoint |
+
+## API keys
+
+An `sfa_` key is 56 characters of `[0-9A-Za-z]` after the prefix. It is the credential for the CLI, CI, and server-to-server calls.
+
+Create one with a scope and a permission list:
+
+<CodeGroup>
+
+```bash curl
+curl -sS -X POST https://api.spacefast.com/v1/api-keys \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "CI publish",
+        "scope": { "kind": "team", "teamId": "team_example" },
+        "permissions": ["spaces:publish", "versions:promote", "teams:read"],
+        "expiresAt": "2027-01-01T00:00:00.000Z"
+      }'
+```
+
+```ts SDK
+const created = await client.post("/v1/api-keys", {
+  body: {
+    name: "CI publish",
+    scope: { kind: "team", teamId: "team_example" },
+    permissions: ["spaces:publish", "versions:promote", "teams:read"],
+    expiresAt: "2027-01-01T00:00:00.000Z",
+  },
+});
+```
+
+</CodeGroup>
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `name` | string, 1 to 255 | Label shown in listings. Optional. |
+| `scope` | `{kind:"team",teamId}`, `{kind:"partner",teamId}`, or `{kind:"space",spaceId}` | What the key can reach. A `space` scope narrows to that Space, never the owning team's tree. |
+| `permissions` | 1 to 64 action strings | The actions the key may take. |
+| `metadata` | object | Free-form. Optional. |
+| `ipAllowlist` | up to 100 strings, each ≤ 255 chars | Restrict the key to these addresses. Optional, nullable. |
+| `expiresAt` | ISO 8601 | When the key stops working. Optional, nullable. Omit for no expiry. |
+| `notBefore` | ISO 8601 | When the key starts working. Optional, nullable. |
+
+Three rules the code enforces:
+
+- **The secret appears once.** `POST /v1/api-keys` is the only response carrying `secret`. Every other API-key response carries `secretPreview` (first 8 characters, then the last 4).
+- **A key can never exceed its creator.** The derived policy must be a subset of the calling credential's policy. A wider request fails with `policy_exceeds_grantor`.
+- **Secrets are immutable.** There is no rotate-in-place. Create a new key, move traffic, then revoke the old one with `DELETE /v1/api-keys/{apiKeyId}`. That returns `204` and keeps the record for audit.
+
+`PATCH /v1/api-keys/{apiKeyId}` changes name, scope, permissions, allowlist, and expiry. `scope` and `permissions` must be sent together or both omitted.
+
+In the dashboard, keys live on the team's **Agents** page under **API keys**. The create form asks for **Name**, a **Policy preset**, and an optional **Expires**, then shows the secret once behind **Copy this key now. It won't be shown again.**
+
+The presets and what they grant:
+
+| Preset | Grants |
+| --- | --- |
+| Space publisher | Publish actions plus `teams:read`. The default. |
+| CI publish | Same actions as Space publisher, labelled for pipelines. |
+| Space admin | Publish, rename, delete, transfer, export, import, version delete, domains, webhooks read and write. |
+| Domain manager | The `domains:write` actions. |
+| Billing viewer | `teams:read`, `billing:read`. |
+| Team admin | `*`, everything the team can do. |
+
+An API key carries its own request budget of 50,000 requests per rolling hour, on top of the [general rate limits](/api/rate-limits).
+
+## Space keys
+
+An anonymous `POST /v1/publish` (no credential at all) creates an unclaimed Space and returns a `claim` block holding an `sfc_` Space key. That key is also the fragment of the claim URL and the token of the Space's `/__/<key>` door.
+
+A Space key reaches only its own Space, and only the operations an unclaimed Space must still support: read the Space, open a new version, refresh uploads, finalize, promote, list activity, mint share links, restore after a delete. Operations declaring `bearerAuth` alone refuse it.
+
+Unclaimed Spaces expire. The default window is 6 hours from creation, extended by an hour each time the claim page is loaded, capped at 6 hours of extension and 30 days from creation. Reading the Space with its key also extends the window. Claim it with `POST /v1/claim` to make it permanent, or exchange the key for an API key with `POST /v1/claim/exchange`.
+
+:::warning[Treat a Space key as a secret]
+It is a management capability for an unclaimed Space, not a share link. Anyone holding it can publish to that Space and claim it.
+:::
+
+## Space machine credentials
+
+An `sfm_` credential is `sfm_` plus a 32-character opaque token, minted for one Space so a machine can reach it without a team-wide key. `POST /v1/spaces/{spaceId}/machine-credentials` takes a `name`, the `resources` and `capabilities` the credential may use, and a `target`, then returns `{ credential, token }`.
+
+The token is returned exactly once, on create and on rotate, and it is accepted only in the `Authorization` header. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
+
+Creating, rotating, and revoking a machine credential all need an API key or a session. A machine credential cannot mint another one.
+
+## Sessions and OAuth
+
+A signed-in browser session works as a cookie and as `Authorization: Bearer <session token>`. A session has no stored policy. It compiles one per team from the caller's live role, so an owner or admin gets everything the team can do and a member gets read, create, write, rename, publish, promote, download, and build actions.
+
+For third-party apps, Spacefast is an OAuth 2.0 authorization server.
+
+| Endpoint | URL |
+| --- | --- |
+| Authorization server base | `https://api.spacefast.com/v1/auth` |
+| Authorize | `https://api.spacefast.com/v1/auth/oauth2/authorize` |
+| Token | `https://api.spacefast.com/v1/auth/oauth2/token` |
+
+Authorization code is the flow for people, client credentials for machines. The scopes:
+
+| Scope | What it allows |
+| --- | --- |
+| `teams:read` | Read the teams the account belongs to. |
+| `teams:create` | Create teams. |
+| `spaces:read` | Read spaces, versions, and build status. |
+| `spaces:write` | Create and update spaces and their settings. |
+| `spaces:rename` | Rename space slugs and managed addresses. |
+| `publish:write` | Publish new immutable versions. |
+| `spaces:publish` | Publish a version to an existing space. |
+| `builds:trigger` | Start a build for an existing version. |
+| `domains:read` | Read domain inventory and DNS diagnostics. |
+| `domains:write` | Attach, verify, and mutate domains and DNS records. |
+| `offline_access` | Refresh access without another interactive sign-in. |
+
+`spaces:publish` and `builds:trigger` exist only on the API resource. Their actions are already covered by `publish:write`.
+
+A token that authenticates but lacks a scope set the operation accepts fails with `insufficient_scope`.
+
+## Device login for CLIs and agents
+
+A headless client starts at `POST /v1/auth/device`, shows the user the verification code, then polls `POST /v1/auth/device/poll` until the user approves. Approval and denial run through `POST /v1/auth/device/approve` and `/deny`, which need a signed-in browser session. While the user has not decided yet, the poll answers `authorization_pending`. That is a `wait`, not a failure.
+
+The code lifetime, the poll cadence, and what the approved credential is good for are on [Sign in and security](/authentication#log-the-cli-in).
+
+## Which routes refuse which credential
+
+Three refusals are worth knowing before you debug one.
+
+**Person-only operations.** An operation whose only declared scheme is the session cookie needs a human behind the request. Account email changes, adding a password, approving a device authorization, approving or denying an agent action, and listing repository installations all refuse an API key or a machine credential. The same session token still works as a bearer token, so this is about the credential kind, not the transport.
+
+**Team-scoped reads.** A Space key reaches its own Space, not the team around it. Listing versions, listing a team's spaces, reading API keys, and managing webhooks all declare `bearerAuth` alone and refuse it.
+
+**Anonymous publish.** `POST /v1/publish` is the one operation that accepts no credential at all. It creates an unclaimed Space and returns a claim block. Retrying it with an `Idempotency-Key` needs a self-supplied replay principal, because there is no credential to scope the key by. See [Idempotency](/api/idempotency#anonymous-publishing-needs-a-principal).
+
+## Failures
+
+| Status | Code | Meaning |
+| --- | --- | --- |
+| 401 | `unauthorized` | No valid credential on the request. |
+| 403 | `forbidden` | The credential is valid but the action is not allowed. |
+| 403 | `insufficient_scope` | Authenticated, but the granted scopes do not include a set this operation accepts. |
+| 403 | `policy_exceeds_grantor` | The requested key policy grants more than your own credential allows. |
+| 403 | `anonymous_expired` | The unclaimed Space expired before it was claimed, so its Space key is dead. |
+
+Every one arrives as a problem document. See [Errors](/api/errors).

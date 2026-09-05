@@ -1,11 +1,11 @@
 ---
 title: "publish_archive_compression_ratio_exceeded"
-description: "The archive's compression ratio is suspiciously high and was rejected."
+description: "The archive expands far more than its compressed size allows."
 ---
 
-The archive's compression ratio is suspiciously high and was rejected.
+The archive expands far more than its compressed size allows.
 
-**How to resolve:** Repackage the content without highly compressible filler data.
+**How to resolve:** Publish an archive whose expanded size is closer to its compressed size.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_archive_compression_ratio_exceeded",
   "title": "Publish archive compression ratio exceeded",
   "status": 400,
-  "detail": "The archive's compression ratio is suspiciously high and was rejected.",
+  "detail": "The archive expands far more than its compressed size allows.",
   "code": "publish_archive_compression_ratio_exceeded",
   "requestId": "req_4mz0v8qk"
 }

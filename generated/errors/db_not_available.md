@@ -1,11 +1,11 @@
 ---
 title: "db_not_available"
-description: "The live version has no database to read."
+description: "The Space's live version has no database."
 ---
 
-The live version has no database to read.
+The Space's live version has no database.
 
-**How to resolve:** Publish a Zero app, or declare `"database": true` under `runtime` in sf.jsonc for a Functions app.
+**How to resolve:** Publish a version that declares a database, or call `GET /v1/spaces/{id}/runtime` to see what the live version runs.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/db_not_available",
   "title": "Db not available",
   "status": 400,
-  "detail": "The live version has no database to read.",
+  "detail": "The Space's live version has no database.",
   "code": "db_not_available",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,0 +1,94 @@
+# Run: bunx blume eval --agent claude   (an agent answers using only the built docs)
+questions:
+  - id: cli-node-version
+    question: What is the minimum Node.js version the sf CLI needs?
+    expected: ["Node.js 20.3 or newer"]
+    routes: /cli
+  - id: default-hostname
+    question: What hostname does a new Space get, and what does a single version's URL look like?
+    expected: ["<slug>.view.fast", "v<number>--<slug>.view.fast"]
+    routes: /urls
+  - id: device-login-lifetime
+    question: How long is the code shown by `sf login` valid, and how long does the resulting credential last?
+    expected: ["30 minutes", "30 days", "7 days without use"]
+    routes: /authentication
+  - id: anonymous-lifetime
+    question: If I publish without an account, how long do I have to claim the Space?
+    expected: ["6 hours", "7 days"]
+    routes: /anonymous-and-claim
+  - id: domain-dns-records
+    question: Which DNS records do I add to connect example.com?
+    expected: ["TXT record at _stattic-verify.example.com", "A records", "www is set up alongside the apex"]
+    routes: /domains
+  - id: domains-rm
+    question: Does `sf domains rm` delete the domain?
+    expected: ["No, it unassigns the domain from the Space", "the domain stays in the team inventory"]
+    routes: /cli/domains
+  - id: exit-code-auth
+    question: Which exit code does the sf CLI use for an authentication failure?
+    expected: ["10"]
+    routes: /cli
+  - id: html-cache-header
+    question: What Cache-Control header do HTML pages get, and how do I bust it?
+    expected: ["s-maxage=600", "publishing purges the whole host"]
+    routes: /caching
+  - id: pagination
+    question: What are the default and maximum page sizes on list endpoints, and how do I get the next page?
+    expected: ["default 20", "maximum 100", "pass nextCursor as cursor"]
+    routes: /api/pagination
+  - id: rate-limit
+    question: How many API requests per minute can one credential make?
+    expected: ["600 per minute per credential", "300 per minute per IP"]
+    routes: /api/rate-limits
+  - id: idempotency-retention
+    question: How long does the API remember an Idempotency-Key?
+    expected: ["24 hours"]
+    routes: /api/idempotency
+  - id: mcp-hosted-url
+    question: What is the URL of the hosted Spacefast MCP server?
+    expected: ["https://mcp.spacefast.com"]
+    routes: /agents/mcp-server
+  - id: execute-limits
+    question: What are the limits of the MCP execute sandbox?
+    expected: ["30 seconds", "64 MiB", "no fetch"]
+    routes: /agents/mcp-server
+  - id: team-roles
+    question: Which team roles exist?
+    expected: ["owner", "admin", "member"]
+    routes: /teams
+  - id: plans
+    question: What does the Plus plan cost per month?
+    expected: ["$4.99"]
+    routes: /billing
+  - id: free-file-limit
+    question: What is the largest single file I can publish on the Free plan?
+    expected: ["50 MiB"]
+    routes: /limits
+  - id: config-filename
+    question: What is the project config file called?
+    expected: ["sf.jsonc"]
+    routes: /config-file
+  - id: zero-declare
+    question: How do I turn on the Zero runtime for a project?
+    expected: ["runtime.kind set to zero in sf.jsonc", "a server entry"]
+    routes: /zero
+  - id: routing-precedence
+    question: If both a _redirects file and sf.jsonc rules match a path, which wins?
+    expected: ["_redirects"]
+    routes: /routing
+  - id: publish-ignores
+    question: Does `sf publish` upload node_modules and .git?
+    expected: ["No, both are dropped"]
+    routes: /publish
+  - id: api-key-prefix
+    question: What prefix do Spacefast API keys start with?
+    expected: ["sfa_"]
+    routes: /api-keys
+  - id: ci-mode
+    question: What changes when the sf CLI runs with CI=1?
+    expected: ["--json is added automatically", "no prompts", "--yes is still required for destructive actions"]
+    routes: /cli
+  - id: rollback
+    question: Does rolling back rebuild the site?
+    expected: ["No", "the live channel points at an older version"]
+    routes: /versions

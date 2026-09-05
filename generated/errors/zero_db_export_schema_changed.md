@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_schema_changed"
-description: "The database schema changed while an export was in progress."
+description: "The database schema changed while the export was running."
 ---
 
-The database schema changed while an export was in progress.
+The database schema changed while the export was running.
 
-**How to resolve:** Start a fresh export so every page uses the same schema.
+**How to resolve:** Start a fresh export against the current schema.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_schema_changed",
   "title": "Zero db export schema changed",
   "status": 400,
-  "detail": "The database schema changed while an export was in progress.",
+  "detail": "The database schema changed while the export was running.",
   "code": "zero_db_export_schema_changed",
   "requestId": "req_4mz0v8qk"
 }

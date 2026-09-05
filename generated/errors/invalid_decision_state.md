@@ -1,11 +1,11 @@
 ---
 title: "invalid_decision_state"
-description: "The decision record is in a state this endpoint cannot interpret."
+description: "The confirmation decision is in a state this call cannot act on."
 ---
 
-The decision record is in a state this endpoint cannot interpret.
+The confirmation decision is in a state this call cannot act on.
 
-**How to resolve:** Request the action again to open a fresh decision.
+**How to resolve:** Start a new decision. If it keeps happening, contact Spacefast support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_decision_state",
   "title": "Invalid decision state",
   "status": 400,
-  "detail": "The decision record is in a state this endpoint cannot interpret.",
+  "detail": "The confirmation decision is in a state this call cannot act on.",
   "code": "invalid_decision_state",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_db_target_denied"
-description: "The application Zero database target is not a public TCP address."
+description: "The database URL points at a host the runtime will not connect to."
 ---
 
-The application Zero database target is not a public TCP address.
+The database URL points at a host the runtime will not connect to.
 
-**How to resolve:** Use a public database hostname whose complete DNS answer set contains only public addresses.
+**How to resolve:** Point `SPACEFAST_ZERO_DATABASE_URL` at an allowed database host.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_target_denied",
   "title": "Zero db target denied",
   "status": 400,
-  "detail": "The application Zero database target is not a public TCP address.",
+  "detail": "The database URL points at a host the runtime will not connect to.",
   "code": "zero_db_target_denied",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_query_invalid"
-description: "The local database export request has an invalid table or page size."
+description: "The export query is invalid or its schema hash is stale."
 ---
 
-The local database export request has an invalid table or page size.
+The export query is invalid or its schema hash is stale.
 
-**How to resolve:** Use a declared table name and a page size within the documented limit.
+**How to resolve:** Re-read the current `schemaHash` and table list, then start a fresh export.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_query_invalid",
   "title": "Zero db export query invalid",
   "status": 400,
-  "detail": "The local database export request has an invalid table or page size.",
+  "detail": "The export query is invalid or its schema hash is stale.",
   "code": "zero_db_export_query_invalid",
   "requestId": "req_4mz0v8qk"
 }

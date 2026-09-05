@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_batch_unsupported"
-description: "The connected DNS provider cannot apply this batch with the required semantics."
+description: "The DNS provider does not accept batched record writes."
 ---
 
-The connected DNS provider cannot apply this batch with the required semantics.
+The DNS provider does not accept batched record writes.
 
-**How to resolve:** Split the change, or use a provider or zone that supports atomic batch writes.
+**How to resolve:** Apply the record changes one at a time.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_batch_unsupported",
   "title": "Dns provider batch unsupported",
   "status": 400,
-  "detail": "The connected DNS provider cannot apply this batch with the required semantics.",
+  "detail": "The DNS provider does not accept batched record writes.",
   "code": "dns_provider_batch_unsupported",
   "requestId": "req_4mz0v8qk"
 }

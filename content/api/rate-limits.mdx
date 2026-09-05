@@ -1,0 +1,104 @@
+---
+title: Rate limits
+description: The per-credential and per-IP request budgets, the hourly publish and build limits per plan, and how to back off from a 429
+sidebar:
+  order: 5
+---
+
+Two layers of limits sit in front of the API: a general per-minute request budget, and hourly budgets on the expensive actions. After this page you can read the headers on any response and back off correctly when one trips.
+
+## The general budget
+
+A fixed 60 second window on every `/v1` request.
+
+| Keyed by | Limit |
+| --- | --- |
+| Credential id, when the request authenticates | 600 requests per minute |
+| Client IP, when it does not | 300 requests per minute |
+
+Windows are fixed, not sliding, so the counter resets at the boundary rather than decaying. `OPTIONS` is exempt.
+
+An API key also carries its own budget of 50,000 requests per rolling hour, independent of the per-minute window above.
+
+## Headers
+
+Every rate-limited response carries three headers, whatever its status:
+
+| Header | Value |
+| --- | --- |
+| `RateLimit-Limit` | The ceiling for the window that applied. |
+| `RateLimit-Remaining` | Requests left in it. |
+| `RateLimit-Reset` | Seconds until it resets. |
+
+A `429` adds `Retry-After`, also in seconds.
+
+When a stricter hourly limiter is the one that rejected you, these headers describe that limiter's window rather than the per-minute one. So the number you see on a publish 429 is the publish window, and waiting that long is the right move.
+
+:::warning[The headers can be missing]
+Rate limiting fails open. If the accounting backend is unavailable the request goes through and the response carries no `RateLimit-*` headers at all, deliberately, rather than reporting invented numbers. Client code must not require them to be present.
+:::
+
+## Hourly limits on publishes, builds, and Spaces
+
+These are abuse protection, not plan features. Each has two buckets, one for a single credential (the actor) and one for the whole account.
+
+| Action | Bucket | Free | Plus | Pro | Enterprise |
+| --- | --- | --- | --- | --- | --- |
+| Publish | per credential | 120 | 600 | 1,800 | 6,000 |
+| Publish | per account | 240 | 1,200 | 6,000 | 20,000 |
+| Build | per credential | 20 | 100 | 500 | 2,000 |
+| Build | per account | 60 | 300 | 2,000 | 10,000 |
+| Space creation | per credential | 20 | 60 | 200 | 600 |
+| Space creation | per account | 40 | 150 | 600 | 3,000 |
+
+All windows are one hour. Space creation is metered separately from publishing because a Space is a site provision, and the general 600 per minute budget would allow 36,000 of them an hour.
+
+A plan change takes effect for these limits within about five seconds.
+
+## Anonymous publishing
+
+A credential-free `POST /v1/publish` pays its own budgets instead.
+
+| Bucket | Limit |
+| --- | --- |
+| Per IP | 20 publishes per hour |
+| Per network and user-agent fingerprint | 60 publishes per hour |
+| Per unclaimed Space | 20 publishes per hour |
+| Builds for one unclaimed Space | 20 per hour |
+
+The first three fail with `anonymous_publish_rate_limited`.
+
+## What a 429 looks like
+
+```json
+{
+  "type": "https://spacefast.com/docs/errors/rate_limited",
+  "title": "Rate limited",
+  "status": 429,
+  "detail": "Too many requests. Try again later.",
+  "code": "rate_limited",
+  "details": { "limit": 600, "resetSeconds": 24 },
+  "requestId": "01J8ZQ7WYX3M4N5P6R7S8T9V0W"
+}
+```
+
+Publish, build, and Space-creation rejections use the same `rate_limited` code with a `detail` naming the action, for example "Too many publishes from this account. Try again later." Anonymous publish rejections use `anonymous_publish_rate_limited`.
+
+## Backing off
+
+<Steps>
+  <Step title="Read Retry-After">
+It is the real remaining window in seconds. Sleep that long. Do not guess an interval and do not retry immediately.
+  </Step>
+  <Step title="Add jitter">
+When several workers share a credential they all get the same `Retry-After`, so they will all wake at the same instant. Spread the wake-up across a second or two.
+  </Step>
+  <Step title="Stay under the budget by watching RateLimit-Remaining">
+Slow down before you hit zero rather than absorbing 429s. On a bulk job, a small pause when `RateLimit-Remaining` drops below a tenth of `RateLimit-Limit` keeps the job moving.
+  </Step>
+  <Step title="Retry only what is safe">
+`GET`, `HEAD`, and `OPTIONS` are always safe to repeat. A `POST` is safe to repeat when it carries an `Idempotency-Key`. See [Idempotency](/api/idempotency).
+  </Step>
+</Steps>
+
+The [TypeScript SDK](/api/sdk) implements this loop already. Opt in per call with `{ retry: { maxAttempts: 3 } }` and it honours `Retry-After`, backs off exponentially with jitter, and retries only idempotent requests.

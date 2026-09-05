@@ -1,11 +1,11 @@
 ---
 title: "build_execution_unavailable"
-description: "Build execution is not available on this deployment."
+description: "The build never reached a verdict because a Spacefast dependency was unavailable."
 ---
 
-Build execution is not available on this deployment.
+The build never reached a verdict because a Spacefast dependency was unavailable.
 
-**How to resolve:** Publish prebuilt output instead.
+**How to resolve:** Retry the build. Nothing in the source needs to change.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_execution_unavailable",
   "title": "Build execution unavailable",
   "status": 400,
-  "detail": "Build execution is not available on this deployment.",
+  "detail": "The build never reached a verdict because a Spacefast dependency was unavailable.",
   "code": "build_execution_unavailable",
   "requestId": "req_4mz0v8qk"
 }

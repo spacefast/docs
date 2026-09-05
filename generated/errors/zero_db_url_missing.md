@@ -1,11 +1,11 @@
 ---
 title: "zero_db_url_missing"
-description: "No Zero database URL is configured."
+description: "No database URL is configured for this Space's Zero endpoints."
 ---
 
-No Zero database URL is configured.
+No database URL is configured for this Space's Zero endpoints.
 
-**How to resolve:** Configure `DATABASE_URL` or finalize the version with database connection variables.
+**How to resolve:** Set `SPACEFAST_ZERO_DATABASE_URL` on the Space, then publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_url_missing",
   "title": "Zero db url missing",
   "status": 400,
-  "detail": "No Zero database URL is configured.",
+  "detail": "No database URL is configured for this Space's Zero endpoints.",
   "code": "zero_db_url_missing",
   "requestId": "req_4mz0v8qk"
 }

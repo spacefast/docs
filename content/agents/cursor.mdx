@@ -1,0 +1,103 @@
+---
+title: Cursor
+description: Install the Spacefast plugin in Cursor, or add the MCP server to mcp.json by hand
+---
+
+After this page Cursor can publish the project you have open, read its deployments, domains, and traffic, and run the rest of the Spacefast API through one sandboxed tool.
+
+## Install
+
+```bash
+npx -y plugins add spacefast/plugins -t cursor -y
+```
+
+`sf setup agent --agent cursor` is the other lane. It writes `~/.cursor/mcp.json` and installs the skill into `~/.cursor/skills/spacefast/`, or into `<project>/.agents/skills/` with `--project`.
+
+## What the plugin adds
+
+### MCP servers
+
+```json .mcp.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "http",
+      "url": "https://mcp.spacefast.com"
+    },
+    "spacefast-local": {
+      "command": "npx",
+      "args": ["-y", "spacefast@<version>", "mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. `spacefast-local` runs on your machine over stdio and can publish a folder. The version in `args` is stamped at release.
+
+### A rule, not a skill directory
+
+Cursor reads rules, so the plugin ships `rules/spacefast.mdc` instead of a skill folder. A `.mdc` file cannot bundle scripts, which is why the Cursor lane has no curl fallbacks.
+
+```md rules/spacefast.mdc
+---
+description: "Publish and manage Spacefast spaces when the user wants to deploy, host, publish, share, update, claim, inspect, roll back, or configure a site."
+globs:
+alwaysApply: false
+---
+```
+
+`alwaysApply: false` means Cursor pulls the rule in when the description matches what you asked for, rather than pinning it to every request. The body is the same routing guidance the skill carries. See [skills](/agents/skills).
+
+## Manual config
+
+Put this in `~/.cursor/mcp.json` to add the hosted server without the plugin.
+
+```json ~/.cursor/mcp.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "type": "http",
+      "url": "https://mcp.spacefast.com"
+    }
+  }
+}
+```
+
+The `"type"` field is required. A bare `{ "url": ... }` entry is broken, not shorter.
+
+Writing this file by hand or through the CLI keeps every other top-level key intact, but it drops comments. The CLI refuses to write through a symlinked config.
+
+## Verify it works
+
+<Prompt description="Use the Spacefast MCP server to search the docs for version rollback." actions={["copy"]}>
+Use the Spacefast MCP server to search the docs for version rollback.
+</Prompt>
+
+Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+
+<Prompt description="Publish this project to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this project to Spacefast and give me the live URL.
+</Prompt>
+
+## Typical prompts
+
+<Prompt description="Publish ./dist to Spacefast and tell me the live URL and the version URL." actions={["copy"]}>
+Publish ./dist to Spacefast and tell me the live URL and the version URL.
+</Prompt>
+
+<Prompt description='Push a new version of this site with the changelog "new landing page".' actions={["copy"]}>
+Push a new version of this site with the changelog "new landing page".
+</Prompt>
+
+<Prompt description="Show me the deployments for this Space and whether the last build passed." actions={["copy"]}>
+Show me the deployments for this Space and whether the last build passed.
+</Prompt>
+
+<Prompt description="Attach app.example.com to this Space and list the DNS records I need." actions={["copy"]}>
+Attach app.example.com to this Space and list the DNS records I need.
+</Prompt>
+
+<Prompt description="What were the top pages on this Space over the last 7 days?" actions={["copy"]}>
+What were the top pages on this Space over the last 7 days?
+</Prompt>

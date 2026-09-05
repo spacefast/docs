@@ -1,0 +1,228 @@
+---
+title: Layout, theme, and site pages
+description: Theme the pages Spacefast draws with theme.json, wrap them in your own _layout.html, or take one over completely with _pages/id.html
+---
+
+After this page you can push your own design tokens into the pages Spacefast draws, wrap every one of them in your site chrome, replace any of the five outright, and check all of it before you publish.
+
+Spacefast draws five pages for a Space that has not written its own. Three levels of control, in increasing order of how much you own:
+
+| Level | File | Plan |
+| --- | --- | --- |
+| Tokens | `theme.json` | Every plan |
+| Chrome | `_layout.html` | Every plan |
+| The whole document | `_pages/<id>.html` | Plus and up |
+
+All three are ordinary files in the directory you publish, so they roll forward and back with the version.
+
+## The five pages
+
+| Id | Shown for | Status |
+| --- | --- | --- |
+| `404` | A URL that matched nothing | 404 |
+| `denied` | A visitor who cannot open this path and has no way in | 403 |
+| `access` | The gate: sign in, password, share link, or request an invite | 403 |
+| `index` | The directory listing on a Space serving files | 200 |
+| `preview` | The single-file view for one asset | 200 |
+
+`denied` and `access` are served `private, no-store` and noindex, because both are answers about one visitor. The other three are cacheable.
+
+A root `404.html` in your version also takes the not-found route over, ahead of any theming. See [Redirects, rewrites, and headers](/routing).
+
+## `theme.json`
+
+A WordPress-compatible `theme.json` next to your config is read as an inference input, not as configuration. Exactly two paths are read:
+
+| Path | Becomes |
+| --- | --- |
+| `settings.color.palette[]` with slug `accent` or `primary` | The accent color |
+| `settings.color.palette[]` with slug `background` | The background color |
+| `settings.typography.fontFamilies[0].fontFamily` | The font stack |
+
+```json theme.json
+{
+  "settings": {
+    "color": {
+      "palette": [
+        { "slug": "accent", "color": "#0d9488", "name": "Accent" },
+        { "slug": "background", "color": "#ffffff", "name": "Background" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        { "slug": "body", "fontFamily": "Inter, system-ui, sans-serif", "name": "Body" }
+      ]
+    }
+  }
+}
+```
+
+Every other WordPress key rides through and is never read. Slugs are lowercase letters, digits, and dashes, up to 64 characters. The palette takes at most 64 entries and `fontFamilies` at most 32. The file is read up to 64 KiB at publish; a larger one is ignored rather than failing the publish.
+
+`theme.json` is the weakest of the three theme sources. What `sf.jsonc` sets under `theme` overrides it, and what the Space's [Customization](/customization) tab sets overrides both. A [Zero](/zero) capsule's Tailwind compile reads the same file, so one file styles both.
+
+## `_layout.html`
+
+`_layout.html` wraps the built-in body of every page you have **not** taken over. It gives your Space real chrome, a header, a footer, a stylesheet, on every plan.
+
+```html _layout.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><sf-page-title></sf-page-title></title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <sf-logo></sf-logo>
+      <strong><sf-name></sf-name></strong>
+    </header>
+    <main><sf-content></sf-content></main>
+    <footer><sf-spacefast-branding></sf-spacefast-branding></footer>
+  </body>
+</html>
+```
+
+The contract is short.
+
+| Rule | Diagnostic |
+| --- | --- |
+| Exactly one `<sf-content>` | `layout_missing_content` |
+| Only `sf-content`, `sf-logo`, `sf-name`, `sf-page-title`, `sf-spacefast-branding` | `page_element_not_allowed` |
+| No unrecognized `sf-*` element | `unknown_page_element` |
+| At most 2 MiB | `page_source_too_large` |
+
+`<sf-content>` is where the built-in page body lands. The rest is yours.
+
+A layout resolves upward from the request's directory, so `docs/_layout.html` wraps the pages under `/docs/` and the root one covers everything else. The nearest ancestor wins.
+
+## `_pages/<id>.html` <Badge variant="accent">Plus and up</Badge>
+
+A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives, the layout is not applied, and the theme controls stop repainting it. This is the full takeover, and it needs a paid plan.
+
+Each file has to be a complete HTML document beginning with `<!doctype html>`, and each is capped at 2 MiB. Like layouts, they resolve upward from the request's directory.
+
+The runtime fills a small set of elements. Which ones are legal depends on the page.
+
+| Element | Renders | Legal in |
+| --- | --- | --- |
+| `<sf-logo>` | The theme logo image | Every page |
+| `<sf-name>` | The theme display name | Every page |
+| `<sf-spacefast-branding>` | The "Powered by Spacefast" badge | Every page |
+| `<sf-page-path>` | The path the visitor asked for | `404`, `index`, `preview` |
+| `<sf-page-title>` | The page's title | `index`, `preview` |
+| `<sf-page-summary>` | The item count, "12 items" | `index` |
+| `<sf-files>` | The directory listing rows | `index` |
+| `<sf-file>` | The single-file card | `preview` |
+| `<sf-denial-context>` | Why this visitor was refused | `denied` |
+| `<sf-access-status>` | The gate's current state message | `access` |
+| `<sf-access-lanes>` | The sign-in, password, and request blocks | `access` |
+
+An element used on the wrong page is `page_element_not_allowed`, and an `sf-` name that is not on this list is `unknown_page_element`.
+
+Two of those are load-bearing rather than decorative. The `access` page **must** render `<sf-access-lanes>`, otherwise the gate ships with no way in and publish fails with `access_lanes_missing`. And if that page declares a CSP with `form-action`, it has to include `'self'`, otherwise its own runtime forms are blocked and publish fails with `access_csp_form_action_missing_self`.
+
+An `index` page that never renders `<sf-files>` publishes with a warning rather than an error, since a listing with no list is a choice you may have meant.
+
+### The plan gate
+
+`_pages/*.html` full-page takeovers need Plus, Pro, or Enterprise. Publishing one from a free plan fails:
+
+```text
+pages_templates_not_entitled
+_pages/*.html takeovers require a paid plan. Remove the templates or upgrade before publishing.
+```
+
+`_layout.html` is not gated. Free Spaces get chrome; paid Spaces get the whole document.
+
+## Write them
+
+<Steps>
+  <Step title="Describe the design in DESIGN.md">
+    Put a `theme.json` block and a `layout.html` block in a `DESIGN.md` at the project root. Everything else in the file is prose for you or your agent and is never parsed.
+
+    ````text DESIGN.md
+    # Design
+
+    Warm, dense, one accent. Header on every page, no nav.
+
+    ```theme.json
+    { "settings": { "color": { "palette": [{ "slug": "accent", "color": "#0d9488" }] } } }
+    ```
+
+    ```layout.html
+    <!doctype html>
+    <html lang="en">
+      <head><title><sf-page-title></sf-page-title></title></head>
+      <body><main><sf-content></sf-content></main></body>
+    </html>
+    ```
+    ````
+
+    ` ```json:theme.json ` and ` ```html:layout.html ` work too. The first block with a given tag wins.
+  </Step>
+
+  <Step title="Generate the files">
+    ```bash
+    sf design generate
+    ```
+
+    Writes `theme.json` and `_layout.html`. Each block is checked with the same validator publish uses, and an invalid one warns and is skipped rather than written. An existing file is skipped unless you pass `--force`. `DESIGN.md` itself is never read at publish or serve time.
+  </Step>
+
+  <Step title="Pull the defaults you want to take over">
+    ```bash
+    sf pages pull 404
+    sf pages pull
+    ```
+
+    With no argument it writes `_layout.html` plus all five `_pages/<id>.html`. Pass `layout` or one page id for just that. The command is fully local and never calls the API. An existing file makes the write fail, and there is no force flag, so move or delete it first.
+  </Step>
+
+  <Step title="Check before you publish">
+    ```bash
+    sf pages validate
+    ```
+
+    Runs the same structural checks publish runs, over `_pages/**` and `_layout.html`. It reads the theme from `theme.json` and then lets `sf.jsonc`'s `theme` override it. `.git`, `.spacefast`, and `node_modules` are skipped.
+
+    Exit code 2 when any diagnostic is an error. Warnings print and the exit code stays 0. Use `-d ./dist` to validate a build output directory instead of the project root.
+  </Step>
+
+  <Step title="Publish">
+    ```bash
+    sf publish
+    ```
+  </Step>
+</Steps>
+
+Full flag tables for `sf pages pull`, `sf pages validate`, and `sf design generate` are on the [CLI reference](/cli/zero).
+
+## What publish does with a bad page
+
+Nothing is served leniently. Page compilation runs at finalize, and the first diagnostic with error severity fails the publish with its code and message. No version is created, and the live version keeps serving.
+
+| Code | Severity | Means |
+| --- | --- | --- |
+| `unknown_page_template` | error | The filename is not one of the supported page ids |
+| `page_document_required` | error | The file does not begin with `<!doctype html>` |
+| `page_source_too_large` | error | Over 2 MiB |
+| `unknown_page_element` | error | An `sf-*` element nobody registers |
+| `page_element_not_allowed` | error | A real element on a page that does not have it |
+| `layout_missing_content` | error | `_layout.html` has zero or more than one `<sf-content>` |
+| `access_lanes_missing` | error | The access page renders no `<sf-access-lanes>` |
+| `access_csp_form_action_missing_self` | error | Its `form-action` CSP would block the gate's own forms |
+| `pages_templates_not_entitled` | error | `_pages/*.html` on a plan without the entitlement |
+| `page_source_unreadable` | error | The file was in the manifest but could not be read at finalize |
+| `index_files_missing` | warning | The index page renders no `<sf-files>` |
+| `page_indexable` | warning | A gate page declares itself indexable, but is served noindex regardless |
+
+`sf pages validate` reports every one of these locally, so the publish is rarely where you meet them.
+
+## Relationship with Customization
+
+The dashboard's [Customization](/customization) tab writes the same theme tokens onto the Space rather than into the version, which is why its values win over `sf.jsonc` and apply without a republish.
+
+A page you ship as `_pages/<id>.html` opts out of that entirely. Customization's preview badges it **Code override.** and says theme controls do not repaint it, because they do not: your document is served as written, with only the elements above filled in.
