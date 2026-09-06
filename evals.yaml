@@ -71,7 +71,7 @@ questions:
   - id: zero-declare
     question: How do I turn on the Zero runtime for a project?
     expected: ["runtime.kind set to zero in sf.jsonc", "a server entry"]
-    routes: /zero
+    routes: /zero-runtime
   - id: routing-precedence
     question: If both a _redirects file and sf.jsonc rules match a path, which wins?
     expected: ["_redirects"]
