@@ -9,7 +9,7 @@ After this page you can read your space's schema and rows from the CLI, apply a 
 
 ## What it is
 
-Every Space that runs [Zero](/zero) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, when it declares `database: true`.
+Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, when it declares `database: true`.
 
 You do not create it, size it, or connect to it. Your capsule declares the tables and the platform applies the migration when a version finalizes.
 

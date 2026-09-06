@@ -2,6 +2,8 @@ import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
+import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
+import { matchRedirect } from "@spacefast/routing/match";
 
 import {
   buildRoutingRules,
@@ -140,7 +142,7 @@ const representativePages = [
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
   ["recipes/vite/index.html", `${docsRoot}/recipes/vite`, "Vite"],
-  ["zero/index.html", `${docsRoot}/zero`, "What Zero is"],
+  ["zero-runtime/index.html", `${docsRoot}/zero-runtime`, "What Zero is"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);
@@ -412,28 +414,42 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
 ]);
 const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
-const zeroRoute = resolveRedirect(`${deploymentBase}/zero`, routingRules);
-if (
-  zeroRoute.destination !== "/zero" ||
-  zeroRoute.hops.length !== 1 ||
-  zeroRoute.hops[0]?.status !== 200
-) {
-  throw new Error("The canonical Zero page must serve through the Docs mount.");
+const compilation = compileRoutingFilesWasm({
+  redirects: builtRedirects,
+  configSource: JSON.stringify(staticConfig),
+});
+if (compilation.diagnostics.some(({ severity }) => severity === "error")) {
+  throw new Error("The built Docs routing configuration does not compile.");
 }
-await requireFile(localTargetFor(zeroRoute.destination));
-const appsZeroRoute = resolveRedirect(`${deploymentBase}/apps/zero`, routingRules);
-if (
-  appsZeroRoute.destination !== "/zero" ||
-  appsZeroRoute.hops.length !== 2 ||
-  appsZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero` ||
-  appsZeroRoute.hops[0]?.status !== 301 ||
-  appsZeroRoute.hops[1]?.status !== 200
-) {
-  throw new Error("The former apps/zero docs route must reach the canonical Zero page.");
+for (const route of ["zero-runtime", "zero", "apps/zero"]) {
+  let url = new URL(`${docsRoot}/${route}?source=route-check&value=a%2Fb`);
+  const hops = [];
+  for (let hop = 0; hop < 3; hop += 1) {
+    const matched = matchRedirect({ compilation, request: { url, headers: new Headers() } });
+    if (!matched) break;
+    hops.push(matched);
+    if (matched.action === "redirect") {
+      url = new URL(matched.target, url);
+    } else if (matched.action === "rewrite") {
+      url.pathname = matched.path;
+      break;
+    } else {
+      throw new Error(`Unexpected routing action for ${route}: ${matched.action}`);
+    }
+  }
+  if (
+    url.pathname !== "/zero-runtime" ||
+    url.search !== "?source=route-check&value=a%2Fb" ||
+    hops.length !== (route === "zero-runtime" ? 1 : 2) ||
+    hops.at(-1)?.status !== 200 ||
+    (route !== "zero-runtime" && hops[0]?.status !== 301)
+  ) {
+    throw new Error(`Zero docs route must reach its public output with its query intact: ${route}`);
+  }
+  await requireFile(localTargetFor(url.pathname));
 }
-await requireFile(localTargetFor(appsZeroRoute.destination));
 const runtimesZeroHtml = await readBuilt("runtimes/zero/index.html");
-if (!runtimesZeroHtml.includes(`<meta http-equiv="refresh" content="0;url=${deploymentBase}/zero">`)) {
+if (!runtimesZeroHtml.includes(`<meta http-equiv="refresh" content="0;url=${deploymentBase}/zero-runtime">`)) {
   throw new Error("The former runtimes/zero page must navigate to the canonical Zero page.");
 }
 const expectedRedirects = `${routingRules

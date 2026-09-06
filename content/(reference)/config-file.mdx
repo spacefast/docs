@@ -121,7 +121,7 @@ While `name` is set in the file, the API refuses to rename the Space. The file w
 
 Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names. `theme` is a closed object, so an unknown key is an error.
 
-A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero) capsule's Tailwind compile reads the same file.
+A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file.
 
 What these tokens paint, and how to replace those pages outright, is on [Layout, theme, and site pages](/site-pages).
 
@@ -187,7 +187,7 @@ One runtime per version, discriminated on `kind`. Omit the block for a static si
 | `runtime.server` | string, required | none | Server entry, relative to the published directory |
 | `runtime.client` | string, required | none | Client entry, relative to the published directory |
 
-Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero).
+Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero-runtime).
 
 ### `kind: "functions"`
 
