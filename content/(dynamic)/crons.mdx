@@ -9,7 +9,7 @@ After this page you can schedule recurring work, write a valid schedule the firs
 
 ## How a run happens
 
-A cron is a scheduled `GET` against a path on your own site. It goes through the same front door a visitor gets, so whatever serves that path answers it: a [Zero](/zero) endpoint, a [Functions](/functions) route, or a static file.
+A cron is a scheduled `GET` against a path on your own site. It goes through the same front door a visitor gets, so whatever serves that path answers it: a [Zero](/zero-runtime) endpoint, a [Functions](/functions) route, or a static file.
 
 A response under 400 is a success and is silent. A response of 400 or worse, or a fatal error, is a failure and is reported.
 

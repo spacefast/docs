@@ -59,7 +59,7 @@ A WordPress-compatible `theme.json` next to your config is read as an inference 
 
 Every other WordPress key rides through and is never read. Slugs are lowercase letters, digits, and dashes, up to 64 characters. The palette takes at most 64 entries and `fontFamilies` at most 32. The file is read up to 64 KiB at publish; a larger one is ignored rather than failing the publish.
 
-`theme.json` is the weakest of the three theme sources. What `sf.jsonc` sets under `theme` overrides it, and what the Space's [Customization](/customization) tab sets overrides both. A [Zero](/zero) capsule's Tailwind compile reads the same file, so one file styles both.
+`theme.json` is the weakest of the three theme sources. What `sf.jsonc` sets under `theme` overrides it, and what the Space's [Customization](/customization) tab sets overrides both. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file, so one file styles both.
 
 ## `_layout.html`
 
