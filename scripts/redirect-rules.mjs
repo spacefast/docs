@@ -11,12 +11,7 @@ const authoredRedirectRules = [
   {
     from: `${deploymentBase}/apps/zero`,
     status: 301,
-    to: `${deploymentBase}/zero-runtime`,
-  },
-  {
-    from: `${deploymentBase}/zero`,
-    status: 301,
-    to: `${deploymentBase}/zero-runtime`,
+    to: `${deploymentBase}/zero`,
   },
 ];
 

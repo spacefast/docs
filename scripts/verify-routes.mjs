@@ -412,25 +412,29 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
 ]);
 const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
-const movedZeroRoute = resolveRedirect(`${deploymentBase}/zero`, routingRules);
+const zeroRoute = resolveRedirect(`${deploymentBase}/zero`, routingRules);
 if (
-  movedZeroRoute.destination !== "/zero-runtime" ||
-  movedZeroRoute.hops.length !== 2 ||
-  movedZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero-runtime` ||
-  movedZeroRoute.hops[0]?.status !== 301 ||
-  movedZeroRoute.hops[1]?.status !== 200
+  zeroRoute.destination !== "/zero" ||
+  zeroRoute.hops.length !== 1 ||
+  zeroRoute.hops[0]?.status !== 200
 ) {
-  throw new Error("The former Zero docs route does not redirect through the Docs mount.");
+  throw new Error("The canonical Zero page must serve through the Docs mount.");
 }
+await requireFile(localTargetFor(zeroRoute.destination));
 const appsZeroRoute = resolveRedirect(`${deploymentBase}/apps/zero`, routingRules);
 if (
-  appsZeroRoute.destination !== "/zero-runtime" ||
+  appsZeroRoute.destination !== "/zero" ||
   appsZeroRoute.hops.length !== 2 ||
-  appsZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero-runtime` ||
+  appsZeroRoute.hops[0]?.destination !== `${deploymentBase}/zero` ||
   appsZeroRoute.hops[0]?.status !== 301 ||
   appsZeroRoute.hops[1]?.status !== 200
 ) {
-  throw new Error("The former apps/zero docs route does not redirect through the Docs mount.");
+  throw new Error("The former apps/zero docs route must reach the canonical Zero page.");
+}
+await requireFile(localTargetFor(appsZeroRoute.destination));
+const runtimesZeroHtml = await readBuilt("runtimes/zero/index.html");
+if (!runtimesZeroHtml.includes(`<meta http-equiv="refresh" content="0;url=${deploymentBase}/zero">`)) {
+  throw new Error("The former runtimes/zero page must navigate to the canonical Zero page.");
 }
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
