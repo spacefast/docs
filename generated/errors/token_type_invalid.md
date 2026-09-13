@@ -1,11 +1,11 @@
 ---
 title: "token_type_invalid"
-description: "The partner token's `typ` header is not the expected token type."
+description: "The partner token has a typ header that Spacefast does not accept."
 ---
 
-The partner token's `typ` header is not the expected token type.
+The partner token has a typ header that Spacefast does not accept.
 
-**How to resolve:** Mint the token with the `typ` the partner token contract requires.
+**How to resolve:** Set typ to at+jwt or application/at+jwt.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_type_invalid",
   "title": "Token type invalid",
   "status": 400,
-  "detail": "The partner token's `typ` header is not the expected token type.",
+  "detail": "The partner token has a typ header that Spacefast does not accept.",
   "code": "token_type_invalid",
   "requestId": "req_4mz0v8qk"
 }

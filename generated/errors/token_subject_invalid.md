@@ -1,11 +1,11 @@
 ---
 title: "token_subject_invalid"
-description: "The partner token's `sub` claim is not a normalized lowercase principal ID."
+description: "The partner token subject is not a normalized lowercase external principal id."
 ---
 
-The partner token's `sub` claim is not a normalized lowercase principal ID.
+The partner token subject is not a normalized lowercase external principal id.
 
-**How to resolve:** Mint the token with `sub` set to the normalized lowercase principal ID.
+**How to resolve:** Use a trimmed lowercase ASCII subject without wildcards, slashes, or reserved policy characters.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_subject_invalid",
   "title": "Token subject invalid",
   "status": 400,
-  "detail": "The partner token's `sub` claim is not a normalized lowercase principal ID.",
+  "detail": "The partner token subject is not a normalized lowercase external principal id.",
   "code": "token_subject_invalid",
   "requestId": "req_4mz0v8qk"
 }

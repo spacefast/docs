@@ -1,0 +1,40 @@
+---
+title: "next_package_layout_unsupported"
+description: "Automatic Next.js builds do not support Yarn Plug'n'Play."
+---
+
+Automatic Next.js builds do not support Yarn Plug'n'Play.
+
+**How to resolve:** Set nodeLinker: node-modules in .yarnrc.yml, reinstall dependencies, and build again.
+
+<div data-pagefind-ignore>
+
+## Error shape
+
+Every Spacefast API error is an RFC 9457 problem document, served as
+`application/problem+json`.
+
+- `code` is stable and machine-readable.
+- `type` links to this page.
+- `title` is a short label.
+- `status` repeats the HTTP status.
+- `detail` explains this occurrence.
+- `pointer`, when present, is an RFC 6901 JSON Pointer at the offending field in the request body.
+- `details`, when present, carries structured context.
+
+Match on `code`, never on `detail`.
+
+```json
+{
+  "type": "https://spacefast.com/docs/errors/next_package_layout_unsupported",
+  "title": "Next package layout unsupported",
+  "status": 400,
+  "detail": "Automatic Next.js builds do not support Yarn Plug'n'Play.",
+  "code": "next_package_layout_unsupported",
+  "requestId": "req_4mz0v8qk"
+}
+```
+
+See the full list of error codes in the [error reference](/errors).
+
+</div>

@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_not_found"
-description: "The compiled run index has no handler for this Zero endpoint."
+description: "No Zero endpoint artifact exists for this endpoint id."
 ---
 
-The compiled run index has no handler for this Zero endpoint.
+No Zero endpoint artifact exists for this endpoint id.
 
-**How to resolve:** Build the capsule with `sf build` so the handler is generated, then publish.
+**How to resolve:** Check the route path and rebuild the Zero endpoint index.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_not_found",
   "title": "Zero endpoint not found",
   "status": 400,
-  "detail": "The compiled run index has no handler for this Zero endpoint.",
+  "detail": "No Zero endpoint artifact exists for this endpoint id.",
   "code": "zero_endpoint_not_found",
   "requestId": "req_4mz0v8qk"
 }

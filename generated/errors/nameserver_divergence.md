@@ -1,11 +1,11 @@
 ---
 title: "nameserver_divergence"
-description: "The nameservers observed in public DNS differ from the ones assigned to this zone."
+description: "The domain's observed nameservers diverge from the expected set."
 ---
 
-The nameservers observed in public DNS differ from the ones assigned to this zone.
+The domain's observed nameservers diverge from the expected set.
 
-**How to resolve:** Set the assigned nameservers at the registrar so the observed set matches.
+**How to resolve:** Align the registrar's nameserver records with the expected set, then re-check.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/nameserver_divergence",
   "title": "Nameserver divergence",
   "status": 400,
-  "detail": "The nameservers observed in public DNS differ from the ones assigned to this zone.",
+  "detail": "The domain's observed nameservers diverge from the expected set.",
   "code": "nameserver_divergence",
   "requestId": "req_4mz0v8qk"
 }

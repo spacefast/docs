@@ -1,11 +1,11 @@
 ---
 title: "continuation_unavailable"
-description: "The claim token cannot be exchanged for a durable credential."
+description: "This space key can no longer be exchanged for an API key."
 ---
 
-The claim token cannot be exchanged for a durable credential.
+This space key can no longer be exchanged for an API key.
 
-**How to resolve:** Ask the Space owner to create an API key in the dashboard, then publish with `sf publish --token <api-key>`.
+**How to resolve:** If the space is claimed, ask its owner for an API key (dashboard: team → Agents → API keys). If it is still unclaimed, keep using the space key as bearer auth instead of exchanging it. If you are still stuck, POST /v1/feedback with the error code and requestId.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/continuation_unavailable",
   "title": "Continuation unavailable",
   "status": 400,
-  "detail": "The claim token cannot be exchanged for a durable credential.",
+  "detail": "This space key can no longer be exchanged for an API key.",
   "code": "continuation_unavailable",
   "requestId": "req_4mz0v8qk"
 }

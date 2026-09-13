@@ -1,11 +1,11 @@
 ---
-title: "artifact_invalid_source"
-description: "The artifact source is not a renderable page component."
+title: "elevation_denied"
+description: "The person denied the temporary access request."
 ---
 
-The artifact source is not a renderable page component.
+The person denied the temporary access request.
 
-**How to resolve:** Export one component named App, with no imports — everything an artifact can use is already in scope.
+**How to resolve:** Stop retrying this request. Ask the person to perform the action if it is still necessary.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_invalid_source",
-  "title": "Artifact invalid source",
+  "type": "https://spacefast.com/docs/errors/elevation_denied",
+  "title": "Elevation denied",
   "status": 400,
-  "detail": "The artifact source is not a renderable page component.",
-  "code": "artifact_invalid_source",
+  "detail": "The person denied the temporary access request.",
+  "code": "elevation_denied",
   "requestId": "req_4mz0v8qk"
 }
 ```

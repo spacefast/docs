@@ -1,11 +1,11 @@
 ---
 title: "config_invalid"
-description: "The Space config did not validate."
+description: "The space configuration failed validation."
 ---
 
-The Space config did not validate.
+The space configuration failed validation.
 
-**How to resolve:** Fix the fields named in the failure details in `sf.jsonc`, then publish again.
+**How to resolve:** Fix the reported fields against the published schema at /schemas/sf.json.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_invalid",
   "title": "Config invalid",
   "status": 400,
-  "detail": "The Space config did not validate.",
+  "detail": "The space configuration failed validation.",
   "code": "config_invalid",
   "requestId": "req_4mz0v8qk"
 }

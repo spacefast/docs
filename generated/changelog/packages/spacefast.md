@@ -7,6 +7,47 @@ Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
+- Updated dependencies
+  - @spacefast/zero-compile@0.4.1
+  - @spacefast/common@0.4.1
+  - @spacefast/mcp@0.4.1
+  - @spacefast/zero-compat-emdash@0.4.1
+  - @spacefast/zero-compat-payloadcms@0.4.1
+  - @spacefast/domain-search-terminal@0.4.1
+  - @spacefast/routing@0.4.1
+  - @spacefast/sdk@0.4.1
+  - @spacefast/zero@0.4.1
+  - @spacefast/next-adapter@0.4.1
+  - @spacefast/build-output@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- Show contextual file diffs, source commits, and build details in approval cards. Preserve the reviewed action after a decision, bind each decision to its exact pause, and connect workspace files, staged changes, history, and build logs in MCP Apps.
+
+  Allow the authenticated MCP proxy to use local development hosts under `.localhost` and the IPv6 loopback address.
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.4.0
+  - @spacefast/build-output@0.4.0
+  - @spacefast/common@0.4.0
+  - @spacefast/domain-search-terminal@0.4.0
+  - @spacefast/next-adapter@0.4.0
+  - @spacefast/routing@0.4.0
+  - @spacefast/sdk@0.4.0
+  - @spacefast/zero@0.4.0
+  - @spacefast/zero-compat-emdash@0.4.0
+  - @spacefast/zero-compat-payloadcms@0.4.0
+  - @spacefast/zero-compile@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

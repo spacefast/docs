@@ -1,0 +1,147 @@
+---
+title: App users
+description: Add Google, Gravatar, or Spacefast sign-in to an app, protect each person's data, and manage app accounts.
+sidebar:
+  order: 1
+---
+
+Use **Users** to add accounts to an app and manage the people who sign in. Each Space has its own accounts, verified email addresses, connected identities, and sessions.
+
+**Users** controls accounts inside your app. [Access](/access) controls who can open or manage the Space. Creating an app account does not add someone to your team or give them a Space permission.
+
+## Enable sign-in
+
+Open your Space in the dashboard, choose **Users**, turn on **Enable app sign-in**, and save.
+
+You can save this setup before the Space is published. It takes effect through the Space's normal publish and settings updates. The account list stays available when app sign-in is off.
+
+Choose the methods your app offers:
+
+| Method | Behavior |
+| --- | --- |
+| **Google — Managed by Spacefast** | Uses Spacefast's Google connection. No Google app credentials are needed in your project. The dashboard reports when managed Google is unavailable. |
+| **Google — Use my Google app** | Uses the Google client ID and secret you configure for this Space. |
+| **Gravatar** | Uses the separate Gravatar sign-in flow. Availability is shown in the dashboard. |
+| **Spacefast** | Uses Spacefast Access and the person's existing permissions for this Space. An app login does not create an Access grant. |
+
+### Use your own Google app
+
+Choose **Use my Google app**. Copy the **Google redirect URI** from the dashboard into your Google app's authorized redirect URIs, then enter its client ID and secret.
+
+The URI includes the exact Space hostname and callback query. If people sign in on another connected domain, register that domain's matching callback with Google too.
+
+The secret is write-only. A blank secret field keeps the saved value; **Remove saved Google secret** removes it. Keep this secret out of source files and app environment variables.
+
+## Add sign-in buttons
+
+In a [Zero app](/zero-runtime), import the client helpers and call the method named on each button:
+
+```tsx client/account.tsx
+import {
+  signInWithGoogle,
+  signInWithGravatar,
+  signInWithSpacefast,
+  signOut,
+  useAuth,
+} from "@spacefast/zero/client";
+
+export function Account() {
+  const auth = useAuth();
+  if (auth.isLoading) return <p>Loading account…</p>;
+
+  if (auth.isAuthenticated) {
+    return (
+      <div>
+        <p>Signed in as {auth.displayName}</p>
+        <a href="/identity/account">Account settings</a>
+        <button onClick={() => void signOut()}>Sign out</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button onClick={() => void signInWithGoogle()}>Continue with Google</button>
+      <button onClick={() => void signInWithGravatar()}>Continue with Gravatar</button>
+      <button onClick={() => void signInWithSpacefast()}>Continue with Spacefast</button>
+    </div>
+  );
+}
+```
+
+Include the buttons for the methods you enabled. The three helpers start distinct flows. The client handles the redirect and uses the Space's session when it returns.
+
+The hosted account page is `/identity/account`. Keep `/identity` and its child paths available for sign-in, callbacks, and account settings.
+
+## Protect app data
+
+Check identity in your server handler. Hiding a button or checking a browser variable does not protect a query.
+
+Use `ctx.auth.userId` as the ownership key in a Zero app. Do not accept an owner ID from the browser or use an email address as an account key.
+
+```ts server/index.ts
+import { capsule, mutation, query, string, table } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "private-notes",
+  schema: {
+    notes: table({ body: string(), ownerId: string() })
+      .index("by_owner", ["ownerId"]),
+  },
+  queries: {
+    notes: query(async (ctx) => {
+      if (!ctx.auth.isAuthenticated) throw new Error("Sign in to read your notes.");
+      return ctx.db.notes
+        .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
+        .collect();
+    }),
+  },
+  mutations: {
+    addNote: mutation(async (ctx, body: string) => {
+      if (!ctx.auth.isAuthenticated) throw new Error("Sign in to add a note.");
+      await ctx.db.notes.insert({ body, ownerId: ctx.auth.userId });
+      ctx.invalidate("notes");
+    }),
+  },
+});
+```
+
+Zero's client queries and mutations send the current session. The runtime verifies it before creating the server's auth context. Your handlers still decide which records that person can read or change.
+
+An account belongs to one Space. Changing its hostname does not create a new account, and the same email address in another Space is a separate account. Connecting another identity requires the account's linking flow; a matching email is not permission to merge accounts.
+
+## Manage accounts
+
+The **Accounts** list supports search and shows each account's state. Choose **View account** to inspect its email addresses, connected identities, and sessions.
+
+- **Suspend account** stops app account use. **Reactivate** restores an account that was suspended.
+- **Sign out** revokes one session. **Sign out everywhere** revokes that account's sessions in this Space. Expired and signed-out sessions are labeled separately.
+- **Deletion requested** means the person has requested erasure. **Complete requested deletion** erases the account's personal data and credentials while preserving anonymous content authorship. Pending deletion accounts cannot be reactivated. Completed accounts leave the directory.
+
+People manage their own email addresses and sign-in methods at **Account settings**. A Space manager can inspect verified addresses; they cannot turn an unverified address into a verified identity through the Users API.
+
+## Use the CLI or API
+
+Select the Space explicitly or use the Space linked to your project:
+
+```bash
+sf users settings --space my-app
+sf users settings --space my-app --enabled true
+sf users ls --space my-app
+sf users get 4 --space my-app
+sf users sessions 4 --space my-app
+```
+
+For direct Google, read the secret from a local file:
+
+```bash
+sf users settings --space my-app --google direct \
+  --google-client-id YOUR_GOOGLE_CLIENT_ID \
+  --google-secret-file ./google-secret.txt
+```
+
+Use `users suspend`, `users reactivate`, `users revoke`, or `users delete` with the account ID from the list. Deletion only completes a deletion the person has requested. `--json` returns a structured receipt without the provider secret.
+
+The API lives under `/v1/spaces/{spaceId}/users`. Read `/settings` before updating it, then send the returned `settingsDigest` as `baseSettingsDigest` with the new settings. A stale digest is rejected so one editor cannot silently overwrite another.
+
+These are Space management operations. Use a manager's session or a suitably scoped [API key](/api-keys). An app session cannot administer the Users directory.

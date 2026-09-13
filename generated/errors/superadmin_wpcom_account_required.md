@@ -1,11 +1,11 @@
 ---
 title: "superadmin_wpcom_account_required"
-description: "The user has no linked WordPress.com account."
+description: "The user must have a WordPress.com account linked before being granted superadmin."
 ---
 
-The user has no linked WordPress.com account.
+The user must have a WordPress.com account linked before being granted superadmin.
 
-**How to resolve:** Have the user link a WordPress.com account, then grant the role again.
+**How to resolve:** Ask them to link WordPress.com in account security, then grant the role again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/superadmin_wpcom_account_required",
   "title": "Superadmin wpcom account required",
   "status": 400,
-  "detail": "The user has no linked WordPress.com account.",
+  "detail": "The user must have a WordPress.com account linked before being granted superadmin.",
   "code": "superadmin_wpcom_account_required",
   "requestId": "req_4mz0v8qk"
 }

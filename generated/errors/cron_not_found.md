@@ -1,11 +1,11 @@
 ---
-title: "space_quota_exceeded"
-description: "Creating or claiming this space would exceed the owner's space allowance."
+title: "cron_not_found"
+description: "The live version declares no scheduled job with that key or path."
 ---
 
-Creating or claiming this space would exceed the owner's space allowance.
+The live version declares no scheduled job with that key or path.
 
-**How to resolve:** Delete a space you no longer need, then retry. If you are still stuck, POST /v1/feedback with the error code and requestId.
+**How to resolve:** List the space's crons to see what the live version declares, and pass one of those keys or paths. Crons are declared in sf.jsonc, so publishing is what adds one.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/space_quota_exceeded",
-  "title": "Space quota exceeded",
+  "type": "https://spacefast.com/docs/errors/cron_not_found",
+  "title": "Cron not found",
   "status": 400,
-  "detail": "Creating or claiming this space would exceed the owner's space allowance.",
-  "code": "space_quota_exceeded",
+  "detail": "The live version declares no scheduled job with that key or path.",
+  "code": "cron_not_found",
   "requestId": "req_4mz0v8qk"
 }
 ```

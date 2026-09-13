@@ -1,13 +1,13 @@
 ---
 title: "Connect ChatGPT to Spacefast"
-description: "Use Spacefast from ChatGPT and ChatGPT Work through the app directory."
+description: "Connect Spacefast to ChatGPT web as a custom app with Developer mode."
 seo:
   canonical: "https://spacefast.com/setup/chatgpt/"
 ---
 
-Use Spacefast from ChatGPT and ChatGPT Work through the app directory.
+Connect Spacefast to ChatGPT web as a custom app with Developer mode.
 
-**Add the hosted MCP server.** Add Spacefast as a custom connector and approve OAuth in the browser. Web only; write tools need a Business or Enterprise workspace, and consumer Pro is read-only.
+**Add the hosted MCP server.** On ChatGPT web, enable Developer mode. Open https://chatgpt.com/plugins and select + to create an app. Enter the Spacefast endpoint and select OAuth. Connect and approve OAuth. Select Developer mode from the conversation's Plus menu, then select Spacefast. Eligible accounts can use read and write tools, subject to confirmation settings and workspace policies.
 
 ```text
 https://mcp.spacefast.com
@@ -15,7 +15,7 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Find Spacefast in ChatGPT — Soon.** Install from the ChatGPT and Codex plugin directory — the only lane that reaches consumer accounts with write tools.
+**Install from the plugin marketplace — Soon.** The public marketplace listing is not live yet.
 
 Use the working manual option below while the directory listing is in review.
 
@@ -27,4 +27,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [ChatGPT documentation](https://platform.openai.com/docs/guides/developer-mode)
+[Agent documentation](/agents) · [ChatGPT documentation](https://developers.openai.com/api/docs/guides/developer-mode)

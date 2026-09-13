@@ -1,11 +1,11 @@
 ---
 title: "runtime_token_invalid"
-description: "The runtime token is malformed."
+description: "The runtime token cannot be parsed or validated."
 ---
 
-The runtime token is malformed.
+The runtime token cannot be parsed or validated.
 
-**How to resolve:** Send a well-formed runtime JWT in the `Authorization` header.
+**How to resolve:** Mint a fresh runtime token.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_token_invalid",
   "title": "Runtime token invalid",
   "status": 400,
-  "detail": "The runtime token is malformed.",
+  "detail": "The runtime token cannot be parsed or validated.",
   "code": "runtime_token_invalid",
   "requestId": "req_4mz0v8qk"
 }

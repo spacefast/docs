@@ -1,11 +1,11 @@
 ---
 title: "zero_spam_unavailable"
-description: "The spam service is not configured for this runtime."
+description: "The local Zero spam service is not configured."
 ---
 
-The spam service is not configured for this runtime.
+The local Zero spam service is not configured.
 
-**How to resolve:** Publish the Space and call the endpoint on the live runtime; `sf dev` does not provide the spam service.
+**How to resolve:** Publish the capsule to call the hosted spam service, or guard the `ctx.spam` call so local runs skip it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_spam_unavailable",
   "title": "Zero spam unavailable",
   "status": 400,
-  "detail": "The spam service is not configured for this runtime.",
+  "detail": "The local Zero spam service is not configured.",
   "code": "zero_spam_unavailable",
   "requestId": "req_4mz0v8qk"
 }

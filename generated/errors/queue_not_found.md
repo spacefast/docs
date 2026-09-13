@@ -1,11 +1,11 @@
 ---
 title: "queue_not_found"
-description: "No queue with that name exists on this Space."
+description: "The named job queue does not exist."
 ---
 
-No queue with that name exists on this Space.
+The named job queue does not exist.
 
-**How to resolve:** Declare the queue in the Space's runtime config, then publish before calling it.
+**How to resolve:** Check the queue name against the operator queue list.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/queue_not_found",
   "title": "Queue not found",
   "status": 400,
-  "detail": "No queue with that name exists on this Space.",
+  "detail": "The named job queue does not exist.",
   "code": "queue_not_found",
   "requestId": "req_4mz0v8qk"
 }

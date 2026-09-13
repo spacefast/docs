@@ -1,11 +1,11 @@
 ---
 title: "publish_path_invalid"
-description: "A path in the publish is not one the platform can serve."
+description: "A publish path is not a relative, normalized POSIX path."
 ---
 
-A path in the publish is not one the platform can serve.
+A publish path is not a relative, normalized POSIX path.
 
-**How to resolve:** Rename the file to a safe relative path, then publish again.
+**How to resolve:** Use forward-slash relative paths without traversal segments or control characters.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_path_invalid",
   "title": "Publish path invalid",
   "status": 400,
-  "detail": "A path in the publish is not one the platform can serve.",
+  "detail": "A publish path is not a relative, normalized POSIX path.",
   "code": "publish_path_invalid",
   "requestId": "req_4mz0v8qk"
 }

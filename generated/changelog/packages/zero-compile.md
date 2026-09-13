@@ -5,6 +5,22 @@ description: "Release history for @spacefast/zero-compile on npm."
 
 Published as [`@spacefast/zero-compile`](https://www.npmjs.com/package/@spacefast/zero-compile) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
+- Updated dependencies
+  - @spacefast/common@0.4.1
+  - @spacefast/zero@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+  - @spacefast/zero@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

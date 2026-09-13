@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_client_not_found"
-description: "No WP Cloud client matches the identifier in the request."
+description: "The provider client was not found."
 ---
 
-No WP Cloud client matches the identifier in the request.
+The provider client was not found.
 
-**How to resolve:** Send a provider client ID that exists.
+**How to resolve:** Verify the provider client id.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_client_not_found",
   "title": "Wp cloud client not found",
   "status": 400,
-  "detail": "No WP Cloud client matches the identifier in the request.",
+  "detail": "The provider client was not found.",
   "code": "wp_cloud_client_not_found",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,6 +5,19 @@ description: "Release history for @spacefast/zero on npm."
 
 Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

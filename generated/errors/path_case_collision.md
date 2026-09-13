@@ -1,11 +1,11 @@
 ---
 title: "path_case_collision"
-description: "Two published routes differ only by letter case and cannot coexist on case-insensitive filesystems."
+description: "Two file paths differ only by letter case, which collides on serving."
 ---
 
-Two published routes differ only by letter case and cannot coexist on case-insensitive filesystems.
+Two file paths differ only by letter case, which collides on serving.
 
-**How to resolve:** Rename one of the files so the routes differ by more than case.
+**How to resolve:** Rename one of the files so that paths are unique case-insensitively.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/path_case_collision",
   "title": "Path case collision",
   "status": 400,
-  "detail": "Two published routes differ only by letter case and cannot coexist on case-insensitive filesystems.",
+  "detail": "Two file paths differ only by letter case, which collides on serving.",
   "code": "path_case_collision",
   "requestId": "req_4mz0v8qk"
 }
