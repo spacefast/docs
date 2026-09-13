@@ -1,11 +1,11 @@
 ---
 title: "prebuilt_metadata_invalid"
-description: "The archive's build metadata sidecar is present but unreadable."
+description: "The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown."
 ---
 
-The archive's build metadata sidecar is present but unreadable.
+The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown.
 
-**How to resolve:** Run `sf build` to regenerate the archive, or delete the `.meta.json` sidecar if the archive holds plain files.
+**How to resolve:** Re-run `sf build` to regenerate the archive and its metadata together. If the archive contains plain files, delete the metadata file.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/prebuilt_metadata_invalid",
   "title": "Prebuilt metadata invalid",
   "status": 400,
-  "detail": "The archive's build metadata sidecar is present but unreadable.",
+  "detail": "The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown.",
   "code": "prebuilt_metadata_invalid",
   "requestId": "req_4mz0v8qk"
 }

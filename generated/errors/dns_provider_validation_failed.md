@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_validation_failed"
-description: "The DNS provider rejected the record as invalid."
+description: "The DNS provider rejected the submitted record data."
 ---
 
-The DNS provider rejected the record as invalid.
+The DNS provider rejected the submitted record data.
 
-**How to resolve:** Correct the record's name, type, or value to what the provider accepts, then retry.
+**How to resolve:** Use the field details and provider message to correct the record.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_validation_failed",
   "title": "Dns provider validation failed",
   "status": 400,
-  "detail": "The DNS provider rejected the record as invalid.",
+  "detail": "The DNS provider rejected the submitted record data.",
   "code": "dns_provider_validation_failed",
   "requestId": "req_4mz0v8qk"
 }

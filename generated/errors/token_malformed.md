@@ -1,11 +1,11 @@
 ---
 title: "token_malformed"
-description: "The partner token is not a well-formed JWT."
+description: "The partner token is not a valid compact JWT within the size limit."
 ---
 
-The partner token is not a well-formed JWT.
+The partner token is not a valid compact JWT within the size limit.
 
-**How to resolve:** Send a compact JWS in the `Authorization` header.
+**How to resolve:** Send a valid compact JWT that is no larger than 8192 bytes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_malformed",
   "title": "Token malformed",
   "status": 400,
-  "detail": "The partner token is not a well-formed JWT.",
+  "detail": "The partner token is not a valid compact JWT within the size limit.",
   "code": "token_malformed",
   "requestId": "req_4mz0v8qk"
 }

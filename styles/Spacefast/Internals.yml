@@ -21,4 +21,4 @@ tokens:
   - \bcaddy\b
   - \bweb server\b
   - \bmonorepo\b
-  - '(?:/Users/|/home/)[a-z]+'
+  - "(?:^|[\\s(\"'\\x60])(?:/Users/|/home/)[a-z]+"

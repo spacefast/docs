@@ -1,11 +1,11 @@
 ---
-title: "artifact_binding_unresolved"
-description: "The artifact names a connection role that is not bound to a connection."
+title: "storage_quota_already_unlimited"
+description: "The team already has unlimited storage."
 ---
 
-The artifact names a connection role that is not bound to a connection.
+The team already has unlimited storage.
 
-**How to resolve:** Bind the role: PATCH /v1/artifacts/{ref} with the role mapped to a connection id you can use.
+**How to resolve:** No quota override is needed.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_binding_unresolved",
-  "title": "Artifact binding unresolved",
+  "type": "https://spacefast.com/docs/errors/storage_quota_already_unlimited",
+  "title": "Storage quota already unlimited",
   "status": 400,
-  "detail": "The artifact names a connection role that is not bound to a connection.",
-  "code": "artifact_binding_unresolved",
+  "detail": "The team already has unlimited storage.",
+  "code": "storage_quota_already_unlimited",
   "requestId": "req_4mz0v8qk"
 }
 ```

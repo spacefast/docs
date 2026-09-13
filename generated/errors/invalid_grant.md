@@ -1,11 +1,11 @@
 ---
 title: "invalid_grant"
-description: "The grant or assertion presented at the token endpoint is expired, revoked, or untrusted."
+description: "The authorization grant is invalid or was already used."
 ---
 
-The grant or assertion presented at the token endpoint is expired, revoked, or untrusted.
+The authorization grant is invalid or was already used.
 
-**How to resolve:** Re-authorize the agent grant, or present an assertion from a trusted issuer with `typ` set to `oauth-id-jag+jwt`.
+**How to resolve:** Restart the login flow to obtain a new grant.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_grant",
   "title": "Invalid grant",
   "status": 400,
-  "detail": "The grant or assertion presented at the token endpoint is expired, revoked, or untrusted.",
+  "detail": "The authorization grant is invalid or was already used.",
   "code": "invalid_grant",
   "requestId": "req_4mz0v8qk"
 }

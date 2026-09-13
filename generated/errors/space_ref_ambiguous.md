@@ -1,11 +1,11 @@
 ---
 title: "space_ref_ambiguous"
-description: "The hostname is attached to more than one Space."
+description: "The space reference matches more than one accessible space."
 ---
 
-The hostname is attached to more than one Space.
+The space reference matches more than one accessible space.
 
-**How to resolve:** Reference the Space by its `spc_` ID instead of the hostname.
+**How to resolve:** Use the `spc_` id, or scope the reference with a `teamRef`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_ref_ambiguous",
   "title": "Space ref ambiguous",
   "status": 400,
-  "detail": "The hostname is attached to more than one Space.",
+  "detail": "The space reference matches more than one accessible space.",
   "code": "space_ref_ambiguous",
   "requestId": "req_4mz0v8qk"
 }

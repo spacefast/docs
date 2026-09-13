@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_id_duplicate"
-description: "Two Zero endpoints share the same ID."
+description: "Two Zero endpoints declare the same endpoint id."
 ---
 
-Two Zero endpoints share the same ID.
+Two Zero endpoints declare the same endpoint id.
 
-**How to resolve:** Give each endpoint a unique ID, then publish again.
+**How to resolve:** Give every endpoint a unique endpoint id before publishing again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_id_duplicate",
   "title": "Zero endpoint id duplicate",
   "status": 400,
-  "detail": "Two Zero endpoints share the same ID.",
+  "detail": "Two Zero endpoints declare the same endpoint id.",
   "code": "zero_endpoint_id_duplicate",
   "requestId": "req_4mz0v8qk"
 }

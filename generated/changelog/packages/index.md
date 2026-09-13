@@ -6,25 +6,25 @@ Each public npm package keeps its own history. The [changelog timeline](/changel
 
 | Package | npm | Releases |
 | --- | --- | ---: |
-| [`spacefast`](/changelog/packages/spacefast) | [CLI (`spacefast`)](https://www.npmjs.com/package/spacefast) | 27 |
-| [`@spacefast/adapter-kit`](/changelog/packages/adapter-kit) | [@spacefast/adapter-kit](https://www.npmjs.com/package/@spacefast/adapter-kit) | 8 |
-| [`@spacefast/astro`](/changelog/packages/astro) | [@spacefast/astro](https://www.npmjs.com/package/@spacefast/astro) | 27 |
-| [`@spacefast/auth`](/changelog/packages/auth) | [@spacefast/auth](https://www.npmjs.com/package/@spacefast/auth) | 10 |
-| [`@spacefast/build-output`](/changelog/packages/build-output) | [@spacefast/build-output](https://www.npmjs.com/package/@spacefast/build-output) | 8 |
-| [`@spacefast/common`](/changelog/packages/common) | [@spacefast/common](https://www.npmjs.com/package/@spacefast/common) | 27 |
-| [`@spacefast/compat-lakebed`](/changelog/packages/compat-lakebed) | [@spacefast/compat-lakebed](https://www.npmjs.com/package/@spacefast/compat-lakebed) | 10 |
-| [`@spacefast/domain-search-terminal`](/changelog/packages/domain-search-terminal) | [@spacefast/domain-search-terminal](https://www.npmjs.com/package/@spacefast/domain-search-terminal) | 27 |
-| [`@spacefast/domain-services`](/changelog/packages/domain-services) | [@spacefast/domain-services](https://www.npmjs.com/package/@spacefast/domain-services) | 27 |
-| [`@spacefast/image`](/changelog/packages/image) | [@spacefast/image](https://www.npmjs.com/package/@spacefast/image) | 27 |
-| [`@spacefast/mcp`](/changelog/packages/mcp) | [@spacefast/mcp](https://www.npmjs.com/package/@spacefast/mcp) | 27 |
-| [`@spacefast/next-adapter`](/changelog/packages/next-adapter) | [@spacefast/next-adapter](https://www.npmjs.com/package/@spacefast/next-adapter) | 8 |
-| [`@spacefast/routing`](/changelog/packages/routing) | [@spacefast/routing](https://www.npmjs.com/package/@spacefast/routing) | 27 |
-| [`@spacefast/sdk`](/changelog/packages/sdk) | [@spacefast/sdk](https://www.npmjs.com/package/@spacefast/sdk) | 27 |
-| [`@spacefast/setup-ui`](/changelog/packages/setup-ui) | [@spacefast/setup-ui](https://www.npmjs.com/package/@spacefast/setup-ui) | 6 |
-| [`@spacefast/vite-plugin`](/changelog/packages/vite-plugin) | [@spacefast/vite-plugin](https://www.npmjs.com/package/@spacefast/vite-plugin) | 27 |
-| [`@spacefast/wordpress`](/changelog/packages/wordpress) | [@spacefast/wordpress](https://www.npmjs.com/package/@spacefast/wordpress) | 20 |
-| [`@spacefast/wpcloud-sdk`](/changelog/packages/wpcloud-sdk) | [@spacefast/wpcloud-sdk](https://www.npmjs.com/package/@spacefast/wpcloud-sdk) | 27 |
-| [`@spacefast/zero`](/changelog/packages/zero) | [@spacefast/zero](https://www.npmjs.com/package/@spacefast/zero) | 27 |
-| [`@spacefast/zero-compat-emdash`](/changelog/packages/zero-compat-emdash) | [@spacefast/zero-compat-emdash](https://www.npmjs.com/package/@spacefast/zero-compat-emdash) | 1 |
-| [`@spacefast/zero-compat-payloadcms`](/changelog/packages/zero-compat-payloadcms) | [@spacefast/zero-compat-payloadcms](https://www.npmjs.com/package/@spacefast/zero-compat-payloadcms) | 1 |
-| [`@spacefast/zero-compile`](/changelog/packages/zero-compile) | [@spacefast/zero-compile](https://www.npmjs.com/package/@spacefast/zero-compile) | 10 |
+| [`spacefast`](/changelog/packages/spacefast) | [CLI (`spacefast`)](https://www.npmjs.com/package/spacefast) | 29 |
+| [`@spacefast/adapter-kit`](/changelog/packages/adapter-kit) | [@spacefast/adapter-kit](https://www.npmjs.com/package/@spacefast/adapter-kit) | 10 |
+| [`@spacefast/astro`](/changelog/packages/astro) | [@spacefast/astro](https://www.npmjs.com/package/@spacefast/astro) | 29 |
+| [`@spacefast/auth`](/changelog/packages/auth) | [@spacefast/auth](https://www.npmjs.com/package/@spacefast/auth) | 12 |
+| [`@spacefast/build-output`](/changelog/packages/build-output) | [@spacefast/build-output](https://www.npmjs.com/package/@spacefast/build-output) | 10 |
+| [`@spacefast/common`](/changelog/packages/common) | [@spacefast/common](https://www.npmjs.com/package/@spacefast/common) | 29 |
+| [`@spacefast/compat-lakebed`](/changelog/packages/compat-lakebed) | [@spacefast/compat-lakebed](https://www.npmjs.com/package/@spacefast/compat-lakebed) | 12 |
+| [`@spacefast/domain-search-terminal`](/changelog/packages/domain-search-terminal) | [@spacefast/domain-search-terminal](https://www.npmjs.com/package/@spacefast/domain-search-terminal) | 29 |
+| [`@spacefast/domain-services`](/changelog/packages/domain-services) | [@spacefast/domain-services](https://www.npmjs.com/package/@spacefast/domain-services) | 29 |
+| [`@spacefast/image`](/changelog/packages/image) | [@spacefast/image](https://www.npmjs.com/package/@spacefast/image) | 29 |
+| [`@spacefast/mcp`](/changelog/packages/mcp) | [@spacefast/mcp](https://www.npmjs.com/package/@spacefast/mcp) | 29 |
+| [`@spacefast/next-adapter`](/changelog/packages/next-adapter) | [@spacefast/next-adapter](https://www.npmjs.com/package/@spacefast/next-adapter) | 10 |
+| [`@spacefast/routing`](/changelog/packages/routing) | [@spacefast/routing](https://www.npmjs.com/package/@spacefast/routing) | 29 |
+| [`@spacefast/sdk`](/changelog/packages/sdk) | [@spacefast/sdk](https://www.npmjs.com/package/@spacefast/sdk) | 29 |
+| [`@spacefast/setup-ui`](/changelog/packages/setup-ui) | [@spacefast/setup-ui](https://www.npmjs.com/package/@spacefast/setup-ui) | 8 |
+| [`@spacefast/vite-plugin`](/changelog/packages/vite-plugin) | [@spacefast/vite-plugin](https://www.npmjs.com/package/@spacefast/vite-plugin) | 29 |
+| [`@spacefast/wordpress`](/changelog/packages/wordpress) | [@spacefast/wordpress](https://www.npmjs.com/package/@spacefast/wordpress) | 22 |
+| [`@spacefast/wpcloud-sdk`](/changelog/packages/wpcloud-sdk) | [@spacefast/wpcloud-sdk](https://www.npmjs.com/package/@spacefast/wpcloud-sdk) | 29 |
+| [`@spacefast/zero`](/changelog/packages/zero) | [@spacefast/zero](https://www.npmjs.com/package/@spacefast/zero) | 29 |
+| [`@spacefast/zero-compat-emdash`](/changelog/packages/zero-compat-emdash) | [@spacefast/zero-compat-emdash](https://www.npmjs.com/package/@spacefast/zero-compat-emdash) | 3 |
+| [`@spacefast/zero-compat-payloadcms`](/changelog/packages/zero-compat-payloadcms) | [@spacefast/zero-compat-payloadcms](https://www.npmjs.com/package/@spacefast/zero-compat-payloadcms) | 3 |
+| [`@spacefast/zero-compile`](/changelog/packages/zero-compile) | [@spacefast/zero-compile](https://www.npmjs.com/package/@spacefast/zero-compile) | 12 |

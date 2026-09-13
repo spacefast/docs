@@ -1,11 +1,11 @@
 ---
 title: "zero_method_not_allowed"
-description: "The Zero run route was called with a method it does not serve."
+description: "The request method is not allowed for this Zero endpoint."
 ---
 
-The Zero run route was called with a method it does not serve.
+The request method is not allowed for this Zero endpoint.
 
-**How to resolve:** Call the Zero run route with `POST`.
+**How to resolve:** Call the endpoint with one of the methods declared by the Zero route.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_method_not_allowed",
   "title": "Zero method not allowed",
   "status": 400,
-  "detail": "The Zero run route was called with a method it does not serve.",
+  "detail": "The request method is not allowed for this Zero endpoint.",
   "code": "zero_method_not_allowed",
   "requestId": "req_4mz0v8qk"
 }

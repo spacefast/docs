@@ -5,6 +5,19 @@ description: "Release history for @spacefast/zero-compat-emdash on npm."
 
 Published as [`@spacefast/zero-compat-emdash`](https://www.npmjs.com/package/@spacefast/zero-compat-emdash) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Minor Changes

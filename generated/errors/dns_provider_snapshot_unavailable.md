@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_snapshot_unavailable"
-description: "Provider records were read but could not be cached for listing."
+description: "Spacefast cannot cache the latest DNS provider snapshot."
 ---
 
-Provider records were read but could not be cached for listing.
+Spacefast cannot cache the latest DNS provider snapshot.
 
-**How to resolve:** Retry the provider snapshot refresh once the provider or the cache recovers.
+**How to resolve:** Retry the refresh after the cache or provider recovers. Do not edit connected-provider records from stale data.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_snapshot_unavailable",
   "title": "Dns provider snapshot unavailable",
   "status": 400,
-  "detail": "Provider records were read but could not be cached for listing.",
+  "detail": "Spacefast cannot cache the latest DNS provider snapshot.",
   "code": "dns_provider_snapshot_unavailable",
   "requestId": "req_4mz0v8qk"
 }

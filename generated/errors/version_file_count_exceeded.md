@@ -1,11 +1,11 @@
 ---
 title: "version_file_count_exceeded"
-description: "The version declares more files than the plan allows."
+description: "The version exceeds the maximum number of files."
 ---
 
-The version declares more files than the plan allows.
+The version exceeds the maximum number of files.
 
-**How to resolve:** Remove files from the publish, or move the team to a plan with a higher file cap.
+**How to resolve:** Reduce the file count or split content across multiple spaces.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_file_count_exceeded",
   "title": "Version file count exceeded",
   "status": 400,
-  "detail": "The version declares more files than the plan allows.",
+  "detail": "The version exceeds the maximum number of files.",
   "code": "version_file_count_exceeded",
   "requestId": "req_4mz0v8qk"
 }
