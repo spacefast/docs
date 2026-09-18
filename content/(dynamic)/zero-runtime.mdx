@@ -186,9 +186,9 @@ A claimed space can reach any public HTTPS host. An unclaimed space can reach on
 
 There is no `ctx.people` service. To create or resend a private-space Person invitation, call the public Spacefast API from an action. Keep a narrowly scoped API key in a server-only variable. The key needs `spaces:write` and an active `access.manage` Grant that covers the requested path and target.
 
-Actions are client-visible entry points. Check `ctx.auth` and your app's own authorization rules before using the management key. This example keeps an explicit server-side allowlist of operators in `PARTNER_INVITER_USER_IDS`; private-space viewer access alone is not enough.
+Actions are client-visible entry points. Check `ctx.auth` and your app's own authorization rules before using the management key. Put the actions in the configured server entry. This example keeps an explicit server-side allowlist of operators in `PARTNER_INVITER_USER_IDS`; private-space viewer access alone is not enough.
 
-```ts server/invitations.ts
+```ts server/index.ts
 import { action, capsule } from "@spacefast/zero/server";
 
 const apiOrigin = "https://api.spacefast.com";
