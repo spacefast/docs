@@ -9,7 +9,7 @@ After this page you can tell whether your project needs Zero, declare it in `sf.
 
 ## What Zero is
 
-Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, and HTTP endpoints, and `sf publish` compiles it into a **capsule** the platform installs on the space.
+Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, actions, and HTTP endpoints, and `sf publish` compiles it into a **capsule** the platform installs on the space.
 
 Zero is on for every account. There is nothing to enable.
 
@@ -48,7 +48,7 @@ sf publish
 | --- | --- | --- |
 | Database | The space's own MySQL. Your capsule declares the tables; the platform migrates them when a version finalizes. | [Database](/database) |
 | Endpoints | Plain HTTP routes in your capsule, for webhooks and callers outside the app. | This page |
-| Queries and mutations | The read and write path your client calls. Queries are live. | This page |
+| Queries, mutations, and actions | The read, transactional write, and outbound-work paths your client calls. Queries are live. | This page |
 | Environment variables | `ctx.env`, from `.env.server` or `sf env`. | [Environment variables](/environment-variables) |
 | Crons | Scheduled GETs against your own paths, declared in `sf.jsonc`. | [Crons](/crons) |
 | Storage | Runtime object storage for visitor uploads. | [Storage](/storage) |
@@ -119,7 +119,7 @@ export function App() {
 }
 ```
 
-`capsule()` takes `name`, `favicon`, `schema`, `queries`, `mutations`, and `endpoints`, and throws on a key it does not know.
+`capsule()` takes `name`, `favicon`, `schema`, `queries`, `mutations`, `actions`, and `endpoints`, and throws on a key it does not know.
 
 ### Tables
 
@@ -127,17 +127,19 @@ export function App() {
 
 ### Handler context
 
-Every query, mutation, and endpoint handler takes `ctx` first.
+Every query, mutation, action, and endpoint handler takes `ctx` first.
 
-| On `ctx` | Queries | Mutations and write endpoints | What it is |
-| --- | --- | --- | --- |
-| `db` | read only | read and write | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
-| `auth` | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
-| `env` | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
-| `log` | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
-| `invalidate` | no | yes | Names the live queries this mutation changed |
+| On `ctx` | Queries and read endpoints | Mutations and write endpoints | Actions | What it is |
+| --- | --- | --- | --- | --- |
+| `db` | read only | read and write | read only | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
+| `auth` | yes | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
+| `env` | yes | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
+| `log` | yes | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
+| `invalidate` | no | yes | no | Names the live queries this mutation changed |
 
 A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
+
+An action runs without a transaction. It gets a read-only `db`, can call `fetch()`, and has no `invalidate`. Use an action when an external API call can take time or cause an external effect. Send the result to a mutation when the capsule must save it.
 
 `invalidate()` takes **query names, not table names**. `ctx.invalidate("notes")` refreshes every `notes` subscription whatever arguments it carries. Calling it with nothing is the safe default and refreshes every live query on the page.
 
@@ -154,7 +156,7 @@ Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for 
 3. Your endpoint table matches. A hit runs the handler in the QuickJS runner on the space's own machine, in one transaction with the database.
 4. Everything else falls to the app shell, which serves your client bundle.
 
-Queries and mutations do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event and every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
+Queries, mutations, and actions do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event and every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
 
 An endpoint cannot claim `/`, `/index.html`, `/client.js`, `/auth/callback`, anything under `/auth/`, or anything under `/_spacefast/`. The shell, the client bundle, and the sign-in flow already answer those.
 
@@ -172,13 +174,74 @@ Only three source roots are read: `client/`, `server/`, and `shared/`. Beyond th
 | Client imports | Anything except the server SDK and `node:*` built-ins |
 | Endpoint request body | 2 MiB |
 | Rejected everywhere | `eval`, `Function`, `require()`, dynamic `import()`, `process`, `__dirname`, `__filename`, `Bun`, `Deno` |
-| Rejected in `server/` and `shared/` | `window`, `document`, `localStorage`, `fetch` has no polyfill, `WebSocket`, `Worker`, `XMLHttpRequest`, `globalThis` |
+| Rejected in `server/` and `shared/` | `window`, `document`, `localStorage`, `WebSocket`, `Worker`, `XMLHttpRequest`, `globalThis` |
 
 Platform modules do not count against your client cap. The SDK, kit, charts, preact, recharts, and lucide serve from immutable same-origin URLs the browser keeps across publishes.
 
-:::warning[There is no outbound fetch in a Zero handler]
-The runner defines `Headers`, `Response`, `URL`, and `URLSearchParams`, but no `fetch`. A handler that needs to call an external API belongs in [Functions](/functions).
-:::
+### Outbound HTTP
+
+Every Zero handler can call `fetch()`. Use an action for a slow call or an external side effect, because an action does not hold a database transaction.
+
+A claimed space can reach any public HTTPS host; Zero does not allow plain HTTP. An unclaimed space can reach only the trusted host list. Functions uses the same claimed/unclaimed host policy but supports public HTTP and HTTPS. Private visitor access is separate from outbound access: a call to an API does not make the space public or change its Grants.
+
+There is no `ctx.people` service. To create or resend a private-space Person invitation, call the public Spacefast API from an action. Keep a narrowly scoped API key in a server-only variable. The key needs `spaces:write` and an active `access.manage` Grant that covers the requested path and target.
+
+Actions are client-visible entry points. Check `ctx.auth` and your app's own authorization rules before using the management key. Put the actions in the configured server entry. This example keeps an explicit server-side allowlist of operators in `PARTNER_INVITER_USER_IDS`; private-space viewer access alone is not enough.
+
+```ts server/index.ts
+import { action, capsule } from "@spacefast/zero/server";
+
+const apiOrigin = "https://api.spacefast.com";
+
+export const invitePartner = action(async (ctx, email: string) => {
+  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
+  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
+    throw new Error("You cannot manage partner invitations.");
+  }
+
+  const credential = ctx.env.PARTNER_TRACKER_API_KEY;
+  const spaceId = ctx.env.PARTNER_SPACE_ID;
+  if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
+
+  const response = await fetch(`${apiOrigin}/v1/spaces/${encodeURIComponent(spaceId)}/people`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${credential}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      grants: [{ scope: "/**", role: "viewer", target: { kind: "live" } }],
+    }),
+  });
+  if (!response.ok) throw new Error(`Person invitation failed with ${response.status}.`);
+  return response.json();
+});
+
+export const resendPartnerInvitation = action(async (ctx, personId: string) => {
+  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
+  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
+    throw new Error("You cannot manage partner invitations.");
+  }
+
+  const credential = ctx.env.PARTNER_TRACKER_API_KEY;
+  const spaceId = ctx.env.PARTNER_SPACE_ID;
+  if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
+
+  const response = await fetch(
+    `${apiOrigin}/v1/spaces/${encodeURIComponent(spaceId)}/people/${encodeURIComponent(personId)}/resend`,
+    { method: "POST", headers: { authorization: `Bearer ${credential}` } },
+  );
+  if (!response.ok) throw new Error(`Person invitation resend failed with ${response.status}.`);
+  return response.json();
+});
+
+export default capsule({
+  actions: { invitePartner, resendPartnerInvitation },
+});
+```
+
+The invitation routes return `{ data }`. They never return the invitation credential. Email delivery owns that credential.
 
 ## Styling
 
