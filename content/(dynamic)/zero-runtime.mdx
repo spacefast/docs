@@ -182,7 +182,7 @@ Platform modules do not count against your client cap. The SDK, kit, charts, pre
 
 Every Zero handler can call `fetch()`. Use an action for a slow call or an external side effect, because an action does not hold a database transaction.
 
-A claimed space can reach any public HTTPS host. An unclaimed space can reach only the trusted host list. The same rule applies to Zero and Functions. Private visitor access is separate from outbound access: a call to an API does not make the space public or change its Grants.
+A claimed space can reach any public HTTPS host; Zero does not allow plain HTTP. An unclaimed space can reach only the trusted host list. Functions uses the same claimed/unclaimed host policy but supports public HTTP and HTTPS. Private visitor access is separate from outbound access: a call to an API does not make the space public or change its Grants.
 
 There is no `ctx.people` service. To create or resend a private-space Person invitation, call the public Spacefast API from an action. Keep a narrowly scoped API key in a server-only variable. The key needs `spaces:write` and an active `access.manage` Grant that covers the requested path and target.
 
