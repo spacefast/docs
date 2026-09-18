@@ -7,7 +7,7 @@ sidebar:
 
 After this page you can add a worker to a Space, know which file layout the publish detects, write a handler with the right signature, and find its logs.
 
-Functions runs your code as a worker. Use it when you need npm packages, framework output like OpenNext Next.js, or outbound HTTP. If you want a database next to your handlers and live queries in the browser, use [Zero](/zero-runtime) instead. One version declares one runtime.
+Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want a database next to your handlers and live queries in the browser, use [Zero](/zero-runtime) instead. Both runtimes support outbound HTTP. One version declares one runtime.
 
 Functions is on for every account.
 
@@ -107,12 +107,12 @@ Detection means most projects need no `runtime` block at all. Declare one when d
 | --- | --- | --- | --- |
 | `entry` | string | detected | Path to the worker entry. Naming a file that does not exist fails the publish rather than falling back to a static publish |
 | `database` | boolean | `false` | Adds `env.DB` |
-| `fetch` | boolean | see below | Allows outbound HTTP from the worker |
+| `fetch` | boolean | `true` | Allows outbound HTTP from the worker |
 | `compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | The runtime semantics this worker was written against |
 
-Capabilities are declared, never detected. Authority an author did not ask for is authority they cannot see.
+Capabilities are explicit in the resolved runtime config. `database` defaults off. Outbound `fetch()` defaults on for both hand-written workers and OpenNext builds; set `fetch: false` to disable it.
 
-`fetch` has no schema default. An OpenNext build gets it unless you set `fetch: false`, because SSR fetches while it renders. A hand-written handler and a `functions/` router reach nothing until you declare it. Without the capability, `fetch()` inside the worker is refused.
+An unclaimed space reaches only the trusted host list. A claimed space can reach any public HTTP or HTTPS host. The target still enforces its own credentials.
 
 ## What is on `env`
 
