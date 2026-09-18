@@ -129,13 +129,13 @@ export function App() {
 
 Every query, mutation, action, and endpoint handler takes `ctx` first.
 
-| On `ctx` | Queries | Mutations and write endpoints | What it is |
-| --- | --- | --- | --- |
-| `db` | read only | read and write | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
-| `auth` | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
-| `env` | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
-| `log` | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
-| `invalidate` | no | yes | Names the live queries this mutation changed |
+| On `ctx` | Queries and read endpoints | Mutations and write endpoints | Actions | What it is |
+| --- | --- | --- | --- | --- |
+| `db` | read only | read and write | read only | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
+| `auth` | yes | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
+| `env` | yes | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
+| `log` | yes | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
+| `invalidate` | no | yes | no | Names the live queries this mutation changed |
 
 A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
 
