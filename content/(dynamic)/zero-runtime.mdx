@@ -186,12 +186,19 @@ A claimed space can reach any public HTTPS host. An unclaimed space can reach on
 
 There is no `ctx.people` service. To create or resend a private-space Person invitation, call the public Spacefast API from an action. Keep a narrowly scoped API key in a server-only variable. The key needs `spaces:write` and an active `access.manage` Grant that covers the requested path and target.
 
+Actions are client-visible entry points. Check `ctx.auth` and your app's own authorization rules before using the management key. This example keeps an explicit server-side allowlist of operators in `PARTNER_INVITER_USER_IDS`; private-space viewer access alone is not enough.
+
 ```ts server/invitations.ts
 import { action, capsule } from "@spacefast/zero/server";
 
 const apiOrigin = "https://api.spacefast.com";
 
 export const invitePartner = action(async (ctx, email: string) => {
+  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
+  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
+    throw new Error("You cannot manage partner invitations.");
+  }
+
   const credential = ctx.env.PARTNER_TRACKER_API_KEY;
   const spaceId = ctx.env.PARTNER_SPACE_ID;
   if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
@@ -212,6 +219,11 @@ export const invitePartner = action(async (ctx, email: string) => {
 });
 
 export const resendPartnerInvitation = action(async (ctx, personId: string) => {
+  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
+  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
+    throw new Error("You cannot manage partner invitations.");
+  }
+
   const credential = ctx.env.PARTNER_TRACKER_API_KEY;
   const spaceId = ctx.env.PARTNER_SPACE_ID;
   if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
