@@ -1,11 +1,11 @@
 ---
 title: "issuer_unknown"
-description: "The token's issuer is not registered with Spacefast."
+description: "The partner token names an issuer that Spacefast does not recognize."
 ---
 
-The token's issuer is not registered with Spacefast.
+The partner token names an issuer that Spacefast does not recognize.
 
-**How to resolve:** Register the issuer, or present a token whose `iss` matches a registered one.
+**How to resolve:** Register the exact token issuer, then request a new partner token.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/issuer_unknown",
   "title": "Issuer unknown",
   "status": 400,
-  "detail": "The token's issuer is not registered with Spacefast.",
+  "detail": "The partner token names an issuer that Spacefast does not recognize.",
   "code": "issuer_unknown",
   "requestId": "req_4mz0v8qk"
 }

@@ -40,9 +40,9 @@
     "to": "/api/reference/account/addaccountemail"
   },
   {
-    "from": "/api/operations/addexternalprincipalspacedomain",
+    "from": "/api/operations/addspacecustomdomain",
     "status": 301,
-    "to": "/api/reference/domains/addexternalprincipalspacedomain"
+    "to": "/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/api/operations/analyzespacesourceconnection",
@@ -95,6 +95,11 @@
     "to": "/api/reference/docs/askdocs"
   },
   {
+    "from": "/api/operations/bindspaceconnector",
+    "status": 301,
+    "to": "/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/api/operations/cancelbuild",
     "status": 301,
     "to": "/api/reference/builds/cancelbuild"
@@ -145,6 +150,11 @@
     "to": "/api/reference/spaces/computespacerouting"
   },
   {
+    "from": "/api/operations/convertspacecontentsource",
+    "status": 301,
+    "to": "/api/reference/spaces/convertspacecontentsource"
+  },
+  {
     "from": "/api/operations/createabusereport",
     "status": 301,
     "to": "/api/reference/spaces/createabusereport"
@@ -153,11 +163,6 @@
     "from": "/api/operations/createapikey",
     "status": 301,
     "to": "/api/reference/account/createapikey"
-  },
-  {
-    "from": "/api/operations/createartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/createartifact"
   },
   {
     "from": "/api/operations/createbetasignup",
@@ -345,6 +350,11 @@
     "to": "/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/api/operations/createspaceversionvisualreview",
+    "status": 301,
+    "to": "/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/api/operations/createspacezerotoken",
     "status": 301,
     "to": "/api/reference/spaces/createspacezerotoken"
@@ -390,11 +400,6 @@
     "to": "/api/reference/account/deleteaccountemail"
   },
   {
-    "from": "/api/operations/deleteartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/deleteartifact"
-  },
-  {
     "from": "/api/operations/deleteconnector",
     "status": 301,
     "to": "/api/reference/connectors/deleteconnector"
@@ -413,6 +418,11 @@
     "from": "/api/operations/deletespace",
     "status": 301,
     "to": "/api/reference/spaces/deletespace"
+  },
+  {
+    "from": "/api/operations/deletespacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/deletespacecustomdomain"
   },
   {
     "from": "/api/operations/deletespacesourcebranch",
@@ -515,11 +525,6 @@
     "to": "/api/reference/git/downloadspacesourcearchive"
   },
   {
-    "from": "/api/operations/editartifactsource",
-    "status": 301,
-    "to": "/api/reference/connectors/editartifactsource"
-  },
-  {
     "from": "/api/operations/editspacesourceworkspacefiles",
     "status": 301,
     "to": "/api/reference/git/editspacesourceworkspacefiles"
@@ -553,16 +558,6 @@
     "from": "/api/operations/getapproval",
     "status": 301,
     "to": "/api/reference/agent/getapproval"
-  },
-  {
-    "from": "/api/operations/getartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/api/operations/getartifactpreview",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/api/operations/getbetavisitor",
@@ -703,6 +698,31 @@
     "from": "/api/operations/getspacecommentsembedconfig",
     "status": 301,
     "to": "/api/reference/spaces/getspacecommentsembedconfig"
+  },
+  {
+    "from": "/api/operations/getspacecontentmedia",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/api/operations/getspacecontentsourceconflict",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/api/operations/getspacecontentsyncstatus",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
+    "from": "/api/operations/getspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomain"
+  },
+  {
+    "from": "/api/operations/getspacecustomdomaindiagnostics",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/api/operations/getspacedatabase",
@@ -865,6 +885,21 @@
     "to": "/api/reference/versions/getspaceversionroutingsummary"
   },
   {
+    "from": "/api/operations/getspaceversionvisualscreenshot",
+    "status": 301,
+    "to": "/api/reference/versions/getspaceversionvisualscreenshot"
+  },
+  {
+    "from": "/api/operations/getspacevisualpreview",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/api/operations/getspaceworkmode",
+    "status": 301,
+    "to": "/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/api/operations/getspacezerocontentmodel",
     "status": 301,
     "to": "/api/reference/spaces/getspacezerocontentmodel"
@@ -930,6 +965,11 @@
     "to": "/api/reference/teams/getteamusage"
   },
   {
+    "from": "/api/operations/getvisualreview",
+    "status": 301,
+    "to": "/api/reference/spaces/getvisualreview"
+  },
+  {
     "from": "/api/operations/getwebhook",
     "status": 301,
     "to": "/api/reference/activity/getwebhook"
@@ -983,11 +1023,6 @@
     "from": "/api/operations/listapprovals",
     "status": 301,
     "to": "/api/reference/agent/listapprovals"
-  },
-  {
-    "from": "/api/operations/listartifacts",
-    "status": 301,
-    "to": "/api/reference/connectors/listartifacts"
   },
   {
     "from": "/api/operations/listauthmethods",
@@ -1067,7 +1102,7 @@
   {
     "from": "/api/operations/listmanageddomains",
     "status": 301,
-    "to": "/api/reference/domains/listmanageddomains"
+    "to": "/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/api/operations/listnotifications",
@@ -1115,6 +1150,11 @@
     "to": "/api/reference/spaces/listspacecomments"
   },
   {
+    "from": "/api/operations/listspaceconnectorbindings",
+    "status": 301,
+    "to": "/api/reference/spaces/listspaceconnectorbindings"
+  },
+  {
     "from": "/api/operations/listspacecrons",
     "status": 301,
     "to": "/api/reference/spaces/listspacecrons"
@@ -1128,6 +1168,11 @@
     "from": "/api/operations/listspacedomains",
     "status": 301,
     "to": "/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/api/operations/listspaceedgelogs",
+    "status": 301,
+    "to": "/api/reference/activity/listspaceedgelogs"
   },
   {
     "from": "/api/operations/listspacefiles",
@@ -1365,6 +1410,11 @@
     "to": "/api/reference/variables/listteamvariables"
   },
   {
+    "from": "/api/operations/listvisitorconnectionusers",
+    "status": 301,
+    "to": "/api/reference/spaces/listvisitorconnectionusers"
+  },
+  {
     "from": "/api/operations/listwebhookdeliveries",
     "status": 301,
     "to": "/api/reference/activity/listwebhookdeliveries"
@@ -1405,6 +1455,11 @@
     "to": "/api/reference/database/openspacedatabaseconsole"
   },
   {
+    "from": "/api/operations/patchspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/patchspacecustomdomain"
+  },
+  {
     "from": "/api/operations/patchspacetagrevisiongraph",
     "status": 301,
     "to": "/api/reference/tags/patchspacetagrevisiongraph"
@@ -1440,11 +1495,6 @@
     "to": "/api/reference/versions/promotespaceversion"
   },
   {
-    "from": "/api/operations/putartifactpreview",
-    "status": 301,
-    "to": "/api/reference/connectors/putartifactpreview"
-  },
-  {
     "from": "/api/operations/readanonymouspublishoperation",
     "status": 301,
     "to": "/api/reference/spaces/readanonymouspublishoperation"
@@ -1453,6 +1503,11 @@
     "from": "/api/operations/reconcilespacecontentsync",
     "status": 301,
     "to": "/api/reference/spaces/reconcilespacecontentsync"
+  },
+  {
+    "from": "/api/operations/reconnectconnection",
+    "status": 301,
+    "to": "/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/api/operations/redeliverwebhookdelivery",
@@ -1530,6 +1585,11 @@
     "to": "/api/reference/agent/requestapproval"
   },
   {
+    "from": "/api/operations/requestspacecontentrest",
+    "status": 301,
+    "to": "/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/api/operations/resendspacepersoninvitation",
     "status": 301,
     "to": "/api/reference/spaces/resendspacepersoninvitation"
@@ -1548,6 +1608,11 @@
     "from": "/api/operations/resolvespace",
     "status": 301,
     "to": "/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/api/operations/resolvespacecontentsourceconflict",
+    "status": 301,
+    "to": "/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/api/operations/resolvespacesourceworkspaceconflicts",
@@ -1588,6 +1653,11 @@
     "from": "/api/operations/retrydomainssl",
     "status": 301,
     "to": "/api/reference/domains/retrydomainssl"
+  },
+  {
+    "from": "/api/operations/retryspacecustomdomainssl",
+    "status": 301,
+    "to": "/api/reference/domains/retryspacecustomdomainssl"
   },
   {
     "from": "/api/operations/revokeallgrants",
@@ -1650,6 +1720,11 @@
     "to": "/api/reference/tags/revoketeamtagpreviewsession"
   },
   {
+    "from": "/api/operations/revokevisitorconnection",
+    "status": 301,
+    "to": "/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/api/operations/rollbackspacetagrelease",
     "status": 301,
     "to": "/api/reference/tags/rollbackspacetagrelease"
@@ -1680,6 +1755,11 @@
     "to": "/api/reference/activity/rotatewebhook"
   },
   {
+    "from": "/api/operations/runspacecron",
+    "status": 301,
+    "to": "/api/reference/spaces/runspacecron"
+  },
+  {
     "from": "/api/operations/runspacewpclicommand",
     "status": 301,
     "to": "/api/reference/spaces/runspacewpclicommand"
@@ -1708,6 +1788,11 @@
     "from": "/api/operations/setspacevariable",
     "status": 301,
     "to": "/api/reference/variables/setspacevariable"
+  },
+  {
+    "from": "/api/operations/setspaceworkmode",
+    "status": 301,
+    "to": "/api/reference/spaces/setspaceworkmode"
   },
   {
     "from": "/api/operations/setteamaccessdefaults",
@@ -1743,6 +1828,11 @@
     "from": "/api/operations/submitteamtagrevision",
     "status": 301,
     "to": "/api/reference/tags/submitteamtagrevision"
+  },
+  {
+    "from": "/api/operations/submitvisualreview",
+    "status": 301,
+    "to": "/api/reference/spaces/submitvisualreview"
   },
   {
     "from": "/api/operations/syncspacesource",
@@ -1835,6 +1925,11 @@
     "to": "/api/reference#versions"
   },
   {
+    "from": "/api/operations/unbindspaceconnector",
+    "status": 301,
+    "to": "/api/reference/spaces/unbindspaceconnector"
+  },
+  {
     "from": "/api/operations/unstagespacesourceworkspacechanges",
     "status": 301,
     "to": "/api/reference/git/unstagespacesourceworkspacechanges"
@@ -1843,11 +1938,6 @@
     "from": "/api/operations/updateapikey",
     "status": 301,
     "to": "/api/reference/account/updateapikey"
-  },
-  {
-    "from": "/api/operations/updateartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/updateartifact"
   },
   {
     "from": "/api/operations/updateconnection",
@@ -1985,6 +2075,11 @@
     "to": "/api/reference/domains/verifydomain"
   },
   {
+    "from": "/api/operations/verifyspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/verifyspacecustomdomain"
+  },
+  {
     "from": "/api/operations/writespacesourcenote",
     "status": 301,
     "to": "/api/reference/git/writespacesourcenote"
@@ -2030,9 +2125,9 @@
     "to": "/api/reference/account/addaccountemail"
   },
   {
-    "from": "/api/reference/operations/addexternalprincipalspacedomain",
+    "from": "/api/reference/operations/addspacecustomdomain",
     "status": 301,
-    "to": "/api/reference/domains/addexternalprincipalspacedomain"
+    "to": "/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/api/reference/operations/analyzespacesourceconnection",
@@ -2085,6 +2180,11 @@
     "to": "/api/reference/docs/askdocs"
   },
   {
+    "from": "/api/reference/operations/bindspaceconnector",
+    "status": 301,
+    "to": "/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/api/reference/operations/cancelbuild",
     "status": 301,
     "to": "/api/reference/builds/cancelbuild"
@@ -2135,6 +2235,11 @@
     "to": "/api/reference/spaces/computespacerouting"
   },
   {
+    "from": "/api/reference/operations/convertspacecontentsource",
+    "status": 301,
+    "to": "/api/reference/spaces/convertspacecontentsource"
+  },
+  {
     "from": "/api/reference/operations/createabusereport",
     "status": 301,
     "to": "/api/reference/spaces/createabusereport"
@@ -2143,11 +2248,6 @@
     "from": "/api/reference/operations/createapikey",
     "status": 301,
     "to": "/api/reference/account/createapikey"
-  },
-  {
-    "from": "/api/reference/operations/createartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/createartifact"
   },
   {
     "from": "/api/reference/operations/createbetasignup",
@@ -2335,6 +2435,11 @@
     "to": "/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/api/reference/operations/createspaceversionvisualreview",
+    "status": 301,
+    "to": "/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/api/reference/operations/createspacezerotoken",
     "status": 301,
     "to": "/api/reference/spaces/createspacezerotoken"
@@ -2380,11 +2485,6 @@
     "to": "/api/reference/account/deleteaccountemail"
   },
   {
-    "from": "/api/reference/operations/deleteartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/deleteartifact"
-  },
-  {
     "from": "/api/reference/operations/deleteconnector",
     "status": 301,
     "to": "/api/reference/connectors/deleteconnector"
@@ -2403,6 +2503,11 @@
     "from": "/api/reference/operations/deletespace",
     "status": 301,
     "to": "/api/reference/spaces/deletespace"
+  },
+  {
+    "from": "/api/reference/operations/deletespacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/deletespacecustomdomain"
   },
   {
     "from": "/api/reference/operations/deletespacesourcebranch",
@@ -2505,11 +2610,6 @@
     "to": "/api/reference/git/downloadspacesourcearchive"
   },
   {
-    "from": "/api/reference/operations/editartifactsource",
-    "status": 301,
-    "to": "/api/reference/connectors/editartifactsource"
-  },
-  {
     "from": "/api/reference/operations/editspacesourceworkspacefiles",
     "status": 301,
     "to": "/api/reference/git/editspacesourceworkspacefiles"
@@ -2543,16 +2643,6 @@
     "from": "/api/reference/operations/getapproval",
     "status": 301,
     "to": "/api/reference/agent/getapproval"
-  },
-  {
-    "from": "/api/reference/operations/getartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/api/reference/operations/getartifactpreview",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/api/reference/operations/getbetavisitor",
@@ -2693,6 +2783,31 @@
     "from": "/api/reference/operations/getspacecommentsembedconfig",
     "status": 301,
     "to": "/api/reference/spaces/getspacecommentsembedconfig"
+  },
+  {
+    "from": "/api/reference/operations/getspacecontentmedia",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/api/reference/operations/getspacecontentsourceconflict",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/api/reference/operations/getspacecontentsyncstatus",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
+    "from": "/api/reference/operations/getspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomain"
+  },
+  {
+    "from": "/api/reference/operations/getspacecustomdomaindiagnostics",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/api/reference/operations/getspacedatabase",
@@ -2855,6 +2970,21 @@
     "to": "/api/reference/versions/getspaceversionroutingsummary"
   },
   {
+    "from": "/api/reference/operations/getspaceversionvisualscreenshot",
+    "status": 301,
+    "to": "/api/reference/versions/getspaceversionvisualscreenshot"
+  },
+  {
+    "from": "/api/reference/operations/getspacevisualpreview",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/api/reference/operations/getspaceworkmode",
+    "status": 301,
+    "to": "/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/api/reference/operations/getspacezerocontentmodel",
     "status": 301,
     "to": "/api/reference/spaces/getspacezerocontentmodel"
@@ -2920,6 +3050,11 @@
     "to": "/api/reference/teams/getteamusage"
   },
   {
+    "from": "/api/reference/operations/getvisualreview",
+    "status": 301,
+    "to": "/api/reference/spaces/getvisualreview"
+  },
+  {
     "from": "/api/reference/operations/getwebhook",
     "status": 301,
     "to": "/api/reference/activity/getwebhook"
@@ -2973,11 +3108,6 @@
     "from": "/api/reference/operations/listapprovals",
     "status": 301,
     "to": "/api/reference/agent/listapprovals"
-  },
-  {
-    "from": "/api/reference/operations/listartifacts",
-    "status": 301,
-    "to": "/api/reference/connectors/listartifacts"
   },
   {
     "from": "/api/reference/operations/listauthmethods",
@@ -3057,7 +3187,7 @@
   {
     "from": "/api/reference/operations/listmanageddomains",
     "status": 301,
-    "to": "/api/reference/domains/listmanageddomains"
+    "to": "/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/api/reference/operations/listnotifications",
@@ -3105,6 +3235,11 @@
     "to": "/api/reference/spaces/listspacecomments"
   },
   {
+    "from": "/api/reference/operations/listspaceconnectorbindings",
+    "status": 301,
+    "to": "/api/reference/spaces/listspaceconnectorbindings"
+  },
+  {
     "from": "/api/reference/operations/listspacecrons",
     "status": 301,
     "to": "/api/reference/spaces/listspacecrons"
@@ -3118,6 +3253,11 @@
     "from": "/api/reference/operations/listspacedomains",
     "status": 301,
     "to": "/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/api/reference/operations/listspaceedgelogs",
+    "status": 301,
+    "to": "/api/reference/activity/listspaceedgelogs"
   },
   {
     "from": "/api/reference/operations/listspacefiles",
@@ -3355,6 +3495,11 @@
     "to": "/api/reference/variables/listteamvariables"
   },
   {
+    "from": "/api/reference/operations/listvisitorconnectionusers",
+    "status": 301,
+    "to": "/api/reference/spaces/listvisitorconnectionusers"
+  },
+  {
     "from": "/api/reference/operations/listwebhookdeliveries",
     "status": 301,
     "to": "/api/reference/activity/listwebhookdeliveries"
@@ -3395,6 +3540,11 @@
     "to": "/api/reference/database/openspacedatabaseconsole"
   },
   {
+    "from": "/api/reference/operations/patchspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/patchspacecustomdomain"
+  },
+  {
     "from": "/api/reference/operations/patchspacetagrevisiongraph",
     "status": 301,
     "to": "/api/reference/tags/patchspacetagrevisiongraph"
@@ -3430,11 +3580,6 @@
     "to": "/api/reference/versions/promotespaceversion"
   },
   {
-    "from": "/api/reference/operations/putartifactpreview",
-    "status": 301,
-    "to": "/api/reference/connectors/putartifactpreview"
-  },
-  {
     "from": "/api/reference/operations/readanonymouspublishoperation",
     "status": 301,
     "to": "/api/reference/spaces/readanonymouspublishoperation"
@@ -3443,6 +3588,11 @@
     "from": "/api/reference/operations/reconcilespacecontentsync",
     "status": 301,
     "to": "/api/reference/spaces/reconcilespacecontentsync"
+  },
+  {
+    "from": "/api/reference/operations/reconnectconnection",
+    "status": 301,
+    "to": "/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/api/reference/operations/redeliverwebhookdelivery",
@@ -3520,6 +3670,11 @@
     "to": "/api/reference/agent/requestapproval"
   },
   {
+    "from": "/api/reference/operations/requestspacecontentrest",
+    "status": 301,
+    "to": "/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/api/reference/operations/resendspacepersoninvitation",
     "status": 301,
     "to": "/api/reference/spaces/resendspacepersoninvitation"
@@ -3538,6 +3693,11 @@
     "from": "/api/reference/operations/resolvespace",
     "status": 301,
     "to": "/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/api/reference/operations/resolvespacecontentsourceconflict",
+    "status": 301,
+    "to": "/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/api/reference/operations/resolvespacesourceworkspaceconflicts",
@@ -3578,6 +3738,11 @@
     "from": "/api/reference/operations/retrydomainssl",
     "status": 301,
     "to": "/api/reference/domains/retrydomainssl"
+  },
+  {
+    "from": "/api/reference/operations/retryspacecustomdomainssl",
+    "status": 301,
+    "to": "/api/reference/domains/retryspacecustomdomainssl"
   },
   {
     "from": "/api/reference/operations/revokeallgrants",
@@ -3640,6 +3805,11 @@
     "to": "/api/reference/tags/revoketeamtagpreviewsession"
   },
   {
+    "from": "/api/reference/operations/revokevisitorconnection",
+    "status": 301,
+    "to": "/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/api/reference/operations/rollbackspacetagrelease",
     "status": 301,
     "to": "/api/reference/tags/rollbackspacetagrelease"
@@ -3670,6 +3840,11 @@
     "to": "/api/reference/activity/rotatewebhook"
   },
   {
+    "from": "/api/reference/operations/runspacecron",
+    "status": 301,
+    "to": "/api/reference/spaces/runspacecron"
+  },
+  {
     "from": "/api/reference/operations/runspacewpclicommand",
     "status": 301,
     "to": "/api/reference/spaces/runspacewpclicommand"
@@ -3698,6 +3873,11 @@
     "from": "/api/reference/operations/setspacevariable",
     "status": 301,
     "to": "/api/reference/variables/setspacevariable"
+  },
+  {
+    "from": "/api/reference/operations/setspaceworkmode",
+    "status": 301,
+    "to": "/api/reference/spaces/setspaceworkmode"
   },
   {
     "from": "/api/reference/operations/setteamaccessdefaults",
@@ -3733,6 +3913,11 @@
     "from": "/api/reference/operations/submitteamtagrevision",
     "status": 301,
     "to": "/api/reference/tags/submitteamtagrevision"
+  },
+  {
+    "from": "/api/reference/operations/submitvisualreview",
+    "status": 301,
+    "to": "/api/reference/spaces/submitvisualreview"
   },
   {
     "from": "/api/reference/operations/syncspacesource",
@@ -3825,6 +4010,11 @@
     "to": "/api/reference#versions"
   },
   {
+    "from": "/api/reference/operations/unbindspaceconnector",
+    "status": 301,
+    "to": "/api/reference/spaces/unbindspaceconnector"
+  },
+  {
     "from": "/api/reference/operations/unstagespacesourceworkspacechanges",
     "status": 301,
     "to": "/api/reference/git/unstagespacesourceworkspacechanges"
@@ -3833,11 +4023,6 @@
     "from": "/api/reference/operations/updateapikey",
     "status": 301,
     "to": "/api/reference/account/updateapikey"
-  },
-  {
-    "from": "/api/reference/operations/updateartifact",
-    "status": 301,
-    "to": "/api/reference/connectors/updateartifact"
   },
   {
     "from": "/api/reference/operations/updateconnection",
@@ -3973,6 +4158,11 @@
     "from": "/api/reference/operations/verifydomain",
     "status": 301,
     "to": "/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/api/reference/operations/verifyspacecustomdomain",
+    "status": 301,
+    "to": "/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/api/reference/operations/writespacesourcenote",
@@ -4210,6 +4400,11 @@
     "to": "/api/reference/activity/listspaceactivity"
   },
   {
+    "from": "/api/reference/resources/activity/methods/list_space_edge_logs",
+    "status": 301,
+    "to": "/api/reference/activity/listspaceedgelogs"
+  },
+  {
     "from": "/api/reference/resources/activity/methods/list_space_logs",
     "status": 301,
     "to": "/api/reference/activity/listspacelogs"
@@ -4360,11 +4555,6 @@
     "to": "/api/reference/connectors/completeconnection"
   },
   {
-    "from": "/api/reference/resources/connectors/methods/create_artifact",
-    "status": 301,
-    "to": "/api/reference/connectors/createartifact"
-  },
-  {
     "from": "/api/reference/resources/connectors/methods/create_connection",
     "status": 301,
     "to": "/api/reference/connectors/createconnection"
@@ -4378,11 +4568,6 @@
     "from": "/api/reference/resources/connectors/methods/create_connector_run",
     "status": 301,
     "to": "/api/reference/connectors/createconnectorrun"
-  },
-  {
-    "from": "/api/reference/resources/connectors/methods/delete_artifact",
-    "status": 301,
-    "to": "/api/reference/connectors/deleteartifact"
   },
   {
     "from": "/api/reference/resources/connectors/methods/delete_connector",
@@ -4403,21 +4588,6 @@
     "from": "/api/reference/resources/connectors/methods/disconnect_connection",
     "status": 301,
     "to": "/api/reference/connectors/disconnectconnection"
-  },
-  {
-    "from": "/api/reference/resources/connectors/methods/edit_artifact_source",
-    "status": 301,
-    "to": "/api/reference/connectors/editartifactsource"
-  },
-  {
-    "from": "/api/reference/resources/connectors/methods/get_artifact",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/api/reference/resources/connectors/methods/get_artifact_preview",
-    "status": 301,
-    "to": "/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/api/reference/resources/connectors/methods/get_connection",
@@ -4450,11 +4620,6 @@
     "to": "/api/reference/connectors/getconnectorrun"
   },
   {
-    "from": "/api/reference/resources/connectors/methods/list_artifacts",
-    "status": 301,
-    "to": "/api/reference/connectors/listartifacts"
-  },
-  {
     "from": "/api/reference/resources/connectors/methods/list_connection_tools",
     "status": 301,
     "to": "/api/reference/connectors/listconnectiontools"
@@ -4485,9 +4650,9 @@
     "to": "/api/reference/connectors/listconnectors"
   },
   {
-    "from": "/api/reference/resources/connectors/methods/put_artifact_preview",
+    "from": "/api/reference/resources/connectors/methods/reconnect_connection",
     "status": 301,
-    "to": "/api/reference/connectors/putartifactpreview"
+    "to": "/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/api/reference/resources/connectors/methods/refresh_connection",
@@ -4508,11 +4673,6 @@
     "from": "/api/reference/resources/connectors/methods/resume_connector_run",
     "status": 301,
     "to": "/api/reference/connectors/resumeconnectorrun"
-  },
-  {
-    "from": "/api/reference/resources/connectors/methods/update_artifact",
-    "status": 301,
-    "to": "/api/reference/connectors/updateartifact"
   },
   {
     "from": "/api/reference/resources/connectors/methods/update_connection",
@@ -4595,9 +4755,9 @@
     "to": "/api/reference#domains"
   },
   {
-    "from": "/api/reference/resources/domains/methods/add_external_principal_space_domain",
+    "from": "/api/reference/resources/domains/methods/add_space_custom_domain",
     "status": 301,
-    "to": "/api/reference/domains/addexternalprincipalspacedomain"
+    "to": "/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/api/reference/resources/domains/methods/create_domain",
@@ -4610,6 +4770,11 @@
     "to": "/api/reference/domains/deletedomain"
   },
   {
+    "from": "/api/reference/resources/domains/methods/delete_space_custom_domain",
+    "status": 301,
+    "to": "/api/reference/domains/deletespacecustomdomain"
+  },
+  {
     "from": "/api/reference/resources/domains/methods/get_domain",
     "status": 301,
     "to": "/api/reference/domains/getdomain"
@@ -4620,19 +4785,29 @@
     "to": "/api/reference/domains/getdomaindiagnostics"
   },
   {
+    "from": "/api/reference/resources/domains/methods/get_space_custom_domain",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomain"
+  },
+  {
+    "from": "/api/reference/resources/domains/methods/get_space_custom_domain_diagnostics",
+    "status": 301,
+    "to": "/api/reference/domains/getspacecustomdomaindiagnostics"
+  },
+  {
     "from": "/api/reference/resources/domains/methods/list_domains",
     "status": 301,
     "to": "/api/reference/domains/listdomains"
   },
   {
-    "from": "/api/reference/resources/domains/methods/list_managed_domains",
-    "status": 301,
-    "to": "/api/reference/domains/listmanageddomains"
-  },
-  {
     "from": "/api/reference/resources/domains/methods/list_space_domains",
     "status": 301,
     "to": "/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/api/reference/resources/domains/methods/patch_space_custom_domain",
+    "status": 301,
+    "to": "/api/reference/domains/patchspacecustomdomain"
   },
   {
     "from": "/api/reference/resources/domains/methods/preflight_domain",
@@ -4645,6 +4820,11 @@
     "to": "/api/reference/domains/retrydomainssl"
   },
   {
+    "from": "/api/reference/resources/domains/methods/retry_space_custom_domain_ssl",
+    "status": 301,
+    "to": "/api/reference/domains/retryspacecustomdomainssl"
+  },
+  {
     "from": "/api/reference/resources/domains/methods/update_domain",
     "status": 301,
     "to": "/api/reference/domains/updatedomain"
@@ -4653,6 +4833,11 @@
     "from": "/api/reference/resources/domains/methods/verify_domain",
     "status": 301,
     "to": "/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/api/reference/resources/domains/methods/verify_space_custom_domain",
+    "status": 301,
+    "to": "/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/api/reference/resources/git",
@@ -4990,6 +5175,11 @@
     "to": "/api/reference/spaces/approvespaceaccessrequest"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/bind_space_connector",
+    "status": 301,
+    "to": "/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/cancel_space_transfer",
     "status": 301,
     "to": "/api/reference/spaces/cancelspacetransfer"
@@ -5003,6 +5193,11 @@
     "from": "/api/reference/resources/spaces/methods/compute_space_routing",
     "status": 301,
     "to": "/api/reference/spaces/computespacerouting"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/convert_space_content_source",
+    "status": 301,
+    "to": "/api/reference/spaces/convertspacecontentsource"
   },
   {
     "from": "/api/reference/resources/spaces/methods/create_abuse_report",
@@ -5145,6 +5340,21 @@
     "to": "/api/reference/spaces/getspacecommentsembedconfig"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/get_space_content_media",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_space_content_source_conflict",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_space_content_sync_status",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/get_space_plan_policy",
     "status": 301,
     "to": "/api/reference/spaces/getspaceplanpolicy"
@@ -5160,9 +5370,24 @@
     "to": "/api/reference/spaces/getspaceusage"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/get_space_visual_preview",
+    "status": 301,
+    "to": "/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_space_work_mode",
+    "status": 301,
+    "to": "/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/get_space_zero_content_model",
     "status": 301,
     "to": "/api/reference/spaces/getspacezerocontentmodel"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/get_visual_review",
+    "status": 301,
+    "to": "/api/reference/spaces/getvisualreview"
   },
   {
     "from": "/api/reference/resources/spaces/methods/invite_space_person",
@@ -5178,6 +5403,11 @@
     "from": "/api/reference/resources/spaces/methods/launch_spacefast_frame_link",
     "status": 301,
     "to": "/api/reference/spaces/launchspacefastframelink"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/list_managed_domains",
+    "status": 301,
+    "to": "/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/api/reference/resources/spaces/methods/list_space_access_requests",
@@ -5198,6 +5428,11 @@
     "from": "/api/reference/resources/spaces/methods/list_space_comments",
     "status": 301,
     "to": "/api/reference/spaces/listspacecomments"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/list_space_connector_bindings",
+    "status": 301,
+    "to": "/api/reference/spaces/listspaceconnectorbindings"
   },
   {
     "from": "/api/reference/resources/spaces/methods/list_space_crons",
@@ -5260,6 +5495,11 @@
     "to": "/api/reference/spaces/listspaces"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/list_visitor_connection_users",
+    "status": 301,
+    "to": "/api/reference/spaces/listvisitorconnectionusers"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/logout_all_space_sessions",
     "status": 301,
     "to": "/api/reference/spaces/logoutallspacesessions"
@@ -5300,6 +5540,11 @@
     "to": "/api/reference/spaces/replacespacepersonroles"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/request_space_content_rest",
+    "status": 301,
+    "to": "/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/resend_space_person_invitation",
     "status": 301,
     "to": "/api/reference/spaces/resendspacepersoninvitation"
@@ -5308,6 +5553,11 @@
     "from": "/api/reference/resources/spaces/methods/resolve_space",
     "status": 301,
     "to": "/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/resolve_space_content_source_conflict",
+    "status": 301,
+    "to": "/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/api/reference/resources/spaces/methods/restore_space",
@@ -5335,6 +5585,11 @@
     "to": "/api/reference/spaces/revokespacesharelink"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/revoke_visitor_connection",
+    "status": 301,
+    "to": "/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/rotate_space_machine_credential",
     "status": 301,
     "to": "/api/reference/spaces/rotatespacemachinecredential"
@@ -5345,9 +5600,29 @@
     "to": "/api/reference/spaces/rotatespacepasswordcredential"
   },
   {
+    "from": "/api/reference/resources/spaces/methods/run_space_cron",
+    "status": 301,
+    "to": "/api/reference/spaces/runspacecron"
+  },
+  {
     "from": "/api/reference/resources/spaces/methods/run_space_wp_cli_command",
     "status": 301,
     "to": "/api/reference/spaces/runspacewpclicommand"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/set_space_work_mode",
+    "status": 301,
+    "to": "/api/reference/spaces/setspaceworkmode"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/submit_visual_review",
+    "status": 301,
+    "to": "/api/reference/spaces/submitvisualreview"
+  },
+  {
+    "from": "/api/reference/resources/spaces/methods/unbind_space_connector",
+    "status": 301,
+    "to": "/api/reference/spaces/unbindspaceconnector"
   },
   {
     "from": "/api/reference/resources/spaces/methods/update_space",
@@ -5900,6 +6175,11 @@
     "to": "/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/api/reference/resources/versions/methods/create_space_version_visual_review",
+    "status": 301,
+    "to": "/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/api/reference/resources/versions/methods/delete_space_version",
     "status": 301,
     "to": "/api/reference/versions/deletespaceversion"
@@ -5928,6 +6208,11 @@
     "from": "/api/reference/resources/versions/methods/get_space_version_routing_summary",
     "status": 301,
     "to": "/api/reference/versions/getspaceversionroutingsummary"
+  },
+  {
+    "from": "/api/reference/resources/versions/methods/get_space_version_visual_screenshot",
+    "status": 301,
+    "to": "/api/reference/versions/getspaceversionvisualscreenshot"
   },
   {
     "from": "/api/reference/resources/versions/methods/list_space_version_comments",
@@ -6015,9 +6300,9 @@
     "to": "/partners/api/reference/account/addaccountemail"
   },
   {
-    "from": "/partner-api/operations/addexternalprincipalspacedomain",
+    "from": "/partner-api/operations/addspacecustomdomain",
     "status": 301,
-    "to": "/partners/api/reference/domains/addexternalprincipalspacedomain"
+    "to": "/partners/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/partner-api/operations/analyzespacesourceconnection",
@@ -6070,6 +6355,11 @@
     "to": "/partners/api/reference/docs/askdocs"
   },
   {
+    "from": "/partner-api/operations/bindspaceconnector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/partner-api/operations/cancelbuild",
     "status": 301,
     "to": "/partners/api/reference/builds/cancelbuild"
@@ -6083,11 +6373,6 @@
     "from": "/partner-api/operations/checkconnectionhealth",
     "status": 301,
     "to": "/partners/api/reference/connectors/checkconnectionhealth"
-  },
-  {
-    "from": "/partner-api/operations/checkdomainavailabilitybatch",
-    "status": 301,
-    "to": "/partners/api/reference/domains/checkdomainavailabilitybatch"
   },
   {
     "from": "/partner-api/operations/checkspacegrantaccess",
@@ -6125,6 +6410,11 @@
     "to": "/partners/api/reference/spaces/computespacerouting"
   },
   {
+    "from": "/partner-api/operations/convertspacecontentsource",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/convertspacecontentsource"
+  },
+  {
     "from": "/partner-api/operations/createabusereport",
     "status": 301,
     "to": "/partners/api/reference/spaces/createabusereport"
@@ -6133,11 +6423,6 @@
     "from": "/partner-api/operations/createapikey",
     "status": 301,
     "to": "/partners/api/reference/account/createapikey"
-  },
-  {
-    "from": "/partner-api/operations/createartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/createartifact"
   },
   {
     "from": "/partner-api/operations/createbetasignup",
@@ -6325,6 +6610,11 @@
     "to": "/partners/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/partner-api/operations/createspaceversionvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/partner-api/operations/createspacezerotoken",
     "status": 301,
     "to": "/partners/api/reference/spaces/createspacezerotoken"
@@ -6360,6 +6650,11 @@
     "to": "/partners/api/reference/tags/createteamtagrevision"
   },
   {
+    "from": "/partner-api/operations/createtenantapikey",
+    "status": 301,
+    "to": "/partners/api/reference/partner/createtenantapikey"
+  },
+  {
     "from": "/partner-api/operations/createwebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/createwebhook"
@@ -6368,11 +6663,6 @@
     "from": "/partner-api/operations/deleteaccountemail",
     "status": 301,
     "to": "/partners/api/reference/account/deleteaccountemail"
-  },
-  {
-    "from": "/partner-api/operations/deleteartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/deleteartifact"
   },
   {
     "from": "/partner-api/operations/deleteconnector",
@@ -6398,6 +6688,11 @@
     "from": "/partner-api/operations/deletespace",
     "status": 301,
     "to": "/partners/api/reference/spaces/deletespace"
+  },
+  {
+    "from": "/partner-api/operations/deletespacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/deletespacecustomdomain"
   },
   {
     "from": "/partner-api/operations/deletespacesourcebranch",
@@ -6500,11 +6795,6 @@
     "to": "/partners/api/reference/git/downloadspacesourcearchive"
   },
   {
-    "from": "/partner-api/operations/editartifactsource",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/editartifactsource"
-  },
-  {
     "from": "/partner-api/operations/editspacesourceworkspacefiles",
     "status": 301,
     "to": "/partners/api/reference/git/editspacesourceworkspacefiles"
@@ -6538,16 +6828,6 @@
     "from": "/partner-api/operations/getapproval",
     "status": 301,
     "to": "/partners/api/reference/agent/getapproval"
-  },
-  {
-    "from": "/partner-api/operations/getartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/partner-api/operations/getartifactpreview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/partner-api/operations/getbetavisitor",
@@ -6620,24 +6900,9 @@
     "to": "/partners/api/reference/domains/getdomain"
   },
   {
-    "from": "/partner-api/operations/getdomainavailability",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainavailability"
-  },
-  {
     "from": "/partner-api/operations/getdomaindiagnostics",
     "status": 301,
     "to": "/partners/api/reference/domains/getdomaindiagnostics"
-  },
-  {
-    "from": "/partner-api/operations/getdomainproduct",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainproduct"
-  },
-  {
-    "from": "/partner-api/operations/getdomainwhois",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainwhois"
   },
   {
     "from": "/partner-api/operations/getemailpreferences",
@@ -6708,6 +6973,31 @@
     "from": "/partner-api/operations/getspacecommentsembedconfig",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacecommentsembedconfig"
+  },
+  {
+    "from": "/partner-api/operations/getspacecontentmedia",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/partner-api/operations/getspacecontentsourceconflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/partner-api/operations/getspacecontentsyncstatus",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
+    "from": "/partner-api/operations/getspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/getspacecustomdomain"
+  },
+  {
+    "from": "/partner-api/operations/getspacecustomdomaindiagnostics",
+    "status": 301,
+    "to": "/partners/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/partner-api/operations/getspacedatabase",
@@ -6870,6 +7160,21 @@
     "to": "/partners/api/reference/versions/getspaceversionroutingsummary"
   },
   {
+    "from": "/partner-api/operations/getspaceversionvisualscreenshot",
+    "status": 301,
+    "to": "/partners/api/reference/versions/getspaceversionvisualscreenshot"
+  },
+  {
+    "from": "/partner-api/operations/getspacevisualpreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/partner-api/operations/getspaceworkmode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/partner-api/operations/getspacezerocontentmodel",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacezerocontentmodel"
@@ -6898,6 +7203,11 @@
     "from": "/partner-api/operations/getteaminvitation",
     "status": 301,
     "to": "/partners/api/reference/teams/getteaminvitation"
+  },
+  {
+    "from": "/partner-api/operations/getteampartneraccount",
+    "status": 301,
+    "to": "/partners/api/reference/teams/getteampartneraccount"
   },
   {
     "from": "/partner-api/operations/getteamplanpolicy",
@@ -6955,6 +7265,11 @@
     "to": "/partners/api/reference/partner/getv1tenantsbytenantid"
   },
   {
+    "from": "/partner-api/operations/getvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getvisualreview"
+  },
+  {
     "from": "/partner-api/operations/getwebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/getwebhook"
@@ -7010,11 +7325,6 @@
     "to": "/partners/api/reference/agent/listapprovals"
   },
   {
-    "from": "/partner-api/operations/listartifacts",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/listartifacts"
-  },
-  {
     "from": "/partner-api/operations/listauthmethods",
     "status": 301,
     "to": "/partners/api/reference/account/listauthmethods"
@@ -7065,24 +7375,9 @@
     "to": "/partners/api/reference/docs/listdocs"
   },
   {
-    "from": "/partner-api/operations/listdomainideas",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainideas"
-  },
-  {
-    "from": "/partner-api/operations/listdomainproducts",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainproducts"
-  },
-  {
     "from": "/partner-api/operations/listdomains",
     "status": 301,
     "to": "/partners/api/reference/domains/listdomains"
-  },
-  {
-    "from": "/partner-api/operations/listdomainsuggestions",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainsuggestions"
   },
   {
     "from": "/partner-api/operations/listgithubinstallationrepositories",
@@ -7107,7 +7402,7 @@
   {
     "from": "/partner-api/operations/listmanageddomains",
     "status": 301,
-    "to": "/partners/api/reference/domains/listmanageddomains"
+    "to": "/partners/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/partner-api/operations/listnotifications",
@@ -7160,6 +7455,11 @@
     "to": "/partners/api/reference/spaces/listspacecomments"
   },
   {
+    "from": "/partner-api/operations/listspaceconnectorbindings",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listspaceconnectorbindings"
+  },
+  {
     "from": "/partner-api/operations/listspacecrons",
     "status": 301,
     "to": "/partners/api/reference/spaces/listspacecrons"
@@ -7173,6 +7473,11 @@
     "from": "/partner-api/operations/listspacedomains",
     "status": 301,
     "to": "/partners/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/partner-api/operations/listspaceedgelogs",
+    "status": 301,
+    "to": "/partners/api/reference/activity/listspaceedgelogs"
   },
   {
     "from": "/partner-api/operations/listspacefiles",
@@ -7410,6 +7715,11 @@
     "to": "/partners/api/reference/variables/listteamvariables"
   },
   {
+    "from": "/partner-api/operations/listtenantapikeys",
+    "status": 301,
+    "to": "/partners/api/reference/partner/listtenantapikeys"
+  },
+  {
     "from": "/partner-api/operations/listusage",
     "status": 301,
     "to": "/partners/api/reference/partner/listusage"
@@ -7418,6 +7728,11 @@
     "from": "/partner-api/operations/listusageperiods",
     "status": 301,
     "to": "/partners/api/reference/partner/listusageperiods"
+  },
+  {
+    "from": "/partner-api/operations/listvisitorconnectionusers",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listvisitorconnectionusers"
   },
   {
     "from": "/partner-api/operations/listwebhookdeliveries",
@@ -7458,6 +7773,11 @@
     "from": "/partner-api/operations/openspacedatabaseconsole",
     "status": 301,
     "to": "/partners/api/reference/database/openspacedatabaseconsole"
+  },
+  {
+    "from": "/partner-api/operations/patchspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/patchspacecustomdomain"
   },
   {
     "from": "/partner-api/operations/patchspacetagrevisiongraph",
@@ -7520,11 +7840,6 @@
     "to": "/partners/api/reference/versions/promotespaceversion"
   },
   {
-    "from": "/partner-api/operations/putartifactpreview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/putartifactpreview"
-  },
-  {
     "from": "/partner-api/operations/putv1principalsexternalbyprincipalidplan",
     "status": 301,
     "to": "/partners/api/reference/partner/putv1principalsexternalbyprincipalidplan"
@@ -7538,6 +7853,11 @@
     "from": "/partner-api/operations/reconcilespacecontentsync",
     "status": 301,
     "to": "/partners/api/reference/spaces/reconcilespacecontentsync"
+  },
+  {
+    "from": "/partner-api/operations/reconnectconnection",
+    "status": 301,
+    "to": "/partners/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/partner-api/operations/redeliverwebhookdelivery",
@@ -7615,6 +7935,11 @@
     "to": "/partners/api/reference/agent/requestapproval"
   },
   {
+    "from": "/partner-api/operations/requestspacecontentrest",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/partner-api/operations/resendspacepersoninvitation",
     "status": 301,
     "to": "/partners/api/reference/spaces/resendspacepersoninvitation"
@@ -7633,6 +7958,11 @@
     "from": "/partner-api/operations/resolvespace",
     "status": 301,
     "to": "/partners/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/partner-api/operations/resolvespacecontentsourceconflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/partner-api/operations/resolvespacesourceworkspaceconflicts",
@@ -7673,6 +8003,11 @@
     "from": "/partner-api/operations/retrydomainssl",
     "status": 301,
     "to": "/partners/api/reference/domains/retrydomainssl"
+  },
+  {
+    "from": "/partner-api/operations/retryspacecustomdomainssl",
+    "status": 301,
+    "to": "/partners/api/reference/domains/retryspacecustomdomainssl"
   },
   {
     "from": "/partner-api/operations/revokeallgrants",
@@ -7735,6 +8070,16 @@
     "to": "/partners/api/reference/tags/revoketeamtagpreviewsession"
   },
   {
+    "from": "/partner-api/operations/revoketenantapikey",
+    "status": 301,
+    "to": "/partners/api/reference/partner/revoketenantapikey"
+  },
+  {
+    "from": "/partner-api/operations/revokevisitorconnection",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/partner-api/operations/rollbackspacetagrelease",
     "status": 301,
     "to": "/partners/api/reference/tags/rollbackspacetagrelease"
@@ -7763,6 +8108,11 @@
     "from": "/partner-api/operations/rotatewebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/rotatewebhook"
+  },
+  {
+    "from": "/partner-api/operations/runspacecron",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/runspacecron"
   },
   {
     "from": "/partner-api/operations/runspacewpclicommand",
@@ -7800,6 +8150,11 @@
     "to": "/partners/api/reference/variables/setspacevariable"
   },
   {
+    "from": "/partner-api/operations/setspaceworkmode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/setspaceworkmode"
+  },
+  {
     "from": "/partner-api/operations/setteamaccessdefaults",
     "status": 301,
     "to": "/partners/api/reference/teams/setteamaccessdefaults"
@@ -7833,6 +8188,11 @@
     "from": "/partner-api/operations/submitteamtagrevision",
     "status": 301,
     "to": "/partners/api/reference/tags/submitteamtagrevision"
+  },
+  {
+    "from": "/partner-api/operations/submitvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/submitvisualreview"
   },
   {
     "from": "/partner-api/operations/syncspacesource",
@@ -7930,6 +8290,11 @@
     "to": "/partners/api/reference#versions"
   },
   {
+    "from": "/partner-api/operations/unbindspaceconnector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/unbindspaceconnector"
+  },
+  {
     "from": "/partner-api/operations/unstagespacesourceworkspacechanges",
     "status": 301,
     "to": "/partners/api/reference/git/unstagespacesourceworkspacechanges"
@@ -7938,11 +8303,6 @@
     "from": "/partner-api/operations/updateapikey",
     "status": 301,
     "to": "/partners/api/reference/account/updateapikey"
-  },
-  {
-    "from": "/partner-api/operations/updateartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/updateartifact"
   },
   {
     "from": "/partner-api/operations/updateconnection",
@@ -8078,6 +8438,16 @@
     "from": "/partner-api/operations/verifydomain",
     "status": 301,
     "to": "/partners/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/partner-api/operations/verifypartnerapigateway",
+    "status": 301,
+    "to": "/partners/api/reference/partner/verifypartnerapigateway"
+  },
+  {
+    "from": "/partner-api/operations/verifyspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/partner-api/operations/writespacesourcenote",
@@ -8320,6 +8690,11 @@
     "to": "/partners/api/reference/activity/listspaceactivity"
   },
   {
+    "from": "/partner-api/resources/activity/methods/list_space_edge_logs",
+    "status": 301,
+    "to": "/partners/api/reference/activity/listspaceedgelogs"
+  },
+  {
     "from": "/partner-api/resources/activity/methods/list_space_logs",
     "status": 301,
     "to": "/partners/api/reference/activity/listspacelogs"
@@ -8470,11 +8845,6 @@
     "to": "/partners/api/reference/connectors/completeconnection"
   },
   {
-    "from": "/partner-api/resources/connectors/methods/create_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/createartifact"
-  },
-  {
     "from": "/partner-api/resources/connectors/methods/create_connection",
     "status": 301,
     "to": "/partners/api/reference/connectors/createconnection"
@@ -8488,11 +8858,6 @@
     "from": "/partner-api/resources/connectors/methods/create_connector_run",
     "status": 301,
     "to": "/partners/api/reference/connectors/createconnectorrun"
-  },
-  {
-    "from": "/partner-api/resources/connectors/methods/delete_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/deleteartifact"
   },
   {
     "from": "/partner-api/resources/connectors/methods/delete_connector",
@@ -8513,21 +8878,6 @@
     "from": "/partner-api/resources/connectors/methods/disconnect_connection",
     "status": 301,
     "to": "/partners/api/reference/connectors/disconnectconnection"
-  },
-  {
-    "from": "/partner-api/resources/connectors/methods/edit_artifact_source",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/editartifactsource"
-  },
-  {
-    "from": "/partner-api/resources/connectors/methods/get_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/partner-api/resources/connectors/methods/get_artifact_preview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/partner-api/resources/connectors/methods/get_connection",
@@ -8560,11 +8910,6 @@
     "to": "/partners/api/reference/connectors/getconnectorrun"
   },
   {
-    "from": "/partner-api/resources/connectors/methods/list_artifacts",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/listartifacts"
-  },
-  {
     "from": "/partner-api/resources/connectors/methods/list_connection_tools",
     "status": 301,
     "to": "/partners/api/reference/connectors/listconnectiontools"
@@ -8595,9 +8940,9 @@
     "to": "/partners/api/reference/connectors/listconnectors"
   },
   {
-    "from": "/partner-api/resources/connectors/methods/put_artifact_preview",
+    "from": "/partner-api/resources/connectors/methods/reconnect_connection",
     "status": 301,
-    "to": "/partners/api/reference/connectors/putartifactpreview"
+    "to": "/partners/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/partner-api/resources/connectors/methods/refresh_connection",
@@ -8618,11 +8963,6 @@
     "from": "/partner-api/resources/connectors/methods/resume_connector_run",
     "status": 301,
     "to": "/partners/api/reference/connectors/resumeconnectorrun"
-  },
-  {
-    "from": "/partner-api/resources/connectors/methods/update_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/updateartifact"
   },
   {
     "from": "/partner-api/resources/connectors/methods/update_connection",
@@ -8705,14 +9045,9 @@
     "to": "/partners/api/reference#domains"
   },
   {
-    "from": "/partner-api/resources/domains/methods/add_external_principal_space_domain",
+    "from": "/partner-api/resources/domains/methods/add_space_custom_domain",
     "status": 301,
-    "to": "/partners/api/reference/domains/addexternalprincipalspacedomain"
-  },
-  {
-    "from": "/partner-api/resources/domains/methods/check_domain_availability_batch",
-    "status": 301,
-    "to": "/partners/api/reference/domains/checkdomainavailabilitybatch"
+    "to": "/partners/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/partner-api/resources/domains/methods/create_domain",
@@ -8725,14 +9060,14 @@
     "to": "/partners/api/reference/domains/deletedomain"
   },
   {
+    "from": "/partner-api/resources/domains/methods/delete_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/deletespacecustomdomain"
+  },
+  {
     "from": "/partner-api/resources/domains/methods/get_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/getdomain"
-  },
-  {
-    "from": "/partner-api/resources/domains/methods/get_domain_availability",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainavailability"
   },
   {
     "from": "/partner-api/resources/domains/methods/get_domain_diagnostics",
@@ -8740,29 +9075,14 @@
     "to": "/partners/api/reference/domains/getdomaindiagnostics"
   },
   {
-    "from": "/partner-api/resources/domains/methods/get_domain_product",
+    "from": "/partner-api/resources/domains/methods/get_space_custom_domain",
     "status": 301,
-    "to": "/partners/api/reference/domains/getdomainproduct"
+    "to": "/partners/api/reference/domains/getspacecustomdomain"
   },
   {
-    "from": "/partner-api/resources/domains/methods/get_domain_whois",
+    "from": "/partner-api/resources/domains/methods/get_space_custom_domain_diagnostics",
     "status": 301,
-    "to": "/partners/api/reference/domains/getdomainwhois"
-  },
-  {
-    "from": "/partner-api/resources/domains/methods/list_domain_ideas",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainideas"
-  },
-  {
-    "from": "/partner-api/resources/domains/methods/list_domain_products",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainproducts"
-  },
-  {
-    "from": "/partner-api/resources/domains/methods/list_domain_suggestions",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainsuggestions"
+    "to": "/partners/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/partner-api/resources/domains/methods/list_domains",
@@ -8770,14 +9090,14 @@
     "to": "/partners/api/reference/domains/listdomains"
   },
   {
-    "from": "/partner-api/resources/domains/methods/list_managed_domains",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listmanageddomains"
-  },
-  {
     "from": "/partner-api/resources/domains/methods/list_space_domains",
     "status": 301,
     "to": "/partners/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/partner-api/resources/domains/methods/patch_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/patchspacecustomdomain"
   },
   {
     "from": "/partner-api/resources/domains/methods/preflight_domain",
@@ -8790,6 +9110,11 @@
     "to": "/partners/api/reference/domains/retrydomainssl"
   },
   {
+    "from": "/partner-api/resources/domains/methods/retry_space_custom_domain_ssl",
+    "status": 301,
+    "to": "/partners/api/reference/domains/retryspacecustomdomainssl"
+  },
+  {
     "from": "/partner-api/resources/domains/methods/update_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/updatedomain"
@@ -8798,6 +9123,11 @@
     "from": "/partner-api/resources/domains/methods/verify_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/partner-api/resources/domains/methods/verify_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/partner-api/resources/git",
@@ -9065,6 +9395,11 @@
     "to": "/partners/api/reference#partner"
   },
   {
+    "from": "/partner-api/resources/partner/methods/create_tenant_api_key",
+    "status": 301,
+    "to": "/partners/api/reference/partner/createtenantapikey"
+  },
+  {
     "from": "/partner-api/resources/partner/methods/delete_principal_variable",
     "status": 301,
     "to": "/partners/api/reference/partner/deleteprincipalvariable"
@@ -9093,6 +9428,11 @@
     "from": "/partner-api/resources/partner/methods/list_principal_variables",
     "status": 301,
     "to": "/partners/api/reference/partner/listprincipalvariables"
+  },
+  {
+    "from": "/partner-api/resources/partner/methods/list_tenant_api_keys",
+    "status": 301,
+    "to": "/partners/api/reference/partner/listtenantapikeys"
   },
   {
     "from": "/partner-api/resources/partner/methods/list_usage",
@@ -9135,9 +9475,19 @@
     "to": "/partners/api/reference/partner/putv1principalsexternalbyprincipalidplan"
   },
   {
+    "from": "/partner-api/resources/partner/methods/revoke_tenant_api_key",
+    "status": 301,
+    "to": "/partners/api/reference/partner/revoketenantapikey"
+  },
+  {
     "from": "/partner-api/resources/partner/methods/set_principal_variable",
     "status": 301,
     "to": "/partners/api/reference/partner/setprincipalvariable"
+  },
+  {
+    "from": "/partner-api/resources/partner/methods/verify_partner_api_gateway",
+    "status": 301,
+    "to": "/partners/api/reference/partner/verifypartnerapigateway"
   },
   {
     "from": "/partner-api/resources/publishing",
@@ -9215,6 +9565,11 @@
     "to": "/partners/api/reference/spaces/approvespaceaccessrequest"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/bind_space_connector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/cancel_space_transfer",
     "status": 301,
     "to": "/partners/api/reference/spaces/cancelspacetransfer"
@@ -9228,6 +9583,11 @@
     "from": "/partner-api/resources/spaces/methods/compute_space_routing",
     "status": 301,
     "to": "/partners/api/reference/spaces/computespacerouting"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/convert_space_content_source",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/convertspacecontentsource"
   },
   {
     "from": "/partner-api/resources/spaces/methods/create_abuse_report",
@@ -9370,6 +9730,21 @@
     "to": "/partners/api/reference/spaces/getspacecommentsembedconfig"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/get_space_content_media",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/get_space_content_source_conflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/get_space_content_sync_status",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/get_space_plan_policy",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspaceplanpolicy"
@@ -9385,9 +9760,24 @@
     "to": "/partners/api/reference/spaces/getspaceusage"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/get_space_visual_preview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/get_space_work_mode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/get_space_zero_content_model",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacezerocontentmodel"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/get_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getvisualreview"
   },
   {
     "from": "/partner-api/resources/spaces/methods/invite_space_person",
@@ -9403,6 +9793,11 @@
     "from": "/partner-api/resources/spaces/methods/launch_spacefast_frame_link",
     "status": 301,
     "to": "/partners/api/reference/spaces/launchspacefastframelink"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/list_managed_domains",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/partner-api/resources/spaces/methods/list_space_access_requests",
@@ -9423,6 +9818,11 @@
     "from": "/partner-api/resources/spaces/methods/list_space_comments",
     "status": 301,
     "to": "/partners/api/reference/spaces/listspacecomments"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/list_space_connector_bindings",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listspaceconnectorbindings"
   },
   {
     "from": "/partner-api/resources/spaces/methods/list_space_crons",
@@ -9485,6 +9885,11 @@
     "to": "/partners/api/reference/spaces/listspaces"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/list_visitor_connection_users",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listvisitorconnectionusers"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/logout_all_space_sessions",
     "status": 301,
     "to": "/partners/api/reference/spaces/logoutallspacesessions"
@@ -9525,6 +9930,11 @@
     "to": "/partners/api/reference/spaces/replacespacepersonroles"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/request_space_content_rest",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/resend_space_person_invitation",
     "status": 301,
     "to": "/partners/api/reference/spaces/resendspacepersoninvitation"
@@ -9533,6 +9943,11 @@
     "from": "/partner-api/resources/spaces/methods/resolve_space",
     "status": 301,
     "to": "/partners/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/resolve_space_content_source_conflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/partner-api/resources/spaces/methods/restore_space",
@@ -9560,6 +9975,11 @@
     "to": "/partners/api/reference/spaces/revokespacesharelink"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/revoke_visitor_connection",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/rotate_space_machine_credential",
     "status": 301,
     "to": "/partners/api/reference/spaces/rotatespacemachinecredential"
@@ -9570,9 +9990,29 @@
     "to": "/partners/api/reference/spaces/rotatespacepasswordcredential"
   },
   {
+    "from": "/partner-api/resources/spaces/methods/run_space_cron",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/runspacecron"
+  },
+  {
     "from": "/partner-api/resources/spaces/methods/run_space_wp_cli_command",
     "status": 301,
     "to": "/partners/api/reference/spaces/runspacewpclicommand"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/set_space_work_mode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/setspaceworkmode"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/submit_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/submitvisualreview"
+  },
+  {
+    "from": "/partner-api/resources/spaces/methods/unbind_space_connector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/unbindspaceconnector"
   },
   {
     "from": "/partner-api/resources/spaces/methods/update_space",
@@ -9950,6 +10390,11 @@
     "to": "/partners/api/reference/teams/getteaminvitation"
   },
   {
+    "from": "/partner-api/resources/teams/methods/get_team_partner_account",
+    "status": 301,
+    "to": "/partners/api/reference/teams/getteampartneraccount"
+  },
+  {
     "from": "/partner-api/resources/teams/methods/get_team_plan_policy",
     "status": 301,
     "to": "/partners/api/reference/teams/getteamplanpolicy"
@@ -10125,6 +10570,11 @@
     "to": "/partners/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/partner-api/resources/versions/methods/create_space_version_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/partner-api/resources/versions/methods/delete_space_version",
     "status": 301,
     "to": "/partners/api/reference/versions/deletespaceversion"
@@ -10153,6 +10603,11 @@
     "from": "/partner-api/resources/versions/methods/get_space_version_routing_summary",
     "status": 301,
     "to": "/partners/api/reference/versions/getspaceversionroutingsummary"
+  },
+  {
+    "from": "/partner-api/resources/versions/methods/get_space_version_visual_screenshot",
+    "status": 301,
+    "to": "/partners/api/reference/versions/getspaceversionvisualscreenshot"
   },
   {
     "from": "/partner-api/resources/versions/methods/list_space_version_comments",
@@ -10235,9 +10690,9 @@
     "to": "/partners/api/reference/account/addaccountemail"
   },
   {
-    "from": "/partners/api/reference/operations/addexternalprincipalspacedomain",
+    "from": "/partners/api/reference/operations/addspacecustomdomain",
     "status": 301,
-    "to": "/partners/api/reference/domains/addexternalprincipalspacedomain"
+    "to": "/partners/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/operations/analyzespacesourceconnection",
@@ -10290,6 +10745,11 @@
     "to": "/partners/api/reference/docs/askdocs"
   },
   {
+    "from": "/partners/api/reference/operations/bindspaceconnector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/partners/api/reference/operations/cancelbuild",
     "status": 301,
     "to": "/partners/api/reference/builds/cancelbuild"
@@ -10303,11 +10763,6 @@
     "from": "/partners/api/reference/operations/checkconnectionhealth",
     "status": 301,
     "to": "/partners/api/reference/connectors/checkconnectionhealth"
-  },
-  {
-    "from": "/partners/api/reference/operations/checkdomainavailabilitybatch",
-    "status": 301,
-    "to": "/partners/api/reference/domains/checkdomainavailabilitybatch"
   },
   {
     "from": "/partners/api/reference/operations/checkspacegrantaccess",
@@ -10345,6 +10800,11 @@
     "to": "/partners/api/reference/spaces/computespacerouting"
   },
   {
+    "from": "/partners/api/reference/operations/convertspacecontentsource",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/convertspacecontentsource"
+  },
+  {
     "from": "/partners/api/reference/operations/createabusereport",
     "status": 301,
     "to": "/partners/api/reference/spaces/createabusereport"
@@ -10353,11 +10813,6 @@
     "from": "/partners/api/reference/operations/createapikey",
     "status": 301,
     "to": "/partners/api/reference/account/createapikey"
-  },
-  {
-    "from": "/partners/api/reference/operations/createartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/createartifact"
   },
   {
     "from": "/partners/api/reference/operations/createbetasignup",
@@ -10545,6 +11000,11 @@
     "to": "/partners/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/partners/api/reference/operations/createspaceversionvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/partners/api/reference/operations/createspacezerotoken",
     "status": 301,
     "to": "/partners/api/reference/spaces/createspacezerotoken"
@@ -10580,6 +11040,11 @@
     "to": "/partners/api/reference/tags/createteamtagrevision"
   },
   {
+    "from": "/partners/api/reference/operations/createtenantapikey",
+    "status": 301,
+    "to": "/partners/api/reference/partner/createtenantapikey"
+  },
+  {
     "from": "/partners/api/reference/operations/createwebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/createwebhook"
@@ -10588,11 +11053,6 @@
     "from": "/partners/api/reference/operations/deleteaccountemail",
     "status": 301,
     "to": "/partners/api/reference/account/deleteaccountemail"
-  },
-  {
-    "from": "/partners/api/reference/operations/deleteartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/deleteartifact"
   },
   {
     "from": "/partners/api/reference/operations/deleteconnector",
@@ -10618,6 +11078,11 @@
     "from": "/partners/api/reference/operations/deletespace",
     "status": 301,
     "to": "/partners/api/reference/spaces/deletespace"
+  },
+  {
+    "from": "/partners/api/reference/operations/deletespacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/deletespacecustomdomain"
   },
   {
     "from": "/partners/api/reference/operations/deletespacesourcebranch",
@@ -10720,11 +11185,6 @@
     "to": "/partners/api/reference/git/downloadspacesourcearchive"
   },
   {
-    "from": "/partners/api/reference/operations/editartifactsource",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/editartifactsource"
-  },
-  {
     "from": "/partners/api/reference/operations/editspacesourceworkspacefiles",
     "status": 301,
     "to": "/partners/api/reference/git/editspacesourceworkspacefiles"
@@ -10758,16 +11218,6 @@
     "from": "/partners/api/reference/operations/getapproval",
     "status": 301,
     "to": "/partners/api/reference/agent/getapproval"
-  },
-  {
-    "from": "/partners/api/reference/operations/getartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/partners/api/reference/operations/getartifactpreview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/partners/api/reference/operations/getbetavisitor",
@@ -10840,24 +11290,9 @@
     "to": "/partners/api/reference/domains/getdomain"
   },
   {
-    "from": "/partners/api/reference/operations/getdomainavailability",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainavailability"
-  },
-  {
     "from": "/partners/api/reference/operations/getdomaindiagnostics",
     "status": 301,
     "to": "/partners/api/reference/domains/getdomaindiagnostics"
-  },
-  {
-    "from": "/partners/api/reference/operations/getdomainproduct",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainproduct"
-  },
-  {
-    "from": "/partners/api/reference/operations/getdomainwhois",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainwhois"
   },
   {
     "from": "/partners/api/reference/operations/getemailpreferences",
@@ -10928,6 +11363,31 @@
     "from": "/partners/api/reference/operations/getspacecommentsembedconfig",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacecommentsembedconfig"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacecontentmedia",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacecontentsourceconflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacecontentsyncstatus",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/getspacecustomdomain"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacecustomdomaindiagnostics",
+    "status": 301,
+    "to": "/partners/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/partners/api/reference/operations/getspacedatabase",
@@ -11090,6 +11550,21 @@
     "to": "/partners/api/reference/versions/getspaceversionroutingsummary"
   },
   {
+    "from": "/partners/api/reference/operations/getspaceversionvisualscreenshot",
+    "status": 301,
+    "to": "/partners/api/reference/versions/getspaceversionvisualscreenshot"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspacevisualpreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/partners/api/reference/operations/getspaceworkmode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/partners/api/reference/operations/getspacezerocontentmodel",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacezerocontentmodel"
@@ -11118,6 +11593,11 @@
     "from": "/partners/api/reference/operations/getteaminvitation",
     "status": 301,
     "to": "/partners/api/reference/teams/getteaminvitation"
+  },
+  {
+    "from": "/partners/api/reference/operations/getteampartneraccount",
+    "status": 301,
+    "to": "/partners/api/reference/teams/getteampartneraccount"
   },
   {
     "from": "/partners/api/reference/operations/getteamplanpolicy",
@@ -11175,6 +11655,11 @@
     "to": "/partners/api/reference/partner/getv1tenantsbytenantid"
   },
   {
+    "from": "/partners/api/reference/operations/getvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getvisualreview"
+  },
+  {
     "from": "/partners/api/reference/operations/getwebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/getwebhook"
@@ -11230,11 +11715,6 @@
     "to": "/partners/api/reference/agent/listapprovals"
   },
   {
-    "from": "/partners/api/reference/operations/listartifacts",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/listartifacts"
-  },
-  {
     "from": "/partners/api/reference/operations/listauthmethods",
     "status": 301,
     "to": "/partners/api/reference/account/listauthmethods"
@@ -11285,24 +11765,9 @@
     "to": "/partners/api/reference/docs/listdocs"
   },
   {
-    "from": "/partners/api/reference/operations/listdomainideas",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainideas"
-  },
-  {
-    "from": "/partners/api/reference/operations/listdomainproducts",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainproducts"
-  },
-  {
     "from": "/partners/api/reference/operations/listdomains",
     "status": 301,
     "to": "/partners/api/reference/domains/listdomains"
-  },
-  {
-    "from": "/partners/api/reference/operations/listdomainsuggestions",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainsuggestions"
   },
   {
     "from": "/partners/api/reference/operations/listgithubinstallationrepositories",
@@ -11327,7 +11792,7 @@
   {
     "from": "/partners/api/reference/operations/listmanageddomains",
     "status": 301,
-    "to": "/partners/api/reference/domains/listmanageddomains"
+    "to": "/partners/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/partners/api/reference/operations/listnotifications",
@@ -11380,6 +11845,11 @@
     "to": "/partners/api/reference/spaces/listspacecomments"
   },
   {
+    "from": "/partners/api/reference/operations/listspaceconnectorbindings",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listspaceconnectorbindings"
+  },
+  {
     "from": "/partners/api/reference/operations/listspacecrons",
     "status": 301,
     "to": "/partners/api/reference/spaces/listspacecrons"
@@ -11393,6 +11863,11 @@
     "from": "/partners/api/reference/operations/listspacedomains",
     "status": 301,
     "to": "/partners/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/partners/api/reference/operations/listspaceedgelogs",
+    "status": 301,
+    "to": "/partners/api/reference/activity/listspaceedgelogs"
   },
   {
     "from": "/partners/api/reference/operations/listspacefiles",
@@ -11630,6 +12105,11 @@
     "to": "/partners/api/reference/variables/listteamvariables"
   },
   {
+    "from": "/partners/api/reference/operations/listtenantapikeys",
+    "status": 301,
+    "to": "/partners/api/reference/partner/listtenantapikeys"
+  },
+  {
     "from": "/partners/api/reference/operations/listusage",
     "status": 301,
     "to": "/partners/api/reference/partner/listusage"
@@ -11638,6 +12118,11 @@
     "from": "/partners/api/reference/operations/listusageperiods",
     "status": 301,
     "to": "/partners/api/reference/partner/listusageperiods"
+  },
+  {
+    "from": "/partners/api/reference/operations/listvisitorconnectionusers",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listvisitorconnectionusers"
   },
   {
     "from": "/partners/api/reference/operations/listwebhookdeliveries",
@@ -11678,6 +12163,11 @@
     "from": "/partners/api/reference/operations/openspacedatabaseconsole",
     "status": 301,
     "to": "/partners/api/reference/database/openspacedatabaseconsole"
+  },
+  {
+    "from": "/partners/api/reference/operations/patchspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/patchspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/operations/patchspacetagrevisiongraph",
@@ -11740,11 +12230,6 @@
     "to": "/partners/api/reference/versions/promotespaceversion"
   },
   {
-    "from": "/partners/api/reference/operations/putartifactpreview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/putartifactpreview"
-  },
-  {
     "from": "/partners/api/reference/operations/putv1principalsexternalbyprincipalidplan",
     "status": 301,
     "to": "/partners/api/reference/partner/putv1principalsexternalbyprincipalidplan"
@@ -11758,6 +12243,11 @@
     "from": "/partners/api/reference/operations/reconcilespacecontentsync",
     "status": 301,
     "to": "/partners/api/reference/spaces/reconcilespacecontentsync"
+  },
+  {
+    "from": "/partners/api/reference/operations/reconnectconnection",
+    "status": 301,
+    "to": "/partners/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/partners/api/reference/operations/redeliverwebhookdelivery",
@@ -11835,6 +12325,11 @@
     "to": "/partners/api/reference/agent/requestapproval"
   },
   {
+    "from": "/partners/api/reference/operations/requestspacecontentrest",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/partners/api/reference/operations/resendspacepersoninvitation",
     "status": 301,
     "to": "/partners/api/reference/spaces/resendspacepersoninvitation"
@@ -11853,6 +12348,11 @@
     "from": "/partners/api/reference/operations/resolvespace",
     "status": 301,
     "to": "/partners/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/partners/api/reference/operations/resolvespacecontentsourceconflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/partners/api/reference/operations/resolvespacesourceworkspaceconflicts",
@@ -11893,6 +12393,11 @@
     "from": "/partners/api/reference/operations/retrydomainssl",
     "status": 301,
     "to": "/partners/api/reference/domains/retrydomainssl"
+  },
+  {
+    "from": "/partners/api/reference/operations/retryspacecustomdomainssl",
+    "status": 301,
+    "to": "/partners/api/reference/domains/retryspacecustomdomainssl"
   },
   {
     "from": "/partners/api/reference/operations/revokeallgrants",
@@ -11955,6 +12460,16 @@
     "to": "/partners/api/reference/tags/revoketeamtagpreviewsession"
   },
   {
+    "from": "/partners/api/reference/operations/revoketenantapikey",
+    "status": 301,
+    "to": "/partners/api/reference/partner/revoketenantapikey"
+  },
+  {
+    "from": "/partners/api/reference/operations/revokevisitorconnection",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/partners/api/reference/operations/rollbackspacetagrelease",
     "status": 301,
     "to": "/partners/api/reference/tags/rollbackspacetagrelease"
@@ -11983,6 +12498,11 @@
     "from": "/partners/api/reference/operations/rotatewebhook",
     "status": 301,
     "to": "/partners/api/reference/activity/rotatewebhook"
+  },
+  {
+    "from": "/partners/api/reference/operations/runspacecron",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/runspacecron"
   },
   {
     "from": "/partners/api/reference/operations/runspacewpclicommand",
@@ -12020,6 +12540,11 @@
     "to": "/partners/api/reference/variables/setspacevariable"
   },
   {
+    "from": "/partners/api/reference/operations/setspaceworkmode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/setspaceworkmode"
+  },
+  {
     "from": "/partners/api/reference/operations/setteamaccessdefaults",
     "status": 301,
     "to": "/partners/api/reference/teams/setteamaccessdefaults"
@@ -12053,6 +12578,11 @@
     "from": "/partners/api/reference/operations/submitteamtagrevision",
     "status": 301,
     "to": "/partners/api/reference/tags/submitteamtagrevision"
+  },
+  {
+    "from": "/partners/api/reference/operations/submitvisualreview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/submitvisualreview"
   },
   {
     "from": "/partners/api/reference/operations/syncspacesource",
@@ -12150,6 +12680,11 @@
     "to": "/partners/api/reference#versions"
   },
   {
+    "from": "/partners/api/reference/operations/unbindspaceconnector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/unbindspaceconnector"
+  },
+  {
     "from": "/partners/api/reference/operations/unstagespacesourceworkspacechanges",
     "status": 301,
     "to": "/partners/api/reference/git/unstagespacesourceworkspacechanges"
@@ -12158,11 +12693,6 @@
     "from": "/partners/api/reference/operations/updateapikey",
     "status": 301,
     "to": "/partners/api/reference/account/updateapikey"
-  },
-  {
-    "from": "/partners/api/reference/operations/updateartifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/updateartifact"
   },
   {
     "from": "/partners/api/reference/operations/updateconnection",
@@ -12298,6 +12828,16 @@
     "from": "/partners/api/reference/operations/verifydomain",
     "status": 301,
     "to": "/partners/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/partners/api/reference/operations/verifypartnerapigateway",
+    "status": 301,
+    "to": "/partners/api/reference/partner/verifypartnerapigateway"
+  },
+  {
+    "from": "/partners/api/reference/operations/verifyspacecustomdomain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/operations/writespacesourcenote",
@@ -12540,6 +13080,11 @@
     "to": "/partners/api/reference/activity/listspaceactivity"
   },
   {
+    "from": "/partners/api/reference/resources/activity/methods/list_space_edge_logs",
+    "status": 301,
+    "to": "/partners/api/reference/activity/listspaceedgelogs"
+  },
+  {
     "from": "/partners/api/reference/resources/activity/methods/list_space_logs",
     "status": 301,
     "to": "/partners/api/reference/activity/listspacelogs"
@@ -12690,11 +13235,6 @@
     "to": "/partners/api/reference/connectors/completeconnection"
   },
   {
-    "from": "/partners/api/reference/resources/connectors/methods/create_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/createartifact"
-  },
-  {
     "from": "/partners/api/reference/resources/connectors/methods/create_connection",
     "status": 301,
     "to": "/partners/api/reference/connectors/createconnection"
@@ -12708,11 +13248,6 @@
     "from": "/partners/api/reference/resources/connectors/methods/create_connector_run",
     "status": 301,
     "to": "/partners/api/reference/connectors/createconnectorrun"
-  },
-  {
-    "from": "/partners/api/reference/resources/connectors/methods/delete_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/deleteartifact"
   },
   {
     "from": "/partners/api/reference/resources/connectors/methods/delete_connector",
@@ -12733,21 +13268,6 @@
     "from": "/partners/api/reference/resources/connectors/methods/disconnect_connection",
     "status": 301,
     "to": "/partners/api/reference/connectors/disconnectconnection"
-  },
-  {
-    "from": "/partners/api/reference/resources/connectors/methods/edit_artifact_source",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/editartifactsource"
-  },
-  {
-    "from": "/partners/api/reference/resources/connectors/methods/get_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifact"
-  },
-  {
-    "from": "/partners/api/reference/resources/connectors/methods/get_artifact_preview",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/getartifactpreview"
   },
   {
     "from": "/partners/api/reference/resources/connectors/methods/get_connection",
@@ -12780,11 +13300,6 @@
     "to": "/partners/api/reference/connectors/getconnectorrun"
   },
   {
-    "from": "/partners/api/reference/resources/connectors/methods/list_artifacts",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/listartifacts"
-  },
-  {
     "from": "/partners/api/reference/resources/connectors/methods/list_connection_tools",
     "status": 301,
     "to": "/partners/api/reference/connectors/listconnectiontools"
@@ -12815,9 +13330,9 @@
     "to": "/partners/api/reference/connectors/listconnectors"
   },
   {
-    "from": "/partners/api/reference/resources/connectors/methods/put_artifact_preview",
+    "from": "/partners/api/reference/resources/connectors/methods/reconnect_connection",
     "status": 301,
-    "to": "/partners/api/reference/connectors/putartifactpreview"
+    "to": "/partners/api/reference/connectors/reconnectconnection"
   },
   {
     "from": "/partners/api/reference/resources/connectors/methods/refresh_connection",
@@ -12838,11 +13353,6 @@
     "from": "/partners/api/reference/resources/connectors/methods/resume_connector_run",
     "status": 301,
     "to": "/partners/api/reference/connectors/resumeconnectorrun"
-  },
-  {
-    "from": "/partners/api/reference/resources/connectors/methods/update_artifact",
-    "status": 301,
-    "to": "/partners/api/reference/connectors/updateartifact"
   },
   {
     "from": "/partners/api/reference/resources/connectors/methods/update_connection",
@@ -12925,14 +13435,9 @@
     "to": "/partners/api/reference#domains"
   },
   {
-    "from": "/partners/api/reference/resources/domains/methods/add_external_principal_space_domain",
+    "from": "/partners/api/reference/resources/domains/methods/add_space_custom_domain",
     "status": 301,
-    "to": "/partners/api/reference/domains/addexternalprincipalspacedomain"
-  },
-  {
-    "from": "/partners/api/reference/resources/domains/methods/check_domain_availability_batch",
-    "status": 301,
-    "to": "/partners/api/reference/domains/checkdomainavailabilitybatch"
+    "to": "/partners/api/reference/domains/addspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/resources/domains/methods/create_domain",
@@ -12945,14 +13450,14 @@
     "to": "/partners/api/reference/domains/deletedomain"
   },
   {
+    "from": "/partners/api/reference/resources/domains/methods/delete_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/deletespacecustomdomain"
+  },
+  {
     "from": "/partners/api/reference/resources/domains/methods/get_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/getdomain"
-  },
-  {
-    "from": "/partners/api/reference/resources/domains/methods/get_domain_availability",
-    "status": 301,
-    "to": "/partners/api/reference/domains/getdomainavailability"
   },
   {
     "from": "/partners/api/reference/resources/domains/methods/get_domain_diagnostics",
@@ -12960,29 +13465,14 @@
     "to": "/partners/api/reference/domains/getdomaindiagnostics"
   },
   {
-    "from": "/partners/api/reference/resources/domains/methods/get_domain_product",
+    "from": "/partners/api/reference/resources/domains/methods/get_space_custom_domain",
     "status": 301,
-    "to": "/partners/api/reference/domains/getdomainproduct"
+    "to": "/partners/api/reference/domains/getspacecustomdomain"
   },
   {
-    "from": "/partners/api/reference/resources/domains/methods/get_domain_whois",
+    "from": "/partners/api/reference/resources/domains/methods/get_space_custom_domain_diagnostics",
     "status": 301,
-    "to": "/partners/api/reference/domains/getdomainwhois"
-  },
-  {
-    "from": "/partners/api/reference/resources/domains/methods/list_domain_ideas",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainideas"
-  },
-  {
-    "from": "/partners/api/reference/resources/domains/methods/list_domain_products",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainproducts"
-  },
-  {
-    "from": "/partners/api/reference/resources/domains/methods/list_domain_suggestions",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listdomainsuggestions"
+    "to": "/partners/api/reference/domains/getspacecustomdomaindiagnostics"
   },
   {
     "from": "/partners/api/reference/resources/domains/methods/list_domains",
@@ -12990,14 +13480,14 @@
     "to": "/partners/api/reference/domains/listdomains"
   },
   {
-    "from": "/partners/api/reference/resources/domains/methods/list_managed_domains",
-    "status": 301,
-    "to": "/partners/api/reference/domains/listmanageddomains"
-  },
-  {
     "from": "/partners/api/reference/resources/domains/methods/list_space_domains",
     "status": 301,
     "to": "/partners/api/reference/domains/listspacedomains"
+  },
+  {
+    "from": "/partners/api/reference/resources/domains/methods/patch_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/patchspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/resources/domains/methods/preflight_domain",
@@ -13010,6 +13500,11 @@
     "to": "/partners/api/reference/domains/retrydomainssl"
   },
   {
+    "from": "/partners/api/reference/resources/domains/methods/retry_space_custom_domain_ssl",
+    "status": 301,
+    "to": "/partners/api/reference/domains/retryspacecustomdomainssl"
+  },
+  {
     "from": "/partners/api/reference/resources/domains/methods/update_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/updatedomain"
@@ -13018,6 +13513,11 @@
     "from": "/partners/api/reference/resources/domains/methods/verify_domain",
     "status": 301,
     "to": "/partners/api/reference/domains/verifydomain"
+  },
+  {
+    "from": "/partners/api/reference/resources/domains/methods/verify_space_custom_domain",
+    "status": 301,
+    "to": "/partners/api/reference/domains/verifyspacecustomdomain"
   },
   {
     "from": "/partners/api/reference/resources/git",
@@ -13285,6 +13785,11 @@
     "to": "/partners/api/reference#partner"
   },
   {
+    "from": "/partners/api/reference/resources/partner/methods/create_tenant_api_key",
+    "status": 301,
+    "to": "/partners/api/reference/partner/createtenantapikey"
+  },
+  {
     "from": "/partners/api/reference/resources/partner/methods/delete_principal_variable",
     "status": 301,
     "to": "/partners/api/reference/partner/deleteprincipalvariable"
@@ -13313,6 +13818,11 @@
     "from": "/partners/api/reference/resources/partner/methods/list_principal_variables",
     "status": 301,
     "to": "/partners/api/reference/partner/listprincipalvariables"
+  },
+  {
+    "from": "/partners/api/reference/resources/partner/methods/list_tenant_api_keys",
+    "status": 301,
+    "to": "/partners/api/reference/partner/listtenantapikeys"
   },
   {
     "from": "/partners/api/reference/resources/partner/methods/list_usage",
@@ -13355,9 +13865,19 @@
     "to": "/partners/api/reference/partner/putv1principalsexternalbyprincipalidplan"
   },
   {
+    "from": "/partners/api/reference/resources/partner/methods/revoke_tenant_api_key",
+    "status": 301,
+    "to": "/partners/api/reference/partner/revoketenantapikey"
+  },
+  {
     "from": "/partners/api/reference/resources/partner/methods/set_principal_variable",
     "status": 301,
     "to": "/partners/api/reference/partner/setprincipalvariable"
+  },
+  {
+    "from": "/partners/api/reference/resources/partner/methods/verify_partner_api_gateway",
+    "status": 301,
+    "to": "/partners/api/reference/partner/verifypartnerapigateway"
   },
   {
     "from": "/partners/api/reference/resources/publishing",
@@ -13435,6 +13955,11 @@
     "to": "/partners/api/reference/spaces/approvespaceaccessrequest"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/bind_space_connector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/bindspaceconnector"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/cancel_space_transfer",
     "status": 301,
     "to": "/partners/api/reference/spaces/cancelspacetransfer"
@@ -13448,6 +13973,11 @@
     "from": "/partners/api/reference/resources/spaces/methods/compute_space_routing",
     "status": 301,
     "to": "/partners/api/reference/spaces/computespacerouting"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/convert_space_content_source",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/convertspacecontentsource"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/create_abuse_report",
@@ -13590,6 +14120,21 @@
     "to": "/partners/api/reference/spaces/getspacecommentsembedconfig"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/get_space_content_media",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentmedia"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/get_space_content_source_conflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsourceconflict"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/get_space_content_sync_status",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacecontentsyncstatus"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/get_space_plan_policy",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspaceplanpolicy"
@@ -13605,9 +14150,24 @@
     "to": "/partners/api/reference/spaces/getspaceusage"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/get_space_visual_preview",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspacevisualpreview"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/get_space_work_mode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getspaceworkmode"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/get_space_zero_content_model",
     "status": 301,
     "to": "/partners/api/reference/spaces/getspacezerocontentmodel"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/get_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/getvisualreview"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/invite_space_person",
@@ -13623,6 +14183,11 @@
     "from": "/partners/api/reference/resources/spaces/methods/launch_spacefast_frame_link",
     "status": 301,
     "to": "/partners/api/reference/spaces/launchspacefastframelink"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/list_managed_domains",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listmanageddomains"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/list_space_access_requests",
@@ -13643,6 +14208,11 @@
     "from": "/partners/api/reference/resources/spaces/methods/list_space_comments",
     "status": 301,
     "to": "/partners/api/reference/spaces/listspacecomments"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/list_space_connector_bindings",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listspaceconnectorbindings"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/list_space_crons",
@@ -13705,6 +14275,11 @@
     "to": "/partners/api/reference/spaces/listspaces"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/list_visitor_connection_users",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/listvisitorconnectionusers"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/logout_all_space_sessions",
     "status": 301,
     "to": "/partners/api/reference/spaces/logoutallspacesessions"
@@ -13745,6 +14320,11 @@
     "to": "/partners/api/reference/spaces/replacespacepersonroles"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/request_space_content_rest",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/requestspacecontentrest"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/resend_space_person_invitation",
     "status": 301,
     "to": "/partners/api/reference/spaces/resendspacepersoninvitation"
@@ -13753,6 +14333,11 @@
     "from": "/partners/api/reference/resources/spaces/methods/resolve_space",
     "status": 301,
     "to": "/partners/api/reference/spaces/resolvespace"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/resolve_space_content_source_conflict",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/resolvespacecontentsourceconflict"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/restore_space",
@@ -13780,6 +14365,11 @@
     "to": "/partners/api/reference/spaces/revokespacesharelink"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/revoke_visitor_connection",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/revokevisitorconnection"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/rotate_space_machine_credential",
     "status": 301,
     "to": "/partners/api/reference/spaces/rotatespacemachinecredential"
@@ -13790,9 +14380,29 @@
     "to": "/partners/api/reference/spaces/rotatespacepasswordcredential"
   },
   {
+    "from": "/partners/api/reference/resources/spaces/methods/run_space_cron",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/runspacecron"
+  },
+  {
     "from": "/partners/api/reference/resources/spaces/methods/run_space_wp_cli_command",
     "status": 301,
     "to": "/partners/api/reference/spaces/runspacewpclicommand"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/set_space_work_mode",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/setspaceworkmode"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/submit_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/submitvisualreview"
+  },
+  {
+    "from": "/partners/api/reference/resources/spaces/methods/unbind_space_connector",
+    "status": 301,
+    "to": "/partners/api/reference/spaces/unbindspaceconnector"
   },
   {
     "from": "/partners/api/reference/resources/spaces/methods/update_space",
@@ -14170,6 +14780,11 @@
     "to": "/partners/api/reference/teams/getteaminvitation"
   },
   {
+    "from": "/partners/api/reference/resources/teams/methods/get_team_partner_account",
+    "status": 301,
+    "to": "/partners/api/reference/teams/getteampartneraccount"
+  },
+  {
     "from": "/partners/api/reference/resources/teams/methods/get_team_plan_policy",
     "status": 301,
     "to": "/partners/api/reference/teams/getteamplanpolicy"
@@ -14345,6 +14960,11 @@
     "to": "/partners/api/reference/versions/createspaceversionpreviewsession"
   },
   {
+    "from": "/partners/api/reference/resources/versions/methods/create_space_version_visual_review",
+    "status": 301,
+    "to": "/partners/api/reference/versions/createspaceversionvisualreview"
+  },
+  {
     "from": "/partners/api/reference/resources/versions/methods/delete_space_version",
     "status": 301,
     "to": "/partners/api/reference/versions/deletespaceversion"
@@ -14373,6 +14993,11 @@
     "from": "/partners/api/reference/resources/versions/methods/get_space_version_routing_summary",
     "status": 301,
     "to": "/partners/api/reference/versions/getspaceversionroutingsummary"
+  },
+  {
+    "from": "/partners/api/reference/resources/versions/methods/get_space_version_visual_screenshot",
+    "status": 301,
+    "to": "/partners/api/reference/versions/getspaceversionvisualscreenshot"
   },
   {
     "from": "/partners/api/reference/resources/versions/methods/list_space_version_comments",

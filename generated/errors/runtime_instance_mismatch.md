@@ -1,11 +1,11 @@
 ---
 title: "runtime_instance_mismatch"
-description: "The runtime token is scoped to a different runtime instance than the one serving the request."
+description: "The request reached a different runtime instance than the one it was issued for."
 ---
 
-The runtime token is scoped to a different runtime instance than the one serving the request.
+The request reached a different runtime instance than the one it was issued for.
 
-**How to resolve:** Mint a token whose instance claim matches the target runtime.
+**How to resolve:** Re-request instructions. The space is on another instance.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_instance_mismatch",
   "title": "Runtime instance mismatch",
   "status": 400,
-  "detail": "The runtime token is scoped to a different runtime instance than the one serving the request.",
+  "detail": "The request reached a different runtime instance than the one it was issued for.",
   "code": "runtime_instance_mismatch",
   "requestId": "req_4mz0v8qk"
 }

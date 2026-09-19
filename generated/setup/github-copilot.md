@@ -1,13 +1,13 @@
 ---
-title: "Connect GitHub Copilot to Spacefast"
-description: "Publish from Copilot CLI and coding agent with native plugin and MCP support."
+title: "Connect GitHub Copilot CLI to Spacefast"
+description: "Publish from GitHub Copilot CLI with its plugin and MCP support."
 seo:
   canonical: "https://spacefast.com/setup/github-copilot/"
 ---
 
-Publish from Copilot CLI and coding agent with native plugin and MCP support.
+Publish from GitHub Copilot CLI with its plugin and MCP support.
 
-**Install the Spacefast plugin.** Install the plugin's skills and MCP into Copilot with nothing installed first.
+**Install the Spacefast plugin.** Install the plugin's skills and MCP into Copilot CLI. Complete MCP OAuth when prompted; use `/mcp auth spacefast` to reconnect. Copilot cloud agent uses separate repository configuration and does not support remote MCP OAuth.
 
 ```bash
 npx -y plugins add spacefast/plugins -t github-copilot -y
@@ -25,7 +25,7 @@ Use the working manual option below while the directory listing is in review.
 npm install -g spacefast && sf setup agent --agent github-copilot
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
 
 ```bash
 npx -y spacefast setup agent --agent github-copilot -y
@@ -34,13 +34,13 @@ npx -y spacefast setup agent --agent github-copilot -y
 **Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
 
 ```bash
-npx -y skills add https://spacefast.com/SKILL.md -y
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 Prefer to hand this off? Copy setup prompt:
@@ -51,4 +51,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [GitHub Copilot documentation](https://docs.github.com/copilot/customizing-copilot/extending-copilot-chat-with-mcp)
+[Agent documentation](/agents) · [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)

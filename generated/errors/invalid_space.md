@@ -1,11 +1,11 @@
 ---
 title: "invalid_space"
-description: "The Space reference in the request could not be resolved."
+description: "The space reference is invalid."
 ---
 
-The Space reference in the request could not be resolved.
+The space reference is invalid.
 
-**How to resolve:** Pass a `spc_` Space ID, an attached hostname, or a slug together with `teamRef`.
+**How to resolve:** Pass a valid spc_ id, slug, or hostname.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_space",
   "title": "Invalid space",
   "status": 400,
-  "detail": "The Space reference in the request could not be resolved.",
+  "detail": "The space reference is invalid.",
   "code": "invalid_space",
   "requestId": "req_4mz0v8qk"
 }

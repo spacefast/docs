@@ -1,11 +1,11 @@
 ---
 title: "config_runtime_invalid_kind"
-description: "The Space config declares a runtime kind this command does not handle."
+description: "The runtime block in the space configuration declares an unknown kind."
 ---
 
-The Space config declares a runtime kind this command does not handle.
+The runtime block in the space configuration declares an unknown kind.
 
-**How to resolve:** Set `runtime.kind` to `zero` in `sf.jsonc` before running this command.
+**How to resolve:** Set runtime.kind to "zero" or "functions" in sf.jsonc.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/config_runtime_invalid_kind",
   "title": "Config runtime invalid kind",
   "status": 400,
-  "detail": "The Space config declares a runtime kind this command does not handle.",
+  "detail": "The runtime block in the space configuration declares an unknown kind.",
   "code": "config_runtime_invalid_kind",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,6 +5,19 @@ description: "Release history for @spacefast/sdk on npm."
 
 Published as [`@spacefast/sdk`](https://www.npmjs.com/package/@spacefast/sdk) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Minor Changes
@@ -151,3 +164,4 @@ _No noted changes in this release._
 ## 0.0.6
 
 _No noted changes in this release._
+

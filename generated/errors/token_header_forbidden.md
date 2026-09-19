@@ -1,9 +1,9 @@
 ---
 title: "token_header_forbidden"
-description: "The partner token carries a forbidden JOSE header."
+description: "The partner token contains a header that can select an untrusted key."
 ---
 
-The partner token carries a forbidden JOSE header.
+The partner token contains a header that can select an untrusted key.
 
 **How to resolve:** Remove `jku`, `x5u`, `jwk`, and `x5c` from the token header.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_header_forbidden",
   "title": "Token header forbidden",
   "status": 400,
-  "detail": "The partner token carries a forbidden JOSE header.",
+  "detail": "The partner token contains a header that can select an untrusted key.",
   "code": "token_header_forbidden",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "upload_path_not_declared"
-description: "The uploaded path was not declared in this publish session's manifest."
+description: "An uploaded path was not declared in the version's manifest."
 ---
 
-The uploaded path was not declared in this publish session's manifest.
+An uploaded path was not declared in the version's manifest.
 
-**How to resolve:** Declare the path in the version manifest before uploading its bytes.
+**How to resolve:** Declare every path up front.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/upload_path_not_declared",
   "title": "Upload path not declared",
   "status": 400,
-  "detail": "The uploaded path was not declared in this publish session's manifest.",
+  "detail": "An uploaded path was not declared in the version's manifest.",
   "code": "upload_path_not_declared",
   "requestId": "req_4mz0v8qk"
 }

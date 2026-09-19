@@ -146,7 +146,9 @@ const scanText = (path, text) => {
   }
 
   const shortHashPattern = /(?<![#\p{L}\p{N}_])[0-9a-f]{7,12}(?![\p{L}\p{N}_])/giu;
-  for (const match of text.matchAll(shortHashPattern)) {
+  // JSON Schema UUID patterns include the standard maximum UUID sentinel.
+  const hashText = text.replaceAll("ffffffff-ffff-ffff-ffff-ffffffffffff", " ".repeat(36));
+  for (const match of hashText.matchAll(shortHashPattern)) {
     const value = match[0];
     if (value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {
       report(path, lineForOffset(text, match.index), "short commit hash");

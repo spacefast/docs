@@ -1,0 +1,73 @@
+---
+title: Start a partner integration
+description: Create your first customer Space with a partner tenant API key.
+---
+
+The Partner API lets your product publish and manage Spaces for your own customers. It uses the same base URL and publishing operations as the Spacefast API. A partner tenant keeps your customers, credentials, configuration, and usage separate from other partners.
+
+Partner access requires account setup. Your account has a live tenant and a linked test tenant. Start with the test tenant ID and a tenant API key from your partner account.
+
+## Read your tenant
+
+Set `SPACEFAST_API_KEY` to the test tenant's API key and `SPACEFAST_TENANT_ID` to its tenant ID. Keep the API key on your server.
+
+```bash
+curl --fail-with-body -sS \
+  "https://api.spacefast.com/v1/tenants/$SPACEFAST_TENANT_ID" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+Check that `data.mode` is `test` and `data.status` is `active`. The response also includes `systemSpaceId`, `manifestStatus`, `presentation`, and domain setup instructions.
+
+The signed-in team's partner account is available through `GET /v1/teams/{teamId}/partner`. That operation requires a team member session. Server integrations use their tenant API key.
+
+## Create a customer Space
+
+Choose a stable customer ID from your own system. Use lowercase ASCII IDs such as `customer_123` throughout the integration.
+
+```bash
+curl --fail-with-body -sS https://api.spacefast.com/v1/spaces \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: customer-123-first-space" \
+  -d '{"title":"Customer site","principal":{"type":"external","id":"customer_123"}}'
+```
+
+Save `data.space.id`. Spacefast creates the customer principal when it first owns a resource. There is no separate customer registration call.
+
+Publish content to that Space with the [publish flow](/publish) or [`sf publish --space`](/cli/publish). Test tenants simulate provisioning. A test result does not prove that a live hostname or certificate works.
+
+## Use the partner SDK
+
+Use the partner client to retain partner-specific request and response fields.
+
+```ts
+import { createSpacefastPartnerClient } from "@spacefast/sdk/partner";
+
+const key = process.env.SPACEFAST_API_KEY;
+const client = createSpacefastPartnerClient({
+  baseUrl: "https://api.spacefast.com",
+  apiKey: key,
+});
+
+const customers = await client.get("/v1/principals", {
+  query: { limit: 20 },
+});
+```
+
+Use a separate client and query cache for each tenant and customer identity. A tenant API key grants management access. Give customer applications a [partner JWT](/api/partners/tokens) scoped to that customer.
+
+## Rotate a tenant API key
+
+Create a replacement with `POST /v1/tenants/{tenantId}/api-keys`. The body accepts `name`, optional `permissions`, `expiresAt`, `notBefore`, `ipAllowlist`, and `metadata`. Omitted permissions grant partner administration. Explicit permissions narrow the grant.
+
+Save the returned secret, update your integration, and verify a request with the replacement. Then revoke the old key with `DELETE /v1/tenants/{tenantId}/api-keys/{apiKeyId}`. Revocation takes effect on subsequent requests. `GET /v1/tenants/{tenantId}/api-keys` returns masked previews, never existing secrets.
+
+## Continue the integration
+
+- [Issue customer JWTs](/api/partners/tokens) for customer-scoped access.
+- [Configure your partner account](/api/partners/configuration) through a system Space.
+- [Manage customers and usage](/api/partners/customers) for plans, suspension, and billing records.
+- [Promote to live](/api/partners/go-live) after the sandbox checks pass.
+
+The [Partner API reference](/platforms/api/reference) lists request schemas and permissions. Download its OpenAPI document from `https://api.spacefast.com/openapi.partner.json`. The shared [error](/api/errors), [pagination](/api/pagination), [idempotency](/api/idempotency), and [operation](/api/operations) contracts also apply.

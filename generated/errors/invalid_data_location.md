@@ -1,11 +1,11 @@
 ---
 title: "invalid_data_location"
-description: "The requested data location is not one the provider offers."
+description: "The requested data location is not a supported region."
 ---
 
-The requested data location is not one the provider offers.
+The requested data location is not a supported region.
 
-**How to resolve:** Set `defaultDataLocation` to `auto` or to one of the data centers the capabilities response lists.
+**How to resolve:** Pick a region from the documented data locations, or use auto.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_data_location",
   "title": "Invalid data location",
   "status": 400,
-  "detail": "The requested data location is not one the provider offers.",
+  "detail": "The requested data location is not a supported region.",
   "code": "invalid_data_location",
   "requestId": "req_4mz0v8qk"
 }

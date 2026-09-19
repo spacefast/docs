@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_invalid"
-description: "The transaction declares no statements, or more than the maximum."
+description: "The Zero database transaction mode is invalid."
 ---
 
-The transaction declares no statements, or more than the maximum.
+The Zero database transaction mode is invalid.
 
-**How to resolve:** Send between one statement and the transaction maximum.
+**How to resolve:** Use a supported generated transaction mode.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_invalid",
   "title": "Zero db transaction invalid",
   "status": 400,
-  "detail": "The transaction declares no statements, or more than the maximum.",
+  "detail": "The Zero database transaction mode is invalid.",
   "code": "zero_db_transaction_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
-title: "artifact_not_found"
-description: "No artifact exists at this space and path."
+title: "connector_write_in_read_handler"
+description: "Read handlers can only call read-only connector tools."
 ---
 
-No artifact exists at this space and path.
+Read handlers can only call read-only connector tools.
 
-**How to resolve:** List artifacts to find the right ref. An artifact ref is `<spaceId>:<path>`.
+**How to resolve:** Call this tool from a mutation or write endpoint.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_not_found",
-  "title": "Artifact not found",
+  "type": "https://spacefast.com/docs/errors/connector_write_in_read_handler",
+  "title": "Connector write in read handler",
   "status": 400,
-  "detail": "No artifact exists at this space and path.",
-  "code": "artifact_not_found",
+  "detail": "Read handlers can only call read-only connector tools.",
+  "code": "connector_write_in_read_handler",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
 title: "zero_capabilities_encode_failed"
-description: "The Zero capability set could not be encoded for the handler."
+description: "The runtime cannot encode the Zero endpoint capabilities."
 ---
 
-The Zero capability set could not be encoded for the handler.
+The runtime cannot encode the Zero endpoint capabilities.
 
-**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
+**How to resolve:** Rebuild with valid capability metadata. If the failure persists, report it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_capabilities_encode_failed",
   "title": "Zero capabilities encode failed",
   "status": 400,
-  "detail": "The Zero capability set could not be encoded for the handler.",
+  "detail": "The runtime cannot encode the Zero endpoint capabilities.",
   "code": "zero_capabilities_encode_failed",
   "requestId": "req_4mz0v8qk"
 }

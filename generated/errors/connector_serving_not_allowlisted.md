@@ -1,11 +1,11 @@
 ---
-title: "deploy_quota_exceeded"
-description: "The owner has used its daily publish allowance."
+title: "connector_serving_not_allowlisted"
+description: "This connector is not allowed to serve sites."
 ---
 
-The owner has used its daily publish allowance.
+This connector is not allowed to serve sites.
 
-**How to resolve:** Wait for the meter to reset at 00:00 UTC. Batch changes into fewer publishes if a CI loop is republishing on every commit.
+**How to resolve:** Ask a team admin to add its slug to the serving allowlist.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/deploy_quota_exceeded",
-  "title": "Deploy quota exceeded",
+  "type": "https://spacefast.com/docs/errors/connector_serving_not_allowlisted",
+  "title": "Connector serving not allowlisted",
   "status": 400,
-  "detail": "The owner has used its daily publish allowance.",
-  "code": "deploy_quota_exceeded",
+  "detail": "This connector is not allowed to serve sites.",
+  "code": "connector_serving_not_allowlisted",
   "requestId": "req_4mz0v8qk"
 }
 ```

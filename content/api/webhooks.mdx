@@ -208,6 +208,10 @@ The response carries the new `secret` once. The old secret keeps signing a secon
 
 Any success resets the failure counter. A delivery that runs out its horizon lands at `exhausted` and stops.
 
+An endpoint in `failing` status still receives delivery records for new matching events. `disabled` stops new deliveries. Process events idempotently: retries and manual redelivery can send the same event more than once, and delivery order is not guaranteed.
+
+Partner tenants declare tenant-wide subscriptions in their [system Space configuration](/api/partners/configuration#connect-an-event-receiver). That guide also explains how to obtain the signing secret and subscribe to delegated customer notifications.
+
 Answer quickly with a `2xx` and do the work afterwards. Ten seconds is the whole budget, and a slow handler costs you retries.
 
 ## Inspect and redeliver

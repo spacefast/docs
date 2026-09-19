@@ -1,26 +1,33 @@
 ---
 title: "Connect Cline to Spacefast"
-description: "Install Spacefast from the Cline marketplace or connect OAuth MCP."
+description: "Connect Spacefast through Cline's MCP server settings."
 seo:
   canonical: "https://spacefast.com/setup/cline/"
 ---
 
-Install Spacefast from the Cline marketplace or connect OAuth MCP.
+Connect Spacefast through Cline's MCP server settings.
 
-**Configure ~/.cline/data/settings/cline_mcp_settings.json.** Merge the hosted Spacefast server into the client MCP configuration.
+**Add the hosted MCP server.** Enter Spacefast as the name and paste the Spacefast endpoint. Choose Streamable HTTP, then Add Server. Complete OAuth when prompted and check that the tools appear. The Configure tab can open the MCP JSON file used by your installation.
+
+```text
+https://mcp.spacefast.com
+```
+
+## Other ways to connect
+
+**Configure ~/.cline/data/settings/cline_mcp_settings.json.** Merge this server into Cline's shared MCP settings. Preserve other servers. If your installation uses a different location, open MCP Servers → Configure → Configure MCP Servers to find its file. Complete OAuth when prompted.
 
 ```json
 {
   "mcpServers": {
     "spacefast": {
-      "type": "http",
-      "url": "https://mcp.spacefast.com"
+      "type": "streamableHttp",
+      "url": "https://mcp.spacefast.com",
+      "disabled": false
     }
   }
 }
 ```
-
-## Other ways to connect
 
 **Install from the plugin marketplace — Soon.** The public marketplace listing is not live yet.
 
@@ -32,7 +39,7 @@ Use the working manual option below while the directory listing is in review.
 npm install -g spacefast && sf setup agent --agent cline
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
 
 ```bash
 npx -y spacefast setup agent --agent cline -y
@@ -41,13 +48,13 @@ npx -y spacefast setup agent --agent cline -y
 **Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
 
 ```bash
-npx -y skills add https://spacefast.com/SKILL.md -y
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 Prefer to hand this off? Copy setup prompt:
@@ -58,4 +65,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Cline documentation](https://docs.cline.bot/mcp)
+[Agent documentation](/agents) · [Cline documentation](https://docs.cline.bot/mcp/mcp-overview)
