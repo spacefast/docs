@@ -1,11 +1,11 @@
 ---
 title: "version_not_prepared"
-description: "The version has not been prepared for this operation yet."
+description: "The version is not prepared for this operation."
 ---
 
-The version has not been prepared for this operation yet.
+The version is not prepared for this operation.
 
-**How to resolve:** Finalize the version, then retry.
+**How to resolve:** Complete the version's upload and finalize steps first.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_not_prepared",
   "title": "Version not prepared",
   "status": 400,
-  "detail": "The version has not been prepared for this operation yet.",
+  "detail": "The version is not prepared for this operation.",
   "code": "version_not_prepared",
   "requestId": "req_4mz0v8qk"
 }

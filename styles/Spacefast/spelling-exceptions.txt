@@ -90,6 +90,7 @@ IPs
 Jetpack
 jittered
 joinable
+JWTs
 keyset
 Lakebed
 letterboxed
@@ -106,6 +107,7 @@ lucide
 matcher
 matchers
 mcp
+MCPs
 middleware
 misconfiguration
 misconfigured
@@ -270,6 +272,7 @@ validator
 Validators
 Vercel
 Vercel's
+Viewport
 Vite
 Vite's
 waitlist

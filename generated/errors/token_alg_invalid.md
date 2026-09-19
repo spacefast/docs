@@ -1,11 +1,11 @@
 ---
 title: "token_alg_invalid"
-description: "The partner token is signed with an algorithm the API does not accept."
+description: "The partner token uses a signing algorithm that Spacefast does not allow."
 ---
 
-The partner token is signed with an algorithm the API does not accept.
+The partner token uses a signing algorithm that Spacefast does not allow.
 
-**How to resolve:** Sign the token with EdDSA over an Ed25519 key.
+**How to resolve:** Sign the token with a registered Ed25519 key.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_alg_invalid",
   "title": "Token alg invalid",
   "status": 400,
-  "detail": "The partner token is signed with an algorithm the API does not accept.",
+  "detail": "The partner token uses a signing algorithm that Spacefast does not allow.",
   "code": "token_alg_invalid",
   "requestId": "req_4mz0v8qk"
 }

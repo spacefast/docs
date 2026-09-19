@@ -5,6 +5,14 @@ description: "Release history for @spacefast/auth on npm."
 
 Published as [`@spacefast/auth`](https://www.npmjs.com/package/@spacefast/auth) on npm.
 
+## 0.4.1
+
+_No noted changes in this release._
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._
@@ -44,3 +52,4 @@ _No noted changes in this release._
 ## 0.0.23
 
 _No noted changes in this release._
+

@@ -5,6 +5,14 @@ description: "Release history for @spacefast/wordpress on npm."
 
 Published as [`@spacefast/wordpress`](https://www.npmjs.com/package/@spacefast/wordpress) on npm.
 
+## 0.4.1
+
+_No noted changes in this release._
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._
@@ -86,3 +94,4 @@ _No noted changes in this release._
 ## 0.0.13
 
 - Connect a WordPress site as a content source, with automatic refreshes.
+

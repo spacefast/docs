@@ -1,0 +1,97 @@
+---
+title: Issue customer JWTs
+description: Register an issuer, prove key ownership, and issue customer-scoped JWTs.
+---
+
+Your server signs a short-lived JWT for a customer. Spacefast verifies it against the keys registered in your tenant's system manifest. Keep tenant API keys and signing keys on your server.
+
+## Register the issuer
+
+Generate an Ed25519 key pair. Store the private key in your secret manager. Add the public key to `system.tokenIssuers` in your [system Space configuration](/api/partners/configuration).
+
+```json
+{
+  "system": {
+    "tokenIssuers": [{
+      "issuer": "https://identity.example.com/spacefast",
+      "keys": [{
+        "kid": "customer-signing-1",
+        "publicKey": "<base64url Ed25519 public-key x coordinate>"
+      }]
+    }]
+  }
+}
+```
+
+Publish the system Space. Read `GET /v1/tenants/{tenantId}` and find the `tokenIssuers` item in `manifestStatus.items`. Save its `audience` and `challenge`. The issuer remains `pending` until you prove possession of every new private key.
+
+An active issuer URL belongs to one tenant. Use different issuer URLs for test and live tenants.
+
+## Prove key ownership
+
+Sign the challenge with the corresponding private key. This example uses `jose` and an Ed25519 PKCS8 private key.
+
+```ts
+import { importPKCS8, SignJWT } from "jose";
+
+const privateKey = await importPKCS8(privateKeyPem, "EdDSA");
+const proof = await new SignJWT({ challenge })
+  .setProtectedHeader({ alg: "EdDSA", kid: "customer-signing-1" })
+  .setAudience(audience)
+  .setIssuedAt()
+  .setExpirationTime("10m")
+  .sign(privateKey);
+```
+
+Add the signed JWT to that issuer's `proofs` array, retain its `issuer` and `keys`, and republish. Wait for the manifest item to become `active`. If the key proposal changes, read the new challenge and sign it again.
+
+## Sign a customer JWT
+
+```ts
+import { randomUUID } from "node:crypto";
+import { SignJWT } from "jose";
+
+const token = await new SignJWT({ client_id: "customer-portal" })
+  .setProtectedHeader({ alg: "EdDSA", typ: "at+jwt", kid: "customer-signing-1" })
+  .setIssuer("https://identity.example.com/spacefast")
+  .setAudience(audience)
+  .setSubject("customer_123")
+  .setJti(randomUUID())
+  .setIssuedAt()
+  .setExpirationTime("10m")
+  .sign(privateKey);
+```
+
+Send it as `Authorization: Bearer <token>`. Authenticate the customer in your own system before choosing `sub`. Never copy an untrusted request's customer ID into a signed JWT.
+
+## JWT contract
+
+| Field | Requirement |
+| --- | --- |
+| `alg` | `EdDSA` or `Ed25519` |
+| `typ` | `at+jwt` or `application/at+jwt` |
+| `kid` | A registered signing key ID |
+| `iss` | The registered issuer URL |
+| `aud` | The single server-issued audience string, not an array |
+| `sub` | A normalized lowercase customer ID accepted by the principal schema; printable ASCII without wildcards |
+| `client_id` | A nonempty identifier, at most 256 characters |
+| `jti` | A nonempty per-token identifier, at most 256 characters |
+| `iat`, `exp` | Integer timestamps; expiry after issuance, lifetime at most 30 minutes |
+
+JWTs may be reused until expiry. The maximum encoded token size is 8,192 bytes. Headers that supply remote or embedded keys, including `jku`, `x5u`, `jwk`, and `x5c`, are refused.
+
+A partner JWT acts only for its customer. It cannot administer principals, list teams, mint API keys, or delete Spaces. Use the tenant API key for management work.
+
+## Rotate or revoke signing keys
+
+Publish the existing key and the new public key together. Read the new challenge, sign it with each new private key, and republish the proofs. Existing keys remain active while the proposal is pending.
+
+After activation, start signing with the new key. Keep the old public key until its outstanding JWTs expire, then remove it and republish. Removing an active key invalidates JWTs signed by that key on subsequent requests.
+
+Remove `tokenIssuers`, or publish an empty array, to revoke the tenant issuer. There is no individual JWT revocation endpoint. For urgent revocation, remove the affected signing key or revoke the issuer.
+
+## Request limits
+
+Valid JWTs use the general 600-request-per-minute credential budget. All valid JWTs from one issuer also share a 60,000-request-per-minute budget. Changing `jti` does not bypass that issuer budget.
+
+Invalid JWTs share a separate 60-request-per-minute budget per client IP and claimed issuer. Invalid traffic does not consume the valid JWT allowance. Follow [rate-limit response headers](/api/rate-limits) when a request returns `429`.

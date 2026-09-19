@@ -1,11 +1,11 @@
 ---
 title: "transfer_push_failed"
-description: "Pushing the transfer to the receiving side failed."
+description: "The source runtime cannot push the space blobs into the transfer bucket."
 ---
 
-Pushing the transfer to the receiving side failed.
+The source runtime cannot push the space blobs into the transfer bucket.
 
-**How to resolve:** Retry the transfer.
+**How to resolve:** Retry the move. If the failure persists, check the source runtime and bucket configuration.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/transfer_push_failed",
   "title": "Transfer push failed",
   "status": 400,
-  "detail": "Pushing the transfer to the receiving side failed.",
+  "detail": "The source runtime cannot push the space blobs into the transfer bucket.",
   "code": "transfer_push_failed",
   "requestId": "req_4mz0v8qk"
 }

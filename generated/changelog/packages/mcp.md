@@ -5,6 +5,36 @@ description: "Release history for @spacefast/mcp on npm."
 
 Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/zero-compile@0.4.1
+  - @spacefast/common@0.4.1
+  - @spacefast/routing@0.4.1
+  - @spacefast/sdk@0.4.1
+  - @spacefast/zero@0.4.1
+
+## 0.4.0
+
+#### Minor Changes
+
+- Add hosted MCP tools to import a Claude Design HTML bundle from its URL and check a pending import.
+
+#### Patch Changes
+
+- Declare explicit JSON types in MCP tool outputs to fix schema portability warnings while preserving scalar, array, object, and null execution results.
+- Show contextual file diffs, source commits, and build details in approval cards. Preserve the reviewed action after a decision, bind each decision to its exact pause, and connect workspace files, staged changes, history, and build logs in MCP Apps.
+
+  Allow the authenticated MCP proxy to use local development hosts under `.localhost` and the IPv6 loopback address.
+
+- @spacefast/common@0.4.0
+  - @spacefast/routing@0.4.0
+  - @spacefast/sdk@0.4.0
+  - @spacefast/zero@0.4.0
+  - @spacefast/zero-compile@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes
@@ -218,3 +248,4 @@ Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on
 ## 0.0.6
 
 - Various bug fixes and improvements.
+

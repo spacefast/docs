@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_protocol_unsupported"
-description: "The runner speaks a protocol version this runtime does not serve."
+description: "The Zero runner received an unsupported invoke protocol."
 ---
 
-The runner speaks a protocol version this runtime does not serve.
+The Zero runner received an unsupported invoke protocol.
 
-**How to resolve:** Rebuild the capsule with the current toolchain, then publish again.
+**How to resolve:** Rebuild and publish again so the PHP bridge and Rust runner versions match.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_protocol_unsupported",
   "title": "Zero runner protocol unsupported",
   "status": 400,
-  "detail": "The runner speaks a protocol version this runtime does not serve.",
+  "detail": "The Zero runner received an unsupported invoke protocol.",
   "code": "zero_runner_protocol_unsupported",
   "requestId": "req_4mz0v8qk"
 }

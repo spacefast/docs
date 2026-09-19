@@ -1,11 +1,11 @@
 ---
 title: "zero_log_query_invalid"
-description: "The log query parameters are invalid."
+description: "The Zero log query parameters are invalid."
 ---
 
-The log query parameters are invalid.
+The Zero log query parameters are invalid.
 
-**How to resolve:** Correct the log query parameters, then retry.
+**How to resolve:** Pass `cursor` exactly as the previous page's `nextCursor`, keep `limit` between 1 and 100, and send `since` and `until` as ISO timestamps.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_log_query_invalid",
   "title": "Zero log query invalid",
   "status": 400,
-  "detail": "The log query parameters are invalid.",
+  "detail": "The Zero log query parameters are invalid.",
   "code": "zero_log_query_invalid",
   "requestId": "req_4mz0v8qk"
 }

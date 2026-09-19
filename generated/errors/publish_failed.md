@@ -1,11 +1,11 @@
 ---
 title: "publish_failed"
-description: "Copying the version's files into the live environment failed."
+description: "The publish failed before going live."
 ---
 
-Copying the version's files into the live environment failed.
+The publish failed before going live.
 
-**How to resolve:** Publish again. If it keeps failing, contact Spacefast support with the `requestId`.
+**How to resolve:** Check the version diagnostics for the cause, then publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_failed",
   "title": "Publish failed",
   "status": 400,
-  "detail": "Copying the version's files into the live environment failed.",
+  "detail": "The publish failed before going live.",
   "code": "publish_failed",
   "requestId": "req_4mz0v8qk"
 }

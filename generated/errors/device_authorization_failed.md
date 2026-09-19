@@ -1,11 +1,11 @@
 ---
 title: "device_authorization_failed"
-description: "The device authorization could not be started."
+description: "The device login request failed and cannot be completed."
 ---
 
-The device authorization could not be started.
+The device login request failed and cannot be completed.
 
-**How to resolve:** Run `sf login` again. If it keeps failing, check the client ID the CLI is configured with.
+**How to resolve:** Start a new device login flow.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/device_authorization_failed",
   "title": "Device authorization failed",
   "status": 400,
-  "detail": "The device authorization could not be started.",
+  "detail": "The device login request failed and cannot be completed.",
   "code": "device_authorization_failed",
   "requestId": "req_4mz0v8qk"
 }

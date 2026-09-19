@@ -5,6 +5,14 @@ description: "Release history for @spacefast/setup-ui on npm."
 
 Published as [`@spacefast/setup-ui`](https://www.npmjs.com/package/@spacefast/setup-ui) on npm.
 
+## 0.4.1
+
+_No noted changes in this release._
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._
@@ -30,3 +38,4 @@ _No noted changes in this release._
 #### Patch Changes
 
 - Publish the pure, registry-driven agent setup renderer with namespaced CSS and adapter-only actions for dashboard, website, and docs consumers.
+

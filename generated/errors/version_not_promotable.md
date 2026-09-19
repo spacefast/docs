@@ -1,11 +1,11 @@
 ---
 title: "version_not_promotable"
-description: "The version is in a state that cannot be promoted."
+description: "The version cannot be promoted in its current status."
 ---
 
-The version is in a state that cannot be promoted.
+The version cannot be promoted in its current status.
 
-**How to resolve:** Promote a version whose status is `ready`.
+**How to resolve:** Only ready versions can be promoted to a channel.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_not_promotable",
   "title": "Version not promotable",
   "status": 400,
-  "detail": "The version is in a state that cannot be promoted.",
+  "detail": "The version cannot be promoted in its current status.",
   "code": "version_not_promotable",
   "requestId": "req_4mz0v8qk"
 }

@@ -12,6 +12,7 @@ export default defineMeta({
     "operations",
     "webhooks",
     "sdk",
+    "partners",
     "reference",
   ],
 });

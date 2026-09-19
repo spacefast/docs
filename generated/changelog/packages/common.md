@@ -5,6 +5,16 @@ description: "Release history for @spacefast/common on npm."
 
 Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/common) on npm.
 
+## 0.4.1
+
+#### Patch Changes
+
+- Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._
@@ -124,3 +134,4 @@ _No noted changes in this release._
 ## 0.0.6
 
 _No noted changes in this release._
+

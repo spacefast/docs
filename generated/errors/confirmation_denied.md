@@ -1,11 +1,11 @@
 ---
 title: "confirmation_denied"
-description: "A person denied this action at the confirmation gate."
+description: "A person reviewed this exact action and denied it. The denial is terminal."
 ---
 
-A person denied this action at the confirmation gate.
+A person reviewed this exact action and denied it. The denial is terminal.
 
-**How to resolve:** Stop retrying and report the denial to the user.
+**How to resolve:** Stop retrying. You cannot clear this yourself; report the denial to the person who asked for the action.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_denied",
   "title": "Confirmation denied",
   "status": 400,
-  "detail": "A person denied this action at the confirmation gate.",
+  "detail": "A person reviewed this exact action and denied it. The denial is terminal.",
   "code": "confirmation_denied",
   "requestId": "req_4mz0v8qk"
 }

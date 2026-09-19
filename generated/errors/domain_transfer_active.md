@@ -1,11 +1,11 @@
 ---
 title: "domain_transfer_active"
-description: "A domain transfer or a queued DNS operation is already in flight for this domain."
+description: "The domain has a transfer in progress, which blocks this operation."
 ---
 
-A domain transfer or a queued DNS operation is already in flight for this domain.
+The domain has a transfer in progress, which blocks this operation.
 
-**How to resolve:** Wait for the transfer and DNS operations to finish, or cancel the transfer, then retry.
+**How to resolve:** Wait for the transfer to finish or cancel it before retrying.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_transfer_active",
   "title": "Domain transfer active",
   "status": 400,
-  "detail": "A domain transfer or a queued DNS operation is already in flight for this domain.",
+  "detail": "The domain has a transfer in progress, which blocks this operation.",
   "code": "domain_transfer_active",
   "requestId": "req_4mz0v8qk"
 }
