@@ -1,88 +1,91 @@
 ---
 title: Plans and billing
-description: What each Spacefast plan costs and includes, how editor seats are billed, and where to upgrade, downgrade, or cancel
+description: Free, Go and Plus plans, shared usage credit, editor seats, and the planned Boost add-on
 sidebar:
   order: 3
 ---
 
-Pick the plan that fits, know what an extra editor costs, and find the exact place in the dashboard to upgrade or cancel. Every price on this page is the price the product charges.
+Spacefast's upcoming plans are Free for personal projects, Go for one person, and Plus for a team. Prices are USD before tax. Paid plans are monthly, with no annual option.
+
+:::note[Upcoming pricing]
+These are the new plan terms. Checkout, metering and feature availability are still changing. **Settings → Billing** shows the plans currently available to your team and the price before you pay. Boost and the new retention windows are planned.
+:::
 
 ## Plans
 
-| Plan | Monthly | Yearly | Included editors | Extra editor |
+| Plan | Per team, per month | Monthly usage | Editors | Commercial use |
 | --- | --- | --- | --- | --- |
-| Free | $0 | $0 | 1 | Not offered |
-| Plus | $4.99 | $49.99 | 3 | $4.99/mo or $49.99/yr |
-| Pro | $49.99 | $499 | 10 | $4.99/mo or $49.99/yr |
-| Enterprise | Custom | Custom | Unlimited | Included |
+| Free | $0 | Fixed allowances | 1 | No |
+| Go | $5 | $5 shared credit | 1 | Yes |
+| Plus | $15 | $15 shared credit | 10, then $5 per extra editor | Yes |
+| Enterprise | Custom | Custom | Custom | Yes |
 
-Every new team starts on Free. Plus and Pro are self-serve. Enterprise is arranged with us.
+Free needs no card. Go and Plus include their monthly price as usage credit. Enterprise plans are arranged through WordPress VIP.
 
-:::note
-Paid plans are not switched on for every account yet. When checkout is unavailable your team stays on Free and the billing page tells you so.
-:::
+| Allowance or feature | Free | Go | Plus |
+| --- | --- | --- | --- |
+| Spaces | 20 | Unlimited | Unlimited |
+| Custom domains per team | 20 | Unlimited | Unlimited |
+| Wildcard domains | No | No | Included |
+| Cached delivery per month | 100 GB | 1 TB, then $0.02/GB | 1 TB, then $0.02/GB |
+| Storage | 500 MB across both classes | Usage-based files and media | Usage-based files and media |
+| Concurrent builds | 1 | 1 | 3 |
+| Email recipients per day | 20 | 200 | 2,000 |
+| Full-page templates | No | No | Included |
 
-### Plan codes in the API
+Live files and database storage have no usage charge. On Free, they still count toward the 500 MB storage allowance. See [Usage](/usage) for all Free allowances and paid usage rates.
 
-The API reports the plan as a code, not the display name. `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` both return a `planCode` field.
+PHP, Zero, Workers, SQL, private sharing, managed publishing, Git, CLI, API, MCP and exports are available across plans. Usage limits still apply. Connecting a domain has no extra fee. Domain registration, renewal and third-party licenses are separate purchases.
 
-| Display name | `planCode` |
-| --- | --- |
-| Free | `free` |
-| Plus | `personal` |
-| Pro | `work` |
-| Enterprise | `enterprise` |
+Domains registered through Spacefast or WordPress.com, and domains using Spacefast DNS, do not count toward the Free plan's 20-domain allowance. Other connected domains and individually connected subdomains count toward it. Managed HTTPS is included. Wildcards such as `*.example.com` require Plus or Enterprise.
 
-The codes are stable. They stay the same when a plan is renamed.
+## Shared usage credit
 
-## What changes between plans
+Go and Plus share one credit across all the team's Spaces and members. It resets monthly and does not roll over. Included cached delivery, invocations and spam checks are applied before their remaining usage draws from the credit.
 
-| | Free | Plus | Pro | Enterprise |
-| --- | --- | --- | --- | --- |
-| Spaces | 200 | Unlimited | Unlimited | Unlimited |
-| Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited |
-| Editors | 1 | 3 included | 10 included | Unlimited |
-| Custom domain groups | 50 | 100 | Unlimited | Unlimited |
-| Files per version | 100,000 | 100,000 | 100,000 | 100,000 |
-| Publishes per day | 100 | 6,000 | Unlimited | Unlimited |
-| Activity and access log history | 48 hours | 30 days | Unlimited | Unlimited |
-| PHP workers per site | 2 | 4 | 4 | 4 |
-| Full-page templates under `_pages/` | No | Yes | Yes | Yes |
-| Hide the Spacefast badge | No | Yes | Yes | Yes |
+The monthly bill is:
 
-Files per version is a platform ceiling, not something a plan buys. The daily publish figure is a soft meter: it warns and resets at 00:00 UTC, it never blocks. A single file can be 1 GiB and a version 2 GiB on every plan, and every plan serves external proxy rules. See [Limits](/limits) for what each number does when you cross it, and which limits block a publish versus warn.
+- The plan price.
+- Extra Plus seats, at $5 each beyond the included 10.
+- Boost add-ons, at $9 per boosted Space when available.
+- Metered usage above the team's credit.
 
-A domain group is one registrable apex plus all of its subdomains, so `example.com`, `www.example.com`, and `docs.example.com` count as one.
+For example, a Go team with $8 of metered usage pays $8 total: the $5 plan and $3 of usage above its credit. A Plus team with 12 editors and $20 of usage pays $30: $15 for the plan, $10 for seats and $5 for extra usage.
 
-## Seats and extra editors
+Overage is on by default under the new terms. An optional hard spending cap pauses metered work when reached. Alerts are planned at 50%, 80% and 100% of credit or a Free allowance. Confirm which spending controls are available in your team's billing settings.
 
-Every team member is a billable seat, whatever their role. Owners, admins, and members all count. Reviewers, agents, API keys, device tokens, and per-Space grants are not memberships and are never billed.
+## Seats
 
-Pending invitations hold a seat before anyone accepts them. A team can hit its seat limit with fewer real members than the plan allows, so cancel stale invitations before buying another seat.
+Free and Go allow one editor, the owner. Additional seats cannot be bought on those plans; a second team member needs Plus.
 
-Free caps the team at one editor and will not go past it. On Plus and Pro with an active subscription you can add editors beyond the included count. Each one is added automatically at the extra editor price, and the charge updates when team membership changes.
+Plus includes 10 active team members, including the owner. Each additional active member costs $5 a month, prorated to the day. Pending invitations reserve capacity but are not billed. Cancel stale invitations if the team cannot invite another person.
 
-## Upgrade
+Reviewers, commenters, agents acting for an owner, and app users do not add seats. A Space-level editor grant is not a team membership. Seat fees do not add usage credit.
 
-<Steps>
-<Step title="Open Settings → Billing">
-In the dashboard, open your team's **Settings**, then **Billing**. Only team owners and admins can change billing.
-</Step>
-<Step title="Choose a plan">
-Under **Choose a plan**, pick Plus or Pro and a Monthly or Yearly interval.
-</Step>
-<Step title="Finish checkout">
-**Upgrade plan** sends you to a hosted checkout. When it completes, the new plan and its limits apply immediately. Rate limits pick up the new plan within about five seconds.
-</Step>
-</Steps>
+## Boost, planned
 
-## Downgrade or cancel
+Boost is a $9-per-Space monthly add-on for Go and Plus. Choose which Spaces to boost; there is no team-wide price ceiling. Free cannot buy Boost.
 
-Once a team has a paid subscription, **Settings → Billing** shows **Open billing portal**. That hosted portal holds invoices, payment methods, receipts, plan changes, and cancellation. Spacefast keeps no separate invoice list.
+Boost adds:
 
-Cancelling takes effect at the end of the current billing period, not on the spot. The billing page then labels the period date **Ends** instead of **Renews**. When the period closes, the team falls back to Free and the Free plan limits apply.
+- Web Analytics.
+- VideoPress.
+- Customization of Spacefast Access pages, including removal of Spacefast branding from sign-in, password and request-access screens.
+- A higher daily email limit for the boosted Space.
 
-A plan change is prorated against the remainder of the current period.
+The increased email limit is not final. Boost does not add usage credit; ordinary usage charges still apply. Without Boost, Access pages carry Spacefast branding under the new terms.
+
+## Upgrade, downgrade or cancel
+
+In the dashboard, open your team's **Settings → Billing**. Only owners and admins can change billing. Choose an available plan and review the price at checkout. Once subscribed, **Open billing portal** holds invoices, payment methods, plan changes and cancellation.
+
+Under the new terms, upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the effective date in checkout or the billing portal before confirming a change.
+
+## Reading the current plan through the API
+
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Existing responses can use `free`, `personal`, `work` or `enterprise`. These are API identifiers; do not infer the new plan price or allowances from a legacy code.
+
+Use the returned entitlements for feature checks and **Settings → Billing** for the subscription currently offered to the team. The upcoming plan names do not introduce new API identifiers on this page.
 
 ## When a payment fails
 

@@ -7,30 +7,32 @@ sidebar:
 
 Find any limit, see which plan changes it, and know exactly which error code comes back. Where a plan says "unlimited" but a platform ceiling still applies, this page gives you the ceiling.
 
-## Limits by plan
+## Upcoming plan allowances
 
-| Limit | Free | Plus | Pro | Enterprise | When you hit it |
-| --- | --- | --- | --- | --- | --- |
-| Spaces | 200 | Unlimited | Unlimited | Unlimited | `409` `space_quota_exceeded` |
-| Editors | 1 | 3 included | 10 included | Unlimited | `409` `team_member_quota_exceeded` |
-| Custom domain groups | 50 | 100 | Unlimited | Unlimited | `409` `domain_quota_exceeded` |
-| Storage | 10 GiB | 50 GiB | 200 GiB | Unlimited | Metered and shown. Nothing blocks |
-| Files per version | 100,000 | 100,000 | 100,000 | 100,000 | `422` `manifest_too_many_files` |
-| Versions kept per space | 200 | No cap | No cap | No cap | The oldest versions nothing serves expire on their own. Publishing continues |
-| Publishes per day | 100 | 6,000 | Unlimited | Unlimited | Activity event, once per day. Publishing continues |
-| Activity feed history | 48 hours | 30 days | Unlimited | Unlimited | Older events are deleted hourly |
-| Access log history | 48 hours | 30 days | Unlimited | Unlimited | Read window clamped, `log_retention_clamped` warning |
-| PHP workers per site | 2 | 4 | 4 | 4 | Serving concurrency, no error |
+The new pricing uses Free, Go and Plus. These allowances describe the upcoming plans; **Settings → Billing** and the entitlements API show what is currently active for your team. See [Plans and billing](/billing) for prices and [Usage](/usage) for all metered allowances.
 
-Every number in that table is the number. Where a plan says unlimited there is no ceiling behind it. The one axis that never says unlimited is files per version: the manifest validator stops at 100,000, and that is the platform ceiling rather than something a plan buys.
+| Allowance | Free | Go | Plus | Enterprise |
+| --- | --- | --- | --- | --- |
+| Spaces | 20 | Unlimited | Unlimited | Custom |
+| Editors | 1 | 1 | 10, then $5 each per month | Custom |
+| Custom domains per team | 20 | Unlimited | Unlimited | Unlimited |
+| Wildcard domains | No | No | Included | Included |
+| Storage | 500 MB combined | Usage-based files and media | Usage-based files and media | Custom |
+| Concurrent builds | 1 | 1 | 3 | Custom |
+| Email recipients per day | 20 | 200 | 2,000 | Custom |
+| Full-page templates | No | No | Included | Included |
 
-The daily publish meter is soft. It counts your pushes and CI builds together, warns once a day when you go past the number, and resets at 00:00 UTC. It never refuses a publish.
+Free and Go cannot buy extra editing seats. Pending invitations reserve capacity but are not billed. Domains registered through Spacefast or WordPress.com, or using Spacefast DNS, do not count toward the Free plan's domain allowance.
 
-The space limit is not soft. Creating a Space past 200 on Free fails, and so does claiming an anonymous Space into a team that is already at the limit — a claim is a create as far as the limit is concerned.
+Free allowance exhaustion triggers review and may lead to suspension. Above 500 MB, new publishes and uploads stop while existing Spaces continue to serve unless suspended. Paid plans bill usage above their shared credit. An optional hard spending cap is planned.
 
-The Free version cap never refuses a publish. Once a publish takes a Free Space past 200 versions, the oldest ready versions that nothing serves expire in the background. A version the live pointer or a branch alias serves is never touched, however old it is.
+## Current enforcement
 
-An editor limit of "3 included" is not a wall. On Plus and Pro with an active subscription you can add editors past the included count and each is billed automatically. Free stops dead at one. Pending invitations hold a seat, so a team can be blocked with fewer members than the number suggests.
+Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `space_quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
+
+The current daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The current storage meter reports overage without enforcing the upcoming Free storage rule. Neither counter is the new itemized usage bill.
+
+Current version cleanup is described on [Versions](/versions#how-many-versions-are-kept). The new history and log windows are [planned](/usage#planned-history-and-log-retention).
 
 ## Same on every plan
 
@@ -116,7 +118,7 @@ The general budget is per fixed 60-second window.
 
 Publishing, building, and creating spaces carry their own hourly budgets that scale with your plan. Each has an actor bucket, which contains one credential, and an account bucket, which contains a whole team.
 
-| Action | Free | Plus | Pro | Enterprise |
+| Action | `free` | `personal` | `work` | `enterprise` |
 | --- | --- | --- | --- | --- |
 | Publishes per hour, per credential | 120 | 600 | 1,800 | 6,000 |
 | Publishes per hour, per account | 240 | 1,200 | 6,000 | 20,000 |
@@ -125,6 +127,6 @@ Publishing, building, and creating spaces carry their own hourly budgets that sc
 | Spaces created per hour, per credential | 20 | 60 | 200 | 600 |
 | Spaces created per hour, per account | 40 | 150 | 600 | 3,000 |
 
-These are platform protection, not entitlements you buy. A plan change is picked up by the limiter within about five seconds.
+These columns are current API plan codes, not the upcoming plan names. These are platform protection, not entitlements you buy. A plan change is picked up by the limiter within about five seconds.
 
 Full rate limit behavior, including what happens when the accounting backend is down, is on the [Rate limits](/api/rate-limits). For what each error code means and whether it is worth retrying, see [Error codes](/api/errors).
