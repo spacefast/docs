@@ -118,7 +118,7 @@ The general budget is per fixed 60-second window.
 
 Publishing, building, and creating spaces carry their own hourly budgets that scale with your plan. Each has an actor bucket, which contains one credential, and an account bucket, which contains a whole team.
 
-| Action | `free` | `personal` | `work` | `enterprise` |
+| Action | `free` | `go` | `plus` | `enterprise` |
 | --- | --- | --- | --- | --- |
 | Publishes per hour, per credential | 120 | 600 | 1,800 | 6,000 |
 | Publishes per hour, per account | 240 | 1,200 | 6,000 | 20,000 |
@@ -127,6 +127,6 @@ Publishing, building, and creating spaces carry their own hourly budgets that sc
 | Spaces created per hour, per credential | 20 | 60 | 200 | 600 |
 | Spaces created per hour, per account | 40 | 150 | 600 | 3,000 |
 
-These columns are current API plan codes, not the upcoming plan names. These are platform protection, not entitlements you buy. A plan change is picked up by the limiter within about five seconds.
+These columns are API plan codes. These limits protect the platform; they are not entitlements you buy. A plan change is picked up by the limiter within about five seconds.
 
 Full rate limit behavior, including what happens when the accounting backend is down, is on the [Rate limits](/api/rate-limits). For what each error code means and whether it is worth retrying, see [Error codes](/api/errors).

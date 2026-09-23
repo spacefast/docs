@@ -38,9 +38,9 @@ Set it, and it stops following. Spacefast reads the color you gave, decides whet
 
 ### Check the branding entitlement
 
-The current dashboard uses the team's branding entitlement. When it is unavailable, the switch is disabled with a link to billing.
+The dashboard enables badge removal when the team has the branding entitlement or the Space used badge removal before the new plans took effect. Other Spaces need the entitlement.
 
-The gate is enforced at publish too, not only in the dashboard. Publishing a version whose effective theme sets `hideSpacefastBranding` without the entitlement fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding requires a paid plan."
+The gate is enforced at publish too. Publishing a version whose effective theme sets `hideSpacefastBranding` without either allowance fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding is not included on this plan."
 
 ### Code override
 

@@ -63,15 +63,15 @@ Reviewers, commenters, agents acting for an owner, and app users do not add seat
 
 ## Upgrade, downgrade or cancel
 
-In the dashboard, open your team's **Settings → Billing**. Only owners and admins can change billing. Choose an available plan and review the price at checkout. Once subscribed, **Open billing portal** holds invoices, payment methods, plan changes and cancellation.
+In the dashboard, open your team's **Settings → Billing**. Only owners and admins can change billing. Choose an available plan and review the price at checkout. Use Billing to change or cancel a plan. **Open billing portal** holds invoices and payment methods.
 
-Under the new terms, upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the effective date in checkout or the billing portal before confirming a change.
+Under the new terms, upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the effective date in Billing before confirming a change.
 
 ## Reading the current plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Existing responses can use `free`, `personal`, `work` or `enterprise`. These are API identifiers; do not infer the new plan price or allowances from a legacy code.
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. The plan codes are `free`, `go`, `plus`, `enterprise` and `internal`. Older cached responses may still carry `personal` or `work` until refreshed.
 
-Use the returned entitlements for feature checks and **Settings → Billing** for the subscription currently offered to the team. The upcoming plan names do not introduce new API identifiers on this page.
+Use the returned entitlements for feature checks and **Settings → Billing** for the subscription currently offered to the team.
 
 ## When a payment fails
 
