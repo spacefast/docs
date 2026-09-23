@@ -47,4 +47,4 @@ Verify `Spacefast-Signature` against the raw request body before parsing it. Sto
 
 Start with `system.presentation`. Add claim and access handoff origins only after those pages can complete their customer flows. Custom site hostnames need DNS ownership and HTTPS serving. A custom API origin also needs an HTTPS gateway that forwards to Spacefast and overwrites `x-spacefast-tenant-id` with your tenant ID. Check `GET /v1/tenants/{tenantId}/api-origin-verification` and actual requests through that gateway. A `pending` manifest item is not an active custom origin.
 
-Follow the [go-live checks](/api/partners/go-live) before sending real customers to the live tenant. The [Partner API reference](/platforms/api/reference) has the exact request and response schemas.
+Follow the [go-live checks](/api/partners/go-live) before sending real customers to the live tenant. The [live Partner OpenAPI document](https://api.spacefast.com/openapi.partner.json) has the current request and response schemas.
