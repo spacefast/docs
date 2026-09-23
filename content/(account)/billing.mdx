@@ -69,7 +69,7 @@ Under the new terms, upgrades apply immediately and prorate to the day. Downgrad
 
 ## Reading the current plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. The plan codes are `free`, `go`, `plus`, `enterprise` and `internal`. Older cached responses may still carry `personal` or `work` until refreshed.
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. During the plan change, Go can appear as `personal` or `go`, and Plus as `work` or `plus`. The other codes are `free`, `enterprise` and `internal`.
 
 Use the returned entitlements for feature checks and **Settings → Billing** for the subscription currently offered to the team.
 
