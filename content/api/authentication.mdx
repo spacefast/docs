@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-The API takes one header. After this page you know which of the four credential shapes to mint for your case, how to scope it, and why a valid token still gets a 403 on some routes.
+The API takes one header. After this page you know which credential to mint for your case, how to scope it, and why a valid token still gets a 403 on some routes.
 
 ## The header
 
@@ -22,7 +22,10 @@ The server decides what a token is from its prefix before any verifier runs.
 | `sfa_` | Platform API key | `POST /v1/api-keys`, or the dashboard |
 | `sfc_` | Space key for an unclaimed anonymous Space | returned by an anonymous `POST /v1/publish` |
 | `sfm_` | Space machine credential | `POST /v1/spaces/{spaceId}/machine-credentials` |
+| signed partner JWT | Customer credential for one external principal | Your verified customer session and active partner issuer |
 | no prefix | Signed-in session or OAuth access token | dashboard sign-in, device login, or the OAuth token endpoint |
+
+Partner `JWTs` have no Spacefast prefix. The API recognizes their signed `at+jwt` profile. See [Partner API](/api/partners) for issuer activation and customer scope.
 
 ## API keys
 

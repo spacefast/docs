@@ -1,0 +1,50 @@
+---
+title: Partner API
+description: Set up a partner tenant, system Space, customer tokens, billing policy, and event delivery
+sidebar:
+  order: 1
+---
+
+The Partner API lets you run your own customer login and product on Spacefast hosting. Your customers are external principals identified by IDs from your identity system. They do not need Spacefast accounts. You own customer billing and support.
+
+Start with the [partner starter](https://github.com/spacefast/partner-starter). Its root app shows a customer portal and a staff dashboard. The [Express example](https://github.com/spacefast/partner-starter/tree/main/examples/express) uses a smaller server with Clerk or local test authentication. Both work with the [system Space template](https://github.com/spacefast/partner-system-space). Use a test tenant until the whole journey works.
+
+## Get a tenant and management key
+
+Ask Spacefast to provision a partner account. Provisioning creates separate live and test tenants and gives you one tenant-rooted `partner_admin` API key for each. Save each secret when it is issued. A team API key cannot grant itself `partner_admin`, and your customer browser must never receive a management key.
+
+The key's tenant ID is the path ID for `GET /v1/tenants/{tenantId}`. That response reports the tenant's mode, provisioning mode, system Space, brand, and `manifestStatus`. A key can read only its own tenant. You can create narrower tenant keys with `POST /v1/tenants/{tenantId}/api-keys`; creation returns the secret once. Rotate by creating a replacement, switching callers, and revoking the old key.
+
+## Publish your system Space
+
+Create a Space with the management key and an external principal reserved for your own configuration, then save `data.space.id` from the response. Publish only the `site/` directory of the [system Space template](https://github.com/spacefast/partner-system-space). Once the Space is active, designate it with `PATCH /v1/tenants/{tenantId}` and `systemSpaceId`. Send the last observed `baseSystemSpaceId` to prevent a concurrent change from replacing your designation.
+
+The live `sf.jsonc` in that Space declares your presentation, token issuers, webhook subscriptions, plan catalog, browser origins, and optional hostnames. Publishing a new version replaces the declared configuration. Removing a declaration can remove the setting it created, so review the full manifest before each publish. Read `manifestStatus.items` after the publish operation finishes. A successful publish response alone does not mean an issuer, subscription, or domain is active.
+
+## Activate your token issuer
+
+Your server owns an Ed25519 private key. Put only the public key and a stable HTTPS issuer identifier in `system.tokenIssuers`. Publish once, then read the `tokenIssuers` manifest item from `GET /v1/tenants/{tenantId}`. It returns a Spacefast audience and a challenge while the issuer is pending. Sign a short-lived proof with your private key, add that proof to the declaration, and publish again. The template and both starters include the key and proof commands.
+
+After the item becomes `active`, mint a customer JWT from a verified session in your own identity system. Use `EdDSA`, `typ: at+jwt`, the declared `kid` and `iss`, the returned single `aud`, and a normalized lowercase external principal ID as `sub`. Include `client_id`, `jti`, `iat`, and `exp`; the lifetime may not exceed 30 minutes. Renew the JWT before it expires. A customer token is limited to its own principal. It cannot manage the tenant, other customers, or billing.
+
+Use [the partner SDK](https://www.npmjs.com/package/@spacefast/sdk) through `@spacefast/sdk/partner` or `@spacefast/sdk/partner/query`. Give each principal a separate query cache. Keep the management key on your server; browser calls use only customer `JWTs`. If your browser calls the API directly, add its exact origin to `system.api.allowedOrigins`.
+
+## Create sites and manage customers
+
+There is no customer registration endpoint. A customer's first authorized operation creates its external principal. Call `POST /v1/spaces` with `principal: { "type": "external", "id": "<customer-id>" }`, then publish content with `POST /v1/publish`. Follow returned operations until they finish, and check the live URL. `GET /v1/spaces` under that customer's JWT returns only its Spaces.
+
+Your server can use its tenant key to list and inspect customers with `/v1/principals`. It can assign a plan from the live system catalog with `PUT /v1/principals/external/{principalId}/plan`. A plan assignment changes entitlements for future publishes; already published versions keep the entitlements they had at publish time. It can suspend and unsuspend customers. A partner suspension serves a suspended page and blocks mutations. Closing a customer is terminal; the API refuses a close while the customer owns Spaces unless you explicitly force it.
+
+The partner owns prices, checkout, invoices, and collection. Read `/v1/usage` for hourly records and `/v1/usage/periods` for monthly totals. Test-tenant usage is measured but never billable. Do not treat an open period as a final invoice total.
+
+## Receive customer events
+
+Declare an HTTPS subscription in `system.subscriptions`, then read `manifestStatus` to confirm it is active. The event catalog at `GET /v1/events/catalog` lists the `principal.notification.*` events that you must deliver to your customers. Spacefast does not send a fallback customer email for these partner events.
+
+Verify `Spacefast-Signature` against the raw request body before parsing it. Store the event ID durably before returning success, then process it with retries and duplicate handling. Keep both secrets during a signing-secret rotation. The starters include a receiver and signature verification; their inbox is a receipt store, so you must add your own notification or billing consumer. [Webhook delivery tools](/api/webhooks) let you inspect and redeliver failures.
+
+## Add your brand
+
+Start with `system.presentation`. Add claim and access handoff origins only after those pages can complete their customer flows. Custom site hostnames need DNS ownership and HTTPS serving. A custom API origin also needs an HTTPS gateway that forwards to Spacefast and overwrites `x-spacefast-tenant-id` with your tenant ID. Check `GET /v1/tenants/{tenantId}/api-origin-verification` and actual requests through that gateway. A `pending` manifest item is not an active custom origin.
+
+Follow the [go-live checks](/api/partners/go-live) before sending real customers to the live tenant. The [Partner API reference](/platforms/api/reference) has the exact request and response schemas.

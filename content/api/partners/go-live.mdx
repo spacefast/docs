@@ -1,0 +1,27 @@
+---
+title: Take a partner integration live
+description: Prove the customer journey in the test tenant, then promote configuration and verify live traffic
+sidebar:
+  order: 2
+---
+
+Use the test and live tenants provisioned for your partner account. Give them separate system Spaces, issuer identifiers, signing keys, webhook secrets, and application configuration. A customer JWT from one mode must not work in the other.
+
+## Prove the test journey
+
+1. Publish the test system Space. Wait for its publish operation, then read `manifestStatus.items`. Confirm the issuer and subscription are `active`.
+2. Sign in through your own identity system and mint a customer JWT. Create a Space for that external principal, publish a page, follow the operation to completion, and fetch the live URL.
+3. Sign in as a second customer. Confirm its Space list excludes the first customer's Space and that it cannot read or mutate the first customer's Space by ID.
+4. From a trusted server, list the principals, assign a catalog plan, suspend and unsuspend a test customer, and inspect usage. Test the close flow only on a disposable principal. Closing is terminal.
+5. Deliver a signed event to your public HTTPS receiver. Confirm raw-body signature verification, durable duplicate handling, the customer-facing action, and a redelivery after a controlled failure.
+6. If you use branded claim, access handoff, site domains, or an API gateway, exercise each customer-facing URL over HTTPS. Check the domain setup and manifest status as well as the served response.
+
+An SDK build or a `200` from `/health` does not prove these customer and provider steps. Keep the test run's request IDs, operation IDs, event IDs, and served URLs for debugging.
+
+## Promote configuration
+
+Publish a live system Space with a live issuer and receiver first. `POST /v1/tenants/{tenantId}/promote`, called with the live tenant's management key, copies the linked test tenant's system configuration through the live system Space. It does not copy customer resources or flip their mode. Both system Spaces need live versions. The live issuer remains its own declaration because an active issuer identifier is globally unique.
+
+Read the returned live tenant and its manifest status. Recheck each item and make a fresh live customer token. Publish and fetch a live Space, then verify a signed event reaches the live receiver. Switch real customer traffic only after those checks pass.
+
+Keep the last good system Space version so you can promote it again if a configuration publish fails. That does not undo customer closures, usage, or rotated webhook secrets. [Build the integration](/api/partners) has the setup steps and [the Partner API reference](/platforms/api/reference) has the operation schemas.
