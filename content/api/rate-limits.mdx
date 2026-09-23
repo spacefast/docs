@@ -42,7 +42,7 @@ Rate limiting fails open. If the accounting backend is unavailable the request g
 
 These are abuse protection, not plan features. Each has two buckets, one for a single credential (the actor) and one for the whole account.
 
-| Action | Bucket | Free | Plus | Pro | Enterprise |
+| Action | Bucket | `free` | Go (`personal` or `go`) | Plus (`work` or `plus`) | `enterprise` |
 | --- | --- | --- | --- | --- | --- |
 | Publish | per credential | 120 | 600 | 1,800 | 6,000 |
 | Publish | per account | 240 | 1,200 | 6,000 | 20,000 |
@@ -51,7 +51,7 @@ These are abuse protection, not plan features. Each has two buckets, one for a s
 | Space creation | per credential | 20 | 60 | 200 | 600 |
 | Space creation | per account | 40 | 150 | 600 | 3,000 |
 
-All windows are one hour. Space creation is metered separately from publishing because a Space is a site provision, and the general 600 per minute budget would allow 36,000 of them an hour.
+Go and Plus use either their old or new API plan code during the plan change. All windows are one hour. Space creation is metered separately from publishing because a Space is a site provision, and the general 600 per minute budget would allow 36,000 of them an hour.
 
 A plan change takes effect for these limits within about five seconds.
 

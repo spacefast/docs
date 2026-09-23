@@ -36,11 +36,11 @@ Leave **Background** blank and the pages follow each visitor's device, light or 
 
 Set it, and it stops following. Spacefast reads the color you gave, decides whether it is light or dark, and serves that one scheme to everyone. The field flips to **Pinned.** with a line saying the color reads as dark or light so every visitor gets that scheme, plus **Clear to follow visitors again**. The preview's Auto/Light/Dark switcher is replaced by a locked **Pinned · Dark** or **Pinned · Light** chip, because there is no longer anything to simulate.
 
-### The badge is a paid-plan entitlement <Badge variant="accent">Plus and up</Badge>
+### Check the branding entitlement
 
-On the free plan the switch is disabled and reads "The badge stays on the free plan." with a link to billing. Plus, Pro, and Enterprise turn it on.
+The dashboard enables badge removal when the team has the branding entitlement or the Space used badge removal before the new plans took effect. Other Spaces need the entitlement.
 
-The gate is enforced at publish too, not only in the dashboard. Publishing a version whose effective theme sets `hideSpacefastBranding` without the entitlement fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding requires a paid plan."
+The gate is enforced at publish too. Publishing a version whose effective theme sets `hideSpacefastBranding` without either allowance fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding is not included on this plan."
 
 ### Code override
 

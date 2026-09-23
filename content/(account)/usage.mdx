@@ -1,13 +1,97 @@
 ---
 title: Usage
-description: What Spacefast meters, where to read the numbers, how far behind they run, and which meters actually block you
+description: Free allowances, Go and Plus usage rates, storage classes, and how to read current usage
 sidebar:
   order: 4
 ---
 
-Read your team's storage, seats, domains, and publish count, know how stale each number is, and tell the meters that block a publish apart from the ones that only warn.
+Free has fixed allowances. Go and Plus use shared monthly credit: $5 on Go and $15 on Plus. Usage above the credit is billed monthly at the same rates on both plans.
 
-## Where to see it
+:::note[Upcoming usage pricing]
+The allowances and rates below describe the new plans. Metering and spending controls are still being rolled out. Check **Settings → Billing** for your team's current terms. The [current usage API](#read-current-usage) reports measurements separately from these new billing terms.
+:::
+
+## Free allowances
+
+These are per team each month, except storage, which is a retained-byte allowance, and email, which has a daily limit. Free is for personal and non-commercial use.
+
+| Usage | Allowance |
+| --- | --- |
+| PHP, Zero and SQL CPU | 3,600 CPU-seconds |
+| PHP and Zero invocations | 1 million |
+| Builds | 100 build-minutes |
+| Cached delivery | 100 GB |
+| Non-cached transfer | 10 GB |
+| Workers requests | 100,000 requests |
+| Workers CPU | 1,000 CPU-seconds |
+| Storage, both classes | 500 MB |
+| Transactional email | 20 per day |
+| Spam checks | 1,000 checks |
+
+The CPU allowance combines PHP, Zero and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
+
+Exceeding an allowance alerts Spacefast for review. A Space may be suspended until the applicable allowance resets, retained storage falls below its limit, or the team upgrades. Data stays and exports remain available. Above 500 MB of storage, new publishes and uploads are refused until the team is under the allowance again. Existing Spaces keep serving unless suspended after review.
+
+## Go and Plus rates
+
+Prices are USD before tax. The included quantities below belong to the whole team, not to each Space. Remaining charges draw from one shared monthly credit.
+
+| Usage | Rate |
+| --- | --- |
+| Cached delivery | 1 TB each month, then $0.02/GB |
+| PHP and Zero CPU | $0.000033 per active CPU-second |
+| SQL CPU | $0.000033 per active CPU-second |
+| PHP and Zero invocations | 1 million each month, then $0.25 per million |
+| Builds | $0.012 per elapsed build-minute |
+| Non-cached transfer | $0.054/GB |
+| Workers CPU, including startup | $0.00002 per CPU-second |
+| Workers requests | $0.30 per million |
+| Files and media | $0.10/GB-month |
+| Live files and database storage | No charge |
+| Transactional email | $0.50 per 1,000 recipient deliveries |
+| Spam checks | 1,000 each month, then $1 per 1,000 |
+
+CPU means active processing time, excluding waits. There is no memory charge. Build minutes measure elapsed machine time, including installation and idle time; platform-caused retries are not billed.
+
+An invocation is one PHP or Zero origin execution, including a request that bypasses the cache or cron run. Cached hits and Worker requests are excluded. Workers have their own request meter.
+
+Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or Zero response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
+
+Workers CPU and requests have a planned $5-per-team monthly spending ceiling, which Go and Plus teams can raise. Reaching it pauses Workers, while PHP, Zero and cached delivery continue. Origin CPU used to relay a Worker request is credited back so the same request is not billed twice.
+
+Email counts recipient deliveries, so one message to three people counts as three. Daily safeguards still apply: 20 recipients on Free, 200 on Go and 2,000 on Plus. A credit balance does not override them.
+
+## Storage classes
+
+Files and media include app-user uploads, media, source and Git history, non-live versions, and customer-saved backup archives. They cost $0.10 per GB-month on paid plans. Storage uses time-weighted logical bytes, not upload volume. GB is decimal.
+
+Live storage is the currently published version's files plus SQL data and indexes. It has no usage charge. Both classes count toward the Free plan's combined 500 MB allowance.
+
+Each logical byte belongs to one class. Internal replicas and recovery copies do not add customer charges. Files downloaded to your own computer do not become retained Spacefast storage. If you keep backup archives in Spacefast, their average retained size counts as files and media.
+
+## Scheduled jobs and backups
+
+Scheduling has no separate fee. Runs use ordinary CPU, invocation, SQL and Workers meters as applicable. Email and saved output use their existing meters. Scheduled response bodies retained on the server add no delivery charge; a manual HTTPS request has its own delivery path.
+
+Managed recovery copies have no separate customer charge. Customer backup and restore controls are planned; this pricing does not promise a retention period or a restore guarantee.
+
+## Planned history and log retention
+
+| History | Free | Go | Plus |
+| --- | --- | --- | --- |
+| Production versions | 30 days | 30 days | 1 year |
+| Preview versions | 30 days | 30 days | 180 days |
+| Failed deployment records | 30 days | 30 days | 90 days |
+| Canceled deployment records | 30 days | 30 days | 30 days |
+| Runtime and HTTP access logs | Up to 3 days | Up to 7 days | Up to 30 days |
+| Build logs | Up to 7 days | Up to 30 days | Up to 30 days |
+| Team activity | 7 days | 30 days | 30 days |
+
+Live, pinned and qualifying aliased versions remain protected. The planned recovery window for deleted successful versions is 30 days. Retained and recoverable non-live bytes count as files and media. Log retention is subject to event and byte budgets; longer retention is an Enterprise discussion.
+
+These windows are planned. The currently enforced [version retention](/versions#how-many-versions-are-kept) and returned plan limits remain authoritative until the new policy is available.
+
+## Read current usage
 
 In the dashboard, open your team's **Settings**, then **Usage**. The page lists every limit your plan carries, with the current value against it. Axes your plan does not include show as **Not included in this plan**.
 
@@ -17,7 +101,7 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 ## What gets metered
 
-### Team counters
+### Current team counters
 
 | Meter | Field | What it counts | At the limit |
 | --- | --- | --- | --- |
@@ -29,7 +113,7 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 The response also carries `storageQuotaBytes`, `storageOverageBytes`, `deploysDaily`, and `meterStartedAt` so you can compute headroom and know when the metering day rolled over.
 
-### Per-space measurements
+### Current per-space measurements
 
 `GET /v1/spaces/{spaceId}/usage` returns one settled period.
 
@@ -42,9 +126,9 @@ The response also carries `storageQuotaBytes`, `storageOverageBytes`, `deploysDa
 | `functionInvocations` | Function calls, counted where the space is known |
 | `functionErrors` | Those calls that ended in an error |
 
-None of these has a plan limit attached today. They are reporting, not gates.
+These fields report the currently measured usage. They are not the new itemized invoice and do not prove that a new pricing meter or spending cap is active.
 
-## How honest the numbers are
+## Measurement timing
 
 Storage is measured by the infrastructure that serves your sites, and it lags the present by about an hour. `storageCalculatedAt` tells you how far back the weakest measurement behind the total reaches.
 
@@ -53,30 +137,3 @@ Nothing is deduplicated. A file present in two spaces sits on two disks and coun
 The newest measurement period is always dropped, because partial ingestion underreports it. When the measuring infrastructure is unreachable, usage comes back as `null` rather than a zero or a cached guess. A blank meter means unmeasured, not empty.
 
 Function invocation counts are pushed after each request finishes, so they can arrive late.
-
-## Storage is measured, not enforced
-
-Your plan carries a storage figure, the dashboard draws a meter against it, and the API reports `storageOverageBytes` when you pass it. No publish path blocks on storage today. Going over shows up as a red meter and nothing else.
-
-## Publishes per day warn, they never block
-
-Free includes 100 publishes a day, Plus 6,000, Pro and Enterprise unlimited. Your pushes and CI builds are pooled into the one count. Passing the number writes one `team.deploy_quota_exceeded` entry to your team activity feed for the day and then gets out of the way. Publishing keeps working and the meter resets at 00:00 UTC.
-
-Spaces are the opposite. Free holds 200 live Spaces, and the create — or the claim, which is a create — fails with `409` `space_quota_exceeded` once you are there.
-
-## Activity and log retention
-
-Your plan sets how far back your history goes.
-
-| Plan | Activity feed | HTTP access logs |
-| --- | --- | --- |
-| Free | 48 hours | 48 hours |
-| Plus | 30 days | 30 days |
-| Pro | Unlimited | Unlimited |
-| Enterprise | Unlimited | Unlimited |
-
-The two behave differently at the boundary. Activity events older than the window are deleted by an hourly sweep, so they are gone, not hidden. Log reads are clamped instead. Ask for a wider window and you get the entries that exist plus a `log_retention_clamped` warning telling you the timestamp it actually started from.
-
-Account security events such as sign-ins and two-factor changes are kept regardless of plan.
-
-For every enforced number in one table, see [Limits](/limits).

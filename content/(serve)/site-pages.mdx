@@ -100,7 +100,7 @@ A layout resolves upward from the request's directory, so `docs/_layout.html` wr
 
 ## `_pages/<id>.html` <Badge variant="accent">Plus and up</Badge>
 
-A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives, the layout is not applied, and the theme controls stop repainting it. This is the full takeover, and it needs a paid plan.
+A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives, the layout is not applied, and the theme controls stop repainting it. This full takeover requires Plus or Enterprise.
 
 Each file has to be a complete HTML document beginning with `<!doctype html>`, and each is capped at 2 MiB. Like layouts, they resolve upward from the request's directory.
 
@@ -128,14 +128,14 @@ An `index` page that never renders `<sf-files>` publishes with a warning rather 
 
 ### The plan gate
 
-`_pages/*.html` full-page takeovers need Plus, Pro, or Enterprise. Publishing one from a free plan fails:
+Under the new plans, `_pages/*.html` full-page takeovers require Plus or Enterprise. Check the team's `pagesTemplates` entitlement for current access. Publishing without it fails:
 
 ```text
 pages_templates_not_entitled
-_pages/*.html takeovers require a paid plan. Remove the templates or upgrade before publishing.
+_pages/*.html takeovers require Plus or Enterprise. Remove the templates or upgrade before publishing.
 ```
 
-`_layout.html` is not gated. Free Spaces get chrome; paid Spaces get the whole document.
+`_layout.html` is not gated. Free and Go Spaces can wrap the built-in page; Spaces on Plus or Enterprise can replace the whole document.
 
 ## Write them
 
