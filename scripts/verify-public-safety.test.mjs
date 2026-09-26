@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
-test("UUID values do not hide an adjacent short commit hash", async () => {
+test("only the UUID sentinels are exempt from the short-hash scan", async () => {
   const directory = await mkdtemp(path.join(tmpdir(), "docs-safety-"));
   const script = fileURLToPath(new URL("./verify-public-safety.mjs", import.meta.url));
   const scan = () => spawnSync(process.execPath, [script], { cwd: directory, encoding: "utf8" });
@@ -23,6 +23,13 @@ test("UUID values do not hide an adjacent short commit hash", async () => {
     assert.equal(invalid.status, 1);
     assert.match(invalid.stderr, /1 violation\(s\)/);
     assert.match(invalid.stderr, /example\.md:2 — short commit hash/);
+    await writeFile(
+      path.join(directory, "example.md"),
+      "ID: " + ["ab".repeat(4), "cd".repeat(2), "4b7a", "8c21", "ef".repeat(6)].join("-") + "\n",
+    );
+    const realUuid = scan();
+    assert.equal(realUuid.status, 1);
+    assert.match(realUuid.stderr, /example\.md:1 — short commit hash/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

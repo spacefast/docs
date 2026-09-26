@@ -145,8 +145,10 @@ const scanText = (path, text) => {
     }
   }
 
-  const uuidPattern = /(?<![\p{L}\p{N}_])[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}(?![\p{L}\p{N}_])/giu;
-  const uuidRanges = Array.from(text.matchAll(uuidPattern), (match) => ({
+  // JSON Schema UUID patterns carry the nil and max UUID sentinels. Exempt only
+  // those two, so a pasted real UUID still trips the short-hash check.
+  const uuidSentinelPattern = /(?<![\p{L}\p{N}_])(?:0{8}(?:-0{4}){3}-0{12}|f{8}(?:-f{4}){3}-f{12})(?![\p{L}\p{N}_])/giu;
+  const uuidRanges = Array.from(text.matchAll(uuidSentinelPattern), (match) => ({
     start: match.index,
     end: match.index + match[0].length,
   }));

@@ -360,8 +360,6 @@ EXAMPLES
     $ sf access
 ```
 
-_See code: [src/commands/access.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/access.ts)_
-
 ## `sf access logout-all`
 
 Revoke all visitor sessions.
@@ -387,8 +385,6 @@ EXAMPLES
 
     $ sf access logout-all --space docs
 ```
-
-_See code: [src/commands/access/logout-all.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/access/logout-all.ts)_
 
 ## `sf activity`
 
@@ -427,8 +423,6 @@ EXAMPLES
   $ sf activity --all --since 2026-06-01T00:00:00Z
 ```
 
-_See code: [src/commands/activity.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/activity.ts)_
-
 ## `sf agents init [DIRECTORY]`
 
 Write Spacefast agent instructions.
@@ -466,8 +460,6 @@ EXAMPLES
     $ sf agents init /path/to/project --agent claude-code
 ```
 
-_See code: [src/commands/agents/init.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/agents/init.ts)_
-
 ## `sf analytics`
 
 Print runtime analytics.
@@ -501,8 +493,6 @@ EXAMPLES
 
     $ sf analytics --space docs --window 30d
 ```
-
-_See code: [src/commands/analytics.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/analytics.ts)_
 
 ## `sf api METHODORPATH [PATH]`
 
@@ -547,8 +537,6 @@ EXAMPLES
   $ sf api GET /v1/spaces/spc_123/versions/ver_123/archive --output site.tar.gz
 ```
 
-_See code: [src/commands/api.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/api.ts)_
-
 ## `sf api-keys`
 
 Manage API keys.
@@ -573,8 +561,6 @@ EXAMPLES
 
     $ sf api-keys
 ```
-
-_See code: [src/commands/api-keys.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/api-keys.ts)_
 
 ## `sf api-keys create`
 
@@ -615,8 +601,6 @@ EXAMPLES
     $ sf api-keys create --name ci --preset ci_deploy
 ```
 
-_See code: [src/commands/api-keys/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/api-keys/create.ts)_
-
 ## `sf api-keys list`
 
 List API keys.
@@ -648,8 +632,6 @@ EXAMPLES
 
     $ sf api-keys ls
 ```
-
-_See code: [src/commands/api-keys/list.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/api-keys/list.ts)_
 
 ## `sf api-keys revoke ID`
 
@@ -683,8 +665,6 @@ EXAMPLES
 
     $ sf api-keys revoke key_123
 ```
-
-_See code: [src/commands/api-keys/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/api-keys/revoke.ts)_
 
 ## `sf apply`
 
@@ -720,8 +700,6 @@ EXAMPLES
     $ sf apply --space docs --no-wait
 ```
 
-_See code: [src/commands/apply.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/apply.ts)_
-
 ## `sf auth`
 
 Authenticate the CLI.
@@ -744,8 +722,6 @@ DESCRIPTION
 EXAMPLES
   $ sf auth login
 ```
-
-_See code: [src/commands/auth.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/auth.ts)_
 
 ## `sf auth as NAME`
 
@@ -773,8 +749,6 @@ EXAMPLES
     $ sf auth as <name>
 ```
 
-_See code: [src/commands/auth/as.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/auth/as.ts)_
-
 ## `sf auth reset`
 
 Clear the local dev guest identity.
@@ -797,8 +771,6 @@ EXAMPLES
 
     $ sf auth reset
 ```
-
-_See code: [src/commands/auth/reset.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/auth/reset.ts)_
 
 ## `sf autocomplete [SHELL]`
 
@@ -828,8 +800,6 @@ EXAMPLES
 
   $ sf autocomplete --refresh-cache
 ```
-
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v3.2.56/src/commands/autocomplete/index.ts)_
 
 ## `sf build [DIR]`
 
@@ -885,8 +855,6 @@ EXAMPLES
     $ sf build --root-directory apps/web --output ./apps/web.tgz
 ```
 
-_See code: [src/commands/build.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/build.ts)_
-
 ## `sf builds cancel BUILD`
 
 Cancel a build.
@@ -912,8 +880,6 @@ DESCRIPTION
 EXAMPLES
   $ sf builds cancel bld_123
 ```
-
-_See code: [src/commands/builds/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/cancel.ts)_
 
 ## `sf builds detect`
 
@@ -956,8 +922,6 @@ EXAMPLES
     $ sf builds detect --space docs --root-directory apps/web --apply-best
 ```
 
-_See code: [src/commands/builds/detect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/detect.ts)_
-
 ## `sf builds get BUILD`
 
 Show a build.
@@ -985,8 +949,6 @@ EXAMPLES
 
     $ sf builds get bld_123
 ```
-
-_See code: [src/commands/builds/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/get.ts)_
 
 ## `sf builds logs BUILD`
 
@@ -1026,8 +988,6 @@ EXAMPLES
     $ sf builds logs bld_123 --follow
 ```
 
-_See code: [src/commands/builds/logs.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/logs.ts)_
-
 ## `sf builds ls`
 
 List builds.
@@ -1065,8 +1025,6 @@ EXAMPLES
     $ sf builds ls --space docs --limit 5
 ```
 
-_See code: [src/commands/builds/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/ls.ts)_
-
 ## `sf builds refresh-upload BUILD`
 
 Refresh source archive upload.
@@ -1095,8 +1053,6 @@ EXAMPLES
     $ sf builds refresh-upload bld_123
 ```
 
-_See code: [src/commands/builds/refresh-upload.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/refresh-upload.ts)_
-
 ## `sf builds retry BUILD`
 
 Retry a terminal build.
@@ -1123,8 +1079,6 @@ EXAMPLES
   $ sf builds retry bld_123
 ```
 
-_See code: [src/commands/builds/retry.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/builds/retry.ts)_
-
 ## `sf channels`
 
 Manage channels.
@@ -1149,8 +1103,6 @@ EXAMPLES
 
     $ sf channels
 ```
-
-_See code: [src/commands/channels.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/channels.ts)_
 
 ## `sf channels history [NAME]`
 
@@ -1185,8 +1137,6 @@ EXAMPLES
     $ sf channels history live --space docs
 ```
 
-_See code: [src/commands/channels/history.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/channels/history.ts)_
-
 ## `sf channels ls`
 
 List channels.
@@ -1215,8 +1165,6 @@ EXAMPLES
 
     $ sf channels ls --space docs
 ```
-
-_See code: [src/commands/channels/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/channels/ls.ts)_
 
 ## `sf channels set NAME`
 
@@ -1261,8 +1209,6 @@ FLAG DESCRIPTIONS
     auto: publishes and green builds go live. manual: hold everything until an explicit promote.
 ```
 
-_See code: [src/commands/channels/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/channels/set.ts)_
-
 ## `sf comments`
 
 Manage comments.
@@ -1281,8 +1227,6 @@ EXAMPLES
 
     $ sf comments
 ```
-
-_See code: [src/commands/comments.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments.ts)_
 
 ## `sf comments archive COMMENT`
 
@@ -1310,8 +1254,6 @@ DESCRIPTION
 EXAMPLES
   $ sf comments archive cmt_123
 ```
-
-_See code: [src/commands/comments/archive.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/archive.ts)_
 
 ## `sf comments export`
 
@@ -1350,8 +1292,6 @@ EXAMPLES
     $ sf comments export --version v3 --status open --format json
 ```
 
-_See code: [src/commands/comments/export.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/export.ts)_
-
 ## `sf comments get COMMENT`
 
 Show a comment.
@@ -1378,8 +1318,6 @@ DESCRIPTION
 EXAMPLES
   $ sf comments get cmt_123
 ```
-
-_See code: [src/commands/comments/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/get.ts)_
 
 ## `sf comments list`
 
@@ -1422,8 +1360,6 @@ EXAMPLES
     $ sf comments list --version v3
 ```
 
-_See code: [src/commands/comments/list.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/list.ts)_
-
 ## `sf comments reply COMMENT`
 
 Reply to a comment.
@@ -1455,8 +1391,6 @@ EXAMPLES
   $ sf comments reply cmt_123 --body "Fixed in v4."
 ```
 
-_See code: [src/commands/comments/reply.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/reply.ts)_
-
 ## `sf comments settings`
 
 Show Comments settings.
@@ -1483,8 +1417,6 @@ EXAMPLES
 
     $ sf comments settings
 ```
-
-_See code: [src/commands/comments/settings.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/settings.ts)_
 
 ## `sf comments settings set`
 
@@ -1530,8 +1462,6 @@ EXAMPLES
     $ sf comments settings set --embed-remove https://docs.example.com
 ```
 
-_See code: [src/commands/comments/settings/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/settings/set.ts)_
-
 ## `sf comments unarchive COMMENT`
 
 Unarchive a comment.
@@ -1559,8 +1489,6 @@ EXAMPLES
   $ sf comments unarchive cmt_123
 ```
 
-_See code: [src/commands/comments/unarchive.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/comments/unarchive.ts)_
-
 ## `sf connectors`
 
 Manage connectors.
@@ -1586,8 +1514,6 @@ EXAMPLES
 
     $ sf connectors
 ```
-
-_See code: [src/commands/connectors.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors.ts)_
 
 ## `sf connectors add TARGET`
 
@@ -1628,8 +1554,6 @@ EXAMPLES
     $ sf connectors add linear --slug linear
 ```
 
-_See code: [src/commands/connectors/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/add.ts)_
-
 ## `sf connectors bind ROLE CONNECTION`
 
 Bind a capsule role to a connection.
@@ -1655,8 +1579,6 @@ EXAMPLES
     $ sf connectors bind <role> <connection>
 ```
 
-_See code: [src/commands/connectors/bind.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/bind.ts)_
-
 ## `sf connectors bindings`
 
 List a Space's connector roles and bindings.
@@ -1677,8 +1599,6 @@ EXAMPLES
 
     $ sf connectors bindings
 ```
-
-_See code: [src/commands/connectors/bindings.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/bindings.ts)_
 
 ## `sf connectors connections`
 
@@ -1705,8 +1625,6 @@ EXAMPLES
 
     $ sf connectors connections
 ```
-
-_See code: [src/commands/connectors/connections.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections.ts)_
 
 ## `sf connectors connections add CONNECTOR`
 
@@ -1757,8 +1675,6 @@ EXAMPLES
     $ sf connectors connections add linear --owner personal
 ```
 
-_See code: [src/commands/connectors/connections/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/add.ts)_
-
 ## `sf connectors connections edit CONNECTION`
 
 Edit a connection.
@@ -1801,8 +1717,6 @@ EXAMPLES
     $ sf connectors connections edit cxn_abc123 --description "Billing, production"
 ```
 
-_See code: [src/commands/connectors/connections/edit.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/edit.ts)_
-
 ## `sf connectors connections health CONNECTION`
 
 Probe a connection.
@@ -1832,8 +1746,6 @@ EXAMPLES
 
     $ sf connectors connections health cxn_abc123
 ```
-
-_See code: [src/commands/connectors/connections/health.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/health.ts)_
 
 ## `sf connectors connections ls`
 
@@ -1878,8 +1790,6 @@ EXAMPLES
     $ sf connectors connections ls --owner personal
 ```
 
-_See code: [src/commands/connectors/connections/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/ls.ts)_
-
 ## `sf connectors connections reconnect CONNECTION`
 
 Reconnect an account.
@@ -1919,8 +1829,6 @@ EXAMPLES
     $ sf connectors connections reconnect cxn_abc123 --api-key $STRIPE_KEY
 ```
 
-_See code: [src/commands/connectors/connections/reconnect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/reconnect.ts)_
-
 ## `sf connectors connections refresh CONNECTION`
 
 Re-sync a connection's tools.
@@ -1953,8 +1861,6 @@ EXAMPLES
 
     $ sf connectors connections refresh cxn_abc123
 ```
-
-_See code: [src/commands/connectors/connections/refresh.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/refresh.ts)_
 
 ## `sf connectors connections rm CONNECTION`
 
@@ -1990,8 +1896,6 @@ EXAMPLES
     $ sf connectors connections rm cxn_abc123 --yes
 ```
 
-_See code: [src/commands/connectors/connections/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/connections/rm.ts)_
-
 ## `sf connectors detect URL`
 
 Detect what is behind a URL.
@@ -2020,8 +1924,6 @@ EXAMPLES
 
     $ sf connectors detect https://api.example.com
 ```
-
-_See code: [src/commands/connectors/detect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/detect.ts)_
 
 ## `sf connectors ls`
 
@@ -2062,8 +1964,6 @@ EXAMPLES
     $ sf connectors ls --source mcp
 ```
 
-_See code: [src/commands/connectors/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/ls.ts)_
-
 ## `sf connectors policies`
 
 Manage connector policy rules.
@@ -2090,8 +1990,6 @@ EXAMPLES
 
     $ sf connectors policies
 ```
-
-_See code: [src/commands/connectors/policies.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies.ts)_
 
 ## `sf connectors policies add PATTERN`
 
@@ -2133,8 +2031,6 @@ EXAMPLES
     $ sf connectors policies add 'cxn_abc123/charges.create' --action block
 ```
 
-_See code: [src/commands/connectors/policies/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies/add.ts)_
-
 ## `sf connectors policies explain ADDRESS`
 
 Explain what happens for one address.
@@ -2165,8 +2061,6 @@ EXAMPLES
     $ sf connectors policies explain cxn_abc123/charges.create
 ```
 
-_See code: [src/commands/connectors/policies/explain.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies/explain.ts)_
-
 ## `sf connectors policies ls`
 
 List policy rules.
@@ -2195,8 +2089,6 @@ EXAMPLES
 
     $ sf connectors policies ls
 ```
-
-_See code: [src/commands/connectors/policies/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies/ls.ts)_
 
 ## `sf connectors policies rm RULE`
 
@@ -2231,8 +2123,6 @@ EXAMPLES
     $ sf connectors policies rm pol_abc123 --yes
 ```
 
-_See code: [src/commands/connectors/policies/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies/rm.ts)_
-
 ## `sf connectors policies set RULE`
 
 Change a policy rule's action.
@@ -2266,8 +2156,6 @@ EXAMPLES
     $ sf connectors policies set pol_abc123 --action block
 ```
 
-_See code: [src/commands/connectors/policies/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/policies/set.ts)_
-
 ## `sf connectors rm CONNECTOR`
 
 Remove a connector.
@@ -2299,8 +2187,6 @@ EXAMPLES
 
     $ sf connectors rm linear --yes
 ```
-
-_See code: [src/commands/connectors/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/rm.ts)_
 
 ## `sf connectors run [CODE]`
 
@@ -2345,8 +2231,6 @@ EXAMPLES
     $ sf connectors run 'return await tools.linear.issues.list({limit: 5})'
 ```
 
-_See code: [src/commands/connectors/run.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/run.ts)_
-
 ## `sf connectors run get RUN`
 
 Read one run.
@@ -2375,8 +2259,6 @@ EXAMPLES
 
     $ sf connectors run get cxr_abc123
 ```
-
-_See code: [src/commands/connectors/run/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/run/get.ts)_
 
 ## `sf connectors run list`
 
@@ -2416,8 +2298,6 @@ EXAMPLES
 
     $ sf connectors run list --status awaiting_approval
 ```
-
-_See code: [src/commands/connectors/run/list.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/run/list.ts)_
 
 ## `sf connectors run resume RUN`
 
@@ -2459,8 +2339,6 @@ EXAMPLES
     $ sf connectors run resume cxr_abc123
 ```
 
-_See code: [src/commands/connectors/run/resume.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/run/resume.ts)_
-
 ## `sf connectors unbind ROLE`
 
 Remove a capsule connector binding.
@@ -2484,8 +2362,6 @@ EXAMPLES
 
     $ sf connectors unbind <role>
 ```
-
-_See code: [src/commands/connectors/unbind.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/connectors/unbind.ts)_
 
 ## `sf continue`
 
@@ -2512,8 +2388,6 @@ EXAMPLES
     $ sf continue
 ```
 
-_See code: [src/commands/continue.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/continue.ts)_
-
 ## `sf crons`
 
 Manage scheduled jobs.
@@ -2538,8 +2412,6 @@ EXAMPLES
 
     $ sf crons
 ```
-
-_See code: [src/commands/crons.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/crons.ts)_
 
 ## `sf crons ls`
 
@@ -2570,8 +2442,6 @@ EXAMPLES
 
     $ sf crons ls --space docs
 ```
-
-_See code: [src/commands/crons/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/crons/ls.ts)_
 
 ## `sf crons run TARGET`
 
@@ -2610,8 +2480,6 @@ EXAMPLES
 
     $ sf crons run api-digest --header "authorization: Bearer $CRON_SECRET"
 ```
-
-_See code: [src/commands/crons/run.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/crons/run.ts)_
 
 ## `sf db [TARGET]`
 
@@ -2654,8 +2522,6 @@ EXAMPLES
     $ sf db --port 4173
 ```
 
-_See code: [src/commands/db.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db.ts)_
-
 ## `sf db console [TARGET]`
 
 Open a database console.
@@ -2692,8 +2558,6 @@ EXAMPLES
 
     $ sf db console --show-secret
 ```
-
-_See code: [src/commands/db/console.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db/console.ts)_
 
 ## `sf db dump [TARGET]`
 
@@ -2734,8 +2598,6 @@ EXAMPLES
 
     $ sf db dump --table todos --limit 100
 ```
-
-_See code: [src/commands/db/dump.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db/dump.ts)_
 
 ## `sf db export [TARGET]`
 
@@ -2782,8 +2644,6 @@ EXAMPLES
     $ sf db export --port 4173
 ```
 
-_See code: [src/commands/db/export.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db/export.ts)_
-
 ## `sf db list [TARGET]`
 
 List database tables and columns.
@@ -2811,8 +2671,6 @@ EXAMPLES
 
     $ sf db list [target]
 ```
-
-_See code: [src/commands/db/list.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db/list.ts)_
 
 ## `sf db migrate [SOURCE]`
 
@@ -2853,8 +2711,6 @@ EXAMPLES
     $ sf db migrate --drop
 ```
 
-_See code: [src/commands/db/migrate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/db/migrate.ts)_
-
 ## `sf design`
 
 Generate design files from DESIGN.md.
@@ -2879,8 +2735,6 @@ EXAMPLES
 
     $ sf design
 ```
-
-_See code: [src/commands/design.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/design.ts)_
 
 ## `sf design generate`
 
@@ -2915,8 +2769,6 @@ EXAMPLES
 
     $ sf design generate --force
 ````
-
-_See code: [src/commands/design/generate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/design/generate.ts)_
 
 ## `sf dev`
 
@@ -2959,8 +2811,6 @@ EXAMPLES
     $ sf dev
 ```
 
-_See code: [src/commands/dev.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/dev.ts)_
-
 ## `sf dev run-many`
 
 Run multiple isolated copies of a Zero app.
@@ -2996,8 +2846,6 @@ EXAMPLES
 
     $ sf dev run-many
 ```
-
-_See code: [src/commands/dev/run-many.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/dev/run-many.ts)_
 
 ## `sf docs [QUERY]`
 
@@ -3048,8 +2896,6 @@ EXAMPLES
     $ sf docs --all --json
 ```
 
-_See code: [src/commands/docs.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/docs.ts)_
-
 ## `sf doctor`
 
 Diagnose Spacefast CLI setup.
@@ -3080,8 +2926,6 @@ EXAMPLES
     $ sf doctor --space docs
 ```
 
-_See code: [src/commands/doctor.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/doctor.ts)_
-
 ## `sf domains`
 
 Manage domains.
@@ -3106,8 +2950,6 @@ EXAMPLES
 
     $ sf domains
 ```
-
-_See code: [src/commands/domains.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains.ts)_
 
 ## `sf domains add HOSTNAME`
 
@@ -3163,8 +3005,6 @@ EXAMPLES
     $ sf domains add www.example.com --space docs --role redirect --redirect-to example.com
 ```
 
-_See code: [src/commands/domains/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/add.ts)_
-
 ## `sf domains check DOMAIN`
 
 Check a domain.
@@ -3201,8 +3041,6 @@ EXAMPLES
     $ sf domains check example.com --space docs
 ```
 
-_See code: [src/commands/domains/check.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/check.ts)_
-
 ## `sf domains diagnostics DOMAIN`
 
 Inspect domain diagnostics.
@@ -3230,8 +3068,6 @@ EXAMPLES
   $ sf domains diagnostics app.example.com --space docs
 ```
 
-_See code: [src/commands/domains/diagnostics.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/diagnostics.ts)_
-
 ## `sf domains dns`
 
 Manage domain DNS records.
@@ -3257,8 +3093,6 @@ EXAMPLES
 
     $ sf domains dns
 ```
-
-_See code: [src/commands/domains/dns.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns.ts)_
 
 ## `sf domains dns add DOMAIN`
 
@@ -3299,8 +3133,6 @@ EXAMPLES
   $ sf domains dns add example.com --type MX --name @ --value mail.example.com --priority 10
 ```
 
-_See code: [src/commands/domains/dns/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/add.ts)_
-
 ## `sf domains dns batch DOMAIN`
 
 Apply a DNS record batch.
@@ -3333,8 +3165,6 @@ EXAMPLES
   $ sf domains dns batch example.com --input '{"posts":[{"type":"TXT","name":"@","value":"v=spf1 -all"}]}'
 ```
 
-_See code: [src/commands/domains/dns/batch.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/batch.ts)_
-
 ## `sf domains dns capabilities DOMAIN`
 
 Show DNS capabilities.
@@ -3361,8 +3191,6 @@ DESCRIPTION
 EXAMPLES
   $ sf domains dns capabilities example.com
 ```
-
-_See code: [src/commands/domains/dns/capabilities.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/capabilities.ts)_
 
 ## `sf domains dns export DOMAIN`
 
@@ -3391,8 +3219,6 @@ EXAMPLES
 
     $ sf domains dns export example.com
 ```
-
-_See code: [src/commands/domains/dns/export.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/export.ts)_
 
 ## `sf domains dns ls DOMAIN`
 
@@ -3430,8 +3256,6 @@ EXAMPLES
     $ sf domains dns ls example.com
 ```
 
-_See code: [src/commands/domains/dns/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/ls.ts)_
-
 ## `sf domains dns refresh DOMAIN`
 
 Refresh DNS provider snapshot.
@@ -3459,8 +3283,6 @@ EXAMPLES
 
     $ sf domains dns refresh example.com
 ```
-
-_See code: [src/commands/domains/dns/refresh.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/refresh.ts)_
 
 ## `sf domains dns rm DOMAIN RECORD`
 
@@ -3495,8 +3317,6 @@ EXAMPLES
 
     $ sf domains dns rm example.com rec_123
 ```
-
-_See code: [src/commands/domains/dns/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/rm.ts)_
 
 ## `sf domains dns update DOMAIN RECORD`
 
@@ -3537,8 +3357,6 @@ EXAMPLES
     $ sf domains dns update example.com rec_123 --value 1.2.3.4 --ttl 3600
 ```
 
-_See code: [src/commands/domains/dns/update.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/dns/update.ts)_
-
 ## `sf domains ls`
 
 List space domains.
@@ -3565,8 +3383,6 @@ ALIASES
 EXAMPLES
   $ sf domains ls --space docs
 ```
-
-_See code: [src/commands/domains/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/ls.ts)_
 
 ## `sf domains nameservers DOMAIN`
 
@@ -3596,8 +3412,6 @@ EXAMPLES
     $ sf domains nameservers example.com
 ```
 
-_See code: [src/commands/domains/nameservers.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/nameservers.ts)_
-
 ## `sf domains nameservers set DOMAIN NAMESERVERS`
 
 Set domain nameservers.
@@ -3626,8 +3440,6 @@ DESCRIPTION
 EXAMPLES
   $ sf domains nameservers set example.com ns1.example-dns.com,ns2.example-dns.com
 ```
-
-_See code: [src/commands/domains/nameservers/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/nameservers/set.ts)_
 
 ## `sf domains rm DOMAIN`
 
@@ -3665,8 +3477,6 @@ EXAMPLES
     $ sf domains rm example.com --space docs
 ```
 
-_See code: [src/commands/domains/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/rm.ts)_
-
 ## `sf domains search [QUERY]`
 
 Search domain names.
@@ -3703,8 +3513,6 @@ EXAMPLES
 
     $ sf domains search acme --interactive
 ```
-
-_See code: [src/commands/domains/search.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/search.ts)_
 
 ## `sf domains update DOMAIN`
 
@@ -3747,8 +3555,6 @@ EXAMPLES
     $ sf domains update example.com --space docs --serve-from www.example.com --wait
 ```
 
-_See code: [src/commands/domains/update.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/domains/update.ts)_
-
 ## `sf env`
 
 Manage env vars.
@@ -3773,8 +3579,6 @@ EXAMPLES
 
     $ sf env
 ```
-
-_See code: [src/commands/env.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env.ts)_
 
 ## `sf env export-template [DIR]`
 
@@ -3812,8 +3616,6 @@ EXAMPLES
 
     $ sf env export-template ./app --format json
 ```
-
-_See code: [src/commands/env/export-template.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/export-template.ts)_
 
 ## `sf env import FILE`
 
@@ -3859,8 +3661,6 @@ EXAMPLES
     $ sf env import public.env --space docs --no-secret
 ```
 
-_See code: [src/commands/env/import.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/import.ts)_
-
 ## `sf env ls`
 
 List space variables.
@@ -3892,8 +3692,6 @@ EXAMPLES
 
     $ sf env ls --space docs
 ```
-
-_See code: [src/commands/env/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/ls.ts)_
 
 ## `sf env pull [FILE]`
 
@@ -3943,8 +3741,6 @@ EXAMPLES
     $ sf env pull --space docs --stdout --format json
 ```
 
-_See code: [src/commands/env/pull.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/pull.ts)_
-
 ## `sf env rm NAME`
 
 Delete a space variable.
@@ -3977,8 +3773,6 @@ EXAMPLES
 
     $ sf env rm API_URL --space docs
 ```
-
-_See code: [src/commands/env/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/rm.ts)_
 
 ## `sf env set NAME [VALUE]`
 
@@ -4027,8 +3821,6 @@ EXAMPLES
     $ sf env set PUBLIC_ORIGIN https://www.example.com --no-secret --space docs
 ```
 
-_See code: [src/commands/env/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/env/set.ts)_
-
 ## `sf feedback`
 
 Send feedback to Spacefast.
@@ -4068,8 +3860,6 @@ EXAMPLES
     $ sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available \
       --request-id req_123 --json
 ```
-
-_See code: [src/commands/feedback.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/feedback.ts)_
 
 ## `sf fetch [PATH]`
 
@@ -4121,8 +3911,6 @@ EXAMPLES
     $ sf fetch / --verify ver_123 --json
 ```
 
-_See code: [src/commands/fetch.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/fetch.ts)_
-
 ## `sf functions`
 
 Use Workers with Spacefast bindings.
@@ -4152,8 +3940,6 @@ EXAMPLES
     $ sf functions
 ```
 
-_See code: [src/commands/functions.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/functions.ts)_
-
 ## `sf git`
 
 Manage repository connections.
@@ -4178,8 +3964,6 @@ EXAMPLES
 
     $ sf git
 ```
-
-_See code: [src/commands/git.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git.ts)_
 
 ## `sf git build`
 
@@ -4242,8 +4026,6 @@ EXAMPLES
 
     $ sf git build --space docs --branch preview --target preview --wait
 ```
-
-_See code: [src/commands/git/build.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/build.ts)_
 
 ## `sf git connect`
 
@@ -4323,8 +4105,6 @@ EXAMPLES
     $ sf git connect --space docs --repository owner/repo --production-branch main --sync
 ```
 
-_See code: [src/commands/git/connect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/connect.ts)_
-
 ## `sf git disconnect`
 
 Disconnect repository.
@@ -4355,8 +4135,6 @@ EXAMPLES
     $ sf git disconnect --space docs
 ```
 
-_See code: [src/commands/git/disconnect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/disconnect.ts)_
-
 ## `sf git github`
 
 Manage GitHub App setup.
@@ -4381,8 +4159,6 @@ EXAMPLES
 
     $ sf git github
 ```
-
-_See code: [src/commands/git/github.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/github.ts)_
 
 ## `sf git github installations`
 
@@ -4409,8 +4185,6 @@ EXAMPLES
 
     $ sf git github installations
 ```
-
-_See code: [src/commands/git/github/installations.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/github/installations.ts)_
 
 ## `sf git github repos [INSTALLATION]`
 
@@ -4441,8 +4215,6 @@ EXAMPLES
     $ sf git github repos 12345678
 ```
 
-_See code: [src/commands/git/github/repos.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/github/repos.ts)_
-
 ## `sf git ls`
 
 Show repository connection.
@@ -4472,8 +4244,6 @@ EXAMPLES
 
     $ sf git ls --space docs
 ```
-
-_See code: [src/commands/git/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/ls.ts)_
 
 ## `sf git origin`
 
@@ -4507,8 +4277,6 @@ EXAMPLES
 
     $ sf git origin --set-origin
 ```
-
-_See code: [src/commands/git/origin.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/origin.ts)_
 
 ## `sf git sync`
 
@@ -4547,8 +4315,6 @@ EXAMPLES
 
     $ sf git sync --space docs --ref main
 ```
-
-_See code: [src/commands/git/sync.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/sync.ts)_
 
 ## `sf git update`
 
@@ -4606,8 +4372,6 @@ EXAMPLES
     $ sf git update --space docs --production-branch main
 ```
 
-_See code: [src/commands/git/update.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/git/update.ts)_
-
 ## `sf help [COMMAND]`
 
 Display help for sf.
@@ -4630,8 +4394,6 @@ EXAMPLES
 
     $ sf help [command]
 ```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.58/src/commands/help.ts)_
 
 ## `sf init [NAME]`
 
@@ -4693,8 +4455,6 @@ EXAMPLES
     $ sf init --runtime functions
 ```
 
-_See code: [src/commands/init.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/init.ts)_
-
 ## `sf inspect [TARGET]`
 
 Inspect a space by ID, slug, URL, or domain.
@@ -4735,8 +4495,6 @@ EXAMPLES
     $ sf inspect spc_abc123 --team acme
 ```
 
-_See code: [src/commands/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/inspect.ts)_
-
 ## `sf link`
 
 Link the current directory to a space.
@@ -4767,8 +4525,6 @@ EXAMPLES
 
     $ sf link --space prj_abc123 --team acme
 ```
-
-_See code: [src/commands/link.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/link.ts)_
 
 ## `sf login`
 
@@ -4822,8 +4578,6 @@ EXAMPLES
     printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
 ```
 
-_See code: [src/commands/login.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/login.ts)_
-
 ## `sf logout`
 
 Log out of Spacefast.
@@ -4848,8 +4602,6 @@ EXAMPLES
 
     $ sf logout
 ```
-
-_See code: [src/commands/logout.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/logout.ts)_
 
 ## `sf logs [TARGET] [KIND]`
 
@@ -4929,8 +4681,6 @@ EXAMPLES
     $ sf logs runtime --follow --json
 ```
 
-_See code: [src/commands/logs.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/logs.ts)_
-
 ## `sf map`
 
 Print the machine-readable command map.
@@ -4963,8 +4713,6 @@ EXAMPLES
     $ sf map --paths
 ```
 
-_See code: [src/commands/map.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/map.ts)_
-
 ## `sf mcp`
 
 Run the Spacefast MCP server.
@@ -4989,8 +4737,6 @@ DESCRIPTION
 EXAMPLES
   $ sf mcp
 ```
-
-_See code: [src/commands/mcp.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/mcp.ts)_
 
 ## `sf mcp install`
 
@@ -5035,8 +4781,6 @@ EXAMPLES
     $ sf mcp install --agent cursor --remote --oauth
 ```
 
-_See code: [src/commands/mcp/install.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/mcp/install.ts)_
-
 ## `sf mcp proxy`
 
 Run the authenticated remote MCP proxy.
@@ -5067,8 +4811,6 @@ EXAMPLES
 
     $ sf mcp proxy
 ```
-
-_See code: [src/commands/mcp/proxy.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/mcp/proxy.ts)_
 
 ## `sf open [TARGET]`
 
@@ -5106,8 +4848,6 @@ EXAMPLES
 
     $ sf open docs
 ```
-
-_See code: [src/commands/open.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/open.ts)_
 
 ## `sf operations [ID]`
 
@@ -5147,8 +4887,6 @@ EXAMPLES
   $ sf operations --space spc_123
 ```
 
-_See code: [src/commands/operations.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/operations.ts)_
-
 ## `sf pages`
 
 Manage Pages templates.
@@ -5173,8 +4911,6 @@ EXAMPLES
 
     $ sf pages
 ```
-
-_See code: [src/commands/pages.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/pages.ts)_
 
 ## `sf pages pull [TARGET]`
 
@@ -5204,8 +4940,6 @@ EXAMPLES
     $ sf pages pull [target]
 ```
 
-_See code: [src/commands/pages/pull.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/pages/pull.ts)_
-
 ## `sf pages validate`
 
 Validate local Pages templates.
@@ -5233,8 +4967,6 @@ EXAMPLES
 
     $ sf pages validate
 ```
-
-_See code: [src/commands/pages/validate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/pages/validate.ts)_
 
 ## `sf plugins`
 
@@ -5281,8 +5013,6 @@ EXAMPLES
     $ sf plugins --agent codex --dry-run
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/plugins.ts)_
-
 ## `sf profiles`
 
 List provider profiles.
@@ -5308,8 +5038,6 @@ EXAMPLES
 
     $ sf profiles
 ```
-
-_See code: [src/commands/profiles.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/profiles.ts)_
 
 ## `sf profiles rm NAME`
 
@@ -5343,8 +5071,6 @@ EXAMPLES
     $ sf profiles rm staging
 ```
 
-_See code: [src/commands/profiles/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/profiles/rm.ts)_
-
 ## `sf profiles set NAME`
 
 Create or update a provider profile.
@@ -5374,8 +5100,6 @@ EXAMPLES
   $ sf profiles set acme --token ""
 ```
 
-_See code: [src/commands/profiles/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/profiles/set.ts)_
-
 ## `sf profiles use NAME`
 
 Select the active provider profile.
@@ -5403,8 +5127,6 @@ EXAMPLES
 
     $ sf profiles use staging
 ```
-
-_See code: [src/commands/profiles/use.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/profiles/use.ts)_
 
 ## `sf promote [VERSION]`
 
@@ -5452,8 +5174,6 @@ EXAMPLES
 
     $ sf promote ver_123 --no-wait --json
 ```
-
-_See code: [src/commands/promote.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/promote.ts)_
 
 ## `sf publish [DIR]`
 
@@ -5585,8 +5305,6 @@ EXAMPLES
     $ sf publish --json --stream
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/publish.ts)_
-
 ## `sf redeploy [BUILD]`
 
 Retry the latest build (alias of `sf builds retry`).
@@ -5621,8 +5339,6 @@ EXAMPLES
 
     $ sf redeploy bld_123
 ```
-
-_See code: [src/commands/redeploy.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/redeploy.ts)_
 
 ## `sf rollback [VERSION]`
 
@@ -5670,8 +5386,6 @@ EXAMPLES
     $ sf rollback 12 --space docs
 ```
 
-_See code: [src/commands/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rollback.ts)_
-
 ## `sf routing`
 
 Routing utilities.
@@ -5696,8 +5410,6 @@ EXAMPLES
 
     $ sf routing
 ```
-
-_See code: [src/commands/routing.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/routing.ts)_
 
 ## `sf routing compute`
 
@@ -5724,8 +5436,6 @@ EXAMPLES
 
     $ sf routing compute --space docs
 ```
-
-_See code: [src/commands/routing/compute.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/routing/compute.ts)_
 
 ## `sf routing inspect`
 
@@ -5761,8 +5471,6 @@ EXAMPLES
     $ sf routing inspect --routing ./dist --url /old-path
 ```
 
-_See code: [src/commands/routing/inspect.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/routing/inspect.ts)_
-
 ## `sf rules`
 
 Manage traffic rules.
@@ -5787,8 +5495,6 @@ EXAMPLES
 
     $ sf rules
 ```
-
-_See code: [src/commands/rules.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules.ts)_
 
 ## `sf rules add`
 
@@ -5861,8 +5567,6 @@ EXAMPLES
     $ sf rules add --kind cache-bypass --path '/api/*'
 ```
 
-_See code: [src/commands/rules/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/add.ts)_
-
 ## `sf rules ls`
 
 List traffic rules.
@@ -5893,8 +5597,6 @@ EXAMPLES
     $ sf rules ls --space docs
 ```
 
-_See code: [src/commands/rules/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/ls.ts)_
-
 ## `sf rules pause`
 
 Pause traffic rules.
@@ -5922,8 +5624,6 @@ EXAMPLES
     $ sf rules pause --space docs
 ```
 
-_See code: [src/commands/rules/pause.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/pause.ts)_
-
 ## `sf rules resume`
 
 Resume traffic rules.
@@ -5949,8 +5649,6 @@ EXAMPLES
 
     $ sf rules resume --space docs
 ```
-
-_See code: [src/commands/rules/resume.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/resume.ts)_
 
 ## `sf rules rm NAME`
 
@@ -5992,8 +5690,6 @@ EXAMPLES
 
     $ sf rules rm block-logins --kind firewall
 ```
-
-_See code: [src/commands/rules/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/rm.ts)_
 
 ## `sf rules test URL`
 
@@ -6046,8 +5742,6 @@ EXAMPLES
     $ sf rules test /api/orders --file sf.jsonc
 ```
 
-_See code: [src/commands/rules/test.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/test.ts)_
-
 ## `sf rules validate`
 
 Check traffic rules before publishing them.
@@ -6082,8 +5776,6 @@ EXAMPLES
     $ sf rules validate --file build/sf.jsonc
 ```
 
-_See code: [src/commands/rules/validate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/rules/validate.ts)_
-
 ## `sf runtime`
 
 Inspect a space's runtime.
@@ -6108,8 +5800,6 @@ EXAMPLES
 
     $ sf runtime
 ```
-
-_See code: [src/commands/runtime.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/runtime.ts)_
 
 ## `sf runtime status`
 
@@ -6144,8 +5834,6 @@ EXAMPLES
     $ sf runtime status --space docs
 ```
 
-_See code: [src/commands/runtime/status.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/runtime/status.ts)_
-
 ## `sf setup`
 
 Generate setup instructions.
@@ -6170,8 +5858,6 @@ EXAMPLES
 
     $ sf setup
 ```
-
-_See code: [src/commands/setup.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/setup.ts)_
 
 ## `sf setup agent`
 
@@ -6218,8 +5904,6 @@ EXAMPLES
     $ sf setup agent -y --agent cursor --remote --oauth
 ```
 
-_See code: [src/commands/setup/agent.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/setup/agent.ts)_
-
 ## `sf share`
 
 Manage Space Grants.
@@ -6245,8 +5929,6 @@ EXAMPLES
 
     $ sf share
 ```
-
-_See code: [src/commands/share.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share.ts)_
 
 ## `sf share check`
 
@@ -6291,8 +5973,6 @@ EXAMPLES
 
     $ sf share check
 ```
-
-_See code: [src/commands/share/check.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/check.ts)_
 
 ## `sf share grant`
 
@@ -6351,8 +6031,6 @@ EXAMPLES
     $ sf share grant --to public --role viewer --path '/**' --target all-versions
 ```
 
-_See code: [src/commands/share/grant.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/grant.ts)_
-
 ## `sf share grant edit ID`
 
 Edit a direct managed Grant.
@@ -6404,8 +6082,6 @@ EXAMPLES
     $ sf share grant edit <id>
 ```
 
-_See code: [src/commands/share/grant/edit.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/grant/edit.ts)_
-
 ## `sf share identity`
 
 Manage external identity access.
@@ -6430,8 +6106,6 @@ EXAMPLES
 
     $ sf share identity
 ```
-
-_See code: [src/commands/share/identity.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity.ts)_
 
 ## `sf share identity create`
 
@@ -6476,8 +6150,6 @@ EXAMPLES
     $ sf share identity create --type signer --name "Acme portal" --issuer https://portal.acme.com --authorize-url \
       https://portal.acme.com/spacefast/authorize --key "2026-01:REPLACE_WITH_BASE64URL_PUBLIC_KEY"
 ```
-
-_See code: [src/commands/share/identity/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity/create.ts)_
 
 ## `sf share identity grant`
 
@@ -6534,8 +6206,6 @@ EXAMPLES
       "/**" --except "/internal/**"
 ```
 
-_See code: [src/commands/share/identity/grant.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity/grant.ts)_
-
 ## `sf share identity ls`
 
 List identity connections.
@@ -6563,8 +6233,6 @@ EXAMPLES
 
     $ sf share identity ls --team acme
 ```
-
-_See code: [src/commands/share/identity/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity/ls.ts)_
 
 ## `sf share identity revoke CONNECTION`
 
@@ -6594,8 +6262,6 @@ EXAMPLES
 
     $ sf share identity revoke acn_123
 ```
-
-_See code: [src/commands/share/identity/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity/revoke.ts)_
 
 ## `sf share identity update CONNECTION`
 
@@ -6640,8 +6306,6 @@ EXAMPLES
     $ sf share identity update acn_123 --key "2026-01:OLD_PUBLIC_KEY" --key "2026-07:NEW_PUBLIC_KEY"
 ```
 
-_See code: [src/commands/share/identity/update.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/identity/update.ts)_
-
 ## `sf share link`
 
 Manage Links.
@@ -6667,8 +6331,6 @@ EXAMPLES
 
     $ sf share link
 ```
-
-_See code: [src/commands/share/link.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link.ts)_
 
 ## `sf share link copy ID`
 
@@ -6701,8 +6363,6 @@ EXAMPLES
 
     $ sf share link copy lnk_123
 ```
-
-_See code: [src/commands/share/link/copy.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link/copy.ts)_
 
 ## `sf share link create`
 
@@ -6753,8 +6413,6 @@ EXAMPLES
     $ sf share link create --landing /docs --path "/docs/**" --path "/assets/**" --exclude "/docs/internal/**" \
       --role commenter --name "Client review" --expires 7d
 ```
-
-_See code: [src/commands/share/link/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link/create.ts)_
 
 ## `sf share link edit ID`
 
@@ -6813,8 +6471,6 @@ EXAMPLES
     $ sf share link edit <id>
 ```
 
-_See code: [src/commands/share/link/edit.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link/edit.ts)_
-
 ## `sf share link ls`
 
 List Links.
@@ -6843,8 +6499,6 @@ EXAMPLES
 
     $ sf share link ls --space docs
 ```
-
-_See code: [src/commands/share/link/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link/ls.ts)_
 
 ## `sf share link revoke ID`
 
@@ -6876,8 +6530,6 @@ EXAMPLES
     $ sf share link revoke lnk_123
 ```
 
-_See code: [src/commands/share/link/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/link/revoke.ts)_
-
 ## `sf share list`
 
 List Space Grants.
@@ -6907,8 +6559,6 @@ EXAMPLES
     $ sf share list
 ```
 
-_See code: [src/commands/share/list.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/list.ts)_
-
 ## `sf share password`
 
 Manage password access.
@@ -6933,8 +6583,6 @@ EXAMPLES
 
     $ sf share password
 ```
-
-_See code: [src/commands/share/password.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/password.ts)_
 
 ## `sf share password create`
 
@@ -6985,8 +6633,6 @@ EXAMPLES
     $ sf share password create --name <name> --path <path>
 ```
 
-_See code: [src/commands/share/password/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/password/create.ts)_
-
 ## `sf share password ls`
 
 List password access.
@@ -7016,8 +6662,6 @@ EXAMPLES
     $ sf share password ls
 ```
 
-_See code: [src/commands/share/password/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/password/ls.ts)_
-
 ## `sf share password revoke ID`
 
 Revoke password access.
@@ -7046,8 +6690,6 @@ EXAMPLES
 
     $ sf share password revoke <id>
 ```
-
-_See code: [src/commands/share/password/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/password/revoke.ts)_
 
 ## `sf share password rotate ID`
 
@@ -7082,8 +6724,6 @@ EXAMPLES
     $ sf share password rotate <id>
 ```
 
-_See code: [src/commands/share/password/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/password/rotate.ts)_
-
 ## `sf share people`
 
 Manage People.
@@ -7108,8 +6748,6 @@ EXAMPLES
 
     $ sf share people
 ```
-
-_See code: [src/commands/share/people.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people.ts)_
 
 ## `sf share people edit PERSON`
 
@@ -7143,8 +6781,6 @@ EXAMPLES
 
     $ sf share people edit person@example.com --grant /=viewer --grant /docs=editor
 ```
-
-_See code: [src/commands/share/people/edit.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people/edit.ts)_
 
 ## `sf share people invite EMAIL`
 
@@ -7186,8 +6822,6 @@ EXAMPLES
     $ sf share people invite client@example.com --role viewer --target version:ver_123
 ```
 
-_See code: [src/commands/share/people/invite.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people/invite.ts)_
-
 ## `sf share people ls`
 
 List People.
@@ -7216,8 +6850,6 @@ EXAMPLES
 
     $ sf share people ls
 ```
-
-_See code: [src/commands/share/people/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people/ls.ts)_
 
 ## `sf share people remove PERSON`
 
@@ -7248,8 +6880,6 @@ EXAMPLES
     $ sf share people remove <person>
 ```
 
-_See code: [src/commands/share/people/remove.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people/remove.ts)_
-
 ## `sf share people resend PERSON`
 
 Resend a Person invitation.
@@ -7279,8 +6909,6 @@ EXAMPLES
     $ sf share people resend <person>
 ```
 
-_See code: [src/commands/share/people/resend.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/people/resend.ts)_
-
 ## `sf share request`
 
 Manage access requests.
@@ -7305,8 +6933,6 @@ EXAMPLES
 
     $ sf share request
 ```
-
-_See code: [src/commands/share/request.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/request.ts)_
 
 ## `sf share request approve ID`
 
@@ -7342,8 +6968,6 @@ EXAMPLES
     $ sf share request approve <id>
 ```
 
-_See code: [src/commands/share/request/approve.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/request/approve.ts)_
-
 ## `sf share request deny ID`
 
 Deny an access request.
@@ -7373,8 +6997,6 @@ EXAMPLES
     $ sf share request deny <id>
 ```
 
-_See code: [src/commands/share/request/deny.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/request/deny.ts)_
-
 ## `sf share request ls`
 
 List access requests.
@@ -7403,8 +7025,6 @@ EXAMPLES
 
     $ sf share request ls
 ```
-
-_See code: [src/commands/share/request/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/request/ls.ts)_
 
 ## `sf share revoke ID`
 
@@ -7439,8 +7059,6 @@ EXAMPLES
     $ sf share revoke <id>
 ```
 
-_See code: [src/commands/share/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/revoke.ts)_
-
 ## `sf share token`
 
 Manage machine access.
@@ -7465,8 +7083,6 @@ EXAMPLES
 
     $ sf share token
 ```
-
-_See code: [src/commands/share/token.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/token.ts)_
 
 ## `sf share token create`
 
@@ -7514,8 +7130,6 @@ EXAMPLES
     $ sf share token create --name <name> --path <path>
 ```
 
-_See code: [src/commands/share/token/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/token/create.ts)_
-
 ## `sf share token ls`
 
 List machine access.
@@ -7545,8 +7159,6 @@ EXAMPLES
     $ sf share token ls
 ```
 
-_See code: [src/commands/share/token/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/token/ls.ts)_
-
 ## `sf share token revoke ID`
 
 Revoke machine access.
@@ -7575,8 +7187,6 @@ EXAMPLES
 
     $ sf share token revoke <id>
 ```
-
-_See code: [src/commands/share/token/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/token/revoke.ts)_
 
 ## `sf share token rotate ID`
 
@@ -7609,8 +7219,6 @@ EXAMPLES
 
     $ sf share token rotate <id>
 ```
-
-_See code: [src/commands/share/token/rotate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/share/token/rotate.ts)_
 
 ## `sf skills`
 
@@ -7662,8 +7270,6 @@ EXAMPLES
     $ sf skills --agent all
 ```
 
-_See code: [src/commands/skills.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/skills.ts)_
-
 ## `sf skills remove`
 
 Remove Spacefast agent skills.
@@ -7709,8 +7315,6 @@ EXAMPLES
 
     $ sf skills remove --project --agent claude-code
 ```
-
-_See code: [src/commands/skills/remove.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/skills/remove.ts)_
 
 ## `sf skills status`
 
@@ -7760,8 +7364,6 @@ EXAMPLES
     $ sf skills status --project --agent claude-code
 ```
 
-_See code: [src/commands/skills/status.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/skills/status.ts)_
-
 ## `sf source archive`
 
 Download a repository archive.
@@ -7799,8 +7401,6 @@ EXAMPLES
 
     $ sf source archive --space docs --ref main --output ./repo.tar.gz
 ```
-
-_See code: [src/commands/source/archive.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/archive.ts)_
 
 ## `sf source branch`
 
@@ -7844,8 +7444,6 @@ EXAMPLES
     $ sf source branch --branch preview/my-change --delete
 ```
 
-_See code: [src/commands/source/branch.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/branch.ts)_
-
 ## `sf source cat PATH`
 
 Print a repository file.
@@ -7878,8 +7476,6 @@ DESCRIPTION
 EXAMPLES
   $ sf source cat README.md --space docs
 ```
-
-_See code: [src/commands/source/cat.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/cat.ts)_
 
 ## `sf source commits apply`
 
@@ -7921,8 +7517,6 @@ DESCRIPTION
 EXAMPLES
   $ sf source commits apply --space docs --connection-type hosted --target-branch main --message "Patch" --diff ./change.patch
 ```
-
-_See code: [src/commands/source/commits/apply.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/commits/apply.ts)_
 
 ## `sf source commits create`
 
@@ -7969,8 +7563,6 @@ EXAMPLES
   $ sf source commits create --space docs --connection-type hosted --target-branch main --message "Update" --file index.html=./index.html
 ```
 
-_See code: [src/commands/source/commits/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/commits/create.ts)_
-
 ## `sf source commits get SHA`
 
 Show a repository commit.
@@ -8003,8 +7595,6 @@ EXAMPLES
 
     $ sf source commits get <commit-sha> --space docs
 ```
-
-_See code: [src/commands/source/commits/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/commits/get.ts)_
 
 ## `sf source commits ls`
 
@@ -8042,8 +7632,6 @@ EXAMPLES
     $ sf source commits ls --space docs --branch main
 ```
 
-_See code: [src/commands/source/commits/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/commits/ls.ts)_
-
 ## `sf source diff`
 
 Show a repository branch diff.
@@ -8080,8 +7668,6 @@ EXAMPLES
     $ sf source diff --space docs --branch feature --base main
 ```
 
-_See code: [src/commands/source/diff.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/diff.ts)_
-
 ## `sf source import`
 
 Create repository import remote.
@@ -8111,8 +7697,6 @@ EXAMPLES
 
     $ sf source import
 ```
-
-_See code: [src/commands/source/import.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/import.ts)_
 
 ## `sf source ls`
 
@@ -8149,8 +7733,6 @@ EXAMPLES
 
     $ sf source ls --space docs --path src --recursive
 ```
-
-_See code: [src/commands/source/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/ls.ts)_
 
 ## `sf source merge SOURCE TARGET`
 
@@ -8195,8 +7777,6 @@ EXAMPLES
 
     $ sf source merge feature main --space docs --connection-type hosted
 ```
-
-_See code: [src/commands/source/merge.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/merge.ts)_
 
 ## `sf source search PATTERN`
 
@@ -8246,8 +7826,6 @@ EXAMPLES
     $ sf source search "TODO" --space docs --path src
 ```
 
-_See code: [src/commands/source/search.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/search.ts)_
-
 ## `sf source tags create NAME`
 
 Create a repository tag.
@@ -8282,8 +7860,6 @@ EXAMPLES
     $ sf source tags create v1.0.0 --space docs --connection-type hosted --target main
 ```
 
-_See code: [src/commands/source/tags/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/tags/create.ts)_
-
 ## `sf source tags ls`
 
 List repository tags.
@@ -8314,8 +7890,6 @@ EXAMPLES
   $ sf source tags ls --space docs
 ```
 
-_See code: [src/commands/source/tags/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/source/tags/ls.ts)_
-
 ## `sf spaces`
 
 Manage spaces.
@@ -8340,8 +7914,6 @@ EXAMPLES
 
     $ sf spaces
 ```
-
-_See code: [src/commands/spaces.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces.ts)_
 
 ## `sf spaces add`
 
@@ -8387,8 +7959,6 @@ EXAMPLES
   $ sf spaces add --name docs
 ```
 
-_See code: [src/commands/spaces/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/add.ts)_
-
 ## `sf spaces archive`
 
 Archive a space.
@@ -8412,8 +7982,6 @@ DESCRIPTION
 EXAMPLES
   $ sf spaces archive --space docs
 ```
-
-_See code: [src/commands/spaces/archive.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/archive.ts)_
 
 ## `sf spaces check NAME`
 
@@ -8442,8 +8010,6 @@ EXAMPLES
 
     $ sf spaces check my-site --team acme
 ```
-
-_See code: [src/commands/spaces/check.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/check.ts)_
 
 ## `sf spaces claim`
 
@@ -8477,8 +8043,6 @@ EXAMPLES
 
     $ sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
 ```
-
-_See code: [src/commands/spaces/claim.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/claim.ts)_
 
 ## `sf spaces download`
 
@@ -8515,8 +8079,6 @@ EXAMPLES
 
     $ sf spaces download --space docs --version v3 --overwrite
 ```
-
-_See code: [src/commands/spaces/download.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/download.ts)_
 
 ## `sf spaces duplicate`
 
@@ -8556,8 +8118,6 @@ EXAMPLES
     $ sf spaces duplicate --space docs --slug docs-copy
 ```
 
-_See code: [src/commands/spaces/duplicate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/duplicate.ts)_
-
 ## `sf spaces get`
 
 Show a space.
@@ -8590,8 +8150,6 @@ EXAMPLES
 
     $ sf spaces get --space docs
 ```
-
-_See code: [src/commands/spaces/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/get.ts)_
 
 ## `sf spaces ls`
 
@@ -8629,8 +8187,6 @@ EXAMPLES
     $ sf spaces ls --team acme
 ```
 
-_See code: [src/commands/spaces/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/ls.ts)_
-
 ## `sf spaces restore`
 
 Restore a space.
@@ -8654,8 +8210,6 @@ DESCRIPTION
 EXAMPLES
   $ sf spaces restore --space docs
 ```
-
-_See code: [src/commands/spaces/restore.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/restore.ts)_
 
 ## `sf spaces rm`
 
@@ -8694,8 +8248,6 @@ EXAMPLES
     $ sf spaces rm --space docs --yes
 ```
 
-_See code: [src/commands/spaces/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/rm.ts)_
-
 ## `sf spaces rotate-claim`
 
 Rotate an anonymous Space's key.
@@ -8721,8 +8273,6 @@ EXAMPLES
 
     $ sf spaces rotate-claim
 ```
-
-_See code: [src/commands/spaces/rotate-claim.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/rotate-claim.ts)_
 
 ## `sf spaces transfer TEAM`
 
@@ -8750,8 +8300,6 @@ DESCRIPTION
 EXAMPLES
   $ sf spaces transfer acme --space spc_123
 ```
-
-_See code: [src/commands/spaces/transfer.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/transfer.ts)_
 
 ## `sf spaces update`
 
@@ -8810,8 +8358,6 @@ EXAMPLES
     $ sf spaces update --space docs --mode files --spa false
 ```
 
-_See code: [src/commands/spaces/update.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/spaces/update.ts)_
-
 ## `sf status`
 
 Show CLI status.
@@ -8843,8 +8389,6 @@ EXAMPLES
 
     $ sf status --include-claim-url
 ```
-
-_See code: [src/commands/status.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/status.ts)_
 
 ## `sf storage [TARGET]`
 
@@ -8888,8 +8432,6 @@ EXAMPLES
     $ sf storage docs --limit 10
 ```
 
-_See code: [src/commands/storage.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/storage.ts)_
-
 ## `sf storage get ID`
 
 Download an app storage object.
@@ -8920,8 +8462,6 @@ EXAMPLES
 
     $ sf storage get <id>
 ```
-
-_See code: [src/commands/storage/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/storage/get.ts)_
 
 ## `sf storage ls [TARGET]`
 
@@ -8959,8 +8499,6 @@ EXAMPLES
     $ sf storage ls [target]
 ```
 
-_See code: [src/commands/storage/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/storage/ls.ts)_
-
 ## `sf storage put FILE`
 
 Upload a file to app storage.
@@ -8992,8 +8530,6 @@ EXAMPLES
 
     $ sf storage put <file>
 ```
-
-_See code: [src/commands/storage/put.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/storage/put.ts)_
 
 ## `sf storage rm [ID]`
 
@@ -9032,8 +8568,6 @@ EXAMPLES
     $ sf storage rm 0123456789abcdef0123456789abcdef --yes
 ```
 
-_See code: [src/commands/storage/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/storage/rm.ts)_
-
 ## `sf switch [TEAM]`
 
 Switch teams.
@@ -9061,8 +8595,6 @@ EXAMPLES
 
     $ sf switch acme
 ```
-
-_See code: [src/commands/switch.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/switch.ts)_
 
 ## `sf tags`
 
@@ -9096,8 +8628,6 @@ EXAMPLES
 
     $ sf tags --space docs --environment production
 ```
-
-_See code: [src/commands/tags.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags.ts)_
 
 ## `sf tags apply FILE`
 
@@ -9141,8 +8671,6 @@ EXAMPLES
     $ sf tags apply spacefast.tags.json --space docs --submit --release production
 ```
 
-_See code: [src/commands/tags/apply.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/apply.ts)_
-
 ## `sf tags debug`
 
 Create a tag debug session.
@@ -9177,8 +8705,6 @@ EXAMPLES
     $ sf tags debug --space docs --url https://docs.view.fast
 ```
 
-_See code: [src/commands/tags/debug.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/debug.ts)_
-
 ## `sf tags releases`
 
 List tag releases.
@@ -9204,8 +8730,6 @@ EXAMPLES
 
     $ sf tags releases --space docs
 ```
-
-_See code: [src/commands/tags/releases.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/releases.ts)_
 
 ## `sf tags releases get ENVIRONMENT`
 
@@ -9235,8 +8759,6 @@ EXAMPLES
 
     $ sf tags releases get production --space docs
 ```
-
-_See code: [src/commands/tags/releases/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/releases/get.ts)_
 
 ## `sf tags releases rollback ENVIRONMENT REVISION`
 
@@ -9274,8 +8796,6 @@ EXAMPLES
     $ sf tags releases rollback production tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/releases/rollback.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/releases/rollback.ts)_
-
 ## `sf tags releases set ENVIRONMENT REVISION`
 
 Set a tag release.
@@ -9312,8 +8832,6 @@ EXAMPLES
     $ sf tags releases set production tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/releases/set.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/releases/set.ts)_
-
 ## `sf tags revisions`
 
 List tag revisions.
@@ -9349,8 +8867,6 @@ EXAMPLES
     $ sf tags revisions --space docs --status draft
 ```
 
-_See code: [src/commands/tags/revisions.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions.ts)_
-
 ## `sf tags revisions abandon REVISION`
 
 Abandon a tag revision.
@@ -9381,8 +8897,6 @@ EXAMPLES
   $ sf tags revisions abandon tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/revisions/abandon.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/abandon.ts)_
-
 ## `sf tags revisions approve REVISION`
 
 Approve a tag revision.
@@ -9412,8 +8926,6 @@ DESCRIPTION
 EXAMPLES
   $ sf tags revisions approve tver_123 --space docs
 ```
-
-_See code: [src/commands/tags/revisions/approve.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/approve.ts)_
 
 ## `sf tags revisions create`
 
@@ -9462,8 +8974,6 @@ EXAMPLES
     $ sf tags revisions create --space docs --template google-analytics --field measurementId=G-123
 ```
 
-_See code: [src/commands/tags/revisions/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/create.ts)_
-
 ## `sf tags revisions diff REVISION`
 
 Diff a tag revision.
@@ -9492,8 +9002,6 @@ EXAMPLES
 
     $ sf tags revisions diff tver_123 --space docs
 ```
-
-_See code: [src/commands/tags/revisions/diff.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/diff.ts)_
 
 ## `sf tags revisions submit REVISION`
 
@@ -9527,8 +9035,6 @@ EXAMPLES
     $ sf tags revisions submit tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/revisions/submit.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/submit.ts)_
-
 ## `sf tags revisions validate REVISION`
 
 Validate a tag revision.
@@ -9561,8 +9067,6 @@ EXAMPLES
     $ sf tags revisions validate tver_123 --space docs
 ```
 
-_See code: [src/commands/tags/revisions/validate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/revisions/validate.ts)_
-
 ## `sf tags templates`
 
 List tag templates.
@@ -9587,8 +9091,6 @@ EXAMPLES
 
     $ sf tags templates
 ```
-
-_See code: [src/commands/tags/templates.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/tags/templates.ts)_
 
 ## `sf teams`
 
@@ -9615,8 +9117,6 @@ EXAMPLES
     $ sf teams
 ```
 
-_See code: [src/commands/teams.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams.ts)_
-
 ## `sf teams accept INVITATION`
 
 Accept a team invitation.
@@ -9642,8 +9142,6 @@ DESCRIPTION
 EXAMPLES
   $ sf teams accept inv_123
 ```
-
-_See code: [src/commands/teams/accept.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/accept.ts)_
 
 ## `sf teams create NAME`
 
@@ -9675,8 +9173,6 @@ EXAMPLES
 
     $ sf teams create "Acme Inc"
 ```
-
-_See code: [src/commands/teams/create.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/create.ts)_
 
 ## `sf teams defaults [ROOTACCESS]`
 
@@ -9711,8 +9207,6 @@ EXAMPLES
     $ sf teams defaults private
 ```
 
-_See code: [src/commands/teams/defaults.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/defaults.ts)_
-
 ## `sf teams invitations`
 
 Manage team invitations.
@@ -9737,8 +9231,6 @@ EXAMPLES
 
     $ sf teams invitations
 ```
-
-_See code: [src/commands/teams/invitations.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/invitations.ts)_
 
 ## `sf teams invitations add EMAILS`
 
@@ -9776,8 +9268,6 @@ EXAMPLES
     $ sf teams invitations add jane@example.com alex@example.com --role member
 ```
 
-_See code: [src/commands/teams/invitations/add.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/invitations/add.ts)_
-
 ## `sf teams invitations cancel INVITATION`
 
 Cancel a team invitation.
@@ -9803,8 +9293,6 @@ DESCRIPTION
 EXAMPLES
   $ sf teams invitations cancel inv_123
 ```
-
-_See code: [src/commands/teams/invitations/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/invitations/cancel.ts)_
 
 ## `sf teams invitations ls`
 
@@ -9832,8 +9320,6 @@ EXAMPLES
   $ sf teams invitations ls
 ```
 
-_See code: [src/commands/teams/invitations/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/invitations/ls.ts)_
-
 ## `sf teams invitations resend INVITATION`
 
 Resend a team invitation.
@@ -9859,8 +9345,6 @@ DESCRIPTION
 EXAMPLES
   $ sf teams invitations resend inv_123
 ```
-
-_See code: [src/commands/teams/invitations/resend.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/invitations/resend.ts)_
 
 ## `sf teams ls`
 
@@ -9888,8 +9372,6 @@ EXAMPLES
   $ sf teams ls
 ```
 
-_See code: [src/commands/teams/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/ls.ts)_
-
 ## `sf teams members`
 
 Manage team members.
@@ -9914,8 +9396,6 @@ EXAMPLES
 
     $ sf teams members
 ```
-
-_See code: [src/commands/teams/members.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/members.ts)_
 
 ## `sf teams members ls`
 
@@ -9942,8 +9422,6 @@ ALIASES
 EXAMPLES
   $ sf teams members ls
 ```
-
-_See code: [src/commands/teams/members/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/members/ls.ts)_
 
 ## `sf teams members rm MEMBER`
 
@@ -9975,8 +9453,6 @@ EXAMPLES
   $ sf teams members rm jane@example.com
 ```
 
-_See code: [src/commands/teams/members/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/members/rm.ts)_
-
 ## `sf teams switch [TEAM]`
 
 Set default team.
@@ -10004,8 +9480,6 @@ EXAMPLES
 
     $ sf teams switch acme
 ```
-
-_See code: [src/commands/teams/switch.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/teams/switch.ts)_
 
 ## `sf transfers accept ID`
 
@@ -10038,8 +9512,6 @@ EXAMPLES
     $ sf transfers accept trf_123
 ```
 
-_See code: [src/commands/transfers/accept.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/transfers/accept.ts)_
-
 ## `sf transfers cancel ID`
 
 Cancel a space transfer.
@@ -10065,8 +9537,6 @@ DESCRIPTION
 EXAMPLES
   $ sf transfers cancel trf_123
 ```
-
-_See code: [src/commands/transfers/cancel.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/transfers/cancel.ts)_
 
 ## `sf unlink`
 
@@ -10097,8 +9567,6 @@ EXAMPLES
     $ sf unlink --yes --json
 ```
 
-_See code: [src/commands/unlink.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/unlink.ts)_
-
 ## `sf users`
 
 Manage app users and sign-in methods.
@@ -10118,8 +9586,6 @@ EXAMPLES
 
     $ sf users
 ```
-
-_See code: [src/commands/users.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users.ts)_
 
 ## `sf users delete USER`
 
@@ -10145,8 +9611,6 @@ EXAMPLES
     $ sf users delete <user>
 ```
 
-_See code: [src/commands/users/delete.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/delete.ts)_
-
 ## `sf users get USER`
 
 Inspect an app user.
@@ -10170,8 +9634,6 @@ EXAMPLES
 
     $ sf users get <user>
 ```
-
-_See code: [src/commands/users/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/get.ts)_
 
 ## `sf users ls`
 
@@ -10199,8 +9661,6 @@ EXAMPLES
     $ sf users ls
 ```
 
-_See code: [src/commands/users/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/ls.ts)_
-
 ## `sf users reactivate USER`
 
 Reactivate an app account.
@@ -10224,8 +9684,6 @@ EXAMPLES
 
     $ sf users reactivate <user>
 ```
-
-_See code: [src/commands/users/reactivate.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/reactivate.ts)_
 
 ## `sf users revoke USER`
 
@@ -10254,8 +9712,6 @@ EXAMPLES
     $ sf users revoke <user>
 ```
 
-_See code: [src/commands/users/revoke.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/revoke.ts)_
-
 ## `sf users sessions USER`
 
 List app user sessions.
@@ -10279,8 +9735,6 @@ EXAMPLES
 
     $ sf users sessions <user>
 ```
-
-_See code: [src/commands/users/sessions.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/sessions.ts)_
 
 ## `sf users settings`
 
@@ -10314,8 +9768,6 @@ EXAMPLES
     $ sf users settings
 ```
 
-_See code: [src/commands/users/settings.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/settings.ts)_
-
 ## `sf users suspend USER`
 
 Suspend an app account.
@@ -10339,8 +9791,6 @@ EXAMPLES
 
     $ sf users suspend <user>
 ```
-
-_See code: [src/commands/users/suspend.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/users/suspend.ts)_
 
 ## `sf versions`
 
@@ -10366,8 +9816,6 @@ EXAMPLES
 
     $ sf versions
 ```
-
-_See code: [src/commands/versions.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/versions.ts)_
 
 ## `sf versions get [VERSION]`
 
@@ -10401,8 +9849,6 @@ EXAMPLES
 
     $ sf versions get ver_123 --space docs --json
 ```
-
-_See code: [src/commands/versions/get.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/versions/get.ts)_
 
 ## `sf versions ls`
 
@@ -10449,8 +9895,6 @@ FLAG DESCRIPTIONS
     Full 40-character git commit SHA. Short SHAs are rejected — the match is exact.
 ```
 
-_See code: [src/commands/versions/ls.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/versions/ls.ts)_
-
 ## `sf versions rm [VERSION]`
 
 Delete a version.
@@ -10489,8 +9933,6 @@ EXAMPLES
     $ sf versions rm ver_123 --space docs --yes
 ```
 
-_See code: [src/commands/versions/rm.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/versions/rm.ts)_
-
 ## `sf whoami`
 
 Show the current Spacefast account.
@@ -10519,8 +9961,6 @@ EXAMPLES
 
     $ sf whoami --json
 ```
-
-_See code: [src/commands/whoami.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/whoami.ts)_
 
 ## `sf wp`
 
@@ -10571,8 +10011,6 @@ EXAMPLES
     $ sf wp -- --version
 ```
 
-_See code: [src/commands/wp.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/wp.ts)_
-
 ## `sf zero`
 
 Work with a space's Zero capsule.
@@ -10597,8 +10035,6 @@ EXAMPLES
 
     $ sf zero
 ```
-
-_See code: [src/commands/zero.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero.ts)_
 
 ## `sf zero abilities`
 
@@ -10629,8 +10065,6 @@ EXAMPLES
 
     $ sf zero abilities
 ```
-
-_See code: [src/commands/zero/abilities.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero/abilities.ts)_
 
 ## `sf zero call ABILITY`
 
@@ -10673,8 +10107,6 @@ EXAMPLES
     $ sf zero call content.posts.save --input @post.json
 ```
 
-_See code: [src/commands/zero/call.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero/call.ts)_
-
 ## `sf zero import SOURCE DIRECTORY`
 
 Import a Payload CMS or EmDash project as a Zero capsule.
@@ -10715,8 +10147,6 @@ EXAMPLES
     $ sf zero import emdash ../my-emdash-site --out .
 ```
 
-_See code: [src/commands/zero/import.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero/import.ts)_
-
 ## `sf zero queries`
 
 List a capsule's declared queries.
@@ -10744,8 +10174,6 @@ EXAMPLES
 
     $ sf zero queries
 ```
-
-_See code: [src/commands/zero/queries.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero/queries.ts)_
 
 ## `sf zero types`
 
@@ -10782,5 +10210,3 @@ EXAMPLES
 
     $ sf zero types --check
 ```
-
-_See code: [src/commands/zero/types.ts](https://github.com/spacefast/monorepo/blob/v0.5.0/src/commands/zero/types.ts)_
