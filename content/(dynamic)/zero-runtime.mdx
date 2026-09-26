@@ -221,8 +221,10 @@ Only three source roots are read: `client/`, `server/`, and `shared/`. Beyond th
 
 Platform modules do not count against your client cap. The SDK, kit, charts, preact, recharts, and lucide serve from immutable same-origin URLs the browser keeps across publishes.
 
-:::warning[There is no outbound fetch in a Zero handler]
-The runner defines `Headers`, `Response`, `URL`, `URLSearchParams`, `atob`, and `btoa`, but no `fetch`, `crypto`, or `TextEncoder`. A handler that needs to call an external API, like creating a checkout session, belongs in [Functions](/functions). Receiving the provider's webhook stays in Zero. See [Receiving a webhook](#receiving-a-webhook).
+:::warning[`sf publish` builds Zero handlers without outbound fetch]
+Handlers published with the current CLI get no `fetch`. The runner defines `Headers`, `Response`, `URL`, `URLSearchParams`, `atob`, and `btoa`, and never `crypto` or `TextEncoder`. A handler that needs to call an external API, like creating a checkout session, belongs in [Functions](/functions). Receiving the provider's webhook stays in Zero. See [Receiving a webhook](#receiving-a-webhook).
+
+The exception is the hosted [MCP server](/agents/mcp-server) at `https://mcp.spacefast.com`: its `publish` tool compiles on Spacefast and the handlers it publishes do get `fetch`. On a claimed Space that reaches any public host. An unclaimed Space reaches only a short list of AI, GitHub, and Stripe APIs. The next `sf publish` from the current CLI builds without it again.
 :::
 
 ## Styling
