@@ -137,6 +137,8 @@ Every query, mutation, action, and endpoint handler takes `ctx` first.
 | `log` | yes | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
 | `invalidate` | no | yes | no | Names the live queries this mutation changed |
 
+A signed-out visitor is a guest with a real `userId` (`guest:…`), so `!ctx.auth.userId` never rejects anyone. Gate sign-in on `ctx.auth.isAuthenticated`.
+
 A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
 
 An action runs without a transaction. It reads the database but cannot write to it, and it has no `invalidate`. That makes it the place for slow or side-effecting calls to other services. To keep what it fetched, hand the result to a mutation. The client calls one with `useAction(name)`.
@@ -212,13 +214,13 @@ An action is callable by anyone who can load your app, so gate it before it spen
 import { action, capsule } from "@spacefast/zero/server";
 
 type Ctx = {
-  auth: { isSignedIn: boolean; userId: string | null };
+  auth: { isAuthenticated: boolean; userId: string | null };
   env: Record<string, string | undefined>;
 };
 
 async function callPeople(ctx: Ctx, path: string, body?: unknown) {
   const admins = (ctx.env.INVITE_ADMINS ?? "").split(",").map((id) => id.trim());
-  if (!ctx.auth.isSignedIn || !admins.includes(ctx.auth.userId ?? "")) {
+  if (!ctx.auth.isAuthenticated || !admins.includes(ctx.auth.userId ?? "")) {
     throw new Error("You can't send invites.");
   }
   const response = await fetch(
