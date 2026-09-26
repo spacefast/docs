@@ -79,7 +79,7 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 
 | What | Window | What happens at the end |
 | --- | --- | --- |
-| Unclaimed space | 33 hours and 20 minutes from the latest publish | The space stops serving |
+| Unclaimed space | 33 hours and 20 minutes from creation or the latest publish that changes files, up to 30 days | The space stops serving |
 | Claiming an expired anonymous space | 7 more days | The claim link stops working |
 | Unfinished publish drafts | 24 hours | The draft is swept |
 | Deleted team | 30 days | The team is reaped |
@@ -87,7 +87,7 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 | Activity events | Plan window, 48 hours on Free | Events are deleted |
 | HTTP access logs | Plan window, 48 hours on Free | Reads are clamped to the window |
 
-The two anonymous rows work together. A space that stops serving after 33 hours and 20 minutes is still recoverable through the claim link for another 7 days. See [Publish without an account](/anonymous-and-claim).
+The two anonymous rows work together. A space that stops serving at its deadline, which claim-page loads can push out by up to 6 hours, is still recoverable through the claim link for another 7 days. See [Publish without an account](/anonymous-and-claim).
 
 ## What a paused or removed space serves
 
