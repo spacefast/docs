@@ -139,7 +139,7 @@ Every query, mutation, action, and endpoint handler takes `ctx` first.
 
 A signed-out visitor is a guest with a real `userId` (`guest:…`), so `!ctx.auth.userId` never rejects anyone. Gate sign-in on `ctx.auth.isAuthenticated`.
 
-A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
+A query can run again when it satisfies a subscription, so any `fetch()` it makes can run again too. Queries have no `invalidate`; only write handlers tell subscriptions to refresh.
 
 An action runs without a transaction. It reads the database but cannot write to it, and it has no `invalidate`. Use it when a call causes an external effect, not to gain more runtime: the whole action has a 5-second deadline. To keep what it fetched, hand the result to a mutation. The client calls one with `useAction(name)`.
 
