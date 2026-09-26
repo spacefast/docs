@@ -1,0 +1,67 @@
+---
+title: Manage customers and usage
+description: Assign plans, suspend or close customers, and reconcile usage records.
+---
+
+Use your tenant API key for customer management. Customer JWTs cannot call these management operations.
+
+## Customer directory and lifecycle
+
+An external principal appears when a customer first owns a resource. IDs match without regard to case. Use one stable lowercase ID in your database, API requests, and signed JWTs.
+
+Lifecycle calls take a JSON body. Send `{}` when you have no fields to set; a request with no body returns `422 validation_error`.
+
+| Operation | Request |
+| --- | --- |
+| List customers | `GET /v1/principals` |
+| Read one customer | `GET /v1/principals/external/{principalId}` |
+| Suspend | `POST /v1/principals/external/{principalId}/suspend` with an optional `reason` |
+| Restore | `POST /v1/principals/external/{principalId}/unsuspend` with an optional `reason` |
+| Close | `POST /v1/principals/external/{principalId}/close` with optional `reason` and `force` |
+| Assign a plan | `PUT /v1/principals/external/{principalId}/plan` with `{"plan":"starter"}` |
+
+Suspension blocks customer Space mutations and changes serving to the suspended page. Restoring the customer lifts a partner-applied suspension. A Spacefast-applied suspension returns `principal_suspension_locked` when a partner tries to lift it or close the customer.
+
+Closure is terminal. Without `force`, closing a customer that owns Spaces returns `principal_has_active_spaces`. With `force`, its Spaces stop serving normally. Closure does not synchronously delete all customer data. Repeating a completed transition does not emit another lifecycle event.
+
+Tenant suspension takes precedence over customer status. Restoring a customer cannot restore serving while its tenant is suspended.
+
+## Assign plans
+
+Declare `system.plans` and `system.defaultPlan` in the [system Space](/api/partners/configuration#plans). Each catalog entry contains `features`, `quotas`, and an optional `quotaPolicy`.
+
+Assign a customer with the plan operation above. An unknown plan returns `plan_unknown`. Assignment affects future publishes. Existing published versions retain the entitlements recorded at their last publish.
+
+Removing an assigned plan from the catalog clears that assignment. The customer falls back to `defaultPlan`, and Spacefast emits `principal.plan_reset`. Subscribe to that event to update your own account display.
+
+`quotaPolicy` is `block` by default. `warn` records a quota event and allows the mutation. A quota limit does not itself suspend serving.
+
+## Read usage
+
+```bash
+curl --fail-with-body -sS \
+  "https://api.spacefast.com/v1/usage?principalId=customer_123&limit=100" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+Follow `pagination.nextCursor` until `hasMore` is false. Filters include `from`, `to`, `principalId`, `spaceId`, and `dimension`. Version 1 uses hourly ledger buckets.
+
+Records are immutable and identify the tenant, principal, Space, dimension, bucket, and mode. Quantities are signed integer strings. Keep integer precision when importing them into your billing system.
+
+A correction is a new record linked through `corrects`. Deduplicate by `usageRecordId`, retain the original, and account for the correction. Do not overwrite an earlier record or assume all quantities are positive. Test-mode records are never billable.
+
+Use `GET /v1/usage/periods` and `GET /v1/usage/periods/{periodId}` for monthly period status and totals. Usage arrives after measurement settles. A newly published Space can have no measured usage yet.
+
+## Handle failures
+
+Follow the stable problem `code`, not the English `detail`. Preserve `requestId` when investigating a failure. Validation errors can include a JSON Pointer in `pointer`.
+
+| Code | Response |
+| --- | --- |
+| `tenant_not_granted` | Check the credential, selected tenant, and custom API gateway header. |
+| `principal_suspended`, `principal_closed` | Stop customer mutations and show the current account state. |
+| `principal_suspension_locked` | Escalate the Spacefast-applied restriction. |
+| `plan_unknown` | Read the current catalog before assigning a plan. |
+| `rate_limited` | Honor `Retry-After` and add jitter. |
+
+Use an [idempotency key](/api/idempotency) when retrying mutations after a timeout. Poll returned [operations](/api/operations) until they reach a terminal status.

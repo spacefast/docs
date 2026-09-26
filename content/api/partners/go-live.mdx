@@ -1,0 +1,75 @@
+---
+title: Promote a partner integration to live
+description: Test failure handling, promote configuration, and verify live publishing and event delivery.
+---
+
+Test and live are separate tenants with separate credentials and resources. Promotion copies system configuration. It does not turn sandbox customers or Spaces into live resources.
+
+## Exercise failures in test mode
+
+Use these reserved strings in the named inputs on your test tenant. Live tenants treat the same strings as ordinary input.
+
+| Input string | Put it in | Result |
+| --- | --- | --- |
+| `sf-sim-build-fail` | Space slug | The next build fails. |
+| `sf-sim-domain-pending` | Custom domain name | Verification stays pending. |
+| `sf-sim-domain-fail` | Custom domain name | Verification fails. |
+| `sf-sim-tls-fail` | Custom domain name | Certificate issuance fails. |
+| `sf-sim-rate-limit` | Space slug on creation | Creation returns `429 rate_limited`. |
+| `sf-sim-webhook-retry` | Webhook URL | Delivery fails and enters retry scheduling. |
+| `sf-sim-suspend` | External customer ID | The customer becomes suspended. |
+| `sf-sim-usage-correction` | Space slug | The next settled usage sample appends a correction. |
+
+The rate-limit trigger checks your response handling, not your throughput. Test-mode provisioning and certificate results are simulated. Ordinary test-mode webhook URLs can receive real HTTPS requests; use a receiver you control.
+
+Verify that your application handles each failure it can expose to a customer. Also check a second customer's credential against the first customer's Space. The second customer must not gain access.
+
+## Prepare the live tenant
+
+Create the live tenant's system Space, [designate it](/api/partners/configuration#designate-a-system-space) with the live tenant API key, and publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
+
+Register and activate a separate live signing issuer. Promotion preserves the live issuer declaration and never copies the test issuer. Store live API keys and webhook secrets separately from test secrets.
+
+## Promote configuration
+
+Use the live tenant's API key and ID.
+
+```bash
+curl --fail-with-body -sS -X POST \
+  "https://api.spacefast.com/v1/tenants/$SPACEFAST_LIVE_TENANT_ID/promote" \
+  -H "Authorization: Bearer $SPACEFAST_LIVE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: $PROMOTION_KEY" \
+  -d '{}'
+```
+
+The body is required, even though it is empty. Generate `PROMOTION_KEY` (a UUID) once per promotion and reuse it when retrying after a timeout, so a retry replays the first result instead of promoting again.
+
+Promotion publishes the test system configuration onto the live system Space while retaining its live content. The test tenant remains unchanged. New domains and other live resources require their own verification.
+
+Read the returned live tenant's `manifestStatus`. Resolve every `failed` item and complete verification for every required `pending` item. Obtain the live webhook signing secret through the [subscription setup flow](/api/partners/configuration#connect-an-event-receiver).
+
+## Prove the live flow
+
+Complete this sequence with a dedicated live test customer before admitting customer traffic.
+
+1. Create a Space with the live tenant API key and publish a small page through the normal publish API or CLI.
+2. Open its returned HTTPS URL and verify the content. Repeat through the custom customer hostname if you use one.
+3. Mint a live customer JWT and read that customer's Space. Confirm that a different customer's JWT cannot read it.
+4. Receive a webhook on your HTTPS receiver. Verify its raw-body signature, record the event ID, and acknowledge with `2xx`.
+5. Return a temporary error from the receiver. Confirm that the same event is retried and that new matching events have delivery records while the endpoint is `failing`.
+6. Restore the receiver and confirm delivery recovery. Exercise manual redelivery and deduplicate by event ID.
+7. Suspend and restore the test customer. Check the serving page and mutation refusals in both states.
+8. Rotate a tenant API key and a signing key. Verify the replacement before revoking the old credential, then confirm that the revoked credential fails.
+9. Check the custom API gateway with a foreign tenant credential and a caller-supplied tenant header. The gateway must enforce its configured tenant.
+10. Delete the dedicated test customer's resources when verification is complete.
+
+An empty usage response immediately after publishing is not a billing failure. Recheck after a measurement bucket settles.
+
+## Recover configuration
+
+Retain the previous live system Space version ID before promotion. If the configuration causes a problem, use the normal version promotion operation to restore that version. Read `manifestStatus` again after the rollback.
+
+Rollback restores the selected version's declaration. It does not reverse customer lifecycle changes, usage records, or webhook-secret rotations. Removing and recreating a signing issuer can change its audience and require a new ownership proof. Check issuer status before minting more JWTs.
+
+For a failing subscription, inspect its delivery diagnostics. For a manifest-owned endpoint, publish the corrected declaration to reactivate it. Repeatedly republishing an unreachable endpoint does not repair the receiver.

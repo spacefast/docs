@@ -90,6 +90,7 @@ IPs
 Jetpack
 jittered
 joinable
+JWTs
 keyset
 Lakebed
 letterboxed

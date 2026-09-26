@@ -1,0 +1,119 @@
+---
+title: Configure your partner account
+description: Publish branding, signing keys, subscriptions, plans, and custom domains through a system Space.
+---
+
+A tenant's designated system Space owns its partner configuration. The live version's `system` block in `sf.jsonc` is the desired configuration. Publishing or rolling back that Space reconciles the declaration into your account.
+
+## Designate a system Space
+
+Create a Space in your tenant and wait for it to become active. Read the tenant's current `systemSpaceId`, then designate the Space.
+
+```bash
+curl --fail-with-body -sS -X PATCH \
+  "https://api.spacefast.com/v1/tenants/$SPACEFAST_TENANT_ID" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"systemSpaceId":"spc_example","baseSystemSpaceId":null}'
+```
+
+Use the current ID instead of `null` when replacing an existing system Space. A stale `baseSystemSpaceId` returns a conflict. Clearing the designation deactivates its materialized configuration, including its issuer and subscriptions.
+
+## Publish the declaration
+
+Add a `system` block to the system Space's `sf.jsonc`. Keep the other project settings and content in the same publish.
+
+```json
+{
+  "system": {
+    "presentation": {
+      "name": "Example Hosting",
+      "logo": "https://example.com/logo.png",
+      "supportUrl": "https://example.com/support",
+      "claimOrigin": "https://portal.example.com",
+      "accessHandoffOrigin": "https://portal.example.com",
+      "problemDocsBaseUrl": "https://example.com/errors"
+    },
+    "subscriptions": [{
+      "url": "https://hooks.example.com/spacefast",
+      "events": ["principal.*", "version.ready", "build.failed"]
+    }],
+    "api": {
+      "allowedOrigins": ["https://portal.example.com"]
+    }
+  }
+}
+```
+
+Publish to the designated Space with your tenant API key. Read `manifestStatus.items` from the tenant response after publishing. Each declared section reports `pending`, `active`, or `failed`, with details when available. A successful content publish does not mean every configuration item is active.
+
+Omitting a previously declared section removes its configuration. Preserve unrelated sections when changing one setting. Ordinary Spaces do not materialize a tenant system manifest.
+
+## The `system` block
+
+Every section is optional. Every URL must use `https://`. Unknown keys fail the publish.
+
+| Field | Shape and limits |
+| --- | --- |
+| `presentation.name` | Brand name, up to 255 characters |
+| `presentation.logo`, `supportUrl`, `claimOrigin`, `accessHandoffOrigin`, `problemDocsBaseUrl` | HTTPS URLs, up to 2,048 characters each |
+| `presentation.contacts` | Map of contact name to URL or address, at most 32 entries |
+| `tokenIssuers` | At most one issuer: `issuer`, `keys` (1 to 5 `{ kid, publicKey }`), and optional `proofs`. See [customer JWTs](/api/partners/tokens) |
+| `subscriptions` | Up to 32 entries of `{ url, events }`, with 1 to 64 event filters each, such as `principal.*` |
+| `plans` | Map of plan name to `{ features, quotas, quotaPolicy }`, at most 64 plans. See [plans](#plans) |
+| `defaultPlan` | A plan name declared in `plans` |
+| `hostnames.apex` | Bare hostname for customer Space hostnames, such as `sites.example.com` |
+| `api.origin` | HTTPS origin on the default port, with no path |
+| `api.allowedOrigins` | Up to 32 HTTPS origins allowed by CORS |
+
+CORS origins cannot contain wildcards, credentials, query strings, fragments, or paths. CORS does not grant API permissions.
+
+### Plans
+
+```json
+{
+  "system": {
+    "defaultPlan": "starter",
+    "plans": {
+      "starter": { "features": [], "quotas": { "spaces": 3 } },
+      "pro": {
+        "features": ["branding.hide", "pages.templates"],
+        "quotas": { "spaces": 50, "customDomains": 10 },
+        "quotaPolicy": "warn"
+      }
+    }
+  }
+}
+```
+
+`features` grants capabilities. `branding.hide` hides the Spacefast badge, `pages.templates` allows `_pages/*.html` full-page takeovers, and `domains.proxy_bindings` allows proxy routes to external upstreams. A partner plan grants none of them unless listed.
+
+`quotas` takes `spaces`, `storageBytes`, `buildMinutesPerMonth`, and `customDomains`, each a nonnegative integer. An omitted quota has no cap. `quotaPolicy` is `block` (the default) or `warn`.
+
+## Connect an event receiver
+
+After publishing `subscriptions`, list `GET /v1/webhooks` with your tenant API key. Match the endpoint URL to its webhook ID. Manifest subscriptions return masked secret previews.
+
+Call `POST /v1/webhooks/{webhookId}/rotate` with `{"expireNow":false}` to obtain a usable signing secret. Store the returned `data.secret` immediately. The [webhook guide](/api/webhooks) covers signature verification, secret overlap, retries, and redelivery.
+
+Use `GET /v1/events/catalog` for delegated customer-notification codes. Spacefast hands these notifications to your receiver so your product can send them to customers. Spacefast does not email your customers for them. Subscribe to `principal.notification.*` to receive the whole class.
+
+Change the URL or event filters by editing the manifest and publishing again. API updates and deletion of manifest-owned subscriptions return `webhook_managed_by_manifest`. Secret rotation, delivery inspection, and redelivery remain available through the API.
+
+## Configure custom customer hostnames
+
+Publish `system.hostnames.apex`, for example `sites.example.com`. Read `domainSetup.hostnames.dnsInstructions` from the tenant response.
+
+Add the supplied ownership TXT record and wildcard address records. Use the returned addresses rather than copied values from another tenant. Spacefast rechecks pending declarations. Wait for the `hostnames` manifest item to become `active` before relying on the namespace.
+
+Each customer site provisions its own TLS certificate. Verify an actual published site's HTTPS URL before switching customer traffic. Test tenants do not claim or configure live hostnames.
+
+## Configure a custom API origin
+
+Publish `system.api.origin`, for example `https://api.example.com`. The origin must use the default HTTPS port. Read `domainSetup.api` for ownership records, `upstreamOrigin`, `proxyHeaders`, and `probeUrl`.
+
+Configure your HTTPS gateway to forward to the returned upstream. Override caller-supplied `x-spacefast-tenant-id` with your tenant ID. Preserve request paths, query strings, and `Authorization`, including on the verification route. Do not redirect the probe.
+
+Add the supplied DNS ownership TXT record. Wait for the `api` manifest item to become `active`. Pending verification must not block your integration: use `https://api.spacefast.com` until the custom origin is ready.
+
+Your gateway's tenant header must be authoritative on every route. Test a credential from another tenant and confirm that the gateway cannot use it to access that tenant's resources. The API also rejects mismatched credentials when it directly receives a verified custom origin's Host.
