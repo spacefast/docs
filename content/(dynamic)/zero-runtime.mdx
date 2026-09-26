@@ -141,7 +141,7 @@ A signed-out visitor is a guest with a real `userId` (`guest:…`), so `!ctx.aut
 
 A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
 
-An action runs without a transaction. It reads the database but cannot write to it, and it has no `invalidate`. That makes it the place for slow or side-effecting calls to other services. To keep what it fetched, hand the result to a mutation. The client calls one with `useAction(name)`.
+An action runs without a transaction. It reads the database but cannot write to it, and it has no `invalidate`. Use it when a call causes an external effect, not to gain more runtime: the whole action has a 5-second deadline. To keep what it fetched, hand the result to a mutation. The client calls one with `useAction(name)`.
 
 `invalidate()` takes **query names, not table names**. `ctx.invalidate("notes")` refreshes every `notes` subscription whatever arguments it carries. Calling it with nothing is the safe default and refreshes every live query on the page.
 
@@ -182,7 +182,7 @@ Platform modules do not count against your client cap. The SDK, kit, charts, pre
 
 ### Outbound HTTP
 
-`fetch()` works in every Zero handler, HTTPS only. Reach for an action when the call is slow or does something out in the world. A mutation or write endpoint holds its database transaction open while it waits, so its `fetch()` gives up after 5 seconds. Everywhere else it gets 10.
+`fetch()` works in every Zero handler, HTTPS only. A mutation or write endpoint holds its database transaction open while it waits, so each fetch has a 5-second timeout. Queries and read endpoints get 10 seconds per fetch. An action gets 5 seconds for the whole invocation, shared across every fetch it makes.
 
 How far `fetch()` reaches depends on who owns the space:
 
