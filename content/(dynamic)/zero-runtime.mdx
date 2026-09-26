@@ -60,8 +60,8 @@ The scaffold's `package.json` pins the package to the compiler's own version. No
 
 | Import | Use it from | What it holds |
 | --- | --- | --- |
-| `@spacefast/zero/server` | `server/` | `capsule`, `query`, `mutation`, `endpoint`, `table`, field constructors, response helpers |
-| `@spacefast/zero/client` | `client/` | `useQuery`, `usePaginatedQuery`, `useMutation`, `useAuth`, `storage`, `Router` and friends |
+| `@spacefast/zero/server` | `server/` | `capsule`, `query`, `mutation`, `action`, `endpoint`, `table`, field constructors, response helpers |
+| `@spacefast/zero/client` | `client/` | `useQuery`, `usePaginatedQuery`, `useMutation`, `useAction`, `useAuth`, `storage`, `Router` and friends |
 | `@spacefast/zero/kit` | `client/` | The component set: `Button`, `Card`, `Input`, `Dialog`, `Table`, and about 30 more |
 | `@spacefast/zero/charts` | `client/` | `LineChart`, `BarChart`, `Sparkline`, `StatTile` |
 
@@ -139,7 +139,7 @@ Every query, mutation, action, and endpoint handler takes `ctx` first.
 
 A query can be replayed to satisfy a subscription, so anything that leaves a mark outside the database is withheld from it. That is why `invalidate` is write-side only.
 
-An action runs without a transaction. It gets a read-only `db`, can call `fetch()`, and has no `invalidate`. Use an action when an external API call can take time or cause an external effect. Send the result to a mutation when the capsule must save it.
+An action runs without a transaction. It reads the database but cannot write to it, and it has no `invalidate`. That makes it the place for slow or side-effecting calls to other services. To keep what it fetched, hand the result to a mutation. The client calls one with `useAction(name)`.
 
 `invalidate()` takes **query names, not table names**. `ctx.invalidate("notes")` refreshes every `notes` subscription whatever arguments it carries. Calling it with nothing is the safe default and refreshes every live query on the page.
 
@@ -180,68 +180,75 @@ Platform modules do not count against your client cap. The SDK, kit, charts, pre
 
 ### Outbound HTTP
 
-Every Zero handler can call `fetch()`. Use an action for a slow call or an external side effect, because an action does not hold a database transaction.
+`fetch()` works in every Zero handler, HTTPS only. Reach for an action when the call is slow or does something out in the world. A mutation or write endpoint holds its database transaction open while it waits, so its `fetch()` gives up after 5 seconds. Everywhere else it gets 10.
 
-A claimed space can reach any public HTTPS host; Zero does not allow plain HTTP. An unclaimed space can reach only the trusted host list. Functions uses the same claimed/unclaimed host policy but supports public HTTP and HTTPS. Private visitor access is separate from outbound access: a call to an API does not make the space public or change its Grants.
+How far `fetch()` reaches depends on who owns the space:
 
-There is no `ctx.people` service. To create or resend a private-space Person invitation, call the public Spacefast API from an action. Keep a narrowly scoped API key in a server-only variable. The key needs `spaces:write` and an active `access.manage` Grant that covers the requested path and target.
+| Space | Reaches |
+| --- | --- |
+| Claimed | Any public HTTPS host |
+| Unclaimed | Only the trusted list: `api.anthropic.com`, `api.openai.com`, `api.github.com`, `api.stripe.com`, `api.groq.com`, `api.mistral.ai`, `api.together.xyz`, `generativelanguage.googleapis.com`, `openrouter.ai` |
 
-Actions are client-visible entry points. Check `ctx.auth` and your app's own authorization rules before using the management key. Put the actions in the configured server entry. This example keeps an explicit server-side allowlist of operators in `PARTNER_INVITER_USER_IDS`; private-space viewer access alone is not enough.
+Anything else from an unclaimed space answers 403 with "This host isn't reachable from an unclaimed space. Claim the space to reach any public host." Claiming opens it up without a republish. Private addresses and cloud metadata stay blocked either way.
+
+Outbound access has nothing to do with who can open your space. Calling an API does not make the space public or touch its Grants.
+
+### Example: invite People from your app
+
+There is no `ctx.people`. To invite someone to a private space, or resend their invite, call the People API from an action with a [machine credential](/access#machine-credentials).
+
+```bash
+sf share token create --name invites --path '/**' --role manager --show-secret
+sf env set INVITE_TOKEN --value-from-stdin < token.txt
+sf env set INVITE_SPACE_ID spc_123
+sf env set INVITE_ADMINS user-id-1,user-id-2
+```
+
+The `manager` role carries `access.manage`, which the People routes require. Narrow `--path` to limit where the token can invite people. `INVITE_ADMINS` lists the `ctx.auth.userId` values allowed to send invites. The People API only works on a claimed space.
+
+An action is callable by anyone who can load your app, so gate it before it spends that token.
 
 ```ts server/index.ts
 import { action, capsule } from "@spacefast/zero/server";
 
-const apiOrigin = "https://api.spacefast.com";
+type Ctx = {
+  auth: { isSignedIn: boolean; userId: string | null };
+  env: Record<string, string | undefined>;
+};
 
-export const invitePartner = action(async (ctx, email: string) => {
-  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
-  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
-    throw new Error("You cannot manage partner invitations.");
+async function callPeople(ctx: Ctx, path: string, body?: unknown) {
+  const admins = (ctx.env.INVITE_ADMINS ?? "").split(",").map((id) => id.trim());
+  if (!ctx.auth.isSignedIn || !admins.includes(ctx.auth.userId ?? "")) {
+    throw new Error("You can't send invites.");
   }
-
-  const credential = ctx.env.PARTNER_TRACKER_API_KEY;
-  const spaceId = ctx.env.PARTNER_SPACE_ID;
-  if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
-
-  const response = await fetch(`${apiOrigin}/v1/spaces/${encodeURIComponent(spaceId)}/people`, {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${credential}`,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      grants: [{ scope: "/**", role: "viewer", target: { kind: "live" } }],
-    }),
-  });
-  if (!response.ok) throw new Error(`Person invitation failed with ${response.status}.`);
-  return response.json();
-});
-
-export const resendPartnerInvitation = action(async (ctx, personId: string) => {
-  const authorizedUserIds = ctx.env.PARTNER_INVITER_USER_IDS?.split(",").map((id) => id.trim());
-  if (!ctx.auth.isAuthenticated || !authorizedUserIds?.includes(ctx.auth.userId)) {
-    throw new Error("You cannot manage partner invitations.");
-  }
-
-  const credential = ctx.env.PARTNER_TRACKER_API_KEY;
-  const spaceId = ctx.env.PARTNER_SPACE_ID;
-  if (!credential || !spaceId) throw new Error("Partner invitation is not configured.");
-
   const response = await fetch(
-    `${apiOrigin}/v1/spaces/${encodeURIComponent(spaceId)}/people/${encodeURIComponent(personId)}/resend`,
-    { method: "POST", headers: { authorization: `Bearer ${credential}` } },
+    `https://api.spacefast.com/v1/spaces/${ctx.env.INVITE_SPACE_ID}/people${path}`,
+    {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${ctx.env.INVITE_TOKEN}`,
+        "content-type": "application/json",
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    },
   );
-  if (!response.ok) throw new Error(`Person invitation resend failed with ${response.status}.`);
-  return response.json();
-});
+  if (!response.ok) throw new Error(`People API answered ${response.status}.`);
+  return (await response.json()).data;
+}
 
 export default capsule({
-  actions: { invitePartner, resendPartnerInvitation },
+  actions: {
+    invite: action((ctx, email: string) =>
+      callPeople(ctx, "", { email, grants: [{ scope: "/", role: "viewer" }] }),
+    ),
+    resendInvite: action((ctx, personId: string) =>
+      callPeople(ctx, `/${encodeURIComponent(personId)}/resend`),
+    ),
+  },
 });
 ```
 
-The invitation routes return `{ data }`. They never return the invitation credential. Email delivery owns that credential.
+Call them from the client with `useAction("invite")`. `scope: "/"` covers the whole space; `/docs` covers one subtree. Both routes return the Person in `{ data }`. The invite link itself only ever travels by email.
 
 ## Styling
 
