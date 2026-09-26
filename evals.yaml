@@ -14,7 +14,7 @@ questions:
     routes: /authentication
   - id: anonymous-lifetime
     question: If I publish without an account, how long do I have to claim the Space?
-    expected: ["6 hours", "7 days"]
+    expected: ["33 hours and 20 minutes", "7 days"]
     routes: /anonymous-and-claim
   - id: domain-dns-records
     question: Which DNS records do I add to connect example.com?
