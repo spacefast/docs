@@ -9,6 +9,8 @@ Use your tenant API key for customer management. Customer JWTs cannot call these
 
 An external principal appears when a customer first owns a resource. IDs match without regard to case. Use one stable lowercase ID in your database, API requests, and signed JWTs.
 
+Lifecycle calls take a JSON body. Send `{}` when you have no fields to set; a request with no body returns `422 validation_error`.
+
 | Operation | Request |
 | --- | --- |
 | List customers | `GET /v1/principals` |
@@ -26,7 +28,7 @@ Tenant suspension takes precedence over customer status. Restoring a customer ca
 
 ## Assign plans
 
-Declare `system.plans` and `system.defaultPlan` in the [system Space](/api/partners/configuration). Each catalog entry contains `features`, `quotas`, and an optional `quotaPolicy`. Use feature names from the configuration schema.
+Declare `system.plans` and `system.defaultPlan` in the [system Space](/api/partners/configuration#plans). Each catalog entry contains `features`, `quotas`, and an optional `quotaPolicy`.
 
 Assign a customer with the plan operation above. An unknown plan returns `plan_unknown`. Assignment affects future publishes. Existing published versions retain the entitlements recorded at their last publish.
 

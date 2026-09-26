@@ -49,17 +49,46 @@ Publish to the designated Space with your tenant API key. Read `manifestStatus.i
 
 Omitting a previously declared section removes its configuration. Preserve unrelated sections when changing one setting. Ordinary Spaces do not materialize a tenant system manifest.
 
-| Section | Purpose |
-| --- | --- |
-| `presentation` | Brand name, logo, support links, claim and access handoff origins, error documentation, and named contacts |
-| `tokenIssuers` | One tenant issuer and its public keys and ownership proofs |
-| `subscriptions` | Tenant-wide event endpoints and filters |
-| `plans`, `defaultPlan` | Customer plan catalog and the plan used without an explicit assignment |
-| `hostnames.apex` | Custom apex for customer Space hostnames |
-| `api.origin` | Custom HTTPS API origin |
-| `api.allowedOrigins` | Concrete HTTPS browser origins allowed by CORS |
+## The `system` block
 
-Use the [configuration reference](/config-file) for schema details. CORS origins cannot contain wildcards, credentials, query strings, fragments, or paths. CORS does not grant API permissions.
+Every section is optional. Every URL must use `https://`. Unknown keys fail the publish.
+
+| Field | Shape and limits |
+| --- | --- |
+| `presentation.name` | Brand name, up to 255 characters |
+| `presentation.logo`, `supportUrl`, `claimOrigin`, `accessHandoffOrigin`, `problemDocsBaseUrl` | HTTPS URLs, up to 2,048 characters each |
+| `presentation.contacts` | Map of contact name to URL or address, at most 32 entries |
+| `tokenIssuers` | At most one issuer: `issuer`, `keys` (1 to 5 `{ kid, publicKey }`), and optional `proofs`. See [customer JWTs](/api/partners/tokens) |
+| `subscriptions` | Up to 32 entries of `{ url, events }`, with 1 to 64 event filters each, such as `principal.*` |
+| `plans` | Map of plan name to `{ features, quotas, quotaPolicy }`, at most 64 plans. See [plans](#plans) |
+| `defaultPlan` | A plan name declared in `plans` |
+| `hostnames.apex` | Bare hostname for customer Space hostnames, such as `sites.example.com` |
+| `api.origin` | HTTPS origin on the default port, with no path |
+| `api.allowedOrigins` | Up to 32 HTTPS origins allowed by CORS |
+
+CORS origins cannot contain wildcards, credentials, query strings, fragments, or paths. CORS does not grant API permissions.
+
+### Plans
+
+```json
+{
+  "system": {
+    "defaultPlan": "starter",
+    "plans": {
+      "starter": { "features": [], "quotas": { "spaces": 3 } },
+      "pro": {
+        "features": ["branding.hide", "pages.templates"],
+        "quotas": { "spaces": 50, "customDomains": 10 },
+        "quotaPolicy": "warn"
+      }
+    }
+  }
+}
+```
+
+`features` grants capabilities. `branding.hide` hides the Spacefast badge, `pages.templates` allows `_pages/*.html` full-page takeovers, and `domains.proxy_bindings` allows proxy routes to external upstreams. A partner plan grants none of them unless listed.
+
+`quotas` takes `spaces`, `storageBytes`, `buildMinutesPerMonth`, and `customDomains`, each a nonnegative integer. An omitted quota has no cap. `quotaPolicy` is `block` (the default) or `warn`.
 
 ## Connect an event receiver
 

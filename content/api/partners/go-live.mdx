@@ -26,7 +26,7 @@ Verify that your application handles each failure it can expose to a customer. A
 
 ## Prepare the live tenant
 
-Create and publish the live tenant's system Space once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
+Create the live tenant's system Space, [designate it](/api/partners/configuration#designate-a-system-space) with the live tenant API key, and publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
 
 Register and activate a separate live signing issuer. Promotion preserves the live issuer declaration and never copies the test issuer. Store live API keys and webhook secrets separately from test secrets.
 
@@ -37,8 +37,13 @@ Use the live tenant's API key and ID.
 ```bash
 curl --fail-with-body -sS -X POST \
   "https://api.spacefast.com/v1/tenants/$SPACEFAST_LIVE_TENANT_ID/promote" \
-  -H "Authorization: Bearer $SPACEFAST_LIVE_API_KEY"
+  -H "Authorization: Bearer $SPACEFAST_LIVE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: $PROMOTION_KEY" \
+  -d '{}'
 ```
+
+The body is required, even though it is empty. Generate `PROMOTION_KEY` (a UUID) once per promotion and reuse it when retrying after a timeout, so a retry replays the first result instead of promoting again.
 
 Promotion publishes the test system configuration onto the live system Space while retaining its live content. The test tenant remains unchanged. New domains and other live resources require their own verification.
 

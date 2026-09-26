@@ -80,7 +80,7 @@ Send it as `Authorization: Bearer <token>`. Authenticate the customer in your ow
 
 JWTs may be reused until expiry. The maximum encoded token size is 8,192 bytes. Headers that supply remote or embedded keys, including `jku`, `x5u`, `jwk`, and `x5c`, are refused.
 
-A partner JWT acts only for its customer. It cannot administer principals, list teams, mint API keys, or delete Spaces. Use the tenant API key for management work.
+A partner JWT acts only for its customer. It cannot administer principals, mint API keys, or delete Spaces, and team listings return no teams. Use the tenant API key for management work.
 
 ## Rotate or revoke signing keys
 

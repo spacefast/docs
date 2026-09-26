@@ -29,9 +29,11 @@ Choose a stable customer ID from your own system. Use lowercase ASCII IDs such a
 curl --fail-with-body -sS https://api.spacefast.com/v1/spaces \
   -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: customer-123-first-space" \
+  -H "Idempotency-Key: $IDEMPOTENCY_KEY" \
   -d '{"title":"Customer site","principal":{"type":"external","id":"customer_123"}}'
 ```
+
+Set `IDEMPOTENCY_KEY` to a fresh UUID for each new Space and reuse it only to retry that request. See [idempotency](/api/idempotency).
 
 Save `data.space.id`. Spacefast creates the customer principal when it first owns a resource. There is no separate customer registration call.
 
