@@ -38,15 +38,15 @@ The claim link is a fragment URL on purpose. Browsers never send a fragment to a
 
 From the dashboard, **Drop** does the same thing while signed out. The eyebrow reads **Anonymous drop · Claim it later**, and the result carries a **Claim this space** button.
 
-Before claiming, you can publish updates, create scoped viewer links, and revoke them. Claim the Space before listing version history, rolling back, downloading files, or exporting app data. Those commands return `space_unclaimed` while the Space has no team owner. Run `sf spaces claim` in the publishing directory, sign in, then retry.
+Before claiming, you can publish updates, promote or roll back to a version ID from an earlier receipt, and create and revoke scoped viewer links. Listing version history, downloading files, and exporting app data return `space_unclaimed` until someone claims the Space. Run `sf spaces claim` in the publishing directory, sign in, then retry.
 
 ## The clock
 
-An anonymous Space serves for **33 hours and 20 minutes** after creation or the latest publish, then stops.
+An anonymous Space serves for **33 hours and 20 minutes** after creation or the latest publish, then stops. A publish that changes nothing creates no version and leaves the deadline where it was.
 
 It is recoverable after that. The key stays valid for another **7 days**, during which you can still claim the Space and bring it back. After that window the Space is gone.
 
-Opening the claim page when less than an hour remains can move the deadline to one hour from that load. Claim-page loads can add up to 6 hours in total. Repeated publishes cannot extend the deadline past 30 days from creation.
+Opening the claim page when less than an hour remains moves the deadline to one hour from that load, up to 6 extra hours in total. Repeated publishes cannot push the deadline past 30 days from creation.
 
 To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted, and it is never written to logs.
 

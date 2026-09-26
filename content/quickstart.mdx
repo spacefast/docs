@@ -62,7 +62,7 @@ You need Node.js 20.3 or newer and a folder of built static files. Any framework
   </Step>
   <Step title="Publish again, then roll back">
 
-    If you skipped sign-in, run `sf spaces claim` in this directory first. It asks you to sign in and attach the Space to a team. Version history and rollback require a claimed Space.
+    If you skipped sign-in, run `sf spaces claim` in this directory first. It asks you to sign in and attach the Space to a team. `sf versions ls` and rollback by version number need a claimed Space.
 
     Change a file and run `sf publish ./dist` again. Only changed files upload. You get `v2`, and `live` now points at it. The version URL for a retained `v1` still serves the old build.
 
