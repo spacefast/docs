@@ -200,13 +200,14 @@ Outbound access has nothing to do with who can open your space. Calling an API d
 There is no `ctx.people`. To invite someone to a private space, or resend their invite, call the People API from an action with a [machine credential](/access#machine-credentials).
 
 ```bash
-sf share token create --name invites --path '/**' --role manager --show-secret
-sf env set INVITE_TOKEN --value-from-stdin < token.txt
+sf share token create --name invites --path '/**' --role manager --show-secret --json \
+  | jq -r '.data.token' \
+  | sf env set INVITE_TOKEN --value-from-stdin
 sf env set INVITE_SPACE_ID spc_123
 sf env set INVITE_ADMINS user-id-1,user-id-2
 ```
 
-The `manager` role carries `access.manage`, which the People routes require. Narrow `--path` to limit where the token can invite people. `INVITE_ADMINS` lists the `ctx.auth.userId` values allowed to send invites. The People API only works on a claimed space.
+The `manager` role carries `access.manage`, which the People routes require. Narrow `--path` to limit where the token can invite people. `INVITE_ADMINS` lists the `ctx.auth.userId` values allowed to send invites. The People API only works on a claimed space. Each `sf env set` queues a settings-only finalize; the action sees the new value after that operation finishes.
 
 An action is callable by anyone who can load your app, so gate it before it spends that token.
 
