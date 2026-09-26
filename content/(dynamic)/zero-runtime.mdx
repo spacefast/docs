@@ -145,7 +145,7 @@ A query can be replayed to satisfy a subscription, so anything that leaves a mar
 
 `endpoint(route, handler)` takes `{ method, path, mode }`, where `mode` is `"read"` or `"write"`. Both `method` and `path` must be literal strings, because the compiler reads them from source without running it. The handler gets `(ctx, req)`, where `req` carries `method`, `path`, `url`, `headers`, `query`, and `text()` / `json()` / `bytes()`.
 
-Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for a 204, `redirect(url)` for a 302, or `new ImageResponse(element)` for a rendered 1200x630 image. Each helper takes an optional `{ status, headers }` second argument.
+Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for a 204, `redirect(url)` for a 302, or `new ImageResponse(element)` for a rendered 1200x630 image. Each helper takes an optional `{ status, headers }` object as its last argument, so `empty({ status: 202 })` and `text("no", { status: 401 })` both work.
 
 ### Receiving a webhook
 
