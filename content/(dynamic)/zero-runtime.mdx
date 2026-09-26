@@ -132,7 +132,7 @@ Every query, mutation, action, and endpoint handler takes `ctx` first.
 | On `ctx` | Queries and read endpoints | Mutations and write endpoints | Actions | What it is |
 | --- | --- | --- | --- | --- |
 | `db` | read only | read and write | read only | `get`, `withIndex`, and on the write side `insert`, `update`, `delete` |
-| `auth` | yes | yes | yes | `userId`, `displayName`, `isGuest`, `isAuthenticated`, `provider` |
+| `auth` | yes | yes | yes | `userId`, `displayName`, `isGuest`, `isSignedIn`, `isAuthenticated`, `provider` |
 | `env` | yes | yes | yes | Server-only variables. See [Environment variables](/environment-variables) |
 | `log` | yes | yes | yes | `info`, `warn`, `error`, each with an optional data bag |
 | `invalidate` | no | yes | no | Names the live queries this mutation changed |
