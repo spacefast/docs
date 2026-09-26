@@ -170,9 +170,11 @@ export default capsule({
     paymentWebhook: endpoint(
       { mode: "write", method: "POST", path: "/api/webhooks/payments" },
       async (ctx, req) => {
+        const credential = ctx.env.WEBHOOK_SIGNING_KEY;
+        if (!credential) return text("webhook not configured", { status: 500 });
         const body = await req.text();
         const signature = req.headers.get("x-signature") ?? "";
-        if (!verifySignature(ctx.env.WEBHOOK_SIGNING_KEY ?? "", body, signature)) {
+        if (!verifySignature(credential, body, signature)) {
           return text("invalid signature", { status: 401 });
         }
         const event = JSON.parse(body) as { id: string; status: string };
@@ -186,7 +188,7 @@ export default capsule({
 
 - **Open the path, not the Space.** Spaces are private by default, and the provider sends no visitor credential, so it gets a 403 until a public Grant covers the path. `access.public` in `sf.jsonc` does that for the listed paths only. `sf share grant --to public --role viewer --path '/api/webhooks/payments'` is the same thing from the CLI. See [Access](/access).
 - **Read the body once, as text.** Signatures cover the exact bytes the provider sent, so verify `await req.text()` (or `req.bytes()`) and parse it afterwards.
-- **Keep the signing key write-only.** `sf env set WEBHOOK_SIGNING_KEY --value-from-stdin` stores it as a secret and the handler reads it from `ctx.env`. See [Environment variables](/environment-variables).
+- **Keep the signing key write-only, and fail closed without it.** `sf env set WEBHOOK_SIGNING_KEY --value-from-stdin` stores it as a secret and the handler reads it from `ctx.env`. A missing key must refuse the request, never verify against an empty string, because anyone can sign with an empty key. See [Environment variables](/environment-variables).
 - **Write the HMAC yourself.** The runner has no `crypto.subtle`, no Node `crypto`, and no `TextEncoder`, and server code imports only the SDK, preact, and your own relative files. Put an HMAC-SHA256 in a file under `server/`, like `./signature` above, and compare signatures in constant time. `atob` and `btoa` are there for base64 signatures.
 - **Cookie-less POSTs are fine.** The same-origin check on writes only applies to requests carrying a visitor session, so a server-to-server call reaches your handler.
 
