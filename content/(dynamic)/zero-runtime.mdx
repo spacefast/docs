@@ -207,7 +207,7 @@ sf env set INVITE_SPACE_ID spc_123
 sf env set INVITE_ADMINS user-id-1,user-id-2
 ```
 
-The `manager` role carries `access.manage`, which the People routes require. Narrow `--path` to limit where the token can invite people. `INVITE_ADMINS` lists the `ctx.auth.userId` values allowed to send invites. The People API only works on a claimed space. Each `sf env set` queues a settings-only finalize; the action sees the new value after that operation finishes.
+The `manager` role carries `access.manage`, which the People routes require. Narrow `--path` to limit where the token can invite people. An invite with `scope: "/docs"` requires `--path '/docs/**'`; the bare `/docs` path does not cover that subtree. `INVITE_ADMINS` lists the `ctx.auth.userId` values allowed to send invites. The People API only works on a claimed space. Each `sf env set` queues a settings-only finalize; the action sees the new value after that operation finishes.
 
 An action is callable by anyone who can load your app, so gate it before it spends that token.
 
