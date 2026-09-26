@@ -1,11 +1,11 @@
 ---
 title: "promotion_live_system_space_invalid"
-description: "The live tenant's designated system Space is not a live Space it owns."
+description: "The space designated as the live tenant's system space is not an active space that tenant owns."
 ---
 
-The live tenant's designated system Space is not a live Space it owns.
+The space designated as the live tenant's system space is not an active space that tenant owns.
 
-**How to resolve:** Designate a system Space the live tenant owns, then promote.
+**How to resolve:** Designate a live, active space owned by this tenant as its system space, then promote again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_live_system_space_invalid",
   "title": "Promotion live system space invalid",
   "status": 400,
-  "detail": "The live tenant's designated system Space is not a live Space it owns.",
+  "detail": "The space designated as the live tenant's system space is not an active space that tenant owns.",
   "code": "promotion_live_system_space_invalid",
   "requestId": "req_4mz0v8qk"
 }

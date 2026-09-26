@@ -1,11 +1,11 @@
 ---
 title: "cache_purge_domain_required"
-description: "The cache purge request did not name a domain."
+description: "A purge request must name the domain to purge."
 ---
 
-The cache purge request did not name a domain.
+A purge request must name the domain to purge.
 
-**How to resolve:** Send the domain to purge in the request body.
+**How to resolve:** Pass the domain to purge in the request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/cache_purge_domain_required",
   "title": "Cache purge domain required",
   "status": 400,
-  "detail": "The cache purge request did not name a domain.",
+  "detail": "A purge request must name the domain to purge.",
   "code": "cache_purge_domain_required",
   "requestId": "req_4mz0v8qk"
 }

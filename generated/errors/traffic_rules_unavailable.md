@@ -1,11 +1,11 @@
 ---
-title: "space_quota_exceeded"
-description: "Creating or claiming this space would exceed the owner's space allowance."
+title: "traffic_rules_unavailable"
+description: "This space has no edge yet, so it cannot hold or check traffic rules."
 ---
 
-Creating or claiming this space would exceed the owner's space allowance.
+This space has no edge yet, so it cannot hold or check traffic rules.
 
-**How to resolve:** Delete a space you no longer need, then retry. If you are still stuck, POST /v1/feedback with the error code and requestId.
+**How to resolve:** Publish the space once; its traffic rules take effect with that publish.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/space_quota_exceeded",
-  "title": "Space quota exceeded",
+  "type": "https://spacefast.com/docs/errors/traffic_rules_unavailable",
+  "title": "Traffic rules unavailable",
   "status": 400,
-  "detail": "Creating or claiming this space would exceed the owner's space allowance.",
-  "code": "space_quota_exceeded",
+  "detail": "This space has no edge yet, so it cannot hold or check traffic rules.",
+  "code": "traffic_rules_unavailable",
   "requestId": "req_4mz0v8qk"
 }
 ```

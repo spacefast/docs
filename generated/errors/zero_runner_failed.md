@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_failed"
-description: "The Zero runner exited non-zero or the handler answered with a failure status."
+description: "The Zero runner process exited without a valid response."
 ---
 
-The Zero runner exited non-zero or the handler answered with a failure status.
+The Zero runner process exited without a valid response.
 
-**How to resolve:** Read the runner output in the detail, fix the handler, then publish again.
+**How to resolve:** Inspect runtime logs and rebuild the Zero project with the current runner.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_failed",
   "title": "Zero runner failed",
   "status": 400,
-  "detail": "The Zero runner exited non-zero or the handler answered with a failure status.",
+  "detail": "The Zero runner process exited without a valid response.",
   "code": "zero_runner_failed",
   "requestId": "req_4mz0v8qk"
 }

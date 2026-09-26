@@ -1,11 +1,11 @@
 ---
 title: "frame_principal_required"
-description: "Launching this frame needs a signed-in user."
+description: "A Frame launch needs a signed-in account session, not an API token."
 ---
 
-Launching this frame needs a signed-in user.
+A Frame launch needs a signed-in account session, not an API token.
 
-**How to resolve:** Sign in, then launch the frame with the session cookie.
+**How to resolve:** Launch the Frame from a signed-in dashboard session so the runtime knows which account is editing.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_principal_required",
   "title": "Frame principal required",
   "status": 400,
-  "detail": "Launching this frame needs a signed-in user.",
+  "detail": "A Frame launch needs a signed-in account session, not an API token.",
   "code": "frame_principal_required",
   "requestId": "req_4mz0v8qk"
 }

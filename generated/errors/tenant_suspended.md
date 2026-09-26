@@ -1,11 +1,11 @@
 ---
 title: "tenant_suspended"
-description: "The account is suspended, so changes are blocked."
+description: "The tenant is suspended, so its resources cannot be served or modified."
 ---
 
-The account is suspended, so changes are blocked.
+The tenant is suspended, so its resources cannot be served or modified.
 
-**How to resolve:** Contact Spacefast support to have the suspension reviewed.
+**How to resolve:** Resolve the suspension with support.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_suspended",
   "title": "Tenant suspended",
   "status": 400,
-  "detail": "The account is suspended, so changes are blocked.",
+  "detail": "The tenant is suspended, so its resources cannot be served or modified.",
   "code": "tenant_suspended",
   "requestId": "req_4mz0v8qk"
 }

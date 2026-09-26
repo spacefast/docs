@@ -78,6 +78,7 @@ gzip
 Hexo
 hostability
 hostname
+hostname's
 hostnames
 http
 https
@@ -106,6 +107,7 @@ lucide
 matcher
 matchers
 mcp
+MCPs
 middleware
 misconfiguration
 misconfigured
@@ -133,6 +135,7 @@ params
 parseable
 passthrough
 pipeable
+placeable
 plaintext
 pnpm
 pollable
@@ -270,6 +273,8 @@ validator
 Validators
 Vercel
 Vercel's
+Viewport
+viewport
 Vite
 Vite's
 waitlist

@@ -1,11 +1,11 @@
 ---
 title: "invalid_zero_realtime_replay_query"
-description: "The Zero realtime replay query is not valid."
+description: "The Zero realtime replay query parameters are invalid."
 ---
 
-The Zero realtime replay query is not valid.
+The Zero realtime replay query parameters are invalid.
 
-**How to resolve:** Correct the replay query's parameters, then reconnect.
+**How to resolve:** Send a retained `afterEventId` from a previous page's `nextAfterEventId`, and a replay limit between 1 and 100.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_zero_realtime_replay_query",
   "title": "Invalid zero realtime replay query",
   "status": 400,
-  "detail": "The Zero realtime replay query is not valid.",
+  "detail": "The Zero realtime replay query parameters are invalid.",
   "code": "invalid_zero_realtime_replay_query",
   "requestId": "req_4mz0v8qk"
 }

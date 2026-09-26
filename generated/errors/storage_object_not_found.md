@@ -1,11 +1,11 @@
 ---
 title: "storage_object_not_found"
-description: "No storage object with that ID exists on this Space."
+description: "The requested storage object does not exist."
 ---
 
-No storage object with that ID exists on this Space.
+The requested storage object does not exist.
 
-**How to resolve:** List the Space's storage objects and use an ID from that list.
+**How to resolve:** Check the object id or upload the object again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_object_not_found",
   "title": "Storage object not found",
   "status": 400,
-  "detail": "No storage object with that ID exists on this Space.",
+  "detail": "The requested storage object does not exist.",
   "code": "storage_object_not_found",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "invalid_version_path"
-description: "A file path in the version is not a valid version path."
+description: "A file path in the version is not a valid space path."
 ---
 
-A file path in the version is not a valid version path.
+A file path in the version is not a valid space path.
 
-**How to resolve:** Rename the file so its path has no control characters and resolves to a non-empty relative path.
+**How to resolve:** Use forward-slash relative paths without traversal segments.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_version_path",
   "title": "Invalid version path",
   "status": 400,
-  "detail": "A file path in the version is not a valid version path.",
+  "detail": "A file path in the version is not a valid space path.",
   "code": "invalid_version_path",
   "requestId": "req_4mz0v8qk"
 }

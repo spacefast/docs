@@ -1,11 +1,11 @@
 ---
 title: "secret_variable_in_template"
-description: "A template references a variable marked secret."
+description: "A secret variable was referenced in a template, which is blocked."
 ---
 
-A template references a variable marked secret.
+A secret variable was referenced in a template, which is blocked.
 
-**How to resolve:** Remove the secret variable from the template and read it in server code instead.
+**How to resolve:** Use only non-secret variables in templates. Remove the secret reference.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/secret_variable_in_template",
   "title": "Secret variable in template",
   "status": 400,
-  "detail": "A template references a variable marked secret.",
+  "detail": "A secret variable was referenced in a template, which is blocked.",
   "code": "secret_variable_in_template",
   "requestId": "req_4mz0v8qk"
 }

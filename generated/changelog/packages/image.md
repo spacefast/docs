@@ -5,6 +5,20 @@ description: "Release history for @spacefast/image on npm."
 
 Published as [`@spacefast/image`](https://www.npmjs.com/package/@spacefast/image) on npm.
 
+## 0.5.0
+
+#### Patch Changes
+
+- `@spacefast/image` loads from `next.config.ts`: the package exports gained a `default` condition, and the documented recipe uses a project-local loader file, which is what Next's `images.loaderFile` expects. Verified against a packed install on Next 15.5 and 16.x.
+
+## 0.4.1
+
+_No noted changes in this release._
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._

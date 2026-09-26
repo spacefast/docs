@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_assignment_space_mismatch"
-description: "The Space or the provider site is already bound to a different partner."
+description: "The domain assignment belongs to a different space."
 ---
 
-The Space or the provider site is already bound to a different partner.
+The domain assignment belongs to a different space.
 
-**How to resolve:** Unassign the existing binding before creating this one.
+**How to resolve:** Use the assignment's owning space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_space_mismatch",
   "title": "Wp cloud assignment space mismatch",
   "status": 400,
-  "detail": "The Space or the provider site is already bound to a different partner.",
+  "detail": "The domain assignment belongs to a different space.",
   "code": "wp_cloud_assignment_space_mismatch",
   "requestId": "req_4mz0v8qk"
 }

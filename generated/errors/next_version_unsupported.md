@@ -1,11 +1,11 @@
 ---
 title: "next_version_unsupported"
-description: "The Next.js version in the source is below the minimum the adapter supports."
+description: "This Next.js version is incompatible with the bundled server runtime adapter."
 ---
 
-The Next.js version in the source is below the minimum the adapter supports.
+This Next.js version is incompatible with the bundled server runtime adapter.
 
-**How to resolve:** Upgrade Next.js to the minimum version named in the failure, then publish again.
+**How to resolve:** Upgrade Next.js to the minimum version named in the error, or publish a browser-ready static export.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/next_version_unsupported",
   "title": "Next version unsupported",
   "status": 400,
-  "detail": "The Next.js version in the source is below the minimum the adapter supports.",
+  "detail": "This Next.js version is incompatible with the bundled server runtime adapter.",
   "code": "next_version_unsupported",
   "requestId": "req_4mz0v8qk"
 }

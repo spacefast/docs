@@ -1,11 +1,11 @@
 ---
 title: "no_space_selected"
-description: "The command found no Space to act on."
+description: "The command needs a Space and this directory does not select one."
 ---
 
-The command found no Space to act on.
+The command needs a Space and this directory does not select one.
 
-**How to resolve:** Run `sf spaces ls` and pass the Space with `--space <space-id>`, or link the directory to a Space.
+**How to resolve:** Pass --space, link the directory with `sf link --space <id>`, or run it where a project link already selects a Space. `sf spaces ls` lists what the credential can reach.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/no_space_selected",
   "title": "No space selected",
   "status": 400,
-  "detail": "The command found no Space to act on.",
+  "detail": "The command needs a Space and this directory does not select one.",
   "code": "no_space_selected",
   "requestId": "req_4mz0v8qk"
 }

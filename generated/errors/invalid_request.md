@@ -1,11 +1,11 @@
 ---
 title: "invalid_request"
-description: "The request body or query does not satisfy this endpoint's rules."
+description: "The request is malformed."
 ---
 
-The request body or query does not satisfy this endpoint's rules.
+The request is malformed.
 
-**How to resolve:** Read `pointer` and `detail` in the problem document, correct the named field, then retry.
+**How to resolve:** Fix the field referenced by pointer and details, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_request",
   "title": "Invalid request",
   "status": 400,
-  "detail": "The request body or query does not satisfy this endpoint's rules.",
+  "detail": "The request is malformed.",
   "code": "invalid_request",
   "requestId": "req_4mz0v8qk"
 }

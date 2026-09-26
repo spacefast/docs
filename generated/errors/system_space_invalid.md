@@ -1,11 +1,11 @@
 ---
 title: "system_space_invalid"
-description: "The chosen system Space is not a live, enabled Space this team or tenant owns."
+description: "The requested system space does not exist, is disabled, or belongs to another tenant."
 ---
 
-The chosen system Space is not a live, enabled Space this team or tenant owns.
+The requested system space does not exist, is disabled, or belongs to another tenant.
 
-**How to resolve:** Point `systemSpaceId` at a live Space the owner holds.
+**How to resolve:** Designate a live space this tenant owns as its system space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/system_space_invalid",
   "title": "System space invalid",
   "status": 400,
-  "detail": "The chosen system Space is not a live, enabled Space this team or tenant owns.",
+  "detail": "The requested system space does not exist, is disabled, or belongs to another tenant.",
   "code": "system_space_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "frame_version_required"
-description: "The frame link spans every version, so the launch has to name one."
+description: "An all-Versions Frame Link requires one explicit immutable Version."
 ---
 
-The frame link spans every version, so the launch has to name one.
+An all-Versions Frame Link requires one explicit immutable Version.
 
-**How to resolve:** Pass the immutable version to open in `target`.
+**How to resolve:** Set `target.kind` to `version` and pass a ready Version id from this Space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_version_required",
   "title": "Frame version required",
   "status": 400,
-  "detail": "The frame link spans every version, so the launch has to name one.",
+  "detail": "An all-Versions Frame Link requires one explicit immutable Version.",
   "code": "frame_version_required",
   "requestId": "req_4mz0v8qk"
 }

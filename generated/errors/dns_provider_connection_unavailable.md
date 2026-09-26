@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_connection_unavailable"
-description: "The DNS provider connection is not active."
+description: "The DNS provider connection cannot currently be used."
 ---
 
-The DNS provider connection is not active.
+The DNS provider connection cannot currently be used.
 
-**How to resolve:** Reconnect or enable the DNS provider connection, then retry.
+**How to resolve:** Reconnect, re-enable, or replace the provider connection before retrying.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_connection_unavailable",
   "title": "Dns provider connection unavailable",
   "status": 400,
-  "detail": "The DNS provider connection is not active.",
+  "detail": "The DNS provider connection cannot currently be used.",
   "code": "dns_provider_connection_unavailable",
   "requestId": "req_4mz0v8qk"
 }

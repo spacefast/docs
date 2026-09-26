@@ -1,11 +1,11 @@
 ---
-title: "anonymous_external_proxy_disabled"
-description: "Proxy routes to external upstreams do not serve on an unclaimed space."
+title: "connector_role_unknown"
+description: "The live capsule does not declare this connector role."
 ---
 
-Proxy routes to external upstreams do not serve on an unclaimed space.
+The live capsule does not declare this connector role.
 
-**How to resolve:** Claim the space. The rules activate on their own, without a republish.
+**How to resolve:** Use a role declared by the live version.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/anonymous_external_proxy_disabled",
-  "title": "Anonymous external proxy disabled",
+  "type": "https://spacefast.com/docs/errors/connector_role_unknown",
+  "title": "Connector role unknown",
   "status": 400,
-  "detail": "Proxy routes to external upstreams do not serve on an unclaimed space.",
-  "code": "anonymous_external_proxy_disabled",
+  "detail": "The live capsule does not declare this connector role.",
+  "code": "connector_role_unknown",
   "requestId": "req_4mz0v8qk"
 }
 ```
