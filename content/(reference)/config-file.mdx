@@ -194,8 +194,6 @@ Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero-r
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
 | `runtime.entry` | string | detected | Worker entry. Naming a file that does not exist fails the publish |
-| `runtime.database` | boolean | `false` | Adds `env.DB` |
-| `runtime.fetch` | boolean | no schema default | Allows outbound HTTP. An OpenNext build gets it unless set to `false`; a hand-written handler does not until you ask |
 | `runtime.compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | Runtime semantics this worker was written against |
 
 See [Functions](/functions).
