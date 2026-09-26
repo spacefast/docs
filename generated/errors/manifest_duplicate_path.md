@@ -1,11 +1,11 @@
 ---
 title: "manifest_duplicate_path"
-description: "Two entries resolve to the same path once canonicalized."
+description: "The upload manifest declares the same path more than once."
 ---
 
-Two entries resolve to the same path once canonicalized.
+The upload manifest declares the same path more than once.
 
-**How to resolve:** Remove or rename one of the entries at the `path` in the error details, then retry.
+**How to resolve:** Deduplicate paths. Comparisons use the canonical form: decoded and NFC-normalized.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/manifest_duplicate_path",
   "title": "Manifest duplicate path",
   "status": 400,
-  "detail": "Two entries resolve to the same path once canonicalized.",
+  "detail": "The upload manifest declares the same path more than once.",
   "code": "manifest_duplicate_path",
   "requestId": "req_4mz0v8qk"
 }

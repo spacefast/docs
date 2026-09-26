@@ -1,11 +1,11 @@
 ---
 title: "partner_preset_not_grantable"
-description: "The `partner_admin` preset cannot be requested on a team API key."
+description: "The `partner_admin` preset is a tenant-rooted partner credential and cannot be minted as an ordinary team API key."
 ---
 
-The `partner_admin` preset cannot be requested on a team API key.
+The `partner_admin` preset is a tenant-rooted partner credential and cannot be minted as an ordinary team API key.
 
-**How to resolve:** Mint the key with a team preset; an operator provisions partner credentials separately.
+**How to resolve:** Ask an operator to bootstrap a partner key for the tenant, or request a team-scoped preset such as `space_admin`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/partner_preset_not_grantable",
   "title": "Partner preset not grantable",
   "status": 400,
-  "detail": "The `partner_admin` preset cannot be requested on a team API key.",
+  "detail": "The `partner_admin` preset is a tenant-rooted partner credential and cannot be minted as an ordinary team API key.",
   "code": "partner_preset_not_grantable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "channel_unsupported"
-description: "The named channel is not one this endpoint serves."
+description: "This space does not support the requested channel."
 ---
 
-The named channel is not one this endpoint serves.
+This space does not support the requested channel.
 
-**How to resolve:** Pass `live` as the channel, or pass `null` for a version-only publish.
+**How to resolve:** Use the live channel, or create the channel before promoting to it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/channel_unsupported",
   "title": "Channel unsupported",
   "status": 400,
-  "detail": "The named channel is not one this endpoint serves.",
+  "detail": "This space does not support the requested channel.",
   "code": "channel_unsupported",
   "requestId": "req_4mz0v8qk"
 }

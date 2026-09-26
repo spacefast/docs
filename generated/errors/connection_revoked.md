@@ -5,7 +5,7 @@ description: "This connection was disconnected and its credential was purged."
 
 This connection was disconnected and its credential was purged.
 
-**How to resolve:** Connect the service again. The old connection stays as a record and cannot be reactivated.
+**How to resolve:** Connect the service again with POST /v1/connectors/connections. A disconnected connection cannot be reconnected — it stays as a record.
 
 <div data-pagefind-ignore>
 

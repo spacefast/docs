@@ -145,10 +145,20 @@ const scanText = (path, text) => {
     }
   }
 
+  // JSON Schema UUID patterns carry the nil and max UUID sentinels. Exempt only
+  // those two, so a pasted real UUID still trips the short-hash check.
+  const uuidSentinelPattern = /(?<![\p{L}\p{N}_])(?:0{8}(?:-0{4}){3}-0{12}|f{8}(?:-f{4}){3}-f{12})(?![\p{L}\p{N}_])/giu;
+  const uuidRanges = Array.from(text.matchAll(uuidSentinelPattern), (match) => ({
+    start: match.index,
+    end: match.index + match[0].length,
+  }));
   const shortHashPattern = /(?<![#\p{L}\p{N}_])[0-9a-f]{7,12}(?![\p{L}\p{N}_])/giu;
   for (const match of text.matchAll(shortHashPattern)) {
     const value = match[0];
-    if (value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {
+    const insideUuid = uuidRanges.some(
+      ({ start, end }) => match.index >= start && match.index + value.length <= end,
+    );
+    if (!insideUuid && value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {
       report(path, lineForOffset(text, match.index), "short commit hash");
     }
   }

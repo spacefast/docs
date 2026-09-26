@@ -1,11 +1,11 @@
 ---
 title: "rate_limited"
-description: "Too many requests came from this caller in the rate limit window."
+description: "Too many requests were made in a short window."
 ---
 
-Too many requests came from this caller in the rate limit window.
+Too many requests were made in a short window.
 
-**How to resolve:** Retry after the seconds in the `Retry-After` header.
+**How to resolve:** Wait for the window in the Retry-After header to pass, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/rate_limited",
   "title": "Rate limited",
   "status": 400,
-  "detail": "Too many requests came from this caller in the rate limit window.",
+  "detail": "Too many requests were made in a short window.",
   "code": "rate_limited",
   "requestId": "req_4mz0v8qk"
 }

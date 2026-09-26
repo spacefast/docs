@@ -105,7 +105,7 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 | Meter | Field | What it counts | At the limit |
 | --- | --- | --- | --- |
-| Spaces | `spaces` | Live spaces in the team | Blocks on Free. `409` `space_quota_exceeded` |
+| Spaces | `spaces` | Live spaces in the team | Blocks on Free. `409` `quota_exceeded` |
 | Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` `domain_quota_exceeded` |
 | Team members | `members` | Billable seats, live members plus pending invitations | Blocks on Free. `409` `team_member_quota_exceeded` |
 | Storage | `storageBytes` | Disk your spaces occupy | Displayed only. Nothing blocks |

@@ -1,11 +1,11 @@
 ---
-title: "deploy_quota_exceeded"
-description: "The owner has used its daily publish allowance."
+title: "cron_not_found"
+description: "The live version declares no scheduled job with that key or path."
 ---
 
-The owner has used its daily publish allowance.
+The live version declares no scheduled job with that key or path.
 
-**How to resolve:** Wait for the meter to reset at 00:00 UTC. Batch changes into fewer publishes if a CI loop is republishing on every commit.
+**How to resolve:** List the space's crons to see what the live version declares, and pass one of those keys or paths. Crons are declared in sf.jsonc, so publishing is what adds one.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/deploy_quota_exceeded",
-  "title": "Deploy quota exceeded",
+  "type": "https://spacefast.com/docs/errors/cron_not_found",
+  "title": "Cron not found",
   "status": 400,
-  "detail": "The owner has used its daily publish allowance.",
-  "code": "deploy_quota_exceeded",
+  "detail": "The live version declares no scheduled job with that key or path.",
+  "code": "cron_not_found",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
 title: "frame_link_inactive"
-description: "The frame link is disabled, out of its active window, or out of uses."
+description: "The Frame Link is revoked, expired, not yet active, or out of uses."
 ---
 
-The frame link is disabled, out of its active window, or out of uses.
+The Frame Link is revoked, expired, not yet active, or out of uses.
 
-**How to resolve:** Launch with an active frame link, or ask the Space owner to re-enable this one.
+**How to resolve:** Create or select an active Frame Link, then launch it again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_link_inactive",
   "title": "Frame link inactive",
   "status": 400,
-  "detail": "The frame link is disabled, out of its active window, or out of uses.",
+  "detail": "The Frame Link is revoked, expired, not yet active, or out of uses.",
   "code": "frame_link_inactive",
   "requestId": "req_4mz0v8qk"
 }

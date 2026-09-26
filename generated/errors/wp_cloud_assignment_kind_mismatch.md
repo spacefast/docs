@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_assignment_kind_mismatch"
-description: "The provider site's kind does not match the assignment being made."
+description: "The domain assignment's kind does not match the site."
 ---
 
-The provider site's kind does not match the assignment being made.
+The domain assignment's kind does not match the site.
 
-**How to resolve:** Assign a provider site whose kind matches the placement.
+**How to resolve:** Verify the assignment against the site's hosting kind.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_kind_mismatch",
   "title": "Wp cloud assignment kind mismatch",
   "status": 400,
-  "detail": "The provider site's kind does not match the assignment being made.",
+  "detail": "The domain assignment's kind does not match the site.",
   "code": "wp_cloud_assignment_kind_mismatch",
   "requestId": "req_4mz0v8qk"
 }

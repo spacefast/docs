@@ -1,11 +1,11 @@
 ---
 title: "principal_closed"
-description: "The customer is closed, so its Spaces cannot be changed."
+description: "The external principal is closed. Its spaces are tombstoned and cannot be modified."
 ---
 
-The customer is closed, so its Spaces cannot be changed.
+The external principal is closed. Its spaces are tombstoned and cannot be modified.
 
-**How to resolve:** Contact Spacefast support to reopen the customer.
+**How to resolve:** A closed principal is terminal and cannot be reopened; create a new principal to resume.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_closed",
   "title": "Principal closed",
   "status": 400,
-  "detail": "The customer is closed, so its Spaces cannot be changed.",
+  "detail": "The external principal is closed. Its spaces are tombstoned and cannot be modified.",
   "code": "principal_closed",
   "requestId": "req_4mz0v8qk"
 }

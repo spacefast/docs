@@ -1,11 +1,11 @@
 ---
 title: "publish_upload_failed"
-description: "The upload session did not take every file the manifest declares."
+description: "Uploading the publish content failed."
 ---
 
-The upload session did not take every file the manifest declares.
+Uploading the publish content failed.
 
-**How to resolve:** Publish again. If it keeps failing, contact Spacefast support with the `requestId`.
+**How to resolve:** Retry the publish. Partial uploads are resumable through the upload session.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_upload_failed",
   "title": "Publish upload failed",
   "status": 400,
-  "detail": "The upload session did not take every file the manifest declares.",
+  "detail": "Uploading the publish content failed.",
   "code": "publish_upload_failed",
   "requestId": "req_4mz0v8qk"
 }
