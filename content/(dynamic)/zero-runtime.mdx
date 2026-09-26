@@ -191,7 +191,7 @@ How far `fetch()` reaches depends on who owns the space:
 | Claimed | Any public HTTPS host |
 | Unclaimed | Only the trusted list: `api.anthropic.com`, `api.openai.com`, `api.github.com`, `api.stripe.com`, `api.groq.com`, `api.mistral.ai`, `api.together.xyz`, `generativelanguage.googleapis.com`, `openrouter.ai` |
 
-Anything else from an unclaimed space answers 403 with "This host isn't reachable from an unclaimed space. Claim the space to reach any public host." Claiming opens it up without a republish. Private addresses and cloud metadata stay blocked either way.
+From an unclaimed space, `fetch()` to any other host throws a `SpacefastFetchError` with code `zero_fetch_host_untrusted` and the message "This host isn't reachable from an unclaimed space. Claim the space to reach any public host." Claiming opens it up without a republish. Private addresses and cloud metadata stay blocked either way.
 
 Outbound access has nothing to do with who can open your space. Calling an API does not make the space public or touch its Grants.
 
