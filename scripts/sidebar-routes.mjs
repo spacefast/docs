@@ -1,7 +1,13 @@
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 
-const GENERATED_ROUTES = ["/api/reference", "/changelog", "/cli/reference", "/errors"];
+const GENERATED_ROUTES = [
+  "/api/reference",
+  "/changelog",
+  "/cli/reference",
+  "/errors",
+  "/partners/api/reference",
+];
 const GENERATED_DIRECTORIES = new Set([
   "content/(reference)/changelog",
   "content/(reference)/errors",

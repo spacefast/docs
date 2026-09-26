@@ -58,7 +58,7 @@ Every section is optional. Every URL must use `https://`. Unknown keys fail the 
 | `presentation.name` | Brand name, up to 255 characters |
 | `presentation.logo`, `supportUrl`, `claimOrigin`, `accessHandoffOrigin`, `problemDocsBaseUrl` | HTTPS URLs, up to 2,048 characters each |
 | `presentation.contacts` | Map of contact name to URL or address, at most 32 entries |
-| `tokenIssuers` | At most one issuer: `issuer`, `keys` (1 to 5 `{ kid, publicKey }`), and optional `proofs`. See [customer JWTs](/api/partners/tokens) |
+| `tokenIssuers` | At most one issuer: `issuer`, `keys` (1 to 5 `{ kid, publicKey }`), and optional `proofs`. See [customer JWTs](/partners/tokens) |
 | `subscriptions` | Up to 32 entries of `{ url, events }`, with 1 to 64 event filters each, such as `principal.*` |
 | `plans` | Map of plan name to `{ features, quotas, quotaPolicy }`, at most 64 plans. See [plans](#plans) |
 | `defaultPlan` | A plan name declared in `plans` |

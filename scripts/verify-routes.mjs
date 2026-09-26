@@ -261,11 +261,14 @@ for (const file of setupFiles) {
     throw new Error(`dist/${file} does not declare its www canonical (${expected}).`);
   }
 }
-// The `+1` is the home page, listed at the docs root rather than at its
-// canonical origin.
-if (indexedPages !== sitemapUrls.length + 1) {
+// Pagefind indexes article pages only. The generated changelog timeline has no
+// article and is left out; every entry it lists is indexed on its own page.
+const searchableSitemapUrls = sitemapUrls.filter(
+  (url) => url.replace(/\/$/u, "") !== `${docsRoot}/changelog`,
+);
+if (indexedPages !== searchableSitemapUrls.length) {
   throw new Error(
-    `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,
+    `Search/sitemap count mismatch: ${indexedPages} indexed, ${searchableSitemapUrls.length} searchable in sitemap.`,
   );
 }
 const robots = await readBuilt("robots.txt");
@@ -293,6 +296,11 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 // invariant checked here. Only link targets count; the preamble's prose and
 // code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
+// Blume places the agent guidance (agents.llmsTxt.details) after the summary.
+const guidance = llmsIndex.indexOf("## Read any page as Markdown");
+if (guidance < 0 || guidance > llmsIndex.indexOf("\n## Docs")) {
+  throw new Error("llms.txt does not lead with the agent guidance from content/_llms-preamble.md.");
+}
 for (const match of llmsIndex.matchAll(/\]\((https:\/\/[^)]+)\)/gu)) {
   const file = discoveryFileForUrl(match[1]);
   if (file !== undefined) await requireFile(file);
@@ -463,10 +471,7 @@ if (
 }
 for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   const example = representativeRedirect(redirect);
-  const canonicalDestination = example.destination.replace(
-    "/partners/api/reference",
-    "/platforms/api/reference",
-  );
+  const canonicalDestination = example.destination;
   const target = localTargetFor(canonicalDestination);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);

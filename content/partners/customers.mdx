@@ -28,7 +28,7 @@ Tenant suspension takes precedence over customer status. Restoring a customer ca
 
 ## Assign plans
 
-Declare `system.plans` and `system.defaultPlan` in the [system Space](/api/partners/configuration#plans). Each catalog entry contains `features`, `quotas`, and an optional `quotaPolicy`.
+Declare `system.plans` and `system.defaultPlan` in the [system Space](/partners/configuration#plans). Each catalog entry contains `features`, `quotas`, and an optional `quotaPolicy`.
 
 Assign a customer with the plan operation above. An unknown plan returns `plan_unknown`. Assignment affects future publishes. Existing published versions retain the entitlements recorded at their last publish.
 

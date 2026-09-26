@@ -1,8 +1,17 @@
+import { readFileSync } from "node:fs";
+
 import { defineConfig } from "blume";
+import { posthog, script } from "blume/analytics";
+import { openapi } from "blume/reference";
+import { pagefind } from "blume/search";
 
 import { redirects } from "./redirects.ts";
 
 const deploymentBase = "/docs";
+// Agent guidance for llms.txt, kept as Markdown so Vale lints it with the pages.
+const llmsDetails = readFileSync(new URL("./content/_llms-preamble.md", import.meta.url), "utf8")
+  .replace(/^---\n[\s\S]*?\n---\n/u, "")
+  .trim();
 const haskoy = {
   name: "Haskoy",
   fallback: "sans" as const,
@@ -25,34 +34,27 @@ export default defineConfig({
     mode: "system",
     radius: "sm",
   },
-  analytics: {
-    posthog: {
-      key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT",
-    },
-    scripts: [
-      {
-        src: "https://spacefast.com/cookie-banner.js",
-        strategy: "defer",
-      },
-      {
-        attributes: { type: "module" },
-        content: `
-          import("${deploymentBase}/pagefind/pagefind.js")
-            .then(async (pagefind) => {
-              await pagefind.options({
-                indexWeight: 1.15,
-                mergeFilter: { source: "Docs" },
-              });
-              await pagefind.mergeIndex("/pagefind", {
-                indexWeight: 1,
-                mergeFilter: { source: "Spacefast" },
-              });
-            })
-            .catch(() => undefined);
-        `,
-      },
-    ],
-  },
+  analytics: [
+    posthog({ key: "phc_pnLfu3acyQJbpNz4YYdv4ULaXgafVtUrsZT8wHwijmQT" }),
+    script({ src: "https://spacefast.com/cookie-banner.js", strategy: "defer" }),
+    script({
+      attributes: { type: "module" },
+      content: `
+        import("${deploymentBase}/pagefind/pagefind.js")
+          .then(async (pagefind) => {
+            await pagefind.options({
+              indexWeight: 1.15,
+              mergeFilter: { source: "Docs" },
+            });
+            await pagefind.mergeIndex("/pagefind", {
+              indexWeight: 1,
+              mergeFilter: { source: "Spacefast" },
+            });
+          })
+          .catch(() => undefined);
+      `,
+    }),
+  ],
   content: { root: "content" },
   export: true,
   github: {
@@ -60,9 +62,10 @@ export default defineConfig({
     repo: "docs",
     branch: "main",
   },
-  lastModified: true,
-  markdown: { imageZoom: true, code: { icons: true, wrap: false } },
+  lastModified: "git",
+  markdown: { externalLinks: true, imageZoom: true, code: { icons: true, wrap: false } },
   navigation: {
+    cta: { href: "https://my.spacefast.com", label: "Dashboard" },
     featured: [
       { label: "Spacefast", href: "https://spacefast.com", icon: "house" },
       { label: "Agent setup", href: "/agents", icon: "bot" },
@@ -74,26 +77,28 @@ export default defineConfig({
       { label: "CLI", path: "/cli", icon: "terminal" },
       { label: "API", path: "/api", icon: "braces" },
       { label: "Agents", path: "/agents", icon: "bot" },
+      { label: "Partners", path: "/partners", icon: "handshake" },
     ],
   },
-  openapi: {
-    enabled: true,
-    codeSamples: ["curl", "js", "python"],
-    sources: [
-      {
-        label: "REST API",
-        route: "/api/reference",
-        spec: "./generated/openapi/api.json",
-      },
-      {
-        label: "Partner API",
-        route: "/platforms/api/reference",
-        spec: "./generated/openapi/partner.json",
-      },
-    ],
-  },
+  reference: [
+    openapi({
+      codeSamples: ["curl", "js", "python"],
+      sources: [
+        {
+          label: "REST API",
+          route: "/api/reference",
+          spec: "./generated/openapi/api.json",
+        },
+        {
+          label: "Partner API",
+          route: "/partners/api/reference",
+          spec: "./generated/openapi/partner.json",
+        },
+      ],
+    }),
+  ],
   search: {
-    provider: "pagefind",
+    provider: pagefind(),
     popular: [
       { label: "Quickstart", href: "/quickstart", icon: "rocket" },
       { label: "Publishing", href: "/publish", icon: "upload" },
@@ -102,7 +107,7 @@ export default defineConfig({
     ],
   },
   ai: {
-    ask: {
+    assistant: {
       enabled: true,
       endpoint: "https://api.spacefast.com/v1/docs/ask",
       suggestions: [
@@ -111,19 +116,12 @@ export default defineConfig({
         { label: "How do I roll back a version?", icon: "undo-2" },
       ],
     },
-    llmsTxt: { enabled: true, openapi: true },
-    mcp: { enabled: false },
   },
-  seo: {
-    agentReadability: true,
-    og: { enabled: true },
-    robots: true,
-    sitemap: true,
-    structuredData: true,
+  agents: {
+    llmsTxt: { details: llmsDetails },
   },
   redirects,
   deployment: {
-    output: "static",
     site: "https://spacefast.com",
     base: deploymentBase,
   },

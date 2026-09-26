@@ -1,7 +1,7 @@
 # Spacefast Docs
 
 The documentation site for [Spacefast](https://spacefast.com/docs). Guides live
-in `content/`, organized into Docs, CLI, API, and Agents tabs. Everything under
+in `content/`, organized into Docs, CLI, API, Agents, and Partners tabs. Everything under
 `generated/` is a verified snapshot — don't edit it by hand.
 
 ## Development
