@@ -96,7 +96,7 @@ An anonymous `POST /v1/publish` (no credential at all) creates an unclaimed Spac
 
 A Space key reaches only its own Space, and only the operations an unclaimed Space must still support: read the Space, open a new version, refresh uploads, finalize, promote, list activity, mint share links, restore after a delete. Operations declaring `bearerAuth` alone refuse it.
 
-Unclaimed Spaces expire. The default window is 6 hours from creation, extended by an hour each time the claim page is loaded, capped at 6 hours of extension and 30 days from creation. Reading the Space with its key also extends the window. Claim it with `POST /v1/claim` to make it permanent, or exchange the key for an API key with `POST /v1/claim/exchange`.
+Unclaimed Spaces expire. The default window is 33 hours and 20 minutes from creation or the latest publish that changes files, capped at 30 days from creation. Reading the Space with its key, which is what the claim page does, moves the deadline to one hour out when less than an hour remains, up to 6 hours of extension in total. Claim it with `POST /v1/claim` to remove the deadline, or exchange the key for an API key with `POST /v1/claim/exchange`.
 
 :::warning[Treat a Space key as a secret]
 It is a management capability for an unclaimed Space, not a share link. Anyone holding it can publish to that Space and claim it.

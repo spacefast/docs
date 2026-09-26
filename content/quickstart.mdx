@@ -33,7 +33,7 @@ You need Node.js 20.3 or newer and a folder of built static files. Any framework
 
     The CLI prints a code and opens your browser. Approve the request there. The CLI receives an API key that lasts 30 days and expires after 7 days without use. Confirm with `sf whoami`.
 
-    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later, within 6 hours.
+    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later. An unclaimed Space serves for 33 hours and 20 minutes after the latest publish that changes files.
 
   </Step>
   <Step title="Publish">
@@ -62,7 +62,9 @@ You need Node.js 20.3 or newer and a folder of built static files. Any framework
   </Step>
   <Step title="Publish again, then roll back">
 
-    Change a file and run `sf publish ./dist` again. Only changed files upload. You get `v2`, and `live` now points at it. Version URLs keep working forever, so `v1--quiet-harbor.view.fast` still serves the old build.
+    If you skipped sign-in, run `sf spaces claim` in this directory first. It asks you to sign in and attach the Space to a team. `sf versions ls` and rollback by version number need a claimed Space.
+
+    Change a file and run `sf publish ./dist` again. Only changed files upload. You get `v2`, and `live` now points at it. The version URL for a retained `v1` still serves the old build.
 
     ```bash
     sf versions ls
