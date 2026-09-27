@@ -77,7 +77,7 @@ export default defineConfig({
       { label: "CLI", path: "/cli", icon: "terminal" },
       { label: "API", path: "/api", icon: "braces" },
       { label: "Agents", path: "/agents", icon: "bot" },
-      { label: "Partners", path: "/partners", icon: "handshake" },
+      { label: "Platforms", path: "/platforms", icon: "handshake" },
     ],
   },
   reference: [
@@ -91,7 +91,7 @@ export default defineConfig({
         },
         {
           label: "Partner API",
-          route: "/partners/api/reference",
+          route: "/platforms/api/reference",
           spec: "./generated/openapi/partner.json",
         },
       ],

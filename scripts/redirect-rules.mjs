@@ -27,19 +27,19 @@ const aliasFamilies = [
   },
   {
     sourcePrefix: "/partner-api/operations/",
-    intermediatePrefix: "/partners/api/reference/operations/",
+    intermediatePrefix: "/platforms/api/reference/operations/",
   },
   {
     sourcePrefix: "/partner-api/resources/",
-    intermediatePrefix: "/partners/api/reference/resources/",
+    intermediatePrefix: "/platforms/api/reference/resources/",
   },
   {
     sourcePrefix: "/platform-api/operations/",
-    intermediatePrefix: "/partners/api/reference/operations/",
+    intermediatePrefix: "/platforms/api/reference/operations/",
   },
   {
     sourcePrefix: "/platform-api/resources/",
-    intermediatePrefix: "/partners/api/reference/resources/",
+    intermediatePrefix: "/platforms/api/reference/resources/",
   },
 ];
 
@@ -48,7 +48,12 @@ function redirectKey(redirect) {
 }
 
 export function compileRedirectRules(redirects) {
-  redirects = [...redirects, ...referenceAliases];
+  // Keep the established public URL when consuming the renamed partner snapshot.
+  redirects = [...redirects, ...referenceAliases].map(({ from, to, status }) => ({
+    from: from.replace("/partners/api/reference", "/platforms/api/reference"),
+    to: to.replace("/partners/api/reference", "/platforms/api/reference"),
+    status,
+  }));
   const bySource = new Map(redirects.map((redirect) => [redirect.from, redirect]));
   const omitted = new Set();
   const dynamic = [];
@@ -84,8 +89,8 @@ export function compileRedirectRules(redirects) {
   return [
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
-    { from: "/platforms/api/reference", status: 301, to: "/partners/api/reference" },
-    { from: "/platforms/api/reference/*", status: 301, to: "/partners/api/reference/:splat" },
+    { from: "/partners/api/reference", status: 301, to: "/platforms/api/reference" },
+    { from: "/partners/api/reference/*", status: 301, to: "/platforms/api/reference/:splat" },
     { from: "/platform-api", status: 301, to: "/partner-api" },
     { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
   ].toSorted((left, right) => left.from.localeCompare(right.from));

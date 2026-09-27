@@ -32,6 +32,7 @@ const DOCS_ROOT = `${SITE}${deploymentBase}`;
 const COLLAPSED_ROOTS = [
   "/errors",
   "/api/reference",
+  "/platforms/api/reference",
   "/partners/api/reference",
   "/changelog",
 ];

@@ -6,7 +6,7 @@ const GENERATED_ROUTES = [
   "/changelog",
   "/cli/reference",
   "/errors",
-  "/partners/api/reference",
+  "/platforms/api/reference",
 ];
 const GENERATED_DIRECTORIES = new Set([
   "content/(reference)/changelog",

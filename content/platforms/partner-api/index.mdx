@@ -57,7 +57,7 @@ const customers = await client.get("/v1/principals", {
 });
 ```
 
-Use a separate client and query cache for each tenant and customer identity. A tenant API key grants management access. Give customer applications a [partner JWT](/partners/tokens) scoped to that customer.
+Use a separate client and query cache for each tenant and customer identity. A tenant API key grants management access. Give customer applications a [partner JWT](/platforms/partner-api/tokens) scoped to that customer.
 
 ## Rotate a tenant API key
 
@@ -67,9 +67,9 @@ Save the returned secret, update your integration, and verify a request with the
 
 ## Continue the integration
 
-- [Issue customer JWTs](/partners/tokens) for customer-scoped access.
-- [Configure your partner account](/partners/configuration) through a system Space.
-- [Manage customers and usage](/partners/customers) for plans, suspension, and billing records.
-- [Promote to live](/partners/go-live) after the sandbox checks pass.
+- [Issue customer JWTs](/platforms/partner-api/tokens) for customer-scoped access.
+- [Configure your partner account](/platforms/partner-api/configuration) through a system Space.
+- [Manage customers and usage](/platforms/partner-api/customers) for plans, suspension, and billing records.
+- [Promote to live](/platforms/partner-api/go-live) after the sandbox checks pass.
 
-The [Partner API reference](/partners/api/reference) lists request schemas and permissions. Download its OpenAPI document from `https://api.spacefast.com/openapi.partner.json`. The shared [error](/api/errors), [pagination](/api/pagination), [idempotency](/api/idempotency), and [operation](/api/operations) contracts also apply.
+The [Partner API reference](/platforms/api/reference) lists request schemas and permissions. Download its OpenAPI document from `https://api.spacefast.com/openapi.partner.json`. The shared [error](/api/errors), [pagination](/api/pagination), [idempotency](/api/idempotency), and [operation](/api/operations) contracts also apply.

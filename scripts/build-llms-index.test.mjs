@@ -37,7 +37,7 @@ const fixture = [
   "",
   entry("/errors"),
   entry("/api/reference"),
-  entry("/partners/api/reference"),
+  entry("/platforms/api/reference"),
   entry("/changelog/packages"),
   "",
   "### Spaces",
@@ -47,7 +47,7 @@ const fixture = [
   entry("/errors/rate_limited"),
   entry("/errors/build_failed"),
   entry("/api/reference/spaces/create"),
-  entry("/partners/api/reference/principals/list"),
+  entry("/platforms/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
   entry("/setup/claude-code"),
@@ -77,7 +77,7 @@ test("collapses generated descendants and keeps only navigated index pages", () 
   for (const gone of [
     "/errors/rate_limited",
     "/api/reference/spaces/create",
-    "/partners/api/reference",
+    "/platforms/api/reference",
     "/changelog/v0-0-24",
   ]) {
     assert.ok(!routes.includes(gone), `${gone} should be collapsed`);
@@ -93,8 +93,8 @@ test("drops generated pages that moved out of the Other bucket", () => {
   // by walking the sidebar, so adding error pages there moves them into a named
   // section. A heading-based filter would stop seeing them; this must not.
   const moved = fixture.replace(
-    `${entry("/partners/api/reference")}\n${entry("/changelog/packages")}`,
-    `${entry("/partners/api/reference")}\n${entry("/changelog/packages")}\n${entry("/errors/rate_limited")}`,
+    `${entry("/platforms/api/reference")}\n${entry("/changelog/packages")}`,
+    `${entry("/platforms/api/reference")}\n${entry("/changelog/packages")}\n${entry("/errors/rate_limited")}`,
   );
   const { text } = build({ source: moved });
   assert.ok(!text.includes("/docs/errors/rate_limited)"));

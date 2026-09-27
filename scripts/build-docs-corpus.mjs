@@ -28,7 +28,7 @@ function normalizePath(url) {
 
 function pageMetadata(path) {
   if (
-    ["/api/reference", "/partners/api/reference"].some(
+    ["/api/reference", "/partners/api/reference", "/platforms/api/reference"].some(
       (prefix) => path === prefix || path.startsWith(`${prefix}/`),
     )
   ) return { kind: "api", tier: "reference" };

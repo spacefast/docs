@@ -471,7 +471,10 @@ if (
 }
 for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   const example = representativeRedirect(redirect);
-  const canonicalDestination = example.destination;
+  const canonicalDestination = example.destination.replace(
+    "/partners/api/reference",
+    "/platforms/api/reference",
+  );
   const target = localTargetFor(canonicalDestination);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
