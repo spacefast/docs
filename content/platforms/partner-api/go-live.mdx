@@ -26,7 +26,7 @@ Verify that your application handles each failure it can expose to a customer. A
 
 ## Prepare the live tenant
 
-Create the live tenant's system Space, [designate it](/api/partners/configuration#designate-a-system-space) with the live tenant API key, and publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
+Create the live tenant's system Space, [designate it](/platforms/partner-api/configuration#designate-a-system-space) with the live tenant API key, and publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
 
 Register and activate a separate live signing issuer. Promotion preserves the live issuer declaration and never copies the test issuer. Store live API keys and webhook secrets separately from test secrets.
 
@@ -47,7 +47,7 @@ The body is required, even though it is empty. Generate `PROMOTION_KEY` (a UUID)
 
 Promotion publishes the test system configuration onto the live system Space while retaining its live content. The test tenant remains unchanged. New domains and other live resources require their own verification.
 
-Read the returned live tenant's `manifestStatus`. Resolve every `failed` item and complete verification for every required `pending` item. Obtain the live webhook signing secret through the [subscription setup flow](/api/partners/configuration#connect-an-event-receiver).
+Read the returned live tenant's `manifestStatus`. Resolve every `failed` item and complete verification for every required `pending` item. Obtain the live webhook signing secret through the [subscription setup flow](/platforms/partner-api/configuration#connect-an-event-receiver).
 
 ## Prove the live flow
 
