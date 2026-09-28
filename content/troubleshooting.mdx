@@ -117,6 +117,14 @@ A credential from `sf login` lasts 30 days and expires after 7 days without use,
 
 `credential_revoked` means someone revoked it, in the dashboard or with `sf api-keys revoke`. `credential_retired` means an old token format. Both need a new credential rather than a retry. See [Authentication](/authentication).
 
+### An agent in a cloud sandbox cannot reach Spacefast
+
+Claude Code on the web and mobile, Codex cloud, and similar hosted sandboxes block unknown hosts by default, and Spacefast is one of them. The CLI fails with `network_error` or `upload_transport_error`, and the agent cannot read these docs either. Three ways out, best first:
+
+1. **Add the Spacefast connector to Claude.** [Open the connector form](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Spacefast&connectorUrl=https%3A%2F%2Fmcp.spacefast.com), choose **Connect**, approve, and enable it for the session. Connector traffic goes through Anthropic rather than the sandbox, so publishing works with no network changes, including from the mobile app.
+2. **Push to a connected GitHub repository.** Sandboxes can push to GitHub, and Spacefast builds the push itself. Connect the repository once from the Space's **Builds** page; see [Connect a GitHub repository](/git#connect-a-github-repository). Claude Code on the web pushes a working branch, which builds a preview; merge the pull request to go live.
+3. **Allow the hosts.** Add `spacefast.com`, `*.spacefast.com`, and `*.view.fast` to the environment's allowlist. In Claude Code that is **Network access → Custom → Allowed domains**; keep **Also include default list of common package managers** checked, or npm, and with it the CLI, is blocked too. In Codex cloud, turn on **Agent internet access**, add the domains, and leave HTTP methods unrestricted, since uploads use `PUT` and `POST`. Allowing only `api.spacefast.com` is not enough: uploads go to `*.view.fast`.
+
 ### An agent gets 403 on one tool
 
 Tools carry their own scope requirements, so a grant can cover most of a client and still refuse one call. `publish` needs `publish:write`. `show_space_deployments` and `show_space_analytics` need `spaces:read`. `show_space_domains` needs `spaces:read` and `domains:read`.
