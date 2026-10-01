@@ -57,22 +57,26 @@ Worked example, from the page-opener cleanup:
 > Before: "After this page you know which directory your framework
 > produces, when to publish that directory yourself versus letting
 > Spacefast build, how detection picks commands, and where to read a
-> failing build." (33 words, 4 clauses)
+> failing build." (31 words, 4 clauses)
 >
-> After: "After this page you know whether to publish your own build
-> output or let Spacefast build it — and where to look when a build
-> fails." (25 words, 2 ideas joined by an em dash)
+> After: "Publish your own build output directly, or hand Spacefast the
+> source and let it build — the logs tell you which one went wrong if it
+> fails." (27 words, 2 ideas joined by an em dash)
 
 Another:
 
 > Before: "After this page you can mint an API key with the right
 > permissions, use it against the API, rotate it without downtime, and
-> recognize every other credential Spacefast hands you by its prefix." (29
+> recognize every other credential Spacefast hands you by its prefix." (33
 > words, 4 clauses)
 >
-> After: "After this page you can mint a scoped API key and rotate it
-> without downtime." (14 words — the credential-prefix table further down
-> the page already covers the dropped clause.)
+> After: "You can mint a scoped API key with exactly the permissions it
+> needs, then rotate it without downtime." (18 words — the credential-prefix
+> table further down the page already covers the dropped clause.)
+
+(These two "after" versions also show the fix from the next section — no
+"after this page" framing. The intermediate step, where the sentence was
+merely shorter but still templated, is history now; don't resurrect it.)
 
 ## Don't template the opening sentence
 
