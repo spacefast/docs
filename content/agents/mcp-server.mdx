@@ -3,7 +3,7 @@ title: MCP server
 description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its five tools, execute sandbox, and approval model
 ---
 
-The Spacefast MCP server exposes five tools over hosted HTTP or local stdio, and pauses for your approval before anything risky runs.
+Your client never actually holds a Spacefast API token — each authenticated request mints a short-lived delegation token instead, so a leaked MCP session can't be replayed against the wider API.
 
 ## Two runtimes, one tool set
 
