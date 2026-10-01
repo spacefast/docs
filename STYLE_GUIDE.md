@@ -74,6 +74,40 @@ Another:
 > without downtime." (14 words — the credential-prefix table further down
 > the page already covers the dropped clause.)
 
+## Don't template the opening sentence
+
+The example above still has a problem, caught in a later pass: "After this
+page you can/know X" and "By the end of this page you have Y" are
+templates — the same framing device, repeated verbatim as the literal first
+move on every page. That's a recognizable AI-writing tell, not a style
+choice: it's the generic "learning objectives" scaffold a model defaults to
+when it has to open a doc page without judging what's actually most
+interesting about *that* page. A human varies the opening move page to
+page. No Vale rule catches this — `AISpeak.yml` bans specific filler words,
+not repeated sentence-level structures, so a templated opener can pass
+every mechanical check and still read as generic.
+
+Open with the fact itself, not a sentence announcing that a fact is coming:
+
+> Templated: "After this page you can mint a scoped API key and rotate it
+> without downtime."
+>
+> Direct: "You can mint a scoped API key with exactly the permissions it
+> needs, then rotate it without downtime."
+
+> Templated: "After this page you know whether to publish your own build
+> output or let Spacefast build it."
+>
+> Direct: "Publish your own build output directly, or hand Spacefast the
+> source and let it build — the logs tell you which one went wrong if it
+> fails."
+
+Vary the construction — "you can," the mechanism stated as fact, a gerund
+opener ("Attaching a custom domain is..."), whatever fits that page — and
+don't let the opener become a word-for-word echo of the page's frontmatter
+`description` either; say the same thing in different words, or pick a
+different angle entirely.
+
 ## Banned words and phrases
 
 Vale errors on these. They're not style preferences — they're specific,
