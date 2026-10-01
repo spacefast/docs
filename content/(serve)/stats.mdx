@@ -31,7 +31,7 @@ Buckets are labelled in UTC, not your timezone, because that is the boundary the
 
 A **request** is any HTTP request the Space answered. A **view** is a successful request from something that is not a crawler: status under 400, assets included. So `views` is always lower than `requests`, and the gap is redirects, 404s, and bots.
 
-**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total, which is why the page lists them one by one instead of showing one number.
+**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total. That's why the page lists them one by one instead of showing a single number.
 
 **Top paths** and top hosts are capped at 10 entries each.
 

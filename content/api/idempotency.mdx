@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-A dropped connection on a publish should not create two versions. After this page you can retry any `POST` and know exactly which of the two possible answers you will get: the original result replayed, or a conflict telling you the first attempt is still running.
+A dropped connection on a publish should not create two versions. After this page you can retry any `POST` and get one of two answers: the original result replayed, or a conflict saying the first attempt is still running.
 
 ## Send a key
 
@@ -90,7 +90,7 @@ Exactly 64 hexadecimal characters, stable across every retry of that attempt, an
 }
 ```
 
-The header is a secret, not an identifier. An anonymous publish receipt contains one-time claim and upload credentials, and the principal is what stops another anonymous caller from replaying your receipt out of a shared scope. Generate 32 random bytes per attempt and hex-encode them.
+The header is a secret, not an identifier. An anonymous publish receipt contains one-time claim and upload credentials. The principal is what stops another anonymous caller from replaying your receipt out of a shared scope. Generate 32 random bytes per attempt and hex-encode them.
 
 ## Where it matters most
 

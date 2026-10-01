@@ -25,9 +25,9 @@ There is a third lane, `sf mcp proxy`, which speaks stdio to your editor and HTT
 
 ### Hosted
 
-The hosted server is an OAuth 2.0 protected resource. It is never anonymous. A request with no token gets a `401` and a `WWW-Authenticate` challenge that points at the resource metadata document, and your client walks the rest from there. Bearer and DPoP are both accepted; a DPoP-shaped request gets a DPoP challenge back.
+The hosted server is an OAuth 2.0 protected resource. It is never anonymous. A request with no token gets a `401` and a `WWW-Authenticate` challenge pointing at the resource metadata document. Your client walks the rest from there. Bearer and DPoP are both accepted; a DPoP-shaped request gets a DPoP challenge back.
 
-The resource identifier is the MCP origin itself. A platform OAuth token that was not bound to the MCP resource is rejected at this endpoint even though it is a valid Spacefast token.
+The resource identifier is the MCP origin itself. A platform OAuth token not bound to the MCP resource is rejected here, even though it's a valid Spacefast token.
 
 By default a client asks for these scopes.
 
@@ -54,7 +54,7 @@ Each tool declares the scopes it needs, and clients can read them from `tools/li
 
 A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
-Your client never receives a Spacefast API token. Each authenticated request mints an internal delegation token that lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session cannot be replayed against the wider API.
+Your client never receives a Spacefast API token. Each authenticated request mints an internal delegation token that lives five minutes and carries the source credential's policy verbatim. That means a leaked MCP session cannot be replayed against the wider API.
 
 Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
 

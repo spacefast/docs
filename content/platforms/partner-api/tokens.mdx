@@ -43,7 +43,7 @@ const proof = await new SignJWT({ challenge })
   .sign(privateKey);
 ```
 
-Add the signed JWT to that issuer's `proofs` array, retain its `issuer` and `keys`, and republish. Wait for the manifest item to become `active`. If the key proposal changes, read the new challenge and sign it again.
+Add the signed JWT to that issuer's `proofs` array, and retain its `issuer` and `keys`. Then republish. Wait for the manifest item to become `active`. If the key proposal changes, read the new challenge and sign it again.
 
 ## Sign a customer JWT
 
@@ -80,13 +80,13 @@ Send it as `Authorization: Bearer <token>`. Authenticate the customer in your ow
 
 JWTs may be reused until expiry. The maximum encoded token size is 8,192 bytes. Headers that supply remote or embedded keys, including `jku`, `x5u`, `jwk`, and `x5c`, are refused.
 
-A partner JWT acts only for its customer. It cannot administer principals, mint API keys, or delete Spaces, and team listings return no teams. Use the tenant API key for management work.
+A partner JWT acts only for its customer. It cannot administer principals, mint API keys, or delete Spaces. Team listings return no teams. Use the tenant API key for management work.
 
 ## Rotate or revoke signing keys
 
-Publish the existing key and the new public key together. Read the new challenge, sign it with each new private key, and republish the proofs. Existing keys remain active while the proposal is pending.
+Publish the existing key and the new public key together. Read the new challenge and sign it with each new private key, then republish the proofs. Existing keys remain active while the proposal is pending.
 
-After activation, start signing with the new key. Keep the old public key until its outstanding JWTs expire, then remove it and republish. Removing an active key invalidates JWTs signed by that key on subsequent requests.
+After activation, start signing with the new key. Keep the old public key until its outstanding JWTs expire. Then remove it and republish. Removing an active key invalidates JWTs signed by that key on subsequent requests.
 
 Remove `tokenIssuers`, or publish an empty array, to revoke the tenant issuer. There is no individual JWT revocation endpoint. For urgent revocation, remove the affected signing key or revoke the issuer.
 

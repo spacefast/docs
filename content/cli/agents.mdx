@@ -27,7 +27,7 @@ That detects your agent clients, installs the Spacefast skill, and writes MCP co
 | `remote-oauth` (`--remote --oauth`) | A direct HTTP connection to the hosted server | Your editor, through OAuth |
 | `local` (`--local`) | A local stdio server that can read your checkout | Your CLI login |
 
-**The default is `remote-proxy`, and here is what that means for you.** Your editor speaks stdio to `sf` on your machine. `sf` speaks HTTPS to the hosted MCP server using the login you already have. You never do an OAuth dance in the editor, and when you run `sf login` again, the proxy picks the new login up without an editor restart. The cost is that `sf` has to be on your `PATH` and you have to be logged in; an unauthenticated proxy answers JSON-RPC error `-32001` telling you to run `sf login`.
+**The default is `remote-proxy`, and here is what that means for you.** Your editor speaks stdio to `sf` on your machine. `sf` speaks HTTPS to the hosted MCP server using the login you already have. You never do an OAuth dance in the editor. When you run `sf login` again, the proxy picks up the new login without an editor restart. The cost: `sf` has to be on your `PATH`, and you have to be logged in. An unauthenticated proxy answers JSON-RPC error `-32001` telling you to run `sf login`.
 
 Pick `--local` instead when you want the MCP server to publish files from your working directory. Pick `--remote --oauth` when you want the editor to own the credential rather than the CLI.
 

@@ -28,7 +28,7 @@ Every version that reaches ready gets a permanent hostname of its own:
 https://v{number}--{label}.view.fast/
 ```
 
-Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready and stored on the version row, so it survives a slug rename and keeps serving that exact build no matter what is live now.
+Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready, and stored on the version row. So it survives a slug rename, and keeps serving that exact build no matter what is live now.
 
 The API and the CLI report it as `immutableUrl`, with an `immutableUrlStatus` of `pending` until the hostname is routable.
 

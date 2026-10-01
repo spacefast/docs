@@ -86,7 +86,7 @@ Read a Space's logs.
 
 `access` is every request the edge served. `runtime` is what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
 
-Runtime lines are written on the origin, shipped, and indexed before they can be read back, so a line you just triggered takes a while to appear. **An empty page means not yet, not broken.** A page can come back empty while there is still more to read, so keep paging while the cursor is there.
+A line you just triggered takes a while to appear — it's written on the origin, shipped, and indexed before it can be read back. **An empty page means not yet, not broken.** Keep paging while the cursor is there: a page can come back empty while there's still more to read.
 
 ```text
 sf logs [target] [kind] [--space <value>] [--limit <n>] [-f] [--cursor <value>]

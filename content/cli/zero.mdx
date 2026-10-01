@@ -50,7 +50,7 @@ sf zero call <ability> [--space <value>] [--credential <mch_...>] [--input <json
 | `--credential=<mch_...>` | the only one, when there is exactly one | Machine credential id to mint the Ability token for |
 | `--input=<json>` | none | Ability input as inline JSON, or `@path` to read it from a file |
 
-The minted token travels in `X-SF-Authorization`, because the plain `Authorization` header belongs to your application and passes through untouched.
+The minted token travels in `X-SF-Authorization`. The plain `Authorization` header belongs to your application and passes through untouched.
 
 ```bash
 sf zero call content.posts.list
@@ -102,7 +102,7 @@ With `--json`, `data` is `{ out, spaceId, versionId, contentModelRevision, abili
 
 Translate a Payload CMS or EmDash project into an authored Zero capsule and its content files, and print the translation report. This is a local codegen step with no space flags.
 
-A Payload config carrying anything Zero cannot hold is refused outright and nothing is written, because a content model missing the fields that refused would publish a site that silently lost content.
+A Payload config carrying anything Zero cannot hold is refused outright, and nothing is written. A content model missing the fields that refused would publish a site that silently lost content.
 
 ```text
 sf zero import <source> <directory> [--out <dir>] [--capsule <path>] [--force]
@@ -138,7 +138,7 @@ sf zero import emdash ../my-emdash-site --out .
 
 Run WP-CLI against a Space's WordPress, or against a local one with `--local`.
 
-Everything after the flags is passed to `wp` unchanged, so `sf wp plugin list --format=csv` runs exactly that. With `--local`, WP-CLI's own output and exit code pass through untouched. Against a Space, the command runs remotely and reports whether it succeeded and how long it took; the platform returns no stdout, so read state back with a follow-up command such as `sf wp option get`. `--json` wraps only Spacefast's own errors, never `wp`'s output. See [WordPress on every Space](/wordpress). Use `--` to pass a flag `sf` would otherwise claim.
+Everything after the flags is passed to `wp` unchanged, so `sf wp plugin list --format=csv` runs exactly that. With `--local`, WP-CLI's own output and exit code pass through untouched. Against a Space, the command runs remotely and reports whether it succeeded and how long it took. The platform returns no stdout, so read state back with a follow-up command such as `sf wp option get`. `--json` wraps only Spacefast's own errors, never `wp`'s output. See [WordPress on every Space](/wordpress). Use `--` to pass a flag `sf` would otherwise claim.
 
 ```text
 sf wp [--space <value>] [--local] [--path <dir>] [--mode full|limited] -- <wp args...>
@@ -209,7 +209,7 @@ sf pages pull [target]
 | --- | --- |
 | `[target]` | `all`, `layout`, or a site page id. Defaults to `all` |
 
-The site page ids are `404`, `denied`, `access`, `index`, and `preview`. It writes `_layout.html` at the project root and `_pages/<id>.html` for each id. An existing file makes the write fail; there is no force flag, so move or delete the file first.
+The site page ids are `404`, `denied`, `access`, `index`, and `preview`. It writes `_layout.html` at the project root and `_pages/<id>.html` for each id. An existing file makes the write fail. There is no force flag, so move or delete the file first.
 
 ```bash
 sf pages pull
@@ -280,7 +280,7 @@ With `--json`, `data` is `{ written, skippedExisting, warnings }`.
 
 Print a Space's runtime analytics series.
 
-The numbers are read live from the edge, not from a local store, and they cover every hostname mapped to the Space. `views` counts successful non-crawler requests, status under 400, assets included. Daily uniques are the finest resolution available and are never summed across days, which is why the per-day series prints instead of one total.
+The numbers are read live from the edge, not from a local store, and they cover every hostname mapped to the Space. `views` counts successful non-crawler requests, status under 400, assets included. That's why the per-day series prints instead of one total: daily uniques are the finest resolution available and are never summed across days.
 
 ```text
 sf analytics [--space <value>] [--window 48h|7d|30d]

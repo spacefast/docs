@@ -7,7 +7,7 @@ sidebar:
 
 After this page you can scaffold a project and link a directory to a Space so `sf publish` needs no flags.
 
-Two files carry the link. `.spacefast/space.json` is the committable one: which Space, which team, which API base URL. `.spacefast/state.json` is the local cache and holds credentials, so it never gets committed and the CLI adds it to `.gitignore` for you.
+Two files carry the link. `.spacefast/space.json` is the committable one: which Space, which team, which API base URL. `.spacefast/state.json` is the local cache. It holds credentials, so it's never committed; the CLI adds it to `.gitignore` for you.
 
 Every command here also takes the [global flags](/cli#global-flags).
 
@@ -219,7 +219,7 @@ sf profiles set acme --api-url https://api.acme-host.example --token sfa_xxxxxxx
 sf profiles set acme --token ""
 ```
 
-Neither flag reads an environment variable here, so an exported `SPACEFAST_TOKEN` cannot be captured into a profile by accident and `--token ""` keeps meaning "clear it". An `--api-url` with embedded credentials is rejected.
+Neither flag reads an environment variable here. An exported `SPACEFAST_TOKEN` can't be captured into a profile by accident, and `--token ""` still means "clear it". An `--api-url` with embedded credentials is rejected.
 
 ### sf profiles use
 

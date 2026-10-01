@@ -76,13 +76,13 @@ sf storage rm 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
 
 `sf storage` and `sf storage ls` do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
 
-`sf storage rm` confirms first, and the id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
+`sf storage rm` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
 
 There is no `sf storage upload`. Uploads go through the client SDK, the API, or the dashboard.
 
 ## Dashboard
 
-Open **Storage** for the space. It has a **Choose files to upload** input and an **Upload files** button, and it prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
+Open **Storage** for the space. It has a **Choose files to upload** input and an **Upload files** button. It also prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
 
 ## Limits
 

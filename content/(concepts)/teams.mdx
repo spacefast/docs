@@ -9,9 +9,9 @@ After this page you know what each role can do and how to invite people to your 
 
 ## What a team is
 
-A team is the thing that owns work. Spaces, custom domains, API keys, billing, and members all hang off it. Every claimed Space belongs to exactly one team, even when you are its only member, so there is no separate personal container to reason about.
+A team is the thing that owns work. Spaces, custom domains, API keys, billing, and members all hang off it. Every claimed Space belongs to exactly one team, even when you are its only member. There is no separate personal container to reason about.
 
-A team has a name and a slug. The slug is the first segment of its dashboard URLs and you can change it in **Team settings → General**, where a live check tells you whether the new one is free.
+A team has a name and a slug. The slug is the first segment of its dashboard URLs. You can change it in **Team settings → General**, where a live check tells you whether the new one is free.
 
 | Slug rule | Value |
 |---|---|
@@ -98,7 +98,7 @@ The default is `team`. From a terminal, `sf teams defaults` prints the current v
 Open the Space, then **Space settings → General → Transfer this space** and press **Transfer space…**. Pick the destination team.
 
 - If you are an owner or admin of the destination, the button reads **Move space** and it happens immediately. The Space keeps serving at its current address.
-- Otherwise the button reads **Request transfer**. Owners and admins of the destination team have 7 days to accept, nothing changes until they do, and you can cancel any time before then.
+- Otherwise the button reads **Request transfer**. Owners and admins of the destination team have 7 days to accept. Nothing changes until they do, and you can cancel any time before then.
 
 From a terminal:
 
@@ -108,7 +108,7 @@ sf transfers accept <transfer-id>
 sf transfers cancel <transfer-id>
 ```
 
-Only owners and admins can transfer a Space. Two consequences to plan for: the old team's Space-scoped API keys stop working the moment the transfer completes, and custom domains keep serving but stay owned by the original team.
+Only owners and admins can transfer a Space. Two consequences to plan for: the old team's Space-scoped API keys stop working the moment the transfer completes. Custom domains keep serving but stay owned by the original team.
 
 ## Leave or delete a team
 

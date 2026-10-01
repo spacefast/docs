@@ -105,4 +105,4 @@ Only the newest failures are kept, with no history behind them. A real failure a
 
 ## API
 
-[`listSpaceCrons`](/api/reference/spaces/listspacecrons) is `GET /v1/spaces/{spaceId}/crons`. It returns the version the schedules came from, which is `null` before the first publish, and one entry per cron with its key, path, schedule, and recent failures.
+[`listSpaceCrons`](/api/reference/spaces/listspacecrons) is `GET /v1/spaces/{spaceId}/crons`. It returns the version the schedules came from, which is `null` before the first publish. Each entry carries its key, path, schedule, and recent failures.

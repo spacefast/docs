@@ -9,14 +9,14 @@ After this page you know whether to publish your own build output or let Spacefa
 
 ## Two paths
 
-**Publish the output.** You run the build, Spacefast takes the directory. This is the fast path and the recommended default. Your machine or your CI already has the toolchain warm, failures show up where you can debug them, and the publish is a file upload.
+**Publish the output.** You run the build, Spacefast takes the directory. This is the fast path and the recommended default. Your machine or your CI already has the toolchain warm, and failures show up where you can debug them. The publish itself is just a file upload.
 
 ```bash
 npm run build
 sf publish ./dist
 ```
 
-**Let Spacefast build.** You hand over source, Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
+**Let Spacefast build.** You hand over source. Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
 
 ```bash
 sf publish --remote
@@ -207,7 +207,7 @@ export default defineConfig({
 });
 ```
 
-It merges inline `redirects` and `headers` options with the `_redirects` and `_headers` files in your project root, public directory, and any `publishDir` you name, compiles them, applies them in `astro dev` so local behavior matches production, and writes the merged files into the build output. A routing error fails the build, because `failOnRoutingError` defaults to `true`. Needs Astro 6 or newer.
+It merges inline `redirects` and `headers` options with the `_redirects` and `_headers` files in your project root, public directory, and any `publishDir` you name. It compiles the result and applies it in `astro dev`, so local behavior matches production, then writes the merged files into the build output. A routing error fails the build, because `failOnRoutingError` defaults to `true`. Needs Astro 6 or newer.
 
 For server-rendered Astro there is a second integration at `@spacefast/astro/adapter`, `spacefastAstroAdapter()`, which records route facts and emits the server entry. Sharp runs at build time only.
 

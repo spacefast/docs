@@ -48,7 +48,7 @@ It is recoverable after that. The key stays valid for another **7 days**, during
 
 Opening the claim page when less than an hour remains moves the deadline to one hour from that load, up to 6 extra hours in total. Repeated publishes cannot push the deadline past 30 days from creation.
 
-To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted, and it is never written to logs.
+To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted. It is never written to logs.
 
 ## Caps
 

@@ -157,7 +157,7 @@ The output is the Link row plus its share URL. The URL is `[REDACTED]` in JSON a
 
 `sf share link copy ID` prints a Link's durable share URL. It takes `--show-secret` with the same meaning as on `create`.
 
-`sf share link edit ID` replaces a Link's metadata or Grant dimensions without rotating its URL. It takes the same `--name`, `--landing`, `--path`, `--exclude`, `--role`, and `--target` flags as `create` and the full constraint set, each defaulting to unchanged, plus the clear flags below. Every flag replaces rather than merges, `--exclude` requires `--path`, and passing no field is a validation error.
+`sf share link edit ID` replaces a Link's metadata or Grant dimensions without rotating its URL. It takes the same `--name`, `--landing`, `--path`, `--exclude`, `--role`, and `--target` flags as `create` and the full constraint set, each defaulting to unchanged, plus the clear flags below. Every flag replaces rather than merges. `--exclude` requires `--path`, and passing no field is a validation error.
 
 | Flag | Default | What it does |
 | --- | --- | --- |

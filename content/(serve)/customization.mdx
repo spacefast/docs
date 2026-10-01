@@ -9,7 +9,7 @@ Open the Space and go to **Customization**. Four tabs, in order: **Theme**, **Se
 
 ## What lives on the Space, not the version
 
-Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published `sf.jsonc`: the Space's `theme` replaces the file's rather than merging with it, so a project that sets `theme` in its config and then edits Theme here keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
+Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published `sf.jsonc`: the Space's `theme` replaces the file's rather than merging with it. So a project that sets `theme` in its config, then edits Theme here, keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
 
 Theme and share metadata apply without republishing. Save, and the next request gets them. **Custom JS** is the exception, and its own field note says so: a script change takes effect on the next publish.
 
@@ -34,7 +34,7 @@ Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names, up
 
 Leave **Background** blank and the pages follow each visitor's device, light or dark. The field's default note says exactly that.
 
-Set it, and it stops following. Spacefast reads the color you gave, decides whether it is light or dark, and serves that one scheme to everyone. The field flips to **Pinned.** with a line saying the color reads as dark or light so every visitor gets that scheme, plus **Clear to follow visitors again**. The preview's Auto/Light/Dark switcher is replaced by a locked **Pinned · Dark** or **Pinned · Light** chip, because there is no longer anything to simulate.
+Set it, and it stops following. Spacefast reads the color you gave, decides whether it is light or dark, and serves that one scheme to everyone. The field flips to **Pinned.**, with a line saying the color reads as dark or light so every visitor gets that scheme. It also shows **Clear to follow visitors again**. The preview's Auto/Light/Dark switcher is replaced by a locked **Pinned · Dark** or **Pinned · Light** chip, because there is no longer anything to simulate.
 
 ### Check the branding entitlement
 

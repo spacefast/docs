@@ -201,13 +201,13 @@ Approving invites the requester to the path they asked about.
 
 **On a public Space**, the page loads. No access code runs at all.
 
-**With a share link**, the link is the page. The token is redeemed before anything is read from disk, so the first request returns the document. The response is never stored in any cache, and it carries `Referrer-Policy: no-referrer` so the secret does not leak through the referrer header on outbound clicks.
+**With a share link**, the link is the page. The token is redeemed before anything is read from disk, so the first request returns the document. The response is never stored in any cache. It also carries `Referrer-Policy: no-referrer`, so the secret does not leak through the referrer header on outbound clicks.
 
 **On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page offers whichever lanes you configured: a password box, an email code, a request-access form, or a sign-in with a Spacefast account.
 
 **Signing in** sends the visitor to Spacefast, then back. The path they originally asked for is carried through the round trip, so they land on the page they wanted rather than the homepage.
 
-**Submitting a password** posts it from the same origin, checks it against the platform rather than anything on the box, and on success sets the visitor's session cookie and sends a **303** back to where they were. Passwords are capped at 1024 bytes. Failures come back as rate limited, invalid password, or exchange unavailable.
+**Submitting a password** posts it from the same origin and checks it against the platform, not anything on the box. On success, it sets the visitor's session cookie and sends a **303** back to where they were. Passwords are capped at 1024 bytes. Failures come back as rate limited, invalid password, or exchange unavailable.
 
 A visitor session is idle-expiring after 7 days and absolutely expiring after 30 days.
 

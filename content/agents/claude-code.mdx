@@ -14,7 +14,7 @@ claude plugin install spacefast@spacefast
 
 The plugin does not assume the `sf` CLI is installed. You sign in the first time the hosted server is used, through your client's OAuth flow.
 
-Two other lanes exist. `npx -y plugins add spacefast/plugins -t claude-code -y` installs the same plugin, and `sf setup agent --agent claude-code` writes MCP config into `~/.claude.json` and installs the skill into `~/.claude/skills/spacefast/` instead. See [sf setup agent](/agents/sf-setup).
+Two other lanes exist. `npx -y plugins add spacefast/plugins -t claude-code -y` installs the same plugin. `sf setup agent --agent claude-code` writes MCP config into `~/.claude.json` and installs the skill into `~/.claude/skills/spacefast/` instead. See [sf setup agent](/agents/sf-setup).
 
 ## What the plugin adds
 
@@ -38,13 +38,13 @@ Two entries, hosted and local.
 }
 ```
 
-`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio, which is what lets `publish` read a folder instead of taking inline files. The version in `args` is stamped at release; the shipped file pins whatever the release built.
+`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio, so `publish` can read a folder instead of taking inline files. The version in `args` is stamped at release; the shipped file pins whatever the release built.
 
 The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
 
 ### The Spacefast skill
 
-`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool, sets the publish then poll then report loop, and holds the rules about never printing claim credentials. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
+`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool and sets the publish-poll-report loop. It also holds the rule against printing claim credentials. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
 
 ### One SessionStart hook
 

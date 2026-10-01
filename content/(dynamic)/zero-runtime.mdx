@@ -9,7 +9,7 @@ After this page you can tell whether your project needs Zero and declare it in `
 
 ## What Zero is
 
-Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, actions, and HTTP endpoints, and `sf publish` compiles it into a **capsule** the platform installs on the space.
+Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, actions, and HTTP endpoints. `sf publish` compiles it into a **capsule** the platform installs on the space.
 
 Zero is on for every account. There is nothing to enable.
 
@@ -160,13 +160,13 @@ Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for 
 3. Your endpoint table matches. A hit runs the handler in the QuickJS runner on the space's own machine, in one transaction with the database.
 4. Everything else falls to the app shell, which serves your client bundle.
 
-Queries, mutations, and actions do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event and every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
+Queries, mutations, and actions do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event. Every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
 
 An endpoint cannot claim `/`, `/index.html`, `/client.js`, `/auth/callback`, anything under `/auth/`, or anything under `/_spacefast/`. The shell, the client bundle, and the sign-in flow already answer those.
 
 ## What a capsule is, and what compiles
 
-A capsule is the value `capsule({...})` returns. `sf publish` runs esbuild over your tree and produces one ESM server bundle for the runner, one browser client bundle, and a migration plan for the tables you declared. Rolling a version back rolls all three back together, because they travel with the version.
+A capsule is the value `capsule({...})` returns. `sf publish` runs esbuild over your tree. It produces one ESM server bundle for the runner, one browser client bundle, and a migration plan for the tables you declared. Rolling a version back rolls all three back together, because they travel with the version.
 
 Only three source roots are read: `client/`, `server/`, and `shared/`. Beyond them the compile admits `package.json`, `.env.server`, and `.env.lakebed.server` and nothing else. `shared/` imports its own relative files only, no packages at all. Client code cannot import the server SDK, and server code cannot import client files.
 
@@ -259,7 +259,7 @@ Call them from the client with `useAction("invite")`. `scope: "/"` covers the wh
 
 Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected, and `theme.json` plus utility classes are the whole styling story.
 
-Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS at all and the capsule ships unstyled. Branch to whole literals instead.
+Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS at all. The capsule ships unstyled. Branch to whole literals instead.
 
 Prefer the semantic tokens, which re-skin from `theme.json` and handle light and dark on their own: `canvas`, `surface`, `ink`, `ink-muted`, `line`, `accent`, `success`, `warning`, `danger`. The shadcn names (`bg-background`, `text-muted-foreground`, `bg-primary`) alias onto the same tokens.
 

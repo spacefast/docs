@@ -49,7 +49,7 @@ A module's filename is its route and the HTTP methods it exports are the methods
 | `functions/haiku/[topic].ts` | `/haiku/:topic` |
 | `functions/posts/[...rest].ts` | `/posts` and everything under it |
 
-Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed, and neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
+Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed. Neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
 
 A path that exists at other methods answers 405 with an `Allow` header. A path in no file's table is a plain 404 and the worker never wakes.
 

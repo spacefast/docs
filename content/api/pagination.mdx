@@ -16,7 +16,7 @@ Two optional query parameters.
 | `limit` | integer, 1 to 100 | 20 | How many items to return. |
 | `cursor` | string, up to 4096 characters | none | The `nextCursor` from the previous page. |
 
-Both are optional. The generated spec marks `limit` as required because the schema supplies its own default, but a request that omits it gets 20.
+Both are optional. The generated spec marks `limit` as required because the schema supplies its own default. A request that omits it still gets 20.
 
 ## Response
 
@@ -45,7 +45,7 @@ A cursor is a base64url-encoded keyset. Do not parse it, build one, or store it 
 
 ## The loop
 
-Stop when `nextCursor` is `null`. Never re-send a cursor you have already used. If the response hands back the same cursor you sent, that is a broken page rather than the end, and looping on it spins forever. Treat it as an error.
+Stop when `nextCursor` is `null`. Never re-send a cursor you have already used. If the response hands back the same cursor you sent, that's a broken page, not the end. Looping on it spins forever. Treat it as an error.
 
 The same walk with curl and [the SDK](/api/sdk).
 

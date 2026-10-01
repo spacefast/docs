@@ -11,7 +11,7 @@ After this page you can inspect your space's database from the CLI and apply a m
 
 Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, as `env.DB`.
 
-You do not create it, size it, or connect to it. Your capsule declares the tables and the platform applies the migration when a version finalizes.
+You do not create it, size it, or connect to it. Your capsule declares the tables. The platform applies the migration when a version finalizes.
 
 :::warning[There is no external connection string]
 No route, flag, or dashboard field returns a DSN, and none is coming. Your code reaches the database through `ctx.db` (Zero) or `env.DB` (Functions). For everything else there is the SQL console below.
@@ -120,7 +120,7 @@ The write is atomic and mode `0600`. If the export fails part-way, an existing d
 
 ## Migrations
 
-Your capsule's tables are the schema. Publishing a version that changes them plans a migration, and the platform applies it at finalize. `sf db migrate` is for applying the live plan again, or for previewing what the source tree in front of you would change on top of it.
+Your capsule's tables are the schema. Publishing a version that changes them plans a migration, and the platform applies it at finalize. `sf db migrate` applies the live plan again, or previews what your source tree would change on top of it.
 
 ```bash
 sf db migrate

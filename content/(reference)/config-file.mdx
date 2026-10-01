@@ -272,6 +272,6 @@ Under `version: 1` the flat spellings are rejected. Four of them get `config_unk
 | `cleanUrls` | `serve.cleanUrls` |
 | `meta` | `metadata` |
 
-The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error: `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`, and `space` reports `config_identity_moved`.
+The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error. `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`; `space` reports `config_identity_moved`.
 
 The flat shape above is what the finalizer reads and what the CLI writes. Use `version: 1` only if you want the stricter contract.

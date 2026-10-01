@@ -116,7 +116,7 @@ This only affects versions still in `created`, `uploading`, or `uploaded`. A rea
 
 The upcoming plans introduce [time-based history windows](/usage#planned-history-and-log-retention). Those windows are planned; the following describes current cleanup.
 
-Ready versions stay until you delete them, with one exception. Free Spaces keep 200 versions, counting everything that is not failed, canceled, or expired. The publish that takes a Free Space past 200 still goes through, and the oldest ready versions that nothing serves expire in the background: their bytes are purged and their history stays. A version the live pointer or a branch alias serves is never expired. Paid plans have no cap. See [Limits](/limits).
+Ready versions stay until you delete them, with one exception. Free Spaces keep 200 versions, counting everything that is not failed, canceled, or expired. The publish that takes a Free Space past 200 still goes through. The oldest ready versions that nothing serves expire in the background — their bytes are purged, but their history stays. A version the live pointer or a branch alias serves is never expired. Paid plans have no cap. See [Limits](/limits).
 
 To delete one:
 
@@ -128,7 +128,7 @@ A version the `live` channel points at cannot be deleted, and neither can one a 
 
 ## Compare what you uploaded with what is served
 
-A version stores two representations of every path. `uploaded` is the byte you sent, before any transform. `served` is the immutable byte the version answers with. They differ where Spacefast processes a file, and a private input such as `sf.jsonc` exists in `uploaded` and is absent from `served` entirely.
+A version stores two representations of every path. `uploaded` is the byte you sent, before any transform. `served` is the immutable byte the version answers with. They differ where Spacefast processes a file. A private input such as `sf.jsonc` exists in `uploaded` and is absent from `served` entirely.
 
 [`listSpaceVersionFileLinks`](/api/reference/versions/listspaceversionfilelinks) mints short-lived read links for up to 200 paths at a time and takes `view=uploaded` or `view=served`. Fetch the same path both ways and diff them.
 

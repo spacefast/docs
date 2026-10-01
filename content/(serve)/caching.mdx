@@ -66,7 +66,7 @@ The non-GET rule is absolute. The shared cache in front of a Space keys on host,
 
 The edge keys a stored response on **host, path, and query**. It does not read `Vary`.
 
-That single fact explains a behavior that surprises people. A routing rule with a `Country=`, `Language=`, `Cookie=` or `Agent=` condition would otherwise let one visitor's response be handed to the next, so any URL a conditional rule touches is forced to `no-store` for everyone, whether the condition matched or not.
+That single fact explains a behavior that surprises people. A routing rule with a `Country=`, `Language=`, `Cookie=` or `Agent=` condition would otherwise let one visitor's response reach the next visitor. So any URL a conditional rule touches is forced to `no-store` for everyone, whether the condition matched or not.
 
 If a page needs to differ by country, language or client, give each variant its own URL rather than one URL with a condition on it. That keeps the whole set shared-cacheable.
 

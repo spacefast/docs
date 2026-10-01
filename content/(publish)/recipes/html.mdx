@@ -45,7 +45,7 @@ Published: https://quiet-harbor.view.fast
 
 ## The gotcha
 
-`sf publish` decides between "upload this" and "build this" from the file names in the folder. A `package.json`, a lockfile, or a framework config file sitting next to your `index.html` flips it to the build path, and then it installs dependencies and looks for a build command you may not have.
+`sf publish` decides between "upload this" and "build this" from the file names in the folder. A `package.json`, a lockfile, or a framework config file sitting next to your `index.html` flips it to the build path. Then it installs dependencies and looks for a build command you may not have.
 
 Force the upload path:
 

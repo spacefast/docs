@@ -48,7 +48,7 @@ Follow `pagination.nextCursor` until `hasMore` is false. Filters include `from`,
 
 Records are immutable and identify the tenant, principal, Space, dimension, bucket, and mode. Quantities are signed integer strings. Keep integer precision when importing them into your billing system.
 
-A correction is a new record linked through `corrects`. Deduplicate by `usageRecordId`, retain the original, and account for the correction. Do not overwrite an earlier record or assume all quantities are positive. Test-mode records are never billable.
+A correction is a new record linked through `corrects`. Deduplicate by `usageRecordId` and retain the original. Then account for the correction. Do not overwrite an earlier record or assume all quantities are positive. Test-mode records are never billable.
 
 Use `GET /v1/usage/periods` and `GET /v1/usage/periods/{periodId}` for monthly period status and totals. Usage arrives after measurement settles. A newly published Space can have no measured usage yet.
 

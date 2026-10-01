@@ -42,7 +42,7 @@ The object is closed. No other members appear.
 
 ## Branch on `code`, not on `status` or `detail`
 
-`code` is a typed union in the source, so the server cannot emit one outside the table below. `detail` is prose and may be reworded. `status` groups many codes together, and `title` and `type` are both mechanical functions of `code`, so they add nothing a branch can use.
+`code` is a typed union in the source, so the server cannot emit one outside the table below. `detail` is prose and may be reworded. `status` groups many codes together. `title` and `type` are both mechanical functions of `code`, so they add nothing a branch can use.
 
 ## `pointer`
 
@@ -79,7 +79,7 @@ The API uses this set, and no others:
 
 ## `recovery` and `retryable`
 
-Every code carries two classifications in the shipped contract. They are not response fields. The `sf` CLI reads them to tell a caller what to do, and the tables on this page publish the same values so your own client can do the same.
+Every code carries two classifications in the shipped contract. They are not response fields. The `sf` CLI reads them to tell a caller what to do. The tables on this page publish the same values, so your own client can do the same.
 
 | `recovery` | What the caller does |
 | --- | --- |

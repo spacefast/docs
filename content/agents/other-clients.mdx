@@ -22,7 +22,7 @@ After this page you can wire Spacefast into any MCP client that has no first-par
     }
     ```
 
-    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright and VS Code reads one as a stdio command, so the short form is broken rather than smaller.
+    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright, and VS Code reads one as a stdio command. The short form is broken, not smaller.
   </Tab>
   <Tab title="Local stdio">
     The server runs on your machine and can read your working directory, so `publish` accepts a path.

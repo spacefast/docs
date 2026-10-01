@@ -61,7 +61,7 @@ So a brand new variable with no flag is write-only. Pass `--no-secret` when you 
 
 ### Build time, `{{ vars.NAME }}`
 
-List a file under `templates` in `sf.jsonc` and every `{{ vars.NAME }}` token in it is substituted when the version finalizes.
+List a file under `templates` in `sf.jsonc`. Every `{{ vars.NAME }}` token in it is substituted when the version finalizes.
 
 ```jsonc sf.jsonc
 {
@@ -129,7 +129,7 @@ sf env pull .env.development --force
 sf env pull --stdout --format json
 ```
 
-`sf env pull` writes `.env.local` by default and refuses to overwrite an existing file without `--force`. The file is written `0600` through a temp file and a rename, and a pre-existing loose file gets tightened.
+`sf env pull` writes `.env.local` by default and refuses to overwrite an existing file without `--force`. The file is written `0600` through a temp file and a rename. A pre-existing loose file gets tightened too.
 
 Only non-secret values are pullable. Write-only names come back in `omittedWriteOnly` with a warning instead of a blank line. Team-scope values are written as `shared.<NAME>`.
 
@@ -138,7 +138,7 @@ sf env import .env.production
 sf env import .env --from vercel --no-secret
 ```
 
-`sf env import` reads a dotenv file and sends one write per entry, in file order. It strips a BOM and a leading `export `, skips blank and `#` lines, requires quotes to close, and strips an inline `#` outside quotes. A later duplicate overwrites an earlier one. A missing `=` or an empty value is an error naming the line. `--from` accepts `dotenv`, `vercel`, `netlify`, and `cloudflare`, which all export dotenv files.
+`sf env import` reads a dotenv file and sends one write per entry, in file order. It strips a BOM and a leading `export `, and skips blank and `#` lines. It also requires quotes to close and strips an inline `#` outside quotes. A later duplicate overwrites an earlier one. A missing `=` or an empty value is an error naming the line. `--from` accepts `dotenv`, `vercel`, `netlify`, and `cloudflare`, which all export dotenv files.
 
 ```bash
 sf env export-template
