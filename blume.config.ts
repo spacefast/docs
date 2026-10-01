@@ -77,7 +77,7 @@ export default defineConfig({
       { label: "Agent setup", href: "/agents", icon: "bot" },
     ],
     repo: true,
-    sidebar: { display: "flat" },
+    sidebar: { display: "group" },
     tabs: [
       { label: "Docs", path: "/", icon: "book-open" },
       { label: "CLI", path: "/cli", icon: "terminal" },

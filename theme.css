@@ -26,6 +26,38 @@
   letter-spacing: -0.025em;
 }
 
+/*
+ * Top-level collapsible sidebar groups read like flat section headings: same
+ * weight and color, with no indented rail under them. Their headers stack
+ * tightly whether open or closed; the only extra space is after an open
+ * group's pages. Nested groups (Recipes, Errors) keep the default style.
+ */
+[data-blume-nav-tree] > ul > li:has(> details) {
+  margin-top: 0.125rem;
+}
+
+[data-blume-nav-tree] > ul > li:not(:has(> details)) + li:has(> details) {
+  margin-top: 1.5rem;
+}
+
+[data-blume-nav-tree] > ul > li:has(> details[open]) + li {
+  margin-top: 0.75rem;
+}
+
+[data-blume-nav-tree] > ul > li > details > summary.blume-nav-summary {
+  color: var(--blume-foreground);
+  font-weight: 500;
+}
+
+[data-blume-nav-tree] > ul > li > details[open] > summary.blume-nav-summary {
+  margin-bottom: 0.25rem;
+}
+
+[data-blume-nav-tree] > ul > li > details > summary + div {
+  border-inline-start: 0;
+  padding-inline-start: 0;
+}
+
 .prose :where(h1, h2, h3) {
   font-weight: 400;
   letter-spacing: -0.025em;

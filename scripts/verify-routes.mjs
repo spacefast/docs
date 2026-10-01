@@ -261,6 +261,58 @@ for (const file of setupFiles) {
     throw new Error(`dist/${file} does not declare its www canonical (${expected}).`);
   }
 }
+// The sidebar override (components/Sidebar.astro) links pages across tabs.
+// Check the rendered sidebars, so a Blume change that drops the override fails here.
+const sidebarOf = async (file) => {
+  const html = await readBuilt(file);
+  const start = html.indexOf("<nav data-blume-nav-tree");
+  if (start < 0) throw new Error(`dist/${file} has no sidebar.`);
+  return html.slice(start, html.indexOf("</aside>", start));
+};
+const sidebarExpectations = [
+  ["quickstart/index.html", ["/cli", "/agents"], ["/setup/vscode", "Other agents"]],
+  ["agents/index.html", ["/agents/mcp-server", "/setup/vscode", "Other agents"], ["/setup/codex"]],
+  ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
+  ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],
+];
+for (const [file, present, absent] of sidebarExpectations) {
+  const sidebar = await sidebarOf(file);
+  const has = (needle) =>
+    needle.startsWith("/") ? sidebar.includes(`href="${deploymentBase}${needle}"`) : sidebar.includes(needle);
+  const missing = present.filter((needle) => !has(needle));
+  const unexpected = absent.filter(has);
+  if (missing.length > 0 || unexpected.length > 0) {
+    throw new Error(
+      `dist/${file} sidebar is wrong: missing [${missing.join(", ")}], unexpected [${unexpected.join(", ")}].`,
+    );
+  }
+}
+// Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
+for (const [file, prev, next] of [
+  ["troubleshooting/index.html", "/quickstart", "/spaces"],
+  ["spaces/index.html", "/troubleshooting", "/versions"],
+  ["setup/vscode/index.html", "/setup/cursor", "/setup/github-copilot"],
+]) {
+  const pager = (await readBuilt(file)).split("</article>").at(-1);
+  const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
+  const got = ["Previous", "Next"].map((label) => links.find(([, , body]) => body.includes(label))?.[1]);
+  const want = [prev, next].map((route) => `${deploymentBase}${route}`);
+  if (got.join() !== want.join()) {
+    throw new Error(`dist/${file} pagination is wrong: expected ${want.join(" / ")}, got ${got.join(" / ")}.`);
+  }
+}
+// /setup/<client> breadcrumbs follow the Agents sidebar those pages render.
+for (const [file, label] of [
+  ["setup/vscode/index.html", "Coding agents"],
+  ["setup/chatgpt/index.html", "Personal agents"],
+]) {
+  const crumb = /<nav aria-label="Breadcrumb"[^>]*>([\s\S]*?)<\/nav>/u
+    .exec(await readBuilt(file))?.[1]
+    .replace(/<[^>]+>/gu, "")
+    .trim();
+  if (crumb !== label) throw new Error(`dist/${file} breadcrumb is "${crumb}", expected "${label}".`);
+}
+
 // Pagefind indexes article pages only. The generated changelog timeline has no
 // article and is left out; every entry it lists is indexed on its own page.
 const searchableSitemapUrls = sitemapUrls.filter(
