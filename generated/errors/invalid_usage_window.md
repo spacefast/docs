@@ -1,11 +1,11 @@
 ---
 title: "invalid_usage_window"
-description: "The usage window is empty, inverted, or longer than 92 days."
+description: "The requested usage window is invalid or longer than 92 days."
 ---
 
-The usage window is empty, inverted, or longer than 92 days.
+The requested usage window is invalid or longer than 92 days.
 
-**How to resolve:** Send `from` before `to` and keep the window at 92 days or less.
+**How to resolve:** Use a positive window of 92 days or less.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_usage_window",
   "title": "Invalid usage window",
   "status": 400,
-  "detail": "The usage window is empty, inverted, or longer than 92 days.",
+  "detail": "The requested usage window is invalid or longer than 92 days.",
   "code": "invalid_usage_window",
   "requestId": "req_4mz0v8qk"
 }

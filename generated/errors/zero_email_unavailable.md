@@ -1,11 +1,11 @@
 ---
 title: "zero_email_unavailable"
-description: "The email service is not configured for this runtime."
+description: "The local Zero email service is not configured."
 ---
 
-The email service is not configured for this runtime.
+The local Zero email service is not configured.
 
-**How to resolve:** Publish the Space and call the endpoint on the live runtime; `sf dev` does not provide the email service.
+**How to resolve:** Publish the capsule to call the hosted email service, or guard the `ctx.email` call so local runs skip it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_email_unavailable",
   "title": "Zero email unavailable",
   "status": 400,
-  "detail": "The email service is not configured for this runtime.",
+  "detail": "The local Zero email service is not configured.",
   "code": "zero_email_unavailable",
   "requestId": "req_4mz0v8qk"
 }

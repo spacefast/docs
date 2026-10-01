@@ -5,6 +5,52 @@ description: "Release history for @spacefast/zero on npm."
 
 Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) on npm.
 
+## 0.5.0
+
+#### Minor Changes
+
+- Add per-Space app accounts with Google, Gravatar, and native Spacefast Access sign-in, verified email addresses, and revocable sessions. Add Users settings and account management to the API, SDK, CLI, and MCP.
+- Actions are back, endpoints take `readOnly`, and `fetch()` works everywhere.
+
+  `capsule({ actions })` declares handlers that read the database and reach the
+  network without holding a transaction — `action()` on the server, `useAction()`
+  on the client, over `action.run`. Persist what an action learned by handing its
+  result to a mutation.
+
+  `endpoint({ method, path, readOnly? })` replaces `mode`: a `GET` or `HEAD` reads,
+  anything else writes, and `readOnly` overrides that when the method and the
+  intent disagree. The derived mode still rides the compiled artifact.
+
+  `fetch()` is a global in every handler kind. How far it reaches is decided by
+  the space, not the build — an unclaimed space reaches a trusted host list, and
+  claiming it opens the rest of the public web.
+
+- Add numeric and optional database fields, user references, indexed counts, application sign-in policies, and transactional guest upgrades to Zero. Query hooks now distinguish loading from empty or null results. Uploads are private by default, with explicit public sharing.
+
+  Add local development identities, multiple isolated dev servers, query inspection, storage transfers, and retained Space archive and restore commands. Newly compiled apps require an engine that implements these contracts before publication.
+
+#### Patch Changes
+
+- Keep query results associated with their arguments while subscriptions change. Paginated clients no longer append the previous page again while the next cursor is loading.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

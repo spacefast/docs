@@ -1,11 +1,11 @@
 ---
 title: "storage_unavailable"
-description: "Storage could not read or persist the object for this Space."
+description: "The runtime cannot read or persist object storage."
 ---
 
-Storage could not read or persist the object for this Space.
+The runtime cannot read or persist object storage.
 
-**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
+**How to resolve:** Retry on a healthy runtime. If the failure persists, contact support.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_unavailable",
   "title": "Storage unavailable",
   "status": 400,
-  "detail": "Storage could not read or persist the object for this Space.",
+  "detail": "The runtime cannot read or persist object storage.",
   "code": "storage_unavailable",
   "requestId": "req_4mz0v8qk"
 }

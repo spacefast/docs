@@ -1,11 +1,11 @@
 ---
 title: "whois_unavailable"
-description: "No WHOIS or RDAP record was returned for the domain."
+description: "WHOIS data is unavailable for this domain right now."
 ---
 
-No WHOIS or RDAP record was returned for the domain.
+WHOIS data is unavailable for this domain right now.
 
-**How to resolve:** Retry the lookup shortly.
+**How to resolve:** Retry later.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/whois_unavailable",
   "title": "Whois unavailable",
   "status": 400,
-  "detail": "No WHOIS or RDAP record was returned for the domain.",
+  "detail": "WHOIS data is unavailable for this domain right now.",
   "code": "whois_unavailable",
   "requestId": "req_4mz0v8qk"
 }

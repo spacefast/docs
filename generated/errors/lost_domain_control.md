@@ -1,11 +1,11 @@
 ---
 title: "lost_domain_control"
-description: "Domain control checks kept failing past the claim notice window, so the attachment is blocked."
+description: "Spacefast no longer observes DNS control for this domain."
 ---
 
-Domain control checks kept failing past the claim notice window, so the attachment is blocked.
+Spacefast no longer observes DNS control for this domain.
 
-**How to resolve:** Restore the verification record at the DNS provider, then verify the domain again.
+**How to resolve:** Restore the documented DNS records, then re-run domain verification.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/lost_domain_control",
   "title": "Lost domain control",
   "status": 400,
-  "detail": "Domain control checks kept failing past the claim notice window, so the attachment is blocked.",
+  "detail": "Spacefast no longer observes DNS control for this domain.",
   "code": "lost_domain_control",
   "requestId": "req_4mz0v8qk"
 }

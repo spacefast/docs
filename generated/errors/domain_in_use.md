@@ -1,11 +1,11 @@
 ---
 title: "domain_in_use"
-description: "The domain is still assigned to a Space or has DNS work in flight."
+description: "The domain is in use by another binding or assignment."
 ---
 
-The domain is still assigned to a Space or has DNS work in flight.
+The domain is in use by another binding or assignment.
 
-**How to resolve:** Set the domain's `spaceId` to `null` and wait for queued DNS operations to finish, then retry.
+**How to resolve:** Remove the existing use of the domain before retrying.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_in_use",
   "title": "Domain in use",
   "status": 400,
-  "detail": "The domain is still assigned to a Space or has DNS work in flight.",
+  "detail": "The domain is in use by another binding or assignment.",
   "code": "domain_in_use",
   "requestId": "req_4mz0v8qk"
 }

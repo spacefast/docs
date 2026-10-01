@@ -1,11 +1,11 @@
 ---
 title: "zero_client_bundle_not_loaded"
-description: "The Zero client bundle is not loaded on this runtime."
+description: "The local Zero dev client bundle is not generated or loaded."
 ---
 
-The Zero client bundle is not loaded on this runtime.
+The local Zero dev client bundle is not generated or loaded.
 
-**How to resolve:** Build the capsule with `sf build` so the client bundle ships with the version.
+**How to resolve:** Restart `sf dev` or run a fresh local build before loading the client route.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_client_bundle_not_loaded",
   "title": "Zero client bundle not loaded",
   "status": 400,
-  "detail": "The Zero client bundle is not loaded on this runtime.",
+  "detail": "The local Zero dev client bundle is not generated or loaded.",
   "code": "zero_client_bundle_not_loaded",
   "requestId": "req_4mz0v8qk"
 }

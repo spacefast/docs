@@ -1,11 +1,11 @@
 ---
 title: "response_table_too_large"
-description: "The response's header or route table is larger than the runtime allows."
+description: "A compiled response table exceeded the 1 MiB per-file limit."
 ---
 
-The response's header or route table is larger than the runtime allows.
+A compiled response table exceeded the 1 MiB per-file limit.
 
-**How to resolve:** Reduce the number of entries the response declares, then publish again.
+**How to resolve:** This version has an unusually dense path set. Contact support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/response_table_too_large",
   "title": "Response table too large",
   "status": 400,
-  "detail": "The response's header or route table is larger than the runtime allows.",
+  "detail": "A compiled response table exceeded the 1 MiB per-file limit.",
   "code": "response_table_too_large",
   "requestId": "req_4mz0v8qk"
 }

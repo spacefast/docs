@@ -1,11 +1,11 @@
 ---
 title: "confirmation_token_required"
-description: "This action already has a decision that only its continuation token can resume."
+description: "This exact action already has a decision, and a retry without its continuation token cannot clear the gate."
 ---
 
-This action already has a decision that only its continuation token can resume.
+This exact action already has a decision, and a retry without its continuation token cannot clear the gate.
 
-**How to resolve:** Resume with the `continuationToken` from the first response instead of retrying without it.
+**How to resolve:** Resume the existing decision with its continuation token instead of repeating the original request.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/confirmation_token_required",
   "title": "Confirmation token required",
   "status": 400,
-  "detail": "This action already has a decision that only its continuation token can resume.",
+  "detail": "This exact action already has a decision, and a retry without its continuation token cannot clear the gate.",
   "code": "confirmation_token_required",
   "requestId": "req_4mz0v8qk"
 }

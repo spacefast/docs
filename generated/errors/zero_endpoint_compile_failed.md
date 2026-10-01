@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_compile_failed"
-description: "A Zero endpoint failed to compile."
+description: "The runtime cannot compile the Zero endpoint bytecode."
 ---
 
-A Zero endpoint failed to compile.
+The runtime cannot compile the Zero endpoint bytecode.
 
-**How to resolve:** Fix the endpoint source, run `sf build`, then publish again.
+**How to resolve:** Inspect the compile diagnostics, fix the endpoint source, and publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_compile_failed",
   "title": "Zero endpoint compile failed",
   "status": 400,
-  "detail": "A Zero endpoint failed to compile.",
+  "detail": "The runtime cannot compile the Zero endpoint bytecode.",
   "code": "zero_endpoint_compile_failed",
   "requestId": "req_4mz0v8qk"
 }

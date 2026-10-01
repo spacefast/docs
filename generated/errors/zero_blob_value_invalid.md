@@ -1,11 +1,11 @@
 ---
 title: "zero_blob_value_invalid"
-description: "The blob value is neither bytes nor a string."
+description: "The local Zero blob request body is invalid."
 ---
 
-The blob value is neither bytes nor a string.
+The local Zero blob request body is invalid.
 
-**How to resolve:** Pass a string, `ArrayBuffer`, or `Uint8Array` as the blob value.
+**How to resolve:** Send a valid blob body within the configured local size limits.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_blob_value_invalid",
   "title": "Zero blob value invalid",
   "status": 400,
-  "detail": "The blob value is neither bytes nor a string.",
+  "detail": "The local Zero blob request body is invalid.",
   "code": "zero_blob_value_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -10,7 +10,7 @@
     "audit": "node scripts/audit-composed-site.mjs",
     "verify:generated": "node scripts/verify-generated.mjs",
     "verify:prose": "node scripts/verify-prose.mjs",
-    "verify:public-safety": "node scripts/verify-public-safety.mjs",
+    "verify:public-safety": "node --test scripts/verify-public-safety.test.mjs && node scripts/verify-public-safety.mjs",
     "verify:commands": "node scripts/verify-command-examples.mjs",
     "verify:routes": "node scripts/verify-routes.mjs",
     "test:corpus": "node --test scripts/build-docs-corpus.test.mjs",

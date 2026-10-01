@@ -13,22 +13,22 @@ same Spacefast account works across all of them.
 - [Claude Desktop](/setup/claude-desktop): Install Spacefast in Claude Desktop as a signed local extension.
 - [Cursor](/setup/cursor): Publish and host from Cursor with its plugin, skills, and hosted MCP.
 - [Codex](/setup/codex): Publish and host from Codex locally or in the cloud.
-- [ChatGPT](/setup/chatgpt): Use Spacefast from ChatGPT and ChatGPT Work through the app directory.
+- [ChatGPT](/setup/chatgpt): Connect Spacefast to ChatGPT web as a custom app with Developer mode.
 - [VS Code](/setup/vscode): Add Spacefast MCP to VS Code and Copilot agent mode.
-- [GitHub Copilot](/setup/github-copilot): Publish from Copilot CLI and coding agent with native plugin and MCP support.
-- [Devin Desktop](/setup/devin-desktop): Connect the local Devin desktop and CLI configuration plane.
-- [Devin Cloud](/setup/devin-cloud): Connect Spacefast in Devin's cloud-only integrations plane.
+- [GitHub Copilot CLI](/setup/github-copilot): Publish from GitHub Copilot CLI with its plugin and MCP support.
+- [Devin Desktop](/setup/devin-desktop): Connect Spacefast to Devin Desktop, formerly Windsurf, and its Devin Local agent.
+- [Devin Cloud](/setup/devin-cloud): Connect Spacefast to Devin Cloud through Customize → MCPs.
 - [Zed](/setup/zed): Connect Spacefast as a custom context server in Zed.
 - [Gemini CLI](/setup/gemini-cli): Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
 - [OpenCode](/setup/opencode): Connect Spacefast to OpenCode with native OAuth MCP and skills.
 - [Amp](/setup/amp): Install Spacefast skills with bundled MCP support in Amp.
 - [Warp](/setup/warp): Use Spacefast skills and MCP in Warp agents.
 - [Factory Droid](/setup/factory-droid): Install Spacefast as a Droid plugin or native OAuth MCP server.
-- [Cline](/setup/cline): Install Spacefast from the Cline marketplace or connect OAuth MCP.
-- [Continue](/setup/continue): Use the Spacefast skill in discontinued Continue installations.
+- [Cline](/setup/cline): Connect Spacefast through Cline's MCP server settings.
+- [Continue](/setup/continue): Use the Spacefast skill in existing Continue installations.
 - [Raycast](/setup/raycast): Connect Spacefast to Raycast AI using its native OAuth MCP form.
 - [Poke](/setup/poke): Prefill a Spacefast integration in Poke and authorize with OAuth.
-- [Pi](/setup/pi): Install the third-party Pi MCP extension for Spacefast.
+- [Pi](/setup/pi): Publish from Pi with the Spacefast skill and direct HTTP API.
 - [Indent](/setup/indent): Connect Spacefast through Indent's native OAuth MCP integration.
 - [Hermes](/setup/hermes): Give Hermes the Spacefast setup guide, or install its skill with the CLI.
 - [OpenClaw](/setup/openclaw): Give OpenClaw the Spacefast setup guide, or install its skill with the CLI.

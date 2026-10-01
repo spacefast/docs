@@ -1,11 +1,11 @@
 ---
 title: "jetpack_licensing_rejected"
-description: "The Jetpack licensing API rejected the request outright."
+description: "The Jetpack Licensing API refused the request."
 ---
 
-The Jetpack licensing API rejected the request outright.
+The Jetpack Licensing API refused the request.
 
-**How to resolve:** Contact Spacefast support; the partner terms, token, or product behind the license needs a person to fix it.
+**How to resolve:** The partner account needs attention — an unaccepted Terms of Service, a revoked token, or an unknown product. Contact support; retrying will not help.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/jetpack_licensing_rejected",
   "title": "Jetpack licensing rejected",
   "status": 400,
-  "detail": "The Jetpack licensing API rejected the request outright.",
+  "detail": "The Jetpack Licensing API refused the request.",
   "code": "jetpack_licensing_rejected",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "build_not_created"
-description: "No build was created for this request."
+description: "The build cannot be created."
 ---
 
-No build was created for this request.
+The build cannot be created.
 
-**How to resolve:** Check the publish inputs, then start the build again.
+**How to resolve:** Verify the build request payload and retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_not_created",
   "title": "Build not created",
   "status": 400,
-  "detail": "No build was created for this request.",
+  "detail": "The build cannot be created.",
   "code": "build_not_created",
   "requestId": "req_4mz0v8qk"
 }

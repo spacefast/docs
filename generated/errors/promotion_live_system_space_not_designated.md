@@ -1,11 +1,11 @@
 ---
 title: "promotion_live_system_space_not_designated"
-description: "The live tenant has no designated system Space."
+description: "The live tenant has no designated system space, and promotion publishes the test manifest onto it."
 ---
 
-The live tenant has no designated system Space.
+The live tenant has no designated system space, and promotion publishes the test manifest onto it.
 
-**How to resolve:** Designate the live tenant's system Space, then promote.
+**How to resolve:** Set the live tenant's systemSpaceId to a space it owns, then promote again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_live_system_space_not_designated",
   "title": "Promotion live system space not designated",
   "status": 400,
-  "detail": "The live tenant has no designated system Space.",
+  "detail": "The live tenant has no designated system space, and promotion publishes the test manifest onto it.",
   "code": "promotion_live_system_space_not_designated",
   "requestId": "req_4mz0v8qk"
 }

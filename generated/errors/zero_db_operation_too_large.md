@@ -1,11 +1,11 @@
 ---
 title: "zero_db_operation_too_large"
-description: "The Zero database operation is larger than the request size limit."
+description: "A database operation is larger than 64 KB (65,536 bytes). A batch counts as one operation."
 ---
 
-The Zero database operation is larger than the request size limit.
+A database operation is larger than 64 KB (65,536 bytes). A batch counts as one operation.
 
-**How to resolve:** Split the operation into smaller statements or batches.
+**How to resolve:** Send fewer or smaller statements per call, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_operation_too_large",
   "title": "Zero db operation too large",
   "status": 400,
-  "detail": "The Zero database operation is larger than the request size limit.",
+  "detail": "A database operation is larger than 64 KB (65,536 bytes). A batch counts as one operation.",
   "code": "zero_db_operation_too_large",
   "requestId": "req_4mz0v8qk"
 }

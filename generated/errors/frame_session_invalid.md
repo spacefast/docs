@@ -1,11 +1,11 @@
 ---
 title: "frame_session_invalid"
-description: "The frame session does not match the Space and link it was minted for."
+description: "The Frame session proof is invalid for this Space or Link."
 ---
 
-The frame session does not match the Space and link it was minted for.
+The Frame session proof is invalid for this Space or Link.
 
-**How to resolve:** Launch the frame link again to mint a fresh session.
+**How to resolve:** Launch the Frame Link again and renew only with the returned session token.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_session_invalid",
   "title": "Frame session invalid",
   "status": 400,
-  "detail": "The frame session does not match the Space and link it was minted for.",
+  "detail": "The Frame session proof is invalid for this Space or Link.",
   "code": "frame_session_invalid",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "anonymous_expired"
-description: "The anonymous Space expired before anyone claimed it."
+description: "This anonymous space expired before it was claimed."
 ---
 
-The anonymous Space expired before anyone claimed it.
+This anonymous space expired before it was claimed.
 
-**How to resolve:** Publish a new Space, or read `spaceId` from `.spacefast/state.json` and publish to that Space with its saved credential.
+**How to resolve:** Publish a fresh space and share its claim link right away this time. If you meant to update a live space, check .spacefast/ (or your saved receipt) for its spaceId. Publish to that space with its credential instead of creating a new space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/anonymous_expired",
   "title": "Anonymous expired",
   "status": 400,
-  "detail": "The anonymous Space expired before anyone claimed it.",
+  "detail": "This anonymous space expired before it was claimed.",
   "code": "anonymous_expired",
   "requestId": "req_4mz0v8qk"
 }

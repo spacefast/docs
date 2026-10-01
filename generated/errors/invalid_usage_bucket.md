@@ -1,11 +1,11 @@
 ---
 title: "invalid_usage_bucket"
-description: "The usage bucket ends at or before it starts."
+description: "The usage bucket has an invalid time range."
 ---
 
-The usage bucket ends at or before it starts.
+The usage bucket has an invalid time range.
 
-**How to resolve:** Send a `bucketEnd` that is later than `bucketStart`.
+**How to resolve:** Set bucketEnd to an instant after bucketStart, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_usage_bucket",
   "title": "Invalid usage bucket",
   "status": 400,
-  "detail": "The usage bucket ends at or before it starts.",
+  "detail": "The usage bucket has an invalid time range.",
   "code": "invalid_usage_bucket",
   "requestId": "req_4mz0v8qk"
 }

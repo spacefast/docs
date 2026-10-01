@@ -1,11 +1,11 @@
 ---
 title: "webhook_managed_by_manifest"
-description: "The webhook is declared in the tenant's system-Space manifest, so the API will not edit it."
+description: "The webhook is declared in the tenant's system-space manifest."
 ---
 
-The webhook is declared in the tenant's system-Space manifest, so the API will not edit it.
+The webhook is declared in the tenant's system-space manifest.
 
-**How to resolve:** Edit the `system.subscriptions` entry and publish the system Space.
+**How to resolve:** Edit its `system.subscriptions` entry and publish the system space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/webhook_managed_by_manifest",
   "title": "Webhook managed by manifest",
   "status": 400,
-  "detail": "The webhook is declared in the tenant's system-Space manifest, so the API will not edit it.",
+  "detail": "The webhook is declared in the tenant's system-space manifest.",
   "code": "webhook_managed_by_manifest",
   "requestId": "req_4mz0v8qk"
 }

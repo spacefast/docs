@@ -1,11 +1,11 @@
 ---
 title: "version_not_finalizable"
-description: "The draft's base moved or its source is not recoverable, so it cannot finalize."
+description: "The version cannot be finalized in its current status."
 ---
 
-The draft's base moved or its source is not recoverable, so it cannot finalize.
+The version cannot be finalized in its current status.
 
-**How to resolve:** Start a fresh publish.
+**How to resolve:** Only uploaded versions finalize. Check the version status.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_not_finalizable",
   "title": "Version not finalizable",
   "status": 400,
-  "detail": "The draft's base moved or its source is not recoverable, so it cannot finalize.",
+  "detail": "The version cannot be finalized in its current status.",
   "code": "version_not_finalizable",
   "requestId": "req_4mz0v8qk"
 }
