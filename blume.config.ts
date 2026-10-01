@@ -39,14 +39,20 @@ export default defineConfig({
     script({ src: "https://spacefast.com/cookie-banner.js", strategy: "defer" }),
     script({
       attributes: { type: "module" },
+      // Blume's search dialog prefixes the deployment base onto root-relative
+      // result URLs, but Pagefind defaults baseUrl to the directory it was
+      // loaded from (/docs/), which doubled the prefix. Keep Docs results
+      // base-less and make Website results absolute so Blume leaves them alone.
       content: `
         import("${deploymentBase}/pagefind/pagefind.js")
           .then(async (pagefind) => {
             await pagefind.options({
+              baseUrl: "/",
               indexWeight: 1.15,
               mergeFilter: { source: "Docs" },
             });
             await pagefind.mergeIndex("/pagefind", {
+              baseUrl: \`\${window.location.origin}/\`,
               indexWeight: 1,
               mergeFilter: { source: "Spacefast" },
             });
