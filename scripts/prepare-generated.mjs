@@ -1,4 +1,4 @@
-import { copyFile, cp, lstat, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, lstat, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { buildRoutingRules } from "./redirect-rules.mjs";
@@ -14,8 +14,11 @@ const trees = [
 ];
 // The Agents tab sidebar groups the generated /setup/<client> pages into these
 // sections (see components/Sidebar.astro). Every generated client must be listed.
+// Each section is also a parenthesized folder, so a page's breadcrumb names its
+// section without adding a URL segment.
 const setupSections = [
   {
+    folder: "(coding)",
     title: "Coding agents",
     pages: [
       "claude-code",
@@ -37,6 +40,7 @@ const setupSections = [
     ],
   },
   {
+    folder: "(personal)",
     title: "Personal agents",
     pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
   },
@@ -107,6 +111,16 @@ for (const tree of trees) {
       `import { defineMeta } from "blume";\n\nexport default defineMeta({ title: "Setup", collapsed: false });\n`,
     );
     await writeFile(path.join(target, "_sidebar.json"), setupSidebar);
+    for (const { folder, title, pages } of setupSections) {
+      await mkdir(path.join(target, folder));
+      await writeFile(
+        path.join(target, folder, "meta.ts"),
+        `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({ title, pages })});\n`,
+      );
+      for (const slug of pages.filter((slug) => setupClients.has(slug))) {
+        await rename(path.join(target, `${slug}.md`), path.join(target, folder, `${slug}.md`));
+      }
+    }
   }
   await writeFile(marker, "spacefast-public-docs\n");
 }

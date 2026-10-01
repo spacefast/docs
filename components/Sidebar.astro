@@ -11,9 +11,10 @@
  *   /setup/<client> pages keep this Agents sidebar instead of the Docs one.
  */
 import NavTree from "blume/components/layout/NavTree.astro";
+import { sidebarForRoute } from "blume/components/layout/nav-utils.ts";
 import type { NavNode } from "blume/core/types.ts";
+import data from "blume:data";
 
-import agentsMeta from "../content/agents/meta.ts";
 import setupSections from "../content/setup/_sidebar.json";
 
 type Props = Record<string, unknown> & { items: NavNode[]; currentRoute: string };
@@ -33,20 +34,6 @@ const withSetupLinks = (nodes: NavNode[]): NavNode[] =>
     node.kind === "group" && node.route === setupRoute
       ? { ...node, route: undefined, children: [page("CLI", "/cli"), page("Agent setup", agentsRoute)] }
       : node,
-  );
-
-// The Agents tab's pages, rebuilt from its folder for routes outside the tab (/setup/*).
-const agentTitles = Object.fromEntries(
-  Object.entries(
-    import.meta.glob<string>("../content/agents/*.mdx", { query: "?raw", import: "default", eager: true }),
-  ).map(([file, source]) => [
-    file.replace(/^.*\/(.+)\.mdx$/u, "$1"),
-    /^title:\s*(.+)$/mu.exec(source)?.[1].trim() ?? "",
-  ]),
-);
-const agentsPages = (): NavNode[] =>
-  (agentsMeta as { pages: string[] }).pages.map((slug) =>
-    page(agentTitles[slug] ?? slug, slug === "index" ? agentsRoute : `${agentsRoute}/${slug}`),
   );
 
 const withOtherAgents = (nodes: NavNode[]): NavNode[] => {
@@ -76,7 +63,11 @@ const withOtherAgents = (nodes: NavNode[]): NavNode[] => {
 const route = rest.currentRoute;
 let sidebar = withSetupLinks(items);
 if (under(route, agentsRoute)) sidebar = withOtherAgents(items);
-else if (route.startsWith(`${setupRoute}/`)) sidebar = withOtherAgents(agentsPages());
+else if (route.startsWith(`${setupRoute}/`)) {
+  // Outside the tab, Blume hands over the Docs tree; take the Agents tab's instead.
+  const { sidebar: tree, tabs, root } = data.navigation;
+  sidebar = withOtherAgents(sidebarForRoute(tree, tabs, agentsRoute, root));
+}
 ---
 
 <NavTree {...rest} items={sidebar} />
