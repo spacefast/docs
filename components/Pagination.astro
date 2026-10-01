@@ -1,0 +1,22 @@
+---
+// Keep the hidden Setup family out of the Docs reading order.
+import Pagination from "blume/components/layout/Pagination.astro";
+import { flattenPages, getPagination, sidebarForRoute } from "blume/components/layout/nav-utils.ts";
+import { stripBasePath } from "blume/core/base-path.ts";
+import data from "blume:data";
+
+const { prev, next, strings } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/u, "");
+const route = stripBasePath(base, Astro.url.pathname.replace(/(.)\/$/u, "$1"));
+const isSetup = (route: string) => route === "/setup" || route.startsWith("/setup/");
+let links = { prev, next };
+if (!isSetup(route) && [prev, next].some((link) => link && isSetup(link.route))) {
+  const { sidebar, tabs, root } = data.navigation;
+  const order = flattenPages(sidebarForRoute(sidebar, tabs, route, root))
+    .filter((page) => !isSetup(page.route));
+  links = getPagination(order, route);
+}
+---
+
+<Pagination next={links.next} prev={links.prev} strings={strings} />

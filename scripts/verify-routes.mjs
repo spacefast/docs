@@ -275,6 +275,20 @@ const sidebarExpectations = [
   ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
   ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],
 ];
+// Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
+for (const [file, prev, next] of [
+  ["troubleshooting/index.html", "/quickstart", "/spaces"],
+  ["spaces/index.html", "/troubleshooting", "/versions"],
+  ["setup/vscode/index.html", "/setup/raycast", "/setup/warp"],
+]) {
+  const pager = (await readBuilt(file)).split("</article>").at(-1);
+  const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
+  const got = ["Previous", "Next"].map((label) => links.find(([, , body]) => body.includes(label))?.[1]);
+  const want = [prev, next].map((route) => `${deploymentBase}${route}`);
+  if (got.join() !== want.join()) {
+    throw new Error(`dist/${file} pagination is wrong: expected ${want.join(" / ")}, got ${got.join(" / ")}.`);
+  }
+}
 for (const [file, present, absent] of sidebarExpectations) {
   const sidebar = await sidebarOf(file);
   const has = (needle) =>
