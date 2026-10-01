@@ -9,6 +9,12 @@ Assume every commit and every line of history will be public.
   flags, routes, defaults, or timelines.
 - Keep the voice direct, no-BS, and a little playful. Prefer the best path over
   an encyclopedia of alternatives.
+- Open each page with one short sentence naming the single most important
+  outcome, not an inventory of every outcome the page covers — the page's own
+  headings already carry the rest. Be concise; lead with importance (see
+  WooCommerce's developer docs style guide). `styles/Spacefast/SentenceLength.yml`
+  flags sentences over 30 words as a suggestion; an opener that trips it is a
+  sign to cut, not to find a way to keep every clause.
 - Do not add navigation to a section until that section has a real page or
   generated source.
 - Authored navigation comes from `content/**` and its `meta.ts` files.

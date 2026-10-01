@@ -4,7 +4,7 @@ description: The _redirects and _headers files, the routing rules in sf.jsonc, h
 sidebar: { order: 3 }
 ---
 
-After this page you can redirect, rewrite, proxy, and set response headers on a published Space, and you know which rule wins when two of them match the same URL.
+After this page you can redirect, rewrite, proxy, and set response headers on a published Space — and know which rule wins when two overlap.
 
 Nothing here is evaluated per request. Spacefast compiles your rules at publish time into a table the edge reads, so a rule that behaves unexpectedly is almost always a compile-time problem. `sf routing inspect` shows you the compiled result before you publish.
 
