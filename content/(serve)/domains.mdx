@@ -12,6 +12,9 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
 <Steps>
   <Step title="Add the domain to a Space">
+    <Tabs>
+    <Tab title="CLI">
+
     The CLI does the whole first step in one command: it creates the domain on the team, assigns it to the Space, and queues the first DNS check.
 
     ```bash
@@ -20,7 +23,13 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
     Add `--role primary` to make it the Space's live address as soon as it verifies.
 
-    In the dashboard, open the Space, go to **Domains**, and click **Add domain**. The wizard walks **Enter**, **Setup**, **Verify**. On the **Enter** step a root domain asks you to pick a **Primary address**, either the apex or `www`.
+    </Tab>
+    <Tab title="Dashboard">
+
+    Open the Space, go to **Domains**, and click **Add domain**. The wizard walks **Enter**, **Setup**, **Verify**. On the **Enter** step a root domain asks you to pick a **Primary address**, either the apex or `www`.
+
+    </Tab>
+    </Tabs>
 
     Over the API it is `POST /v1/domains` to create the record, then `PATCH /v1/domains/{domainId}` with a `spaceId` to assign it. See the [API reference](/api/reference).
   </Step>
@@ -38,11 +47,22 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
   </Step>
 
   <Step title="Make it primary">
+    <Tabs>
+    <Tab title="CLI">
+
     ```bash
     sf domains add example.com --space my-site --role primary
     ```
 
-    Or in the dashboard, edit the row on the Space's **Domains** page and choose **Serve this space** with **Primary domain, the live URL**. Once the domain reaches `active`, it becomes the Space's `liveUrl`.
+    </Tab>
+    <Tab title="Dashboard">
+
+    Edit the row on the Space's **Domains** page and choose **Serve this space** with **Primary domain, the live URL**.
+
+    </Tab>
+    </Tabs>
+
+    Once the domain reaches `active`, it becomes the Space's `liveUrl`.
   </Step>
 </Steps>
 
