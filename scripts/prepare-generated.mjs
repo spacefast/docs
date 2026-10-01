@@ -12,6 +12,35 @@ const trees = [
   { source: "generated/changelog", target: "content/(reference)/changelog" },
   { source: "generated/setup", target: "content/setup" },
 ];
+// The Agents tab sidebar groups the generated /setup/<client> pages into these
+// sections (see components/Sidebar.astro). Every generated client must be listed.
+const setupSections = [
+  {
+    title: "Coding agents",
+    pages: [
+      "claude-code",
+      "codex",
+      "cursor",
+      "vscode",
+      "github-copilot",
+      "devin-desktop",
+      "devin-cloud",
+      "zed",
+      "gemini-cli",
+      "opencode",
+      "amp",
+      "warp",
+      "factory-droid",
+      "cline",
+      "continue",
+      "pi",
+    ],
+  },
+  {
+    title: "Personal agents",
+    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
+  },
+];
 
 async function exists(value) {
   try {
@@ -22,6 +51,29 @@ async function exists(value) {
     throw error;
   }
 }
+
+// Short client names from the generated setup index ("- [Codex](/setup/codex): …").
+// Checked before any overlay is replaced, so a failure leaves the last good copy.
+const setupClients = new Map(
+  [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
+    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\)/gmu,
+  )].map(([, name, slug]) => [slug, name]),
+);
+const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
+const unlistedClients = [...setupClients.keys()].filter((slug) => !listedClients.has(slug));
+if (unlistedClients.length > 0) {
+  throw new Error(`Add generated setup clients to setupSections: ${unlistedClients.join(", ")}`);
+}
+const setupSidebar = `${JSON.stringify(
+  setupSections.map(({ title, pages }) => ({
+    title,
+    pages: pages
+      .filter((slug) => setupClients.has(slug))
+      .map((slug) => ({ slug, label: setupClients.get(slug) })),
+  })),
+  null,
+  2,
+)}\n`;
 
 for (const tree of trees) {
   const source = path.join(root, tree.source);
@@ -48,6 +100,13 @@ for (const tree of trees) {
       const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
       if (match) await rm(path.join(target, `${match[1]}.md`), { force: true });
     }
+  }
+  if (tree.source === "generated/setup") {
+    await writeFile(
+      path.join(target, "meta.ts"),
+      `import { defineMeta } from "blume";\n\nexport default defineMeta({ title: "Setup", collapsed: false });\n`,
+    );
+    await writeFile(path.join(target, "_sidebar.json"), setupSidebar);
   }
   await writeFile(marker, "spacefast-public-docs\n");
 }
