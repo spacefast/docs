@@ -5,6 +5,10 @@ description: Connect to the Spacefast MCP server over hosted HTTP or local stdio
 
 Your client never actually holds a Spacefast API token — each authenticated request mints a short-lived delegation token instead, so a leaked MCP session can't be replayed against the wider API.
 
+:::note[Already connected through Claude Desktop or a one-click plugin?]
+You don't need this page. It's the technical reference for wiring up the MCP server by hand — see [Claude Desktop](/agents/claude-desktop) or [Claude Code](/agents/claude-code) for the point-and-click setup instead.
+:::
+
 ## Two runtimes, one tool set
 
 The same server ships in two runtimes. Both register the same five tools. The difference is the filesystem.

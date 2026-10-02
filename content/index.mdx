@@ -39,7 +39,7 @@ Publish this folder to Spacefast and give me the live URL.
 
 ## How it fits together
 
-A **Space** is one site with a stable hostname. Every publish creates a new **version**, an immutable snapshot with its own URL that never changes. The `live` channel points at one version. Promoting or rolling back moves that pointer. Nothing gets rebuilt.
+A **Space** is one site with a stable hostname. Every publish creates a new **version**, an immutable snapshot with its own URL that never changes. The `live` channel points at one version. Promoting or rolling back moves that pointer. Nothing gets rebuilt. (New terms piling up? See the [glossary](/glossary).)
 
 Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs opt into the Zero runtime with one line of config.
 
@@ -49,6 +49,9 @@ Static output is the default path. Point `sf publish` at a build directory and i
   </Card>
   <Card title="Drop" href="/publish#publish" icon="mouse-pointer-click">
     Drag a folder onto the dashboard. No install, no account required.
+  </Card>
+  <Card title="Glossary" href="/glossary" icon="book-open">
+    Space, version, live, capsule, Ability, grant — every term, defined once.
   </Card>
   <Card title="Publishing" href="/publish" icon="upload">
     What gets uploaded, how versions work, and how to roll back.

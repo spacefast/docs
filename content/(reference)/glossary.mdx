@@ -1,0 +1,56 @@
+---
+title: Glossary
+description: Every Spacefast-specific term used across these docs, defined once, in one place
+sidebar:
+  order: 3
+---
+
+The terms below show up starting on the homepage and get used without re-explanation everywhere after. If a word stopped you somewhere else in these docs, it's probably here.
+
+## Ability
+
+A named operation with a schema that a Space's WordPress publishes for agents to call. Some ship with the runtime itself and exist on every Space; others come from an app you publish. See [WordPress on every Space](/wordpress).
+
+## Build
+
+What happens when you hand Spacefast source code instead of a built output directory: it installs dependencies, runs your framework's build command in a sandbox, and publishes the result as a version. See [Frameworks and builds](/frameworks).
+
+## Capsule
+
+The compiled form of a Zero app. `sf publish` turns your TypeScript server code into a capsule, which the platform installs on the Space. See [Dynamic sites with Zero](/zero-runtime).
+
+## Claim / claiming
+
+Attaching an anonymous Space (one published with no account) to a real account and team, so it stops counting down to its expiry deadline. See [Publish without an account](/anonymous-and-claim).
+
+## Drop
+
+The dashboard's drag-and-drop publish flow: drag a folder, a `.zip`, or a single `index.html` onto the window. No install, no account required. See [Publishing](/publish#publish).
+
+## Functions
+
+The runtime for shipping a worker alongside your site — npm packages, framework server output, outbound HTTP. The other option, alongside [Zero](#zero), for sites that need more than static files. See [Functions](/functions).
+
+## Grant
+
+One rule in a Space's access list: it names an audience (public, team, one person, a link, a password, a machine, or an external identity) and what that audience can do. A Space has no public-or-private flag — its access is just the sum of its grants. See [Access and sharing](/access).
+
+## Live (the live channel)
+
+The pointer that decides which version a Space actually serves right now. Publishing, promoting, and rolling back all just move this pointer — nothing gets rebuilt. See [Versions and the live channel](/versions).
+
+## Space
+
+One published site with a stable hostname. Everything else in these docs — versions, domains, access, functions — belongs to a Space. See [Spaces](/spaces).
+
+## Team
+
+The thing that owns your Spaces, domains, API keys, and billing. Every claimed Space belongs to exactly one team, even if you're its only member. See [Teams and members](/teams).
+
+## Version
+
+An immutable snapshot created by every publish, with its own permanent URL that never changes. The [live](#live-the-live-channel) pointer always points at exactly one version. See [Versions and the live channel](/versions).
+
+## Zero
+
+The runtime for a Space that needs a database, live queries, or scheduled jobs: one TypeScript app, a MySQL database next to your code, and HTTP endpoints, compiled into a [capsule](#capsule). The other dynamic option, alongside [Functions](#functions). See [Dynamic sites with Zero](/zero-runtime).
