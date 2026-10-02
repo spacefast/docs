@@ -13,7 +13,7 @@ A named operation with a schema that a Space's WordPress publishes for agents to
 
 ## Build
 
-What happens when you hand Spacefast source code instead of a built output directory: it installs dependencies, runs your framework's build command in a sandbox, and publishes the result as a version. See [Frameworks and builds](/frameworks).
+What happens when you hand Spacefast source code instead of a built output directory. It installs your dependencies, runs the build in a sandbox, and publishes the result as a version. See [Frameworks and builds](/frameworks).
 
 ## Capsule
 
@@ -53,4 +53,4 @@ An immutable snapshot created by every publish, with its own permanent URL that 
 
 ## Zero
 
-The runtime for a Space that needs a database, live queries, or scheduled jobs: one TypeScript app, a MySQL database next to your code, and HTTP endpoints, compiled into a [capsule](#capsule). The other dynamic option, alongside [Functions](#functions). See [Dynamic sites with Zero](/zero-runtime).
+The runtime for a Space that needs a database, live queries, or scheduled jobs. One TypeScript app compiles into a [capsule](#capsule) with a MySQL database next to your code. The other dynamic option, alongside [Functions](#functions). See [Dynamic sites with Zero](/zero-runtime).
