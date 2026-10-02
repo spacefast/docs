@@ -8,7 +8,7 @@ A Space has no public-or-private flag — access is a list of additive grants, a
 
 ## Access is a list, not a switch
 
-A Space has no public or private flag. Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A visitor is admitted when at least one grant matches. Removing every grant makes a Space private, because nothing admits anyone.
+Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A visitor is admitted when at least one grant matches, and nothing admits anyone once every grant is gone.
 
 That model is why a Space can be public at `/docs/**` and closed everywhere else, and why revoking a share link takes effect on the next request rather than at the next publish.
 

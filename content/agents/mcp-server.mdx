@@ -54,7 +54,7 @@ Each tool declares the scopes it needs, and clients can read them from `tools/li
 
 A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
-Your client never receives a Spacefast API token. Each authenticated request mints an internal delegation token that lives five minutes and carries the source credential's policy verbatim. That means a leaked MCP session cannot be replayed against the wider API.
+That delegation token lives five minutes and carries the source credential's policy verbatim.
 
 Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
 

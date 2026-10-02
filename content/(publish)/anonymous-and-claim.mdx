@@ -30,7 +30,7 @@ https://swift-otter-4821.view.fast/__/sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 https://my.spacefast.com/claim#sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 ```
 
-The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later. Lose the folder and lose the key, and the Space runs out its clock.
+The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later.
 
 In `--json` or non-interactive output the key and the claim link are masked. Pass `--show-secret` to print them.
 

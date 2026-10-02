@@ -9,9 +9,7 @@ A data source is a public WordPress site a build reads content from. Nothing is 
 
 ## What you need first
 
-Data sources reach **repository builds only**. A folder publish never sees them, and neither does a local `sf publish` of a built directory.
-
-So a Space needs a connected repository before a source does anything. See [Publish from Git](/git). Until one is connected, the dashboard shows **Connect a repository to use data sources** with a **Connect repository** button, and saved sources sit there doing nothing. Once it is connected the banner reads **Ready for repository builds**.
+A Space needs a connected repository before a source does anything — see [Publish from Git](/git). Until one is connected, the dashboard shows **Connect a repository to use data sources** with a **Connect repository** button, and saved sources sit there doing nothing. Once it is connected the banner reads **Ready for repository builds**.
 
 Sources live on the Space, not in `sf.jsonc`. `dataSources` and `defaultDataSource` are not keys of the committed config file, and putting them there does nothing. A build's content source is a deployment fact, so it is set through the dashboard or the API.
 
