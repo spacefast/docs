@@ -7,6 +7,10 @@ sidebar:
 
 There's no connection string for this database — your code reaches it through `ctx.db` or `env.DB`, or through a single-use SQL console when you need raw SQL.
 
+:::note[Don't have a database yet?]
+This page covers the database you get once [Zero](/zero-runtime) is running. Turn Zero on first — declare `kind: "zero"` in `sf.jsonc`, or run `sf init --runtime zero` to scaffold a new project with it.
+:::
+
 ## What it is
 
 Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, as `env.DB`.
