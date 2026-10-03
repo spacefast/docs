@@ -16,12 +16,14 @@ const sidebarRoutes = new Set([
   "/changelog/packages",
 ]);
 
-const preamble = "Header prose.\n\n- [Error reference](https://spacefast.com/docs/errors): Codes.";
-
 const fixture = [
   "# Spacefast Docs",
   "",
   "> Publish sites and build apps with Spacefast.",
+  "",
+  "## Read any page as Markdown",
+  "",
+  "Header prose.",
   "",
   "## Docs",
   "",
@@ -36,22 +38,22 @@ const fixture = [
   entry("/errors"),
   entry("/api/reference"),
   entry("/platforms/api/reference"),
-  entry("/partners/api/reference"),
   entry("/changelog/packages"),
+  "",
+  "### Spaces",
   "",
   "## Other",
   "",
   entry("/errors/rate_limited"),
   entry("/errors/build_failed"),
   entry("/api/reference/spaces/create"),
-  entry("/platforms/api/reference/tenants/list"),
-  entry("/partners/api/reference/principals/list"),
+  entry("/platforms/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
   entry("/setup/claude-code"),
   "",
   "## Discovery",
-  ...["/llms-full.txt", "/index.md", "/.well-known/api-catalog", "/agent-readability.json"].map((route) => entry(route)),
+  ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/.well-known/api-catalog", "/.well-known/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
   "",
   "## RSS Feeds",
   "",
@@ -60,11 +62,11 @@ const fixture = [
 ].join("\n");
 
 const build = (overrides = {}) =>
-  buildLlmsIndex({ source: fixture, preamble, sidebarRoutes, ...overrides });
+  buildLlmsIndex({ source: fixture, sidebarRoutes, ...overrides });
 
 test("collapses generated descendants and keeps only navigated index pages", () => {
   const { text, dropped } = build();
-  assert.equal(dropped, 9);
+  assert.equal(dropped, 7);
   const routes = text
     .split("\n")
     .filter((line) => line.startsWith("- ["))
@@ -81,6 +83,9 @@ test("collapses generated descendants and keeps only navigated index pages", () 
     assert.ok(!routes.includes(gone), `${gone} should be collapsed`);
   }
   assert.ok(routes.includes("/setup/claude-code"), "agent setup pages stay listed");
+  assert.ok(!text.includes("### Spaces"), "a reference tag heading without entries is dropped");
+  assert.ok(text.includes("## Reference"), "a heading that keeps entries survives");
+  assert.ok(text.includes("## Read any page as Markdown"), "a prose section survives");
 });
 
 test("drops generated pages that moved out of the Other bucket", () => {
@@ -118,14 +123,6 @@ test("relabels the leftover bucket and drops emptied headings", () => {
   }
 });
 
-test("splices the preamble between the summary and the first section", () => {
-  const { text } = build();
-  const header = text.indexOf("> Publish sites");
-  const prose = text.indexOf("Header prose.");
-  const firstSection = text.indexOf("## Docs");
-  assert.ok(header < prose && prose < firstSection);
-});
-
 test("throws when an unrecognized generated family survives", () => {
   const invaded = fixture.replace(entry("/setup/claude-code"), entry("/widgets/blue"));
   assert.throws(() => build({ source: invaded }), /widgets\/blue/u);
@@ -134,10 +131,6 @@ test("throws when an unrecognized generated family survives", () => {
 test("throws when nothing was collapsed, so a second run cannot mangle the file", () => {
   const { text } = build();
   assert.throws(() => build({ source: text }), /No entries were collapsed/u);
-});
-
-test("throws on an empty preamble", () => {
-  assert.throws(() => build({ preamble: "  \n " }), /empty/u);
 });
 
 test("throws when Blume's output has no headings or entries", () => {

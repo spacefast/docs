@@ -12,7 +12,7 @@ Assume every commit and every line of history will be public.
 - Do not add navigation to a section until that section has a real page or
   generated source.
 - Authored navigation comes from `content/**` and its `meta.ts` files.
-  `blume.config.ts` defines the Docs, CLI, API, and Agents tabs.
+  `blume.config.ts` defines the Docs, CLI, API, Agents, and Platforms tabs.
   `bun run verify:routes` checks every authored route against the built output.
 - Route policy: one page per task, not one page per toggle; a page lives in one
   primary place and is cross-linked elsewhere. Authored URLs may move freely
