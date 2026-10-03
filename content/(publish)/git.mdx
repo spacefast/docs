@@ -9,6 +9,12 @@ After this page you can publish with `git push`, connect a GitHub repository so 
 
 Two lanes. The Spacefast remote needs no external host and no app install. A GitHub connection keeps your repository where it is and reacts to its webhooks.
 
+## Source and deployment files
+
+`sf publish dist --prebuilt` uploads the files in `dist`, not the editable project that produced them. A version's Git commit metadata records where a build came from; it does not mean your source or Git history was uploaded.
+
+Keep the editable project in Git. Connect its repository or push it to the Spacefast remote below. Configuring a remote alone does not upload source; the Git push does. Keep an independent copy of your source and history for recovery. Rolling back a deployment restores published files, not deleted source files or branches.
+
 ## Push to a Spacefast remote
 
 Spacefast hosts a Git endpoint. `sf git origin` mints a signed remote and installs it.
