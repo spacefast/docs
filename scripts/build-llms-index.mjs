@@ -5,10 +5,9 @@
 // of the file, so an agent fetching llms.txt to orient itself pays for ~1,100
 // operation titles before reaching anything it can act on.
 //
-// This drops those entries and splices in a header. It never authors prose:
-// titles and descriptions stay Blume's (which reads them from page
-// frontmatter) and the header comes from content/_llms-preamble.md, so nothing
-// here can drift as pages are added or retitled.
+// This drops those entries. It never authors prose: titles and descriptions
+// stay Blume's (which reads them from page frontmatter), and Blume places the
+// agent guidance from content/_llms-preamble.md through `agents.llmsTxt.details`.
 //
 // llms-full.txt is deliberately untouched. scripts/build-docs-corpus.mjs parses
 // it into dist/docs-corpus.json, which backs the docs search and ask endpoints;
@@ -46,7 +45,9 @@ const ALLOWED_NON_SIDEBAR_PREFIX = "/setup";
 const DISCOVERY_ROUTES = new Set([
   "/llms-full.txt",
   "/index.md",
+  "/api/docs/pages.json",
   "/.well-known/api-catalog",
+  "/.well-known/ai-catalog.json",
   "/agent-readability.json",
 ]);
 export const isDiscoveryResource = (route) => route.endsWith(".xml") || DISCOVERY_ROUTES.has(route);
@@ -70,6 +71,25 @@ const MAX_BYTES = 32 * 1024;
 
 const isEntry = (line) => line.startsWith("- [");
 const isHeading = (line) => line.startsWith("## ");
+const headingLevel = (line) => /^(#{2,6}) /u.exec(line)?.[1].length;
+
+// Blume nests a reference's tag groups as sub-headings. Once their operations
+// collapse, drop every heading that no longer owns any content.
+function pruneEmptyHeadings(lines) {
+  return lines.filter((line, index) => {
+    const level = headingLevel(line);
+    if (level === undefined) return true;
+    for (const next of lines.slice(index + 1)) {
+      const nextLevel = headingLevel(next);
+      if (nextLevel !== undefined) {
+        if (nextLevel <= level) return false;
+        continue;
+      }
+      if (next.trim() !== "") return true;
+    }
+    return false;
+  });
+}
 
 /** The docs-relative route a link line points at, or undefined for a non-link. */
 export function routeOf(line) {
@@ -80,15 +100,7 @@ export function routeOf(line) {
   return match[1] === "" ? "/" : match[1];
 }
 
-/** Strip a leading YAML frontmatter block, if the file carries one. */
-function stripFrontmatter(source) {
-  if (!source.startsWith("---\n")) return source;
-  const end = source.indexOf("\n---\n", 4);
-  if (end < 0) throw new Error("The preamble opens a frontmatter block it never closes.");
-  return source.slice(end + 5);
-}
-
-export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
+export function buildLlmsIndex({ source, sidebarRoutes }) {
   const lines = source.split("\n");
   const entries = lines.filter(isEntry);
   if (entries.length === 0 || !lines.some(isHeading)) {
@@ -96,11 +108,6 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
       "dist/llms.txt has no headings or no link entries. Blume's output format changed; " +
         "re-read node_modules/blume/src/ai/llms.ts before adjusting this script.",
     );
-  }
-
-  const trimmed = preamble.trim();
-  if (trimmed.length === 0) {
-    throw new Error("content/_llms-preamble.md is empty.");
   }
 
   // Feed URLs (the RSS section) are not pages and are never collapsed.
@@ -127,9 +134,8 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
     );
   }
 
-  // A heading whose entries all collapsed emits nothing. "## Other" is where
-  // the leftovers land, so once the generated families are gone the agent
-  // setup pages are all that remain there and the label should say so.
+  // "## Other" is where the leftovers land. Once the generated families are
+  // gone, only the agent setup pages remain there, so the label says so.
   const sections = [];
   for (const line of kept) {
     if (isHeading(line)) {
@@ -146,7 +152,6 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
   const rendered = [];
   for (const section of sections) {
     const sectionEntries = section.body.filter(isEntry);
-    if (section.heading && sectionEntries.length === 0) continue;
     if (section.heading === "## Other") {
       const strays = sectionEntries.filter((line) => {
         const route = routeOf(line);
@@ -170,14 +175,11 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
     rendered.push(...section.body);
   }
 
-  // The header is the title line and the blockquote summary; the preamble goes
-  // after it, before the first section.
-  const out = rendered.join("\n");
-  const firstHeading = out.indexOf("\n## ");
-  if (firstHeading < 0) throw new Error("No sections survived the rewrite.");
-  const result = `${out.slice(0, firstHeading).trim()}\n\n${trimmed}\n${out.slice(firstHeading)}`
+  const result = pruneEmptyHeadings(rendered)
+    .join("\n")
     .replaceAll(/\n{3,}/gu, "\n\n")
     .replace(/\n*$/u, "\n");
+  if (!result.includes("\n## ")) throw new Error("No sections survived the rewrite.");
 
   // Every surviving entry is a sidebar route or an agent setup page. Nothing
   // else belongs in this file, and asserting it here means a future generated
@@ -210,12 +212,11 @@ export function buildLlmsIndex({ source, preamble, sidebarRoutes }) {
 
 export async function curateLlmsIndex(root = process.cwd()) {
   const target = path.join(root, "dist", "llms.txt");
-  const [source, preamble, sidebarRoutes] = await Promise.all([
+  const [source, sidebarRoutes] = await Promise.all([
     readFile(target, "utf8"),
-    readFile(path.join(root, "content", "_llms-preamble.md"), "utf8").then(stripFrontmatter),
     readSidebarRoutes(root),
   ]);
-  const result = buildLlmsIndex({ source, preamble, sidebarRoutes });
+  const result = buildLlmsIndex({ source, sidebarRoutes });
   await writeFile(target, result.text);
   return result;
 }

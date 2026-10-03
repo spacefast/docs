@@ -7,18 +7,29 @@ import { websiteDependencyManifest, websiteOrigin } from "./website-dependencies
 
 const blumeCli = fileURLToPath(new URL("../node_modules/blume/bin/blume.mjs", import.meta.url));
 
-function isComposedDependency(diagnostic, dependencyUrls) {
+// Blume reports a root URL outside deployment.base as a base mistake. For the
+// declared Website dependencies it is intentional: the Website serves them.
+const outsideBase = ", which is missing deployment.base (/docs), so the deployed site does not serve it.";
+
+function isComposedDependency(diagnostic, dependencyUrls, dependencies) {
   if (diagnostic.code === "BLUME_AUDIT_SUBRESOURCE_MISSING") {
     return dependencyUrls.some(
-      (url) => diagnostic.message === `Page references ${url}, which is not in the build.`,
+      (url) =>
+        diagnostic.message === `Page references ${url}, which is not in the build.` ||
+        diagnostic.message === `Page references ${url}${outsideBase}`,
     );
   }
   if (diagnostic.code === "BLUME_AUDIT_LINK_TO_BROKEN") {
     return dependencyUrls.some(
       (url) =>
-        diagnostic.message.startsWith(`Link to ${url} resolves to `) &&
-        diagnostic.message.endsWith(", which the build does not serve."),
-    );
+        (diagnostic.message.startsWith(`Link to ${url} resolves to `) &&
+          diagnostic.message.endsWith(", which the build does not serve.")) ||
+        diagnostic.message === `Link to ${url}${outsideBase}`,
+    ) ||
+      dependencies.some(
+        (dependency) =>
+          diagnostic.message === `Navigation links to ${dependency}, which the build does not serve.`,
+      );
   }
   return false;
 }
@@ -27,7 +38,8 @@ export function unexpectedAuditErrors(diagnostics, dependencies) {
   const dependencyUrls = dependencies.map((dependency) => `${websiteOrigin}${dependency}`);
   return diagnostics.filter(
     (diagnostic) =>
-      diagnostic.severity === "error" && !isComposedDependency(diagnostic, dependencyUrls),
+      diagnostic.severity === "error" &&
+      !isComposedDependency(diagnostic, dependencyUrls, dependencies),
   );
 }
 
@@ -73,6 +85,7 @@ async function main() {
       isComposedDependency(
         diagnostic,
         dependencies.map((dependency) => `${websiteOrigin}${dependency}`),
+        dependencies,
       ),
   ).length;
   console.log(

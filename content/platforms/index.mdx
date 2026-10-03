@@ -1,0 +1,52 @@
+---
+title: Platforms
+description: Offer hosting under your own brand. Spacefast runs the infra, and your product keeps the customer, the pricing, and the relationship.
+---
+
+Spacefast Platforms is for companies that sell hosting as part of their own product: hosting companies, domain registrars, agencies, and organizations that run many sites. Spacefast runs the infra. Your customers see your brand, your pricing, and your dashboard.
+
+Platforms is part of WP Cloud, the platform hosting companies use to power their own WordPress hosting products. It runs on the same infra as Automattic, WP Cloud, Pressable, and WordPress.com. The [Partner API](/platforms/partner-api) extends it to the sites and apps your customers build with agents.
+
+## Who it's for
+
+| You are | What Platforms gives you |
+| --- | --- |
+| A hosting company | Managed publishing and hosting for your customers, without running servers or a control panel |
+| A domain registrar | A live site at the point of registration, with no infrastructure to build |
+| An agency or reseller | One integration for every client site, billed and branded as your own |
+| An organization with many sites | Sites provisioned from code for each team, with one account over all of them |
+
+## What you control
+
+- **Your brand.** Set your name, logo, support links, and error docs once. Claims and access handoffs land on your own portal.
+- **Your customers.** Each customer is an ID from your own system. Spacefast creates them on first use, with no separate signup.
+- **Your pricing.** Declare plans with their own features and quotas. Read usage records per customer and bill however you want.
+- **Your domains.** Serve customer sites from your own hostname, and put the API behind your own origin.
+- **Your UX.** Everything is API-first. Build your own interface, or give customers scoped tokens and let their apps call Spacefast directly.
+
+## What Spacefast runs
+
+Publishing, builds, versions and rollbacks, custom domains and certificates, and CDN and caching. Customer sites get the same serving path as every other Space.
+
+## How integration works
+
+1. **Get partner access.** Your account gets a live tenant and a linked test tenant. The test tenant simulates provisioning and is metered at zero.
+2. **Create customer Spaces.** Publish for a customer with a tenant API key and their ID. See the [Partner API quickstart](/platforms/partner-api).
+3. **Configure your account.** Branding, signing keys, plans, event subscriptions, and hostnames live in one [system Space](/platforms/partner-api/configuration).
+4. **Hand customers access.** Issue [customer JWTs](/platforms/partner-api/tokens) scoped to one customer.
+5. **Go live.** Exercise failures in test mode, then [promote your configuration](/platforms/partner-api/go-live) to the live tenant.
+
+<CardGroup cols={2}>
+  <Card title="Partner API" href="/platforms/partner-api" icon="rocket">
+    Create your first customer Space with a tenant API key.
+  </Card>
+  <Card title="Partner API reference" href="/platforms/api/reference" icon="braces">
+    Every tenant, customer, and usage operation with its schemas.
+  </Card>
+  <Card title="Customers and usage" href="/platforms/partner-api/customers" icon="users">
+    Plans, suspension, and the usage records you bill from.
+  </Card>
+  <Card title="Go live" href="/platforms/partner-api/go-live" icon="check">
+    Test failure handling, then promote configuration to live.
+  </Card>
+</CardGroup>
