@@ -123,7 +123,7 @@ export function App() {
 
 ### Tables
 
-`table(fields)` takes three field constructors: `string()`, `boolean()`, and `id("otherTable")`. Store numbers and dates as strings for now. `.default(value)` makes a field optional on insert. Every row gets `id`, `createdAt`, and `updatedAt`, so those three names are reserved, as is the built-in `by_creation` index. Field and index names must match `/^[A-Za-z][A-Za-z0-9_]*$/`. Declare an index with `.index(name, fields)` and read it through `withIndex`.
+`table(fields)` takes five field constructors: `string()`, `boolean()`, `number()`, `id("otherTable")`, and `userId()`. Store dates as strings. The wire schema also accepts `json`, but the SDK has no `json()` field constructor. `.default(value)` makes a field optional on insert. Every row gets `id`, `createdAt`, and `updatedAt`, so those three names are reserved, as is the built-in `by_creation` index. Field and index names must match `/^[A-Za-z_][A-Za-z0-9_]*$/`. A leading underscore is allowed. Declare an index with `.index(name, fields)` and read it through `withIndex`.
 
 ### Handler context
 
