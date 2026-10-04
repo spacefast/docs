@@ -13,7 +13,7 @@ Two lanes. The Spacefast remote needs no external host and no app install. A Git
 
 `sf publish dist --prebuilt` uploads the files in `dist`, not the editable project that produced them. A version's Git commit metadata records where a build came from; it does not mean your source or Git history was uploaded.
 
-Keep the editable project in Git. Connect its repository or push it to the Spacefast remote below. Configuring a remote alone does not upload source; the Git push does. Keep an independent copy of your source and history for recovery. Rolling back a deployment restores published files, not deleted source files or branches.
+Keep the editable project in Git. Connect its repository or push it to the Spacefast remote below. Add and commit the source files before pushing. A Git push transfers the committed history on the branch you push; it excludes files you have not committed. Keep an independent copy of your source and history for recovery. Rolling back a deployment restores published files, not deleted source files or branches.
 
 ## Push to a Spacefast remote
 
