@@ -54,7 +54,7 @@ A second control, **What visitors can do**, sets the role that option grants. Ev
 ## Make a Space public
 
 ```bash
-sf share grant --to public --role viewer --path '/**' --space my-site
+sf share grant --to public --role viewer --path '/**' --target live --space my-site
 ```
 
 Scope it instead of opening everything:
@@ -66,6 +66,14 @@ sf share grant --to public --role viewer --path '/docs/**' --exclude '/docs/inte
 `--to team` does the same for the owning team. Patterns use `*` for one segment and `**` for zero or more. A grant takes up to 100 include patterns and 100 excludes.
 
 A public grant cannot carry publish or manage capabilities.
+
+Grants default to `live`. Opening the live site does not open branch previews or version URLs. To make immutable version URLs public too, add a grant for `all-versions`:
+
+```bash
+sf share grant --to public --role viewer --path '/**' --target all-versions --space my-site
+```
+
+Use `version:<id>` to open only one version. Branch previews need a `branch:<name>` grant; `all-versions` does not cover them or the live site. A team grant admits the owning team; it cannot name another team you belong to.
 
 ## Share links
 
