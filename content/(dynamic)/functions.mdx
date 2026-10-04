@@ -7,7 +7,7 @@ sidebar:
 
 After this page you can add a worker to a Space, know which file layout the publish detects, write a handler with the right signature, and find its logs.
 
-Functions runs your code as a worker. Use it when you need npm packages, framework output like OpenNext Next.js, or outbound HTTP. If you want a database next to your handlers and live queries in the browser, use [Zero](/zero-runtime) instead. One version declares one runtime.
+Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want live queries in the browser and a schema the platform migrates for you, use [Zero](/zero-runtime) instead. Both can call `fetch()`. One version declares one runtime.
 
 Functions is on for every account.
 
@@ -88,7 +88,7 @@ Requests and responses are the standard `Request` and `Response`. There is no Sp
 
 ## Declare it
 
-Detection means most projects need no `runtime` block at all. Declare one when detection cannot guess the layout, or when you want a capability.
+Detection means most projects need no `runtime` block at all. Declare one when detection cannot guess the layout.
 
 ```jsonc sf.jsonc
 {
@@ -96,8 +96,6 @@ Detection means most projects need no `runtime` block at all. Declare one when d
   "runtime": {
     "kind": "functions",
     "entry": "handler.ts",
-    "database": true,
-    "fetch": true,
     "compatibilityDate": "2026-07-01"
   }
 }
@@ -106,22 +104,26 @@ Detection means most projects need no `runtime` block at all. Declare one when d
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
 | `entry` | string | detected | Path to the worker entry. Naming a file that does not exist fails the publish rather than falling back to a static publish |
-| `database` | boolean | `false` | Adds `env.DB` |
-| `fetch` | boolean | see below | Allows outbound HTTP from the worker |
 | `compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | The runtime semantics this worker was written against |
 
-Capabilities are declared, never detected. Authority an author did not ask for is authority they cannot see.
+There is nothing to switch on. Every worker gets its database and outbound `fetch()`. A leftover `database` or `fetch` key is ignored with a warning.
 
-`fetch` has no schema default. An OpenNext build gets it unless you set `fetch: false`, because SSR fetches while it renders. A hand-written handler and a `functions/` router reach nothing until you declare it. Without the capability, `fetch()` inside the worker is refused.
+## Outbound HTTP
+
+`fetch()` works in every worker. How far it reaches depends on who owns the space:
+
+| Space | Reaches |
+| --- | --- |
+| Claimed | Any public HTTP or HTTPS host |
+| Unclaimed | Only the trusted list: `api.anthropic.com`, `api.openai.com`, `api.github.com`, `api.stripe.com`, `api.groq.com`, `api.mistral.ai`, `api.together.xyz`, `generativelanguage.googleapis.com`, `openrouter.ai` |
+
+Anything else from an unclaimed space answers 403 with "This host isn't reachable from an unclaimed space. Claim the space to reach any public host." Claiming opens it up without a republish.
 
 ## What is on `env`
 
 `env` carries the space's environment variables. See [Environment variables](/environment-variables) for how to set them.
 
-Two names are added when you declare them.
-
-- `env.DB`, with `database: true`. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
-- Nothing else is injected. A capability you did not declare is absent, not empty.
+`env.DB` is always there. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
 
 Two groups of variable names never reach a worker, dropped rather than blanked so your code reads them as absent instead of as "configured, but empty".
 

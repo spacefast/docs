@@ -9,7 +9,7 @@ After this page you can read your space's schema and rows from the CLI, apply a 
 
 ## What it is
 
-Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, when it declares `database: true`.
+Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, as `env.DB`.
 
 You do not create it, size it, or connect to it. Your capsule declares the tables and the platform applies the migration when a version finalizes.
 
@@ -167,7 +167,7 @@ sf db console --show-secret
 
 The console is also how you reach a Functions worker's tables, since the schema routes do not apply to one.
 
-If the space has never run a Zero app or declared `database: true`, the Database page shows **Database isn't enabled**.
+Until the space runs a Zero app or a worker, the Database page shows **Database isn't enabled**.
 
 ## Limits
 
