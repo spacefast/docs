@@ -21,16 +21,16 @@ Fetch https://spacefast.com/setup.md
 npm install -g spacefast && sf setup agent --agent openclaw
 ```
 
-**Set up without installing.** Install the same Spacefast skill in one shot, with nothing left behind.
+**Set up without installing.** Install the Spacefast skill without a global CLI install.
 
 ```bash
 npx -y spacefast setup agent --agent openclaw -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 [Agent documentation](/agents) · [OpenClaw documentation](https://docs.openclaw.ai/tools/skills)

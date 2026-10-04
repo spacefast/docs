@@ -1,11 +1,11 @@
 ---
 title: "slug_reserved"
-description: "The requested slug or managed hostname is reserved."
+description: "The slug is reserved for infrastructure, product, or impersonation protection."
 ---
 
-The requested slug or managed hostname is reserved.
+The slug is reserved for infrastructure, product, or impersonation protection.
 
-**How to resolve:** Publish under a different slug.
+**How to resolve:** Choose a different name that is not reserved by the shared slug policy.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/slug_reserved",
   "title": "Slug reserved",
   "status": 400,
-  "detail": "The requested slug or managed hostname is reserved.",
+  "detail": "The slug is reserved for infrastructure, product, or impersonation protection.",
   "code": "slug_reserved",
   "requestId": "req_4mz0v8qk"
 }

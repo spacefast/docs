@@ -1,11 +1,11 @@
 ---
 title: "invalid_webhook_events"
-description: "The webhook filter list names an event that is not in the activity taxonomy."
+description: "One or more webhook event codes are not in the event taxonomy."
 ---
 
-The webhook filter list names an event that is not in the activity taxonomy.
+One or more webhook event codes are not in the event taxonomy.
 
-**How to resolve:** Use exact event names, a family wildcard such as `version.*`, or the catch-all `*`.
+**How to resolve:** Subscribe only to documented activity event codes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_webhook_events",
   "title": "Invalid webhook events",
   "status": 400,
-  "detail": "The webhook filter list names an event that is not in the activity taxonomy.",
+  "detail": "One or more webhook event codes are not in the event taxonomy.",
   "code": "invalid_webhook_events",
   "requestId": "req_4mz0v8qk"
 }

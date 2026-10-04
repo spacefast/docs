@@ -5,6 +5,28 @@ description: "Release history for @spacefast/vite-plugin on npm."
 
 Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast/vite-plugin) on npm.
 
+## 0.5.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.5.0
+  - @spacefast/adapter-kit@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- @spacefast/routing@0.4.1
+  - @spacefast/adapter-kit@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- Refuse external proxy routes in the Vite development server before they can reach developer-local or private-network services. Matching local requests now return `403`; published proxy routes are unchanged.
+- @spacefast/adapter-kit@0.4.0
+  - @spacefast/routing@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

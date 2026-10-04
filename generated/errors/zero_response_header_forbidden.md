@@ -1,11 +1,11 @@
 ---
 title: "zero_response_header_forbidden"
-description: "The handler set a response header the runtime will not serve."
+description: "A Zero endpoint attempted to set a platform-managed response header."
 ---
 
-The handler set a response header the runtime will not serve.
+A Zero endpoint attempted to set a platform-managed response header.
 
-**How to resolve:** Remove the forbidden header from the handler's response, then publish again.
+**How to resolve:** Remove the reserved response header from the endpoint response.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_response_header_forbidden",
   "title": "Zero response header forbidden",
   "status": 400,
-  "detail": "The handler set a response header the runtime will not serve.",
+  "detail": "A Zero endpoint attempted to set a platform-managed response header.",
   "code": "zero_response_header_forbidden",
   "requestId": "req_4mz0v8qk"
 }

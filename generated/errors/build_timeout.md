@@ -1,11 +1,11 @@
 ---
 title: "build_timeout"
-description: "The build exceeded its time limit and was stopped."
+description: "The build exceeded its time limit before producing a version."
 ---
 
-The build exceeded its time limit and was stopped.
+The build exceeded its time limit before producing a version.
 
-**How to resolve:** Speed the build up or raise the build timeout in the build settings, then retry.
+**How to resolve:** Speed up the build or raise the build timeout in the build settings, then start a new build.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/build_timeout",
   "title": "Build timeout",
   "status": 400,
-  "detail": "The build exceeded its time limit and was stopped.",
+  "detail": "The build exceeded its time limit before producing a version.",
   "code": "build_timeout",
   "requestId": "req_4mz0v8qk"
 }

@@ -28,7 +28,7 @@ Free allowance exhaustion triggers review and may lead to suspension. Above 500 
 
 ## Current enforcement
 
-Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `space_quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
+Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
 
 The current daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The current storage meter reports overage without enforcing the upcoming Free storage rule. Neither counter is the new itemized usage bill.
 

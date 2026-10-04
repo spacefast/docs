@@ -1,11 +1,11 @@
 ---
 title: "issuer_tenant_occupied"
-description: "The tenant already holds a pending or active token issuer."
+description: "This tenant already has a pending or active partner token issuer."
 ---
 
-The tenant already holds a pending or active token issuer.
+This tenant already has a pending or active partner token issuer.
 
-**How to resolve:** Delete the tenant's existing issuer before registering another.
+**How to resolve:** Activate or revoke the tenant's existing issuer before registering another one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/issuer_tenant_occupied",
   "title": "Issuer tenant occupied",
   "status": 400,
-  "detail": "The tenant already holds a pending or active token issuer.",
+  "detail": "This tenant already has a pending or active partner token issuer.",
   "code": "issuer_tenant_occupied",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "version_in_use"
-description: "A channel, branch alias, or reusing draft still points at this version."
+description: "The version is referenced by one or more channels and cannot be deleted."
 ---
 
-A channel, branch alias, or reusing draft still points at this version.
+The version is referenced by one or more channels and cannot be deleted.
 
-**How to resolve:** Point the referencing channels and aliases at another version, then delete this one.
+**How to resolve:** Promote another version on those channels first. The `details` field lists them.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/version_in_use",
   "title": "Version in use",
   "status": 400,
-  "detail": "A channel, branch alias, or reusing draft still points at this version.",
+  "detail": "The version is referenced by one or more channels and cannot be deleted.",
   "code": "version_in_use",
   "requestId": "req_4mz0v8qk"
 }

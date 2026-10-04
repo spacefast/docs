@@ -1,11 +1,11 @@
 ---
-title: "artifact_binding_unresolved"
-description: "The artifact names a connection role that is not bound to a connection."
+title: "connector_serving_not_allowlisted"
+description: "This connector is not allowed to serve sites."
 ---
 
-The artifact names a connection role that is not bound to a connection.
+This connector is not allowed to serve sites.
 
-**How to resolve:** Bind the role: PATCH /v1/artifacts/{ref} with the role mapped to a connection id you can use.
+**How to resolve:** Ask a team admin to add its slug to the serving allowlist.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_binding_unresolved",
-  "title": "Artifact binding unresolved",
+  "type": "https://spacefast.com/docs/errors/connector_serving_not_allowlisted",
+  "title": "Connector serving not allowlisted",
   "status": 400,
-  "detail": "The artifact names a connection role that is not bound to a connection.",
-  "code": "artifact_binding_unresolved",
+  "detail": "This connector is not allowed to serve sites.",
+  "code": "connector_serving_not_allowlisted",
   "requestId": "req_4mz0v8qk"
 }
 ```

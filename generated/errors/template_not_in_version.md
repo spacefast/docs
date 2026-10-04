@@ -1,11 +1,11 @@
 ---
 title: "template_not_in_version"
-description: "A `templates` entry names a file this version does not publish, so it was skipped."
+description: "The configuration names a template file the version does not contain."
 ---
 
-A `templates` entry names a file this version does not publish, so it was skipped.
+The configuration names a template file the version does not contain.
 
-**How to resolve:** Publish the file, or remove the entry from `templates` in `sf.jsonc`.
+**How to resolve:** Upload the file or remove its `templates` entry from `sf.jsonc`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/template_not_in_version",
   "title": "Template not in version",
   "status": 400,
-  "detail": "A `templates` entry names a file this version does not publish, so it was skipped.",
+  "detail": "The configuration names a template file the version does not contain.",
   "code": "template_not_in_version",
   "requestId": "req_4mz0v8qk"
 }

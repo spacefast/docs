@@ -1,11 +1,11 @@
 ---
 title: "issuer_exists"
-description: "That token issuer is already active for another tenant."
+description: "This partner token issuer is already active for another tenant."
 ---
 
-That token issuer is already active for another tenant.
+This partner token issuer is already active for another tenant.
 
-**How to resolve:** Register the issuer under a distinct `iss` value.
+**How to resolve:** Use a globally unique issuer URL, or revoke the existing issuer before registering it here.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/issuer_exists",
   "title": "Issuer exists",
   "status": 400,
-  "detail": "That token issuer is already active for another tenant.",
+  "detail": "This partner token issuer is already active for another tenant.",
   "code": "issuer_exists",
   "requestId": "req_4mz0v8qk"
 }

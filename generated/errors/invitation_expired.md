@@ -1,11 +1,11 @@
 ---
 title: "invitation_expired"
-description: "The invitation passed its expiry before anyone accepted it."
+description: "The invitation is expired and can no longer be accepted."
 ---
 
-The invitation passed its expiry before anyone accepted it.
+The invitation is expired and can no longer be accepted.
 
-**How to resolve:** Ask a team admin to send a fresh invitation.
+**How to resolve:** Ask a team admin to send a fresh invitation, then accept the new one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invitation_expired",
   "title": "Invitation expired",
   "status": 400,
-  "detail": "The invitation passed its expiry before anyone accepted it.",
+  "detail": "The invitation is expired and can no longer be accepted.",
   "code": "invitation_expired",
   "requestId": "req_4mz0v8qk"
 }

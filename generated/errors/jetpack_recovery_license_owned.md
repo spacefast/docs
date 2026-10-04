@@ -1,11 +1,11 @@
 ---
-title: "artifact_not_found"
-description: "No artifact exists at this space and path."
+title: "jetpack_recovery_license_owned"
+description: "Another space already owns the supplied license."
 ---
 
-No artifact exists at this space and path.
+Another space already owns the supplied license.
 
-**How to resolve:** List artifacts to find the right ref. An artifact ref is `<spaceId>:<path>`.
+**How to resolve:** Recover the license on its original space. Do not assign one license to multiple spaces.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_not_found",
-  "title": "Artifact not found",
+  "type": "https://spacefast.com/docs/errors/jetpack_recovery_license_owned",
+  "title": "Jetpack recovery license owned",
   "status": 400,
-  "detail": "No artifact exists at this space and path.",
-  "code": "artifact_not_found",
+  "detail": "Another space already owns the supplied license.",
+  "code": "jetpack_recovery_license_owned",
   "requestId": "req_4mz0v8qk"
 }
 ```

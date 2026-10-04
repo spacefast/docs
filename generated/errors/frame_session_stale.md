@@ -1,11 +1,11 @@
 ---
 title: "frame_session_stale"
-description: "The frame link changed after this session was minted."
+description: "The Frame Link changed after this session was launched."
 ---
 
-The frame link changed after this session was minted.
+The Frame Link changed after this session was launched.
 
-**How to resolve:** Launch the frame link again.
+**How to resolve:** Launch the current Frame Link again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_session_stale",
   "title": "Frame session stale",
   "status": 400,
-  "detail": "The frame link changed after this session was minted.",
+  "detail": "The Frame Link changed after this session was launched.",
   "code": "frame_session_stale",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "static_runtime_required"
-description: "This operation only applies to a static Space."
+description: "This operation only applies to static-runtime spaces."
 ---
 
-This operation only applies to a static Space.
+This operation only applies to static-runtime spaces.
 
-**How to resolve:** Remove `runtime` from `sf.jsonc` and publish the Space as static content.
+**How to resolve:** Target a static-runtime space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/static_runtime_required",
   "title": "Static runtime required",
   "status": 400,
-  "detail": "This operation only applies to a static Space.",
+  "detail": "This operation only applies to static-runtime spaces.",
   "code": "static_runtime_required",
   "requestId": "req_4mz0v8qk"
 }

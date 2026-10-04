@@ -1,11 +1,11 @@
 ---
 title: "wp_cli_timeout"
-description: "The WP-CLI command did not finish inside its deadline and may still be running on the site."
+description: "The WP-CLI command did not finish in time and may still be running on the site."
 ---
 
-The WP-CLI command did not finish inside its deadline and may still be running on the site.
+The WP-CLI command did not finish in time and may still be running on the site.
 
-**How to resolve:** Check the site's state before running the command again; WP-CLI is capped at five minutes.
+**How to resolve:** Check the site's current state before running the command again; WP-CLI is capped at five minutes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cli_timeout",
   "title": "Wp cli timeout",
   "status": 400,
-  "detail": "The WP-CLI command did not finish inside its deadline and may still be running on the site.",
+  "detail": "The WP-CLI command did not finish in time and may still be running on the site.",
   "code": "wp_cli_timeout",
   "requestId": "req_4mz0v8qk"
 }

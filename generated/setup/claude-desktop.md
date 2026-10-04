@@ -13,17 +13,10 @@ Install Spacefast in Claude Desktop as a signed local extension.
 
 ## Other ways to connect
 
-**Configure claude_desktop_config.json.** Merge the hosted Spacefast server into the client MCP configuration.
+**Add the hosted MCP server.** Add Spacefast with the Spacefast endpoint. Connect and approve OAuth. Enable the connector for the conversation; it also works in Desktop. Team and Enterprise owners must add the connector first.
 
-```json
-{
-  "mcpServers": {
-    "spacefast": {
-      "type": "http",
-      "url": "https://mcp.spacefast.com"
-    }
-  }
-}
+```text
+https://mcp.spacefast.com
 ```
 
 Prefer to hand this off? Copy setup prompt:

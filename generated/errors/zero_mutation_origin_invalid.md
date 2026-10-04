@@ -1,11 +1,11 @@
 ---
-title: "build_minutes_quota_exceeded"
-description: "This build would exceed the owner's build minutes for the month."
+title: "zero_mutation_origin_invalid"
+description: "The cookie-authenticated Zero mutation did not prove the serving origin."
 ---
 
-This build would exceed the owner's build minutes for the month.
+The cookie-authenticated Zero mutation did not prove the serving origin.
 
-**How to resolve:** Wait for the meter to reset at the start of the next UTC month, or publish prebuilt output instead of building on Spacefast.
+**How to resolve:** Send the write from the Space's exact origin with a non-safelisted content type, or use an explicit platform bearer for a non-browser client.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/build_minutes_quota_exceeded",
-  "title": "Build minutes quota exceeded",
+  "type": "https://spacefast.com/docs/errors/zero_mutation_origin_invalid",
+  "title": "Zero mutation origin invalid",
   "status": 400,
-  "detail": "This build would exceed the owner's build minutes for the month.",
-  "code": "build_minutes_quota_exceeded",
+  "detail": "The cookie-authenticated Zero mutation did not prove the serving origin.",
+  "code": "zero_mutation_origin_invalid",
   "requestId": "req_4mz0v8qk"
 }
 ```

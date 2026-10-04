@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_invalid_status"
-description: "The Zero runner returned a status outside 100 to 599."
+description: "The Zero runner returned an invalid HTTP status."
 ---
 
-The Zero runner returned a status outside 100 to 599.
+The Zero runner returned an invalid HTTP status.
 
-**How to resolve:** Return a valid HTTP status from the handler, then publish again.
+**How to resolve:** Return a status between 100 and 599 from endpoint handlers.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_invalid_status",
   "title": "Zero runner invalid status",
   "status": 400,
-  "detail": "The Zero runner returned a status outside 100 to 599.",
+  "detail": "The Zero runner returned an invalid HTTP status.",
   "code": "zero_runner_invalid_status",
   "requestId": "req_4mz0v8qk"
 }

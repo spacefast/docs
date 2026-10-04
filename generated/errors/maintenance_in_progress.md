@@ -1,11 +1,11 @@
 ---
 title: "maintenance_in_progress"
-description: "Spacefast is in maintenance, so writes are paused while reads keep working."
+description: "This change is temporarily unavailable while maintenance finishes."
 ---
 
-Spacefast is in maintenance, so writes are paused while reads keep working.
+This change is temporarily unavailable while maintenance finishes.
 
-**How to resolve:** Retry after the seconds in the `Retry-After` header.
+**How to resolve:** Wait for the Retry-After window, then send the same request again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/maintenance_in_progress",
   "title": "Maintenance in progress",
   "status": 400,
-  "detail": "Spacefast is in maintenance, so writes are paused while reads keep working.",
+  "detail": "This change is temporarily unavailable while maintenance finishes.",
   "code": "maintenance_in_progress",
   "requestId": "req_4mz0v8qk"
 }

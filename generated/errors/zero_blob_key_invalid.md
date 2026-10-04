@@ -1,11 +1,11 @@
 ---
 title: "zero_blob_key_invalid"
-description: "The blob key is empty or is not a string."
+description: "The local Zero blob key is invalid."
 ---
 
-The blob key is empty or is not a string.
+The local Zero blob key is invalid.
 
-**How to resolve:** Pass a non-empty string key to the blob call.
+**How to resolve:** Use a non-empty blob key without unsafe path segments.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_blob_key_invalid",
   "title": "Zero blob key invalid",
   "status": 400,
-  "detail": "The blob key is empty or is not a string.",
+  "detail": "The local Zero blob key is invalid.",
   "code": "zero_blob_key_invalid",
   "requestId": "req_4mz0v8qk"
 }

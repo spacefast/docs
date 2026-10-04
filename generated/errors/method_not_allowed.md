@@ -1,11 +1,11 @@
 ---
 title: "method_not_allowed"
-description: "The route exists but does not serve this HTTP method."
+description: "The requested HTTP method is not supported for this endpoint."
 ---
 
-The route exists but does not serve this HTTP method.
+The requested HTTP method is not supported for this endpoint.
 
-**How to resolve:** Call the route with one of the methods the `Allow` header lists.
+**How to resolve:** Use one of the methods listed in the Allow response header.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/method_not_allowed",
   "title": "Method not allowed",
   "status": 400,
-  "detail": "The route exists but does not serve this HTTP method.",
+  "detail": "The requested HTTP method is not supported for this endpoint.",
   "code": "method_not_allowed",
   "requestId": "req_4mz0v8qk"
 }

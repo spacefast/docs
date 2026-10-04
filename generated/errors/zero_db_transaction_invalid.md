@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_invalid"
-description: "The transaction declares no statements, or more than the maximum."
+description: "A database batch is empty or has more than 64 statements."
 ---
 
-The transaction declares no statements, or more than the maximum.
+A database batch is empty or has more than 64 statements.
 
-**How to resolve:** Send between one statement and the transaction maximum.
+**How to resolve:** Send between 1 and 64 statements per batch.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_invalid",
   "title": "Zero db transaction invalid",
   "status": 400,
-  "detail": "The transaction declares no statements, or more than the maximum.",
+  "detail": "A database batch is empty or has more than 64 statements.",
   "code": "zero_db_transaction_invalid",
   "requestId": "req_4mz0v8qk"
 }

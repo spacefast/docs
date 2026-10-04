@@ -1,11 +1,11 @@
 ---
 title: "manifest_too_many_files"
-description: "The version declares more files than the plan allows."
+description: "The upload manifest declares more files than the allowed ceiling."
 ---
 
-The version declares more files than the plan allows.
+The upload manifest declares more files than the allowed ceiling.
 
-**How to resolve:** Remove files from the publish, or move the team to a plan with a higher file cap.
+**How to resolve:** Reduce the file count or split content across multiple spaces.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/manifest_too_many_files",
   "title": "Manifest too many files",
   "status": 400,
-  "detail": "The version declares more files than the plan allows.",
+  "detail": "The upload manifest declares more files than the allowed ceiling.",
   "code": "manifest_too_many_files",
   "requestId": "req_4mz0v8qk"
 }

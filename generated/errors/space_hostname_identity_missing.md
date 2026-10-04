@@ -1,11 +1,11 @@
 ---
 title: "space_hostname_identity_missing"
-description: "The Space has no persisted default hostname identity."
+description: "The space is missing its persisted default hostname identity."
 ---
 
-The Space has no persisted default hostname identity.
+The space is missing its persisted default hostname identity.
 
-**How to resolve:** Contact Spacefast support with the Space ID and the `requestId`.
+**How to resolve:** Contact support. Retrying cannot safely recreate a permanent hostname identity.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_hostname_identity_missing",
   "title": "Space hostname identity missing",
   "status": 400,
-  "detail": "The Space has no persisted default hostname identity.",
+  "detail": "The space is missing its persisted default hostname identity.",
   "code": "space_hostname_identity_missing",
   "requestId": "req_4mz0v8qk"
 }

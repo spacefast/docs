@@ -1,11 +1,11 @@
 ---
-title: "artifact_invalid_source"
-description: "The artifact source is not a renderable page component."
+title: "label_name_taken"
+description: "Another label in this team already uses that name, ignoring case."
 ---
 
-The artifact source is not a renderable page component.
+Another label in this team already uses that name, ignoring case.
 
-**How to resolve:** Export one component named App, with no imports — everything an artifact can use is already in scope.
+**How to resolve:** Pick a different name, or use the existing label with that name.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_invalid_source",
-  "title": "Artifact invalid source",
+  "type": "https://spacefast.com/docs/errors/label_name_taken",
+  "title": "Label name taken",
   "status": 400,
-  "detail": "The artifact source is not a renderable page component.",
-  "code": "artifact_invalid_source",
+  "detail": "Another label in this team already uses that name, ignoring case.",
+  "code": "label_name_taken",
   "requestId": "req_4mz0v8qk"
 }
 ```
