@@ -1,11 +1,10 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const content = path.join(root, "content");
 const dist = path.join(root, "dist");
 
 async function builtPage(route) {
@@ -23,27 +22,19 @@ function opening(page) {
   return paragraph.replace(/\s+/gu, " ");
 }
 
-async function* authoredPages(directory) {
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    const location = path.join(directory, entry.name);
-    if (entry.isDirectory()) yield* authoredPages(location);
-    else if (entry.name.endsWith(".mdx")) yield location;
-  }
-}
-
 test("every authored page opens with its subject instead of a page promise", async () => {
   const offenders = [];
-  let count = 0;
-  for await (const file of authoredPages(content)) {
-    const source = await readFile(file, "utf8");
-    const body = source.replace(/^---\n[\s\S]*?\n---\n/u, "").trimStart();
-    const lead = opening(body);
-    count += 1;
+  const manifest = JSON.parse(await readFile(path.join(root, ".blume", "blume.manifest.json"), "utf8"));
+  const authored = manifest.routes.filter((route) =>
+    route.source?.name === "filesystem" && route.entryId?.endsWith(".mdx"),
+  );
+  for (const route of authored) {
+    const lead = opening(await builtPage(route.path));
     if (/^(after this page|by the end of this page)\b/iu.test(lead)) {
-      offenders.push(path.relative(root, file));
+      offenders.push(route.path);
     }
   }
-  assert.ok(count > 50, "the authored corpus should be present");
+  assert.ok(authored.length > 50, "the authored corpus should be present");
   assert.deepEqual(offenders, [], "generic page promises hide the useful first fact");
 });
 

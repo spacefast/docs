@@ -1,6 +1,6 @@
 # Authored-docs writing audit
 
-The manual click-path and command comparisons in [DOCS_QA_COMPARISON.md](DOCS_QA_COMPARISON.md) measure answer findability and factual accuracy. Neither measures whether the authored prose is better. This point-in-time audit checks the writing changes against `main` as of October 5, 2026. Repeatable checks for the current docs are in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md).
+The reviewer click-path and command comparisons in [DOCS_QA_COMPARISON.md](DOCS_QA_COMPARISON.md) measure answer findability and factual accuracy. Neither measures whether the authored prose is better for readers. This point-in-time audit checks the writing changes against `main` as of October 5, 2026. Repeatable checks for the current docs are in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md).
 
 ## Method
 
@@ -37,4 +37,4 @@ For example, Versions opened with “After this page you know what a version hol
 
 The manual review caught five candidate leads that were shorter but spent the first sentence on a less useful detail: slug validation on Spaces, polling mechanics on Logs, archive flags on Frameworks and builds, CLI naming on Publish from Git, and remote WP-CLI output on WordPress. Each now leads with the page's main task or mental model. The removed detail was checked elsewhere on the same page and retained or moved into the body.
 
-This audit establishes changes in structure and in which facts appear first. It does not show that real readers complete tasks faster or understand the docs better. That requires reader testing. Vale still reports the two existing spelling alerts (`GETs` and `TTYs`); its rules do not detect repeated sentence structures or judge whether a page leads with the right fact.
+This audit establishes changes in structure and in which facts appear first. It does not show that real readers complete tasks faster or understand the docs better. Shorter openings could also lose useful context for some readers. That requires reader testing. Vale now passes after two existing technical plurals (`GETs` and `TTYs`) were written as plain explanations; its rules do not detect repeated sentence structures or judge whether a page leads with the right fact.

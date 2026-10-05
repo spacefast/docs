@@ -43,6 +43,8 @@ A **Space** is one site with a stable hostname. Every publish creates a new **ve
 
 Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs opt into the Zero runtime with one line of config.
 
+When more than one person works on a site, its team owns the Space, domains, and API keys. Members can publish and roll back without passing around one person's login, while team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
+
 <CardGroup cols={2}>
   <Card title="Quickstart" href="/quickstart" icon="rocket">
     Install, sign in, publish, and attach a domain in five minutes.
@@ -58,6 +60,9 @@ Static output is the default path. Point `sf publish` at a build directory and i
   </Card>
   <Card title="Custom domains" href="/domains" icon="globe">
     DNS records, verification, TLS, and the primary domain.
+  </Card>
+  <Card title="Teams and members" href="/teams" icon="users">
+    Invite collaborators, share Spaces, and control who can change what.
   </Card>
   <Card title="Agents" href="/agents" icon="bot">
     Connect Claude Code, Cursor, Codex, or any MCP client.

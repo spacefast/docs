@@ -105,7 +105,7 @@ Commands that act on a Space add `--space`, `-o, --team`, and `--claim-token`. C
 
 ## Interactive and non-interactive
 
-The CLI prompts only when stdin and stdout are both TTYs, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
+The CLI prompts only when stdin and stdout are both connected to a terminal, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
 
 Destructive actions need an answer either way. Pass `--yes` (or set `SPACEFAST_YES=1`) to proceed without a prompt. Without it, a non-interactive run fails with `confirmation_required` and exit 2. Declining a prompt exits 130.
 

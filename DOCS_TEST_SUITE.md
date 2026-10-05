@@ -7,7 +7,7 @@ bun run build
 bun run test:docs
 ```
 
-CI runs `test:docs` after the production build. It uses Bun's test runner and exits nonzero on a failed assertion. The experience checks read the built Markdown in `dist/`, so a passing source edit alone cannot satisfy them. Existing unit tests for the docs corpus, LLM index, and composed-site audit run in the same command.
+CI runs `test:docs` after the production build. It uses Node's test runner and exits nonzero on a failed assertion. The experience checks read the built Markdown in `dist/`, so a passing source edit alone cannot satisfy them. Existing unit tests for the docs corpus, LLM index, and composed-site audit run in the same command.
 
 ## Reader-facing contracts
 

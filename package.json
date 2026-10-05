@@ -13,7 +13,7 @@
     "verify:public-safety": "node scripts/verify-public-safety.mjs",
     "verify:commands": "node scripts/verify-command-examples.mjs",
     "verify:routes": "node scripts/verify-routes.mjs",
-    "test:docs": "bun test scripts/*.test.mjs",
+    "test:docs": "node --test scripts/*.test.mjs",
     "test:corpus": "node --test scripts/build-docs-corpus.test.mjs",
     "test:llms": "node --test scripts/build-llms-index.test.mjs",
     "doctor": "blume doctor"
