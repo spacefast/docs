@@ -63,6 +63,7 @@ bun run verify:generated
 bun run check
 bun run validate
 bun run build
+bun run test:docs
 bun run audit
 bun run verify:public-safety
 bun run verify:prose

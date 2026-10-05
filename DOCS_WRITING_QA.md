@@ -1,6 +1,6 @@
 # Authored-docs writing audit
 
-The click-path suite in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md) measures whether a reader can find an answer. The command suite checks facts against the generated reference. Neither measures whether the authored prose is better. This point-in-time audit checks the writing changes against `main` as of October 5, 2026.
+The manual click-path and command comparisons in [DOCS_QA_COMPARISON.md](DOCS_QA_COMPARISON.md) measure answer findability and factual accuracy. Neither measures whether the authored prose is better. This point-in-time audit checks the writing changes against `main` as of October 5, 2026. Repeatable checks for the current docs are in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md).
 
 ## Method
 
