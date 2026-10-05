@@ -15,11 +15,36 @@ Both are point-in-time results, not a standing guarantee. Re-run by hand
 when the content changes meaningfully — there's no CI gate for either yet
 (see "Running this again," below).
 
+## Current main versus this branch (October 5, 2026)
+
+Both sites were built from the same current `main` base and tested in a browser
+from their homepages. The candidate adds one authored route (Glossary); the
+generated CLI and API reference trees are identical on both branches.
+
+| Test | Current `main` | This branch | Change |
+|---|---:|---:|---|
+| Part 1: clear answer in at most 3 clicks | 18/20 | 19/20 | +1 question |
+| Part 2: command/API accuracy against generated reference | 19/20 | 19/20 | No change |
+
+Part 1 improvement comes from Q11: the Database page now tells readers how
+to enable Zero before using its database (one click on both sites; the old
+answer was incomplete). Q1 already passed on `main`, but the no-install Drop
+path moved from Publishing → Dashboard (two actions) to the homepage (zero).
+Q19 still fails on both sites because “contact support” has no linked or named
+support channel. Q14 can be answered on Customization in one click; Site pages
+adds detail about error-page layout in a second click.
+
+Part 2 Q8 is one failed question with two issues on both branches: the
+generated CLI example uses a preset outside its own enum, and the authored
+API-key page omits `partner_admin` while giving conflicting default-preset
+guidance. The checks compare documentation with the generated reference; they
+do not execute a live publish or API request.
+
 ## Part 1: User click-path tests (20 questions)
 
 Methodology: every test starts fresh from the homepage
-(`http://localhost:4321/docs`), using only real navigation a user would use
-(nav bar, sidebar, in-page links/cards). A "click" is one navigation action.
+(`/docs/`), using only real navigation a user would use
+(nav bar, sidebar, tabs, in-page links/cards). A "click" is one navigation action.
 "Stated clearly" means the answer is plain and near the top of where you
 land — not something inferred from paragraphs of surrounding technical
 detail.
@@ -36,10 +61,10 @@ detail.
 | 8 | What exactly is a "Space"? | 1 | `/spaces` | PASS |
 | 9 | Connect Claude to publish for me? | 1 | `/agents` | PASS |
 | 10 | Does it work with Next.js? | 1 | `/recipes/next` | PASS |
-| 11 | Add a database to my site? | 2 | `/database` → `/zero-runtime` | PASS (initial failure fixed) |
+| 11 | Add a database to my site? | 1 | `/database` | PASS (initial failure fixed) |
 | 12 | My build failed — what do I do? | 1 | `/troubleshooting` | PASS |
 | 13 | See my site's traffic? | 1 | `/stats` | PASS |
-| 14 | Use my own logo on error pages? | 2 | `/customization` → `/site-pages` | PASS (second page needed for full clarity) |
+| 14 | Use my own logo on error pages? | 1 | `/customization` | PASS (`/site-pages` adds error-page detail in a second click) |
 | 15 | Invite a teammate? | 1 | `/teams` | PASS |
 | 16 | Free plan limits? | 1 | `/limits` | PASS |
 | 17 | Connect GitHub for auto-deploy? | 1 | `/git` | PASS |
@@ -47,7 +72,7 @@ detail.
 | 19 | Something broke — where do I get help? | 1 | `/troubleshooting` | **FAIL — real gap, not fixed** |
 | 20 | Can I resell this under my own brand? | 1 | `/platforms` | PASS |
 
-**Final score: 19/20 pass at ≤3 clicks, 1 unresolved failure.** Q11
+**Candidate score: 19/20 pass at ≤3 clicks, 1 unresolved failure.** Q11
 failed on the first pass and was fixed before this result was recorded.
 
 ### Failure 1 (Q11) — fixed
