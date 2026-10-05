@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-`--prebuilt` forces the upload path and `--build` forces the build path — but a `.tar.gz` archive always goes through a build, since archives are classified remotely.
+Publish built output directly when you have it; Spacefast can build from source when you don't.
 
 ## Two paths
 
@@ -23,6 +23,8 @@ sf publish --remote
 ```
 
 With no flags, `sf publish` builds a detected project, and publishes the directory as-is if there is nothing to build.
+
+`--prebuilt` forces the upload path and `--build` forces the build path. A `.tar.gz` archive always goes through a build, since archives are classified remotely.
 
 ## Which directory to publish
 

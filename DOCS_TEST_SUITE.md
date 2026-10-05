@@ -5,6 +5,9 @@ existed before this suite; `evals.yaml` already covers a third, related
 thing (an AI assistant's factual-retrieval accuracy answering from the docs)
 and isn't duplicated here.
 
+These suites do not grade prose quality. The before/after writing audit is in
+[DOCS_WRITING_QA.md](DOCS_WRITING_QA.md).
+
 - **Part 1 — can a real user find the answer, stated clearly, in 3 clicks or
   less?** Tests navigation and clarity, not content accuracy.
 - **Part 2 — is the exact command/code shown actually correct?** Tests
