@@ -36,7 +36,7 @@ detail.
 | 8 | What exactly is a "Space"? | 1 | `/spaces` | PASS |
 | 9 | Connect Claude to publish for me? | 1 | `/agents` | PASS |
 | 10 | Does it work with Next.js? | 1 | `/recipes/next` | PASS |
-| 11 | Add a database to my site? | 2 | `/database` → `/zero-runtime` | **FAIL → fixed** |
+| 11 | Add a database to my site? | 2 | `/database` → `/zero-runtime` | PASS (initial failure fixed) |
 | 12 | My build failed — what do I do? | 1 | `/troubleshooting` | PASS |
 | 13 | See my site's traffic? | 1 | `/stats` | PASS |
 | 14 | Use my own logo on error pages? | 2 | `/customization` → `/site-pages` | PASS (second page needed for full clarity) |
@@ -47,7 +47,8 @@ detail.
 | 19 | Something broke — where do I get help? | 1 | `/troubleshooting` | **FAIL — real gap, not fixed** |
 | 20 | Can I resell this under my own brand? | 1 | `/platforms` | PASS |
 
-**Score: 18/20 pass at ≤3 clicks, 2 failures.**
+**Final score: 19/20 pass at ≤3 clicks, 1 unresolved failure.** Q11
+failed on the first pass and was fixed before this result was recorded.
 
 ### Failure 1 (Q11) — fixed
 
@@ -103,7 +104,8 @@ internally consistent with the generated reference.
 | 19 | Password-protect a path? | PASS |
 | 20 | Webhook signature header + algorithm? | PASS |
 
-**Score: 18/20 pass, 2 real bugs found in one question.**
+**Score: 19/20 questions pass.** Q8 fails because of 2 real bugs in that
+one question.
 
 ### Bug 1 — in the frozen generated reference (not fixed here)
 
