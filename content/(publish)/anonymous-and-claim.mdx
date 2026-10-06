@@ -5,7 +5,7 @@ sidebar:
   order: 3
 ---
 
-After this page you can put a site online with no signup, know how long it stays up, and move it into a team later while keeping the same URL.
+Keep the space key or claim link from your anonymous publish. Losing the publishing folder is recoverable if you saved either; losing every copy of the key leaves you unable to claim the Space before it expires.
 
 ## Publish with no login
 
@@ -30,7 +30,7 @@ https://swift-otter-4821.view.fast/__/sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 https://my.spacefast.com/claim#sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 ```
 
-The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later. Lose the folder and lose the key, and the Space runs out its clock.
+The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later.
 
 In `--json` or non-interactive output the key and the claim link are masked. Pass `--show-secret` to print them.
 
@@ -48,7 +48,7 @@ It is recoverable after that. The key stays valid for another **7 days**, during
 
 Opening the claim page when less than an hour remains moves the deadline to one hour from that load, up to 6 extra hours in total. Repeated publishes cannot push the deadline past 30 days from creation.
 
-To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted, and it is never written to logs.
+To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted. It is never written to logs.
 
 ## Caps
 
@@ -123,6 +123,8 @@ An agent that published the Space for you loses its credential the moment you cl
 On the claim page that is the **Claim & keep access** button. On the CLI it is `sf spaces claim --keep-publishing`. Either way the choice is yours, explicitly, and the server decides whether the Space is even eligible.
 
 If you say yes, the agent's next request trades the demoted key for a real API key scoped to the Space, using `exchangeSpaceClaim`. That key is shown exactly once. If you say no, the old key stops working and the agent has to be reconnected the normal way.
+
+For the full picture of what a credential like this can and cannot do, see [what agents are allowed to do](/agents/permissions).
 
 ## Rotating the key
 

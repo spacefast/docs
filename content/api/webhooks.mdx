@@ -5,7 +5,7 @@ sidebar:
   order: 8
 ---
 
-Spacefast `POST`s a signed JSON body to your endpoint whenever something happens in your team. After this page you can register an endpoint, verify a signature correctly through a secret rotation, and know when a delivery has given up.
+Spacefast `POST`s a signed JSON body to your endpoint whenever something happens in your team — register one here, verify its signature correctly through a secret rotation, and know when a delivery has given up.
 
 ## Create an endpoint
 
@@ -61,7 +61,7 @@ The response is the only place the signing secret ever appears:
 
 Store `secret` now. Every later read returns `secretPreview` only.
 
-Endpoints must be public HTTPS. Non-HTTPS URLs are rejected, each connection is pinned to the DNS result that was validated, and redirects are refused.
+Endpoints must be public HTTPS. Non-HTTPS URLs are rejected. Each connection is pinned to the DNS result that was validated, and redirects are refused.
 
 In the dashboard the same thing lives under **Webhooks** in the team sidebar. **Add webhook** asks for an **Endpoint URL**, then **Events** as either **All events** or **Choose events**, then a **Status** toggle.
 
@@ -182,7 +182,7 @@ export function verifySpacefastWebhook(rawBody, header, secret) {
 }
 ```
 
-Three things that break naive verifiers. The header can carry more than one `v1=` entry, so accept a match on any of them. The body must be the raw bytes. And the timestamp tolerance is yours to choose, since the header carries the signing time but the server does not enforce a window on your behalf.
+Three things that break naive verifiers. The header can carry more than one `v1=` entry, so accept a match on any of them. The body must be the raw bytes. The timestamp tolerance is yours to choose: the header carries the signing time, but the server does not enforce a window on your behalf.
 
 ## Rotate the secret
 

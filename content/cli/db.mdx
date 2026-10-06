@@ -5,7 +5,7 @@ sidebar:
   order: 22
 ---
 
-After this page you can read a Space's tables and pending migration plan, pull rows out as JSON, take a full backup, apply a migration, open a real SQL console, and fire a scheduled job on demand.
+Inspect, migrate, and dump a Zero Space's database without a connection string. Functions workers use `env.DB` or the SQL console instead of the Zero table commands. You can also trigger a declared cron job on demand.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
@@ -182,7 +182,7 @@ sf db console [target] [--space <value>] [--show-secret]
 | --- | --- | --- |
 | `--show-secret` | `false` | Print the single-use console URL instead of opening it |
 
-The URL is short-lived, single-use, and grants full SQL authority, which is why it opens in a browser instead of printing. It requires write access.
+The URL is short-lived, single-use, and grants full SQL authority. That's why it opens in a browser instead of printing. It requires write access.
 
 ```bash
 sf db console

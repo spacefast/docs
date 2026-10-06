@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-After this page you can publish a folder, build a framework project locally or remotely, publish without an account and claim the Space later, and parse the `--json` receipt in a script. `sf dev` is documented at the end because it runs a project locally, not a copy of what publish serves.
+Use `sf publish` for a file, directory, supported project, or `.zip`/`.tar.gz` archive. Build detection and validation decide what can publish. `sf dev` is documented at the end because it runs a project locally, not a copy of what publish serves.
 
 ## sf publish
 
@@ -15,7 +15,7 @@ Publish files or built projects to Spacefast. `sf deploy` is an exact alias.
 sf publish [DIR]
 ```
 
-A publish creates one immutable version. If the live channel promotes automatically (the default), that version goes live. See [Publishing](/publish) for the model and [Versions](/versions) for what happens after.
+A publish can create an immutable version or report no changes. A production publish goes live when the channel promotes automatically (the default); preview publishes and manual policies leave it ready for a separate promotion. See [Publishing](/publish) for the model and [Versions](/versions) for what happens after.
 
 ### Arguments
 
@@ -165,7 +165,7 @@ The team-wide default for future Spaces is `sf teams defaults`, on the [teams pa
 
 ## Anonymous publish and the claim key
 
-With no login and no linked Space, publish creates an anonymous Space and saves its key (`sfc_…`), claim URL, and expiry in `.spacefast/state.json`, which the CLI adds to `.gitignore`. The claim link prints once, on the publish that created the Space. Later publishes point at `sf spaces claim` instead.
+With no login and no linked Space, publish creates an anonymous Space. It saves the key (`sfc_…`), claim URL, and expiry in `.spacefast/state.json`, which the CLI adds to `.gitignore`. The claim link prints once, on the publish that created the Space. Later publishes point at `sf spaces claim` instead.
 
 ```bash
 sf spaces claim                                  # claim the Space saved here
@@ -253,7 +253,7 @@ The headline verb is `Published`, `Updated`, `No changes`, `Ready`, or `Held`, d
 }
 ```
 
-`activation.outcome` is one of `activated`, `unpromoted`, `superseded`, or `pending`. `next.action` is `poll` while the version is still building and `done` once it is ready; when the version is ready but not live, `next.url` is the promote endpoint and `next.hint` says why. An anonymous receipt adds a `claim` block with `key`, `url`, `claimUrl`, and `expiresAt`.
+`activation.outcome` is one of `activated`, `unpromoted`, `superseded`, or `pending`. `next.action` is `poll` while the version is still building, and `done` once it's ready. When the version is ready but not live, `next.url` is the promote endpoint and `next.hint` says why. An anonymous receipt adds a `claim` block with `key`, `url`, `claimUrl`, and `expiresAt`.
 
 With `--stream`, stdout becomes JSONL, one event per line:
 
@@ -293,7 +293,7 @@ Start the local dev server.
 sf dev
 ```
 
-`sf dev` runs the project in this directory. It is not a local mirror of what publish serves: for a `zero` runtime it starts the capsule dev server, and for anything else it serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. There is no static file server for your site on that path, so for a framework project use that framework's own dev server (`next dev`, `vite`) and run `sf publish` when you are ready.
+`sf dev` runs the project in this directory. It is not a local mirror of what publish serves: for a `zero` runtime it starts the capsule dev server, and for anything else it serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. There is no static file server for your site on that path. For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
 
 | Flag | Default | What it does |
 | --- | --- | --- |

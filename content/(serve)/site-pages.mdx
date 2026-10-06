@@ -3,7 +3,7 @@ title: Layout, theme, and site pages
 description: Theme the pages Spacefast draws with theme.json, wrap them in your own _layout.html, or take one over completely with _pages/id.html
 ---
 
-After this page you can push your own design tokens into the pages Spacefast draws, wrap every one of them in your site chrome, replace any of the five outright, and check all of it before you publish.
+Spacefast's built-in pages can be made your own three ways, from design tokens up to a full page takeover.
 
 Spacefast draws five pages for a Space that has not written its own. Three levels of control, in increasing order of how much you own:
 
@@ -100,7 +100,7 @@ A layout resolves upward from the request's directory, so `docs/_layout.html` wr
 
 ## `_pages/<id>.html` <Badge variant="accent">Plus and up</Badge>
 
-A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives, the layout is not applied, and the theme controls stop repainting it. This full takeover requires Plus or Enterprise.
+A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives. The layout does not apply, and the theme controls stop repainting the page. This full takeover requires Plus or Enterprise.
 
 Each file has to be a complete HTML document beginning with `<!doctype html>`, and each is capped at 2 MiB. Like layouts, they resolve upward from the request's directory.
 
@@ -122,7 +122,7 @@ The runtime fills a small set of elements. Which ones are legal depends on the p
 
 An element used on the wrong page is `page_element_not_allowed`, and an `sf-` name that is not on this list is `unknown_page_element`.
 
-Two of those are load-bearing rather than decorative. The `access` page **must** render `<sf-access-lanes>`, otherwise the gate ships with no way in and publish fails with `access_lanes_missing`. And if that page declares a CSP with `form-action`, it has to include `'self'`, otherwise its own runtime forms are blocked and publish fails with `access_csp_form_action_missing_self`.
+Two of those are load-bearing rather than decorative. The `access` page **must** render `<sf-access-lanes>`. Otherwise the gate ships with no way in, and publish fails with `access_lanes_missing`. And if that page declares a CSP with `form-action`, it has to include `'self'`. Otherwise its own runtime forms are blocked, and publish fails with `access_csp_form_action_missing_self`.
 
 An `index` page that never renders `<sf-files>` publishes with a warning rather than an error, since a listing with no list is a choice you may have meant.
 
@@ -178,7 +178,7 @@ _pages/*.html takeovers require Plus or Enterprise. Remove the templates or upgr
     sf pages pull
     ```
 
-    With no argument it writes `_layout.html` plus all five `_pages/<id>.html`. Pass `layout` or one page id for just that. The command is fully local and never calls the API. An existing file makes the write fail, and there is no force flag, so move or delete it first.
+    With no argument it writes `_layout.html` plus all five `_pages/<id>.html`. Pass `layout` or one page id for just that. The command is fully local and never calls the API. An existing file makes the write fail, and there is no force flag. Move or delete it first.
   </Step>
 
   <Step title="Check before you publish">
@@ -225,4 +225,4 @@ Nothing is served leniently. Page compilation runs at finalize, and the first di
 
 The dashboard's [Customization](/customization) tab writes the same theme tokens onto the Space rather than into the version, which is why its values win over `sf.jsonc` and apply without a republish.
 
-A page you ship as `_pages/<id>.html` opts out of that entirely. Customization's preview badges it **Code override.** and says theme controls do not repaint it, because they do not: your document is served as written, with only the elements above filled in.
+A page you ship as `_pages/<id>.html` opts out of that entirely. Customization's preview badges it **Code override.** and says theme controls do not repaint it. That's accurate: your document is served as written, with only the elements above filled in.

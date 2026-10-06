@@ -1,11 +1,11 @@
 ---
 title: sf teams
-description: Create teams, switch the default one, invite and remove members, and set the access preset new Spaces get
+description: Create and select teams, list members and invitations, set defaults for new Spaces, and check which actions require the dashboard
 sidebar:
   order: 6
 ---
 
-After this page you can create a team, pick which one your publishes land in, invite people and manage those invitations, remove members, and decide what access new Spaces start with.
+Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Plus](/billing#seats); CLI credentials can list members and invitations, but invitation and membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
 A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
 
@@ -39,7 +39,7 @@ Set default team.
 sf teams switch [TEAM]
 ```
 
-Sets the default team for future CLI publishes. The selection is stored per login and cleared when you log in again, so it can never outlive the identity that made it.
+Sets the default team for future CLI publishes. The selection is stored per login and cleared when you log in again. It can never outlive the identity that made it.
 
 ### Arguments
 
@@ -108,28 +108,13 @@ Accept a team invitation.
 sf teams accept INVITATION
 ```
 
-Accepts an invitation and joins the team as the current login.
+Accept the invitation through its join link in the dashboard. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`. Once you accept in the dashboard, credentials approved for all teams can see the new team.
 
 ### Arguments
 
 | Argument | Default | What it is |
 | --- | --- | --- |
 | `<invitation>` | required | Invitation ID from the invite link |
-
-### Example
-
-```bash
-sf teams accept inv_123
-```
-
-### Output
-
-```text
-Joined team acme as member.
-Team: team_…
-```
-
-`--json` returns `{ team }` with `teamId`, `teamSlug`, `userId`, and `role`.
 
 ## sf teams defaults
 
@@ -201,6 +186,8 @@ Remove a team member. Aliases: `sf teams members remove`, `sf teams members dele
 sf teams members rm MEMBER
 ```
 
+Remove the member from the dashboard under **Members**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
+
 ### Arguments
 
 | Argument | Default | What it is |
@@ -212,16 +199,6 @@ sf teams members rm MEMBER
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
-
-### Example
-
-```bash
-sf teams members rm jane@example.com
-```
-
-### Output
-
-`Removed team member jane@example.com.` `--json` returns `{ removed: true, member }`.
 
 ## sf teams invitations ls
 
@@ -257,7 +234,7 @@ Create a team invitation. Alias: `sf teams invitations create`.
 sf teams invitations add EMAIL
 ```
 
-Invites a person to the team. They join with the role you set once they accept.
+Send the invitation from the dashboard under **Members → Invite member**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
 
 ### Arguments
 
@@ -272,21 +249,6 @@ Invites a person to the team. They join with the role you set once they accept.
 | `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
 | `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
-### Example
-
-```bash
-sf teams invitations add jane@example.com --role member
-```
-
-### Output
-
-```text
-Invited jane@example.com as member.
-Invitation: inv_…
-```
-
-`--json` returns `{ invitation }`.
-
 ## sf teams invitations resend
 
 Resend a team invitation.
@@ -295,23 +257,13 @@ Resend a team invitation.
 sf teams invitations resend INVITATION
 ```
 
-Resends a pending invitation.
+Resend the invitation from the dashboard under **Members → Pending**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
 
 ### Arguments
 
 | Argument | Default | What it is |
 | --- | --- | --- |
 | `<invitation>` | required | Invitation ID |
-
-### Example
-
-```bash
-sf teams invitations resend inv_123
-```
-
-### Output
-
-`Resent invitation to jane@example.com.` `--json` returns `{ invitation }`.
 
 ## sf teams invitations cancel
 
@@ -321,27 +273,10 @@ Cancel a team invitation.
 sf teams invitations cancel INVITATION
 ```
 
-Cancels a pending invitation. The invitee can no longer accept it. This one always confirms: agent mode cannot auto-approve it, so scripts must pass `--yes`.
+Cancel the invitation from the dashboard under **Members → Pending**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`. Passing `--yes` only skips the CLI confirmation; it does not grant permission.
 
 ### Arguments
 
 | Argument | Default | What it is |
 | --- | --- | --- |
 | `<invitation>` | required | Invitation ID |
-
-### Example
-
-```bash
-sf teams invitations cancel inv_123 --yes
-```
-
-### Output
-
-`Canceled invitation inv_123.` `--json` returns `{ canceled: true, invitation }`.
-
-### Errors
-
-| Code | Exit | What to do |
-| --- | --- | --- |
-| `confirmation_required` | 2 | Non-interactive run without `--yes`. Pass `--yes` |
-| `cancelled` | 130 | You declined the prompt |

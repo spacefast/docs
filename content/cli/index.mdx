@@ -35,7 +35,7 @@ sf publish ./dist
 
 `sf login` prints a code and a link, opens your browser, and polls until you approve. See [Authentication](/cli/login) for the read-only variant and for signing in with an API key.
 
-Bare `sf` runs `sf status`, so typing `sf` in a project tells you who you are, which team is default, and which Space the directory is linked to.
+Bare `sf` runs `sf status`. Typing `sf` in a project tells you who you are, which team is default, and which Space the directory is linked to.
 
 ## Global flags
 
@@ -85,7 +85,7 @@ Commands that act on a Space add `--space`, `-o, --team`, and `--claim-token`. C
 }
 ```
 
-`error.code` is stable, `error.retryable` says whether re-running the same command unchanged could work, and `error.recovery` is one runnable hint. Validation failures add `error.pointer`, an RFC 6901 JSON Pointer into the failing input. List endpoints pass their `{ data, pagination }` envelope through without double-wrapping. Capability query parameters and blob paths are replaced with `[redacted]`.
+`error.code` is stable. `error.retryable` says whether re-running the same command unchanged could work. `error.recovery` is one runnable hint. Validation failures add `error.pointer`, an RFC 6901 JSON Pointer into the failing input. List endpoints pass their `{ data, pagination }` envelope through without double-wrapping. Capability query parameters and blob paths are replaced with `[redacted]`.
 
 ## Exit codes
 
@@ -105,7 +105,7 @@ Commands that act on a Space add `--space`, `-o, --team`, and `--claim-token`. C
 
 ## Interactive and non-interactive
 
-The CLI prompts only when stdin and stdout are both TTYs, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
+The CLI prompts only when stdin and stdout are both connected to a terminal, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
 
 Destructive actions need an answer either way. Pass `--yes` (or set `SPACEFAST_YES=1`) to proceed without a prompt. Without it, a non-interactive run fails with `confirmation_required` and exit 2. Declining a prompt exits 130.
 

@@ -5,11 +5,13 @@ sidebar:
   order: 1
 ---
 
-By the end of this page you have a site live on a `view.fast` hostname, a second version you can roll back to, and a custom domain pointed at it.
+You can publish a folder of static files and get a live `view.fast` URL in one command, then point your own domain at it.
 
 ## Before you start
 
 You need Node.js 20.3 or newer and a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
+
+Don't want to install anything? Open the dashboard and drag a folder, a `.zip`, or a single `index.html` onto the window — no account needed. See [Drop](/publish#publish) for the full walkthrough.
 
 <Steps>
   <Step title="Install the CLI">
@@ -93,7 +95,12 @@ You need Node.js 20.3 or newer and a folder of built static files. Any framework
 
 ## Next
 
+Working with other people? If your Space is still anonymous, [claim it first](/anonymous-and-claim#claim-it). Signed-in publishes already belong to a team. Free and Go allow only the owner; adding another member needs [Plus](/billing#seats). Then [invite members](/teams#invite-someone) to publish and roll back together. Owners and admins can manage domains and invitations. Choose whether new Spaces start open to the team, private, or public in [team access settings](/teams#default-access-for-new-spaces).
+
 <CardGroup cols={2}>
+  <Card title="Work with a team" href="/teams" icon="users">
+    Invite members, choose roles, and set access for new Spaces.
+  </Card>
   <Card title="Let your agent publish" href="/agents" icon="bot">
     Install the Spacefast plugin for Claude Code, Cursor, or Codex.
   </Card>

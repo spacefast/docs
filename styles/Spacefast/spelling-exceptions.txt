@@ -207,6 +207,7 @@ stderr
 stdin
 stdout
 streamable
+subcommand
 subcommands
 subdomain
 subdomains

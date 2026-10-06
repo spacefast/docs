@@ -4,7 +4,7 @@ description: The _redirects and _headers files, the routing rules in sf.jsonc, h
 sidebar: { order: 3 }
 ---
 
-After this page you can redirect, rewrite, proxy, and set response headers on a published Space, and you know which rule wins when two of them match the same URL.
+You can redirect, rewrite, proxy, and set response headers on a published Space. Redirect rules run in order, while matching header blocks accumulate. Rewrites and 404 rules can yield to real files.
 
 Nothing here is evaluated per request. Spacefast compiles your rules at publish time into a table the edge reads, so a rule that behaves unexpectedly is almost always a compile-time problem. `sf routing inspect` shows you the compiled result before you publish.
 
@@ -83,11 +83,11 @@ Header names must match `^[A-Za-z0-9-]+$`. Some names are owned by the platform 
 | `cdn-cache-control`, `cloudflare-cdn-cache-control`, `netlify-cdn-cache-control`, `surrogate-control` | `header_cdn_cache_unsupported` |
 | `Basic-Auth` | `header_basic_auth_unsupported` |
 
-`Basic-Auth` is rejected before anything else, and the offending line is redacted out of the diagnostics and stripped from the compiled bytes so the credential never reaches a log. For real access control, see [Access and sharing](/access).
+`Basic-Auth` is rejected before anything else. The offending line is redacted from the diagnostics and stripped from the compiled bytes, so the credential never reaches a log. For real access control, see [Access and sharing](/access).
 
 `Cache-Control` is allowed and warns with `header_cache_control_platform_managed`. It applies to browser responses; shared caching is managed for you. See [Caching](/caching).
 
-`_headers` matchers cannot include a port, and they match the raw pathname, so they are sensitive to a trailing slash where `_redirects` is not. Header rules also apply to the URL the visitor asked for, not to the path a rewrite landed on.
+`_headers` matchers cannot include a port. They match the raw pathname, so they are sensitive to a trailing slash where `_redirects` is not. Header rules also apply to the URL the visitor asked for, not to the path a rewrite landed on.
 
 ## Rules in `sf.jsonc`
 
@@ -187,7 +187,7 @@ The edge cache key is host, path, and query. It does not read `Vary`. Any condit
 
 ### Rules versus real files
 
-A `rewrite` or a `404` rule skips itself when the request path resolves to a committed file, unless you set `force`, and evaluation then continues to later rules. A `redirect` and a `proxy` never consult the file table at all.
+A `rewrite` or a `404` rule skips itself when the request path resolves to a committed file, unless you set `force`. Evaluation then continues to later rules. A `redirect` and a `proxy` never consult the file table at all.
 
 ### What happens to the query string
 

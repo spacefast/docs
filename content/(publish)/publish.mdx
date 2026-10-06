@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-After this page you can publish a folder from the CLI, the dashboard, or the API, predict which files make it and which get dropped, and read a receipt well enough to know whether your site is live.
+A folder can be published from the CLI, dashboard, or API, and the receipt it returns tells you whether the site is live.
 
 ## The mental model
 
@@ -161,7 +161,7 @@ The parts you actually read:
 | `diagnostics` | Warnings, dropped paths, and `noop_publish` |
 | `operation` | The handle to poll when finalize kept running |
 
-`next.action` is the field to branch on. `done` means there is nothing left to do, and the `hint` says why, for example `Live. Nothing left to do.` An `unpromoted` outcome with `done` means the version is ready and you need to promote it yourself, and the promote URL is right there in `links.promote`.
+`next.action` is the field to branch on. `done` means there is nothing left to do, and the `hint` says why, for example `Live. Nothing left to do.` An `unpromoted` outcome with `done` means the version is ready and you need to promote it yourself. The promote URL is right there in `links.promote`.
 
 Anonymous publishes add a `claim` block instead of the `access` link. See [Publish without an account](/anonymous-and-claim).
 

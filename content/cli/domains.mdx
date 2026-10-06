@@ -5,7 +5,7 @@ sidebar:
   order: 20
 ---
 
-After this page you can attach a custom domain, make it primary or a redirect, watch DNS and TLS come up, take a hostname off a Space, and compile your `_redirects` and `_headers` before you publish them.
+Attaching a custom domain to a Space is three API calls in one command, with DNS and TLS readiness tracked as they come up.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and, except `sf routing inspect`, the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli) for those.
 
@@ -36,7 +36,7 @@ sf domains add <hostname> [--space <value>] [--role standard|primary|redirect]
 
 The command makes three calls: it creates the domain in the Space's team, attaches it to the Space with the role you asked for, and queues a DNS check.
 
-`--wait` polls the Space's runtime until it is active with a live version, then sends a `HEAD` request to the hostname and requires the response to carry `x-spacefast-runtime: 1` and the live version id. Redirect-role domains skip that serve check.
+`--wait` polls the Space's runtime until it is active with a live version, then sends a `HEAD` request to the hostname. The response must carry `x-spacefast-runtime: 1` and the live version id. Redirect-role domains skip that serve check.
 
 ```bash
 sf domains add example.com --space docs
@@ -103,7 +103,7 @@ Verification: verified
 Operation: opr_xxxxxxxx
 ```
 
-On `pending` or `failed` it reprints the required DNS records and tells you to rerun the check, or to run `sf domains diagnostics <name>` for the records it actually observed.
+On `pending` or `failed` it reprints the required DNS records and tells you to rerun the check. Run `sf domains diagnostics <name>` instead to see the records it actually observed.
 
 ## sf domains diagnostics
 

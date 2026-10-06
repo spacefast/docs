@@ -5,7 +5,7 @@ sidebar:
   order: 10
 ---
 
-API keys authenticate anything that cannot run a browser login: CI jobs, scripts, servers, agents. A key belongs to a team and carries the permissions of the preset you created it with. After this page you can mint one, see what exists, and turn one off.
+API keys authenticate anything that cannot run a browser login: CI jobs, scripts, servers, agents. A key belongs to a team and carries the permissions of the preset you created it with.
 
 All three subcommands need a login or a `--token` of their own, and they act on your default team unless you name another. Every command here also takes the [global flags](/cli#global-flags).
 
@@ -56,7 +56,7 @@ Store this secret now. It is only shown once.
 
 The secret appears once and is never retrievable. Copy it straight into your secret store.
 
-With `--json`, `data` carries `apiKey` and the compiled `permissions` array, and the secret is replaced with a note saying it was shown once. Run the command without `--json` when you need the value, or pipe the human output where you want it.
+With `--json`, `data` carries `apiKey` and the compiled `permissions` array. The secret is replaced with a note saying it was shown once. Run the command without `--json` when you need the value, or pipe the human output where you want it.
 
 Use the key by exporting `SPACEFAST_TOKEN`, passing `--token`, or storing it with `sf login --token`.
 

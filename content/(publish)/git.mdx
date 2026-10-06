@@ -1,13 +1,15 @@
 ---
 title: Publish from Git
-description: Push to a Spacefast remote, or connect a GitHub repository and let every push build and publish itself
+description: Push to a Spacefast remote or connect GitHub, choose which branches build, and control which versions go live
 sidebar:
   order: 4
 ---
 
-After this page you can publish with `git push`, connect a GitHub repository so pushes build on their own, decide which branch goes live, and find out why a push produced nothing.
+Keep your source in Git and publish from a Spacefast remote or a connected GitHub repository. Connected repository pushes queue builds only when auto-deploy is enabled for that branch; deleting a branch does not build it.
 
 Two lanes. The Spacefast remote needs no external host and no app install. A GitHub connection keeps your repository where it is and reacts to its webhooks.
+
+The `sf git` and `sf source` command families name the same two connection types in different words — on purpose, not a typo.
 
 ## Source and deployment files
 
@@ -158,11 +160,11 @@ sf git github installations --space docs
 sf git github repos <installation> --space docs
 ```
 
-`sf git update` takes `--clear-credential` to remove a stored token, and passing it together with `--credential` is a validation error. `sf git disconnect` confirms first. Disconnecting stops pushes from building the Space. What is already published stays live, your domains do not move, and the repository itself is untouched.
+`sf git update` takes `--clear-credential` to remove a stored token, and passing it together with `--credential` is a validation error. `sf git disconnect` confirms first. Disconnecting stops pushes from building the Space. What is already published stays live and your domains do not move. The repository itself is untouched.
 
 ## Two connection-type vocabularies
 
-The `sf git *` commands and the `sf source *` commands name the same two connection kinds differently. This is real, not a typo.
+The exact values each command family uses:
 
 | Command family | Values | Meaning |
 | --- | --- | --- |

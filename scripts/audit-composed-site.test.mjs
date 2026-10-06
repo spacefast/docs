@@ -1,4 +1,5 @@
-import { expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import test from "node:test";
 
 import { unexpectedAuditErrors } from "./audit-composed-site.mjs";
 
@@ -50,7 +51,7 @@ test("allows only exact Website-owned composition dependencies", () => {
     },
   ];
 
-  expect(unexpectedAuditErrors(diagnostics, ["/cookie-banner.js", "/help"])).toEqual([
+  assert.deepEqual(unexpectedAuditErrors(diagnostics, ["/cookie-banner.js", "/help"]), [
     diagnostics[2],
     diagnostics[6],
   ]);

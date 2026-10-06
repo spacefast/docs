@@ -26,7 +26,7 @@ Verify that your application handles each failure it can expose to a customer. A
 
 ## Prepare the live tenant
 
-Create the live tenant's system Space, [designate it](/platforms/partner-api/configuration#designate-a-system-space) with the live tenant API key, and publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
+Create the live tenant's system Space and [designate it](/platforms/partner-api/configuration#designate-a-system-space) with the live tenant API key. Publish it once. Both the test and live system Spaces need a live version before promotion. Keep the live content you want to serve in the live system Space.
 
 Register and activate a separate live signing issuer. Promotion preserves the live issuer declaration and never copies the test issuer. Store live API keys and webhook secrets separately from test secrets.
 
@@ -43,7 +43,7 @@ curl --fail-with-body -sS -X POST \
   -d '{}'
 ```
 
-The body is required, even though it is empty. Generate `PROMOTION_KEY` (a UUID) once per promotion and reuse it when retrying after a timeout, so a retry replays the first result instead of promoting again.
+The body is required, even though it is empty. Generate `PROMOTION_KEY` (a UUID) once per promotion. Reuse it when retrying after a timeout, so a retry replays the first result instead of promoting again.
 
 Promotion publishes the test system configuration onto the live system Space while retaining its live content. The test tenant remains unchanged. New domains and other live resources require their own verification.
 
@@ -57,10 +57,10 @@ Complete this sequence with a dedicated live test customer before admitting cust
 2. Open its returned HTTPS URL and verify the content. Repeat through the custom customer hostname if you use one.
 3. Mint a live customer JWT and read that customer's Space. Confirm that a different customer's JWT cannot read it.
 4. Receive a webhook on your HTTPS receiver. Verify its raw-body signature, record the event ID, and acknowledge with `2xx`.
-5. Return a temporary error from the receiver. Confirm that the same event is retried and that new matching events have delivery records while the endpoint is `failing`.
+5. Return a temporary error from the receiver. Confirm that the same event is retried. New matching events should have delivery records while the endpoint is `failing`.
 6. Restore the receiver and confirm delivery recovery. Exercise manual redelivery and deduplicate by event ID.
 7. Suspend and restore the test customer. Check the serving page and mutation refusals in both states.
-8. Rotate a tenant API key and a signing key. Verify the replacement before revoking the old credential, then confirm that the revoked credential fails.
+8. Rotate a tenant API key and a signing key. Verify the replacement before revoking the old credential. Then confirm that the revoked credential fails.
 9. Check the custom API gateway with a foreign tenant credential and a caller-supplied tenant header. The gateway must enforce its configured tenant.
 10. Delete the dedicated test customer's resources when verification is complete.
 
