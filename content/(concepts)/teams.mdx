@@ -53,6 +53,8 @@ Three roles, and the one you hold in a team caps everything you do there, whethe
 | Grant the owner role | Yes | No | No |
 | Transfer ownership | Yes | No | No |
 
+Invitation and membership changes require a signed-in person in the dashboard. CLI and API credentials cannot perform them, even for an owner or admin. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
+
 Owner and admin differ in exactly one place. An admin can hand out `admin` and `member`, but only an owner can make someone else an owner.
 
 ## Invite someone
@@ -71,7 +73,7 @@ Your team needs [Plus](/billing#seats) to add another member. Free and Go includ
   </Step>
 </Steps>
 
-From a terminal, `sf teams invitations add teammate@example.com --role member`, plus `ls`, `resend`, and `cancel`.
+From a terminal, `sf teams invitations ls` lists invitations. Use the dashboard to send, resend, cancel, or accept one.
 
 Things that catch people out:
 

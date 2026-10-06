@@ -81,3 +81,13 @@ Coverage by original PR section:
 The style guide and contributor instructions now require this meaning check. Existing built-output assertions were updated where they reinforced a misleading claim. No new regex suite is presented as independent proof of product behavior. Generated references remain producer-owned and unchanged. The previously recorded support-contact and API-key preset gaps remain outside these corrections.
 
 Verification with Bun 1.3.11 and Node 24 passed: frozen dependency install, generated-reference and command-example checks, type check, strict link validation, production build, all 26 docs tests, composed-site audit, public-safety check, Vale, route verification, and `git diff --check`.
+
+## Review follow-through, October 6, 2026
+
+The next review caught two places the semantic pass had not reconciled: the `sf teams` lead contradicted its command examples, and the pagination eval still assumed a universal default. The team CLI guide now names the documented credential restriction beside all five affected commands, including invitation acceptance, and replaces success examples with dashboard instructions. The Teams guide now recommends the CLI only for listing invitations and states the credential restriction beside its role table.
+
+These corrections follow the authored authentication and permissions contract in `/authentication`, `/api-keys`, and `/agents/permissions`. The generated CLI snapshot lists command syntax but does not establish that a CLI credential can execute the action. No team membership was changed to test authorization, and the producer-owned snapshot was not edited.
+
+The pagination eval now expects endpoint-specific defaults, offset paging, and unpaginated lists. Checking the adjacent eval expectations also found an overly broad cache-purge answer; that case now names public static HTML, best-effort purge, and immutable version-hostname exceptions. These are corrected evaluation expectations, not a claim that the agent-based eval has run.
+
+Verification passed with Bun 1.3.11 and Node 24: the full repository check sequence, all 26 docs tests, and `git diff --check`. All 23 eval cases parsed and passed a structural check; no agent-based eval result is claimed.

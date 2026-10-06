@@ -29,12 +29,12 @@ questions:
     expected: ["10"]
     routes: /cli
   - id: html-cache-header
-    question: What Cache-Control header do HTML pages get, and how do I bust it?
-    expected: ["s-maxage=600", "publishing purges the whole host"]
+    question: For public static HTML without header overrides or no-cache rules, what is the default Cache-Control policy, and what are the limits of a publish purge?
+    expected: ["s-maxage=600", "max-age=0", "whole-host purge when a new version is activated", "best-effort", "ten-minute shared lifetime is the backstop", "immutable version hostnames are not purged"]
     routes: /caching
   - id: pagination
-    question: What are the default and maximum page sizes on list endpoints, and how do I get the next page?
-    expected: ["default 20", "maximum 100", "pass nextCursor as cursor"]
+    question: What are the common cursor-pagination defaults, how do storage objects differ, and do all list endpoints use cursors?
+    expected: ["common default 20", "storage objects default 50", "maximum 100 for these cursor-paginated lists", "pass nextCursor as cursor", "documentation search uses offsets", "some lists are unpaginated"]
     routes: /api/pagination
   - id: rate-limit
     question: What are the API request limits per minute for an authenticated credential and an unauthenticated client IP?
