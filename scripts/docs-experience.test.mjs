@@ -72,6 +72,9 @@ test("Database gives the Zero prerequisite before query instructions", async () 
   assert.ok(prerequisite >= 0 && query > prerequisite);
   assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\)/u);
   assert.match(database.slice(prerequisite, query), /kind: "zero"/u);
+  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime#declare-it\)/u);
+  assert.match(database.slice(prerequisite, query), /`server`/u);
+  assert.match(database.slice(prerequisite, query), /server file is required/iu);
   assert.match(database.slice(prerequisite, query), /sf init --runtime zero/u);
 });
 
@@ -111,8 +114,12 @@ const firstFactCases = [
   },
   {
     route: "/stats",
-    question: "Does traffic count crawlers?",
-    evidence: [/crawler traffic/iu, /left out|excluded/iu],
+    question: "Which traffic counts exclude crawlers?",
+    evidence: [
+      /views exclude crawlers and failed requests/iu,
+      /requests count every HTTP request/iu,
+      /unique visitors .* without those filters/iu,
+    ],
   },
 ];
 

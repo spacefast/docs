@@ -3,7 +3,7 @@ title: MCP server
 description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its five tools, execute sandbox, and approval model
 ---
 
-Your client never actually holds a Spacefast API token — each authenticated request mints a short-lived delegation token instead, so a leaked MCP session can't be replayed against the wider API.
+The hosted MCP server uses OAuth and accepts inline files. The local server uses your CLI login or `SPACEFAST_TOKEN` and can publish files from your workspace.
 
 :::note[Already connected through Claude Desktop or a one-click plugin?]
 You don't need this page. It's the technical reference for wiring up the MCP server by hand — see [Claude Desktop](/agents/claude-desktop) or [Claude Code](/agents/claude-code) for the point-and-click setup instead.
@@ -58,7 +58,7 @@ Each tool declares the scopes it needs, and clients can read them from `tools/li
 
 A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
-That delegation token lives five minutes and carries the source credential's policy verbatim.
+The hosted server mints a delegation token for each authenticated request instead of handing your client a Spacefast API token. That delegation token lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session can't be replayed against the wider API.
 
 Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
 

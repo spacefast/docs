@@ -41,9 +41,9 @@ Publish this folder to Spacefast and give me the live URL.
 
 A **Space** is one site with a stable hostname. Every publish creates a new **version**, an immutable snapshot with its own URL that never changes. The `live` channel points at one version. Promoting or rolling back moves that pointer. Nothing gets rebuilt. (New terms piling up? See the [glossary](/glossary).)
 
-Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs opt into the Zero runtime with one line of config.
+Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs declare a [Zero runtime](/zero-runtime#declare-it) and server entry.
 
-When more than one person works on a site, its team owns the Space, domains, and API keys. Members can publish and roll back without passing around one person's login, while team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
+Every claimed Space belongs to a team, even when you are its only member. On [Plus](/billing#seats), you can add members who publish and roll back without sharing your login. Free and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
 
 <CardGroup cols={2}>
   <Card title="Quickstart" href="/quickstart" icon="rocket">

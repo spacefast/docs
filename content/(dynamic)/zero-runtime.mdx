@@ -5,13 +5,13 @@ sidebar:
   order: 0
 ---
 
-Every account gets Zero for free, but it only turns on when your `sf.jsonc` explicitly declares `kind: "zero"`.
+Zero is available on every account, with [usage allowances and metered rates](/usage). To use it, declare the full [runtime block](#declare-it) in `sf.jsonc` and provide the server entry.
 
 ## What Zero is
 
 Zero is the runtime a Space gets when its project declares it. Your server code runs on the machine that already serves the site, next to that space's own MySQL database, inside a QuickJS runner. You write one TypeScript app. It declares tables, queries, mutations, actions, and HTTP endpoints. `sf publish` compiles it into a **capsule** the platform installs on the space.
 
-Zero is on for every account. There is nothing to enable.
+There is no account-level switch to enable.
 
 The other runtime is [Functions](/functions), a worker for npm-heavy code and framework output like OpenNext. One version declares one runtime, not both.
 

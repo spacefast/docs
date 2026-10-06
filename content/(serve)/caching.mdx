@@ -1,14 +1,14 @@
 ---
 title: Caching
-description: The two cache policies a published Space sends, which files get which, and what a publish does to copies already out there
+description: Default cache policies for public static files, header overrides, responses that are never cached, and what publishing refreshes
 sidebar: { order: 4 }
 ---
 
-Every file in a published Space gets one of exactly two `Cache-Control` headers, and republishing is how you force a fresh response.
+Republish to request a fresh response from the edge. Public static files use two default cache policies, with exceptions for protected responses, conditional routing, and header overrides.
 
 ## Two policies
 
-A published Space sends one of two headers on its static files. There is nothing in between.
+Public static files use these defaults unless a header override or a [no-cache rule](#responses-that-are-never-cached) applies.
 
 | Policy | `Cache-Control` |
 | --- | --- |
