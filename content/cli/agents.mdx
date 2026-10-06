@@ -1,11 +1,11 @@
 ---
 title: mcp, setup, skills, agents
-description: Configure any coding agent for Spacefast, run the MCP server or its authenticated proxy, and manage the bundled agent skill
+description: Configure supported coding agents for Spacefast, run the MCP server or its authenticated proxy, and manage the bundled agent skill
 sidebar:
   order: 26
 ---
 
-One command points Claude Code, Cursor, Codex, or any other MCP client at Spacefast.
+`sf setup agent` configures detected or selected supported clients, including Claude Code, Cursor, and Codex. Other MCP clients may need manual configuration.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`). `sf mcp` and `sf mcp proxy` do not support `--json`, because stdout carries the MCP protocol.
 

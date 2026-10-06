@@ -5,7 +5,7 @@ sidebar:
   order: 22
 ---
 
-A Space's database can be inspected, migrated, and dumped without ever touching a connection string — there isn't one. You can also fire a declared cron job on demand instead of waiting for its schedule.
+Inspect, migrate, and dump a Zero Space's database without a connection string. Functions workers use `env.DB` or the SQL console instead of the Zero table commands. You can also trigger a declared cron job on demand.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 

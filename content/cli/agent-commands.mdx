@@ -5,7 +5,7 @@ sidebar:
   order: 27
 ---
 
-The commands on this page answer questions and finish jobs rather than change what is published — look up any Space you can reach, or pull a private route straight from the terminal.
+Use `sf inspect` and `sf fetch` to read a Space you can access. Other helpers change state: `sf apply` makes saved settings live, and `sf continue` updates your saved credential after an approved claim handoff.
 
 Every command here also takes the [global flags](/cli#global-flags).
 
@@ -155,7 +155,7 @@ sf continue [--claim-token <value>]
 sf continue
 ```
 
-This is the last step of the anonymous flow. You published without an account, someone claimed the Space, and the space key in `.spacefast/state.json` stopped being the right credential. `sf continue` trades it for a durable key bound to the claimed Space, in place, so the same directory keeps publishing.
+This is the last step of an anonymous flow where the person claiming the Space chose [Claim & keep access](/anonymous-and-claim#keeping-your-agent-publishing). `sf continue` trades the saved space key for a durable key bound to the claimed Space, so the same directory keeps publishing. Without that approval, reconnect with a new credential.
 
 Run it from the directory you published from.
 

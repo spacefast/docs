@@ -1,11 +1,11 @@
 ---
 title: API overview
-description: Base URL, response envelopes, content types, and a one-minute curl walkthrough from credential to live URL
+description: Base URL, response envelopes, content types, and a curl walkthrough from credential to published version
 sidebar:
   order: 1
 ---
 
-Everything the dashboard and the `sf` CLI do runs through this same API — authenticate a request, read any success or failure body, and publish a folder to a live URL with four curl calls.
+Use the Spacefast API to publish files, inspect Spaces, and manage resources within your credential's permissions. Publishing can return an operation that needs repeated polling before you know the result.
 
 ## Base URL and versioning
 
@@ -50,7 +50,7 @@ Success is always an object with a `data` member. Three shapes cover the whole A
 | Shape | When | Example operation |
 | --- | --- | --- |
 | `{ data }` | one resource, or a mutation with no background work | `GET /v1/spaces/{spaceId}` |
-| `{ data, pagination }` | any list | `GET /v1/spaces/{spaceId}/versions` |
+| `{ data, pagination }` | a cursor-paginated list | `GET /v1/spaces/{spaceId}/versions` |
 | `{ data, operation }` | a mutation that can outlive the request | `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` |
 
 `operation` is `null` when the work finished inside the request. See [Operations](/api/operations).
@@ -65,7 +65,7 @@ Send `application/json` on every request body. `POST /v1/publish` is the excepti
 
 Every response carries `X-Request-Id`. It equals the `requestId` in a problem document, and it is the value to quote when you ask for help.
 
-## One minute, four calls
+## Publish with curl
 
 <Steps>
   <Step title="Check the credential">
@@ -133,7 +133,7 @@ Stop when `data.status` is `succeeded`, `failed`, or `canceled`. Then read `spac
     Problem documents, the stable `code`, and every code the API can return.
   </Card>
   <Card title="Pagination" href="/api/pagination" icon="list">
-    One cursor scheme for every list.
+    Cursor paging, endpoint defaults, and other list shapes.
   </Card>
   <Card title="Rate limits" href="/api/rate-limits" icon="gauge">
     Per-credential and per-IP budgets, and what a 429 carries.

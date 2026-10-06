@@ -13,7 +13,7 @@ A named operation with a schema that a Space's WordPress publishes for agents to
 
 ## Build
 
-What happens when you hand Spacefast source code instead of a built output directory. It installs your dependencies, runs the build in a sandbox, and publishes the result as a version. See [Frameworks and builds](/frameworks).
+A build turns source code into publishable output. You can build locally or let Spacefast build remotely and publish the result. See [Frameworks and builds](/frameworks).
 
 ## Capsule
 
@@ -37,20 +37,20 @@ One rule in a Space's access list: it names an audience (public, team, one perso
 
 ## Live (the live channel)
 
-The pointer that decides which version a Space actually serves right now. Publishing, promoting, and rolling back all just move this pointer — nothing gets rebuilt. See [Versions and the live channel](/versions).
+The pointer that selects the version served at the live URL. Promoting or rolling back moves it to a retained, ready version without rebuilding. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
 
 ## Space
 
-One published site with a stable hostname. Everything else in these docs — versions, domains, access, functions — belongs to a Space. See [Spaces](/spaces).
+A container for a site's versions and access settings. It can exist before anything is published. Custom domains belong to a team and are assigned to a Space. See [Spaces](/spaces).
 
 ## Team
 
-The thing that owns your Spaces, domains, API keys, and billing. Every claimed Space belongs to exactly one team, even if you're its only member. See [Teams and members](/teams).
+The owner of Spaces, domains, API keys, and billing in a self-serve account, even when you are its only member. Partner API integrations can use external principals for customer ownership instead. See [Teams and members](/teams).
 
 ## Version
 
-An immutable snapshot created when a publish produces a new version. A ready version gets its own permanent URL that never changes. The [live](#live-the-live-channel) pointer names the version visitors see; it is empty before the first publish. See [Versions and the live channel](/versions).
+An immutable snapshot created when a publish produces a new version. A ready version gets its own URL, which serves the snapshot while the version is retained. The [live](#live-the-live-channel) pointer names the version visitors see; it is empty before the first publish. See [Versions and the live channel](/versions).
 
 ## Zero
 
-The runtime for a Space that needs a database, live queries, or scheduled jobs. One TypeScript app compiles into a [capsule](#capsule) with a MySQL database next to your code. The other dynamic option, alongside [Functions](#functions). See [Dynamic sites with Zero](/zero-runtime).
+The runtime for an app with live queries and a declared database schema. One TypeScript app compiles into a [capsule](#capsule) with a MySQL database next to your code. [Functions](#functions) also provides a database, and [crons](/crons) can call either runtime or static files. See [Dynamic sites with Zero](/zero-runtime).

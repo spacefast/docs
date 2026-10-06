@@ -1,6 +1,6 @@
 # Authored-docs writing audit
 
-The reviewer click-path and command comparisons in [DOCS_QA_COMPARISON.md](DOCS_QA_COMPARISON.md) measure answer findability and factual accuracy. Neither measures whether the authored prose is better for readers. This point-in-time audit checks the writing changes against `main` as of October 5, 2026. Repeatable checks for the current docs are in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md).
+The October 5 audit below measured structure and wording, but missed factual overstatements. Its candidate examples are historical, not verified guidance. The [October 6 semantic review](#semantic-review-october-6-2026) records the corrections and their evidence. Repeatable checks for the current docs are in [DOCS_TEST_SUITE.md](DOCS_TEST_SUITE.md).
 
 ## Method
 
@@ -29,7 +29,7 @@ The edited leads now put several useful answers before the reader has to scan th
 | Caching | How do I force a fresh response? | Promises to explain cache behavior | Says republishing forces one |
 | Traffic stats | Are crawlers included? | Promises to explain counts | Says crawler traffic is excluded |
 
-These rows are illustrative checks of what the opening now tells a reader, not an independent six-question success rate. The underlying facts and the full procedures remain on the pages.
+These rows record what the candidate openings claimed at the time, not an independent six-question success rate. Review later found that several claims dropped necessary qualifications, including the caching and traffic examples.
 
 For example, Versions opened with “After this page you know what a version holds, how it reaches `ready`, how the `live` pointer moves, and how to roll back to any earlier version in seconds.” It now opens with “A rollback doesn't rebuild anything — it just repoints `live` at a version that already exists, which is why it takes seconds, not minutes.” The new sentence answers the likely rollback question; the page still explains version states below it.
 
@@ -38,3 +38,46 @@ For example, Versions opened with “After this page you know what a version hol
 The manual review caught five candidate leads that were shorter but spent the first sentence on a less useful detail: slug validation on Spaces, polling mechanics on Logs, archive flags on Frameworks and builds, CLI naming on Publish from Git, and remote WP-CLI output on WordPress. Each now leads with the page's main task or mental model. The removed detail was checked elsewhere on the same page and retained or moved into the body.
 
 This audit establishes changes in structure and in which facts appear first. It does not show that real readers complete tasks faster or understand the docs better. Shorter openings could also lose useful context for some readers. That requires reader testing. Vale now passes after two existing technical plurals (`GETs` and `TTYs`) were written as plain explanations; its rules do not detect repeated sentence structures or judge whether a page leads with the right fact.
+
+## Semantic review, October 6, 2026
+
+Reviewed every changed MDX hunk in the PR: 78 existing pages plus the new glossary. Compared each rewrite with its original wording, then checked broader claims against the relevant procedures, exceptions, sibling guides, and producer-owned public reference snapshot. This was a documentation consistency audit, not a live product test or a reread of every unchanged paragraph.
+
+The first review fixed eight findings covering stats, caching, routing, anonymous key recovery, Zero pricing, hosted MCP authentication, team plan limits, and Zero setup. The follow-up applied the same reasoning across the full rewrite and corrected related claims at other entry points.
+
+| Claim family | Correction | Evidence checked |
+| --- | --- | --- |
+| Retry safety | Name the key, matching request scope, 24-hour replay window, and unstored outcomes that execute again | `content/api/idempotency.mdx`, Send a key / What is not stored |
+| Pagination | Limit the common cursor model to endpoints that use it; retain endpoint defaults, ordering, offset paging, and unpaginated lists | `generated/openapi/api.json`: `searchDocs`, `listSpaceStorageObjects`, `listSpaceDomains` |
+| Publish and rollback | Preserve no-op publishes, ready/retained targets, manual promotion, and preview behavior | Public reference: `createSpaceVersion`, `promoteSpaceVersion`; `content/(concepts)/versions.mdx`; `content/(publish)/ci.mdx` |
+| URL lifetime | Separate a stable version URL from retained files; distinguish domain attachment from slug rename | `content/(concepts)/spaces.mdx`, Renaming; `content/cli/versions.mdx`, sf versions rm |
+| Access | Revoking one matching grant does not revoke other grants or the team's permissions | `content/(serve)/access.mdx`, scoped grants; `content/(concepts)/teams.mdx`, role and default-access tables |
+| Runtime setup | Scope auto-detection to Functions layouts; preserve the Zero declaration and the Functions database alternative | `content/(dynamic)/functions.mdx`, Where the code lives / Declare it; `content/cli/db.mdx` |
+| Variables and logs | A queued re-finalize can apply variables; logs have retention, ingestion delay, and static-runtime limits | `content/(dynamic)/environment-variables.mdx`; `content/(dynamic)/logs.mdx`; `listSpaceRuntimeLogs` |
+| Archives and Git | Preserve prebuilt archives, branch auto-deploy controls, and the GitHub App prerequisite | `generated/cli/index.md`, sf publish `--prebuilt`; `content/(publish)/git.mdx`; `content/cli/git.mdx` |
+| CLI helpers | Linking selects a Space rather than removing all publish options; apply and continuation helpers mutate state; continuation needs claim approval | `content/cli/project.mdx`; `content/cli/agent-commands.mdx`; `content/(publish)/anonymous-and-claim.mdx` |
+| WP-CLI and storage | Remote WP-CLI returns no printed output, even for read commands; object IDs do not replace read keys | `content/(dynamic)/wordpress.mdx`, Local versus remote; `content/(dynamic)/storage.mdx`, returned URL |
+| Agent reach | Keep supported-client detection, skill installation, permission ceilings, human-only actions, and team-automation revocation exceptions | `content/cli/agents.mdx`; `content/agents/skills.mdx`; `content/agents/permissions.mdx` |
+| Ownership and billing | Distinguish self-serve teams from partner customer ownership; billing reads differ from plan changes; key rotation depends on switching consumers first | `createSpace` public reference; `content/platforms/partner-api/customers.mdx`; `content/(account)/billing.mdx`; `content/(account)/api-keys.mdx` |
+| Cache and schedule application | Repeat public-cache exceptions in troubleshooting; crons follow the live version | `content/(serve)/caching.mdx`; `listSpaceCrons` public reference |
+| Sentence splitting | Limit missing generated CSS to the dynamic class instead of declaring the whole app unstyled | `content/(dynamic)/zero-runtime.mdx`, Styling |
+
+Coverage by original PR section:
+
+| Section | Pages compared |
+| --- | --- |
+| Account | 3: api-keys, authentication, billing |
+| Concepts | 3: spaces, teams, versions |
+| Dynamic | 8: crons, database, environment-variables, functions, logs, storage, wordpress, zero-runtime |
+| Publishing | 8: anonymous-and-claim, ci, frameworks, git, publish, recipes/html, recipes/next, wordpress-data-sources |
+| Reference | 3: config-file, glossary, limits |
+| Serving | 8: access, caching, customization, domains, routing, site-pages, stats, urls |
+| Agents | 9: claude-code, claude-desktop, codex, cursor, mcp-server, other-clients, permissions, sf-setup, skills |
+| API | 9: authentication, errors, idempotency, index, operations, pagination, rate-limits, sdk, webhooks |
+| CLI | 20: agent-commands, agents, api-keys, api, builds, db, domains, env, git, index, login, project, publish, share, source, spaces, storage, teams, versions, zero |
+| Entry pages | 3: index, quickstart, troubleshooting |
+| Platforms | 5: partner-api/configuration, customers, go-live, index, tokens |
+
+The style guide and contributor instructions now require this meaning check. Existing built-output assertions were updated where they reinforced a misleading claim. No new regex suite is presented as independent proof of product behavior. Generated references remain producer-owned and unchanged. The previously recorded support-contact and API-key preset gaps remain outside these corrections.
+
+Verification with Bun 1.3.11 and Node 24 passed: frozen dependency install, generated-reference and command-example checks, type check, strict link validation, production build, all 26 docs tests, composed-site audit, public-safety check, Vale, route verification, and `git diff --check`.

@@ -4,7 +4,7 @@ description: Every hostname a Space answers on, which one counts as the live URL
 sidebar: { order: 1 }
 ---
 
-Adding a custom domain never retires a Space's default `view.fast` hostname — it keeps serving for the life of the Space.
+Adding a custom domain leaves the Space's default `view.fast` hostname in place. A later slug rename moves that default address and redirects the old one.
 
 ## The default hostname
 
@@ -26,7 +26,7 @@ Every version that reaches ready gets a permanent hostname of its own:
 https://v{number}--{label}.view.fast/
 ```
 
-Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready, and stored on the version row. So it survives a slug rename, and keeps serving that exact build no matter what is live now.
+Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready, and stored on the version row. It survives a slug rename and serves that build while the version is retained. [Deleting or expiring a version](/versions#how-many-versions-are-kept) removes its files.
 
 The API and the CLI report it as `immutableUrl`, with an `immutableUrlStatus` of `pending` until the hostname is routable.
 

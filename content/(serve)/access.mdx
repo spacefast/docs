@@ -4,11 +4,11 @@ description: Make a Space public, hand out scoped share links or a password, inv
 sidebar: { order: 5 }
 ---
 
-A Space has no public-or-private flag — access is a list of additive grants, and removing every one of them is what makes it private.
+Visitor access comes from additive grants. Removing a public grant closes that route to the public only if no other public grant matches; links, people, and team access can remain.
 
 ## Access is a list, not a switch
 
-Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A visitor is admitted when at least one grant matches, and nothing admits anyone once every grant is gone.
+Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A matching grant admits a visitor. Revoking one grant does not revoke other matching grants or remove the owning team's permissions.
 
 That model is why a Space can be public at `/docs/**` and closed everywhere else, and why revoking a share link takes effect on the next request rather than at the next publish.
 

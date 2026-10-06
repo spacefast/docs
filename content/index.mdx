@@ -5,7 +5,7 @@ sidebar:
   order: 0
 ---
 
-Spacefast hosts the sites people build with AI agents. You hand it a folder, it hands back a URL. Everything you can do in the dashboard you can also do from the `sf` CLI, the HTTP API, or an MCP server. That means the agent that built the site can publish it too.
+Spacefast hosts the sites people build with AI agents. You hand it a folder, it hands back a URL. Publish from the dashboard, the `sf` CLI, the HTTP API, or an MCP server. An agent with publishing permission can ship the site it built.
 
 Prefer a browser to a terminal? Drag a folder onto the dashboard instead — no install, no account required. See [Drop](/publish#publish).
 
@@ -39,11 +39,11 @@ Publish this folder to Spacefast and give me the live URL.
 
 ## How it fits together
 
-A **Space** is one site with a stable hostname. Every publish creates a new **version**, an immutable snapshot with its own URL that never changes. The `live` channel points at one version. Promoting or rolling back moves that pointer. Nothing gets rebuilt. (New terms piling up? See the [glossary](/glossary).)
+A **Space** holds a site and its **versions**, immutable snapshots with their own URLs. A publish with no changes can reuse the current version. The `live` channel points at the version visitors see, or is empty before the first publish. Promoting or rolling back to a retained, ready version moves that pointer without rebuilding. Preview publishes and manual promotion policies leave `live` alone. (New terms piling up? See the [glossary](/glossary).)
 
 Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs declare a [Zero runtime](/zero-runtime#declare-it) and server entry.
 
-Every claimed Space belongs to a team, even when you are its only member. On [Plus](/billing#seats), you can add members who publish and roll back without sharing your login. Free and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
+In a self-serve account, your team owns the Spaces you claim, even when you are its only member. On [Plus](/billing#seats), you can add members who publish and roll back without sharing your login. Free and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
 
 <CardGroup cols={2}>
   <Card title="Quickstart" href="/quickstart" icon="rocket">
@@ -53,7 +53,7 @@ Every claimed Space belongs to a team, even when you are its only member. On [Pl
     Drag a folder onto the dashboard. No install, no account required.
   </Card>
   <Card title="Glossary" href="/glossary" icon="book-open">
-    Space, version, live, capsule, Ability, grant — every term, defined once.
+    Space, version, live, capsule, Ability, grant — core terms in one place.
   </Card>
   <Card title="Publishing" href="/publish" icon="upload">
     What gets uploaded, how versions work, and how to roll back.

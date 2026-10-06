@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-A CI pipeline can publish automatically on every push to main, and ship pull requests as preview versions that never touch live traffic.
+A CI pipeline can publish pushes to your production branch. Use `--target preview` for pull requests to leave the `live` channel unchanged; an ordinary publish can move it.
 
 ## Set it up
 
@@ -87,7 +87,7 @@ publish:
 </Tab>
 </Tabs>
 
-The CLI needs Node.js 20.3 or newer. `sf publish` waits until the version is ready and live before it exits, so the job fails when the publish fails.
+The CLI needs Node.js 20.3 or newer. `sf publish` waits by default, but a successful command can leave a version ready without making it live. Check the receipt's activation outcome, especially for previews or a manual promotion policy.
 
 ## What `CI` changes
 

@@ -89,8 +89,8 @@ test("Troubleshooting gives a first diagnostic step before the error catalog", a
 const firstFactCases = [
   {
     route: "/versions",
-    question: "Does rollback rebuild?",
-    evidence: [/rollback/iu, /doesn't rebuild|does not rebuild/iu, /live/iu],
+    question: "Does rollback rebuild, and which versions can it use?",
+    evidence: [/rollback/iu, /doesn't rebuild|does not rebuild/iu, /live/iu, /retained, ready version/iu, /deleted or expired versions cannot/iu],
   },
   {
     route: "/crons",
@@ -104,12 +104,12 @@ const firstFactCases = [
   },
   {
     route: "/access",
-    question: "What makes a Space private?",
-    evidence: [/removing every one/iu, /private/iu, /grant/iu],
+    question: "Does removing one public grant remove all access?",
+    evidence: [/removing a public grant/iu, /no other public grant matches/iu, /links, people, and team access can remain/iu],
   },
   {
     route: "/caching",
-    question: "How do I force a fresh response?",
+    question: "How do I request a cache refresh?",
     evidence: [/republish/iu, /fresh response/iu],
   },
   {

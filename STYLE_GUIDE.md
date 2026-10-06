@@ -49,8 +49,38 @@ In practice:
   definition of "wordy." A 22-word sentence that chains four clauses is
   still a problem this rule won't catch; use judgment, not just the word
   count.
-- **Cut filler and hedging.** If a sentence works with a phrase removed,
-  remove it.
+- **Cut filler, preserve conditions.** Remove a phrase only if the shorter
+  sentence remains true for the same readers and situations. A plan limit,
+  required flag, credential type, runtime, or exception is not filler.
+
+## Preserve meaning when shortening
+
+Read a rewritten lead beside the full procedure and its exceptions. Check
+the original wording and the public reference before treating the shorter
+sentence as equivalent. A fact moved out of a subsection must keep that
+subsection's scope: a hosted MCP guarantee does not describe local stdio.
+
+- Keep prerequisites next to the action: a ready version for rollback,
+  an idempotency key for replay, or the plan required to add members.
+- Keep distinct states distinct: available versus free, ready versus live,
+  a permanent URL versus retained files, and configuration saved versus applied.
+- Check words such as "every," "always," "never," "only," and "any" against
+  counterexamples. Name the supported case instead of broadening a claim.
+- After splitting a sentence, make sure its condition still governs every
+  sentence that depends on it. Repeat the condition when necessary.
+- Check sibling guides, CLI pages, descriptions, glossary entries, and tests
+  for the same claim. A correction is incomplete if another entry point
+  teaches the old rule.
+
+For example, "Every list uses cursors" drops offset-based and unpaginated
+endpoints. "Cursor-paginated endpoints return `pagination.nextCursor`; check
+the endpoint's limits and ordering" preserves the useful rule and its scope.
+
+Tests of built docs can check that a prerequisite or exception stays visible.
+They do not prove product behavior. A regex matching confident wording is
+not evidence that the wording is true, and shorter copy is not a pass criterion.
+
+## Concision examples
 
 Worked example, from the page-opener cleanup:
 
@@ -70,9 +100,12 @@ Another:
 > recognize every other credential Spacefast hands you by its prefix." (33
 > words, 4 clauses)
 >
-> After: "You can mint a scoped API key with exactly the permissions it
-> needs, then rotate it without downtime." (18 words — the credential-prefix
-> table further down the page already covers the dropped clause.)
+> After: "Team owners and admins can mint scoped API keys. To rotate without
+> interrupting an integration, create a replacement, switch the integration
+> to it, verify a request, and only then revoke the old key."
+
+This version keeps the role prerequisite and the order that makes rotation
+safe. The credential-prefix table can stay below; the rotation condition cannot.
 
 (These two "after" versions also show the fix from the next section — no
 "after this page" framing. The intermediate step, where the sentence was
@@ -96,8 +129,8 @@ Open with the fact itself, not a sentence announcing that a fact is coming:
 > Templated: "After this page you can mint a scoped API key and rotate it
 > without downtime."
 >
-> Direct: "You can mint a scoped API key with exactly the permissions it
-> needs, then rotate it without downtime."
+> Direct: "To rotate a key without interrupting an integration, switch to
+> its replacement and verify a request before revoking the old key."
 
 > Templated: "After this page you know whether to publish your own build
 > output or let Spacefast build it."

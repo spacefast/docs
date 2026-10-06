@@ -259,7 +259,7 @@ Call them from the client with `useAction("invite")`. `scope: "/"` covers the wh
 
 Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected, and `theme.json` plus utility classes are the whole styling story.
 
-Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS at all. The capsule ships unstyled. Branch to whole literals instead.
+Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS for that class. Branch to whole literals instead.
 
 Prefer the semantic tokens, which re-skin from `theme.json` and handle light and dark on their own: `canvas`, `surface`, `ink`, `ink-muted`, `line`, `accent`, `success`, `warning`, `danger`. The shadcn names (`bg-background`, `text-muted-foreground`, `bg-primary`) alias onto the same tokens.
 

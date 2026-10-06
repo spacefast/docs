@@ -1,15 +1,15 @@
 ---
 title: Versions and the live channel
-description: Every publish is an immutable version, the live channel is a pointer at one of them, and rolling back moves the pointer without rebuilding anything
+description: Immutable versions, the live channel, promotion policies, and rollback to a retained ready version without rebuilding
 sidebar:
   order: 2
 ---
 
-A rollback doesn't rebuild anything — it just repoints `live` at a version that already exists, which is why it takes seconds, not minutes.
+A rollback doesn't rebuild anything. It repoints `live` at a retained, ready version; deleted or expired versions cannot be rollback targets.
 
 ## A version is a snapshot
 
-Each publish creates a version. A version is the exact set of files plus the config it finalized with, frozen. Nothing rewrites a version after it is ready. Publishing again does not modify the old one, it makes a new one.
+A publish that changes the files creates a version. A version is the exact set of files plus the config it finalized with, frozen. Nothing rewrites a version after it is ready. A publish with no changes can return `noop_publish` without creating a version.
 
 Ids are `ver_` plus 32 hex characters. Once a version reaches `ready` it also gets a number, and the CLI and dashboard call it by that number.
 

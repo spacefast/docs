@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-A dropped connection on a publish should not create two versions, so retrying any `POST` gets one of two answers: the original result replayed, or a conflict saying the first attempt is still running.
+Send a valid `Idempotency-Key` when retrying a `POST`, and reuse the same body, credential, and path. Stored results replay for 24 hours. In-flight requests return a conflict, and outcomes that are not stored can execute again.
 
 ## Send a key
 

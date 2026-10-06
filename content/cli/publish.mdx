@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-One command, `sf publish`, ships any folder, project, or archive to a Space. `sf dev` is documented at the end because it runs a project locally, not a copy of what publish serves.
+Use `sf publish` for a file, directory, supported project, or `.zip`/`.tar.gz` archive. Build detection and validation decide what can publish. `sf dev` is documented at the end because it runs a project locally, not a copy of what publish serves.
 
 ## sf publish
 
@@ -15,7 +15,7 @@ Publish files or built projects to Spacefast. `sf deploy` is an exact alias.
 sf publish [DIR]
 ```
 
-A publish creates one immutable version. If the live channel promotes automatically (the default), that version goes live. See [Publishing](/publish) for the model and [Versions](/versions) for what happens after.
+A publish can create an immutable version or report no changes. A production publish goes live when the channel promotes automatically (the default); preview publishes and manual policies leave it ready for a separate promotion. See [Publishing](/publish) for the model and [Versions](/versions) for what happens after.
 
 ### Arguments
 

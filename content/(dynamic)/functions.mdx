@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-Detection decides your runtime: Spacefast scans your project tree and picks the first layout it recognizes, so most projects need no `runtime` block at all.
+Functions can detect a supported worker layout when you publish, without an explicit `runtime` block. Custom layouts need a declaration, and [Zero](/zero-runtime#declare-it) is always declared explicitly.
 
 Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want live queries in the browser and a schema the platform migrates for you, use [Zero](/zero-runtime) instead. Both can call `fetch()`. One version declares one runtime.
 

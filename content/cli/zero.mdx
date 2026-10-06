@@ -5,7 +5,7 @@ sidebar:
   order: 25
 ---
 
-A Space's capsule exposes a catalog of Zero Abilities that agents can list and call, and any WP-CLI command can run against a Space directly.
+List a live capsule's published Abilities and call the ones your credential permits. Remote `sf wp` needs a provisioned Space and write access, and reports status without the command's printed output.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). All except `sf zero import`, `sf pages pull`, `sf pages validate`, and `sf design generate` also take the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
@@ -138,7 +138,7 @@ sf zero import emdash ../my-emdash-site --out .
 
 Run WP-CLI against a Space's WordPress, or against a local one with `--local`.
 
-Everything after the flags is passed to `wp` unchanged, so `sf wp plugin list --format=csv` runs exactly that. With `--local`, WP-CLI's own output and exit code pass through untouched. Against a Space, the command runs remotely and reports whether it succeeded and how long it took. The platform returns no stdout, so read state back with a follow-up command such as `sf wp option get`. `--json` wraps only Spacefast's own errors, never `wp`'s output. See [WordPress on every Space](/wordpress). Use `--` to pass a flag `sf` would otherwise claim.
+Everything after the flags is passed to `wp` unchanged, so `sf wp plugin list --format=csv` runs exactly that. With `--local`, WP-CLI's own output and exit code pass through untouched. Against a Space, the command runs remotely and reports whether it succeeded and how long it took. The platform returns no stdout, including for read commands such as `sf wp option get`. `--json` wraps only Spacefast's own errors, never `wp`'s output. See [WordPress on every Space](/wordpress). Use `--` to pass a flag `sf` would otherwise claim.
 
 ```text
 sf wp [--space <value>] [--local] [--path <dir>] [--mode full|limited] -- <wp args...>

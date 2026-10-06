@@ -12,6 +12,10 @@ Assume every commit and every line of history will be public.
 - Be concise; lead with importance. See [STYLE_GUIDE.md](STYLE_GUIDE.md) for
   the full rationale, worked examples, and the complete list of banned words,
   wordiness swaps, and vocabulary rules Vale enforces.
+- Preserve prerequisites, scope, and exceptions when rewriting. Check leads
+  against the procedure and public reference, then reconcile sibling guides,
+  glossary entries, and built-output tests. Shorter wording is not evidence
+  of factual accuracy.
 - Do not add navigation to a section until that section has a real page or
   generated source.
 - Authored navigation comes from `content/**` and its `meta.ts` files.

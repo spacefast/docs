@@ -5,9 +5,9 @@ sidebar:
   order: 9
 ---
 
-Scaffolding a project and linking a directory to a Space means `sf publish` needs no flags afterward.
+Scaffold a project with `sf init`, then link it to a Space with `sf link`. The saved link selects the Space on later publishes; build and publish options still depend on your project.
 
-Two files carry the link. `.spacefast/space.json` is the committable one: which Space, which team, which API base URL. `.spacefast/state.json` is the local cache. It holds credentials, so it's never committed; the CLI adds it to `.gitignore` for you.
+Two files carry the link. `.spacefast/space.json` is the committable one: which Space, which team, which API base URL. `.spacefast/state.json` is the local cache. It holds credentials, so never commit it. The CLI adds it to `.gitignore` for you.
 
 Every command here also takes the [global flags](/cli#global-flags).
 

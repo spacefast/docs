@@ -8,7 +8,7 @@ sidebar:
 There's no connection string for this database — your code reaches it through `ctx.db` or `env.DB`, or through a single-use SQL console when you need raw SQL.
 
 :::note[Don't have a database yet?]
-This page covers the database you get once [Zero](/zero-runtime) is running. Start with `sf init --runtime zero`, or add the full [runtime block](/zero-runtime#declare-it) to `sf.jsonc`, including `kind: "zero"`, `server`, and `client` entry paths. The server file is required; Zero can generate a client shell. Publish the app before querying its live database.
+For [Zero](/zero-runtime), start with `sf init --runtime zero`, or add the full [runtime block](/zero-runtime#declare-it) to `sf.jsonc`, including `kind: "zero"`, `server`, and `client` entry paths. The server file is required; Zero can generate a client shell. Publish the app before querying its live database. A [Functions](/functions#what-is-on-env) worker also gets a database through `env.DB`, but the Zero table commands do not apply to it.
 :::
 
 ## What it is

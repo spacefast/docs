@@ -53,9 +53,9 @@ The codes name the stage. `build_failed` is your command exiting non-zero. `buil
 
 ### The site still shows the old version
 
-Shared caches hold a copy for ten minutes. Non-immutable files are sent with `public, s-maxage=600, max-age=0, must-revalidate`. Your own browser revalidates on every load, but a shared copy can be up to ten minutes stale.
+Ordinary public static files default to `public, s-maxage=600, max-age=0, must-revalidate`. Your browser revalidates on every load, but a shared copy can be up to ten minutes stale. Protected responses, conditional routing, and header overrides follow the exceptions on [Caching](/caching).
 
-A publish purges every hostname the Space serves, which normally makes that moot. When the purge does not confirm, you get a `runtime_purge_failed` diagnostic and the runtime retries. The ten-minute lifetime is the backstop. Check which version answered you:
+Activating a new version requests a purge of the Space's serving hostnames; immutable version hostnames are not purged. When the purge does not confirm, you get a `runtime_purge_failed` diagnostic and the runtime retries. The default ten-minute shared lifetime is the backstop. Check which version answered you:
 
 ```bash
 curl -sI https://my-site.view.fast/ | grep -i x-spacefast-version

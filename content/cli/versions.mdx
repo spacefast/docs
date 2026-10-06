@@ -5,9 +5,9 @@ sidebar:
   order: 4
 ---
 
-Live traffic can be moved to any version a Space has published, and rolled back the same way after a bad one.
+Move live traffic to a retained, ready version with `sf promote` or `sf rollback`. Deleted, expired, and unfinished versions cannot serve as rollback targets.
 
-Every publish creates one immutable version. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer; they never rebuild anything. See [Versions](/versions) for the model.
+A publish can create an immutable version or report no changes. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer; they never rebuild anything. See [Versions](/versions) for the model.
 
 ## sf versions ls
 

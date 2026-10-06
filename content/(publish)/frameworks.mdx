@@ -24,7 +24,7 @@ sf publish --remote
 
 With no flags, `sf publish` builds a detected project, and publishes the directory as-is if there is nothing to build.
 
-`--prebuilt` forces the upload path and `--build` forces the build path. A `.tar.gz` archive always goes through a build, since archives are classified remotely.
+`--prebuilt` publishes a built directory or archive without installing dependencies or running a build. `--build` forces build mode for directories. Without `--prebuilt`, archives go through remote detection.
 
 ## Which directory to publish
 

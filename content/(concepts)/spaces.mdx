@@ -9,7 +9,7 @@ A Space is one site with a stable hostname. Publishing creates versions inside i
 
 ## What a Space is
 
-A Space is one site. It owns a slug, a hostname, an owner, and one pointer that says which version visitors get. Everything you publish lands in a Space as a new immutable version, and the Space decides which of them is live.
+A Space is one site. It owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
 
 Ids are `spc_` plus 32 hex characters:
 
@@ -54,14 +54,15 @@ Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getsl
 
 ## The default hostname
 
-Every Space answers at `https://<slug>.view.fast/` from the moment it exists, and keeps that hostname for life. Adding a custom domain never retires it. Version and branch hostnames, the live URL rule, and what a rename does to each are on [URLs and hostnames](/urls).
+A Space gets a default `view.fast` hostname. Adding a custom domain leaves it in place; renaming the slug moves the default hostname and redirects the old one. Version and branch hostnames, the live URL rule, and what a rename does to each are on [URLs and hostnames](/urls).
 
 ## Who owns a Space
 
-Exactly one owner, one of two kinds:
+The owner depends on how the Space was created:
 
 - **A team.** The normal case. Team members reach the Space by their role. Slugs are unique per team rather than globally, so two teams can both own `docs`.
 - **A space key.** A Space published without an account is owned by its `sfc_` key until someone claims it. See [Publish without an account](/anonymous-and-claim).
+- **An external principal.** A customer in a [Partner API integration](/platforms/partner-api/customers) can own Spaces without a self-serve team.
 
 To move a Space to another team, run `sf spaces transfer <team> --space docs`, or open **Space settings → General → Transfer this space → Transfer space…**. If you are an owner or admin of both teams, the move is instant. The Space keeps serving at its current address. Otherwise the target team has 7 days to accept, and nothing changes until they do. Roles and membership are on [Teams](/teams).
 
