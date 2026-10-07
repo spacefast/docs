@@ -1,11 +1,11 @@
 ---
-title: "space_quota_exceeded"
-description: "Creating or claiming this space would exceed the owner's space allowance."
+title: "team_has_sell_seller"
+description: "This team owns a Stripe seller binding and must remain available for Sell order management."
 ---
 
-Creating or claiming this space would exceed the owner's space allowance.
+This team owns a Stripe seller binding and must remain available for Sell order management.
 
-**How to resolve:** Delete a space you no longer need, then retry. If you are still stuck, POST /v1/feedback with the error code and requestId.
+**How to resolve:** Keep the team to manage shipping, refunds and delivery. Contact support if you need to retire its seller binding and order records.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/space_quota_exceeded",
-  "title": "Space quota exceeded",
+  "type": "https://spacefast.com/docs/errors/team_has_sell_seller",
+  "title": "Team has sell seller",
   "status": 400,
-  "detail": "Creating or claiming this space would exceed the owner's space allowance.",
-  "code": "space_quota_exceeded",
+  "detail": "This team owns a Stripe seller binding and must remain available for Sell order management.",
+  "code": "team_has_sell_seller",
   "requestId": "req_4mz0v8qk"
 }
 ```

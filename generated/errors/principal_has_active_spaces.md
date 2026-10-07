@@ -1,11 +1,11 @@
 ---
 title: "principal_has_active_spaces"
-description: "The principal still owns Spaces that are not deleted."
+description: "The external principal still owns spaces, so it cannot be closed."
 ---
 
-The principal still owns Spaces that are not deleted.
+The external principal still owns spaces, so it cannot be closed.
 
-**How to resolve:** Delete the principal's Spaces, or retry with `force` to tombstone them.
+**How to resolve:** Delete the principal's spaces first, or retry with `force` to tombstone them as part of the close.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_has_active_spaces",
   "title": "Principal has active spaces",
   "status": 400,
-  "detail": "The principal still owns Spaces that are not deleted.",
+  "detail": "The external principal still owns spaces, so it cannot be closed.",
   "code": "principal_has_active_spaces",
   "requestId": "req_4mz0v8qk"
 }

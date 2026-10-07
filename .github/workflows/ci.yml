@@ -35,7 +35,9 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Verify public safety
-        run: bun run verify:public-safety
+        run: |
+          node --test scripts/verify-public-safety.test.mjs
+          bun run verify:public-safety
 
       - name: Install Vale
         run: |
@@ -44,7 +46,9 @@ jobs:
           vale --version
 
       - name: Verify prose style
-        run: bun run verify:prose
+        run: |
+          node --test scripts/openapi-prose-scope.test.mjs
+          bun run verify:prose
 
       - name: Check types and templates
         run: bun run check

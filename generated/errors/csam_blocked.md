@@ -1,11 +1,11 @@
 ---
 title: "csam_blocked"
-description: "The content was blocked by the CSAM policy."
+description: "The content was blocked because it matched known child sexual abuse material."
 ---
 
-The content was blocked by the CSAM policy.
+The content was blocked because it matched known child sexual abuse material.
 
-**How to resolve:** Contact Spacefast support if this looks like a mistake.
+**How to resolve:** This action is final and reported as required by law. Do not retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/csam_blocked",
   "title": "Csam blocked",
   "status": 400,
-  "detail": "The content was blocked by the CSAM policy.",
+  "detail": "The content was blocked because it matched known child sexual abuse material.",
   "code": "csam_blocked",
   "requestId": "req_4mz0v8qk"
 }

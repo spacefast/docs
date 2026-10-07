@@ -1,11 +1,11 @@
 ---
 title: "jetpack_licensing_unavailable"
-description: "The Jetpack licensing API could not be reached or did not complete the request."
+description: "The Jetpack Licensing API did not complete the request."
 ---
 
-The Jetpack licensing API could not be reached or did not complete the request.
+The Jetpack Licensing API did not complete the request.
 
-**How to resolve:** Retry the request once the licensing API recovers.
+**How to resolve:** Retry. If the partner account needs attention, contact support.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/jetpack_licensing_unavailable",
   "title": "Jetpack licensing unavailable",
   "status": 400,
-  "detail": "The Jetpack licensing API could not be reached or did not complete the request.",
+  "detail": "The Jetpack Licensing API did not complete the request.",
   "code": "jetpack_licensing_unavailable",
   "requestId": "req_4mz0v8qk"
 }

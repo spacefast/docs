@@ -1,11 +1,11 @@
 ---
 title: "publish_session_expired"
-description: "The publish upload session expired before it finished."
+description: "This publish session expired before it was finalized."
 ---
 
-The publish upload session expired before it finished.
+This publish session expired before it was finalized.
 
-**How to resolve:** Start a fresh publish and upload the files again.
+**How to resolve:** Start a new publish. Spacefast keeps declared uploads for 24 hours only.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_session_expired",
   "title": "Publish session expired",
   "status": 400,
-  "detail": "The publish upload session expired before it finished.",
+  "detail": "This publish session expired before it was finalized.",
   "code": "publish_session_expired",
   "requestId": "req_4mz0v8qk"
 }

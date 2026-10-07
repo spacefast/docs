@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_replace_all_write_strategy"
-description: "This DNS provider applies writes by replacing the whole record set at a name."
+description: "This provider applies DNS changes with a replace-all write strategy."
 ---
 
-This DNS provider applies writes by replacing the whole record set at a name.
+This provider applies DNS changes with a replace-all write strategy.
 
-**How to resolve:** Send the complete desired record set for the name, not only the records that changed.
+**How to resolve:** To preserve unrelated MX, TXT, CAA, NS, and wildcard records, review the full-zone diff carefully.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_replace_all_write_strategy",
   "title": "Dns provider replace all write strategy",
   "status": 400,
-  "detail": "This DNS provider applies writes by replacing the whole record set at a name.",
+  "detail": "This provider applies DNS changes with a replace-all write strategy.",
   "code": "dns_provider_replace_all_write_strategy",
   "requestId": "req_4mz0v8qk"
 }

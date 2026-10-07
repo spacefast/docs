@@ -145,9 +145,16 @@ const scanText = (path, text) => {
     }
   }
 
+  const uuidRanges = Array.from(
+    text.matchAll(/\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b/giu),
+    (match) => [match.index, match.index + match[0].length],
+  );
   const shortHashPattern = /(?<![#\p{L}\p{N}_])[0-9a-f]{7,12}(?![\p{L}\p{N}_])/giu;
   for (const match of text.matchAll(shortHashPattern)) {
     const value = match[0];
+    if (uuidRanges.some(([start, end]) => match.index >= start && match.index < end)) {
+      continue;
+    }
     if (value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {
       report(path, lineForOffset(text, match.index), "short commit hash");
     }

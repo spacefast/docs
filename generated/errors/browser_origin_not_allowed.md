@@ -1,11 +1,11 @@
 ---
-title: "build_minutes_quota_exceeded"
-description: "This build would exceed the owner's build minutes for the month."
+title: "browser_origin_not_allowed"
+description: "This browser origin cannot perform authenticated mutations."
 ---
 
-This build would exceed the owner's build minutes for the month.
+This browser origin cannot perform authenticated mutations.
 
-**How to resolve:** Wait for the meter to reset at the start of the next UTC month, or publish prebuilt output instead of building on Spacefast.
+**How to resolve:** Use the dashboard for this environment. Contact support if the dashboard still refuses the request.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/build_minutes_quota_exceeded",
-  "title": "Build minutes quota exceeded",
+  "type": "https://spacefast.com/docs/errors/browser_origin_not_allowed",
+  "title": "Browser origin not allowed",
   "status": 400,
-  "detail": "This build would exceed the owner's build minutes for the month.",
-  "code": "build_minutes_quota_exceeded",
+  "detail": "This browser origin cannot perform authenticated mutations.",
+  "code": "browser_origin_not_allowed",
   "requestId": "req_4mz0v8qk"
 }
 ```

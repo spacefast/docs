@@ -1,11 +1,11 @@
 ---
 title: "principal_suspended"
-description: "The customer is suspended, so changes to its Spaces are blocked."
+description: "The external principal is suspended. Its spaces serve the suspended page and its mutations are blocked."
 ---
 
-The customer is suspended, so changes to its Spaces are blocked.
+The external principal is suspended. Its spaces serve the suspended page and its mutations are blocked.
 
-**How to resolve:** Contact Spacefast support, or have the partner lift the suspension.
+**How to resolve:** Unsuspend the principal to restore serving and writes; a Spacefast-applied suspension can only be lifted by Spacefast.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_suspended",
   "title": "Principal suspended",
   "status": 400,
-  "detail": "The customer is suspended, so changes to its Spaces are blocked.",
+  "detail": "The external principal is suspended. Its spaces serve the suspended page and its mutations are blocked.",
   "code": "principal_suspended",
   "requestId": "req_4mz0v8qk"
 }

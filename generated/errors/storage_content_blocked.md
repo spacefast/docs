@@ -1,11 +1,11 @@
 ---
 title: "storage_content_blocked"
-description: "The upload's content type is executable or active web content."
+description: "The object contains executable or active web content that Spacefast storage does not serve."
 ---
 
-The upload's content type is executable or active web content.
+The object contains executable or active web content that Spacefast storage does not serve.
 
-**How to resolve:** Upload the file as inert content, such as an image, document, or archive.
+**How to resolve:** Upload a passive file type without HTML, script, SVG, PHP, or executable bytes.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_content_blocked",
   "title": "Storage content blocked",
   "status": 400,
-  "detail": "The upload's content type is executable or active web content.",
+  "detail": "The object contains executable or active web content that Spacefast storage does not serve.",
   "code": "storage_content_blocked",
   "requestId": "req_4mz0v8qk"
 }

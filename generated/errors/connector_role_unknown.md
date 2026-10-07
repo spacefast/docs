@@ -1,11 +1,11 @@
 ---
-title: "deploy_quota_exceeded"
-description: "The owner has used its daily publish allowance."
+title: "connector_role_unknown"
+description: "The live capsule does not declare this connector role."
 ---
 
-The owner has used its daily publish allowance.
+The live capsule does not declare this connector role.
 
-**How to resolve:** Wait for the meter to reset at 00:00 UTC. Batch changes into fewer publishes if a CI loop is republishing on every commit.
+**How to resolve:** Use a role declared by the live version.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/deploy_quota_exceeded",
-  "title": "Deploy quota exceeded",
+  "type": "https://spacefast.com/docs/errors/connector_role_unknown",
+  "title": "Connector role unknown",
   "status": 400,
-  "detail": "The owner has used its daily publish allowance.",
-  "code": "deploy_quota_exceeded",
+  "detail": "The live capsule does not declare this connector role.",
+  "code": "connector_role_unknown",
   "requestId": "req_4mz0v8qk"
 }
 ```

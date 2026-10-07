@@ -1,11 +1,11 @@
 ---
 title: "email_already_claimed"
-description: "The address already belongs to an account."
+description: "That email address is already verified on an account."
 ---
 
-The address already belongs to an account.
+That email address is already verified on an account.
 
-**How to resolve:** Sign in as that account, or use an address no account has verified.
+**How to resolve:** Sign in with the address instead of adding it, or use a different address.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/email_already_claimed",
   "title": "Email already claimed",
   "status": 400,
-  "detail": "The address already belongs to an account.",
+  "detail": "That email address is already verified on an account.",
   "code": "email_already_claimed",
   "requestId": "req_4mz0v8qk"
 }

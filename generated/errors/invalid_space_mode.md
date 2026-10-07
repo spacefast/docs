@@ -1,11 +1,11 @@
 ---
 title: "invalid_space_mode"
-description: "The requested Space serving mode is not one the API accepts."
+description: "The requested space serving mode is not supported."
 ---
 
-The requested Space serving mode is not one the API accepts.
+The requested space serving mode is not supported.
 
-**How to resolve:** Set the Space mode to a supported value, then retry.
+**How to resolve:** Use a supported serving configuration.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_space_mode",
   "title": "Invalid space mode",
   "status": 400,
-  "detail": "The requested Space serving mode is not one the API accepts.",
+  "detail": "The requested space serving mode is not supported.",
   "code": "invalid_space_mode",
   "requestId": "req_4mz0v8qk"
 }

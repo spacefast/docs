@@ -1,11 +1,11 @@
 ---
 title: "zero_artifact_malformed"
-description: "The Zero artifact could not be parsed."
+description: "The Zero endpoint artifact cannot be parsed."
 ---
 
-The Zero artifact could not be parsed.
+The Zero endpoint artifact cannot be parsed.
 
-**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
+**How to resolve:** Rebuild the Zero project. Do not edit generated artifact JSON by hand.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_artifact_malformed",
   "title": "Zero artifact malformed",
   "status": 400,
-  "detail": "The Zero artifact could not be parsed.",
+  "detail": "The Zero endpoint artifact cannot be parsed.",
   "code": "zero_artifact_malformed",
   "requestId": "req_4mz0v8qk"
 }

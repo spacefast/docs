@@ -1,11 +1,11 @@
 ---
 title: "slug_unavailable"
-description: "Another team or Space already uses that slug."
+description: "Another resource already uses this slug. Offline spaces retain their slugs."
 ---
 
-Another team or Space already uses that slug.
+Another resource already uses this slug. Offline spaces retain their slugs.
 
-**How to resolve:** Choose a different slug and retry.
+**How to resolve:** Use the suggested slug or choose a different slug. If an offline space uses this slug, ask support to purge that space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/slug_unavailable",
   "title": "Slug unavailable",
   "status": 400,
-  "detail": "Another team or Space already uses that slug.",
+  "detail": "Another resource already uses this slug. Offline spaces retain their slugs.",
   "code": "slug_unavailable",
   "requestId": "req_4mz0v8qk"
 }

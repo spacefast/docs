@@ -1,11 +1,11 @@
 ---
 title: "token_signature_invalid"
-description: "The partner token's signature did not verify against the issuer's keys."
+description: "The partner token signature does not match a registered issuer key."
 ---
 
-The partner token's signature did not verify against the issuer's keys.
+The partner token signature does not match a registered issuer key.
 
-**How to resolve:** Sign the token with a key the issuer registration publishes.
+**How to resolve:** Sign the token with an active key that is registered for the issuer.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_signature_invalid",
   "title": "Token signature invalid",
   "status": 400,
-  "detail": "The partner token's signature did not verify against the issuer's keys.",
+  "detail": "The partner token signature does not match a registered issuer key.",
   "code": "token_signature_invalid",
   "requestId": "req_4mz0v8qk"
 }

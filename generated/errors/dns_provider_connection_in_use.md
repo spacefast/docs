@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_connection_in_use"
-description: "The DNS provider connection is still attached to a zone or held by another team."
+description: "The DNS provider connection is still attached to one or more zones."
 ---
 
-The DNS provider connection is still attached to a zone or held by another team.
+The DNS provider connection is still attached to one or more zones.
 
-**How to resolve:** Detach the provider zones first. For a domain transfer, reconnect the provider under the target owner before transferring.
+**How to resolve:** Detach or migrate attached zones before revoking the connection.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_connection_in_use",
   "title": "Dns provider connection in use",
   "status": 400,
-  "detail": "The DNS provider connection is still attached to a zone or held by another team.",
+  "detail": "The DNS provider connection is still attached to one or more zones.",
   "code": "dns_provider_connection_in_use",
   "requestId": "req_4mz0v8qk"
 }

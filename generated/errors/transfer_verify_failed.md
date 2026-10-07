@@ -1,11 +1,11 @@
 ---
 title: "transfer_verify_failed"
-description: "Verifying the transfer with the receiving side failed."
+description: "The target runtime cannot verify transferred blob content."
 ---
 
-Verifying the transfer with the receiving side failed.
+The target runtime cannot verify transferred blob content.
 
-**How to resolve:** Retry the transfer.
+**How to resolve:** Retry the move. If the failure persists, check the target runtime and bucket integrity.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/transfer_verify_failed",
   "title": "Transfer verify failed",
   "status": 400,
-  "detail": "Verifying the transfer with the receiving side failed.",
+  "detail": "The target runtime cannot verify transferred blob content.",
   "code": "transfer_verify_failed",
   "requestId": "req_4mz0v8qk"
 }
