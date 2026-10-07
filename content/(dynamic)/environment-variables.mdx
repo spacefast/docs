@@ -98,7 +98,7 @@ import { capsule, endpoint, json } from "@spacefast/zero/server";
 export default capsule({
   name: "billing",
   endpoints: {
-    charge: endpoint({ mode: "write", method: "POST", path: "/api/charge" }, (ctx) =>
+    charge: endpoint({ method: "POST", path: "/api/charge" }, (ctx) =>
       json({ configured: Boolean(ctx.env.STRIPE_SECRET_KEY) }),
     ),
   },
