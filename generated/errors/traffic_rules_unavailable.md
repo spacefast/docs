@@ -1,11 +1,11 @@
 ---
-title: "artifact_binding_unresolved"
-description: "The artifact names a connection role that is not bound to a connection."
+title: "traffic_rules_unavailable"
+description: "This space has no edge yet, so it cannot hold or check traffic rules."
 ---
 
-The artifact names a connection role that is not bound to a connection.
+This space has no edge yet, so it cannot hold or check traffic rules.
 
-**How to resolve:** Bind the role: PATCH /v1/artifacts/{ref} with the role mapped to a connection id you can use.
+**How to resolve:** Publish the space once; its traffic rules take effect with that publish.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_binding_unresolved",
-  "title": "Artifact binding unresolved",
+  "type": "https://spacefast.com/docs/errors/traffic_rules_unavailable",
+  "title": "Traffic rules unavailable",
   "status": 400,
-  "detail": "The artifact names a connection role that is not bound to a connection.",
-  "code": "artifact_binding_unresolved",
+  "detail": "This space has no edge yet, so it cannot hold or check traffic rules.",
+  "code": "traffic_rules_unavailable",
   "requestId": "req_4mz0v8qk"
 }
 ```

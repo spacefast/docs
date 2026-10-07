@@ -1,57 +1,62 @@
 ---
 title: "Connect Warp to Spacefast"
-description: "Use Spacefast skills and MCP in Warp agents."
+description: "Add Spacefast to Warp so its agents can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/warp/"
 ---
 
-Use Spacefast skills and MCP in Warp agents.
+Add Spacefast to Warp so its agents can publish what you build.
 
-**[Open Warp MCP settings](warp://settings/mcp)**
-
-If nothing happens, add the endpoint in Warp yourself:
+**Add Spacefast in Warp's settings.** Set it up in Warp's own settings, with no config file to edit.
 
 ```text
 https://mcp.spacefast.com
 ```
 
+1. Open Settings → Agents → MCP servers and choose + Add.
+2. Add a Streamable HTTP server with the address above.
+3. Start the server, then sign in to Spacefast and approve access.
+4. Check that Spacefast's tools appear.
+
 ## Other ways to connect
 
-**Configure ~/.warp/mcp.json.** Merge the hosted Spacefast server into the client MCP configuration.
+**Configure `~/.warp/.mcp.json`.** Add Spacefast to Warp's config file by hand.
 
 ```json
 {
   "mcpServers": {
     "spacefast": {
-      "type": "http",
       "url": "https://mcp.spacefast.com"
     }
   }
 }
 ```
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+1. Add the entry above to `~/.warp/.mcp.json`, keeping what's already in the file.
+2. Sign in to Spacefast and approve access when asked.
+
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent warp
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent warp -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
-npx -y skills add https://spacefast.com/SKILL.md -y
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 Prefer to hand this off? Copy setup prompt:
@@ -62,4 +67,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Warp documentation](https://docs.warp.dev/knowledge-and-collaboration/mcp)
+[Agent documentation](/agents) · [Warp documentation](https://docs.warp.dev/agents/capabilities/mcp/)

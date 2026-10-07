@@ -1,11 +1,11 @@
 ---
 title: "invalid_file_path"
-description: "A path in the request is not a safe version path."
+description: "A file path in the request is not a valid space path."
 ---
 
-A path in the request is not a safe version path.
+A file path in the request is not a valid space path.
 
-**How to resolve:** Send a relative path with no `..` segments or control characters; immutable asset prefixes must end with `/`.
+**How to resolve:** Use forward-slash relative paths without traversal segments.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_file_path",
   "title": "Invalid file path",
   "status": 400,
-  "detail": "A path in the request is not a safe version path.",
+  "detail": "A file path in the request is not a valid space path.",
   "code": "invalid_file_path",
   "requestId": "req_4mz0v8qk"
 }

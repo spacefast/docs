@@ -78,6 +78,7 @@ gzip
 Hexo
 hostability
 hostname
+hostname's
 hostnames
 http
 https
@@ -107,6 +108,7 @@ lucide
 matcher
 matchers
 mcp
+MCPs
 middleware
 misconfiguration
 misconfigured
@@ -126,6 +128,7 @@ Nullable
 nullable
 Nuxt
 oauth
+onboarding
 OpenAPI
 openclaw
 opencode
@@ -134,6 +137,7 @@ params
 parseable
 passthrough
 pipeable
+placeable
 plaintext
 pnpm
 pollable
@@ -213,6 +217,8 @@ subdomains
 subprotocol
 subscribable
 substring
+subteam
+subteams
 subtree
 subtrees
 superadmin
@@ -271,6 +277,7 @@ validator
 Validators
 Vercel
 Vercel's
+Viewport
 Vite
 Vite's
 waitlist

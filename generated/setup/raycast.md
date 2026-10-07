@@ -1,32 +1,25 @@
 ---
 title: "Connect Raycast to Spacefast"
-description: "Connect Spacefast to Raycast AI using its native OAuth MCP form."
+description: "Add Spacefast to Raycast AI and call it with @Spacefast."
 seo:
   canonical: "https://spacefast.com/setup/raycast/"
 ---
 
-Connect Spacefast to Raycast AI using its native OAuth MCP form.
+Add Spacefast to Raycast AI and call it with @Spacefast.
 
-**Add the hosted MCP server.** Paste the Spacefast endpoint into Raycast Settings → AI → MCP Servers → Install MCP Server and approve OAuth in the browser.
+**Add Spacefast in Raycast.** Raycast's own Install MCP Server command connects Spacefast to Raycast AI.
 
 ```text
 https://mcp.spacefast.com
 ```
 
-## Other ways to connect
+1. Run Install MCP Server.
+2. Choose HTTP and paste the address above.
+3. Choose Dynamic for OAuth Type, then install the server.
+4. Choose Sign In and approve access.
+5. Use @Spacefast in Raycast AI to select its tools.
 
-**Configure an MCP client configuration.** Merge the hosted Spacefast server into the client MCP configuration.
-
-```json
-{
-  "mcpServers": {
-    "spacefast": {
-      "type": "http",
-      "url": "https://mcp.spacefast.com"
-    }
-  }
-}
-```
+You need Raycast Pro for this.
 
 Prefer to hand this off? Copy setup prompt:
 
@@ -36,4 +29,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Raycast documentation](https://manual.raycast.com/model-context-protocol)
+[Agent documentation](/agents) · [Raycast documentation](https://manual.raycast.com/ai/model-context-protocol)

@@ -1,11 +1,11 @@
 ---
 title: "frame_target_fixed"
-description: "The frame link already fixes its target, so the request cannot choose one."
+description: "The request tried to override a Frame Link with a fixed serving target."
 ---
 
-The frame link already fixes its target, so the request cannot choose one.
+The request tried to override a Frame Link with a fixed serving target.
 
-**How to resolve:** Omit `target` from the launch request.
+**How to resolve:** Omit `target`; only all-Versions Frame Links accept an explicit Version target.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_target_fixed",
   "title": "Frame target fixed",
   "status": 400,
-  "detail": "The frame link already fixes its target, so the request cannot choose one.",
+  "detail": "The request tried to override a Frame Link with a fixed serving target.",
   "code": "frame_target_fixed",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "space_transferring"
-description: "A transfer is in flight on this Space, or its ownership changed mid-transfer."
+description: "The space has a transfer in progress, which blocks this operation."
 ---
 
-A transfer is in flight on this Space, or its ownership changed mid-transfer.
+The space has a transfer in progress, which blocks this operation.
 
-**How to resolve:** Wait for the transfer to settle, then retry.
+**How to resolve:** Complete or cancel the transfer first.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_transferring",
   "title": "Space transferring",
   "status": 400,
-  "detail": "A transfer is in flight on this Space, or its ownership changed mid-transfer.",
+  "detail": "The space has a transfer in progress, which blocks this operation.",
   "code": "space_transferring",
   "requestId": "req_4mz0v8qk"
 }

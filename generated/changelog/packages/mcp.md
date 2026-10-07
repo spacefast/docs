@@ -5,6 +5,115 @@ description: "Release history for @spacefast/mcp on npm."
 
 Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on npm.
 
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Show the Space Library as a grid of page previews on wide panes; narrow panes keep the list. An opened Space shows when it went live, its runtime, and its source, plus Next steps that send a ready prompt to the chat: review it visually, make a change, use your own domain, open the WordPress admin, share it, and show deployments or traffic.
+
+#### Patch Changes
+
+- Agents now ask once whether to send feedback to Spacefast when a task ends after an error, retry, workaround, or other friction. A yes covers later friction in the same conversation; a no stops the question. The MCP server instructions carry the same rule as the skills and setup document.
+- Clear removed host presentation settings in ChatGPT Apps. Save MCP delivery with build, deployment, and domain lifecycle transitions. Search file-owned Space names and preserve existing webhook URL behavior.
+- Ask your agent for an admin panel, dashboard, or CMS to manage a Space's content, and it opens the Space's WordPress dashboard for you instead of building one. The agent creates a one-use sign-in link with `createSpaceContentAdminLink`: no password, expires in 10 minutes, signs you in as the Space's administrator or editor. If your page is plain static files, the agent offers to move it to Zero: your posts go into the dashboard, the page lists them live, and dashboard edits land back in the Space's source and deploy. Nothing moves until you say yes.
+- Return the Spacefast API's own error when `execute` gets a 401 or 403, instead of a generic "re-authenticate the connection" failure that pointed agents at `executor.coreTools.*` tools the MCP never provides.
+- Add a Recover button to MCP App errors with the saved execution and result details. Preserve error reasons, validate publish manifests before approval, and distinguish new Spaces from updates in approval cards.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+  - @spacefast/sdk@0.6.0
+  - @spacefast/zero@0.6.0
+  - @spacefast/builders@0.6.0
+  - @spacefast/routing@0.6.0
+  - @spacefast/zero-compile@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- Clarify that hosted MCP publishing requires authentication and that anonymous publishing creates private bearer previews. Remove instructions that restrict the use of other services, and require Space ownership before serving share-preview images without an access credential.
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.5.1
+  - @spacefast/sdk@0.5.1
+  - @spacefast/common@0.5.1
+  - @spacefast/routing@0.5.1
+  - @spacefast/zero@0.5.1
+
+## 0.5.0
+
+#### Minor Changes
+
+- Agents see fewer, sharper MCP tools. Work mode, visual review feedback, page screenshots, and traffic rules now run inside `execute`, which also teaches agents to show screenshots as images. The build log view no longer reopens while a build runs, and the database view drops its console button: use `sf db console` or the dashboard. The prompt menu adds a tour, visual review, source browsing, and guided workflows for domains, sharing, rollbacks, and failed builds.
+- Claim a hostname attached to another Space with a unique DNS TXT record, or move it directly when authorized to manage both Spaces. Expose ownership instructions and move status through the API and CLI, including `sf domains check --move`.
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+  - @spacefast/routing@0.5.0
+  - @spacefast/zero@0.5.0
+  - @spacefast/sdk@0.5.0
+  - @spacefast/zero-compile@0.5.0
+- Fix CLI domain and storage lists and the MCP Space domains view to read the API response shapes returned by the shared transport.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.5.0
+  - @spacefast/common@0.5.0
+  - @spacefast/sdk@0.5.0
+  - @spacefast/zero@0.5.0
+  - @spacefast/routing@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/zero-compile@0.4.1
+  - @spacefast/common@0.4.1
+  - @spacefast/routing@0.4.1
+  - @spacefast/sdk@0.4.1
+  - @spacefast/zero@0.4.1
+
+## 0.4.0
+
+#### Minor Changes
+
+- Add hosted MCP tools to import a Claude Design HTML bundle from its URL and check a pending import.
+
+#### Patch Changes
+
+- Declare explicit JSON types in MCP tool outputs to fix schema portability warnings while preserving scalar, array, object, and null execution results.
+- Show contextual file diffs, source commits, and build details in approval cards. Preserve the reviewed action after a decision, bind each decision to its exact pause, and connect workspace files, staged changes, history, and build logs in MCP Apps.
+
+  Allow the authenticated MCP proxy to use local development hosts under `.localhost` and the IPv6 loopback address.
+
+- @spacefast/common@0.4.0
+  - @spacefast/routing@0.4.0
+  - @spacefast/sdk@0.4.0
+  - @spacefast/zero@0.4.0
+  - @spacefast/zero-compile@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

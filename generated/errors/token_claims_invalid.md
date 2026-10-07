@@ -1,11 +1,11 @@
 ---
 title: "token_claims_invalid"
-description: "The partner token's claims did not pass validation."
+description: "The partner token omits a required claim or contains an invalid claim value."
 ---
 
-The partner token's claims did not pass validation.
+The partner token omits a required claim or contains an invalid claim value.
 
-**How to resolve:** Mint the token with the claim set the partner token contract requires.
+**How to resolve:** Add valid `iss`, `aud`, `sub`, `client_id`, `jti`, `iat`, and `exp` claims.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_claims_invalid",
   "title": "Token claims invalid",
   "status": 400,
-  "detail": "The partner token's claims did not pass validation.",
+  "detail": "The partner token omits a required claim or contains an invalid claim value.",
   "code": "token_claims_invalid",
   "requestId": "req_4mz0v8qk"
 }

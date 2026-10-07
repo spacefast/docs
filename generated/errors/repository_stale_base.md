@@ -1,11 +1,11 @@
 ---
 title: "repository_stale_base"
-description: "The branch moved after this change was built on it."
+description: "The branch moved after this change was built, so the commit was refused."
 ---
 
-The branch moved after this change was built on it.
+The branch moved after this change was built, so the commit was refused.
 
-**How to resolve:** Re-read the branch at the `headSha` in the error details and rebuild the commit.
+**How to resolve:** Re-read the branch head (`error.details.headSha`), rebuild the change on it, and send the new head as `expectedHeadSha`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/repository_stale_base",
   "title": "Repository stale base",
   "status": 400,
-  "detail": "The branch moved after this change was built on it.",
+  "detail": "The branch moved after this change was built, so the commit was refused.",
   "code": "repository_stale_base",
   "requestId": "req_4mz0v8qk"
 }

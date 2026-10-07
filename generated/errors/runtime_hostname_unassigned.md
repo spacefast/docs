@@ -1,11 +1,11 @@
 ---
 title: "runtime_hostname_unassigned"
-description: "The Space has no runtime hostname assigned yet."
+description: "The hostname is not assigned to a runtime, so the request cannot be routed."
 ---
 
-The Space has no runtime hostname assigned yet.
+The hostname is not assigned to a runtime, so the request cannot be routed.
 
-**How to resolve:** Publish the Space once, then retry after it has a live hostname.
+**How to resolve:** Verify that the binding is active and that DNS points at Spacefast.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_hostname_unassigned",
   "title": "Runtime hostname unassigned",
   "status": 400,
-  "detail": "The Space has no runtime hostname assigned yet.",
+  "detail": "The hostname is not assigned to a runtime, so the request cannot be routed.",
   "code": "runtime_hostname_unassigned",
   "requestId": "req_4mz0v8qk"
 }

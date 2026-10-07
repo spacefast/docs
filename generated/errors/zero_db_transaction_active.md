@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_active"
-description: "A Zero database transaction is already open on this connection."
+description: "The Zero runner tried to start a database transaction while one was already active."
 ---
 
-A Zero database transaction is already open on this connection.
+The Zero runner tried to start a database transaction while one was already active.
 
-**How to resolve:** Commit or roll back the open transaction before starting another.
+**How to resolve:** Rebuild with the current Zero runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_active",
   "title": "Zero db transaction active",
   "status": 400,
-  "detail": "A Zero database transaction is already open on this connection.",
+  "detail": "The Zero runner tried to start a database transaction while one was already active.",
   "code": "zero_db_transaction_active",
   "requestId": "req_4mz0v8qk"
 }

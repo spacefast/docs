@@ -1,11 +1,11 @@
 ---
 title: "zero_db_transaction_missing"
-description: "No Zero database transaction is open on this connection."
+description: "The Zero runner tried to finish a database transaction that was not active."
 ---
 
-No Zero database transaction is open on this connection.
+The Zero runner tried to finish a database transaction that was not active.
 
-**How to resolve:** Start a transaction before committing or rolling one back.
+**How to resolve:** Rebuild with the current Zero runner. If the failure repeats, report it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_missing",
   "title": "Zero db transaction missing",
   "status": 400,
-  "detail": "No Zero database transaction is open on this connection.",
+  "detail": "The Zero runner tried to finish a database transaction that was not active.",
   "code": "zero_db_transaction_missing",
   "requestId": "req_4mz0v8qk"
 }

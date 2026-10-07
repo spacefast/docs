@@ -1,11 +1,11 @@
 ---
 title: "agent_handoff_declined"
-description: "The agent handoff was declined and cannot be redeemed."
+description: "The app-private agent handoff cannot be redeemed."
 ---
 
-The agent handoff was declined and cannot be redeemed.
+The app-private agent handoff cannot be redeemed.
 
-**How to resolve:** Ask the user to mint a fresh handoff for this Space and client, then redeem that link once.
+**How to resolve:** Ask the user to create a fresh handoff for this space and client, then redeem that new link once.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/agent_handoff_declined",
   "title": "Agent handoff declined",
   "status": 400,
-  "detail": "The agent handoff was declined and cannot be redeemed.",
+  "detail": "The app-private agent handoff cannot be redeemed.",
   "code": "agent_handoff_declined",
   "requestId": "req_4mz0v8qk"
 }

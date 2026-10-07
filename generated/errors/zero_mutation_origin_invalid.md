@@ -1,11 +1,11 @@
 ---
-title: "not_enrolled"
-description: "The account is not enrolled in the Spacefast private beta."
+title: "zero_mutation_origin_invalid"
+description: "The cookie-authenticated Zero mutation did not prove the serving origin."
 ---
 
-The account is not enrolled in the Spacefast private beta.
+The cookie-authenticated Zero mutation did not prove the serving origin.
 
-**How to resolve:** Request beta access, then retry once the account is enrolled.
+**How to resolve:** Send the write from the Space's exact origin with a non-safelisted content type, or use an explicit platform bearer for a non-browser client.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/not_enrolled",
-  "title": "Not enrolled",
+  "type": "https://spacefast.com/docs/errors/zero_mutation_origin_invalid",
+  "title": "Zero mutation origin invalid",
   "status": 400,
-  "detail": "The account is not enrolled in the Spacefast private beta.",
-  "code": "not_enrolled",
+  "detail": "The cookie-authenticated Zero mutation did not prove the serving origin.",
+  "code": "zero_mutation_origin_invalid",
   "requestId": "req_4mz0v8qk"
 }
 ```

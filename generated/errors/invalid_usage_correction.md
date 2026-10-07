@@ -1,11 +1,11 @@
 ---
 title: "invalid_usage_correction"
-description: "The correction does not line up with the usage record it corrects."
+description: "The correction does not match the original usage record."
 ---
 
-The correction does not line up with the usage record it corrects.
+The correction does not match the original usage record.
 
-**How to resolve:** Match the original tenant, principal, Space, mode, dimension, and bucket exactly in the correction.
+**How to resolve:** Use the same tenant, principal, space, mode, dimension, and bucket as the original.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_usage_correction",
   "title": "Invalid usage correction",
   "status": 400,
-  "detail": "The correction does not line up with the usage record it corrects.",
+  "detail": "The correction does not match the original usage record.",
   "code": "invalid_usage_correction",
   "requestId": "req_4mz0v8qk"
 }

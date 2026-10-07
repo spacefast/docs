@@ -1,11 +1,11 @@
 ---
 title: "slow_down"
-description: "The device flow was polled faster than its interval allows."
+description: "The device login is being polled faster than the advised interval."
 ---
 
-The device flow was polled faster than its interval allows.
+The device login is being polled faster than the advised interval.
 
-**How to resolve:** Wait the seconds in `resetSeconds`, then poll again at the interval the device response returned.
+**How to resolve:** Increase the polling interval. Aggressive polling invalidates the flow.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/slow_down",
   "title": "Slow down",
   "status": 400,
-  "detail": "The device flow was polled faster than its interval allows.",
+  "detail": "The device login is being polled faster than the advised interval.",
   "code": "slow_down",
   "requestId": "req_4mz0v8qk"
 }

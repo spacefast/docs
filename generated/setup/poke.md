@@ -1,13 +1,16 @@
 ---
 title: "Connect Poke to Spacefast"
-description: "Prefill a Spacefast integration in Poke and authorize with OAuth."
+description: "Add Spacefast to Poke so it can publish for you."
 seo:
   canonical: "https://spacefast.com/setup/poke/"
 ---
 
-Prefill a Spacefast integration in Poke and authorize with OAuth.
+Add Spacefast to Poke so it can publish for you.
 
 **[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)**
+
+1. Choose Create Integration.
+2. Sign in to Spacefast and approve access.
 
 If nothing happens, add the endpoint in Poke yourself:
 

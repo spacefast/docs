@@ -8,15 +8,19 @@ After this page you know every hostname a Space answers on, which one the CLI an
 
 ## The default hostname
 
-Every Space gets one hostname the moment it exists:
+Every new Space gets one hostname the moment it exists:
 
 ```text
-https://{label}.view.fast/
+https://{label}.space.fast/
 ```
 
-The label comes from the Space slug, lowercased, with every character outside `a-z`, `0-9` and `-` replaced by `-`, runs of hyphens collapsed, and a 63-character cap. A Space with slug `my-site` serves at `https://my-site.view.fast/`.
+The label comes from the Space slug, lowercased, with every character outside `a-z`, `0-9` and `-` replaced by `-`, runs of hyphens collapsed, and a 63-character cap. A new Space with slug `my-site` serves at `https://my-site.space.fast/`.
 
 The default hostname keeps serving for the life of the Space. Adding a custom domain never retires it.
+
+Existing Spaces on `view.fast` keep that domain. Publishing again, renaming the slug, or creating a version or branch preview keeps the Space on its original domain. Existing version URLs and share links keep working.
+
+A hostname label stays taken across both domains. If `my-site.view.fast` belongs to a Space, another Space cannot take `my-site.space.fast`.
 
 A slug cannot contain `--`, because `--` is the separator between a version or branch label and the Space label in the hostnames below.
 
@@ -25,10 +29,12 @@ A slug cannot contain `--`, because `--` is the separator between a version or b
 Every version that reaches ready gets a permanent hostname of its own:
 
 ```text
-https://v{number}--{label}.view.fast/
+https://{label}--v{number}.{apex}/
 ```
 
-Version 7 of `my-site` is `https://v7--my-site.view.fast/`. The URL is computed once when the version turns ready and stored on the version row, so it survives a slug rename and keeps serving that exact build no matter what is live now.
+The apex is the Space's original domain, either `space.fast` or `view.fast`. Version 7 of a new Space named `my-site` is `https://my-site--v7.space.fast/`. The URL is computed once when the version turns ready and stored on the version row, so it survives a slug rename and keeps serving that exact build no matter what is live now.
+
+Existing URLs such as `https://v7--my-site.view.fast/` retain their format. Use the returned `immutableUrl` rather than composing a version URL yourself.
 
 The API and the CLI report it as `immutableUrl`, with an `immutableUrlStatus` of `pending` until the hostname is routable.
 
@@ -39,8 +45,10 @@ Version hostnames always carry `X-Robots-Tag: noindex, nofollow`, and their `/ro
 A version published from a connected Git branch also gets a branch hostname:
 
 ```text
-https://br-{alias}--{label}.view.fast/
+https://{label}--br-{alias}.{apex}/
 ```
+
+The apex stays the same as the Space's default hostname. Existing branch URLs such as `https://br-preview--my-site.view.fast/` retain their format.
 
 The alias is clamped to 16 characters. Branch hostnames follow the branch: pushing again repoints the same URL at the newer version. They are noindex for the same reason version hostnames are.
 
@@ -50,9 +58,9 @@ The alias is clamped to 16 characters. Branch hostnames follow the branch: pushi
 
 | Space state | `liveUrl` |
 | --- | --- |
-| No custom domain | `https://{label}.view.fast/` |
+| No custom domain | The Space's default hostname |
 | Primary domain, state `active` | `https://{primary hostname}/` |
-| Primary domain still verifying, or blocked | `https://{label}.view.fast/` |
+| Primary domain still verifying, or blocked | The Space's default hostname |
 
 It is always `https`, always with a trailing slash on the root, so the same host produces a byte-identical URL everywhere. A primary domain that has not reached `active` does not displace the default hostname, which is why a half-configured domain never publishes a link nobody can load.
 
@@ -60,13 +68,13 @@ It is always `https`, always with a trailing slash on the root, so the same host
 
 Both hostnames serve. The default hostname stays in the Space's serving set permanently, and requests to it keep returning content, not a redirect. What changes is the URL Spacefast reports for the Space.
 
-If you want the `view.fast` hostname to stop answering with content, there is no switch for it. Point people at the custom domain instead.
+If you want the managed hostname to stop answering with content, there is no switch for it. Point people at the custom domain instead.
 
 The apex and `www` pair is different. When one of them serves, the other gets an automatic 308 to it. See [Custom domains](/domains).
 
 ## Renaming a Space
 
-Renaming the slug moves the default hostname to the new label. The old hostname keeps a temporary 307 to the new one, preserving path and query, so links you already handed out still land. Branch hostnames under the old label get the same 307.
+Renaming the slug moves the default hostname to the new label on the same domain. A `view.fast` Space stays on `view.fast`. A `space.fast` Space stays on `space.fast`. The old hostname keeps a temporary 307 to the new one, preserving path and query, so links you already handed out still land. Branch hostnames under the old label get the same 307.
 
 Version URLs do not change on a rename. They were computed once and stay put.
 
@@ -82,7 +90,7 @@ One request returns that page. There is no redirect and no interstitial, so `cur
 
 ## Hostnames you cannot claim
 
-Any hostname ending in `.view.fast` is refused as a custom domain with `domain_reserved_suffix`. Default hostnames pass DNS verification automatically, so allowing them as custom domains would let one team claim an address owned by another team.
+Any hostname ending in `.space.fast` or `.view.fast` is refused as a custom domain with `domain_reserved_suffix`. Default hostnames pass DNS verification automatically, so allowing them as custom domains would let one team claim an address owned by another team.
 
 ## Hostnames that do not serve
 
