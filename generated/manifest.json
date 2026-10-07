@@ -1,10 +1,10 @@
 {
-  "contentDigest": "1dab44948e5d586038d71af6552e2caf0d1dadb3602d6c717fa99938f4d3c5a0",
+  "contentDigest": "6c850e3cefc08d93f1cc46bcb9a61432d1879a6c0b3f5ea2819419851a8fcf83",
   "counts": {
     "apiOperations": 435,
     "changelogPackages": 24,
     "changelogVersions": 27,
-    "errorCodes": 672,
+    "errorCodes": 673,
     "partnerOperations": 415,
     "redirects": 3089,
     "setupPages": 24
@@ -1166,9 +1166,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 87860,
+      "bytes": 88022,
       "path": "errors/index.md",
-      "sha256": "b24337029ffeb34a1e4a0c762558a74c4a255d3e2019998d491fbabd47ad75a6"
+      "sha256": "c811cc34e83425655826b0e2d1257f26de1148889fb3a8c17e374e0ffaae6ce5"
     },
     {
       "bytes": 1112,
@@ -1854,6 +1854,11 @@
       "bytes": 1115,
       "path": "errors/publish_bytes_missing.md",
       "sha256": "79d91a6348d9371ef9184a0ce496e8f9ffbc78310e1df3f749266791d1b324ff"
+    },
+    {
+      "bytes": 1254,
+      "path": "errors/publish_config_only_no_artifact.md",
+      "sha256": "bc51c95861754053fd4cced332a8b4bef5d74fa15f766541e17d30de03489be7"
     },
     {
       "bytes": 1157,
@@ -3641,14 +3646,14 @@
       "sha256": "71cd78e5d1cc2fd45230adb301b6171b85ac39e8c7861e655ab286cccc423d47"
     },
     {
-      "bytes": 8647368,
+      "bytes": 8647960,
       "path": "openapi/api.json",
-      "sha256": "061dd9da72e4854c30d38d412d019fea6d9b4db63ce1eadd5a1dc79f8b8308b7"
+      "sha256": "7a63470152c051f8390289676a4b498eb658ed942027de54101335993a6d94d8"
     },
     {
-      "bytes": 8469757,
+      "bytes": 8470349,
       "path": "openapi/partner.json",
-      "sha256": "842994042553a4de906384f7c3584f6dc2e7d9ca7ab26e83d340655809cf237c"
+      "sha256": "6a86c81c55f2d7488ce9ced63e12cf25808899d414ad3d1d9b0c16cfd50a2dc9"
     },
     {
       "bytes": 483034,

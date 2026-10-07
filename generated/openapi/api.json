@@ -149482,6 +149482,10 @@
                     },
                     "description": "The complete desired file manifest. `sha256` is optional: omit it to upload by path and let the runtime hash the bytes, or include it to upload by content address, with the digest verified as the bytes land. A `sourceUrl` entry is fetched and hashed by the runtime."
                   },
+                  "configOnly": {
+                    "description": "Recompile the configuration on top of the current ready artifact without replacing content: the file catalog carries forward, Functions/Zero declarations and runtime detection are preserved, and the version records a `config_update` source. `files` may name only `sf.jsonc` (the shipped configuration); every other path keeps the current version's bytes. Requires an existing ready version to carry forward. Runtime changes still need a normal content publish.",
+                    "type": "boolean"
+                  },
                   "deletePaths": {
                     "default": [],
                     "description": "Explicit paths to remove when `publishMode` is additive. Omitted paths are retained. Only listed paths are deleted.",

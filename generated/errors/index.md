@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 672 error codes in the registry.
+There are 673 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -327,6 +327,7 @@ There are 672 error codes in the registry.
 | [`publish_archive_too_large`](/errors/publish_archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`publish_base_changed`](/errors/publish_base_changed) | Someone published new space settings after the base you loaded, so saving would overwrite their change. |
 | [`publish_bytes_missing`](/errors/publish_bytes_missing) | The publish has no complete staged content to materialize. |
+| [`publish_config_only_no_artifact`](/errors/publish_config_only_no_artifact) | A configuration-only publish needs an existing ready version to carry forward. |
 | [`publish_config_unsupported`](/errors/publish_config_unsupported) | The publish carries configuration this endpoint does not support. |
 | [`publish_failed`](/errors/publish_failed) | The publish failed before going live. |
 | [`publish_file_missing`](/errors/publish_file_missing) | A declared file was never uploaded, so the publish cannot finalize. |
