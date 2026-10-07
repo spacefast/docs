@@ -6,7 +6,7 @@ questions:
     routes: /cli
   - id: default-hostname
     question: What hostname does a new Space get, and what does a single version's URL look like?
-    expected: ["<slug>.view.fast", "v<number>--<slug>.view.fast"]
+    expected: ["<label>.space.fast", "<label>--v<number>.space.fast", "existing Spaces keep view.fast"]
     routes: /urls
   - id: device-login-lifetime
     question: How long is the code shown by `sf login` valid, and how long does the resulting credential last?

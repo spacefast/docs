@@ -200,7 +200,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | `invalid_domain_name` | 400 | Not a hostname: no dot, an IP literal, over 253 characters, or not convertible to ASCII. |
 | `domain_wildcard_label` | 400 | A label contained `*`. Add the apex or the concrete hostname instead. |
 | `domain_reserved_suffix` | 400 | The hostname ends in a Spacefast-managed suffix. |
-| `managed_domain_protected` | 400 | You passed the id of a built-in `view.fast` hostname. |
+| `managed_domain_protected` | 400 | You passed the id of a built-in `space.fast` or `view.fast` hostname. |
 | `domain_already_exists` | 409 | The team already has that hostname. |
 | `domain_quota_exceeded` | 409 | The plan's external domain group limit is reached. |
 | `domain_in_use` | 409 | Another verified claim serves it, or it is still assigned to a Space. |
