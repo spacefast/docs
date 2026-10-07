@@ -1,5 +1,5 @@
 {
-  "contentDigest": "7454e12b524837803b70d3229a342b4c570c9c72485447e9b0da62ba4828a70a",
+  "contentDigest": "1dab44948e5d586038d71af6552e2caf0d1dadb3602d6c717fa99938f4d3c5a0",
   "counts": {
     "apiOperations": 435,
     "changelogPackages": 24,
@@ -3643,12 +3643,12 @@
     {
       "bytes": 8647368,
       "path": "openapi/api.json",
-      "sha256": "9bde2a998959c9f24f99a2fe41b1242eff1cbc1945cc77c0533ee488ee59978d"
+      "sha256": "061dd9da72e4854c30d38d412d019fea6d9b4db63ce1eadd5a1dc79f8b8308b7"
     },
     {
       "bytes": 8469757,
       "path": "openapi/partner.json",
-      "sha256": "5d4b9f84c6137eb66d1c0b4da55dcbc1bcfaa591959e2df4bc9c2add7aa61213"
+      "sha256": "842994042553a4de906384f7c3584f6dc2e7d9ca7ab26e83d340655809cf237c"
     },
     {
       "bytes": 483034,
