@@ -1,11 +1,11 @@
 ---
 title: Skills
-description: The Spacefast agent skill, what it tells your agent to do, and how to install or remove it with the sf CLI
+description: The base Spacefast skill and the task skills for saving and using a team's Design System
 ---
 
-After this page you know what the shipped skill instructs your agent to do, which clients get which variant, and how to install, check, or remove it.
+The base `spacefast` skill routes publishing and management work to the right tools. Spacefast plugins also include task skills for saving and using a team's Design System.
 
-## One skill, called `spacefast`
+## The base `spacefast` skill
 
 Every lane ships a skill named `spacefast`. It is two markdown files, `SKILL.md` and `references.md`, rendered from one template into per-client variants.
 
@@ -18,7 +18,20 @@ Every lane ships a skill named `spacefast`. It is two markdown files, `SKILL.md`
 
 The plugin lanes carry the MCP variant, which routes work to the typed tools. The copy bundled with the CLI carries the curl and HTTP API variant instead, for agents that have no MCP connection at all. Same name, same product rules, different lane.
 
-## What triggers it
+## Design System task skills
+
+Spacefast plugins include four skills for the [Design System](/design-system):
+
+| Skill | Use it for |
+|---|---|
+| `import-design-system` | Save supplied standards, source files, and supporting guidance to the team |
+| `apply-design-system` | Use saved standards in a new build or requested source edit |
+| `verify-design-system` | Check a source build or preview against current standards; fix only when you ask for corrections |
+| `update-design` | Bring a named existing Space or linked project onto current standards |
+
+Importing standards does not change a project. Applying them to one project does not roll them out to the team's other Spaces.
+
+## What triggers the base skill
 
 The trigger line is the frontmatter `description`. Your client matches it against what you asked for.
 
@@ -65,7 +78,7 @@ Publish this folder to Spacefast and give me the live URL.
 Show me the deployments for this Space and whether the last build passed.
 </Prompt>
 
-## What it instructs
+## What the base skill instructs
 
 The skill's job is routing and conduct. The MCP variant follows these tool choices.
 
@@ -90,9 +103,9 @@ The rest sets behavior the tools alone do not enforce.
 
 ## Kept in sync with the tools
 
-A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The skill you install always names exactly the five tools the server registers.
+A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The base skill names exactly the five tools the server registers.
 
-## Install it on its own
+## Install the base skill on its own
 
 If you want the skill without touching MCP config, the CLI installs the copy bundled with it.
 

@@ -1,0 +1,39 @@
+---
+title: Design System
+description: Save a team's design rules once, then reuse and check them across projects
+---
+
+Save your team's colors, type, layout, voice, and brand files in one Design System. A connected agent can reuse those standards in a new project, check a build against them, or bring a named Space up to date. You choose which Spaces change. Saving the system alone does not edit or publish a site.
+
+## Start a Design System
+
+When Design System is enabled for your team, open the team and choose **Design System**. If you see **Set up team context**, select it first. Then choose how to start:
+
+- **Import what you already have.** Choose **Copy prompt** and give it to an agent connected to [Spacefast MCP](/agents). Give the agent your brand guide, Figma file, or repository too. The `import-design-system` skill saves supported values, registers source files, and keeps other guidance in supporting Memory records. Ask for a report of conflicts and anything it could not import.
+- **Start from a kit.** Choose **shadcn/ui**, **Tailwind CSS**, or **Spacefast default**. The kit saves editable colors, type, and layout values. Review them before applying them to a project.
+
+You can also add the standards yourself in the dashboard. **Look & feel** holds named colors, typography for headings and body text, and layout dimensions. **Voice** holds a tone description and writing rules with optional examples.
+
+## Add brand files
+
+Use **Brand files** to upload logos, images, fonts, and source documents. After uploading, edit **How to use** to tell your agent where and when a file belongs. A filename alone cannot do that job.
+
+Each upload must be no larger than 25 MB. Files stay in the team's private Media Library. Accepted SVG files are sanitized on upload, so check the saved artwork. An agent must download needed files and put visitor-facing assets in the project's source; private file URLs do not belong in a live page.
+
+## Apply it to a project
+
+On a saved Design System, choose **Apply with your agent → Copy prompt**. Give the prompt to your connected agent and name the project or Space you want it to work on. The prompt points the agent to the current team standards and these skills when available:
+
+- `apply-design-system` builds a new project or makes a requested source edit using the saved standards.
+- `verify-design-system` checks a matching source build or preview and fixes gaps when you ask for corrections.
+- `update-design` brings a named existing Space or linked project into line with the current standards.
+
+The agent reads the saved Design System and applicable Memory, works from the complete project source, and checks the built result at desktop and mobile sizes. If a required file is unavailable or two rules conflict, it should report the specific gap.
+
+Changes to team standards do not roll out to existing Spaces. Name each Space you want updated. Whether the agent publishes depends on your request and that Space's work mode.
+
+## Change or undo a saved rule
+
+Edit the saved values in **Look & feel**, **Voice**, or **Brand files**. The **Changelog** shows the current revision and changes made in this session. **Revert** can undo only the latest saved change; older changes cannot be selected for undo.
+
+If someone saves a newer revision while you are editing, reload the saved version and reconcile your draft before saving again.
