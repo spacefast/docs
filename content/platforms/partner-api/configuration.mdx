@@ -86,7 +86,7 @@ CORS origins cannot contain wildcards, credentials, query strings, fragments, or
 }
 ```
 
-`features` grants capabilities. `branding.hide` hides the Spacefast badge, `pages.templates` allows `_pages/*.html` full-page takeovers, and `domains.proxy_bindings` allows proxy routes to external upstreams. A partner plan grants none of them unless listed.
+`features` grants capabilities. `branding.hide` hides the Spacefast badge and `pages.templates` allows `_pages/*.html` full-page takeovers. A partner plan grants these capabilities only when listed. External proxy routes are available independently of feature grants.
 
 `quotas` takes `spaces`, `storageBytes`, `buildMinutesPerMonth`, and `customDomains`, each a nonnegative integer. An omitted quota has no cap. `quotaPolicy` is `block` (the default) or `warn`.
 
