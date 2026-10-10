@@ -16,8 +16,8 @@ Download `claude-desktop.mcpb` from the latest release of `github.com/spacefast/
   <Step title="Double-click it">
     Claude Desktop reads the manifest and offers to install the extension.
   </Step>
-  <Step title="Leave the token blank, or paste one">
-    The extension has one setting, a Spacefast API token. Leave it empty to publish anonymously and claim the Space later.
+  <Step title="Leave the key blank, or paste one">
+    The extension has one setting, a Spacefast API key. Leave it empty to publish anonymously and claim the Space later.
   </Step>
 </Steps>
 
@@ -62,7 +62,7 @@ The extension exposes one user setting.
 
 | Setting | Type | Required | What it does |
 |---|---|---|---|
-| Spacefast API token | string, marked sensitive | No | "Your Spacefast account token (from spacefast.com/account/tokens). Leave blank to publish anonymously." |
+| Spacefast API key | string, marked sensitive | No | "Your Spacefast API key (from https://my.spacefast.com/account/api-keys). Leave blank to publish anonymously." |
 
 The value is passed to the server as `SPACEFAST_TOKEN` and never written into a config file you have to manage.
 
