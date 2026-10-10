@@ -25,6 +25,12 @@ A directory matching none of these is a static site, which is the safe default.
 
 The OpenNext build wins over a stray `handler.ts`, because framework output is the thing the build produced while a loose file may be a leftover.
 
+### Static files first, then the worker
+
+Files in the tree are served before the worker runs. Only a path with no matching file reaches the route table.
+
+A root handler claims the whole site, so it receives every path that is not a file, and its response is final. A `404.html` in the tree is never used for those paths: visitors see whatever the handler returns. To show a 404 page, return HTML from the handler's fallback for browser requests, or use a `functions/` directory. With a file router, a path that no route claims falls through to static handling: the SPA `fallback` if you set one, otherwise the nearest `404.html`, then the Spacefast page. See [The 404 page](/routing#the-404-page).
+
 ### The `functions/` file router
 
 A module's filename is its route and the HTTP methods it exports are the methods it answers. Nothing is inferred from a module graph, so the table is exact.
@@ -51,7 +57,7 @@ A module's filename is its route and the HTTP methods it exports are the methods
 
 Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed, and neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
 
-A path that exists at other methods answers 405 with an `Allow` header. A path in no file's table is a plain 404 and the worker never wakes.
+A path that exists at other methods answers 405 with an `Allow` header. A path in no file's table never wakes the worker and falls through to static handling, as described above.
 
 ## The handler
 
@@ -82,7 +88,7 @@ export default {
 };
 ```
 
-`sf init my-app --runtime functions` writes exactly that file plus the matching `sf.jsonc`.
+`sf init my-app --runtime functions` writes exactly that file plus the matching `sf.jsonc`. Its fallback answers every unknown path with plain text, including page URLs a visitor mistypes, so replace it if the site needs a 404 page. See [Static files first, then the worker](#static-files-first-then-the-worker).
 
 Requests and responses are the standard `Request` and `Response`. There is no Spacefast wrapper around either.
 
