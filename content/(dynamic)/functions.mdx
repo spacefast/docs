@@ -86,6 +86,8 @@ export default {
 
 Requests and responses are the standard `Request` and `Response`. There is no Spacefast wrapper around either.
 
+**HTTP `429`:** WP Cloud uses this status for platform rate limiting and can replace a handler's JSON response with its own HTML page. Do not rely on your handler's body or headers, including `Retry-After`, reaching the client with a `429` response. See [WP Cloud HTTP status codes](https://wp.cloud/docs/troubleshooting/wp-cloud-http-status-codes/) for platform-specific behavior.
+
 ## Declare it
 
 Detection means most projects need no `runtime` block at all. Declare one when detection cannot guess the layout.
