@@ -9,6 +9,13 @@ Assume every commit and every line of history will be public.
   flags, routes, defaults, or timelines.
 - Keep the voice direct, no-BS, and a little playful. Prefer the best path over
   an encyclopedia of alternatives.
+- Be concise; lead with importance. See [STYLE_GUIDE.md](STYLE_GUIDE.md) for
+  the full rationale, worked examples, and the complete list of banned words,
+  wordiness swaps, and vocabulary rules Vale enforces.
+- Preserve prerequisites, scope, and exceptions when rewriting. Check leads
+  against the procedure and public reference, then reconcile sibling guides,
+  glossary entries, and built-output tests. Shorter wording is not evidence
+  of factual accuracy.
 - Do not add navigation to a section until that section has a real page or
   generated source.
 - Authored navigation comes from `content/**` and its `meta.ts` files.
@@ -60,6 +67,7 @@ bun run verify:generated
 bun run check
 bun run validate
 bun run build
+bun run test:docs
 bun run audit
 bun run verify:public-safety
 bun run verify:prose
@@ -67,6 +75,9 @@ bun run verify:routes
 ```
 
 ## Prose style (Vale)
+
+See [STYLE_GUIDE.md](STYLE_GUIDE.md) for the human-readable version of every
+rule below, with rationale and worked examples.
 
 `bun run verify:prose` runs [Vale](https://vale.sh) over every docs page and
 over the `summary`/`description` fields of the generated OpenAPI snapshot

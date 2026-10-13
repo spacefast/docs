@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-After this page you can add a worker to a Space, know which file layout the publish detects, write a handler with the right signature, and find its logs.
+Functions can detect a supported worker layout when you publish, without an explicit `runtime` block. Custom layouts need a declaration, and [Zero](/zero-runtime#declare-it) is always declared explicitly.
 
 Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want live queries in the browser and a schema the platform migrates for you, use [Zero](/zero-runtime) instead. Both can call `fetch()`. One version declares one runtime.
 
@@ -49,7 +49,7 @@ A module's filename is its route and the HTTP methods it exports are the methods
 | `functions/haiku/[topic].ts` | `/haiku/:topic` |
 | `functions/posts/[...rest].ts` | `/posts` and everything under it |
 
-Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed, and neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
+Route modules can be `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. A name starting with `_` or `.` is a colocated helper and is never routed. Neither are `.d.ts` files or anything matching `*.test.*` / `*.spec.*`. A catch-all is terminal or nothing: `[...rest]` in the middle of a path is skipped.
 
 A path that exists at other methods answers 405 with an `Allow` header. A path in no file's table is a plain 404 and the worker never wakes.
 
@@ -88,7 +88,7 @@ Requests and responses are the standard `Request` and `Response`. There is no Sp
 
 ## Declare it
 
-Detection means most projects need no `runtime` block at all. Declare one when detection cannot guess the layout.
+Declare a `runtime` block when detection cannot identify your layout or you need to specify `entry` or `compatibilityDate`.
 
 ```jsonc sf.jsonc
 {

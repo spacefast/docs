@@ -3,15 +3,13 @@ title: Build from a WordPress site
 description: Point a Space's repository build at a public WordPress site, read its content over the REST API during the build, and publish the static output
 ---
 
-After this page you can name one or more public WordPress sites on a Space, read their content while your repository builds, and know exactly which environment variables the build receives.
+Data sources only reach repository builds — a folder publish, or a local `sf publish` of a built directory, never sees them.
 
-A data source is a public WordPress site a build reads content from. Nothing is copied into the Space and nothing is written back. The platform hands the build a URL and a source map, your build code fetches over the WordPress REST API, and the output publishes like any other static build.
+A data source is a public WordPress site a build reads content from. Nothing is copied into the Space and nothing is written back. The platform hands the build a URL and a source map. Your build code fetches over the WordPress REST API, and the output publishes like any other static build.
 
 ## What you need first
 
-Data sources reach **repository builds only**. A folder publish never sees them, and neither does a local `sf publish` of a built directory.
-
-So a Space needs a connected repository before a source does anything. See [Publish from Git](/git). Until one is connected, the dashboard shows **Connect a repository to use data sources** with a **Connect repository** button, and saved sources sit there doing nothing. Once it is connected the banner reads **Ready for repository builds**.
+A Space needs a connected repository before a source does anything — see [Publish from Git](/git). Until one is connected, the dashboard shows **Connect a repository to use data sources** with a **Connect repository** button, and saved sources sit there doing nothing. Once it is connected the banner reads **Ready for repository builds**.
 
 Sources live on the Space, not in `sf.jsonc`. `dataSources` and `defaultDataSource` are not keys of the committed config file, and putting them there does nothing. A build's content source is a deployment fact, so it is set through the dashboard or the API.
 

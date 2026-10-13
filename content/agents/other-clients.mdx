@@ -3,7 +3,7 @@ title: Any MCP client
 description: Connect any MCP client to Spacefast over hosted HTTP or local stdio, and what sf mcp proxy does
 ---
 
-After this page you can wire Spacefast into an MCP client that has no first-party plugin, choose between the hosted endpoint and a local stdio server, and know what the CLI's default proxy lane actually does.
+MCP configuration varies by client: `mcp` for OpenCode, `servers` for VS Code, and `context_servers` for Zed. `sf setup agent` writes configuration for the clients it supports.
 
 ## Pick a transport
 
@@ -22,7 +22,7 @@ After this page you can wire Spacefast into an MCP client that has no first-part
     }
     ```
 
-    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright and VS Code reads one as a stdio command, so the short form is broken rather than smaller.
+    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright, and VS Code reads one as a stdio command. The short form is broken, not smaller.
   </Tab>
   <Tab title="Local stdio">
     The server runs on your machine and can read your working directory, so `publish` accepts a path.
@@ -59,7 +59,7 @@ After this page you can wire Spacefast into an MCP client that has no first-part
   </Tab>
 </Tabs>
 
-Some clients use different key names. `mcp` for OpenCode, `servers` for VS Code, `context_servers` for Zed, and Amp puts the server map at the top level with no root key at all. `sf setup agent` knows each dialect, so let it write the file when you can.
+Amp puts the server map at the top level with no root key. Use `sf setup agent` for a [supported client](/cli/agents#sf-mcp-install); otherwise adapt the transport example to your client's configuration format.
 
 Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
 
