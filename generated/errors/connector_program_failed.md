@@ -1,11 +1,11 @@
 ---
-title: "anonymous_external_proxy_disabled"
-description: "Proxy routes to external upstreams do not serve on an unclaimed space."
+title: "connector_program_failed"
+description: "The connector program failed during execution."
 ---
 
-Proxy routes to external upstreams do not serve on an unclaimed space.
+The connector program failed during execution.
 
-**How to resolve:** Claim the space. The rules activate on their own, without a republish.
+**How to resolve:** Read the error detail, correct the program or its inputs, and submit a new run.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/anonymous_external_proxy_disabled",
-  "title": "Anonymous external proxy disabled",
+  "type": "https://spacefast.com/docs/errors/connector_program_failed",
+  "title": "Connector program failed",
   "status": 400,
-  "detail": "Proxy routes to external upstreams do not serve on an unclaimed space.",
-  "code": "anonymous_external_proxy_disabled",
+  "detail": "The connector program failed during execution.",
+  "code": "connector_program_failed",
   "requestId": "req_4mz0v8qk"
 }
 ```

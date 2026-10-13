@@ -1,11 +1,11 @@
 ---
 title: "decision_execution_lost"
-description: "The confirmation execution lease is not held by this request."
+description: "The approved action's execution lease is no longer held, so its result cannot be recorded."
 ---
 
-The confirmation execution lease is not held by this request.
+The approved action's execution lease is no longer held, so its result cannot be recorded.
 
-**How to resolve:** Request a new decision, then run the action again.
+**How to resolve:** Poll the continuation to read the decision's current state before requesting the action again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/decision_execution_lost",
   "title": "Decision execution lost",
   "status": 400,
-  "detail": "The confirmation execution lease is not held by this request.",
+  "detail": "The approved action's execution lease is no longer held, so its result cannot be recorded.",
   "code": "decision_execution_lost",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "validation_error"
-description: "The request did not satisfy the schema for this endpoint."
+description: "A request field failed validation."
 ---
 
-The request did not satisfy the schema for this endpoint.
+A request field failed validation.
 
-**How to resolve:** Read `pointer` and `detail` in the problem document, correct the named field, then retry.
+**How to resolve:** Fix the field referenced by `pointer` and `details`, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/validation_error",
   "title": "Validation error",
   "status": 400,
-  "detail": "The request did not satisfy the schema for this endpoint.",
+  "detail": "A request field failed validation.",
   "code": "validation_error",
   "requestId": "req_4mz0v8qk"
 }

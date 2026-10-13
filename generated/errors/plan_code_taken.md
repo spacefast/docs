@@ -1,11 +1,11 @@
 ---
-title: "artifact_not_found"
-description: "No artifact exists at this space and path."
+title: "plan_code_taken"
+description: "Another plan code already uses this code."
 ---
 
-No artifact exists at this space and path.
+Another plan code already uses this code.
 
-**How to resolve:** List artifacts to find the right ref. An artifact ref is `<spaceId>:<path>`.
+**How to resolve:** Choose a different custom code, or leave it blank to mint a random one.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_not_found",
-  "title": "Artifact not found",
+  "type": "https://spacefast.com/docs/errors/plan_code_taken",
+  "title": "Plan code taken",
   "status": 400,
-  "detail": "No artifact exists at this space and path.",
-  "code": "artifact_not_found",
+  "detail": "Another plan code already uses this code.",
+  "code": "plan_code_taken",
   "requestId": "req_4mz0v8qk"
 }
 ```

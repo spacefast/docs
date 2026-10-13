@@ -1,11 +1,11 @@
 ---
 title: "issuer_proof_invalid"
-description: "The issuer key-possession proof did not verify or is stale."
+description: "The partner token issuer key-possession proof is invalid."
 ---
 
-The issuer key-possession proof did not verify or is stale.
+The partner token issuer key-possession proof is invalid.
 
-**How to resolve:** Re-sign the challenge nonce with the issuer key and send the fresh proof in `proof`.
+**How to resolve:** Sign the current challenge and minted audience with one of the registered Ed25519 keys, then retry activation.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/issuer_proof_invalid",
   "title": "Issuer proof invalid",
   "status": 400,
-  "detail": "The issuer key-possession proof did not verify or is stale.",
+  "detail": "The partner token issuer key-possession proof is invalid.",
   "code": "issuer_proof_invalid",
   "requestId": "req_4mz0v8qk"
 }

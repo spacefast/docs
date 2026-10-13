@@ -1,11 +1,11 @@
 ---
 title: "promotion_test_twin_missing"
-description: "This live tenant has no linked test tenant to promote from."
+description: "This live tenant has no linked test tenant, so there is nothing to promote from."
 ---
 
-This live tenant has no linked test tenant to promote from.
+This live tenant has no linked test tenant, so there is nothing to promote from.
 
-**How to resolve:** Link a test tenant to the live tenant, then promote.
+**How to resolve:** Create the tenant's test twin and publish its system space before promoting.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_test_twin_missing",
   "title": "Promotion test twin missing",
   "status": 400,
-  "detail": "This live tenant has no linked test tenant to promote from.",
+  "detail": "This live tenant has no linked test tenant, so there is nothing to promote from.",
   "code": "promotion_test_twin_missing",
   "requestId": "req_4mz0v8qk"
 }

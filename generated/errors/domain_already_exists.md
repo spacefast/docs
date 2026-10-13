@@ -1,11 +1,11 @@
 ---
 title: "domain_already_exists"
-description: "The team or principal already holds a domain record for this hostname."
+description: "This domain is already present in your inventory."
 ---
 
-The team or principal already holds a domain record for this hostname.
+This domain is already present in your inventory.
 
-**How to resolve:** Use the existing domain record instead of adding the hostname again.
+**How to resolve:** Use the existing domain record instead of adding it again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_already_exists",
   "title": "Domain already exists",
   "status": 400,
-  "detail": "The team or principal already holds a domain record for this hostname.",
+  "detail": "This domain is already present in your inventory.",
   "code": "domain_already_exists",
   "requestId": "req_4mz0v8qk"
 }

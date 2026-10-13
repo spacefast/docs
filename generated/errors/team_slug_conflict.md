@@ -1,11 +1,11 @@
 ---
 title: "team_slug_conflict"
-description: "Another team already uses that slug."
+description: "The team slug is already taken."
 ---
 
-Another team already uses that slug.
+The team slug is already taken.
 
-**How to resolve:** Choose a different team slug and retry.
+**How to resolve:** Choose a different slug.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/team_slug_conflict",
   "title": "Team slug conflict",
   "status": 400,
-  "detail": "Another team already uses that slug.",
+  "detail": "The team slug is already taken.",
   "code": "team_slug_conflict",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
-title: "artifact_invalid_source"
-description: "The artifact source is not a renderable page component."
+title: "cron_not_found"
+description: "The live version declares no scheduled job with that key or path."
 ---
 
-The artifact source is not a renderable page component.
+The live version declares no scheduled job with that key or path.
 
-**How to resolve:** Export one component named App, with no imports — everything an artifact can use is already in scope.
+**How to resolve:** List the space's crons to see what the live version declares, and pass one of those keys or paths. Crons are declared in sf.jsonc, so publishing is what adds one.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/artifact_invalid_source",
-  "title": "Artifact invalid source",
+  "type": "https://spacefast.com/docs/errors/cron_not_found",
+  "title": "Cron not found",
   "status": 400,
-  "detail": "The artifact source is not a renderable page component.",
-  "code": "artifact_invalid_source",
+  "detail": "The live version declares no scheduled job with that key or path.",
+  "code": "cron_not_found",
   "requestId": "req_4mz0v8qk"
 }
 ```

@@ -1,11 +1,11 @@
 ---
 title: "password_compromised"
-description: "The chosen password appears in a public breach list."
+description: "The password appears in a public breach corpus."
 ---
 
-The chosen password appears in a public breach list.
+The password appears in a public breach corpus.
 
-**How to resolve:** Pick a password that has not been used anywhere else.
+**How to resolve:** Pick a password you have not used anywhere else, then try again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/password_compromised",
   "title": "Password compromised",
   "status": 400,
-  "detail": "The chosen password appears in a public breach list.",
+  "detail": "The password appears in a public breach corpus.",
   "code": "password_compromised",
   "requestId": "req_4mz0v8qk"
 }

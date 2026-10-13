@@ -1,11 +1,11 @@
 ---
 title: "storage_quota_exceeded"
-description: "The Space or principal is at its storage quota."
+description: "The operation would exceed its storage allowance."
 ---
 
-The Space or principal is at its storage quota.
+The operation would exceed its storage allowance.
 
-**How to resolve:** Delete stored objects or published files, or move the team to a plan with more storage.
+**How to resolve:** Delete unused storage objects or old versions, reduce the upload size, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_quota_exceeded",
   "title": "Storage quota exceeded",
   "status": 400,
-  "detail": "The Space or principal is at its storage quota.",
+  "detail": "The operation would exceed its storage allowance.",
   "code": "storage_quota_exceeded",
   "requestId": "req_4mz0v8qk"
 }

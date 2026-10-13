@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_schema_unavailable"
-description: "The capsule has no stable schema hash, so a complete export cannot be fenced."
+description: "The live capsule has no stable schema hash for a complete export."
 ---
 
-The capsule has no stable schema hash, so a complete export cannot be fenced.
+The live capsule has no stable schema hash for a complete export.
 
-**How to resolve:** Publish a capsule that declares a table set, or contact Spacefast support.
+**How to resolve:** Publish the capsule with a current Zero schema, then start the export again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_db_export_schema_unavailable",
   "title": "Zero db export schema unavailable",
   "status": 400,
-  "detail": "The capsule has no stable schema hash, so a complete export cannot be fenced.",
+  "detail": "The live capsule has no stable schema hash for a complete export.",
   "code": "zero_db_export_schema_unavailable",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "runtime_callback_forbidden"
-description: "The runtime callback token is invalid or is not scoped for this event."
+description: "The runtime callback cannot be authenticated."
 ---
 
-The runtime callback token is invalid or is not scoped for this event.
+The runtime callback cannot be authenticated.
 
-**How to resolve:** Send a callback token minted for this Space, version, and event.
+**How to resolve:** Verify the callback secret configuration for this runtime.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_callback_forbidden",
   "title": "Runtime callback forbidden",
   "status": 400,
-  "detail": "The runtime callback token is invalid or is not scoped for this event.",
+  "detail": "The runtime callback cannot be authenticated.",
   "code": "runtime_callback_forbidden",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,7 +5,7 @@ description: "The stored credential expired or was revoked at the provider."
 
 The stored credential expired or was revoked at the provider.
 
-**How to resolve:** Reconnect the service. Credentials are immutable, so reconnecting replaces them — there is nothing to edit.
+**How to resolve:** POST /v1/connectors/connections/{connectionId}/reconnect. The connection keeps its id, label, and bindings; credentials are immutable, so reconnecting replaces them — there is nothing to edit.
 
 <div data-pagefind-ignore>
 

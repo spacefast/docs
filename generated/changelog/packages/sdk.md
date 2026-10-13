@@ -5,6 +5,82 @@ description: "Release history for @spacefast/sdk on npm."
 
 Published as [`@spacefast/sdk`](https://www.npmjs.com/package/@spacefast/sdk) on npm.
 
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Add feature-gated `sourceUrl` publishing through WordPress.com, with durable URL Build receipts and capture progress/evidence. Existing file and archive publishing contracts remain supported.
+
+#### Patch Changes
+
+- Agents that arrive through a handoff link, and any API key a team member created, can now open a Space's content dashboard: the one-use sign-in link signs in the person who created the key. `sf content dashboard` opens the dashboard in your browser, or prints the sign-in link with `--show-secret --json` for an agent to hand you. The handoff document teaches both the CLI and the direct HTTP lane.
+- `@spacefast/sdk/query` keeps request bodies in Firefox when it sends to a configured request origin. Firefox has no `Request.body`, so a mutation sent through `setSpacefastQueryRequestOrigin` used to arrive with a JSON content type and no body, and the API answered "Request body must be valid JSON."
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- Regenerate the Partner API client and TanStack Query bindings from the current Partner API contract. This updates the Atomic API paths and removes account-only operations from the partner client.
+- @spacefast/common@0.5.1
+
+## 0.5.0
+
+#### Minor Changes
+
+- Claim a hostname attached to another Space with a unique DNS TXT record, or move it directly when authorized to manage both Spaces. Expose ownership instructions and move status through the API and CLI, including `sf domains check --move`.
+- Bind every upload to the API the caller selected, and to the session response
+  that API returned. `uploadSessionFiles` now requires `apiUrl`: it is the origin
+  a relative target resolves against, and the only non-runtime origin an upload
+  may reach. Previously any HTTPS target the session response named was accepted,
+  so a substituted target received the caller's bytes and session headers.
+
+  An upload destination now has to satisfy two independent facts, and route shape
+  is neither. Its host must be one the session response named (or the selected
+  API origin), and it must be a runtime upload endpoint naming the caller's own
+  Space or upload session — anything else has to be verbatim a destination that
+  session issued. Matching `/spaces/<id>/blobs/<sha>` no longer admits a host: the
+  Space id is already in every legitimate target, so it is not a secret and cannot
+  establish who receives the bytes. Reaching a trusted origin is likewise not
+  enough to reach an arbitrary resource on it.
+
+  This is a breaking change for direct callers of `uploadSessionFiles` from
+  `@spacefast/sdk/publish`. Pass the API base URL you already configured for the
+  transport; never read it back out of the upload session. Direct callers of
+  `assertUploadDestination` in `@spacefast/common/utils/upload-session` must now
+  supply `named` — use `uploadSessionDestinations(session)`.
+
+#### Patch Changes
+
+- Reject an unreadable tracked publish operation instead of reporting a completed wait.
+- Updated dependencies
+  - @spacefast/common@0.5.0
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Minor Changes

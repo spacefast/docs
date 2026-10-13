@@ -1,11 +1,11 @@
 ---
 title: "dashboard_prefs_too_large"
-description: "The dashboard preferences serialize to more bytes than the limit allows."
+description: "The merged dashboard preferences would exceed the 16KB serialized size limit."
 ---
 
-The dashboard preferences serialize to more bytes than the limit allows.
+The merged dashboard preferences would exceed the 16KB serialized size limit.
 
-**How to resolve:** Remove preference values until the stored bag fits the byte limit.
+**How to resolve:** Store smaller values, or delete preferences you no longer need by setting them to null.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dashboard_prefs_too_large",
   "title": "Dashboard prefs too large",
   "status": 400,
-  "detail": "The dashboard preferences serialize to more bytes than the limit allows.",
+  "detail": "The merged dashboard preferences would exceed the 16KB serialized size limit.",
   "code": "dashboard_prefs_too_large",
   "requestId": "req_4mz0v8qk"
 }

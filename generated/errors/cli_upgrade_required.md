@@ -1,11 +1,11 @@
 ---
 title: "cli_upgrade_required"
-description: "This request needs a newer version of the `sf` CLI."
+description: "This CLI version is too old to talk to the API safely."
 ---
 
-This request needs a newer version of the `sf` CLI.
+This CLI version is too old to talk to the API safely.
 
-**How to resolve:** Upgrade the CLI, then run the command again.
+**How to resolve:** Upgrade the CLI to the latest release and retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/cli_upgrade_required",
   "title": "Cli upgrade required",
   "status": 400,
-  "detail": "This request needs a newer version of the `sf` CLI.",
+  "detail": "This CLI version is too old to talk to the API safely.",
   "code": "cli_upgrade_required",
   "requestId": "req_4mz0v8qk"
 }

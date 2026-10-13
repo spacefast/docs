@@ -1,11 +1,11 @@
 ---
 title: "promotion_live_content_missing"
-description: "The live tenant's system Space has no ready version whose content promotion can retain."
+description: "The live tenant's system space has nothing published, so promotion has no content to carry forward."
 ---
 
-The live tenant's system Space has no ready version whose content promotion can retain.
+The live tenant's system space has nothing published, so promotion has no content to carry forward.
 
-**How to resolve:** Publish the live system Space once, then promote.
+**How to resolve:** Publish the live system space once, then promote the test tenant again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_live_content_missing",
   "title": "Promotion live content missing",
   "status": 400,
-  "detail": "The live tenant's system Space has no ready version whose content promotion can retain.",
+  "detail": "The live tenant's system space has nothing published, so promotion has no content to carry forward.",
   "code": "promotion_live_content_missing",
   "requestId": "req_4mz0v8qk"
 }

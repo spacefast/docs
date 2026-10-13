@@ -1,11 +1,11 @@
 ---
 title: "runtime_token_expired"
-description: "The runtime token is expired or not valid yet."
+description: "The runtime token is expired."
 ---
 
-The runtime token is expired or not valid yet.
+The runtime token is expired.
 
-**How to resolve:** Mint a fresh runtime token and retry.
+**How to resolve:** Mint a fresh runtime token. Step tokens are short-lived by design.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_token_expired",
   "title": "Runtime token expired",
   "status": 400,
-  "detail": "The runtime token is expired or not valid yet.",
+  "detail": "The runtime token is expired.",
   "code": "runtime_token_expired",
   "requestId": "req_4mz0v8qk"
 }

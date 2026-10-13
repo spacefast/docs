@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_future_authoritative_backend"
-description: "Spacefast authoritative DNS is modeled as a provider adapter so zones can migrate per nameserver family."
+description: "This domain uses a future Spacefast authoritative DNS backend adapter."
 ---
 
-Spacefast authoritative DNS is modeled as a provider adapter so zones can migrate per nameserver family.
+This domain uses a future Spacefast authoritative DNS backend adapter.
 
-**How to resolve:** Keep calling the same DNS API; no change is needed for the backend behind the zone.
+**How to resolve:** Use the provider-neutral DNS endpoints and rely on the advertised capabilities for supported actions.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_future_authoritative_backend",
   "title": "Dns provider future authoritative backend",
   "status": 400,
-  "detail": "Spacefast authoritative DNS is modeled as a provider adapter so zones can migrate per nameserver family.",
+  "detail": "This domain uses a future Spacefast authoritative DNS backend adapter.",
   "code": "dns_provider_future_authoritative_backend",
   "requestId": "req_4mz0v8qk"
 }

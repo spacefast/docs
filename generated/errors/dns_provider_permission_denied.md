@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_permission_denied"
-description: "The DNS provider refused the change for lack of permission."
+description: "The connected DNS provider denied permission for this zone or action."
 ---
 
-The DNS provider refused the change for lack of permission.
+The connected DNS provider denied permission for this zone or action.
 
-**How to resolve:** Grant DNS edit access for this zone, or reconnect with broader provider scopes.
+**How to resolve:** Grant DNS edit access for this zone, reconnect with broader scopes, or connect a different provider account.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dns_provider_permission_denied",
   "title": "Dns provider permission denied",
   "status": 400,
-  "detail": "The DNS provider refused the change for lack of permission.",
+  "detail": "The connected DNS provider denied permission for this zone or action.",
   "code": "dns_provider_permission_denied",
   "requestId": "req_4mz0v8qk"
 }

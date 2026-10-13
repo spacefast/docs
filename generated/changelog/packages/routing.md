@@ -5,6 +5,50 @@ description: "Release history for @spacefast/routing on npm."
 
 Published as [`@spacefast/routing`](https://www.npmjs.com/package/@spacefast/routing) on npm.
 
+## 0.6.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- @spacefast/common@0.5.1
+
+## 0.5.0
+
+#### Patch Changes
+
+- One hostname rule everywhere: `normalizeHostname` now lives in `@spacefast/common/utils/hostname` (`@spacefast/routing/hostname` still re-exports it). It folds ASCII case and trims ASCII whitespace only, as DNS does, so a non-ASCII host like `K.example` (Kelvin sign) no longer collapses into a different ASCII name. `verifyVisitorToken` in `@spacefast/zero` compares hosts with the same rule, so `example.com.` and `example.com` are one host.
+- Updated dependencies
+  - @spacefast/common@0.5.0
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/common@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

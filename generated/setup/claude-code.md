@@ -1,13 +1,13 @@
 ---
 title: "Connect Claude Code to Spacefast"
-description: "Publish, host, and operate Spacefast artifacts from Claude Code."
+description: "Add Spacefast to Claude Code so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/claude-code/"
 ---
 
-Publish, host, and operate Spacefast artifacts from Claude Code.
+Add Spacefast to Claude Code so it can publish what you build.
 
-**Install the Spacefast plugin.** Add the Spacefast marketplace and install the plugin with Claude Code itself.
+**Install the Spacefast plugin.** Adds Spacefast to Claude Code with everything it needs to publish.
 
 ```bash
 claude plugin marketplace add spacefast/plugins && claude plugin install spacefast@spacefast
@@ -15,13 +15,13 @@ claude plugin marketplace add spacefast/plugins && claude plugin install spacefa
 
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent claude-code
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent claude-code -y
@@ -33,16 +33,16 @@ npx -y spacefast setup agent --agent claude-code -y
 npx -y plugins add spacefast/plugins -t claude-code -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
-npx -y skills add https://spacefast.com/SKILL.md -y
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 Prefer to hand this off? Copy setup prompt:
@@ -53,4 +53,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)
+[Agent documentation](/agents) · [Claude Code documentation](https://code.claude.com/docs/en/mcp)

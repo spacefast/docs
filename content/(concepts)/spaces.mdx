@@ -54,7 +54,7 @@ Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getsl
 
 ## The default hostname
 
-A Space gets a default `view.fast` hostname. Adding a custom domain leaves it in place; renaming the slug moves the default hostname and redirects the old one. Version and branch hostnames, the live URL rule, and what a rename does to each are on [URLs and hostnames](/urls).
+New Spaces use `https://<label>.space.fast/`. Existing Spaces on `view.fast` keep their domain, including after a publish or slug rename. Adding a custom domain never retires the managed hostname. Version and branch hostnames, the live URL rule, and what a rename does to each are on [URLs and hostnames](/urls).
 
 ## Who owns a Space
 

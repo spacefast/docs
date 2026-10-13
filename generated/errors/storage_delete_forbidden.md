@@ -1,11 +1,11 @@
 ---
 title: "storage_delete_forbidden"
-description: "Only the uploader can delete this storage object."
+description: "The current visitor did not upload this object."
 ---
 
-Only the uploader can delete this storage object.
+The current visitor did not upload this object.
 
-**How to resolve:** Delete the object as the identity that uploaded it.
+**How to resolve:** Sign in as the original uploader before deleting the object.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/storage_delete_forbidden",
   "title": "Storage delete forbidden",
   "status": 400,
-  "detail": "Only the uploader can delete this storage object.",
+  "detail": "The current visitor did not upload this object.",
   "code": "storage_delete_forbidden",
   "requestId": "req_4mz0v8qk"
 }

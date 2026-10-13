@@ -1,11 +1,11 @@
 ---
 title: "zero_run_duplicate"
-description: "The same Zero run handler is declared more than once."
+description: "Two Zero run handlers declare the same run id."
 ---
 
-The same Zero run handler is declared more than once.
+Two Zero run handlers declare the same run id.
 
-**How to resolve:** Remove the duplicate run handler, then publish again.
+**How to resolve:** Give every run handler a unique run id before publishing again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_run_duplicate",
   "title": "Zero run duplicate",
   "status": 400,
-  "detail": "The same Zero run handler is declared more than once.",
+  "detail": "Two Zero run handlers declare the same run id.",
   "code": "zero_run_duplicate",
   "requestId": "req_4mz0v8qk"
 }

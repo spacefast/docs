@@ -1,11 +1,11 @@
 ---
 title: "tenant_selection_required"
-description: "The credential spans several tenants, so this request is ambiguous."
+description: "The credential spans multiple tenants, so the request must select one."
 ---
 
-The credential spans several tenants, so this request is ambiguous.
+The credential spans multiple tenants, so the request must select one.
 
-**How to resolve:** Send `X-Spacefast-Tenant-Id` with the tenant to act in.
+**How to resolve:** Send the tenant header naming the tenant to act on.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/tenant_selection_required",
   "title": "Tenant selection required",
   "status": 400,
-  "detail": "The credential spans several tenants, so this request is ambiguous.",
+  "detail": "The credential spans multiple tenants, so the request must select one.",
   "code": "tenant_selection_required",
   "requestId": "req_4mz0v8qk"
 }

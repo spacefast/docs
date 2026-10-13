@@ -1,11 +1,11 @@
 ---
 title: "static_control_file_not_supported"
-description: "The publish contains an execution-control file a static publish cannot upload."
+description: "This control file is not supported by the static runtime."
 ---
 
-The publish contains an execution-control file a static publish cannot upload.
+This control file is not supported by the static runtime.
 
-**How to resolve:** Remove the execution-control file from the publish directory, then publish again.
+**How to resolve:** Remove the file. See the routing docs for supported convention files.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/static_control_file_not_supported",
   "title": "Static control file not supported",
   "status": 400,
-  "detail": "The publish contains an execution-control file a static publish cannot upload.",
+  "detail": "This control file is not supported by the static runtime.",
   "code": "static_control_file_not_supported",
   "requestId": "req_4mz0v8qk"
 }

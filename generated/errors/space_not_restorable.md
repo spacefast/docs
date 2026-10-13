@@ -1,11 +1,11 @@
 ---
 title: "space_not_restorable"
-description: "The Space cannot be restored: it was not deleted with this credential, or another lifecycle transition won."
+description: "The space is past its recovery window and cannot be restored."
 ---
 
-The Space cannot be restored: it was not deleted with this credential, or another lifecycle transition won.
+The space is past its recovery window and cannot be restored.
 
-**How to resolve:** Restore only a Space deleted with its own Space key, or contact Spacefast support if it was disabled by enforcement.
+**How to resolve:** Publish the content to a new space.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_not_restorable",
   "title": "Space not restorable",
   "status": 400,
-  "detail": "The Space cannot be restored: it was not deleted with this credential, or another lifecycle transition won.",
+  "detail": "The space is past its recovery window and cannot be restored.",
   "code": "space_not_restorable",
   "requestId": "req_4mz0v8qk"
 }

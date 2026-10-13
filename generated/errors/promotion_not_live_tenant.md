@@ -1,11 +1,11 @@
 ---
 title: "promotion_not_live_tenant"
-description: "Promotion targets a live tenant and the caller's tenant is not live."
+description: "Promotion targets a live tenant, and the tenant named in the request is not in live mode."
 ---
 
-Promotion targets a live tenant and the caller's tenant is not live.
+Promotion targets a live tenant, and the tenant named in the request is not in live mode.
 
-**How to resolve:** Call promotion with a credential rooted in the live tenant.
+**How to resolve:** Call promotion against the live tenant, not its test twin.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_not_live_tenant",
   "title": "Promotion not live tenant",
   "status": 400,
-  "detail": "Promotion targets a live tenant and the caller's tenant is not live.",
+  "detail": "Promotion targets a live tenant, and the tenant named in the request is not in live mode.",
   "code": "promotion_not_live_tenant",
   "requestId": "req_4mz0v8qk"
 }

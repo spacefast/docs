@@ -1,11 +1,11 @@
 ---
 title: "zero_gravatar_unavailable"
-description: "The Gravatar service is not configured for this runtime."
+description: "The local Zero Gravatar service is not configured."
 ---
 
-The Gravatar service is not configured for this runtime.
+The local Zero Gravatar service is not configured.
 
-**How to resolve:** Publish the Space and call the endpoint on the live runtime; `sf dev` does not provide the Gravatar service.
+**How to resolve:** Publish the capsule to call the hosted Gravatar service. `ctx.gravatar.avatarUrl` needs no service and works locally.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_gravatar_unavailable",
   "title": "Zero gravatar unavailable",
   "status": 400,
-  "detail": "The Gravatar service is not configured for this runtime.",
+  "detail": "The local Zero Gravatar service is not configured.",
   "code": "zero_gravatar_unavailable",
   "requestId": "req_4mz0v8qk"
 }

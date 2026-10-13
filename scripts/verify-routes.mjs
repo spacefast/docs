@@ -481,7 +481,16 @@ const compilation = compileRoutingFilesWasm({
 if (compilation.diagnostics.some(({ severity }) => severity === "error")) {
   throw new Error("The built Docs routing configuration does not compile.");
 }
-for (const route of ["zero-runtime", "zero", "apps/zero"]) {
+if (await exists(path.join(dist, "storage"))) {
+  throw new Error("The docs build must not emit files under the reserved /storage runtime path.");
+}
+for (const [route, target, hopCount] of [
+  ["zero-runtime", "/zero-runtime", 1],
+  ["zero", "/zero-runtime", 2],
+  ["apps/zero", "/zero-runtime", 2],
+  ["object-storage", "/object-storage", 1],
+  ["storage", "/object-storage", 2],
+]) {
   let url = new URL(`${docsRoot}/${route}?source=route-check&value=a%2Fb`);
   const hops = [];
   for (let hop = 0; hop < 3; hop += 1) {
@@ -498,13 +507,13 @@ for (const route of ["zero-runtime", "zero", "apps/zero"]) {
     }
   }
   if (
-    url.pathname !== "/zero-runtime" ||
+    url.pathname !== target ||
     url.search !== "?source=route-check&value=a%2Fb" ||
-    hops.length !== (route === "zero-runtime" ? 1 : 2) ||
+    hops.length !== hopCount ||
     hops.at(-1)?.status !== 200 ||
-    (route !== "zero-runtime" && hops[0]?.status !== 301)
+    (hopCount > 1 && hops[0]?.status !== 301)
   ) {
-    throw new Error(`Zero docs route must reach its public output with its query intact: ${route}`);
+    throw new Error(`Docs route must reach its public output with its query intact: ${route}`);
   }
   await requireFile(localTargetFor(url.pathname));
 }

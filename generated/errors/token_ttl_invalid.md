@@ -1,11 +1,11 @@
 ---
 title: "token_ttl_invalid"
-description: "The partner token is expired, not yet valid, or lives longer than the maximum lifetime."
+description: "The partner token time claims are expired, premature, or outside the lifetime limit."
 ---
 
-The partner token is expired, not yet valid, or lives longer than the maximum lifetime.
+The partner token time claims are expired, premature, or outside the lifetime limit.
 
-**How to resolve:** Mint a token whose `iat` is in the past and whose lifetime is within the maximum.
+**How to resolve:** Issue a new token with `exp` after `iat` and no more than 1800 seconds after `iat`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/token_ttl_invalid",
   "title": "Token ttl invalid",
   "status": 400,
-  "detail": "The partner token is expired, not yet valid, or lives longer than the maximum lifetime.",
+  "detail": "The partner token time claims are expired, premature, or outside the lifetime limit.",
   "code": "token_ttl_invalid",
   "requestId": "req_4mz0v8qk"
 }

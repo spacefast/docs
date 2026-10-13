@@ -1,11 +1,11 @@
 ---
 title: "abuse_takedown"
-description: "The Space was taken down for abuse and is not being served."
+description: "This space was disabled by an abuse takedown and cannot be served or modified."
 ---
 
-The Space was taken down for abuse and is not being served.
+This space was disabled by an abuse takedown and cannot be served or modified.
 
-**How to resolve:** Contact Spacefast support with the Space ID to have the takedown reviewed.
+**How to resolve:** If you believe the takedown is a mistake, contact support with the space id.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/abuse_takedown",
   "title": "Abuse takedown",
   "status": 400,
-  "detail": "The Space was taken down for abuse and is not being served.",
+  "detail": "This space was disabled by an abuse takedown and cannot be served or modified.",
   "code": "abuse_takedown",
   "requestId": "req_4mz0v8qk"
 }

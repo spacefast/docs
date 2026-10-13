@@ -5,6 +5,53 @@ description: "Release history for @spacefast/common on npm."
 
 Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/common) on npm.
 
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Add feature-gated `sourceUrl` publishing through WordPress.com, with durable URL Build receipts and capture progress/evidence. Existing file and archive publishing contracts remain supported.
+
+#### Patch Changes
+
+- Agents that arrive through a handoff link, and any API key a team member created, can now open a Space's content dashboard: the one-use sign-in link signs in the person who created the key. `sf content dashboard` opens the dashboard in your browser, or prints the sign-in link with `--show-secret --json` for an agent to hand you. The handoff document teaches both the CLI and the direct HTTP lane.
+- `contentRestRequestSchema` accepts a media upload whose path carries a query, such as the `?_locale=user` WordPress's apiFetch adds to every request. The upload rule now compares the route, as the runtime already does, so uploads from the dashboard's Content editor are no longer refused before they reach WordPress.
+- Add a Recover button to MCP App errors with the saved execution and result details. Preserve error reasons, validate publish manifests before approval, and distinguish new Spaces from updates in approval cards.
+- List pending Space transfers with `sf transfers ls --team <team>` and inspect one with `sf transfers get <id>`. Transfer guidance now names receiving team owners and admins, explains credential visibility when a target team cannot be resolved, and distinguishes transfer authority from Space read/write access.
+
+## 0.5.1
+
+_No noted changes in this release._
+
+## 0.5.0
+
+#### Minor Changes
+
+- Claim a hostname attached to another Space with a unique DNS TXT record, or move it directly when authorized to manage both Spaces. Expose ownership instructions and move status through the API and CLI, including `sf domains check --move`.
+- Add numeric and optional database fields, user references, indexed counts, application sign-in policies, and transactional guest upgrades to Zero. Query hooks now distinguish loading from empty or null results. Uploads are private by default, with explicit public sharing.
+
+  Add local development identities, multiple isolated dev servers, query inspection, storage transfers, and retained Space archive and restore commands. Newly compiled apps require an engine that implements these contracts before publication.
+
+#### Patch Changes
+
+- One hostname rule everywhere: `normalizeHostname` now lives in `@spacefast/common/utils/hostname` (`@spacefast/routing/hostname` still re-exports it). It folds ASCII case and trims ASCII whitespace only, as DNS does, so a non-ASCII host like `K.example` (Kelvin sign) no longer collapses into a different ASCII name. `verifyVisitorToken` in `@spacefast/zero` compares hosts with the same rule, so `example.com.` and `example.com` are one host.
+- Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
+- Framework builds and Zero compose in one project. `sf build` and `sf publish` run the framework build, compile the capsule from the project root, and publish the build output at `/` with the runtime beside it; a Zero project whose build script renders into the project root publishes the root. Sources, lockfiles, `tsconfig*.json`, TypeScript files, and `tools/` stay out of the published files. The `build` settings in `sf.jsonc` apply to local builds too, `sf publish --remote` takes the build lane when the project has a build, and a host project's `tsconfig.json` no longer rebinds the JSX runtime of Zero pages.
+
+  Local Zero previews also accept source-backed Markdown and HTML documents. Their source preview escapes author markup instead of requiring compiled HTML or executing the source.
+
+  Prebuilt publishes reuse compiled Zero and Functions metadata from the build archive's sidecar instead of recompiling sources removed during packaging. Invalid runtime metadata fails before upload.
+
+## 0.4.1
+
+#### Patch Changes
+
+- Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
+
+## 0.4.0
+
+_No noted changes in this release._
+
 ## 0.3.0
 
 _No noted changes in this release._

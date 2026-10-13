@@ -1,11 +1,11 @@
 ---
 title: "access_denied"
-description: "Access was refused: the Space or page is private, or the user rejected the device login."
+description: "The authorization request was denied by the user."
 ---
 
-Access was refused: the Space or page is private, or the user rejected the device login.
+The authorization request was denied by the user.
 
-**How to resolve:** Retry with a credential that has access, or run `sf login` again and approve the request.
+**How to resolve:** Restart the login flow and approve the request to continue.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/access_denied",
   "title": "Access denied",
   "status": 400,
-  "detail": "Access was refused: the Space or page is private, or the user rejected the device login.",
+  "detail": "The authorization request was denied by the user.",
   "code": "access_denied",
   "requestId": "req_4mz0v8qk"
 }

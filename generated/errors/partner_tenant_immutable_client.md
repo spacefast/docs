@@ -1,11 +1,11 @@
 ---
 title: "partner_tenant_immutable_client"
-description: "The partner tenant's client cannot be changed after it is set."
+description: "The tenant's provider client cannot be changed."
 ---
 
-The partner tenant's client cannot be changed after it is set.
+The tenant's provider client cannot be changed.
 
-**How to resolve:** Create a new partner tenant instead of changing this one's client.
+**How to resolve:** Create a new tenant with the desired provider client instead.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/partner_tenant_immutable_client",
   "title": "Partner tenant immutable client",
   "status": 400,
-  "detail": "The partner tenant's client cannot be changed after it is set.",
+  "detail": "The tenant's provider client cannot be changed.",
   "code": "partner_tenant_immutable_client",
   "requestId": "req_4mz0v8qk"
 }

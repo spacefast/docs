@@ -1,11 +1,11 @@
 ---
 title: "system_space_conflict"
-description: "The system Space changed after the base value in this request was read."
+description: "The tenant's system space changed since the value you sent as `baseSystemSpaceId`, so the update was rejected."
 ---
 
-The system Space changed after the base value in this request was read.
+The tenant's system space changed since the value you sent as `baseSystemSpaceId`, so the update was rejected.
 
-**How to resolve:** Read the team or tenant again, then retry with the current `baseSystemSpaceId`.
+**How to resolve:** Re-read `/v1/tenants/{tenantId}`, confirm the current `systemSpaceId`, and retry with a matching `baseSystemSpaceId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/system_space_conflict",
   "title": "System space conflict",
   "status": 400,
-  "detail": "The system Space changed after the base value in this request was read.",
+  "detail": "The tenant's system space changed since the value you sent as `baseSystemSpaceId`, so the update was rejected.",
   "code": "system_space_conflict",
   "requestId": "req_4mz0v8qk"
 }

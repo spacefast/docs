@@ -99,12 +99,12 @@ An explicit promote is never held by a manual policy. That hold only applies to 
 Every version that reaches ready gets a permanent hostname of its own, computed once and stored:
 
 ```text
-https://v7--my-site.view.fast/
+https://my-site--v7.space.fast/
 ```
 
 It serves that exact snapshot no matter what is live, and it survives a rename, a transfer, and any number of rollbacks. The API reports it as `immutableUrl`, with `immutableUrlStatus` of `pending` until the hostname is routable.
 
-A version published from a connected Git branch also gets a branch hostname, `https://br-<alias>--my-site.view.fast/`, which follows the branch rather than the snapshot. The dashboard shows it on the version page as **Branch preview URL**. Full hostname rules are on [URLs and hostnames](/urls).
+A version published from a connected Git branch also gets a branch hostname, `https://my-site--br-<alias>.space.fast/`, which follows the branch rather than the snapshot. The dashboard shows it on the version page as **Branch preview URL**. Existing Spaces stay on `view.fast`, and existing version and branch URLs retain their format. Full hostname rules are on [URLs and hostnames](/urls).
 
 ## Drafts expire in 24 hours
 

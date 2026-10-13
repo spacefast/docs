@@ -1,11 +1,11 @@
 ---
 title: "dashboard_prefs_too_many_keys"
-description: "The dashboard preferences hold more keys than the limit allows."
+description: "The merged dashboard preferences would hold more than the 50 allowed keys."
 ---
 
-The dashboard preferences hold more keys than the limit allows.
+The merged dashboard preferences would hold more than the 50 allowed keys.
 
-**How to resolve:** Delete unused preference keys before storing more.
+**How to resolve:** Delete preferences you no longer need by setting them to null before adding more.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/dashboard_prefs_too_many_keys",
   "title": "Dashboard prefs too many keys",
   "status": 400,
-  "detail": "The dashboard preferences hold more keys than the limit allows.",
+  "detail": "The merged dashboard preferences would hold more than the 50 allowed keys.",
   "code": "dashboard_prefs_too_many_keys",
   "requestId": "req_4mz0v8qk"
 }

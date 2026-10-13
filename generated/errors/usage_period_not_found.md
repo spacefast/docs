@@ -1,11 +1,11 @@
 ---
 title: "usage_period_not_found"
-description: "No usage period matches the identifier in the request."
+description: "The requested usage period does not exist in this tenant."
 ---
 
-No usage period matches the identifier in the request.
+The requested usage period does not exist in this tenant.
 
-**How to resolve:** List usage periods and use an ID from that list.
+**How to resolve:** List usage periods and use an id returned for the selected tenant.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/usage_period_not_found",
   "title": "Usage period not found",
   "status": 400,
-  "detail": "No usage period matches the identifier in the request.",
+  "detail": "The requested usage period does not exist in this tenant.",
   "code": "usage_period_not_found",
   "requestId": "req_4mz0v8qk"
 }

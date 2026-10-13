@@ -1,11 +1,11 @@
 ---
 title: "wp_cloud_assignment_team_mismatch"
-description: "The provider site belongs to a different team than the assignment names."
+description: "The domain assignment belongs to a different team."
 ---
 
-The provider site belongs to a different team than the assignment names.
+The domain assignment belongs to a different team.
 
-**How to resolve:** Assign a provider site owned by the same team.
+**How to resolve:** Use the assignment's owning team.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_team_mismatch",
   "title": "Wp cloud assignment team mismatch",
   "status": 400,
-  "detail": "The provider site belongs to a different team than the assignment names.",
+  "detail": "The domain assignment belongs to a different team.",
   "code": "wp_cloud_assignment_team_mismatch",
   "requestId": "req_4mz0v8qk"
 }

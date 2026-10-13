@@ -1,11 +1,11 @@
 ---
 title: "source_archive_validation_busy"
-description: "Source archive validation capacity is used up right now."
+description: "The service is already validating its maximum number of source archives."
 ---
 
-Source archive validation capacity is used up right now.
+The service is already validating its maximum number of source archives.
 
-**How to resolve:** Retry the upload shortly.
+**How to resolve:** Wait briefly and retry the upload.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/source_archive_validation_busy",
   "title": "Source archive validation busy",
   "status": 400,
-  "detail": "Source archive validation capacity is used up right now.",
+  "detail": "The service is already validating its maximum number of source archives.",
   "code": "source_archive_validation_busy",
   "requestId": "req_4mz0v8qk"
 }

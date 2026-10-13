@@ -13,9 +13,17 @@ sidebar:
 npm install -g spacefast
 ```
 
-The package is `spacefast` and it installs two binaries, `spacefast` and `sf`. Homebrew (`brew install spacefast`) and standalone binaries for macOS (arm64, x64), Linux (arm64, x64), and Windows (x64) are also available.
+The package is `spacefast` and it installs two binaries, `spacefast` and `sf`. Standalone binaries for macOS (arm64, x64), Linux (arm64, x64), and Windows (x64) are also available.
 
-The CLI needs Node.js 20.3 or newer. Check the install:
+On macOS or Linux, Homebrew installs the same two binaries:
+
+```bash
+brew install spacefast/tap/spacefast
+```
+
+Upgrade with `brew upgrade spacefast`.
+
+The npm package needs Node.js 20.3 or newer. Homebrew and the standalone binaries bundle their own runtime. Check the install:
 
 ```bash
 sf --version

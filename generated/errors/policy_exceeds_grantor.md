@@ -1,11 +1,11 @@
 ---
 title: "policy_exceeds_grantor"
-description: "The requested API key policy grants more than the calling credential holds."
+description: "The requested key policy grants more than your own credential allows."
 ---
 
-The requested API key policy grants more than the calling credential holds.
+The requested key policy grants more than your own credential allows.
 
-**How to resolve:** Request a policy that is a subset of the caller's own permissions.
+**How to resolve:** Request a policy that is a subset of the credential creating the key.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/policy_exceeds_grantor",
   "title": "Policy exceeds grantor",
   "status": 400,
-  "detail": "The requested API key policy grants more than the calling credential holds.",
+  "detail": "The requested key policy grants more than your own credential allows.",
   "code": "policy_exceeds_grantor",
   "requestId": "req_4mz0v8qk"
 }

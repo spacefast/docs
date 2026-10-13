@@ -1,11 +1,11 @@
 ---
 title: "runtime_purge_failed"
-description: "The version published, but the runtime's edge purge failed and is queued for retry."
+description: "Content updated but the edge cache purge did not confirm."
 ---
 
-The version published, but the runtime's edge purge failed and is queued for retry.
+Content updated but the edge cache purge did not confirm.
 
-**How to resolve:** Wait for the retry to land, or publish again if stale content keeps serving.
+**How to resolve:** The runtime retries automatically. Recent visitors may briefly see the previous version.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_purge_failed",
   "title": "Runtime purge failed",
   "status": 400,
-  "detail": "The version published, but the runtime's edge purge failed and is queued for retry.",
+  "detail": "Content updated but the edge cache purge did not confirm.",
   "code": "runtime_purge_failed",
   "requestId": "req_4mz0v8qk"
 }

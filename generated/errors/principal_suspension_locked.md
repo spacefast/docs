@@ -1,11 +1,11 @@
 ---
 title: "principal_suspension_locked"
-description: "Spacefast applied this suspension, so the partner cannot lift or close it."
+description: "The suspension was applied by Spacefast (legal/abuse) and cannot be lifted by the partner."
 ---
 
-Spacefast applied this suspension, so the partner cannot lift or close it.
+The suspension was applied by Spacefast (legal/abuse) and cannot be lifted by the partner.
 
-**How to resolve:** Contact Spacefast support to have the suspension reviewed.
+**How to resolve:** Contact Spacefast support to resolve a platform-applied suspension.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_suspension_locked",
   "title": "Principal suspension locked",
   "status": 400,
-  "detail": "Spacefast applied this suspension, so the partner cannot lift or close it.",
+  "detail": "The suspension was applied by Spacefast (legal/abuse) and cannot be lifted by the partner.",
   "code": "principal_suspension_locked",
   "requestId": "req_4mz0v8qk"
 }
