@@ -64,6 +64,7 @@ exif
 extensionless
 Favicon
 fetchable
+Figma
 finalizer
 followable
 forwardable
