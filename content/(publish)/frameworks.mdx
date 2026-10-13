@@ -5,24 +5,26 @@ sidebar:
   order: 2
 ---
 
-After this page you know which directory your framework produces, when to publish that directory yourself versus letting Spacefast build, how detection picks commands, and where to read a failing build.
+Publish built output directly when you have it; Spacefast can build from source when you don't.
 
 ## Two paths
 
-**Publish the output.** You run the build, Spacefast takes the directory. This is the fast path and the recommended default. Your machine or your CI already has the toolchain warm, failures show up where you can debug them, and the publish is a file upload.
+**Publish the output.** You run the build, Spacefast takes the directory. This is the fast path and the recommended default. Your machine or your CI already has the toolchain warm, and failures show up where you can debug them. The publish itself is just a file upload.
 
 ```bash
 npm run build
 sf publish ./dist
 ```
 
-**Let Spacefast build.** You hand over source, Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
+**Let Spacefast build.** You hand over source. Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
 
 ```bash
 sf publish --remote
 ```
 
-With no flags, `sf publish` builds a detected project, and publishes the directory as-is if there is nothing to build. `--prebuilt` forces the upload path. `--build` forces the build path. Archives are always classified remotely, so a `.tar.gz` is always a build.
+With no flags, `sf publish` builds a detected project, and publishes the directory as-is if there is nothing to build.
+
+`--prebuilt` publishes a built directory or archive without installing dependencies or running a build. `--build` forces build mode for directories. Without `--prebuilt`, archives go through remote detection.
 
 ## Which directory to publish
 
@@ -207,7 +209,7 @@ export default defineConfig({
 });
 ```
 
-It merges inline `redirects` and `headers` options with the `_redirects` and `_headers` files in your project root, public directory, and any `publishDir` you name, compiles them, applies them in `astro dev` so local behavior matches production, and writes the merged files into the build output. A routing error fails the build, because `failOnRoutingError` defaults to `true`. Needs Astro 6 or newer.
+It merges inline `redirects` and `headers` options with the `_redirects` and `_headers` files in your project root, public directory, and any `publishDir` you name. It compiles the result and applies it in `astro dev`, so local behavior matches production, then writes the merged files into the build output. A routing error fails the build, because `failOnRoutingError` defaults to `true`. Needs Astro 6 or newer.
 
 For server-rendered Astro there is a second integration at `@spacefast/astro/adapter`, `spacefastAstroAdapter()`, which records route facts and emits the server entry. Sharp runs at build time only.
 

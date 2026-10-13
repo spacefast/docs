@@ -78,7 +78,7 @@ On a non-GET request it fails with `--paginate is only valid for GET requests.` 
 
 ## Output
 
-A JSON response prints verbatim on stdout, envelope and all, so a success is `{ data }` from the API and a failure is its problem document. A `204`, `205`, or `304` has no body, so `sf api` prints `{"data":null}` instead of reporting an un-downloadable response.
+A JSON response prints verbatim on stdout, envelope and all. A success is `{ data }` from the API; a failure is its problem document. A `204`, `205`, or `304` has no body, so `sf api` prints `{"data":null}` instead of reporting an un-downloadable response.
 
 A non-JSON response needs somewhere to go. Pass `--output <file>` to write it to disk or `--raw-stdout` to stream it, or the command fails rather than dumping bytes into your terminal.
 

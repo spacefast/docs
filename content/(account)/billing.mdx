@@ -86,6 +86,6 @@ Reading is never blocked in either state. Settle the payment from the billing po
 
 ## Billing is dashboard-only
 
-Plans, checkout, and cancellation live in the dashboard. There is no `sf` command and no API endpoint for changing a plan, and API keys and agent credentials cannot reach billing at all.
+Plans, checkout, and cancellation live in the dashboard. There is no `sf` command and no API endpoint for changing a plan. API keys and agent credentials cannot make those changes.
 
 Reading is a different story. An agent can pull the resolved plan and limits from `GET /v1/teams/{teamId}/entitlements`, current counters from `GET /v1/teams/{teamId}/usage`, and the limits as they are enforced at publish time from `GET /v1/teams/{teamId}/plan-policy`. See [Usage](/usage) for what those numbers mean.

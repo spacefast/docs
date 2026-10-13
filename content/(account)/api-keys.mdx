@@ -5,7 +5,7 @@ sidebar:
   order: 2
 ---
 
-After this page you can mint an API key with the right permissions, use it against the API, rotate it without downtime, and recognize every other credential Spacefast hands you by its prefix.
+Team owners and admins can mint scoped API keys. To rotate without interrupting an integration, create a replacement, switch the integration to it, verify a request, and only then revoke the old key.
 
 ## Create an API key
 
@@ -57,7 +57,7 @@ A preset is a named bundle of permissions. Pick the narrowest one that does the 
 | `billing_viewer` | Billing viewer | Read team and billing information, nothing else |
 | `team_admin` | Team admin | Everything this team can do |
 
-`space_publisher` and `ci_deploy` carry the same publish permissions. `space_admin` is the default when a request names no preset, and it deliberately stops short of `team_admin`: it can never mint keys, manage members, or touch billing.
+`space_publisher` and `ci_deploy` carry the same publish permissions. `space_admin` is the default when a request names no preset. It deliberately stops short of `team_admin`: it can never mint keys, manage members, or touch billing.
 
 ## How permissions compile
 
@@ -91,9 +91,9 @@ A credential that tries gets a `403` with `authorization_level_not_allowed`. Do 
 
 ## Rotate a key
 
-A secret is immutable, so rotation means a new key. In the dashboard, **Replace key…** mints a fresh key with the same policy and then offers to revoke the old one once your integrations have moved over.
+A secret is immutable, so rotation means a new key. In the dashboard, **Replace key…** mints a fresh key with the same policy. It then offers to revoke the old one once your integrations have moved over.
 
-Revoking is immediate. Anything using that key fails on its next request, and the row stays in the list marked revoked so the audit trail survives.
+Revoking is immediate. Anything using that key fails on its next request. The row stays in the list marked revoked, so the audit trail survives.
 
 ## Every credential, by prefix
 

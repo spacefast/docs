@@ -45,11 +45,6 @@ jobs:
             | sudo tar -xz -C /usr/local/bin vale
           vale --version
 
-      - name: Verify prose style
-        run: |
-          node --test scripts/openapi-prose-scope.test.mjs
-          bun run verify:prose
-
       - name: Check types and templates
         run: bun run check
 
@@ -59,8 +54,16 @@ jobs:
       - name: Build static site
         run: bun run build
 
+      - name: Test built docs experience and helpers
+        run: bun run test:docs
+
       - name: Audit built site
         run: bun run audit
 
       - name: Verify routes and artifacts
         run: bun run verify:routes
+
+      - name: Verify prose style
+        run: |
+          node --test scripts/openapi-prose-scope.test.mjs
+          bun run verify:prose

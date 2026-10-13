@@ -5,7 +5,7 @@ sidebar:
   order: 7
 ---
 
-After this page you can open a Space to the public or to your team, send someone a link that expires, put a password on a route subtree, mint a token for a machine, invite a named person to one path, and explain exactly why a given visitor can or cannot see a URL.
+Access to a Space can be granted with links, passwords, or machine tokens. You can also explain exactly why a visitor can or can't see a URL.
 
 ## The model in one minute
 
@@ -157,7 +157,7 @@ The output is the Link row plus its share URL. The URL is `[REDACTED]` in JSON a
 
 `sf share link copy ID` prints a Link's durable share URL. It takes `--show-secret` with the same meaning as on `create`.
 
-`sf share link edit ID` replaces a Link's metadata or Grant dimensions without rotating its URL. It takes the same `--name`, `--landing`, `--path`, `--exclude`, `--role`, and `--target` flags as `create` and the full constraint set, each defaulting to unchanged, plus the clear flags below. Every flag replaces rather than merges, `--exclude` requires `--path`, and passing no field is a validation error.
+`sf share link edit ID` replaces a Link's metadata or Grant dimensions without rotating its URL. It takes the same `--name`, `--landing`, `--path`, `--exclude`, `--role`, and `--target` flags as `create` and the full constraint set, each defaulting to unchanged, plus the clear flags below. Every flag replaces rather than merges. `--exclude` requires `--path`, and passing no field is a validation error.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
