@@ -16,7 +16,7 @@ https://{label}.space.fast/
 
 The label comes from the Space slug, lowercased, with every character outside `a-z`, `0-9` and `-` replaced by `-`, runs of hyphens collapsed, and a 63-character cap. A new Space with slug `my-site` serves at `https://my-site.space.fast/`.
 
-The default hostname keeps serving for the life of the Space. Adding a custom domain never retires it.
+Adding a custom domain never retires the managed hostname.
 
 Existing Spaces on `view.fast` keep that domain. Publishing again, renaming the slug, or creating a version or branch preview keeps the Space on its original domain. Existing version URLs and share links keep working.
 
@@ -66,7 +66,7 @@ It is always `https`, always with a trailing slash on the root, so the same host
 
 ## After a custom domain becomes primary
 
-Both hostnames serve. The default hostname stays in the Space's serving set permanently, and requests to it keep returning content, not a redirect. What changes is the URL Spacefast reports for the Space.
+Both hostnames serve. Adding a custom domain leaves the managed hostname serving content. What changes is the URL Spacefast reports for the Space.
 
 If you want the managed hostname to stop answering with content, there is no switch for it. Point people at the custom domain instead.
 
@@ -86,7 +86,7 @@ A share link is the page you want with the secret in the query string:
 https://my-site.space.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-One request returns that page. There is no redirect and no interstitial, so `curl` and an agent get the same document a browser does. Creating, scoping, and revoking them is on [Access and sharing](/access).
+At the current hostname, one request returns that page without an access redirect or interstitial, so `curl` and an agent get the same document a browser does. Creating, scoping, and revoking them is on [Access and sharing](/access).
 
 ## Hostnames you cannot claim
 
