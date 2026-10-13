@@ -9,7 +9,7 @@ By the end of this page you have a site live on a `space.fast` hostname, a secon
 
 ## Before you start
 
-You need Node.js 20.3 or newer and a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
+You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
 
 <Steps>
   <Step title="Install the CLI">
@@ -18,7 +18,7 @@ You need Node.js 20.3 or newer and a folder of built static files. Any framework
     npm install -g spacefast
     ```
 
-    Homebrew (`brew install spacefast`) and standalone binaries are also available. Check the install:
+    The npm package needs Node.js 20.3 or newer. On macOS or Linux you can use Homebrew instead (`brew install spacefast/tap/spacefast`). Standalone binaries are also available. Check the install:
 
     ```bash
     sf --version

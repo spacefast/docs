@@ -5,11 +5,13 @@ description: Save a team's design rules once, then reuse and check them across p
 
 Save your team's colors, type, layout, voice, and brand files in one Design System. A connected agent can reuse those standards in a new project, check a build against them, or bring a named Space up to date. You choose which Spaces change. Saving the system alone does not edit or publish a site.
 
+For agent imports and updates, use a Spacefast plugin with the [Design System task skills](/agents/skills#design-system-task-skills).
+
 ## Start a Design System
 
 When Design System is enabled for your team, open the team and choose **Design System**. If you see **Set up team context**, select it first. Then choose how to start:
 
-- **Import what you already have.** Choose **Copy prompt** and give it to an agent connected to [Spacefast MCP](/agents). Give the agent your brand guide, Figma file, or repository too. The `import-design-system` skill saves supported values, registers source files, and keeps other guidance in supporting Memory records. Ask for a report of conflicts and anything it could not import.
+- **Import what you already have.** Choose **Copy prompt** and give it to an agent connected to [Spacefast MCP](/agents). Give the agent your brand guide, Figma file, or repository too. With `import-design-system` installed, the agent saves supported values, registers source files, and keeps other guidance in supporting Memory records. Ask for a report of conflicts and anything it could not import.
 - **Start from a kit.** Choose **shadcn/ui**, **Tailwind CSS**, or **Spacefast default**. The kit saves editable colors, type, and layout values. Review them before applying them to a project.
 
 You can also add the standards yourself in the dashboard. **Look & feel** holds named colors, typography for headings and body text, and layout dimensions. **Voice** holds a tone description and writing rules with optional examples.
