@@ -32,11 +32,11 @@ All paths below start with `/v1/teams/{teamId}`.
 | `GET /memories` | List active memories; use `status=archived` for archived records. |
 | `POST /memories` | Save one lasting fact, decision, or preference. |
 | `PATCH /memories/{memoryId}` | Update a memory or set `archived:true` to archive it. |
-| `DELETE /memories/{memoryId}` | Permanently delete a memory; only owners and admins can do this. |
+| `DELETE /memories/{memoryId}` | Permanently delete a memory; only owners and admins using a dashboard session can do this. |
 | `GET /skills` | Read preset skills, instructions, and setup status. |
-| `PATCH /skills/{skillKey}` | Enable or disable a skill; only owners and admins can do this. |
+| `PATCH /skills/{skillKey}` | Enable or disable a skill; only owners and admins using a dashboard session can do this. |
 
-Memory reads use `spaces:read`. Memory saves and updates use `spaces:write`. Agents archive memories instead of deleting them. Agents cannot change skill settings.
+Memory reads use `spaces:read`. Memory saves and updates use `spaces:write`. Agents archive memories instead of deleting them. API keys and agent grants cannot delete memories or change skill settings, even when the owner is a team admin. These operations require a dashboard session and otherwise return `authorization_level_not_allowed`.
 
 Save one fact per memory. Do not save credentials, payment details, private contact details, temporary task progress, or build output. List existing memories before creating duplicates. After an uncertain write response, read the saved state before another write.
 

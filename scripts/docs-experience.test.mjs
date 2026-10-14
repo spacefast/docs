@@ -37,7 +37,8 @@ test("team context explains setup, eligibility, and administrative boundaries", 
   assert.match(context, /agents\.memory_skills/u);
   assert.match(context, /POST \/v1\/teams\/\{teamId\}\/context/u);
   assert.match(context, /no request body/u);
-  assert.match(context, /Agents cannot change skill settings/u);
+  assert.match(context, /API keys and agent grants cannot delete memories or change skill settings/u);
+  assert.match(context, /These operations require a dashboard session/u);
   assert.match(design, /POST \/design-system\/assets\/upload/u);
   assert.match(design, /numeric revision/u);
   assert.match(design, /100 MB/u);
