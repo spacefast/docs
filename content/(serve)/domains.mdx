@@ -1,4 +1,5 @@
 ---
+
 title: Custom domains
 description: Connect a domain you own, add the DNS records Spacefast asks for, get a certificate, and make it the Space's primary address
 sidebar: { order: 2 }
@@ -232,3 +233,35 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 ### Checking before you commit
 
 `GET /v1/domains/preflight?name=example.com` runs the same name validation and hosting check as the add, so terminal problems surface before any record exists. Its `canHost` verdict is advisory. A `false` still lets you add the domain and claim it with the TXT proof, and `null` means the check was unavailable rather than negative.
+
+## Research and register domains with the API
+
+Domain research and registration use the operations below. The current [OpenAPI specification](https://api.spacefast.com/openapi.json) defines their inputs, credentials, and responses. A published schema does not guarantee registration availability. Registrar submissions require an explicit deployment opt-in. Without it, submissions fail with `registrar_writes_disabled`; changing your API key does not enable them.
+
+All paths below start with `/v1/domains`.
+
+| Method and path | Task |
+| --- | --- |
+| `POST /search` | Search from a naming brief and refine the returned session. |
+| `POST /research/conversation` | Stream suggestions and a completed reply or typed error. |
+| `POST /research/rank` | Rank candidates; scores do not establish availability or trademark clearance. |
+| `GET /research/suggestions` | Get ranked suggestions for a query. |
+| `GET /research/ideas` | Get domain name ideas for a query. |
+| `GET /research/availability` | Check one domain against the live registry before buying. |
+| `POST /research/availability` | Check many names against zone data; confirm each selected name with the single-domain check. |
+| `GET /research/whois` | Read public registration data. |
+| `GET /contacts` | List saved registrant contacts. |
+| `POST /contacts` | Save registrant details supplied by the user. |
+| `PATCH /contacts/{contactId}` | Change contact details for future purchases. |
+| `POST /purchases` | Create one checkout for up to ten apex domains. |
+| `GET /{domainId}/registration` | Read registration and payment status. |
+| `POST /{domainId}/registration` | Request a purchase or renewal checkout. |
+| `PATCH /{domainId}/registration` | Update registration preferences. |
+
+Keep the returned search session unchanged between calls. When `complete` is false, inspect `problems` and resume with that session without a new message. Search results and batch availability are signals, not purchase guarantees.
+
+Ask the user for registrant details. Never invent them. Reuse a saved contact where appropriate. Contact edits do not change details on domains already registered.
+
+A purchase returns `data.checkout.url` for a person to open and pay. No charge or registration occurs before payment. Poll registration status after payment; an active registration is the success result, not the checkout URL. An unavailable name refuses the whole cart. Set `expectedTotalCents` to refuse a changed price.
+
+Transfers are not available. `autoRenew` stores a preference but does not renew automatically. Request a renewal explicitly with `{"action":"renew"}`.

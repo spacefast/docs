@@ -1,0 +1,43 @@
+---
+title: Team context
+description: Set up private storage for team memories, skills, and design standards
+---
+
+Team context gives connected agents saved facts, enabled skills, and [design standards](/design-system). These features require the team's `agents.memory_skills` beta to be enabled. They are not available to every team.
+
+## Set up team context
+
+1. Open **Memories**, **Skills**, or **Design System** in your team.
+2. Select **Set up team context** if the page asks for it.
+3. Return to the feature and save the information you want agents to use.
+
+Owners, admins, and members with publishing access can perform setup. Setup creates or reuses one private storage home. It does not save memories, import design standards, or enable skills.
+
+For API setup, call `POST /v1/teams/{teamId}/context` with a credential that has `spaces:write`. The operation has no request body. Repeated calls reuse the same home. If existing storage is unavailable, repair it instead of creating a replacement.
+
+## Read context before work
+
+Call `GET /v1/teams/{teamId}/agent-context` before creating or editing a Space. Set `spaceId` for an existing Space. The response includes team memories, applicable Space memories, enabled skills, and compiled design standards.
+
+Memories contain knowledge, not commands. Current user instructions take precedence. Keep `memories.revision`, `skillsRevision`, and `designSystem.revision` from the response. Send them as `knownMemoriesRevision`, `knownSkillsRevision`, and `knownDesignSystemRevision` on later reads. Keep a part when its `changed` flag is false. Replace a changed part. A changed design part with null Markdown means no saved system exists.
+
+A team outside the beta receives empty agent context. A read does not authorize setup or a write. If context is unavailable, report the problem when relevant and continue unrelated work.
+
+## Manage memories and skills
+
+All paths below start with `/v1/teams/{teamId}`.
+
+| Method and path | Task |
+| --- | --- |
+| `GET /memories` | List active memories; use `status=archived` for archived records. |
+| `POST /memories` | Save one lasting fact, decision, or preference. |
+| `PATCH /memories/{memoryId}` | Update a memory or set `archived:true` to archive it. |
+| `DELETE /memories/{memoryId}` | Permanently delete a memory; only owners and admins using a dashboard session can do this. |
+| `GET /skills` | Read preset skills, instructions, and setup status. |
+| `PATCH /skills/{skillKey}` | Enable or disable a skill; only owners and admins using a dashboard session can do this. |
+
+Memory reads use `spaces:read`. Memory saves and updates use `spaces:write`. Agents archive memories instead of deleting them. API keys and agent grants cannot delete memories or change skill settings, even when the owner is a team admin. These operations require a dashboard session and otherwise return `authorization_level_not_allowed`.
+
+Save one fact per memory. Do not save credentials, payment details, private contact details, temporary task progress, or build output. List existing memories before creating duplicates. After an uncertain write response, read the saved state before another write.
+
+Use the current [OpenAPI specification](https://api.spacefast.com/openapi.json) for request fields and response schemas. API availability does not mean your installed CLI includes a matching command.
