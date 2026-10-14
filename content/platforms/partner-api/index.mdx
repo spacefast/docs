@@ -65,7 +65,7 @@ Use a separate client and query cache for each tenant and customer identity. A t
 
 Create a replacement with `POST /v1/tenants/{tenantId}/api-keys`. The body accepts `name`, optional `permissions`, `expiresAt`, `notBefore`, `ipAllowlist`, and `metadata`. Omitted permissions grant partner administration. Explicit permissions narrow the grant.
 
-Save the returned secret, update your integration, and verify a request with the replacement. Then revoke the old key with `DELETE /v1/tenants/{tenantId}/api-keys/{apiKeyId}`. Revocation takes effect on subsequent requests. `GET /v1/tenants/{tenantId}/api-keys` returns masked previews, never existing secrets.
+Save the returned secret and update your integration, then verify a request with the replacement. Revoke the old key with `DELETE /v1/tenants/{tenantId}/api-keys/{apiKeyId}`. Revocation takes effect on subsequent requests. `GET /v1/tenants/{tenantId}/api-keys` returns masked previews, never existing secrets.
 
 ## Continue the integration
 

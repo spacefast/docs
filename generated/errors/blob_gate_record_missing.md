@@ -1,11 +1,11 @@
 ---
 title: "blob_gate_record_missing"
-description: "No blob gate record exists for the requested blob."
+description: "The file behind this download link no longer exists."
 ---
 
-No blob gate record exists for the requested blob.
+The file behind this download link no longer exists.
 
-**How to resolve:** Request a fresh blob gate token, then fetch the blob again.
+**How to resolve:** The underlying object was deleted. Ask the owner for a fresh link.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/blob_gate_record_missing",
   "title": "Blob gate record missing",
   "status": 400,
-  "detail": "No blob gate record exists for the requested blob.",
+  "detail": "The file behind this download link no longer exists.",
   "code": "blob_gate_record_missing",
   "requestId": "req_4mz0v8qk"
 }

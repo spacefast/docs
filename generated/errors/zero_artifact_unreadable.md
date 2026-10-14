@@ -1,11 +1,11 @@
 ---
 title: "zero_artifact_unreadable"
-description: "The Zero artifact could not be read from the version."
+description: "The Zero endpoint artifact cannot be read by the runtime."
 ---
 
-The Zero artifact could not be read from the version.
+The Zero endpoint artifact cannot be read by the runtime.
 
-**How to resolve:** Publish the version again so the artifact is re-uploaded.
+**How to resolve:** Verify the version finalized with all generated Zero files present.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_artifact_unreadable",
   "title": "Zero artifact unreadable",
   "status": 400,
-  "detail": "The Zero artifact could not be read from the version.",
+  "detail": "The Zero endpoint artifact cannot be read by the runtime.",
   "code": "zero_artifact_unreadable",
   "requestId": "req_4mz0v8qk"
 }

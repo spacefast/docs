@@ -8,29 +8,29 @@ seo:
 Pick the agent you already use. Every page is one action, a click or a paste, and the
 same Spacefast account works across all of them.
 
-- [Claude Code](/setup/claude-code): Publish, host, and operate Spacefast artifacts from Claude Code.
-- [Claude](/setup/claude-app): Connect Spacefast to Claude on the web, mobile, and Cowork with one click.
-- [Claude Desktop](/setup/claude-desktop): Install Spacefast in Claude Desktop as a signed local extension.
-- [Cursor](/setup/cursor): Publish and host from Cursor with its plugin, skills, and hosted MCP.
-- [Codex](/setup/codex): Publish and host from Codex locally or in the cloud.
-- [ChatGPT](/setup/chatgpt): Use Spacefast from ChatGPT and ChatGPT Work through the app directory.
-- [VS Code](/setup/vscode): Add Spacefast MCP to VS Code and Copilot agent mode.
-- [GitHub Copilot](/setup/github-copilot): Publish from Copilot CLI and coding agent with native plugin and MCP support.
-- [Devin Desktop](/setup/devin-desktop): Connect the local Devin desktop and CLI configuration plane.
-- [Devin Cloud](/setup/devin-cloud): Connect Spacefast in Devin's cloud-only integrations plane.
-- [Zed](/setup/zed): Connect Spacefast as a custom context server in Zed.
-- [Gemini CLI](/setup/gemini-cli): Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
-- [OpenCode](/setup/opencode): Connect Spacefast to OpenCode with native OAuth MCP and skills.
-- [Amp](/setup/amp): Install Spacefast skills with bundled MCP support in Amp.
-- [Warp](/setup/warp): Use Spacefast skills and MCP in Warp agents.
-- [Factory Droid](/setup/factory-droid): Install Spacefast as a Droid plugin or native OAuth MCP server.
-- [Cline](/setup/cline): Install Spacefast from the Cline marketplace or connect OAuth MCP.
-- [Continue](/setup/continue): Use the Spacefast skill in discontinued Continue installations.
-- [Raycast](/setup/raycast): Connect Spacefast to Raycast AI using its native OAuth MCP form.
-- [Poke](/setup/poke): Prefill a Spacefast integration in Poke and authorize with OAuth.
-- [Pi](/setup/pi): Install the third-party Pi MCP extension for Spacefast.
-- [Indent](/setup/indent): Connect Spacefast through Indent's native OAuth MCP integration.
-- [Hermes](/setup/hermes): Give Hermes the Spacefast setup guide, or install its skill with the CLI.
-- [OpenClaw](/setup/openclaw): Give OpenClaw the Spacefast setup guide, or install its skill with the CLI.
+- [Claude Code](/setup/claude-code): Add Spacefast to Claude Code so it can publish what you build.
+- [Claude](/setup/claude-app): Add Spacefast to your Claude account once, and use it on the web, your phone, the desktop app, and Cowork.
+- [Claude Desktop](/setup/claude-desktop): Add Spacefast to the Claude desktop app on this computer.
+- [Cursor](/setup/cursor): Add Spacefast to Cursor so its agent can publish what you build.
+- [Codex](/setup/codex): Add Spacefast to Codex so it can publish what you build, on your computer or in the cloud.
+- [ChatGPT](/setup/chatgpt): Add Spacefast to ChatGPT on the web so it can publish what you build.
+- [VS Code](/setup/vscode): Add Spacefast to VS Code so Copilot can publish from agent mode.
+- [GitHub Copilot CLI](/setup/github-copilot): Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
+- [Devin Desktop](/setup/devin-desktop): Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI.
+- [Devin Cloud](/setup/devin-cloud): Add Spacefast to Devin Cloud so your sessions can publish what you build.
+- [Zed](/setup/zed): Add Spacefast to Zed so its agent can publish what you build.
+- [Gemini CLI](/setup/gemini-cli): Add Spacefast to Gemini CLI so it can publish from your terminal.
+- [OpenCode](/setup/opencode): Add Spacefast to OpenCode so it can publish what you build.
+- [Amp](/setup/amp): Add Spacefast to Amp so it can publish what you build.
+- [Warp](/setup/warp): Add Spacefast to Warp so its agents can publish what you build.
+- [Factory Droid](/setup/factory-droid): Add Spacefast to Factory Droid so it can publish what you build.
+- [Cline](/setup/cline): Add Spacefast to Cline so it can publish what you build.
+- [Continue](/setup/continue): Add the Spacefast skill to a Continue install you already have.
+- [Raycast](/setup/raycast): Add Spacefast to Raycast AI and call it with @Spacefast.
+- [Poke](/setup/poke): Add Spacefast to Poke so it can publish for you.
+- [Pi](/setup/pi): Add the Spacefast skill to Pi so it can publish through the Spacefast API.
+- [Indent](/setup/indent): Add Spacefast to Indent so it can publish what you build.
+- [Hermes](/setup/hermes): Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal.
+- [OpenClaw](/setup/openclaw): Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal.
 
 Anything else that can fetch a URL can publish too: point it at the [agent documentation](/agents).

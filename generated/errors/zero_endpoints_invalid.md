@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoints_invalid"
-description: "The finalize request's `zero_endpoints` value is not an array."
+description: "The Zero endpoints payload is invalid."
 ---
 
-The finalize request's `zero_endpoints` value is not an array.
+The Zero endpoints payload is invalid.
 
-**How to resolve:** Send `zero_endpoints` as an array of endpoint entries.
+**How to resolve:** Send an endpoint array within the supported count and size limits.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoints_invalid",
   "title": "Zero endpoints invalid",
   "status": 400,
-  "detail": "The finalize request's `zero_endpoints` value is not an array.",
+  "detail": "The Zero endpoints payload is invalid.",
   "code": "zero_endpoints_invalid",
   "requestId": "req_4mz0v8qk"
 }

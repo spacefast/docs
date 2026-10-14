@@ -18,6 +18,11 @@ const authoredRedirectRules = [
     status: 301,
     to: `${deploymentBase}/zero-runtime`,
   },
+  {
+    from: `${deploymentBase}/storage`,
+    status: 301,
+    to: `${deploymentBase}/object-storage`,
+  },
 ];
 
 const aliasFamilies = [

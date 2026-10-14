@@ -1,11 +1,11 @@
 ---
 title: "plan_unknown"
-description: "The tenant's plan catalog has no plan by that name."
+description: "The requested plan name is not in the tenant's live plan catalog, so it cannot be assigned to a principal."
 ---
 
-The tenant's plan catalog has no plan by that name.
+The requested plan name is not in the tenant's live plan catalog, so it cannot be assigned to a principal.
 
-**How to resolve:** Send a plan code the tenant's catalog lists.
+**How to resolve:** Assign a plan declared in the tenant's system-space manifest. List the catalog's plan names and use one of them.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/plan_unknown",
   "title": "Plan unknown",
   "status": 400,
-  "detail": "The tenant's plan catalog has no plan by that name.",
+  "detail": "The requested plan name is not in the tenant's live plan catalog, so it cannot be assigned to a principal.",
   "code": "plan_unknown",
   "requestId": "req_4mz0v8qk"
 }

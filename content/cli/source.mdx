@@ -5,11 +5,11 @@ sidebar:
   order: 25
 ---
 
-After this page you can list and read files in a Space's source repository, search it, diff and merge branches, commit from files or a unified diff, download an archive, and create tags, all without a local clone.
+Every `sf source` command reads or writes a repository directly through the API, so there's nothing to clone, branch, or pull locally first.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
-The `--connection-type` values here are the older spelling, `remote|push|import`. `remote` is the same connection as `connected` on the `sf git` commands and `push` is the same as `hosted`. `import` is the one-time ingestion remote and has no `sf git` equivalent. See [two connection types, two spellings](/cli/git#two-connection-types-two-spellings).
+The `--connection-type` values here are the older spelling, `remote|push|import`. `remote` is the same connection as `connected` on the `sf git` commands. `push` is the same as `hosted`. `import` is the one-time ingestion remote and has no `sf git` equivalent. See [two connection types, two spellings](/cli/git#two-connection-types-two-spellings).
 
 ## sf source ls
 

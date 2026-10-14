@@ -1,11 +1,11 @@
 ---
 title: "zero_runner_stdin_too_large"
-description: "The request handed to the runner is larger than its input limit."
+description: "The Zero runner request envelope is too large."
 ---
 
-The request handed to the runner is larger than its input limit.
+The Zero runner request envelope is too large.
 
-**How to resolve:** Send a smaller request body.
+**How to resolve:** Reduce request headers, body size, or route parameters.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_runner_stdin_too_large",
   "title": "Zero runner stdin too large",
   "status": 400,
-  "detail": "The request handed to the runner is larger than its input limit.",
+  "detail": "The Zero runner request envelope is too large.",
   "code": "zero_runner_stdin_too_large",
   "requestId": "req_4mz0v8qk"
 }

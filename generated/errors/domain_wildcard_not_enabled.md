@@ -1,11 +1,11 @@
 ---
 title: "domain_wildcard_not_enabled"
-description: "Wildcard routing is not turned on for this domain."
+description: "Wildcard hostnames are not enabled for this domain or plan."
 ---
 
-Wildcard routing is not turned on for this domain.
+Wildcard hostnames are not enabled for this domain or plan.
 
-**How to resolve:** Enable wildcard routing on the domain record, then retry.
+**How to resolve:** Bind concrete hostnames, or enable wildcard support for the domain.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/domain_wildcard_not_enabled",
   "title": "Domain wildcard not enabled",
   "status": 400,
-  "detail": "Wildcard routing is not turned on for this domain.",
+  "detail": "Wildcard hostnames are not enabled for this domain or plan.",
   "code": "domain_wildcard_not_enabled",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,6 +5,43 @@ description: "Release history for @spacefast/next-adapter on npm."
 
 Published as [`@spacefast/next-adapter`](https://www.npmjs.com/package/@spacefast/next-adapter) on npm.
 
+## 0.6.0
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.6.0
+  - @spacefast/build-output@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.5.1
+  - @spacefast/build-output@0.5.1
+
+## 0.5.0
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.5.0
+  - @spacefast/build-output@0.5.0
+- @spacefast/adapter-kit@0.5.0
+  - @spacefast/build-output@0.5.0
+
+## 0.4.1
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.4.1
+  - @spacefast/build-output@0.4.1
+
+## 0.4.0
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.4.0
+  - @spacefast/build-output@0.4.0
+
 ## 0.3.0
 
 #### Patch Changes

@@ -1,11 +1,11 @@
 ---
 title: "promotion_nothing_to_promote"
-description: "The test tenant's system Space has no live manifest to promote."
+description: "The test tenant's system space has no live manifest, so there is no configuration to promote."
 ---
 
-The test tenant's system Space has no live manifest to promote.
+The test tenant's system space has no live manifest, so there is no configuration to promote.
 
-**How to resolve:** Publish the test system Space, then promote.
+**How to resolve:** Publish the test tenant's system space first, then promote it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_nothing_to_promote",
   "title": "Promotion nothing to promote",
   "status": 400,
-  "detail": "The test tenant's system Space has no live manifest to promote.",
+  "detail": "The test tenant's system space has no live manifest, so there is no configuration to promote.",
   "code": "promotion_nothing_to_promote",
   "requestId": "req_4mz0v8qk"
 }

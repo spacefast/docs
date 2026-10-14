@@ -1,11 +1,11 @@
 ---
 title: "invalid_elevation_request"
-description: "The elevation request is missing scopes or a usable rationale."
+description: "An elevation request needs at least one scope and a rationale of 1 to 1024 characters."
 ---
 
-The elevation request is missing scopes or a usable rationale.
+An elevation request needs at least one scope and a rationale of 1 to 1024 characters.
 
-**How to resolve:** Send at least one scope and a `reason` of 1 to 1024 characters.
+**How to resolve:** Send a non-empty scope list and a specific rationale, then retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_elevation_request",
   "title": "Invalid elevation request",
   "status": 400,
-  "detail": "The elevation request is missing scopes or a usable rationale.",
+  "detail": "An elevation request needs at least one scope and a rationale of 1 to 1024 characters.",
   "code": "invalid_elevation_request",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,11 +1,11 @@
 ---
 title: "principal_not_found"
-description: "No external principal with that ID exists in this tenant."
+description: "No external principal with that id exists in this tenant."
 ---
 
-No external principal with that ID exists in this tenant.
+No external principal with that id exists in this tenant.
 
-**How to resolve:** Create the principal, or send an ID this tenant already holds.
+**How to resolve:** List `/v1/principals` to see the ids this tenant knows; a principal appears only once it owns a resource.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/principal_not_found",
   "title": "Principal not found",
   "status": 400,
-  "detail": "No external principal with that ID exists in this tenant.",
+  "detail": "No external principal with that id exists in this tenant.",
   "code": "principal_not_found",
   "requestId": "req_4mz0v8qk"
 }

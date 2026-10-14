@@ -1,11 +1,11 @@
 ---
 title: "publish_bytes_missing"
-description: "The publish declared a file whose bytes never arrived."
+description: "The publish has no complete staged content to materialize."
 ---
 
-The publish declared a file whose bytes never arrived.
+The publish has no complete staged content to materialize.
 
-**How to resolve:** Upload the missing file's bytes, then finalize the publish again.
+**How to resolve:** Finish uploading the staged content, or start a new publish.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_bytes_missing",
   "title": "Publish bytes missing",
   "status": 400,
-  "detail": "The publish declared a file whose bytes never arrived.",
+  "detail": "The publish has no complete staged content to materialize.",
   "code": "publish_bytes_missing",
   "requestId": "req_4mz0v8qk"
 }

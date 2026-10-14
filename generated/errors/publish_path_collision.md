@@ -1,11 +1,11 @@
 ---
 title: "publish_path_collision"
-description: "Several published files resolve to the same served route."
+description: "Two different artifacts would serve the same URL after directory-index or clean-URL resolution."
 ---
 
-Several published files resolve to the same served route.
+Two different artifacts would serve the same URL after directory-index or clean-URL resolution.
 
-**How to resolve:** Rename or remove all but one of the files listed in the diagnostic details.
+**How to resolve:** Rename or remove one artifact so that every request route has one owner.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_path_collision",
   "title": "Publish path collision",
   "status": 400,
-  "detail": "Several published files resolve to the same served route.",
+  "detail": "Two different artifacts would serve the same URL after directory-index or clean-URL resolution.",
   "code": "publish_path_collision",
   "requestId": "req_4mz0v8qk"
 }

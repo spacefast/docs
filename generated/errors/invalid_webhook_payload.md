@@ -1,11 +1,11 @@
 ---
 title: "invalid_webhook_payload"
-description: "The webhook body is not a JSON object within the size cap."
+description: "The webhook configuration payload is malformed."
 ---
 
-The webhook body is not a JSON object within the size cap.
+The webhook configuration payload is malformed.
 
-**How to resolve:** Send a JSON object body under the webhook payload cap.
+**How to resolve:** Fix the field referenced by pointer and retry.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/invalid_webhook_payload",
   "title": "Invalid webhook payload",
   "status": 400,
-  "detail": "The webhook body is not a JSON object within the size cap.",
+  "detail": "The webhook configuration payload is malformed.",
   "code": "invalid_webhook_payload",
   "requestId": "req_4mz0v8qk"
 }

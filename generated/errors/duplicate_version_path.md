@@ -1,11 +1,11 @@
 ---
 title: "duplicate_version_path"
-description: "Two files in the publish resolve to the same version path."
+description: "The version upload declares the same file path twice."
 ---
 
-Two files in the publish resolve to the same version path.
+The version upload declares the same file path twice.
 
-**How to resolve:** Rename or remove one of the colliding files, then publish again.
+**How to resolve:** Deduplicate the file list so every path appears once.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/duplicate_version_path",
   "title": "Duplicate version path",
   "status": 400,
-  "detail": "Two files in the publish resolve to the same version path.",
+  "detail": "The version upload declares the same file path twice.",
   "code": "duplicate_version_path",
   "requestId": "req_4mz0v8qk"
 }

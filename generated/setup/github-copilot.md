@@ -1,17 +1,22 @@
 ---
-title: "Connect GitHub Copilot to Spacefast"
-description: "Publish from Copilot CLI and coding agent with native plugin and MCP support."
+title: "Connect GitHub Copilot CLI to Spacefast"
+description: "Add Spacefast to GitHub Copilot CLI so it can publish from your terminal."
 seo:
   canonical: "https://spacefast.com/setup/github-copilot/"
 ---
 
-Publish from Copilot CLI and coding agent with native plugin and MCP support.
+Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
 
-**Install the Spacefast plugin.** Install the plugin's skills and MCP into Copilot with nothing installed first.
+**Install the Spacefast plugin.** Adds Spacefast to Copilot CLI with everything it needs to publish.
 
 ```bash
 npx -y plugins add spacefast/plugins -t github-copilot -y
 ```
+
+1. Sign in to Spacefast and approve access when asked.
+2. To reconnect later, run `/mcp auth spacefast`.
+
+This doesn't cover Copilot cloud agent, which uses its own repository configuration and doesn't support signing in to remote MCP servers.
 
 ## Other ways to connect
 
@@ -19,28 +24,28 @@ npx -y plugins add spacefast/plugins -t github-copilot -y
 
 Use the working manual option below while the directory listing is in review.
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent github-copilot
 ```
 
-**Set up without installing.** One-shot setup with no global install — same work, nothing left behind.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent github-copilot -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
-npx -y skills add https://spacefast.com/SKILL.md -y
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
 ```
 
-**Push to deploy.** Push to deploy — output returns your live and claim links.
+**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
-git remote add spacefast https://t:{{token}}@git.spacefast.com/{{space}}.git && git push spacefast main
+git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
 Prefer to hand this off? Copy setup prompt:
@@ -51,4 +56,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [GitHub Copilot documentation](https://docs.github.com/copilot/customizing-copilot/extending-copilot-chat-with-mcp)
+[Agent documentation](/agents) · [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)

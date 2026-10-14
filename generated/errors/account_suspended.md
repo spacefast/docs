@@ -1,11 +1,11 @@
 ---
 title: "account_suspended"
-description: "The account behind this Space is suspended, so its Spaces are not served."
+description: "This account is suspended for a policy or abuse violation and cannot be used."
 ---
 
-The account behind this Space is suspended, so its Spaces are not served.
+This account is suspended for a policy or abuse violation and cannot be used.
 
-**How to resolve:** Contact Spacefast support to have the suspension reviewed.
+**How to resolve:** If you believe the suspension is a mistake, contact support to review it.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/account_suspended",
   "title": "Account suspended",
   "status": 400,
-  "detail": "The account behind this Space is suspended, so its Spaces are not served.",
+  "detail": "This account is suspended for a policy or abuse violation and cannot be used.",
   "code": "account_suspended",
   "requestId": "req_4mz0v8qk"
 }

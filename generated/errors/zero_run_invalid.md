@@ -1,11 +1,11 @@
 ---
 title: "zero_run_invalid"
-description: "A Zero run handler entry is not shaped the way the runtime expects."
+description: "A Zero run-handler definition is invalid."
 ---
 
-A Zero run handler entry is not shaped the way the runtime expects.
+A Zero run-handler definition is invalid.
 
-**How to resolve:** Rebuild the capsule with `sf build`, then publish again.
+**How to resolve:** Fix the run id, source, capabilities, or database metadata and publish again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_run_invalid",
   "title": "Zero run invalid",
   "status": 400,
-  "detail": "A Zero run handler entry is not shaped the way the runtime expects.",
+  "detail": "A Zero run-handler definition is invalid.",
   "code": "zero_run_invalid",
   "requestId": "req_4mz0v8qk"
 }

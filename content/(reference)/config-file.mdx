@@ -194,8 +194,6 @@ Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero-r
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
 | `runtime.entry` | string | detected | Worker entry. Naming a file that does not exist fails the publish |
-| `runtime.database` | boolean | `false` | Adds `env.DB` |
-| `runtime.fetch` | boolean | no schema default | Allows outbound HTTP. An OpenNext build gets it unless set to `false`; a hand-written handler does not until you ask |
 | `runtime.compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | Runtime semantics this worker was written against |
 
 See [Functions](/functions).
@@ -274,6 +272,6 @@ Under `version: 1` the flat spellings are rejected. Four of them get `config_unk
 | `cleanUrls` | `serve.cleanUrls` |
 | `meta` | `metadata` |
 
-The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error: `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`, and `space` reports `config_identity_moved`.
+The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error. `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`; `space` reports `config_identity_moved`.
 
 The flat shape above is what the finalizer reads and what the CLI writes. Use `version: 1` only if you want the stricter contract.

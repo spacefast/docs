@@ -1,11 +1,11 @@
 ---
 title: "space_selection_conflict"
-description: "`--access` applies only when a publish creates a Space, and this directory is already linked to one."
+description: "The command asked to create a Space while this directory already selects one."
 ---
 
-`--access` applies only when a publish creates a Space, and this directory is already linked to one.
+The command asked to create a Space while this directory already selects one.
 
-**How to resolve:** Drop `--access`, or publish into a new Space with no existing selection.
+**How to resolve:** Drop --slug to publish to the selected Space, or publish from an unlinked directory to create a new one.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_selection_conflict",
   "title": "Space selection conflict",
   "status": 400,
-  "detail": "`--access` applies only when a publish creates a Space, and this directory is already linked to one.",
+  "detail": "The command asked to create a Space while this directory already selects one.",
   "code": "space_selection_conflict",
   "requestId": "req_4mz0v8qk"
 }

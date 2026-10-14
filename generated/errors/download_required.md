@@ -1,11 +1,11 @@
 ---
 title: "download_required"
-description: "The resource has to be downloaded before it can be used."
+description: "This content is too large to return inline and must be downloaded."
 ---
 
-The resource has to be downloaded before it can be used.
+This content is too large to return inline and must be downloaded.
 
-**How to resolve:** Download the resource, then retry the request.
+**How to resolve:** Use the download endpoint referenced in the error details.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/download_required",
   "title": "Download required",
   "status": 400,
-  "detail": "The resource has to be downloaded before it can be used.",
+  "detail": "This content is too large to return inline and must be downloaded.",
   "code": "download_required",
   "requestId": "req_4mz0v8qk"
 }

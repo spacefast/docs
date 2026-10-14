@@ -1,11 +1,11 @@
 ---
 title: "team_scope_mismatch"
-description: "The credential acts for a different team than the request names."
+description: "The requested team conflicts with the team this credential or resource is bound to."
 ---
 
-The credential acts for a different team than the request names.
+The requested team conflicts with the team this credential or resource is bound to.
 
-**How to resolve:** Drop the team reference, or call with a credential scoped to that team.
+**How to resolve:** Drop the team parameter to act on the bound team, or use a credential for the team you named.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/team_scope_mismatch",
   "title": "Team scope mismatch",
   "status": 400,
-  "detail": "The credential acts for a different team than the request names.",
+  "detail": "The requested team conflicts with the team this credential or resource is bound to.",
   "code": "team_scope_mismatch",
   "requestId": "req_4mz0v8qk"
 }

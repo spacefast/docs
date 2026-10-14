@@ -1,11 +1,11 @@
 ---
 title: "promotion_runtime_publish_incomplete"
-description: "The live system Space's runtime publish did not finish."
+description: "The promoted version was accepted but its runtime publish did not finish, so live is unchanged."
 ---
 
-The live system Space's runtime publish did not finish.
+The promoted version was accepted but its runtime publish did not finish, so live is unchanged.
 
-**How to resolve:** Retry the promotion.
+**How to resolve:** Retry the promotion. If it keeps failing, contact support with the `requestId`.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/promotion_runtime_publish_incomplete",
   "title": "Promotion runtime publish incomplete",
   "status": 400,
-  "detail": "The live system Space's runtime publish did not finish.",
+  "detail": "The promoted version was accepted but its runtime publish did not finish, so live is unchanged.",
   "code": "promotion_runtime_publish_incomplete",
   "requestId": "req_4mz0v8qk"
 }

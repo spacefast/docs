@@ -1,11 +1,11 @@
 ---
 title: "jetpack_licensing_response_invalid"
-description: "The Jetpack licensing API answered with a body that does not match its contract."
+description: "The Jetpack Licensing API returned an unexpected response."
 ---
 
-The Jetpack licensing API answered with a body that does not match its contract.
+The Jetpack Licensing API returned an unexpected response.
 
-**How to resolve:** Retry the request. If it keeps failing, contact Spacefast support with the `requestId`.
+**How to resolve:** Retry. If the response contract remains invalid, contact support.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/jetpack_licensing_response_invalid",
   "title": "Jetpack licensing response invalid",
   "status": 400,
-  "detail": "The Jetpack licensing API answered with a body that does not match its contract.",
+  "detail": "The Jetpack Licensing API returned an unexpected response.",
   "code": "jetpack_licensing_response_invalid",
   "requestId": "req_4mz0v8qk"
 }

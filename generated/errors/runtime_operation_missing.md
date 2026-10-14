@@ -1,11 +1,11 @@
 ---
 title: "runtime_operation_missing"
-description: "The runtime management token carries no operation ID."
+description: "The runtime operation referenced by this request was not found."
 ---
 
-The runtime management token carries no operation ID.
+The runtime operation referenced by this request was not found.
 
-**How to resolve:** Mint the token with an `operation_id` claim.
+**How to resolve:** Re-request instructions and retry with a current operation id.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/runtime_operation_missing",
   "title": "Runtime operation missing",
   "status": 400,
-  "detail": "The runtime management token carries no operation ID.",
+  "detail": "The runtime operation referenced by this request was not found.",
   "code": "runtime_operation_missing",
   "requestId": "req_4mz0v8qk"
 }

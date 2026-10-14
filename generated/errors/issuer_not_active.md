@@ -1,11 +1,11 @@
 ---
 title: "issuer_not_active"
-description: "The partner token issuer is registered but not active."
+description: "The partner token issuer is registered but is not active."
 ---
 
-The partner token issuer is registered but not active.
+The partner token issuer is registered but is not active.
 
-**How to resolve:** Activate the issuer by completing its key-possession proof, then retry.
+**How to resolve:** Activate the issuer, then request a new partner token.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/issuer_not_active",
   "title": "Issuer not active",
   "status": 400,
-  "detail": "The partner token issuer is registered but not active.",
+  "detail": "The partner token issuer is registered but is not active.",
   "code": "issuer_not_active",
   "requestId": "req_4mz0v8qk"
 }

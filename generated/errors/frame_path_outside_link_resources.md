@@ -1,11 +1,11 @@
 ---
 title: "frame_path_outside_link_resources"
-description: "The requested frame path is outside the resources the link grants."
+description: "The requested Frame path is outside the Link's resource set."
 ---
 
-The requested frame path is outside the resources the link grants.
+The requested Frame path is outside the Link's resource set.
 
-**How to resolve:** Request a path inside the link's resource set.
+**How to resolve:** Choose a path included by the Link, or update the Link resources before launching.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/frame_path_outside_link_resources",
   "title": "Frame path outside link resources",
   "status": 400,
-  "detail": "The requested frame path is outside the resources the link grants.",
+  "detail": "The requested Frame path is outside the Link's resource set.",
   "code": "frame_path_outside_link_resources",
   "requestId": "req_4mz0v8qk"
 }

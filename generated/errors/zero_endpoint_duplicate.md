@@ -1,11 +1,11 @@
 ---
 title: "zero_endpoint_duplicate"
-description: "The same Zero endpoint is declared more than once."
+description: "Two Zero endpoints declare the same method and route."
 ---
 
-The same Zero endpoint is declared more than once.
+Two Zero endpoints declare the same method and route.
 
-**How to resolve:** Remove the duplicate endpoint declaration, then publish again.
+**How to resolve:** Give each endpoint a unique method and route before publishing again.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_endpoint_duplicate",
   "title": "Zero endpoint duplicate",
   "status": 400,
-  "detail": "The same Zero endpoint is declared more than once.",
+  "detail": "Two Zero endpoints declare the same method and route.",
   "code": "zero_endpoint_duplicate",
   "requestId": "req_4mz0v8qk"
 }

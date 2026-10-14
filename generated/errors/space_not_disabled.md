@@ -1,11 +1,11 @@
 ---
 title: "space_not_disabled"
-description: "The Space is not disabled, so there is nothing to restore."
+description: "The space is not disabled, so it cannot be restored."
 ---
 
-The Space is not disabled, so there is nothing to restore.
+The space is not disabled, so it cannot be restored.
 
-**How to resolve:** Skip the restore; the Space is already serving.
+**How to resolve:** No action is needed. The space is already active.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_not_disabled",
   "title": "Space not disabled",
   "status": 400,
-  "detail": "The Space is not disabled, so there is nothing to restore.",
+  "detail": "The space is not disabled, so it cannot be restored.",
   "code": "space_not_disabled",
   "requestId": "req_4mz0v8qk"
 }
