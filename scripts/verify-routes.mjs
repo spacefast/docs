@@ -143,6 +143,7 @@ const representativePages = [
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
   ["recipes/vite/index.html", `${docsRoot}/recipes/vite`, "Vite"],
   ["zero-runtime/index.html", `${docsRoot}/zero-runtime`, "What Zero is"],
+  ["content-sync/index.html", `${docsRoot}/content-sync`, "Document metadata"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);

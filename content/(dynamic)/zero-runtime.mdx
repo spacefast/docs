@@ -255,6 +255,10 @@ export default capsule({
 
 Call them from the client with `useAction("invite")`. `scope: "/"` covers the whole space; `/docs` covers one subtree. Both routes return the Person in `{ data }`. The invite link itself only ever travels by email.
 
+## Document metadata
+
+For Markdown or HTML files bound to WordPress documents, set titles and publication dates with [content source metadata](/content-sync). YAML front matter does not set those fields.
+
 ## Styling
 
 Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected, and `theme.json` plus utility classes are the whole styling story.

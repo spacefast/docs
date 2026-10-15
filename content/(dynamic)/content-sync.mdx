@@ -1,0 +1,37 @@
+---
+title: Content source metadata
+description: Set the title, publication date, slug, and status of a source-backed WordPress document.
+---
+
+When Content management is enabled for your team, Markdown and HTML files bound to WordPress documents can carry their own metadata. Use the document header below to preserve titles and publication dates during a migration.
+
+## Document metadata
+
+Put a single-line JSON object inside a `spacefast:document` HTML comment at the very start of the file, before its body. Do not put a blank line or other text before the comment.
+
+```markdown content/posts/first-post.md
+<!-- spacefast:document {"version":1,"title":"My first post","slug":"first-post","status":"publish","dateGmt":"2026-01-15T09:30:00Z"} -->
+
+The post body starts here.
+```
+
+The same header works before an HTML document body. It stores WordPress fields separately from the editable content; it is not a visible heading or a page layout.
+
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `version` | Yes | Must be `1`. |
+| `title` | Yes | The WordPress document title, up to 2,000 UTF-8 bytes. |
+| `slug` | Yes | The WordPress document slug, up to 200 UTF-8 bytes. |
+| `status` | Yes | `draft`, `pending`, `publish`, `private`, `future`, or `trash`. |
+| `dateGmt` | No | Publication time in UTC, such as `2026-01-15T09:30:00Z`. Required when `status` is `future`. |
+| `componentSource` | No | The original component path recorded by a source conversion. Preserve it when it is already present. |
+
+`dateGmt` must end in `Z`. Fractional seconds are accepted but stored to whole seconds. Do not add other keys to the JSON object.
+
+## Editing and migration
+
+WordPress editor saves write the metadata header back to the source file alongside the body. Preserve that header when you edit the file locally. Its JSON keys may be reordered when the source is saved.
+
+Without this header, the source does not set the document's metadata. A new document gets a title derived from its filename or binding slug. Existing WordPress metadata is retained during source adoption.
+
+YAML front matter is not read as document metadata. A `title:` or `date:` field between `---` lines does not set the WordPress title or publication date. Replace that front matter with the JSON header before publishing source-backed documents. Otherwise a migrated post's original date is not supplied to WordPress, which can change date-based query ordering.
