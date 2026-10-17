@@ -119,6 +119,13 @@ There is nothing to switch on. Every worker gets its database and outbound `fetc
 
 Anything else from an unclaimed space answers 403 with "This host isn't reachable from an unclaimed space. Claim the space to reach any public host." Claiming opens it up without a republish.
 
+Outbound requests from a worker leave from Cloudflare's shared network addresses, not from a dedicated or fixed IP for your space. Other spaces can send from the same addresses, so an API that rate-limits or blocks by IP can count their traffic against yours and answer `429` on your first request. There is also no fixed address to put on an API allowlist. Plan for it:
+
+- Send the key the API issues you. An API that limits per key then counts only your requests.
+- Retry a `429` with backoff. When `Retry-After` is longer than the request can wait, return an error and try again on a later request or [cron run](/crons).
+- Cache responses in `env.DB` so repeat requests are answered from the cache.
+- Call the API from the browser instead when it accepts cross-origin requests and the call needs no secret.
+
 ## What is on `env`
 
 `env` carries the space's environment variables. See [Environment variables](/environment-variables) for how to set them.
