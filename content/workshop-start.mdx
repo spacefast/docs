@@ -1,0 +1,108 @@
+---
+title: Build and publish your first Space
+description: Connect your AI tool, make a small static page, and share a link someone else can open.
+sidebar:
+  label: Your first Space
+---
+
+Use the AI tool you already have. Connect it, make one small thing, and give someone a link that opens.
+
+## Connect your tool
+
+Sign in to the tool you want to build with, then open its setup guide. Keep your email inbox available for Spacefast sign-in.
+
+| Your tool | Start here | Before connecting |
+| --- | --- | --- |
+| ChatGPT | [Connect ChatGPT](https://my.spacefast.com/start/chatgpt) | Use ChatGPT on the web. Plugin availability and custom MCP connections depend on your account and workspace security settings. |
+| Claude | [Connect Claude](/setup/claude-app/) | Sign in to Claude. On a Team or Enterprise plan, an owner must add the connector first. |
+| Codex | [Connect Codex](/setup/codex/) | Use a Codex session where you can install the plugin or configure an MCP server, then sign in to Spacefast when asked. |
+
+Follow that guide through installation and authorization. Enable Spacefast in the conversation if your tool asks you to select it.
+
+### Check your connection
+
+Send this prompt in your AI tool:
+
+```text
+Use Spacefast to tell me which account I am connected as and list my teams. Do not create or change anything.
+```
+
+Continue when the tool returns your Spacefast account and teams. Seeing Spacefast in settings alone does not prove that the connection works. If the tool cannot make the request, use [Connection blocked](#connection-blocked).
+
+## Make one small thing
+
+Choose one prompt. Replace the words in square brackets with your idea, then send it in the connected conversation. Start with one static `index.html`; you can add more after someone opens your first version.
+
+### Checklist
+
+```text
+Make a one-page checklist for [goal] with add, complete, and clear-completed controls.
+Use one self-contained index.html with inline styles and JavaScript. Use fictional examples and keep the first version static, with no sign-in, database, or paid services.
+Publish it privately with Spacefast. Wait for publishing to finish, then return the Space's dashboard link and a viewer link that allows viewing without my account. Do not make the Space public.
+Keep the Space ID so later changes update this same Space and its live address.
+If you publish without an account, give me the private claim link and tell me to claim it before leaving. Keep management credentials and the claim link out of the viewer link and page.
+```
+
+### Calculator
+
+```text
+Make a one-page calculator for [calculation], label every input, and show the formula and result.
+Use one self-contained index.html with inline styles and JavaScript. Use fictional examples and keep the first version static, with no sign-in, database, or paid services.
+Publish it privately with Spacefast. Wait for publishing to finish, then return the Space's dashboard link and a viewer link that allows viewing without my account. Do not make the Space public.
+Keep the Space ID so later changes update this same Space and its live address.
+If you publish without an account, give me the private claim link and tell me to claim it before leaving. Keep management credentials and the claim link out of the viewer link and page.
+```
+
+### Dashboard
+
+```text
+Make a one-page dashboard using fictional data for [topic], with three summary figures and a useful filter.
+Use one self-contained index.html with inline styles and JavaScript. Keep the first version static, with no sign-in, database, or paid services.
+Publish it privately with Spacefast. Wait for publishing to finish, then return the Space's dashboard link and a viewer link that allows viewing without my account. Do not make the Space public.
+Keep the Space ID so later changes update this same Space and its live address.
+If you publish without an account, give me the private claim link and tell me to claim it before leaving. Keep management credentials and the claim link out of the viewer link and page.
+```
+
+## Publish and share
+
+1. Open the result yourself and check that the controls work.
+2. Open the Space in [your dashboard](https://my.spacefast.com). In **Access**, choose **Create share link**, then **Can view**. Review its expiry and create the link.
+3. Copy that viewer link and open it in a private browser window where you are signed out, or ask another person to open it without your account.
+
+You have finished this step when someone else can open the page and use it. A private Space's address alone can require access; share the viewer link you tested. Keep owner and claim links to yourself. See [Sharing and access](/access).
+
+## Keep it and return
+
+Save the Space's dashboard link so you can find it again. Ask your agent to change one thing and publish to the **same Space**. Reopen the existing viewer link and check that it shows the change.
+
+If you published without an account, open the private claim link, sign in, and choose your team before you leave. Review whether you want the publishing agent to keep permission to update the Space. Claiming keeps the Space available and preserves its sharing settings.
+
+An unclaimed Space expires **33 hours and 20 minutes after its latest publish that changes files**. Keep the claim link private. [Anonymous publishing and claiming](/anonymous-and-claim) explains how to keep the result.
+
+## Connection blocked
+
+You can still publish the page through [Drop](https://my.spacefast.com/drop):
+
+1. Ask your AI tool to export the self-contained `index.html` file.
+2. Open Drop and sign in if asked.
+3. Upload the file and wait for publishing to finish.
+4. Open the Space in the dashboard, then follow [Publish and share](#publish-and-share) to create and test a viewer link.
+
+If your workspace blocks the connection, ask your administrator about its policy or use this file upload path for your first build.
+
+## Stuck
+
+| What you see | What to do |
+| --- | --- |
+| Spacefast is missing or cannot identify my account | Reopen your tool's setup link above, confirm installation and connection, enable Spacefast in the conversation, then rerun the connection prompt. Check workspace policy if blocked. |
+| Publish failed | Record the visible error and job or request ID, check upload or build status, then use [Troubleshooting](/troubleshooting). Do not create another Space solely to retry an uncertain publish. |
+| The demo link says private or returns 403 | In the intended Space, open **Access → Create share link → Can view**. Copy that viewer link and test it without owner access. |
+| I published without an account | Open the private claim link, review continued agent access, claim, then confirm the result is retained and that its intended viewer link still works. |
+
+## Before you leave
+
+- **Can someone else open your viewer link?**
+- **Can you find this Space again and update the same address?**
+- **If you published without an account, have you claimed it?**
+
+If one answer is no, ask a coach to help and agree who will follow up.

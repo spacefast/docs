@@ -4,6 +4,7 @@ export default defineMeta({
   pages: [
     "index",
     "quickstart",
+    "workshop-start",
     "troubleshooting",
     "setup",
     "concepts",

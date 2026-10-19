@@ -1,5 +1,5 @@
 {
-  "contentDigest": "6c850e3cefc08d93f1cc46bcb9a61432d1879a6c0b3f5ea2819419851a8fcf83",
+  "contentDigest": "c6f8cf737fa5f1dee0f2fb50370a13793948da37bd137b047fd1093f51f5af7b",
   "counts": {
     "apiOperations": 435,
     "changelogPackages": 24,
@@ -3666,9 +3666,9 @@
       "sha256": "385c453d153fb9da28dea822f96125319d7dddae5a0dfd56e624e974527288a4"
     },
     {
-      "bytes": 1468,
+      "bytes": 1684,
       "path": "setup/chatgpt.md",
-      "sha256": "ee46377afaaecf4d51d1b1d2b842d222fc8476a37c32b56fe83a07147f64a658"
+      "sha256": "40ca4683f6de463b0997717a1da05032607d230f2e8b49b58a7ba64697a0f3db"
     },
     {
       "bytes": 1113,
