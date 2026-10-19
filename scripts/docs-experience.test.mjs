@@ -56,6 +56,17 @@ test("Quickstart gives a no-install route before the CLI steps", async () => {
   assert.match(quickstart.slice(drop, install), /\[Drop\]\(\/docs\/publish#publish\)/u);
 });
 
+test("first Space guide points to the canonical recipe flow and keeps recovery optional", async () => {
+  const guide = await builtPage("/workshop-start");
+  const recipe = guide.indexOf("[open the recipe page](https://my.spacefast.com/first-recipe)");
+  const sameConversation = guide.indexOf("same conversation where you connected Spacefast");
+  const viewer = guide.indexOf("the agent returns a dashboard link and a viewer link");
+  const recovery = guide.indexOf("If the agent does not return a viewer link");
+  assert.ok(recipe >= 0 && sameConversation > recipe && viewer > sameConversation);
+  assert.ok(recovery > viewer, "dashboard share-link instructions are a recovery path");
+  assert.match(guide, /Publishing through your connected account saves the Space there; it does not require a claim step\./u);
+});
+
 test("unfamiliar homepage terms have a linked glossary with definitions", async () => {
   const home = await builtPage("/");
   const glossary = await builtPage("/glossary");
