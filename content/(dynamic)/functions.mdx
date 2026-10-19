@@ -7,7 +7,7 @@ sidebar:
 
 Functions can detect a supported worker layout when you publish, without an explicit `runtime` block. Custom layouts need a declaration, and [Zero](/zero-runtime#declare-it) is always declared explicitly.
 
-Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want live queries in the browser and a schema the platform migrates for you, use [Zero](/zero-runtime) instead. Both can call `fetch()`. One version declares one runtime.
+Functions runs your code as a worker. Use it when you need npm packages or framework output like OpenNext Next.js. If you want live queries in the browser and a schema the platform migrates for you, use [Zero](/zero-runtime) instead. Both can call `fetch()`. A Zero capsule can also carry a `functions/` file router in the same version: one `sf publish` builds both, and each file answers only the route it declares. That's the way to give one slow call, such as an LLM request, more time than a Zero handler allows.
 
 Functions is on for every account.
 
@@ -139,12 +139,15 @@ Two groups of variable names never reach a worker, dropped rather than blanked s
 | `DATABASE_URL`, `DATABASE_URI`, `MYSQL_URL`, `MYSQL_URI`, `MYSQL_DSN`, `POSTGRES_URL`, `POSTGRES_URI`, `POSTGRESQL_URL`, `POSTGRESQL_URI` | A worker reaches the database through the broker or not at all |
 | Anything starting with `SPACEFAST_` or `ZERO_` | The platform's own namespace |
 
+Every other space variable reaches `env` as plain text. That includes a key a Zero capsule in the same space only uses through `ctx.crypto`.
+
 ## Limits
 
 | Limit | Value |
 | --- | --- |
 | Compiled bundle | 8 MiB |
 | Routes per version | 256 |
+| Request duration | 30 seconds for the whole request. Past it the visitor gets a `functions_transport_failed` error, and the worker is not stopped |
 | Next cache seed, one entry | 2 MiB minus 8192 bytes |
 | Next cache seed, total | 8 MiB |
 
