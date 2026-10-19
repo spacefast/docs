@@ -186,6 +186,8 @@ Platform modules do not count against your client cap. The SDK, kit, charts, pre
 
 `fetch()` works in every Zero handler, HTTPS only. A mutation or write endpoint holds its database transaction open while it waits, so each fetch has a 5-second timeout. Queries and read endpoints get 10 seconds per fetch. An action gets 5 seconds for the whole invocation, shared across every fetch it makes.
 
+`fetch()` holds the handler until the whole response arrives, up to 1 MiB, and makes one request at a time. `Promise.all` over three fetches takes as long as all three in a row, and asking the upstream to stream does not buy extra time. There are no timers on the server: `setTimeout`, `setInterval`, `clearTimeout`, `AbortController`, and `AbortSignal` are undefined, and `fetch()` ignores `signal`. Node and browser tests have all of them, so check with `typeof` in code you share with the client.
+
 How far `fetch()` reaches depends on who owns the space:
 
 | Space | Reaches |
