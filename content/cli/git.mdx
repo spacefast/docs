@@ -45,7 +45,7 @@ sf git connect [--space <value>] [--provider github|gitlab|bitbucket|generic]
 | `--default-branch=<value>` | none | Repository default branch |
 | `--production-branch=<value>` | none | Branch that publishes to production |
 | `--ref=<value>` | none | Ref, branch, tag, or commit to sync or build after connecting. Env `SPACEFAST_BUILD_REF` |
-| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--config=<path>` | none | Path to a `spacefast.config.ts` or `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
 | `--auto-deploy-production` / `--no-auto-deploy-production` | `true` | Automatically build pushes to the production branch |
 | `--auto-deploy-previews` / `--no-auto-deploy-previews` | `true` | Automatically build preview branches and pull requests |
 | `--root-directory=<value>` | none | App root directory |
@@ -122,7 +122,7 @@ sf git update [--space <value>] [--connection-type connected|hosted] ...
 | `--clear-credential` | `false` | Clear the stored generic Git clone token |
 | `--auto-deploy-production` / `--no-auto-deploy-production` | unchanged | Automatically build pushes to the production branch |
 | `--auto-deploy-previews` / `--no-auto-deploy-previews` | unchanged | Automatically build preview branches and pull requests |
-| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--config=<path>` | none | Path to a `spacefast.config.ts` or `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
 | `--root-directory=<value>` | unchanged | App root directory |
 | `--install-directory=<value>` | unchanged | Dependency install directory |
 | `--install-command=<value>` | unchanged | Install command |
@@ -157,7 +157,7 @@ sf git build [--space <value>] [--connection-type connected|hosted] [--ref <valu
 | `--branch=<value>` | none | Branch name for preview alias and production branch selection. Env `SPACEFAST_GIT_BRANCH` |
 | `--commit=<sha>` | none | Commit SHA to build. Env `SPACEFAST_GIT_COMMIT` |
 | `--pull-request=<n>` | none | Pull request number for preview builds. Minimum 1. Env `SPACEFAST_PULL_REQUEST` |
-| `--config=<path>` | none | Path to an `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
+| `--config=<path>` | none | Path to a `spacefast.config.ts` or `sf.jsonc` with repository build settings. Env `SPACEFAST_CONFIG` |
 | `--target=<production\|preview>` | from the branch | Force the build target |
 | `--root-directory=<value>` | saved setting | Override the app root directory for this build |
 | `--install-directory=<value>` | saved setting | Override the dependency install directory for this build |
