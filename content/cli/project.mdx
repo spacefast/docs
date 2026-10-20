@@ -49,11 +49,12 @@ sf init my-app --runtime zero --template guestbook
 
 ### What it writes
 
-`sf init` writes `sf.jsonc`, commented out down to the keys you are likely to want:
+For a new static project, `sf init` writes `spacefast.config.ts`. Add the settings you need inside `defineConfig`:
 
-```jsonc sf.jsonc
-{
-  "$schema": "https://spacefast.com/schemas/sf.json",
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
   // Project link: .spacefast/space.json (written by sf init --space, sf link, or sf publish).
   // "index": "index.html",
   // "fallback": "/index.html", // SPA fallback; or { "path": "/404.html", "status": 404 }
@@ -62,19 +63,19 @@ sf init my-app --runtime zero --template guestbook
   // "meta": { "title": "", "description": "", "image": "/og.png", "favicon": "/favicon.svg" },
   // "templates": [], // files that receive {{ vars.NAME }} substitution
   // "build": { "rootDirectory": ".", "buildCommand": "npm run build", "outputDirectory": "dist" },
-}
+});
 ```
 
 With `--space` it also writes `.spacefast/space.json` and refreshes `.spacefast/state.json`. If the cache write fails you get a warning, not a failure, because the committed link is the source of truth.
 
-Other config filenames still work, in this precedence order: `sf.jsonc`, `spacefast.jsonc`, `spacefast.json`, `sf.json`, `.sf/sf.json`, `.sf/config.jsonc`, `.sf/config.json`. The highest one present wins and the rest produce a warning naming the winner.
+`spacefast.config.ts` takes precedence over `sf.jsonc` and the other JSON/JSONC aliases. Those formats remain permanently supported. The highest-priority file present wins; the CLI warns about ignored files and does not fall back if the winning file is invalid. See [Project configuration](/config-file) for the exported types, full precedence, and migration steps.
 
 `sf init` refuses to overwrite an existing config without `--force`, and refuses a symlinked or non-regular config outright. `sf init <name>` removes the directory it created if init fails.
 
 ### Output
 
 ```text
-{ "data": { "created": true, "configPath": "…/sf.jsonc" } }
+{ "data": { "created": true, "configPath": "…/spacefast.config.ts" } }
 ```
 
 With `--space`, `data` also carries `linkPath`, `space`, `statePath`, and `stateSaved`.

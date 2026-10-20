@@ -1,11 +1,11 @@
 ---
 title: Crons
-description: Schedule a GET against one of your own paths. Declared in sf.jsonc, applied by publishing, with failures reported in the dashboard and sf crons.
+description: Schedule a GET against one of your own paths. Declare crons in project configuration and publish to apply them.
 sidebar:
   order: 4
 ---
 
-There's no dashboard editor for crons. Declare schedules in `sf.jsonc`, then publish and make that version live to apply them. A preview does not replace the live version's schedules.
+There's no dashboard editor for crons. Declare schedules in `spacefast.config.ts` or `sf.jsonc`, then publish and make that version live to apply them. A preview does not replace the live version's schedules.
 
 ## How a run happens
 
@@ -23,15 +23,17 @@ A response under 400 is a success and is silent. A response of 400 or worse, or 
 
 ## Declare it
 
-There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free.
+There is no write API and no dashboard editor. [Project configuration](/config-file) is the only writer, and a publish is the only edit. A rollback restores the previous schedules.
 
-```jsonc sf.jsonc
-{
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
   "crons": [
     { "path": "/api/digest", "schedule": "daily" },
     { "path": "/api/poll", "schedule": "*/15 * * * *" }
   ]
-}
+});
 ```
 
 ```bash
@@ -92,7 +94,7 @@ The run prints a receipt with the URL, status, duration, content type, byte coun
 Before the first publish, `sf crons ls` prints:
 
 ```text
-No scheduled jobs declared. Add a `crons` block to sf.jsonc.
+No scheduled jobs declared. Add a `crons` block to spacefast.config.ts.
 ```
 
 ## Failures

@@ -32,6 +32,10 @@ Fetch https://spacefast.com/setup.md
 That page teaches a single-request publish flow that needs no CLI and no MCP
 server.
 
+For project settings, read [Project configuration](https://spacefast.com/docs/config-file).
+New projects use `spacefast.config.ts` with `defineConfig` from `spacefast/config`.
+`sf.jsonc` remains supported. The [JSON Schema](https://spacefast.com/schemas/sf.json) describes the JSON format, not TypeScript modules.
+
 For a fuller setup, install the CLI and let it configure the rest:
 
 ```bash

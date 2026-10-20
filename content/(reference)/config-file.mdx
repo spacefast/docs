@@ -1,11 +1,85 @@
 ---
-title: sf.jsonc reference
-description: Every key sf.jsonc accepts, what it does, and which defaults the finalizer actually computes
+title: Project configuration
+description: Configure a project with spacefast.config.ts or sf.jsonc, migrate between formats, and set serving and build defaults.
 sidebar:
   order: 1
 ---
 
-`sf.jsonc` is the project config Spacefast reads when a version finalizes. This page lists every key the schema accepts. After it you can write the file by hand and know which defaults are real.
+`spacefast.config.ts` is the preferred project configuration for new projects. `sf init` creates it. `sf.jsonc` and its JSON/JSONC aliases remain permanently supported; they are not deprecated.
+
+Both formats declare the settings below. The CLI evaluates TypeScript during a build and freezes the result into JSON configuration for serving. The server does not execute TypeScript configuration on visitor requests.
+
+## TypeScript configuration
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "My App",
+  build: { buildCommand: "npm run build", outputDirectory: "dist" },
+  crons: [{ path: "/api/digest", schedule: "daily" }],
+});
+```
+
+The module must have a default export. It can be an object, a promise of an object, or a function returning either. Async functions and local imports work. Package imports resolve from your project, so install those dependencies there.
+
+`spacefast/config` exports `defineConfig`, `SpacefastConfig`, and `SpacefastConfigInput`. `defineConfig` preserves type inference and checks the input type; the CLI validates the resolved configuration when it loads it. `SpacefastConfig` describes the object, while `SpacefastConfigInput` also accepts promises and factories. You can use the object type without the helper:
+
+```ts spacefast.config.ts
+import type { SpacefastConfig } from "spacefast/config";
+
+export default {
+  name: "My App",
+  cleanUrls: true,
+} satisfies SpacefastConfig;
+```
+
+The installed CLI supplies `defineConfig` when it loads the file, including global and standalone installations. For editor type checking, add `spacefast` as a project development dependency:
+
+```bash
+npm install --save-dev spacefast
+```
+
+The resolved object must contain JSON-compatible values. Optional properties with `undefined` values are omitted when the CLI writes JSON. Configuration is executable code: only build projects you trust, and do not put secrets in settings that become part of a published artifact.
+
+## Migrate from sf.jsonc
+
+Migration is optional. There is no `sf migrate config` command; `sf migrate` publishes a site from a public URL.
+
+1. Create `spacefast.config.ts` beside your existing `sf.jsonc`.
+2. Add the `defineConfig` import and wrap the existing object in `export default defineConfig(...)`. JSON property names and comments can stay. Remove the optional `$schema` editor pointer; TypeScript uses the exported types instead.
+3. Keep all your settings, including `runtime`, routing rules, crons, and build options. Do not replace your file with an empty starter.
+4. Run `sf build` from the project root to validate and build without publishing. Fix any configuration or build errors.
+5. Remove the old `sf.jsonc` after the build succeeds. Commit the TypeScript file and any dependency changes.
+
+For example, this JSONC:
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "name": "My App",
+  "cleanUrls": true
+}
+```
+
+becomes:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "My App",
+  cleanUrls: true,
+});
+```
+
+Keep `.spacefast/space.json` if you have linked the project. Changing the config format does not replace that link.
+
+## Repository builds and uploads
+
+Connected Git repository builds read `spacefast.config.ts` too. Commit it with your source; evaluation happens in the isolated build environment. The CLI also accepts it through `--config` (or `SPACEFAST_CONFIG`) on commands that expose that option, including Git build configuration. Do not depend on files or environment variables that exist only on your laptop.
+
+Source builds preserve the authored TypeScript file and produce resolved JSON configuration in the build output. Raw file uploads and hosted MCP inline publishing cannot execute it. For those paths, build locally with `sf build`, then publish the resulting output directory with `sf publish <output> --prebuilt`.
 
 ## A full example
 
@@ -68,19 +142,20 @@ sidebar:
 
 ## Where the file lives
 
-The canonical name is `sf.jsonc` at the root of the directory you publish. Six aliases are accepted too. The first file found wins, in this order.
+Put the config at the project root. During project builds, the first file found wins, in this order:
 
-1. `sf.jsonc`
-2. `spacefast.jsonc`
-3. `spacefast.json`
-4. `sf.json`
-5. `.sf/sf.json`
-6. `.sf/config.jsonc`
-7. `.sf/config.json`
+1. `spacefast.config.ts`
+2. `sf.jsonc`
+3. `spacefast.jsonc`
+4. `spacefast.json`
+5. `sf.json`
+6. `.sf/sf.json`
+7. `.sf/config.jsonc`
+8. `.sf/config.json`
 
-All seven are private files. They are never served. Keep exactly one, since two config files in the same tree is an error.
+All eight are private files. They are never served. Keep one authored config: if several exist, the CLI warns that it ignored the lower-priority files. An invalid or unreadable winning file fails the command; it does not fall back to another file. An explicit `--config` selects that file instead of discovery.
 
-The file is JSON with comments, capped at 256 KiB. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation.
+The JSONC format accepts comments and is capped at 256 KiB. Point `$schema` at [the JSON Schema](https://spacefast.com/schemas/sf.json) for editor completion and validation. That schema describes JSON configuration, not executable TypeScript modules.
 
 ## Identity
 
@@ -206,7 +281,7 @@ See [Functions](/functions).
 | `crons[].path` | string, up to 512 chars | none | Path to GET. Starts with `/`, no query, no wildcards, no `:placeholders` |
 | `crons[].schedule` | string | none | A named schedule, a shorthand, or a five-field crontab |
 
-`sf.jsonc` is the only writer. See [Crons](/crons) for the schedule grammar.
+Project configuration is the only writer. Use `spacefast.config.ts` or `sf.jsonc`. See [Crons](/crons) for the schedule grammar.
 
 ## Access
 

@@ -22,6 +22,31 @@ function opening(page) {
   return paragraph.replace(/\s+/gu, " ");
 }
 
+test("project configuration explains both supported formats and migration", async () => {
+  const config = await builtPage("/config-file");
+  assert.match(config, /sf\.jsonc.*permanently supported; they are not deprecated/u);
+  for (const symbol of ["defineConfig", "SpacefastConfig", "SpacefastConfigInput"]) {
+    assert.ok(config.includes(symbol), `configuration must explain ${symbol}`);
+  }
+  assert.match(config, /1\. `spacefast\.config\.ts`\s+2\. `sf\.jsonc`/u);
+  assert.match(config, /does not fall back to another file/u);
+  assert.match(config, /There is no `sf migrate config` command/u);
+  assert.match(config, /Run `sf build` from the project root/u);
+  assert.match(config, /Connected Git repository builds read `spacefast\.config\.ts` too/u);
+  assert.match(config, /hosted MCP inline publishing cannot execute it/u);
+  assert.match(config, /https:\/\/spacefast\.com\/schemas\/sf\.json/u);
+
+  const project = await builtPage("/cli/project");
+  assert.match(project, /`sf init` writes `spacefast\.config\.ts`/u);
+  assert.doesNotMatch(project, /`sf init` writes `sf\.jsonc`/u);
+  const crons = await builtPage("/crons");
+  assert.match(crons, /```ts spacefast\.config\.ts/u);
+  const git = await builtPage("/git");
+  assert.match(git, /Repository builds read `spacefast\.config\.ts`/u);
+  const index = await readFile(path.join(dist, "llms.txt"), "utf8");
+  assert.match(index, /Project configuration.*https:\/\/spacefast\.com\/docs\/config-file/u);
+});
+
 test("every authored page opens with its subject instead of a page promise", async () => {
   const offenders = [];
   const manifest = JSON.parse(await readFile(path.join(root, ".blume", "blume.manifest.json"), "utf8"));

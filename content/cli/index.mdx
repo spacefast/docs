@@ -181,7 +181,8 @@ Other files the CLI owns:
 | `~/.spacefast/credentials/profile-*.json` | One credential file per profile |
 | `.spacefast/space.json` | Committable link: which Space, team, and API base URL |
 | `.spacefast/state.json` | Local cache and credentials. Never commit it, and `sf` adds it to `.gitignore` for you |
-| `sf.jsonc` | Project config written by `sf init` |
+| `spacefast.config.ts` | Typed project config written by `sf init`; see [Project configuration](/config-file) |
+| `sf.jsonc` | Permanently supported JSONC project config; TypeScript takes precedence when both exist |
 
 ## Update checks
 
