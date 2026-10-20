@@ -44,7 +44,7 @@ These apply when the publish creates the Space. On an existing Space with `--tar
 | `--access=private\|team\|public` | team default | Set initial root access when this publish creates a team-owned Space. Requires a login or `--token`, and fails with `space_selection_conflict` if a Space is already selected |
 | `--hostname-scope=team\|global` | server default | Managed hostname scope for newly created Spaces |
 | `--spa=auto\|true\|false` | `auto` | Control single-page app fallback detection |
-| `--mode=website\|files` | `website` | Serve the Space as a website or as a raw file listing. Usually set in `sf.jsonc` |
+| `--mode=website\|files` | `website` | Serve the Space as a website or as a raw file listing. Usually set in project configuration |
 
 `--mode files` with `--spa true` is rejected: a file listing has no SPA fallback to serve.
 

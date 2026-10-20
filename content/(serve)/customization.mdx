@@ -3,17 +3,17 @@ title: Customization
 description: Theme the pages Spacefast draws, set the title and image links unfurl with, add an analytics tag, and run one site-wide script
 ---
 
-Everything you set here lives on the Space, not a version — it survives every publish, and it wins over whatever `theme` or `meta` your `sf.jsonc` declares.
+Everything you set here lives on the Space, not a version — it survives every publish, and it wins over whatever `theme` or `meta` your project configuration declares.
 
 Open the Space and go to **Customization**. Four tabs, in order: **Theme**, **Search & sharing**, **Google Analytics**, and **Custom JS**. A large live preview sits beside the controls, labelled **Visitor sees**, painted from your unsaved draft.
 
 ## What lives on the Space, not the version
 
-Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published `sf.jsonc`: the Space's `theme` replaces the file's rather than merging with it. So a project that sets `theme` in its config, then edits Theme here, keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
+Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published configuration: the Space's `theme` replaces the file's rather than merging with it. So a project that sets `theme` in its config, then edits Theme here, keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
 
 Theme and share metadata apply without republishing. Save, and the next request gets them. **Custom JS** is the exception, and its own field note says so: a script change takes effect on the next publish.
 
-Everything the four tabs write is `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
+Everything the four tabs write is `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [Project configuration reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
 
 ## Theme
 
@@ -112,6 +112,6 @@ The header's **Copy as spacefast.jsonc** button, titled "Theme and share metadat
 }
 ```
 
-Paste it into your project's `sf.jsonc` and those two keys travel with the repository. `spacefast.jsonc` is the button's wording and a legacy filename the loader still accepts; the canonical name is `sf.jsonc`. The rest of the file is unaffected, and both keys work under either name.
+Merge these two keys into your existing project configuration: inside `defineConfig` for `spacefast.config.ts`, or into the object in `sf.jsonc`. Keep the other settings. Do not create a second configuration file. `spacefast.jsonc` is the button's wording and a supported JSONC alias; it does not take precedence over TypeScript.
 
 One thing to know before you paste it: as long as the Space also carries a `theme`, the Space keeps winning. Clear the Theme tab's fields if you want the file to be the source of truth.

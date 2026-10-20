@@ -8,7 +8,7 @@ sidebar:
 There's no connection string for this database — your code reaches it through `ctx.db` or `env.DB`, or through a single-use SQL console when you need raw SQL.
 
 :::note[Don't have a database yet?]
-For [Zero](/zero-runtime), start with `sf init --runtime zero`, or add the full [runtime block](/zero-runtime#declare-it) to `sf.jsonc`, including `kind: "zero"`, `server`, and `client` entry paths. The server file is required; Zero can generate a client shell. Publish the app before querying its live database. A [Functions](/functions#what-is-on-env) worker also gets a database through `env.DB`, but the Zero table commands do not apply to it.
+For [Zero](/zero-runtime), start with `sf init --runtime zero`, or add the full [runtime block](/zero-runtime#declare-it) to your existing `spacefast.config.ts` or `sf.jsonc`, including `kind: "zero"`, `server`, and `client` entry paths. The server file is required; Zero can generate a client shell. Publish the app before querying its live database. A [Functions](/functions#what-is-on-env) worker also gets a database through `env.DB`, but the Zero table commands do not apply to it.
 :::
 
 ## What it is
@@ -150,7 +150,7 @@ sf db migrate --rename
 | `drop_table`, `drop_column`, `drop_index` | `--drop` |
 | `rename_table`, `rename_column` | `--rename` |
 
-`sf db migrate` decides Zero-ness from your local `sf.jsonc` before it contacts the API. A static or Functions project fails with `runtime_kind_mismatch` and exit code `30`, having sent no request. `--previous-artifact` diffs against a named artifact instead of the live schema.
+`sf db migrate` decides Zero-ness from your local project configuration before it contacts the API. A static or Functions project fails with `runtime_kind_mismatch` and exit code `30`, having sent no request. `--previous-artifact` diffs against a named artifact instead of the live schema.
 
 `sf db`, `sf db dump`, and `sf db migrate` are Zero-only. A worker declares no table set, so they answer `runtime_kind_mismatch` for one.
 

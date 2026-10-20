@@ -117,7 +117,7 @@ sf share grant --to public --role viewer --path '/**' --target all-versions
 
 ## sf share revoke
 
-`sf share revoke ID` revokes one managed Grant by its ID from `sf share list`. Grants that come from `sf.jsonc` are changed there instead, and credential-backed Grants normally revoke through their own credential command.
+`sf share revoke ID` revokes one managed Grant by its ID from `sf share list`. Grants that come from project configuration are changed there instead, and credential-backed Grants normally revoke through their own credential command.
 
 ```bash
 sf share revoke gnt_123
