@@ -7,10 +7,186 @@ Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
 
+## 0.8.0
+
+#### Minor Changes
+
+- MCP now exposes one Cloudflare-style code-mode surface: `search` finds and describes Spacefast API operations without calling them, and `execute` calls them, alongside `resume_execution`, `publish`, and the MCP Apps. Simple and full modes, `SPACEFAST_MCP_MODE`, and the per-operation tools are removed. `sf mcp` and `sf mcp proxy` accept and ignore `--mode`, so agent configs written by CLI 0.7.0 keep starting. The connector gateway (`search_connector_tools`) is removed from hosted MCP, and hosted OAuth no longer grants connector scopes. On-Device MCP served by the CLI (`sf mcp` and the Claude Desktop extension) keeps the gateway and runs it on the CLI login; `sf mcp proxy` relays hosted MCP, so it does not. The hosted server ignores a `mode` query parameter, so hosted MCP URLs saved with `?mode=full` keep working when clients connect to them directly. Dashboard-only operations stay out of the agent catalog: domain purchases, registration details, owner contacts, plan codes, and the generic WordPress REST and WP-CLI passthroughs. The dashboard, the CLI, and the API keep them, and the Domains App hands registration and payment to the dashboard.
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.8.0
+  - @spacefast/common@0.8.0
+  - @spacefast/builders@0.8.0
+  - @spacefast/routing@0.8.0
+  - @spacefast/sdk@0.8.0
+  - @spacefast/zero@0.8.0
+  - @spacefast/zero-compat-emdash@0.8.0
+  - @spacefast/zero-compat-payloadcms@0.8.0
+  - @spacefast/zero-compile@0.8.0
+  - @spacefast/adapter-kit@0.8.0
+  - @spacefast/next-adapter@0.8.0
+  - @spacefast/build-output@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Give agents the same domain-search conversation as the dashboard through `POST /v1/domains/search`, the SDK's `searchDomains`, and MCP's `spacefast.org.session.domains.searchDomains`.
+
+  `sf domains search` now uses the hosted conversation by default. Pass a saved receipt with `--input` to continue it, refine the brief, or apply likes, dislikes, and selections. Use `--local` for offline suggestions.
+
+  Responses retain the full session, stable suggestion IDs, feedback, availability provenance, ranking, and fee-inclusive display prices. If generation reaches its time budget, resume the returned session to finish the same turn. MCP callers should save the full structured result for continuation.
+
+- Comments are available to every team. `sf comments` gains `create`, `react`, `unreact`, `mark-read`, `resolve` and `reopen`, `list --unread`, `--author` and `--search` filters, and `--mention` on create and reply; `archive` and `unarchive` are replaced by `resolve` and `reopen`. Human CLI errors list every validation problem. The in-page overlay keeps its composer next to what you're commenting on, renders safe Markdown, sends page anchors for page comments, and adds an `@` mention picker. MCP guidance maps every comment verb to its API operation.
+- Make simple mode the default for hosted MCP and `sf mcp`. Simple mode exposes individual first-party operations and disables the connected-service gateway. Use `?mode=full` for hosted connections or `sf mcp --mode full` to keep code execution and connected-service tools. Native plugin connections now select full mode explicitly, and skills, prompts, and Apps follow the selected mode.
+- Simple mode now advertises only operations an agent can call, each with its own description. Operations that need a browser session, the CLI's device login, or a visitor's Frame or comment session are no longer MCP tools in either mode. Domain purchases, renewals, owner details, and plan codes continue in the Spacefast dashboard from simple mode, and the generic WordPress REST and WP-CLI passthroughs stay in full mode. The Domains App searches and hands selected names to the dashboard in simple mode.
+
+  `getBootstrap` is now `getAccount`, `createSpaceZeroToken` is now `createSpaceRestApiToken`, and the MCP comments link helper `writeSpaceComment` is now `getSpaceCommentsLink`. Request paths are unchanged.
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Build logs no longer mark what a build command prints to stderr as an error. A failed build is still reported by its exit status, with the failed command's output as the detail.
+- Keep existing website content and runtime declarations when publishing configuration only. Configuration-only publishes stage the evaluated configuration without scanning local content and use the server's retaining version lifecycle.
+- Return a friendly validation error with command guidance for unknown commands, without interactive prompts or framework warnings. Add `sf git list` as an alias for `sf git ls`.
+- A rollback or promotion that needs approval now says to run the same command again with `--continuation-token` once it is approved.
+- `sf setup agent` and `sf mcp install` now write VS Code's MCP config to its user-level `mcp.json` instead of creating `.vscode/mcp.json` in the current project. Pass `--project` to `sf setup agent` to write `.vscode/mcp.json` in the project as before. From a VS Code remote terminal (Dev Containers, Codespaces, SSH, WSL) setup still writes `.vscode/mcp.json`, because VS Code only runs a server on the remote from workspace or remote config.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.7.0
+  - @spacefast/sdk@0.7.0
+  - @spacefast/common@0.7.0
+  - @spacefast/zero@0.7.0
+  - @spacefast/zero-compile@0.7.0
+  - @spacefast/builders@0.7.0
+  - @spacefast/routing@0.7.0
+  - @spacefast/zero-compat-emdash@0.7.0
+  - @spacefast/zero-compat-payloadcms@0.7.0
+  - @spacefast/adapter-kit@0.7.0
+  - @spacefast/next-adapter@0.7.0
+  - @spacefast/build-output@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Align `sf domains search` with the dashboard in normal and interactive modes. Search uses live keyword matches, Luna typing previews, Sol submissions and refinements, fee-inclusive quotes, and Jev ranking. Saved sessions preserve feedback and selections, and interrupted searches remain resumable.
+- Each submitted descriptive brief runs one AI generation batch of up to 12 new names; typing previews may already have added names. API and MCP first turns now request one batch instead of the previous two batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names; liked and selected names stay protected. Keyword exact matches are unchanged.
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/builders@0.6.1
+  - @spacefast/mcp@0.6.1
+  - @spacefast/routing@0.6.1
+  - @spacefast/sdk@0.6.1
+  - @spacefast/zero@0.6.1
+  - @spacefast/zero-compat-emdash@0.6.1
+  - @spacefast/zero-compat-payloadcms@0.6.1
+  - @spacefast/zero-compile@0.6.1
+  - @spacefast/adapter-kit@0.6.1
+  - @spacefast/next-adapter@0.6.1
+  - @spacefast/build-output@0.6.1
+
+## 0.6.0
+
+#### Minor Changes
+
+- Projects can use `spacefast.config.ts`, with `defineConfig` and types from `spacefast/config`. `sf init` writes this format. Existing `sf.jsonc` projects remain supported; an explicit `--config` selection wins, otherwise `spacefast.config.ts` takes precedence when both files exist. Use only one project configuration file to avoid maintaining two different configurations.
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Read back the feedback you sent. `sf feedback list` shows your recent feedback, newest first, and `sf feedback get <ref>` shows one entry by the reference `sf feedback` returned. Both need you signed in as yourself (`sf login` or a dashboard session) and only return feedback you sent; Space keys and team, OAuth-client or partner keys get a 403. The API equivalents are `GET /v1/feedback` and `GET /v1/feedback/{ref}`.
+- Add `sf migrate <url>` to capture public HTTPS websites through the existing publish API, with Build waiting, explicit idempotency-key recovery, and Open/Claim receipts. Each ordinary invocation starts a new migration.
+
+#### Patch Changes
+
+- Agents now ask once whether to send feedback to Spacefast when a task ends after an error, retry, workaround, or other friction. A yes covers later friction in the same conversation; a no stops the question. The MCP server instructions carry the same rule as the skills and setup document.
+- Keep MCP setup runnable after transient npm installs by pinning its launcher to the current CLI version. Report broken Claude Code integrations as integration errors with recovery instructions.
+- `sf setup agent` now works with symlinked user-level MCP configs, such as a `~/.codex/config.toml` kept in a dotfiles repository. Setup edits the file the link points to and leaves the link in place. A symlinked config inside the current repository (or the working directory outside one) is still refused, because a cloned repository can point that link anywhere.
+- Clear removed host presentation settings in ChatGPT Apps. Save MCP delivery with build, deployment, and domain lifecycle transitions. Search file-owned Space names and preserve existing webhook URL behavior.
+- Point the Claude Desktop extension's API key setting at the dashboard page where keys are created, instead of a page that no longer exists.
+- Use publication config validation for routing inspection, explain missing databases, and preserve specific authentication refusal messages.
+- Agents that arrive through a handoff link, and any API key a team member created, can now open a Space's content dashboard: the one-use sign-in link signs in the person who created the key. `sf content dashboard` opens the dashboard in your browser, or prints the sign-in link with `--show-secret --json` for an agent to hand you. The handoff document teaches both the CLI and the direct HTTP lane.
+- Ask your agent for an admin panel, dashboard, or CMS to manage a Space's content, and it opens the Space's WordPress dashboard for you instead of building one. The agent creates a one-use sign-in link with `createSpaceContentAdminLink`: no password, expires in 10 minutes, signs you in as the Space's administrator or editor. If your page is plain static files, the agent offers to move it to Zero: your posts go into the dashboard, the page lists them live, and dashboard edits land back in the Space's source and deploy. Nothing moves until you say yes.
+- Keep transient npm agent setup runnable after a Homebrew Node upgrade by persisting verified installation aliases for Node and npx.
+- A permission refusal (`forbidden` and the connector role and policy refusals) no longer tells you to run `sf login`. Its `recovery` now says to ask a team owner or admin, because signing in again returns the same refusal.
+- A build whose root directory does not exist now fails with `App root directory "travel" does not exist in the repository` instead of a raw `ENOENT … realpath` error with a sandbox path. When the name only differs by case, the error names the directory that exists (`did you mean "Travel"?`), since hosted builds run on a case-sensitive filesystem.
+- Remote builds no longer pin detected build settings. `sf publish` sent the locally detected build command and output directory to the cloud build as explicit settings, which turned off automatic Next.js and TanStack Start output handling there, so a server-rendered Next.js app failed with "Build output directory does not exist: …/out". Settings you choose with flags or `sf.jsonc` are still sent.
+- `sf setup agent --handoff` now says when sign-in already worked. If a setup step failed after the handoff link was redeemed, the error read like a failed sign-in, so retrying the spent link only returned "already used". The error now says the CLI is signed in and the link is used up, and its JSON details carry `handoff: { redeemed: true }`.
+- List pending Space transfers with `sf transfers ls --team <team>` and inspect one with `sf transfers get <id>`. Transfer guidance now names receiving team owners and admins, explains credential visibility when a target team cannot be resolved, and distinguishes transfer authority from Space read/write access.
+- Publish assets-only Wrangler projects that set `assets.not_found_handling`. `single-page-application` becomes the `/index.html` fallback in the generated `sf.jsonc`, with clean URLs kept on unless `assets.html_handling` is `none`; `404-page` and `none` keep Spacefast's default 404 handling. Workers with a `main` entry still report the setting as unsupported.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.6.0
+  - @spacefast/common@0.6.0
+  - @spacefast/sdk@0.6.0
+  - @spacefast/zero@0.6.0
+  - @spacefast/builders@0.6.0
+  - @spacefast/domain-search-terminal@0.6.0
+  - @spacefast/routing@0.6.0
+  - @spacefast/zero-compat-emdash@0.6.0
+  - @spacefast/zero-compat-payloadcms@0.6.0
+  - @spacefast/zero-compile@0.6.0
+  - @spacefast/adapter-kit@0.6.0
+  - @spacefast/next-adapter@0.6.0
+  - @spacefast/build-output@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- Agents in hosted sandboxes that block Spacefast (Claude Code on the web and mobile, Codex cloud) now get a way forward instead of "run this from your laptop". The skills and `/setup.md` point them to the Claude connector link, GitHub push to deploy, and the exact domains to allow. In a Claude Code cloud session, `network_error` and `upload_transport_error` from the CLI carry the same guidance.
+- The Cursor plugin marketplace manifest lists its owner by name only, as Cursor's marketplace schema requires, so the Spacefast plugins publish again.
+- `sf git github installations` and `sf git github repos` now list by team (`--team`, defaulting to your default team) instead of by Space, so you can see a team's GitHub repositories before any Space exists. Repositories past GitHub's 1,000-repository listing limit stay visible instead of disappearing.
+- Clarify that hosted MCP publishing requires authentication and that anonymous publishing creates private bearer previews. Remove instructions that restrict the use of other services, and require Space ownership before serving share-preview images without an access credential.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.5.1
+  - @spacefast/sdk@0.5.1
+  - @spacefast/mcp@0.5.1
+  - @spacefast/zero-compat-emdash@0.5.1
+  - @spacefast/zero-compat-payloadcms@0.5.1
+  - @spacefast/domain-search-terminal@0.5.1
+  - @spacefast/adapter-kit@0.5.1
+  - @spacefast/build-output@0.5.1
+  - @spacefast/builders@0.5.1
+  - @spacefast/common@0.5.1
+  - @spacefast/next-adapter@0.5.1
+  - @spacefast/routing@0.5.1
+  - @spacefast/zero@0.5.1
+
 ## 0.5.0
 
 #### Minor Changes
 
+- Default new share links and password credentials to the viewer role. Pass `--role commenter` to grant commenting access. Show `status: "stored"` in `sf feedback --json` receipts.
 - Every worker has a database and outbound fetch — nothing to declare.
 
   `sf.jsonc` no longer takes `runtime.database` or `runtime.fetch`; a stale key
@@ -47,6 +223,31 @@ Install with `npm install -g spacefast`. Standalone binaries are also published 
 
 #### Patch Changes
 
+- When a detected `bun install --frozen-lockfile` fails because `bun.lock` no longer matches `package.json`, `sf build` and `sf publish` install from `package.json` with `bun install` and report a `build_install_lockfile_stale` warning instead of failing the build.
+- Link the team's billing page when a plan limit that a paid plan raises blocks a command.
+- Allow approved rollback and promotion requests to resume with their continuation token.
+- Retry CLI update checks after registry failures and whenever the installed CLI version changes.
+- `sf setup agent` no longer fails with `validation_error` when you keep the picker's default Universal (.agents) choice.
+- Publish TanStack Start apps built with Nitro's `cloudflare-module` preset automatically: `.output/public` ships as files and the Nitro server runs as the site's worker with its Wrangler settings and D1 databases.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+  - @spacefast/routing@0.5.0
+  - @spacefast/zero@0.5.0
+  - @spacefast/mcp@0.5.0
+  - @spacefast/sdk@0.5.0
+  - @spacefast/builders@0.5.0
+  - @spacefast/domain-search-terminal@0.5.0
+  - @spacefast/zero-compat-emdash@0.5.0
+  - @spacefast/zero-compat-payloadcms@0.5.0
+  - @spacefast/zero-compile@0.5.0
+  - @spacefast/adapter-kit@0.5.0
+  - @spacefast/next-adapter@0.5.0
+  - @spacefast/build-output@0.5.0
 - Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
 - Fix CLI domain and storage lists and the MCP Space domains view to read the API response shapes returned by the shared transport.
 - Framework builds and Zero compose in one project. `sf build` and `sf publish` run the framework build, compile the capsule from the project root, and publish the build output at `/` with the runtime beside it; a Zero project whose build script renders into the project root publishes the root. Sources, lockfiles, `tsconfig*.json`, TypeScript files, and `tools/` stay out of the published files. The `build` settings in `sf.jsonc` apply to local builds too, `sf publish --remote` takes the build lane when the project has a build, and a host project's `tsconfig.json` no longer rebinds the JSX runtime of Zero pages.

@@ -5,6 +5,26 @@ description: "Release history for @spacefast/wpcloud-sdk on npm."
 
 Published as [`@spacefast/wpcloud-sdk`](https://www.npmjs.com/package/@spacefast/wpcloud-sdk) on npm.
 
+## 0.8.0
+
+_No noted changes in this release._
+
+## 0.7.0
+
+_No noted changes in this release._
+
+## 0.6.1
+
+_No noted changes in this release._
+
+## 0.6.0
+
+_No noted changes in this release._
+
+## 0.5.1
+
+_No noted changes in this release._
+
 ## 0.5.0
 
 _No noted changes in this release._

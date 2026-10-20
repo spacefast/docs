@@ -3,7 +3,7 @@ title: Codex
 description: Install the Spacefast plugin in Codex, or add the MCP server to config.toml by hand
 ---
 
-After this page Codex can publish your project, check builds, domains, and traffic, and fall back to bundled curl scripts when MCP is unavailable.
+Codex publishes your project to Spacefast through the plugin, and falls back to curl scripts when MCP isn't available.
 
 ## Install
 
@@ -12,7 +12,7 @@ codex plugin marketplace add spacefast/plugins
 codex plugin add spacefast@spacefast
 ```
 
-Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` installs the same plugin, and `sf setup agent --agent codex` writes the MCP table into `$CODEX_HOME/config.toml`, default `~/.codex/config.toml`, and installs the skill into `$CODEX_HOME/skills/spacefast/`.
+Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` installs the same plugin. `sf setup agent --agent codex` writes the MCP table into `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`) and installs the skill into `$CODEX_HOME/skills/spacefast/`.
 
 ## What the plugin adds
 

@@ -1,11 +1,11 @@
 ---
 title: "Connect Hermes to Spacefast"
-description: "Give Hermes the Spacefast setup guide, or install its skill with the CLI."
+description: "Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal."
 seo:
   canonical: "https://spacefast.com/setup/hermes/"
 ---
 
-Give Hermes the Spacefast setup guide, or install its skill with the CLI.
+Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal.
 
 **Copy setup prompt.** Give the agent one prompt that lets it choose and complete the best setup lane.
 
@@ -15,13 +15,13 @@ Fetch https://spacefast.com/setup.md
 
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it install the Spacefast skill for this agent.
+**Use the Spacefast CLI.** Adds the Spacefast skill for this agent. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent hermes
 ```
 
-**Set up without installing.** Install the Spacefast skill without a global CLI install.
+**Set it up without installing the CLI.** Adds the Spacefast skill without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent hermes -y

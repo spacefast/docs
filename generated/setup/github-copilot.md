@@ -1,17 +1,22 @@
 ---
 title: "Connect GitHub Copilot CLI to Spacefast"
-description: "Publish from GitHub Copilot CLI with its plugin and MCP support."
+description: "Add Spacefast to GitHub Copilot CLI so it can publish from your terminal."
 seo:
   canonical: "https://spacefast.com/setup/github-copilot/"
 ---
 
-Publish from GitHub Copilot CLI with its plugin and MCP support.
+Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
 
-**Install the Spacefast plugin.** Install the plugin's skills and MCP into Copilot CLI. Complete MCP OAuth when prompted; use `/mcp auth spacefast` to reconnect. Copilot cloud agent uses separate repository configuration and does not support remote MCP OAuth.
+**Install the Spacefast plugin.** Adds Spacefast to Copilot CLI with everything it needs to publish.
 
 ```bash
 npx -y plugins add spacefast/plugins -t github-copilot -y
 ```
+
+1. Sign in to Spacefast and approve access when asked.
+2. To reconnect later, run `/mcp auth spacefast`.
+
+This doesn't cover Copilot cloud agent, which uses its own repository configuration and doesn't support signing in to remote MCP servers.
 
 ## Other ways to connect
 
@@ -19,19 +24,30 @@ npx -y plugins add spacefast/plugins -t github-copilot -y
 
 Use the working manual option below while the directory listing is in review.
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent github-copilot
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent github-copilot -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+copilot mcp add --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Copilot CLI and run `/mcp` to find Spacefast.
+2. Sign in to Spacefast and approve access when asked. To reconnect, run `/mcp auth spacefast`.
+
+This sets up Copilot CLI and the GitHub Copilot app on this computer, not Copilot cloud agent.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

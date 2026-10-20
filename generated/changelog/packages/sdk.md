@@ -5,6 +5,70 @@ description: "Release history for @spacefast/sdk on npm."
 
 Published as [`@spacefast/sdk`](https://www.npmjs.com/package/@spacefast/sdk) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Give agents the same domain-search conversation as the dashboard through `POST /v1/domains/search`, the SDK's `searchDomains`, and MCP's `spacefast.org.session.domains.searchDomains`.
+
+  `sf domains search` now uses the hosted conversation by default. Pass a saved receipt with `--input` to continue it, refine the brief, or apply likes, dislikes, and selections. Use `--local` for offline suggestions.
+
+  Responses retain the full session, stable suggestion IDs, feedback, availability provenance, ranking, and fee-inclusive display prices. If generation reaches its time budget, resume the returned session to finish the same turn. MCP callers should save the full structured result for continuation.
+
+- Simple mode now advertises only operations an agent can call, each with its own description. Operations that need a browser session, the CLI's device login, or a visitor's Frame or comment session are no longer MCP tools in either mode. Domain purchases, renewals, owner details, and plan codes continue in the Spacefast dashboard from simple mode, and the generic WordPress REST and WP-CLI passthroughs stay in full mode. The Domains App searches and hands selected names to the dashboard in simple mode.
+
+  `getBootstrap` is now `getAccount`, `createSpaceZeroToken` is now `createSpaceRestApiToken`, and the MCP comments link helper `writeSpaceComment` is now `getSpaceCommentsLink`. Request paths are unchanged.
+
+#### Patch Changes
+
+- Keep existing website content and runtime declarations when publishing configuration only. Configuration-only publishes stage the evaluated configuration without scanning local content and use the server's retaining version lifecycle.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- `searchDomains` (`POST /v1/domains/search`) now runs one AI generation batch for a descriptive first brief, matching the dashboard and CLI. It requests up to 12 AI names instead of the previous initial and automatic enrichment batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names; liked and selected names stay protected. Keyword exact matches are unchanged.
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Add feature-gated `sourceUrl` publishing through WordPress.com, with durable URL Build receipts and capture progress/evidence. Existing file and archive publishing contracts remain supported.
+
+#### Patch Changes
+
+- Agents that arrive through a handoff link, and any API key a team member created, can now open a Space's content dashboard: the one-use sign-in link signs in the person who created the key. `sf content dashboard` opens the dashboard in your browser, or prints the sign-in link with `--show-secret --json` for an agent to hand you. The handoff document teaches both the CLI and the direct HTTP lane.
+- `@spacefast/sdk/query` keeps request bodies in Firefox when it sends to a configured request origin. Firefox has no `Request.body`, so a mutation sent through `setSpacefastQueryRequestOrigin` used to arrive with a JSON content type and no body, and the API answered "Request body must be valid JSON."
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- Regenerate the Partner API client and TanStack Query bindings from the current Partner API contract. This updates the Atomic API paths and removes account-only operations from the partner client.
+- @spacefast/common@0.5.1
+
 ## 0.5.0
 
 #### Minor Changes
@@ -33,6 +97,9 @@ Published as [`@spacefast/sdk`](https://www.npmjs.com/package/@spacefast/sdk) on
 
 #### Patch Changes
 
+- Reject an unreadable tracked publish operation instead of reporting a completed wait.
+- Updated dependencies
+  - @spacefast/common@0.5.0
 - Updated dependencies
 - Updated dependencies
 - Updated dependencies

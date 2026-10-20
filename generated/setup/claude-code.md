@@ -1,13 +1,13 @@
 ---
 title: "Connect Claude Code to Spacefast"
-description: "Publish, host, and operate Spacefast artifacts from Claude Code."
+description: "Add Spacefast to Claude Code so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/claude-code/"
 ---
 
-Publish, host, and operate Spacefast artifacts from Claude Code.
+Add Spacefast to Claude Code so it can publish what you build.
 
-**Install the Spacefast plugin.** Add the Spacefast marketplace and install the plugin with Claude Code itself.
+**Install the Spacefast plugin.** Adds Spacefast to Claude Code with everything it needs to publish.
 
 ```bash
 claude plugin marketplace add spacefast/plugins && claude plugin install spacefast@spacefast
@@ -15,13 +15,13 @@ claude plugin marketplace add spacefast/plugins && claude plugin install spacefa
 
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent claude-code
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent claude-code -y
@@ -33,7 +33,16 @@ npx -y spacefast setup agent --agent claude-code -y
 npx -y plugins add spacefast/plugins -t claude-code -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+claude mcp add --scope user --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start a new Claude Code session and run `/mcp`.
+2. Select Spacefast, then sign in and approve access.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

@@ -1,13 +1,13 @@
 ---
 title: "Connect Amp to Spacefast"
-description: "Install Spacefast skills with bundled MCP support in Amp."
+description: "Add Spacefast to Amp so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/amp/"
 ---
 
-Install Spacefast skills with bundled MCP support in Amp.
+Add Spacefast to Amp so it can publish what you build.
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent amp
@@ -15,7 +15,7 @@ npm install -g spacefast && sf setup agent --agent amp
 
 ## Other ways to connect
 
-**Configure `~/.config/amp/settings.json`.** Merge this entry into your Amp user settings. Start the Amp TUI and complete the OAuth browser prompt. Run amp mcp doctor to check the connection. Local settings apply on this machine; use Amp's remote MCP settings for orbs.
+**Configure `~/.config/amp/settings.json`.** Add Spacefast to your Amp user settings by hand.
 
 ```json
 {
@@ -27,13 +27,31 @@ npm install -g spacefast && sf setup agent --agent amp
 }
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+1. Add the entry above to `~/.config/amp/settings.json`, keeping what's already in the file.
+2. Start Amp in your terminal.
+3. Sign in to Spacefast in the browser and approve access.
+4. Run `amp mcp doctor` to check the connection.
+
+These settings only cover this computer, so use Amp's remote MCP settings for orbs.
+
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent amp -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+amp mcp add spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Amp in your terminal to open the OAuth sign-in flow.
+2. Sign in to Spacefast and approve access. Run `amp mcp doctor` to check the connection.
+
+This configures Amp on this computer. Orbs use Amp's remote MCP settings.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

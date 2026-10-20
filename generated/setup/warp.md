@@ -1,21 +1,26 @@
 ---
 title: "Connect Warp to Spacefast"
-description: "Use Spacefast skills and MCP in Warp agents."
+description: "Add Spacefast to Warp so its agents can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/warp/"
 ---
 
-Use Spacefast skills and MCP in Warp agents.
+Add Spacefast to Warp so its agents can publish what you build.
 
-**Add the hosted MCP server.** Open Warp's MCP settings and add a Streamable HTTP server with this URL. Start the server, complete OAuth, and confirm its tools appear.
+**Add Spacefast in Warp's settings.** Set it up in Warp's own settings, with no config file to edit.
 
 ```text
 https://mcp.spacefast.com
 ```
 
+1. Open Settings → Agents → MCP servers and choose + Add.
+2. Add a Streamable HTTP server with the address above.
+3. Start the server, then sign in to Spacefast and approve access.
+4. Check that Spacefast's tools appear.
+
 ## Other ways to connect
 
-**Configure `~/.warp/.mcp.json`.** Merge the hosted Spacefast server into the client MCP configuration. Preserve other settings and servers.
+**Configure `~/.warp/.mcp.json`.** Add Spacefast to Warp's config file by hand.
 
 ```json
 {
@@ -27,19 +32,22 @@ https://mcp.spacefast.com
 }
 ```
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+1. Add the entry above to `~/.warp/.mcp.json`, keeping what's already in the file.
+2. Sign in to Spacefast and approve access when asked.
+
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent warp
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent warp -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

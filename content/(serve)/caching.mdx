@@ -1,14 +1,14 @@
 ---
 title: Caching
-description: The two cache policies a published Space sends, which files get which, and what a publish does to copies already out there
+description: Default cache policies for public static files, header overrides, responses that are never cached, and what publishing refreshes
 sidebar: { order: 4 }
 ---
 
-After this page you know exactly which `Cache-Control` header each file in your Space gets, what a publish invalidates, and how to get a fresh response when you need one.
+Republish to request a fresh response from the edge. Public static files use two default cache policies, with exceptions for protected responses, conditional routing, and header overrides.
 
 ## Two policies
 
-A published Space sends one of two headers on its static files. There is nothing in between.
+Public static files use these defaults unless a header override or a [no-cache rule](#responses-that-are-never-cached) applies.
 
 | Policy | `Cache-Control` |
 | --- | --- |
@@ -66,7 +66,7 @@ The non-GET rule is absolute. The shared cache in front of a Space keys on host,
 
 The edge keys a stored response on **host, path, and query**. It does not read `Vary`.
 
-That single fact explains a behavior that surprises people. A routing rule with a `Country=`, `Language=`, `Cookie=` or `Agent=` condition would otherwise let one visitor's response be handed to the next, so any URL a conditional rule touches is forced to `no-store` for everyone, whether the condition matched or not.
+That single fact explains a behavior that surprises people. A routing rule with a `Country=`, `Language=`, `Cookie=` or `Agent=` condition would otherwise let one visitor's response reach the next visitor. So any URL a conditional rule touches is forced to `no-store` for everyone, whether the condition matched or not.
 
 If a page needs to differ by country, language or client, give each variant its own URL rather than one URL with a condition on it. That keeps the whole set shared-cacheable.
 

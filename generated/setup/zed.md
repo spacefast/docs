@@ -1,13 +1,13 @@
 ---
 title: "Connect Zed to Spacefast"
-description: "Connect Spacefast as a custom context server in Zed."
+description: "Add Spacefast to Zed so its agent can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/zed/"
 ---
 
-Connect Spacefast as a custom context server in Zed.
+Add Spacefast to Zed so its agent can publish what you build.
 
-**Configure `~/.config/zed/settings.json`.** Merge this entry into Zed's settings. Open Settings → AI → MCP Servers and complete OAuth. Confirm Spacefast shows Server is active before using its tools.
+**Configure `~/.config/zed/settings.json`.** One entry in Zed's settings connects Spacefast.
 
 ```json
 {
@@ -19,21 +19,26 @@ Connect Spacefast as a custom context server in Zed.
 }
 ```
 
+1. Add the entry above to `~/.config/zed/settings.json`, keeping what's already in the file.
+2. Open Settings → AI → MCP Servers.
+3. Sign in to Spacefast and approve access.
+4. Check that Spacefast shows “Server is active” before you use its tools.
+
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent zed
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent zed -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

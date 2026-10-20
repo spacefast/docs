@@ -1,13 +1,13 @@
 ---
 title: "Connect Pi to Spacefast"
-description: "Publish from Pi with the Spacefast skill and direct HTTP API."
+description: "Add the Spacefast skill to Pi so it can publish through the Spacefast API."
 seo:
   canonical: "https://spacefast.com/setup/pi/"
 ---
 
-Publish from Pi with the Spacefast skill and direct HTTP API.
+Add the Spacefast skill to Pi so it can publish through the Spacefast API.
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
@@ -15,13 +15,13 @@ npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefas
 
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it install the Spacefast skill for this agent.
+**Use the Spacefast CLI.** Adds the Spacefast skill for this agent. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent pi
 ```
 
-**Set up without installing.** Install the Spacefast skill without a global CLI install.
+**Set it up without installing the CLI.** Adds the Spacefast skill without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent pi -y
@@ -41,4 +41,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md#skills)
+[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md)

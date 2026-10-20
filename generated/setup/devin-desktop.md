@@ -1,40 +1,56 @@
 ---
 title: "Connect Devin Desktop to Spacefast"
-description: "Connect Spacefast to Devin Desktop, formerly Windsurf, and its Devin Local agent."
+description: "Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI."
 seo:
   canonical: "https://spacefast.com/setup/devin-desktop/"
 ---
 
-Connect Spacefast to Devin Desktop, formerly Windsurf, and its Devin Local agent.
+Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI.
 
-**Configure `~/.config/devin/mcp_config.json`.** This config is for Devin Local, the default agent in current Devin Desktop, and Devin CLI. Merge the server without replacing other settings. Use Authenticate in Desktop or run `devin mcp login spacefast` to complete OAuth. Current versions migrate MCP entries from the older `~/.config/devin/config.json`. For legacy Cascade, use Devin Settings → Cascade → MCP Servers and its `~/.codeium/windsurf/mcp_config.json` with a `serverUrl` field instead. Choose the setup for the agent you use.
+**Configure `~/.config/devin/mcp_config.json`.** Works with Devin Local, Devin Desktop's default agent, and with Devin CLI.
 
 ```json
 {
   "mcpServers": {
     "spacefast": {
       "transport": "http",
-      "url": "https://mcp.spacefast.com"
+      "url": "https://mcp.spacefast.com",
+      "oauthResource": "https://mcp.spacefast.com"
     }
   }
 }
 ```
 
+1. Add the entry above to `~/.config/devin/mcp_config.json`, keeping what's already in the file.
+2. Choose Authenticate in Devin Desktop, or run `devin mcp login spacefast`.
+3. Sign in to Spacefast and approve access.
+
+Legacy Cascade reads the same file.
+
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent devin-desktop
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent devin-desktop -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+devin mcp add --scope user spacefast 'https://mcp.spacefast.com' --oauth-resource 'https://mcp.spacefast.com'
+```
+
+1. Run `devin mcp login spacefast`, then sign in to Spacefast and approve access.
+2. Use `devin mcp list` to check the connection in Devin CLI or Devin Local.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

@@ -1,17 +1,25 @@
 ---
 title: "Connect Indent to Spacefast"
-description: "Connect Spacefast through Indent's native OAuth MCP integration."
+description: "Add Spacefast to Indent so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/indent/"
 ---
 
-Connect Spacefast through Indent's native OAuth MCP integration.
+Add Spacefast to Indent so it can publish what you build.
 
-**Add the hosted MCP server.** Open https://app.indent.com/integrations and select Create custom integration. Enter the Spacefast endpoint and Spacefast as the display name. Choose your personal account or organization under Connect for. Under Advanced, select Streamable HTTP and OAuth. Complete authorization. Personal integration tools are available in private sessions.
+**Add Spacefast as a custom integration.** Set it up from Indent's Integrations page, for just you or your organization.
 
 ```text
 https://mcp.spacefast.com
 ```
+
+1. Open [app.indent.com/integrations](https://app.indent.com/integrations) and choose Create custom integration.
+2. Paste the address above and enter Spacefast as the display name.
+3. Under Connect for, choose your personal account or your organization.
+4. Under Advanced, choose Streamable HTTP and OAuth.
+5. Sign in to Spacefast and approve access.
+
+If you connect it to your personal account, its tools are available in private sessions.
 
 Prefer to hand this off? Copy setup prompt:
 

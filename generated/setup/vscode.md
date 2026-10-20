@@ -1,11 +1,11 @@
 ---
 title: "Connect VS Code to Spacefast"
-description: "Add Spacefast MCP to VS Code and Copilot agent mode."
+description: "Add Spacefast to VS Code so Copilot can publish from agent mode."
 seo:
   canonical: "https://spacefast.com/setup/vscode/"
 ---
 
-Add Spacefast MCP to VS Code and Copilot agent mode.
+Add Spacefast to VS Code so Copilot can publish from agent mode.
 
 **[Add to VS Code](https://vscode.dev/redirect/mcp/install?name=spacefast&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.spacefast.com%22%7D)**
 
@@ -17,13 +17,13 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Install the Spacefast plugin.** Install the plugin and its MCP server into VS Code with nothing installed first.
+**Install the Spacefast plugin.** Adds Spacefast to VS Code with nothing to install first.
 
 ```bash
 npx -y plugins add spacefast/plugins -t vscode -y
 ```
 
-**Configure .vscode`/mcp`.json.** Merge the hosted Spacefast server into the client MCP configuration. Preserve other settings and servers.
+**Configure .vscode`/mcp`.json.** Add Spacefast to VS Code's config file by hand.
 
 ```json
 {
@@ -36,19 +36,30 @@ npx -y plugins add spacefast/plugins -t vscode -y
 }
 ```
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+1. Add the entry above to .vscode`/mcp`.json, keeping what's already in the file.
+
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent vscode
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent vscode -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+code --add-mcp '{"name":"spacefast","type":"http","url":"https://mcp.spacefast.com"}'
+```
+
+1. In VS Code, run MCP: List Servers from the Command Palette and start Spacefast.
+2. Confirm server trust, then sign in to Spacefast and approve access.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

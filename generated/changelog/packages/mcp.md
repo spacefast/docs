@@ -5,14 +5,131 @@ description: "Release history for @spacefast/mcp on npm."
 
 Published as [`@spacefast/mcp`](https://www.npmjs.com/package/@spacefast/mcp) on npm.
 
+## 0.8.0
+
+#### Minor Changes
+
+- MCP now exposes one Cloudflare-style code-mode surface: `search` finds and describes Spacefast API operations without calling them, and `execute` calls them, alongside `resume_execution`, `publish`, and the MCP Apps. Simple and full modes, `SPACEFAST_MCP_MODE`, and the per-operation tools are removed. `sf mcp` and `sf mcp proxy` accept and ignore `--mode`, so agent configs written by CLI 0.7.0 keep starting. The connector gateway (`search_connector_tools`) is removed from hosted MCP, and hosted OAuth no longer grants connector scopes. On-Device MCP served by the CLI (`sf mcp` and the Claude Desktop extension) keeps the gateway and runs it on the CLI login; `sf mcp proxy` relays hosted MCP, so it does not. The hosted server ignores a `mode` query parameter, so hosted MCP URLs saved with `?mode=full` keep working when clients connect to them directly. Dashboard-only operations stay out of the agent catalog: domain purchases, registration details, owner contacts, plan codes, and the generic WordPress REST and WP-CLI passthroughs. The dashboard, the CLI, and the API keep them, and the Domains App hands registration and payment to the dashboard.
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+  - @spacefast/builders@0.8.0
+  - @spacefast/routing@0.8.0
+  - @spacefast/sdk@0.8.0
+  - @spacefast/zero@0.8.0
+  - @spacefast/zero-compile@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Give agents the same domain-search conversation as the dashboard through `POST /v1/domains/search`, the SDK's `searchDomains`, and MCP's `spacefast.org.session.domains.searchDomains`.
+
+  `sf domains search` now uses the hosted conversation by default. Pass a saved receipt with `--input` to continue it, refine the brief, or apply likes, dislikes, and selections. Use `--local` for offline suggestions.
+
+  Responses retain the full session, stable suggestion IDs, feedback, availability provenance, ranking, and fee-inclusive display prices. If generation reaches its time budget, resume the returned session to finish the same turn. MCP callers should save the full structured result for continuation.
+
+- Make simple mode the default for hosted MCP and `sf mcp`. Simple mode exposes individual first-party operations and disables the connected-service gateway. Use `?mode=full` for hosted connections or `sf mcp --mode full` to keep code execution and connected-service tools. Native plugin connections now select full mode explicitly, and skills, prompts, and Apps follow the selected mode.
+- Simple mode now advertises only operations an agent can call, each with its own description. Operations that need a browser session, the CLI's device login, or a visitor's Frame or comment session are no longer MCP tools in either mode. Domain purchases, renewals, owner details, and plan codes continue in the Spacefast dashboard from simple mode, and the generic WordPress REST and WP-CLI passthroughs stay in full mode. The Domains App searches and hands selected names to the dashboard in simple mode.
+
+  `getBootstrap` is now `getAccount`, `createSpaceZeroToken` is now `createSpaceRestApiToken`, and the MCP comments link helper `writeSpaceComment` is now `getSpaceCommentsLink`. Request paths are unchanged.
+
+#### Patch Changes
+
+- New Spacefast logo: a star followed by lowercase "spacefast", upright, in one color. `SPACEFAST_WORDMARK_PATH` and `SPACEFAST_WORDMARK_VIEW_BOX` now draw it on a tight `0 0 127 20` viewBox. The star on its own is the new mark: `SPACEFAST_MARK_PATH` on `SPACEFAST_MARK_VIEW_BOX` (`0 0 24 24`) replaces the `SPACEFAST_ICON_*` "SF" letter geometry, which is removed. `SPACEFAST_BRAND_COLORS` drops the lime `shadow`. The full-bleed icon export moves from `brand-assets/spacefast-sf-full-bleed.svg` to `brand-assets/spacefast-icon.svg`. The MCP Space library's sidebar icon is now the star.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/sdk@0.7.0
+  - @spacefast/common@0.7.0
+  - @spacefast/zero@0.7.0
+  - @spacefast/zero-compile@0.7.0
+  - @spacefast/builders@0.7.0
+  - @spacefast/routing@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- `spacefast.org.session.domains.searchDomains` now runs one AI generation batch for a descriptive first brief, matching the dashboard and CLI. It requests up to 12 AI names instead of the previous initial and automatic enrichment batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names; liked and selected names stay protected. Keyword exact matches are unchanged.
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/builders@0.6.1
+  - @spacefast/routing@0.6.1
+  - @spacefast/sdk@0.6.1
+  - @spacefast/zero@0.6.1
+  - @spacefast/zero-compile@0.6.1
+
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Show the Space Library as a grid of page previews on wide panes; narrow panes keep the list. An opened Space shows when it went live, its runtime, and its source, plus Next steps that send a ready prompt to the chat: review it visually, make a change, use your own domain, open the WordPress admin, share it, and show deployments or traffic.
+
+#### Patch Changes
+
+- Agents now ask once whether to send feedback to Spacefast when a task ends after an error, retry, workaround, or other friction. A yes covers later friction in the same conversation; a no stops the question. The MCP server instructions carry the same rule as the skills and setup document.
+- Clear removed host presentation settings in ChatGPT Apps. Save MCP delivery with build, deployment, and domain lifecycle transitions. Search file-owned Space names and preserve existing webhook URL behavior.
+- Ask your agent for an admin panel, dashboard, or CMS to manage a Space's content, and it opens the Space's WordPress dashboard for you instead of building one. The agent creates a one-use sign-in link with `createSpaceContentAdminLink`: no password, expires in 10 minutes, signs you in as the Space's administrator or editor. If your page is plain static files, the agent offers to move it to Zero: your posts go into the dashboard, the page lists them live, and dashboard edits land back in the Space's source and deploy. Nothing moves until you say yes.
+- Return the Spacefast API's own error when `execute` gets a 401 or 403, instead of a generic "re-authenticate the connection" failure that pointed agents at `executor.coreTools.*` tools the MCP never provides.
+- Add a Recover button to MCP App errors with the saved execution and result details. Preserve error reasons, validate publish manifests before approval, and distinguish new Spaces from updates in approval cards.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+  - @spacefast/sdk@0.6.0
+  - @spacefast/zero@0.6.0
+  - @spacefast/builders@0.6.0
+  - @spacefast/routing@0.6.0
+  - @spacefast/zero-compile@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- Clarify that hosted MCP publishing requires authentication and that anonymous publishing creates private bearer previews. Remove instructions that restrict the use of other services, and require Space ownership before serving share-preview images without an access credential.
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/zero-compile@0.5.1
+  - @spacefast/sdk@0.5.1
+  - @spacefast/common@0.5.1
+  - @spacefast/routing@0.5.1
+  - @spacefast/zero@0.5.1
+
 ## 0.5.0
 
 #### Minor Changes
 
+- Agents see fewer, sharper MCP tools. Work mode, visual review feedback, page screenshots, and traffic rules now run inside `execute`, which also teaches agents to show screenshots as images. The build log view no longer reopens while a build runs, and the database view drops its console button: use `sf db console` or the dashboard. The prompt menu adds a tour, visual review, source browsing, and guided workflows for domains, sharing, rollbacks, and failed builds.
 - Claim a hostname attached to another Space with a unique DNS TXT record, or move it directly when authorized to manage both Spaces. Expose ownership instructions and move status through the API and CLI, including `sf domains check --move`.
 
 #### Patch Changes
 
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+  - @spacefast/routing@0.5.0
+  - @spacefast/zero@0.5.0
+  - @spacefast/sdk@0.5.0
+  - @spacefast/zero-compile@0.5.0
 - Fix CLI domain and storage lists and the MCP Space domains view to read the API response shapes returned by the shared transport.
 - Updated dependencies
 - Updated dependencies

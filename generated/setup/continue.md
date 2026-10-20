@@ -1,13 +1,13 @@
 ---
 title: "Connect Continue to Spacefast"
-description: "Use the Spacefast skill in existing Continue installations."
+description: "Add the Spacefast skill to a Continue install you already have."
 seo:
   canonical: "https://spacefast.com/setup/continue/"
 ---
 
-Use the Spacefast skill in existing Continue installations.
+Add the Spacefast skill to a Continue install you already have.
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
@@ -15,13 +15,13 @@ npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefas
 
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent continue
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent continue -y

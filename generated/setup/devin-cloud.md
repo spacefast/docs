@@ -1,21 +1,31 @@
 ---
 title: "Connect Devin Cloud to Spacefast"
-description: "Connect Spacefast to Devin Cloud through Customize → MCPs."
+description: "Add Spacefast to Devin Cloud so your sessions can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/devin-cloud/"
 ---
 
-Connect Spacefast to Devin Cloud through Customize → MCPs.
+Add Spacefast to Devin Cloud so your sessions can publish what you build.
 
-**Add the hosted MCP server.** Add Spacefast with HTTP transport and OAuth authentication. Choose Personal access for your own account, or Organization only when shared access is intended. Save, choose Connect, complete OAuth, and use Test listing tools before starting a session. Adding a custom server requires Manage MCP Servers permission.
+**Add Spacefast as a custom MCP.** Set it up from Devin's Customize page, for just you or your whole organization.
 
 ```text
 https://mcp.spacefast.com
 ```
 
+1. Open Customize → MCPs, then choose Add MCP → Add custom MCP.
+2. Name it Spacefast and paste the address above.
+3. Choose HTTP transport and OAuth authentication.
+4. Choose Personal access for your own account, or Organization only if you want to share it.
+5. Save, then choose Connect.
+6. Sign in to Spacefast and approve access.
+7. Use Test tools before you start a session.
+
+You need the Manage MCP Servers permission to add a custom MCP.
+
 ## Other ways to connect
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

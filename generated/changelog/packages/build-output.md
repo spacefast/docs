@@ -5,6 +5,26 @@ description: "Release history for @spacefast/build-output on npm."
 
 Published as [`@spacefast/build-output`](https://www.npmjs.com/package/@spacefast/build-output) on npm.
 
+## 0.8.0
+
+_No noted changes in this release._
+
+## 0.7.0
+
+_No noted changes in this release._
+
+## 0.6.1
+
+_No noted changes in this release._
+
+## 0.6.0
+
+_No noted changes in this release._
+
+## 0.5.1
+
+_No noted changes in this release._
+
 ## 0.5.0
 
 _No noted changes in this release._

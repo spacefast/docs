@@ -5,6 +5,54 @@ description: "Release history for @spacefast/common on npm."
 
 Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/common) on npm.
 
+## 0.8.0
+
+#### Minor Changes
+
+- Hosted MCP no longer asks for connector scopes. `OAUTH_MCP_RESOURCE_SCOPES` is now the shared API set without `connectors:read`, `connectors:write`, and `connectors:execute`. The new `OAUTH_CONNECTOR_SCOPES` names those three, and the API resource keeps them for the Connectors REST API. MCP's default scopes, protected-resource metadata, and consent screen all drop them, and an MCP consent for the narrower set still counts as Agent access. Grants issued with the connector scopes keep refreshing; their new tokens just leave those scopes out.
+
+## 0.7.0
+
+#### Minor Changes
+
+- New Spacefast logo: a star followed by lowercase "spacefast", upright, in one color. `SPACEFAST_WORDMARK_PATH` and `SPACEFAST_WORDMARK_VIEW_BOX` now draw it on a tight `0 0 127 20` viewBox. The star on its own is the new mark: `SPACEFAST_MARK_PATH` on `SPACEFAST_MARK_VIEW_BOX` (`0 0 24 24`) replaces the `SPACEFAST_ICON_*` "SF" letter geometry, which is removed. `SPACEFAST_BRAND_COLORS` drops the lime `shadow`. The full-bleed icon export moves from `brand-assets/spacefast-sf-full-bleed.svg` to `brand-assets/spacefast-icon.svg`. The MCP Space library's sidebar icon is now the star.
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Keep existing website content and runtime declarations when publishing configuration only. Configuration-only publishes stage the evaluated configuration without scanning local content and use the server's retaining version lifecycle.
+- Retire the URL capture rollout flag. Website migration and URL Build retries now use normal public publishing admission.
+
+## 0.6.1
+
+#### Patch Changes
+
+- Align `sf domains search` with the dashboard in normal and interactive modes. Search uses live keyword matches, Luna typing previews, Sol submissions and refinements, fee-inclusive quotes, and Jev ranking. Saved sessions preserve feedback and selections, and interrupted searches remain resumable.
+- The shared workflow runs one AI generation batch for a descriptive first brief. API and MCP first turns therefore request up to 12 AI names instead of the previous two batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names, then retire the lowest-ranked unprotected names after checks and scoring. Keyword exact matches are unchanged.
+
+## 0.6.0
+
+#### Minor Changes
+
+- Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
+- Add feature-gated `sourceUrl` publishing through WordPress.com, with durable URL Build receipts and capture progress/evidence. Existing file and archive publishing contracts remain supported.
+
+#### Patch Changes
+
+- Agents that arrive through a handoff link, and any API key a team member created, can now open a Space's content dashboard: the one-use sign-in link signs in the person who created the key. `sf content dashboard` opens the dashboard in your browser, or prints the sign-in link with `--show-secret --json` for an agent to hand you. The handoff document teaches both the CLI and the direct HTTP lane.
+- `contentRestRequestSchema` accepts a media upload whose path carries a query, such as the `?_locale=user` WordPress's apiFetch adds to every request. The upload rule now compares the route, as the runtime already does, so uploads from the dashboard's Content editor are no longer refused before they reach WordPress.
+- Add a Recover button to MCP App errors with the saved execution and result details. Preserve error reasons, validate publish manifests before approval, and distinguish new Spaces from updates in approval cards.
+- List pending Space transfers with `sf transfers ls --team <team>` and inspect one with `sf transfers get <id>`. Transfer guidance now names receiving team owners and admins, explains credential visibility when a target team cannot be resolved, and distinguishes transfer authority from Space read/write access.
+
+## 0.5.1
+
+_No noted changes in this release._
+
 ## 0.5.0
 
 #### Minor Changes
@@ -16,6 +64,7 @@ Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/comm
 
 #### Patch Changes
 
+- One hostname rule everywhere: `normalizeHostname` now lives in `@spacefast/common/utils/hostname` (`@spacefast/routing/hostname` still re-exports it). It folds ASCII case and trims ASCII whitespace only, as DNS does, so a non-ASCII host like `K.example` (Kelvin sign) no longer collapses into a different ASCII name. `verifyVisitorToken` in `@spacefast/zero` compares hosts with the same rule, so `example.com.` and `example.com` are one host.
 - Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
 - Framework builds and Zero compose in one project. `sf build` and `sf publish` run the framework build, compile the capsule from the project root, and publish the build output at `/` with the runtime beside it; a Zero project whose build script renders into the project root publishes the root. Sources, lockfiles, `tsconfig*.json`, TypeScript files, and `tools/` stay out of the published files. The `build` settings in `sf.jsonc` apply to local builds too, `sf publish --remote` takes the build lane when the project has a build, and a host project's `tsconfig.json` no longer rebinds the JSX runtime of Zero pages.
 

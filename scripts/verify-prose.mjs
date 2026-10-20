@@ -10,6 +10,7 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "n
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { openapiProseForChecking } from "./openapi-prose-scope.mjs";
 
 const root = resolve(fileURLToPath(import.meta.url), "../..");
 
@@ -55,8 +56,9 @@ for (const spec of specs) {
       for (const [key, value] of Object.entries(node)) {
         const childPointer = `${pointer}/${escapePointer(key)}`;
         if ((key === "description" || key === "summary") && typeof value === "string") {
-          if (!proseSources.has(value)) proseSources.set(value, []);
-          proseSources.get(value).push({ spec, pointer: childPointer });
+          const prose = openapiProseForChecking(value, childPointer);
+          if (!proseSources.has(prose)) proseSources.set(prose, []);
+          proseSources.get(prose).push({ spec, pointer: childPointer });
         } else {
           visit(value, childPointer);
         }

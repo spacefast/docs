@@ -1,13 +1,13 @@
 ---
 title: "Connect Gemini CLI to Spacefast"
-description: "Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI."
+description: "Add Spacefast to Gemini CLI so it can publish from your terminal."
 seo:
   canonical: "https://spacefast.com/setup/gemini-cli/"
 ---
 
-Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
+Add Spacefast to Gemini CLI so it can publish from your terminal.
 
-**Configure `~/.gemini/settings.json`.** Merge this entry into your Gemini CLI settings. Start Gemini CLI and run `/mcp auth spacefast` to finish OAuth. Use `/mcp` to check that Spacefast is connected.
+**Configure `~/.gemini/settings.json`.** One entry in your Gemini CLI settings connects Spacefast.
 
 ```json
 {
@@ -22,25 +22,39 @@ Use the Spacefast extension, skills, and OAuth MCP from Gemini CLI.
 }
 ```
 
+1. Add the entry above to `~/.gemini/settings.json`, keeping what's already in the file.
+2. Start Gemini CLI and run `/mcp auth spacefast`.
+3. Sign in to Spacefast and approve access.
+4. Use `/mcp` to check that Spacefast is connected.
+
 ## Other ways to connect
 
 **Install from the plugin marketplace — Soon.** The public marketplace listing is not live yet.
 
 Use the working manual option below while the directory listing is in review.
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent gemini-cli
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent gemini-cli -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+gemini mcp add --scope user --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Gemini CLI and run `/mcp auth spacefast`.
+2. Sign in to Spacefast and approve access. Use `/mcp` to check the connection.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

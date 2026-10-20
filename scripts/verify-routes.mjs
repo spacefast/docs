@@ -261,11 +261,66 @@ for (const file of setupFiles) {
     throw new Error(`dist/${file} does not declare its www canonical (${expected}).`);
   }
 }
-// The `+1` is the home page, listed at the docs root rather than at its
-// canonical origin.
-if (indexedPages !== sitemapUrls.length + 1) {
+// The sidebar override (components/Sidebar.astro) links pages across tabs.
+// Check the rendered sidebars, so a Blume change that drops the override fails here.
+const sidebarOf = async (file) => {
+  const html = await readBuilt(file);
+  const start = html.indexOf("<nav data-blume-nav-tree");
+  if (start < 0) throw new Error(`dist/${file} has no sidebar.`);
+  return html.slice(start, html.indexOf("</aside>", start));
+};
+const sidebarExpectations = [
+  ["quickstart/index.html", ["/cli", "/agents"], ["/setup/vscode", "Other agents"]],
+  ["agents/index.html", ["/agents/mcp-server", "/setup/vscode", "Other agents"], ["/setup/codex"]],
+  ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
+  ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],
+];
+for (const [file, present, absent] of sidebarExpectations) {
+  const sidebar = await sidebarOf(file);
+  const has = (needle) =>
+    needle.startsWith("/") ? sidebar.includes(`href="${deploymentBase}${needle}"`) : sidebar.includes(needle);
+  const missing = present.filter((needle) => !has(needle));
+  const unexpected = absent.filter(has);
+  if (missing.length > 0 || unexpected.length > 0) {
+    throw new Error(
+      `dist/${file} sidebar is wrong: missing [${missing.join(", ")}], unexpected [${unexpected.join(", ")}].`,
+    );
+  }
+}
+// Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
+for (const [file, prev, next] of [
+  ["troubleshooting/index.html", "/quickstart", "/spaces"],
+  ["spaces/index.html", "/troubleshooting", "/versions"],
+  ["setup/vscode/index.html", "/setup/cursor", "/setup/github-copilot"],
+]) {
+  const pager = (await readBuilt(file)).split("</article>").at(-1);
+  const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
+  const got = ["Previous", "Next"].map((label) => links.find(([, , body]) => body.includes(label))?.[1]);
+  const want = [prev, next].map((route) => `${deploymentBase}${route}`);
+  if (got.join() !== want.join()) {
+    throw new Error(`dist/${file} pagination is wrong: expected ${want.join(" / ")}, got ${got.join(" / ")}.`);
+  }
+}
+// /setup/<client> breadcrumbs follow the Agents sidebar those pages render.
+for (const [file, label] of [
+  ["setup/vscode/index.html", "Coding agents"],
+  ["setup/chatgpt/index.html", "Personal agents"],
+]) {
+  const crumb = /<nav aria-label="Breadcrumb"[^>]*>([\s\S]*?)<\/nav>/u
+    .exec(await readBuilt(file))?.[1]
+    .replace(/<[^>]+>/gu, "")
+    .trim();
+  if (crumb !== label) throw new Error(`dist/${file} breadcrumb is "${crumb}", expected "${label}".`);
+}
+
+// Pagefind indexes article pages only. The generated changelog timeline has no
+// article and is left out; every entry it lists is indexed on its own page.
+const searchableSitemapUrls = sitemapUrls.filter(
+  (url) => url.replace(/\/$/u, "") !== `${docsRoot}/changelog`,
+);
+if (indexedPages !== searchableSitemapUrls.length) {
   throw new Error(
-    `Search/sitemap count mismatch: ${indexedPages} indexed, ${sitemapUrls.length} in sitemap.`,
+    `Search/sitemap count mismatch: ${indexedPages} indexed, ${searchableSitemapUrls.length} searchable in sitemap.`,
   );
 }
 const robots = await readBuilt("robots.txt");
@@ -293,6 +348,11 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 // invariant checked here. Only link targets count; the preamble's prose and
 // code samples mention docs URLs that are illustrations, not entries.
 const llmsIndex = await readBuilt("llms.txt");
+// Blume places the agent guidance (agents.llmsTxt.details) after the summary.
+const guidance = llmsIndex.indexOf("## Read any page as Markdown");
+if (guidance < 0 || guidance > llmsIndex.indexOf("\n## Docs")) {
+  throw new Error("llms.txt does not lead with the agent guidance from content/_llms-preamble.md.");
+}
 for (const match of llmsIndex.matchAll(/\]\((https:\/\/[^)]+)\)/gu)) {
   const file = discoveryFileForUrl(match[1]);
   if (file !== undefined) await requireFile(file);
@@ -421,7 +481,16 @@ const compilation = compileRoutingFilesWasm({
 if (compilation.diagnostics.some(({ severity }) => severity === "error")) {
   throw new Error("The built Docs routing configuration does not compile.");
 }
-for (const route of ["zero-runtime", "zero", "apps/zero"]) {
+if (await exists(path.join(dist, "storage"))) {
+  throw new Error("The docs build must not emit files under the reserved /storage runtime path.");
+}
+for (const [route, target, hopCount] of [
+  ["zero-runtime", "/zero-runtime", 1],
+  ["zero", "/zero-runtime", 2],
+  ["apps/zero", "/zero-runtime", 2],
+  ["object-storage", "/object-storage", 1],
+  ["storage", "/object-storage", 2],
+]) {
   let url = new URL(`${docsRoot}/${route}?source=route-check&value=a%2Fb`);
   const hops = [];
   for (let hop = 0; hop < 3; hop += 1) {
@@ -438,13 +507,13 @@ for (const route of ["zero-runtime", "zero", "apps/zero"]) {
     }
   }
   if (
-    url.pathname !== "/zero-runtime" ||
+    url.pathname !== target ||
     url.search !== "?source=route-check&value=a%2Fb" ||
-    hops.length !== (route === "zero-runtime" ? 1 : 2) ||
+    hops.length !== hopCount ||
     hops.at(-1)?.status !== 200 ||
-    (route !== "zero-runtime" && hops[0]?.status !== 301)
+    (hopCount > 1 && hops[0]?.status !== 301)
   ) {
-    throw new Error(`Zero docs route must reach its public output with its query intact: ${route}`);
+    throw new Error(`Docs route must reach its public output with its query intact: ${route}`);
   }
   await requireFile(localTargetFor(url.pathname));
 }

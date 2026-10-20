@@ -1,13 +1,13 @@
 ---
 title: "Connect OpenCode to Spacefast"
-description: "Connect Spacefast to OpenCode with native OAuth MCP and skills."
+description: "Add Spacefast to OpenCode so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/opencode/"
 ---
 
-Connect Spacefast to OpenCode with native OAuth MCP and skills.
+Add Spacefast to OpenCode so it can publish what you build.
 
-**Configure `~/.config/opencode/opencode.json`.** Merge this entry into your OpenCode configuration. Run `opencode mcp auth spacefast` to finish OAuth, then `opencode mcp list` to check the connection.
+**Configure `~/.config/opencode/opencode.json`.** One entry in your OpenCode config connects Spacefast.
 
 ```json
 {
@@ -21,21 +21,35 @@ Connect Spacefast to OpenCode with native OAuth MCP and skills.
 }
 ```
 
+1. Add the entry above to `~/.config/opencode/opencode.json`, keeping what's already in the file.
+2. Run `opencode mcp auth spacefast`, then sign in to Spacefast and approve access.
+3. Run `opencode mcp list` to check the connection.
+
 ## Other ways to connect
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent opencode
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent opencode -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+opencode mcp add
+```
+
+1. Follow the prompts to add a remote server named spacefast.
+2. Paste the server URL shown on this page, including the tool-mode query if selected.
+3. Run `opencode mcp auth spacefast`, then sign in to Spacefast and approve access.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y

@@ -5,7 +5,7 @@ sidebar:
   order: 9
 ---
 
-`@spacefast/sdk` is a typed client generated from the same OpenAPI document that produces [the reference](/api/reference). After this page you can make any call in the API with path params, query params, request body, and response body all checked at compile time.
+`@spacefast/sdk` is a typed client generated from the same OpenAPI document that produces [the reference](/api/reference), so every call in the API gets path params, query params, request body, and response body checked at compile time.
 
 ## Install
 
@@ -156,6 +156,9 @@ There is no built-in iterator. Walk the cursor yourself, as shown in [Pagination
 | `@spacefast/sdk/publish` | the publish pipeline |
 | `@spacefast/sdk/query` | TanStack Query option and mutation factories |
 | `@spacefast/sdk/openapi.json` | the spec itself |
+| `@spacefast/sdk/partner` | typed client for the Partner API |
+| `@spacefast/sdk/partner/query` | partner query factories with a separate cache for each principal |
+| `@spacefast/sdk/openapi.partner.json` | the Partner API spec |
 
 The query layer defaults to browser session cookies against the production API. Point it elsewhere once, before the first request:
 

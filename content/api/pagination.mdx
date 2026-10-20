@@ -1,26 +1,26 @@
 ---
 title: Pagination
-description: One cursor scheme for every list in the Spacefast API, with defaults, limits, and the loop that walks a whole collection
+description: Walk cursor-paginated collections, check endpoint-specific limits, and handle lists that use another paging scheme
 sidebar:
   order: 4
 ---
 
-Every list in this API pages the same way. After this page you can walk a collection to the end without writing a special case for any endpoint.
+Cursor-paginated collections return `pagination.nextCursor` for the next request. Check each endpoint's defaults and ordering: documentation search uses offsets, and some lists return their full result without pagination.
 
 ## Request
 
-Two optional query parameters.
+Cursor-paginated endpoints take two query parameters. These are the common defaults; check the endpoint's reference for exceptions.
 
 | Parameter | Type | Default | What it does |
 | --- | --- | --- | --- |
 | `limit` | integer, 1 to 100 | 20 | How many items to return. |
 | `cursor` | string, up to 4096 characters | none | The `nextCursor` from the previous page. |
 
-Both are optional. The generated spec marks `limit` as required because the schema supplies its own default, but a request that omits it gets 20.
+Both can be omitted. The generated spec marks a defaulted `limit` as required, but the server applies the endpoint's default when it is absent. For example, [storage objects](/api/reference/spaces/listspacestorageobjects) default to 50 and accept cursors up to 2048 characters.
 
 ## Response
 
-A list body adds a `pagination` object next to `data`.
+A cursor-paginated list adds a `pagination` object next to `data`.
 
 ```json
 {
@@ -37,15 +37,15 @@ A list body adds a `pagination` object next to `data`.
 | `nextCursor` | string or null | Pass it back as `cursor` for the next page. `null` when there is nothing after this page. |
 | `hasMore` | boolean | Whether another page exists. |
 
-Lists are newest first, ordered by creation time and then by id, so a stable sort holds across pages even when two rows share a timestamp.
+Ordering belongs to the endpoint. Versions are newest first, while storage objects are in ID order. Keep that order when combining pages.
 
 ## Cursors are opaque
 
-A cursor is a base64url-encoded keyset. Do not parse it, build one, or store it as a durable bookmark. Pass back exactly what you got.
+A cursor is an opaque continuation value. Do not parse it, build one, or store it as a durable bookmark. Pass back exactly what you got.
 
 ## The loop
 
-Stop when `nextCursor` is `null`. Never re-send a cursor you have already used. If the response hands back the same cursor you sent, that is a broken page rather than the end, and looping on it spins forever. Treat it as an error.
+Stop when `nextCursor` is `null`. Never re-send a cursor you have already used. If the response hands back the same cursor you sent, that's a broken page, not the end. Looping on it spins forever. Treat it as an error.
 
 The same walk with curl and [the SDK](/api/sdk).
 
@@ -85,9 +85,11 @@ async function allVersions(spaceId: string) {
 
 The `sf` CLI does the same walk for you with `sf api GET <path> --paginate`, which streams every page as JSON Lines and fails when a cursor repeats.
 
-## The one exception
+## Other list shapes
 
-`GET /v1/docs/search` pages by offset rather than by cursor. It takes `limit` (up to 25) and `offset`, and answers with `nextOffset` and `hasMore`. Every other list on the public API uses the cursor scheme above.
+`GET /v1/docs/search` pages by offset rather than by cursor. It takes `limit` (up to 25) and `offset`, and answers with `nextOffset` and `hasMore`.
+
+Some lists do not paginate. For example, [Space domains](/api/reference/domains/listspacedomains) return the full set in one response. Other endpoints use their own continuation fields. Follow the response shape documented for the endpoint instead of assuming every list carries `pagination`.
 
 ## Filters compose with paging
 

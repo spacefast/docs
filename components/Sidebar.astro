@@ -1,0 +1,73 @@
+---
+/*
+ * Blume's sidebar with two changes that link pages across folders, which
+ * folder meta can't express:
+ * - Docs: the Setup group lists plain links to the CLI and agent setup
+ *   sections (which live under their own tabs) instead of the generated
+ *   per-client setup pages.
+ * - Agents: the tab's own pages render as a flat "Agents" section, followed
+ *   by an "Other agents" section linking the generated /setup/<client> pages
+ *   that have no authored /agents page, split into coding and personal. The
+ *   /setup/<client> pages keep this Agents sidebar instead of the Docs one.
+ */
+import NavTree from "blume/components/layout/NavTree.astro";
+import { sidebarForRoute } from "blume/components/layout/nav-utils.ts";
+import type { NavNode } from "blume/core/types.ts";
+import data from "blume:data";
+
+import setupSections from "../content/setup/_sidebar.json";
+
+type Props = Record<string, unknown> & { items: NavNode[]; currentRoute: string };
+
+const { items, ...rest } = Astro.props as Props;
+// Navigation routes are base-less; Blume adds the deployment base when it renders links.
+const agentsRoute = "/agents";
+const setupRoute = "/setup";
+const under = (route: string, root: string) => route === root || route.startsWith(`${root}/`);
+
+const page = (label: string, route: string): NavNode => ({ kind: "page", label, route, pageId: "" });
+
+// The generated /setup folder is the Docs "Setup" group; its header stops linking to
+// the per-client index, and its rows point at the CLI and Agents tabs instead.
+const withSetupLinks = (nodes: NavNode[]): NavNode[] =>
+  nodes.map((node) =>
+    node.kind === "group" && node.route === setupRoute
+      ? { ...node, route: undefined, children: [page("CLI", "/cli"), page("Agent setup", agentsRoute)] }
+      : node,
+  );
+
+const withOtherAgents = (nodes: NavNode[]): NavNode[] => {
+  const hasAuthored = (slug: string) =>
+    nodes.some((node) => node.kind === "page" && node.route === `${agentsRoute}/${slug}`);
+  const sections = setupSections.map(({ title, pages }) => ({
+    kind: "group" as const,
+    label: title,
+    display: "group" as const,
+    collapsed: true,
+    children: pages
+      .filter(({ slug }) => !hasAuthored(slug))
+      .map(({ slug, label }) => page(label, `${setupRoute}/${slug}`)),
+  }));
+  return [
+    {
+      kind: "group",
+      label: "Agents",
+      display: "flat",
+      route: agentsRoute,
+      children: nodes.filter((node) => !(node.kind === "page" && node.route === agentsRoute)),
+    },
+    { kind: "group", label: "Other agents", display: "flat", children: sections },
+  ];
+};
+
+const route = rest.currentRoute;
+let sidebar = withSetupLinks(items);
+if (under(route, agentsRoute)) sidebar = withOtherAgents(items);
+else if (route.startsWith(`${setupRoute}/`)) {
+  // Outside the tab, Blume hands over the Docs tree; take the Agents tab's instead.
+  const { sidebar: tree, tabs, root } = data.navigation;
+  sidebar = withOtherAgents(sidebarForRoute(tree, tabs, agentsRoute, root));
+}
+---
+
+<NavTree {...rest} items={sidebar} />

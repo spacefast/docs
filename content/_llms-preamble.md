@@ -1,6 +1,6 @@
 ---
 title: llms.txt preamble
-description: The header spliced into dist/llms.txt by scripts/build-llms-index.mjs. The underscore keeps it out of the site; verify-prose still lints it.
+description: Agent guidance that Blume places at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
 ---
 
 Spacefast publishes static sites and runs apps. You can drive all of it from the

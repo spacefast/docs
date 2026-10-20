@@ -5,10 +5,54 @@ description: "Release history for @spacefast/zero-compat-payloadcms on npm."
 
 Published as [`@spacefast/zero-compat-payloadcms`](https://www.npmjs.com/package/@spacefast/zero-compat-payloadcms) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
+## 0.6.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- @spacefast/common@0.5.1
+
 ## 0.5.0
 
 #### Patch Changes
 
+- Updated dependencies
+  - @spacefast/common@0.5.0
 - Updated dependencies
 - Updated dependencies
 - Updated dependencies

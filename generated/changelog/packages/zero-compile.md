@@ -5,6 +5,67 @@ description: "Release history for @spacefast/zero-compile on npm."
 
 Published as [`@spacefast/zero-compile`](https://www.npmjs.com/package/@spacefast/zero-compile) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+  - @spacefast/zero@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+  - @spacefast/zero@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/zero@0.6.1
+
+## 0.6.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+  - @spacefast/zero@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- When a `content/posts` document publishes at a URL a page or endpoint already serves, the build error now names that page file or endpoint instead of "an existing owner".
+- @spacefast/common@0.5.1
+  - @spacefast/zero@0.5.1
+
 ## 0.5.0
 
 #### Minor Changes
@@ -15,6 +76,12 @@ Published as [`@spacefast/zero-compile`](https://www.npmjs.com/package/@spacefas
 
 #### Patch Changes
 
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.5.0
+  - @spacefast/zero@0.5.0
 - Build CLI commands as self-contained entry bundles with declared package dependencies resolved by Node. Keep the canonical WordPress block serializer private to the compiler so CLI installation does not inherit editor peer dependencies, and publish the browser API declarations.
 - Framework builds and Zero compose in one project. `sf build` and `sf publish` run the framework build, compile the capsule from the project root, and publish the build output at `/` with the runtime beside it; a Zero project whose build script renders into the project root publishes the root. Sources, lockfiles, `tsconfig*.json`, TypeScript files, and `tools/` stay out of the published files. The `build` settings in `sf.jsonc` apply to local builds too, `sf publish --remote` takes the build lane when the project has a build, and a host project's `tsconfig.json` no longer rebinds the JSX runtime of Zero pages.
 

@@ -1,6 +1,6 @@
 # Blume patches
 
-Blume 1.6.0 hyphenates camelCase operation IDs when generating reference URLs.
+Blume 2 hyphenates camelCase operation IDs when generating reference URLs.
 Spacefast's published reference URLs are stable contracts, so this patch keeps
 the previous OpenAPI slug behavior in both the source model and bundled CLI.
 

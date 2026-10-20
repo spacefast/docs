@@ -5,10 +5,67 @@ description: "Release history for @spacefast/zero on npm."
 
 Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- The context editor starts faster: it loads the document and the editor together, downloads Gutenberg's scripts in parallel, ships the first page and post-type responses with the editor, and shows the saved document while Gutenberg starts.
+- The context document now reads and saves through WordPress's own pages API. `/spacefast/v1/context` and `/spacefast/v1/context/editor` are removed: read with `GET /wp/v2/pages?slug=context&context=edit`, and save with `POST /wp/v2/pages/{id}`, sending back the `spacefast_revision` you read with `content` or `markdown`. A stale revision returns 409. The editor loads Gutenberg from the Space dashboard's `/wp/v2/editor/assets`. Viewers who cannot edit see "Sign in to edit" or "View only" instead of a sign-in button that did nothing. Context Spaces published before this change need republishing.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
+## 0.6.0
+
+#### Patch Changes
+
+- `EndpointRequest` now declares `params`, the values captured by `:name` segments of an endpoint's `path` (for example `req.params.slug` on `path: "/p/:slug"`). The hosted runtime and `sf dev` already passed them; only the type was missing.
+- Realtime reconnects now back off exponentially with jitter (250–500ms first, up to 15–30s) instead of retrying every 500ms, and reset once the relay accepts a connection. A page whose Cast joins keep failing no longer mints a realtime ticket twice a second for as long as the tab stays open.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.6.0
+
+## 0.5.1
+
+#### Patch Changes
+
+- @spacefast/common@0.5.1
+
 ## 0.5.0
 
 #### Minor Changes
 
+- Add `ctx.jwt.sign` and `ctx.crypto` to Zero server handlers. `ctx.jwt.sign({ key, kid, claims, ttlSeconds })` signs short-lived Ed25519 `at+jwt` access tokens with a key held in a secret variable that never enters `ctx.env`. `ctx.crypto` adds `sha256`, `hmacSha256`, and `timingSafeEqual` for webhook signature checks and key hashing.
+- Add `@spacefast/zero/react`: React hooks (`useQuery`, `useMutation`, `useAction`, `usePaginatedQuery`, `useAuth`) and a typed `createClient<typeof app>()` over the same browser client as `@spacefast/zero/client`. React is an optional peer dependency; the React entry never loads Preact.
 - Add per-Space app accounts with Google, Gravatar, and native Spacefast Access sign-in, verified email addresses, and revocable sessions. Add Users settings and account management to the API, SDK, CLI, and MCP.
 - Actions are back, endpoints take `readOnly`, and `fetch()` works everywhere.
 
@@ -31,6 +88,10 @@ Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) 
 
 #### Patch Changes
 
+- One hostname rule everywhere: `normalizeHostname` now lives in `@spacefast/common/utils/hostname` (`@spacefast/routing/hostname` still re-exports it). It folds ASCII case and trims ASCII whitespace only, as DNS does, so a non-ASCII host like `K.example` (Kelvin sign) no longer collapses into a different ASCII name. `verifyVisitorToken` in `@spacefast/zero` compares hosts with the same rule, so `example.com.` and `example.com` are one host.
+- `verifyUser` reads only the `__Host-sfi_session` cookie over HTTPS, so a session cookie planted by a sibling host under the same parent domain is ignored.
+- Updated dependencies
+  - @spacefast/common@0.5.0
 - Keep query results associated with their arguments while subscriptions change. Paginated clients no longer append the previous page again while the next cursor is loading.
 - Updated dependencies
 - Updated dependencies

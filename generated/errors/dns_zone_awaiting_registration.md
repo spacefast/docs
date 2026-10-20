@@ -1,11 +1,11 @@
 ---
-title: "not_enrolled"
-description: "This account is not enrolled in the private beta, so the API cannot be used yet."
+title: "dns_zone_awaiting_registration"
+description: "The change is saved, but Spacefast DNS serves this domain only once its registration completes."
 ---
 
-This account is not enrolled in the private beta, so the API cannot be used yet.
+The change is saved, but Spacefast DNS serves this domain only once its registration completes.
 
-**How to resolve:** Join the waitlist or open your beta invite link, then sign in again.
+**How to resolve:** Nothing to do. The zone is served as soon as the registrar confirms the registration.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/not_enrolled",
-  "title": "Not enrolled",
+  "type": "https://spacefast.com/docs/errors/dns_zone_awaiting_registration",
+  "title": "Dns zone awaiting registration",
   "status": 400,
-  "detail": "This account is not enrolled in the private beta, so the API cannot be used yet.",
-  "code": "not_enrolled",
+  "detail": "The change is saved, but Spacefast DNS serves this domain only once its registration completes.",
+  "code": "dns_zone_awaiting_registration",
   "requestId": "req_4mz0v8qk"
 }
 ```

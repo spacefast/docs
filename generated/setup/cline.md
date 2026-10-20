@@ -1,21 +1,27 @@
 ---
 title: "Connect Cline to Spacefast"
-description: "Connect Spacefast through Cline's MCP server settings."
+description: "Add Spacefast to Cline so it can publish what you build."
 seo:
   canonical: "https://spacefast.com/setup/cline/"
 ---
 
-Connect Spacefast through Cline's MCP server settings.
+Add Spacefast to Cline so it can publish what you build.
 
-**Add the hosted MCP server.** Enter Spacefast as the name and paste the Spacefast endpoint. Choose Streamable HTTP, then Add Server. Complete OAuth when prompted and check that the tools appear. The Configure tab can open the MCP JSON file used by your installation.
+**Add Spacefast in the Cline panel.** Set it up from Cline's own panel, with no config file to edit.
 
 ```text
 https://mcp.spacefast.com
 ```
 
+1. Open the Cline panel, then MCP Servers → Remote Servers.
+2. Enter Spacefast as the name and paste the address above.
+3. Choose Streamable HTTP, then Add Server.
+4. Sign in to Spacefast and approve access when asked.
+5. Check that Spacefast's tools appear.
+
 ## Other ways to connect
 
-**Configure `~/.cline/data/settings/cline_mcp_settings.json`.** Merge this server into Cline's shared MCP settings. Preserve other servers. If your installation uses a different location, open MCP Servers → Configure → Configure MCP Servers to find its file. Complete OAuth when prompted.
+**Configure `~/.cline/data/settings/cline_mcp_settings.json`.** Add Spacefast to Cline's shared settings file by hand.
 
 ```json
 {
@@ -29,23 +35,39 @@ https://mcp.spacefast.com
 }
 ```
 
+1. Add the entry above to `~/.cline/data/settings/cline_mcp_settings.json`, keeping the servers already there.
+2. Sign in to Spacefast and approve access when asked.
+
+If your installation keeps the file somewhere else, open MCP Servers → Configure → Configure MCP Servers in Cline to find it.
+
 **Install from the plugin marketplace — Soon.** The public marketplace listing is not live yet.
 
 Use the working manual option below while the directory listing is in review.
 
-**Set up with the Spacefast CLI.** Install the CLI once, then let it write MCP config, install the skill, and sign you in.
+**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent cline
 ```
 
-**Set up without installing.** Set up MCP, skills, and authentication without a global CLI install.
+**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent cline -y
 ```
 
-**Install the Spacefast skill.** Install publish and hosting guidance using the Agent Skills standard.
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+cline mcp add spacefast 'https://mcp.spacefast.com' --transport http
+```
+
+1. Confirm the prefilled server details in Cline's add wizard.
+2. Run `cline mcp`, choose Authorize OAuth for Spacefast, then sign in and approve access.
+
+Cline CLI and the Cline extension 4.0 or later share these settings, so this adds Spacefast to both.
+
+**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
