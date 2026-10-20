@@ -1,6 +1,6 @@
 ---
 title: Redirects, rewrites, and headers
-description: The _redirects and _headers files, the routing rules in sf.jsonc, how they are ordered, and the limits they run under
+description: The _redirects and _headers files, project configuration routing rules, their order, and their limits.
 sidebar: { order: 3 }
 ---
 
@@ -14,13 +14,13 @@ Nothing here is evaluated per request. Spacefast compiles your rules at publish 
 | --- | --- |
 | `_redirects` | Line-based redirect, rewrite, proxy, and 404 rules |
 | `_headers` | Block-based response header rules |
-| `sf.jsonc` | Typed `redirects`, `rewrites`, and `headers` arrays |
+| `spacefast.config.ts` or `sf.jsonc` | Typed `redirects`, `rewrites`, and `headers` arrays |
 
 They merge into one list in that order: `_redirects` rules first, then `redirects` from the config, then its `rewrites`. Within a list, rules match in the order you wrote them and the first match wins.
 
 A config rule whose source is already claimed by an unconditional file rule never runs, and publish reports `redirect_shadowed_by_file`: `_redirects already routes "{source}", so this rule never runs.`
 
-The config file is `sf.jsonc`. These names also work, in this precedence order: `spacefast.jsonc`, `spacefast.json`, `sf.json`, `.sf/sf.json`, `.sf/config.jsonc`, `.sf/config.json`.
+`spacefast.config.ts` takes precedence over `sf.jsonc`. JSON and JSONC formats remain supported. See [Project configuration](/config-file) for the full discovery order and explicit file selection. Add routing rules to your existing configuration rather than creating a second file.
 
 `_redirects` and `_headers` are published but never served as content. Requesting one returns 404.
 
@@ -89,7 +89,9 @@ Header names must match `^[A-Za-z0-9-]+$`. Some names are owned by the platform 
 
 `_headers` matchers cannot include a port. They match the raw pathname, so they are sensitive to a trailing slash where `_redirects` is not. Header rules also apply to the URL the visitor asked for, not to the path a rewrite landed on.
 
-## Rules in `sf.jsonc`
+## Rules in project configuration
+
+The examples below use JSONC. The same arrays work inside `defineConfig` in `spacefast.config.ts`.
 
 ```jsonc sf.jsonc
 {

@@ -79,7 +79,7 @@ Keep `.spacefast/space.json` if you have linked the project. Changing the config
 
 Connected Git repository builds read `spacefast.config.ts` too. Commit it with your source; evaluation happens in the isolated build environment. The CLI also accepts it through `--config` (or `SPACEFAST_CONFIG`) on commands that expose that option, including Git build configuration. Do not depend on files or environment variables that exist only on your laptop.
 
-Source builds preserve the authored TypeScript file and produce resolved JSON configuration in the build output. Raw file uploads and hosted MCP inline publishing cannot execute it. For those paths, build locally with `sf build`, then publish the resulting output directory with `sf publish <output> --prebuilt`.
+Source builds preserve the authored TypeScript file and put the resolved JSON configuration in the build archive. Raw file uploads and hosted MCP inline publishing cannot execute it. To publish prebuilt content without losing configuration, run `sf build`, then `sf publish .spacefast/build-output.tgz --prebuilt`. If you set `sf build --output`, publish that archive instead. Plain `sf publish` from the project root also loads the project configuration.
 
 ## A full example
 

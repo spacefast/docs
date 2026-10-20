@@ -49,20 +49,15 @@ sf init my-app --runtime zero --template guestbook
 
 ### What it writes
 
-For a new static project, `sf init` writes `spacefast.config.ts`. Add the settings you need inside `defineConfig`:
+`sf init` writes `spacefast.config.ts`. Without a runtime option, it starts with these commented examples:
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
 
 export default defineConfig({
-  // Project link: .spacefast/space.json (written by sf init --space, sf link, or sf publish).
-  // "index": "index.html",
-  // "fallback": "/index.html", // SPA fallback; or { "path": "/404.html", "status": 404 }
-  // "listing": false,
-  // "access": "public", // whole live space public; or { "public": ["/assets/**", "!/assets/private/**"] }
-  // "meta": { "title": "", "description": "", "image": "/og.png", "favicon": "/favicon.svg" },
-  // "templates": [], // files that receive {{ vars.NAME }} substitution
-  // "build": { "rootDirectory": ".", "buildCommand": "npm run build", "outputDirectory": "dist" },
+  // fallback: "/index.html",
+  // meta: { title: "", description: "", image: "/og.png" },
+  // build: { buildCommand: "npm run build", outputDirectory: "dist" },
 });
 ```
 

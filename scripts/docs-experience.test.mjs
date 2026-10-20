@@ -28,12 +28,13 @@ test("project configuration explains both supported formats and migration", asyn
   for (const symbol of ["defineConfig", "SpacefastConfig", "SpacefastConfigInput"]) {
     assert.ok(config.includes(symbol), `configuration must explain ${symbol}`);
   }
-  assert.match(config, /1\. `spacefast\.config\.ts`\s+2\. `sf\.jsonc`/u);
-  assert.match(config, /does not fall back to another file/u);
-  assert.match(config, /There is no `sf migrate config` command/u);
-  assert.match(config, /Run `sf build` from the project root/u);
-  assert.match(config, /Connected Git repository builds read `spacefast\.config\.ts` too/u);
-  assert.match(config, /hosted MCP inline publishing cannot execute it/u);
+  assert.match(config, /first file found wins[\s\S]*`spacefast\.config\.ts`[\s\S]*`sf\.jsonc`/u);
+  assert.match(config, /does not fall back/u);
+  assert.match(config, /no `sf migrate config`/u);
+  assert.match(config, /`sf build`[^\n]*validat/u);
+  assert.match(config, /Git repository builds[^\n]*`spacefast\.config\.ts`/u);
+  assert.match(config, /hosted MCP[^\n]*cannot execute/u);
+  assert.match(config, /sf publish \.spacefast\/build-output\.tgz --prebuilt/u);
   assert.match(config, /https:\/\/spacefast\.com\/schemas\/sf\.json/u);
 
   const project = await builtPage("/cli/project");
