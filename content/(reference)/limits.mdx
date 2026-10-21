@@ -5,11 +5,11 @@ sidebar:
   order: 1
 ---
 
-Find any limit, see which plan changes it, and know exactly which error code comes back. Where a plan says "unlimited" but a platform ceiling still applies, this page gives you the ceiling.
+Plan allowances, platform limits, and the errors returned when you exceed them.
 
-## Upcoming plan allowances
+## Plan allowances
 
-The new pricing uses Free, Go and Plus. These allowances describe the upcoming plans; **Settings → Billing** and the entitlements API show what is currently active for your team. See [Plans and billing](/billing) for prices and [Usage](/usage) for all metered allowances.
+See [Plans and billing](/billing) for prices and [Usage](/usage) for metered allowances.
 
 | Allowance | Free | Go | Plus | Enterprise |
 | --- | --- | --- | --- | --- |
@@ -24,15 +24,15 @@ The new pricing uses Free, Go and Plus. These allowances describe the upcoming p
 
 Free and Go cannot buy extra editing seats. Pending invitations reserve capacity but are not billed. Domains registered through Spacefast or WordPress.com, or using Spacefast DNS, do not count toward the Free plan's domain allowance.
 
-Free allowance exhaustion triggers review and may lead to suspension. Above 500 MB, new publishes and uploads stop while existing Spaces continue to serve unless suspended. Paid plans bill usage above their shared credit. An optional hard spending cap is planned.
+Free allowance exhaustion triggers review and may lead to suspension. Above 500 MB, new publishes and uploads stop while existing Spaces continue to serve unless suspended. Paid plans bill usage above their shared credit.
 
-## Current enforcement
+## Enforcement
 
 Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `space_quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
 
-The current daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The current storage meter reports overage without enforcing the upcoming Free storage rule. Neither counter is the new itemized usage bill.
+The daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The storage usage counter reports overage without blocking writes. These counters are not invoice line items.
 
-Current version cleanup is described on [Versions](/versions#how-many-versions-are-kept). The new history and log windows are [planned](/usage#planned-history-and-log-retention).
+See [Versions](/versions#how-many-versions-are-kept) for version cleanup.
 
 ## Same on every plan
 
