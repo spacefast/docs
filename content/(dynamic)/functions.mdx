@@ -132,6 +132,8 @@ Outbound requests from a worker leave from Cloudflare's shared network addresses
 
 `env.DB` is always there. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
 
+The SQL dialect is MySQL, not SQLite. Schema changes (DDL), including `CREATE TABLE IF NOT EXISTS`, are allowed from a Functions handler with `await env.DB.prepare(sql).run()`. See [Database](/database#query-it-from-code).
+
 Two groups of variable names never reach a worker, dropped rather than blanked so your code reads them as absent instead of as "configured, but empty".
 
 | Withheld | Why |

@@ -67,6 +67,8 @@ Index ranges take `eq`, `gt`, `gte`, `lt`, and `lte`. Every call is async, so aw
 
 A Functions worker gets a D1-shaped binding instead.
 
+The SQL dialect is MySQL, not SQLite. Schema changes (DDL), including `CREATE TABLE IF NOT EXISTS`, are allowed from a Functions handler with `await env.DB.prepare(sql).run()`.
+
 ```ts handler.ts
 export default {
   async fetch(request: Request, env: { DB: D1Database }) {
