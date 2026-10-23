@@ -56,7 +56,7 @@ If Claude says the Spacefast connector isn't connected, add the connector as des
 
 ## Install the desktop extension
 
-The extension runs the Spacefast MCP server on your computer. Publishing a local folder by path needs the native Linux `sf` build; on macOS and Windows, publish inline files or use the [CLI](/cli). It starts the server with `npx`, so it needs Node.js 20.3 or newer with `npx` installed where Claude Desktop can find it.
+The extension runs the Spacefast MCP server on your computer. It publishes inline files on every system; to publish a local folder, use the [CLI](/cli) (`sf publish <path>`). It starts the server with `npx`, so it needs Node.js 20.3 or newer with `npx` installed where Claude Desktop can find it.
 
 <Steps>
   <Step title="Download the bundle">
@@ -86,7 +86,7 @@ The bundle is a manifest version `0.2` extension with a Node server. Its entry p
 }
 ```
 
-The server runs locally, but publishing a folder by path needs the native Linux `sf` build. On macOS and Windows, `publish` takes inline files; use the CLI for a local folder.
+The server runs locally, but it starts through `npx`, so `publish` takes inline files on every system. Use the CLI for a local folder.
 
 | Fact | Value |
 |---|---|
