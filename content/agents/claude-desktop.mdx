@@ -40,7 +40,7 @@ List my Spacefast Spaces.
 
 ## Install the desktop extension
 
-The extension runs the Spacefast MCP server on your computer, so `publish` can read local files. It starts the server with `npx`, so it needs Node.js 20 or newer with `npx` installed where Claude Desktop can find it.
+The extension runs the Spacefast MCP server on your computer, so `publish` can read local files. It starts the server with `npx`, so it needs Node.js 20.3 or newer with `npx` installed where Claude Desktop can find it.
 
 <Steps>
   <Step title="Download the bundle">
@@ -54,7 +54,7 @@ The extension runs the Spacefast MCP server on your computer, so `publish` can r
   </Step>
 </Steps>
 
-If Claude Desktop shows "Server disconnected" or "Unable to connect to extension server", open `~/Library/Logs/Claude/mcp-server-Spacefast.log` on macOS. `spawn npx ENOENT` means Claude Desktop cannot find `npx`. This happens when Node.js comes from Homebrew, nvm, or another version manager. Use the plugin instead.
+If Claude Desktop shows "Server disconnected" or "Unable to connect to extension server", open `~/Library/Logs/Claude/mcp-server-Spacefast.log` on macOS. `spawn npx ENOENT` means Claude Desktop cannot find `npx`. This happens when Node.js comes from Homebrew or a Node version manager. Use the plugin instead.
 
 ## What the manifest declares
 
@@ -77,7 +77,7 @@ Because the server runs locally, it can read files. `publish` takes a path or th
 | Manifest version | `0.2` |
 | Server type | `node` |
 | Platforms | macOS, Windows, Linux |
-| Node | 20 or newer |
+| Node | 20.3 or newer |
 | License | MIT |
 | Tools declared | The nine Spacefast MCP tools |
 
