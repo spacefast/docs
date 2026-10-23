@@ -1,13 +1,44 @@
 ---
 title: Claude Desktop
-description: Add the Spacefast plugin to Claude Desktop, or install the local desktop extension
+description: Connect Claude Desktop to Spacefast with the hosted connector, the Spacefast plugin, or the local desktop extension
 ---
 
-Add Spacefast to Claude Desktop so it can publish files and read your Spaces. The plugin is the recommended way. The desktop extension runs the server on your computer instead.
+Add Spacefast to Claude Desktop so it can publish and read your Spaces. The connector is the recommended way. The desktop extension runs the server on your computer instead.
+
+## Add the Spacefast connector
+
+The connector is the hosted Spacefast MCP server. You add it once to your Claude account, so it works in the desktop app, on claude.ai, and on your phone.
+
+<Steps>
+  <Step title="Open Connectors">
+    On claude.ai or in Claude Desktop, open Customize → Connectors, then choose + → Add custom connector.
+  </Step>
+  <Step title="Add Spacefast">
+    Name it Spacefast and use `https://mcp.spacefast.com` as its URL.
+  </Step>
+  <Step title="Connect">
+    Choose Connect, then sign in to Spacefast and approve access.
+  </Step>
+  <Step title="Turn it on">
+    Turn Spacefast on for the conversation you want to use it in.
+  </Step>
+</Steps>
+
+On a Team or Enterprise plan, an owner has to add the connector first.
+
+Then ask for something small to prove Spacefast is connected.
+
+<Prompt description="Make a one-page site and publish it to Spacefast." actions={["copy"]}>
+Make a one-page site that says hello and publish it to Spacefast. Give me the link.
+</Prompt>
+
+<Prompt description="List my Spacefast Spaces." actions={["copy"]}>
+List my Spacefast Spaces.
+</Prompt>
 
 ## Add the Spacefast plugin
 
-The plugin carries the hosted Spacefast MCP server and the Spacefast skills. You add it once to your Claude account, so it works in the Chat and Cowork tabs, on claude.ai, and in Claude Code signed in with the same account.
+The plugin adds the Spacefast skills and the hosted connector to your Claude account, for the Chat and Cowork tabs and for Claude Code signed in with the same account.
 
 <Steps>
   <Step title="Open the Plugins page">
@@ -19,28 +50,13 @@ The plugin carries the hosted Spacefast MCP server and the Spacefast skills. You
   <Step title="Add the plugin">
     Select the Spacefast plugin, then choose Add.
   </Step>
-  <Step title="Sign in">
-    Sign in to Spacefast and approve access when Claude asks.
-  </Step>
 </Steps>
 
-Plugins need a paid Claude plan. On a Team or Enterprise plan, an owner may limit which marketplaces you can add. See [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude).
-
-You can also add only the connector: on claude.ai, open Customize → Connectors, choose + → Add custom connector, name it Spacefast, and use `https://mcp.spacefast.com` as its URL. On a Team or Enterprise plan, an owner has to add the connector first.
-
-Then ask for something small to prove Spacefast is connected.
-
-<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
-Publish this folder to Spacefast and give me the live URL.
-</Prompt>
-
-<Prompt description="List my Spacefast Spaces." actions={["copy"]}>
-List my Spacefast Spaces.
-</Prompt>
+If Claude says the Spacefast connector isn't connected, add the connector as described above. Plugins need a paid Claude plan, and on a Team or Enterprise plan an owner may limit which marketplaces you can add. See [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude).
 
 ## Install the desktop extension
 
-The extension runs the Spacefast MCP server on your computer, so `publish` can read local files. It starts the server with `npx`, so it needs Node.js 20.3 or newer with `npx` installed where Claude Desktop can find it.
+The extension runs the Spacefast MCP server on your computer. Publishing a local folder by path needs the native Linux `sf` build; on macOS and Windows, publish inline files or use the [CLI](/cli). It starts the server with `npx`, so it needs Node.js 20.3 or newer with `npx` installed where Claude Desktop can find it.
 
 <Steps>
   <Step title="Download the bundle">
@@ -54,7 +70,7 @@ The extension runs the Spacefast MCP server on your computer, so `publish` can r
   </Step>
 </Steps>
 
-If Claude Desktop shows "Server disconnected" or "Unable to connect to extension server", open `~/Library/Logs/Claude/mcp-server-Spacefast.log` on macOS. `spawn npx ENOENT` means Claude Desktop cannot find `npx`. This happens when Node.js comes from Homebrew or a Node version manager. Use the plugin instead.
+If Claude Desktop shows "Server disconnected" or "Unable to connect to extension server", open `~/Library/Logs/Claude/mcp-server-Spacefast.log` on macOS. `spawn npx ENOENT` means Claude Desktop cannot find `npx`. This happens when Node.js comes from Homebrew or a Node version manager. Use the connector instead.
 
 ## What the manifest declares
 
@@ -70,7 +86,7 @@ The bundle is a manifest version `0.2` extension with a Node server. Its entry p
 }
 ```
 
-Because the server runs locally, it can read files. `publish` takes a path or the current directory, not only inline files.
+The server runs locally, but publishing a folder by path needs the native Linux `sf` build. On macOS and Windows, `publish` takes inline files; use the CLI for a local folder.
 
 | Fact | Value |
 |---|---|
