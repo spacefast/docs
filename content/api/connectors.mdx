@@ -239,9 +239,9 @@ curl -sS -X POST "https://api.spacefast.com/v1/connectors/runs?team=acme" \
 
 `args` is validated against the tool's `inputSchema` and defaults to `{}`. A program can call any tool the credential may use, and it runs for at most 10 seconds.
 
-A new run answers `201`. A retry with the same `idempotencyKey` and the same input answers `200` with the original run. The same key with a different input fails with `409` and `idempotency_key_reused`.
+A new run answers `201`, whatever its `status` when the wait ends. A retry with the same `idempotencyKey` and the same input answers `200` with the original run. The same key with a different input fails with `409` and `idempotency_key_reused`.
 
-A run that fails still answers `200`. The request succeeded and the run did not, so read `status`.
+A run that fails is not an HTTP error. The request succeeded and the run did not, so read `status`.
 
 ```json
 {

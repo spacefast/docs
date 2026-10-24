@@ -148,7 +148,7 @@ Two more bindings appear on `env` when the version needs them. Run `sf functions
 | `env.CONNECTORS` | The version's capsule declares connector roles, or the Space has a connector binding | A connector role |
 | `env.ZERO` | The version includes a [Zero](/zero-runtime) capsule | The capsule's queries and mutations |
 
-A Zero project ships a Worker when it also has a `functions/` directory or a root `handler.ts`. `sf publish` compiles the capsule and the Worker into one version.
+A Zero project ships a Worker when it also has a `functions/` directory or a root `handler.ts`, `handler.js`, or `handler.mjs`. `sf publish` compiles the capsule and the Worker into one version.
 
 ### `env.CONNECTORS`
 
@@ -159,16 +159,20 @@ A Zero project ships a Worker when it also has a `functions/` directory or a roo
 ```js handler.js
 export default {
   async fetch(request, env) {
-    const notes = await env.ZERO.query("notes");
-    await env.ZERO.mutate("addNote", "Written by the Worker");
-    return Response.json(notes);
+    if (request.method !== "POST") return Response.json(await env.ZERO.query("notes"));
+    const secret = env.NOTES_SECRET;
+    if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const { body } = await request.json();
+    return Response.json(await env.ZERO.mutate("addNote", body), { status: 201 });
   },
 };
 ```
 
 `env.ZERO.query(name, ...args)` resolves to the query's data. `env.ZERO.mutate(name, ...args)` resolves to the mutation's return value. There is no call for actions. A failed call throws an `Error` with a `code`. The code is `zero_upstream_unavailable` when the capsule cannot be reached.
 
-Both bindings forward the request's cookie. The runtime verifies the signed Zero identity cookie before it acts for that visitor. When no visitor is signed in, `env.ZERO` runs as the Space's service principal. In the capsule handler, `ctx.auth.userId` is then `service:<spaceId>` and `ctx.auth.provider` is `service`. `ctx.auth.isAuthenticated` is `true`, so a sign-in check alone does not keep the Worker out.
+Both bindings forward the request's cookie. The runtime verifies the signed Zero identity cookie before it acts for that visitor. When no visitor is signed in, `env.ZERO` runs as the Space's service principal. In the capsule handler, `ctx.auth.userId` is then `service:<spaceId>` and `ctx.auth.provider` is `service`. `ctx.auth.isAuthenticated` is `true`, so a sign-in check alone does not keep the Worker out. Check the caller in the Worker before it calls a mutation. The example requires a secret that you set with `sf env set NOTES_SECRET --value-from-stdin`.
 
 ## Limits
 

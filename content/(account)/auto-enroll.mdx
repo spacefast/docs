@@ -17,8 +17,8 @@ Only owners and admins can add or remove domains. An OAuth token needs the `team
 Over HTTP, send [`createTeamAutoEnrollEntry`](/api/reference/teams/createteamautoenrollentry):
 
 ```bash
-curl https://api.spacefast.com/v1/teams/<team-id>/auto-enroll \
-  -H "Authorization: Bearer sfa_xxxxxxxx" \
+curl "https://api.spacefast.com/v1/teams/$TEAM_ID/auto-enroll" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value":"example.com"}'
 ```

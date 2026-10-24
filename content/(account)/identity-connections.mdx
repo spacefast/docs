@@ -43,8 +43,8 @@ The connection appears as a row with an **OIDC** or **Signer** badge and its iss
 Send [`createTeamIdentityConnection`](/api/reference/teams/createteamidentityconnection):
 
 ```bash
-curl https://api.spacefast.com/v1/teams/<team-id>/identity-connections \
-  -H "Authorization: Bearer sfa_xxxxxxxx" \
+curl "https://api.spacefast.com/v1/teams/$TEAM_ID/identity-connections" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"type":"oidc","name":"Acme SSO","issuer":"https://login.example.com","clientId":"<client-id>","clientSecret":"<client-secret>"}'
 ```
@@ -114,7 +114,7 @@ A `signer` connection sends visitors to your portal, and your portal vouches for
 1. The visitor presses **Continue with** on the access page. Spacefast redirects the browser to your `authorizeUrl` with the query parameters below.
 2. Your portal signs the visitor in and signs a proof token.
 3. Your server sends the proof to Spacefast and receives a short-lived token.
-4. Your portal sends the browser to `https://<host>/__sf/redeem?sf_token=<token>&return=<return>`. The Space sets a session cookie and opens the page.
+4. Your portal sends the browser to `/__sf/redeem` on `host`, with the `sf_token` and `return` query parameters. The Space sets a session cookie and opens the page.
 
 | Query parameter | What it holds |
 | --- | --- |
@@ -143,14 +143,20 @@ Send the proof from your server, not from the browser:
 
 ```bash
 curl https://api.spacefast.com/identity/acn_xxxxxxxx/exchange \
-  -H "Authorization: Bearer <proof-jwt>" \
+  -H "Authorization: Bearer $PROOF_JWT" \
   -H "Content-Type: application/json" \
   -d '{"spaceId":"<spaceId>","host":"<host>","resource":"<return>","browserState":"<browserState>"}'
 ```
 
 A `200` answers with `token` and `expiresAt`. A `403` means the proof failed or no grant admits that subject to `resource`.
 
-Redirect the browser to `/__sf/redeem` on the same `host` within 60 seconds. The token works once, and only in the browser that started the sign-in.
+Redirect the browser to `/__sf/redeem` on the same `host` within 60 seconds. The token works once, and only in the browser that started the sign-in. Encode each value as one query parameter. A `return` such as `/docs?tab=a&sort=b` holds `&` and `=`, so do not join the strings by hand:
+
+```js
+const redeem = new URL(`https://${host}/__sf/redeem`);
+redeem.searchParams.set("sf_token", token);
+redeem.searchParams.set("return", returnPath);
+```
 
 ## Update a connection
 
@@ -163,7 +169,7 @@ In **SSO providers**, press **Update** on the connection's row.
 
 Leave **Replacement client secret** blank to keep the current secret. To rename a connection or change a signer's sign-in URL, use the API or the CLI.
 
-[`updateTeamIdentityConnection`](/api/reference/teams/updateteamidentityconnection) accepts `name`, `clientId`, `clientSecret`, `authorizeUrl`, `publicKeys`, and `sessionTtlSeconds`. It accepts `sessionTtlSeconds` from 60 to 86,400. For a signer, Spacefast lowers any value above 1,800 to 1,800. `publicKeys` replaces the whole key set. The `type` and `issuer` cannot change. To change them, create a new connection.
+[`updateTeamIdentityConnection`](/api/reference/teams/updateteamidentityconnection) accepts `name`, `clientId`, `clientSecret`, `authorizeUrl`, `publicKeys`, and `sessionTtlSeconds`. It accepts `sessionTtlSeconds` from 60 to 86,400. For a signer, Spacefast lowers any value above 1,800 to 1,800. `publicKeys` replaces the whole key set. The `type` and `issuer` cannot change.
 
 Grants that use the connection keep working. A change to the client ID, client secret, keys, or session lifetime sets `rotatedAt`.
 
@@ -173,13 +179,20 @@ To rotate a signer key without a sign-in gap:
 2. Sign new proofs with the new key.
 3. Send a key set that holds only the new key.
 
+### Replace a connection
+
+A team can have one active connection per issuer. Revoking a connection also revokes its grants. Plan the order:
+
+- **To move to a new issuer**, create the new connection and its grants first. Then revoke the old connection.
+- **To change the type for the same issuer**, revoke the old connection first, because the new one uses the same issuer. Then create the new connection and add its grants again. Visitors cannot sign in through that issuer until the new grants exist.
+
 ## Revoke a connection
 
 Press **Revoke** on the row, then **Revoke connection** in the dialog. Over HTTP, send [`revokeTeamIdentityConnection`](/api/reference/teams/revoketeamidentityconnection). It answers `204`. From a terminal, run `sf share identity revoke`.
 
 Revoking removes the grants too. Spacefast revokes every grant on the team's Spaces that trusts the connection's issuer, then the connection itself.
 
-A revoked connection stays in [`listTeamIdentityConnections`](/api/reference/teams/listteamidentityconnections) with `revokedAt` set. It cannot be updated. To restore access, create a new connection and new grants.
+A revoked connection stays in [`listTeamIdentityConnections`](/api/reference/teams/listteamidentityconnections) with `revokedAt` set. It cannot be updated. To restore access, create a new connection and add its grants again.
 
 ## Errors
 

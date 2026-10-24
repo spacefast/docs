@@ -110,9 +110,9 @@ To return at once and check later, pass `--no-wait`. The receipt has the build I
 
 ## Finish the move
 
-1. To keep an anonymous copy, open the **Claim** link and pick a team. See [Publish without an account](/anonymous-and-claim).
+1. To keep an anonymous copy, open the **Claim** link and pick a team. An unclaimed copy stops serving after 33 hours and 20 minutes. See [The clock](/anonymous-and-claim#the-clock).
 2. To serve the copy on your own domain, attach the domain to the new Space. See [Custom domains](/domains).
-3. To edit the copy after you claim it, download it with `sf spaces download`. Change the files, then publish them with `sf publish`.
+3. To edit the copy after you claim it, download it with `sf spaces download --space` and the ID from the `Space` line. Change the files, then publish them with `sf publish --space` and the same ID.
 
 ## Errors
 

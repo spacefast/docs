@@ -11,7 +11,7 @@ Every command takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/
 
 Every command needs a credential. Without one, it fails with `validation_error` and exit 2 before any request.
 
-API errors map to exit codes by HTTP status: 401 and 403 exit 10, 404 exits 20, 409 exits 30, and 422 exits 2. The tables below list the codes that commands raise before the request.
+API errors map to exit codes by HTTP status: 401 and 403 exit 10, 404 exits 20, 409 exits 30, and 422 exits 2. The tables below list the codes each command raises, both before the request and from the API.
 
 ## sf connectors ls
 

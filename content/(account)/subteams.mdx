@@ -12,7 +12,7 @@ Subteams need an Enterprise parent team. On every other plan, subteam operations
 ## How subteams work
 
 - **The parent's owners and admins are in every subteam.** They hold the same role there. To change that role, change it on the parent team.
-- **Parent members can join a subteam.** Every subteam appears in **Teams you can join** for parent members. Pressing **Join** makes them a subteam `member`, with no new seat.
+- **Parent members can join a subteam.** A subteam appears in **Teams you can join** for parent members. Pressing **Join** makes them a subteam `member`, with no new seat. A person removed from a subteam does not see it there. An owner or admin of the parent team must add them again.
 - **Seats are shared.** Seats count across the parent and all its subteams. A person in several teams of the family uses one seat.
 - **Subteams do not nest.** A subteam cannot have subteams of its own.
 - **Leaving the parent leaves every subteam.** When someone leaves or is removed from the parent team, they also lose every subteam membership.
@@ -32,8 +32,8 @@ Spacefast creates the subteam and opens it. Its URL slug starts with the parent'
 Over HTTP, send [`createSubTeam`](/api/reference/teams/createsubteam) with a `name` of 1 to 255 characters:
 
 ```bash
-curl https://api.spacefast.com/v1/teams/<team-id>/subteams \
-  -H "Authorization: Bearer sfa_xxxxxxxx" \
+curl "https://api.spacefast.com/v1/teams/$TEAM_ID/subteams" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"name":"Design"}'
 ```
@@ -51,7 +51,7 @@ The **Subteams** page shows the subteams you are in, each with **Open**. Below t
 Send [`updateSubTeam`](/api/reference/teams/updatesubteam) with a new `name`. The slug does not change. From a terminal:
 
 ```bash
-sf teams subteams rename <subteam-id> "Brand design"
+sf teams subteams rename "$SUBTEAM_ID" "Brand design"
 ```
 
 You can also open the subteam and rename it in **Team settings → General**.
@@ -61,9 +61,9 @@ You can also open the subteam and rename it in **Team settings → General**.
 Adding and removing members needs an owner or admin of the parent team.
 
 ```bash
-sf teams subteams members ls <subteam-id>
-sf teams subteams members add <subteam-id> <user-id>
-sf teams subteams members rm <subteam-id> <user-id>
+sf teams subteams members ls "$SUBTEAM_ID"
+sf teams subteams members add "$SUBTEAM_ID" "$USER_ID"
+sf teams subteams members rm "$SUBTEAM_ID" "$USER_ID"
 ```
 
 | Operation | What it does |

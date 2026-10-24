@@ -67,7 +67,8 @@ With `--json`, the output is `{ data, pagination }`. `data` holds the threads in
 | Code | Exit | When |
 | --- | --- | --- |
 | `validation_error` | 2 | `--status` is not `open` or `resolved`, or `--limit` is below 1 |
-| `validation_error` | 2 | `--version` matches no version in the Space |
+| `validation_error` | 2 | `--version` is a ref or a number that matches none of the Space's 100 newest versions |
+| `not_found` | 20 | `--version` is a `ver_` ID that does not exist in the Space |
 
 ## sf comments get
 
@@ -168,7 +169,8 @@ With `--json`, `data` is the new thread in the [`createSpaceVersionComment`](/ap
 | `validation_error` | 2 | `--lines` is not a line or a range, or the range ends before it starts |
 | `validation_error` | 2 | `--file` is combined with `--page` or `--selector`, or `--lines` is passed without `--file` |
 | `validation_error` | 2 | A `--mention` value matches nobody, or matches more than one person |
-| `validation_error` | 2 | `--version` matches no version, or the Space has no versions |
+| `validation_error` | 2 | `--version` is a ref or a number that matches none of the Space's 100 newest versions, or the Space has no versions |
+| `not_found` | 20 | `--version` is a `ver_` ID that does not exist in the Space |
 | `comments_disabled` | 2 | Comments are off for the Space |
 
 ## sf comments reply
@@ -419,7 +421,8 @@ With `--json`, `data` is `{ format, content }`, and `content` is the export as o
 | Code | Exit | When |
 | --- | --- | --- |
 | `validation_error` | 2 | `--format` or `--status` has a value not in the list |
-| `validation_error` | 2 | `--version` matches no version in the Space |
+| `validation_error` | 2 | `--version` is a ref or a number that matches none of the Space's 100 newest versions |
+| `not_found` | 20 | `--version` is a `ver_` ID that does not exist in the Space |
 
 ## sf comments settings
 

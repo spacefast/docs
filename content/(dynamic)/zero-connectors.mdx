@@ -35,13 +35,14 @@ export default capsule({
 
 | Key | Required | What it does |
 | --- | --- | --- |
-| `as` | yes | Whose account the role uses: `team` or `owner` |
-| `connector` | no | The connector slug for the role. The dashboard offers only connections for this connector |
+| `as` | yes | Whose account the role uses: `team`, `owner`, or `visitor` |
+| `connector` | no | The connector slug for the role. The dashboard offers only connections for this connector. A `visitor` role needs it |
 
 | `as` | Account | Condition |
 | --- | --- | --- |
 | `team` | A team connection | The connection allows sites to use it |
 | `owner` | Your own personal connection | The Space is private |
+| `visitor` | Each signed-in visitor's own account | The visitor connects it on the Space. See [Let visitors connect their own account](#let-visitors-connect-their-own-account) |
 
 A role name starts with a lowercase letter and holds only letters and digits, up to 64 characters. The compiler reads the `connectors` map from source without running it, so write it as a literal. A map that is not a literal object of roles fails the publish with "capsule() connectors must be a role map."
 
@@ -55,6 +56,7 @@ The connection must fit the role:
 
 - A `team` role needs a team connection that allows sites to use it. Turn that on with **Allow sites to use this account** in the dashboard, `sf connectors connections edit <connection> --serving`, or [`updateConnection`](/api/reference/connectors/updateconnection) with `serving: true`.
 - An `owner` role needs a personal connection that you created, on a private Space. If the Space stops being private, Spacefast removes its owner bindings.
+- A `visitor` role cannot be bound. Binding one fails with `visitor_role_not_bindable`.
 
 The request must act for a user who can manage the Space. A credential that acts for no user gets `forbidden`.
 
@@ -87,6 +89,25 @@ sf connectors unbind tracker --space my-app --yes
 | [`unbindSpaceConnector`](/api/reference/spaces/unbindspaceconnector) | Removes a role's binding without disconnecting the account |
 
 All three need the `connectors:write` scope.
+
+## Let visitors connect their own account
+
+A `visitor` role calls the service as the signed-in visitor, with that visitor's own account. Nobody on the team binds it, and the dashboard row has no **Bind account** button.
+
+```ts server/index.ts
+connectors: {
+  myTracker: connector({ as: "visitor", connector: "linear-app" }),
+},
+```
+
+1. A call returns `connect_required` until the visitor connects an account.
+2. `ConnectorGate` shows a **Connect** button for that state. The button opens the service's sign-in in a popup.
+3. A visitor who is not signed in to the Space signs in first.
+4. After the service sign-in, the popup closes and the gate runs the call again.
+
+The connector must support OAuth sign-in. Each connection belongs to one visitor, one Space, and one role. For `reconnect_required`, the gate shows **Reconnect** instead.
+
+To disconnect, call `disconnect()` on the result of `useConnectorState(result, role)`. To see who connected, call [`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers). It returns counts and roles per Space user, not the accounts. To disconnect one user, call [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection).
 
 ## Call a role from Zero
 
@@ -135,18 +156,26 @@ To read the state of one result yourself, call `useConnectorState(result)` from 
 
 ## Call a role from a Worker
 
-A [Worker](/functions) gets `env.CONNECTORS` when the version's capsule declares roles or the Space has a binding. To ship a Worker beside a capsule, add a `functions/` directory or a root `handler.ts` to the Zero project. `sf publish` compiles both into one version.
+A [Worker](/functions) gets `env.CONNECTORS` when the version's capsule declares roles or the Space has a binding. To ship a Worker beside a capsule, add a `functions/` directory or a root `handler.ts`, `handler.js`, or `handler.mjs` to the Zero project. `sf publish` compiles both into one version.
 
 The role proxy works as it does in Zero. It resolves to the tool's result and throws a `ConnectorCallError` for any other state.
 
 ```js handler.js
 export default {
   async fetch(request, env) {
-    const issue = await env.CONNECTORS.tracker.issues.create({ title: "Checkout is down" });
-    return Response.json(issue);
+    if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
+    const secret = env.REPORT_SECRET;
+    if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const { title } = await request.json();
+    const issue = await env.CONNECTORS.tracker.issues.create({ title });
+    return Response.json(issue, { status: 201 });
   },
 };
 ```
+
+A `team` role acts with the team's account for every request that reaches the Worker. Call a tool that writes only on a write method, and only after you check the caller. This example requires a secret that you set with `sf env set REPORT_SECRET --value-from-stdin`.
 
 To handle every state without a throw, call `env.CONNECTORS.call(role, tool, args)`. It resolves to `{ state, run }`. Check `state.code` before you read `run`.
 
@@ -173,8 +202,8 @@ Every call ends in one state. `state.message` carries the text below.
 | `ok` | Connected. | The tool ran |
 | `unbound` | The site owner needs to connect this service. | No usable connection is bound to the role, or the Space has no team. An owner binding stops working when its owner leaves the team |
 | `forbidden` | You do not have permission to use this connection. | The bound connection does not fit the role, policy blocks the tool, or a Zero read handler called a tool that writes |
-| `connect_required` | Connect your account to continue. | The bound connection is still waiting for authorization |
-| `reconnect_required` | Reconnect your account to continue. | The bound connection was revoked or needs a new sign-in |
+| `connect_required` | Connect your account to continue. | The bound connection is still waiting for authorization, or the visitor has not connected an account for a `visitor` role |
+| `reconnect_required` | Reconnect your account to continue. | The connection was revoked or needs a new sign-in |
 | `approval_pending` | This action is waiting for approval. | Policy parked the call. `pendingReason` is `approval`, and `approvalUrl` links to the decision |
 | `approval_pending` | Still working on it. Try again in a moment. | The run did not finish within 25 seconds. `pendingReason` is `running` |
 | `unavailable` | This service is unavailable. Try again. | The tool failed for another reason |
@@ -203,6 +232,7 @@ Each call has an idempotency key built from the version, the request id, the han
 | --- | --- |
 | `space_must_be_claimed` | The Space does not belong to a team |
 | `connector_role_unknown` | The live version does not declare the role |
+| `visitor_role_not_bindable` | The role is a `visitor` role. Each visitor connects their own account |
 | `connection_serving_not_granted` | A `team` role got a personal connection, or a team connection that does not allow sites to use it |
 | `owner_binding_requires_private_space` | An `owner` role got a connection that is not your personal one, or the Space is not private |
 | `forbidden` | The credential does not act for a user |
