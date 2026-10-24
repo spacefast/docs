@@ -56,3 +56,14 @@ test("allows only exact Website-owned composition dependencies", () => {
     diagnostics[6],
   ]);
 });
+
+test("allows the declared JSON Schema with Blume's direct-link diagnostic", () => {
+  const diagnostic = (url) => ({
+    code: "BLUME_AUDIT_LINK_TO_BROKEN",
+    severity: "error",
+    message: `Link to ${url} is missing deployment.base (/docs), so the deployed site does not serve it.`,
+  });
+  const schema = diagnostic("https://spacefast.com/schemas/sf.json");
+  const missing = diagnostic("https://spacefast.com/schemas/missing.json");
+  assert.deepEqual(unexpectedAuditErrors([schema, missing], ["/schemas/sf.json"]), [missing]);
+});

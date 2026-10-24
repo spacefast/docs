@@ -67,7 +67,7 @@ Full policy on [Caching](/caching).
 
 Three rules decide this, and your local dev server implements none of them.
 
-Clean URLs are on by default, so `about.html` answers `/about` and `/about/` redirects to `/about` with a 308. A directory serves its `index.html`. A single-page app needs an explicit `fallback` in `sf.jsonc`. The fallback is skipped for around 110 asset extensions, so a missing `.js` returns 404 instead of your HTML shell.
+Clean URLs are on by default, so `about.html` answers `/about` and `/about/` redirects to `/about` with a 308. A directory serves its `index.html`. A single-page app needs an explicit `fallback` in your existing [project configuration](/config-file). The fallback is skipped for around 110 asset extensions, so a missing `.js` returns 404 instead of your HTML shell.
 
 If two files would answer the same URL after that resolution, the publish stops with `publish_path_collision` rather than letting lookup order decide. See [Redirects, rewrites, and headers](/routing).
 
