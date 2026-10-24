@@ -139,6 +139,37 @@ Two groups of variable names never reach a worker, dropped rather than blanked s
 | `DATABASE_URL`, `DATABASE_URI`, `MYSQL_URL`, `MYSQL_URI`, `MYSQL_DSN`, `POSTGRES_URL`, `POSTGRES_URI`, `POSTGRESQL_URL`, `POSTGRESQL_URI` | A worker reaches the database through the broker or not at all |
 | Anything starting with `SPACEFAST_` or `ZERO_` | The platform's own namespace |
 
+## Call connectors and your capsule
+
+Two more bindings appear on `env` when the version needs them. Run `sf functions` for a summary in the CLI.
+
+| Binding | Present when | Calls |
+| --- | --- | --- |
+| `env.CONNECTORS` | The version's capsule declares connector roles, or the Space has a connector binding | A connector role |
+| `env.ZERO` | The version includes a [Zero](/zero-runtime) capsule | The capsule's queries and mutations |
+
+A Zero project ships a Worker when it also has a `functions/` directory or a root `handler.ts`. `sf publish` compiles the capsule and the Worker into one version.
+
+### `env.CONNECTORS`
+
+`env.CONNECTORS.<role>.<tool>(args)` calls a tool through a role and resolves to its result. `env.CONNECTORS.call(role, tool, args)` resolves to `{ state, run }` instead of throwing on a non-`ok` state. See [Call connectors from your Space](/zero-connectors) for roles, bindings, and call states.
+
+### `env.ZERO`
+
+```js handler.js
+export default {
+  async fetch(request, env) {
+    const notes = await env.ZERO.query("notes");
+    await env.ZERO.mutate("addNote", "Written by the Worker");
+    return Response.json(notes);
+  },
+};
+```
+
+`env.ZERO.query(name, ...args)` resolves to the query's data. `env.ZERO.mutate(name, ...args)` resolves to the mutation's return value. There is no call for actions. A failed call throws an `Error` with a `code`. The code is `zero_upstream_unavailable` when the capsule cannot be reached.
+
+Both bindings forward the request's cookie. The runtime verifies the signed Zero identity cookie before it acts for that visitor. When no visitor is signed in, `env.ZERO` runs as the Space's service principal. In the capsule handler, `ctx.auth.userId` is then `service:<spaceId>` and `ctx.auth.provider` is `service`. `ctx.auth.isAuthenticated` is `true`, so a sign-in check alone does not keep the Worker out.
+
 ## Limits
 
 | Limit | Value |

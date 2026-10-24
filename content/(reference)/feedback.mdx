@@ -1,0 +1,131 @@
+---
+title: Send feedback
+description: Tell Spacefast what broke or what is missing, from the CLI, the API, an agent, or the docs, with the error code and request ID attached
+sidebar:
+  order: 5
+---
+
+Every note gets a reference, and a person reads it. The fastest report names what you tried, what happened, and the request ID from the error.
+
+## Send feedback from the CLI
+
+```bash
+sf feedback -m "The continuation docs are unclear" --category docs
+```
+
+```text
+sf feedback -m <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space-id <id>] [--url <url>]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-m, --message=<value>` | required | The feedback itself |
+| `--category=<value>` | `other` | One of `bug`, `docs`, `limit`, `idea`, or `other` |
+| `--error-code=<value>` | none | The `code` of the error you hit |
+| `--request-id=<value>` | none | The `requestId` of the failed request |
+| `--space-id=<value>` | none | The Space the feedback is about |
+| `--url=<value>` | none | A page or URL the feedback is about |
+
+`sf feedback` works without a login. When you are signed in, the note is filed under your account.
+
+The CLI prints the reference:
+
+```text
+Feedback ref: fdb_0123456789abcdef
+Thanks! We read every one.
+```
+
+With `--json`, `data` is `{ "ref": "fdb_…", "status": "stored" }`.
+
+## Attach an error to your feedback
+
+Every API error carries a stable `code` and a `requestId`. Send both, and the team can find the exact failed request.
+
+When an API call fails, the CLI prints the report command for you, with both values filled in:
+
+```text
+To report this: sf feedback --error-code space_unclaimed --request-id 00000000-0000-4000-8000-000000000000 --message "Describe what happened"
+```
+
+With `--json`, the same line is the last entry of `error.suggestions`, and the values are in `error.code` and `error.requestId`. Copy the command, replace the message, and run it.
+
+```bash
+sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id 00000000-0000-4000-8000-000000000000
+```
+
+The dashboard shows the same values. An error screen lists the code, the HTTP status, and the request ID under **Error details**. **Copy** puts them on the clipboard with the page URL.
+
+## Read back what you sent
+
+```bash
+sf feedback list
+sf feedback list --limit 5 --json
+sf feedback get fdb_0123456789abcdef
+```
+
+`sf feedback list` shows your notes, newest first, as a `REF | CATEGORY | SENT | MESSAGE` table. The message column shows the first 60 characters. `--limit` defaults to 20, with a maximum of 100. With nothing sent, it prints "No feedback sent yet."
+
+`sf feedback get` prints one note in full: the reference, the category, the time sent, any context, and the message.
+
+Only the person who sent a note can read it. Sign in with `sf login` or the dashboard first. Feedback sent without a login cannot be read back.
+
+## Send feedback through the API
+
+[`createFeedback`](/api/reference/spaces/createfeedback) takes the same fields as the CLI. It needs no credential.
+
+```bash
+curl -X POST https://api.spacefast.com/v1/feedback \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Publish failed after claim","category":"bug","context":{"errorCode":"space_claimed_credential_available","requestId":"00000000-0000-4000-8000-000000000000"}}'
+```
+
+The response is `201` with `{ "data": { "ref": "fdb_…" } }`. The body can also be form-encoded or multipart.
+
+| Field | Required | Limits |
+| --- | --- | --- |
+| `message` | yes | 1 to 4,000 characters after trimming |
+| `category` | no | `bug`, `docs`, `limit`, `idea`, or `other`. Default `other` |
+| `context.errorCode` | no | 1 to 128 characters |
+| `context.requestId` | no | 1 to 128 characters |
+| `context.spaceId` | no | 1 to 128 characters |
+| `context.url` | no | An `http` or `https` URL, up to 2,000 characters |
+
+Spacefast identifies the sender from the credential on the request:
+
+| Credential | Sender |
+| --- | --- |
+| A login, or an API key a person created | That person |
+| A space key (`sfc_…`) | The unclaimed Space the key belongs to |
+| None | Anonymous |
+
+To read notes back, call [`listFeedback`](/api/reference/spaces/listfeedback) (`limit` 1 to 100, default 20) or [`getFeedback`](/api/reference/spaces/getfeedback) with the reference. Both need a credential that acts for the person who sent the note.
+
+## Send feedback from an agent
+
+Agents call the same `createFeedback` operation. On the [MCP server](/agents/mcp-server), the operation runs through `execute`. From a terminal, the agent runs `sf feedback`.
+
+The Spacefast agent instructions tell an agent to ask you once, after a task with friction, whether to send feedback. If you agree, the agent sends later notes in the same conversation without asking again and tells you what it sent. If you decline, it does not ask again. The agent includes the error code and request ID when it has them, and never includes credentials or private links.
+
+## Rate a docs page
+
+Each docs page ends with **Was this page helpful?** and the buttons **Yes** and **No**. To suggest a fix to the text, choose **Edit on GitHub** on the page.
+
+## Get help in the dashboard
+
+To talk to a person, choose **Support** in the dashboard sidebar. It opens chat, or an email to `support@spacefast.com` when chat is not available. Error screens have a **Contact support** button that does the same.
+
+## Limits and errors
+
+| Sender | Limit |
+| --- | --- |
+| Signed-in account | 100 notes per hour |
+| Space key | 50 notes per hour for each Space |
+| Anonymous | 5 notes per hour for each IP address |
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | The message is empty or too long, a context field is out of range, or the category is unknown |
+| `rate_limited` | 1 | You reached the limit for your sender type. Wait for the `Retry-After` time |
+| `unauthorized` | 10 | `sf feedback list` or `get` with no credential |
+| `forbidden` | 10 | `sf feedback list` or `get` with a space key, team key, OAuth client key, or partner key |
+| `not_found` | 20 | The reference does not exist, or another person sent it |

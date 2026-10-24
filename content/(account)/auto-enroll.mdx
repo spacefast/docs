@@ -1,0 +1,76 @@
+---
+title: Allowed email domains
+description: Let people with a verified company email address find and join your team without an invitation
+---
+
+An allowed email domain offers your team to anyone whose verified email address is at that domain. Spacefast never adds anyone automatically. A person becomes a member only when they press **Join**.
+
+Only owners and admins can add or remove domains. An OAuth token needs the `teams:members.write` scope, including to list them.
+
+## Add a domain
+
+1. Open the team and go to **Members**.
+2. Press **Allowed domains**. The **Allowed email domains** dialog opens.
+3. Type the domain, for example `example.com`.
+4. Press **Add domain**.
+
+Over HTTP, send [`createTeamAutoEnrollEntry`](/api/reference/teams/createteamautoenrollentry):
+
+```bash
+curl https://api.spacefast.com/v1/teams/<team-id>/auto-enroll \
+  -H "Authorization: Bearer sfa_xxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"value":"example.com"}'
+```
+
+The `201` response holds the entry: `id`, `teamId`, `kind` (always `domain`), `value`, and `createdAt`. Adding a domain the team already has returns the existing entry. [`listTeamAutoEnrollEntries`](/api/reference/teams/listteamautoenrollentries) returns all entries, newest first.
+
+The credential must act for a person. A key or token with no user behind it gets `forbidden`.
+
+## Which domains Spacefast accepts
+
+A domain is accepted when all of these are true:
+
+- **A current member already uses it.** At least one member of this team must have a verified email address at exactly that domain. A subdomain does not count.
+- **It is a domain, not an address.** A value with `@` is refused. Invite that person by email instead.
+- **It is a registrable domain.** IP addresses, single labels such as `localhost`, and public suffixes such as `co.uk` are refused.
+- **It is not a shared mailbox provider.** These are refused: `gmail.com`, `googlemail.com`, `outlook.com`, `hotmail.com`, `live.com`, `yahoo.com`, `proton.me`, `protonmail.com`, `icloud.com`, `me.com`, `aol.com`, `mail.com`, `gmx.com`, and `wordpress.com`.
+
+Spacefast stores the canonical form: lowercase ASCII, with international names converted to their `xn--` form. `Bücher.de` becomes `xn--bcher-kva.de`. Matching uses the same form, so either spelling works for people who join.
+
+## What a person sees
+
+A signed-in person with a verified address at the domain sees your team in **Teams you can join** on the **Teams** page. The row reads **Your email domain matches**. Their team's Spaces page also shows a **Teams you can join** notice with **View teams**.
+
+Every verified address on the account counts, including secondary addresses. The account does not need to use that address to sign in.
+
+Pressing **Join** makes them a member with the `member` role. Owners and admins can change the role later on **Members**. Joining needs a signed-in browser session. An API key or an agent cannot join for a person. The API operation is [`joinTeam`](/api/reference/teams/jointeam).
+
+## Seats and billing
+
+A person who joins through a domain takes a seat like any other member. On Plus, members beyond the included 10 are billed as extra seats.
+
+Free and Go allow one member, the owner. On those plans, **Join** fails with `team_member_quota_exceeded`, so nobody can join until the team moves to Plus. See [Seats](/billing#seats).
+
+## Remove a domain
+
+In **Allowed email domains**, press the remove button next to the domain. Confirm with **Remove domain**.
+
+Over HTTP, send [`deleteTeamAutoEnrollEntry`](/api/reference/teams/deleteteamautoenrollentry) with the entry `id`. It answers `204`.
+
+- **Existing members stay.** Removing a domain changes no membership and no role.
+- **New people need an invitation.** The team stops appearing in their **Teams you can join** list.
+
+To take access away from someone who joined through a domain, remove them on **Members**. See [Teams and members](/teams#change-a-role-or-remove-someone).
+
+A member you remove cannot rejoin through the domain. To bring them back, send an invitation. A member who leaves on their own can rejoin through the domain.
+
+## Errors
+
+| Code | Status | Meaning |
+| --- | --- | --- |
+| `invalid_domain_name` | 422 | The value is not a registrable domain. IP addresses and public suffixes land here |
+| `validation_error` | 422 | `details.reason` says why. `email_not_supported`: the value is an email address. `domain_not_allowed`: the domain is a shared mailbox provider. `domain_not_represented`: no member has a verified address there |
+| `not_found` | 404 | The entry does not exist or belongs to another team |
+| `forbidden` | 403 | Your role cannot manage members, or the credential has no person behind it |
+| `team_member_quota_exceeded` | 409 | A person pressed **Join** while the team was at its member limit |

@@ -1,0 +1,510 @@
+---
+title: sf comments
+description: List, read, start, reply to, react to, resolve, and export comment threads, and set where Comments run
+sidebar:
+  order: 13
+---
+
+`sf comments` works with a Space's comment threads and its Comments settings. For what Comments do and who can comment, see [Comments](/comments).
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+`sf comments` with no subcommand prints the help for the group.
+
+Comments need a claimed Space that belongs to a team, with **Page enhancements** on. `create`, `reply`, `react`, `unreact`, `mark-read`, `resolve`, and `reopen` need a credential that acts as a person.
+
+## Common arguments and values
+
+| Value | What it is |
+| --- | --- |
+| `<comment>` | A thread ID, for example `cmt_123` |
+| `--version=<value>` | A version ID (`ver_...`), a ref such as `v3`, or a number. `3` matches `v3`. A ref or a number must be in the Space's 100 newest versions, or the command fails with `validation_error` (exit 2). An unknown `ver_` ID fails with `not_found` (exit 20) |
+| `--status=<value>` | `open` or `resolved` |
+
+The API names the resolved state `archived`. The CLI translates `resolved` to `archived` in requests, and `--json` output keeps `archived`.
+
+## sf comments list
+
+List comment threads across a Space. Aliased as `sf comments ls`. Listing never marks a thread read.
+
+```text
+sf comments list [--status open|resolved] [--unread] [--path <value>] [--version <value>]
+  [--author <value>] [--search <value>] [--limit <n>] [--space <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--status=<value>` | both | Only `open` or only `resolved` threads |
+| `--unread` | `false` | Only threads with comments you have not read |
+| `--path=<value>` | none | Only threads on this page or file path, for example `/pricing` |
+| `--version=<value>` | none | Only threads left on this version |
+| `--author=<value>` | none | Only threads started by this author name |
+| `--search=<value>` | none | Only threads whose text contains this |
+| `--limit=<n>` | every thread | Maximum threads to return. Minimum 1 |
+
+Without `--limit`, the command reads every page of results.
+
+```bash
+sf comments list --unread
+sf comments list --status open --path /pricing
+sf comments list --version v3
+```
+
+### Output
+
+A table of `ID | STATUS | ON | REPLIES | COMMENT`. Open threads come first. An unread open thread has `●` in front of its ID. `ON` is the anchor: `page <path>`, `element <selector> on <path>`, or `file <path>:<lines>`. `COMMENT` is the first 60 characters of the body.
+
+With `--limit`, `More threads match. Raise --limit to see them.` follows the table when more threads match.
+
+With no threads: `No comments found.`, or `You're all caught up.` with `--unread`.
+
+With `--json`, the output is `{ data, pagination }`. `data` holds the threads in the [`listSpaceComments`](/api/reference/spaces/listspacecomments) shape. `pagination` is `{ nextCursor, hasMore }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--status` is not `open` or `resolved`, or `--limit` is below 1 |
+| `validation_error` | 2 | `--version` matches no version in the Space |
+
+## sf comments get
+
+Show one thread with its replies and reactions. Reading a thread does not mark it read.
+
+```text
+sf comments get <comment> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+
+No command-specific flags.
+
+```bash
+sf comments get cmt_123
+```
+
+### Output
+
+```text
+cmt_123  open  unread
+On: element #hero-title on /
+Author: Ana, 2026-10-12 17:03 UTC
+Page: <version URL of the page>
+Open: <dashboard link to the thread>
+Reactions: 👍 2
+
+<body>
+
+Milo replied 2026-10-12 17:20 UTC:
+<reply body>
+```
+
+Lines without a value are left out. `unread` shows only on an open thread. A thread or reply with files lists them under `Attachments:` as name, size, and kind. Attachment URLs appear only in `--json` output.
+
+With `--json`, `data` is the thread in the [`getSpaceComment`](/api/reference/spaces/getspacecomment) shape.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments create
+
+Start a comment thread on a page, an element on a page, or a file. The thread goes on the live version unless `--version` picks another.
+
+```text
+sf comments create --body <value> [--page <path>] [--selector <css>] [--file <path>]
+  [--lines <n>|<n>-<m>] [--mention <value>]... [--version <value>]
+  [--idempotency-key <value>] [--space <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--body=<value>` | required | What the comment says. 1 to 16,000 characters |
+| `--page=<path>` | `/` | Page path to comment on. A missing leading `/` is added |
+| `--selector=<css>` | none | CSS selector of the element to pin the comment to |
+| `--file=<path>` | none | File path to comment on, for example `src/app.js` |
+| `--lines=<value>` | none | A line such as `7` or a range such as `7-14` in `--file`. Lines start at 1 |
+| `--mention=<value>` | none | Teammate to notify, by email, name, or user ID. Repeatable |
+| `--version=<value>` | the live version | Version to comment on |
+| `--idempotency-key=<value>` | none | Stable key for retrying this comment safely |
+
+`--file` cannot be combined with `--page` or `--selector`. `--lines` needs `--file`.
+
+Without `--version`, the thread goes on the live version. If nothing is live, it goes on the newest ready version.
+
+`--mention` matches the email, the name, or the user ID of a person whom the `listSpaceCommentMentionable` operation lists. Case does not matter, and a leading `@` is ignored.
+
+```bash
+sf comments create --page /pricing --body "The annual price is wrong."
+sf comments create --page / --selector "#hero-title" --body "Too long for mobile."
+sf comments create --file src/app.js --lines 7-14 --body "This loop never ends."
+sf comments create --page /about.html --body "Can you check the photos?" --mention milo@example.com
+```
+
+### Output
+
+```text
+Thread started on page /pricing.
+ID: cmt_123
+Open: <dashboard link to the thread>
+```
+
+With `--json`, `data` is the new thread in the [`createSpaceVersionComment`](/api/reference/versions/createspaceversioncomment) shape.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--lines` is not a line or a range, or the range ends before it starts |
+| `validation_error` | 2 | `--file` is combined with `--page` or `--selector`, or `--lines` is passed without `--file` |
+| `validation_error` | 2 | A `--mention` value matches nobody, or matches more than one person |
+| `validation_error` | 2 | `--version` matches no version, or the Space has no versions |
+| `comments_disabled` | 2 | Comments are off for the Space |
+
+## sf comments reply
+
+Reply to a comment thread.
+
+```text
+sf comments reply <comment> --body <value> [--mention <value>]...
+  [--idempotency-key <value>] [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--body=<value>` | required | What the reply says. 1 to 16,000 characters |
+| `--mention=<value>` | none | Teammate to notify, by email, name, or user ID. Repeatable |
+| `--idempotency-key=<value>` | none | Stable key for retrying this reply safely |
+
+```bash
+sf comments reply cmt_123 --body "Fixed in v4."
+sf comments reply cmt_123 --body "Over to you." --mention milo@example.com
+```
+
+### Output
+
+`Reply posted on <comment>.`
+
+With `--json`, `data` is `{ status, comment }`. `status` is `inserted`, or `existing` when the idempotency key already created this reply. `comment` is the reply in the shape of a thread's `comments` entries.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | A `--mention` value matches nobody, or matches more than one person |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments react
+
+React to a comment thread with an emoji.
+
+```text
+sf comments react <comment> <emoji> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+| `<emoji>` | Required. A name or the emoji itself. See the table below |
+
+| Name | Emoji |
+| --- | --- |
+| `thumbsup` | 👍 |
+| `heart` | ❤️ |
+| `tada` | 🎉 |
+| `eyes` | 👀 |
+| `rocket` | 🚀 |
+| `pray` | 🙏 |
+
+No command-specific flags.
+
+```bash
+sf comments react cmt_123 thumbsup
+sf comments react cmt_123 🎉
+```
+
+### Output
+
+`Reacted <emoji> on <comment>.`, then `Reactions: <emoji> <count> ...` with the thread's reaction counts.
+
+With `--json`, `data` is the thread in the [`updateSpaceCommentReaction`](/api/reference/spaces/updatespacecommentreaction) shape.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<emoji>` is not one of the six reactions. Raised before the request |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments unreact
+
+Take back your emoji reaction on a comment thread.
+
+```text
+sf comments unreact <comment> <emoji> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+| `<emoji>` | Required. The reaction to take back, by name or emoji, as for `sf comments react` |
+
+No command-specific flags.
+
+```bash
+sf comments unreact cmt_123 thumbsup
+```
+
+### Output
+
+`Took back <emoji>.`, then the `Reactions:` line if the thread still has reactions.
+
+With `--json`, `data` is the thread.
+
+### Errors
+
+The same as `sf comments react`.
+
+## sf comments mark-read
+
+Mark a comment thread read for you. The thread then leaves `sf comments list --unread`.
+
+```text
+sf comments mark-read <comment> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+
+No command-specific flags.
+
+```bash
+sf comments mark-read cmt_123
+```
+
+### Output
+
+`Marked <comment> read.`
+
+With `--json`, `data` is the thread with `unread: false` and `unreadCount: 0`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments resolve
+
+Mark a comment thread resolved. The thread leaves the open list and keeps every reply.
+
+```text
+sf comments resolve <comment> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+
+No command-specific flags.
+
+```bash
+sf comments resolve cmt_123
+```
+
+### Output
+
+`Resolved <comment>.`
+
+With `--json`, `data` is the thread with `status: "archived"`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments reopen
+
+Reopen a resolved comment thread.
+
+```text
+sf comments reopen <comment> [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<comment>` | Thread ID, for example `cmt_123`. Required |
+
+No command-specific flags.
+
+```bash
+sf comments reopen cmt_123
+```
+
+### Output
+
+`Reopened <comment>.`
+
+With `--json`, `data` is the thread with `status: "open"`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `not_found` | 20 | No thread has this ID, or Comments are off |
+
+## sf comments export
+
+Export comment threads as Markdown or JSON, for agents and scripts. The export holds every thread that matches. It does not page.
+
+```text
+sf comments export [--format markdown|json] [--status open|resolved] [--version <value>]
+  [--space <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--format=<value>` | `markdown` | `markdown` or `json` |
+| `--status=<value>` | both | Only `open` or only `resolved` threads |
+| `--version=<value>` | every version | Only threads left on this version |
+
+```bash
+sf comments export --status open --format markdown
+sf comments export --version v3 --status open --format json
+```
+
+### Output
+
+The command writes the export to standard output.
+
+- Markdown starts with `# Spacefast comments`. Each thread is a `## <id> <open|resolved>` section with `- Page:`, `- URL:`, `- Permalink:`, `- Author:`, `- Viewport:`, `- Selectors:`, and `- Attachment:` lines where they have values. The body follows, then one `- Reply by <name>: <body>` line per reply. With no threads, the body is `No comments found.`
+- JSON is `{ "data": [...] }` with the threads in the `sf comments list --json` shape.
+
+With `--json`, `data` is `{ format, content }`, and `content` is the export as one string.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--format` or `--status` has a value not in the list |
+| `validation_error` | 2 | `--version` matches no version in the Space |
+
+## sf comments settings
+
+Show where Comments run for a Space and which other sites can embed them.
+
+```text
+sf comments settings [--space <value>]
+```
+
+No command-specific flags.
+
+```bash
+sf comments settings
+```
+
+### Output
+
+```text
+Comments: previews — version previews only
+Sites allowed to embed: none
+Revision: 3
+```
+
+The first line is one of these:
+
+| Setting | Meaning |
+| --- | --- |
+| `off` | Nobody can comment |
+| `previews` | Version previews only |
+| `everywhere` | Version previews and the live Space |
+
+With `--json`, `data` is the [`getSpaceCollaboration`](/api/reference/spaces/getspacecollaboration) response: `{ spaceId, revision, castResourceId, castResourceKey, settings, createdAt, updatedAt }`. `settings` holds `surface`, `embedOrigins`, and, when set, `spamFilterEnabled` and `notificationPreferences`.
+
+## sf comments settings set
+
+Change where Comments run and which other sites can embed them. The change applies without a republish.
+
+```text
+sf comments settings set [--surface off|previews|everywhere] [--embed-allow <origin>]...
+  [--embed-remove <origin>]... [--space <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--surface=<value>` | unchanged | `off`, `previews`, or `everywhere` |
+| `--embed-allow=<origin>` | none | Allow this site to embed the Space's Comments. Repeatable |
+| `--embed-remove=<origin>` | none | Remove this site from the embed list. Repeatable |
+
+Pass at least one flag. An origin is one exact `https` origin, for example `https://docs.example.com`. Wildcards and paths are refused. A Space takes up to 20 origins. Allowing a site that is already on the list changes nothing.
+
+The command asks for confirmation before it turns Comments off, adds a site, or removes a site. An allowed site can create commenters without an account in this Space. In a non-interactive shell or in agent mode, pass `--yes`.
+
+```bash
+sf comments settings set --surface everywhere
+sf comments settings set --embed-allow https://docs.example.com
+sf comments settings set --embed-remove https://docs.example.com --yes
+```
+
+### Output
+
+`Comments settings updated.`, then the three lines that `sf comments settings` prints.
+
+With `--json`, `data` is the updated settings in the `sf comments settings --json` shape.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | No flag passed. Raised before the request |
+| `validation_error` | 2 | An origin is not one exact `https` origin. Raised before the request |
+| `validation_error` | 2 | One origin is passed to both `--embed-allow` and `--embed-remove`. Raised before the request |
+| `validation_error` | 2 | An `--embed-remove` origin is not on the list |
+| `validation_error` | 2 | The list would hold more than 20 origins |
+| `confirmation_required` | 2 | The change needs confirmation, and there is no terminal or the CLI is in agent mode. Pass `--yes` |
+| `cancelled` | 130 | You declined the prompt |
+| `resource_revision_changed` | 30 | Someone changed the settings while the command ran. Run it again |
+
+## Errors for every command
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `team_required` | 2 | The Space does not belong to a team |
+| `comments_disabled` | 2 | **Page enhancements** is off for the Space |
+| `forbidden` | 10 | The command changes a thread, and the credential does not act as a person |
+
+The full command reference is at [/cli/reference](/cli/reference).

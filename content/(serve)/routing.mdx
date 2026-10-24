@@ -6,6 +6,8 @@ sidebar: { order: 3 }
 
 You can redirect, rewrite, proxy, and set response headers on a published Space. Redirect rules run in order, while matching header blocks accumulate. Rewrites and 404 rules can yield to real files.
 
+To block, challenge, or skip the cache for requests, see [Traffic rules](/traffic-rules).
+
 Nothing here is evaluated per request. Spacefast compiles your rules at publish time into a table the edge reads, so a rule that behaves unexpectedly is almost always a compile-time problem. `sf routing inspect` shows you the compiled result before you publish.
 
 ## Three sources, one order

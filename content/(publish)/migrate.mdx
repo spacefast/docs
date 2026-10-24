@@ -1,0 +1,131 @@
+---
+title: Copy a website
+description: Capture a public website with sf migrate, publish it as a static Space, and finish the move with a claim and a domain
+sidebar:
+  order: 3.5
+---
+
+`sf migrate` takes the URL of a live website and publishes a static copy of it to a new Space. It does not read your current directory, and the result is a new Space every time.
+
+## Copy a site
+
+```bash
+sf migrate https://example.com
+```
+
+The CLI starts a capture build, follows it until the copy is published, and prints the result. A capture takes a while. The build can run for up to 75 minutes, and the CLI waits 15 minutes by default. To wait for the whole capture, raise the timeout:
+
+```bash
+sf migrate https://example.com --wait-timeout 4500
+```
+
+```text
+sf migrate URL [--team <value>] [--name <value>] [--idempotency-key <value>]
+  [--wait | --no-wait] [--wait-timeout <seconds>] [--show-secret]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `URL` | The public `https://` address of the site to copy. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--team=<value>` | default team | Team that receives the new Space. Requires a login or `--token` |
+| `--name=<value>` | source hostname | Title of the new Space |
+| `--idempotency-key=<value>` | new key | Recover an earlier attempt. See [Recover an attempt](#recover-an-attempt) |
+| `--wait` / `--no-wait` | `--wait` | Wait until the copy is published before returning |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for the capture and the publish. Minimum 1 |
+| `--show-secret` | off | Print the **Open** and **Claim** links in JSON or non-interactive output |
+
+The global flags (`--api-url`, `--profile`, `--token`, `-y`, `--json`) also apply. See [the CLI overview](/cli).
+
+## Choose what the URL can be
+
+The URL must:
+
+- use `https://`
+- have no user name, password, or `#fragment`
+- resolve to a public address, not `localhost` or a private or loopback IP address
+- not be a Spacefast hostname
+- be at most 2,048 characters long
+
+## Know what the copy contains
+
+The capture renders the site as portable HTML and publishes those files as a static Space. If the capture produces no HTML file, the build fails.
+
+The copy is static files only. Server-side code, accounts, stored data, and domains stay with the old site.
+
+Without a login, the copy publishes as an anonymous Space and gets the anonymous limits:
+
+| Limit | Value |
+| --- | --- |
+| Files | 1,000 |
+| Size of one file | 50 MB |
+| Total size | 100 MB |
+
+If the copy is larger, the build fails with the matching code. To lift these limits, sign in and run `sf migrate` again. The copy then publishes to your team under its plan's limits. See [Limits](/limits).
+
+## Read the result
+
+Progress goes to stderr. The result goes to stdout:
+
+```text
+Space          spc_0123456789abcdef
+Build          bld_0123456789abcdef (succeeded)
+Status         https://api.spacefast.com/v1/builds/bld_0123456789abcdef/receipt
+Replay key     5f0c6a1e-8a51-4c3b-9d1e-2a7f4b6c8d90
+Open           https://swift-otter-4821.space.fast/...
+Capture        {"state":"preview_ready",...}
+```
+
+| Line | What it is |
+| --- | --- |
+| `Space` | The new Space ID |
+| `Build` | The capture build ID and its status |
+| `Status` | The URL that reports the build receipt |
+| `Replay key` | The idempotency key for this attempt |
+| `Open` | A link that opens the copy, or `Pending publication` |
+| `Claim` | The claim link. Anonymous copies only |
+| `Capture` | Capture progress and quality evidence |
+
+New Spaces are private. Use the **Open** link, or share the copy with [Access and sharing](/access). An unmeasured visual comparison in `Capture` is not a passing comparison. Open the copy and check it yourself.
+
+With `--json`, `data` is the build receipt plus `idempotencyKey`. The receipt carries `space`, `build`, `next`, `links`, and, when they exist, `version`, `access`, `claim`, and `diagnostics`. JSON and non-interactive output replace the access link, the claim link, and `access.token` with `[REDACTED]`. Pass `--show-secret` to print them. The space key in `claim.key` is always masked.
+
+## Recover an attempt
+
+Each run of `sf migrate` starts a new migration. To continue an earlier attempt instead, repeat it with the key from `Replay key`:
+
+```bash
+sf migrate https://example.com --idempotency-key 5f0c6a1e-8a51-4c3b-9d1e-2a7f4b6c8d90
+```
+
+Use the same URL, `--team`, `--name`, and credential as the first run. The CLI keeps each attempt under `~/.spacefast/migrations/`, and a repeat with matching inputs resumes it without a new capture. When a run fails after the request starts, the error prints the repeat command.
+
+To return at once and check later, pass `--no-wait`. The receipt has the build ID. Follow it with [`sf builds logs`](/cli/builds), or repeat the run with the key.
+
+## Finish the move
+
+1. To keep an anonymous copy, open the **Claim** link and pick a team. See [Publish without an account](/anonymous-and-claim).
+2. To serve the copy on your own domain, attach the domain to the new Space. See [Custom domains](/domains).
+3. To edit the copy after you claim it, download it with `sf spaces download`. Change the files, then publish them with `sf publish`.
+
+## Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | The URL is not `https://`, carries credentials or a fragment, or does not parse. Raised before the request |
+| `validation_error` | 2 | `--team` without a login or `--token`, or no team matches it |
+| `invalid_publish_payload` | 2 | The API refused the URL, for example a Spacefast hostname or `localhost` |
+| `egress_target_denied` | 2 | The hostname resolves to a private, loopback, or other blocked address |
+| `egress_target_unresolvable` | 2 | The hostname does not resolve |
+| `build_failed` | 1 | The capture did not publish. `details.captureCode` names the capture failure |
+| `manifest_too_many_files` | 1 | The copy has more files than the limit |
+| `version_file_too_large` | 1 | One file in the copy is over the limit |
+| `version_total_bytes_exceeded` | 1 | The copy is over the total size limit |
+| `timeout_error` | 50 | `--wait-timeout` ran out before the build finished. Repeat with the key |
+| `migration_state_invalid` | 2 | The saved attempt file for this key cannot be read. Repair it, or run without the key to start over |

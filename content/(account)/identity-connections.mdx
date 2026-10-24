@@ -1,0 +1,205 @@
+---
+title: Identity connections
+description: Connect an OIDC provider or your own signer to a team, then admit its people to Spaces with grants
+---
+
+An identity connection lets visitors prove who they are with a sign-in system you already run. The connection admits no one by itself. A Space admits a person only through a grant that names the connection and that person's subject.
+
+| Type | `type` | Use it when | You provide |
+| --- | --- | --- | --- |
+| **OpenID Connect** | `oidc` | Your company signs people in through an OIDC provider | Issuer, client ID, and client secret |
+| **White-label signer** | `signer` | You run your own portal and sign each visitor's identity yourself | Issuer, sign-in URL, and Ed25519 public keys |
+
+Owners and admins create, update, and revoke connections. Every team member can list them. An OAuth token needs the `teams:create` scope to change a connection and `teams:read` to list them.
+
+## Register Spacefast with your OIDC provider
+
+To use `oidc`, register Spacefast in your provider first as a web app with a client secret. Use these values:
+
+| Setting | Value |
+| --- | --- |
+| Redirect URI | `https://api.spacefast.com/identity/callback` |
+| Grant type | Authorization code. Spacefast also sends a PKCE `S256` challenge and a nonce |
+| Client authentication | HTTP Basic (`client_secret_basic`) |
+| Scopes | `openid email profile` |
+| ID token algorithms | `RS256`, `PS256`, `ES256`, or `EdDSA` |
+
+Spacefast reads `<issuer>/.well-known/openid-configuration` over HTTPS. The `issuer` value in that document must match the issuer you enter. If your tenant sets `presentation.accessHandoffOrigin`, the redirect URI is `/identity/callback` on that origin instead. See [Partner API configuration](/platforms/partner-api/configuration).
+
+## Add a connection in the dashboard
+
+1. Open the team and go to **Team settings → Access**.
+2. In **SSO providers**, press **Add identity provider**. The **Add SSO provider** dialog opens.
+3. Pick a **Connection type**: **OpenID Connect** or **White-label signer**.
+4. Enter a **Name** and the **Issuer**.
+5. For OpenID Connect, enter the **Client ID** and **Client secret**.
+6. For a signer, enter the **Sign-in URL**. Add the **Ed25519 public keys**, one `kid:base64url-key` per line.
+7. Press **Add connection**.
+
+The connection appears as a row with an **OIDC** or **Signer** badge and its issuer.
+
+## Add a connection with the API or CLI
+
+Send [`createTeamIdentityConnection`](/api/reference/teams/createteamidentityconnection):
+
+```bash
+curl https://api.spacefast.com/v1/teams/<team-id>/identity-connections \
+  -H "Authorization: Bearer sfa_xxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{"type":"oidc","name":"Acme SSO","issuer":"https://login.example.com","clientId":"<client-id>","clientSecret":"<client-secret>"}'
+```
+
+A signer body uses `authorizeUrl` and `publicKeys` instead of the client fields:
+
+```json
+{
+  "type": "signer",
+  "name": "Customer portal",
+  "issuer": "https://portal.example.com",
+  "authorizeUrl": "https://portal.example.com/spacefast/authorize",
+  "publicKeys": [{ "kid": "2026-01", "publicKey": "<43-character-base64url-key>" }]
+}
+```
+
+The `201` response holds the connection. Its `id` starts with `acn_`, and grants use that ID. A team can have one active connection per issuer. From a terminal, run `sf share identity create`. See [`sf share`](/cli/share#sf-share-identity-create).
+
+| Field | Applies to | Rules |
+| --- | --- | --- |
+| `type` | Both | `oidc` or `signer` |
+| `name` | Both | 1 to 200 characters |
+| `issuer` | Both | An absolute HTTPS URL, up to 1,024 characters. No user info and no fragment. Spacefast removes trailing slashes |
+| `clientId` | `oidc` | Up to 512 characters |
+| `clientSecret` | `oidc` | Up to 2,048 characters. Write-only. Responses show only `clientSecretSet` |
+| `authorizeUrl` | `signer` | An absolute HTTPS URL, up to 2,048 characters. No user info and no fragment |
+| `publicKeys` | `signer` | 1 to 5 entries of `kid` and `publicKey`. Each `kid` is unique and up to 64 characters. `publicKey` is a raw Ed25519 public key, base64url, 43 characters |
+| `sessionTtlSeconds` | Both | Optional. `oidc`: 60 to 86,400, default 28,800. `signer`: 60 to 1,800, default 1,800 |
+
+## Admit people to a Space
+
+The connection proves identity. A grant on the Space decides what that identity can open.
+
+To add a grant in the dashboard, open the Space and go to **Access**. Open **Advanced**, then find **SSO and identity**. Pick the **Connection**, then fill in **Subject**, **Name**, **Paths**, and an optional **Expires**. Choose **What this identity can do** and press **Add identity grant**. If the team has no connection, the card shows **No SSO provider**.
+
+From a terminal, run `sf share identity grant`:
+
+```bash
+sf share identity grant --connection acn_xxxxxxxx --subject alex@example.com --name "Alex (Acme SSO)" --path '/docs/**' --space my-site
+```
+
+Over HTTP, send [`createSpaceGrant`](/api/reference/spaces/createspacegrant) with an `external` audience:
+
+```json
+{
+  "name": "Alex (Acme SSO)",
+  "audience": { "kind": "external", "connectionId": "acn_xxxxxxxx", "subject": "alex@example.com" },
+  "resources": { "include": ["/docs/**"] },
+  "capabilities": ["page.view"],
+  "target": { "kind": "live" }
+}
+```
+
+- **The subject must equal the `sub` claim.** Spacefast compares it exactly. It holds up to 255 characters.
+- **A name is required.** Spacefast stores the subject as a hash, so the grant list cannot show it.
+- **The connection must belong to the Space's team.** The Space must be claimed.
+- **Verified email follows the provider.** A grant that requires a verified email admits an OIDC visitor only when the ID token has `email_verified: true`. A signer proof never counts as a verified email.
+
+Roles, paths, and targets work as they do for every other grant. See [Access and sharing](/access).
+
+A visitor who cannot open a page sees the Space's access page. It shows **Continue with** and the connection name for each connection that an active grant on that Space trusts. A connection with no grant on the Space does not appear there.
+
+## Build a signer
+
+A `signer` connection sends visitors to your portal, and your portal vouches for them. The round trip has four steps:
+
+1. The visitor presses **Continue with** on the access page. Spacefast redirects the browser to your `authorizeUrl` with the query parameters below.
+2. Your portal signs the visitor in and signs a proof token.
+3. Your server sends the proof to Spacefast and receives a short-lived token.
+4. Your portal sends the browser to `https://<host>/__sf/redeem?sf_token=<token>&return=<return>`. The Space sets a session cookie and opens the page.
+
+| Query parameter | What it holds |
+| --- | --- |
+| `spaceId` | The Space the visitor is opening |
+| `host` | The hostname the visitor is on. The proof's `aud` must equal it |
+| `return` | The path to open after sign-in |
+| `browserState` | A 64-character hex value that binds the sign-in to this browser. Send it back unchanged |
+
+### The proof token
+
+The proof is a JWT signed with one of the Ed25519 keys on the connection.
+
+| Part | Requirement |
+| --- | --- |
+| `alg` header | `EdDSA` or `Ed25519` |
+| `kid` header | The `kid` of a key on the connection |
+| `iss` | The connection's issuer. A trailing slash is allowed |
+| `sub` | The visitor's subject. Grants match this value |
+| `aud` | The `host` query parameter |
+| `iat` | Issue time in seconds. At most 300 seconds in the future |
+| `exp` | Expiry in seconds. Later than `iat`. `exp` minus `iat` must not exceed the connection's `sessionTtlSeconds` or 1,800 |
+
+### Exchange the proof
+
+Send the proof from your server, not from the browser:
+
+```bash
+curl https://api.spacefast.com/identity/acn_xxxxxxxx/exchange \
+  -H "Authorization: Bearer <proof-jwt>" \
+  -H "Content-Type: application/json" \
+  -d '{"spaceId":"<spaceId>","host":"<host>","resource":"<return>","browserState":"<browserState>"}'
+```
+
+A `200` answers with `token` and `expiresAt`. A `403` means the proof failed or no grant admits that subject to `resource`.
+
+Redirect the browser to `/__sf/redeem` on the same `host` within 60 seconds. The token works once, and only in the browser that started the sign-in.
+
+## Update a connection
+
+In **SSO providers**, press **Update** on the connection's row.
+
+| Type | Fields | Button |
+| --- | --- | --- |
+| OpenID Connect | **Client ID**, **Replacement client secret**, **Session lifetime in minutes** | **Update connection** |
+| White-label signer | **Replacement Ed25519 key set**, **Session lifetime in minutes** | **Rotate key set** |
+
+Leave **Replacement client secret** blank to keep the current secret. To rename a connection or change a signer's sign-in URL, use the API or the CLI.
+
+[`updateTeamIdentityConnection`](/api/reference/teams/updateteamidentityconnection) accepts `name`, `clientId`, `clientSecret`, `authorizeUrl`, `publicKeys`, and `sessionTtlSeconds`. It accepts `sessionTtlSeconds` from 60 to 86,400. For a signer, Spacefast lowers any value above 1,800 to 1,800. `publicKeys` replaces the whole key set. The `type` and `issuer` cannot change. To change them, create a new connection.
+
+Grants that use the connection keep working. A change to the client ID, client secret, keys, or session lifetime sets `rotatedAt`.
+
+To rotate a signer key without a sign-in gap:
+
+1. Send a key set that holds the old key and the new key.
+2. Sign new proofs with the new key.
+3. Send a key set that holds only the new key.
+
+## Revoke a connection
+
+Press **Revoke** on the row, then **Revoke connection** in the dialog. Over HTTP, send [`revokeTeamIdentityConnection`](/api/reference/teams/revoketeamidentityconnection). It answers `204`. From a terminal, run `sf share identity revoke`.
+
+Revoking removes the grants too. Spacefast revokes every grant on the team's Spaces that trusts the connection's issuer, then the connection itself.
+
+A revoked connection stays in [`listTeamIdentityConnections`](/api/reference/teams/listteamidentityconnections) with `revokedAt` set. It cannot be updated. To restore access, create a new connection and new grants.
+
+## Errors
+
+| Code | Status | Meaning |
+| --- | --- | --- |
+| `identity_connection_invalid_issuer` | 422 | The issuer is not an absolute HTTPS URL, or it holds user info or a fragment |
+| `identity_connection_invalid_authorize_url` | 422 | The sign-in URL is not an absolute HTTPS URL, or it holds user info or a fragment |
+| `identity_connection_duplicate_kid` | 422 | Two signer keys share a `kid` |
+| `identity_connection_type_mismatch` | 422 | An update sent signer fields to an OIDC connection, or OIDC fields to a signer |
+| `validation_error` | 422 | The body failed the schema, or an `external` grant has no `name` |
+| `not_found` | 404 | The connection does not exist, belongs to another team, or is revoked |
+| `forbidden` | 403 | Your role cannot change connections, or a signer proof was rejected |
+
+OIDC sign-in failures show to the visitor during the round trip:
+
+| Code | Status | Meaning |
+| --- | --- | --- |
+| `oidc_discovery_failed` | 503 or 422 | The discovery document did not load, or it is not valid |
+| `oidc_discovery_issuer_mismatch` | 422 | The discovery document names a different issuer |
+| `oidc_token_exchange_rejected` | 422 | The provider refused the authorization code or the client credentials |
+| `oidc_issuer_mismatch` | 422 | The ID token `iss` does not match the connection |
+| `oidc_audience_mismatch` | 422 | The ID token `aud` does not include the client ID |
+| `oidc_state_expired` | 422 | The sign-in took longer than 10 minutes. Start again |
