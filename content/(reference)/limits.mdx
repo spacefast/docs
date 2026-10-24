@@ -103,7 +103,7 @@ A space that stops serving does not fall back to a blank 404. The status code an
 
 Reads are never blocked by account state. Only writes are. A past-due account keeps serving every site at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
 
-The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything. Both return `404` with `X-Spacefast-Undeployed: 1` and the unpublished body, which distinguish them from a missing page on a published site.
+The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything. The strictest-safety response and a never-published host both return `404` with `X-Spacefast-Undeployed: 1` and the unpublished body, which distinguish them from a missing page on a published site.
 
 ## Rate limits
 
