@@ -41,7 +41,7 @@ These apply when the publish creates the Space. On an existing Space with `--tar
 | --- | --- | --- |
 | `-n, --name=<value>` | none | Set the Space title |
 | `--slug=<value>` | generated | Set the Space slug when creating a new Space. Fails with `space_selection_conflict` if a Space is already selected |
-| `--access=private\|team\|public` | team default | Set initial root access when this publish creates a team-owned Space. Requires a login or `--token`, and fails with `space_selection_conflict` if a Space is already selected |
+| `--access=private\|public` | team default | Set initial root access when this publish creates a team-owned Space. `team` is accepted as `private`. Requires a login or `--token`, and fails with `space_selection_conflict` if a Space is already selected |
 | `--hostname-scope=team\|global` | server default | Managed hostname scope for newly created Spaces |
 | `--spa=auto\|true\|false` | `auto` | Control single-page app fallback detection |
 | `--mode=website\|files` | `website` | Serve the Space as a website or as a raw file listing. Usually set in `sf.jsonc` |
