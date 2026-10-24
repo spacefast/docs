@@ -13,7 +13,7 @@ Use the Spacefast API to publish files, inspect Spaces, and manage resources wit
 https://api.spacefast.com
 ```
 
-Every operation lives under `/v1`. The version is in the path, so a future `/v2` never changes what `/v1` returns. The spec that generates [the reference](/api/reference) is served at `https://api.spacefast.com/openapi.json` and stamps its own version in `info.version` (currently `0.3.0`).
+Every operation lives under `/v1`. The spec that generates [the reference](/api/reference) is served at `https://api.spacefast.com/openapi.json`. Its `info.version` identifies the contract snapshot, not the URL version or your installed CLI version. Read the live spec for the current value.
 
 `HEAD` works for every `GET`.
 
