@@ -1,13 +1,95 @@
 ---
-title: sf.jsonc reference
-description: Every key sf.jsonc accepts, what it does, and which defaults the finalizer actually computes
+title: Project config reference
+description: Every key the project config accepts in spacefast.config.ts or sf.jsonc, how the CLI finds the file, and which defaults the finalizer actually computes
 sidebar:
   order: 1
 ---
 
-`sf.jsonc` is the project config Spacefast reads when a version finalizes. This page lists every key the schema accepts. After it you can write the file by hand and know which defaults are real.
+The project config holds the settings Spacefast reads when a version finalizes. Write it as `spacefast.config.ts` or as `sf.jsonc`. Both formats accept the same keys, and both stay supported. `sf init` writes `spacefast.config.ts`.
+
+## File names and discovery order
+
+The CLI looks for the config in the project directory. The first file found wins, in this order.
+
+1. `spacefast.config.ts`
+2. `sf.jsonc`
+3. `spacefast.jsonc`
+4. `spacefast.json`
+5. `sf.json`
+6. `.sf/sf.json`
+7. `.sf/config.jsonc`
+8. `.sf/config.json`
+
+No other TypeScript or JavaScript file name is read. `spacefast.config.mts` and `spacefast.config.js` are ignored.
+
+All eight files are private. They are never served.
 
 ## A full example
+
+The two files below declare the same config.
+
+<Tabs>
+<Tab title="spacefast.config.ts">
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  // Which Space this project publishes to, and what it is called.
+  space: "my-app",
+  name: "My App",
+
+  // Serving shape.
+  index: "index.html",
+  fallback: { path: "index.html", status: 200 },
+  cleanUrls: true,
+  listing: false,
+
+  // Listing, sharing, and browser icon metadata.
+  meta: {
+    title: "My App",
+    description: "What this site is",
+    image: "/og.png",
+    favicon: "/favicon.ico",
+  },
+
+  // Visual tokens for Spacefast-authored pages (404, access, index).
+  theme: { accent: "#0d9488", background: "#ffffff", name: "My App" },
+
+  // Files that receive {{ vars.NAME }} substitution at finalize.
+  templates: ["index.html"],
+
+  // Analytics tags and custom snippets.
+  superpowers: {
+    googleAnalytics: { enabled: true, measurementId: "G-XXXXXXX" },
+  },
+
+  // Settings for builds the platform runs from a connected repository.
+  build: {
+    rootDirectory: "apps/web",
+    installCommand: "pnpm install",
+    buildCommand: "pnpm build",
+    outputDirectory: "dist",
+    timeoutSeconds: 900,
+  },
+
+  // Run code alongside the files.
+  runtime: { kind: "zero", server: "server/index.ts", client: "client/index.tsx" },
+
+  // Scheduled GETs against this space's own paths.
+  crons: [{ path: "/api/digest", schedule: "daily" }],
+
+  // Paths that stay public even on a restricted Space.
+  access: { public: ["/health", "/assets/**"] },
+
+  // Routing rules; see the routing page.
+  redirects: [{ source: "/old", destination: "/new", status: 301 }],
+  headers: [{ source: "/assets/*", headers: [{ key: "X-Frame-Options", value: "DENY" }] }],
+});
+```
+
+</Tab>
+<Tab title="sf.jsonc">
 
 ```jsonc sf.jsonc
 {
@@ -66,21 +148,104 @@ sidebar:
 }
 ```
 
-## Where the file lives
+</Tab>
+</Tabs>
 
-The canonical name is `sf.jsonc` at the root of the directory you publish. Six aliases are accepted too. The first file found wins, in this order.
+## TypeScript config
 
-1. `sf.jsonc`
-2. `spacefast.jsonc`
-3. `spacefast.json`
-4. `sf.json`
-5. `.sf/sf.json`
-6. `.sf/config.jsonc`
-7. `.sf/config.json`
+`spacefast.config.ts` is an ES module. Its default export is the config. The export can be an object, a promise of an object, or a function that returns either. An async function works.
 
-All seven are private files. They are never served. Keep exactly one, since two config files in the same tree is an error.
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+import { siteTitle } from "./site/meta";
 
-The file is JSON with comments, capped at 256 KiB. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation.
+export default defineConfig(async () => ({
+  name: siteTitle,
+  cleanUrls: true,
+}));
+```
+
+The CLI bundles the file and its relative imports, then runs the bundle in its own process. Package imports and Node.js built-ins are not bundled. They resolve from the project directory when the config loads.
+
+`sf build`, `sf publish`, and hosted Git builds load the config before they run the install command. A package import therefore fails on a fresh checkout. Import only relative files and Node.js built-ins.
+
+The resolved value must be a JSON object. Strings, numbers, booleans, `null`, arrays, and plain objects are allowed. A key set to `undefined` is dropped. Any other value, for example a `Date`, fails the load.
+
+The config is code. It runs on your machine and in hosted builds. Do not put secrets in it, because the resolved values are stored with the version.
+
+### `defineConfig` and types
+
+The CLI provides the `spacefast/config` module.
+
+| Export | Kind | What it is |
+| --- | --- | --- |
+| `defineConfig` | function | Returns its argument unchanged. Its signature type-checks the default export |
+| `SpacefastConfig` | type | The config object |
+| `SpacefastConfigInput` | type | `SpacefastConfig`, a promise of it, or a function that returns either |
+
+The CLI supplies the module when it loads the file, so the project needs no dependency for it.
+
+:::note[Editor types]
+The `spacefast` package on npm does not include `spacefast/config` yet. TypeScript in your editor cannot resolve the import, but the CLI still loads the file.
+:::
+
+`defineConfig` is optional. A plain default export works the same way.
+
+```ts spacefast.config.ts
+import type { SpacefastConfig } from "spacefast/config";
+
+export default { name: "My App", cleanUrls: true } satisfies SpacefastConfig;
+```
+
+## Precedence and failure rules
+
+- The first file in the discovery order wins. The CLI prints a warning for each lower file it ignores.
+- An explicit `--config` path skips discovery. The CLI reads that file only.
+- The selected file must be valid. If it fails to load or validate, the command stops with `config_invalid` (exit 2). The CLI never falls back to a lower file.
+- A selected file that exists but cannot be read also fails with `config_invalid`.
+- A `--config` path that does not exist fails with `config_not_found` (exit 2).
+
+A TypeScript file fails to load when it throws, has no default export, imports a package that is not installed, or resolves to a value that is not JSON. A file that loads but sets an invalid key fails validation. For example, `cleanUrls: "yes"` reports `spacefast.config.ts is invalid: cleanUrls: Expected a boolean`.
+
+## Which commands read it
+
+Every command that selects a Space from the current directory reads the config. That includes commands that take `--space`, so an invalid config stops them too. `sf publish`, `sf build`, `sf dev`, `sf doctor`, and `sf routing inspect` also read it for their own work. `sf doctor` reports the selected file and any ignored files on its `project-config` line.
+
+Two command groups take an explicit path.
+
+| Command | Flag | What it reads |
+| --- | --- | --- |
+| `sf git connect`, `sf git update`, `sf git build` | `--config=<path>`, env `SPACEFAST_CONFIG` | The `build` block, sent as repository build settings |
+| `sf rules validate`, `sf rules test` | `--file=<path>` | The `firewall` and `cache` blocks |
+
+## How the TypeScript config ships
+
+The server does not run TypeScript. When `sf publish` or `sf build` packs a version, the CLI evaluates `spacefast.config.ts`. It writes the result into the version as `sf.jsonc`, in place of any `sf.jsonc` on disk. Your source files do not change.
+
+Files that the config imports are ordinary files. If they are in the published directory, they are published and served.
+
+Hosted Git builds run the same CLI build, so they evaluate a committed `spacefast.config.ts` too.
+
+A publish that sends individual files through the API or MCP cannot evaluate the file. If those files include `spacefast.config.ts`, the publish fails. To publish a project with a TypeScript config, run `sf publish` from the project directory.
+
+## Migrate from sf.jsonc
+
+Migration is optional. `sf.jsonc` stays supported. If the project uses another JSON file name, use that file in step 1.
+
+1. Move `sf.jsonc` to `spacefast.config.ts` in the project directory.
+2. Add `import { defineConfig } from "spacefast/config";` as the first line.
+3. Put `export default defineConfig(` before the opening `{`.
+4. Put `);` after the closing `}`.
+5. Run `sf doctor`.
+6. Make sure that the `project-config` line starts with `ok` and names `spacefast.config.ts`.
+
+Quoted keys, `//` comments, and trailing commas are valid TypeScript. The pasted object needs no other change. The `$schema` key is allowed but has no effect in TypeScript. Your Space link in `.spacefast/space.json` does not change.
+
+## File format
+
+`sf.jsonc` and the other JSON names are JSON with comments. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation. The schema covers the JSON files only.
+
+The config is capped at 256 KiB. For `spacefast.config.ts`, the cap applies to the resolved JSON, not to the source file.
 
 ## Identity
 
@@ -121,7 +286,7 @@ While `name` is set in the file, the API refuses to rename the Space. The file w
 
 Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names. `theme` is a closed object, so an unknown key is an error.
 
-A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file.
+A `theme.json` file next to the config is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file.
 
 What these tokens paint, and how to replace those pages outright, is on [Layout, theme, and site pages](/site-pages).
 
@@ -206,7 +371,7 @@ See [Functions](/functions).
 | `crons[].path` | string, up to 512 chars | none | Path to GET. Starts with `/`, no query, no wildcards, no `:placeholders` |
 | `crons[].schedule` | string | none | A named schedule, a shorthand, or a five-field crontab |
 
-`sf.jsonc` is the only writer. See [Crons](/crons) for the schedule grammar.
+The project config is the only writer. See [Crons](/crons) for the schedule grammar.
 
 ## Access
 
@@ -218,9 +383,18 @@ See [Functions](/functions).
 
 ## Routing
 
-`redirects`, `rewrites`, and `headers` are real `sf.jsonc` keys, owned by the routing compiler and merged behind the `_redirects` and `_headers` files. Their grammar, precedence, and every rule field live on one page.
+`redirects`, `rewrites`, and `headers` are real config keys, owned by the routing compiler and merged behind the `_redirects` and `_headers` files. Their grammar, precedence, and every rule field live on one page.
 
 See [Redirects, rewrites, and headers](/routing).
+
+## Traffic rules
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `firewall` | array, up to 50 rules | none | Requests to block or challenge before they reach the Space |
+| `cache.bypass` | array, up to 50 rules | none | Requests that skip the cache |
+
+A publish puts these rules at the edge. The Space settings can declare the same two keys, and their rules answer first. See [Traffic rules](/traffic-rules) for the rule fields.
 
 ## Accepted but not yet enforced
 
@@ -246,7 +420,7 @@ A plan may lower these caps. None of them can be raised.
 
 ## The strict v1 shape
 
-There is a second, stricter contract for the same filename, selected by a top-level `"version": 1`. Its schema is published separately at `https://spacefast.com/schemas/sf.v1.json`, and `sf routing inspect` compiles against it.
+There is a second, stricter contract for the same files, selected by a top-level `"version": 1`. Its schema is published separately at `https://spacefast.com/schemas/sf.v1.json`, and `sf routing inspect` compiles against it.
 
 In that shape the serving keys move into a `serve` block.
 
@@ -272,6 +446,6 @@ Under `version: 1` the flat spellings are rejected. Four of them get `config_unk
 | `cleanUrls` | `serve.cleanUrls` |
 | `meta` | `metadata` |
 
-The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error. `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`; `space` reports `config_identity_moved`.
+The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `firewall`, `cache`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error. `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`; `space` reports `config_identity_moved`.
 
 The flat shape above is what the finalizer reads and what the CLI writes. Use `version: 1` only if you want the stricter contract.

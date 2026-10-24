@@ -11,6 +11,7 @@ export default defineMeta({
     "idempotency",
     "operations",
     "webhooks",
+    "connectors",
     "sdk",
     "reference",
   ],
