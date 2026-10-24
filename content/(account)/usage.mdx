@@ -7,10 +7,6 @@ sidebar:
 
 Free has fixed allowances. Go and Plus use shared monthly credit: $5 on Go and $15 on Plus. Usage above the credit is billed monthly at the same rates on both plans.
 
-:::note[Upcoming usage pricing]
-The allowances and rates below describe the new plans. Metering and spending controls are still being rolled out. Check **Settings → Billing** for your team's current terms. The [current usage API](#read-current-usage) reports measurements separately from these new billing terms.
-:::
-
 ## Free allowances
 
 These are per team each month, except storage, which is a retained-byte allowance, and email, which has a daily limit. Free is for personal and non-commercial use.
@@ -30,7 +26,7 @@ These are per team each month, except storage, which is a retained-byte allowanc
 
 The CPU allowance combines PHP, Zero and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
 
-Exceeding an allowance alerts Spacefast for review. A Space may be suspended until the applicable allowance resets, retained storage falls below its limit, or the team upgrades. Data stays and exports remain available. Above 500 MB of storage, new publishes and uploads are refused until the team is under the allowance again. Existing Spaces keep serving unless suspended after review.
+Exceeding an allowance alerts Spacefast for review. A Space may be suspended until the applicable allowance resets, retained storage falls below its limit, or the team upgrades. Data stays and exports remain available.
 
 ## Go and Plus rates
 
@@ -57,8 +53,6 @@ An invocation is one PHP or Zero origin execution, including a request that bypa
 
 Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or Zero response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
 
-Workers CPU and requests have a planned $5-per-team monthly spending ceiling, which Go and Plus teams can raise. Reaching it pauses Workers, while PHP, Zero and cached delivery continue. Origin CPU used to relay a Worker request is credited back so the same request is not billed twice.
-
 Email counts recipient deliveries, so one message to three people counts as three. Daily safeguards still apply: 20 recipients on Free, 200 on Go and 2,000 on Plus. A credit balance does not override them.
 
 ## Storage classes
@@ -73,27 +67,11 @@ Each logical byte belongs to one class. Internal replicas and recovery copies do
 
 Scheduling has no separate fee. Runs use ordinary CPU, invocation, SQL and Workers meters as applicable. Email and saved output use their existing meters. Scheduled response bodies retained on the server add no delivery charge; a manual HTTPS request has its own delivery path.
 
-Managed recovery copies have no separate customer charge. Customer backup and restore controls are planned; this pricing does not promise a retention period or a restore guarantee.
-
-## Planned history and log retention
-
-| History | Free | Go | Plus |
-| --- | --- | --- | --- |
-| Production versions | 30 days | 30 days | 1 year |
-| Preview versions | 30 days | 30 days | 180 days |
-| Failed deployment records | 30 days | 30 days | 90 days |
-| Canceled deployment records | 30 days | 30 days | 30 days |
-| Runtime and HTTP access logs | Up to 3 days | Up to 7 days | Up to 30 days |
-| Build logs | Up to 7 days | Up to 30 days | Up to 30 days |
-| Team activity | 7 days | 30 days | 30 days |
-
-Live, pinned and qualifying aliased versions remain protected. The planned recovery window for deleted successful versions is 30 days. Retained and recoverable non-live bytes count as files and media. Log retention is subject to event and byte budgets; longer retention is an Enterprise discussion.
-
-These windows are planned. The currently enforced [version retention](/versions#how-many-versions-are-kept) and returned plan limits remain authoritative until the new policy is available.
+Managed recovery copies have no separate customer charge.
 
 ## Read current usage
 
-In the dashboard, open your team's **Settings**, then **Usage**. The page lists every limit your plan carries, with the current value against it. Axes your plan does not include show as **Not included in this plan**.
+Open your team's **Settings → Usage** to see usage against each plan limit. Features outside your plan show **Not included in this plan**.
 
 **Settings → Billing** carries a shorter set of meters next to the plan card: Storage, Team members, Custom domains, and Publishes today. Each one highlights when you reach 80% of the limit.
 
@@ -126,7 +104,7 @@ The response also carries `storageQuotaBytes`, `storageOverageBytes`, `deploysDa
 | `functionInvocations` | Function calls, counted where the space is known |
 | `functionErrors` | Those calls that ended in an error |
 
-These fields report the currently measured usage. They are not the new itemized invoice and do not prove that a new pricing meter or spending cap is active.
+These measurements are usage counters, not invoice line items.
 
 ## Measurement timing
 

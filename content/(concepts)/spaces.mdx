@@ -120,7 +120,9 @@ A rename moves the slug and the managed hostname together.
 sf spaces update --space docs --slug developers
 ```
 
-In the dashboard it is **Space settings → General → Managed address → Change managed address**. Over HTTP, `PATCH /v1/spaces/{spaceId}` takes `slug` and refuses it alongside any other field, so send it by itself.
+In the dashboard, open **Space settings → General → Managed address** and edit **Slug**. Save it with the action in that section, not the General settings Save bar. Save or discard other General settings changes first.
+
+Over HTTP, `PATCH /v1/spaces/{spaceId}` takes `slug` and refuses it alongside any other field, so send it by itself.
 
 What changes:
 
