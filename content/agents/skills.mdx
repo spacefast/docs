@@ -97,7 +97,7 @@ The rest sets behavior the tools alone do not enforce.
 - Call the matching tool first. Inside `execute`, search for and describe each operation before calling it.
 - Reuse the `.spacefast/` link in the current directory. Do not list Spaces before an ordinary publish, and set `createNew` only when you asked for a separate Space.
 - Publish once, then poll `operation_status` until it settles, then read the deployment, then report.
-- Report the live URL, the immutable version URL, and the access URL. For an anonymous publish, state the claim expiry and point at the claim action rather than copying the credential into the transcript.
+- Report the live URL and the immutable version URL, plus the access URL when the receipt includes one. Current clients create team-owned Spaces without automatic access URLs: the owning team signs in at the live URL, and `sf share link create` makes a link for people outside the team. For an anonymous publish, state the claim expiry and point at the claim action rather than copying the credential into the transcript.
 - Never print API keys, Space keys, upload tokens, or `.spacefast/state.json`.
 - Open the URL before claiming success, since a bare live URL is private until access is granted.
 
