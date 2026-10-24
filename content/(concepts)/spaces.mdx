@@ -68,13 +68,14 @@ To move a Space to another team, run `sf spaces transfer <team> --space docs`, o
 
 ## Access when you create one
 
-A new Space starts at one of three presets.
+A new team-owned Space starts at one of two presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/anonymous-and-claim).
 
 | Preset | Who can open the live site |
 | --- | --- |
-| `private` | Only people you name |
-| `team` | Everyone in the owning team |
-| `public` | Anyone with the URL |
+| `private` | The owning team, plus anyone you add |
+| `public` | The owning team, plus anyone on the web |
+
+The API still accepts `team` and treats it as `private`.
 
 Set it on the request that creates the Space, with `sf publish --access public` or the `access` field on `createPublish` and [`createSpace`](/api/reference/spaces/createspace). Sending `access` together with a `spaceId` is a validation error, because the field only applies at creation. Omit it and the Space takes the owning team's default for new Spaces.
 
