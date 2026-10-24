@@ -45,7 +45,7 @@ The **General access** card holds a segmented control with three options:
 
 | Option | What it does |
 | --- | --- |
-| **Private** | The owning team and people with another matching grant can open it. |
+| **Private** | "Your team and people you add can view it." |
 | **Share link** | "The share link is the key. Anyone who has it can open it, no account needed." |
 | **Public** | "Anyone on the web can open it." |
 
@@ -79,7 +79,7 @@ Use `version:<id>` to open only one version. Branch previews need a `branch:<nam
 
 A new team-owned Space does not create a share link in the current CLI or dashboard. The owning team signs in at the live URL. Create a link when you want to share outside the team.
 
-Older CLI versions and dashboard tabs can still receive a compatibility Open link at creation. API clients can send `capabilities: ["optional_access"]` in `POST /v1/spaces` to opt out of that link; their successful receipt can omit `access`.
+Team requests to `POST /v1/spaces` that do not send `capabilities: ["optional_access"]`, such as older CLI versions and dashboard tabs, still receive a compatibility Open link. Team Spaces created by current publish clients get no automatic link. Team requests that send the capability get no link, and their successful receipt can omit `access`. Anonymous Spaces keep their expiring Open link.
 
 A share link is a durable URL that opens exactly the paths you scoped it to, with no account needed. The secret rides in the query string, so the link is the page:
 
@@ -234,4 +234,4 @@ A team decides what its new Spaces start as. In the dashboard, open team setting
 | `private` | Access for the owning team |
 | `public` | Access for the owning team, plus view access for anyone on the web |
 
-The default is `private`. The API accepts the legacy value `team` and normalizes it to `private`. Changing the default applies only to Spaces created after the change. Neither preset creates a share link in clients that support optional access receipts.
+The default is `private`. The API accepts the legacy value `team` and normalizes it to `private`. Changing the default applies only to Spaces created after the change. Neither preset creates a share link on its own.
