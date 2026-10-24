@@ -116,7 +116,7 @@ sf spaces add --name docs
 
 ### Output
 
-The Space summary. `--json` returns the created Space with its state entry; the access URL and claim link are masked unless you pass `--show-secret`.
+The Space summary. `--json` returns the created Space with its state entry. A new team-owned Space has no automatic share link, so the receipt can omit `access`. The owning team signs in at the live URL. Create a [share link](/access#share-links) when you need one. Any access URL or claim link in a receipt is masked unless you pass `--show-secret`.
 
 ## sf spaces update
 
