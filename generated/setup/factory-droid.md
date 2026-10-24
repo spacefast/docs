@@ -10,7 +10,7 @@ Add Spacefast to Factory Droid so it can publish what you build.
 **Install the Spacefast plugin.** Adds Spacefast to Droid with everything it needs to publish.
 
 ```bash
-droid plugin marketplace add spacefast/plugins && droid plugin install spacefast@spacefast
+droid plugin marketplace add spacefast/plugins && droid plugin install spacefast@plugins --scope user
 ```
 
 1. Run `/mcp` inside Droid.
@@ -30,6 +30,15 @@ npm install -g spacefast && sf setup agent --agent factory-droid
 ```bash
 npx -y spacefast setup agent --agent factory-droid -y
 ```
+
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+droid mcp add spacefast 'https://mcp.spacefast.com' --type http
+```
+
+1. Start Droid and run `/mcp` to authenticate Spacefast.
+2. Sign in and approve access. Run `droid mcp list` to check the connection.
 
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
@@ -51,4 +60,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Factory Droid documentation](https://docs.factory.ai/harness/mcp)
+[Agent documentation](/agents) · [Factory Droid documentation](https://docs.factory.com/harness/mcp)

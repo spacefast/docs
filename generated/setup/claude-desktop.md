@@ -7,12 +7,12 @@ seo:
 
 Add Spacefast to the Claude desktop app on this computer.
 
-**Download desktop extension.** A signed extension for the desktop app. Download it, then double-click the file.
+**Download desktop extension.** An extension for the desktop app. Download it, then double-click the file.
 
 [Download desktop extension](https://github.com/spacefast/plugins/releases/latest/download/claude-desktop.mcpb)
 
-1. Confirm the install.
-2. Sign in to Spacefast and approve access when asked.
+1. Confirm the install. The API key is optional, so you can leave it blank.
+2. Sign in to Spacefast and approve access when Claude asks.
 
 ## Other ways to connect
 

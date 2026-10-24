@@ -91,6 +91,24 @@ export function compileRedirectRules(redirects) {
     }
   }
 
+  for (const root of ["/api/reference", "/platforms/api/reference"]) {
+    for (const section of ["resources", "operations/tags"]) {
+      const prefix = `${root}/${section}/`;
+      let covered = 0;
+      for (const redirect of redirects) {
+        if (!redirect.from.startsWith(prefix)) continue;
+        const tag = redirect.from.slice(prefix.length);
+        if (!tag || tag.includes("/")) continue;
+        if (redirect.to !== `${root}#${tag}` || redirect.status !== 301) {
+          throw new Error(`Cannot collapse section redirect: ${redirect.from}`);
+        }
+        omitted.add(redirectKey(redirect));
+        covered += 1;
+      }
+      if (covered > 0) dynamic.push({ from: `${prefix}*`, status: 301, to: `${root}#:splat` });
+    }
+  }
+
   return [
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
@@ -98,7 +116,11 @@ export function compileRedirectRules(redirects) {
     { from: "/partners/api/reference/*", status: 301, to: "/platforms/api/reference/:splat" },
     { from: "/platform-api", status: 301, to: "/partner-api" },
     { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
-  ].toSorted((left, right) => left.from.localeCompare(right.from));
+  ].toSorted((left, right) => {
+    // Method aliases must precede their section's wildcard fallback.
+    const wildcardOrder = Number(left.from.endsWith("*")) - Number(right.from.endsWith("*"));
+    return wildcardOrder || left.from.localeCompare(right.from);
+  });
 }
 
 function applyRule(rule, source) {

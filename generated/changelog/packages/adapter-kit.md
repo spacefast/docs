@@ -5,6 +5,27 @@ description: "Release history for @spacefast/adapter-kit on npm."
 
 Published as [`@spacefast/adapter-kit`](https://www.npmjs.com/package/@spacefast/adapter-kit) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.8.0
+  - @spacefast/build-output@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.7.0
+  - @spacefast/build-output@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- @spacefast/routing@0.6.1
+  - @spacefast/build-output@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

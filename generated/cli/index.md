@@ -21,7 +21,7 @@ $ npm install -g spacefast
 $ sf COMMAND
 running command...
 $ sf (--version)
-spacefast/0.6.0
+spacefast/0.8.0
 $ sf --help [COMMAND]
 USAGE
   $ sf COMMAND
@@ -76,14 +76,18 @@ GLOBAL FLAGS
 - [`sf channels ls`](#sf-channels-ls)
 - [`sf channels set NAME`](#sf-channels-set-name)
 - [`sf comments`](#sf-comments)
-- [`sf comments archive COMMENT`](#sf-comments-archive-comment)
+- [`sf comments create`](#sf-comments-create)
 - [`sf comments export`](#sf-comments-export)
 - [`sf comments get COMMENT`](#sf-comments-get-comment)
 - [`sf comments list`](#sf-comments-list)
+- [`sf comments mark-read COMMENT`](#sf-comments-mark-read-comment)
+- [`sf comments react COMMENT EMOJI`](#sf-comments-react-comment-emoji)
+- [`sf comments reopen COMMENT`](#sf-comments-reopen-comment)
 - [`sf comments reply COMMENT`](#sf-comments-reply-comment)
+- [`sf comments resolve COMMENT`](#sf-comments-resolve-comment)
 - [`sf comments settings`](#sf-comments-settings)
 - [`sf comments settings set`](#sf-comments-settings-set)
-- [`sf comments unarchive COMMENT`](#sf-comments-unarchive-comment)
+- [`sf comments unreact COMMENT EMOJI`](#sf-comments-unreact-comment-emoji)
 - [`sf connectors`](#sf-connectors)
 - [`sf connectors add TARGET`](#sf-connectors-add-target)
 - [`sf connectors bind ROLE CONNECTION`](#sf-connectors-bind-role-connection)
@@ -130,6 +134,9 @@ GLOBAL FLAGS
 - [`sf domains`](#sf-domains)
 - [`sf domains add HOSTNAME`](#sf-domains-add-hostname)
 - [`sf domains check DOMAIN`](#sf-domains-check-domain)
+- [`sf domains contacts`](#sf-domains-contacts)
+- [`sf domains contacts add`](#sf-domains-contacts-add)
+- [`sf domains contacts ls`](#sf-domains-contacts-ls)
 - [`sf domains diagnostics DOMAIN`](#sf-domains-diagnostics-domain)
 - [`sf domains dns`](#sf-domains-dns)
 - [`sf domains dns add DOMAIN`](#sf-domains-dns-add-domain)
@@ -138,11 +145,15 @@ GLOBAL FLAGS
 - [`sf domains dns export DOMAIN`](#sf-domains-dns-export-domain)
 - [`sf domains dns ls DOMAIN`](#sf-domains-dns-ls-domain)
 - [`sf domains dns refresh DOMAIN`](#sf-domains-dns-refresh-domain)
+- [`sf domains dns replace DOMAIN`](#sf-domains-dns-replace-domain)
 - [`sf domains dns rm DOMAIN RECORD`](#sf-domains-dns-rm-domain-record)
 - [`sf domains dns update DOMAIN RECORD`](#sf-domains-dns-update-domain-record)
 - [`sf domains ls`](#sf-domains-ls)
 - [`sf domains nameservers DOMAIN`](#sf-domains-nameservers-domain)
 - [`sf domains nameservers set DOMAIN NAMESERVERS`](#sf-domains-nameservers-set-domain-nameservers)
+- [`sf domains registration DOMAIN`](#sf-domains-registration-domain)
+- [`sf domains registration purchase DOMAIN... [flags]`](#sf-domains-registration-purchase-domain-flags)
+- [`sf domains registration renew DOMAIN`](#sf-domains-registration-renew-domain)
 - [`sf domains rm DOMAIN`](#sf-domains-rm-domain)
 - [`sf domains search [QUERY]`](#sf-domains-search-query)
 - [`sf domains update DOMAIN`](#sf-domains-update-domain)
@@ -265,6 +276,7 @@ GLOBAL FLAGS
 - [`sf skills remove`](#sf-skills-remove)
 - [`sf skills status`](#sf-skills-status)
 - [`sf source archive`](#sf-source-archive)
+- [`sf source availability`](#sf-source-availability)
 - [`sf source branch`](#sf-source-branch)
 - [`sf source cat PATH`](#sf-source-cat-path)
 - [`sf source commits apply`](#sf-source-commits-apply)
@@ -1287,7 +1299,7 @@ USAGE
 DESCRIPTION
   Manage comments.
 
-  List, export, and update persistent Space comments, and set where Comments run.
+  Read, start, reply to, react to, and resolve Space comment threads, and set where Comments run.
 
 EXAMPLES
   Manage comments.
@@ -1295,17 +1307,21 @@ EXAMPLES
     $ sf comments
 ```
 
-## `sf comments archive COMMENT`
+## `sf comments create`
 
-Archive a comment.
+Start a comment thread.
 
 ```text
 USAGE
-  $ sf comments archive COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments create --body <value> [--profile <value>] [-y]
+    [-o <value>] [--space <value>] [--mention <value>...] [--page <value> | --file <value>]
+    [--selector <value> | ] [--lines <value> ] [--version <value>] [--idempotency-key <value>]
 
-ARGUMENTS
-  COMMENT  Comment id, for example cmt_123.
+FLAGS
+  --body=<value>             (required) What the comment says.
+  --idempotency-key=<value>  Stable key for safely retrying this comment.
+  --mention=<value>...       Teammate to notify, by email, name, or user ID. Repeat for more.
+  --version=<value>          Version ID, ref, or number to comment on. Defaults to the live version.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1313,13 +1329,34 @@ GLOBAL FLAGS
       --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-DESCRIPTION
-  Archive a comment.
+ANCHOR FLAGS
+  --file=<value>      File path to comment on, for example src/app.js.
+  --lines=<value>     Line or range in --file, for example 7 or 7-14.
+  --page=<value>      Page path to comment on, for example /pricing. Defaults to /.
+  --selector=<value>  CSS selector of the element to pin the comment to.
 
-  Archive a comment thread.
+DESCRIPTION
+  Start a comment thread.
+
+  Start a comment thread on a page, an element on a page, or a file. Threads land on the live version unless --version
+  picks another.
 
 EXAMPLES
-  $ sf comments archive cmt_123
+  Comment on a whole page.
+
+    $ sf comments create --page /pricing --body "The annual price is wrong."
+
+  Pin a comment to an element.
+
+    $ sf comments create --page / --selector "#hero-title" --body "Too long for mobile."
+
+  Comment on lines of a file.
+
+    $ sf comments create --file src/app.js --lines 7-14 --body "This loop never ends."
+
+  Start a thread and notify a teammate.
+
+    $ sf comments create --page /about.html --body "Can you check the photos?" --mention milo@example.com
 ```
 
 ## `sf comments export`
@@ -1329,14 +1366,14 @@ Export comments.
 ```text
 USAGE
   $ sf comments export [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--format markdown|json] [--status open|archived]
+    <value>] [-o <value>] [--space <value>] [--version <value>] [--format markdown|json] [--status open|resolved]
 
 FLAGS
   --format=<option>  [default: markdown] Export format.
                      <options: markdown|json>
-  --status=<option>  Filter by status.
-                     <options: open|archived>
-  --version=<value>  Filter by version ID, ref, or number.
+  --status=<option>  Only open or only resolved threads.
+                     <options: open|resolved>
+  --version=<value>  Only threads left on this version ID, ref, or number.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1354,7 +1391,7 @@ EXAMPLES
 
     $ sf comments export --status open --format markdown
 
-  Export open comments filtered to version v3 as JSON.
+  Export open threads left on version v3 as JSON.
 
     $ sf comments export --version v3 --status open --format json
 ```
@@ -1369,7 +1406,7 @@ USAGE
     <value>] [-o <value>] [--space <value>]
 
 ARGUMENTS
-  COMMENT  Comment id, for example cmt_123.
+  COMMENT  Thread id, for example cmt_123.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1380,7 +1417,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Show a comment.
 
-  Show one comment thread.
+  Show one comment thread with its replies and reactions. Reading it does not mark it read.
 
 EXAMPLES
   $ sf comments get cmt_123
@@ -1393,15 +1430,18 @@ List comments.
 ```text
 USAGE
   $ sf comments list [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--status open|archived] [--path <value>] [--limit
-    <value>]
+    <value>] [-o <value>] [--space <value>] [--status open|resolved] [--unread] [--path <value>] [--version <value>]
+    [--author <value>] [--search <value>] [--limit <value>]
 
 FLAGS
-  --limit=<value>    Maximum comments to return.
-  --path=<value>     Filter by page path.
-  --status=<option>  Filter by status.
-                     <options: open|archived>
-  --version=<value>  Filter by version ID, ref, or number.
+  --author=<value>   Only threads started by this author name.
+  --limit=<value>    Maximum threads to return.
+  --path=<value>     Only threads on this page or file path, for example /pricing.
+  --search=<value>   Only threads whose text contains this.
+  --status=<option>  Only open or only resolved threads.
+                     <options: open|resolved>
+  --unread           Only threads with comments you haven't read.
+  --version=<value>  Only threads left on this version ID, ref, or number.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1412,19 +1452,115 @@ GLOBAL FLAGS
 DESCRIPTION
   List comments.
 
-  List persistent comment threads across a space.
+  List comment threads across a Space. Listing never marks anything read. Unread threads carry a ● in the first column.
 
 ALIASES
   $ sf comments ls
 
 EXAMPLES
-  List open comments on the pricing route across publishes.
+  Show threads with comments you haven't read.
+
+    $ sf comments list --unread
+
+  List open threads on the pricing page across versions.
 
     $ sf comments list --status open --path /pricing
 
-  Filter comments by their version context.
+  List threads left on version v3.
 
     $ sf comments list --version v3
+```
+
+## `sf comments mark-read COMMENT`
+
+Mark a comment read.
+
+```text
+USAGE
+  $ sf comments mark-read COMMENT [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+ARGUMENTS
+  COMMENT  Thread id, for example cmt_123.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Mark a comment read.
+
+  Mark a comment thread read for you. Reading a thread with `comments get` leaves it unread.
+
+EXAMPLES
+  Clear a thread from `comments list --unread`.
+
+    $ sf comments mark-read cmt_123
+```
+
+## `sf comments react COMMENT EMOJI`
+
+React to a comment.
+
+```text
+USAGE
+  $ sf comments react COMMENT EMOJI [--profile <value>] [-y]
+    [-o <value>] [--space <value>]
+
+ARGUMENTS
+  COMMENT  Thread id, for example cmt_123.
+  EMOJI    Reaction: thumbsup, heart, tada, eyes, rocket, pray, 👍, ❤️, 🎉, 👀, 🚀, 🙏.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  React to a comment.
+
+  React to a comment thread with an emoji.
+
+EXAMPLES
+  Add 👍 by name.
+
+    $ sf comments react cmt_123 thumbsup
+
+  Add 🎉 directly.
+
+    $ sf comments react cmt_123 🎉
+```
+
+## `sf comments reopen COMMENT`
+
+Reopen a comment thread.
+
+```text
+USAGE
+  $ sf comments reopen COMMENT [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+ARGUMENTS
+  COMMENT  Thread id, for example cmt_123.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Reopen a comment thread.
+
+  Reopen a resolved comment thread.
+
+EXAMPLES
+  Put a resolved thread back on the open list.
+
+    $ sf comments reopen cmt_123
 ```
 
 ## `sf comments reply COMMENT`
@@ -1434,14 +1570,15 @@ Reply to a comment.
 ```text
 USAGE
   $ sf comments reply COMMENT --body <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+    [-o <value>] [--space <value>] [--mention <value>...] [--idempotency-key <value>]
 
 ARGUMENTS
-  COMMENT  Comment id, for example cmt_123.
+  COMMENT  Thread id, for example cmt_123.
 
 FLAGS
-  --body=<value>             (required) Reply body.
+  --body=<value>             (required) What the reply says.
   --idempotency-key=<value>  Stable key for safely retrying this reply.
+  --mention=<value>...       Teammate to notify, by email, name, or user ID. Repeat for more.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1455,7 +1592,42 @@ DESCRIPTION
   Reply to a comment thread.
 
 EXAMPLES
-  $ sf comments reply cmt_123 --body "Fixed in v4."
+  Reply to a thread.
+
+    $ sf comments reply cmt_123 --body "Fixed in v4."
+
+  Reply and notify a teammate.
+
+    $ sf comments reply cmt_123 --body "Over to you." --mention milo@example.com
+```
+
+## `sf comments resolve COMMENT`
+
+Resolve a comment thread.
+
+```text
+USAGE
+  $ sf comments resolve COMMENT [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>]
+
+ARGUMENTS
+  COMMENT  Thread id, for example cmt_123.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Resolve a comment thread.
+
+  Mark a comment thread resolved. It leaves the open list but keeps every reply; `comments reopen` brings it back.
+
+EXAMPLES
+  Resolve a thread once the fix is live.
+
+    $ sf comments resolve cmt_123
 ```
 
 ## `sf comments settings`
@@ -1529,17 +1701,18 @@ EXAMPLES
     $ sf comments settings set --embed-remove https://docs.example.com
 ```
 
-## `sf comments unarchive COMMENT`
+## `sf comments unreact COMMENT EMOJI`
 
-Unarchive a comment.
+Remove your reaction.
 
 ```text
 USAGE
-  $ sf comments unarchive COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments unreact COMMENT EMOJI [--profile <value>] [-y]
+    [-o <value>] [--space <value>]
 
 ARGUMENTS
-  COMMENT  Comment id, for example cmt_123.
+  COMMENT  Thread id, for example cmt_123.
+  EMOJI    Reaction to take back: thumbsup, heart, tada, eyes, rocket, pray, 👍, ❤️, 🎉, 👀, 🚀, 🙏.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -1548,12 +1721,14 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Unarchive a comment.
+  Remove your reaction.
 
-  Unarchive a comment thread.
+  Take back your emoji reaction on a comment thread.
 
 EXAMPLES
-  $ sf comments unarchive cmt_123
+  Remove your 👍.
+
+    $ sf comments unreact cmt_123 thumbsup
 ```
 
 ## `sf connectors`
@@ -2697,7 +2872,7 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
-  --limit=<value>      Maximum rows per table (default 25, max 100).
+  --limit=<value>      Maximum rows per table (default 25, max 100). 0 prints row counts only.
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
   --table=<value>      Restrict the dump to one table.
@@ -2715,6 +2890,10 @@ EXAMPLES
   Dump one table, up to 100 rows.
 
     $ sf db dump --table todos --limit 100
+
+  Count every table's rows.
+
+    $ sf db dump --limit 0
 ```
 
 ## `sf db export [TARGET]`
@@ -3160,6 +3339,85 @@ EXAMPLES
     $ sf domains check example.com --space docs
 ```
 
+## `sf domains contacts`
+
+Manage registrant contacts.
+
+```text
+USAGE
+  $ sf domains contacts [--profile <value>] [-y]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage registrant contacts.
+
+  Manage the registrant contacts domains are bought under. See `domains contacts ls` and `add`.
+
+EXAMPLES
+  Manage registrant contacts.
+
+    $ sf domains contacts
+```
+
+## `sf domains contacts add`
+
+Save a registrant contact.
+
+```text
+USAGE
+  $ sf domains contacts add --file <value> [--profile <value>] [-y] [-o
+    <value>]
+
+FLAGS
+  --file=<value>  (required) JSON file with the registrant's details.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Save a registrant contact.
+
+  Save the person or organization domains are registered to. Fields: firstName, lastName, organization?, address1,
+  address2?, city, state, postalCode, countryCode, email, phone.
+
+EXAMPLES
+  $ sf domains contacts add --file contact.json
+```
+
+## `sf domains contacts ls`
+
+List registrant contacts.
+
+```text
+USAGE
+  $ sf domains contacts ls [--profile <value>] [-y] [-o <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List registrant contacts.
+
+  List saved registrant contacts, newest first.
+
+ALIASES
+  $ sf domains contacts list
+
+EXAMPLES
+  $ sf domains contacts ls
+```
+
 ## `sf domains diagnostics DOMAIN`
 
 Inspect domain diagnostics.
@@ -3205,7 +3463,7 @@ DESCRIPTION
   Manage domain DNS records.
 
   Manage DNS records for a domain zone. See `domains dns ls`, `capabilities`, `refresh`, `add`, `update`, `rm`, `batch`,
-  and `export`.
+  `export`, and `replace`.
 
 EXAMPLES
   Manage domain DNS records.
@@ -3403,6 +3661,48 @@ EXAMPLES
     $ sf domains dns refresh example.com
 ```
 
+## `sf domains dns replace DOMAIN`
+
+Replace DNS records that block a domain.
+
+```text
+USAGE
+  $ sf domains dns replace DOMAIN [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [--name <value>...] [--wait] [--wait-timeout <value>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+FLAGS
+  --name=<value>...  Hostname to replace. Repeat for both names. Defaults to every blocked name.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait             Wait until queued work finishes before returning.
+  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
+
+DESCRIPTION
+  Replace DNS records that block a domain.
+
+  Delete your A, AAAA, CNAME and ALIAS records that block a domain in its Spacefast DNS zone, so Spacefast DNS serves it
+  for the Space. The deleted records are gone for good: removing the domain later does not bring them back. An NS
+  delegation is never replaced.
+
+EXAMPLES
+  Replace every blocked name after confirmation.
+
+    $ sf domains dns replace example.com --space docs
+
+  Replace one name without a prompt.
+
+    $ sf domains dns replace example.com --space docs --name www.example.com --yes
+```
+
 ## `sf domains dns rm DOMAIN RECORD`
 
 Delete a DNS record.
@@ -3553,11 +3853,103 @@ GLOBAL FLAGS
 DESCRIPTION
   Set domain nameservers.
 
-  Set custom nameservers for a Spacefast-registered domain. Externally registered domains change nameservers at their
-  registrar.
+  Set the nameservers of a domain registered through Spacefast. ns1.spacefast.com,ns2.spacefast.com moves it onto
+  Spacefast DNS; other nameservers move it to external DNS and keep its records. Externally registered domains change
+  nameservers at their registrar.
 
 EXAMPLES
   $ sf domains nameservers set example.com ns1.example-dns.com,ns2.example-dns.com
+```
+
+## `sf domains registration DOMAIN`
+
+Show a domain's registration.
+
+```text
+USAGE
+  $ sf domains registration DOMAIN [--profile <value>] [-y] [-o <value>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show a domain's registration.
+
+  Show a domain's registration: status, expiry, and any failure or refund. Buy with `domains registration purchase`,
+  renew with `domains registration renew`.
+
+EXAMPLES
+  Check whether a purchase has registered.
+
+    $ sf domains registration example.com
+```
+
+## `sf domains registration purchase DOMAIN... [flags]`
+
+Buy domains.
+
+```text
+USAGE
+  $ sf domains registration purchase DOMAIN... [flags]
+
+FLAGS
+  --contact=<value>       Saved registrant contact id (dcon_...).
+  --contact-file=<value>  JSON file with a new registrant; saved before buying.
+  --expect-total=<value>  Refuse if the total before tax is not this amount in USD (e.g. 45.68).
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Buy domains.
+
+  Hold up to 10 domains for one payment and print the checkout link. Nothing is charged until you pay there. Without
+  --contact or --contact-file, the newest saved registrant is used.
+
+EXAMPLES
+  Buy two domains with your newest saved registrant.
+
+    $ sf domains registration purchase acme.com acme.dev
+
+  Save a registrant and buy, refusing if the price moved.
+
+    $ sf domains registration purchase acme.com --contact-file contact.json --expect-total 10.34
+```
+
+## `sf domains registration renew DOMAIN`
+
+Renew a domain.
+
+```text
+USAGE
+  $ sf domains registration renew DOMAIN [--profile <value>] [-y] [-o
+  <value>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Renew a domain.
+
+  Renew a domain for one year and print the checkout link. Nothing is charged until you pay there.
+
+EXAMPLES
+  $ sf domains registration renew example.com
 ```
 
 ## `sf domains rm DOMAIN`
@@ -3598,19 +3990,27 @@ EXAMPLES
 
 ## `sf domains search [QUERY]`
 
-Search domain names.
+Find domain names in a conversation.
 
 ```text
 USAGE
-  $ sf domains search [QUERY] [--profile <value>] [-y]
-    [--interactive] [--limit <value>] [-o <value>]
+  $ sf domains search [QUERY] [--profile <value>] [-y] [-i <value>]
+    [--interactive | --json | --local] [--limit <value>] [--like <value>...] [--dislike <value>...] [--neutral
+    <value>...] [--select <value>...] [--unselect <value>...] [-o <value>]
 
 ARGUMENTS
-  [QUERY]  Brand, idea, or full domain to search.
+  [QUERY]  Keyword, naming brief, or follow-up message.
 
 FLAGS
-  --interactive    Open the interactive terminal domain search UI.
-  --limit=<value>  [default: 20] Number of local suggestions to print when not interactive.
+  -i, --input=<value>        Previous search receipt, session, or request: JSON, @file, or - for stdin.
+      --dislike=<value>...   Dismiss a saved suggestion. Repeat for more than one.
+      --interactive          Keep a search conversation open, with previews, refinements and feedback.
+      --like=<value>...      Like a saved suggestion. Repeat for more than one.
+      --limit=<value>        Number of offline suggestions to print with --local. Ignored otherwise.
+      --local                Print offline name ideas without an account or live checks.
+      --neutral=<value>...   Clear a saved suggestion's like or dismissal.
+      --select=<value>...    Select a saved suggestion. Repeat for more than one.
+      --unselect=<value>...  Remove a saved suggestion from the selection.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -3619,16 +4019,34 @@ GLOBAL FLAGS
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Search domain names.
+  Find domain names in a conversation.
 
-  Search domain ideas locally, with optional live availability checks in interactive mode.
+  Search like the dashboard: a keyword checks exact matches and domain hacks; a descriptive brief generates AI ideas.
+  Both receive live availability, prices and Jev scores. Generated ideas grow toward 24 available names. Above that
+  target, the lowest-ranked eligible names retire after checks and Jev scoring. Likes and selections protect names.
+  Exact matches stay separate.
+
+  Save --json output and pass it back with --input to continue. Feedback accepts a domain, suggestion ID, or the result
+  number from that saved receipt.
 
 EXAMPLES
-  Print local domain name ideas for a brand.
+  Start a naming conversation and save its state.
 
-    $ sf domains search acme
+    $ sf domains search "a cozy bakery in Brooklyn" --json > names.json
 
-  Open the interactive domain search with live availability.
+  Continue with feedback on the saved results.
+
+    $ sf domains search "shorter, playful names" --input @names.json --like 2 --select 3 --json
+
+  Update feedback without adding a message.
+
+    $ sf domains search --input @names.json --dislike 4 --json
+
+  Print offline domain name ideas for a brand.
+
+    $ sf domains search acme --local --limit 20
+
+  Keep searching, refine the brief and give feedback in the terminal.
 
     $ sf domains search acme --interactive
 ```
@@ -4417,6 +4835,9 @@ DESCRIPTION
 
   Show a repository connection.
 
+ALIASES
+  $ sf git list
+
 EXAMPLES
   Show the repository connection.
 
@@ -4581,8 +5002,8 @@ Create a Spacefast project.
 ```text
 USAGE
   $ sf init [NAME] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template todo|guestbook|contact]
-    [--title <value>] [--no-git]
+    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template
+    todo|guestbook|contact|context] [--title <value>] [--no-git]
 
 ARGUMENTS
   [NAME]  Directory name for a new project. Omit to initialize the current directory.
@@ -4599,7 +5020,7 @@ GLOBAL FLAGS
 ZERO FLAGS
   --no-git             Skip initializing git for a Zero starter app.
   --template=<option>  Zero starter template to scaffold.
-                       <options: todo|guestbook|contact>
+                       <options: todo|guestbook|contact|context>
   --title=<value>      Zero starter app title.
 
 PROJECT FLAGS
@@ -4924,20 +5345,27 @@ Install MCP client config.
 ```text
 USAGE
   $ sf mcp install [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf...] [--local | --remote | --oauth]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [--local | --remote | --oauth]
 
 FLAGS
-  --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
-                       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|gith
-                       ub-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continu
-                       e|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.
-                       ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
-  --local              Use checkout-aware local stdio MCP instead of the hosted proxy.
-  --oauth              With --remote, connect directly and let the editor handle OAuth.
-  --remote             Use hosted MCP through `sf mcp proxy` and the current CLI login.
+  --agent=<option>...
+      Agent/client to configure. Repeat to configure more than one.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+
+  --local
+      Use checkout-aware local stdio MCP instead of the hosted proxy.
+
+  --oauth
+      With --remote, connect directly and let the editor handle OAuth.
+
+  --remote
+      Use hosted MCP through `sf mcp proxy` and the current CLI login.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5198,18 +5626,21 @@ Install the Spacefast agent plugin.
 ```text
 USAGE
   $ sf plugins [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf] [--dry-run]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf] [--dry-run]
 
 FLAGS
-  --agent=<option>  [default: claude-code] Plugin-capable agent to configure.
-                    <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-
-                    copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|rayc
-                    ast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhu
-                    b|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
-  --dry-run         Print the pinned installer command without changing agent configuration.
+  --agent=<option>
+      [default: claude-code] Plugin-capable agent to configure.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+
+  --dry-run
+      Print the pinned installer command without changing agent configuration.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -6450,26 +6881,48 @@ Install Spacefast agent tooling.
 ```text
 USAGE
   $ sf setup agent [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf...] [-p] [--local | --remote | --oauth] [--skip-mcp] [--force] [--handoff]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [--local | --remote | --oauth]
+    [--skip-mcp] [--force] [--agent-name <value> --handoff]
 
 FLAGS
-  -p, --project            Install skills and VS Code MCP config into this project, not global directories.
-  -y, --yes                Skip prompts, auto-detect agents, and accept hosted MCP through `sf mcp proxy`.
-      --agent=<option>...  Agent/client to configure. Repeat to configure more than one.
-                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
-                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
-                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
-                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
-      --force              Overwrite locally modified or unverified Spacefast skill files.
-      --handoff            Redeem a one-use handoff link from the dashboard or the MCP cli_login tool before generating
-                           setup. The link is read from stdin.
-      --local              Use checkout-aware local stdio MCP instead of the hosted proxy.
-      --oauth              With --remote, connect directly and let the editor handle OAuth.
-      --remote             Use hosted MCP through `sf mcp proxy` and the current CLI login.
-      --skip-mcp           Install skills without configuring MCP.
+  -p, --project
+      Install skills and VS Code MCP config into this project, not global directories.
+
+  -y, --yes
+      Skip prompts, auto-detect agents, and accept hosted MCP through `sf mcp proxy`.
+
+  --agent=<option>...
+      Agent/client to configure. Repeat to configure more than one.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+
+  --agent-name=<value>
+      With --handoff, the name your user calls you, or your product name, such as Claude Code. The user sees it as the
+      connection's name. Defaults to the detected agent.
+
+  --force
+      Overwrite locally modified or unverified Spacefast skill files.
+
+  --handoff
+      Redeem a one-use handoff link from the dashboard or the MCP cli_login tool before generating setup. The link is read
+      from stdin.
+
+  --local
+      Use checkout-aware local stdio MCP instead of the hosted proxy.
+
+  --oauth
+      With --remote, connect directly and let the editor handle OAuth.
+
+  --remote
+      Use hosted MCP through `sf mcp proxy` and the current CLI login.
+
+  --skip-mcp
+      Install skills without configuring MCP.
   --json             Format output as json.
   --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
@@ -6981,7 +7434,8 @@ LINK FLAGS
   --landing=<value>     [default: /] Clean route opened after exchange.
   --name=<value>        (required) Human name shown in the Links list.
   --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
-  --role=<option>       [default: viewer] Role: viewer or commenter. Defaults to viewer.
+  --role=<option>       [default: viewer] Role: viewer or commenter. Defaults to viewer. A commenter on the live target
+                        needs comments set to Everywhere; otherwise target a Version.
                         <options: viewer|commenter>
   --show-secret         Print the share URL even when output is JSON or non-interactive.
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
@@ -6992,10 +7446,10 @@ DESCRIPTION
   Create a named Link backed by one Grant. Links can View or Comment on multiple path patterns.
 
 EXAMPLES
-  Create a client Link that can comment on two path groups except internal docs.
+  Create a client Link that can comment on one Version's two path groups except internal docs.
 
     $ sf share link create --landing /docs --path "/docs/**" --path "/assets/**" --exclude "/docs/internal/**" \
-      --role commenter --name "Client review" --expires 7d
+      --role commenter --target version:ver_123 --name "Client review" --expires 7d
 ```
 
 ## `sf share link edit ID`
@@ -7040,7 +7494,8 @@ LINK FLAGS
   --landing=<value>     New clean landing path.
   --name=<value>        New Link name.
   --path=<value>...     Replace included route patterns. Repeat for disjoint paths.
-  --role=<option>       Replace the role: viewer or commenter.
+  --role=<option>       Replace the role: viewer or commenter. A commenter on the live target needs comments set to
+                        Everywhere.
                         <options: viewer|commenter>
   --target=<value>      Replace the target: live, all-versions, version:<id>, or branch:<name>.
 
@@ -7397,9 +7852,10 @@ DESCRIPTION
   Invite one Person without requiring an account. Repeat --scope to grant the same role on multiple route subtrees.
 
 EXAMPLES
-  Invite a commenter to two route subtrees.
+  Invite a commenter to two route subtrees on every Version. Commenters on the live space need comments set to
+  Everywhere.
 
-    $ sf share people invite person@example.com --role commenter --scope /docs --scope /assets
+    $ sf share people invite person@example.com --role commenter --scope /docs --scope /assets --target all-versions
 
   Invite someone to one immutable version instead of the live space.
 
@@ -7811,20 +8267,27 @@ Install or update Spacefast agent skills.
 ```text
 USAGE
   $ sf skills [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf...] [-p] [-l] [--force]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [-l] [--force]
 
 FLAGS
-  -l, --list               List bundled skill files without installing.
-  -p, --project            Install into this project instead of the agent's global skills directory.
-      --agent=<option>...  Agent to install for. `auto` configures detected agents plus .agents/skills.
-                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
-                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
-                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
-                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
-      --force              Overwrite locally modified or unverified Spacefast skill files.
+  -l, --list
+      List bundled skill files without installing.
+
+  -p, --project
+      Install into this project instead of the agent's global skills directory.
+
+  --agent=<option>...
+      Agent to install for. `auto` configures detected agents plus .agents/skills.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+
+  --force
+      Overwrite locally modified or unverified Spacefast skill files.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -7861,19 +8324,24 @@ Remove Spacefast agent skills.
 ```text
 USAGE
   $ sf skills remove [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf...] [-p] [--force]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [--force]
 
 FLAGS
-  -p, --project            Remove project-local skills instead of global skills.
-      --agent=<option>...  Agent to remove from. Repeat to remove from more than one.
-                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
-                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
-                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
-                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
-      --force              Remove locally modified or unverified Spacefast skill files.
+  -p, --project
+      Remove project-local skills instead of global skills.
+
+  --agent=<option>...
+      Agent to remove from. Repeat to remove from more than one.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+
+  --force
+      Remove locally modified or unverified Spacefast skill files.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -7907,18 +8375,21 @@ Check Spacefast skill installation.
 ```text
 USAGE
   $ sf skills status [--profile <value>] [-y] [--agent
-    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|devin-desktop|devi
-    n-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|hermes|openclaw|app.dev
-    in.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|winds
-    urf...] [-p]
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
+    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p]
 
 FLAGS
-  -p, --project            Check project-local skills instead of global skill directories.
-      --agent=<option>...  Agent to check. `auto` checks detected agents plus .agents/skills.
-                           <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|
-                           github-copilot|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline
-                           |continue|raycast|poke|pi|indent|hermes|openclaw|app.devin.ai|chatgpt-work|claude|claude-code
-                           -cli|claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|pi.dev|windsurf>
+  -p, --project
+      Check project-local skills instead of global skill directories.
+
+  --agent=<option>...
+      Agent to check. `auto` checks detected agents plus .agents/skills.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
+      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -7984,6 +8455,37 @@ EXAMPLES
   Download a repository archive for the main ref.
 
     $ sf source archive --space docs --ref main --output ./repo.tar.gz
+```
+
+## `sf source availability`
+
+Read or set Source available.
+
+```text
+USAGE
+  $ sf source availability [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [--enable | --disable]
+
+FLAGS
+  --disable  Disable future remixes.
+  --enable   Enable main-branch remixes.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Read or set Source available.
+
+  Allow main-branch remixes of the existing source repository. Known draft commits may also be accessible in remixes.
+  Website access is separate.
+
+EXAMPLES
+  Read or set Source available.
+
+    $ sf source availability
 ```
 
 ## `sf source branch`
@@ -8501,12 +9003,12 @@ EXAMPLES
 
 ## `sf spaces add`
 
-Create an empty space.
+Create a Space or remix a shared Space.
 
 ```text
 USAGE
-  $ sf spaces add [--profile <value>] [-y] [-o <value>] [-n
-    <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode website|files]
+  $ sf spaces add [--profile <value>] [-y] [-o <value>] [--git
+    <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode website|files]
     [--save-state] [--show-secret]
 
 SPACE METADATA FLAGS
@@ -8526,6 +9028,9 @@ GLOBAL FLAGS
       --json             Format output as json.
       --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
+REPOSITORY FLAGS
+  --git=<value>  Remix a Source available Spacefast repository’s main branch.
+
 EXECUTION FLAGS
   --[no-]save-state  Write the created space to .spacefast/state.json.
 
@@ -8533,9 +9038,9 @@ OUTPUT FLAGS
   --show-secret  Print the access URL and claim link in JSON or non-interactive output.
 
 DESCRIPTION
-  Create an empty space.
+  Create a Space or remix a shared Space.
 
-  Create an empty space and save it to .spacefast/state.json.
+  Create a space and save it to .spacefast/state.json.
 
 ALIASES
   $ sf spaces create

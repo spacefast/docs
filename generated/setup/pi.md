@@ -41,4 +41,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md#skills)
+[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md)

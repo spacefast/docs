@@ -7,10 +7,106 @@ Published as [`spacefast`](https://www.npmjs.com/package/spacefast) on npm.
 
 Install with `npm install -g spacefast`. Standalone binaries are also published on the [CLI releases](https://github.com/spacefast/cli/releases) page.
 
+## 0.8.0
+
+#### Minor Changes
+
+- MCP now exposes one Cloudflare-style code-mode surface: `search` finds and describes Spacefast API operations without calling them, and `execute` calls them, alongside `resume_execution`, `publish`, and the MCP Apps. Simple and full modes, `SPACEFAST_MCP_MODE`, and the per-operation tools are removed. `sf mcp` and `sf mcp proxy` accept and ignore `--mode`, so agent configs written by CLI 0.7.0 keep starting. The connector gateway (`search_connector_tools`) is removed from hosted MCP, and hosted OAuth no longer grants connector scopes. On-Device MCP served by the CLI (`sf mcp` and the Claude Desktop extension) keeps the gateway and runs it on the CLI login; `sf mcp proxy` relays hosted MCP, so it does not. The hosted server ignores a `mode` query parameter, so hosted MCP URLs saved with `?mode=full` keep working when clients connect to them directly. Dashboard-only operations stay out of the agent catalog: domain purchases, registration details, owner contacts, plan codes, and the generic WordPress REST and WP-CLI passthroughs. The dashboard, the CLI, and the API keep them, and the Domains App hands registration and payment to the dashboard.
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.8.0
+  - @spacefast/common@0.8.0
+  - @spacefast/builders@0.8.0
+  - @spacefast/routing@0.8.0
+  - @spacefast/sdk@0.8.0
+  - @spacefast/zero@0.8.0
+  - @spacefast/zero-compat-emdash@0.8.0
+  - @spacefast/zero-compat-payloadcms@0.8.0
+  - @spacefast/zero-compile@0.8.0
+  - @spacefast/adapter-kit@0.8.0
+  - @spacefast/next-adapter@0.8.0
+  - @spacefast/build-output@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Give agents the same domain-search conversation as the dashboard through `POST /v1/domains/search`, the SDK's `searchDomains`, and MCP's `spacefast.org.session.domains.searchDomains`.
+
+  `sf domains search` now uses the hosted conversation by default. Pass a saved receipt with `--input` to continue it, refine the brief, or apply likes, dislikes, and selections. Use `--local` for offline suggestions.
+
+  Responses retain the full session, stable suggestion IDs, feedback, availability provenance, ranking, and fee-inclusive display prices. If generation reaches its time budget, resume the returned session to finish the same turn. MCP callers should save the full structured result for continuation.
+
+- Comments are available to every team. `sf comments` gains `create`, `react`, `unreact`, `mark-read`, `resolve` and `reopen`, `list --unread`, `--author` and `--search` filters, and `--mention` on create and reply; `archive` and `unarchive` are replaced by `resolve` and `reopen`. Human CLI errors list every validation problem. The in-page overlay keeps its composer next to what you're commenting on, renders safe Markdown, sends page anchors for page comments, and adds an `@` mention picker. MCP guidance maps every comment verb to its API operation.
+- Make simple mode the default for hosted MCP and `sf mcp`. Simple mode exposes individual first-party operations and disables the connected-service gateway. Use `?mode=full` for hosted connections or `sf mcp --mode full` to keep code execution and connected-service tools. Native plugin connections now select full mode explicitly, and skills, prompts, and Apps follow the selected mode.
+- Simple mode now advertises only operations an agent can call, each with its own description. Operations that need a browser session, the CLI's device login, or a visitor's Frame or comment session are no longer MCP tools in either mode. Domain purchases, renewals, owner details, and plan codes continue in the Spacefast dashboard from simple mode, and the generic WordPress REST and WP-CLI passthroughs stay in full mode. The Domains App searches and hands selected names to the dashboard in simple mode.
+
+  `getBootstrap` is now `getAccount`, `createSpaceZeroToken` is now `createSpaceRestApiToken`, and the MCP comments link helper `writeSpaceComment` is now `getSpaceCommentsLink`. Request paths are unchanged.
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Build logs no longer mark what a build command prints to stderr as an error. A failed build is still reported by its exit status, with the failed command's output as the detail.
+- Keep existing website content and runtime declarations when publishing configuration only. Configuration-only publishes stage the evaluated configuration without scanning local content and use the server's retaining version lifecycle.
+- Return a friendly validation error with command guidance for unknown commands, without interactive prompts or framework warnings. Add `sf git list` as an alias for `sf git ls`.
+- A rollback or promotion that needs approval now says to run the same command again with `--continuation-token` once it is approved.
+- `sf setup agent` and `sf mcp install` now write VS Code's MCP config to its user-level `mcp.json` instead of creating `.vscode/mcp.json` in the current project. Pass `--project` to `sf setup agent` to write `.vscode/mcp.json` in the project as before. From a VS Code remote terminal (Dev Containers, Codespaces, SSH, WSL) setup still writes `.vscode/mcp.json`, because VS Code only runs a server on the remote from workspace or remote config.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/mcp@0.7.0
+  - @spacefast/sdk@0.7.0
+  - @spacefast/common@0.7.0
+  - @spacefast/zero@0.7.0
+  - @spacefast/zero-compile@0.7.0
+  - @spacefast/builders@0.7.0
+  - @spacefast/routing@0.7.0
+  - @spacefast/zero-compat-emdash@0.7.0
+  - @spacefast/zero-compat-payloadcms@0.7.0
+  - @spacefast/adapter-kit@0.7.0
+  - @spacefast/next-adapter@0.7.0
+  - @spacefast/build-output@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Align `sf domains search` with the dashboard in normal and interactive modes. Search uses live keyword matches, Luna typing previews, Sol submissions and refinements, fee-inclusive quotes, and Jev ranking. Saved sessions preserve feedback and selections, and interrupted searches remain resumable.
+- Each submitted descriptive brief runs one AI generation batch of up to 12 new names; typing previews may already have added names. API and MCP first turns now request one batch instead of the previous two batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names; liked and selected names stay protected. Keyword exact matches are unchanged.
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/builders@0.6.1
+  - @spacefast/mcp@0.6.1
+  - @spacefast/routing@0.6.1
+  - @spacefast/sdk@0.6.1
+  - @spacefast/zero@0.6.1
+  - @spacefast/zero-compat-emdash@0.6.1
+  - @spacefast/zero-compat-payloadcms@0.6.1
+  - @spacefast/zero-compile@0.6.1
+  - @spacefast/adapter-kit@0.6.1
+  - @spacefast/next-adapter@0.6.1
+  - @spacefast/build-output@0.6.1
+
 ## 0.6.0
 
 #### Minor Changes
 
+- Projects can use `spacefast.config.ts`, with `defineConfig` and types from `spacefast/config`. `sf init` writes this format. Existing `sf.jsonc` projects remain supported; an explicit `--config` selection wins, otherwise `spacefast.config.ts` takes precedence when both files exist. Use only one project configuration file to avoid maintaining two different configurations.
 - Add ChatGPT plugin entrypoints, a Space Library, an HTML file editor, local file opening, composer mentions, context attachments, chat actions, rich Space selection with previews, native settings, onboarding, and durable MCP event subscriptions. Add searchable Space lists and account-bound plugin preferences. Package the same plugin for local desktop testing.
 - Read back the feedback you sent. `sf feedback list` shows your recent feedback, newest first, and `sf feedback get <ref>` shows one entry by the reference `sf feedback` returned. Both need you signed in as yourself (`sf login` or a dashboard session) and only return feedback you sent; Space keys and team, OAuth-client or partner keys get a 403. The API equivalents are `GET /v1/feedback` and `GET /v1/feedback/{ref}`.
 - Add `sf migrate <url>` to capture public HTTPS websites through the existing publish API, with Build waiting, explicit idempotency-key recovery, and Open/Claim receipts. Each ordinary invocation starts a new migration.

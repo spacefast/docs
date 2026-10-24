@@ -40,6 +40,17 @@ These settings only cover this computer, so use Amp's remote MCP settings for or
 npx -y spacefast setup agent --agent amp -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+amp mcp add spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Amp in your terminal to open the OAuth sign-in flow.
+2. Sign in to Spacefast and approve access. Run `amp mcp doctor` to check the connection.
+
+This configures Amp on this computer. Orbs use Amp's remote MCP settings.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash

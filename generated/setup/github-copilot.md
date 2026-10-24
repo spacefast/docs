@@ -36,6 +36,17 @@ npm install -g spacefast && sf setup agent --agent github-copilot
 npx -y spacefast setup agent --agent github-copilot -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+copilot mcp add --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Copilot CLI and run `/mcp` to find Spacefast.
+2. Sign in to Spacefast and approve access when asked. To reconnect, run `/mcp auth spacefast`.
+
+This sets up Copilot CLI and the GitHub Copilot app on this computer, not Copilot cloud agent.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash

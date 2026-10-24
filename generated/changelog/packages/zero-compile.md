@@ -5,6 +5,44 @@ description: "Release history for @spacefast/zero-compile on npm."
 
 Published as [`@spacefast/zero-compile`](https://www.npmjs.com/package/@spacefast/zero-compile) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+  - @spacefast/zero@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+  - @spacefast/zero@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/zero@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

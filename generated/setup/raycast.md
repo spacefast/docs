@@ -14,7 +14,7 @@ https://mcp.spacefast.com
 ```
 
 1. Run Install MCP Server.
-2. Choose HTTP and paste the address above.
+2. Name it Spacefast, choose HTTP, and paste the address above.
 3. Choose Dynamic for OAuth Type, then install the server.
 4. Choose Sign In and approve access.
 5. Use @Spacefast in Raycast AI to select its tools.

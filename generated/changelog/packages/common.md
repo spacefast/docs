@@ -5,6 +5,36 @@ description: "Release history for @spacefast/common on npm."
 
 Published as [`@spacefast/common`](https://www.npmjs.com/package/@spacefast/common) on npm.
 
+## 0.8.0
+
+#### Minor Changes
+
+- Hosted MCP no longer asks for connector scopes. `OAUTH_MCP_RESOURCE_SCOPES` is now the shared API set without `connectors:read`, `connectors:write`, and `connectors:execute`. The new `OAUTH_CONNECTOR_SCOPES` names those three, and the API resource keeps them for the Connectors REST API. MCP's default scopes, protected-resource metadata, and consent screen all drop them, and an MCP consent for the narrower set still counts as Agent access. Grants issued with the connector scopes keep refreshing; their new tokens just leave those scopes out.
+
+## 0.7.0
+
+#### Minor Changes
+
+- New Spacefast logo: a star followed by lowercase "spacefast", upright, in one color. `SPACEFAST_WORDMARK_PATH` and `SPACEFAST_WORDMARK_VIEW_BOX` now draw it on a tight `0 0 127 20` viewBox. The star on its own is the new mark: `SPACEFAST_MARK_PATH` on `SPACEFAST_MARK_VIEW_BOX` (`0 0 24 24`) replaces the `SPACEFAST_ICON_*` "SF" letter geometry, which is removed. `SPACEFAST_BRAND_COLORS` drops the lime `shadow`. The full-bleed icon export moves from `brand-assets/spacefast-sf-full-bleed.svg` to `brand-assets/spacefast-icon.svg`. The MCP Space library's sidebar icon is now the star.
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- Keep existing website content and runtime declarations when publishing configuration only. Configuration-only publishes stage the evaluated configuration without scanning local content and use the server's retaining version lifecycle.
+- Retire the URL capture rollout flag. Website migration and URL Build retries now use normal public publishing admission.
+
+## 0.6.1
+
+#### Patch Changes
+
+- Align `sf domains search` with the dashboard in normal and interactive modes. Search uses live keyword matches, Luna typing previews, Sol submissions and refinements, fee-inclusive quotes, and Jev ranking. Saved sessions preserve feedback and selections, and interrupted searches remain resumable.
+- The shared workflow runs one AI generation batch for a descriptive first brief. API and MCP first turns therefore request up to 12 AI names instead of the previous two batches totaling about 24. Follow-up turns grow the generated pool toward 24 available names, then retire the lowest-ranked unprotected names after checks and scoring. Keyword exact matches are unchanged.
+
 ## 0.6.0
 
 #### Minor Changes

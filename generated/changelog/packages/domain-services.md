@@ -5,6 +5,40 @@ description: "Release history for @spacefast/domain-services on npm."
 
 Published as [`@spacefast/domain-services`](https://www.npmjs.com/package/@spacefast/domain-services) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- The registrar client can quote DSAPI's raw registration fees for a batch of names (`quoteDomainFees`, `quoteDomainFee`), renew a domain (`renewDomain`), and read and acknowledge reseller events (`enumerateEvents`, `acknowledgeEvent`, `dsapiEventKey`). A registration the pre-register check refuses (name taken, premium, fee changed) now throws a `refused` `DsapiError` before anything is sent, and DSAPI's 554 and 599 Register refusals classify as `refused`, 541 as `invalid`.
+- The registrar client can now set a registered domain's nameservers (`setNameservers`), validating the list before anything is sent. Every registrar failure is now a typed `DsapiError` with the registrar's own reason and a `kind` such as `invalid`, `refused`, `unauthorized` or `transport`.
+- New `@spacefast/domain-services/powerdns` export: a typed client for the PowerDNS Authoritative 4.9 HTTP API that reads, creates and deletes zones and applies rrset changes in one atomic PATCH. Every failure is a `PowerDnsError` with a `kind` such as `invalid`, `too_large`, `conflict`, `unauthorized` or `transport`, and never carries the API key or the PowerDNS address.
+- `registerDomain` now delegates the name at registration. `DomainRegistrationInput` takes optional `nameservers` (2 to 12 distinct hostnames, normalized like `setNameservers` input). When it is omitted, `Domain\Register` sends `defaultRegistrationNameservers` (`ns1.spacefast.com`, `ns2.spacefast.com`). Invalid nameservers throw `DsapiError` kind `invalid` before any request is sent.
+- The registrar client now reaches DSAPI through WP Cloud domain services. Breaking: `DomainServicesCredentials` takes a WP Cloud `clientName` and API token instead of a reseller `user` and key, and the default endpoint is `https://atomic-api.wordpress.com/api/v1.0/domain-services/<clientName>`. Requests are form bodies with JSON-string `params` and an `auth` header, and responses are read from WP Cloud's `{ message, data }` wrapper. Commands reach the OTE registry unless the client is created with `live: true`. WP Cloud's own HTTP errors classify as `unauthorized` (401/403), `invalid` (400) or `server_failed` (5xx).
+
+#### Patch Changes
+
+- The DSAPI client adds `bulkCheck(names)`, which checks up to 50 names per call with DSAPI's zone-file `Domain\Bulk_Check`. It never falls back to RDAP or the live `Domain\Check`. Premium names keep their real availability but are never purchasable, and registration refuses them. `checkDomains` is unchanged.
+- The PowerDNS client confirms a missing zone by listing zones filtered to that name instead of reading the server, so it works with an API key scoped to zone endpoints. Such a key is refused the server itself with a 403, which made every first publish of a zone fail.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

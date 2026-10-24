@@ -14,7 +14,8 @@ Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and
   "mcpServers": {
     "spacefast": {
       "transport": "http",
-      "url": "https://mcp.spacefast.com"
+      "url": "https://mcp.spacefast.com",
+      "oauthResource": "https://mcp.spacefast.com"
     }
   }
 }
@@ -24,7 +25,7 @@ Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and
 2. Choose Authenticate in Devin Desktop, or run `devin mcp login spacefast`.
 3. Sign in to Spacefast and approve access.
 
-On legacy Cascade, use Devin Settings → Cascade → MCP Servers and its `~/.codeium/windsurf/mcp_config.json` instead, with a `serverUrl` field.
+Legacy Cascade reads the same file.
 
 ## Other ways to connect
 
@@ -39,6 +40,15 @@ npm install -g spacefast && sf setup agent --agent devin-desktop
 ```bash
 npx -y spacefast setup agent --agent devin-desktop -y
 ```
+
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+devin mcp add --scope user spacefast 'https://mcp.spacefast.com' --oauth-resource 'https://mcp.spacefast.com'
+```
+
+1. Run `devin mcp login spacefast`, then sign in to Spacefast and approve access.
+2. Use `devin mcp list` to check the connection in Devin CLI or Devin Local.
 
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 

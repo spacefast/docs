@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 673 error codes in the registry.
+There are 759 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -21,6 +21,14 @@ There are 673 error codes in the registry.
 | [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the space. |
 | [`agent_handoff_origin_unsupported`](/errors/agent_handoff_origin_unsupported) | The dashboard origin this deployment is configured with cannot mint canonical agent handoff links. |
 | [`ambiguous_space_slug`](/errors/ambiguous_space_slug) | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
+| [`analytics_backend_error`](/errors/analytics_backend_error) | The analytics service answered this query with something the analytics query contract doesn't allow. |
+| [`analytics_backend_unavailable`](/errors/analytics_backend_unavailable) | Analytics couldn't answer right now. |
+| [`analytics_profile_too_large`](/errors/analytics_profile_too_large) | The analytics profile is larger than a profile may be. |
+| [`analytics_query_breakdown_over_time_unsupported`](/errors/analytics_query_breakdown_over_time_unsupported) | The analytics query asks for a breakdown and time buckets together, which isn't answered yet. |
+| [`analytics_query_combination_unsupported`](/errors/analytics_query_combination_unsupported) | The analytics query asks for a metric with a breakdown, filter or granularity it doesn't support. |
+| [`analytics_query_hourly_range_too_long`](/errors/analytics_query_hourly_range_too_long) | Hourly buckets cover at most 7 days. |
+| [`analytics_query_range_too_long`](/errors/analytics_query_range_too_long) | An analytics query covers at most 395 days, how long raw events are kept. |
+| [`analytics_query_two_breakdowns`](/errors/analytics_query_two_breakdowns) | An analytics query takes one breakdown dimension besides time. |
 | [`anonymous_expired`](/errors/anonymous_expired) | This anonymous space expired before it was claimed. |
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
 | [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed spaces. |
@@ -44,6 +52,8 @@ There are 673 error codes in the registry.
 | [`build_timeout`](/errors/build_timeout) | The build exceeded its time limit before producing a version. |
 | [`cache_purge_domain_required`](/errors/cache_purge_domain_required) | A purge request must name the domain to purge. |
 | [`cache_purge_path_required`](/errors/cache_purge_path_required) | A purge request must name at least one path. |
+| [`cast_backend_error`](/errors/cast_backend_error) | The comments service turned this request down. |
+| [`cast_backend_unavailable`](/errors/cast_backend_unavailable) | The comments service didn't answer. |
 | [`catalog_unavailable`](/errors/catalog_unavailable) | The connector catalog could not be built right now. |
 | [`channel_name_reserved`](/errors/channel_name_reserved) | The channel name collides with a reserved hostname suffix and cannot be used. |
 | [`channel_pointer_moved`](/errors/channel_pointer_moved) | The channel was promoted to a different version since you read it. |
@@ -51,6 +61,14 @@ There are 673 error codes in the registry.
 | [`claim_blocked_takedown`](/errors/claim_blocked_takedown) | This space is under an abuse takedown and cannot be claimed. |
 | [`claim_target_not_found`](/errors/claim_target_not_found) | The team or account to claim the space into was not found. |
 | [`cli_upgrade_required`](/errors/cli_upgrade_required) | This CLI version is too old to talk to the API safely. |
+| [`comment_page_path_invalid`](/errors/comment_page_path_invalid) | The comment's page path isn't a plain absolute URL path. |
+| [`comment_page_path_too_long`](/errors/comment_page_path_too_long) | The comment's page path is longer than Comments allow. |
+| [`comment_room_deleted`](/errors/comment_room_deleted) | The comment room for this page was deleted, so it can't take new comments. |
+| [`comments_disabled`](/errors/comments_disabled) | Comments are off for this Space. |
+| [`comments_not_configured`](/errors/comments_not_configured) | Comments aren't set up on the server for this Space yet. |
+| [`comments_reauth_required`](/errors/comments_reauth_required) | Your access to this page changed since you signed in to comment. |
+| [`comments_target_unavailable`](/errors/comments_target_unavailable) | Comments only show on Versions while this Space's comments are set to Previews only, so a comment role can't point at the live site. |
+| [`comments_view_only`](/errors/comments_view_only) | You can read this page's comments but not add to them. |
 | [`config_file_too_large`](/errors/config_file_too_large) | The sf.jsonc configuration file exceeds the maximum size. |
 | [`config_functions_key_removed`](/errors/config_functions_key_removed) | The sf.jsonc configuration still uses the removed top-level functions key. |
 | [`config_invalid`](/errors/config_invalid) | The space configuration failed validation. |
@@ -110,11 +128,14 @@ There are 673 error codes in the registry.
 | [`decision_in_progress`](/errors/decision_in_progress) | This approved action is already executing. |
 | [`device_authorization_failed`](/errors/device_authorization_failed) | The device login request failed and cannot be completed. |
 | [`device_verification_rate_limited`](/errors/device_verification_rate_limited) | Too many incorrect device codes were entered in a short window. |
+| [`dns_backend_rejected`](/errors/dns_backend_rejected) | Spacefast DNS refused to serve the zone with this change, so the zone still serves its earlier records. |
+| [`dns_backend_unavailable`](/errors/dns_backend_unavailable) | Spacefast DNS could not be reached, so the change is saved but not served yet. |
 | [`dns_control_observation_indeterminate`](/errors/dns_control_observation_indeterminate) | The domain check could not finish because a DNS or HTTP probe did not answer. |
 | [`dns_export_required`](/errors/dns_export_required) | This operation requires exporting the current DNS records first. |
 | [`dns_field_conflict`](/errors/dns_field_conflict) | Two DNS fields cannot be used together for this provider or record type. |
 | [`dns_field_not_applicable`](/errors/dns_field_not_applicable) | The DNS field is not writable for this provider, record type, or management mode. |
 | [`dns_import_partial_visibility`](/errors/dns_import_partial_visibility) | The DNS import cannot see the full zone, so importing would lose records. |
+| [`dns_name_delegated`](/errors/dns_name_delegated) | Your NS record delegates this name to other nameservers. Replace never deletes a delegation. |
 | [`dns_provider_auth_expired`](/errors/dns_provider_auth_expired) | The connected DNS provider authorization expired or was revoked. |
 | [`dns_provider_batch_unsupported`](/errors/dns_provider_batch_unsupported) | The connected DNS provider cannot apply this batch with the required semantics. |
 | [`dns_provider_change_pending`](/errors/dns_provider_change_pending) | The DNS provider accepted the change but propagation or provider completion is still pending. |
@@ -126,7 +147,6 @@ There are 673 error codes in the registry.
 | [`dns_provider_feature_descriptors`](/errors/dns_provider_feature_descriptors) | This provider exposes domain features through capability descriptors. |
 | [`dns_provider_feature_unavailable`](/errors/dns_provider_feature_unavailable) | The requested DNS provider field or feature is not available for this zone. |
 | [`dns_provider_field_unsupported`](/errors/dns_provider_field_unsupported) | The DNS provider does not support one of the requested record fields. |
-| [`dns_provider_future_authoritative_backend`](/errors/dns_provider_future_authoritative_backend) | This domain uses a future Spacefast authoritative DNS backend adapter. |
 | [`dns_provider_missing_permission`](/errors/dns_provider_missing_permission) | The connected DNS provider account lacks the required permission. |
 | [`dns_provider_not_connected`](/errors/dns_provider_not_connected) | This domain has no connected DNS provider zone. |
 | [`dns_provider_operation_failed`](/errors/dns_provider_operation_failed) | The DNS provider operation failed before the requested change was accepted. |
@@ -144,20 +164,32 @@ There are 673 error codes in the registry.
 | [`dns_record_conflicts_with_managed`](/errors/dns_record_conflicts_with_managed) | The DNS change conflicts with a record Spacefast manages for this domain. |
 | [`dns_record_managed`](/errors/dns_record_managed) | This DNS record is managed by Spacefast and cannot be edited directly. |
 | [`dns_record_not_found`](/errors/dns_record_not_found) | The DNS record was not found in this zone. |
+| [`dns_zone_awaiting_registration`](/errors/dns_zone_awaiting_registration) | The change is saved, but Spacefast DNS serves this domain only once its registration completes. |
+| [`dns_zone_ownership_unproven`](/errors/dns_zone_ownership_unproven) | The change is saved, but Spacefast DNS serves this delegated domain only after you prove you control it. |
+| [`dns_zone_served_by_another_domain`](/errors/dns_zone_served_by_another_domain) | The change is saved, but another Spacefast domain record already serves DNS for this hostname. |
 | [`domain_already_exists`](/errors/domain_already_exists) | This domain is already present in your inventory. |
 | [`domain_bound`](/errors/domain_bound) | The domain is currently bound to a space, which blocks this operation. |
+| [`domain_cart_duplicate`](/errors/domain_cart_duplicate) | The cart lists the same domain more than once. |
+| [`domain_checkout_pending`](/errors/domain_checkout_pending) | One or more of these domains is already waiting on an open payment. |
+| [`domain_checkout_total_changed`](/errors/domain_checkout_total_changed) | The live price of the cart no longer matches the total you expected. |
+| [`domain_contact_not_found`](/errors/domain_contact_not_found) | The registrant contact does not exist, or belongs to another team. |
 | [`domain_facet_already_managed`](/errors/domain_facet_already_managed) | This facet of the domain is already managed by Spacefast. |
 | [`domain_facet_external`](/errors/domain_facet_external) | This facet of the domain is managed outside Spacefast. |
 | [`domain_facet_not_applicable`](/errors/domain_facet_not_applicable) | The requested facet does not apply to this domain. |
 | [`domain_in_use`](/errors/domain_in_use) | The domain is in use by another binding or assignment. |
 | [`domain_lookup_rate_limited`](/errors/domain_lookup_rate_limited) | Too many domain lookups were made in a short window. |
 | [`domain_not_bound`](/errors/domain_not_bound) | The domain is not bound to this space. |
+| [`domain_not_purchasable`](/errors/domain_not_purchasable) | One or more domains in the cart cannot be bought right now. |
+| [`domain_price_changed`](/errors/domain_price_changed) | The registrar price changed after you paid, so the payment for this domain was refunded. |
 | [`domain_primary_redirect_conflict`](/errors/domain_primary_redirect_conflict) | A redirecting domain cannot be the primary domain. |
+| [`domain_purchase_apex_required`](/errors/domain_purchase_apex_required) | Only a registrable apex domain (like `example.com`) can be bought, not a subdomain. |
 | [`domain_quota_exceeded`](/errors/domain_quota_exceeded) | Adding this domain would exceed the plan's external domain allowance. |
 | [`domain_registration_active`](/errors/domain_registration_active) | The domain has an active registration, which blocks this operation. |
 | [`domain_registration_not_renewable`](/errors/domain_registration_not_renewable) | The domain registration cannot be renewed right now. |
 | [`domain_reserved_suffix`](/errors/domain_reserved_suffix) | The hostname is under a Spacefast-managed suffix and cannot be added as a domain. |
 | [`domain_transfer_active`](/errors/domain_transfer_active) | The domain has a transfer in progress, which blocks this operation. |
+| [`domain_transfer_unavailable`](/errors/domain_transfer_unavailable) | Domain transfers into or out of Spacefast aren't available yet. Nothing was changed. |
+| [`domain_unavailable`](/errors/domain_unavailable) | Someone else registered the domain first, so the payment for it was refunded. |
 | [`domain_wildcard_label`](/errors/domain_wildcard_label) | The hostname uses a wildcard label in a position that is not allowed. |
 | [`domain_wildcard_not_enabled`](/errors/domain_wildcard_not_enabled) | Wildcard hostnames are not enabled for this domain or plan. |
 | [`download_required`](/errors/download_required) | This content is too large to return inline and must be downloaded. |
@@ -185,6 +217,7 @@ There are 673 error codes in the registry.
 | [`frame_target_fixed`](/errors/frame_target_fixed) | The request tried to override a Frame Link with a fixed serving target. |
 | [`frame_version_required`](/errors/frame_version_required) | An all-Versions Frame Link requires one explicit immutable Version. |
 | [`free_external_proxy_disabled`](/errors/free_external_proxy_disabled) | Proxy routes to external upstreams do not serve on an unclaimed Space. |
+| [`functions_transport_failed`](/errors/functions_transport_failed) | The space's Functions worker did not answer: the request ran past the 30-second limit, or the connection to the worker failed. |
 | [`hostname_contested`](/errors/hostname_contested) | The hostname this Space would serve on is already attached to a different site. |
 | [`human_approval_required`](/errors/human_approval_required) | This run was parked for a person, so an agent's decision cannot settle it. |
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
@@ -196,6 +229,8 @@ There are 673 error codes in the registry.
 | [`insufficient_scope`](/errors/insufficient_scope) | The credential authenticated, but its granted scopes do not include a set this operation accepts. |
 | [`interactive_session_required`](/errors/interactive_session_required) | This action requires an interactive browser session. |
 | [`internal_error`](/errors/internal_error) | Something went wrong on our side. |
+| [`internal_notice_token_required`](/errors/internal_notice_token_required) | This internal comments endpoint needs a valid service token. |
+| [`internal_notice_token_unconfigured`](/errors/internal_notice_token_unconfigured) | Live comment notices aren't configured on this server. |
 | [`invalid_claim_token`](/errors/invalid_claim_token) | The space key is invalid or does not match this space. |
 | [`invalid_continuation_token`](/errors/invalid_continuation_token) | The continuation token is invalid, expired, or already finished. |
 | [`invalid_data_location`](/errors/invalid_data_location) | The requested data location is not a supported region. |
@@ -203,6 +238,7 @@ There are 673 error codes in the registry.
 | [`invalid_device_code`](/errors/invalid_device_code) | The device code is invalid or expired. |
 | [`invalid_domain`](/errors/invalid_domain) | The domain reference is invalid. |
 | [`invalid_domain_name`](/errors/invalid_domain_name) | The domain name is not a valid registrable hostname. |
+| [`invalid_dpop_proof`](/errors/invalid_dpop_proof) | The request's proof of possession is missing, invalid, or already used. |
 | [`invalid_elevation_request`](/errors/invalid_elevation_request) | An elevation request needs at least one scope and a rationale of 1 to 1024 characters. |
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
@@ -214,6 +250,7 @@ There are 673 error codes in the registry.
 | [`invalid_runtime_event`](/errors/invalid_runtime_event) | The runtime event payload is not recognized. |
 | [`invalid_space`](/errors/invalid_space) | The space reference is invalid. |
 | [`invalid_space_mode`](/errors/invalid_space_mode) | The requested space serving mode is not supported. |
+| [`invalid_token`](/errors/invalid_token) | The session token is expired or does not authorize this interface. |
 | [`invalid_usage_bucket`](/errors/invalid_usage_bucket) | The usage bucket has an invalid time range. |
 | [`invalid_usage_correction`](/errors/invalid_usage_correction) | The correction does not match the original usage record. |
 | [`invalid_usage_window`](/errors/invalid_usage_window) | The requested usage window is invalid or longer than 92 days. |
@@ -269,9 +306,10 @@ There are 673 error codes in the registry.
 | [`method_not_allowed`](/errors/method_not_allowed) | The requested HTTP method is not supported for this endpoint. |
 | [`missing_route_param`](/errors/missing_route_param) | A required route parameter is missing from the request path. |
 | [`move_target_capacity_lost`](/errors/move_target_capacity_lost) | The selected move target no longer has capacity for the space. |
-| [`name_managed_by_config`](/errors/name_managed_by_config) | The space name is managed by sf.jsonc while its live version declares one. |
+| [`name_managed_by_config`](/errors/name_managed_by_config) | This Space is named by its live version's config file. |
 | [`nameserver_delegation_required`](/errors/nameserver_delegation_required) | This operation requires the domain to be delegated to Spacefast nameservers. |
 | [`nameserver_divergence`](/errors/nameserver_divergence) | The domain's observed nameservers diverge from the expected set. |
+| [`nameservers_required`](/errors/nameservers_required) | Spacefast holds this domain's registration, so it leaves Spacefast DNS only by delegating to other nameservers. |
 | [`next_package_layout_unsupported`](/errors/next_package_layout_unsupported) | Automatic Next.js builds do not support Yarn `Plug'n'Play`. |
 | [`next_version_unsupported`](/errors/next_version_unsupported) | This Next.js version is incompatible with the bundled server runtime adapter. |
 | [`no_space_selected`](/errors/no_space_selected) | The command needs a Space and this directory does not select one. |
@@ -312,6 +350,7 @@ There are 673 error codes in the registry.
 | [`promotion_nothing_to_promote`](/errors/promotion_nothing_to_promote) | The test tenant's system space has no live manifest, so there is no configuration to promote. |
 | [`promotion_runtime_publish_incomplete`](/errors/promotion_runtime_publish_incomplete) | The promoted version was accepted but its runtime publish did not finish, so live is unchanged. |
 | [`promotion_test_twin_missing`](/errors/promotion_test_twin_missing) | This live tenant has no linked test tenant, so there is nothing to promote from. |
+| [`provider_commit_denied`](/errors/provider_commit_denied) | The domain changed hands or lost access before the registrar call, so nothing was sent. |
 | [`provider_error`](/errors/provider_error) | WP Cloud reported an error. |
 | [`provider_job_failed`](/errors/provider_job_failed) | A hosting-provider job failed while processing this operation. |
 | [`provider_job_timeout`](/errors/provider_job_timeout) | A hosting-provider job timed out while processing this operation. |
@@ -346,14 +385,29 @@ There are 673 error codes in the registry.
 | [`rate_limit_backend_unavailable`](/errors/rate_limit_backend_unavailable) | Shared request accounting is temporarily unavailable, so this request cannot proceed. |
 | [`rate_limited`](/errors/rate_limited) | Too many requests were made in a short window. |
 | [`realtime_cursor_expired`](/errors/realtime_cursor_expired) | The realtime event cursor is no longer in the retained event history. |
+| [`registrant_contact_invalid`](/errors/registrant_contact_invalid) | The registrar rejected the registrant contact, so the payment for this domain was refunded. |
+| [`registrar_nameservers_refused`](/errors/registrar_nameservers_refused) | The registry refused the nameserver change. Nothing changed. |
+| [`registrar_nameservers_unconfirmed`](/errors/registrar_nameservers_unconfirmed) | The registrar did not confirm the nameserver change. The registry may still apply it. |
+| [`registrar_outcome_unknown`](/errors/registrar_outcome_unknown) | The registrar has not confirmed whether the registration went through yet. |
+| [`registrar_tld_maintenance`](/errors/registrar_tld_maintenance) | The registry for this domain ending is down for maintenance. |
+| [`registrar_unavailable`](/errors/registrar_unavailable) | The registrar could not be reached. |
+| [`registrar_writes_disabled`](/errors/registrar_writes_disabled) | Spacefast paused registrar writes. |
 | [`registration_expired`](/errors/registration_expired) | The domain registration is expired. |
 | [`registration_expiring`](/errors/registration_expiring) | The domain registration is about to expire, which blocks this operation. |
+| [`registration_failed`](/errors/registration_failed) | The registrar refused the registration, so the payment for this domain was refunded. |
 | [`repository_commit_not_found`](/errors/repository_commit_not_found) | The commit you asked to read does not exist in this repository. |
 | [`repository_commit_unchanged`](/errors/repository_commit_unchanged) | The commit changes no files: the branch already holds this exact tree, so there is nothing to save. |
 | [`repository_path_invalid`](/errors/repository_path_invalid) | The repository provider refused the requested file path. |
 | [`repository_ref_not_found`](/errors/repository_ref_not_found) | The branch, tag, or commit you asked to read does not exist in this repository. A repository nothing has been pushed to yet answers this for its own default branch. |
 | [`repository_resource_not_found`](/errors/repository_resource_not_found) | The requested repository resource does not exist. |
+| [`repository_source_already_initialized`](/errors/repository_source_already_initialized) | The repository already has source history. |
+| [`repository_source_read_only`](/errors/repository_source_read_only) | This connected repository must be edited upstream. |
 | [`repository_stale_base`](/errors/repository_stale_base) | The branch moved after this change was built, so the commit was refused. |
+| [`repository_upload_source_changed`](/errors/repository_upload_source_changed) | The current upload changed while source was being initialized. |
+| [`repository_upload_source_ineligible`](/errors/repository_upload_source_ineligible) | This version cannot automatically initialize original uploaded source. |
+| [`repository_upload_source_invalid`](/errors/repository_upload_source_invalid) | The version contains empty, duplicate, or invalid repository paths. |
+| [`repository_upload_source_too_large`](/errors/repository_upload_source_too_large) | The files exceed the source initialization limit. |
+| [`repository_upload_source_unavailable`](/errors/repository_upload_source_unavailable) | The complete version files could not be verified. |
 | [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
 | [`response_headers_unservable`](/errors/response_headers_unservable) | A file needs a response header that the platform cannot deliver for large files. |
 | [`response_table_too_large`](/errors/response_table_too_large) | A compiled response table exceeded the 1 MiB per-file limit. |
@@ -375,6 +429,7 @@ There are 673 error codes in the registry.
 | [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space does not serve a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
 | [`runtime_purge_failed`](/errors/runtime_purge_failed) | Content updated but the edge cache purge did not confirm. |
+| [`runtime_release_superseded`](/errors/runtime_release_superseded) | A newer deploy already decided the platform release this one would have changed. |
 | [`runtime_release_unverifiable`](/errors/runtime_release_unverifiable) | The requested platform release could not be verified at its origin. |
 | [`runtime_request_body_too_large`](/errors/runtime_request_body_too_large) | The runtime management request exceeded its byte limit before JSON parsing. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
@@ -392,6 +447,7 @@ There are 673 error codes in the registry.
 | [`service_booting`](/errors/service_booting) | The process that received this request is still starting and cannot serve it yet. |
 | [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature cannot be verified. |
 | [`session_not_fresh`](/errors/session_not_fresh) | This action needs a recent identity confirmation. |
+| [`sign_in_required`](/errors/sign_in_required) | The personal agent's session has no active account authorization. |
 | [`site_already_deleted`](/errors/site_already_deleted) | The site was already deleted. |
 | [`site_required`](/errors/site_required) | A site reference is required for this operation. |
 | [`site_suspended`](/errors/site_suspended) | The site is suspended, so its spaces cannot be served or modified. |
@@ -415,10 +471,14 @@ There are 673 error codes in the registry.
 | [`source_file_too_large`](/errors/source_file_too_large) | The source file exceeds the complete-read size limit. |
 | [`source_file_unavailable`](/errors/source_file_unavailable) | The selected source snapshot did not return complete file contents. |
 | [`source_files_too_large`](/errors/source_files_too_large) | The selected source file contents exceed the operation size limit. |
+| [`source_fork_replaced`](/errors/source_fork_replaced) | The remix destination no longer matches its captured source. |
+| [`source_fork_revoked`](/errors/source_fork_revoked) | Source sharing changed before the remix copy completed. |
 | [`source_hunk_selection_invalid`](/errors/source_hunk_selection_invalid) | The selected hunks are duplicated or cannot be staged independently. |
 | [`source_hunk_stale`](/errors/source_hunk_stale) | The hunk IDs do not match the current source workspace snapshots. |
+| [`source_import_pending`](/errors/source_import_pending) | The initial main-branch source copy is pending. |
 | [`source_merge_snapshot_changed`](/errors/source_merge_snapshot_changed) | A managed merge ref no longer matches the pinned source snapshot. |
 | [`source_merge_undo_unsupported`](/errors/source_merge_undo_unsupported) | The selected source commit is a merge commit with multiple parents. |
+| [`source_namespace_required`](/errors/source_namespace_required) | Public source sharing requires an organization namespace. |
 | [`source_nothing_staged`](/errors/source_nothing_staged) | The staged source tree has no changes against the saved base. |
 | [`source_operation_pending`](/errors/source_operation_pending) | A source workspace operation still has an uncertain provider result. |
 | [`source_operation_reused`](/errors/source_operation_reused) | The operation ID was already used with different source input. |
@@ -458,7 +518,9 @@ There are 673 error codes in the registry.
 | [`space_selection_conflict`](/errors/space_selection_conflict) | The command asked to create a Space while this directory already selects one. |
 | [`space_transferring`](/errors/space_transferring) | The space has a transfer in progress, which blocks this operation. |
 | [`space_unclaimed`](/errors/space_unclaimed) | This operation requires a claimed space. |
+| [`spacefast_git_url_invalid`](/errors/spacefast_git_url_invalid) | The Spacefast Git URL does not identify an organization and Space. |
 | [`ssl_renewal_blocked`](/errors/ssl_renewal_blocked) | SSL certificate renewal is blocked for this hostname. |
+| [`staging_signup_restricted`](/errors/staging_signup_restricted) | New accounts on staging require a connection from the approved IP list. |
 | [`static_control_file_not_supported`](/errors/static_control_file_not_supported) | This control file is not supported by the static runtime. |
 | [`static_runtime_control_path_not_supported`](/errors/static_runtime_control_path_not_supported) | This control path is not supported by the static runtime. |
 | [`static_runtime_required`](/errors/static_runtime_required) | This operation only applies to static-runtime spaces. |
@@ -477,6 +539,7 @@ There are 673 error codes in the registry.
 | [`storage_unavailable`](/errors/storage_unavailable) | The runtime cannot read or persist object storage. |
 | [`stripe_error`](/errors/stripe_error) | The billing provider reported an error. |
 | [`subteam_name_taken`](/errors/subteam_name_taken) | Another subteam in this team already uses that name, ignoring case. |
+| [`superadmin_automattic_email_required`](/errors/superadmin_automattic_email_required) | The user needs a verified @automattic.com email address before receiving the superadmin role. |
 | [`superadmin_proxy_required`](/errors/superadmin_proxy_required) | Superadmin access requires the operator proxy. |
 | [`superadmin_two_factor_required`](/errors/superadmin_two_factor_required) | The user must have two-factor authentication enrolled before being granted superadmin. |
 | [`superadmin_wpcom_account_required`](/errors/superadmin_wpcom_account_required) | The user must have a WordPress.com account linked before being granted superadmin. |
@@ -485,14 +548,37 @@ There are 673 error codes in the registry.
 | [`system_space_invalid`](/errors/system_space_invalid) | The requested system space does not exist, is disabled, or belongs to another tenant. |
 | [`system_team_immutable`](/errors/system_team_immutable) | This team is operated by Spacefast. Its name, slug and lifecycle are fixed, so renaming or deleting it was refused. |
 | [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere. A takeover notice window applies. |
+| [`team_deleted`](/errors/team_deleted) | The team was deleted before the domain could be registered, so the payment for it was refunded. |
+| [`team_design_system_asset_not_found`](/errors/team_design_system_asset_not_found) | The attachment does not belong to this team's design-system media. |
+| [`team_design_system_asset_too_large`](/errors/team_design_system_asset_too_large) | The file is empty or exceeds 100 MB. |
+| [`team_design_system_asset_type_invalid`](/errors/team_design_system_asset_type_invalid) | The filename, declared content type, and file bytes do not agree. |
+| [`team_design_system_contains_credential`](/errors/team_design_system_contains_credential) | The design guidance looks like it contains a password, key, or token. |
+| [`team_design_system_entry_not_found`](/errors/team_design_system_entry_not_found) | The entry is missing, archived, or belongs to a different record type. |
+| [`team_design_system_invalid`](/errors/team_design_system_invalid) | The design-system change is invalid or missing required values. |
+| [`team_design_system_limit_reached`](/errors/team_design_system_limit_reached) | Active design metadata exceeds 256 KiB or 200 entries of one type. |
+| [`team_design_system_operation_conflict`](/errors/team_design_system_operation_conflict) | This operation ID already names different input. |
+| [`team_design_system_revision_conflict`](/errors/team_design_system_revision_conflict) | The team's design system changed since this action was prepared. |
+| [`team_design_system_storage_invalid`](/errors/team_design_system_storage_invalid) | A stored design-system record or action cannot be decoded. |
+| [`team_design_system_svg_invalid`](/errors/team_design_system_svg_invalid) | The SVG contains unsupported elements, attributes, or external content. |
+| [`team_design_system_undo_conflict`](/errors/team_design_system_undo_conflict) | The requested action is no longer the latest design-system action. |
+| [`team_design_system_upload_failed`](/errors/team_design_system_upload_failed) | The file or native attachment could not be stored. |
+| [`team_design_system_upload_invalid`](/errors/team_design_system_upload_invalid) | The file upload is invalid or exceeds 100 MB. |
+| [`team_design_system_write_failed`](/errors/team_design_system_write_failed) | The design-system transaction could not be stored. |
 | [`team_has_paid_plan`](/errors/team_has_paid_plan) | This team still has an active subscription or a purchase in progress, so it can't be deleted. |
 | [`team_has_sell_seller`](/errors/team_has_sell_seller) | This team owns a Stripe seller binding and must remain available for Sell order management. |
+| [`team_knowledge_setup_required`](/errors/team_knowledge_setup_required) | The team has no designated context storage. |
+| [`team_knowledge_storage_unavailable`](/errors/team_knowledge_storage_unavailable) | The designated system Space cannot serve team context. |
 | [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded) | Inviting this person would exceed the team's seat limit. |
 | [`team_members_missing_two_factor`](/errors/team_members_missing_two_factor) | Some team members don't have two-factor authentication on yet. |
+| [`team_memory_contains_credential`](/errors/team_memory_contains_credential) | The memory looks like it contains a password, key, or token. |
+| [`team_memory_exists`](/errors/team_memory_exists) | An active memory with this title already exists in the same scope, ignoring case. |
+| [`team_memory_limit_reached`](/errors/team_memory_limit_reached) | The team already has the maximum number of active memories. |
+| [`team_memory_not_found`](/errors/team_memory_not_found) | No memory with this id exists in the team. |
 | [`team_owner_required`](/errors/team_owner_required) | Only a team owner can change this setting. |
 | [`team_ref_required`](/errors/team_ref_required) | A team reference is required for this operation. |
 | [`team_required`](/errors/team_required) | This operation requires an acting team. |
 | [`team_scope_mismatch`](/errors/team_scope_mismatch) | The requested team conflicts with the team this credential or resource is bound to. |
+| [`team_skill_not_found`](/errors/team_skill_not_found) | No team skill with this key exists. |
 | [`team_slug_conflict`](/errors/team_slug_conflict) | The team slug is already taken. |
 | [`team_two_factor_required`](/errors/team_two_factor_required) | This team requires two-factor authentication, and your account doesn't have it on. |
 | [`template_file_too_large`](/errors/template_file_too_large) | A template file exceeds the maximum size for substitution. |
@@ -642,7 +728,7 @@ There are 673 error codes in the registry.
 | [`zero_gravatar_unavailable`](/errors/zero_gravatar_unavailable) | The local Zero Gravatar service is not configured. |
 | [`zero_js_context_init_failed`](/errors/zero_js_context_init_failed) | The Zero runner cannot initialize a QuickJS context. |
 | [`zero_js_execution_failed`](/errors/zero_js_execution_failed) | The Zero endpoint JavaScript threw during execution. |
-| [`zero_js_execution_timeout`](/errors/zero_js_execution_timeout) | The Zero endpoint exceeded its JavaScript execution budget. |
+| [`zero_js_execution_timeout`](/errors/zero_js_execution_timeout) | A Zero query, mutation, or endpoint used more than 500 ms of CPU time on one request. |
 | [`zero_js_globals_failed`](/errors/zero_js_globals_failed) | The Zero runner cannot install runtime globals for the endpoint. |
 | [`zero_js_response_malformed`](/errors/zero_js_response_malformed) | The Zero endpoint returned a malformed runner response. |
 | [`zero_js_runtime_init_failed`](/errors/zero_js_runtime_init_failed) | The Zero runner cannot initialize QuickJS. |

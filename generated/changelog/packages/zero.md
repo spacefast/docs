@@ -5,6 +5,41 @@ description: "Release history for @spacefast/zero on npm."
 
 Published as [`@spacefast/zero`](https://www.npmjs.com/package/@spacefast/zero) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Minor Changes
+
+- Add a context starter: one Space is one Gutenberg document, with Save at the top
+  right and the Space's existing access settings controlling viewing and editing.
+  WordPress stores blocks and native revisions. A lossless `.blocks` source binding
+  uses the existing source writeback pipeline so committed content can travel with
+  source remixes. Markdown remains available for supported agent handoffs. Revision
+  tokens protect human edits from stale saves.
+
+#### Patch Changes
+
+- The context editor starts faster: it loads the document and the editor together, downloads Gutenberg's scripts in parallel, ships the first page and post-type responses with the editor, and shows the saved document while Gutenberg starts.
+- The context document now reads and saves through WordPress's own pages API. `/spacefast/v1/context` and `/spacefast/v1/context/editor` are removed: read with `GET /wp/v2/pages?slug=context&context=edit`, and save with `POST /wp/v2/pages/{id}`, sending back the `spacefast_revision` you read with `content` or `markdown`. A stale revision returns 409. The editor loads Gutenberg from the Space dashboard's `/wp/v2/editor/assets`. Viewers who cannot edit see "Sign in to edit" or "View only" instead of a sign-in button that did nothing. Context Spaces published before this change need republishing.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

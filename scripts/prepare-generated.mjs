@@ -26,10 +26,12 @@ const setupSections = [
       "cursor",
       "vscode",
       "github-copilot",
+      "github-copilot-app",
       "devin-desktop",
       "devin-cloud",
       "zed",
       "gemini-cli",
+      "grok-build",
       "opencode",
       "amp",
       "warp",
@@ -42,7 +44,18 @@ const setupSections = [
   {
     folder: "(personal)",
     title: "Personal agents",
-    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
+    pages: [
+      "claude-app",
+      "chatgpt",
+      "claude-desktop",
+      "grok",
+      "grok-bot",
+      "raycast",
+      "poke",
+      "indent",
+      "hermes",
+      "openclaw",
+    ],
   },
 ];
 
@@ -59,9 +72,11 @@ async function exists(value) {
 // Short client names from the generated setup index ("- [Codex](/setup/codex): …").
 // Checked before any overlay is replaced, so a failure leaves the last good copy.
 const setupClients = new Map(
-  [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
-    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\)/gmu,
-  )].map(([, name, slug]) => [slug, name]),
+  [
+    ...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
+      /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\)/gmu,
+    ),
+  ].map(([, name, slug]) => [slug, name]),
 );
 const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
 const unlistedClients = [...setupClients.keys()].filter((slug) => !listedClients.has(slug));

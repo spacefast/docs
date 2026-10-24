@@ -33,6 +33,15 @@ npx -y spacefast setup agent --agent claude-code -y
 npx -y plugins add spacefast/plugins -t claude-code -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+claude mcp add --scope user --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start a new Claude Code session and run `/mcp`.
+2. Select Spacefast, then sign in and approve access.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash

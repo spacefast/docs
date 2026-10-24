@@ -56,6 +56,17 @@ npm install -g spacefast && sf setup agent --agent cline
 npx -y spacefast setup agent --agent cline -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+cline mcp add spacefast 'https://mcp.spacefast.com' --transport http
+```
+
+1. Confirm the prefilled server details in Cline's add wizard.
+2. Run `cline mcp`, choose Authorize OAuth for Spacefast, then sign in and approve access.
+
+Cline CLI and the Cline extension 4.0 or later share these settings, so this adds Spacefast to both.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash

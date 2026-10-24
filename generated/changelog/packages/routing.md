@@ -5,6 +5,30 @@ description: "Release history for @spacefast/routing on npm."
 
 Published as [`@spacefast/routing`](https://www.npmjs.com/package/@spacefast/routing) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

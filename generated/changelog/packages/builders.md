@@ -5,6 +5,33 @@ description: "Release history for @spacefast/builders on npm."
 
 Published as [`@spacefast/builders`](https://www.npmjs.com/package/@spacefast/builders) on npm.
 
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+  - @spacefast/build-output@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+  - @spacefast/build-output@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+  - @spacefast/build-output@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

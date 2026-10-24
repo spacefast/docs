@@ -19,7 +19,7 @@ https://mcp.spacefast.com
 4. Choose Personal access for your own account, or Organization only if you want to share it.
 5. Save, then choose Connect.
 6. Sign in to Spacefast and approve access.
-7. Use Test listing tools before you start a session.
+7. Use Test tools before you start a session.
 
 You need the Manage MCP Servers permission to add a custom MCP.
 

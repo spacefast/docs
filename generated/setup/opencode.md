@@ -39,6 +39,16 @@ npm install -g spacefast && sf setup agent --agent opencode
 npx -y spacefast setup agent --agent opencode -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+opencode mcp add
+```
+
+1. Follow the prompts to add a remote server named spacefast.
+2. Paste the server URL shown on this page, including the tool-mode query if selected.
+3. Run `opencode mcp auth spacefast`, then sign in to Spacefast and approve access.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
