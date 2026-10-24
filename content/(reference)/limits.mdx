@@ -99,11 +99,11 @@ A space that stops serving does not fall back to a blank 404. The status code an
 | Account suspended | `402` | `This space is paused.` | `403` `tenant_suspended` |
 | Space disabled, expired, or taken down | `404` | `This space is no longer available.` | `409` with the disable reason |
 | Removed after a legal complaint | `451` | `This content is unavailable for legal reasons.` | `409` |
-| Removed under the strictest safety category | `503` | `This space hasn't been published yet.` | `409` |
+| Removed under the strictest safety category | `404` | `This space hasn't been published yet.` | `409` |
 
 Reads are never blocked by account state. Only writes are. A past-due account keeps serving every site at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
 
-The 451 and 404 pages are customizable like any other error page. The 503 case is byte-identical to a host that has never published anything.
+The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything. Both return `404` with `X-Spacefast-Undeployed: 1` and the unpublished body, which distinguish them from a missing page on a published site.
 
 ## Rate limits
 
