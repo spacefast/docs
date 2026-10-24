@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 import { buildLlmsIndex, discoveryFileForUrl, routeOf } from "./build-llms-index.mjs";
 import { routesFromSidebar } from "./sidebar-routes.mjs";
@@ -146,7 +147,7 @@ test("throws when the result would exceed the size ceiling", () => {
 
 test("the sidebar parser agrees with the real config", async () => {
   const { readSidebarRoutes } = await import("./sidebar-routes.mjs");
-  const routes = await readSidebarRoutes(new URL("..", import.meta.url).pathname);
+  const routes = await readSidebarRoutes(fileURLToPath(new URL("..", import.meta.url)));
   assert.ok(routes.has("/errors"));
   assert.ok(routes.has("/changelog"));
   assert.ok(routes.size > 40);
