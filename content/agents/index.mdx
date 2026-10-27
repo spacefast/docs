@@ -7,15 +7,16 @@ Connect your coding agent to Spacefast once, then ask it to publish. This page c
 
 ## What an agent can do
 
-Anything you can do in the dashboard, an agent can do over MCP. The Spacefast MCP server exposes five tools.
+Anything you can do in the dashboard, an agent can do over MCP. Every Spacefast API operation is its own MCP tool, named by its operation ID: `getAccount`, `listSpaces`, `searchDocs`, `createDomain`, and a few hundred more. Clients that support tool search load them on demand.
+
+A handful of tools sit on top of that catalog.
 
 - `publish` uploads a folder, a file, an archive, or inline files and returns the live URL and the immutable version URL.
 - `operation_status` checks a publish that is still running.
-- `show_space` opens a read-only view of deployments, domains, analytics, source files, changes, history, comparisons, or build logs.
-- `execute` runs one JavaScript program against the Spacefast API catalog. Use it for documentation, account information, API reads without a visual view, and mutations.
-- `resume_execution` continues the same program after it pauses for your approval.
+- The `show_space_*` tools open a visual view of a Space: its preview, deployments, domains, analytics, comments, source, build logs, or database.
+- `resume_execution` continues a call that paused for your approval.
 
-Inside `execute`, search for an operation with `tools.search`, read its contract with `tools.describe`, then call it. Check each write with a read before reporting success.
+Check each write with a read before reporting success.
 
 If your team has a saved [Design System](/design-system), your agent can read its standards and files while working on a project. Ask it to apply the system to a new build or bring an existing project into line with the current rules.
 
@@ -31,7 +32,7 @@ Show me the deployments for this Space and whether the last build passed.
 Point docs.example.com at this Space and tell me which DNS records to add.
 </Prompt>
 
-Read [the MCP server page](/agents/mcp-server) for the tool schemas, the sandbox contract, and the approval model.
+Read [the MCP server page](/agents/mcp-server) for the full tool list, the scopes, and the approval model.
 
 ## Three ways to connect
 

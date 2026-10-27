@@ -40,10 +40,10 @@ The trigger line is the frontmatter `description`. Your client matches it agains
 <Tabs param="client">
 <Tab title="Claude Code">
 
-The MCP variant routes publishing, inspection, and management requests to the current tools.
+The MCP variant triggers on building, publishing, and changing Spaces, sharing, domains, and team standards.
 
 ```text
-Use publish for local files or a new inline artifact, operation_status for an active publish, and show_space for read-only views. Use execute for documentation, API reads, and mutations. Use resume_execution to continue a paused program.
+Build and publish websites, edit existing Spaces, manage sharing and domains, and apply saved team standards with Spacefast. Use the installed task skill for the requested workflow.
 ```
 
 </Tab>
@@ -87,14 +87,14 @@ The skill's job is routing and conduct. The MCP variant follows these tool choic
 | Job | Tool |
 |---|---|
 | Publish local files or a new inline artifact | `publish` |
-| View deployments, domains, analytics, source, or build logs | `show_space` |
+| See a Space's preview, deployments, domains, analytics, comments, source, build logs, or database | The matching `show_space_*` tool |
 | Check an active publish | `operation_status` |
-| Documentation, account context, other API reads, and mutations | `execute` |
+| Documentation, account context, other API reads, and mutations | The operation's own tool, such as `searchDocs` or `promoteSpaceVersion` |
 | Continue an approval | `resume_execution` |
 
 The rest sets behavior the tools alone do not enforce.
 
-- Call the matching tool first. Inside `execute`, search for and describe each operation before calling it.
+- Call the matching tool first. Read an operation tool's input schema before calling it.
 - Reuse the `.spacefast/` link in the current directory. Do not list Spaces before an ordinary publish, and set `createNew` only when you asked for a separate Space.
 - Publish once, then poll `operation_status` until it settles, then read the deployment, then report.
 - Report the live URL and the immutable version URL, plus the access URL when the receipt includes one. Current clients create team-owned Spaces without automatic access URLs: the owning team signs in at the live URL, and `sf share link create` makes a link for people outside the team. For an anonymous publish, state the claim expiry and point at the claim action rather than copying the credential into the transcript.
@@ -105,7 +105,7 @@ The rest sets behavior the tools alone do not enforce.
 
 ## Kept in sync with the tools
 
-A CI check re-renders every skill variant and compares the tool names it mentions against the live tool list, in both directions. A tool added without a skill update fails the build, and so does a skill that names a tool which no longer exists. The base skill names exactly the five tools the server registers.
+A CI check renders every skill variant and checks each tool it names against the tools the server registers. A skill that names a tool which no longer exists fails the build.
 
 ## Install the base skill on its own
 
