@@ -9,6 +9,7 @@ import {
   buildRoutingRules,
   compileRedirectRules,
   deploymentBase,
+  markdownTwinRules,
   resolveRedirect,
 } from "./redirect-rules.mjs";
 import { discoveryFileForUrl } from "./build-llms-index.mjs";
@@ -516,6 +517,16 @@ for (const [route, target, hopCount] of [
     throw new Error(`Docs route must reach its public output with its query intact: ${route}`);
   }
   await requireFile(localTargetFor(url.pathname));
+}
+for (const { from, to } of markdownTwinRules) {
+  const matched = matchRedirect({
+    compilation,
+    request: { url: new URL(`${docsRoot}${from.slice(deploymentBase.length)}`), headers: new Headers() },
+  });
+  if (matched?.action !== "redirect" || matched.status !== 301 || matched.target !== to) {
+    throw new Error(`A retired page's Markdown URL must 301 to its replacement: ${from} -> ${to}`);
+  }
+  await requireFile(localTargetFor(to.slice(deploymentBase.length)));
 }
 const runtimesZeroHtml = await readBuilt("runtimes/zero/index.html");
 if (!runtimesZeroHtml.includes(`<meta http-equiv="refresh" content="0;url=${deploymentBase}/zero-runtime">`)) {

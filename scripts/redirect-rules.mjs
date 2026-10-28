@@ -1,3 +1,4 @@
+import { redirects as retiredPageRedirects } from "../redirects.ts";
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 export const deploymentBase = "/docs";
@@ -24,6 +25,25 @@ const authoredRedirectRules = [
     to: `${deploymentBase}/object-storage`,
   },
 ];
+
+// `route` is relative to the deployment base; a `#fragment` has no Markdown form.
+function markdownRoute(route) {
+  const pathname = route.split("#")[0];
+  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.md`;
+}
+
+function unbased(route) {
+  return route.slice(deploymentBase.length) || "/";
+}
+
+// Retired pages in redirects.ts survive only as Blume meta-refresh stubs, and
+// moved pages leave no file behind, so neither has a Markdown twin. llms.txt
+// tells agents to append `.md` to any docs URL, so each one gets a real 301
+// from its `.md` URL to the replacement's `.md`.
+export const markdownTwinRules = [
+  ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
+  ...retiredPageRedirects,
+].map(({ from, to }) => ({ from: markdownRoute(from), status: 301, to: markdownRoute(to) }));
 
 const aliasFamilies = [
   {
@@ -117,6 +137,7 @@ function applyRule(rule, source) {
 export function buildRoutingRules(redirects) {
   return [
     ...authoredRedirectRules,
+    ...markdownTwinRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,
