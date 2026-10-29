@@ -112,9 +112,9 @@ The apex is decided by the public suffix list, not by counting labels. `example.
 
 **Verification failure never takes a live site down.** Compiled routes and certificates stay in place while the domain re-proves itself. Only sustained failure past the notice window blocks the attachment.
 
-**Space-attachment responses** (`/v1/spaces/{spaceId}/domains` and its domain detail route) use `verification.status` for provider HTTPS readiness instead. `pending` means DNS, provider attachment, or certificate provisioning is still settling; `verified` means the configured hostname is active; `failed` reports an attachment error. This includes legacy attachments: DNS ownership proof alone does not settle the attachment's status. The Space's `liveUrl` changes to the selected primary custom hostname once its attachment becomes active.
+**Native Space-attachment responses** (`/v1/spaces/{spaceId}/domains` and its domain detail route) use `verification.status` for provider HTTPS readiness instead. `pending` means DNS, provider attachment, or certificate provisioning is still settling; `verified` means the configured hostname is active; `failed` reports an attachment error. Legacy attachments can still report DNS ownership proof in this field, so check certificate diagnostics before treating them as HTTPS-ready. The Space's `liveUrl` changes to the selected primary custom hostname once its attachment becomes active.
 
-For separate progress steps, use hostname diagnostics: `dns.txtVerified` reports TXT ownership proof (`null` together with `dns.expectedTxtValue: null` means no TXT proof is required), `dns.pointsToProvider` reports routing, and `ssl.status` reports certificate state. A pending certificate does not undo completed ownership proof.
+For separate progress steps, use hostname diagnostics: `dns.txtVerified` reports observed TXT ownership proof, `dns.pointsToProvider` reports routing, and `ssl.status` reports certificate state. A `null` TXT observation is inconclusive: diagnostics may not include a prefixed ownership record. Follow the domain's verification instructions rather than assuming no TXT proof is required. A pending certificate does not undo completed ownership proof.
 
 ## Certificates
 
