@@ -1,0 +1,106 @@
+---
+title: SSO and external identity
+description: Let people sign in to a private Space with your company's OpenID Connect provider or a signer you run, then grant each identity the paths it may open
+---
+
+A private Space can admit people who sign in somewhere else: your company's OpenID Connect provider, or a portal you run that signs its own identity proofs. The provider proves who someone is. A grant on the Space decides what that identity may open.
+
+Two things have to exist for an SSO sign-in to work:
+
+1. An **identity connection** on the team. It names the issuer and holds the client secret or signing keys.
+2. An **external grant** on the Space. It names one subject from that connection, a role, and the paths it covers.
+
+A connection admits nobody by itself. Until a Space has an external grant for its issuer, visitors never see the SSO button.
+
+## Connect an identity provider
+
+Open team settings, go to **Access**, and in the **SSO providers** card choose **Add identity provider**. Pick the **Connection type** first; the rest of the form follows from it.
+
+| Field | OpenID Connect | White-label signer |
+| --- | --- | --- |
+| **Name** | What visitors see on the button, such as "Company sign-in" | Such as "Customer portal" |
+| **Issuer** | The provider's issuer URL, over HTTPS | The `iss` your portal puts in its proofs, over HTTPS |
+| **Client ID** / **Client secret** | From the application you register at the provider | — |
+| **Sign-in URL** | — | Where Spacefast sends the visitor to sign in |
+| **Ed25519 public keys** | — | One `kid:base64url-key` per line, up to 5 |
+
+Only team owners and admins can add, update, or revoke a connection. A team can hold one active connection per issuer.
+
+From the CLI:
+
+```bash
+sf share identity create --type oidc --name "Company sign-in" \
+  --issuer https://login.example.com \
+  --client-id 0oa1b2c3 --client-secret "$OIDC_CLIENT_SECRET"
+
+sf share identity ls
+```
+
+### Register Spacefast at your provider
+
+When you create the application at your OpenID Connect provider, register this redirect URI:
+
+```text
+https://api.spacefast.com/identity/callback
+```
+
+Spacefast uses the authorization code flow with PKCE and asks for the `openid email profile` scopes. The provider's discovery document at `/.well-known/openid-configuration` has to be reachable over HTTPS, and its `issuer` has to match the one you entered. Spacefast accepts ID tokens signed with `RS256`, `PS256`, `ES256`, or `EdDSA`.
+
+Spacefast does not check the provider when you save the connection. A wrong issuer or client secret shows up the first time someone signs in, as an error on the callback.
+
+## Grant an identity access
+
+Open the Space, go to **Access**, expand **Advanced**, and find **SSO and identity**. Pick the **Connection**, enter the **Subject**, give the grant a **Name**, then choose paths, a role, and an optional expiry. **Add identity grant** saves it.
+
+The subject is the `sub` claim your provider puts in its ID token, matched exactly. It is not an email address unless your provider uses email as `sub`, and there is no wildcard or domain matching. One grant admits one subject. Name the grant after the person or role it stands for, because the stored subject is opaque in every listing.
+
+From the CLI, `--connection` takes the connection ID shown by `sf share identity ls`:
+
+```bash
+sf share identity grant --space my-site \
+  --connection acn_xxxxxxxx \
+  --subject 00u1a2b3c4d5e6f7g8h9 \
+  --name "Alex (company sign-in)" \
+  --role viewer --path '/docs/**' --expires 90d
+```
+
+An external grant can hold any role, from `viewer` to `manager`, and any target: `live`, `all-versions`, `version:<id>`, or `branch:<name>`. The dashboard form always writes `live` and takes no exclusions; use the CLI or the API for those. A `commenter` role on `live` needs the Space's comments set to **Everywhere**; otherwise target a version.
+
+The grant appears in `sf share list`. To change its paths or role, revoke it and create a new one. Revoking takes effect on the next request.
+
+## What a visitor sees
+
+On the Space's access page, each connection the Space has a grant for shows as a **Continue with &lt;name&gt;** button, next to **Continue with Spacefast** and any password form. The visitor signs in at the provider and comes back to the page they asked for.
+
+After sign-in, Spacefast checks the grant against the path the visitor asked for. An identity with no matching grant is refused with "This identity does not have access to that page." Fix that by adding a grant for its subject, or by widening the paths of the one it has.
+
+An admitted visitor holds the same session as any other: it expires after 7 days idle or 30 days absolute, and `sf access logout-all` ends it. Each sign-in counts as one use against a grant's `--max-uses`.
+
+## Rotate secrets and keys
+
+**Update** on a connection replaces the client secret, or the signer key set, in place. External grants survive the rotation. Every session that was admitted through the connection ends, and those visitors sign in again on their next request.
+
+For a signer, the replacement key set is complete: list every key that should stay valid. To rotate without downtime, add the new key alongside the old one, switch your portal to the new key, then update again with only the new key.
+
+```bash
+sf share identity update acn_xxxxxxxx --client-secret "$NEW_SECRET"
+sf share identity update acn_xxxxxxxx --key k2:AAAA...43chars --key k3:BBBB...43chars
+```
+
+## Revoke a connection
+
+**Revoke** on a connection ends it, every external grant on the team's Spaces that names its issuer, and every session those grants admitted. The SSO button disappears from each Space's access page.
+
+```bash
+sf share identity revoke acn_xxxxxxxx
+```
+
+To take access away from one person instead, revoke their grant on the Space and leave the connection alone.
+
+## White-label signers
+
+A signer connection is for a portal you already run and whose users you want to admit without an OpenID Connect provider. Your portal signs a short-lived proof with an Ed25519 key you registered on the connection, and Spacefast exchanges that proof for a Space session.
+
+Spacefast sends the visitor to your **Sign-in URL** with `spaceId`, `host`, `return`, and `browserState` as query parameters. Your portal proves the user, mints a proof whose `iss` is the connection's issuer, whose `sub` is the subject grants name, and whose `aud` is the `host`, and hands the visitor back to the Space. Proofs live at most 30 minutes.
+
+The exchange steps between your portal and Spacefast are not yet part of the public API reference. If you are building a signer integration, write to [support@spacefast.com](mailto:support@spacefast.com) for the current protocol.

@@ -11,6 +11,7 @@ export default defineMeta({
     "caching",
     "stats",
     "access",
+    "sso",
     "customization",
     "site-pages",
   ],
