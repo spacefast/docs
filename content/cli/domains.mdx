@@ -7,7 +7,7 @@ sidebar:
 
 Attaching a custom domain to a Space is three API calls in one command, with DNS and TLS readiness tracked as they come up.
 
-Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and, except `sf routing inspect`, the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli) for those.
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). Space-scoped commands also take the selection flags (`--space`, `-o`/`--team`, `--claim-token`). `sf domains delete` selects a team with `--team`, not a Space. `sf routing inspect` takes no space selection flags. See [the CLI overview](/cli) for those.
 
 ## sf domains add
 
@@ -157,7 +157,7 @@ A table of `DOMAIN | VERIFICATION | KIND | LAST CHECKED`, or the line "No domain
 
 ## sf domains rm
 
-Remove a domain assignment from a Space. Aliased as `sf domains remove` and `sf domains delete`.
+Remove a domain assignment from a Space. Aliased as `sf domains remove`.
 
 **This unassigns, it does not delete.** The command sends `{"spaceId": null}`, so the hostname stays in your team's domain inventory and can be attached to another Space. The Space pointer is cleared only after provider teardown finishes, so the record keeps pointing at the Space while it drains.
 
@@ -181,6 +181,36 @@ This is a destructive remote action. It prompts "Remove this domain from the spa
 
 ```bash
 sf domains rm example.com --space docs
+```
+
+## sf domains delete
+
+**This deletes the domain from your team's inventory and any DNS zone Spacefast hosts for it.** If Spacefast serves the zone, its DNS records stop working. To unassign a domain from a Space without deleting it, use `sf domains rm` instead.
+
+```text
+sf domains delete <domain> [--team <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<domain>` | Domain ID or hostname. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--team=<value>` | current team | Select the team that owns the domain |
+
+The command prompts "Delete example.com from the team's domains?" unless you pass `--yes` (`-y`). In agent mode it refuses with `confirmation_required` (exit 2) until you pass `--yes` explicitly.
+
+Deletion is refused while the domain is attached to a Space, registered or being transferred through Spacefast, or served by a connected DNS provider. A Space using a name under the hosted DNS zone also blocks deletion.
+
+`sf domains delete` used to be an alias of `sf domains rm`. It no longer accepts `--space`: update scripts that unassign domains to use `sf domains rm <domain> --space <space>`.
+
+```bash
+sf domains delete example.com
 ```
 
 ## sf routing compute

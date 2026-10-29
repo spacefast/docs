@@ -1,5 +1,5 @@
 {
-  "contentDigest": "62a60a5fcd58a6585555a402c5a8117621630013446509a8b0575bccf271b428",
+  "contentDigest": "cf26e4e73e79458a157caea23e129ee34e3006289c9345696c7b061d717bc6a7",
   "counts": {
     "apiOperations": 435,
     "changelogPackages": 24,
@@ -271,9 +271,9 @@
       "sha256": "cd5eb822094be120033fadc780c14795e8004c2b41b0a2ea3fda14036240f899"
     },
     {
-      "bytes": 362245,
+      "bytes": 363206,
       "path": "cli/index.md",
-      "sha256": "e4b583c677e818c6e982b2fe2fb77e47f0f6a72c58f451e22cc8385c32eec8bb"
+      "sha256": "1d86bb23ed349f1016f7e3d6ce15f25ec8e92ea021b342b4652288ee6569164e"
     },
     {
       "bytes": 1224,
