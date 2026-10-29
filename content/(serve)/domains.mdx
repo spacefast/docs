@@ -99,11 +99,11 @@ The apex is decided by the public suffix list, not by counting labels. `example.
 
 ## Verification states
 
-`verification.status` on the domain record answers one question: is DNS control proved right now?
+`verification.status` depends on the response projection. **Legacy inventory records** report DNS ownership proof (the table below); **native inventory records** report `not_required`. The default `/v1/domains` list and detail compatibility responses can overlay an attached hostname's HTTPS readiness onto the inventory identity, so a `verified` status is not universally a DNS-proof verdict.
 
 | Status | What it means | What to do |
 | --- | --- | --- |
-| `not_required` | The domain is in the team inventory but not assigned to a Space. | Assign it to a Space. |
+| `not_required` | A native inventory record, or a legacy record with no ownership verification required. | Inspect the Space attachment for HTTPS readiness. |
 | `pending` | Assigned, waiting for the records to show up in public DNS. | Add the records, then wait or run `sf domains check`. |
 | `verified` | A current positive signal proves control. | Nothing. |
 | `failed` | No current proof. Either the records were never observed, or the domain verified in the past and has stopped proving. | Run `sf domains diagnostics` to see which records are observed. |
@@ -111,6 +111,10 @@ The apex is decided by the public suffix list, not by counting labels. `example.
 `failed` on a domain that used to work almost always means someone edited the zone. It does not mean the site is down.
 
 **Verification failure never takes a live site down.** Compiled routes and certificates stay in place while the domain re-proves itself. Only sustained failure past the notice window blocks the attachment.
+
+**Space-attachment responses** (`/v1/spaces/{spaceId}/domains` and its domain detail route) use `verification.status` for provider HTTPS readiness instead. `pending` means DNS, provider attachment, or certificate provisioning is still settling; `verified` means the configured hostname is active; `failed` reports an attachment error. This includes legacy attachments: DNS ownership proof alone does not settle the attachment's status. The Space's `liveUrl` changes to the selected primary custom hostname once its attachment becomes active.
+
+For separate progress steps, use hostname diagnostics: `dns.txtVerified` reports TXT ownership proof (`null` together with `dns.expectedTxtValue: null` means no TXT proof is required), `dns.pointsToProvider` reports routing, and `ssl.status` reports certificate state. A pending certificate does not undo completed ownership proof.
 
 ## Certificates
 

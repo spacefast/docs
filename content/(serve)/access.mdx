@@ -75,6 +75,16 @@ sf share grant --to public --role viewer --path '/**' --target all-versions --sp
 
 Use `version:<id>` to open only one version. Branch previews need a `branch:<name>` grant; `all-versions` does not cover them or the live site. A team grant admits the owning team; it cannot name another team you belong to.
 
+## Crawler protection
+
+Crawler identification is not the same as Space access. Requests identifying as Googlebot, Bingbot, GPTBot, or ClaudeBot from IPs that do not belong to those crawlers have been observed receiving a **403** page saying **“Checking search engine crawler”**. Sending a crawler `User-Agent` with `curl` does not establish how a genuine crawler is treated.
+
+Whether genuine GPTBot, ClaudeBot, or PerplexityBot requests pass is not established. There is no documented guarantee that AI crawlers are allowed. Private and preview hosts also have access and indexing restrictions independent of this challenge.
+
+When reporting a challenge, include the URL, time, status, response body, user agent, and source IP. An absent edge-log row is not evidence that a request was allowed.
+
+WP Cloud's `ssl-social-crawler-redirect` endpoint is unrelated: its documented purpose is HTTPS-to-HTTP redirects for Facebook, Twitter, and LinkedIn to retain historic share counts, not AI-crawler access.
+
 ## Share links
 
 A new team-owned Space does not create a share link in the current CLI or dashboard. The owning team signs in at the live URL. Create a link when you want to share outside the team.
