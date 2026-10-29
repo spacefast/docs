@@ -34,7 +34,7 @@ These flags narrow when and from where a Grant admits a visitor. Commands below 
 | `--not-before=<iso>` | none | Do not admit before this ISO date-time |
 | `--expires=<duration>` | never | Expire after a duration such as `7d` or `30m` |
 | `--max-uses=<n>` | unlimited | Maximum successful admissions. 1 to 1,000,000 |
-| `--network=<ip\|cidr>` | none | Unsupported. Spacefast has no trusted visitor IP, so any write carrying an IP or CIDR rule is refused. Pass `--no-network` on an edit to clear a rule saved before this changed |
+| `--network=<ip\|cidr>` | none | Unsupported. Spacefast has no trusted visitor IP, so any write carrying an IP or CIDR rule is refused. Pass `--no-network` on an edit to clear a rule saved before this changed; it also drops that Grant's country and user-agent rules |
 | `--country=<code>` | any | Allowed ISO country code. Repeatable |
 | `--exclude-country=<code>` | none | Blocked ISO country code. Repeatable |
 | `--exclude-user-agent=<text>` | none | Block user agents containing this text. Repeatable |
@@ -313,7 +313,7 @@ Connect a team to an external identity provider, either an OIDC provider or a wh
 
 `sf share identity ls` lists a team's OIDC and white-label signer connections. Alias: `sf share identity list`.
 
-`sf share identity update CONNECTION` rotates OIDC secrets or signer keys and updates connection settings. External Grants are untouched. Only team owners and admins can create, update, or revoke a connection. It takes `--name`, `--client-id`, `--client-secret`, `--authorize-url`, and `--key` with the same meaning as on `create`, each defaulting to unchanged, plus `--session-ttl=<duration>`, for example `30m` or `8h`, which caps how long a signer proof may live (30 minutes at most). It does not shorten visitor sessions. Rotating a secret or key set ends every session the connection admitted. `--key` is a complete replacement key set; repeat it to overlap old and new keys during rotation. Passing none of them is a validation error.
+`sf share identity update CONNECTION` rotates OIDC secrets or signer keys and updates connection settings. External Grants are untouched. Only team owners and admins can create, update, or revoke a connection. It takes `--name`, `--client-id`, `--client-secret`, `--authorize-url`, and `--key` with the same meaning as on `create`, each defaulting to unchanged, plus `--session-ttl=<duration>`, for example `30m` or `8h`. On a signer connection it caps how long a proof may live, 30 minutes at most; an OIDC connection accepts up to 24 hours. It does not shorten visitor sessions. Changing `--client-id`, `--client-secret`, `--key`, or `--session-ttl` counts as a rotation and ends every session the connection admitted; `--name` and `--authorize-url` do not. `--key` is a complete replacement key set; repeat it to overlap old and new keys during rotation. Passing none of them is a validation error.
 
 `sf share identity revoke CONNECTION` revokes the connection, its external Grants, and every session it admitted.
 

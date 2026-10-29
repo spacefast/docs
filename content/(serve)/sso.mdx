@@ -78,7 +78,7 @@ An admitted visitor holds the same session as any other: it expires after 7 days
 
 ## Rotate secrets and keys
 
-**Update** on a connection replaces the client secret, or the signer key set, in place. External grants survive the rotation. Every session that was admitted through the connection ends, and those visitors sign in again on their next request.
+**Update** on a connection replaces the client ID or secret, the signer key set, or the session lifetime in place. External grants survive the rotation. Every session that was admitted through the connection ends, and those visitors sign in again on their next request. Renaming a connection does not end sessions.
 
 For a signer, the replacement key set is complete: list every key that should stay valid. To rotate without downtime, add the new key alongside the old one, switch your portal to the new key, then update again with only the new key.
 

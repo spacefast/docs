@@ -215,7 +215,7 @@ A person who already accepted an invitation but lost their session gets back in 
 
 **With a share link**, the link is the page. The token is redeemed before anything is read from disk, so the first request returns the document. The response is never stored in any cache. It also carries `Referrer-Policy: no-referrer`, so the secret does not leak through the referrer header on outbound clicks.
 
-**On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page always offers **Continue with Spacefast** and a request-access form. It adds a password box when the Space has a password, and a **Continue with &lt;provider&gt;** button for each [SSO connection](/sso) the Space has a grant for.
+**On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. On a claimed Space, the page offers **Continue with Spacefast** and a request-access form. It adds a password box when the Space has a password, and a **Continue with &lt;provider&gt;** button for each [SSO connection](/sso) the Space has a grant for.
 
 **Signing in** sends the visitor to Spacefast, then back. The path they originally asked for is carried through the round trip, so they land on the page they wanted rather than the homepage.
 
