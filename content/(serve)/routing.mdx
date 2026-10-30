@@ -251,7 +251,7 @@ A single-page app needs no config. When `fallback` isn't set and the version run
 
 1. A root `200.html`, the name Surge, SvelteKit, and Nuxt use.
 2. Otherwise `_shell.html`, which TanStack Start writes.
-3. Otherwise a root `index.html` next to a bundler's output, as long as there is no root `404.html`. That means `_app/`, `_next/static/`, `_nuxt/`, `asset-manifest.json`, or a script with a content hash in its name directly under `assets/` or under `static/js/`, such as `assets/index-DiwrgTda.js`. A hand-written `assets/app.js` doesn't count.
+3. Otherwise a root `index.html` next to a build tool's output, as long as there is no root `404.html`. That means `_app/`, `_next/static/`, `_nuxt/`, `asset-manifest.json`, or a script with a content hash in its name directly under `assets/` or under `static/js/`, such as `assets/index-DiwrgTda.js`. A hand-written `assets/app.js` doesn't count.
 
 A root `404.html` says routes can miss, so a static export that ships one keeps its real 404s. Files mode (`"listing": true` or `"index": false`) is never an SPA. Set `"fallback": false` to turn the inference off.
 

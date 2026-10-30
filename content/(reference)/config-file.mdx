@@ -103,7 +103,7 @@ While `name` is set in the file, the API refuses to rename the Space. The file w
 
 `index` defaults to `index.html` when the version has one at the root. Otherwise, if a 200-status `fallback` names a committed file and the version runs no worker, that file. Otherwise, if the version publishes exactly one HTML file, that file. Otherwise, if there is exactly one HTML file at the root, that one. Otherwise `false`.
 
-`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it turns `listing` off unless you set it yourself. Committed pages still answer their own URLs; set `"cleanUrls": false` to send extensionless routes to the shell instead. A `fallback` path that is not a committed file fails the publish. Left unset, `fallback` is inferred: a root `200.html`, else `_shell.html`, else a root `index.html` beside a bundler's output when there's no root `404.html`. See [SPA fallback](/routing#spa-fallback).
+`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it turns `listing` off unless you set it yourself. Committed pages still answer their own URLs; set `"cleanUrls": false` to send extensionless routes to the shell instead. A `fallback` path that is not a committed file fails the publish. Left unset, `fallback` is inferred: a root `200.html`, else `_shell.html`, else a root `index.html` beside a build tool's output when there's no root `404.html`. See [SPA fallback](/routing#spa-fallback).
 
 ## Metadata and appearance
 
