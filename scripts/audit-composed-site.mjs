@@ -24,7 +24,8 @@ function isComposedDependency(diagnostic, dependencyUrls, dependencies) {
       (url) =>
         (diagnostic.message.startsWith(`Link to ${url} resolves to `) &&
           diagnostic.message.endsWith(", which the build does not serve.")) ||
-        diagnostic.message === `Link to ${url}${outsideBase}`,
+        diagnostic.message === `Link to ${url}${outsideBase}` ||
+        diagnostic.message === `Link to ${url} is missing deployment.base (/docs), so the deployed site does not serve it.`,
     ) ||
       dependencies.some(
         (dependency) =>

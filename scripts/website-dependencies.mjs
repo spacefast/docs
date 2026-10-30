@@ -11,6 +11,7 @@ export const websiteDependencies = [
   "/cookie-banner.js",
   "/help",
   "/recipes",
+  "/schemas/sf.json",
   "/setup",
 ];
 
