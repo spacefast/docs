@@ -1,6 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
+
 import { deploymentBase } from "./redirect-rules.mjs";
 
 const headersPath = path.join(path.resolve(process.cwd()), "dist", "_headers");
@@ -26,25 +28,26 @@ function supportedHeaderRules(source) {
   ]);
   const lines = source.split(/\r?\n/u);
   const kept = [];
-  const svgHeaders = [];
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
-    if (unsupported.has(line) || line === svgAssetGlob) {
-      while (/^\s/u.test(lines[index + 1] ?? "")) {
-        index += 1;
-        if (line === svgAssetGlob) svgHeaders.push(lines[index]);
-      }
+    if (unsupported.has(line)) {
+      while (/^\s/u.test(lines[index + 1] ?? "")) index += 1;
       continue;
     }
-    kept.push(line);
+    kept.push(line === svgAssetGlob ? svgAssetDirectory : line);
   }
-  if (svgHeaders.length > 0) {
-    while (kept.at(-1) === "") kept.pop();
-    kept.push(svgAssetDirectory, ...new Set(svgHeaders), "");
+  const headers = kept.join("\n");
+  const errors = compileRoutingFilesWasm({ headers }).diagnostics.filter(
+    ({ severity }) => severity === "error",
+  );
+  if (errors.length > 0) {
+    throw new Error(
+      `dist/_headers has rules the platform rejects:\n${errors
+        .map(({ source: rule, message }) => `${rule}: ${message}`)
+        .join("\n")}`,
+    );
   }
-  const invalid = kept.find((line) => !/^\s/u.test(line) && /\*[^/]/u.test(line));
-  if (invalid) throw new Error(`dist/_headers has a rule the platform cannot match: ${invalid}`);
-  return kept.join("\n");
+  return headers;
 }
 
 // Blume owns dist/_headers (Markdown charset, agent Link header, api-catalog

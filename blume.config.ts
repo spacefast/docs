@@ -106,6 +106,8 @@ export default defineConfig({
     branch: "main",
   },
   lastModified: "git",
+  // Docs headers are composed into the Website's; keep them to the rules Docs needs.
+  poweredBy: false,
   markdown: { externalLinks: true, imageZoom: true, code: { icons: true, wrap: false } },
   navigation: {
     cta: { href: "https://my.spacefast.com", label: "Dashboard" },
@@ -162,6 +164,9 @@ export default defineConfig({
   },
   agents: {
     llmsTxt: { details: llmsDetails },
+    // The Website publishes Spacefast's agent skill at the site root; a second,
+    // generated Docs skill would compete with it.
+    skillMd: false,
   },
   redirects,
   deployment: {

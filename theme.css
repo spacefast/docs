@@ -16,7 +16,6 @@
   --blume-muted-foreground: #6a6a6a;
   --blume-border: color-mix(in oklch, #141414 8%, transparent);
   --blume-code-background: #f5f5f5;
-  --blume-accent-foreground: #ffffff;
   --sf-green: #1efe57;
   --sf-ink: #141414;
 }
@@ -107,6 +106,15 @@
 
 .prose :where(.config-playground, .config-playground *) {
   box-sizing: border-box;
+}
+
+/*
+ * An API reference sample panel has its own Copy in its tab strip, so Blume
+ * hides the code-block Copy overlay there but not the Ask one beside it, which
+ * then covers the first line of the sample.
+ */
+blume-panel-tabs [data-blume-ask] {
+  display: none !important;
 }
 
 /*
