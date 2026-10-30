@@ -247,7 +247,15 @@ Without a `404.html`, Spacefast renders its own page: status 404, the heading "P
 
 ## SPA fallback
 
-Point `fallback` at a committed file to serve it whenever no exact route matches:
+A single-page app needs no config. When `fallback` isn't set and the version runs no worker, publish picks the shell from the files and says so with the note `spa_fallback_inferred`:
+
+1. A root `200.html`, the name Surge, SvelteKit, and Nuxt use.
+2. Otherwise `_shell.html`, which TanStack Start writes.
+3. Otherwise a root `index.html` next to a JavaScript bundle (`assets/`, `static/js/`, `_app/`, `_next/static/`, `_nuxt/`, or `asset-manifest.json`), as long as there is no root `404.html`.
+
+A root `404.html` says routes can miss, so a static export that ships one keeps its real 404s. Files mode (`"listing": true` or `"index": false`) is never an SPA. Set `"fallback": false` to turn the inference off.
+
+Point `fallback` at a committed file to choose the shell yourself:
 
 ```jsonc sf.jsonc
 {
@@ -255,7 +263,7 @@ Point `fallback` at a committed file to serve it whenever no exact route matches
 }
 ```
 
-The long form takes a status: `{"path": "/index.html", "status": 200}`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
+The long form takes a status: `{"path": "/index.html", "status": 200}`. `false` serves no fallback, so a miss gets the nearest `404.html`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
 
 `{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one. It turns directory listings off by default, and without a root `index.html` its file is also the homepage.
 
