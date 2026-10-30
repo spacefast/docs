@@ -218,9 +218,9 @@ Those compiled 308s accept every method and carry the incoming query across.
 
 ## Index files and clean URLs
 
-`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and it keeps its literal `/docs/index.html` URL too.
+`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, `/docs` redirects there with a 308, and the file keeps its literal `/docs/index.html` URL too. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
 
-With no config, Spacefast infers the index: a root `index.html`, else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
+With no config, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names, else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
 
 Two keys in `sf.jsonc` change it:
 
@@ -231,9 +231,9 @@ Two keys in `sf.jsonc` change it:
 }
 ```
 
-`index` names the directory index file, defaulting to `index.html`. Setting it to `false` disables index resolution.
+`index` names the homepage, the file `/` serves. It doesn't rename folder indexes: with `"index": "home.html"`, `docs/home.html` doesn't answer `/docs/`, and the publish warns with `custom_index_not_folder_index`. Setting it to `false` serves no homepage.
 
-`cleanUrls` serves a flat `about.html` at `/about` as well as `/about.html`, and redirects `/about/` to `/about` with a 308. It defaults to on, unless a 200-status SPA fallback is configured, in which case it defaults to off.
+`cleanUrls` serves a flat `about.html` at `/about` as well as `/about.html`, and redirects `/about/` to `/about` with a 308. It defaults to on, with or without a fallback, so a committed page always wins its URL over the SPA shell.
 
 In a config that declares `"version": 1`, these live under `serve` as `serve.index`, `serve.cleanUrls`, `serve.spaFallback`, and `serve.directoryListing`.
 
@@ -257,7 +257,9 @@ Point `fallback` at a committed file to serve it whenever no exact route matches
 
 The long form takes a status: `{"path": "/index.html", "status": 200}`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
 
-`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one, and it turns clean URLs off by default and forces directory listings off.
+`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one. It turns directory listings off by default, and without a root `index.html` its file is also the homepage.
+
+Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` to send extensionless routes to the shell instead.
 
 The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. It is a denylist on purpose, which keeps dotted client routes such as `/users/jane.doe` and `/v1.2.3` reaching the shell.
 
