@@ -36,13 +36,13 @@ In `--json` or non-interactive output the key and the claim link are masked. Pas
 
 The claim link is a fragment URL on purpose. Browsers never send a fragment to a server, so the key reaches the claim page without being logged anywhere in between.
 
-From the dashboard, **Drop** does the same thing while signed out. The eyebrow reads **Anonymous drop · Claim it later**, and the result carries a **Claim this space** button.
+From the dashboard, **Drop** does the same thing while signed out. The result explains that the Space has no account owner yet and offers **Save to my account**. Saving it removes the anonymous publishing deadline, lets you find it again and publish updates, and keeps its existing sharing settings unchanged. A Space you already published to your account does not need this step.
 
 Before claiming, you can publish updates, promote or roll back to a version ID from an earlier receipt, and create and revoke scoped viewer links. Listing version history, downloading files, and exporting app data return `space_unclaimed` until someone claims the Space. Run `sf spaces claim` in the publishing directory, sign in, then retry.
 
 ## The clock
 
-An anonymous Space serves for **33 hours and 20 minutes** after creation or the latest publish, then stops. A publish that changes nothing creates no version and leaves the deadline where it was.
+An unclaimed Space normally stops serving **33 hours and 20 minutes after its latest publish that changes files**. A publish that changes nothing creates no version and leaves the deadline where it was. The claim page shows the current deadline. Opening it near expiry can extend the deadline by up to six hours.
 
 It is recoverable after that. The key stays valid for another **7 days**, during which you can still claim the Space and bring it back. After that window the Space is gone.
 
@@ -70,16 +70,16 @@ One more difference. An unclaimed Space accepts every file type, but only *serve
 ## Claim it
 
 <Steps>
-<Step title="Open the claim link">
+<Step title="Open the private link">
 
-Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from.
+Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from. The page shows the Space and its current serving deadline.
 
-The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the site while you decide.
+The page explains that the Space was published without an account. Saving it to your account keeps it available after the anonymous deadline and lets you find it again and publish updates. Existing sharing settings stay the same.
 
 </Step>
 <Step title="Sign in">
 
-Signed out, the button reads **Sign in & claim**. Signed in, it reads **Claim**, or **Claim & keep access** when the agent that published the Space can stay connected.
+Signed out, choose **Sign in & save this Space**. Signed in, choose **Save to my account**. If eligible, a separate unchecked option lets the publishing agent keep permission to publish updates after the Space is saved. Leaving it unchecked ends that access.
 
 The CLI equivalent starts a browser login for you if you are not signed in.
 
