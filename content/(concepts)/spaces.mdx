@@ -133,6 +133,41 @@ What changes:
 
 One thing blocks a rename. While `name` is set in your `sf.jsonc`, the API refuses to rename the Space — the file would win back the old name on the next publish. Remove the key or rename it in the file. See [Config file](/config-file).
 
+## Archiving and restoring
+
+Archive a Space you no longer need but may want back. It stops serving and keeps everything else.
+
+```bash
+sf spaces archive --space old-report
+sf spaces restore --space old-report
+```
+
+Repeat `--space` to archive several Spaces in one run. The run stops at the first Space it can't archive, and the Spaces before it stay archived. Over HTTP it is [`archiveSpace`](/api/reference/spaces/archivespace) and [`restoreSpace`](/api/reference/spaces/restorespace). The dashboard has no archive or restore control yet.
+
+| What | What happens |
+| --- | --- |
+| The live URL | Stops serving |
+| Versions, source, database, storage, and domains | Kept |
+| The team's live Space limit | An archived Space doesn't count toward it |
+| Undo | `sf spaces restore` brings it back with the same versions, data, and URLs |
+
+Any member of the team can archive or restore a Space. When someone archives a Space they didn't create, the creator gets an email that names who archived it and how to restore it.
+
+### Find Spaces nobody uses
+
+Team owners and admins can list the team's Spaces that nobody published or changed in a given number of days, oldest first.
+
+```bash
+sf spaces ls --team acme --inactive-for 90
+```
+
+- A publish or change by a person, an agent, or a Git push counts as activity. Visits don't.
+- A Space created within the window is active.
+- Pinned Spaces never appear. To keep a Space off the list, pin it for the team from its menu on the team page.
+- Archived Spaces don't appear.
+
+Over HTTP it is `GET /v1/teams/{teamId}/inactive-spaces?days=90`, the `listTeamInactiveSpaces` operation. `days` defaults to 90.
+
 ## Deleting and restoring
 
 Deleting is a takedown, and it takes effect at once.
