@@ -220,7 +220,7 @@ Those compiled 308s accept every method and carry the incoming query across.
 
 `index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and `/docs`, `/docs/index` and `/docs/index.html` redirect there with a 308. With clean URLs on, each page has one URL, as on Cloudflare Pages. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
 
-With no config, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names, else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
+With no `index` set, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names (unless the version runs a worker, which keeps `/`), else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
 
 Two keys in `sf.jsonc` change it:
 
@@ -265,9 +265,9 @@ Point `fallback` at a committed file to choose the shell yourself:
 
 The long form takes a status: `{"path": "/index.html", "status": 200}`. `false` serves no fallback, so a miss gets the nearest `404.html`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
 
-`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one. It turns directory listings off by default, and without a root `index.html` its file is also the homepage.
+`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one. It turns directory listings off by default. When `index` isn't set, there's no root `index.html` and the version runs no worker, its file is also the homepage.
 
-Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` to send extensionless routes to the shell instead.
+Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` and a flat `about.html` no longer answers `/about`, so that route reaches the shell; folders still serve their `index.html`.
 
 The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. It is a denylist on purpose, which keeps dotted client routes such as `/users/jane.doe` and `/v1.2.3` reaching the shell.
 
