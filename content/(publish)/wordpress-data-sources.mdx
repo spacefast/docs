@@ -122,4 +122,21 @@ With no argument it reads `WORDPRESS_URL`, falling back to the default entry in 
 
 The URL has to serve the standard WordPress REST API at `/wp-json/` with pretty permalinks on. The content the build reads is whatever that API returns to an anonymous caller, so anything private stays private.
 
-A source is only read while a build runs. When published content changes, a new build is what picks it up. Open **Builds** and use **Build now** for an immediate refresh, or push to the production branch.
+## Rebuild when content changes
+
+A source is only read while a build runs. When published content changes, a new build is what picks it up. Let WordPress start it.
+
+<Steps>
+  <Step title="Install the plugin">
+    Download [`spacefast-wordpress.zip`](https://github.com/spacefast/wordpress/releases/latest/download/spacefast-wordpress.zip) and install it in WordPress. It needs WordPress 6.5 and PHP 8.1 or newer.
+  </Step>
+  <Step title="Connect it">
+    Open **Settings → Spacefast** and expand **Use WordPress as a CMS for a repository site**. Sign in to Spacefast, authorize one team, and pick the Space whose repository reads this site.
+  </Step>
+</Steps>
+
+That's the loop. The plugin writes this site into the Space's data sources as the default, so the step above is optional when you connect it this way.
+
+Any change to published content the REST API serves schedules a production build of the connected repository: publishing it, updating it, moving it out of published, or deleting it. So do media, taxonomy term, menu, and user changes. Saving a draft, or a revision WordPress keeps on its own, doesn't. Each change restarts a 60-second quiet window, so a batch of edits becomes one build. **Build now**, in WordPress or on the Space's **Builds** page, skips the wait.
+
+The plugin asks for `teams:read`, `spaces:read`, `spaces:write`, and `builds:trigger`. Write access keeps the Space's title, search visibility, and WordPress source in sync with the site; turn each off under **WordPress sync**. A build it triggers always runs the Space's saved production branch, build settings, and live target. It can't pick its own.
