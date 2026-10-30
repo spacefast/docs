@@ -209,16 +209,16 @@ There is no generic trailing-slash normalizer. The behavior comes from what the 
 
 | Situation | Behavior |
 | --- | --- |
-| `dir/index.html` exists | `/dir/` serves, `/dir` answers 308 to `/dir/` |
+| `dir/index.html` exists | `/dir/` serves; `/dir`, `/dir/index` and `/dir/index.html` answer 308 to `/dir/` |
 | A directory listing exists for `dir` | `/dir/` serves, `/dir` answers 308 to `/dir/` |
-| Clean URLs are on and `page.html` exists | `/page` serves, `/page/` answers 308 to `/page` |
+| Clean URLs are on and `page.html` exists | `/page` serves; `/page/` and `/page.html` answer 308 to `/page` |
 | Anything else | No normalization. The other spelling falls through to the SPA fallback or a 404 |
 
 Those compiled 308s accept every method and carry the incoming query across.
 
 ## Index files and clean URLs
 
-`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, `/docs` redirects there with a 308, and the file keeps its literal `/docs/index.html` URL too. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
+`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and `/docs`, `/docs/index` and `/docs/index.html` redirect there with a 308. With clean URLs on, each page has one URL, as on Cloudflare Pages. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
 
 With no config, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names, else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
 
@@ -233,7 +233,7 @@ Two keys in `sf.jsonc` change it:
 
 `index` names the homepage, the file `/` serves. It doesn't rename folder indexes: with `"index": "home.html"`, `docs/home.html` doesn't answer `/docs/`, and the publish warns with `custom_index_not_folder_index`. Setting it to `false` serves no homepage.
 
-`cleanUrls` serves a flat `about.html` at `/about` as well as `/about.html`, and redirects `/about/` to `/about` with a 308. It defaults to on, with or without a fallback, so a committed page always wins its URL over the SPA shell.
+`cleanUrls` serves a flat `about.html` at `/about`, and redirects `/about.html` and `/about/` there with a 308, query string included. A rewrite that lands on `/about.html` still serves the file, and a page you address with your own redirect or `_headers` rule keeps its `.html` URL. With `"cleanUrls": false`, pages answer only at their file URL. It defaults to on, with or without a fallback, so a committed page always wins its URL over the SPA shell.
 
 In a config that declares `"version": 1`, these live under `serve` as `serve.index`, `serve.cleanUrls`, `serve.spaFallback`, and `serve.directoryListing`.
 
