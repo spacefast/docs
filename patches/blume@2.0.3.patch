@@ -1,3 +1,54 @@
+diff --git a/dist/cli/chunk-c8chx29p.js b/dist/cli/chunk-c8chx29p.js
+index 3c92ea6e34c269e5396486d82bc9336545b4f0d8..298a19fcd99ccb83a1444d9683d6bdbda43b304d 100644
+--- a/dist/cli/chunk-c8chx29p.js
++++ b/dist/cli/chunk-c8chx29p.js
+@@ -254,6 +254,7 @@ var cardCacheTally = () => {
+ };
+ 
+ // src/astro/generate.ts
++import { execFileSync as execFileSyncTracked } from "node:child_process";
+ import { createHash } from "node:crypto";
+ import { existsSync as existsSync6, readFileSync as readFileSync3, realpathSync as realpathSync2 } from "node:fs";
+ import {
+@@ -3056,6 +3057,23 @@ var resolveGithubData = (github) => github ? {
+   owner: github.owner,
+   repo: github.repo
+ } : null;
++var trackedRealPath = (path) => {
++  try {
++    return normalize2(realpathSync2.native(path));
++  } catch {
++    return path;
++  }
++};
++var gitTrackedFiles = (root) => {
++  try {
++    const top = execFileSyncTracked("git", ["-C", root, "rev-parse", "--show-toplevel"], { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
++    const output = execFileSyncTracked("git", ["-C", top, "ls-files", "-z"], { encoding: "utf-8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] });
++    const base = trackedRealPath(top);
++    return new Set(output.split("\0").filter(Boolean).map((file) => normalize2(join11(base, file))));
++  } catch {
++    return null;
++  }
++};
+ var buildRuntimeData = (project) => {
+   const { config, context, graph, manifest } = project;
+   const { github } = config;
+@@ -3063,10 +3081,14 @@ var buildRuntimeData = (project) => {
+   const editBase = github ? editBaseUrl(github) : null;
+   const logo = resolveLogo(project);
+   const ogLogo = resolveOgMark(project, logo?.svg);
++  const trackedFiles = editBase ? gitTrackedFiles(context.root) : null;
+   const editUrlFor = (sourcePath) => {
+     if (!(editBase && sourcePath)) {
+       return null;
+     }
++    if (trackedFiles && !trackedFiles.has(trackedRealPath(sourcePath))) {
++      return null;
++    }
+     const rel = relative5(context.root, sourcePath).split("\\").join("/");
+     const editDir = trimChar(github?.dir ?? "", "/");
+     const editPath = normalize2(editDir ? join11(editDir, rel) : rel);
 diff --git a/dist/cli/chunk-pv29h0wf.js b/dist/cli/chunk-pv29h0wf.js
 index 80b7dd7838613662cf5bf7c8872b0ce1afeb1c2e..950edc71cf7111ef4c7a61536d01b7377d40f792 100644
 --- a/dist/cli/chunk-pv29h0wf.js
@@ -11,6 +62,76 @@ index 80b7dd7838613662cf5bf7c8872b0ce1afeb1c2e..950edc71cf7111ef4c7a61536d01b737
    return fromId || slugify2(`${method}-${path}`);
  };
  var specOf = (specs, source) => Object.hasOwn(specs, source) ? specs[source] : undefined;
+diff --git a/src/astro/generate.ts b/src/astro/generate.ts
+index c881423df4cf2ebe33e786f4f35e20d3deab2079..2e76d5e6df90060f453c60d03bb32d92bd4b3052 100644
+--- a/src/astro/generate.ts
++++ b/src/astro/generate.ts
+@@ -1,3 +1,4 @@
++import { execFileSync } from "node:child_process";
+ import { createHash } from "node:crypto";
+ import { existsSync, readFileSync, realpathSync } from "node:fs";
+ import {
+@@ -49,6 +50,7 @@ import type {
+   BlumeLogo,
+ } from "../core/data.ts";
+ import { BlumeError } from "../core/diagnostics.ts";
++import { gitRepositoryRoot, realPath } from "../core/last-modified.ts";
+ import { writeTextAtomic } from "../core/fs-atomic.ts";
+ import {
+   apiUrl as githubApiUrl,
+@@ -764,6 +766,35 @@ const headerRepoUrl = (
+   return repo ? derived : null;
+ };
+ 
++/**
++ * Absolute paths of every file git tracks under `root`, or null when git is
++ * unavailable or the project isn't a repository (edit links then stay as
++ * configured).
++ */
++const gitTrackedFiles = (root: string): Set<string> | null => {
++  const top = gitRepositoryRoot(root);
++  if (top === null) {
++    return null;
++  }
++  try {
++    const output = execFileSync(
++      // oxlint-disable-next-line sonarjs/no-os-command-from-path -- git is a required dev-tool dependency resolved from PATH
++      "git",
++      ["-C", top, "ls-files", "-z"],
++      { encoding: "utf-8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] }
++    );
++    const base = realPath(top);
++    return new Set(
++      output
++        .split("\0")
++        .filter(Boolean)
++        .map((file) => normalize(join(base, file)))
++    );
++  } catch {
++    return null;
++  }
++};
++
+ /**
+  * Resolve the configured logo. A single SVG is read and inlined so a
+  * `currentColor` logo follows the theme; other images keep their URL for an
+@@ -1045,10 +1076,16 @@ export const buildRuntimeData = (project: BlumeProject): string => {
+   const logo = resolveLogo(project);
+   const ogLogo = resolveOgMark(project, logo?.svg);
+ 
++  // Only files committed to the repository have a page to edit on GitHub; a
++  // generated overlay would link to a 404.
++  const trackedFiles = editBase ? gitTrackedFiles(context.root) : null;
+   const editUrlFor = (sourcePath?: string): string | null => {
+     if (!(editBase && sourcePath)) {
+       return null;
+     }
++    if (trackedFiles && !trackedFiles.has(realPath(sourcePath))) {
++      return null;
++    }
+     const rel = relative(context.root, sourcePath).split("\\").join("/");
+     // The edit path is repo-relative: `github.dir` places the project inside
+     // the repo, so a source above the project dir (a monorepo vault beside the
 diff --git a/src/openapi/model.ts b/src/openapi/model.ts
 index 0913e042e03b31bb37d3eb09c850dbc9cacee1d1..3c5796bb4381dc93c95d161983339d67ce70092f 100644
 --- a/src/openapi/model.ts

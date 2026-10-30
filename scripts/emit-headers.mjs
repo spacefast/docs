@@ -10,7 +10,15 @@ ${deploymentBase}/*
   Access-Control-Allow-Origin: *
 `;
 
-function removeUnsupportedExtensionGlobs(source) {
+// Spacefast header rules match whole path segments, so an extension glob like
+// `/docs/*.md` does not compile. The content-type globs go: the platform
+// already serves those types. The SVG sandbox rules widen to their directory,
+// which holds only downloaded content images; the sandbox and nosniff headers
+// are inert on an image an <img> embeds and keep an opened SVG from running.
+const svgAssetGlob = `${deploymentBase}/blume-assets/*.svg`;
+const svgAssetDirectory = `${deploymentBase}/blume-assets/*`;
+
+function supportedHeaderRules(source) {
   const unsupported = new Set([
     `${deploymentBase}/*.md`,
     `${deploymentBase}/*.mdx`,
@@ -18,13 +26,24 @@ function removeUnsupportedExtensionGlobs(source) {
   ]);
   const lines = source.split(/\r?\n/u);
   const kept = [];
+  const svgHeaders = [];
   for (let index = 0; index < lines.length; index += 1) {
-    if (!unsupported.has(lines[index])) {
-      kept.push(lines[index]);
+    const line = lines[index];
+    if (unsupported.has(line) || line === svgAssetGlob) {
+      while (/^\s/u.test(lines[index + 1] ?? "")) {
+        index += 1;
+        if (line === svgAssetGlob) svgHeaders.push(lines[index]);
+      }
       continue;
     }
-    while (/^\s/u.test(lines[index + 1] ?? "")) index += 1;
+    kept.push(line);
   }
+  if (svgHeaders.length > 0) {
+    while (kept.at(-1) === "") kept.pop();
+    kept.push(svgAssetDirectory, ...new Set(svgHeaders), "");
+  }
+  const invalid = kept.find((line) => !/^\s/u.test(line) && /\*[^/]/u.test(line));
+  if (invalid) throw new Error(`dist/_headers has a rule the platform cannot match: ${invalid}`);
   return kept.join("\n");
 }
 
@@ -33,7 +52,7 @@ function removeUnsupportedExtensionGlobs(source) {
 // CORS rules — which let the consumer site merge this index and let the
 // dashboard terminal read canonical Markdown cross-origin — are
 // appended here instead of shipped from public/.
-const current = removeUnsupportedExtensionGlobs(
+const current = supportedHeaderRules(
   await readFile(headersPath, "utf8").catch(() => ""),
 );
 if (
