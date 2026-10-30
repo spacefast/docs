@@ -135,7 +135,7 @@ A source is only read while a build runs. When published content changes, a new 
   </Step>
 </Steps>
 
-Picking a Space acts right away. The plugin copies the site's title, description, and search visibility onto the Space, sets this site as the Space's default WordPress source, and starts a production build. The **WordPress sync** switches that turn each of those off appear only after the first sync, so pick an existing Space only if you want it to match this site. Connecting this way also means you can skip [Add a source](#add-a-source).
+Picking a Space acts right away. The plugin copies the site's title, description, and search visibility onto the Space, saves this site as the default source under the name `wordpress`, replacing any source already called that, and starts a production build. The **WordPress sync** switches that turn each of those off appear only after the first sync, so pick an existing Space only if you want it to match this site. Connecting this way also means you can skip [Add a source](#add-a-source).
 
 Any change to published content the REST API serves schedules a production build of the connected repository: publishing it, updating it, moving it out of published, or deleting it. So do media, taxonomy term, menu, and user changes. Saving a draft, or a revision WordPress keeps on its own, doesn't. Each change restarts a 60-second quiet window, so a batch of edits becomes one build. **Build now**, in WordPress or on the Space's **Builds** page, skips the wait.
 
