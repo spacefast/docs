@@ -10,6 +10,7 @@ export default defineMeta({
     "routing",
     "caching",
     "stats",
+    "telemetry",
     "access",
     "customization",
     "site-pages",
