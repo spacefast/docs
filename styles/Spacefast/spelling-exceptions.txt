@@ -16,6 +16,7 @@ Automattic
 Automattician
 Automatticians
 backoff
+Bingbot
 Blume
 Blume's
 boolean
@@ -72,6 +73,8 @@ frontmatter
 fsynced
 github
 globals
+Googlebot
+GPTBot
 Gravatar
 grayscale
 Gridsome

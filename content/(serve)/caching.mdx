@@ -62,6 +62,22 @@ Publish warns with `header_cache_control_platform_managed`, because the header y
 
 The non-GET rule is absolute. The shared cache in front of a Space keys on host, path and query without reading the method, so a cacheable answer to a `POST` could be replayed to a `GET`.
 
+## Testing before promotion
+
+Previews are private by default. An authenticated preview response uses `private, no-store`, so it cannot demonstrate the cache behavior of a public live response.
+
+Before promotion, inspect the exact build output you intend to publish:
+
+```bash
+sf routing inspect --routing ./dist --url https://example.com/path
+```
+
+Replace `./dist` with that build's publish root. Repeat `--url` to match more URLs. This shows compiled custom header rules, not the full runtime response or managed edge cache policy. See [`_headers` syntax](/routing#_headers).
+
+`sf routing compute --space my-site` resolves routing with current variables for the ready pending version if there is one, otherwise the live version. It does not accept `--url` or select an arbitrary version. An authenticated request to a preview can check its actual response headers, but its private cache policy remains intentional.
+
+To observe live edge caching, run `sf promote <version>` and request the public live URL without private access credentials. Use `sf rollback <version>` if you need to return to an earlier version.
+
 ## Vary is not part of the cache key
 
 The edge keys a stored response on **host, path, and query**. It does not read `Vary`.

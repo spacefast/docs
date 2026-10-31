@@ -89,6 +89,14 @@ Header names must match `^[A-Za-z0-9-]+$`. Some names are owned by the platform 
 
 `_headers` matchers cannot include a port. They match the raw pathname, so they are sensitive to a trailing slash where `_redirects` is not. Header rules also apply to the URL the visitor asked for, not to the path a rewrite landed on.
 
+Check a particular URL against the build's local rules before promotion:
+
+```bash
+sf routing inspect --routing ./dist --url https://example.com/downloads/file.zip
+```
+
+Use the exact publish root in place of `./dist`; repeat `--url` for more URLs. The result shows matching custom header rules, not the complete runtime headers or edge cache policy. Private previews use `private, no-store`; [test live edge caching after promotion](/caching#testing-before-promotion).
+
 ## Rules in `sf.jsonc`
 
 ```jsonc sf.jsonc
