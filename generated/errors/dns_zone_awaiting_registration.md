@@ -1,11 +1,11 @@
 ---
-title: "storage_bucket_unavailable"
-description: "No usable internal storage bucket is configured for this operation."
+title: "dns_zone_awaiting_registration"
+description: "The change is saved, but Spacefast DNS serves this domain only once its registration completes."
 ---
 
-No usable internal storage bucket is configured for this operation.
+The change is saved, but Spacefast DNS serves this domain only once its registration completes.
 
-**How to resolve:** Check the storage bucket registry and credential environment references, then retry.
+**How to resolve:** Nothing to do. The zone is served as soon as the registrar confirms the registration.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/storage_bucket_unavailable",
-  "title": "Storage bucket unavailable",
+  "type": "https://spacefast.com/docs/errors/dns_zone_awaiting_registration",
+  "title": "Dns zone awaiting registration",
   "status": 400,
-  "detail": "No usable internal storage bucket is configured for this operation.",
-  "code": "storage_bucket_unavailable",
+  "detail": "The change is saved, but Spacefast DNS serves this domain only once its registration completes.",
+  "code": "dns_zone_awaiting_registration",
   "requestId": "req_4mz0v8qk"
 }
 ```

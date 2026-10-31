@@ -2,7 +2,7 @@
 title: "Connect Zed to Spacefast"
 description: "Add Spacefast to Zed so its agent can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/zed/"
+  canonical: "https://spacefast.com/docs/setup/zed/"
 ---
 
 Add Spacefast to Zed so its agent can publish what you build.
@@ -58,4 +58,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Zed documentation](https://zed.dev/docs/ai/mcp)
+[Agent documentation](/agents/) · [Zed documentation](https://zed.dev/docs/ai/mcp)

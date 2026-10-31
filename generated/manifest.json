@@ -1,279 +1,324 @@
 {
-  "contentDigest": "62a60a5fcd58a6585555a402c5a8117621630013446509a8b0575bccf271b428",
+  "contentDigest": "ca99f14edb14400c37f26970e9e1b7f8a3cea9b6b64e06e98ab8495c6998b583",
   "counts": {
-    "apiOperations": 435,
+    "apiOperations": 494,
     "changelogPackages": 24,
-    "changelogVersions": 27,
-    "errorCodes": 673,
-    "partnerOperations": 415,
-    "redirects": 3089,
-    "setupPages": 24
+    "changelogVersions": 36,
+    "errorCodes": 802,
+    "partnerOperations": 459,
+    "redirects": 3507,
+    "setupPages": 28
   },
   "files": [
     {
-      "bytes": 1517,
+      "bytes": 1885,
       "path": "changelog/packages/adapter-kit.md",
-      "sha256": "ec44262f42050fbd30b011942cfa8e10840fbd67997a86f7d39593918d960c6f"
+      "sha256": "6b473268ddda2cfe363ffdf40452fd0f62c323794efc0849e00d3ab0cdf06a36"
     },
     {
-      "bytes": 2676,
+      "bytes": 3040,
       "path": "changelog/packages/astro.md",
-      "sha256": "17cf748272f20330df331044873a7af9a2b22384b5d6ed66dc1bef1e7c502e4f"
+      "sha256": "c7008fb83024b1aa27033753501151d14e458aa1fb8558174cda7e9cfa88bbea"
     },
     {
-      "bytes": 891,
+      "bytes": 1079,
       "path": "changelog/packages/auth.md",
-      "sha256": "ba994cc5b304b161180c1cab24520538cce9094b35101adb1d4c3c361e84978e"
-    },
-    {
-      "bytes": 827,
-      "path": "changelog/packages/build-output.md",
-      "sha256": "c542eae131a4c31077c2416535afd72343691973f3ca601959b9b0c49943e86c"
-    },
-    {
-      "bytes": 1284,
-      "path": "changelog/packages/builders.md",
-      "sha256": "be97cd246857117d04ad7dbb080dee2773359ad3745ac0855846a44ca5934b27"
-    },
-    {
-      "bytes": 7730,
-      "path": "changelog/packages/common.md",
-      "sha256": "693e91f02fbc000237e50ad192909c88e7aced9c66ae192bf18c3d7eb986ecd1"
-    },
-    {
-      "bytes": 1394,
-      "path": "changelog/packages/compat-lakebed.md",
-      "sha256": "0221a1774e285ab619328c9854a20a1b2639cf076809e489f6745afe37314184"
-    },
-    {
-      "bytes": 1081,
-      "path": "changelog/packages/domain-sdk.md",
-      "sha256": "92212cc33f91313cb7d90efae2411eafe7a457f2e7749af027e0e26a9be8ff56"
-    },
-    {
-      "bytes": 3451,
-      "path": "changelog/packages/domain-search-terminal.md",
-      "sha256": "0c74fc56db4266b6780bed3cbcc5dae1d9b9167636d61fb4ea383def1c0e5348"
-    },
-    {
-      "bytes": 2589,
-      "path": "changelog/packages/domain-services.md",
-      "sha256": "c3a1e55919b7ff0da27d13efe9bc436e09fc8a711ead01f438c55a7227ac7aaa"
-    },
-    {
-      "bytes": 2033,
-      "path": "changelog/packages/image.md",
-      "sha256": "47c346062266b980820472ab8a857d4a15e12d5843945908b7864d777528624e"
-    },
-    {
-      "bytes": 3871,
-      "path": "changelog/packages/index.md",
-      "sha256": "e56da226080fed9c006ecd4ae82b0b3eb5600559032efcdcf74bba57b677171b"
-    },
-    {
-      "bytes": 10576,
-      "path": "changelog/packages/mcp.md",
-      "sha256": "a13191631522278b2b484be1a0bcbada2ff722472ab44ae569177553ba4ee836"
-    },
-    {
-      "bytes": 1527,
-      "path": "changelog/packages/next-adapter.md",
-      "sha256": "9ba60cddcf7fff7e9bdba95e7ded80e1f81effb57aa3df2843a2a44678bd5505"
-    },
-    {
-      "bytes": 3648,
-      "path": "changelog/packages/routing.md",
-      "sha256": "24486f0a8893ca0b2c43a8a0f4107a98c92d5941703da13546d3e779fb3715ed"
-    },
-    {
-      "bytes": 7998,
-      "path": "changelog/packages/sdk.md",
-      "sha256": "f1b55d2d28e75809ecd00c7504012b998a86bc5a7c3607bb8f520ae1daad6977"
-    },
-    {
-      "bytes": 845,
-      "path": "changelog/packages/setup-ui.md",
-      "sha256": "4acbf27aed664dbcecc44aa0afb91ffc8621041eb5dad855f484cff12217a157"
-    },
-    {
-      "bytes": 24838,
-      "path": "changelog/packages/spacefast.md",
-      "sha256": "61e077454e0d2f1badbf1e9173c57b27a6e75b836da0b02a3b406f0c13dee761"
-    },
-    {
-      "bytes": 2909,
-      "path": "changelog/packages/vite-plugin.md",
-      "sha256": "33c367b50f691d318919128feb10463ae9a2731315b55354078d4e5d8cfb02bd"
-    },
-    {
-      "bytes": 1504,
-      "path": "changelog/packages/wordpress.md",
-      "sha256": "9aa7e39f28f3110a4e8ae64a451d39bfea2adc944dd1904c7685a029cfcc0141"
-    },
-    {
-      "bytes": 1808,
-      "path": "changelog/packages/wpcloud-sdk.md",
-      "sha256": "dbf49034bae64cf06f50f8f58f9d214091c0ac29592f28e63974a5c2dc110a02"
-    },
-    {
-      "bytes": 1162,
-      "path": "changelog/packages/zero-compat-emdash.md",
-      "sha256": "f14c09a19ed86b1d844caf7a236c621c1266feb7e63a2a75fdc37841c76a2582"
-    },
-    {
-      "bytes": 975,
-      "path": "changelog/packages/zero-compat-payloadcms.md",
-      "sha256": "9deee8539a37e43d1773d5c62ce9c589e12b5a680557955bf30059c6e62fef8f"
-    },
-    {
-      "bytes": 4799,
-      "path": "changelog/packages/zero-compile.md",
-      "sha256": "e2b076abf5778a3c491ce72c28debeb892039f00ecae5d09c62384c3b33eadcc"
-    },
-    {
-      "bytes": 6118,
-      "path": "changelog/packages/zero.md",
-      "sha256": "5cfcf6d4c992f34471343c394ddf4fa5a4ee30841935f2b2bfafa4631ea38e8b"
-    },
-    {
-      "bytes": 614,
-      "path": "changelog/v0-0-10.md",
-      "sha256": "7a76492ae5c976cda188cdec08eaa58ac059bb0b8e81099d2d9e05567fd2f93a"
-    },
-    {
-      "bytes": 575,
-      "path": "changelog/v0-0-11.md",
-      "sha256": "68526159340cc7a1d5571191608c21a8d3247acc6267d7cbfd1696849c1a389f"
-    },
-    {
-      "bytes": 710,
-      "path": "changelog/v0-0-12.md",
-      "sha256": "4d92db7a2123dc78adff106f1d972b7e1e38248d7309ab5c8e604c6c405531de"
-    },
-    {
-      "bytes": 869,
-      "path": "changelog/v0-0-13.md",
-      "sha256": "620f014c0ae27e403605f026962c378372b4d6b0399ed79b5b540724721c2746"
-    },
-    {
-      "bytes": 4155,
-      "path": "changelog/v0-0-14.md",
-      "sha256": "92299fe33572130e3602c015f7bb84ba945d1f88dbcae7e756ab40db940d2080"
-    },
-    {
-      "bytes": 981,
-      "path": "changelog/v0-0-15.md",
-      "sha256": "cd19447c8646ec2e8b13756ace29c12ff49971304d9553396e11c4dfa030ee14"
-    },
-    {
-      "bytes": 975,
-      "path": "changelog/v0-0-16.md",
-      "sha256": "be9a6650db87207113f298e555f6ec8263d4c5244202c1da8c1f07dffc16d4c8"
-    },
-    {
-      "bytes": 960,
-      "path": "changelog/v0-0-17.md",
-      "sha256": "c24d1e85d10f130e10dc1db73e9b48fc5360bfcdd38e80b11a336a36cf4fc5b9"
-    },
-    {
-      "bytes": 2494,
-      "path": "changelog/v0-0-18.md",
-      "sha256": "848b8231422cc1486536aed0bd8b41e8fe38dd79884e3aa1931e80950bec5050"
-    },
-    {
-      "bytes": 966,
-      "path": "changelog/v0-0-19.md",
-      "sha256": "eaf025bc0bd5108e992fc212e1601ff87aae6b43f7ec8e775c3be19cc234a04f"
-    },
-    {
-      "bytes": 999,
-      "path": "changelog/v0-0-20.md",
-      "sha256": "73ccee2d929c8d8b54a0caba0583cbd83ada69577d3514ec24e59aa5ab7596a4"
-    },
-    {
-      "bytes": 971,
-      "path": "changelog/v0-0-21.md",
-      "sha256": "3c2b482659cb49b02cf6a7299ea28691b6c85fdb42b5f6a7f87d08bb9ecd6b35"
-    },
-    {
-      "bytes": 1086,
-      "path": "changelog/v0-0-22.md",
-      "sha256": "a47cf0c55f64f265f3fbf3cc04dbc454e2ca361a6bc929b9fc47b5879820e575"
+      "sha256": "c6368474c2350275aa165adfc30ef1812b8d7798b643f71b954098e087b76e4c"
     },
     {
       "bytes": 1015,
+      "path": "changelog/packages/build-output.md",
+      "sha256": "b6b33e30b97037587daf9aa84fc156ef31060a6fc50a339428f642b63db701a8"
+    },
+    {
+      "bytes": 1792,
+      "path": "changelog/packages/builders.md",
+      "sha256": "49f1aee1a0a540e8a81d1625243428b22fd819f4442550d4f1f8ddf83e0d3ba5"
+    },
+    {
+      "bytes": 10526,
+      "path": "changelog/packages/common.md",
+      "sha256": "a9821aa6203f63c45d85f75da97e1789543655141120fa79d05ca58b1415134e"
+    },
+    {
+      "bytes": 1685,
+      "path": "changelog/packages/compat-lakebed.md",
+      "sha256": "1d47087c27346d3a24535356db94aaab51567c510552b8e249fc13489e03ebd8"
+    },
+    {
+      "bytes": 1367,
+      "path": "changelog/packages/domain-sdk.md",
+      "sha256": "ada3ec950f36a473cc8e8bb33c4693372ee05ec1b6eb35a49bad3bf62fe74a19"
+    },
+    {
+      "bytes": 4083,
+      "path": "changelog/packages/domain-search-terminal.md",
+      "sha256": "c206cf377b16fbfed262456f9d521fd7a4bfedbfeabb2f47b5fa1c2d3a99bf2c"
+    },
+    {
+      "bytes": 6056,
+      "path": "changelog/packages/domain-services.md",
+      "sha256": "f8d40f597c45f01a46f0e41cef60775779c446d497db71bfb407b817708c2236"
+    },
+    {
+      "bytes": 2221,
+      "path": "changelog/packages/image.md",
+      "sha256": "083e1ddfdc00e5c235976c7b9433940f7c0545080ec406f0cee501b87d2320f2"
+    },
+    {
+      "bytes": 4057,
+      "path": "changelog/packages/index.md",
+      "sha256": "051fce67da1b2c28b40ad42e00cc7363c67fdda1e2ce6f3ebe9d9037e7f46a00"
+    },
+    {
+      "bytes": 17478,
+      "path": "changelog/packages/mcp.md",
+      "sha256": "1d37b0fab3219832fc79a68150d1cabf9a63fd0b67a230e7919c27d1e0ab01e6"
+    },
+    {
+      "bytes": 1911,
+      "path": "changelog/packages/next-adapter.md",
+      "sha256": "aeb989f7fddc9d0174dc50bef9c2ff8259f68b53fddc14d5a29356a11fb9d7a5"
+    },
+    {
+      "bytes": 4020,
+      "path": "changelog/packages/routing.md",
+      "sha256": "a8ce2bd59aa06050d5f1225b451a46245960d7a9b1476f780a48f32dadac8dfb"
+    },
+    {
+      "bytes": 10452,
+      "path": "changelog/packages/sdk.md",
+      "sha256": "e9a1e2afcda00a6fa6a85eb01f0a6373997ef081dcac0246769abd66450cbd84"
+    },
+    {
+      "bytes": 1033,
+      "path": "changelog/packages/setup-ui.md",
+      "sha256": "db9c27e48b9a5d783bc7c05738d14b8f19594c4b59da55381dbdf057981679f8"
+    },
+    {
+      "bytes": 35067,
+      "path": "changelog/packages/spacefast.md",
+      "sha256": "825c08be772987cda983fd89a67c49c968262dd84d333db139a8f37f40af0ae5"
+    },
+    {
+      "bytes": 3273,
+      "path": "changelog/packages/vite-plugin.md",
+      "sha256": "af96dd89839671eadab060b1f713c4ba578b7585b36bd26eb8fc431e37d9abad"
+    },
+    {
+      "bytes": 1692,
+      "path": "changelog/packages/wordpress.md",
+      "sha256": "5aac93a54f20b4901f9f1194c531d0da9b4986c64451eb8a35343393117666d1"
+    },
+    {
+      "bytes": 1996,
+      "path": "changelog/packages/wpcloud-sdk.md",
+      "sha256": "7656a75bed35f60404b1fc8f32857d28f0a92a656048fc6551b590dafaa02d43"
+    },
+    {
+      "bytes": 1534,
+      "path": "changelog/packages/zero-compat-emdash.md",
+      "sha256": "6d73a56ed2e1f5cfa3030107642ec5d6b177ad1a1d4c6ae563e0c9665ae11d46"
+    },
+    {
+      "bytes": 1347,
+      "path": "changelog/packages/zero-compat-payloadcms.md",
+      "sha256": "8dd443dd9e203af4d506ac0991783b33de914c1dd3862500c49b0bd118d0b43a"
+    },
+    {
+      "bytes": 5805,
+      "path": "changelog/packages/zero-compile.md",
+      "sha256": "3daffd9eb913d678fd31d77f34fd19f8292641d1b0a07205978c2d3d19a61695"
+    },
+    {
+      "bytes": 7816,
+      "path": "changelog/packages/zero.md",
+      "sha256": "9d6345f6e78c48f9d1ccf5489d71004922437aca9b3e6d33b6057cc92c5443f6"
+    },
+    {
+      "bytes": 610,
+      "path": "changelog/v0-0-10.md",
+      "sha256": "a17655276924a62a56ee0e96f87a19d6d1d7e3d237f8c714bb97456b995e1561"
+    },
+    {
+      "bytes": 571,
+      "path": "changelog/v0-0-11.md",
+      "sha256": "16c37c2f5dc515925fd5caedd8e3bf15ef112479797a6be77daedfbea237e26a"
+    },
+    {
+      "bytes": 706,
+      "path": "changelog/v0-0-12.md",
+      "sha256": "9ae8ea9e8b3ad7c48cd11ce13918168927a8c5127ff211749fdde4d82245edb2"
+    },
+    {
+      "bytes": 865,
+      "path": "changelog/v0-0-13.md",
+      "sha256": "0599c6513f326125cb9f9b12cf28ec4624f19cd28c977f93c548363bb48db6fb"
+    },
+    {
+      "bytes": 4151,
+      "path": "changelog/v0-0-14.md",
+      "sha256": "7cdc14b3a76c92f3650e4e421544dd3cebaff35004ff8e83c350efd5b1fa1322"
+    },
+    {
+      "bytes": 977,
+      "path": "changelog/v0-0-15.md",
+      "sha256": "18215cf0e7586a16ef346a3ee1ca12208c12e5fde1f3d5c028ac98e1adf467fa"
+    },
+    {
+      "bytes": 971,
+      "path": "changelog/v0-0-16.md",
+      "sha256": "257c64a092e8fccea7d108ac6a758f930f79f7b2de989e87a93bed12aff376b3"
+    },
+    {
+      "bytes": 956,
+      "path": "changelog/v0-0-17.md",
+      "sha256": "8d953059d38a7001601925ce3be3a81bd4ee218028562f7b604d9551ae5f0538"
+    },
+    {
+      "bytes": 2490,
+      "path": "changelog/v0-0-18.md",
+      "sha256": "9fb6b11e853d8fa05b1c5129d1b09e09289d1e232e4ee5207282147a2f017d14"
+    },
+    {
+      "bytes": 962,
+      "path": "changelog/v0-0-19.md",
+      "sha256": "df3c5d6302045cc5869f28f876eabc064512552e947d6d4c9a63c3e7c83edb76"
+    },
+    {
+      "bytes": 995,
+      "path": "changelog/v0-0-20.md",
+      "sha256": "5a1a6529732f3b092a77c37bf14ba3cbefb61388711d90b9bd39e4557b6c9ebe"
+    },
+    {
+      "bytes": 967,
+      "path": "changelog/v0-0-21.md",
+      "sha256": "7cb82e3d0d07021bd11133735f6554cde993b463d1fb461c3de46e5e4ee7245f"
+    },
+    {
+      "bytes": 1082,
+      "path": "changelog/v0-0-22.md",
+      "sha256": "63f0235d14c4539ec0fdaf91401c256cb7184505359794fb664a47897764e72b"
+    },
+    {
+      "bytes": 1011,
       "path": "changelog/v0-0-23.md",
-      "sha256": "ba5a35a65a38e7c445de5ca52120259cbb5f7398de1706184e58c49405f50480"
+      "sha256": "cdf60b1dd52bf0416309a227970449b89e3a98736450cc5dfc5fcec9cdd9190e"
     },
     {
-      "bytes": 1572,
+      "bytes": 1568,
       "path": "changelog/v0-0-24.md",
-      "sha256": "d2bc6b5806847e9e0bdb6c9ea83be5eb49a354ca1fbd7f7f37b410cf841ca48a"
+      "sha256": "72676ffaa609a480ecd6d09d857154de5d936a1ef9fd60ae7763420052cc9fea"
     },
     {
-      "bytes": 2044,
+      "bytes": 2040,
       "path": "changelog/v0-0-25.md",
-      "sha256": "7eac6069b0809110418219f9e1718b0dba888dfe3750e94f81ab7a9881703a4a"
+      "sha256": "d2e9d6eaff97fe078613c13f5c7fdeb1b80d02d417655b928b5c9721e2d9cc1b"
     },
     {
-      "bytes": 1749,
+      "bytes": 1745,
       "path": "changelog/v0-0-26.md",
-      "sha256": "1855a5d3aa7ee782786a09c144bb87172083b0e0c8da5f37c19b81c5ee76e2e1"
+      "sha256": "a9ee82ddf60c0872875d9ac6785e91dbb744b2804134ea68c288810d84fdc295"
     },
     {
-      "bytes": 2954,
+      "bytes": 2950,
       "path": "changelog/v0-0-27.md",
-      "sha256": "b143087bba10cc8765e1dc2f7d90fcccb098fa4977bc7ba36334629773ea49eb"
+      "sha256": "0cbfe1dce7fda6d5d11c0d07a10b7e081935b44676e390566ebce94950070bd9"
     },
     {
-      "bytes": 579,
+      "bytes": 575,
       "path": "changelog/v0-0-6.md",
-      "sha256": "67bfc426f93b9fff6b1182761bf5b1a1f85ed081ca785adfe81d2369f13ac835"
+      "sha256": "0bed40a7c32bb1285db2f62e6d2bf2949b150cffff6bbf7a47036816a68a2af7"
     },
     {
-      "bytes": 728,
+      "bytes": 724,
       "path": "changelog/v0-0-7.md",
-      "sha256": "4c119b63cc7a31db50aacd4822d6fbd9918e1b244b5b7f3d69d81dd1a750b010"
+      "sha256": "03b98130af44e3b6a1ef1f9a0718dcda6da378b411b811ecc1bca69c24c8383d"
     },
     {
-      "bytes": 609,
+      "bytes": 605,
       "path": "changelog/v0-0-8.md",
-      "sha256": "4dfd92dee041e98f2a1bd80c62e19c6de2f3ec773eae3e231c3c55bf19c54531"
+      "sha256": "ad2f67945a83cbc79e92b1805f7df688814ca082430e7ba2e4b412ad05ef06be"
     },
     {
-      "bytes": 599,
+      "bytes": 595,
       "path": "changelog/v0-0-9.md",
-      "sha256": "2cf3ea9a35e425c12d7eec39e0f59110e23d99a5962f8fda296e9ac9cceae809"
+      "sha256": "e8cd800e4fe77d378f91b12a1558d40b17082783b8768f792f25cbf05a1bfa86"
     },
     {
-      "bytes": 3033,
+      "bytes": 2943,
+      "path": "changelog/v0-1-0.md",
+      "sha256": "b4537e7ba70a2f75a6139dc95ecd0375db7a1d80371e2169c87939469e5993a0"
+    },
+    {
+      "bytes": 2873,
+      "path": "changelog/v0-2-0.md",
+      "sha256": "c8353aa62cc7b205af2ec5447f620bbd52c2c3fdb775df58b1cf4e0940f1f567"
+    },
+    {
+      "bytes": 3029,
       "path": "changelog/v0-2-1.md",
-      "sha256": "8876cb1c189a6624e948a82e066f2c984838843e2874ffb4ef7540e2b19d9755"
+      "sha256": "07ccc52b7aa37ac373786a46641a2c7e35c82a4566ffca5dc0461b4d6baf53dc"
     },
     {
-      "bytes": 1991,
+      "bytes": 1987,
       "path": "changelog/v0-2-2.md",
-      "sha256": "0610599cdee3cca6a02a745d5394eedd79cd55c211c6db465f9de51ad5bc176a"
+      "sha256": "11748ab53930445fe2a28b67a3cc70bb0bcb0f8d1b1c4cb58879773eddd1186d"
     },
     {
-      "bytes": 3217,
+      "bytes": 2843,
+      "path": "changelog/v0-3-0.md",
+      "sha256": "d2cb90337029925cb4274cc862fc35f372e38ce4c1193726f527cdf725bfcb4e"
+    },
+    {
+      "bytes": 3213,
       "path": "changelog/v0-4-0.md",
-      "sha256": "af041346f17e23ad03fcbba7f7c0da699483281cfe1fec8ed174b6e096541c11"
+      "sha256": "723d30bc214b46d84a7a1b4d5238cdcfe0305bccce5707a93e152e6cd86c450e"
     },
     {
-      "bytes": 3057,
+      "bytes": 3053,
       "path": "changelog/v0-4-1.md",
-      "sha256": "6c322e5ba64a40541e63fa1b8a8b07763e623b1f58c5aca367e77b4c3b99956a"
+      "sha256": "26ce37be92cd3c969fe4481cbf59737cbfa1ca90eb7b052c6d0eec31f35c73be"
     },
     {
-      "bytes": 23204,
+      "bytes": 23200,
       "path": "changelog/v0-5-0.md",
-      "sha256": "cd5eb822094be120033fadc780c14795e8004c2b41b0a2ea3fda14036240f899"
+      "sha256": "6b239a3fdc72160078bba71f7cb7a23c9ca377087fa157c2d4f65ee3dd715f40"
     },
     {
-      "bytes": 362245,
+      "bytes": 3980,
+      "path": "changelog/v0-5-1.md",
+      "sha256": "1ec7df23ab21a2bf0437f790b46050b4a138bd15d8629d25dba94765e7cca8cf"
+    },
+    {
+      "bytes": 16178,
+      "path": "changelog/v0-6-0.md",
+      "sha256": "4e8de550103f2cf269a3d5b040d14e42e4ff376c33d5f5825d3961a4f8753e94"
+    },
+    {
+      "bytes": 4521,
+      "path": "changelog/v0-6-1.md",
+      "sha256": "428cd0286a64e39a40145118633533506cf665acd84e18b276d28f556391808e"
+    },
+    {
+      "bytes": 17992,
+      "path": "changelog/v0-7-0.md",
+      "sha256": "ddfd6a92d9382b01a1b2ec69b9188c0e74b9f4ee9a742b8eda1aafd8c8b736b1"
+    },
+    {
+      "bytes": 5296,
+      "path": "changelog/v0-8-0.md",
+      "sha256": "3a23d048b60af7bfd864fe6d99130c99e4d38284beeb61d905a1ea5fb87b9850"
+    },
+    {
+      "bytes": 6275,
+      "path": "changelog/v0-8-1.md",
+      "sha256": "555b719fa41513a5c0a839ea265441f5c2e91cfd783558b9dc2c761d83bdf8a0"
+    },
+    {
+      "bytes": 368214,
       "path": "cli/index.md",
-      "sha256": "e4b583c677e818c6e982b2fe2fb77e47f0f6a72c58f451e22cc8385c32eec8bb"
+      "sha256": "e9a64f260bbb9300cdcd7ddd49504dec30b8de6055519ca3cbe74590ff9828f6"
     },
     {
       "bytes": 1224,
@@ -321,6 +366,46 @@
       "sha256": "4d86a95d1f694fe4c94404b5fefee85adf735f832d2b1b38d742b45f57b5aab6"
     },
     {
+      "bytes": 1322,
+      "path": "errors/analytics_backend_error.md",
+      "sha256": "99a1ae4686aab063e0f2dbff800b231ad109557ffda0a87bb8c6056216b97461"
+    },
+    {
+      "bytes": 1089,
+      "path": "errors/analytics_backend_unavailable.md",
+      "sha256": "2e5c58e4b5127dd2df6092c3a46d41749f288b9c7811bc4d2765318905a969d5"
+    },
+    {
+      "bytes": 1167,
+      "path": "errors/analytics_profile_too_large.md",
+      "sha256": "ef23e5a53b3e01ccfe8e2c7564f607b6612aad84c4db1fe4b5f658f50e206873"
+    },
+    {
+      "bytes": 1389,
+      "path": "errors/analytics_query_breakdown_over_time_unsupported.md",
+      "sha256": "ab5a20f10324972e88ae3a2a8c796cc32bcec2180a80b9906c17cbeaa33eefa8"
+    },
+    {
+      "bytes": 1393,
+      "path": "errors/analytics_query_combination_unsupported.md",
+      "sha256": "07ec404fe4774e998fec47d81ad54ce5181f9857fc323021f0d4602def2f460a"
+    },
+    {
+      "bytes": 1113,
+      "path": "errors/analytics_query_hourly_range_too_long.md",
+      "sha256": "abed34964b98a0040c9cb37c71fa6e850c0bd7c57afb46f01ddb9636f435148a"
+    },
+    {
+      "bytes": 1174,
+      "path": "errors/analytics_query_range_too_long.md",
+      "sha256": "742724694106dc5e92aca9e12eb008bb4a29066d1802386f610ec1997288846e"
+    },
+    {
+      "bytes": 1195,
+      "path": "errors/analytics_query_two_breakdowns.md",
+      "sha256": "ab2530086cfb35750f9ead188255b9b09517c6eed0efdb76de8e05c159e90b4c"
+    },
+    {
       "bytes": 1257,
       "path": "errors/anonymous_expired.md",
       "sha256": "5e5b2b11aeed6b18ce1bc9ba5f1bf9585e5eaaa22d17bee82d4b16b16302ffa8"
@@ -361,6 +446,16 @@
       "sha256": "0853543462cca327e140f74344586c47c2e2d22fe6b5094bfdd4222eaccf9066"
     },
     {
+      "bytes": 1239,
+      "path": "errors/billing_address_required.md",
+      "sha256": "8c58cb2085e0075f0cf54b858d80765817db82bd50fce2adfeeb6628ce83ecec"
+    },
+    {
+      "bytes": 1203,
+      "path": "errors/billing_managed_by_parent.md",
+      "sha256": "46a6edab1598e15d1f5d87099f470fad3ce3653ebc0269096e931021773fbc12"
+    },
+    {
       "bytes": 1115,
       "path": "errors/blob_gate_record_missing.md",
       "sha256": "c9d3302c3004eec3ca580fb2182207ff3918116e24c021e035de18dc51b387fa"
@@ -386,19 +481,19 @@
       "sha256": "8cff17b48e2fef799b6805ea09950618e9667744b3347beec023db43b7f199d7"
     },
     {
-      "bytes": 1052,
+      "bytes": 1270,
       "path": "errors/build_failed.md",
-      "sha256": "a99d1e4c9a5b3a949d3ecfc95dba2c838ba3869417af4d455e431b41373677e9"
+      "sha256": "76454e37d8c779d8da14552b597529087d30225e9a74c89a2f277dfeaee23d16"
     },
     {
-      "bytes": 1150,
+      "bytes": 1274,
       "path": "errors/build_install_failed.md",
-      "sha256": "31fa1a033d6d1063c81ab4037e20fd59d5c7b73f54cbb7b4836c2928f6da99c6"
+      "sha256": "c179bd57080e62f2919d8c49278dfd3f9fc8c63cfc4858a07f5006f5be9ddd59"
     },
     {
-      "bytes": 1196,
+      "bytes": 1283,
       "path": "errors/build_no_index_html.md",
-      "sha256": "7c5ae25bd7ea73506638fb2414c4bb1a44052a90fa16607ae37bb5af7f72d028"
+      "sha256": "c39a89ecfe51e517ea76c541efa1d45c6bb3f210590ee2c09b2d375f8d1641c9"
     },
     {
       "bytes": 992,
@@ -416,9 +511,9 @@
       "sha256": "176049854c2455aa97328b935d144761522ac39da21c6f25984245ef65e18d25"
     },
     {
-      "bytes": 1185,
+      "bytes": 1320,
       "path": "errors/build_output_dir_missing.md",
-      "sha256": "8e57d2dd6a582073dbcaa60a8c102ca289468de2235f59a070f8869c427c8688"
+      "sha256": "a447732c9f6cc15b0aaef0c0768ff8b494fcfccdde03fc3f02f382805f4bc9fe"
     },
     {
       "bytes": 1124,
@@ -434,6 +529,16 @@
       "bytes": 1069,
       "path": "errors/cache_purge_path_required.md",
       "sha256": "e7f1c043ed24472e6087f41a56236514406b2624ea41dea207a5833f605238da"
+    },
+    {
+      "bytes": 1117,
+      "path": "errors/cast_backend_error.md",
+      "sha256": "2d5288200a47f3a20337d5bb29fe81aedc5d7477383693da831d01ecd3ffeb92"
+    },
+    {
+      "bytes": 1046,
+      "path": "errors/cast_backend_unavailable.md",
+      "sha256": "0e34c215051fecae17cc98370e602c103c4e2fe45caa10f8cdd4c6b8e318ed71"
     },
     {
       "bytes": 1119,
@@ -469,6 +574,46 @@
       "bytes": 1087,
       "path": "errors/cli_upgrade_required.md",
       "sha256": "ab444e7fb717999c10a30b1ffd81de27ab75dcf9c475c01eff61e4f013783b6b"
+    },
+    {
+      "bytes": 1153,
+      "path": "errors/comment_page_path_invalid.md",
+      "sha256": "04dfa58ecba70c21376a19b169a4886e1d71c52c05aa91b178d886c838ecb262"
+    },
+    {
+      "bytes": 1104,
+      "path": "errors/comment_page_path_too_long.md",
+      "sha256": "6cad1faab0b52e291fdc545e0d04e14936b71f72c39b415b1b35fe2775229e9f"
+    },
+    {
+      "bytes": 1165,
+      "path": "errors/comment_room_deleted.md",
+      "sha256": "8db0ba86a7db0618f717e2ed103fa49cc4d2e7f3a0db310cf157f760c98aa5b2"
+    },
+    {
+      "bytes": 1061,
+      "path": "errors/comments_disabled.md",
+      "sha256": "9926b33ca4d57c58ac304758b7fb8c1dcf96faa06c00837d94520ce3f4b04de2"
+    },
+    {
+      "bytes": 1140,
+      "path": "errors/comments_not_configured.md",
+      "sha256": "3613fbd0db48035cf92aa65e6d12408ebadb972466e8ba5e1d214b29920656be"
+    },
+    {
+      "bytes": 1130,
+      "path": "errors/comments_reauth_required.md",
+      "sha256": "1688374f4e403b487daea0151708e2894c1f454bc67bc4337877fd612d68d75b"
+    },
+    {
+      "bytes": 1459,
+      "path": "errors/comments_target_unavailable.md",
+      "sha256": "448b3be1374ed4eaba38ebb954adb3e86ececfe80fe2cae185798352d43203c2"
+    },
+    {
+      "bytes": 1068,
+      "path": "errors/comments_view_only.md",
+      "sha256": "8945130d344125a6f1e474a38e146d849740c63915dcc5ba0d7a5ac67901b0cd"
     },
     {
       "bytes": 1099,
@@ -526,14 +671,14 @@
       "sha256": "a7cc990d6b2ac9d627c68418e8ae612d72841549c331735f0f62e60e6a1381fd"
     },
     {
-      "bytes": 1414,
+      "bytes": 1635,
       "path": "errors/confirmation_required.md",
-      "sha256": "3f30de445c4f22befb06331e34035b0c32a938b333fafbd8aec70e91a80ce7b0"
+      "sha256": "46ecb7587e7e937dca4842dde578fd9f716f26825b07aa64ca7aae93ed9dd5d6"
     },
     {
-      "bytes": 1325,
+      "bytes": 1441,
       "path": "errors/confirmation_token_required.md",
-      "sha256": "255599388ce13b773f9d47fd4eddac46aff54b8bcb59682f991318c1bd14df80"
+      "sha256": "aa26b8215bfba22c996dede2df6cac2a1519011867c9906a0e6a8dfb73c388f8"
     },
     {
       "bytes": 1233,
@@ -579,6 +724,11 @@
       "bytes": 1096,
       "path": "errors/connector_not_found.md",
       "sha256": "d99a683928f7f097c1bf87cc6415cf44272684314f3a31f7747bee945c93631d"
+    },
+    {
+      "bytes": 1192,
+      "path": "errors/connector_policy_blocked.md",
+      "sha256": "806bcd7dbff914de816bc2f783a18ea516597bd93ad169dbb6fff3d07aeb6c9b"
     },
     {
       "bytes": 1110,
@@ -661,9 +811,9 @@
       "sha256": "667320c9f278c884a45d86567783589dee3878074a0fa414ebc83db6c3aa84fe"
     },
     {
-      "bytes": 1371,
+      "bytes": 1360,
       "path": "errors/continuation_unavailable.md",
-      "sha256": "8ac80c9714abb3377dbb1189acfd32762e4d3bd18995cdff1b973ec1ab2b0991"
+      "sha256": "596fdb16f705eb9704b96e86a5a944cb0b8e095758283160aff1a83e909d2b5a"
     },
     {
       "bytes": 1198,
@@ -706,9 +856,9 @@
       "sha256": "adf7e1944bb7f53df9cb2c6fa41550216e03bd1b2577204329f832ae36d26993"
     },
     {
-      "bytes": 1258,
+      "bytes": 1664,
       "path": "errors/cron_run_unreachable.md",
-      "sha256": "68a60d487ebb6b1bfec9d32f3d898bc1a84e78eee1212ca74bf5365ecad52856"
+      "sha256": "f10e2ac1c87a51f434307340de46c75a6809b3c197b3275284dda503b5bae33a"
     },
     {
       "bytes": 1143,
@@ -756,6 +906,41 @@
       "sha256": "0714a6d35787c905da40d92dca7c280844c73c076131c4e1b36820e9fc0d6735"
     },
     {
+      "bytes": 1303,
+      "path": "errors/dev_relay_automattician_required.md",
+      "sha256": "d6d977b34aa8de36019529134825d67ac5abe56429d3f0e002b62310ba426975"
+    },
+    {
+      "bytes": 1210,
+      "path": "errors/dev_relay_decision_invalid.md",
+      "sha256": "c703e932919f52c506992be19ddfe878d9b347697904c7dfae054c98b0ebb26f"
+    },
+    {
+      "bytes": 1198,
+      "path": "errors/dev_relay_enrollment_conflict.md",
+      "sha256": "49b5b9c162bf5cf1489afa781a935cb98f8c37969fd3f862e6aa17baa0889e5f"
+    },
+    {
+      "bytes": 1129,
+      "path": "errors/dev_relay_enrollment_not_found.md",
+      "sha256": "c6f6f6d2353528872d2950aa7c70ce0b8966442c1b3a0e2e32f8ff09d5c4f713"
+    },
+    {
+      "bytes": 1202,
+      "path": "errors/dev_relay_enrollment_pending.md",
+      "sha256": "f9a43f74a225bf9d1e3492e5b917b63a7bdb3d098ea97d6396b65698acf03669"
+    },
+    {
+      "bytes": 1161,
+      "path": "errors/dev_relay_enrollment_revoked.md",
+      "sha256": "e8f99df6d20984af0e31c5d413b2f43f4303ed20cbde889fc9c86a0ddd728e29"
+    },
+    {
+      "bytes": 1186,
+      "path": "errors/dev_relay_hostname_unavailable.md",
+      "sha256": "927df49ae26442340cb295ca2e36464a71313b1bf70790b6b740e028430caf6e"
+    },
+    {
       "bytes": 1103,
       "path": "errors/device_authorization_failed.md",
       "sha256": "340626d0906718f9ebdd55c42b9cf0a0dde375467f634b2762006bdde6e4f527"
@@ -764,6 +949,16 @@
       "bytes": 1193,
       "path": "errors/device_verification_rate_limited.md",
       "sha256": "f2f90ea29dfab5614f24186c390adeccb29fed9c423fdbb76b1c701a5c07cbb7"
+    },
+    {
+      "bytes": 1316,
+      "path": "errors/dns_backend_rejected.md",
+      "sha256": "88fff728775ba3771a9388bb98be3b32b50c86f97b496ceac50767744f36b4a8"
+    },
+    {
+      "bytes": 1238,
+      "path": "errors/dns_backend_unavailable.md",
+      "sha256": "02acae9477aeacbc7b61e3653911ee3ccbaacf525b64f2cf6ab11f0e4052df75"
     },
     {
       "bytes": 1281,
@@ -789,6 +984,11 @@
       "bytes": 1199,
       "path": "errors/dns_import_partial_visibility.md",
       "sha256": "ed1e6c9efb8f0ec596b35a8f05cd188e861787b97473a3e4d2266e0304570367"
+    },
+    {
+      "bytes": 1221,
+      "path": "errors/dns_name_delegated.md",
+      "sha256": "1218872a8913692abd0eb64fb1ecfe452cdfcb7ce1fcb37777a059a695d1c5d2"
     },
     {
       "bytes": 1196,
@@ -844,11 +1044,6 @@
       "bytes": 1214,
       "path": "errors/dns_provider_field_unsupported.md",
       "sha256": "2a647d1730eeba209ed234c885d95db7aaf45ac5db0548b34a2f751202bd6dc5"
-    },
-    {
-      "bytes": 1272,
-      "path": "errors/dns_provider_future_authoritative_backend.md",
-      "sha256": "077c59dd8a1aa2d0551771ebb783f2421b36d9da3f88eed0fe2071e577f9c7ac"
     },
     {
       "bytes": 1203,
@@ -926,14 +1121,29 @@
       "sha256": "99543da39d5e4c6697023b4860e92f8a4ac824ef541f3e9e86449157a24ebbf9"
     },
     {
-      "bytes": 1152,
+      "bytes": 1275,
       "path": "errors/dns_record_managed.md",
-      "sha256": "a635ff9c39e6d2ed52179a2476308d4b0c453daa37b6cb5158a36b2e163b66f8"
+      "sha256": "9ce47dcfe3b3bdef029664e9bd9d9af07eddc3147271083e0f386eb5835f44e3"
     },
     {
       "bytes": 1052,
       "path": "errors/dns_record_not_found.md",
       "sha256": "83a33e302ebdf98d3eb4e069efacbad6b1789146fc08d66197f2d9ce99132120"
+    },
+    {
+      "bytes": 1287,
+      "path": "errors/dns_zone_awaiting_registration.md",
+      "sha256": "fa7791cc477840a04a649e0b20717268653c6242c730d7ee47ce212057c5d630"
+    },
+    {
+      "bytes": 1563,
+      "path": "errors/dns_zone_ownership_unproven.md",
+      "sha256": "a820ffbdc9d640933a24b6148c63da2aaa5be5dd5ecf89787199029b515962e2"
+    },
+    {
+      "bytes": 1295,
+      "path": "errors/dns_zone_served_by_another_domain.md",
+      "sha256": "3a8a1652c87d5f099f3279514edade7f7e47965a646bce2fde0b3791bd6e0fa7"
     },
     {
       "bytes": 1086,
@@ -944,6 +1154,26 @@
       "bytes": 1102,
       "path": "errors/domain_bound.md",
       "sha256": "f6245dc11daa74c1b56a3a6586ce20c6de1d85b340b7584e9c22d1edcd61b42a"
+    },
+    {
+      "bytes": 1078,
+      "path": "errors/domain_cart_duplicate.md",
+      "sha256": "d6e1b3a42412937d1c0db38b6e094d27d9c9469e46b25d64885aeaa50aec9ee2"
+    },
+    {
+      "bytes": 1186,
+      "path": "errors/domain_checkout_pending.md",
+      "sha256": "d60627492619e8aabe92c5d73cf3f753e7e32422d35a07644ef6eb5497b8529b"
+    },
+    {
+      "bytes": 1204,
+      "path": "errors/domain_checkout_total_changed.md",
+      "sha256": "8c38cca06ea00065849fcace103f5623664a8ffb949e06975eaddd8b1ba58a73"
+    },
+    {
+      "bytes": 1179,
+      "path": "errors/domain_contact_not_found.md",
+      "sha256": "bda299ea603ed48dc84edd4a54316454ab83bf683adde2cc27bff6f70b1d45b7"
     },
     {
       "bytes": 1129,
@@ -961,9 +1191,9 @@
       "sha256": "c9024731ab5d9ffda11dbebaa6769809a1c2ce60ad90289d4d0db0b39254d172"
     },
     {
-      "bytes": 1065,
+      "bytes": 1332,
       "path": "errors/domain_in_use.md",
-      "sha256": "2fbdcbe30f1a74f69484288d73884a654932f1876bd7a48dcfaa9c5bc75e1efa"
+      "sha256": "e3c194e503569f247eb7b8985e51481d061b3197a6cdd62f7f730d033f723715"
     },
     {
       "bytes": 1134,
@@ -976,9 +1206,24 @@
       "sha256": "f74e6788dd00ef44ecc2230b823ba901b1e38851887e84b6a965e09382e68084"
     },
     {
+      "bytes": 1149,
+      "path": "errors/domain_not_purchasable.md",
+      "sha256": "af1b31358883c4e8592e91ba9c21f4ab41a1596cee699a34b60c9fc0c9743d5b"
+    },
+    {
+      "bytes": 1201,
+      "path": "errors/domain_price_changed.md",
+      "sha256": "ae8fa2c35f5ff77abab75267f73692da7990327d4cdb257a9fa0ccdeb66085b8"
+    },
+    {
       "bytes": 1151,
       "path": "errors/domain_primary_redirect_conflict.md",
       "sha256": "0f35f279f037a3dc5fcded8c3ffff7d9e93b685245aff80966fbe38ed973b3fd"
+    },
+    {
+      "bytes": 1232,
+      "path": "errors/domain_purchase_apex_required.md",
+      "sha256": "661b9b27b32f35807e778521607c6d722d88f1339ddb49e5e55f82fb96a81be5"
     },
     {
       "bytes": 1229,
@@ -1004,6 +1249,16 @@
       "bytes": 1147,
       "path": "errors/domain_transfer_active.md",
       "sha256": "314a174af335a6d2c8d4e6467dd02045fbc2f78b8bce568bcb47e02c6ccd916b"
+    },
+    {
+      "bytes": 1265,
+      "path": "errors/domain_transfer_unavailable.md",
+      "sha256": "f55af41148cbf1d21494cf3317f90770999aff384897bf9d2aa5f45ab860b616"
+    },
+    {
+      "bytes": 1149,
+      "path": "errors/domain_unavailable.md",
+      "sha256": "5bbf62188d5da7d66b8c6d2653391c98a4ef1305a923ae8195ab6b94dfa93a21"
     },
     {
       "bytes": 1157,
@@ -1141,6 +1396,11 @@
       "sha256": "8f61432d49517e4749843b6c3ea73be1a07a13d9f6c9ccc7ee10c9a6e4a41663"
     },
     {
+      "bytes": 1777,
+      "path": "errors/functions_transport_failed.md",
+      "sha256": "8ee92ab87a0cfe10740902612c1c0427d230e33d0014db528a2839f3bd5480b8"
+    },
+    {
       "bytes": 1213,
       "path": "errors/hostname_contested.md",
       "sha256": "bac416e3671d7410367603d7ccd65e1c173ec125532419638be81845157085a3"
@@ -1166,14 +1426,19 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 88022,
+      "bytes": 105982,
       "path": "errors/index.md",
-      "sha256": "c811cc34e83425655826b0e2d1257f26de1148889fb3a8c17e374e0ffaae6ce5"
+      "sha256": "de7b54bec57b50a0c41ce9a27bc3a91c06b1ac8527f63443c569d18bc68a7d66"
     },
     {
       "bytes": 1112,
       "path": "errors/ingest_admission_exceeded.md",
       "sha256": "113abb310a21d92692d06171a8631d287493688282dfd597f844dd830a336428"
+    },
+    {
+      "bytes": 1161,
+      "path": "errors/ingress_policy_active.md",
+      "sha256": "c92f2b47bfb5aef756442170687c3323dc480ffca23fd26e7c0537ed1f965ece"
     },
     {
       "bytes": 1074,
@@ -1191,14 +1456,24 @@
       "sha256": "051e54782fe9956b8da12f43b504d6e70e7602b6a4d4ca79b9ebeef63da73c6b"
     },
     {
-      "bytes": 1167,
+      "bytes": 1200,
       "path": "errors/interactive_session_required.md",
-      "sha256": "29a56669fb058c5797caee806676b6b4da552dcfd54ec6621803e64602fc7bde"
+      "sha256": "fbe19e00b108a9291ac8d0083d187e4a2de1c55723f55f5f9fcd114b57618ac2"
     },
     {
       "bytes": 1029,
       "path": "errors/internal_error.md",
       "sha256": "ff7ce9fd905229cc198dbb59617c358e68f339536653434d563234f3cd83512d"
+    },
+    {
+      "bytes": 1199,
+      "path": "errors/internal_notice_token_required.md",
+      "sha256": "c7441ec9fdf09018a45736408abd8c651a358055f2fc51eff25840784409b49e"
+    },
+    {
+      "bytes": 1183,
+      "path": "errors/internal_notice_token_unconfigured.md",
+      "sha256": "dd0fc28b23b757a7a45b9fc64b4a1bd0a7629ad13a352b3047d416fdcb5a0b08"
     },
     {
       "bytes": 1120,
@@ -1234,6 +1509,11 @@
       "bytes": 1086,
       "path": "errors/invalid_domain_name.md",
       "sha256": "de55c61d14fc4674e106d625b2238106f2fc123a591f050f35e24097fc6aa796"
+    },
+    {
+      "bytes": 1222,
+      "path": "errors/invalid_dpop_proof.md",
+      "sha256": "0c0d55e7672da60e36c66f9c1fdfcdf1075941ecb0c9414815f78a31baf156e9"
     },
     {
       "bytes": 1220,
@@ -1289,6 +1569,11 @@
       "bytes": 1057,
       "path": "errors/invalid_space_mode.md",
       "sha256": "d2822a18b62d99584623b8b1eb501a2415291bd5c67df667e63c654c64863d6b"
+    },
+    {
+      "bytes": 1340,
+      "path": "errors/invalid_token.md",
+      "sha256": "77eeef78074a51edb16e84adff8901272b61a4f7b5d80bb142f713419c6904b1"
     },
     {
       "bytes": 1064,
@@ -1476,6 +1761,11 @@
       "sha256": "cc5744b4c1d5c926749a7c902f9487a2c5e3263bdfa5f4e2e53872c49e4b2b92"
     },
     {
+      "bytes": 1106,
+      "path": "errors/join_link_not_found.md",
+      "sha256": "b23cf32d9a2ce5237ad1a018f064561011f1dd268078af200e1318b04cfb344d"
+    },
+    {
       "bytes": 1090,
       "path": "errors/label_limit_reached.md",
       "sha256": "388b748548b614923101b345c0700b339900a25b71dcd9c766c5164ad27027a2"
@@ -1489,6 +1779,11 @@
       "bytes": 1097,
       "path": "errors/label_team_mismatch.md",
       "sha256": "4703fdbc1403fd4c1ab26a1c5e742f5fbce56a12f048d33ae6077d36ac64fdce"
+    },
+    {
+      "bytes": 1162,
+      "path": "errors/labs_enrollment_not_pending.md",
+      "sha256": "4efdc9d0e61a89ceeeb156c41ee56bcd8fd472d2350a274b9c5d8041a669a1cd"
     },
     {
       "bytes": 1046,
@@ -1566,9 +1861,9 @@
       "sha256": "d7460379043cd3e3d5c221e68a8786364eff3fe9ea232ab985042968d000f9b5"
     },
     {
-      "bytes": 1215,
+      "bytes": 1092,
       "path": "errors/name_managed_by_config.md",
-      "sha256": "0e49ae1e0833d7c6536c8217c9e90a40af76b453074479f7187f97e1e3d515fa"
+      "sha256": "2ec1fef929cb735cc628c26a1a39fc719fb6cd8ed7840cc76d6cc4e5154fc798"
     },
     {
       "bytes": 1230,
@@ -1579,6 +1874,16 @@
       "bytes": 1151,
       "path": "errors/nameserver_divergence.md",
       "sha256": "79c216e461128a4b4621b83fef15aa8aa703f703b657d4d18e7729e2788cd683"
+    },
+    {
+      "bytes": 1362,
+      "path": "errors/nameservers_required.md",
+      "sha256": "3239ea2143ff608e4209ce733f1edde8b57e5dc3008b39e44cdd7de028fad8ab"
+    },
+    {
+      "bytes": 1167,
+      "path": "errors/network_policy_enterprise_required.md",
+      "sha256": "45761cb4c3e6e5781765ee5c70cf3d430f8be217735ed618b75866ecdd9f2ad2"
     },
     {
       "bytes": 1183,
@@ -1609,6 +1914,11 @@
       "bytes": 1130,
       "path": "errors/owner_binding_requires_private_space.md",
       "sha256": "cb19f847feeaebc42a20bb1703b5a226e0daa20cd9c00cf4e59b0af3d60edd57"
+    },
+    {
+      "bytes": 1158,
+      "path": "errors/parent_authority_required.md",
+      "sha256": "3d73b100f76d7ef2eb39c204732f5e99b2236a351ec93b2d9b489dfec7096979"
     },
     {
       "bytes": 1364,
@@ -1781,6 +2091,11 @@
       "sha256": "2a1ca9d412d279cf9e1c73aded75640385035495ce777a8b4cec0227fecbbe24"
     },
     {
+      "bytes": 1268,
+      "path": "errors/provider_commit_denied.md",
+      "sha256": "2fe7c58013a95435d60400ebaac98e8c2bc135042a22e346f09f363416a7e83a"
+    },
+    {
       "bytes": 1001,
       "path": "errors/provider_error.md",
       "sha256": "67202cf380b3a257c480667aa05f06a2b70609a44ab65182b495cedfcc3ff855"
@@ -1846,9 +2161,9 @@
       "sha256": "803502a511d4ca933389aa7ad952d4f645c68a89cd61b90f058bb7d4deb8351e"
     },
     {
-      "bytes": 1297,
+      "bytes": 1408,
       "path": "errors/publish_base_changed.md",
-      "sha256": "302be690aada6e128b2a4152397a2138388e1208285d3f85439b68590a4e481b"
+      "sha256": "6aefea86cd590c07625b5a8fd857af3b1f2a79c31d2ea0fb1147a3108c94610c"
     },
     {
       "bytes": 1115,
@@ -1871,19 +2186,19 @@
       "sha256": "25f6b0b3af101c13b4bee791386b4478a882260cad1e1565ff8d61cf769ccd5a"
     },
     {
-      "bytes": 1158,
+      "bytes": 1370,
       "path": "errors/publish_file_missing.md",
-      "sha256": "9db62e2912edffbd0d31471f9458328bc07b259458c647115eaed7f52a755623"
+      "sha256": "247d8e3b4a4bc5fc7aa52990198c29b25b645195b391c85f83a0c58e85c75084"
     },
     {
-      "bytes": 1101,
+      "bytes": 1261,
       "path": "errors/publish_hash_mismatch.md",
-      "sha256": "03d9e4f897ea12ee1da80c42faa2e756a28cc9b8d74f0bf24526fc306fcdfc85"
+      "sha256": "b7108fd059e81bea923b7f7557487fb337baf078e74e4f1b4fed0a7b45cf422c"
     },
     {
-      "bytes": 1180,
+      "bytes": 1323,
       "path": "errors/publish_inline_limit_exceeded.md",
-      "sha256": "0a0db9f80c2b4f2ec5ddb42aa3feb1a04ff62bac2449f5b16d5a07d18e07d008"
+      "sha256": "917962f584e6a3fe40ea889f4e0487d0537423c2ff85934d6fe5286ac9f37617"
     },
     {
       "bytes": 1123,
@@ -1891,9 +2206,9 @@
       "sha256": "1fcf561acad3557c900112170c24f04c69dae1456603ff7ec646f40fcf808456"
     },
     {
-      "bytes": 1242,
+      "bytes": 1391,
       "path": "errors/publish_path_collision.md",
-      "sha256": "31c2093591d59b70e242998509bd30fb9c8dc8517783f7a7ff7fd3680386e35f"
+      "sha256": "5400f6a2da1d48e0e69370d9e9ec7eca7b478cd276abf22b166f2d017dad00bf"
     },
     {
       "bytes": 1127,
@@ -1921,9 +2236,9 @@
       "sha256": "349ed5d945dcf341c8476677cefb74785fffc7db468dc7b323ddeba5eb479617"
     },
     {
-      "bytes": 1155,
+      "bytes": 1378,
       "path": "errors/publish_verification_failed.md",
-      "sha256": "abd9036f405ceb92a7e5c2929012efa425f3a4225f2a3df3b66e58601305047d"
+      "sha256": "361779f6365d6920a15015037c7201c5f0292990f7b4c9eb8dee19de85eae2b1"
     },
     {
       "bytes": 1015,
@@ -1951,6 +2266,41 @@
       "sha256": "0886ac0818cef8242bab94560f324c9dd2ad7f5fbdeca5eb9dd09f698bf86e89"
     },
     {
+      "bytes": 1251,
+      "path": "errors/registrant_contact_invalid.md",
+      "sha256": "3d2668bee1dbe3a6d4e50f1b0000baed3f032e6b635120e46ed0b1fe0bcceb75"
+    },
+    {
+      "bytes": 1241,
+      "path": "errors/registrar_nameservers_refused.md",
+      "sha256": "966a181b3366d56300cb8b09e9c0328a0537af1e63f4eb06a720703760ac8419"
+    },
+    {
+      "bytes": 1276,
+      "path": "errors/registrar_nameservers_unconfirmed.md",
+      "sha256": "efc0ef3e3fd0e04208597d5dc1765b26cfb9ee78f3c0fb835affde110c55e137"
+    },
+    {
+      "bytes": 1230,
+      "path": "errors/registrar_outcome_unknown.md",
+      "sha256": "1ed96c9520ed6a70ba92bebd8244c9b14c482b60f343574dc1a83ff0ca7827a3"
+    },
+    {
+      "bytes": 1155,
+      "path": "errors/registrar_tld_maintenance.md",
+      "sha256": "167172382dfdff77055c42110d904a8a28e4f829d24654f464f65e9fd036abf7"
+    },
+    {
+      "bytes": 1153,
+      "path": "errors/registrar_unavailable.md",
+      "sha256": "7b65fd1bdc8210de8ce0ebcc2eaa038f16cfe0c84a7838a498db255ee9255a35"
+    },
+    {
+      "bytes": 1050,
+      "path": "errors/registrar_writes_disabled.md",
+      "sha256": "ae8cd7f1add99024b5a92fa1b108b26272c471ca9e49a81ecac854de31ba9aa4"
+    },
+    {
       "bytes": 1032,
       "path": "errors/registration_expired.md",
       "sha256": "3071b5d226425f4078d21398949301dad5c66a7eb50a630d7de3ea85dcc36168"
@@ -1959,6 +2309,16 @@
       "bytes": 1132,
       "path": "errors/registration_expiring.md",
       "sha256": "02f4cb69dcced76f1a48b7a12c9ed2aa589a5dda91d9e0e9519e78738445a7c6"
+    },
+    {
+      "bytes": 1192,
+      "path": "errors/registration_failed.md",
+      "sha256": "9d1aa5ed8e2414693056f7397eb098f0476bc0a9d8b5c01f67c16a63ac6666f3"
+    },
+    {
+      "bytes": 1158,
+      "path": "errors/reply_email_unconfigured.md",
+      "sha256": "9f0d18d5d74e30560f43743c87e2d620712e9d61891f990f0f183c268c585732"
     },
     {
       "bytes": 1162,
@@ -1971,6 +2331,11 @@
       "sha256": "1c0f4c4a2231b066e7c48e6c9e0216d48ddad8cfe194a9180a3476a4a04f34f3"
     },
     {
+      "bytes": 1354,
+      "path": "errors/repository_patch_invalid.md",
+      "sha256": "e7e55221c0301e9a40db6c6ac92515781faf4c787d05ce4ea8703bff1feb4383"
+    },
+    {
       "bytes": 1163,
       "path": "errors/repository_path_invalid.md",
       "sha256": "8b7875a6bcba227818e9e958cb2bf4052885ec2c0ffc98719a22a8c3a18564e1"
@@ -1981,14 +2346,49 @@
       "sha256": "fdb1306a10144b5ca76062a4dd4bb99d0d3192789cbd14c0b90c434d1f8d7ea9"
     },
     {
-      "bytes": 1135,
+      "bytes": 1157,
       "path": "errors/repository_resource_not_found.md",
-      "sha256": "2bbeb741721095f90fea7380fa0d3aaa4415aade9d6af929e907b3c60df42d6d"
+      "sha256": "4dd313dfd341f8f68b70f5a7fd30bb9d82d060949404dcd19cbd939eaeec3fdf"
+    },
+    {
+      "bytes": 1142,
+      "path": "errors/repository_source_already_initialized.md",
+      "sha256": "b96be4e369653447beb8aff9f82122acfd44bf395af7d4efc86abbb87cee64d3"
+    },
+    {
+      "bytes": 1131,
+      "path": "errors/repository_source_read_only.md",
+      "sha256": "7443ba9f2eaaaec25d723a19b74d4d94ed083f9bc92ba0cac53ca522a593a95d"
     },
     {
       "bytes": 1217,
       "path": "errors/repository_stale_base.md",
       "sha256": "a2e4d0ac876241848a0f70163f37e7bc56cd2cab4f451442dcd9ed5d3e1af451"
+    },
+    {
+      "bytes": 1166,
+      "path": "errors/repository_upload_source_changed.md",
+      "sha256": "7331dcfa5a4f5ef489f5684fd183dd815543eca8dd71bc97bd8ce3ea2ae8b349"
+    },
+    {
+      "bytes": 1232,
+      "path": "errors/repository_upload_source_ineligible.md",
+      "sha256": "2bde8d0c8ab8f11bc87ab3f06906d3fa52e962ccc5ba1b8b6bd482a694cbdec4"
+    },
+    {
+      "bytes": 1186,
+      "path": "errors/repository_upload_source_invalid.md",
+      "sha256": "780334c54a1171ef06bc9bfeebbe5ea5fbe296f24174f35cdf55c798328379dc"
+    },
+    {
+      "bytes": 1148,
+      "path": "errors/repository_upload_source_too_large.md",
+      "sha256": "7add051a127c27c8a2bb154df3f4d8a2f9b923a205ea1806903c19d4bfa46b67"
+    },
+    {
+      "bytes": 1154,
+      "path": "errors/repository_upload_source_unavailable.md",
+      "sha256": "e9fb803fc0686c9cbcc42db347188eb37ea9078c8eef4e34c093124ec18930ab"
     },
     {
       "bytes": 1254,
@@ -2009,6 +2409,11 @@
       "bytes": 1146,
       "path": "errors/review_item_claimed.md",
       "sha256": "34fc605dc924f12597c26550063df907f600f856fdfc0e8abc1ac81b49b99491"
+    },
+    {
+      "bytes": 1264,
+      "path": "errors/role_managed_by_parent.md",
+      "sha256": "d89bd96c567a82334e4aa86e189d3812273ab573b61c4e4530717974a156cce5"
     },
     {
       "bytes": 1248,
@@ -2036,6 +2441,11 @@
       "sha256": "2e42e8c92d093fc9acd9b0bebf2fba6db822087936bf253db7d3f95604bce8fd"
     },
     {
+      "bytes": 1293,
+      "path": "errors/runtime_delivery_lock_timeout.md",
+      "sha256": "481f8fb0e021641fe472d003750febf1d99fb45bdf5176c1d5a1b97929ae69c9"
+    },
+    {
       "bytes": 1137,
       "path": "errors/runtime_dev_unsupported.md",
       "sha256": "1557d51f5420863b6433cdb30721a8eeea4cb0d0f8bcc9ca03e646bdfc2c988a"
@@ -2044,6 +2454,11 @@
       "bytes": 1231,
       "path": "errors/runtime_edge_refused.md",
       "sha256": "798be6d80944c9b3571d9e18ce51f3bbe2dc5c3e2642205bac3ddc014e9ad3bf"
+    },
+    {
+      "bytes": 1212,
+      "path": "errors/runtime_engine_update_busy.md",
+      "sha256": "e5915e6368ef2feb23354c267c18807d2377f67d0ff5182502058e07f4905dba"
     },
     {
       "bytes": 1197,
@@ -2094,6 +2509,11 @@
       "bytes": 1136,
       "path": "errors/runtime_purge_failed.md",
       "sha256": "b53e427d9e7e298ebdd98fecd0befe43dc36d38adf3ee33b55640cf716c66c8b"
+    },
+    {
+      "bytes": 1242,
+      "path": "errors/runtime_release_superseded.md",
+      "sha256": "f112c7a9b205f63e051310828ac75954e172a642e289cd9307c641fae1545563"
     },
     {
       "bytes": 1203,
@@ -2179,6 +2599,16 @@
       "bytes": 1110,
       "path": "errors/session_not_fresh.md",
       "sha256": "6ea6c90a0da862f5d86f917d58bff51b88657c13e0f1ccd0ec3605207f7025b6"
+    },
+    {
+      "bytes": 1206,
+      "path": "errors/show_and_tell_ineligible.md",
+      "sha256": "3668ec6532916095ca95c2c634ad9604b83d1e6dcc0a7041232b02dc676a66e8"
+    },
+    {
+      "bytes": 1164,
+      "path": "errors/sign_in_required.md",
+      "sha256": "1a0cf4f9289a428a32d56330eed96606ec7707a2a953ad4b2225a76a97ac6058"
     },
     {
       "bytes": 1002,
@@ -2296,6 +2726,16 @@
       "sha256": "7e41896629052c947d003b7698350237daf513cf1b03ff1ab7b17e6a3c1b6e95"
     },
     {
+      "bytes": 1127,
+      "path": "errors/source_fork_replaced.md",
+      "sha256": "e4d0bc34392728d51e55fff0f7fe33eec158f0153174230694d16c84a4beb837"
+    },
+    {
+      "bytes": 1111,
+      "path": "errors/source_fork_revoked.md",
+      "sha256": "aa8c464da88b253d26f0f1f243732020e4a02832d15b8deec96a2b190c2ab78d"
+    },
+    {
       "bytes": 1193,
       "path": "errors/source_hunk_selection_invalid.md",
       "sha256": "7076961b0d62fa8497649dfb010bfa4147663dd536bf18fc65bb7a85740b756b"
@@ -2306,6 +2746,11 @@
       "sha256": "fa2ef537d5c159b043652d5cd4a76afe3d580a951919d5c3e1f1efb0c628629c"
     },
     {
+      "bytes": 1169,
+      "path": "errors/source_import_pending.md",
+      "sha256": "696e7b1a45891ec1a63e51df77cc756c20879a7dccac5ea829353e9bc38aaa95"
+    },
+    {
       "bytes": 1167,
       "path": "errors/source_merge_snapshot_changed.md",
       "sha256": "ab3f538cab6d8eea2e70c867b291d5af313338bed3b17a6273c319b0905bb2e4"
@@ -2314,6 +2759,11 @@
       "bytes": 1166,
       "path": "errors/source_merge_undo_unsupported.md",
       "sha256": "c6d5f5ece8202777694df812d32e0e367b5dfff33699e922d23eeb593af0db1c"
+    },
+    {
+      "bytes": 1137,
+      "path": "errors/source_namespace_required.md",
+      "sha256": "dc5dc94cb92246702f18225c38f840c1cca5b48b2ccfddfb2abf1d12fd851b77"
     },
     {
       "bytes": 1116,
@@ -2506,14 +2956,24 @@
       "sha256": "9a43b384c6a46de7f9bdf1712b7244ac4473f4324f1edbeb9bcd819d0cb477d8"
     },
     {
-      "bytes": 1019,
+      "bytes": 1264,
       "path": "errors/space_unclaimed.md",
-      "sha256": "7e039b79678c7804d3c5ead903139b31b7773bc1dbe831df4425c1b9df99945a"
+      "sha256": "d2eb4283ff786e8e5bb2e9dda0ac9b19e6f776a1de8849c574dfee7c7aa308ff"
+    },
+    {
+      "bytes": 1159,
+      "path": "errors/spacefast_git_url_invalid.md",
+      "sha256": "b43ca341b24d1bbfa6f7965bfba9c8b0f8201797e07751ac7bd97ec06d7b27d0"
     },
     {
       "bytes": 1094,
       "path": "errors/ssl_renewal_blocked.md",
       "sha256": "acbea4ab2e4921ba0e342f4145c2da25f72b55b94a33f54801df0a53ff516194"
+    },
+    {
+      "bytes": 1172,
+      "path": "errors/staging_signup_restricted.md",
+      "sha256": "4cc3fa3faf980620262e61597c9ba32903ce336da0da866a7a6b99560ededbb6"
     },
     {
       "bytes": 1169,
@@ -2534,11 +2994,6 @@
       "bytes": 1107,
       "path": "errors/storage_auth_required.md",
       "sha256": "f9f3d8e6eec9e0af1499120ba39c07882ee68ae6853c77269aaca0127c1ce85b"
-    },
-    {
-      "bytes": 1186,
-      "path": "errors/storage_bucket_unavailable.md",
-      "sha256": "82d60b66042404b2f0c6ce27ed37c05fbb021919537b20e17367fbb9acdaba81"
     },
     {
       "bytes": 1241,
@@ -2601,9 +3056,14 @@
       "sha256": "87f1467b1c28fd72a3f8e462d152d90284951e72e51df0c68b6ca27ac11d0d4e"
     },
     {
-      "bytes": 1122,
-      "path": "errors/subteam_name_taken.md",
-      "sha256": "54575bb546e51228f4e4a8ce262980550db290865eff2f96a7fa710134d3216b"
+      "bytes": 1318,
+      "path": "errors/subteam_nesting_unsupported.md",
+      "sha256": "3277d356e675b00579021bd0519871c6d089093e813e2eb79cde67702ae09d24"
+    },
+    {
+      "bytes": 1331,
+      "path": "errors/superadmin_automattic_email_required.md",
+      "sha256": "06edcf92e33543309f9cd1fb3d0c3e31e8e24a1321dc3bfdd1cc30d2f3471ad9"
     },
     {
       "bytes": 1103,
@@ -2646,6 +3106,86 @@
       "sha256": "514f8527e4b9d674b5a9d9845563127a5a679feabcd168c179d47363237bc2a9"
     },
     {
+      "bytes": 1175,
+      "path": "errors/team_deleted.md",
+      "sha256": "08559ad5316172040428c6872d82597083aeb37ef34c71c23f1408f5219da1f1"
+    },
+    {
+      "bytes": 1195,
+      "path": "errors/team_design_system_asset_not_found.md",
+      "sha256": "9b26fe92b6a8c2ef901f775c0598cbdb7e458d84416219b0fdbc112f5c6d7dd1"
+    },
+    {
+      "bytes": 1101,
+      "path": "errors/team_design_system_asset_too_large.md",
+      "sha256": "dd0ce3ca78aa3d58d815ae9a5b8a5b81fa4f8b2118254aca9cd0e0778df9c41d"
+    },
+    {
+      "bytes": 1297,
+      "path": "errors/team_design_system_asset_type_invalid.md",
+      "sha256": "5b851a6d2a236062d60010656722ee7a08e71ee1a4d9ba0cbd4e2ba4ee7364f1"
+    },
+    {
+      "bytes": 1220,
+      "path": "errors/team_design_system_contains_credential.md",
+      "sha256": "eed04144c0a843abd5d2e5a37b28e5dd97f021703ab778ee626eaa60c7278d1b"
+    },
+    {
+      "bytes": 1225,
+      "path": "errors/team_design_system_entry_not_found.md",
+      "sha256": "6c6f9a96180db27af67d3353c3826e614801b368138bcf8cadb801c8bf668e61"
+    },
+    {
+      "bytes": 1176,
+      "path": "errors/team_design_system_invalid.md",
+      "sha256": "b3ef0f3e5af2abb59d10b446bfaaf1ad89ea76abeedd4fd3ec3b25fb1176856c"
+    },
+    {
+      "bytes": 1193,
+      "path": "errors/team_design_system_limit_reached.md",
+      "sha256": "6e74f74efa9b192e05cbf564eefac6bace0ca0fe86fd87df852f2a7d52a19c19"
+    },
+    {
+      "bytes": 1163,
+      "path": "errors/team_design_system_operation_conflict.md",
+      "sha256": "49ad0dddb1a61f00a03e641215f26ff7c8add2a43d4daf2d094a6005ac298144"
+    },
+    {
+      "bytes": 1219,
+      "path": "errors/team_design_system_revision_conflict.md",
+      "sha256": "64f7b4bf6d069594f28a303e744ed45b0a914a456be059cd1ab74294d5aaa01d"
+    },
+    {
+      "bytes": 1169,
+      "path": "errors/team_design_system_storage_invalid.md",
+      "sha256": "50e560ab11adeb10959ecd991d50a973c031294edd27600877a07bec7fa7cfa8"
+    },
+    {
+      "bytes": 1223,
+      "path": "errors/team_design_system_svg_invalid.md",
+      "sha256": "4261c7e14d1e90d1a6976fa0cd55cbe3244ba3d27e9b63f5b0cb35d74a4c89cd"
+    },
+    {
+      "bytes": 1205,
+      "path": "errors/team_design_system_undo_conflict.md",
+      "sha256": "42cadf406b09e4f36bf15562c10f742160810cc9c07ae3a7cd1a3a7bd86e6d5b"
+    },
+    {
+      "bytes": 1132,
+      "path": "errors/team_design_system_upload_failed.md",
+      "sha256": "fa464b3add3427ffebf1fabcf2938d5837f7f48d753db2c0ae7bb42910af82b9"
+    },
+    {
+      "bytes": 1162,
+      "path": "errors/team_design_system_upload_invalid.md",
+      "sha256": "8e963626a1a84945f3cd3601efddf763e7d19436eb3922735e6aaf5a3ab5c638"
+    },
+    {
+      "bytes": 1175,
+      "path": "errors/team_design_system_write_failed.md",
+      "sha256": "c920de3523fe86ec7409e6a8ff2d689e4e889ecb3b30a0fd8504be4ebe39d0f4"
+    },
+    {
       "bytes": 1253,
       "path": "errors/team_has_paid_plan.md",
       "sha256": "a6e87156b097a4f5b194398d2d824662ab02a845bd31d1ebdaae0fb1f196f1b7"
@@ -2654,6 +3194,21 @@
       "bytes": 1281,
       "path": "errors/team_has_sell_seller.md",
       "sha256": "21c73bc48cd9b8b3635a59afd8a558e5b2270c4f339ee259ff7fc7613148ff7f"
+    },
+    {
+      "bytes": 999,
+      "path": "errors/team_has_subteams.md",
+      "sha256": "1576aab978004782f82e5fd0fb016e1d908bb782c89fc9d2fa76b79add1ded98"
+    },
+    {
+      "bytes": 1362,
+      "path": "errors/team_knowledge_setup_required.md",
+      "sha256": "674d0a51892baeaa64a8dadaf0c15892e7c2e44e6eb907700380b944cc2d3bb0"
+    },
+    {
+      "bytes": 1216,
+      "path": "errors/team_knowledge_storage_unavailable.md",
+      "sha256": "e0ea3253661bd1caa681a5fd2e77ce25a5a143db5ef178b8230f3acbd8c5133d"
     },
     {
       "bytes": 1180,
@@ -2666,9 +3221,34 @@
       "sha256": "45968593b766cbfc650e3fd7dc71838c9183392410213718a89fa70b264469bb"
     },
     {
+      "bytes": 1209,
+      "path": "errors/team_memory_contains_credential.md",
+      "sha256": "8e4ce2a04811bbbe94194abb3e17542f7d569e5f54cb7171e9ff338969715ced"
+    },
+    {
+      "bytes": 1204,
+      "path": "errors/team_memory_exists.md",
+      "sha256": "5caa97b33479c5de8787bd7d2120de9567b9635cef84041e33d0e8d7bacefac4"
+    },
+    {
+      "bytes": 1135,
+      "path": "errors/team_memory_limit_reached.md",
+      "sha256": "80f50ea3cb2c528ce79b92e5226743e51d8e0d6b809b9f5f87816eee10773356"
+    },
+    {
+      "bytes": 1061,
+      "path": "errors/team_memory_not_found.md",
+      "sha256": "f6f3fda3697f73d33a695b24d726389d7937d239d62003b29f687a64b5a52178"
+    },
+    {
       "bytes": 1029,
       "path": "errors/team_owner_required.md",
       "sha256": "600547544acb9e7ef0a6c07b8156cccdcc1bddc53bc20d85a7430cd2cb8b4a62"
+    },
+    {
+      "bytes": 1219,
+      "path": "errors/team_private_spaces_only.md",
+      "sha256": "ba45358304ba5254db51a4a542e025110c8e68898424b30582c7df1a4b6eb1f3"
     },
     {
       "bytes": 1034,
@@ -2681,9 +3261,19 @@
       "sha256": "45317f73d61975a045649760a7af0accc2ab9315ae7e46ccfabf7561d3e7d6f8"
     },
     {
+      "bytes": 1122,
+      "path": "errors/team_requires_noindex.md",
+      "sha256": "b76d355012663a085102179a9f88e8a4622dce43663516f41e00a4e43fced847"
+    },
+    {
       "bytes": 1215,
       "path": "errors/team_scope_mismatch.md",
       "sha256": "b23d59dfdf5247ef4307bf43f45ea505e7e5bda705d79cee9656ff8c1e8bb39f"
+    },
+    {
+      "bytes": 1034,
+      "path": "errors/team_skill_not_found.md",
+      "sha256": "81c869623c773eed7b85c9327f80da138a619955521be56e11fd2ff0e99b6232"
     },
     {
       "bytes": 986,
@@ -2791,6 +3381,11 @@
       "sha256": "c867828a254800216db93b4811dbdf5967ad4fca3f224d7723ae1b67516d30f9"
     },
     {
+      "bytes": 1136,
+      "path": "errors/traffic_rules_paused.md",
+      "sha256": "a3e65249d3d63792c522e0c94b863f9af42cff1265fc3559088485cd71fef879"
+    },
+    {
       "bytes": 1732,
       "path": "errors/traffic_rules_placement_incomplete.md",
       "sha256": "eb2d977ce2b010a70238abda26ffe6ce0f958786ec7e7d2e5f77e46d998b6f40"
@@ -2809,6 +3404,16 @@
       "bytes": 1089,
       "path": "errors/transfer_not_cancelable.md",
       "sha256": "b9a77d16b41aa623661a7c858d68646db6196384934a8c5a42024935cbf8d10a"
+    },
+    {
+      "bytes": 1228,
+      "path": "errors/transfer_outside_parent_team.md",
+      "sha256": "3343ea6a6719a76f2abacf27b99df71f307265a1e3d9713a9d44d4824bcdc58d"
+    },
+    {
+      "bytes": 1144,
+      "path": "errors/transfer_policy_managed_by_parent.md",
+      "sha256": "926682ea670b2fccdb9d3c2c2f6f029839944d192d34d3eddc285343b72b258e"
     },
     {
       "bytes": 1184,
@@ -2831,9 +3436,9 @@
       "sha256": "42563d866e70c08fd0aaf55fb2053d22b0b661ed35b79e461b5a7aa6968eb6b0"
     },
     {
-      "bytes": 1026,
+      "bytes": 1268,
       "path": "errors/unauthorized.md",
-      "sha256": "bac41c6eca1bcd6c39b4e01a3cdad791ea3479d09a6f3c5daaec7d8c2248f979"
+      "sha256": "5a2ea4807d1d24de8f3058d60e23b6d725df50198555acafd04037a1c1983294"
     },
     {
       "bytes": 1092,
@@ -2841,9 +3446,84 @@
       "sha256": "f9b28ddfd8287883c0b408fb6bb7a90414e5f05e0e5d9e83064f131cd7301fc4"
     },
     {
+      "bytes": 1059,
+      "path": "errors/upload_chunk_invalid.md",
+      "sha256": "0d7119676467b985baba69a14a51596b66fd3d0e2ec167b2dfe25fe2dc07ff17"
+    },
+    {
+      "bytes": 1095,
+      "path": "errors/upload_chunk_out_of_order.md",
+      "sha256": "39bf50a0869bab041b50aa52de5fc1c667e5f55a8ef5bdfdbe07485c324ea2d5"
+    },
+    {
+      "bytes": 1102,
+      "path": "errors/upload_chunk_pending.md",
+      "sha256": "a09edb013d3395e894d1314ada37627f0935ee1baa6458851649ec93be74a988"
+    },
+    {
+      "bytes": 1038,
+      "path": "errors/upload_chunk_too_large.md",
+      "sha256": "3818e34bb43e0dade67b346b04a60647f394020aac14fc358e6b682db088ed87"
+    },
+    {
+      "bytes": 1094,
+      "path": "errors/upload_consumer_missing.md",
+      "sha256": "f9040a43e3f71ca1714d756cf982d2a38335771fc074c9c3d0475531d98c3e37"
+    },
+    {
+      "bytes": 1078,
+      "path": "errors/upload_consumer_released.md",
+      "sha256": "24ef99655c8734038160c5a4cef4c15aeaca1bf38689b1cf78e7d2e1ad119ce0"
+    },
+    {
+      "bytes": 1006,
+      "path": "errors/upload_expired.md",
+      "sha256": "e644e8845df996372270b4ecb6ed3164f03b36878b7c5e02cd09f0f1e2844127"
+    },
+    {
       "bytes": 1094,
       "path": "errors/upload_hash_mismatch.md",
       "sha256": "ea4fe09fc284616fa9a05206c4e1ce12a07f3ac5b388e85fac9487019cadbd6b"
+    },
+    {
+      "bytes": 1083,
+      "path": "errors/upload_import_conflict.md",
+      "sha256": "b92e5313a9981c8c4ddd001699febad368d1c3af0508de7f6c99d79f6892ccc9"
+    },
+    {
+      "bytes": 1026,
+      "path": "errors/upload_import_failed.md",
+      "sha256": "919705432cf9287f715a7f974f800ab12ecbcace1ec10e178a4f23b6e17889ca"
+    },
+    {
+      "bytes": 1094,
+      "path": "errors/upload_import_redirect_limit.md",
+      "sha256": "1ebe1bb4e10d620d1e7c6aa473d982f80b6e3bd77dba68921213e877ebacd362"
+    },
+    {
+      "bytes": 1121,
+      "path": "errors/upload_import_reference_expired.md",
+      "sha256": "58ab4da8703e49de3ac6e040799459d99eb032f320f17006d1f5deb3aae90f9d"
+    },
+    {
+      "bytes": 1123,
+      "path": "errors/upload_import_url_invalid.md",
+      "sha256": "8a97fcd4c2d8deeba36fbdee44728ed4b36288ab7fe9f2879b68ee8c890a59d8"
+    },
+    {
+      "bytes": 1029,
+      "path": "errors/upload_in_use.md",
+      "sha256": "9808980db94cb034d893e6d32c8973bb7dfd455bbaad7eea670b61ecfd0b8b29"
+    },
+    {
+      "bytes": 995,
+      "path": "errors/upload_incomplete.md",
+      "sha256": "44e415857dc71c1abc785bdf79c20ccc3ee12c7d20526aac3fc743ae60c4b3e9"
+    },
+    {
+      "bytes": 1084,
+      "path": "errors/upload_integrity_failed.md",
+      "sha256": "4b802fd4fcd3c158760c2f366dceb3580cbd1597be7db669d95f5d10316ec1de"
     },
     {
       "bytes": 1159,
@@ -2854,6 +3534,16 @@
       "bytes": 1101,
       "path": "errors/upload_path_not_declared.md",
       "sha256": "fbaa7d16dd7efb8f576deeb21d317f94cbfc78f0c871a088ebe1c700eb26ef46"
+    },
+    {
+      "bytes": 1094,
+      "path": "errors/upload_retry_conflict.md",
+      "sha256": "58dcd682300cfbca91e1a0aff1e61b6d8512e8f434849b03e576707c547f2f8d"
+    },
+    {
+      "bytes": 1012,
+      "path": "errors/upload_sealed.md",
+      "sha256": "3e2e2457e439c70dcd747cb19172334843e1e682c13e9fb66749b5560ad33ad6"
     },
     {
       "bytes": 1092,
@@ -2951,9 +3641,9 @@
       "sha256": "44d6d26dd333a1bb00293c8fb342c1161e26b34fa83c05709328b9f300572004"
     },
     {
-      "bytes": 987,
+      "bytes": 1177,
       "path": "errors/version_not_found.md",
-      "sha256": "a9cd249760bcc02df5a02fdf9f1eb257d60a91858aa3479af37a8d639a5fdee4"
+      "sha256": "455884b2aea6e91e2d88b681bac505d0e4b0f213cc845bd140a0eb07f39c9660"
     },
     {
       "bytes": 1073,
@@ -2961,14 +3651,14 @@
       "sha256": "d628e123ebcb3b67cbb08b5fefa396fb708bce1bff691d0d2868b62632754f2b"
     },
     {
-      "bytes": 1093,
+      "bytes": 1293,
       "path": "errors/version_not_promotable.md",
-      "sha256": "e527b07f238d901dd9b2febdaefac56bd03b3addf4fb299db498462b7984488d"
+      "sha256": "dadc1d3526b0368b25ea434c06295db07c58099ad6f97871f4249074f30f57b9"
     },
     {
-      "bytes": 1022,
+      "bytes": 1238,
       "path": "errors/version_not_ready.md",
-      "sha256": "cca6940a3f8ea2b5c5287dd1ee5a887c2ab2ea51a8f97d7bf75e2fbc8f3c465d"
+      "sha256": "ff4295fb5f1047083ee72581a8e36034a02c96ddf01f502d9faf4d1b701cfb08"
     },
     {
       "bytes": 1480,
@@ -3431,9 +4121,9 @@
       "sha256": "661be4f2369904e39c2a2a399cd6a96c26c45e17c5d64c601232f36e6e8b020b"
     },
     {
-      "bytes": 1137,
+      "bytes": 1378,
       "path": "errors/zero_js_execution_timeout.md",
-      "sha256": "424b03f1ba3bdd0b6e23077f70184c5ad37795aee9994b578ba90877ab60dc34"
+      "sha256": "9c8cbdcfcecaa1ff75e1170354e9cc8ddb6a23d52285263a6136e8655601f585"
     },
     {
       "bytes": 1142,
@@ -3646,144 +4336,164 @@
       "sha256": "71cd78e5d1cc2fd45230adb301b6171b85ac39e8c7861e655ab286cccc423d47"
     },
     {
-      "bytes": 8647960,
+      "bytes": 9993910,
       "path": "openapi/api.json",
-      "sha256": "7a63470152c051f8390289676a4b498eb658ed942027de54101335993a6d94d8"
+      "sha256": "bfa093b8b3bc8d9063770968147deac3bf99e51dc3669a5ea2a159c284e01128"
     },
     {
-      "bytes": 8470349,
+      "bytes": 9723382,
       "path": "openapi/partner.json",
-      "sha256": "6a86c81c55f2d7488ce9ced63e12cf25808899d414ad3d1d9b0c16cfd50a2dc9"
+      "sha256": "9add11ed65fa74aa155d0cdc38d10ad57aa49bb7eefc5e5277812a11e9f46566"
     },
     {
-      "bytes": 483034,
+      "bytes": 548345,
       "path": "redirects.json",
-      "sha256": "6bdd68ad71b001ef0f8e5633438ed86db1cfaf7fac7f7cc3ea2a011b959f5483"
+      "sha256": "2135db88fe07b0434ee55fe90a038fb972f801a2a9cf9c2eb347ca63e742c08d"
     },
     {
-      "bytes": 2052,
+      "bytes": 2411,
       "path": "setup/amp.md",
-      "sha256": "385c453d153fb9da28dea822f96125319d7dddae5a0dfd56e624e974527288a4"
+      "sha256": "056de4724c3f19e4e2879f49bc559b7758e1bc09c5d547c134d81ad881801765"
     },
     {
-      "bytes": 1468,
+      "bytes": 1500,
       "path": "setup/chatgpt.md",
-      "sha256": "ee46377afaaecf4d51d1b1d2b842d222fc8476a37c32b56fe83a07147f64a658"
+      "sha256": "7b1d85332fe96645c2211e4565b60e9f554cdf4d9f5b57ca5dc9b20a379fd9ee"
     },
     {
-      "bytes": 1113,
+      "bytes": 1776,
       "path": "setup/claude-app.md",
-      "sha256": "b34051c27ca8f477b337a05e80639be064959e771b246c98b0fb8775570c0eb1"
+      "sha256": "f95ca51fa7aceadc080495448412dd9e71af7bd290dddb3170967f50afe46dc6"
     },
     {
-      "bytes": 1968,
+      "bytes": 2238,
       "path": "setup/claude-code.md",
-      "sha256": "894cb307e9e6e3ec17c7e4d577d5bfdd86a009759faf74d46c413ca10df910c2"
+      "sha256": "11411e017866d5077b545bd9432d2e197cea90527a2de82c245b11675635835d"
     },
     {
-      "bytes": 1421,
+      "bytes": 2218,
       "path": "setup/claude-desktop.md",
-      "sha256": "dd5889e5fb9e29c053d87f4e8d96c52d311cf386d5695e498087a40613e88d66"
+      "sha256": "56eebd53e78a91b6cc1ba604f75632d25cb11f39c129d7f7a78bbf189c2c4623"
     },
     {
-      "bytes": 2706,
+      "bytes": 3113,
       "path": "setup/cline.md",
-      "sha256": "5b8723c2d86c9b31e6585936ac3443a3386f48dc6e7cd44d1b2c6a1b43f9e345"
+      "sha256": "0e38e02c89475ddc14ebeb61eca06feebcf048bac999f0a385aa86df8510b965"
     },
     {
-      "bytes": 2660,
+      "bytes": 2985,
       "path": "setup/codex.md",
-      "sha256": "63925c1bd22b1e57dbb26e98f380a55dfa101b755e5b24e818d35572f78ef8b0"
+      "sha256": "ec0fdf9d3a78fc5bd2673ba67de7b6de7c3ece4b538213715f5c99901e4875a8"
     },
     {
-      "bytes": 1574,
+      "bytes": 1580,
       "path": "setup/continue.md",
-      "sha256": "7d99b21042d3a0b10f2ff13b1d1f9384c36f9e7978b073817f0f3f5261959b2d"
+      "sha256": "cb9535d46864c82c3ac17beb5f0b620c03212f6b2aadaed92dac10ea3d14a77c"
+    },
+    {
+      "bytes": 2568,
+      "path": "setup/cursor.md",
+      "sha256": "ae357b2687b07d1b3a2240923b78ed9cf44c5279a55f85488adcd901d2f79316"
+    },
+    {
+      "bytes": 1413,
+      "path": "setup/devin-cloud.md",
+      "sha256": "2b331131b527e821ff8f88f489de92cc159673e459ce6f53d1caa31b0f0c2d52"
+    },
+    {
+      "bytes": 2573,
+      "path": "setup/devin-desktop.md",
+      "sha256": "ca0a9ed4e9be6e857e34829ab7bfe57061c54571b535cfafddad0c043ad625d3"
+    },
+    {
+      "bytes": 2211,
+      "path": "setup/factory-droid.md",
+      "sha256": "5c0ccf394f9aa5b149e4ef3af676256bb03c571458e594f33c9b2bed66bb8fb1"
     },
     {
       "bytes": 2562,
-      "path": "setup/cursor.md",
-      "sha256": "0c85e3d398a68d2150ecfecd09d20e60a09958cd310b11a058b620b8f74bfce3"
-    },
-    {
-      "bytes": 1415,
-      "path": "setup/devin-cloud.md",
-      "sha256": "edae5731030229233fd4c882dcd227b28ba0360cca50f6dd668296f133d918f4"
-    },
-    {
-      "bytes": 2281,
-      "path": "setup/devin-desktop.md",
-      "sha256": "d632ce909752764913374381f7816e9a82a4827bf2d489438daf68b4f9e7dd9c"
-    },
-    {
-      "bytes": 1919,
-      "path": "setup/factory-droid.md",
-      "sha256": "4f7c9f503f80ef809e0023ee18ad79e592267873e6a55706d4afd516f12a0e1d"
-    },
-    {
-      "bytes": 2266,
       "path": "setup/gemini-cli.md",
-      "sha256": "eb5a4560efb5e481b74883177f912d64d50321d7309107021a6aedfa012f214d"
+      "sha256": "2f8db0cd19daf0251e23e2d0307d6b443daf37f27c67e97eb63f755cf7404ad3"
     },
     {
-      "bytes": 2277,
+      "bytes": 1560,
+      "path": "setup/github-copilot-app.md",
+      "sha256": "bb91ab7f5b49ab9a65574b2d912a8bc2ac0d494a2e8f2450ad1118458d115c29"
+    },
+    {
+      "bytes": 2677,
       "path": "setup/github-copilot.md",
-      "sha256": "6295d6f87d56b7bd40b6d15efdc4da9006eff482f65bf299c1a35cb94f72002b"
+      "sha256": "8fe3c5a07697a988c85d06f78de0f2b45e2fa13004e466df525832263f6bab84"
     },
     {
-      "bytes": 1440,
+      "bytes": 927,
+      "path": "setup/grok-bot.md",
+      "sha256": "65a5b589bc40bcb00b8b3899915db3a56bc271e0c1f98086467903a655c7297b"
+    },
+    {
+      "bytes": 1169,
+      "path": "setup/grok-build.md",
+      "sha256": "c826c38be35ccddf4bb7b02dff8495714a668d49c1ea3f8a68dd440d9a339aca"
+    },
+    {
+      "bytes": 731,
+      "path": "setup/grok.md",
+      "sha256": "e6cfecda5cd361778a2eeba6672e20bbc75f8670818dbbfe83b0b16376178562"
+    },
+    {
+      "bytes": 1446,
       "path": "setup/hermes.md",
-      "sha256": "df03199b572fb9c5a03b6df15f44cf74130f711a401dadc69c86fa5146d5305b"
+      "sha256": "be5a7a5201c6af4d148364ecb12eb15f95a56cbbf1d223724627316eeea2bf37"
     },
     {
-      "bytes": 1118,
+      "bytes": 1124,
       "path": "setup/indent.md",
-      "sha256": "af75c7027439230ef78b2469c903093dece53811fa534ea6ace3defafb0f95e2"
+      "sha256": "f0fc733f925c14193a47e58540a776ab0ec45e539e2aee0df3fa94c3436181fd"
     },
     {
-      "bytes": 2830,
+      "bytes": 3264,
       "path": "setup/index.md",
-      "sha256": "4ea74288ada8598761d3d91a7f336d0440473b65cc7c49d3d9d56d80a1e5dc5a"
+      "sha256": "bab012a64e4c9b238879d16d82bebcc355e0cb1a8c47ffaf7f7e4cf511de1c9b"
     },
     {
-      "bytes": 1394,
+      "bytes": 1400,
       "path": "setup/openclaw.md",
-      "sha256": "79e103f226a667f5c0f95a69e786161ef9bad963e17303929633b3f24489934a"
+      "sha256": "aaead891548f9956d759c8ca73588777182222332e1923c3c7c0a8b07270d5d2"
     },
     {
-      "bytes": 2048,
+      "bytes": 2337,
       "path": "setup/opencode.md",
-      "sha256": "1da91e5110f129718a639d2bf781373dd1c7909fd489d39c4879ad9f4681bb95"
+      "sha256": "aba2a6a7bd7b4e794269e2c2b88fe58da4d7756a5d6e0fa61b18df73edd09776"
     },
     {
-      "bytes": 1614,
+      "bytes": 1618,
       "path": "setup/pi.md",
-      "sha256": "73cf9008c564f0b96e5155fd3f6f19e88e172e05929fad88d0b2add4dcae8760"
+      "sha256": "fa65deb6ccafed36b1344164c7df2c676804b13fcf29bd7a8fe4c892a4f7e0e3"
     },
     {
-      "bytes": 753,
+      "bytes": 759,
       "path": "setup/poke.md",
-      "sha256": "45d8d9bb0f6d9f027d46be1f8fd4e1e2758eb09b3d60e7d0bd1baf60c2ccc4b6"
+      "sha256": "2476fe40a92a765784a4c7539b7fa8b6202b9a44ba3818239baff4555bb3a164"
     },
     {
-      "bytes": 921,
+      "bytes": 947,
       "path": "setup/raycast.md",
-      "sha256": "b9979e89726513aadf69611d8096ca6dbe9f8e315f166789342409577b2fbdcd"
+      "sha256": "ce39cba02ec9b35910554b5c6af3cdbf7c137866190d6a2b2dcf93c23f9db6b9"
     },
     {
-      "bytes": 2305,
+      "bytes": 2627,
       "path": "setup/vscode.md",
-      "sha256": "d372c8fb4e9e9ed3cca2380918ca6504460ede6965062aa6a63c8bedc0af7353"
+      "sha256": "e090150a392ff2ca3f923d17d4db0d31e79c71732e67d8ce372b3a1f54a915db"
     },
     {
-      "bytes": 2253,
+      "bytes": 2259,
       "path": "setup/warp.md",
-      "sha256": "92000df87bfcfc63af8d92481b78347781ff83afc1aaf3df367e00b1de5371ed"
+      "sha256": "8a60ed32f7e5b59fab63219d62e90c738f6593d5776137af3cdaa4376afe99ba"
     },
     {
-      "bytes": 1995,
+      "bytes": 2001,
       "path": "setup/zed.md",
-      "sha256": "00e03b62f5e61a1ad5873888edb996adf4bc796d9302152a287172cb0141d934"
+      "sha256": "41018c340b44d8f7e8f41b5d170841ee4b36add8662821cc3c61b621571cc664"
     }
   ],
   "generator": "spacefast-public-docs",

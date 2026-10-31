@@ -5,6 +5,34 @@ description: "Release history for @spacefast/vite-plugin on npm."
 
 Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast/vite-plugin) on npm.
 
+## 0.8.1
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.8.1
+  - @spacefast/routing@0.8.1
+
+## 0.8.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.8.0
+  - @spacefast/adapter-kit@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- @spacefast/routing@0.7.0
+  - @spacefast/adapter-kit@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- @spacefast/routing@0.6.1
+  - @spacefast/adapter-kit@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

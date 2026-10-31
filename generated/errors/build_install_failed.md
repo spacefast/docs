@@ -5,7 +5,7 @@ description: "The dependency install step failed during the build run."
 
 The dependency install step failed during the build run.
 
-**How to resolve:** Inspect the build logs for the install error, fix the lockfile or install command, and start a new build.
+**How to resolve:** Read `sf builds logs <buildId>` for the dependency installer error. Check the selected package manager, committed lockfile and install command, then start a new build after fixing the failure. See [Frameworks](/docs/frameworks/).
 
 <div data-pagefind-ignore>
 

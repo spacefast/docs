@@ -11,7 +11,7 @@ You can publish a folder of static files and get a live `space.fast` URL in one 
 
 You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
 
-Don't want to install anything? Open the dashboard and drag a folder, a `.zip`, or a single `index.html` onto the window — no account needed. See [Drop](/publish#publish) for the full walkthrough.
+Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window — no account needed. See [Drop](/publish#publish) for the full walkthrough.
 
 <Steps>
   <Step title="Install the CLI">
@@ -35,7 +35,7 @@ Don't want to install anything? Open the dashboard and drag a folder, a `.zip`, 
 
     The CLI prints a code and opens your browser. Approve the request there. The CLI receives an API key that lasts 30 days and expires after 7 days without use. Confirm with `sf whoami`.
 
-    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later. An unclaimed Space serves for 33 hours and 20 minutes after the latest publish that changes files.
+    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later. An unclaimed Space serves for {{anonymous-ttlSeconds}} after creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation.
 
   </Step>
   <Step title="Publish">

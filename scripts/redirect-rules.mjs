@@ -1,7 +1,18 @@
-import { redirects as retiredPageRedirects } from "../redirects.ts";
+import { redirects as retiredRoutes } from "../redirects.ts";
+
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 export const deploymentBase = "/docs";
+// Keep the agreed Docs ceiling; compression also reserves the Website's full
+// compiler count, including host-specific exact rules (16 rather than 12).
+export const docsDynamicRuleLimit = 88;
+const websiteDynamicRuleReserve = 16;
+const platformDynamicRuleLimit = 100;
+// The composed artifact shares the platform's 2,000 static and 2,100 total
+// redirects with the Website, which declares about 90 of its own.
+const websiteStaticRuleReserve = 120;
+export const docsStaticRuleLimit = 2_000 - websiteStaticRuleReserve;
+const docsTotalRuleLimit = 2_100 - websiteStaticRuleReserve - websiteDynamicRuleReserve;
 
 const mountRewriteRules = [
   { from: deploymentBase, status: 200, to: "/" },
@@ -12,24 +23,24 @@ const authoredRedirectRules = [
   {
     from: `${deploymentBase}/apps/zero`,
     status: 301,
-    to: `${deploymentBase}/zero-runtime`,
+    to: `${deploymentBase}/zero-runtime/`,
   },
   {
     from: `${deploymentBase}/zero`,
     status: 301,
-    to: `${deploymentBase}/zero-runtime`,
+    to: `${deploymentBase}/zero-runtime/`,
   },
   {
     from: `${deploymentBase}/storage`,
     status: 301,
-    to: `${deploymentBase}/object-storage`,
+    to: `${deploymentBase}/object-storage/`,
   },
 ];
 
 // `route` is relative to the deployment base; a `#fragment` has no Markdown form.
-function markdownRoute(route) {
-  const pathname = route.split("#")[0];
-  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.md`;
+function markdownRoute(route, extension) {
+  const pathname = route.split("#")[0].replace(/(?<=.)\/$/u, "");
+  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.${extension}`;
 }
 
 function unbased(route) {
@@ -41,8 +52,14 @@ function unbased(route) {
 // so both kinds get a 301 to the replacement's Markdown file.
 export const markdownTwinRules = [
   ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
-  ...retiredPageRedirects,
-].map(({ from, to }) => ({ from: markdownRoute(from), status: 301, to: markdownRoute(to) }));
+  ...retiredRoutes,
+// Only .md: agents fetch it, and an .mdx twin per page would push the composed
+// site past the platform's 2,000 static redirects.
+].map(({ from, to }) => ({
+  from: markdownRoute(from, "md"),
+  status: 301,
+  to: markdownRoute(to, "md"),
+}));
 
 const aliasFamilies = [
   {
@@ -67,8 +84,41 @@ const aliasFamilies = [
   },
 ];
 
+// The platform counts splats and named segments alike as dynamic rules.
+const isDynamic = ({ from }) => from.includes("*") || /\/:[a-z]/iu.test(from);
+
 function redirectKey(redirect) {
   return `${redirect.from}\0${redirect.to}\0${redirect.status}`;
+}
+
+// Legacy operation namespaces contain no content pages. Compress only a prefix
+// whose complete published mapping preserves the suffix and destination.
+function compressOperationAliases(rules) {
+  let statics = rules.filter((rule) => !isDynamic(rule));
+  const dynamic = rules.filter(isDynamic);
+  const aliasDynamicRuleLimit = Math.min(docsDynamicRuleLimit, platformDynamicRuleLimit - websiteDynamicRuleReserve)
+    - mountRewriteRules.filter(isDynamic).length;
+  const candidates = new Map();
+  for (const rule of statics) {
+    if (!rule.from.includes("/operations/")) continue;
+    const suffix = rule.from.split("/").at(-1);
+    if (!rule.to.endsWith(`/${suffix}`)) continue;
+    for (let length = rule.from.lastIndexOf("/") + 1; length < rule.from.length; length += 1) {
+      const prefix = rule.from.slice(0, length);
+      if (candidates.has(prefix)) continue;
+      const target = rule.to.slice(0, rule.to.length - (rule.from.length - length));
+      const matches = statics.filter(({ from }) => from.startsWith(prefix));
+      if (matches.length > 1 && matches.every(({ from, to }) => to === target + from.slice(length))) candidates.set(prefix, { prefix, target, count: matches.length });
+    }
+  }
+  for (const candidate of [...candidates.values()].sort((a, b) => b.count - a.count)) {
+    if (dynamic.length >= aliasDynamicRuleLimit) break;
+    const matches = statics.filter(({ from }) => from.startsWith(candidate.prefix));
+    if (matches.length < 2) continue;
+    statics = statics.filter(({ from }) => !from.startsWith(candidate.prefix));
+    dynamic.push({ from: `${candidate.prefix}*`, to: `${candidate.target}:splat`, status: 301 });
+  }
+  return [...statics, ...dynamic.toSorted((a, b) => b.from.length - a.from.length)];
 }
 
 export function compileRedirectRules(redirects) {
@@ -130,14 +180,14 @@ export function compileRedirectRules(redirects) {
     }
   }
 
-  return [
+  return compressOperationAliases([
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
     { from: "/partners/api/reference", status: 301, to: "/platforms/api/reference" },
     { from: "/partners/api/reference/*", status: 301, to: "/platforms/api/reference/:splat" },
-    { from: "/platform-api", status: 301, to: "/partner-api" },
-    { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
-  ].toSorted((left, right) => left.from.localeCompare(right.from));
+    { from: "/platform-api", status: 301, to: "/platforms/api/reference" },
+    { from: "/platform-api/*", status: 301, to: "/platforms/api/reference/:splat" },
+  ].toSorted((left, right) => left.from.localeCompare(right.from)));
 }
 
 // The published tree is flat (Astro emits pages at the dist root), but every
@@ -146,13 +196,56 @@ export function compileRedirectRules(redirects) {
 // then map the remaining based URLs back onto the flat files.
 export function buildRoutingRules(redirects) {
   return [
+    ...retiredRoutes.map(({ from, to, status }) => {
+      const [pathname, fragment] = to.split("#");
+      return { from: `${deploymentBase}${from}`, status, to: `${deploymentBase}${pathname === "/" ? "/" : `${pathname}/`}${fragment ? `#${fragment}` : ""}` };
+    }),
     ...authoredRedirectRules,
     ...markdownTwinRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,
-      to: `${deploymentBase}${to}`,
+      to: `${deploymentBase}${to.split("#")[0].replace(/\/$/u, "")}/${to.includes("#") ? `#${to.split("#")[1]}` : ""}`,
     })),
     ...mountRewriteRules,
   ];
+}
+
+export function verifyRoutingBudget(rules) {
+  const dynamicRules = rules.filter(isDynamic).length;
+  const staticRules = rules.length - dynamicRules;
+  if (
+    dynamicRules > docsDynamicRuleLimit ||
+    staticRules > docsStaticRuleLimit ||
+    rules.length > docsTotalRuleLimit
+  ) {
+    throw new Error(
+      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${rules.length}/${docsTotalRuleLimit} total`,
+    );
+  }
+}
+
+function applyRule(rule, source) {
+  if (!rule.from.endsWith("*")) {
+    return rule.from === source ? rule.to : null;
+  }
+  const prefix = rule.from.slice(0, -1);
+  if (!source.startsWith(prefix)) return null;
+  return rule.to.replace(":splat", source.slice(prefix.length));
+}
+
+export function resolveRedirect(source, rules, maximumHops = 5) {
+  let current = source;
+  const hops = [];
+  for (let index = 0; index < maximumHops; index += 1) {
+    const rule = rules.find((candidate) => applyRule(candidate, current) !== null);
+    if (!rule) return { destination: current, hops };
+    const destination = applyRule(rule, current);
+    hops.push({ source: current, destination, status: rule.status });
+    if (hops.some((hop, hopIndex) => hopIndex < hops.length - 1 && hop.source === destination)) {
+      throw new Error(`Redirect loop while resolving ${source}`);
+    }
+    current = destination;
+  }
+  throw new Error(`Redirect chain exceeds ${maximumHops} hops: ${source}`);
 }

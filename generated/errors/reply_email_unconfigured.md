@@ -1,11 +1,11 @@
 ---
-title: "subteam_name_taken"
-description: "Another subteam in this team already uses that name, ignoring case."
+title: "reply_email_unconfigured"
+description: "Reply emails for comments aren't configured on this server."
 ---
 
-Another subteam in this team already uses that name, ignoring case.
+Reply emails for comments aren't configured on this server.
 
-**How to resolve:** Choose a different name or use the existing subteam.
+**How to resolve:** Contact support with the requestId. Retrying gets the same answer until it's configured.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/subteam_name_taken",
-  "title": "Subteam name taken",
+  "type": "https://spacefast.com/docs/errors/reply_email_unconfigured",
+  "title": "Reply email unconfigured",
   "status": 400,
-  "detail": "Another subteam in this team already uses that name, ignoring case.",
-  "code": "subteam_name_taken",
+  "detail": "Reply emails for comments aren't configured on this server.",
+  "code": "reply_email_unconfigured",
   "requestId": "req_4mz0v8qk"
 }
 ```

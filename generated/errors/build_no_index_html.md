@@ -5,7 +5,7 @@ description: "The build produced output but no index.html at the site root."
 
 The build produced output but no index.html at the site root.
 
-**How to resolve:** Ensure your build writes an index.html to the output directory. Otherwise point the output directory at the folder that contains index.html.
+**How to resolve:** Check the configured output directory after running your build locally: its root must contain index.html. Point the output directory at the browser-ready export rather than the project root. See [Frameworks](/docs/frameworks/).
 
 <div data-pagefind-ignore>
 

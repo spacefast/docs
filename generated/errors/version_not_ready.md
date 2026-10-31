@@ -5,7 +5,7 @@ description: "The version is not ready yet."
 
 The version is not ready yet.
 
-**How to resolve:** Wait for finalize to complete. The operation receipt reports progress.
+**How to resolve:** Read the version status and its operation receipt. Wait for an active finalize operation to finish; if the version failed, inspect its diagnostics and publish corrected content. Promotion and comparison require a ready version. See [Versions and rollback](/docs/versions-and-rollback/).
 
 <div data-pagefind-ignore>
 

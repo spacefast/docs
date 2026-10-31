@@ -2,7 +2,7 @@
 title: "Connect Continue to Spacefast"
 description: "Add the Spacefast skill to a Continue install you already have."
 seo:
-  canonical: "https://spacefast.com/setup/continue/"
+  canonical: "https://spacefast.com/docs/setup/continue/"
 ---
 
 Add the Spacefast skill to a Continue install you already have.
@@ -41,4 +41,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Continue documentation](https://github.com/continuedev/continue)
+[Agent documentation](/agents/) · [Continue documentation](https://github.com/continuedev/continue)
