@@ -33,9 +33,9 @@ const authoredRedirectRules = [
 ];
 
 // `route` is relative to the deployment base; a `#fragment` has no Markdown form.
-function markdownRoute(route) {
+function markdownRoute(route, extension) {
   const pathname = route.split("#")[0].replace(/(?<=.)\/$/u, "");
-  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.md`;
+  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.${extension}`;
 }
 
 function unbased(route) {
@@ -44,11 +44,18 @@ function unbased(route) {
 
 // Blume emits HTML meta-refresh stubs for retired Markdown URLs. Agents need
 // an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
-// so both kinds get a 301 to the replacement's Markdown file.
+// so both kinds get a 301 to the replacement's Markdown file of the same kind.
 export const markdownTwinRules = [
   ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
   ...retiredRoutes,
-].map(({ from, to }) => ({ from: markdownRoute(from), status: 301, to: markdownRoute(to) }));
+].flatMap(({ from, to }) =>
+  // Blume publishes each page as both .md and .mdx.
+  ["md", "mdx"].map((extension) => ({
+    from: markdownRoute(from, extension),
+    status: 301,
+    to: markdownRoute(to, extension),
+  })),
+);
 
 const aliasFamilies = [
   {
