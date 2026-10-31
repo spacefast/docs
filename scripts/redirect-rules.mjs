@@ -133,8 +133,8 @@ export function compileRedirectRules(redirects) {
     ...dynamic,
     { from: "/partners/api/reference", status: 301, to: "/platforms/api/reference" },
     { from: "/partners/api/reference/*", status: 301, to: "/platforms/api/reference/:splat" },
-    { from: "/platform-api", status: 301, to: "/partner-api" },
-    { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
+    { from: "/platform-api", status: 301, to: "/platforms/api/reference" },
+    { from: "/platform-api/*", status: 301, to: "/platforms/api/reference/:splat" },
   ].toSorted((left, right) => left.from.localeCompare(right.from)));
 }
 

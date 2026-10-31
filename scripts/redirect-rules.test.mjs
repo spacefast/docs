@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
+import { matchRedirect } from "@spacefast/routing/match";
 
 import redirects from "../generated/redirects.json" with { type: "json" };
 import { buildRoutingRules, verifyRoutingBudget } from "./redirect-rules.mjs";
@@ -34,4 +35,15 @@ test("the complete compatibility map reserves the website's splats and host-spec
   });
   assert.deepEqual(compilation.diagnostics.filter(({ severity }) => severity === "error"), []);
   assert.ok(compilation.stats.dynamicRedirectCount <= 100, JSON.stringify(compilation.stats));
+  for (const [source, destination] of [
+    ["/platform-api", "/platforms/api/reference/"],
+    ["/platform-api/spaces/getspace", "/platforms/api/reference/spaces/getspace/"],
+  ]) {
+    const url = new URL(`https://spacefast.com/docs${source}?from=test`);
+    const first = matchRedirect({ compilation, request: { url, headers: new Headers() } });
+    assert.equal(first?.action, "redirect");
+    assert.equal(new URL(first.target, url).href, `https://spacefast.com/docs${destination}?from=test`);
+    const second = matchRedirect({ compilation, request: { url: new URL(first.target, url), headers: new Headers() } });
+    assert.equal(second?.action, "rewrite", `${source} must redirect directly to its final page`);
+  }
 });

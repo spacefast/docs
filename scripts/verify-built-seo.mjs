@@ -1,12 +1,47 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
+import { matchRedirect } from "@spacefast/routing/match";
 import { duplicateOperations } from "./api-ownership.mjs";
+
+function* strings(value) {
+  if (typeof value === "string") yield value;
+  else if (value && typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      yield key;
+      yield* strings(child);
+    }
+  }
+}
+
+export async function verifyDiscoveryUrls(dist, files, served) {
+  const compilation = compileRoutingFilesWasm({ redirects: await readFile(path.join(dist, "_redirects"), "utf8") });
+  if (compilation.diagnostics.some(({ severity }) => severity === "error")) throw new Error("Cannot verify discovery URLs against invalid routing");
+  const checked = new Set();
+  for (const file of files.filter((file) => /\.(?:json|jsonc|xml|txt|md|mdx)$/u.test(file))) {
+    const text = await readFile(path.join(dist, file), "utf8");
+    // Parse JSON so escaped URLs and URLs embedded in prose are checked too.
+    const values = file.endsWith(".json") ? strings(JSON.parse(text)) : [text];
+    for (const value of values) {
+      for (const [href] of value.matchAll(/(?<![\w/])(?:https:\/\/spacefast\.com)?\/docs(?=[/\s?#,"'<>`\)\]}]|$)(?:\/[^\s,"'<>`\\)\]}]*)?(?:[?#][^\s,"'<>`\\)\]}]*)?/gu)) {
+        if (checked.has(href)) continue;
+        const url = new URL(href.replaceAll("&amp;", "&"), "https://spacefast.com");
+        const result = matchRedirect({ compilation, request: { url, headers: new Headers() } });
+        if (result?.action === "redirect") throw new Error(`Redirecting discovery URL in ${file}: ${href} -> ${result.target}`);
+        const slash = `${url.origin}${url.pathname.replace(/\/$/u, "")}/`;
+        if (served.has(slash) && !url.pathname.endsWith("/")) throw new Error(`Slashless discovery URL in ${file}: ${href}`);
+        checked.add(href);
+      }
+    }
+  }
+}
 
 export async function verifyBuiltSeo(dist = path.resolve("dist")) {
   const files = (await readdir(dist, { recursive: true, withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => path.relative(dist, path.join(entry.parentPath, entry.name)));
   const pages = files.filter((file) => file.endsWith("index.html") && !file.startsWith("blume-nav/"));
   const root = "https://spacefast.com/docs/";
   const served = new Set(pages.map((file) => `${root}${file.replace(/index\.html$/u, "")}`));
+  await verifyDiscoveryUrls(dist, files, served);
   const sitemap = [...(await readFile(path.join(dist, "sitemap.xml"), "utf8")).matchAll(/<loc>([^<]+)<\/loc>/gu)].map((match) => match[1]);
   const api = JSON.parse(await readFile("generated/openapi/api.json", "utf8"));
   const partner = JSON.parse(await readFile("generated/openapi/partner.json", "utf8"));

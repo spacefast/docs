@@ -8,7 +8,8 @@ import { compileRedirectRules, resolveRedirect } from "./redirect-rules.mjs";
 const dist = path.resolve("dist");
 const origin = "https://spacefast.com";
 const base = "/docs";
-const files = (await readdir(dist, { recursive: true, withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => path.relative(dist, path.join(entry.parentPath, entry.name))).filter((file) => !file.startsWith(".well-known/"));
+const listFiles = async () => (await readdir(dist, { recursive: true, withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => path.relative(dist, path.join(entry.parentPath, entry.name)));
+let files = await listFiles();
 const htmlFiles = files.filter((file) => file.endsWith(".html"));
 const pages = new Set(htmlFiles.filter((file) => file.endsWith("index.html")).map((file) => `${base}/${file.replace(/index\.html$/u, "")}`));
 const compatibility = JSON.parse(await readFile("generated/redirects.json", "utf8"));
@@ -20,10 +21,12 @@ const catalogs = new Map([
 ]);
 for (const [from, to] of catalogs) await writeFile(path.join(dist, to.slice(base.length)), await readFile(path.join(dist, from.slice(base.length))).catch(() => readFile(path.join(dist, to.slice(base.length)))));
 await rm(path.join(dist, ".well-known"), { recursive: true, force: true });
+// Include the catalogs just moved out of .well-known in URL normalization.
+files = await listFiles();
 const finalUrl = (value) => {
   const absolute = value.startsWith(origin);
   const local = absolute ? value.slice(origin.length) : value;
-  if (!local.startsWith(base)) return value;
+  if (local !== base && !local.startsWith(`${base}/`) && !local.startsWith(`${base}?`) && !local.startsWith(`${base}#`)) return value;
   const [, pathname, suffix = ""] = /^(.*?)([?#].*)?$/u.exec(local);
   if (catalogs.has(pathname)) return `${absolute ? origin : ""}${catalogs.get(pathname)}${suffix}`;
   const route = pathname.slice(base.length).replace(/\/$/u, "") || "/";
@@ -37,7 +40,7 @@ const cachedUrl = (value) => {
   if (!urlCache.has(value)) urlCache.set(value, finalUrl(value));
   return urlCache.get(value);
 };
-const rewrite = (text) => text.replace(/(?:https:\/\/spacefast\.com)?\/docs(?:\/[^\s"'<>`\\)\]}]*)?(?:#[^\s"'<>`\\)\]}]*)?/gu, cachedUrl);
+const rewrite = (text) => text.replace(/(?:https:\/\/spacefast\.com)?\/docs(?:\/[^\s,"'<>`\\)\]}]*)?(?:#[^\s,"'<>`\\)\]}]*)?/gu, cachedUrl);
 const unescape = (text) => text.replace(/<[^>]+>/gu, "").replaceAll("&amp;", "&").replaceAll("&#39;", "'").replaceAll("&quot;", '"').trim();
 const manifest = JSON.parse(await readFile(".blume/blume.manifest.json", "utf8"));
 const api = JSON.parse(await readFile("generated/openapi/api.json", "utf8"));
