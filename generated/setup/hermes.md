@@ -2,7 +2,7 @@
 title: "Connect Hermes to Spacefast"
 description: "Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal."
 seo:
-  canonical: "https://spacefast.com/setup/hermes/"
+  canonical: "https://spacefast.com/docs/setup/hermes/"
 ---
 
 Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal.

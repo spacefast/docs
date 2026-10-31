@@ -81,7 +81,7 @@ args = ["mcp", "proxy"]
 Use the Spacefast MCP server to search the docs for anonymous publishing.
 </Prompt>
 
-Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+Ask the agent to call `searchDocs` for a documentation query, then `getDocsPage` with a returned slug before attempting a publish.
 
 <Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
 Publish this folder to Spacefast and give me the live URL.
@@ -105,4 +105,4 @@ Show DNS and TLS status for every domain on this Space.
 Make this Space public and confirm the access setting afterwards.
 </Prompt>
 
-The last one goes through `execute`, which can pause for your approval before the write lands.
+The last one calls the matching API operation tool, which can pause for your approval before the write lands.

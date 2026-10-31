@@ -2,7 +2,7 @@
 title: "Connect Poke to Spacefast"
 description: "Add Spacefast to Poke so it can publish for you."
 seo:
-  canonical: "https://spacefast.com/setup/poke/"
+  canonical: "https://spacefast.com/docs/setup/poke/"
 ---
 
 Add Spacefast to Poke so it can publish for you.

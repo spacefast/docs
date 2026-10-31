@@ -1,11 +1,11 @@
 ---
-title: "dns_provider_future_authoritative_backend"
-description: "This domain uses a future Spacefast authoritative DNS backend adapter."
+title: "team_design_system_operation_conflict"
+description: "This operation ID already names different input."
 ---
 
-This domain uses a future Spacefast authoritative DNS backend adapter.
+This operation ID already names different input.
 
-**How to resolve:** Use the provider-neutral DNS endpoints and rely on the advertised capabilities for supported actions.
+**How to resolve:** Use the original input for a retry, or a new operationId for a new action.
 
 <div data-pagefind-ignore>
 
@@ -26,11 +26,11 @@ Match on `code`, never on `detail`.
 
 ```json
 {
-  "type": "https://spacefast.com/docs/errors/dns_provider_future_authoritative_backend",
-  "title": "Dns provider future authoritative backend",
+  "type": "https://spacefast.com/docs/errors/team_design_system_operation_conflict",
+  "title": "Team design system operation conflict",
   "status": 400,
-  "detail": "This domain uses a future Spacefast authoritative DNS backend adapter.",
-  "code": "dns_provider_future_authoritative_backend",
+  "detail": "This operation ID already names different input.",
+  "code": "team_design_system_operation_conflict",
   "requestId": "req_4mz0v8qk"
 }
 ```

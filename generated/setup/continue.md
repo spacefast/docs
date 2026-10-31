@@ -2,7 +2,7 @@
 title: "Connect Continue to Spacefast"
 description: "Add the Spacefast skill to a Continue install you already have."
 seo:
-  canonical: "https://spacefast.com/setup/continue/"
+  canonical: "https://spacefast.com/docs/setup/continue/"
 ---
 
 Add the Spacefast skill to a Continue install you already have.

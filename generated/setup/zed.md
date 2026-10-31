@@ -2,7 +2,7 @@
 title: "Connect Zed to Spacefast"
 description: "Add Spacefast to Zed so its agent can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/zed/"
+  canonical: "https://spacefast.com/docs/setup/zed/"
 ---
 
 Add Spacefast to Zed so its agent can publish what you build.

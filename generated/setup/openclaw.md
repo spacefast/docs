@@ -2,7 +2,7 @@
 title: "Connect OpenClaw to Spacefast"
 description: "Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal."
 seo:
-  canonical: "https://spacefast.com/setup/openclaw/"
+  canonical: "https://spacefast.com/docs/setup/openclaw/"
 ---
 
 Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal.

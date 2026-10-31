@@ -5,6 +5,8 @@ import { posthog, script } from "blume/analytics";
 import { openapi } from "blume/reference";
 import { pagefind } from "blume/search";
 
+import { loadPricing, pricingVariables } from "./scripts/pricing.mjs";
+
 import { redirects } from "./redirects.ts";
 
 const deploymentBase = "/docs";
@@ -59,6 +61,7 @@ const icons = {
 
 export default defineConfig({
   title: "Spacefast Docs",
+  variables: pricingVariables(await loadPricing()),
   description: "Publish and host the sites your agents build.",
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
   // The 2026-10 brand: neutral greys, one green, dark first like the Website.

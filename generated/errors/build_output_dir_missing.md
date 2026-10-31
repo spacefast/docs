@@ -5,7 +5,7 @@ description: "The build finished but its output directory was not produced."
 
 The build finished but its output directory was not produced.
 
-**How to resolve:** Point the output directory setting at the folder your build writes (for example dist, build, out, or public).
+**How to resolve:** Run the build locally and check which directory it creates. Set the output directory to that folder relative to the project root; rerunning the same build with a nonexistent output directory will fail again. See [Frameworks](/docs/frameworks/).
 
 <div data-pagefind-ignore>
 

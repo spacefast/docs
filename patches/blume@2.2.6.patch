@@ -25,3 +25,65 @@ index cdf1cb34912f04ecca107a6a0869ea3fb0d6ef95..afd6e320633af606decc3a004c84fb96
    return fromId || slugify(`${method}-${path}`);
  };
  
+diff --git a/src/components/layout/Fonts.astro b/src/components/layout/Fonts.astro
+--- a/src/components/layout/Fonts.astro
++++ b/src/components/layout/Fonts.astro
+@@ -19,7 +19,7 @@
+ const preloadFilters = (head: FontHead) =>
+   head.preloadWeights.flatMap((weight) =>
+     head.preloadSubsets
+-      ? head.preloadSubsets.map((subset) => ({
++      ? head.preloadSubsets.filter((subset) => subset === "latin").map((subset) => ({
+           style: "normal" as const,
+           subset,
+           weight,
+diff --git a/src/components/islands/hooks.ts b/src/components/islands/hooks.ts
+--- a/src/components/islands/hooks.ts
++++ b/src/components/islands/hooks.ts
+@@ -39,7 +39,7 @@
+ let cached: { data: BlumeClientData; text: string } | null = null;
+ 
+ /** Read + parse the current page's injected snapshot (memoized per text). */
+-const readClientData = (): BlumeClientData | null => {
++const readClientData = async (): Promise<BlumeClientData | null> => {
+   const text = document.querySelector("#blume-client-data")?.textContent;
+   if (!text) {
+     return null;
+@@ -51,6 +51,11 @@
+     // SAFETY: the layout serialized this script tag's JSON from the same
+     // `BlumeClientData` snapshot this reads back.
+     const data = JSON.parse(text) as BlumeClientData;
++    if (!data.navigation) {
++      const response = await fetch(joinBase(import.meta.env.BASE_URL, "navigation.json"));
++      if (!response.ok) return null;
++      data.navigation = await response.json();
++    }
+     cached = { data, text };
+     return data;
+   } catch {
+@@ -71,7 +76,12 @@
+     if (!("document" in globalThis)) {
+       return;
+     }
+-    const sync = () => setData(readClientData());
++    let generation = 0;
++    const sync = async () => {
++      const current = ++generation;
++      const snapshot = await readClientData();
++      if (current === generation) setData(snapshot);
++    };
+     // Intentional post-mount hydration guard: `null` on the server and first
+     // client render so hydration matches, then the snapshot once mounted. The
+     // extra render is required; do not seed the initial value from the DOM.
+@@ -81,7 +91,10 @@
+     // page it mounted on; the swap brings the next page's snapshot, so read
+     // it again or the hook keeps answering with the first page's data.
+     document.addEventListener("astro:after-swap", sync);
+-    return () => document.removeEventListener("astro:after-swap", sync);
++    return () => {
++      generation += 1;
++      document.removeEventListener("astro:after-swap", sync);
++    };
+   }, []);
+   return data;
+ };

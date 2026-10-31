@@ -2,7 +2,7 @@
 title: "Agent setup"
 description: "Connect Codex, Claude, ChatGPT, Cursor, VS Code, or OpenClaw to publish and manage spaces."
 seo:
-  canonical: "https://spacefast.com/setup/"
+  canonical: "https://spacefast.com/docs/setup/"
 ---
 
 Pick the agent you already use. Every page is one action, a click or a paste, and the
@@ -16,6 +16,7 @@ same Spacefast account works across all of them.
 - [ChatGPT](/setup/chatgpt): Add Spacefast to ChatGPT on the web so it can publish what you build.
 - [VS Code](/setup/vscode): Add Spacefast to VS Code so Copilot can publish from agent mode.
 - [GitHub Copilot CLI](/setup/github-copilot): Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
+- [GitHub Copilot app](/setup/github-copilot-app): Add Spacefast to the GitHub Copilot app so its agents can publish what you build.
 - [Devin Desktop](/setup/devin-desktop): Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI.
 - [Devin Cloud](/setup/devin-cloud): Add Spacefast to Devin Cloud so your sessions can publish what you build.
 - [Zed](/setup/zed): Add Spacefast to Zed so its agent can publish what you build.
@@ -32,5 +33,8 @@ same Spacefast account works across all of them.
 - [Indent](/setup/indent): Add Spacefast to Indent so it can publish what you build.
 - [Hermes](/setup/hermes): Give Hermes one prompt and it sets up Spacefast itself, or add the skill from your terminal.
 - [OpenClaw](/setup/openclaw): Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal.
+- [Grok](/setup/grok): Connect Spacefast to Grok through a custom MCP connector.
+- [Grok Build](/setup/grok-build): Add Spacefast's remote MCP server to Grok Build.
+- [Grok Bot](/setup/grok-bot): Connect a Grok Bot to Spacefast with a custom Remote HTTPS MCP server.
 
 Anything else that can fetch a URL can publish too: point it at the [agent documentation](/agents).

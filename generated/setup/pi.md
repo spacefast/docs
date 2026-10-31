@@ -2,7 +2,7 @@
 title: "Connect Pi to Spacefast"
 description: "Add the Spacefast skill to Pi so it can publish through the Spacefast API."
 seo:
-  canonical: "https://spacefast.com/setup/pi/"
+  canonical: "https://spacefast.com/docs/setup/pi/"
 ---
 
 Add the Spacefast skill to Pi so it can publish through the Spacefast API.
@@ -41,4 +41,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md#skills)
+[Agent documentation](/agents) · [Pi documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md)

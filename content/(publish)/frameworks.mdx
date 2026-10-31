@@ -33,10 +33,10 @@ Detection uses this table for both paths. The output directory column is what to
 | Framework | Detected by | Default build command | Output directory |
 | --- | --- | --- | --- |
 | Nextra | `nextra` dependency | `next build` | `out` |
-| Next.js | `next` dependency | `next build` | `out` |
+| [Next.js](/recipes/next) | `next` dependency | `next build` | `out` |
 | TanStack Start | `@tanstack/react-start` dependency | package script | `dist/client` |
 | Nuxt | `nuxt` dependency | `nuxt generate` | `.output/public` |
-| Astro | `astro` dependency or `astro.config.*` | `astro build` | `dist` |
+| [Astro](/recipes/astro) | `astro` dependency or `astro.config.*` | `astro build` | `dist` |
 | VitePress | `vitepress` dependency | `vitepress build docs` | `docs/.vitepress/dist` |
 | SvelteKit | `@sveltejs/kit` dependency | package script | `build` |
 | SolidStart | `@solidjs/start` dependency | `vinxi build` | `.output/public` |
@@ -48,9 +48,9 @@ Detection uses this table for both paths. The output directory column is what to
 | Angular | `@angular/cli` dependency or `angular.json` | `ng build` | `dist` |
 | Ember | `ember-cli` dependency or `ember-cli-build.js` | `ember build` | `dist` |
 | Gridsome | `gridsome` dependency or `gridsome.config.js` | `gridsome build` | `dist` |
-| Eleventy | `@11ty/eleventy` dependency or `.eleventy.js`, `eleventy.config.*` | `eleventy` | `_site` |
+| [Eleventy](/recipes/eleventy) | `@11ty/eleventy` dependency or `.eleventy.js`, `eleventy.config.*` | `eleventy` | `_site` |
 | Hexo | `hexo` dependency | `hexo generate` | `public` |
-| Vite | `vite` dependency or `vite.config.*` | `vite build` | `dist` |
+| [Vite](/recipes/vite) | `vite` dependency or `vite.config.*` | `vite build` | `dist` |
 | Zola | `config.toml` plus a `templates` directory | `zola build` | `public` |
 | Hugo | `hugo.toml` or `config.toml` | `hugo` | `public` |
 | Jekyll | `_config.yml`, `_config.yaml`, or `_config.toml` | `bundle exec jekyll build --config <detected config>` | `_site`, or `destination` from the config |
@@ -231,3 +231,7 @@ Same routing conventions as the Astro integration, plus a check that the build i
 Wired for you. When `sf publish` runs `next build`, it points Next at the bundled adapter through `NEXT_ADAPTER_PATH`, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
 
 Next 16.2 or newer is required for server-rendered builds, because that is the version where Next gained the `experimental.adapterPath` hook the adapter runs on. On an older Next, build with `output: "export"` and publish the export directory yourself.
+
+## Next steps
+
+Start with the [plain HTML recipe](/recipes/html) for an exported page. If a build fails, use [Troubleshooting](/troubleshooting) and [CLI build logs](/cli/builds) to inspect the failure.

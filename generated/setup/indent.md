@@ -2,7 +2,7 @@
 title: "Connect Indent to Spacefast"
 description: "Add Spacefast to Indent so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/indent/"
+  canonical: "https://spacefast.com/docs/setup/indent/"
 ---
 
 Add Spacefast to Indent so it can publish what you build.

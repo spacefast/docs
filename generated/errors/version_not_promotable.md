@@ -5,7 +5,7 @@ description: "The version cannot be promoted in its current status."
 
 The version cannot be promoted in its current status.
 
-**How to resolve:** Only ready versions can be promoted to a channel.
+**How to resolve:** Read the version status before selecting it for a channel. Finish its upload and finalize operation if still running; a failed version needs corrected content, not another promotion attempt. See [Versions and rollback](/docs/versions-and-rollback/).
 
 <div data-pagefind-ignore>
 

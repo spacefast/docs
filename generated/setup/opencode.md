@@ -2,7 +2,7 @@
 title: "Connect OpenCode to Spacefast"
 description: "Add Spacefast to OpenCode so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/opencode/"
+  canonical: "https://spacefast.com/docs/setup/opencode/"
 ---
 
 Add Spacefast to OpenCode so it can publish what you build.
@@ -38,6 +38,16 @@ npm install -g spacefast && sf setup agent --agent opencode
 ```bash
 npx -y spacefast setup agent --agent opencode -y
 ```
+
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+opencode mcp add
+```
+
+1. Follow the prompts to add a remote server named spacefast.
+2. Paste the server URL shown on this page.
+3. Run `opencode mcp auth spacefast`, then sign in to Spacefast and approve access.
 
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 

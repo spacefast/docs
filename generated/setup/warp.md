@@ -2,7 +2,7 @@
 title: "Connect Warp to Spacefast"
 description: "Add Spacefast to Warp so its agents can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/warp/"
+  canonical: "https://spacefast.com/docs/setup/warp/"
 ---
 
 Add Spacefast to Warp so its agents can publish what you build.

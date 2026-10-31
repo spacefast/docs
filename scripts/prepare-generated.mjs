@@ -26,6 +26,7 @@ const setupSections = [
       "cursor",
       "vscode",
       "github-copilot",
+      "grok-build",
       "devin-desktop",
       "devin-cloud",
       "zed",
@@ -42,42 +43,41 @@ const setupSections = [
   {
     folder: "(personal)",
     title: "Personal agents",
-    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
+    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw", "github-copilot-app", "grok", "grok-bot"],
   },
 ];
 
-// Provider pages the generated snapshot links to that have since moved. The
-// snapshot is digest-guarded, so its overlay copy carries the current address
-// until the next snapshot does. An entry no generated page uses fails the
-// build, so the list empties as snapshots catch up.
-const movedProviderUrls = new Map([
-  [
-    "https://developers.openai.com/api/docs/guides/developer-mode",
-    "https://developers.openai.com/plugins/deploy/connect-chatgpt",
-  ],
-  [
-    "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md#skills",
-    "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md",
-  ],
-]);
-const usedProviderUrls = new Set();
-
-async function updateMovedUrls(file) {
-  const markdown = await readFile(file, "utf8");
-  let updated = markdown;
-  for (const [from, to] of movedProviderUrls) {
-    if (!updated.includes(from)) continue;
-    updated = updated.replaceAll(from, to);
-    usedProviderUrls.add(from);
+async function normalizeOverlayLinks(directory) {
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  const retired = new Map(authoredRedirects.map(({ from, to }) => [from, to]));
+  for (const entry of entries.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))) {
+    const file = path.join(entry.parentPath, entry.name);
+    const source = await readFile(file, "utf8");
+    const normalized = source.replace(/\]\(\/docs\/([^)]*)\)/gu, (_, target) => {
+      const [pathname, fragment] = target.split("#");
+      const route = `/${pathname.replace(/\/$/u, "")}`;
+      const final = retired.get(route) ?? route;
+      return `](${final}${fragment ? `#${fragment}` : ""})`;
+    });
+    if (normalized !== source) await writeFile(file, normalized);
   }
-  if (updated !== markdown) await writeFile(file, updated);
 }
 
-async function markdownFiles(directory) {
+async function presentHistory(directory) {
   const entries = await readdir(directory, { recursive: true, withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => path.join(entry.parentPath, entry.name));
+  for (const entry of entries.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))) {
+    const file = path.join(entry.parentPath, entry.name);
+    let markdown = await readFile(file, "utf8");
+    const relative = path.relative(directory, file);
+    markdown = markdown.replace(/^#### /gmu, "### ");
+    markdown = markdown.replace(/^title: "([^"]+)"/mu, (_, title) => `title: ${JSON.stringify(relative.startsWith("packages") ? `${title} release history` : `Spacefast ${title} release notes`)}`);
+    if (relative.startsWith("packages")) {
+      const empty = [];
+      markdown = markdown.replace(/^## ([^\n]+)\n\n_No noted changes in this release\._\n*/gmu, (_, version) => { empty.push(version); return ""; });
+      if (empty.length) markdown += `\n## Publications without separate change notes\n\nThese versions record package publications. Read the [Spacefast release timeline](/changelog) for changes across packages.\n\n${empty.join(", ")}.\n`;
+    }
+    await writeFile(file, markdown);
+  }
 }
 
 async function exists(value) {
@@ -133,7 +133,8 @@ for (const tree of trees) {
     await rm(target, { recursive: true });
   }
   await cp(source, target, { recursive: true });
-  for (const file of await markdownFiles(target)) await updateMovedUrls(file);
+  await normalizeOverlayLinks(target);
+  if (tree.source === "generated/changelog") await presentHistory(target);
   if (tree.source === "generated/errors") {
     for (const { from } of authoredRedirects) {
       const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
@@ -165,12 +166,6 @@ await copyFile(
   path.join(root, "generated/cli/index.md"),
   path.join(root, "content/cli/reference.md"),
 );
-await updateMovedUrls(path.join(root, "content/cli/reference.md"));
-const unusedProviderUrls = [...movedProviderUrls.keys()].filter((url) => !usedProviderUrls.has(url));
-if (unusedProviderUrls.length > 0) {
-  throw new Error(`No generated page links to these moved URLs anymore; remove them: ${unusedProviderUrls.join(", ")}`);
-}
-
 const redirectsTarget = path.join(root, "public/_redirects");
 if (await exists(redirectsTarget)) {
   const current = await readFile(redirectsTarget, "utf8");

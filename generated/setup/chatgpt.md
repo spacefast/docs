@@ -2,7 +2,7 @@
 title: "Connect ChatGPT to Spacefast"
 description: "Add Spacefast to ChatGPT on the web so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/chatgpt/"
+  canonical: "https://spacefast.com/docs/setup/chatgpt/"
 ---
 
 Add Spacefast to ChatGPT on the web so it can publish what you build.
@@ -13,19 +13,19 @@ Add Spacefast to ChatGPT on the web so it can publish what you build.
 
 ## Other ways to connect
 
-**Add Spacefast as a custom app.** Connect the hosted MCP server directly with Developer mode.
+**Add Spacefast as a custom MCP server.** Add the hosted MCP server yourself from ChatGPT's Plugins page.
 
 ```text
 https://mcp.spacefast.com
 ```
 
-1. In [ChatGPT on the web](https://chatgpt.com), open Settings → Security and login and turn on Developer mode.
-2. Open [chatgpt.com/plugins](https://chatgpt.com/plugins) and choose + to create an app.
-3. Paste the address above and choose OAuth.
-4. Connect the app, then sign in to Spacefast and approve access.
-5. In a conversation, open the Plus menu, choose Developer mode, then choose Spacefast.
+1. Open [chatgpt.com/plugins](https://chatgpt.com/plugins), choose +, then Add custom MCP server.
+2. Name it Spacefast and paste the address above as the server URL.
+3. Choose OAuth, check I understand and want to continue, then choose Create as a plugin.
+4. Install the plugin, then sign in to Spacefast and approve access.
+5. In a new chat, type @ and pick Spacefast.
 
-Read and write tools work on eligible accounts only, subject to your confirmation settings and workspace policies.
+Custom MCP servers need ChatGPT on the web and a Business, Enterprise, or Edu workspace. On Business, only admins and owners can add one.
 
 Prefer to hand this off? Copy setup prompt:
 
@@ -35,4 +35,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [ChatGPT documentation](https://developers.openai.com/api/docs/guides/developer-mode)
+[Agent documentation](/agents) · [ChatGPT documentation](https://help.openai.com/en/articles/12584461-connecting-custom-mcp-servers-in-chatgpt)

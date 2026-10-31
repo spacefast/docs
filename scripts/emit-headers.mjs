@@ -6,7 +6,13 @@ import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
 import { deploymentBase } from "./redirect-rules.mjs";
 
 const headersPath = path.join(path.resolve(process.cwd()), "dist", "_headers");
-const corsRules = `${deploymentBase}/pagefind/*
+const corsRules = `${deploymentBase}/ard.json
+  Content-Type: application/json; charset=utf-8
+${deploymentBase}/ai-catalog.json
+  Content-Type: application/json; charset=utf-8
+${deploymentBase}/api-catalog.json
+  Content-Type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+${deploymentBase}/pagefind/*
   Access-Control-Allow-Origin: *
 ${deploymentBase}/*
   Access-Control-Allow-Origin: *
@@ -26,6 +32,7 @@ function supportedHeaderRules(source) {
     `${deploymentBase}/*.mdx`,
     `${deploymentBase}/*.txt`,
   ]);
+  source = source.replaceAll("/.well-known/api-catalog", "/api-catalog.json").replaceAll("/.well-known/ai-catalog.json", "/ai-catalog.json").replaceAll("/.well-known/ard.json", "/ard.json");
   const lines = source.split(/\r?\n/u);
   const kept = [];
   for (let index = 0; index < lines.length; index += 1) {

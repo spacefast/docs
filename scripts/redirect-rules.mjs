@@ -1,3 +1,5 @@
+import { redirects as retiredRoutes } from "../redirects.ts";
+
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 export const deploymentBase = "/docs";
@@ -11,17 +13,17 @@ const authoredRedirectRules = [
   {
     from: `${deploymentBase}/apps/zero`,
     status: 301,
-    to: `${deploymentBase}/zero-runtime`,
+    to: `${deploymentBase}/zero-runtime/`,
   },
   {
     from: `${deploymentBase}/zero`,
     status: 301,
-    to: `${deploymentBase}/zero-runtime`,
+    to: `${deploymentBase}/zero-runtime/`,
   },
   {
     from: `${deploymentBase}/storage`,
     status: 301,
-    to: `${deploymentBase}/object-storage`,
+    to: `${deploymentBase}/object-storage/`,
   },
 ];
 
@@ -50,6 +52,34 @@ const aliasFamilies = [
 
 function redirectKey(redirect) {
   return `${redirect.from}\0${redirect.to}\0${redirect.status}`;
+}
+
+// Legacy operation namespaces contain no content pages. Compress only a prefix
+// whose complete published mapping preserves the suffix and destination.
+function compressOperationAliases(rules) {
+  let statics = rules.filter(({ from }) => !from.includes("*"));
+  const dynamic = rules.filter(({ from }) => from.includes("*"));
+  const candidates = new Map();
+  for (const rule of statics) {
+    if (!rule.from.includes("/operations/")) continue;
+    const suffix = rule.from.split("/").at(-1);
+    if (!rule.to.endsWith(`/${suffix}`)) continue;
+    for (let length = rule.from.lastIndexOf("/") + 1; length < rule.from.length; length += 1) {
+      const prefix = rule.from.slice(0, length);
+      if (candidates.has(prefix)) continue;
+      const target = rule.to.slice(0, rule.to.length - (rule.from.length - length));
+      const matches = statics.filter(({ from }) => from.startsWith(prefix));
+      if (matches.length > 1 && matches.every(({ from, to }) => to === target + from.slice(length))) candidates.set(prefix, { prefix, target, count: matches.length });
+    }
+  }
+  for (const candidate of [...candidates.values()].sort((a, b) => b.count - a.count)) {
+    if (dynamic.length >= 98) break;
+    const matches = statics.filter(({ from }) => from.startsWith(candidate.prefix));
+    if (matches.length < 2) continue;
+    statics = statics.filter(({ from }) => !from.startsWith(candidate.prefix));
+    dynamic.push({ from: `${candidate.prefix}*`, to: `${candidate.target}:splat`, status: 301 });
+  }
+  return [...statics, ...dynamic.toSorted((a, b) => b.from.length - a.from.length)];
 }
 
 export function compileRedirectRules(redirects) {
@@ -91,14 +121,14 @@ export function compileRedirectRules(redirects) {
     }
   }
 
-  return [
+  return compressOperationAliases([
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
     { from: "/partners/api/reference", status: 301, to: "/platforms/api/reference" },
     { from: "/partners/api/reference/*", status: 301, to: "/platforms/api/reference/:splat" },
     { from: "/platform-api", status: 301, to: "/partner-api" },
     { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
-  ].toSorted((left, right) => left.from.localeCompare(right.from));
+  ].toSorted((left, right) => left.from.localeCompare(right.from)));
 }
 
 function applyRule(rule, source) {
@@ -116,11 +146,15 @@ function applyRule(rule, source) {
 // then map the remaining based URLs back onto the flat files.
 export function buildRoutingRules(redirects) {
   return [
+    ...retiredRoutes.map(({ from, to, status }) => {
+      const [pathname, fragment] = to.split("#");
+      return { from: `${deploymentBase}${from}`, status, to: `${deploymentBase}${pathname === "/" ? "/" : `${pathname}/`}${fragment ? `#${fragment}` : ""}` };
+    }),
     ...authoredRedirectRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,
-      to: `${deploymentBase}${to}`,
+      to: `${deploymentBase}${to.split("#")[0].replace(/\/$/u, "")}/${to.includes("#") ? `#${to.split("#")[1]}` : ""}`,
     })),
     ...mountRewriteRules,
   ];

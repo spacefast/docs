@@ -204,7 +204,7 @@ GLOBAL FLAGS
 - [`sf promote [VERSION]`](#sf-promote-version)
 - [`sf publish [DIR]`](#sf-publish-dir)
 - [`sf redeploy [BUILD]`](#sf-redeploy-build)
-- [`sf rollback [VERSION]`](#sf-rollback-version)
+- [`sf rollback VERSION`](#sf-rollback-version)
 - [`sf routing`](#sf-routing)
 - [`sf routing compute`](#sf-routing-compute)
 - [`sf routing inspect`](#sf-routing-inspect)
@@ -329,11 +329,17 @@ GLOBAL FLAGS
 - [`sf teams accept INVITATION`](#sf-teams-accept-invitation)
 - [`sf teams create NAME`](#sf-teams-create-name)
 - [`sf teams defaults [ROOTACCESS]`](#sf-teams-defaults-rootaccess)
+- [`sf teams domains`](#sf-teams-domains)
+- [`sf teams domains add DOMAIN`](#sf-teams-domains-add-domain)
+- [`sf teams domains ls`](#sf-teams-domains-ls)
+- [`sf teams domains rm DOMAIN`](#sf-teams-domains-rm-domain)
 - [`sf teams invitations`](#sf-teams-invitations)
 - [`sf teams invitations add EMAILS`](#sf-teams-invitations-add-emails)
 - [`sf teams invitations cancel INVITATION`](#sf-teams-invitations-cancel-invitation)
 - [`sf teams invitations ls`](#sf-teams-invitations-ls)
 - [`sf teams invitations resend INVITATION`](#sf-teams-invitations-resend-invitation)
+- [`sf teams join [TEAM]`](#sf-teams-join-team)
+- [`sf teams join-link`](#sf-teams-join-link)
 - [`sf teams ls`](#sf-teams-ls)
 - [`sf teams members`](#sf-teams-members)
 - [`sf teams members ls`](#sf-teams-members-ls)
@@ -565,13 +571,13 @@ GLOBAL FLAGS
 DESCRIPTION
   Call the Spacefast API directly.
 
-  Send a signed request to the public API using the resolved profile credentials. JSON envelopes print verbatim;
-  non-JSON responses need --output or --raw-stdout. This is a raw request tool: it does not open browser approval, save
-  continuations, or replay approved mutations. For API key creation, use `sf api-keys create --name ci --preset
-  ci_deploy` instead of POST /v1/api-keys. When a device login requires approval, that command saves the continuation,
-  waits for a person to approve in the browser, and resumes the same request. If interrupted, re-run it with the same
-  flags, profile, team, and credential. --yes does not grant browser approval. Use the intended name, preset, and team;
-  --json masks the one-time secret.
+  Send a signed request to the public API using the resolved profile credentials. Successful JSON responses print
+  verbatim. Failures print the CLI error envelope to stderr. Non-JSON responses need --output or --raw-stdout. This is a
+  raw request tool: it does not open browser approval, save continuations, or replay approved mutations. For API key
+  creation, use `sf api-keys create --name ci --preset ci_deploy` instead of POST /v1/api-keys. When a device login
+  requires approval, that command saves the continuation, waits for a person to approve in the browser, and resumes the
+  same request. If interrupted, re-run it with the same flags, profile, team, and credential. --yes does not grant
+  browser approval. Use the intended name, preset, and team; --json masks the one-time secret.
 
 EXAMPLES
   $ sf api /v1/me
@@ -4645,7 +4651,8 @@ REPOSITORY FLAGS
   --provider=<option>          Repository host.
                                <options: github|gitlab|bitbucket|generic>
   --ref=<value>                [env: SPACEFAST_BUILD_REF] Ref, branch, tag, or commit to sync or build after connecting.
-  --repository=<value>         Repository full name, for example owner/repo. Defaults to the origin remote.
+  --repository=<value>         Repository full name, for example owner/repo. Defaults to the current branch’s upstream
+                               remote, then origin.
   --repository-id=<value>      Repository ID from the host. Resolved from GitHub when omitted.
   --repository-name=<value>    Repository name from the host.
 
@@ -5100,14 +5107,14 @@ Log in to Spacefast.
 ```text
 USAGE
   $ sf login [--profile <value>] [-y] [--access
-    read|agent|agent-personal-pages] [--handoff] [-o <value>]
+    read|domains|agent|agent-personal-pages] [--handoff] [-o <value>]
 
 FLAGS
-  --access=<option>  Access to request for this machine: read or agent or agent-personal-pages. Defaults to agent. You
-                     confirm or narrow it in the browser.
-                     <options: read|agent|agent-personal-pages>
-  --handoff          Redeem a one-use handoff link from the dashboard or the MCP cli_login tool. Read from stdin: pipe
-                     it or paste it at the hidden prompt, never as an argument.
+  --access=<option>  Access to request for this machine: read or domains or agent or agent-personal-pages. Defaults to
+                     agent. You confirm or narrow it in the browser.
+                     <options: read|domains|agent|agent-personal-pages>
+  --handoff          Redeem a one-use link from a dashboard agent setup prompt or the MCP cli_login tool. Read from
+                     stdin: pipe it or paste it at the hidden prompt, never as an argument.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -5119,6 +5126,13 @@ DESCRIPTION
   Log in to Spacefast.
 
   Log this machine in through the browser, or save an API key you already have.
+
+  Use --profile or SPACEFAST_PROFILE to save a profile login. After `sf profiles use client`, plain `sf login` still
+  saves the default login; commands keep using client's own key when present.
+
+  If browser login is interrupted, run the same login command again. Keep the same CLI home, API URL, and --access
+  profile. The CLI resumes the saved request or prints a new link if it expired. Approve the link printed by that run if
+  asked. If the command stops while you approve, run it again after approval.
 
 ALIASES
   $ sf auth login
@@ -5132,6 +5146,10 @@ EXAMPLES
 
     $ sf login --token sfa_...
 
+  Log a second account in under a profile. The default login and other profiles stay signed in.
+
+    $ sf login --profile client
+
   Ask for a read-only credential instead of full agent access.
 
     $ sf login --access read
@@ -5140,7 +5158,7 @@ EXAMPLES
 
     $ sf login --access agent-personal-pages
 
-  Redeem a one-use handoff link from the dashboard or an agent session.
+  Redeem a link from a dashboard agent setup prompt or the MCP cli_login tool.
 
     printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
 ```
@@ -5962,18 +5980,18 @@ EXAMPLES
     $ sf redeploy bld_123
 ```
 
-## `sf rollback [VERSION]`
+## `sf rollback VERSION`
 
 Roll back to a previous version.
 
 ```text
 USAGE
-  $ sf rollback [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--continuation-token <value>] [--wait]
-    [--wait-timeout <value>]
+  $ sf rollback VERSION [--profile <value>] [-y] [--claim-token
+    <value>] [-o <value>] [--space <value>] [--channel <value>] [--continuation-token <value>] [--wait] [--wait-timeout
+    <value>]
 
 ARGUMENTS
-  [VERSION]  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
+  VERSION  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -9029,7 +9047,7 @@ Archive a space.
 ```text
 USAGE
   $ sf spaces archive [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+    <value>] [-o <value>] [--space <value>...]
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -9040,10 +9058,13 @@ GLOBAL FLAGS
 DESCRIPTION
   Archive a space.
 
-  Stop serving a space and retain its versions, source, database, storage, and domains.
+  Stop serving a space and retain its versions, source, database, storage, and domains. Repeat --space to archive
+  several spaces in one run.
 
 EXAMPLES
   $ sf spaces archive --space docs
+
+  $ sf spaces archive --team acme --space old-report --space q3-dashboard
 ```
 
 ## `sf spaces check NAME`
@@ -9227,10 +9248,11 @@ List spaces.
 ```text
 USAGE
   $ sf spaces ls [--profile <value>] [-y] [-o <value>] [--limit
-    <value>]
+    <value>] [--inactive-for <value>]
 
 FLAGS
-  --limit=<value>  Maximum number of spaces to return (default 50, max 100).
+  --inactive-for=<value>  Only list the team's spaces with no publish or change in this many days.
+  --limit=<value>         Maximum number of spaces to return (default 50, max 100).
 
 GLOBAL FLAGS
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
@@ -9241,7 +9263,9 @@ GLOBAL FLAGS
 DESCRIPTION
   List spaces.
 
-  List spaces accessible to the current login, optionally filtered by team.
+  List spaces accessible to the current login, optionally filtered by team. With --inactive-for, list the team's spaces
+  that nobody published or changed in that many days, oldest first. Pinned and archived spaces are left out. Only team
+  owners and admins can use --inactive-for.
 
 ALIASES
   $ sf spaces list
@@ -9254,6 +9278,10 @@ EXAMPLES
   List spaces for a specific team.
 
     $ sf spaces ls --team acme
+
+  List the team's spaces with no publish or change in 90 days.
+
+    $ sf spaces ls --team acme --inactive-for 90
 ```
 
 ## `sf spaces restore`
@@ -9301,7 +9329,8 @@ EXECUTION FLAGS
 DESCRIPTION
   Take a space offline.
 
-  Take the selected space offline. Its slug, versions, and data stay retained for operator cleanup.
+  Take the selected space offline. Its slug stays reserved to prevent link takeover; only an operator can release it.
+  Versions and data stay retained for operator cleanup.
 
 ALIASES
   $ sf spaces remove
@@ -10281,6 +10310,113 @@ EXAMPLES
     $ sf teams defaults private
 ```
 
+## `sf teams domains`
+
+Manage team email domains.
+
+```text
+USAGE
+  $ sf teams domains [--profile <value>] [-y]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage team email domains.
+
+  Manage the company email domains whose verified owners can join the team.
+
+EXAMPLES
+  Manage team email domains.
+
+    $ sf teams domains
+```
+
+## `sf teams domains add DOMAIN`
+
+Add a team email domain.
+
+```text
+USAGE
+  $ sf teams domains add DOMAIN [--profile <value>] [-y] [-o <value>]
+
+ARGUMENTS
+  DOMAIN  Company email domain, such as example.com.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Add a team email domain.
+
+  Let anyone with a verified email at this domain join the team. A current member must already have a verified email
+  there.
+
+EXAMPLES
+  $ sf teams domains add example.com
+```
+
+## `sf teams domains ls`
+
+List team email domains.
+
+```text
+USAGE
+  $ sf teams domains ls [--profile <value>] [-y] [-o <value>]
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List team email domains.
+
+  List the company email domains whose verified owners can join the team.
+
+ALIASES
+  $ sf teams domains list
+
+EXAMPLES
+  $ sf teams domains ls
+```
+
+## `sf teams domains rm DOMAIN`
+
+Remove a team email domain.
+
+```text
+USAGE
+  $ sf teams domains rm DOMAIN [--profile <value>] [-y] [-o <value>]
+
+ARGUMENTS
+  DOMAIN  Email domain to remove, such as example.com.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Remove a team email domain.
+
+  Stop letting people at this email domain join on their own. Current members stay.
+
+ALIASES
+  $ sf teams domains remove
+
+EXAMPLES
+  $ sf teams domains rm example.com
+```
+
 ## `sf teams invitations`
 
 Manage team invitations.
@@ -10418,6 +10554,64 @@ DESCRIPTION
 
 EXAMPLES
   $ sf teams invitations resend inv_123
+```
+
+## `sf teams join [TEAM]`
+
+Join a team.
+
+```text
+USAGE
+  $ sf teams join [TEAM] [--profile <value>] [-y]
+
+ARGUMENTS
+  [TEAM]  Team slug, ID, or name. Omit it to list the teams you can join.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Join a team.
+
+  Join a team your verified email or a pending invitation lets you into. With no team, list the teams you can join.
+
+EXAMPLES
+  $ sf teams join
+
+  $ sf teams join acme
+```
+
+## `sf teams join-link`
+
+Get the team join link.
+
+```text
+USAGE
+  $ sf teams join-link [--profile <value>] [-y] [-o <value>] [--reset]
+
+FLAGS
+  --reset  Replace the link with a new one. The old link stops working.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Get the team join link.
+
+  Print the team's join link. Only people with a verified email at one of the team's email domains can join through it.
+
+EXAMPLES
+  $ sf teams join-link
+
+  Replace the link. The old one stops working at once.
+
+    $ sf teams join-link --reset
 ```
 
 ## `sf teams ls`

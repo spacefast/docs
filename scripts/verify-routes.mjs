@@ -1,3 +1,7 @@
+import { redirects as authoredRedirects } from "../redirects.ts";
+
+import { verifyBuiltSeo } from "./verify-built-seo.mjs";
+
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 import { access, readFile, readdir, stat } from "node:fs/promises";
@@ -25,11 +29,15 @@ const corpusKey = (url) => {
 };
 const checked = [];
 
+const existence = new Map();
 async function exists(value) {
+  if (existence.has(value)) return existence.get(value);
   try {
     await access(value);
+    existence.set(value, true);
     return true;
   } catch {
+    existence.set(value, false);
     return false;
   }
 }
@@ -68,8 +76,8 @@ function hasPagefindIgnore(html) {
 
 async function requirePage(relativePath, expectedCanonical, expectedText) {
   const html = await readBuilt(relativePath);
-  const canonical = canonicalFrom(html)?.replace(/\/$/u, "");
-  if (canonical !== expectedCanonical.replace(/\/$/u, "")) {
+  const canonical = canonicalFrom(html);
+  if (canonical !== `${expectedCanonical.replace(/\/$/u, "")}/`) {
     throw new Error(`Wrong canonical in dist/${relativePath}: ${canonical ?? "missing"}`);
   }
   if (!/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>/iu.test(html)) {
@@ -152,7 +160,7 @@ for (const route of requiredIaRoutes) {
 }
 
 const notFound = await readBuilt("404.html");
-if (!notFound.includes("Page not found") || !notFound.includes(`href="${deploymentBase}"`)) {
+if (!notFound.includes("Page not found") || !notFound.includes(`href="${deploymentBase}/"`)) {
   throw new Error("Built 404 does not link back to the docs site.");
 }
 
@@ -217,7 +225,7 @@ const sitemap = await readBuilt("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/gu)].map((match) => match[1]);
 const sitemapExpected = representativePages.map(([, canonical]) => canonical);
 for (const expected of sitemapExpected) {
-  if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === expected)) {
+  if (!sitemapUrls.includes(`${expected}/`)) {
     throw new Error(`Sitemap is missing ${expected}`);
   }
 }
@@ -251,9 +259,9 @@ if (setupRoutes.length < 2) {
   throw new Error("Expected generated /setup pages in the build; none are present.");
 }
 for (const route of setupRoutes) {
-  const expected = `<link rel="canonical" href="https://spacefast.com/${route}">`;
+  const expected = `<link rel="canonical" href="https://spacefast.com/docs/${route}">`;
   if (!(await readBuilt(`${route}index.html`)).includes(expected)) {
-    throw new Error(`dist/${route}index.html does not declare its www canonical (${expected}).`);
+    throw new Error(`dist/${route}index.html does not declare its self canonical (${expected}).`);
   }
 }
 // The sidebar override (components/Sidebar.astro) links pages across tabs.
@@ -273,7 +281,7 @@ const sidebarExpectations = [
 for (const [file, present, absent] of sidebarExpectations) {
   const sidebar = await sidebarOf(file);
   const has = (needle) =>
-    needle.startsWith("/") ? sidebar.includes(`href="${deploymentBase}${needle}"`) : sidebar.includes(needle);
+    needle.startsWith("/") ? sidebar.includes(`href="${deploymentBase}${needle}/"`) : sidebar.includes(needle);
   const missing = present.filter((needle) => !has(needle));
   const unexpected = absent.filter(has);
   if (missing.length > 0 || unexpected.length > 0) {
@@ -291,22 +299,12 @@ for (const [file, prev, next] of [
   const pager = (await readBuilt(file)).split("</article>").at(-1);
   const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
   const got = ["Previous", "Next"].map((label) => links.find(([, , body]) => body.includes(label))?.[1]);
-  const want = [prev, next].map((route) => `${deploymentBase}${route}`);
+  const want = [prev, next].map((route) => `${deploymentBase}${route}/`);
   if (got.join() !== want.join()) {
     throw new Error(`dist/${file} pagination is wrong: expected ${want.join(" / ")}, got ${got.join(" / ")}.`);
   }
 }
-// /setup/<client> breadcrumbs follow the Agents sidebar those pages render.
-for (const [file, label] of [
-  ["setup/vscode/index.html", "Coding agents"],
-  ["setup/chatgpt/index.html", "Personal agents"],
-]) {
-  const crumb = /<nav aria-label="Breadcrumb"[^>]*>([\s\S]*?)<\/nav>/u
-    .exec(await readBuilt(file))?.[1]
-    .replace(/<[^>]+>/gu, "")
-    .trim();
-  if (crumb !== label) throw new Error(`dist/${file} breadcrumb is "${crumb}", expected "${label}".`);
-}
+// Visible breadcrumbs and schema are verified for every content page below.
 
 // The public docs corpus that search and the LLM files carry: the sitemap,
 // without the generated changelog timeline (it has no article; every entry it
@@ -320,7 +318,8 @@ if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl
 }
 const corpusUrls = [
   ...sitemapUrls.filter((url) => url.replace(/\/$/u, "") !== generatedChangelogUrl),
-  ...setupRoutes.map((route) => `${docsRoot}/${route}`),
+  ...setupRoutes.map((route) => `${docsRoot}/${route}`).filter((url) => !sitemapUrls.includes(url)),
+  ...htmlFiles.filter((file) => file.startsWith("platforms/api/reference/") && !file.endsWith("reference/index.html")).map((file) => `${docsRoot}/${file.replace(/index\.html$/u, "")}`).filter((url) => !sitemapUrls.includes(url)),
 ];
 if (indexedPages !== corpusUrls.length) {
   throw new Error(
@@ -471,42 +470,19 @@ if (compilation.diagnostics.some(({ severity }) => severity === "error")) {
 if (await exists(path.join(dist, "storage"))) {
   throw new Error("The docs build must not emit files under the reserved /storage runtime path.");
 }
-for (const [route, target, hopCount] of [
-  ["zero-runtime", "/zero-runtime", 1],
-  ["zero", "/zero-runtime", 2],
-  ["apps/zero", "/zero-runtime", 2],
-  ["object-storage", "/object-storage", 1],
-  ["storage", "/object-storage", 2],
-]) {
-  let url = new URL(`${docsRoot}/${route}?source=route-check&value=a%2Fb`);
-  const hops = [];
-  for (let hop = 0; hop < 3; hop += 1) {
-    const matched = matchRedirect({ compilation, request: { url, headers: new Headers() } });
-    if (!matched) break;
-    hops.push(matched);
-    if (matched.action === "redirect") {
-      url = new URL(matched.target, url);
-    } else if (matched.action === "rewrite") {
-      url.pathname = matched.path;
-      break;
-    } else {
-      throw new Error(`Unexpected routing action for ${route}: ${matched.action}`);
-    }
+// Retired authored routes must be real one-hop HTTP redirects, followed only
+// by the internal mount rewrite. The query string survives both operations.
+for (const { from, to } of authoredRedirects) {
+  for (const suffix of ["", "/"]) {
+    const source = new URL(`${docsRoot}${from}${suffix}?source=route-check&value=a%2Fb`);
+    const first = matchRedirect({ compilation, request: { url: source, headers: new Headers() } });
+    if (first?.action !== "redirect" || first.status !== 301) throw new Error(`Missing HTTP redirect: ${source}`);
+    const target = new URL(first.target, source);
+    if (!target.pathname.endsWith("/") || target.search !== source.search) throw new Error(`Non-final redirect target: ${source}`);
+    const second = matchRedirect({ compilation, request: { url: target, headers: new Headers() } });
+    if (second?.action !== "rewrite") throw new Error(`Redirect chain: ${source} -> ${target}`);
+    await requireFile(localTargetFor(target.pathname.slice(deploymentBase.length)));
   }
-  if (
-    url.pathname !== target ||
-    url.search !== "?source=route-check&value=a%2Fb" ||
-    hops.length !== hopCount ||
-    hops.at(-1)?.status !== 200 ||
-    (hopCount > 1 && hops[0]?.status !== 301)
-  ) {
-    throw new Error(`Docs route must reach its public output with its query intact: ${route}`);
-  }
-  await requireFile(localTargetFor(url.pathname));
-}
-const runtimesZeroHtml = await readBuilt("runtimes/zero/index.html");
-if (!runtimesZeroHtml.includes(`<meta http-equiv="refresh" content="0;url=${deploymentBase}/zero-runtime">`)) {
-  throw new Error("The former runtimes/zero page must navigate to the canonical Zero page.");
 }
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
@@ -568,3 +544,5 @@ for (const file of htmlFiles) {
 console.log(
   `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap URLs, ${corpusUrls.length} LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length + referenceAliases.length} compatibility URLs, and every root-relative URL resolves.`,
 );
+
+await verifyBuiltSeo(dist);

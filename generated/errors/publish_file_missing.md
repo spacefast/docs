@@ -5,7 +5,7 @@ description: "A declared file was never uploaded, so the publish cannot finalize
 
 A declared file was never uploaded, so the publish cannot finalize.
 
-**How to resolve:** Upload every declared file, or resume the upload session to see what is missing.
+**How to resolve:** Read `details.path` and include the bytes for that declared file. For an inline request, include its required file content; for an upload session, finish uploading missing files before completing it. Repeating finalize without those bytes will fail again. See [Publishing](/docs/publishing/).
 
 <div data-pagefind-ignore>
 

@@ -9,10 +9,17 @@ Blume has no setting for this, so the patch stays until it does.
 pages and every generated compatibility redirect. Keep both checks passing when
 upgrading or removing the patch.
 
-`scripts/prepare-generated.mjs` keeps the generated snapshot as it is and
-updates provider links that have moved in its overlay copy, so every rendition
-(HTML, Markdown, MDX, page JSON, and LLM exports) links to the current page.
-Remove an entry once the snapshot carries the new address; the build fails on
-an entry no generated page uses. `scripts/emit-headers.mjs` writes the
-content-image sandbox rules for their whole directory, because Spacefast
-header rules match whole path segments.
+The font patch retains every configured Unicode face while preloading only the
+Latin subset for English pages. The hooks patch loads shared navigation only
+when an island requests the site snapshot; `scripts/finalize-site.mjs` extracts
+that navigation from page HTML into one cacheable file.
+
+The finalizer also normalizes directory URLs across HTML and agent exports,
+relocates catalogs out of the forbidden nested dot-directory, and gives exact
+REST/Partner contract duplicates one canonical owner. It derives breadcrumb
+schema from the visible trail. `verify:routes` verifies the built result.
+
+`scripts/prepare-generated.mjs` copies the verified snapshot and gives history
+pages descriptive titles, correctly nested headings, and a concise list of
+publications without separate change notes. It never changes `generated/`.
+`emit-headers.mjs` adds catalog media types, CORS, and image sandbox rules.

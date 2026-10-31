@@ -1,0 +1,489 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "revision": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string",
+      "const": "USD"
+    },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "free",
+              "go",
+              "plus",
+              "enterprise"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "monthlyPriceUsd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "usageCreditUsd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "selfServe": {
+            "type": "boolean"
+          },
+          "seats": {
+            "type": "object",
+            "properties": {
+              "included": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "extraMonthlyUsd": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "included",
+              "extraMonthlyUsd"
+            ],
+            "additionalProperties": false
+          },
+          "limits": {
+            "type": "object",
+            "properties": {
+              "storageBytes": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "teamMembers": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "liveSpaces": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "customDomains": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "auditLogRetentionHours": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "buildAccessLogRetentionHours": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "buildsDeploysDaily": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "shareLinksPerSpace": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "invitesPerSpace": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "inviteEmailsPerSpaceDaily": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "inviteEmailsPerAccountDaily": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              },
+              "pendingAccessRequestsPerSpace": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "const": "unlimited"
+                  }
+                ],
+                "description": "Plan limit value; \"unlimited\" when the plan does not limit this axis."
+              }
+            },
+            "required": [
+              "storageBytes",
+              "teamMembers",
+              "liveSpaces",
+              "customDomains",
+              "auditLogRetentionHours",
+              "buildAccessLogRetentionHours",
+              "buildsDeploysDaily",
+              "shareLinksPerSpace",
+              "invitesPerSpace",
+              "inviteEmailsPerSpaceDaily",
+              "inviteEmailsPerAccountDaily",
+              "pendingAccessRequestsPerSpace"
+            ],
+            "additionalProperties": false,
+            "description": "Named plan limit table."
+          },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "externalProxy": {
+                "type": "boolean",
+                "description": "Whether external proxy upstreams compile on this plan."
+              },
+              "pagesTemplates": {
+                "type": "boolean",
+                "description": "Whether _pages/*.html full-page takeovers compile for this team."
+              },
+              "hideSpacefastBranding": {
+                "type": "boolean",
+                "description": "Whether theme.hideSpacefastBranding removes the badge from default pages."
+              },
+              "networkPolicies": {
+                "type": "boolean",
+                "description": "Whether the team can set Space network policies."
+              }
+            },
+            "required": [
+              "externalProxy",
+              "pagesTemplates",
+              "hideSpacefastBranding",
+              "networkPolicies"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "monthlyPriceUsd",
+          "usageCreditUsd",
+          "selfServe",
+          "seats",
+          "limits",
+          "capabilities"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "usage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "freeIncluded": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "freePeriod": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "month",
+                  "day",
+                  "stored"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "freePool": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "compute",
+                  "storage"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meter": {
+            "type": "string",
+            "enum": [
+              "cached_bytes",
+              "origin_bytes",
+              "runtime_cpu_microseconds",
+              "sql_cpu_microseconds",
+              "origin_invocations",
+              "build_milliseconds",
+              "worker_cpu_microseconds",
+              "worker_requests",
+              "live_byte_seconds",
+              "file_byte_seconds",
+              "email_recipients",
+              "spam_checks"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "GB",
+              "GB-month",
+              "CPU-second",
+              "million",
+              "minute",
+              "recipient",
+              "check"
+            ]
+          },
+          "paidIncluded": {
+            "type": "number",
+            "minimum": 0
+          },
+          "paidRateUsd": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "freeIncluded",
+          "freePeriod",
+          "freePool",
+          "meter",
+          "label",
+          "unit",
+          "paidIncluded",
+          "paidRateUsd"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "boost": {
+      "type": "object",
+      "properties": {
+        "monthlyUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "go",
+              "plus"
+            ]
+          }
+        }
+      },
+      "required": [
+        "monthlyUsd",
+        "plans"
+      ],
+      "additionalProperties": false
+    },
+    "anonymous": {
+      "type": "object",
+      "properties": {
+        "ttlSeconds": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "resetOn": {
+          "type": "string",
+          "const": "publish-with-changed-files"
+        },
+        "publishAbsoluteCapSeconds": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "claimPageExtensionSeconds": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "claimPageTotalExtensionSeconds": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "recoveryWindowSeconds": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "ttlSeconds",
+        "resetOn",
+        "publishAbsoluteCapSeconds",
+        "claimPageExtensionSeconds",
+        "claimPageTotalExtensionSeconds",
+        "recoveryWindowSeconds"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "revision",
+    "currency",
+    "plans",
+    "usage",
+    "boost",
+    "anonymous"
+  ],
+  "additionalProperties": false
+}
