@@ -8,6 +8,11 @@ export const deploymentBase = "/docs";
 export const docsDynamicRuleLimit = 88;
 const websiteDynamicRuleReserve = 16;
 const platformDynamicRuleLimit = 100;
+// The composed artifact shares the platform's 2,000 static and 2,100 total
+// redirects with the Website, which declares about 90 of its own.
+const websiteStaticRuleReserve = 120;
+export const docsStaticRuleLimit = 2_000 - websiteStaticRuleReserve;
+const docsTotalRuleLimit = 2_100 - websiteStaticRuleReserve - websiteDynamicRuleReserve;
 
 const mountRewriteRules = [
   { from: deploymentBase, status: 200, to: "/" },
@@ -44,18 +49,17 @@ function unbased(route) {
 
 // Blume emits HTML meta-refresh stubs for retired Markdown URLs. Agents need
 // an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
-// so both kinds get a 301 to the replacement's Markdown file of the same kind.
+// so both kinds get a 301 to the replacement's Markdown file.
 export const markdownTwinRules = [
   ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
   ...retiredRoutes,
-].flatMap(({ from, to }) =>
-  // Blume publishes each page as both .md and .mdx.
-  ["md", "mdx"].map((extension) => ({
-    from: markdownRoute(from, extension),
-    status: 301,
-    to: markdownRoute(to, extension),
-  })),
-);
+// Only .md: agents fetch it, and an .mdx twin per page would push the composed
+// site past the platform's 2,000 static redirects.
+].map(({ from, to }) => ({
+  from: markdownRoute(from, "md"),
+  status: 301,
+  to: markdownRoute(to, "md"),
+}));
 
 const aliasFamilies = [
   {
@@ -210,9 +214,13 @@ export function buildRoutingRules(redirects) {
 export function verifyRoutingBudget(rules) {
   const dynamicRules = rules.filter(isDynamic).length;
   const staticRules = rules.length - dynamicRules;
-  if (dynamicRules > docsDynamicRuleLimit || staticRules > 2_000 || rules.length > 2_100) {
+  if (
+    dynamicRules > docsDynamicRuleLimit ||
+    staticRules > docsStaticRuleLimit ||
+    rules.length > docsTotalRuleLimit
+  ) {
     throw new Error(
-      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/2000 static, ${rules.length}/2100 total`,
+      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${rules.length}/${docsTotalRuleLimit} total`,
     );
   }
 }

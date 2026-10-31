@@ -27,6 +27,10 @@ test("the complete compatibility map reserves the website's splats and host-spec
   websiteRules.push(...Array.from({ length: 4 }, (_, index) =>
     `https://legacy-${index}.spacefast.com/ https://spacefast.com/ 301`,
   ));
+  // The Website's exact redirects share the static cap with Docs.
+  websiteRules.push(...Array.from({ length: 116 }, (_, index) =>
+    `/website-old-${index} /website-new-${index}/ 301`,
+  ));
   const compilation = compileRoutingFilesWasm({
     redirects: [
       ...rules.map(({ from, to, status }) => `${from} ${to} ${status}`),
