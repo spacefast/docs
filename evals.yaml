@@ -48,9 +48,9 @@ questions:
     question: What is the URL of the hosted Spacefast MCP server?
     expected: ["https://mcp.spacefast.com"]
     routes: /agents/mcp-server
-  - id: execute-limits
-    question: What are the limits of the MCP execute sandbox?
-    expected: ["30 seconds", "64 MiB", "no fetch"]
+  - id: mcp-approval-resume
+    question: How long can an MCP operation wait for approval, and how does the agent continue the saved call?
+    expected: ["24 hours", "resume_execution", "same executionId"]
     routes: /agents/mcp-server
   - id: team-roles
     question: Which team roles exist?
