@@ -508,9 +508,16 @@ for (const [route, target, hopCount] of [
 for (const { from, to } of markdownTwinRules) {
   const matched = matchRedirect({
     compilation,
-    request: { url: new URL(`${docsRoot}${from.slice(deploymentBase.length)}`), headers: new Headers() },
+    request: {
+      url: new URL(`${docsRoot}${from.slice(deploymentBase.length)}?source=markdown&value=a%2Fb`),
+      headers: new Headers(),
+    },
   });
-  if (matched?.action !== "redirect" || matched.status !== 301 || matched.target !== to) {
+  const destination = matched?.action === "redirect" ? new URL(matched.target, docsRoot) : null;
+  if (
+    matched?.action !== "redirect" || matched.status !== 301 ||
+    destination?.pathname !== to || destination.search !== "?source=markdown&value=a%2Fb"
+  ) {
     throw new Error(`A retired page's Markdown URL must 301 to its replacement: ${from} -> ${to}`);
   }
   await requireFile(localTargetFor(to.slice(deploymentBase.length)));

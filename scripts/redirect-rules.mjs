@@ -36,10 +36,9 @@ function unbased(route) {
   return route.slice(deploymentBase.length) || "/";
 }
 
-// Retired pages in redirects.ts survive only as Blume meta-refresh stubs, and
-// moved pages leave no file behind, so neither has a Markdown twin. llms.txt
-// tells agents to append `.md` to any docs URL, so each one gets a real 301
-// from its `.md` URL to the replacement's `.md`.
+// Blume emits HTML meta-refresh stubs for retired Markdown URLs. Agents need
+// an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
+// so both kinds get a 301 to the replacement's Markdown file.
 export const markdownTwinRules = [
   ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
   ...retiredPageRedirects,
