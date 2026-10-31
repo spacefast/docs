@@ -44,4 +44,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Claude documentation](https://claude.com/docs/connectors/building/directory-vs-custom)
+[Agent documentation](/agents/) · [Claude documentation](https://claude.com/docs/connectors/building/directory-vs-custom)

@@ -30,4 +30,4 @@ grok mcp add --transport http spacefast 'https://mcp.spacefast.com'
 1. Open Grok Build and use Spacefast, or open `/mcps` and press `i` to authenticate.
 2. Sign in to Spacefast and approve access. Run `grok mcp doctor spacefast` to check the connection.
 
-[Agent documentation](/agents) · [Grok Build documentation](https://docs.x.ai/build/features/mcp-servers)
+[Agent documentation](/agents/) · [Grok Build documentation](https://docs.x.ai/build/features/mcp-servers)

@@ -1,7 +1,7 @@
 import { copyFile, cp, lstat, mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { buildRoutingRules } from "./redirect-rules.mjs";
+import { buildRoutingRules, verifyRoutingBudget } from "./redirect-rules.mjs";
 import { redirects as authoredRedirects } from "../redirects.ts";
 
 const root = path.resolve(process.cwd());
@@ -94,7 +94,7 @@ async function exists(value) {
 // Checked before any overlay is replaced, so a failure leaves the last good copy.
 const setupClients = new Map(
   [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
-    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\)/gmu,
+    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\/?\)/gmu,
   )].map(([, name, slug]) => [slug, name]),
 );
 const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
@@ -177,12 +177,7 @@ const redirects = await readFile(path.join(root, "generated/redirects.json"), "u
   JSON.parse,
 );
 const routingRules = buildRoutingRules(redirects);
-const staticRules = routingRules.filter(({ from }) => !from.includes("*")).length;
-if (staticRules > 2_000 || routingRules.length > 2_100) {
-  throw new Error(
-    `Generated compatibility routes exceed Spacefast limits: ${staticRules} static, ${routingRules.length} total`,
-  );
-}
+verifyRoutingBudget(routingRules);
 await writeFile(
   redirectsTarget,
   `${redirectsMarker}${routingRules

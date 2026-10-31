@@ -29,4 +29,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Raycast documentation](https://manual.raycast.com/ai/model-context-protocol)
+[Agent documentation](/agents/) · [Raycast documentation](https://manual.raycast.com/ai/model-context-protocol)

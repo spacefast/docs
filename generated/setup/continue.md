@@ -41,4 +41,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Continue documentation](https://github.com/continuedev/continue)
+[Agent documentation](/agents/) · [Continue documentation](https://github.com/continuedev/continue)

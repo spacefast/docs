@@ -79,4 +79,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [VS Code documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers)
+[Agent documentation](/agents/) · [VS Code documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers)

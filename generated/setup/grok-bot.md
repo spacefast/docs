@@ -19,4 +19,4 @@ Add a custom MCP server called Spacefast using Remote HTTPS at https://mcp.space
 
 For a Team Bot, its owner or a manager changes the shared setup. Each teammate signs in with their own account.
 
-[Agent documentation](/agents) · [Grok Bot documentation](https://docs.x.ai/grok-bot/team-bots)
+[Agent documentation](/agents/) · [Grok Bot documentation](https://docs.x.ai/grok-bot/team-bots)

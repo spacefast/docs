@@ -67,4 +67,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Warp documentation](https://docs.warp.dev/agents/capabilities/mcp/)
+[Agent documentation](/agents/) · [Warp documentation](https://docs.warp.dev/agents/capabilities/mcp/)

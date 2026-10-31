@@ -78,4 +78,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Codex documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+[Agent documentation](/agents/) · [Codex documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)

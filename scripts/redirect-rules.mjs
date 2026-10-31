@@ -3,6 +3,11 @@ import { redirects as retiredRoutes } from "../redirects.ts";
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 export const deploymentBase = "/docs";
+// Keep the agreed Docs ceiling; compression also reserves the Website's full
+// compiler count, including host-specific exact rules (16 rather than 12).
+export const docsDynamicRuleLimit = 88;
+const websiteDynamicRuleReserve = 16;
+const platformDynamicRuleLimit = 100;
 
 const mountRewriteRules = [
   { from: deploymentBase, status: 200, to: "/" },
@@ -59,6 +64,8 @@ function redirectKey(redirect) {
 function compressOperationAliases(rules) {
   let statics = rules.filter(({ from }) => !from.includes("*"));
   const dynamic = rules.filter(({ from }) => from.includes("*"));
+  const aliasDynamicRuleLimit = Math.min(docsDynamicRuleLimit, platformDynamicRuleLimit - websiteDynamicRuleReserve)
+    - mountRewriteRules.filter(({ from }) => from.includes("*")).length;
   const candidates = new Map();
   for (const rule of statics) {
     if (!rule.from.includes("/operations/")) continue;
@@ -73,7 +80,7 @@ function compressOperationAliases(rules) {
     }
   }
   for (const candidate of [...candidates.values()].sort((a, b) => b.count - a.count)) {
-    if (dynamic.length >= 98) break;
+    if (dynamic.length >= aliasDynamicRuleLimit) break;
     const matches = statics.filter(({ from }) => from.startsWith(candidate.prefix));
     if (matches.length < 2) continue;
     statics = statics.filter(({ from }) => !from.startsWith(candidate.prefix));
@@ -158,6 +165,16 @@ export function buildRoutingRules(redirects) {
     })),
     ...mountRewriteRules,
   ];
+}
+
+export function verifyRoutingBudget(rules) {
+  const dynamicRules = rules.filter(({ from }) => from.includes("*")).length;
+  const staticRules = rules.length - dynamicRules;
+  if (dynamicRules > docsDynamicRuleLimit || staticRules > 2_000 || rules.length > 2_100) {
+    throw new Error(
+      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/2000 static, ${rules.length}/2100 total`,
+    );
+  }
 }
 
 export function resolveRedirect(source, rules, maximumHops = 5) {

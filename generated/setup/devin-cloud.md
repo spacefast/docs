@@ -39,4 +39,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Devin Cloud documentation](https://docs.devin.ai/work-with-devin/mcp)
+[Agent documentation](/agents/) · [Devin Cloud documentation](https://docs.devin.ai/work-with-devin/mcp)

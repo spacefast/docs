@@ -70,4 +70,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Devin Desktop documentation](https://docs.devin.ai/desktop/devin-local)
+[Agent documentation](/agents/) · [Devin Desktop documentation](https://docs.devin.ai/desktop/devin-local)

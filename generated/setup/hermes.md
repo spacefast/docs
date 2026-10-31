@@ -33,4 +33,4 @@ npx -y spacefast setup agent --agent hermes -y
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
-[Agent documentation](/agents) · [Hermes documentation](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/skills.md)
+[Agent documentation](/agents/) · [Hermes documentation](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/skills.md)

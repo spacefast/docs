@@ -58,4 +58,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Zed documentation](https://zed.dev/docs/ai/mcp)
+[Agent documentation](/agents/) · [Zed documentation](https://zed.dev/docs/ai/mcp)

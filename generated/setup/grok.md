@@ -19,4 +19,4 @@ https://mcp.spacefast.com
 
 Business and Enterprise teams need an admin to provision the connector first.
 
-[Agent documentation](/agents) · [Grok documentation](https://docs.x.ai/grok/connectors)
+[Agent documentation](/agents/) · [Grok documentation](https://docs.x.ai/grok/connectors)

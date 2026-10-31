@@ -62,4 +62,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Claude Code documentation](https://code.claude.com/docs/en/mcp)
+[Agent documentation](/agents/) · [Claude Code documentation](https://code.claude.com/docs/en/mcp)

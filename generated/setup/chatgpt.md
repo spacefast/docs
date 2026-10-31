@@ -35,4 +35,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [ChatGPT documentation](https://help.openai.com/en/articles/12584461-connecting-custom-mcp-servers-in-chatgpt)
+[Agent documentation](/agents/) · [ChatGPT documentation](https://help.openai.com/en/articles/12584461-connecting-custom-mcp-servers-in-chatgpt)

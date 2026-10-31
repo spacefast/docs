@@ -71,4 +71,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Amp documentation](https://ampcode.com/docs/customize/mcp)
+[Agent documentation](/agents/) · [Amp documentation](https://ampcode.com/docs/customize/mcp)

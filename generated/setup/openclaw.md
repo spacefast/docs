@@ -33,4 +33,4 @@ npx -y spacefast setup agent --agent openclaw -y
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
-[Agent documentation](/agents) · [OpenClaw documentation](https://docs.openclaw.ai/tools/skills)
+[Agent documentation](/agents/) · [OpenClaw documentation](https://docs.openclaw.ai/tools/skills)

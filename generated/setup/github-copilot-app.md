@@ -37,4 +37,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [GitHub Copilot app documentation](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app)
+[Agent documentation](/agents/) · [GitHub Copilot app documentation](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app)

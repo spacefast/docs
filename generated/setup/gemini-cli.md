@@ -74,4 +74,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Gemini CLI documentation](https://geminicli.com/docs/tools/mcp-server)
+[Agent documentation](/agents/) · [Gemini CLI documentation](https://geminicli.com/docs/tools/mcp-server)

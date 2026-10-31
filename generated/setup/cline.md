@@ -87,4 +87,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Cline documentation](https://docs.cline.bot/mcp/mcp-overview)
+[Agent documentation](/agents/) · [Cline documentation](https://docs.cline.bot/mcp/mcp-overview)

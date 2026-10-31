@@ -26,4 +26,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Poke documentation](https://poke.com/docs/mcp-servers)
+[Agent documentation](/agents/) · [Poke documentation](https://poke.com/docs/mcp-servers)
