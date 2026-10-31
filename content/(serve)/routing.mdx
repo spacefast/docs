@@ -209,18 +209,18 @@ There is no generic trailing-slash normalizer. The behavior comes from what the 
 
 | Situation | Behavior |
 | --- | --- |
-| `dir/index.html` exists | `/dir/` serves, `/dir` answers 308 to `/dir/` |
+| `dir/index.html` exists | `/dir/` serves and `/dir` answers 308 to `/dir/`. With clean URLs on, `/dir/index` and `/dir/index.html` also redirect there |
 | A directory listing exists for `dir` | `/dir/` serves, `/dir` answers 308 to `/dir/` |
-| Clean URLs are on and `page.html` exists | `/page` serves, `/page/` answers 308 to `/page` |
+| Clean URLs are on and `page.html` exists | `/page` serves; `/page/` and `/page.html` answer 308 to `/page` |
 | Anything else | No normalization. The other spelling falls through to the SPA fallback or a 404 |
 
 Those compiled 308s accept every method and carry the incoming query across.
 
 ## Index files and clean URLs
 
-`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and it keeps its literal `/docs/index.html` URL too.
+`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and `/docs` redirects there with a 308. With clean URLs on, `/docs/index` and `/docs/index.html` also redirect there. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
 
-With no config, Spacefast infers the index: a root `index.html`, else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
+With no `index` set, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names (unless the version runs a worker, which keeps `/`), else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
 
 Two keys in `sf.jsonc` change it:
 
@@ -231,9 +231,9 @@ Two keys in `sf.jsonc` change it:
 }
 ```
 
-`index` names the directory index file, defaulting to `index.html`. Setting it to `false` disables index resolution.
+`index` names the homepage, the file `/` serves. It doesn't rename folder indexes: with `"index": "home.html"`, `docs/home.html` doesn't answer `/docs/`, and the publish warns with `custom_index_not_folder_index`. Setting it to `false` serves no homepage.
 
-`cleanUrls` serves a flat `about.html` at `/about` as well as `/about.html`, and redirects `/about/` to `/about` with a 308. It defaults to on, unless a 200-status SPA fallback is configured, in which case it defaults to off.
+`cleanUrls` serves a flat `about.html` at `/about`, and redirects `/about.html` and `/about/` there with a 308, query string included. A rewrite that lands on `/about.html` still serves the file, and a page you address with your own redirect or `_headers` rule keeps its `.html` URL. With `"cleanUrls": false`, flat pages answer only at their file URL. Folders still serve their `index.html` at the folder URL: `/docs/` serves and `/docs` redirects there. The literal `/docs/index.html` also serves, while `/docs/index` has no generated alias. `cleanUrls` defaults to on, with or without a fallback, so a committed page always wins its URL over the SPA shell.
 
 In a config that declares `"version": 1`, these live under `serve` as `serve.index`, `serve.cleanUrls`, `serve.spaFallback`, and `serve.directoryListing`.
 
@@ -247,7 +247,15 @@ Without a `404.html`, Spacefast renders its own page: status 404, the heading "P
 
 ## SPA fallback
 
-Point `fallback` at a committed file to serve it whenever no exact route matches:
+A single-page app needs no config. When `fallback` isn't set and the version runs no worker, publish picks the shell from the files and says so with the note `spa_fallback_inferred`:
+
+1. A root `200.html`, the name Surge, SvelteKit, and Nuxt use.
+2. Otherwise `_shell.html`, which TanStack Start writes.
+3. Otherwise a root `index.html` next to a build tool's output, as long as there is no root `404.html`. That means `_app/`, `_next/static/`, `_nuxt/`, `asset-manifest.json`, or a script with a content hash in its name directly under `assets/` or under `static/js/`, such as `assets/index-DiwrgTda.js`. A hand-written `assets/app.js` doesn't count.
+
+A root `404.html` says routes can miss, so a static export that ships one keeps its real 404s. Files mode (`"listing": true` or `"index": false`) is never an SPA. Set `"fallback": false` to turn the inference off.
+
+Point `fallback` at a committed file to choose the shell yourself:
 
 ```jsonc sf.jsonc
 {
@@ -255,9 +263,11 @@ Point `fallback` at a committed file to serve it whenever no exact route matches
 }
 ```
 
-The long form takes a status: `{"path": "/index.html", "status": 200}`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
+The long form takes a status: `{"path": "/index.html", "status": 200}`. `false` serves no fallback, so a miss gets the nearest `404.html`. Only `200` and `404` are accepted, and anything else resolves to 200. A bare string means 200. The path has to be a committed, non-private file, otherwise publish fails with `config_invalid`.
 
-`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one, and it turns clean URLs off by default and forces directory listings off.
+`{"path": "404.html", "status": 404}` is a custom error page, not an SPA fallback. A 200-status fallback is the SPA one. It turns directory listings off by default. When `index` isn't set, there's no root `index.html` and the version runs no worker, its file is also the homepage.
+
+Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` and a flat `about.html` no longer answers `/about`, so that route reaches the shell; folders still serve their `index.html`.
 
 The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. It is a denylist on purpose, which keeps dotted client routes such as `/users/jane.doe` and `/v1.2.3` reaching the shell.
 
