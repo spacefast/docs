@@ -9,7 +9,7 @@ For agent imports and updates, use a Spacefast plugin with the [Design System ta
 
 ## Start a Design System
 
-When Design System is enabled for your team, open the team and choose **Design System**. If you see **Set up team context**, select it first. Then choose how to start:
+Design System requires the team's `agents.memory_skills` beta. When enabled, open the team and choose **Design System**. If you see **Set up team context**, follow the [setup steps](/team-context) first. Then choose how to start:
 
 - **Import what you already have.** Choose **Copy prompt** and give it to an agent connected to [Spacefast MCP](/agents). Give the agent your brand guide, Figma file, or repository too. With `import-design-system` installed, the agent saves supported values, registers source files, and keeps other guidance in supporting Memory records. Ask for a report of conflicts and anything it could not import.
 - **Start from a kit.** Choose **shadcn/ui**, **Tailwind CSS**, or **Spacefast default**. The kit saves editable colors, type, and layout values. Review them before applying them to a project.
@@ -20,7 +20,7 @@ You can also add the standards yourself in the dashboard. **Look & feel** holds 
 
 Use **Brand files** to upload logos, images, fonts, and source documents. After uploading, edit **How to use** to tell your agent where and when a file belongs. A filename alone cannot do that job.
 
-Each upload must be no larger than 25 MB. Files stay in the team's private Media Library. Accepted SVG files are sanitized on upload, so check the saved artwork. An agent must download needed files and put visitor-facing assets in the project's source; private file URLs do not belong in a live page.
+Each upload must be no larger than 100 MB. Files stay in the team's private Media Library. Accepted SVG files are sanitized on upload, so check the saved artwork. An agent must download needed files and put visitor-facing assets in the project's source; private file URLs do not belong in a live page.
 
 ## Apply it to a project
 
@@ -39,3 +39,19 @@ Changes to team standards do not roll out to existing Spaces. Name each Space yo
 Edit the saved values in **Look & feel**, **Voice**, or **Brand files**. The **Changelog** shows the current revision and changes made in this session. **Revert** can undo only the latest saved change; older changes cannot be selected for undo.
 
 If someone saves a newer revision while you are editing, reload the saved version and reconcile your draft before saving again.
+
+## Use the API
+
+All paths below start with `/v1/teams/{teamId}`. Use the current [OpenAPI specification](https://api.spacefast.com/openapi.json) for input fields and response schemas.
+
+| Method and path | Task |
+| --- | --- |
+| `GET /design-system` | Read saved values, stable entry IDs, and the numeric write revision. |
+| `POST /design-system/assets/upload` | Upload file bytes as `contentBase64`; receive an `attachmentId`. |
+| `GET /design-system/assets/{attachmentId}` | Download a private asset. |
+| `POST /design-system/changes` | Save selected changes with `expectedRevision` and `operationId`. |
+| `POST /design-system/undo` | Undo the latest action with its `actionId`, `expectedRevision`, and `operationId`. |
+
+An upload alone does not add an asset record or change the design revision. Reference the returned attachment ID in a changes request. Both the API and dashboard accept files up to 100 MB.
+
+Use the numeric revision from `GET /design-system` for writes, not the context fingerprint from `GET /agent-context`. A stale write revision returns `409`. Reuse the same `operationId` and identical input after an uncertain response. Saving standards does not change site files.

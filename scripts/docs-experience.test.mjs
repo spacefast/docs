@@ -22,6 +22,40 @@ function opening(page) {
   return paragraph.replace(/\s+/gu, " ");
 }
 
+test("installation and version guidance avoid stale release claims", async () => {
+  const cli = await builtPage("/cli");
+  const api = await builtPage("/api");
+  assert.match(cli, /brew install spacefast\/tap\/spacefast/u);
+  assert.doesNotMatch(cli, /spacefast\/0\.3\.0/u);
+  assert.match(api, /contract snapshot/u);
+  assert.doesNotMatch(api, /currently `0\./u);
+});
+
+test("team context explains setup, eligibility, and administrative boundaries", async () => {
+  const context = await builtPage("/team-context");
+  const design = await builtPage("/design-system");
+  assert.match(context, /agents\.memory_skills/u);
+  assert.match(context, /POST \/v1\/teams\/\{teamId\}\/context/u);
+  assert.match(context, /no request body/u);
+  assert.match(context, /API keys and agent grants cannot delete memories or change skill settings/u);
+  assert.match(context, /These operations require a dashboard session/u);
+  assert.match(design, /POST \/design-system\/assets\/upload/u);
+  assert.match(design, /numeric revision/u);
+  assert.match(design, /100 MB/u);
+});
+
+test("Git and domain guides preserve permission and payment requirements", async () => {
+  const git = await builtPage("/git");
+  const domains = await builtPage("/domains");
+  assert.match(git, /Pull requests: Read and write/u);
+  assert.match(git, /default is on/u);
+  assert.match(git, /source\/availability/u);
+  assert.match(git, /does not change website access/u);
+  assert.match(domains, /registrar_writes_disabled/u);
+  assert.match(domains, /No charge or registration occurs before payment/u);
+  assert.match(domains, /does not renew automatically/u);
+});
+
 test("every authored page opens with its subject instead of a page promise", async () => {
   const offenders = [];
   const manifest = JSON.parse(await readFile(path.join(root, ".blume", "blume.manifest.json"), "utf8"));

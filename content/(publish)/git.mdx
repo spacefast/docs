@@ -79,6 +79,23 @@ In the dashboard the same flow lives on the space's **Builds** page. Click **Con
 
 Once connected, the sidebar's **Code** row shows **Source**, the repository tree at the production branch, instead of the version's files.
 
+## Pull request preview comments
+
+Spacefast can post one comment on a GitHub pull request and update it with the latest preview status and links.
+
+- In **Team settings**, **GitHub preview comments** sets **Comment on preview pull requests**. The default is on.
+- On a Space's **Builds** page, open repository settings. **Pull request preview comments** can inherit the team default, turn on, or turn off.
+
+The section heading is not a second toggle. The comment does not replace GitHub's deployment timeline entries or change a preview's access rules.
+
+Comments require the GitHub App to have **Pull requests: Read and write** permission. A setting cannot grant that permission. If GitHub offers a permission update, an installation owner must approve it. If no update is available, contact Spacefast support. Detaching and reconnecting the repository does not add a permission that the App does not request.
+
+## Source sharing
+
+`GET /v1/spaces/{spaceId}/source/availability` returns whether the current repository permits independent forks of `main`, plus its remix URL.
+
+`PUT /v1/spaces/{spaceId}/source/availability` accepts `{"enabled":true}` to allow forks or `{"enabled":false}` to stop allowing them. Obtain the owner's consent before enabling source sharing. This setting does not change website access. Repository replacement and ownership transfer require new consent.
+
 ## Which branch publishes what
 
 The connection carries one production branch. Everything else is a preview.
