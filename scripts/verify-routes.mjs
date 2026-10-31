@@ -210,13 +210,8 @@ if (
 ) {
   throw new Error("Built headers do not allow the consumer site to merge the Pagefind index.");
 }
-if (
-  !headers.includes(`${deploymentBase}/*\n  Access-Control-Allow-Origin: *`) ||
-  headers.includes(`${deploymentBase}/*.md`) ||
-  headers.includes(`${deploymentBase}/*.mdx`) ||
-  headers.includes(`${deploymentBase}/*.txt`)
-) {
-  throw new Error("Built headers do not expose Docs artifacts through valid routing patterns.");
+if (!headers.includes(`${deploymentBase}/*\n  Access-Control-Allow-Origin: *`)) {
+  throw new Error("Built headers do not expose Docs artifacts cross-origin.");
 }
 
 const sitemap = await readBuilt("sitemap.xml");
@@ -237,29 +232,29 @@ if (new Set(sitemapUrls).size !== sitemapUrls.length) {
 }
 // Owner rule: every content page is indexable, searchable, and advertised in
 // the sitemap. Redirect documents are not content pages and Blume correctly
-// marks them noindex. The generated `/setup/*` pages are the one place content
-// is duplicated across surfaces (spec §5.1) — they stay indexable and instead
-// declare a canonical straight at the www copy that owns that content for
-// search, which the audit accepts and the sitemap still lists.
-for (const file of await htmlFilesUnder(dist)) {
+// marks them noindex. The generated `/setup` pages are the one place content
+// is duplicated across surfaces (spec §5.1) — they stay indexable and
+// searchable and instead declare a canonical straight at the www copy that
+// owns that content, so Blume leaves them out of the Docs sitemap.
+const htmlFiles = await htmlFilesUnder(dist);
+for (const file of htmlFiles) {
   const html = await readBuilt(file);
   const isRedirect = /<meta\s+http-equiv="refresh"/u.test(html);
   if (!isRedirect && /<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
     throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
   }
 }
-const setupFiles = (await htmlFilesUnder(dist)).filter((file) =>
-  /^setup\/[^/]+\/index\.html$/u.test(file),
-);
-if (setupFiles.length === 0) {
+// Each generated setup page's route, relative to its site: `setup/`, `setup/codex/`.
+const setupRoutes = htmlFiles
+  .filter((file) => /^setup\/(?:[^/]+\/)?index\.html$/u.test(file))
+  .map((file) => file.replace(/index\.html$/u, ""));
+if (setupRoutes.length < 2) {
   throw new Error("Expected generated /setup pages in the build; none are present.");
 }
-for (const file of setupFiles) {
-  const html = await readBuilt(file);
-  const id = file.split("/")[1];
-  const expected = `<link rel="canonical" href="https://spacefast.com/setup/${id}/">`;
-  if (!html.includes(expected)) {
-    throw new Error(`dist/${file} does not declare its www canonical (${expected}).`);
+for (const route of setupRoutes) {
+  const expected = `<link rel="canonical" href="https://spacefast.com/${route}">`;
+  if (!(await readBuilt(`${route}index.html`)).includes(expected)) {
+    throw new Error(`dist/${route}index.html does not declare its www canonical (${expected}).`);
   }
 }
 // The sidebar override (components/Sidebar.astro) links pages across tabs.
@@ -314,31 +309,28 @@ for (const [file, label] of [
   if (crumb !== label) throw new Error(`dist/${file} breadcrumb is "${crumb}", expected "${label}".`);
 }
 
-// Pagefind indexes article pages only. The generated changelog timeline has no
-// article and is left out; every entry it lists is indexed on its own page.
-const searchableSitemapUrls = sitemapUrls.filter(
-  (url) => url.replace(/\/$/u, "") !== `${docsRoot}/changelog`,
-);
-if (indexedPages !== searchableSitemapUrls.length) {
+// The public docs corpus that search and the LLM files carry: the sitemap,
+// without the generated changelog timeline (it has no article; every entry it
+// lists is a page of its own), plus the /setup pages the sitemap leaves out
+// because their canonical is on www.
+const generatedChangelogUrl = `${docsRoot}/changelog`;
+if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl)) {
   throw new Error(
-    `Search/sitemap count mismatch: ${indexedPages} indexed, ${searchableSitemapUrls.length} searchable in sitemap.`,
+    `Sitemap is missing the generated changelog timeline at ${generatedChangelogUrl}`,
+  );
+}
+const corpusUrls = [
+  ...sitemapUrls.filter((url) => url.replace(/\/$/u, "") !== generatedChangelogUrl),
+  ...setupRoutes.map((route) => `${docsRoot}/${route}`),
+];
+if (indexedPages !== corpusUrls.length) {
+  throw new Error(
+    `Search/corpus count mismatch: ${indexedPages} indexed, ${corpusUrls.length} public docs pages.`,
   );
 }
 const robots = await readBuilt("robots.txt");
 if (!robots.includes(`Sitemap: ${docsRoot}/sitemap.xml`)) {
   throw new Error("robots.txt does not advertise the docs sitemap.");
-}
-
-// Blume's generated changelog timeline is in the sitemap/search index, but the
-// LLM corpus enumerates authored changelog entries (and packages) instead.
-const generatedChangelogUrl = `${docsRoot}/changelog`;
-const llmSitemapUrls = sitemapUrls.filter(
-  (url) => url.replace(/\/$/u, "") !== generatedChangelogUrl,
-);
-if (!sitemapUrls.some((url) => url.replace(/\/$/u, "") === generatedChangelogUrl)) {
-  throw new Error(
-    `Sitemap is missing the generated changelog timeline at ${generatedChangelogUrl}`,
-  );
 }
 
 // llms.txt is a curated index, not a mirror of the sitemap: the generated error
@@ -414,18 +406,12 @@ const llmsFull = await readBuilt("llms-full.txt");
 const sourceUrls = [...llmsFull.matchAll(/^Source: (https:\/\/[^\s]+)$/gmu)].map(
   (match) => match[1],
 );
+const corpusKeys = new Set(corpusUrls.map(corpusKey));
 if (
-  sourceUrls.length !== llmSitemapUrls.length ||
-  sourceUrls.some((url) => !url.startsWith(`${docsRoot}/`) && url !== docsRoot && url !== site)
+  sourceUrls.length !== corpusUrls.length ||
+  sourceUrls.some((url) => !corpusKeys.has(corpusKey(url)))
 ) {
-  throw new Error("llms-full.txt has missing or non-docs source URLs.");
-}
-const sitemapKeys = new Set(llmSitemapUrls.map(corpusKey));
-if (
-  sourceUrls.length !== llmSitemapUrls.length ||
-  sourceUrls.some((url) => !sitemapKeys.has(corpusKey(url)))
-) {
-  throw new Error("llms-full.txt and sitemap.xml disagree on the public docs corpus.");
+  throw new Error("llms-full.txt and the public docs corpus disagree.");
 }
 
 const corpus = JSON.parse(await readBuilt("docs-corpus.json"));
@@ -477,6 +463,7 @@ const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
 const compilation = compileRoutingFilesWasm({
   redirects: builtRedirects,
+  headers,
   configSource: JSON.stringify(staticConfig),
 });
 if (compilation.diagnostics.some(({ severity }) => severity === "error")) {
@@ -541,6 +528,18 @@ if (
 ) {
   throw new Error("Built redirects do not match the generated compatibility map.");
 }
+// The platform applies a routing rule before it serves a file, so a redirect
+// whose source is a built page hides that page.
+const shadowedPages = [];
+for (const { from, status } of routingRules) {
+  if (from.includes("*") || status < 300) continue;
+  const file = localTargetFor(from.slice(deploymentBase.length) || "/");
+  const html = await readBuilt(file).catch(() => null);
+  if (html !== null && !/<meta\s+http-equiv="refresh"/u.test(html)) shadowedPages.push(from);
+}
+if (shadowedPages.length > 0) {
+  throw new Error(`Routing rules redirect away from built pages: ${shadowedPages.join(", ")}`);
+}
 for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   const example = representativeRedirect(redirect);
   const canonicalDestination = example.destination.replace(
@@ -562,7 +561,6 @@ for (const redirect of [...generatedRedirects, ...referenceAliases]) {
     );
   }
 }
-const htmlFiles = await htmlFilesUnder(dist);
 for (const file of htmlFiles) {
   const html = await readFile(path.join(dist, file), "utf8");
   for (const match of html.matchAll(/\b(?:action|href|src)=["'](\/[^"']*)["']/giu)) {
@@ -579,5 +577,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap/LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length + referenceAliases.length} compatibility URLs, and every root-relative URL resolves.`,
+  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap URLs, ${corpusUrls.length} LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length + referenceAliases.length} compatibility URLs, and every root-relative URL resolves.`,
 );
