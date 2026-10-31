@@ -212,9 +212,9 @@ See [Functions](/functions).
 
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
-| `access` | `"public"` or `{ public: string[] }` | none | Live paths that stay public whatever the Space's access setting is |
+| `access` | `"public"` or `{ public: string[] }` | none | Live paths that stay public whatever the Space's access setting is, unless the team has turned on **Private spaces only** |
 
-`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed. See [Access](/access).
+`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed, and it is ignored while the team has turned on **Private spaces only**. It compiles to one public `viewer` grant on the live target, which `sf share revoke` cannot remove; change the file and publish instead. See [Access](/access).
 
 ## Routing
 

@@ -11,8 +11,8 @@ Access to a Space can be granted with links, passwords, or machine tokens. You c
 
 Access is a list of **Grants**. Each Grant says who (audience), what they may do (role), which routes (paths and exclusions), and against which target. Grants are additive: a visitor gets the union of every Grant that matches. Nothing is subtracted, so a Space with no Grants is private.
 
-- **Roles**: `viewer`, `commenter`, `editor`, `manager`. A public Grant may only be `viewer` or `commenter`; anything higher is refused before the request leaves your machine.
-- **Targets**: `live`, `all-versions`, `version:<id>`, or `branch:<name>`.
+- **Roles**: `viewer`, `commenter`, `editor`, `manager`. A public Grant may only be `viewer` or `commenter`; anything higher is refused before the request leaves your machine. `commenter` on the `live` target needs the Space's comments set to **Everywhere**; otherwise the write fails with `comments_target_unavailable`, so target a version instead.
+- **Targets**: `live`, `all-versions`, `version:<id>`, or `branch:<name>`. A `public` Grant cannot target a branch; use a Link for branch previews.
 - **Paths**: glob patterns such as `/docs/**`. `--path` is repeatable for disjoint subtrees; `--exclude` carves holes local to that one Grant.
 
 Credential-backed audiences get their own commands (`link`, `password`, `token`, `identity`) so the proof and its Grant are created in one write. `sf share grant` is for the two audiences that need no proof: `public` and `team`.
@@ -34,7 +34,7 @@ These flags narrow when and from where a Grant admits a visitor. Commands below 
 | `--not-before=<iso>` | none | Do not admit before this ISO date-time |
 | `--expires=<duration>` | never | Expire after a duration such as `7d` or `30m` |
 | `--max-uses=<n>` | unlimited | Maximum successful admissions. 1 to 1,000,000 |
-| `--network=<ip\|cidr>` | any | Allowed IP address or CIDR. Repeatable |
+| `--network=<ip\|cidr>` | none | Unsupported. Spacefast has no trusted visitor IP, so any write carrying an IP or CIDR rule is refused. Pass `--no-network` on an edit to clear a rule saved before this changed; it also drops that Grant's country and user-agent rules |
 | `--country=<code>` | any | Allowed ISO country code. Repeatable |
 | `--exclude-country=<code>` | none | Blocked ISO country code. Repeatable |
 | `--exclude-user-agent=<text>` | none | Block user agents containing this text. Repeatable |
@@ -65,13 +65,13 @@ Explain the exact additive Grants and capabilities that match one route, audienc
 | `--issuer=<value>` | none | External identity issuer. Required with `--as external` |
 | `--subject=<value>` | none | External identity subject. Required with `--as external` |
 | `--verified-email` | off | Simulate a principal with a verified email |
-| `--ip=<value>` | none | IP address to evaluate against network constraints |
+| `--ip=<value>` | none | Hypothetical IP. Grants with IP rules stay unsupported and are reported as denied |
 | `--target=live\|version\|branch` | `live` | Published target kind |
 | `--target-id=<value>` | none | Version ID or branch name. Required when `--target` is not `live` |
 
 ```bash
 sf share check --path /docs/internal --as public
-sf share check --path /docs --as person --person psn_123
+sf share check --path /docs --as person --person per_123
 sf share check --path / --as link --link lnk_123 --ip 203.0.113.4
 ```
 
@@ -93,7 +93,7 @@ Also accepts `--network`, `--country`, `--exclude-country`, and `--exclude-user-
 
 ```bash
 sf share grant --to team --role viewer --path '/docs/**'
-sf share grant --to public --role commenter --path '/proposal/**' --exclude '/proposal/internal/**'
+sf share grant --to public --role viewer --path '/proposal/**' --exclude '/proposal/internal/**'
 sf share grant --to public --role viewer --path '/**' --target all-versions
 ```
 
@@ -120,7 +120,7 @@ sf share grant --to public --role viewer --path '/**' --target all-versions
 `sf share revoke ID` revokes one managed Grant by its ID from `sf share list`. Grants that come from `sf.jsonc` are changed there instead, and credential-backed Grants normally revoke through their own credential command.
 
 ```bash
-sf share revoke gnt_123
+sf share revoke grt_123
 ```
 
 ## sf share link create
@@ -133,7 +133,7 @@ Create a named Link backed by one Grant. A Link is the "send this to a client" s
 | `--landing=<path>` | `/` | Clean route opened after exchange |
 | `--path=<pattern>` | `/**` | Included route pattern. Repeatable |
 | `--exclude=<pattern>` | none | Excluded route pattern local to this Link. Repeatable |
-| `--role=viewer\|commenter` | `commenter` | Role granted to link holders |
+| `--role=viewer\|commenter` | `viewer` | Role granted to link holders |
 | `--target=<value>` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
 | `--show-secret` | off | Print the share URL even in JSON or non-interactive output |
 
@@ -186,7 +186,7 @@ Create a named password Grant. The verifier is Argon2id, and rotation fences exi
 | `--exclude=<pattern>` | none | Local exclusion pattern. Repeatable |
 | `--password=<value>` | none | The password. Env `SPACEFAST_SHARE_PASSWORD` |
 | `--password-from-stdin` | off | Read the password from standard input |
-| `--role=viewer\|commenter` | `commenter` | Role granted to password holders |
+| `--role=viewer\|commenter` | `viewer` | Role granted to password holders |
 | `--target=<value>` | `live` | Published target selector |
 
 Accepts the full [constraint set](#constraints).
@@ -284,13 +284,13 @@ sf share people remove person@example.com
 `sf share request deny ID` denies a pending request.
 
 ```bash
-sf share request approve req_123 --role viewer --scope /docs
-sf share request deny req_123
+sf share request approve arq_123 --role viewer --scope /docs
+sf share request deny arq_123
 ```
 
 ## sf share identity create
 
-Connect a team to an external identity provider, either an OIDC provider or a white-label Ed25519 signer you run yourself. Once a connection exists, `sf share identity grant` gives individual external subjects access to a Space.
+Connect a team to an external identity provider, either an OIDC provider or a white-label Ed25519 signer you run yourself. Once a connection exists, `sf share identity grant` gives individual external subjects access to a Space. For the redirect URI to register at your provider and what visitors see, read [SSO and external identity](/sso).
 
 | Flag | Default | What it does |
 | --- | --- | --- |
@@ -313,7 +313,7 @@ Connect a team to an external identity provider, either an OIDC provider or a wh
 
 `sf share identity ls` lists a team's OIDC and white-label signer connections. Alias: `sf share identity list`.
 
-`sf share identity update CONNECTION` rotates OIDC secrets or signer keys and updates connection settings. External Grants are untouched. It takes `--name`, `--client-id`, `--client-secret`, `--authorize-url`, and `--key` with the same meaning as on `create`, each defaulting to unchanged, plus `--session-ttl=<duration>` for the admitted session lifetime, for example `30m` or `8h`. `--key` is a complete replacement key set; repeat it to overlap old and new keys during rotation. Passing none of them is a validation error.
+`sf share identity update CONNECTION` rotates OIDC secrets or signer keys and updates connection settings. External Grants are untouched. Only team owners and admins can create, update, or revoke a connection. It takes `--name`, `--client-id`, `--client-secret`, `--authorize-url`, and `--key` with the same meaning as on `create`, each defaulting to unchanged, plus `--session-ttl=<duration>`, for example `30m` or `8h`. On a signer connection it caps how long a proof may live, 30 minutes at most; an OIDC connection accepts up to 24 hours. It does not shorten visitor sessions. Changing `--client-id`, `--client-secret`, `--key`, or `--session-ttl` counts as a rotation and ends every session the connection admitted; `--name` and `--authorize-url` do not. `--key` is a complete replacement key set; repeat it to overlap old and new keys during rotation. Passing none of them is a validation error.
 
 `sf share identity revoke CONNECTION` revokes the connection, its external Grants, and every session it admitted.
 
@@ -324,7 +324,7 @@ Grant one externally proven subject specific capabilities and paths on a Space.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--connection=<value>` | required | Identity connection ID |
-| `--subject=<value>` | required | Subject as the provider spells it |
+| `--subject=<value>` | required | The `sub` claim as the provider spells it, matched exactly. No wildcards or domains |
 | `--name=<value>` | required | Human-readable Grant name |
 | `--role=viewer\|commenter\|editor\|manager` | `viewer` | Role granted to this subject |
 | `--path=<pattern>` | `/**` | Included route pattern. Repeatable |

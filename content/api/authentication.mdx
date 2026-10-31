@@ -109,7 +109,7 @@ It is a management capability for an unclaimed Space, not a share link. Anyone h
 
 An `sfm_` credential is `sfm_` plus a 32-character opaque token, minted for one Space so a machine can reach it without a team-wide key. `POST /v1/spaces/{spaceId}/machine-credentials` takes a `name`, the `resources` and `capabilities` the credential may use, and a `target`, then returns `{ credential, token }`.
 
-The token is returned exactly once, on create and on rotate, and it is accepted only in the `Authorization` header. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
+The token is returned exactly once, on create and on rotate. API requests accept it only in the `Authorization` header; requests to the Space itself send it as `X-SF-Authorization: Bearer sfm_…`, because the Space passes `Authorization` through to your own application. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
 
 Creating, rotating, and revoking a machine credential all need an API key or a session. A machine credential cannot mint another one.
 
