@@ -8,6 +8,7 @@ export default defineMeta({
     "publish",
     "frameworks",
     "anonymous-and-claim",
+    "migrate",
     "git",
     "ci",
     "wordpress-data-sources",

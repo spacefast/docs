@@ -1,0 +1,702 @@
+---
+title: sf connectors
+description: Register tool sources for a team, connect accounts, set policy rules, and run connector tools from the terminal
+sidebar:
+  order: 18
+---
+
+`sf connectors` manages a team's connectors: tool sources, the accounts connected to them, the policy rules that decide what agents may call, and runs. For the concepts and the dashboard, see [Connectors](/connectors).
+
+Every command takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and `-o`/`--team` (team slug, ID, or name, env `SPACEFAST_TEAM`). Without `--team`, the server picks the team your credential acts for. A credential that can act for several teams must name one. See [the CLI overview](/cli).
+
+Every command needs a credential. Without one, it fails with `validation_error` and exit 2 before any request.
+
+API errors map to exit codes by HTTP status: 401 and 403 exit 10, 404 exits 20, 409 exits 30, and 422 exits 2. The tables below list the codes each command raises, both before the request and from the API.
+
+## sf connectors ls
+
+List the team's connectors, with the connections your credential can use on each. Aliased as `sf connectors list`.
+
+```text
+sf connectors ls [--query <value>] [--source openapi|graphql|mcp] [--limit <n>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--query=<value>` | none | Filter over slug, title, and description |
+| `--source=<kind>` | none | Show only `openapi`, `graphql`, or `mcp` connectors |
+| `--limit=<n>` | `50` | Maximum connectors to return. Minimum 1, maximum 100 |
+
+```bash
+sf connectors ls
+sf connectors ls --source mcp
+```
+
+### Output
+
+A table of `SLUG | TITLE | SOURCE | TOOLS | CONNECTIONS`. `CONNECTIONS` shows the count and the worst status among them, or `none`. An empty team prints "No connectors. Add one with `sf connectors add <url-or-slug>`."
+
+With `--json`, the receipt is the API list envelope `{ data, pagination }`.
+
+## sf connectors add
+
+Register a connector. A URL is detected first, and the most confident candidate is registered. Any other value is looked up in the catalog.
+
+```text
+sf connectors add <target> [--slug <value>] [--title <value>] [--description <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<target>` | A spec, endpoint, or MCP URL, or a catalog slug. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--slug=<value>` | detected or catalog slug | Connector slug. Also the namespace of its tools |
+| `--title=<value>` | the source's own name | Display name |
+| `--description=<value>` | none | Agent-visible note on what the connector reaches |
+
+A catalog lookup takes an exact id, registry id, or preset id match. Otherwise it takes the only search result.
+
+```bash
+sf connectors add https://api.example.com/openapi.json
+sf connectors add linear --slug linear
+```
+
+### Output
+
+`Registered <slug> (<title>) — <n> tools.`, then the command that connects an account. With `--json`, `data` is the connector.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<target>` is missing |
+| `validation_error` | 2 | Nothing recognizable behind the URL |
+| `validation_error` | 2 | No catalog row matches, or several do. The message lists up to five ids |
+| `validation_error` | 2 | The team already has that catalog row. The message names its slug |
+| `connector_slug_taken` | 30 | The team already has a connector with that slug |
+| `connector_source_unreachable` | 2 | The source did not load |
+| `connector_source_blocked` | 2 | The URL is not reachable from Spacefast |
+| `rate_limited` | 1 | More than 60 registrations, detections, or source refreshes in one hour for the team |
+
+## sf connectors detect
+
+Probe a URL and list the connectors behind it, most confident first. Nothing is registered.
+
+```text
+sf connectors detect <url>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<url>` | Any `http` or `https` URL a service published. Required |
+
+```bash
+sf connectors detect https://api.example.com
+```
+
+### Output
+
+A table of `KIND | CONFIDENCE | SLUG | TITLE | ENDPOINT`. `CONFIDENCE` is `high`, `medium`, or `low`. `ENDPOINT` is the URL to register, which can differ from the one you pasted. With `--json`, `data` is the array of candidates. Each carries `kind`, `confidence`, `endpoint`, `title`, `slug`, and `presetId`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<url>` is missing, or is not an `http` or `https` URL |
+| `rate_limited` | 1 | Shares the hourly budget of `sf connectors add` |
+
+## sf connectors rm
+
+Remove a connector and its tools. Aliased as `sf connectors remove` and `sf connectors delete`. Prompts unless you pass `--yes`.
+
+```text
+sf connectors rm <connector>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connector>` | Connector slug. Required |
+
+Removing a connector disconnects every account on it first.
+
+```bash
+sf connectors rm linear --yes
+```
+
+### Output
+
+`Removed connector <slug>.` With `--json`, `data` is `{ connector, removed: true }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `confirmation_required` | 2 | Non-interactive run without `--yes` |
+| `connector_first_party_immutable` | 30 | The connector is built into Spacefast |
+
+## sf connectors connections ls
+
+List the connections your credential can use: the team's shared ones and your personal ones. Aliased as `sf connectors connections list`.
+
+```text
+sf connectors connections ls [--owner team|personal|any] [--connector <slug>]
+  [--status <status>] [--include-revoked] [--limit <n>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--owner=<value>` | `any` | `team`, `personal`, or `any` |
+| `--connector=<slug>` | none | Show only connections of this connector |
+| `--status=<value>` | none | `pending_authorization`, `active`, `degraded`, `needs_reauth`, or `revoked` |
+| `--include-revoked` | `false` | Include disconnected connections |
+| `--limit=<n>` | `50` | Maximum connections to return. Minimum 1, maximum 100 |
+
+```bash
+sf connectors connections ls
+sf connectors connections ls --owner personal
+```
+
+### Output
+
+A table of `ID | CONNECTOR | OWNER | NAME | STATUS | TOOLS`. `(default)` marks the connection an agent gets when it names the connector alone. With `--json`, the receipt is `{ data, pagination }`.
+
+## sf connectors connections add
+
+Connect an account. Aliased as `sf connectors connections connect`.
+
+```text
+sf connectors connections add <connector> [--api-key <value> | --field <name=value>...]
+  [--owner team|personal] [--name <value>] [--description <value>] [--auth-method <slug>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connector>` | Connector slug. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--api-key=<value>` | none | API key for a connector that takes one. Never echoed back |
+| `--field=<name=value>` | none | One credential value. Repeat it for each field. Splits on the first `=` |
+| `--owner=<value>` | `team` | `team` shares it with the team. `personal` keeps it yours, within this team |
+| `--name=<value>` | the connector's title | Connection label |
+| `--description=<value>` | none | Agent-visible note on what the connection is for |
+| `--auth-method=<slug>` | chosen by the server | Auth method to use when the connector offers more than one |
+
+```bash
+sf connectors connections add stripe --api-key "$STRIPE_KEY"
+sf connectors connections add linear --owner personal
+```
+
+### Output
+
+The answer has one of three statuses.
+
+| Status | Human output |
+| --- | --- |
+| `connected` | `Connected <name> as <id> — <n> tools.` |
+| `authorization_required` | `Open: <authorizeUrl>` and its expiry. The provider callback finishes the connection |
+| `input_required` | One `--field <name>=<value>` line per value, with the provider's help when it has some, and the auth method to pass back with `--auth-method` |
+
+With `--json`, `data` carries `status` and the matching fields: `connection`, `authorizeUrl` and `expiresAt`, or `connector`, `authMethod`, and `fields`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<connector>` is missing |
+| `validation_error` | 2 | `--api-key` and `--field` are both set |
+| `validation_error` | 2 | A `--field` value has no `name=` part |
+| `connection_forbidden` | 2 | An API key asked for `--owner personal` |
+| `connection_needs_reauth` | 2 | The credential was not stored, or the method does not fit the credential |
+
+## sf connectors connections edit
+
+Change a connection's label, its agent note, or its site-serving grant. Aliased as `sf connectors connections update`.
+
+```text
+sf connectors connections edit <connection> [--name <value>] [--description <value>]
+  [--serving | --no-serving]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connection>` | Connection id, for example `cxn_abc123`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name=<value>` | unchanged | New label. Must not be blank |
+| `--description=<value>` | unchanged | New agent note. An empty string clears it |
+| `--serving`, `--no-serving` | unchanged | Let sites bound to this team connection act as this account. See [Zero connectors](/zero-connectors) |
+
+Credentials cannot be edited. To rotate one, run `sf connectors connections reconnect`.
+
+```bash
+sf connectors connections edit cxn_abc123 --name "Stripe (prod)"
+sf connectors connections edit cxn_abc123 --description "Billing, production"
+```
+
+### Output
+
+`Updated <name> (<id>).` With `--json`, `data` is the connection.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | No flag to change, or `--name` is blank |
+| `connection_serving_not_granted` | 2 | `--serving` on a personal connection |
+
+## sf connectors connections health
+
+Probe a connection against the provider. It only reports. An expired token refreshes on its own.
+
+```text
+sf connectors connections health <connection>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connection>` | Connection id. Required |
+
+```bash
+sf connectors connections health cxn_abc123
+```
+
+### Output
+
+`<id> <status> · <latency> · <n> tools`, then the provider's detail when something went wrong. A `needs_reauth` status adds the reconnect command. With `--json`, `data` carries `connectionId`, `status`, `reachable`, `latencyMs`, `detail`, `toolCount`, and `checkedAt`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `connection_revoked` | 30 | The connection is disconnected |
+| `connection_needs_reauth` | 30 | The connection has no credential, or its authorization is not finished |
+
+## sf connectors connections reconnect
+
+Sign in again, or replace the credential, on the same connection. It keeps its id, label, policies, and Space bindings.
+
+```text
+sf connectors connections reconnect <connection> [--api-key <value> | --field <name=value>...]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connection>` | Connection id. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--api-key=<value>` | none | Replacement API key |
+| `--field=<name=value>` | none | One replacement value. Repeat it for each field |
+
+Omit both flags for an OAuth connection. The answer is then an authorization URL.
+
+```bash
+sf connectors connections reconnect cxn_abc123
+sf connectors connections reconnect cxn_abc123 --api-key "$STRIPE_KEY"
+```
+
+### Output
+
+The same three statuses as `sf connectors connections add`. `connected` prints `Reconnected <name> (<id>) — <n> tools.`
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--api-key` and `--field` are both set, or a `--field` has no `name=` part |
+| `connection_revoked` | 30 | The connection is disconnected. Connect the service again instead |
+| `invalid_request` | 2 | The connector does not take the credential you passed |
+
+## sf connectors connections refresh
+
+Read the tool list behind a connection again, so tools the provider added or dropped show up. Aliased as `sf connectors connections sync`.
+
+```text
+sf connectors connections refresh <connection>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connection>` | Connection id. Required |
+
+```bash
+sf connectors connections refresh cxn_abc123
+```
+
+### Output
+
+`Re-synced <name> (<id>) — <n> tools, <status>.` With `--json`, `data` is the connection.
+
+## sf connectors connections rm
+
+Disconnect a connection. The stored credential is purged and cannot be restored. Aliased as `sf connectors connections remove` and `sf connectors connections disconnect`. Prompts unless you pass `--yes`.
+
+```text
+sf connectors connections rm <connection>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<connection>` | Connection id. Required |
+
+Disconnecting an already disconnected connection changes nothing.
+
+```bash
+sf connectors connections rm cxn_abc123 --yes
+```
+
+### Output
+
+`Disconnected <name> (<id>). The credential is purged.` With `--json`, `data` is the connection with `status` `revoked`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `confirmation_required` | 2 | Non-interactive run without `--yes` |
+
+## sf connectors policies ls
+
+List the policy rules in force: the team's rules and your personal ones. Aliased as `sf connectors policies list`.
+
+```text
+sf connectors policies ls
+```
+
+No command-specific flags.
+
+```bash
+sf connectors policies ls
+```
+
+### Output
+
+A table of `ID | PATTERN | ACTION | OWNER`. With no rules, it prints "No rules. Every call falls through to the connector's own default." With `--json`, `data` is the array of rules. Each carries `id`, `pattern`, `action`, `owner`, `position`, and `createdAt`.
+
+## sf connectors policies add
+
+Add a policy rule. Its position comes from the pattern's specificity, so the more specific rule wins.
+
+```text
+sf connectors policies add <pattern> --action <action> [--owner team|personal]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<pattern>` | `*`, `<connector>/*`, `<connector>/<tool>`, `<connectionId>/*`, or `<connectionId>/<tool>`. Quote it, because the shell expands a bare `*`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--action=<value>` | none, required | `approve` runs the call. `require_approval` parks it for a person. `block` refuses it |
+| `--owner=<value>` | `team` | `team` applies to everyone. `personal` applies to your own calls in this team |
+
+A team rule is a floor. A personal rule can tighten it, never loosen it.
+
+```bash
+sf connectors policies add '*' --action require_approval
+sf connectors policies add 'cxn_abc123/charges.create' --action block
+```
+
+### Output
+
+`Added <owner> rule <id>: <pattern> → <action>.` With `--json`, `data` is the rule.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<pattern>` or `--action` is missing |
+| `malformed_policy_pattern` | 2 | The pattern does not fit the grammar |
+| `connector_not_found` | 2 | The pattern names a connector or connection the team does not have |
+| `connection_forbidden` | 2 | An API key asked for `--owner personal` |
+
+## sf connectors policies set
+
+Change what a rule does. A rule's pattern and owner are fixed. To change those, remove the rule and add a new one.
+
+```text
+sf connectors policies set <rule> --action <action>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<rule>` | Rule id from `sf connectors policies ls`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--action=<value>` | none, required | `approve`, `require_approval`, or `block` |
+
+```bash
+sf connectors policies set pol_abc123 --action block
+```
+
+### Output
+
+`<id> is now <action> for <pattern>.` With `--json`, `data` is the rule.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `<rule>` or `--action` is missing |
+
+## sf connectors policies rm
+
+Remove a rule. Its tools fall through to the next matching rule, or to the tool's own default, so removing a block can open a tool again. Aliased as `sf connectors policies remove` and `sf connectors policies delete`. Prompts unless you pass `--yes`.
+
+```text
+sf connectors policies rm <rule>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<rule>` | Rule id. Required |
+
+```bash
+sf connectors policies rm pol_abc123 --yes
+```
+
+### Output
+
+`Removed rule <id>.` With `--json`, `data` is `{ policyRule, removed: true }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `confirmation_required` | 2 | Non-interactive run without `--yes` |
+
+## sf connectors policies explain
+
+Show what happens if you call one address, and why, without calling it.
+
+```text
+sf connectors policies explain <address>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<address>` | Tool address, `<connectionId>/<tool>`. Required |
+
+```bash
+sf connectors policies explain cxn_abc123/charges.create
+```
+
+### Output
+
+`<address> → <effect>`, then the deciding rule or "No rule matched.", then the reason in one sentence. With `--json`, `data` carries `address`, `effect`, `decidedBy` (`ruleId`, `pattern`, `owner`, or `null`), and `explanation`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `malformed_tool_address` | 2 | The address does not resolve to a connection you can use |
+
+## sf connectors run
+
+Run one tool, or a program that calls several. Both are one run with one id.
+
+```text
+sf connectors run [code] [--tool <address>] [--args <json>] [--wait <seconds>]
+  [--idempotency-key <value>] [--deny-unattended]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `[code]` | A program to run in the sandbox. It can call any tool your credential may use. Omit it with `--tool` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--tool=<address>` | none | Tool address, `<connectionId>/<tool>`, or `<connector>/<tool>` when one connection matches |
+| `--args=<json>` | `{}` | JSON object of tool arguments. Accepts `@file` or `-` for stdin. Only with `--tool` |
+| `--wait=<seconds>` | the server's, 30 seconds | Seconds to wait for a final status. Minimum 0, maximum 120 |
+| `--idempotency-key=<value>` | none | Retry with the same key to get the original run back instead of running it twice |
+| `--deny-unattended` | `false` | Fail at once instead of parking when a call needs approval |
+
+The run needs a credential with `connectors:execute`. A program runs for at most 10 seconds.
+
+```bash
+sf connectors run --tool cxn_abc123/issues.list --args '{"limit":5}'
+sf connectors run --tool cxn_abc123/issues.create --args @issue.json
+```
+
+### Output
+
+| Status | Human output | Exit |
+| --- | --- | --- |
+| `succeeded` | `<id> succeeded · <n> tool call(s) · <ms>ms`, then the result as JSON | 0 |
+| `failed` | `<id> failed`, then `<code>: <detail>` | 1 |
+| `awaiting_approval` | The address, `Approve or deny: <approvalUrl>`, and the expiry | 0 |
+| `expired` | `parked too long; submit it again.` | 1 |
+| `running` | `still running.`, then the `sf connectors run get` command | 0 |
+
+With `--json`, `data` is the run. Every run carries `id`, `status`, `origin`, `input` (`kind`, `address`, `digest`), `usage` (`toolCalls`, `egressBytes`, `durationMs`), and `createdAt`. A finished run adds `completedAt`, then `result` or `error`. A parked run adds `approval` with `mode`, `address`, `preview`, `reason`, `matchedPattern`, `approvalUrl`, and `expiresAt`.
+
+A parked run expires after 15 minutes.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | Both `[code]` and `--tool`, or neither |
+| `validation_error` | 2 | `--tool` has no `/` |
+| `validation_error` | 2 | `--args` with a program, or `--args` is not a JSON object |
+| `validation_error` | 2 | `--wait` outside 0 to 120 |
+| `idempotency_key_reused` | 30 | The key was used with a different request |
+| `rate_limited` | 1 | More than 1,200 runs in one hour for the team |
+
+A run that fails carries its reason in `error.code`, for example `connector_tool_blocked`, `connection_ambiguous`, `connection_needs_reauth`, or `connector_approval_required`.
+
+## sf connectors run get
+
+Read one run: its result, its failure, or the approval it waits on. Use it to follow a `running` run.
+
+```text
+sf connectors run get <run>
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<run>` | Run id, for example `cxr_abc123`. Required |
+
+```bash
+sf connectors run get cxr_abc123
+```
+
+### Output
+
+The same as `sf connectors run`, with the same exit codes.
+
+## sf connectors run list
+
+List the team's runs, newest first. Aliased as `sf connectors run ls`.
+
+```text
+sf connectors run list [--status <status>] [--connection <id>] [--limit <n>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--status=<value>` | none | `running`, `awaiting_approval`, `succeeded`, `failed`, or `expired` |
+| `--connection=<id>` | none | Show only runs that touched this connection |
+| `--limit=<n>` | `50` | Maximum runs to return. Minimum 1, maximum 100 |
+
+```bash
+sf connectors run list
+sf connectors run list --status awaiting_approval
+```
+
+### Output
+
+A table of `ID | STATUS | KIND | ADDRESS | CALLS | CREATED`, or "No runs." With `--json`, the receipt is `{ data, pagination }`.
+
+## sf connectors run resume
+
+Decide a parked run, or read back the decision a person made.
+
+```text
+sf connectors run resume <run> [--accept | --deny | --cancel] [--content <json>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<run>` | Run id. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--accept` | `false` | Approve the parked call |
+| `--deny` | `false` | Refuse the parked call. The run fails with `connector_tool_blocked` |
+| `--cancel` | `false` | Abandon the run |
+| `--content=<json>` | none | JSON object of values the parked call asked for. Accepts `@file` or `-` for stdin |
+
+Omit the action to read back a decision a person recorded in the dashboard. A run parked for a person refuses a decision from the CLI.
+
+```bash
+sf connectors run resume cxr_abc123
+```
+
+### Output
+
+The same as `sf connectors run`, with the same exit codes.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | More than one of `--accept`, `--deny`, and `--cancel` |
+| `validation_error` | 2 | `--content` is not a JSON object |
+| `human_approval_required` | 10 | An action was passed, and a person must decide this run in the dashboard |
+| `connector_approval_required` | 2 | No action, and nobody has decided yet |
+| `connector_run_not_resumable` | 30 | The run already settled, or someone else claimed the decision |
+
+## Space bindings
+
+These three commands connect a Space's connector roles to team connections. They require `--space`. For roles and bindings, see [Zero connectors](/zero-connectors).
+
+| Command | What it does |
+| --- | --- |
+| `sf connectors bindings --space <ref>` | List the Space's roles: `ROLE | AS | CONNECTION | STATUS` |
+| `sf connectors bind <role> <connection> --space <ref>` | Bind one role to a connection id |
+| `sf connectors unbind <role> --space <ref>` | Remove one binding. Prompts unless you pass `--yes` |
+
+Without `--space`, each fails with `validation_error` and exit 2.
+
+See also the generated [command reference](/cli/reference).

@@ -85,6 +85,53 @@ Mode:     website
 
 Then the live version summary, or `Live version: none`. An anonymous Space prints `Team: anonymous` and a `Claim expires:` line. `--json` returns `{ space, state, runtime, liveVersion }`.
 
+## sf spaces check
+
+Check whether a space name is available.
+
+```text
+sf spaces check NAME
+```
+
+Normalizes the name to a slug, then checks the slug and its managed hostname in the team. The answer is advisory: another create or rename can still take the name first. Reserved names fail, and so do slugs that contain `spacefast`, `stattic`, `automattic`, `wordpress`, or `paypal`. A space slug is at most 55 characters. Requires a login or `--token`.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<name>` | required | Space name or slug to check |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `-o, --team=<value>` | default team | Team to check the name in. Slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf spaces check my-site --team acme
+```
+
+### Output
+
+```text
+Normalized name: my-site
+Space slug: available
+Space slug suggestion: none
+Managed hostname (my-site.space.fast): available
+Managed hostname suggestion: none
+```
+
+When a name is taken, the suggestion lines name the closest free slug and hostname label. A name with nothing usable prints `Normalized name: empty` and is unavailable. `--json` returns the [`getSlugAvailability`](/api/reference/spaces/getslugavailability) result unchanged: `kind`, `normalizedSlug`, `available`, `suggestion`, and the hostname fields.
+
+### Errors
+
+| Code | Exit | What to do |
+| --- | --- | --- |
+| `unauthorized` | 10 | No credential. Run `sf login` |
+| `validation_error` | 2 | No accessible team matches `--team`. Run `sf teams ls` |
+
 ## sf spaces add
 
 Create an empty space. Alias: `sf spaces create`.

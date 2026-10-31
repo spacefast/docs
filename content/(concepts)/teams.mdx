@@ -19,6 +19,8 @@ Free and Go allow only the owner. Adding another member needs [Plus](/billing#se
 
 A team is the thing that owns work in a self-serve account. Spaces, custom domains, API keys, billing, and members all hang off it. A Space you claim belongs to the team you select, even when you are its only member. [Partner API customers](/platforms/partner-api/customers) use external principals instead.
 
+An Enterprise team can split into [subteams](/subteams), each with its own members and Spaces. A team can also hold [identity connections](/identity-connections), so people from your own sign-in system can open its Spaces.
+
 A team can also hold a [Design System](/design-system) for colors, type, voice, and brand files. Saving those standards does not change any Space until you apply them to its project.
 
 A team has a name and a slug. The slug is the first segment of its dashboard URLs. You can change it in **Team settings → General**, where a live check tells you whether the new one is free.
@@ -76,6 +78,8 @@ Your team needs [Plus](/billing#seats) to add another member. Free and Go includ
 </Steps>
 
 From a terminal, `sf teams invitations ls` lists invitations. Use the dashboard to send, resend, cancel, or accept one.
+
+To skip invitations for coworkers, add your company's [allowed email domain](/auto-enroll).
 
 Things that catch people out:
 
