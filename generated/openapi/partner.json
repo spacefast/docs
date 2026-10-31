@@ -74561,7 +74561,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Include live hosting capabilities. Set false to read stored settings without contacting the hosting provider.",
+              "description": "Include live hosting capabilities. Set false to read only the stored settings, which skips the live capability lookup.",
               "anyOf": [
                 {
                   "type": "boolean"
@@ -75196,7 +75196,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Include live hosting capabilities. Set false to read stored settings without contacting the hosting provider.",
+              "description": "Include live hosting capabilities. Set false to read only the stored settings, which skips the live capability lookup.",
               "anyOf": [
                 {
                   "type": "boolean"
@@ -127340,9 +127340,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "suggestion"
-                          ]
+                          "const": "suggestion"
                         },
                         "suggestion": {
                           "type": "object",
@@ -127381,9 +127379,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "done"
-                          ]
+                          "const": "done"
                         },
                         "reply": {
                           "type": "object",
@@ -127456,9 +127452,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "error"
-                          ]
+                          "const": "error"
                         },
                         "error": {
                           "type": "object",
@@ -127488,9 +127482,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "availability"
-                          ]
+                          "const": "availability"
                         },
                         "availability": {
                           "type": "object",
@@ -127516,29 +127508,35 @@
                               "type": "boolean"
                             },
                             "price": {
-                              "nullable": true,
-                              "type": "object",
-                              "properties": {
-                                "amount": {
-                                  "type": "number",
-                                  "minimum": 0
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "amount": {
+                                      "type": "number",
+                                      "minimum": 0
+                                    },
+                                    "formatted": {
+                                      "type": "string",
+                                      "maxLength": 40
+                                    },
+                                    "currency": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 8
+                                    }
+                                  },
+                                  "required": [
+                                    "amount",
+                                    "formatted",
+                                    "currency"
+                                  ],
+                                  "additionalProperties": false
                                 },
-                                "formatted": {
-                                  "type": "string",
-                                  "maxLength": 40
-                                },
-                                "currency": {
-                                  "type": "string",
-                                  "minLength": 1,
-                                  "maxLength": 8
+                                {
+                                  "type": "null"
                                 }
-                              },
-                              "required": [
-                                "amount",
-                                "formatted",
-                                "currency"
-                              ],
-                              "additionalProperties": false
+                              ]
                             },
                             "source": {
                               "type": "string",
@@ -127568,9 +127566,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "score"
-                          ]
+                          "const": "score"
                         },
                         "score": {
                           "type": "object",
@@ -127610,9 +127606,7 @@
                       "properties": {
                         "type": {
                           "type": "string",
-                          "enum": [
-                            "skipped"
-                          ]
+                          "const": "skipped"
                         },
                         "skipped": {
                           "type": "object",
