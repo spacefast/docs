@@ -12,7 +12,7 @@ A team owns its Spaces, domains, API keys, and billing. Your role in that team c
 Free and Go allow only the owner. Adding another member needs [Plus](/billing#seats).
 
 - **Publish together.** Members can create Spaces, publish new versions, and roll back. The site stays with the team when a member leaves.
-- **Keep access in one place.** Invite someone to the team to give them access to team-owned work at their role. Remove them to take that access away across the team's Spaces. Set the default access for each new Space to `team`, `private`, or `public`.
+- **Keep access in one place.** Invite someone to the team to give them access to team-owned work at their role. Remove them to take that access away across the team's Spaces. Set the default access for each new Space to `private` or `public`.
 - **Separate routine work from administration.** Members can publish, while owners and admins manage invitations, domains, and billing. The [role table](#roles) shows the full boundary.
 
 ## What a team is
@@ -101,11 +101,10 @@ To hand the team over, use **Team settings → Danger zone → Transfer ownershi
 
 | Preset | What a new Space gets |
 |---|---|
-| `private` | No access grant at all. Only the team's own access reaches it |
-| `team` | A grant named "Team", so everyone in the team can open it |
-| `public` | A grant named "Public", so anyone with the URL can open it |
+| `private` | Access for the owning team |
+| `public` | Access for the owning team, plus view access for anyone on the web |
 
-The default is `team`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [access and share links](/access).
+The default is `private`. The API accepts `team` as a legacy spelling of `private`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [access and share links](/access).
 
 ## Move a Space to another team
 
