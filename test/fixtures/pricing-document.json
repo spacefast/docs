@@ -100,7 +100,7 @@
         "code": "enterprise",
         "name": "Enterprise",
         "monthlyPriceUsd": null,
-        "usageCreditUsd": 0,
+        "usageCreditUsd": null,
         "selfServe": false,
         "seats": {
           "included": "unlimited",
@@ -130,122 +130,122 @@
     ],
     "usage": [
       {
-        "freeIncluded": 100,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "cached_bytes",
         "label": "Cached delivery",
         "unit": "GB",
+        "freeIncluded": 100,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 1000,
         "paidRateUsd": 0.02
       },
       {
-        "freeIncluded": 10,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "origin_bytes",
         "label": "Non-cached transfer",
         "unit": "GB",
+        "freeIncluded": 10,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 0,
         "paidRateUsd": 0.054
       },
       {
-        "freeIncluded": 3600,
-        "freePeriod": "month",
-        "freePool": "compute",
         "meter": "runtime_cpu_microseconds",
         "label": "PHP and Zero CPU",
         "unit": "CPU-second",
-        "paidIncluded": 0,
-        "paidRateUsd": 0.000033
-      },
-      {
         "freeIncluded": 3600,
         "freePeriod": "month",
         "freePool": "compute",
-        "meter": "sql_cpu_microseconds",
-        "label": "SQL CPU",
-        "unit": "CPU-second",
         "paidIncluded": 0,
         "paidRateUsd": 0.000033
       },
       {
-        "freeIncluded": 1,
+        "meter": "sql_cpu_microseconds",
+        "label": "SQL CPU",
+        "unit": "CPU-second",
+        "freeIncluded": 3600,
         "freePeriod": "month",
-        "freePool": null,
+        "freePool": "compute",
+        "paidIncluded": 0,
+        "paidRateUsd": 0.000033
+      },
+      {
         "meter": "origin_invocations",
         "label": "PHP and Zero invocations",
         "unit": "million",
+        "freeIncluded": 1,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 1,
         "paidRateUsd": 0.25
       },
       {
-        "freeIncluded": 100,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "build_milliseconds",
         "label": "Builds",
         "unit": "minute",
+        "freeIncluded": 100,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 0,
         "paidRateUsd": 0.012
       },
       {
-        "freeIncluded": 1000,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "worker_cpu_microseconds",
         "label": "Workers CPU",
         "unit": "CPU-second",
+        "freeIncluded": 1000,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 0,
         "paidRateUsd": 0.00002
       },
       {
-        "freeIncluded": 0.1,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "worker_requests",
         "label": "Workers requests",
         "unit": "million",
+        "freeIncluded": 0.1,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 0,
         "paidRateUsd": 0.3
       },
       {
-        "freeIncluded": 0.5,
-        "freePeriod": "stored",
-        "freePool": "storage",
         "meter": "live_byte_seconds",
         "label": "Live files and SQL",
         "unit": "GB-month",
+        "freeIncluded": 0.5,
+        "freePeriod": "stored",
+        "freePool": "storage",
         "paidIncluded": 0,
         "paidRateUsd": 0
       },
       {
-        "freeIncluded": 0.5,
-        "freePeriod": "stored",
-        "freePool": "storage",
         "meter": "file_byte_seconds",
         "label": "Files and media",
         "unit": "GB-month",
+        "freeIncluded": 0.5,
+        "freePeriod": "stored",
+        "freePool": "storage",
         "paidIncluded": 0,
         "paidRateUsd": 0.1
       },
       {
-        "freeIncluded": 20,
-        "freePeriod": "day",
-        "freePool": null,
         "meter": "email_recipients",
         "label": "Transactional email",
         "unit": "recipient",
+        "freeIncluded": 20,
+        "freePeriod": "day",
+        "freePool": null,
         "paidIncluded": 0,
         "paidRateUsd": 0.0005
       },
       {
-        "freeIncluded": 1000,
-        "freePeriod": "month",
-        "freePool": null,
         "meter": "spam_checks",
         "label": "Spam checks",
         "unit": "check",
+        "freeIncluded": 1000,
+        "freePeriod": "month",
+        "freePool": null,
         "paidIncluded": 1000,
         "paidRateUsd": 0.001
       }
@@ -259,11 +259,11 @@
     },
     "anonymous": {
       "ttlSeconds": 120000,
-      "resetOn": "publish-with-changed-files",
       "publishAbsoluteCapSeconds": 2592000,
       "claimPageExtensionSeconds": 3600,
       "claimPageTotalExtensionSeconds": 21600,
-      "recoveryWindowSeconds": 604800
+      "recoveryWindowSeconds": 604800,
+      "resetOn": "publish-with-changed-files"
     }
   }
 }

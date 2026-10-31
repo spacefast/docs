@@ -38,8 +38,15 @@
             ]
           },
           "usageCreditUsd": {
-            "type": "number",
-            "minimum": 0
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "selfServe": {
             "type": "boolean"

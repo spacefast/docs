@@ -4,6 +4,7 @@ import { duplicateOperations } from "./api-ownership.mjs";
 
 import { redirects } from "../redirects.ts";
 import { compileRedirectRules, resolveRedirect } from "./redirect-rules.mjs";
+import { docsUrlPattern } from "./docs-urls.mjs";
 
 const dist = path.resolve("dist");
 const origin = "https://spacefast.com";
@@ -40,7 +41,7 @@ const cachedUrl = (value) => {
   if (!urlCache.has(value)) urlCache.set(value, finalUrl(value));
   return urlCache.get(value);
 };
-const rewrite = (text) => text.replace(/(?:https:\/\/spacefast\.com)?\/docs(?:\/[^\s,"'<>`\\)\]}]*)?(?:#[^\s,"'<>`\\)\]}]*)?/gu, cachedUrl);
+const rewrite = (text) => text.replace(docsUrlPattern, cachedUrl);
 const unescape = (text) => text.replace(/<[^>]+>/gu, "").replaceAll("&amp;", "&").replaceAll("&#39;", "'").replaceAll("&quot;", '"').trim();
 const manifest = JSON.parse(await readFile(".blume/blume.manifest.json", "utf8"));
 const api = JSON.parse(await readFile("generated/openapi/api.json", "utf8"));

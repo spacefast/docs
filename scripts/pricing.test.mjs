@@ -11,7 +11,11 @@ test("pricing loads the public envelope and derives prices, pools, seats, and th
   const snippets = pricingSnippets(pricing);
   assert.match(snippets.usage, /shared compute pool/u);
   assert.match(snippets.usage, /shared storage pool/u);
-  assert.match(snippets.limits, /storage Bytes/u);
+  assert.match(snippets.limits, /\| Storage \| 500 MB \| Unlimited \|/u);
+  assert.match(snippets.limits, /\| Audit log retention \| 2 days \| 30 days \|/u);
+  assert.match(snippets.plans, /\| Enterprise \| Custom \| Custom \| Unlimited \|/u);
+  assert.match(snippets.usage, /\| Builds \| 100 minutes per month \| None \|/u);
+  assert.match(snippets.capabilities, /\| Remove Spacefast branding \|/u);
   assert.match(variables["anonymous-ttlSeconds"], /hours and .* minutes/u);
   const changed = structuredClone(pricing);
   changed.plans.find((plan) => plan.code === "plus").monthlyPriceUsd += 2;
