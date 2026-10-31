@@ -61,7 +61,7 @@ const icons = {
 
 export default defineConfig({
   title: "Spacefast Docs",
-  variables: pricingVariables(await loadPricing()),
+  variables: pricingVariables(await loadPricing({ fixture: new URL("./content/_pricing/document.json", import.meta.url) })),
   description: "Publish and host the sites your agents build.",
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
   // The 2026-10 brand: neutral greys, one green, dark first like the Website.

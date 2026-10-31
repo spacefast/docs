@@ -10,7 +10,7 @@ const expand = (value, spec, seen = new Set()) => {
   }
   return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, expand(item, spec, seen)]));
 };
-const operations = (spec) => new Map(Object.entries(spec.paths).flatMap(([path, item]) => Object.entries(item).filter(([, operation]) => operation?.operationId).map(([method, operation]) => [operation.operationId.toLowerCase(), { path, method, operation, parameters: item.parameters, security: operation.security ?? spec.security }])));
+const operations = (spec) => new Map(Object.entries(spec.paths).flatMap(([path, item]) => Object.entries(item).filter(([, operation]) => operation?.operationId).map(([method, operation]) => [operation.operationId.toLowerCase(), { path, method, operation, parameters: item.parameters, security: operation.security ?? spec.security, securitySchemes: spec.components?.securitySchemes, servers: item.servers ?? operation.servers ?? spec.servers }])));
 export function duplicateOperations(api, partner) {
   const primary = operations(api);
   const duplicates = new Set();

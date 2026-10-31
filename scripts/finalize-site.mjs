@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile, mkdir, rm } from "node:fs/promises";
+import { readFile, readdir, writeFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { duplicateOperations } from "./api-ownership.mjs";
 
