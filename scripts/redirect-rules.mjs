@@ -1,3 +1,4 @@
+import { redirects as retiredPageRedirects } from "../redirects.ts";
 import referenceAliases from "./reference-aliases.json" with { type: "json" };
 
 export const deploymentBase = "/docs";
@@ -24,6 +25,24 @@ const authoredRedirectRules = [
     to: `${deploymentBase}/object-storage`,
   },
 ];
+
+// `route` is relative to the deployment base; a `#fragment` has no Markdown form.
+function markdownRoute(route) {
+  const pathname = route.split("#")[0];
+  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.md`;
+}
+
+function unbased(route) {
+  return route.slice(deploymentBase.length) || "/";
+}
+
+// Blume emits HTML meta-refresh stubs for retired Markdown URLs. Agents need
+// an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
+// so both kinds get a 301 to the replacement's Markdown file.
+export const markdownTwinRules = [
+  ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
+  ...retiredPageRedirects,
+].map(({ from, to }) => ({ from: markdownRoute(from), status: 301, to: markdownRoute(to) }));
 
 const aliasFamilies = [
   {
@@ -117,6 +136,7 @@ function applyRule(rule, source) {
 export function buildRoutingRules(redirects) {
   return [
     ...authoredRedirectRules,
+    ...markdownTwinRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,
