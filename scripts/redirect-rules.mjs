@@ -32,6 +32,24 @@ const authoredRedirectRules = [
   },
 ];
 
+// `route` is relative to the deployment base; a `#fragment` has no Markdown form.
+function markdownRoute(route) {
+  const pathname = route.split("#")[0].replace(/(?<=.)\/$/u, "");
+  return `${deploymentBase}${pathname === "/" ? "/index" : pathname}.md`;
+}
+
+function unbased(route) {
+  return route.slice(deploymentBase.length) || "/";
+}
+
+// Blume emits HTML meta-refresh stubs for retired Markdown URLs. Agents need
+// an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
+// so both kinds get a 301 to the replacement's Markdown file.
+export const markdownTwinRules = [
+  ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
+  ...retiredRoutes,
+].map(({ from, to }) => ({ from: markdownRoute(from), status: 301, to: markdownRoute(to) }));
+
 const aliasFamilies = [
   {
     sourcePrefix: "/api/operations/",
@@ -55,6 +73,9 @@ const aliasFamilies = [
   },
 ];
 
+// The platform counts splats and named segments alike as dynamic rules.
+const isDynamic = ({ from }) => from.includes("*") || /\/:[a-z]/iu.test(from);
+
 function redirectKey(redirect) {
   return `${redirect.from}\0${redirect.to}\0${redirect.status}`;
 }
@@ -62,10 +83,10 @@ function redirectKey(redirect) {
 // Legacy operation namespaces contain no content pages. Compress only a prefix
 // whose complete published mapping preserves the suffix and destination.
 function compressOperationAliases(rules) {
-  let statics = rules.filter(({ from }) => !from.includes("*"));
-  const dynamic = rules.filter(({ from }) => from.includes("*"));
+  let statics = rules.filter((rule) => !isDynamic(rule));
+  const dynamic = rules.filter(isDynamic);
   const aliasDynamicRuleLimit = Math.min(docsDynamicRuleLimit, platformDynamicRuleLimit - websiteDynamicRuleReserve)
-    - mountRewriteRules.filter(({ from }) => from.includes("*")).length;
+    - mountRewriteRules.filter(isDynamic).length;
   const candidates = new Map();
   for (const rule of statics) {
     if (!rule.from.includes("/operations/")) continue;
@@ -128,6 +149,26 @@ export function compileRedirectRules(redirects) {
     }
   }
 
+  for (const root of ["/api/reference", "/platforms/api/reference"]) {
+    for (const section of ["resources", "operations/tags"]) {
+      const prefix = `${root}/${section}/`;
+      let covered = 0;
+      for (const redirect of redirects) {
+        if (!redirect.from.startsWith(prefix)) continue;
+        const tag = redirect.from.slice(prefix.length);
+        if (!tag || tag.includes("/")) continue;
+        if (redirect.to !== `${root}#${tag}` || redirect.status !== 301) {
+          throw new Error(`Cannot collapse section redirect: ${redirect.from}`);
+        }
+        omitted.add(redirectKey(redirect));
+        covered += 1;
+      }
+      if (covered > 0) {
+        dynamic.push({ from: `${prefix}:tag`, status: 301, to: `${root}#:tag` });
+      }
+    }
+  }
+
   return compressOperationAliases([
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
@@ -136,15 +177,6 @@ export function compileRedirectRules(redirects) {
     { from: "/platform-api", status: 301, to: "/platforms/api/reference" },
     { from: "/platform-api/*", status: 301, to: "/platforms/api/reference/:splat" },
   ].toSorted((left, right) => left.from.localeCompare(right.from)));
-}
-
-function applyRule(rule, source) {
-  if (!rule.from.endsWith("*")) {
-    return rule.from === source ? rule.to : null;
-  }
-  const prefix = rule.from.slice(0, -1);
-  if (!source.startsWith(prefix)) return null;
-  return rule.to.replace(":splat", source.slice(prefix.length));
 }
 
 // The published tree is flat (Astro emits pages at the dist root), but every
@@ -158,6 +190,7 @@ export function buildRoutingRules(redirects) {
       return { from: `${deploymentBase}${from}`, status, to: `${deploymentBase}${pathname === "/" ? "/" : `${pathname}/`}${fragment ? `#${fragment}` : ""}` };
     }),
     ...authoredRedirectRules,
+    ...markdownTwinRules,
     ...compileRedirectRules(redirects).map(({ from, status, to }) => ({
       from: `${deploymentBase}${from}`,
       status,
@@ -168,13 +201,22 @@ export function buildRoutingRules(redirects) {
 }
 
 export function verifyRoutingBudget(rules) {
-  const dynamicRules = rules.filter(({ from }) => from.includes("*")).length;
+  const dynamicRules = rules.filter(isDynamic).length;
   const staticRules = rules.length - dynamicRules;
   if (dynamicRules > docsDynamicRuleLimit || staticRules > 2_000 || rules.length > 2_100) {
     throw new Error(
       `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/2000 static, ${rules.length}/2100 total`,
     );
   }
+}
+
+function applyRule(rule, source) {
+  if (!rule.from.endsWith("*")) {
+    return rule.from === source ? rule.to : null;
+  }
+  const prefix = rule.from.slice(0, -1);
+  if (!source.startsWith(prefix)) return null;
+  return rule.to.replace(":splat", source.slice(prefix.length));
 }
 
 export function resolveRedirect(source, rules, maximumHops = 5) {

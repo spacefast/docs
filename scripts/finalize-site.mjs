@@ -22,6 +22,9 @@ const catalogs = new Map([
 ]);
 for (const [from, to] of catalogs) await writeFile(path.join(dist, to.slice(base.length)), await readFile(path.join(dist, from.slice(base.length))).catch(() => readFile(path.join(dist, to.slice(base.length)))));
 await rm(path.join(dist, ".well-known"), { recursive: true, force: true });
+// The platform reads _redirects. Blume's manifests for other hosts would only
+// be rewritten into stale, self-referencing entries here.
+for (const file of ["blume-redirects.json", "vercel.json"]) await rm(path.join(dist, file), { force: true });
 // Include the catalogs just moved out of .well-known in URL normalization.
 files = await listFiles();
 const finalUrl = (value) => {

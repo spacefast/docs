@@ -32,8 +32,8 @@ Pass the value as an argument or read it from stdin, never both and never neithe
 
 Passing a secret on the command line prints a warning naming the variable, because it lands in your shell history. Prefer `--value-from-stdin`.
 
-:::warning[A write applies at the next finalize]
-Setting or deleting a variable does not touch the running site. The live version keeps the values it was sealed with. The change reaches visitors when a version next finalizes, which the write itself queues.
+:::note[No republish needed for a Space variable]
+A version keeps the values it was sealed with, so a write never edits the running version. Setting or deleting a Space variable queues a new version with the new values, and that version replaces the live one when it is ready. A team variable change does not queue one. It reaches each Space at that Space's next publish.
 :::
 
 ## Secret or plain
@@ -58,6 +58,8 @@ So a brand new variable with no flag is write-only. Pass `--no-secret` when you 
 | Empty values | Refused. A variable always has a value |
 
 ## Build time and runtime are different lanes
+
+A plain variable reaches both lanes. It is filled into template files when a version finalizes, and server code reads it at runtime. A secret reaches server code only. A template that references one is blocked with `secret_variable_in_template`.
 
 ### Build time, `{{ vars.NAME }}`
 

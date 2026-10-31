@@ -11,9 +11,8 @@ import { matchRedirect } from "@spacefast/routing/match";
 
 import {
   buildRoutingRules,
-  compileRedirectRules,
   deploymentBase,
-  resolveRedirect,
+  markdownTwinRules,
 } from "./redirect-rules.mjs";
 import { discoveryFileForUrl } from "./build-llms-index.mjs";
 import { readSidebarRoutes } from "./sidebar-routes.mjs";
@@ -457,7 +456,6 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
   readFile(path.join(root, "generated/redirects.json"), "utf8").then(JSON.parse),
   readBuilt("_redirects"),
 ]);
-const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
 const compilation = compileRoutingFilesWasm({
   redirects: builtRedirects,
@@ -483,6 +481,23 @@ for (const { from, to } of authoredRedirects) {
     if (second?.action !== "rewrite") throw new Error(`Redirect chain: ${source} -> ${target}`);
     await requireFile(localTargetFor(target.pathname.slice(deploymentBase.length)));
   }
+}
+for (const { from, to } of markdownTwinRules) {
+  const matched = matchRedirect({
+    compilation,
+    request: {
+      url: new URL(`${docsRoot}${from.slice(deploymentBase.length)}?source=markdown&value=a%2Fb`),
+      headers: new Headers(),
+    },
+  });
+  const destination = matched?.action === "redirect" ? new URL(matched.target, docsRoot) : null;
+  if (
+    matched?.action !== "redirect" || matched.status !== 301 ||
+    destination?.pathname !== to || destination.search !== "?source=markdown&value=a%2Fb"
+  ) {
+    throw new Error(`A retired page's Markdown URL must 301 to its replacement: ${from} -> ${to}`);
+  }
+  await requireFile(localTargetFor(to.slice(deploymentBase.length)));
 }
 const expectedRedirects = `${routingRules
   .map(({ from, status, to }) => `${from} ${to} ${status}`)
@@ -515,11 +530,21 @@ for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
   }
-  const resolved = resolveRedirect(example.source, compatibilityRules);
+  let url = new URL(`${docsRoot}${example.source}?source=compatibility&value=a%2Fb`);
+  const hops = [];
+  for (let hop = 0; hop < 5; hop += 1) {
+    const matched = matchRedirect({ compilation, request: { url, headers: new Headers() } });
+    if (!matched || matched.action === "rewrite") break;
+    hops.push(matched);
+    if (matched.action !== "redirect") break;
+    url = new URL(matched.target, url);
+  }
   if (
-    resolved.destination !== canonicalDestination ||
-    resolved.hops.length < 1 ||
-    resolved.hops.some(({ status }) => status !== redirect.status)
+    // Served pages carry a trailing slash; the compatibility map is slashless.
+    `${url.pathname.replace(/(?<=.)\/$/u, "")}${url.hash}` !== `${deploymentBase}${canonicalDestination}`.replace(/(?<=.)\/(?=#|$)/u, "") ||
+    url.search !== "?source=compatibility&value=a%2Fb" ||
+    hops.length < 1 ||
+    hops.some(({ action, status }) => action !== "redirect" || status !== redirect.status)
   ) {
     throw new Error(
       `Built routing rules do not preserve compatibility: ${example.source} -> ${example.destination}`,
