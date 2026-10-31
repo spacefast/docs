@@ -283,7 +283,8 @@ for (const [file, present, absent] of sidebarExpectations) {
 }
 // Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
 for (const [file, prev, next] of [
-  ["troubleshooting/index.html", "/quickstart", "/spaces"],
+  ["workshop-start/index.html", "/quickstart", "/troubleshooting"],
+  ["troubleshooting/index.html", "/workshop-start", "/spaces"],
   ["spaces/index.html", "/troubleshooting", "/versions"],
   ["setup/vscode/index.html", "/setup/cursor", "/setup/github-copilot"],
 ]) {
