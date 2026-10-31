@@ -109,54 +109,9 @@ A visitor who cannot open a page sees the Space's access page. It shows **Contin
 
 ## Build a signer
 
-A `signer` connection sends visitors to your portal, and your portal vouches for them. The round trip has four steps:
+A signer connection lets your portal prove a visitor's identity with an Ed25519 key registered on the connection. The proof's subject must match the subject on a Space grant. Signer proofs live at most 30 minutes; the OIDC session lifetime has a separate limit.
 
-1. The visitor presses **Continue with** on the access page. Spacefast redirects the browser to your `authorizeUrl` with the query parameters below.
-2. Your portal signs the visitor in and signs a proof token.
-3. Your server sends the proof to Spacefast and receives a short-lived token.
-4. Your portal sends the browser to `/__sf/redeem` on `host`, with the `sf_token` and `return` query parameters. The Space sets a session cookie and opens the page.
-
-| Query parameter | What it holds |
-| --- | --- |
-| `spaceId` | The Space the visitor is opening |
-| `host` | The hostname the visitor is on. The proof's `aud` must equal it |
-| `return` | The path to open after sign-in |
-| `browserState` | A 64-character hex value that binds the sign-in to this browser. Send it back unchanged |
-
-### The proof token
-
-The proof is a JWT signed with one of the Ed25519 keys on the connection.
-
-| Part | Requirement |
-| --- | --- |
-| `alg` header | `EdDSA` or `Ed25519` |
-| `kid` header | The `kid` of a key on the connection |
-| `iss` | The connection's issuer. A trailing slash is allowed |
-| `sub` | The visitor's subject. Grants match this value |
-| `aud` | The `host` query parameter |
-| `iat` | Issue time in seconds. At most 300 seconds in the future |
-| `exp` | Expiry in seconds. Later than `iat`. `exp` minus `iat` must not exceed the connection's `sessionTtlSeconds` or 1,800 |
-
-### Exchange the proof
-
-Send the proof from your server, not from the browser:
-
-```bash
-curl https://api.spacefast.com/identity/acn_xxxxxxxx/exchange \
-  -H "Authorization: Bearer $PROOF_JWT" \
-  -H "Content-Type: application/json" \
-  -d '{"spaceId":"<spaceId>","host":"<host>","resource":"<return>","browserState":"<browserState>"}'
-```
-
-A `200` answers with `token` and `expiresAt`. A `403` means the proof failed or no grant admits that subject to `resource`.
-
-Redirect the browser to `/__sf/redeem` on the same `host` within 60 seconds. The token works once, and only in the browser that started the sign-in. Encode each value as one query parameter. A `return` such as `/docs?tab=a&sort=b` holds `&` and `=`, so do not join the strings by hand:
-
-```js
-const redeem = new URL(`https://${host}/__sf/redeem`);
-redeem.searchParams.set("sf_token", token);
-redeem.searchParams.set("return", returnPath);
-```
+The proof-exchange protocol is not part of the public API reference. Contact [support@spacefast.com](mailto:support@spacefast.com) for the current integration steps.
 
 ## Update a connection
 
@@ -171,9 +126,9 @@ Leave **Replacement client secret** blank to keep the current secret. To rename 
 
 [`updateTeamIdentityConnection`](/api/reference/teams/updateteamidentityconnection) accepts `name`, `clientId`, `clientSecret`, `authorizeUrl`, `publicKeys`, and `sessionTtlSeconds`. It accepts `sessionTtlSeconds` from 60 to 86,400. For a signer, Spacefast lowers any value above 1,800 to 1,800. `publicKeys` replaces the whole key set. The `type` and `issuer` cannot change.
 
-Grants that use the connection keep working. A change to the client ID, client secret, keys, or session lifetime sets `rotatedAt`.
+Grants that use the connection survive rotation. Changing the client ID, client secret, key set, or session lifetime ends sessions admitted through the connection, so those visitors sign in again. Renaming a connection does not end sessions.
 
-To rotate a signer key without a sign-in gap:
+To keep both signing keys valid during a transition:
 
 1. Send a key set that holds the old key and the new key.
 2. Sign new proofs with the new key.

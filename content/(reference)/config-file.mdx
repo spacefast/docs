@@ -167,7 +167,7 @@ export default defineConfig(async () => ({
 
 The CLI bundles the file and its relative imports, then runs the bundle in its own process. Package imports and Node.js built-ins are not bundled. They resolve from the project directory when the config loads.
 
-`sf build`, `sf publish`, and hosted Git builds load the config before they run the install command. A package import therefore fails on a fresh checkout. Import only relative files and Node.js built-ins.
+`sf build`, `sf publish`, and hosted Git builds load the config before they run the install command. Package imports other than `spacefast/config` must already be installed when the config loads. For a fresh checkout, use relative files, Node.js built-ins, and `spacefast/config` so the config does not depend on that install step.
 
 The resolved value must be a JSON object. Strings, numbers, booleans, `null`, arrays, and plain objects are allowed. A key set to `undefined` is dropped. Any other value, for example a `Date`, fails the load.
 
@@ -186,7 +186,7 @@ The CLI provides the `spacefast/config` module.
 The CLI supplies the module when it loads the file, so the project needs no dependency for it.
 
 :::note[Editor types]
-The `spacefast` package on npm does not include `spacefast/config` yet. TypeScript in your editor cannot resolve the import, but the CLI still loads the file.
+The published `spacefast` package includes `spacefast/config` and its types. For editor type checking, add it as a development dependency with `npm install --save-dev spacefast`. The CLI supplies the helper when loading the config even without that project dependency.
 :::
 
 `defineConfig` is optional. A plain default export works the same way.
@@ -226,7 +226,7 @@ Files that the config imports are ordinary files. If they are in the published d
 
 Hosted Git builds run the same CLI build, so they evaluate a committed `spacefast.config.ts` too.
 
-A publish that sends individual files through the API or MCP cannot evaluate the file. If those files include `spacefast.config.ts`, the publish fails. To publish a project with a TypeScript config, run `sf publish` from the project directory.
+Loose-file publishing through the API or MCP does not evaluate TypeScript config. This includes local MCP publishing when a local directory becomes a file upload. If the upload includes `spacefast.config.ts`, it fails. Run `sf publish` from the project directory to evaluate the config, or run `sf build` and publish its `.spacefast/build-output.tgz` archive with `--prebuilt`. Sending the framework output directory alone does not carry the resolved project config.
 
 ## Migrate from sf.jsonc
 

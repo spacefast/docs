@@ -22,7 +22,7 @@ They merge into one list in that order: `_redirects` rules first, then `redirect
 
 A config rule whose source is already claimed by an unconditional file rule never runs, and publish reports `redirect_shadowed_by_file`: `_redirects already routes "{source}", so this rule never runs.`
 
-The config file is `sf.jsonc`. These names also work, in this precedence order: `spacefast.jsonc`, `spacefast.json`, `sf.json`, `.sf/sf.json`, `.sf/config.jsonc`, `.sf/config.json`.
+The project config can be `spacefast.config.ts` or `sf.jsonc`. Edit the selected file; TypeScript takes precedence over JSON config. See [Project config reference](/config-file) for discovery order.
 
 `_redirects` and `_headers` are published but never served as content. Requesting one returns 404.
 
