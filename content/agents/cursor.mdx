@@ -3,7 +3,7 @@ title: Cursor
 description: Install the Spacefast plugin in Cursor, or add the MCP server to mcp.json by hand
 ---
 
-The Spacefast plugin lets Cursor publish your project and call API operations through `execute`, within the permissions you approved. Some actions remain reserved for a signed-in person.
+The Spacefast plugin lets Cursor publish your project and call every API operation as its own tool, within the permissions you approved. Some actions remain reserved for a signed-in person.
 
 ## Install
 
@@ -74,7 +74,7 @@ Writing this file by hand or through the CLI keeps every other top-level key int
 Use the Spacefast MCP server to search the docs for version rollback.
 </Prompt>
 
-Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+Ask the agent to search the docs. It should call the `searchDocs` tool directly, which proves the operation tools are wired up before you publish.
 
 <Prompt description="Publish this project to Spacefast and give me the live URL." actions={["copy"]}>
 Publish this project to Spacefast and give me the live URL.

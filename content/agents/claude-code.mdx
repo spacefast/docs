@@ -76,7 +76,7 @@ The live URL is appended only when it starts with `https://`. If the file is mis
 
 ## Verify it works
 
-Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+Ask the agent to search the docs. It should call the `searchDocs` tool directly, which proves the operation tools are wired up before you publish.
 
 <Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
 Use the Spacefast MCP server to search the docs for custom domains.
@@ -116,4 +116,4 @@ How much traffic did this Space get in the last 30 days?
 Roll this Space back to the previous version.
 </Prompt>
 
-The first five map to typed tools. The rollback goes through `execute`, which may pause and ask you to approve the write in the browser before it runs. See [approvals](/agents/mcp-server).
+Each one maps to a tool. The rollback calls the `promoteSpaceVersion` operation, which may pause and ask you to approve the write before it runs. See [approvals](/agents/mcp-server#approvals).
