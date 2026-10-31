@@ -221,7 +221,7 @@ sf crons ls --space docs
 
 ### Output
 
-One row per job with its key, path, schedule, and recent failures. A Space with none prints "No scheduled jobs declared. Add a `crons` block to sf.jsonc."
+One row per job with its key, path, schedule, and recent failures. A Space with none prints "No scheduled jobs declared. Add a `crons` block to sf.jsonc." Add that block to the project's existing configuration, whether it uses `spacefast.config.ts` or `sf.jsonc`; do not create a second file.
 
 With `--json`, `data` is `{ versionId, crons }`, where each cron carries `key`, `path`, `schedule`, `recentFailures[]`, and `unattributedFailures[]`. Run output is never echoed, because it can contain response bodies and secrets.
 

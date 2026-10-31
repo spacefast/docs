@@ -5,7 +5,7 @@ sidebar:
   order: 0
 ---
 
-Zero is available on every account, with [usage allowances and metered rates](/usage). To use it, declare the full [runtime block](#declare-it) in `sf.jsonc` and provide the server entry.
+Zero is available on every account, with [usage allowances and metered rates](/usage). To use it, declare the full [runtime block](#declare-it) in your existing project configuration (`spacefast.config.ts` or `sf.jsonc`) and provide the server entry.
 
 ## What Zero is
 
@@ -50,7 +50,7 @@ sf publish
 | Endpoints | Plain HTTP routes in your capsule, for webhooks and callers outside the app. | This page |
 | Queries, mutations, and actions | The read, transactional write, and outbound-work paths your client calls. Queries are live. | This page |
 | Environment variables | `ctx.env`, from `.env.server` or `sf env`. | [Environment variables](/environment-variables) |
-| Crons | Scheduled `GET` requests to your own paths, declared in `sf.jsonc`. | [Crons](/crons) |
+| Crons | Scheduled `GET` requests to your own paths, declared in project configuration. | [Crons](/crons) |
 | Storage | Runtime object storage for visitor uploads. | [Storage](/object-storage) |
 | Logs | What your handlers wrote, plus every request the edge served. | [Logs](/logs) |
 
@@ -278,7 +278,7 @@ sf dev
   <Card title="Functions" href="/functions" icon="zap">
     Workers, the `functions/` file router, and OpenNext.
   </Card>
-  <Card title="sf.jsonc reference" href="/config-file" icon="file-json">
+  <Card title="Project configuration" href="/config-file" icon="file-json">
     Every key the config schema accepts.
   </Card>
   <Card title="Logs" href="/logs" icon="scroll-text">

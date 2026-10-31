@@ -108,10 +108,12 @@ The platform builds your repository and publishes the output. It detects the fra
 
 Detected presets include Astro, Next, Nuxt, SvelteKit, Remix, TanStack Start, Vite, Solid Start, Qwik, Angular, Ember, Gatsby, Docusaurus, Eleventy, VitePress, Nextra, Hugo, Jekyll, Zola, MkDocs, and Sphinx. See [Frameworks](/frameworks).
 
-Override any of it in `sf.jsonc` or on the connection.
+Repository builds read `spacefast.config.ts` in the isolated build environment. Override build settings there or on the connection. `sf.jsonc` remains supported; TypeScript takes precedence when both files exist. See [Project configuration](/config-file) for imports, migration, and file precedence.
 
-```jsonc sf.jsonc
-{
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
   "build": {
     "rootDirectory": "apps/web",
     "installCommand": "pnpm install",
@@ -119,7 +121,7 @@ Override any of it in `sf.jsonc` or on the connection.
     "outputDirectory": "dist",
     "timeoutSeconds": 900
   }
-}
+});
 ```
 
 The dashboard's **Build settings** section holds the same four fields as **Root directory**, **Install command**, **Build command**, and **Output directory**, each with an **Auto** placeholder. Leave a field empty and the builder decides from the detected framework. **Detect build settings** re-runs detection and shows candidates with a confidence, which you can **Apply**.
