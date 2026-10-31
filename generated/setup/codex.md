@@ -2,7 +2,7 @@
 title: "Connect Codex to Spacefast"
 description: "Add Spacefast to Codex so it can publish what you build, on your computer or in the cloud."
 seo:
-  canonical: "https://spacefast.com/setup/codex/"
+  canonical: "https://spacefast.com/docs/setup/codex/"
 ---
 
 Add Spacefast to Codex so it can publish what you build, on your computer or in the cloud.
@@ -49,6 +49,15 @@ npx -y spacefast setup agent --agent codex -y
 npx -y plugins add spacefast/plugins -t codex -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+codex mcp add spacefast --url 'https://mcp.spacefast.com'
+```
+
+1. Sign in to Spacefast and approve access. If sign-in did not start, run `codex mcp login spacefast`.
+2. Restart Codex, or start a new CLI session. Use `/mcp` to check the connection.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
@@ -69,4 +78,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Codex documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+[Agent documentation](/agents/) · [Codex documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)

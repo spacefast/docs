@@ -5,7 +5,7 @@ description: "This action destroys live content or spends money, so a person mus
 
 This action destroys live content or spends money, so a person must approve this exact action before it runs.
 
-**How to resolve:** Send the person to the `url` in the error details, then poll `pollUrl` with the `continuationToken` every 5 seconds. Give up after 10 minutes and report back. No flag or environment variable can clear this.
+**How to resolve:** Send the person to the `url` in the error details, then poll `pollUrl` with the `continuationToken` every 5 seconds. Once it reports completed, send the original request again with the token in the `X-Spacefast-Continuation-Token` header (`--continuation-token` on `sf rollback` and `sf promote`); approval alone does not run the action. Give up after 10 minutes and report back. No flag or environment variable can clear this.
 
 <div data-pagefind-ignore>
 

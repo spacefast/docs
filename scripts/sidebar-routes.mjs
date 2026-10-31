@@ -36,6 +36,7 @@ async function authoredFiles(root, relative = "") {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(
     entries.map((entry) => {
+      if (/^[_.]/u.test(entry.name)) return [];
       const child = path.join(relative, entry.name);
       if (entry.isDirectory()) return authoredFiles(root, child);
       if (entry.isFile()) return [child];

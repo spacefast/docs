@@ -5,7 +5,7 @@ description: "Two different artifacts would serve the same URL after directory-i
 
 Two different artifacts would serve the same URL after directory-index or clean-URL resolution.
 
-**How to resolve:** Rename or remove one artifact so that every request route has one owner.
+**How to resolve:** Check the diagnostic paths for directory-index and clean-URL overlap, such as an HTML file and another artifact owning the same route. Rename or remove one owner, rebuild, and publish again. See [Routing](/docs/routing/).
 
 <div data-pagefind-ignore>
 

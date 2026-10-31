@@ -1,11 +1,11 @@
 ---
 title: "zero_js_execution_timeout"
-description: "The Zero endpoint exceeded its JavaScript execution budget."
+description: "A Zero query, mutation, or endpoint used more than 500 ms of CPU time on one request."
 ---
 
-The Zero endpoint exceeded its JavaScript execution budget.
+A Zero query, mutation, or endpoint used more than 500 ms of CPU time on one request.
 
-**How to resolve:** Reduce synchronous work or database round trips in the handler.
+**How to resolve:** Do less work per request: write fewer rows, page through large reads, or split the work across requests. Time spent waiting on the database or `fetch()` does not count toward the 500 ms. Actions have a separate 5-second limit.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/zero_js_execution_timeout",
   "title": "Zero js execution timeout",
   "status": 400,
-  "detail": "The Zero endpoint exceeded its JavaScript execution budget.",
+  "detail": "A Zero query, mutation, or endpoint used more than 500 ms of CPU time on one request.",
   "code": "zero_js_execution_timeout",
   "requestId": "req_4mz0v8qk"
 }

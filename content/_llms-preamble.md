@@ -4,7 +4,7 @@ description: Agent guidance that Blume places at the top of dist/llms.txt throug
 ---
 
 Spacefast publishes static sites and runs apps. You can drive all of it from the
-CLI, the REST API, the SDK, or MCP, with no dashboard visit required.
+CLI, the REST API, the SDK, or MCP. Team membership and billing changes need a person in the dashboard.
 
 The sections below index every authored page. Read this header first: it covers
 the things an agent needs that a link list cannot express.
@@ -14,7 +14,7 @@ the things an agent needs that a link list cannot express.
 Add `.md` to any docs URL to get the raw Markdown instead of rendered HTML:
 
 ```
-https://spacefast.com/docs/publish      ->  https://spacefast.com/docs/publish.md
+https://spacefast.com/docs/publish/     ->  https://spacefast.com/docs/publish.md
 ```
 
 Every authored page below works both ways. The API reference is the exception:
@@ -48,7 +48,7 @@ npx -y skills add spacefast/plugins --skill spacefast -g -y
 The raw skill Markdown is at `https://api.spacefast.com/skill` for agents that
 can only fetch and import. Hosted MCP runs at `https://mcp.spacefast.com` and
 signs in through browser OAuth. Per-agent instructions live at
-[spacefast.com/setup](https://spacefast.com/setup).
+[agent setup](https://my.spacefast.com/setup/).
 
 ## Search the docs
 
@@ -57,6 +57,8 @@ Search returns matching pages without crawling this file:
 ```bash
 curl "https://api.spacefast.com/v1/docs/search?q=rollback"
 ```
+
+Read one page with `GET https://api.spacefast.com/v1/docs/pages/{slug}`.
 
 Each result carries the page path, its full URL, and a summary, so you can go
 straight to the Markdown.
