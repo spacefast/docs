@@ -136,6 +136,7 @@ GLOBAL FLAGS
 - [`sf domains contacts`](#sf-domains-contacts)
 - [`sf domains contacts add`](#sf-domains-contacts-add)
 - [`sf domains contacts ls`](#sf-domains-contacts-ls)
+- [`sf domains delete DOMAIN`](#sf-domains-delete-domain)
 - [`sf domains diagnostics DOMAIN`](#sf-domains-diagnostics-domain)
 - [`sf domains dns`](#sf-domains-dns)
 - [`sf domains dns add DOMAIN`](#sf-domains-dns-add-domain)
@@ -3385,6 +3386,36 @@ EXAMPLES
   $ sf domains contacts ls
 ```
 
+## `sf domains delete DOMAIN`
+
+Delete a team domain.
+
+```text
+USAGE
+  $ sf domains delete DOMAIN [--profile <value>] [-y] [-o <value>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --json             Format output as json.
+      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a team domain.
+
+  Delete a domain from the team's domains, along with any DNS zone Spacefast hosts for it. Refused while it is still in
+  use: attached to a Space, registered or being transferred through Spacefast, or served by a connected DNS provider. To
+  take a domain off a Space, use `sf domains rm`.
+
+EXAMPLES
+  Delete a domain the team no longer uses, after confirmation.
+
+    $ sf domains delete example.com
+```
+
 ## `sf domains diagnostics DOMAIN`
 
 Inspect domain diagnostics.
@@ -3947,7 +3978,6 @@ DESCRIPTION
 
 ALIASES
   $ sf domains remove
-  $ sf domains delete
 
 EXAMPLES
   Remove a domain from a space after confirmation.
