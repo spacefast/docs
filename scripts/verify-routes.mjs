@@ -7,10 +7,8 @@ import { matchRedirect } from "@spacefast/routing/match";
 
 import {
   buildRoutingRules,
-  compileRedirectRules,
   deploymentBase,
   markdownTwinRules,
-  resolveRedirect,
 } from "./redirect-rules.mjs";
 import { discoveryFileForUrl } from "./build-llms-index.mjs";
 import { readSidebarRoutes } from "./sidebar-routes.mjs";
@@ -459,7 +457,6 @@ const [generatedRedirects, builtRedirects] = await Promise.all([
   readFile(path.join(root, "generated/redirects.json"), "utf8").then(JSON.parse),
   readBuilt("_redirects"),
 ]);
-const compatibilityRules = compileRedirectRules(generatedRedirects);
 const routingRules = buildRoutingRules(generatedRedirects);
 const compilation = compileRoutingFilesWasm({
   redirects: builtRedirects,
@@ -557,11 +554,20 @@ for (const redirect of [...generatedRedirects, ...referenceAliases]) {
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
   }
-  const resolved = resolveRedirect(example.source, compatibilityRules);
+  let url = new URL(`${docsRoot}${example.source}?source=compatibility&value=a%2Fb`);
+  const hops = [];
+  for (let hop = 0; hop < 5; hop += 1) {
+    const matched = matchRedirect({ compilation, request: { url, headers: new Headers() } });
+    if (!matched || matched.action === "rewrite") break;
+    hops.push(matched);
+    if (matched.action !== "redirect") break;
+    url = new URL(matched.target, url);
+  }
   if (
-    resolved.destination !== canonicalDestination ||
-    resolved.hops.length < 1 ||
-    resolved.hops.some(({ status }) => status !== redirect.status)
+    `${url.pathname}${url.hash}` !== `${deploymentBase}${canonicalDestination}` ||
+    url.search !== "?source=compatibility&value=a%2Fb" ||
+    hops.length < 1 ||
+    hops.some(({ action, status }) => action !== "redirect" || status !== redirect.status)
   ) {
     throw new Error(
       `Built routing rules do not preserve compatibility: ${example.source} -> ${example.destination}`,
