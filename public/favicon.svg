@@ -1,16 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Spacefast">
-  <style>
-    .sf-favicon-primary { fill: #141419; }
-    @media (prefers-color-scheme: dark) { .sf-favicon-primary { fill: #fbf8f1; } }
-  </style>
-  <g transform="rotate(-1 80 80)">
-    <g transform="translate(22.5 48) scale(2.15)" fill="#ff4217">
-      <path d="M0 0h24v7H7v7h17v20H0v-7h17v-7H0V0Z"/>
-      <path d="M0 0h25v7H7v6h15v7H7v14H0V0Z" transform="translate(31 0)"/>
-    </g>
-    <g class="sf-favicon-primary" transform="translate(17.5 43) scale(2.15)" fill="#141419">
-      <path d="M0 0h24v7H7v7h17v20H0v-7h17v-7H0V0Z"/>
-      <path d="M0 0h25v7H7v6h15v7H7v14H0V0Z" transform="translate(31 0)"/>
-    </g>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32.3902 32.3902" role="img" aria-label="Spacefast">
+  <rect width="32.3902" height="32.3902" rx="4.04878" fill="#1efe57"/>
+  <path fill="#000000" d="M 18.1737 4.6582 L 17.8225 6.76506 C 17.2607 10.1126 17.5416 12.2663 18.876 13.6006 C 20.2805 15.0286 22.9024 15.4968 27.0225 15.5202 H 27.5609 V 16.6439 H 27.0225 C 22.5044 16.6205 19.6719 17.0418 17.7757 18.7273 C 16.1839 20.1319 15.2709 22.4728 14.6154 26.1949 L 14.2877 28.0443 H 12.93 L 13.2811 26.0545 C 13.8897 22.7069 13.8429 20.2255 12.2979 18.6571 C 10.987 17.3227 8.62261 16.6439 4.64299 16.6439 H 4.1748 V 15.5202 H 4.64299 C 8.80988 15.4734 11.4552 15.1222 13.2343 13.8581 C 14.9666 12.594 15.8561 10.4169 16.4648 6.74165 L 16.8159 4.6582 H 18.1737 Z"/>
 </svg>

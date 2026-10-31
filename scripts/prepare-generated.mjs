@@ -1,4 +1,4 @@
-import { copyFile, cp, lstat, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, lstat, mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { buildRoutingRules } from "./redirect-rules.mjs";
@@ -45,6 +45,40 @@ const setupSections = [
     pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
   },
 ];
+
+// Provider pages the generated snapshot links to that have since moved. The
+// snapshot is digest-guarded, so its overlay copy carries the current address
+// until the next snapshot does. An entry no generated page uses fails the
+// build, so the list empties as snapshots catch up.
+const movedProviderUrls = new Map([
+  [
+    "https://developers.openai.com/api/docs/guides/developer-mode",
+    "https://developers.openai.com/plugins/deploy/connect-chatgpt",
+  ],
+  [
+    "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md#skills",
+    "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/skills.md",
+  ],
+]);
+const usedProviderUrls = new Set();
+
+async function updateMovedUrls(file) {
+  const markdown = await readFile(file, "utf8");
+  let updated = markdown;
+  for (const [from, to] of movedProviderUrls) {
+    if (!updated.includes(from)) continue;
+    updated = updated.replaceAll(from, to);
+    usedProviderUrls.add(from);
+  }
+  if (updated !== markdown) await writeFile(file, updated);
+}
+
+async function markdownFiles(directory) {
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .map((entry) => path.join(entry.parentPath, entry.name));
+}
 
 async function exists(value) {
   try {
@@ -99,6 +133,7 @@ for (const tree of trees) {
     await rm(target, { recursive: true });
   }
   await cp(source, target, { recursive: true });
+  for (const file of await markdownFiles(target)) await updateMovedUrls(file);
   if (tree.source === "generated/errors") {
     for (const { from } of authoredRedirects) {
       const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
@@ -130,6 +165,11 @@ await copyFile(
   path.join(root, "generated/cli/index.md"),
   path.join(root, "content/cli/reference.md"),
 );
+await updateMovedUrls(path.join(root, "content/cli/reference.md"));
+const unusedProviderUrls = [...movedProviderUrls.keys()].filter((url) => !usedProviderUrls.has(url));
+if (unusedProviderUrls.length > 0) {
+  throw new Error(`No generated page links to these moved URLs anymore; remove them: ${unusedProviderUrls.join(", ")}`);
+}
 
 const redirectsTarget = path.join(root, "public/_redirects");
 if (await exists(redirectsTarget)) {
