@@ -110,6 +110,26 @@ export function compileRedirectRules(redirects) {
     }
   }
 
+  for (const root of ["/api/reference", "/platforms/api/reference"]) {
+    for (const section of ["resources", "operations/tags"]) {
+      const prefix = `${root}/${section}/`;
+      let covered = 0;
+      for (const redirect of redirects) {
+        if (!redirect.from.startsWith(prefix)) continue;
+        const tag = redirect.from.slice(prefix.length);
+        if (!tag || tag.includes("/")) continue;
+        if (redirect.to !== `${root}#${tag}` || redirect.status !== 301) {
+          throw new Error(`Cannot collapse section redirect: ${redirect.from}`);
+        }
+        omitted.add(redirectKey(redirect));
+        covered += 1;
+      }
+      if (covered > 0) {
+        dynamic.push({ from: `${prefix}:tag`, status: 301, to: `${root}#:tag` });
+      }
+    }
+  }
+
   return [
     ...redirects.filter((redirect) => !omitted.has(redirectKey(redirect))),
     ...dynamic,
@@ -118,15 +138,6 @@ export function compileRedirectRules(redirects) {
     { from: "/platform-api", status: 301, to: "/partner-api" },
     { from: "/platform-api/*", status: 301, to: "/partner-api/:splat" },
   ].toSorted((left, right) => left.from.localeCompare(right.from));
-}
-
-function applyRule(rule, source) {
-  if (!rule.from.endsWith("*")) {
-    return rule.from === source ? rule.to : null;
-  }
-  const prefix = rule.from.slice(0, -1);
-  if (!source.startsWith(prefix)) return null;
-  return rule.to.replace(":splat", source.slice(prefix.length));
 }
 
 // The published tree is flat (Astro emits pages at the dist root), but every
@@ -144,20 +155,4 @@ export function buildRoutingRules(redirects) {
     })),
     ...mountRewriteRules,
   ];
-}
-
-export function resolveRedirect(source, rules, maximumHops = 5) {
-  let current = source;
-  const hops = [];
-  for (let index = 0; index < maximumHops; index += 1) {
-    const rule = rules.find((candidate) => applyRule(candidate, current) !== null);
-    if (!rule) return { destination: current, hops };
-    const destination = applyRule(rule, current);
-    hops.push({ source: current, destination, status: rule.status });
-    if (hops.some((hop, hopIndex) => hopIndex < hops.length - 1 && hop.source === destination)) {
-      throw new Error(`Redirect loop while resolving ${source}`);
-    }
-    current = destination;
-  }
-  throw new Error(`Redirect chain exceeds ${maximumHops} hops: ${source}`);
 }
