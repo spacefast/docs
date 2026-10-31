@@ -86,7 +86,27 @@ test("Troubleshooting gives a first diagnostic step before the error catalog", a
   assert.match(troubleshooting.slice(0, errors), /last publish and its status/iu);
 });
 
+test("Telemetry preserves beta gates and separates visitor analytics from edge stats", async () => {
+  const telemetry = await builtPage("/telemetry");
+  const stats = await builtPage("/stats");
+  assert.match(telemetry, /enabled for both your team and your Space/iu);
+  assert.match(telemetry, /no self-service switch/iu);
+  assert.match(telemetry, /signed in as an editor/iu);
+  assert.match(telemetry, /Collection on published pages requires/iu);
+  assert.match(telemetry, /Page enhancements/u);
+  assert.match(telemetry, /does not require Comments/iu);
+  assert.match(telemetry, /CLI command does not return the Telemetry cards/iu);
+  assert.match(telemetry, /\[Traffic stats\]\(\/docs\/stats\)/u);
+  assert.match(stats, /\[Telemetry \(Beta\)\]\(\/docs\/telemetry\)/u);
+  assert.doesNotMatch(stats, /all you get from Spacefast/iu);
+});
+
 const firstFactCases = [
+  {
+    route: "/telemetry",
+    question: "What can I do with Telemetry?",
+    evidence: [/Now/u, /Trends/u, /live activity/iu, /7, 30, or 90 days/u],
+  },
   {
     route: "/versions",
     question: "Does rollback rebuild, and which versions can it use?",

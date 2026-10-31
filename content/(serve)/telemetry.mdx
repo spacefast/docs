@@ -1,0 +1,44 @@
+---
+title: Telemetry (Beta)
+description: Watch visitors live in Now and explore visitor history in Trends, with beta availability and the difference from edge traffic stats
+---
+
+Telemetry shows who's on your Space now and how visits change over time. Use **Now** to watch live activity and **Trends** to explore visitor history over 7, 30, or 90 days.
+
+## Open Telemetry
+
+Open your Space in the dashboard and choose **Telemetry**. You must be signed in as an editor of the Space.
+
+Telemetry is in beta and must be enabled for both your team and your Space. If the menu is missing, or the page says **Analytics is off for this Space**, contact [support](mailto:support@spacefast.com). There is no self-service switch to enable the beta.
+
+The dashboard page does not require Comments. The live and history views depend on separate services: if only one is configured, only its card appears. **Telemetry isn't set up here** means neither is available on that deployment.
+
+Collection on published pages requires **Page enhancements** to be on in the Space's **Settings**. Telemetry uses a browser tracker, unlike the script-free edge stats. Opening the dashboard does not by itself start collecting visits from a site with page enhancements off.
+
+## What can I do with Telemetry?
+
+| View | Use it to |
+| --- | --- |
+| Now | See how many visitors are here, which pages they're on, and recent arrivals |
+| Now | Inspect sources, countries, engagement, and recent events where those measurements are available |
+| Trends | Follow visitors, page views, and engaged time over 7, 30, or 90 days |
+| Trends | Find top pages, compare page traffic with the previous period, and inspect engagement by page |
+| Trends | Review referrers and scroll depth |
+
+The Space's analytics profile changes which live views come first. A measurement the source cannot supply is shown as unavailable or left out, not counted as zero. Visitor analytics counts visitors without listing individual people.
+
+If Trends cannot be reached, reload the page to try again. A gap or an error is not evidence that nobody visited.
+
+## Watch on the published site
+
+For a published Space, the page can offer **Watch on site** or **Open site**. **Watch on site** opens the live site with its Telemetry drawer. That drawer requires page enhancements and Comments enabled on the live Space, not only on previews. Otherwise, **Open site** opens the site without promising a drawer.
+
+You can use the dashboard's Now and Trends cards without enabling Comments.
+
+## Telemetry or traffic stats?
+
+Telemetry is visitor analytics. [Traffic stats](/stats) are the edge's request accounting, available under **Settings → Stats** and through `sf analytics`. They count requests and views differently and use windows of 48 hours, 7 days, or 30 days. The CLI command does not return the Telemetry cards.
+
+Use Stats to inspect requests, bandwidth, and busy paths. Use Telemetry to watch visitors and explore engagement over time. Do not expect their totals to match.
+
+[Google Analytics and Tag Manager](/customization) are separate integrations. Adding one of those tags does not enable the Telemetry beta.

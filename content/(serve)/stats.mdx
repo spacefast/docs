@@ -5,6 +5,8 @@ description: Requests, views, unique visitors, and top paths for a Space, where 
 
 Views exclude crawlers and failed requests. Requests count every HTTP request, and unique visitors use a separate daily count without those filters.
 
+Looking for live visitors or engagement history? See [Telemetry (Beta)](/telemetry). This page covers edge traffic stats, not Telemetry's Now and Trends views.
+
 ## Where to look
 
 Open the Space and go to **Settings → Stats**. A segmented control labelled **Time period** switches between three windows.
@@ -76,4 +78,4 @@ There is no window-level request total in the payload. Sum `series[].requests` f
 
 ## This is not Google Analytics
 
-These numbers are the edge's own accounting, and they are all you get from Spacefast. If you want page-level product analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id and injects it into every published page. That is a separate feature with a separate switch. See [Customization](/customization).
+These numbers are the edge's own accounting. [Telemetry (Beta)](/telemetry) provides separate visitor analytics where enabled. You can also add your own tag: **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id and injects it into every published page. That is a separate feature with a separate switch. See [Customization](/customization).
