@@ -11,7 +11,7 @@ You don't need this page. It's the technical reference for wiring up the MCP ser
 
 ## Two runtimes, one tool catalog
 
-The same server ships in two runtimes. Both expose every Spacefast API operation as its own tool. The difference is the filesystem.
+The same server ships in two runtimes. Both expose each eligible Spacefast API operation as its own tool. The difference is the filesystem.
 
 | | Hosted | Local |
 |---|---|---|
@@ -73,11 +73,11 @@ The local server takes its credential from the process, never from client config
 
 ### Operation tools
 
-Every API operation an agent may call is a tool named by its `operationId`: `getAccount`, `listSpaces`, `searchDocs`, `createDomain`, `promoteSpaceVersion`, and a few hundred more. Its input schema is the operation's own contract, with `path`, `query`, and `body` groups. Its result is the API response. There is nothing to discover at runtime and no program to write: read the schema from `tools/list`, then call the tool.
+Each API operation exposed through MCP is a tool named by its `operationId`: `getAccount`, `listSpaces`, `searchDocs`, `createDomain`, `promoteSpaceVersion`, and a few hundred more. Its input schema is the operation's own contract, with `path`, `query`, and `body` groups. Its result is the API response. There is nothing to discover at runtime and no program to write: read the schema from `tools/list`, then call the tool.
 
 That is a big list. Clients that support tool search load the tools they need on demand. A client that loads everything up front still works, just with a larger tool list.
 
-A few operations stay in the dashboard, such as buying a domain, and a few stay in the CLI and API, such as claiming an anonymous Space with its key. Those have no tool.
+A few operations stay in the dashboard, such as buying a domain. The `domains:write` scope does not add a domain-purchase MCP tool. A few stay in the CLI and API, such as claiming an anonymous Space with its key. Those have no tool.
 
 ### Product tools
 
