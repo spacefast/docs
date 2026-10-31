@@ -60,6 +60,13 @@ for (const file of files) {
   let text = await readFile(filename, "utf8");
   if (file.endsWith(".html")) {
     if (/<meta\s+http-equiv="refresh"/u.test(text)) {
+      // A retired .mdx mirror has no HTTP rule (the static redirect cap is
+      // spent on .md), so its stub is the only thing that still forwards it.
+      if (/\.mdx\/index\.html$/u.test(file)) {
+        // A forwarding stub is not a page, so it names no canonical.
+        await writeFile(filename, text.replace(/<link rel="canonical"[^>]*>/u, ""));
+        continue;
+      }
       await rm(filename);
       redirectsRemoved += 1;
       continue;

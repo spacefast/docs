@@ -38,7 +38,8 @@ export async function verifyDiscoveryUrls(dist, files, served) {
 
 export async function verifyBuiltSeo(dist = path.resolve("dist")) {
   const files = (await readdir(dist, { recursive: true, withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => path.relative(dist, path.join(entry.parentPath, entry.name)));
-  const pages = files.filter((file) => file.endsWith("index.html") && !file.startsWith("blume-nav/"));
+  // Retired .mdx mirrors keep a noindex forwarding stub; they are not pages.
+  const pages = files.filter((file) => file.endsWith("index.html") && !file.startsWith("blume-nav/") && !/\.mdx\/index\.html$/u.test(file));
   const root = "https://spacefast.com/docs/";
   const served = new Set(pages.map((file) => `${root}${file.replace(/index\.html$/u, "")}`));
   await verifyDiscoveryUrls(dist, files, served);
