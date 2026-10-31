@@ -53,7 +53,7 @@ Success is always an object with a `data` member. Three shapes cover the whole A
 | `{ data, pagination }` | a cursor-paginated list | `GET /v1/spaces/{spaceId}/versions` |
 | `{ data, operation }` | a mutation that can outlive the request | `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` |
 
-`operation` is `null` when the work finished inside the request. See [Operations](/api/operations).
+`operation` is `null` when the work finished inside the request. See [Operations](/api/long-running-operations).
 
 Every JSON body also carries a `$schema` member naming its JSON Schema, and a `Link: <...>; rel="describedby"` header pointing at the same document. A strict client-side validator that rejects unknown properties will trip on `$schema`, so allow it.
 
@@ -141,7 +141,7 @@ Stop when `data.status` is `succeeded`, `failed`, or `canceled`. Then read `spac
   <Card title="Idempotency" href="/api/idempotency" icon="repeat">
     Make any POST safe to retry.
   </Card>
-  <Card title="Operations" href="/api/operations" icon="clock">
+  <Card title="Operations" href="/api/long-running-operations" icon="clock">
     Async work: the handle, the states, the polling loop.
   </Card>
   <Card title="Webhooks" href="/api/webhooks" icon="webhook">

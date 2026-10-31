@@ -9,7 +9,7 @@ export default defineMeta({
     "pagination",
     "rate-limits",
     "idempotency",
-    "operations",
+    "long-running-operations",
     "webhooks",
     "connectors",
     "sdk",
