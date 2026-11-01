@@ -70,9 +70,9 @@ test("Database gives the Zero prerequisite before query instructions", async () 
   const prerequisite = database.indexOf("Don't have a database yet?");
   const query = database.indexOf("## Query it from code");
   assert.ok(prerequisite >= 0 && query > prerequisite);
-  assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\/\)/u);
+  assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero\/\)/u);
   assert.match(database.slice(prerequisite, query), /kind: "zero"/u);
-  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime\/#declare-it\)/u);
+  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero\/#declare-it\)/u);
   assert.match(database.slice(prerequisite, query), /`server`/u);
   assert.match(database.slice(prerequisite, query), /server file is required/iu);
   assert.match(database.slice(prerequisite, query), /sf init --runtime zero/u);
