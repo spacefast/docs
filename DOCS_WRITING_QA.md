@@ -60,7 +60,7 @@ The first review fixed eight findings covering stats, caching, routing, anonymou
 | Agent reach | Keep supported-client detection, skill installation, permission ceilings, human-only actions, and team-automation revocation exceptions | `content/cli/agents.mdx`; `content/agents/skills.mdx`; `content/agents/permissions.mdx` |
 | Ownership and billing | Distinguish self-serve teams from partner customer ownership; billing reads differ from plan changes; key rotation depends on switching consumers first | `createSpace` public reference; `content/platforms/partner-api/customers.mdx`; `content/(account)/billing.mdx`; `content/(account)/api-keys.mdx` |
 | Cache and schedule application | Repeat public-cache exceptions in troubleshooting; crons follow the live version | `content/(serve)/caching.mdx`; `listSpaceCrons` public reference |
-| Sentence splitting | Limit missing generated CSS to the dynamic class instead of declaring the whole app unstyled | `content/(dynamic)/zero-runtime.mdx`, Styling |
+| Sentence splitting | Limit missing generated CSS to the dynamic class instead of declaring the whole app unstyled | `content/(dynamic)/zero.mdx`, Styling |
 
 Coverage by original PR section:
 
@@ -68,7 +68,7 @@ Coverage by original PR section:
 | --- | --- |
 | Account | 3: api-keys, authentication, billing |
 | Concepts | 3: spaces, teams, versions |
-| Dynamic | 8: crons, database, environment-variables, functions, logs, storage, wordpress, zero-runtime |
+| Dynamic | 8: crons, database, environment-variables, functions, logs, storage, wordpress, zero |
 | Publishing | 8: anonymous-and-claim, ci, frameworks, git, publish, recipes/html, recipes/next, wordpress-data-sources |
 | Reference | 3: config-file, glossary, limits |
 | Serving | 8: access, caching, customization, domains, routing, site-pages, stats, urls |
