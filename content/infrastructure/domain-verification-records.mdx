@@ -1,0 +1,40 @@
+---
+title: Domain verification records
+description: Publish the exact TXT records needed to prove control of a Space hostname.
+---
+
+Spacefast uses DNS verification records to prove that you control a hostname before it serves your Space. Copy the exact record names and values from your domain's setup instructions.
+
+## Get the records for your hostname
+
+```bash
+sf domains add example.com --space my-site
+sf domains diagnostics example.com --space my-site
+```
+
+The dashboard's domain setup also shows the required records. Add them wherever your DNS is managed. For the complete connection flow, see [Custom domains](/domains).
+
+Instructions can include both a Spacefast ownership record and a WP Cloud verification record. They prove different claims. Do not substitute one for the other or build a TXT value from an example.
+
+## When WP Cloud verification is required
+
+A hostname already used by another WP Cloud client can require an extra TXT record before it can attach to Spacefast. Spacefast retrieves that proof and includes it in the DNS instructions.
+
+The upstream value starts with `atomic-domain-` and belongs at the exact hostname being verified. The apex `example.com` and `www.example.com` can require separate values.
+
+Publish only the currently required WP Cloud verification value at each hostname. Multiple distinct TXT values starting with `atomic-domain-` at the same hostname can prevent verification, even when one matches Spacefast's instructions. Remove a superseded WP Cloud proof when moving the hostname. Keep unrelated TXT records, including email authentication records.
+
+A CNAME cannot coexist with the required TXT record at the same hostname. Follow Spacefast's address-record instructions instead.
+
+## Check and retain the proof
+
+```bash
+sf domains check example.com --space my-site
+sf domains diagnostics example.com --space my-site
+```
+
+DNS propagation can delay a successful check. Inspect every hostname in diagnostics; a verified apex does not prove that `www` is ready.
+
+Keep required verification records after setup so future checks can still prove control. A domain's verification state, routing readiness, and [TLS certificate](/infrastructure/tls-certificates) state are separate. A TXT record alone does not make the hostname live.
+
+<WpCloudDocs title="Domain verification records" href="https://wp.cloud/docs/sites/domains/domain-verification-records/" />

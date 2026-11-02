@@ -70,7 +70,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
 An unassigned domain has no records to show. Instructions appear once the domain is assigned to a Space, which is why `sf domains add` assigns in the same command.
 
-Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` produces six of them in the common case, because the `www` twin is set up alongside it.
+Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. The apex and `www` can each need address and verification records. The table below shows example record shapes, not a fixed list for every domain.
 
 | Type | Name | Value | Purpose |
 | --- | --- | --- | --- |
@@ -81,13 +81,15 @@ Each record the API returns has four fields: `type`, `name`, `value`, and `purpo
 | `AAAA` | `example.com` | the IPv6 address in your instructions | `routing` |
 | `AAAA` | `www.example.com` | the IPv6 address in your instructions | `routing` |
 
-The TXT value carries your team id and proves you control the zone. The address records are generated for your hostname, so copy the exact values from your own output rather than the ones above.
+Spacefast ownership records prove control for your team. Instructions can also include a separate WP Cloud TXT value at the hostname itself. Copy every required record from your own output, including the exact name and value. See [Domain verification records](/infrastructure/domain-verification-records) for conflicts with older proofs.
 
 :::warning[Delete the old address records first]
 Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live. The same rule applies to `AAAA` when IPv6 is offered.
 :::
 
 Spacefast generates `A`, `AAAA` and `TXT` records only. There is no CNAME or ALIAS instruction.
+
+Certificates are provisioned and renewed automatically once the hostname can be validated. See [TLS certificates](/infrastructure/tls-certificates) for issuance checks and retries, and [IP ranges](/infrastructure/ip-ranges) for inbound and outbound address behavior.
 
 ## Apex and www travel together
 

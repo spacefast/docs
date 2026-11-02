@@ -10,6 +10,7 @@ export default defineMeta({
     "publish",
     "serve",
     "dynamic",
+    "infrastructure",
     "account",
     "reference",
   ],

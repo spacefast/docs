@@ -1,0 +1,44 @@
+---
+title: TLS certificates
+description: Automatic HTTPS, per-hostname certificate checks, and recovery from blocked issuance.
+---
+
+Spacefast provisions and renews HTTPS certificates for your Space's hostnames automatically. For a custom domain, issuance depends on correct DNS and a reachable validation path.
+
+## Provisioning and renewal
+
+WP Cloud manages certificates through Let's Encrypt and Google Trust Services. Issuance uses the ACME HTTP-01 challenge, so each hostname must resolve to the supplied infra addresses and allow validation over HTTP.
+
+The apex and `www` are validated independently. One can have a working certificate while the other is still pending. Check every hostname returned by your domain setup.
+
+Renewals happen automatically. Failed attempts are requeued with increasing delays, so correct the DNS or configuration problem before requesting another attempt.
+
+## Check a certificate
+
+```bash
+sf domains diagnostics example.com --space my-site
+```
+
+The diagnostics report DNS, verification, and SSL state for each hostname. The UI and API use the familiar name SSL in some fields; the connection uses TLS.
+
+To inspect the certificate presented by a public hostname:
+
+```bash
+openssl s_client -connect example.com:443 -servername example.com </dev/null 2>/dev/null | openssl x509 -noout -issuer -dates
+```
+
+Issuer names and chains can change. Do not pin an integration to a particular issuer common name.
+
+## When issuance is blocked
+
+Check that the hostname's address records match Spacefast's instructions. Remove old addresses that still send some requests elsewhere. If CAA records restrict certificate authorities, allow the authorities used for issuance. Check that an extra proxy or redirect does not block the HTTP validation request.
+
+After fixing the cause, use **Retry SSL** in the domain's dashboard controls or `POST /v1/domains/{domainId}/ssl/retry`. Retries are rate limited; repeated retries do not repair a DNS or CAA error.
+
+See [Custom domains](/domains#troubleshooting) for diagnostic codes such as `ssl_pending` and `ssl_renewal_blocked`.
+
+## Protocol support
+
+WP Cloud disables TLS 1.0 and TLS 1.1. Modern clients negotiate TLS 1.2 or TLS 1.3. Some TLS 1.2 ciphers remain for older-client compatibility, so evaluate scanner findings against the protocol and cipher the affected client actually negotiates.
+
+<WpCloudDocs title="TLS certificates" href="https://wp.cloud/docs/sites/domains/tls-certificates/" />
