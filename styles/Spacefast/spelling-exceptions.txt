@@ -5,11 +5,13 @@ accountless
 allowlist
 allowlisted
 alphanumerics
+Anycast
 api
 apis
 approver
 approver's
 argv
+Ashburn
 Astro
 async
 Automattic
@@ -21,6 +23,7 @@ Blume's
 boolean
 booleans
 Bot's
+Brotli
 browsable
 buildable
 burstable
@@ -64,6 +67,7 @@ esbuild
 ETag
 exif
 extensionless
+failover
 Favicon
 fetchable
 Figma
@@ -72,8 +76,10 @@ followable
 forwardable
 frontmatter
 fsynced
+Gbit
 github
 globals
+Googlebot
 Gravatar
 grayscale
 Gridsome
@@ -132,6 +138,7 @@ npx
 nullable
 Nullable
 Nuxt
+NVMe
 oauth
 onboarding
 OpenAPI
