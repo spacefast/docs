@@ -104,7 +104,7 @@ Every value here is recorded on the version. On GitHub Actions, GitLab CI, and B
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--show-secret` | off | Print the access URL and claim link in JSON or non-interactive output |
+| `--show-secret` | off | Print secret fields, including the separate Space key. Anonymous preview and claim links are already included outside CI |
 | `--allow-unsupported-platform-features` | off | Publish even when imported platform config includes features Spacefast cannot convert |
 
 ## How publish decides what to do
@@ -165,14 +165,14 @@ The team-wide default for future Spaces is `sf teams defaults`, on the [teams pa
 
 ## Anonymous publish and the claim key
 
-With no login and no linked Space, publish creates an anonymous Space. It saves the key (`sfc_…`), claim URL, and expiry in `.spacefast/state.json`, which the CLI adds to `.gitignore`. The claim link prints once, on the publish that created the Space. Later publishes point at `sf spaces claim` instead.
+With no login and no linked Space, publish creates an anonymous Space. It saves the key (`sfc_…`), claim URL, and expiry in `.spacefast/state.json`, which the CLI adds to `.gitignore`. Anonymous publish receipts include a preview URL, claim URL, expiry, and a message to relay to the person who will claim the Space.
 
 ```bash
 sf spaces claim                                  # claim the Space saved here
 sf continue                                      # swap the key for a durable API key
 ```
 
-In `--json` or non-interactive output the key, its URL form, and the claim URL are all `[REDACTED]` unless you pass `--show-secret`. The `expiresAt` field is never masked, so a script can always tell an anonymous receipt from a permanent one. The clock, the caps, and the claim itself are on [Publish without an account](/anonymous-and-claim).
+Anonymous preview and claim links remain available in `--json` and non-interactive publish output so an agent can relay them. Both links contain the Space key. CI masks them unless you pass `--show-secret`; the separate `claim.key` field follows the CLI's secret-output policy. `expiresAt` remains visible. See [Publish without an account](/anonymous-and-claim) for deadlines and claiming.
 
 ## Examples
 

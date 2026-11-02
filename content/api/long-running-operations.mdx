@@ -122,7 +122,7 @@ curl -sS "https://api.spacefast.com/v1/operations?spaceId=spc_4a7f9c2e8b1d0a6f5c
 | `resourceType` | Everything touching one resource type, for example `space`. |
 | `resourceId` | Everything touching one resource. |
 
-The list is cursor-paginated like every other list. See [Pagination](/api/pagination).
+This list uses cursor pagination. See [Pagination](/api/pagination) for the cursor fields and endpoint-specific exceptions.
 
 Authorization is checked per row through the resource each operation touches, so the feed never shows work your credential could not already reach.
 

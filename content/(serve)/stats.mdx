@@ -17,21 +17,21 @@ Open the Space and go to **Settings → Stats**. A segmented control labelled **
 
 Thirty days is the widest window. There is no longer one.
 
-The page shows two totals, **Requests** and **Views**, then three sections.
+The page shows **Requests**, **Visitor requests**, and **Visitors per day**. Visitor requests include assets, not only page loads. Visitors per day averages complete UTC days in the selected window.
 
 | Section | What it lists |
 | --- | --- |
 | Traffic by period | One row per bucket, with requests, views, and bandwidth |
-| Unique visitors | Distinct visitors per day |
+| Visitors | Daily distinct counts in the period table. The hourly window lists daily counts under the visitor card |
 | Top paths | The busiest paths in the window |
 
-Buckets are labelled in UTC, not your timezone, because that is the boundary the edge measured. Bandwidth is available in the table's field picker but hidden by default, since bandwidth is unlimited on every plan.
+Buckets are labelled in UTC. Bandwidth is available in the table's field picker but hidden by default. Delivery has [plan allowances and usage rates](/usage).
 
 ## What counts as a view
 
 A **request** is any HTTP request the Space answered. A **view** is a request from something that is not a crawler with a status under 400, assets included. So `views` cannot exceed `requests`, and the gap comes from crawlers and responses with a status of 400 or higher.
 
-**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total. That's why the page lists them one by one instead of showing a single number.
+**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total. The dashboard shows daily counts and an average over complete days, rather than adding daily visitors into a window total.
 
 **Top paths** and top hosts are capped at 10 entries each.
 
@@ -74,6 +74,6 @@ curl "https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/analytics?window=7d" \
 
 There is no window-level request total in the payload. Sum `series[].requests` for it, which is what the dashboard does.
 
-## This is not Google Analytics
+## Add browser analytics
 
-These numbers are the edge's own accounting, and they are all you get from Spacefast. If you want page-level product analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id and injects it into every published page. That is a separate feature with a separate switch. See [Customization](/customization).
+For browser analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id. Its own switch controls whether the tag loads. See [Customization](/customization).
