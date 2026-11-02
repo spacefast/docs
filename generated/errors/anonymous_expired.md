@@ -5,7 +5,7 @@ description: "This anonymous space expired before it was claimed."
 
 This anonymous space expired before it was claimed.
 
-**How to resolve:** Publish a fresh space and share its claim link right away this time. If you meant to update a live space, check .spacefast/ (or your saved receipt) for its spaceId. Publish to that space with its credential instead of creating a new space.
+**How to resolve:** Open the saved claim link to recover the Space while its recovery window is still open. If the Space has been purged, publish again and keep the new claim link. To update a different existing Space, select its spaceId and use its credential.
 
 <div data-pagefind-ignore>
 

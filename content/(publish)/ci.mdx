@@ -123,7 +123,7 @@ Every value shows up on the version, so version history says which commit and wh
           echo "Preview: $(jq -r '.data.version.immutableUrl' receipt.json)"
 ```
 
-`version.immutableUrl` is that version's permanent hostname, which keeps serving that exact build no matter what goes live later. `activation.outcome` comes back `unpromoted`, and promoting it later is one call to the URL in `links.promote`.
+`version.immutableUrl` is that version's fixed hostname. It serves that exact build while the version is retained, regardless of what goes live later. `activation.outcome` comes back `unpromoted`, and promoting it later is one call to the URL in `links.promote`.
 
 A preview on an existing Space refuses `--name`, `--mode`, and a non-`auto` `--spa`, because a preview must not change settings live traffic shares.
 
