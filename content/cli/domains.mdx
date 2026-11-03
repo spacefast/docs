@@ -207,7 +207,7 @@ The command prompts "Delete example.com from the team's domains?" unless you pas
 
 Deletion is refused while the domain is attached to a Space, registered or being transferred through Spacefast, or served by a connected DNS provider. A Space using a name under the hosted DNS zone also blocks deletion.
 
-`sf domains delete` used to be an alias of `sf domains rm`. It no longer accepts `--space`: update scripts that unassign domains to use `sf domains rm <domain> --space <space>`.
+Older CLIs behave differently. Through CLI 0.8.0, `sf domains delete` is an alias of `sf domains rm`: with `--space` and `--yes` it takes the domain off that Space, even a live one, and deletes nothing. To tell which one you have, run `sf domains delete --help`. If it lists `--space`, it is the old alias. The new command has no `--space` flag, so update scripts that unassign domains to use `sf domains rm <domain> --space <space>`.
 
 ```bash
 sf domains delete example.com
