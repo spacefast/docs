@@ -1,7 +1,7 @@
-import { copyFile, cp, lstat, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { copyFile, cp, lstat, mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { buildRoutingRules } from "./redirect-rules.mjs";
+import { buildRoutingRules, verifyRoutingBudget } from "./redirect-rules.mjs";
 import { redirects as authoredRedirects } from "../redirects.ts";
 
 const root = path.resolve(process.cwd());
@@ -26,6 +26,7 @@ const setupSections = [
       "cursor",
       "vscode",
       "github-copilot",
+      "grok-build",
       "devin-desktop",
       "devin-cloud",
       "zed",
@@ -42,9 +43,42 @@ const setupSections = [
   {
     folder: "(personal)",
     title: "Personal agents",
-    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw"],
+    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw", "github-copilot-app", "grok", "grok-bot"],
   },
 ];
+
+async function normalizeOverlayLinks(directory) {
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  const retired = new Map(authoredRedirects.map(({ from, to }) => [from, to]));
+  for (const entry of entries.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))) {
+    const file = path.join(entry.parentPath, entry.name);
+    const source = await readFile(file, "utf8");
+    const normalized = source.replace(/\]\(\/docs\/([^)]*)\)/gu, (_, target) => {
+      const [pathname, fragment] = target.split("#");
+      const route = `/${pathname.replace(/\/$/u, "")}`;
+      const final = retired.get(route) ?? route;
+      return `](${final}${fragment ? `#${fragment}` : ""})`;
+    });
+    if (normalized !== source) await writeFile(file, normalized);
+  }
+}
+
+async function presentHistory(directory) {
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  for (const entry of entries.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))) {
+    const file = path.join(entry.parentPath, entry.name);
+    let markdown = await readFile(file, "utf8");
+    const relative = path.relative(directory, file);
+    markdown = markdown.replace(/^#### /gmu, "### ");
+    markdown = markdown.replace(/^title: "([^"]+)"/mu, (_, title) => `title: ${JSON.stringify(relative.startsWith("packages") ? `${title} release history` : `Spacefast ${title} release notes`)}`);
+    if (relative.startsWith("packages")) {
+      const empty = [];
+      markdown = markdown.replace(/^## ([^\n]+)\n\n_No noted changes in this release\._\n*/gmu, (_, version) => { empty.push(version); return ""; });
+      if (empty.length) markdown += `\n## Publications without separate change notes\n\nThese versions record package publications. Read the [Spacefast release timeline](/changelog) for changes across packages.\n\n${empty.join(", ")}.\n`;
+    }
+    await writeFile(file, markdown);
+  }
+}
 
 async function exists(value) {
   try {
@@ -60,7 +94,7 @@ async function exists(value) {
 // Checked before any overlay is replaced, so a failure leaves the last good copy.
 const setupClients = new Map(
   [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
-    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\)/gmu,
+    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\/?\)/gmu,
   )].map(([, name, slug]) => [slug, name]),
 );
 const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
@@ -99,6 +133,8 @@ for (const tree of trees) {
     await rm(target, { recursive: true });
   }
   await cp(source, target, { recursive: true });
+  await normalizeOverlayLinks(target);
+  if (tree.source === "generated/changelog") await presentHistory(target);
   if (tree.source === "generated/errors") {
     for (const { from } of authoredRedirects) {
       const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
@@ -130,7 +166,6 @@ await copyFile(
   path.join(root, "generated/cli/index.md"),
   path.join(root, "content/cli/reference.md"),
 );
-
 const redirectsTarget = path.join(root, "public/_redirects");
 if (await exists(redirectsTarget)) {
   const current = await readFile(redirectsTarget, "utf8");
@@ -142,12 +177,7 @@ const redirects = await readFile(path.join(root, "generated/redirects.json"), "u
   JSON.parse,
 );
 const routingRules = buildRoutingRules(redirects);
-const staticRules = routingRules.filter(({ from }) => !from.includes("*")).length;
-if (staticRules > 2_000 || routingRules.length > 2_100) {
-  throw new Error(
-    `Generated compatibility routes exceed Spacefast limits: ${staticRules} static, ${routingRules.length} total`,
-  );
-}
+verifyRoutingBudget(routingRules);
 await writeFile(
   redirectsTarget,
   `${redirectsMarker}${routingRules

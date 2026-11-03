@@ -2,7 +2,7 @@
 title: "Connect Gemini CLI to Spacefast"
 description: "Add Spacefast to Gemini CLI so it can publish from your terminal."
 seo:
-  canonical: "https://spacefast.com/setup/gemini-cli/"
+  canonical: "https://spacefast.com/docs/setup/gemini-cli/"
 ---
 
 Add Spacefast to Gemini CLI so it can publish from your terminal.
@@ -45,6 +45,15 @@ npm install -g spacefast && sf setup agent --agent gemini-cli
 npx -y spacefast setup agent --agent gemini-cli -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+gemini mcp add --scope user --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Gemini CLI and run `/mcp auth spacefast`.
+2. Sign in to Spacefast and approve access. Use `/mcp` to check the connection.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
@@ -65,4 +74,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Gemini CLI documentation](https://geminicli.com/docs/tools/mcp-server)
+[Agent documentation](/agents/) · [Gemini CLI documentation](https://geminicli.com/docs/tools/mcp-server)

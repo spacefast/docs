@@ -5,6 +5,37 @@ description: "Release history for @spacefast/domain-search-terminal on npm."
 
 Published as [`@spacefast/domain-search-terminal`](https://www.npmjs.com/package/@spacefast/domain-search-terminal) on npm.
 
+## 0.8.1
+
+#### Patch Changes
+
+- @spacefast/common@0.8.1
+
+## 0.8.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.8.0
+
+## 0.7.0
+
+#### Patch Changes
+
+- `DomainResearchClient.availability(domain)` now runs a live single-name registry check through `GET /availability`, and `DomainSearchSession.check()` uses it for carts and checkout. Search results hide premium names and names on TLDs Spacefast doesn't sell.
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.7.0
+
+## 0.6.1
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/common@0.6.1
+
 ## 0.6.0
 
 #### Patch Changes

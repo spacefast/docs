@@ -2,7 +2,7 @@
 title: "Connect Devin Cloud to Spacefast"
 description: "Add Spacefast to Devin Cloud so your sessions can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/devin-cloud/"
+  canonical: "https://spacefast.com/docs/setup/devin-cloud/"
 ---
 
 Add Spacefast to Devin Cloud so your sessions can publish what you build.
@@ -19,7 +19,7 @@ https://mcp.spacefast.com
 4. Choose Personal access for your own account, or Organization only if you want to share it.
 5. Save, then choose Connect.
 6. Sign in to Spacefast and approve access.
-7. Use Test listing tools before you start a session.
+7. Use Test tools before you start a session.
 
 You need the Manage MCP Servers permission to add a custom MCP.
 
@@ -39,4 +39,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Devin Cloud documentation](https://docs.devin.ai/work-with-devin/mcp)
+[Agent documentation](/agents/) · [Devin Cloud documentation](https://docs.devin.ai/work-with-devin/mcp)

@@ -61,7 +61,7 @@ MCP configuration varies by client: `mcp` for OpenCode, `servers` for VS Code, a
 
 Amp puts the server map at the top level with no root key. Use `sf setup agent` for a [supported client](/cli/agents#sf-mcp-install); otherwise adapt the transport example to your client's configuration format.
 
-Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+Ask the agent to call `searchDocs` for a documentation query, then `getDocsPage` with a returned slug before attempting a publish.
 
 <Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
 Use the Spacefast MCP server to search the docs for custom domains.

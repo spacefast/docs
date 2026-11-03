@@ -5,7 +5,7 @@ description: "The requested repository resource does not exist."
 
 The requested repository resource does not exist.
 
-**How to resolve:** Select an existing repository and branch before reading its commit history.
+**How to resolve:** Check that the repository, branch, and commit you referenced exist, then retry with ones that do.
 
 <div data-pagefind-ignore>
 

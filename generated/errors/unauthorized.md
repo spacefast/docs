@@ -5,7 +5,7 @@ description: "The request carried no valid credential."
 
 The request carried no valid credential.
 
-**How to resolve:** Send a bearer API key, use an agent OAuth client, or sign in.
+**How to resolve:** For the CLI, run `sf login` on this machine. For API keys, send `Authorization: Bearer <token>` and check that the key has not expired or been revoked; agent OAuth sessions must use their required proof and resource. See [API authentication](/docs/api/authentication/) and [CLI login](/docs/cli/login/).
 
 <div data-pagefind-ignore>
 

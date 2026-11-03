@@ -232,3 +232,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 ### Checking before you commit
 
 `GET /v1/domains/preflight?name=example.com` runs the same name validation and hosting check as the add, so terminal problems surface before any record exists. Its `canHost` verdict is advisory. A `false` still lets you add the domain and claim it with the TXT proof, and `null` means the check was unavailable rather than negative.
+
+## Next steps
+
+For command options, use [CLI domains](/cli/domains). Once the address is ready, [read traffic stats](/stats) to see visits.

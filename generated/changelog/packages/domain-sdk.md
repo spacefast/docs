@@ -5,6 +5,24 @@ description: "Release history for @spacefast/domain-sdk on npm."
 
 Published as [`@spacefast/domain-sdk`](https://www.npmjs.com/package/@spacefast/domain-sdk) on npm.
 
+## 0.8.1
+
+_No noted changes in this release._
+
+## 0.8.0
+
+_No noted changes in this release._
+
+## 0.7.0
+
+#### Patch Changes
+
+- Preserve CNAME records in Spacefast DNS instructions and report their routing status from hostname diagnostics.
+
+## 0.6.1
+
+_No noted changes in this release._
+
 ## 0.6.0
 
 _No noted changes in this release._

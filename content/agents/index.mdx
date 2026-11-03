@@ -7,15 +7,11 @@ Connect your coding agent to Spacefast once, then ask it to publish. This page c
 
 ## What an agent can do
 
-Anything you can do in the dashboard, an agent can do over MCP. The Spacefast MCP server exposes five tools.
+Agents call API operations directly through MCP, within the permissions you approve. Some actions, including team membership and billing changes, need you in the dashboard.
 
-- `publish` uploads a folder, a file, an archive, or inline files and returns the live URL and the immutable version URL.
-- `operation_status` checks a publish that is still running.
-- `show_space` opens a read-only view of deployments, domains, analytics, source files, changes, history, comparisons, or build logs.
-- `execute` runs one JavaScript program against the Spacefast API catalog. Use it for documentation, account information, API reads without a visual view, and mutations.
-- `resume_execution` continues the same program after it pauses for your approval.
+Use `publish` for files, `operation_status` for an active publish, and Space Apps for visual inspection. Call operation tools such as `searchDocs`, `getDocsPage`, and `listSpaces` directly. Continue a saved approval with `resume_execution`.
 
-Inside `execute`, search for an operation with `tools.search`, read its contract with `tools.describe`, then call it. Check each write with a read before reporting success.
+The [MCP reference](/agents/mcp-server#the-tools) links the current tool catalog and explains the runtime differences. Read the operation schema before calling it, and check a write with a read before reporting success.
 
 If your team has a saved [Design System](/design-system), your agent can read its standards and files while working on a project. Ask it to apply the system to a new build or bring an existing project into line with the current rules.
 
@@ -31,7 +27,7 @@ Show me the deployments for this Space and whether the last build passed.
 Point docs.example.com at this Space and tell me which DNS records to add.
 </Prompt>
 
-Read [the MCP server page](/agents/mcp-server) for the tool schemas, the sandbox contract, and the approval model.
+Read [the MCP server page](/agents/mcp-server) for operation tools, runtime differences, and approvals.
 
 ## Three ways to connect
 
@@ -105,3 +101,7 @@ The default connection method is `remote-proxy`, which points your client at `sf
     What an agent can never do without you, and how approvals work.
   </Card>
 </CardGroup>
+
+## Share an existing artifact
+
+[Share a Claude artifact publicly](/agents/share-claude-artifact) walks through exporting a page, publishing it, choosing its audience, and keeping the same address for updates.

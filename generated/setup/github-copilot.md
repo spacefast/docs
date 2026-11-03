@@ -2,7 +2,7 @@
 title: "Connect GitHub Copilot CLI to Spacefast"
 description: "Add Spacefast to GitHub Copilot CLI so it can publish from your terminal."
 seo:
-  canonical: "https://spacefast.com/setup/github-copilot/"
+  canonical: "https://spacefast.com/docs/setup/github-copilot/"
 ---
 
 Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
@@ -36,6 +36,17 @@ npm install -g spacefast && sf setup agent --agent github-copilot
 npx -y spacefast setup agent --agent github-copilot -y
 ```
 
+**Run in your terminal.** Run this command to add Spacefast.
+
+```bash
+copilot mcp add --transport http spacefast 'https://mcp.spacefast.com'
+```
+
+1. Start Copilot CLI and run `/mcp` to find Spacefast.
+2. Sign in to Spacefast and approve access when asked. To reconnect, run `/mcp auth spacefast`.
+
+This sets up Copilot CLI and the GitHub Copilot app on this computer, not Copilot cloud agent.
+
 **Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
@@ -56,4 +67,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)
+[Agent documentation](/agents/) · [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)

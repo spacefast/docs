@@ -1,0 +1,19 @@
+---
+import { withMountedBase } from "blume/components/islands/base-path.ts";
+import type { Crumb } from "blume/components/layout/nav-utils.ts";
+interface Props { crumbs: Crumb[]; wide?: boolean; centered?: boolean }
+const { crumbs, wide = false, centered = false } = Astro.props;
+const route = Astro.url.pathname.replace(/\/$/u, "");
+const routed = crumbs.filter((crumb) => crumb.route && crumb.route !== "/");
+const trail = [{ label: "Docs", route: "/" }, ...routed];
+// Folder groups without a page are labels, never invented URLs.
+if (trail.length === 1 || withMountedBase(trail.at(-1)?.route ?? "/").replace(/\/$/u, "") !== route) {
+  const current = crumbs.at(-1);
+  if (current) trail.push({ label: current.label, route: current.route ?? "/" });
+}
+---
+<nav aria-label="Breadcrumb" class:list={["mb-2 text-muted-foreground text-sm", wide ? "max-w-none" : ["mx-auto", centered ? "max-w-[54rem]" : "max-w-content"]]}>
+  <ol class="flex flex-wrap gap-2">
+    {trail.map((crumb, index) => <li>{index > 0 && <span aria-hidden="true">/ </span>}{index === trail.length - 1 ? <span aria-current="page">{crumb.label}</span> : <a class="hover:text-foreground" href={withMountedBase(crumb.route)}>{crumb.label}</a>}</li>)}
+  </ol>
+</nav>

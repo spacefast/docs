@@ -64,4 +64,4 @@ Follow the stable problem `code`, not the English `detail`. Preserve `requestId`
 | `plan_unknown` | Read the current catalog before assigning a plan. |
 | `rate_limited` | Honor `Retry-After` and add jitter. |
 
-Use an [idempotency key](/api/idempotency) when retrying mutations after a timeout. Poll returned [operations](/api/operations) until they reach a terminal status.
+Use an [idempotency key](/api/idempotency) when retrying mutations after a timeout. Poll returned [operations](/api/long-running-operations) until they reach a terminal status.

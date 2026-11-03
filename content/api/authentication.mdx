@@ -1,5 +1,5 @@
 ---
-title: Authentication
+title: API authentication
 description: Every credential the Spacefast API accepts, where each one is created, what it can reach, and which routes refuse it
 sidebar:
   order: 2
@@ -99,7 +99,7 @@ An anonymous `POST /v1/publish` (no credential at all) creates an unclaimed Spac
 
 A Space key reaches only its own Space, and only the operations an unclaimed Space must still support: read the Space, open a new version, refresh uploads, finalize, promote, list activity, mint share links, restore after a delete. Operations declaring `bearerAuth` alone refuse it.
 
-Unclaimed Spaces expire. The default window is 33 hours and 20 minutes from creation or the latest publish that changes files, capped at 30 days from creation. Reading the Space with its key moves the deadline to one hour out when less than an hour remains, up to 6 hours of extension in total. That's what the claim page does. Claim it with `POST /v1/claim` to remove the deadline, or exchange the key for an API key with `POST /v1/claim/exchange`.
+Unclaimed Spaces expire. The default window is {{anonymous-ttlSeconds}} from creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation. Reading the Space with its key moves the deadline to one hour out when less than an hour remains, up to 6 hours of extension in total. That's what the claim page does. Claim it with `POST /v1/claim` to remove the deadline, or exchange the key for an API key with `POST /v1/claim/exchange`.
 
 :::warning[Treat a Space key as a secret]
 It is a management capability for an unclaimed Space, not a share link. Anyone holding it can publish to that Space and claim it.

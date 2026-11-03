@@ -5,7 +5,7 @@ description: "This operation requires a claimed space."
 
 This operation requires a claimed space.
 
-**How to resolve:** Claim the space first using its claim URL.
+**How to resolve:** Open the claim URL from your publish receipt, or run `sf spaces claim` in the directory you published from and sign in. This operation needs team ownership; the anonymous space key alone cannot grant it. Retry after claiming. See [Publish without an account](/docs/anonymous-and-claim/).
 
 <div data-pagefind-ignore>
 

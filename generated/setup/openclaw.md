@@ -2,7 +2,7 @@
 title: "Connect OpenClaw to Spacefast"
 description: "Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal."
 seo:
-  canonical: "https://spacefast.com/setup/openclaw/"
+  canonical: "https://spacefast.com/docs/setup/openclaw/"
 ---
 
 Give OpenClaw one prompt and it sets up Spacefast itself, or add the skill from your terminal.
@@ -33,4 +33,4 @@ npx -y spacefast setup agent --agent openclaw -y
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
 ```
 
-[Agent documentation](/agents) · [OpenClaw documentation](https://docs.openclaw.ai/tools/skills)
+[Agent documentation](/agents/) · [OpenClaw documentation](https://docs.openclaw.ai/tools/skills)

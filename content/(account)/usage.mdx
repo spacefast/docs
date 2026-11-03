@@ -5,24 +5,13 @@ sidebar:
   order: 4
 ---
 
-Free has fixed allowances. Go and Plus use shared monthly credit: $5 on Go and $15 on Plus. Usage above the credit is billed monthly at the same rates on both plans.
+Free has fixed allowances. Go and Plus use shared monthly credit: {{go-credit}} on Go and {{plus-credit}} on Plus. Usage above the credit is billed monthly at the same rates on both plans.
 
 ## Free allowances
 
 These are per team each month, except storage, which is a retained-byte allowance, and email, which has a daily limit. Free is for personal and non-commercial use.
 
-| Usage | Allowance |
-| --- | --- |
-| PHP, Zero and SQL CPU | 3,600 CPU-seconds |
-| PHP and Zero invocations | 1 million |
-| Builds | 100 build-minutes |
-| Cached delivery | 100 GB |
-| Non-cached transfer | 10 GB |
-| Workers requests | 100,000 requests |
-| Workers CPU | 1,000 CPU-seconds |
-| Storage, both classes | 500 MB |
-| Transactional email | 20 per day |
-| Spam checks | 1,000 checks |
+<include>/_pricing/usage.md</include>
 
 The CPU allowance combines PHP, Zero and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
 
@@ -32,34 +21,19 @@ Exceeding an allowance alerts Spacefast for review. A Space may be suspended unt
 
 Prices are USD before tax. The included quantities below belong to the whole team, not to each Space. Remaining charges draw from one shared monthly credit.
 
-| Usage | Rate |
-| --- | --- |
-| Cached delivery | 1 TB each month, then $0.02/GB |
-| PHP and Zero CPU | $0.000033 per active CPU-second |
-| SQL CPU | $0.000033 per active CPU-second |
-| PHP and Zero invocations | 1 million each month, then $0.25 per million |
-| Builds | $0.012 per elapsed build-minute |
-| Non-cached transfer | $0.054/GB |
-| Workers CPU, including startup | $0.00002 per CPU-second |
-| Workers requests | $0.30 per million |
-| Files and media | $0.10/GB-month |
-| Live files and database storage | No charge |
-| Transactional email | $0.50 per 1,000 recipient deliveries |
-| Spam checks | 1,000 each month, then $1 per 1,000 |
-
 CPU means active processing time, excluding waits. There is no memory charge. Build minutes measure elapsed machine time, including installation and idle time; platform-caused retries are not billed.
 
 An invocation is one PHP or Zero origin execution, including a request that bypasses the cache or cron run. Cached hits and Worker requests are excluded. Workers have their own request meter.
 
 Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or Zero response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
 
-Email counts recipient deliveries, so one message to three people counts as three. Daily safeguards still apply: 20 recipients on Free, 200 on Go and 2,000 on Plus. A credit balance does not override them.
+Email counts recipient deliveries, so one message to three people counts as three. Daily delivery safeguards still apply. A credit balance does not override them; check the current entitlement before sending.
 
 ## Storage classes
 
-Files and media include app-user uploads, media, source and Git history, non-live versions, and customer-saved backup archives. They cost $0.10 per GB-month on paid plans. Storage uses time-weighted logical bytes, not upload volume. GB is decimal.
+Files and media include app-user uploads, media, source and Git history, non-live versions, and customer-saved backup archives. Their paid rate appears in the usage table above. Storage uses time-weighted logical bytes, not upload volume. GB is decimal.
 
-Live storage is the currently published version's files plus SQL data and indexes. It has no usage charge. Both classes count toward the Free plan's combined 500 MB allowance.
+Live storage is the currently published version's files plus SQL data and indexes. It has no usage charge. Both classes share the Free storage pool in the usage table above.
 
 Each logical byte belongs to one class. Internal replicas and recovery copies do not add customer charges. Files downloaded to your own computer do not become retained Spacefast storage. If you keep backup archives in Spacefast, their average retained size counts as files and media.
 

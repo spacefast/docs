@@ -53,7 +53,7 @@ const fixture = [
   entry("/setup/claude-code"),
   "",
   "## Discovery",
-  ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/.well-known/api-catalog", "/.well-known/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
+  ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/api-catalog.json", "/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
   "",
   "## RSS Feeds",
   "",
@@ -112,7 +112,7 @@ test("relabels the leftover bucket and drops emptied headings", () => {
   assert.ok(!text.includes("## Other"), "the Other label should not survive");
   assert.ok(text.includes("## Agent setup"));
   assert.ok(text.includes("## RSS Feeds"), "feeds are not pages and are never collapsed");
-  for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/.well-known/api-catalog", "/agent-readability.json"]) {
+  for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/api-catalog.json", "/agent-readability.json"]) {
     assert.ok(text.includes(`https://spacefast.com/docs${route}`));
     assert.equal(discoveryFileForUrl(`https://spacefast.com/docs${route}`), route.slice(1));
   }

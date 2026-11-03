@@ -1,6 +1,6 @@
 ---
 title: MCP server
-description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use its five tools, execute sandbox, and approval model
+description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use API operation tools, publishing, Apps, and saved approvals
 ---
 
 The hosted MCP server uses OAuth and accepts inline files. The local server uses your CLI login or `SPACEFAST_TOKEN` and can publish files from your workspace.
@@ -11,7 +11,7 @@ You don't need this page. It's the technical reference for wiring up the MCP ser
 
 ## Two runtimes, one tool set
 
-The same server ships in two runtimes. Both register the same five tools. The difference is the filesystem.
+The same server ships in two runtimes. Both expose the eligible API operations by their OpenAPI operation IDs, alongside publishing, Apps, and continuation tools. The runtime also determines filesystem and connector access.
 
 | | Hosted | Local |
 |---|---|---|
@@ -49,12 +49,7 @@ By default a client asks for these scopes.
 
 Each tool declares the scopes it needs, and clients can read them from `tools/list` before calling.
 
-| Tool | Required scopes |
-|---|---|
-| `publish` | `publish:write` |
-| `operation_status` | `spaces:read` |
-| `show_space` | The scopes required by the selected view |
-| `execute`, `resume_execution` | The called API operation checks the credential's scopes |
+Read each operation's required scopes in its tool schema and the [API reference](/api/reference). `publish` requires `publish:write`; deployment and analytics reads require `spaces:read`. Domain inspection also needs the domain scopes declared by its tool.
 
 A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
@@ -74,29 +69,17 @@ The local server takes its credential from the process, never from client config
 
 ## The tools
 
-| Tool | What it does | Key inputs | Returns |
-|---|---|---|---|
-| `publish` | Uploads files and creates an immutable version | `path` or `files`, `spaceId`, `teamId`, `access` | Publish receipt and status |
-| `operation_status` | Checks a publish that is still running | `operationId` | Status, progress, diagnostics, `done` |
-| `show_space` | Opens a read-only Space view | `request.view`, `request.input` | The selected view and its data |
-| `execute` | Runs a JavaScript program against the API catalog | `code` | Program result or a pause for approval |
-| `resume_execution` | Continues a paused program | `executionId` and the requested decision fields | The continued program's result |
+The [Spacefast discovery card](https://api.spacefast.com/.well-known/mcp/server-card.json) publishes the hosted tool catalog. It is a Spacefast discovery artifact. Your connection's `tools/list` is the authority for the tools and input schemas available to that client.
 
-Every result is capped at 24,000 characters across the whole structured value, with an explicit truncation marker when it hits the cap.
+Use the API operation tool directly. For example, `searchDocs` searches documentation, `getDocsPage` reads an exact slug, `listSpaces` finds Spaces, and `promoteSpaceVersion` promotes a ready version. Hosts that support tool discovery can load operations on demand.
 
-Three requests that exercise the typed tools.
+Space Apps provide visual views through tools such as `show_space_deployments`, `show_space_domains`, and `show_space_analytics`. Use `show_domains` for the domain library. These views and the publish card remain available alongside operation tools.
 
-<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
-Publish this folder to Spacefast and give me the live URL.
-</Prompt>
+`publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. Read each tool's schema before calling it.
 
-<Prompt description="Show me the deployments for this Space and whether the last build passed." actions={["copy"]}>
-Show me the deployments for this Space and whether the last build passed.
-</Prompt>
+### Connector access
 
-<Prompt description="Point docs.example.com at this Space and tell me which DNS records to add." actions={["copy"]}>
-Point docs.example.com at this Space and tell me which DNS records to add.
-</Prompt>
+Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connector_tools` through the CLI login. Hosted MCP and `sf mcp proxy` do not expose connectors. Hosted OAuth grants no connector scopes.
 
 ### publish
 
@@ -138,177 +121,19 @@ Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
 Poll about every two seconds. Stop when `result.done` is true. Report success only when `result.status` is `succeeded`; the other terminal states are `failed` and `canceled`.
 
-### show_space
-
-Choose a view, then provide the input that view requires. Detailed views require a claimed Space.
-
-| View | What it shows |
-|---|---|
-| `deployments` | Deployment history and build status |
-| `domains` | Domains, DNS records, and TLS status |
-| `analytics` | Traffic over the selected window |
-| `source_files` | Repository files and folders |
-| `source_changes` | Pending source workspace changes |
-| `source_history` | Repository commits |
-| `source_comparison` | Differences between source commits |
-| `deployment_comparison` | Differences between published versions |
-| `build_logs` | Logs from one build |
-
-```json
-{
-  "request": {
-    "view": "deployments",
-    "input": { "space": "docs.example.com" }
-  }
-}
-```
-
-Read the input schema from `tools/list` before selecting another view. `show_space` never changes source, deployments, domains, or settings. Use `execute` for those changes.
-
-### execute
-
-| Field | Type | What it does |
-|---|---|---|
-| `code` | string, required | One complete JavaScript program |
-
-See the sandbox contract below.
-
 ### Find documentation
 
-Use `execute` to discover the generated documentation operation with `tools.search`. Read its schema with `tools.describe`, then call it with the documentation query. The documentation API supports ranked search, an exact page slug, and listing pages with an empty query.
+Call `searchDocs` with a query, then `getDocsPage` with the returned slug. The HTTP equivalents are `GET /v1/docs/search` and `GET /v1/docs/pages/{slug}`. Read the operation schemas in the [API reference](/api/reference) for their input envelopes.
 
-For an error, open the problem document's `type` URL to read the matching error page.
-
-### resume_execution
-
-The input depends on where the approval decision is made.
-
-In browser mode, which is what the hosted server uses, the model cannot decide for you.
-
-| Field | Type | What it does |
-|---|---|---|
-| `executionId` | string, required | The id from the paused `execute` result |
-
-```json
-{ "executionId": "exe_9c3f1b7a20d4" }
-```
-
-In model mode, which stdio connections use by default, the client supplies the decision.
-
-| Field | Type | What it does |
-|---|---|---|
-| `executionId` | string, required | The id from the paused `execute` result |
-| `action` | `accept`, `decline`, or `cancel` | The decision |
-| `content` | string, default `"{}"` | JSON-encoded form response. Leave the default when the pause has no form fields |
-
-## The execute sandbox
-
-`execute` runs your program in QuickJS inside a worker. The whole Spacefast OpenAPI catalog is mounted as a lazy `tools` proxy, so every API operation is reachable without an allowlist.
-
-| Limit | Value |
-|---|---|
-| Runtime | 30 seconds |
-| Memory | 64 MiB |
-| Stack | 1 MiB |
-| Network | No `fetch`. Only `tools.*` |
-
-Three things exist in the program.
-
-- `tools.search({ query, limit })` returns `{ items, hasMore, nextOffset }`.
-- `tools.describe.tool({ path })` returns the operation's shape, including `inputTypeScript`.
-- `tools[item.path](input)` calls the operation. Input groups are `path`, `query`, and `body`.
-
-Every call returns `{ ok: true, data, http }` or `{ ok: false, error }`. Check `ok`. A successful call puts the HTTP body in `result.data`, never in `result.result`. Return one compact value at the end; returning the search page or the schema wastes the result budget.
-
-`emit` delivers user-visible content and files. A Space file is delivered by emitting its minted link as `{ type: "resource_link", uri, name }`. Returning the link object does not deliver the file.
-
-Do not enumerate or spread `tools`, and do not use `fetch`. Credentials, scopes, and approvals are applied by `tools.*`, not by you.
-
-Cancelling a runaway program terminates the worker, not the session. The connection stays usable.
-
-### Find the Space, then publish to it
-
-`execute` is not the publish path. Use it to resolve which Space you want, then call `publish` with the id.
-
-```js
-const page = await tools.search({ query: "list spaces", limit: 10 });
-const match = page.items.find((item) => item.path.endsWith(".spaces.listSpaces"));
-if (!match) return { error: "No matching list-spaces operation." };
-
-const shape = await tools.describe.tool({ path: match.path });
-if (shape.error) return { error: shape.error };
-
-const result = await tools[match.path]({});
-if (!result.ok) return { error: result.error };
-
-const spaces = result.data?.data ?? result.data;
-return spaces.map((space) => ({ id: space.id, slug: space.slug }));
-```
-
-Then, with the id in hand:
-
-```json
-{ "spaceId": "spc_4a91c0de2f3b", "path": "dist" }
-```
-
-### Add a domain, then watch it
-
-One program creates the domain and binds it to the Space. Use `show_space` with the `domains` view to inspect DNS and TLS afterward.
-
-```js
-const found = await tools.search({ query: "create domain for space", limit: 10 });
-const create = found.items.find((item) => item.path.endsWith(".domains.createDomain"));
-if (!create) return { error: "No matching create-domain operation." };
-
-const shape = await tools.describe.tool({ path: create.path });
-if (shape.error) return { error: shape.error };
-
-const added = await tools[create.path]({
-  body: { name: "docs.example.com", teamId: "tm_2b7d40a9" },
-});
-if (!added.ok) return { error: added.error };
-const domain = added.data?.data ?? added.data;
-
-const page = await tools.search({ query: "assign domain to space", limit: 10 });
-const bind = page.items.find((item) => item.path.endsWith(".domains.updateDomain"));
-if (!bind) return { error: "No matching update-domain operation." };
-
-const bound = await tools[bind.path]({
-  path: { domainId: domain.id },
-  body: { spaceId: "spc_4a91c0de2f3b", primary: true },
-});
-return bound.ok ? { domainId: domain.id, name: domain.name } : { error: bound.error };
-```
-
-Then watch the DNS and TLS state with a read tool until it settles.
-
-```json
-{ "space": "spc_4a91c0de2f3b" }
-```
+For an error, open the problem document's `type` URL to read its matching error page.
 
 ## Approvals
 
-A write inside an `execute` program can pause before its HTTP request goes out.
+An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard.
 
-<Steps>
-  <Step title="The program pauses">
-    `execute` returns `status: "user_approval_required"` with an `executionId`, an `approvalUrl`, and a `resumePrompt`.
-  </Step>
-  <Step title="You review it in the browser">
-    The `approvalUrl` opens the approvals page in the dashboard, which shows the exact action the program wants to run. Accept, decline, or cancel.
-  </Step>
-  <Step title="The agent resumes">
-    The agent calls `resume_execution` with the same `executionId`. That call blocks until your decision lands, then the saved program continues from where it stopped.
-  </Step>
-</Steps>
+Keep the returned execution ID and call `resume_execution` using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
 
-You have four minutes to decide. The agent must reuse the `executionId`; starting a second `execute` call throws away the pause.
-
-Choosing "always allow" is deliberately narrow. Only a plain confirmation gate, a pause with nothing to fill in, can be auto-approved later. A pause that asks you to open a URL, or one that wants form content, always comes back to you.
-
-If the request changes between the pause and your decision, the resume fails with "This approval no longer matches the request. Run execute again."
-
-Tools also declare how risky they are, and clients use that to decide what to confirm on their own. `publish`, `execute`, and `resume_execution` are marked destructive. `operation_status` and `show_space` are marked read-only.
+See [Agent permissions](/agents/permissions) for the actions that require a person and the scope of standing access.
 
 ## Local file access
 

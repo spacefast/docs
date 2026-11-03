@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    env:
+      SPACEFAST_PRICING_FIXTURE: test/fixtures/pricing-document.json
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

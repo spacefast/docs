@@ -5,7 +5,7 @@ description: "The version was not found."
 
 The version was not found.
 
-**How to resolve:** List the space's versions to confirm the id.
+**How to resolve:** List versions for the selected Space and copy its version ID, not a build or operation ID. Check that you selected the correct Space and that the version has not been deleted. See [Versions and rollback](/docs/versions-and-rollback/).
 
 <div data-pagefind-ignore>
 

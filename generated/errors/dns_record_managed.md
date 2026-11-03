@@ -5,7 +5,7 @@ description: "This DNS record is managed by Spacefast and cannot be edited direc
 
 This DNS record is managed by Spacefast and cannot be edited directly.
 
-**How to resolve:** Change the binding or feature that owns the record instead of editing it.
+**How to resolve:** This record is maintained by an active domain service. Change the service or domain assignment that owns it instead of editing the generated record directly. See [Domains and DNS](/docs/domains/).
 
 <div data-pagefind-ignore>
 

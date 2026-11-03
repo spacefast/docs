@@ -5,7 +5,7 @@ description: "The inline publish exceeds the file-count or total-size limit."
 
 The inline publish exceeds the file-count or total-size limit.
 
-**How to resolve:** Trim the inline payload, or switch to an upload-based publish for larger content.
+**How to resolve:** Check the reported file count and total bytes. Publish the directory with `sf publish ./dist` so the CLI can choose an upload transport, or reduce the inline request to fit the documented limits. See [Limits](/docs/limits/).
 
 <div data-pagefind-ignore>
 

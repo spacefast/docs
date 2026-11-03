@@ -20,6 +20,7 @@ Blume
 Blume's
 boolean
 booleans
+Bot's
 browsable
 buildable
 burstable
@@ -55,6 +56,7 @@ dev
 Docusaurus
 dogfood
 dotenv
+Edu
 eleventy
 enum
 env
@@ -75,6 +77,7 @@ globals
 Gravatar
 grayscale
 Gridsome
+Grok's
 gzip
 Hexo
 hostability
@@ -90,6 +93,7 @@ indexable
 inviter
 IPs
 Jetpack
+Jev
 jittered
 joinable
 JWTs
@@ -125,8 +129,8 @@ noindex
 noop
 npm
 npx
-Nullable
 nullable
+Nullable
 Nuxt
 oauth
 onboarding
@@ -147,6 +151,7 @@ preact
 precompressed
 precomputation
 prefill
+prefilled
 prefills
 prepended
 prerender
@@ -165,6 +170,8 @@ reachability
 realtime
 rebased
 recharts
+reconnections
+redemptions
 reinstalls
 renderable
 repo
@@ -177,14 +184,15 @@ Resends
 resyncs
 retargeting
 retheme
-Retryable
 retryable
+Retryable
 retunes
 revalidate
 revalidated
 revalidates
 revalidating
 reverified
+rollout
 rollups
 routable
 ruleset
@@ -220,6 +228,7 @@ subprotocol
 subscribable
 substring
 subteam
+subteam's
 subteams
 subtree
 subtrees
@@ -237,14 +246,15 @@ topbar
 triaged
 truthy
 unarchive
-Unassign
 unassign
+Unassign
 unassigns
 uncategorized
 unclaimed
 unconfigured
 uncursored
 underreports
+undoable
 unescapes
 unhashed
 unindented
@@ -252,6 +262,7 @@ uniques
 unix
 unlinking
 unlinks
+unlist
 unmanaged
 unoptimized
 Unparseable
@@ -283,6 +294,7 @@ Viewport
 Vite
 Vite's
 waitlist
+Waitlisted
 walkthrough
 webhook
 webhook's
@@ -291,6 +303,6 @@ websocket
 websockets
 whoami
 wordmark
-WP
 wp
+WP
 www
