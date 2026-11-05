@@ -188,6 +188,8 @@ sf share token revoke mch_xxxxxxxx --space my-site
 
 The token is shown once, right after creation. The dashboard says it plainly: "Copy it now. It won't be shown again." Rotating keeps the grant and its scope and invalidates the old token immediately.
 
+Send the token as `X-SF-Authorization: Bearer <token>`. Spacefast reads Space access only from that header. The plain `Authorization` header belongs to your application and passes through to your code.
+
 ## Access requests
 
 A visitor who lands on a Space they cannot open can ask for access. Requests show up in the **Access requests** card and in the CLI:

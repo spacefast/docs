@@ -1,0 +1,125 @@
+---
+title: Serve MCP from a Space
+description: Expose your own tools to agents with an MCP endpoint in a Functions route, using the official TypeScript SDK over Streamable HTTP
+sidebar:
+  order: 1
+---
+
+A [Functions](/functions) route can answer the Model Context Protocol, so Claude, Cursor, and other MCP clients can call tools your Space defines. Use the official TypeScript SDK in stateless mode with JSON responses. Every tool call is one HTTP request that finishes within the Functions time limit.
+
+This page is about your own MCP server. To connect an agent to Spacefast itself, see [the Spacefast MCP server](/agents/mcp-server).
+
+## The route
+
+Install the SDK next to your site:
+
+```bash
+npm install @modelcontextprotocol/sdk zod
+```
+
+Then add one route module. `sf publish` bundles the SDK into the worker.
+
+```ts functions/mcp.ts
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
+import { z } from "zod";
+
+type Context = { env: Record<string, string | undefined> };
+
+function createServer() {
+  const server = new McpServer({ name: "my-space", version: "1.0.0" });
+  server.registerTool(
+    "add",
+    { description: "Add two numbers", inputSchema: { a: z.number(), b: z.number() } },
+    async ({ a, b }) => ({ content: [{ type: "text", text: String(a + b) }] }),
+  );
+  return server;
+}
+
+export default async function (request: Request, { env }: Context): Promise<Response> {
+  if (request.method !== "POST") {
+    return new Response(null, { status: 405, headers: { allow: "POST" } });
+  }
+  const expected = env.MCP_TOKEN && `Bearer ${env.MCP_TOKEN}`;
+  if (!expected || request.headers.get("authorization") !== expected) {
+    return Response.json(
+      { jsonrpc: "2.0", error: { code: -32001, message: "Unauthorized" }, id: null },
+      { status: 401 },
+    );
+  }
+  const transport = new WebStandardStreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+    enableJsonResponse: true,
+  });
+  await createServer().connect(transport);
+  return transport.handleRequest(request);
+}
+```
+
+The three choices that matter:
+
+- **`sessionIdGenerator: undefined`** makes the server stateless. Each request builds a fresh server, so nothing depends on the previous request.
+- **`enableJsonResponse: true`** answers each call with one JSON body. A Functions response reaches the client only after the handler finishes, so an SSE stream adds nothing.
+- **405 for `GET`** tells the client there is no standalone event stream. Without it, a client that opens one holds a request open until the time limit cuts it off.
+
+## Open the path and set the token
+
+Spaces are private by default, and a private path answers an MCP client with `403` before your code runs. List the endpoint as a public path, and let the handler check the token:
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "access": { "public": ["/mcp"] }
+}
+```
+
+Only `/mcp` opens. The rest of the Space keeps its access rules.
+
+Store the token as a secret Space variable, then publish:
+
+```bash
+openssl rand -hex 24 > ./mcp-token.txt
+sf env set MCP_TOKEN --value-from-stdin < ./mcp-token.txt
+sf publish
+```
+
+The `Authorization` header reaches your handler untouched. Without `MCP_TOKEN` set, the handler above refuses every request.
+
+## Connect a client
+
+Point the client at the route and send the token as a header. In a `.mcp.json`-style config:
+
+```json
+{
+  "mcpServers": {
+    "my-space": {
+      "type": "http",
+      "url": "https://my-site.space.fast/mcp",
+      "headers": { "Authorization": "Bearer <token>" }
+    }
+  }
+}
+```
+
+## Keep the path private instead
+
+If your client can send custom headers, you can skip the public path and let Spacefast check access. Create a [machine credential](/access#machine-credentials) for the path:
+
+```bash
+sf share token create --space my-site --name "MCP client" --path '/mcp' --show-secret
+```
+
+Send it as `X-SF-Authorization: Bearer <token>`. Spacefast reads only that header for Space access and removes it before your handler runs. A machine credential in plain `Authorization` is ignored, and the request gets the private-Space `403`.
+
+A private path does not start an OAuth sign-in in the client. It answers `403`, not a `401` challenge.
+
+## Limits
+
+| Limit | What happens |
+| --- | --- |
+| 30 seconds per request | A slower tool call fails with [`functions_transport_failed`](/errors/functions_transport_failed). Split long work into calls that each finish in time |
+| One response per request | Progress notifications arrive together with the result, not as the tool runs |
+
+Everything on the [Functions](/functions) page applies too, including outbound `fetch()` reach and the bundle limit.
+
+Use Functions rather than [Zero](/zero-runtime) for this. Zero server code cannot import npm packages, so the SDK will not load there.
