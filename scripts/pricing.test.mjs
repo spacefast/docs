@@ -12,7 +12,7 @@ test("pricing loads the public envelope and derives prices, pools, seats, and th
   assert.match(snippets.usage, /shared compute pool/u);
   assert.match(snippets.usage, /shared storage pool/u);
   assert.match(snippets.limits, /\| Storage \| 500 MB \| Unlimited \|/u);
-  assert.match(snippets.limits, /\| Audit log retention \| 2 days \| 30 days \|/u);
+  assert.match(snippets.limits, /\| Activity history \| 2 days \| 30 days \|/u);
   assert.match(snippets.plans, /\| Enterprise \| Custom \| Custom \| Unlimited \|/u);
   assert.match(snippets.usage, /\| Builds \| 100 minutes per month \| None \|/u);
   assert.match(snippets.capabilities, /\| Remove Spacefast branding \|/u);
