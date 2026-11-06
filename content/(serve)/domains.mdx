@@ -89,6 +89,14 @@ Every observed `A` record has to point at Spacefast. A leftover record from your
 
 Spacefast generates `A`, `AAAA` and `TXT` records only. There is no CNAME or ALIAS instruction.
 
+### Subdomains with DNS managed by Pressable
+
+DNS records and a site's domain list are separate. [Pressable adds default address and TXT records](https://pressable.com/knowledgebase/adding-dns-records-in-pressable/) when you add a domain to a Pressable account. If your subdomain redirects to a Pressable site's primary domain after a DNS change, check whether Pressable also lists that hostname on the WordPress site.
+
+For a subdomain that should serve only Spacefast, remove that hostname's Pressable site association, not the parent domain or its DNS zone. Use the exact address records and any ownership TXT record shown by Spacefast. If Pressable has added a competing `atomic-domain-…` ownership TXT for that same hostname, remove only that obsolete claim, leaving Spacefast's claim in place. Preserve unrelated TXT records, including email records, and records for the parent domain.
+
+A CNAME cannot coexist with a TXT record at the same DNS name. If Spacefast requests ownership TXT at the subdomain itself, replace a CNAME there with the address records Spacefast provides. Run the domain check again after updating DNS. If Pressable restores the site association or its ownership TXT, ask Pressable support to release that hostname while keeping the DNS zone intact.
+
 ## Apex and www travel together
 
 If the hostname you add is the registrable apex or its `www` twin, both hostnames get set up. `example.com` pulls in `www.example.com`, and `www.example.com` pulls in `example.com`. Any other subdomain, like `app.example.com`, is connected on its own.
