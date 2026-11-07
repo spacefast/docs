@@ -30,3 +30,24 @@ test("accepts UUID literals while rejecting a separate short commit hash", () =>
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("accepts the OAuth client-type term while rejecting the same word as a marker", () => {
+  const directory = mkdtempSync(join(tmpdir(), "docs-public-safety-"));
+  try {
+    const marker = ["confi", "dential"].join("");
+    const fixture = join(directory, "reference.md");
+    writeFileSync(
+      fixture,
+      `sf oauth-apps create [--${marker}]\n  --${marker}  Issue a client secret.\nRotate a ${marker} app's secret, as for any ${marker} client.\n`,
+    );
+    const accepted = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+    assert.equal(accepted.status, 0, accepted.stderr);
+
+    writeFileSync(fixture, `sf oauth-apps create [--${marker}]\n\n${marker.toUpperCase()}: roadmap\n`);
+    const rejected = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+    assert.equal(rejected.status, 1);
+    assert.match(rejected.stderr, /reference\.md:3 — internal-only marker/u);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});

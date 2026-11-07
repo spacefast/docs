@@ -125,7 +125,18 @@ const scanText = (path, text) => {
     }
   }
   for (const marker of internalMarkers) {
-    const index = lower.indexOf(marker.toLowerCase());
+    const needle = marker.toLowerCase();
+    let index = lower.indexOf(needle);
+    // OAuth (RFC 6749) names a client type with one of these words. Its CLI
+    // flag (`--<word>`) and the phrases "<word> app" and "<word> client" are
+    // public product vocabulary, not a document classification.
+    while (
+      index !== -1 &&
+      (lower.startsWith("--", index - 2) ||
+        /^\s+(?:app|client)\b/u.test(lower.slice(index + needle.length, index + needle.length + 12)))
+    ) {
+      index = lower.indexOf(needle, index + needle.length);
+    }
     if (index !== -1) {
       report(path, lineForOffset(text, index), "internal-only marker");
     }
