@@ -1,11 +1,11 @@
 ---
 title: storage and logs
-description: List and delete the objects a Space's app uploaded, and read the request and handler logs the Space produced
+description: Upload, list, and delete the objects in a Space's app storage, and read the request and handler logs the Space produced
 sidebar:
   order: 23
 ---
 
-List your app's stored objects and read access or runtime logs within your plan's retention window. Runtime lines take time to appear, and static Spaces have no runtime logs.
+Upload, list, and delete your app's stored objects, and read access or runtime logs within your plan's retention window. Runtime lines take time to appear, and static Spaces have no runtime logs.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
@@ -13,7 +13,7 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 List object metadata and quota usage for files uploaded by a Space's app.
 
-This is runtime object storage, not your published files. Only a Space with a runtime app has any. Objects are addressed by a bare 32-character hex id. There is no key and no per-object visibility.
+This is runtime object storage, not your published files. Only a Space with a runtime app has any. Objects are addressed by a bare 32-character hex id. There is no key or path.
 
 ```text
 sf storage [target] [--space <value>] [--limit <n>] [--cursor <value>]
@@ -46,13 +46,51 @@ A table of `Id | Size | Type | Uploaded by | Created`, or "No stored objects." A
 
 With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
 
-Upload with `sf storage put` or the API.
+Upload with [`sf storage put`](#sf-storage-put) or the API.
 
 ### Errors
 
 | Code | Exit | When |
 | --- | --- | --- |
 | `validation_error` | 2 | `--limit` or `--cursor` did not parse. Raised before the request |
+
+## sf storage put
+
+Upload one file to the Space's app storage.
+
+```text
+sf storage put <file> [--space <value>] [--content-type <value>] [--public]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<file>` | Path to a regular file. Required. 5 MiB at most |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--content-type=<value>` | `application/octet-stream` | The object's MIME type |
+| `--public` | `false` | Make the object readable by anyone holding its URL |
+
+The file's base name becomes the object's `filename`. Without `--public` the object is private, and the public read URL never serves it. The same content policy as any upload applies, so active web content and executables are refused. See [Storage](/object-storage#limits).
+
+```bash
+sf storage put receipt.pdf --content-type application/pdf
+sf storage put logo.png --content-type image/png --public --space docs
+```
+
+### Output
+
+`Uploaded <file>: <id> (<size> B).` With `--json`, `data` is the stored object.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | The path is not a regular file, or the file is larger than 5 MiB. Raised before the request |
 
 ## sf storage rm
 

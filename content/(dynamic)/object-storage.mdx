@@ -11,7 +11,7 @@ Storage holds files uploaded by a running app, separate from published version f
 
 Storage holds files a running app uploaded, not the files you published. Only a Space with a runtime app has it. Version files are a different thing and live in [Publishing](/publish).
 
-An object is addressed by a bare 32-character hexadecimal id. There is no key, no path, and no visibility flag. The id is the identity.
+An object is addressed by a bare 32-character hexadecimal id. There is no key and no path. The id is the identity.
 
 | Field | Notes |
 | --- | --- |
@@ -59,7 +59,7 @@ sf storage rm 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
 
 `sf storage rm` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
 
-Upload from the CLI with `sf storage put <file>`, or through the API or the dashboard.
+Upload from the CLI with [`sf storage put <file>`](/cli/storage#sf-storage-put), or through the API or the dashboard.
 
 ## Dashboard
 

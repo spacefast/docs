@@ -107,7 +107,7 @@ curl -X POST https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/zero/token \
 
 | Field | Value |
 | --- | --- |
-| `credentialId` | A live `mch_` machine credential of this Space. Required |
+| `credentialId` | A live `mch_` machine credential of this Space. Required. Create one with `sf share token create`. See [Machine credentials](/access#machine-credentials) |
 | `ttlSeconds` | 60 to 3,600. Defaults to 900 |
 
 Send the token to the Space in `X-SF-Authorization`, never in `Authorization`:
@@ -123,6 +123,10 @@ curl -X POST \
 The plain `Authorization` header belongs to your application and passes through untouched. That's why the platform's bearer takes a header of its own.
 
 The token is bound to the host the Space serves on, and the runtime re-derives what it may do from the credential's Grant on every request. The `capabilities` in the response are what to expect, not a promise: a credential scoped away from a path answers there with less, never with more.
+
+### Your app's Abilities
+
+The live version publishes Abilities of its own for its content model. [`listSpaceZeroAbilities`](/api/reference/spaces/listspacezeroabilities) lists them, each with its `name`, its input and output schemas, and what it `requires`. Call one the same way, with its `name` in the path. The storage Abilities above are not in that list, because the runtime registers them on every Space.
 
 ## The database
 
