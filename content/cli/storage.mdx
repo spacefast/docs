@@ -46,7 +46,7 @@ A table of `Id | Size | Type | Uploaded by | Created`, or "No stored objects." A
 
 With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
 
-There is no `sf storage upload`. Uploading is an API call, or `storage.upload()` from the client SDK inside your app.
+Upload with `sf storage put` or the API.
 
 ### Errors
 
@@ -110,7 +110,7 @@ A bare kind in the first slot works: `sf logs runtime` is the same as `sf logs -
 | `-f, --follow` | `false` | Poll for new entries every 2 seconds until interrupted with Ctrl-C |
 | `--cursor=<value>` | none | Continue from the cursor printed by the previous page |
 | `--request-id=<value>` | none | Runtime logs only. Everything logged while serving one request |
-| `--handler=<value>` | none | Runtime logs only. Lines from one Zero mutation or Functions handler |
+| `--handler=<value>` | none | Runtime logs only. Lines from one Functions handler |
 
 `--follow` polls, it does not stream over a socket. It dedupes by the whole entry and remembers up to 5,000 keys.
 

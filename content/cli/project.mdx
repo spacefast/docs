@@ -30,11 +30,8 @@ sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functio
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-f, --force` | `false` | Overwrite existing generated files. |
-| `--runtime=<static\|zero\|functions>` | `static` | Project runtime to scaffold. |
-| `--template=<todo\|guestbook\|contact>` | none | Zero starter template to scaffold. |
-| `--title=<value>` | none | Zero starter app title. |
-| `--no-git` | off | Skip initializing git for a Zero starter app. |
-| `--space=<value>` | none | Space ID, live URL, domain, or slug to link the directory to. Env `SPACEFAST_SPACE`. |
+| `--runtime=<static\|zero\|functions>` | `static` | Project to scaffold. `zero` writes a starter [Zero](/zero) `zero.config.ts`, the same one `sf zero init` writes. |
+| `--space=<value>` | none | Space ID, live URL, domain, or slug to link the directory to. Only with `--runtime static`. Env `SPACEFAST_SPACE`. |
 | `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 | `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
 
@@ -44,7 +41,7 @@ sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functio
 sf init
 sf init my-site
 sf init --space docs
-sf init my-app --runtime zero --template guestbook
+sf init my-app --runtime zero
 ```
 
 ### What it writes

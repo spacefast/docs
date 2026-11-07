@@ -1,0 +1,271 @@
+---
+title: Dynamic sites with Zero
+description: Zero compiles one zero.config.ts (collections, tables, actions, and TSX pages) into WordPress, and Spacefast hosts it on your Space.
+sidebar:
+  order: 0
+---
+
+Zero turns one `zero.config.ts` into a WordPress app: collections, tables, actions, access rules, and pages. `sf publish` sends the source, and Spacefast compiles it and runs it on the Space's own WordPress. Zero is available on every account, with [usage allowances and metered rates](/usage).
+
+## What Zero is
+
+Zero is a compiler. You describe your data and your server logic in TypeScript, and Zero compiles it to WordPress plugins: a post type for each collection, a SQL table for each table, REST routes for both, and plain PHP for your hooks and actions. Nothing runs JavaScript on the server.
+
+A project is a Zero app when it has a `zero.config.ts` at its root. There is no runtime block to declare and no switch to turn on.
+
+The other runtime is [Functions](/functions), a worker for npm-heavy code and framework output like OpenNext.
+
+## Start an app
+
+```bash
+sf init my-app --runtime zero
+cd my-app
+sf zero dev
+sf publish
+```
+
+`sf init --runtime zero` writes a starter `zero.config.ts` named after the directory. `sf zero init` writes the same file. `sf zero dev` runs the app on a local WordPress and rebuilds when you save. `sf publish` publishes it to a new Space.
+
+The starter holds one collection, one table, and one action:
+
+```ts zero.config.ts
+import { action, collection, db, defineConfig, table, text, timestamp } from "zero";
+
+// Collections are WordPress posts: they show up in wp-admin and the REST API.
+export const posts = collection({
+  title: text().notNull(),
+  body: text(),
+}, { title: "title" });
+
+// Tables are plain MySQL tables for app data.
+export const signups = table({
+  email: text().notNull().unique().max(191),
+  createdAt: timestamp().notNull().defaultNow(),
+});
+
+export default defineConfig({
+  name: "my-app",
+  collections: { posts },
+  tables: { signups },
+  actions: {
+    signup: action({
+      input: { email: text().notNull() },
+      access: "anyone",
+      async handler({ email }) {
+        const [row] = await db.insert(signups).values({ email: email.trim().toLowerCase() }).returning();
+        return { id: row?.id ?? null };
+      },
+    }),
+  },
+});
+```
+
+Everything comes from the `"zero"` module.
+
+## What you get
+
+| Piece | What it is |
+| --- | --- |
+| Collections | Editorial content. Each is a WordPress post type with the block editor, drafts, and revisions |
+| Tables | App data in its own SQL table |
+| REST routes | `/wp-json/zero/v1/<collection>` for every collection and table, with relations loaded through `with` |
+| Actions | Named server functions at `POST /wp-json/zero/v1/actions/<name>` |
+| Hooks | Code that runs before or after a collection write, inside the same transaction |
+| Access rules | Who may read and write each collection, table, field, and action |
+| Sign-in | Accounts, sessions, guests, passkeys, and MFA through the `zero-identity` plugin |
+| Jobs and webhooks | Background work that runs after a request commits |
+| Pages | TSX routes and layouts that WordPress renders per request |
+| Typed client | A `fetch` client generated from your schema |
+
+Your data lives in the Space's MySQL database. See [Database](/database).
+
+## Collections and tables
+
+Pick the storage by what the data is. A `collection()` is content people edit: it gets a WordPress post type, an editor in wp-admin, drafts, and revisions. A `table()` is app data: it gets its own SQL table and nothing else.
+
+```ts zero.config.ts
+import { collection, defineConfig, defineRelations, integer, richText, table, text } from "zero";
+
+const posts = collection({ title: text().notNull(), body: richText() }, { content: "body" });
+const stock = table({
+  postId: integer().references(() => posts.id, { onDelete: "cascade" }),
+  quantity: integer().notNull().default(0),
+});
+
+const collections = { posts };
+const tables = { stock };
+const relations = defineRelations({ ...collections, ...tables }, (r) => ({
+  stock: { post: r.one.posts({ from: r.stock.postId, to: r.posts.id }) },
+  posts: { stock: r.many.stock() },
+}));
+
+export default defineConfig({ collections, tables, relations });
+```
+
+Every row gets an `id`. The registry key is the name everywhere: `shoppingList` is `zero.shoppingList` in the client and `/wp-json/zero/v1/shopping_list` over REST.
+
+Column builders include `text()`, `integer()`, `real()`, `boolean()`, `timestamp()`, `date()`, `json()`, `email()`, `url()`, `slug()`, `richText()`, `media()`, `select()`, `group()`, `repeater()`, and `blocks()`. Chain `.notNull()`, `.default(value)`, `.unique()`, `.min(n)`, `.max(n)`, `.pattern(/re/)`, or `.references(...)` to constrain one. A modifier that makes no sense for its column, like `.max()` on a boolean, fails the build at that line.
+
+## Access rules
+
+Every collection and table takes `access: { read, create, update, delete }`. Each rule is `true`, `false`, `"anyone"`, `"authenticated"`, a role, or a function of `ctx`. Roles rank `"guest" < "subscriber" < "author" < "editor" < "admin"`, and a role admits itself and everything above it.
+
+```ts
+{ access: { read: "anyone", create: "author", update: "author", delete: "editor" } }
+```
+
+The default is read by `"anyone"`, write by `"editor"`. Actions default to `"editor"` too, so an action a visitor calls needs `access: "anyone"`. The rules hold on every path into the data: Zero's REST routes, WordPress's own `/wp/v2` routes, wp-admin, and Abilities.
+
+## Actions
+
+An action takes typed input and returns JSON. `input` uses the same column builders as your schema, so a bad request is refused before your handler runs.
+
+```bash
+curl -X POST https://my-site.view.fast/wp-json/zero/v1/actions/signup \
+  -H 'Content-Type: application/json' \
+  --data '{"email":"sam@example.com"}'
+```
+
+A successful call answers `{ "data": ... }` with whatever the handler returned. Throw `new HttpError(status, code, message)` to choose the error response. Any throw rolls back every write the request made.
+
+## Hooks
+
+Hooks run around collection writes: `beforeCreate`, `afterCreate`, `beforeUpdate`, `afterUpdate`, `beforeDelete`, and `afterDelete`. A `before` hook can change the data or throw to refuse the write.
+
+```ts
+hooks: {
+  posts: {
+    beforeCreate(data) {
+      data.title = data.title.trim();
+      if (data.title === "") throw new HttpError(422, "invalid_input", "A post needs a title");
+    },
+  },
+},
+```
+
+## What compiles
+
+Hooks, actions, and access functions are a checked subset of TypeScript compiled to PHP. Functions, closures, spread, classes, `async`/`await` on Zero calls, and the usual control flow all work. `eval`, generators, `any`, and dynamic `import()` do not. Anything outside the subset fails the build at `file:line:col` with a fix:
+
+```bash
+sf zero check
+sf zero check --json
+```
+
+Imports can be `"zero"`, your own relative modules, and installed source packages. `sf publish` captures the installed packages it needs. Spacefast never runs `npm install`.
+
+## Call it from a frontend
+
+`sf zero build` and `sf zero dev` write a typed client to `zero/client/`. It is plain `fetch`, so it works from any framework.
+
+```ts
+import { createClient } from "./zero/client/index.ts";
+
+const zero = createClient({ url: "https://my-site.view.fast/wp-json/zero/v1" });
+
+const posts = await zero.posts.list({ orderBy: { title: "asc" } });
+await zero.actions.signup({ email: "sam@example.com" });
+```
+
+Every argument and result is typed from your schema. A published Space also serves its client at `/__spacefast/client.js`, with types at `/__spacefast/client.d.ts`.
+
+To serve a static frontend from the same Space, put its files in `public/`. `sf publish` uploads them with the app.
+
+## Pages
+
+Pages are TSX files under `pages/`. They compile at build time, and WordPress renders them on every request with the visitor's own data, through the same access rules as the REST routes.
+
+| File | Route |
+| --- | --- |
+| `pages/page.tsx` | `/` |
+| `pages/about/page.tsx` | `/about` |
+| `pages/notes/[slug]/page.tsx` | `/notes/<slug>`, one per post in a collection, with `collectionPage("notes")` |
+| `pages/layout.tsx` | Wraps every page below it |
+| `pages/not-found.tsx` | The body of a 404 |
+
+A static route beats an item route at the same path, so `notes/featured` wins over `notes/[slug]`. WordPress's own paths, like `/wp-admin` and `/wp-json`, cannot be claimed. Every page response is `Cache-Control: private, no-store`, because its HTML depends on the visitor.
+
+A page reads data with a `load()` function and renders request values through helpers like `<Show>` and `orElse()`. Plain `&&` or `?:` on request data is refused at build time, with the line and the helper to use instead.
+
+## Environment variables
+
+Read a Space variable with `env()`. Set it with `sf env set`, or put it in `.env.server` and publish.
+
+```ts
+import { action, env } from "zero";
+
+const checkout = action({
+  access: "anyone",
+  handler() {
+    return { configured: env("STRIPE_SECRET_KEY") !== null };
+  },
+});
+```
+
+See [Environment variables](/environment-variables).
+
+## Jobs and webhooks
+
+A job is background work you enqueue from a hook or an action. It runs after the request commits, never inside it, and a job that throws retries with backoff up to its `retries`.
+
+```ts
+jobs: {
+  notifyEditors: job({
+    input: { postId: integer().notNull() },
+    retries: 3,
+    async handler(input, ctx) {
+      // send the email
+    },
+  }),
+},
+```
+
+Call `jobs.notifyEditors.enqueue({ postId })` to queue one. A `webhooks` entry POSTs each matching write to a URL, signed in the `zero-signature` header, and retries the same way. On Spacefast a due job can wait up to five minutes before it starts.
+
+## No realtime
+
+Zero has no live subscriptions. A client sees a change when it reads again.
+
+## Before you publish a schema change
+
+Every version of a Space shares one database, migrated forward to the newest schema. Rolling back the code does not roll back the schema. See [Database](/database#migrations).
+
+## Run it locally
+
+```bash
+sf zero dev
+sf zero dev stop
+sf zero build
+```
+
+`sf zero dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer. The first start downloads WordPress and the plugins the app needs. Keep it running and it rebuilds on every save. It prints the local URL and an admin login for local use only.
+
+`sf zero build` writes the plugins to `.zero/wp-content/`, new migrations to `zero/migrations/`, and the client to `zero/client/`. Commit `zero/migrations/`, `zero/client/`, and `zero.gen.ts`. `.zero/` is local state, and publish skips it.
+
+`sf zero check` and `sf publish` use the compiler bundled with the CLI. `sf zero dev` and `sf zero build` need the CLI's native optional package. If it is missing, reinstall the CLI with optional dependencies enabled.
+
+## Bring a schema from another CMS
+
+```bash
+sf zero import payload ../my-payload-app
+sf zero import emdash ../site --out app/zero.config.ts
+```
+
+`sf zero import` reads a Payload, EmDash, or Sanity schema and writes a new `zero.config.ts`. It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the import, and nothing is written. Every write rule starts as denied, so set `access` before you publish.
+
+Have a Zero app on Spacefast with no `zero.config.ts`? See [Migrate an older Zero app](/zero-migrate).
+
+<CardGroup cols={2}>
+  <Card title="Database" href="/database" icon="database">
+    Where the data lives, migrations, and the SQL console.
+  </Card>
+  <Card title="Environment variables" href="/environment-variables" icon="key-round">
+    Secrets your actions read with `env()`.
+  </Card>
+  <Card title="Functions" href="/functions" icon="zap">
+    Workers, the `functions/` file router, and OpenNext.
+  </Card>
+  <Card title="CLI: sf zero" href="/cli/zero" icon="terminal">
+    Every `sf zero` command and its flags.
+  </Card>
+</CardGroup>

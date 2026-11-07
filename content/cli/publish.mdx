@@ -293,7 +293,7 @@ Start the local dev server.
 sf dev
 ```
 
-`sf dev` runs the project in this directory. It is not a local mirror of what publish serves: for a `zero` runtime it starts the capsule dev server, and for anything else it serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. There is no static file server for your site on that path. For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
+`sf dev` serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. It is not a local mirror of what publish serves, and there is no static file server for your site on that path. For a [Zero](/zero) app, run `sf zero dev`. For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
@@ -301,9 +301,6 @@ sf dev
 | `-p, --port=<value>` | `4173` | Preview port. 1 to 65535 |
 | `--host=<value>` | `127.0.0.1` | Host interface for the local dev server |
 | `--allow-network` | off | Allow an explicit non-loopback binding |
-| `--state-backend=memory\|sqlite` | `memory` | Local state adapter for a runtime dev server |
-| `--watch` / `--no-watch` | `--watch` | Poll source files and reload the runtime after changes |
-| `--watch-interval=<ms>` | `1000` | Source polling interval in milliseconds |
 | `--dry-run` | off | Print the dev server plan without starting it |
 
 A non-loopback `--host` without `--allow-network` fails with `validation_error`. A project whose `sf.jsonc` declares the `functions` runtime fails with `runtime_dev_unsupported` (exit 2), which points you at your framework's dev server.
