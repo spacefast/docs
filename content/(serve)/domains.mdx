@@ -70,24 +70,28 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
 An unassigned domain has no records to show. Instructions appear once the domain is assigned to a Space, which is why `sf domains add` assigns in the same command.
 
-Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` produces six of them in the common case, because the `www` twin is set up alongside it.
+Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` usually produces three, because the `www` twin is set up alongside it.
 
 | Type | Name | Value | Purpose |
 | --- | --- | --- | --- |
-| `TXT` | `_stattic-verify.example.com` | `stattic-team-verification=tm_xxxxxxxx` | `verification` |
-| `TXT` | `_stattic-verify.www.example.com` | `stattic-team-verification=tm_xxxxxxxx` | `verification` |
-| `A` | `example.com` | `192.0.79.132` | `routing` |
-| `A` | `www.example.com` | `192.0.79.132` | `routing` |
-| `AAAA` | `example.com` | the IPv6 address in your instructions | `routing` |
-| `AAAA` | `www.example.com` | the IPv6 address in your instructions | `routing` |
+| `A` | `example.com` | `192.0.79.157` | `routing` |
+| `A` | `example.com` | `192.0.79.175` | `routing` |
+| `CNAME` | `www.example.com` | `example.com` | `routing` |
 
-The TXT value carries your team id and proves you control the zone. The address records are generated for your hostname, so copy the exact values from your own output rather than the ones above.
+A subdomain like `app.example.com` gets its two `A` records and nothing else. The addresses are generated for your hostname, so copy the exact values from your own output rather than the ones above.
 
 :::warning[Delete the old address records first]
-Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live. The same rule applies to `AAAA` when IPv6 is offered.
+Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live.
 :::
 
-Spacefast generates `A`, `AAAA` and `TXT` records only. There is no CNAME or ALIAS instruction.
+### When a TXT record shows up
+
+Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours:
+
+- **Another host still holds it.** The record is named for the hostname, its value starts with `atomic-domain-`, and the domain waits until it is published. Remove any CNAME at that name first; a TXT record cannot sit beside one.
+- **Another Space serves it.** Adding it here leaves a claim and returns a `_spacefast-claim.<domain>` TXT record. Publish it, then verify to move the domain to this Space.
+
+Keep exactly one `atomic-domain-` record per hostname. Two of them, even when one is correct, make the claim fail.
 
 ## Apex and www travel together
 
