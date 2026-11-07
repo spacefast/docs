@@ -4,5 +4,5 @@ export default defineMeta({
   title: "Dynamic",
   collapsed: false,
   order: 5,
-  pages: ["zero-runtime", "functions", "database", "environment-variables", "crons", "object-storage", "logs", "wordpress", "zero-migrate"],
+  pages: ["zero", "functions", "database", "environment-variables", "crons", "object-storage", "logs", "wordpress", "zero-migrate"],
 });

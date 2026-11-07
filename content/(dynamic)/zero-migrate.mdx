@@ -5,7 +5,7 @@ sidebar:
   order: 8
 ---
 
-Your Zero 0.8 app keeps working. Its Space keeps serving, and you can keep publishing updates to it. New Spaces start on the current Zero, the `zero.config.ts` compiler described in [Dynamic sites with Zero](/zero-runtime).
+Your Zero 0.8 app keeps working. Its Space keeps serving, and you can keep publishing updates to it. New Spaces start on the current Zero, the `zero.config.ts` compiler described in [Dynamic sites with Zero](/zero).
 
 A Zero 0.8 app is one built on `@spacefast/zero`: a `capsule()` in `server/index.ts`, declared in `sf.jsonc` as `"runtime": { "kind": "zero" }`.
 
@@ -61,7 +61,7 @@ Every write starts denied. Open `zero.config.ts` and set `access` on each collec
 The converter refuses these, with a pointer to each:
 
 - **Endpoints.** Rewrite each one as a named action at `POST /wp-json/zero/v1/actions/<name>`, then update its callers.
-- **Pages, layouts, and islands.** Rebuild them as [TSX pages](/zero-runtime#pages).
+- **Pages, layouts, and islands.** Rebuild them as [TSX pages](/zero#pages).
 - **Connector calls inside handlers.**
 - **Realtime.** Declarations are dropped with a review hint. The current Zero has no live queries, so a client reads again after a write.
 - **Pagination, dynamic query builders, and range comparisons on optional fields.**

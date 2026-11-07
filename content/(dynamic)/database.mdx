@@ -8,12 +8,12 @@ sidebar:
 There's no connection string for this database. Your code reaches it through Zero's `db` or a worker's `env.DB`, and you reach it through a single-use SQL console.
 
 :::note[Don't have a database yet?]
-Start a [Zero](/zero-runtime) app with `sf init --runtime zero`. Its `zero.config.ts` declares the collections and tables, and Spacefast creates them when you publish. A [Functions](/functions#what-is-on-env) worker also gets the database, through `env.DB`.
+Start a [Zero](/zero) app with `sf init --runtime zero`. Its `zero.config.ts` declares the collections and tables, and Spacefast creates them when you publish. A [Functions](/functions#what-is-on-env) worker also gets the database, through `env.DB`.
 :::
 
 ## What it is
 
-Every Space has one database, the MySQL that lives on the machine serving the site. A [Zero](/zero-runtime) app keeps its collections and tables there. A [Functions](/functions) worker gets it as `env.DB`.
+Every Space has one database, the MySQL that lives on the machine serving the site. A [Zero](/zero) app keeps its collections and tables there. A [Functions](/functions) worker gets it as `env.DB`.
 
 You do not create it, size it, or connect to it. Your config declares the schema, and Spacefast applies it when a version initializes.
 

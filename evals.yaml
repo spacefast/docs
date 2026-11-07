@@ -71,7 +71,7 @@ questions:
   - id: zero-declare
     question: How do I turn on the Zero runtime for a project?
     expected: ["a zero.config.ts at the project root", "no runtime block in sf.jsonc"]
-    routes: /zero-runtime
+    routes: /zero
   - id: routing-precedence
     question: If both a _redirects file and sf.jsonc rules match a path, which wins?
     expected: ["_redirects"]

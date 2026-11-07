@@ -92,7 +92,7 @@ EOF
 sf publish
 ```
 
-A [Zero](/zero-runtime) action or hook reads it with `env()`, which returns `null` for a name that isn't set.
+A [Zero](/zero) action or hook reads it with `env()`, which returns `null` for a name that isn't set.
 
 ```ts zero.config.ts
 import { action, defineConfig, env } from "zero";
