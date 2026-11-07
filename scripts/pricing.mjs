@@ -19,7 +19,7 @@ const limitLabels = {
   teamMembers: ["Team members"],
   liveSpaces: ["Live Spaces"],
   customDomains: ["Custom domains"],
-  auditLogRetentionHours: ["Audit log retention", "hours"],
+  auditLogRetentionHours: ["Activity history", "hours"],
   buildAccessLogRetentionHours: ["Build and access log retention", "hours"],
   buildsDeploysDaily: ["Builds and deploys per day"],
   shareLinksPerSpace: ["Share links per Space"],
