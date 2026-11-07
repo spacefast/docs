@@ -41,7 +41,7 @@ See [Versions](/versions#how-many-versions-are-kept) for version cleanup.
 | Manifest body | 16 MiB | `manifest_body_too_large` |
 | `sf.jsonc` file size | 256 KiB | Config validation error |
 | Templates in `sf.jsonc` | 100 | `config_templates_over_limit` |
-| Cron jobs per space | 8 | Config validation error |
+| Cron jobs declared per space | 95. Your plan sets how many run, see [Crons](/crons#allowance-by-plan) | `config_cron_too_many` |
 | Data sources in `sf.jsonc` | 32 | Config validation error |
 | Inject snippets | 16, each 8 KiB | Config validation error |
 | Redirect rules compiled | 2,100 total, 2,000 static, 100 dynamic | Routing compile error |
