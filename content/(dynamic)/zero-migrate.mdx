@@ -9,6 +9,52 @@ Your Zero 0.8 app keeps working. Its Space keeps serving, and you can keep publi
 
 A Zero 0.8 app is one built on `@spacefast/zero`: a `capsule()` in `server/index.ts`, declared in `sf.jsonc` as `"runtime": { "kind": "zero" }`.
 
+## Keep working on a 0.8 app
+
+A 0.8 app keeps its own local dev server and database commands. The [`sf zero`](/cli/zero) commands are for `zero.config.ts` apps, not for this one.
+
+### Run it locally
+
+From the 0.8 project root, `sf dev` starts the 0.8 dev server, because `sf.jsonc` declares `"runtime": { "kind": "zero" }`.
+
+```bash
+sf dev
+sf dev --state-backend sqlite
+sf dev --no-watch
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--port=<value>` | `4173` | Port for the dev server |
+| `--state-backend=memory\|sqlite` | `memory` | Where local state lives. `memory` resets on every start |
+| `--watch` / `--no-watch` | `--watch` | Poll source files and reload after changes |
+| `--watch-interval=<ms>` | `1000` | Polling interval in milliseconds |
+| `--dry-run` | off | Print the dev server plan without starting it |
+
+`sf dev` binds `127.0.0.1` unless you pass `--host` with `--allow-network`.
+
+### Read and migrate its database
+
+These commands read the tables the 0.8 app declares. A [Functions](/functions) worker declares none, so they answer it with `db_not_available` or `runtime_kind_mismatch`. `sf db console` works on any Space. See [Database](/database#the-sql-console).
+
+```bash
+sf db
+sf db list
+sf db dump --table todos --limit 100
+sf db export --output ./backup.json
+sf db migrate
+```
+
+| Command | What it does |
+| --- | --- |
+| `sf db [target]` | Tables, columns, and the pending migration plan |
+| `sf db list [target]` | Tables and columns. Aliased as `sf db ls` |
+| `sf db dump [target]` | Rows from every declared table. `--table` picks one, `--limit` caps rows per table (default 25, at most 100), and `--limit 0` prints row counts only |
+| `sf db export [target]` | Every declared table to one versioned JSON backup. `--output` names the file. An existing file is replaced only after the whole export succeeds |
+| `sf db migrate [source]` | Re-apply the live version's schema migrations, and preview what the source tree would change on top. `--drop` and `--rename` preview those operations without applying them |
+
+Pass `--port <n>` or `--local-url <url>` to `sf db`, `sf db list`, `sf db dump`, or `sf db export` to read a running `sf dev` server instead of the live version.
+
 ## What's coming
 
 Automatic migration is coming. This page will show how to run it when it ships. Until then, nothing changes for your app, and you do not need to do anything.

@@ -11,6 +11,8 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 There is no connection string anywhere in the CLI or the API. `sf db console` is how you reach the database directly.
 
+An older Zero app that declares `"runtime": { "kind": "zero" }` in `sf.jsonc` also has `sf db`, `sf db list`, `sf db dump`, `sf db export`, and `sf db migrate`. See [Migrate an older Zero app](/zero-migrate#read-and-migrate-its-database).
+
 ## sf db console
 
 Open a phpMyAdmin console on the Space's database.

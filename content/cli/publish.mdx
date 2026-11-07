@@ -293,12 +293,12 @@ Start the local dev server.
 sf dev
 ```
 
-`sf dev` serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. It is not a local mirror of what publish serves, and there is no static file server for your site on that path. For a [Zero](/zero) app, run `sf zero dev`. For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
+`sf dev` serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. It is not a local mirror of what publish serves, and there is no static file server for your site on that path. For a [Zero](/zero) app, run `sf zero dev`. An older Zero app that declares `"runtime": { "kind": "zero" }` in `sf.jsonc` still runs under `sf dev`. See [Migrate an older Zero app](/zero-migrate#keep-working-on-a-08-app). For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-d, --dir=<value>` | `.` | Project directory |
-| `-p, --port=<value>` | `4173` | Preview port. 1 to 65535 |
+| `--dir=<value>` | `.` | Project directory |
+| `--port=<value>` | `4173` | Preview port. 1 to 65535 |
 | `--host=<value>` | `127.0.0.1` | Host interface for the local dev server |
 | `--allow-network` | off | Allow an explicit non-loopback binding |
 | `--dry-run` | off | Print the dev server plan without starting it |
