@@ -108,13 +108,13 @@ A version published from a connected Git branch also gets a branch hostname, `ht
 
 ## Drafts expire in 24 hours
 
-A version that is declared but never finalized is a draft. Drafts live for 24 hours. Past that they flip to `expired` and their file declaration is dropped, so an abandoned draft cannot be resumed. Publish again instead.
+A version that is declared but never finalized is a draft. Drafts live for 24 hours. Past that they flip to `expired` and stop accepting uploads, so an abandoned draft cannot be resumed. Publish again instead. The expired draft stays in the version history.
 
 This only affects versions still in `created`, `uploading`, or `uploaded`. A ready version has no clock on it.
 
 ## How many versions are kept
 
-Ready versions stay until you delete them, with one exception. Free Spaces have a retained-version cap, counting everything that is not failed, canceled, or expired. The publish that takes a Free Space past its cap still goes through. The oldest ready versions that nothing serves expire in the background — their bytes are purged, but their history stays. A version the live pointer or a branch alias serves is never expired. Paid plans have no cap. See [Limits](/limits).
+All of them. Ready versions stay until you delete them, on every plan.
 
 To delete one:
 
