@@ -60,7 +60,7 @@ test("unfamiliar homepage terms have a linked glossary with definitions", async 
   const home = await builtPage("/");
   const glossary = await builtPage("/glossary");
   assert.match(home, /\[glossary\]\(\/docs\/glossary\/\)/iu);
-  for (const term of ["Ability", "Capsule", "Grant", "Live", "Space", "Version", "Zero"]) {
+  for (const term of ["Ability", "Grant", "Live", "Space", "Version", "Zero"]) {
     assert.match(glossary, new RegExp(`^## ${term}(?:\\b| \\()`, "mu"), `${term} needs a definition`);
   }
 });
@@ -71,11 +71,8 @@ test("Database gives the Zero prerequisite before query instructions", async () 
   const query = database.indexOf("## Query it from code");
   assert.ok(prerequisite >= 0 && query > prerequisite);
   assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\/\)/u);
-  assert.match(database.slice(prerequisite, query), /kind: "zero"/u);
-  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime\/#declare-it\)/u);
-  assert.match(database.slice(prerequisite, query), /`server`/u);
-  assert.match(database.slice(prerequisite, query), /server file is required/iu);
   assert.match(database.slice(prerequisite, query), /sf init --runtime zero/u);
+  assert.match(database.slice(prerequisite, query), /`zero\.config\.ts`/u);
 });
 
 test("Troubleshooting gives a first diagnostic step before the error catalog", async () => {

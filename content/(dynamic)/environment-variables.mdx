@@ -1,6 +1,6 @@
 ---
 title: Environment variables
-description: Set variables on a Space or a team, keep secrets write-only, substitute them into files at build, and read them from a handler as ctx.env
+description: Set variables on a Space or a team, keep secrets write-only, substitute them into files at build, and read them from server code at runtime
 sidebar:
   order: 3
 ---
@@ -81,7 +81,7 @@ sf env set API_URL https://api.example.com --branch-value beta=https://beta.exam
 
 `--branch-value` takes `branch=value` and repeats. An empty branch or an empty value is a validation error.
 
-### Runtime, `ctx.env`
+### Runtime, `env()`
 
 Server-only values belong in `.env.server` next to your project. `sf publish` reads that file, syncs every key into the Space's variables **as secrets**, and never uploads the file itself. The shared publish denylist covers `.env.*`, so the bytes stay on your machine.
 
@@ -92,24 +92,26 @@ EOF
 sf publish
 ```
 
-A Zero handler reads it from `ctx.env`.
+A [Zero](/zero-runtime) action or hook reads it with `env()`, which returns `null` for a name that isn't set.
 
-```ts server/index.ts
-import { capsule, endpoint, json } from "@spacefast/zero/server";
+```ts zero.config.ts
+import { action, defineConfig, env } from "zero";
 
-export default capsule({
-  name: "billing",
-  endpoints: {
-    charge: endpoint({ mode: "write", method: "POST", path: "/api/charge" }, (ctx) =>
-      json({ configured: Boolean(ctx.env.STRIPE_SECRET_KEY) }),
-    ),
+export default defineConfig({
+  actions: {
+    billingStatus: action({
+      access: "editor",
+      handler() {
+        return { configured: env("STRIPE_SECRET_KEY") !== null };
+      },
+    }),
   },
 });
 ```
 
-A [Functions](/functions) worker reads the same values from `env`, its second handler argument.
+A Zero app sees **Space** variables only. Team variables do not reach it, so set what the app needs on the Space.
 
-`.env.lakebed.server` is accepted as an alias for capsule portability.
+A [Functions](/functions) worker reads the same values from `env`, its second handler argument.
 
 An anonymous first publish, before you have an account, syncs nothing and reports `skipped: "anonymous"`.
 

@@ -1,138 +1,127 @@
 ---
 title: zero, wp, runtime, pages, design, analytics
-description: Inspect and call a Space's Zero Abilities, generate types, run WP-CLI, see what a Space is serving, and read its traffic
+description: Start, check, run, and build Zero apps, import a CMS schema, run WP-CLI, see what a Space is serving, and read its traffic
 sidebar:
   order: 25
 ---
 
-List a live capsule's published Abilities and call the ones your credential permits. Remote `sf wp` needs a provisioned Space and write access, and reports status without the command's printed output.
+`sf zero` builds and runs [Zero](/zero-runtime) apps: a `zero.config.ts` compiled to WordPress. The rest of this page covers WP-CLI, runtime status, site pages, design tokens, and analytics.
 
-Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). All except `sf zero import`, `sf pages pull`, `sf pages validate`, and `sf design generate` also take the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). `sf wp`, `sf runtime status`, and `sf analytics` also take the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
-## sf zero abilities
+To publish a Zero app, run `sf publish` from its root. See [Dynamic sites with Zero](/zero-runtime).
 
-List the Abilities the Space's live capsule publishes: what an agent can call, what category it belongs to, and whether it reads or writes. Aliased as `sf zero ls`.
+## sf zero init
 
-```text
-sf zero abilities [--space <value>]
-```
-
-No arguments, no command-specific flags.
-
-```bash
-sf zero abilities
-```
-
-### Output
-
-A table of `ABILITY | CATEGORY | MODE | REQUIRES`, or "This space publishes no Zero Abilities." The `REQUIRES` column is the capability or Grant capabilities the Ability needs, which is what answers "why did that come back 403".
-
-With `--json`, `data` is the array of Ability rows.
-
-## sf zero call
-
-Mint a short-lived Ability token for the Space and run the Ability against the Space's own WordPress REST API. The token is never printed and never appears in the `--json` receipt.
+Start a Zero app: a starter `zero.config.ts` with one collection, one table, and one action, named after the directory.
 
 ```text
-sf zero call <ability> [--space <value>] [--credential <mch_...>] [--input <json>]
+sf zero init [name] [-f]
 ```
 
-### Arguments
-
-| Argument | What it is |
+| Argument or flag | What it does |
 | --- | --- |
-| `<ability>` | Ability name, as shown by `sf zero abilities`. Required |
+| `[name]` | Directory to create. Omit to initialize the current directory |
+| `-f, --force` | Overwrite an existing `zero.config.ts` |
 
-### Flags
-
-| Flag | Default | What it does |
-| --- | --- | --- |
-| `--credential=<mch_...>` | the only one, when there is exactly one | Machine credential id to mint the Ability token for |
-| `--input=<json>` | none | Ability input as inline JSON, or `@path` to read it from a file |
-
-The minted token travels in `X-SF-Authorization`. The plain `Authorization` header belongs to your application and passes through untouched.
+It also adds `.zero/` and `node_modules/` to `.gitignore`. `sf init --runtime zero` writes the same starter.
 
 ```bash
-sf zero call content.posts.list
-sf zero call content.posts.get --input '{"slug":"hello"}'
-sf zero call content.posts.save --input @post.json
+sf zero init my-app
+sf zero init
 ```
 
-### Output
+## sf zero check
 
-The HTTP status, then the Ability's JSON result. With `--json`, `data` is `{ ability, spaceId, endpoint, credentialId, role, status, ok, result }`.
-
-### Errors
-
-| Code | Exit | When |
-| --- | --- | --- |
-| `zero_ability_failed` | 1 | The Ability answered a non-2xx status. The whole receipt rides along in `details`. A 403 means the credential's Grant does not permit this Ability |
-
-## sf zero types
-
-Generate TypeScript for everything the platform owns rather than your source: the live content model's types, the Ability catalog with the capability each one needs, and a row type per database table. Commit the result and use `--check` in CI.
+Compile `zero.config.ts` and report diagnostics without writing anything.
 
 ```text
-sf zero types [--space <value>] [--out <path>] [--check]
+sf zero check [project] [--json]
 ```
 
-### Flags
-
-| Flag | Default | What it does |
-| --- | --- | --- |
-| `--out=<path>` | `zero-types.ts` | File to write, relative to the current directory |
-| `--check` | `false` | Compare instead of writing, and exit non-zero when the file is stale or missing |
+Each diagnostic names a `file:line:col` and a fix. `--json` prints the diagnostics envelope instead of text. `sf zero check` uses the compiler bundled with the CLI, so it needs no native download.
 
 ```bash
-sf zero types
-sf zero types --check
+sf zero check
+sf zero check ./app --json
 ```
 
-### Output
+## sf zero dev
 
-With `--json`, `data` is `{ out, spaceId, versionId, contentModelRevision, abilities, tables, checked, drifted }`.
+Run the app on a local WordPress and rebuild when its source changes.
 
-### Errors
+```text
+sf zero dev [project] [--port <n>] [--no-watch] [--allow-destructive]
+sf zero dev stop [project]
+sf zero dev status [project]
+sf zero dev wp [project] -- <WP-CLI args>
+```
 
-| Code | Exit | When |
-| --- | --- | --- |
-| `zero_types_stale` | 2 | `--check` and the file is missing or no longer matches what the Space publishes |
+`sf zero dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer, and the first start downloads WordPress and the plugins the app needs. It watches TypeScript, config, and `public/` files. Ctrl-C stops WordPress and keeps the local database for the next start.
+
+| Argument or flag | What it does |
+| --- | --- |
+| `--port=<n>` | Port for a new local site. An existing site keeps its port |
+| `--no-watch` | Start the site and return, without watching |
+| `--allow-destructive` | Apply a schema change that drops or retypes data, once. Saves after that are protected again |
+| `stop` | Stop the local site |
+| `status` | Print whether the local site is running, and its URL |
+| `wp -- <args>` | Run WP-CLI against the local site |
+
+The login it prints is for local development only.
+
+```bash
+sf zero dev
+sf zero dev --no-watch
+sf zero dev wp -- user application-password create admin local --porcelain
+sf zero dev stop
+```
+
+## sf zero build
+
+Compile `zero.config.ts` into WordPress plugins.
+
+```text
+sf zero build [project] [--out <dir>]
+```
+
+It writes the plugins to `.zero/wp-content/`, new migrations to `zero/migrations/`, the typed client to `zero/client/`, and editor types to `zero.gen.ts`. Commit everything except `.zero/`.
+
+```bash
+sf zero build
+sf zero build ./app --out ./dist
+```
+
+`sf zero dev` and `sf zero build` run the native compiler from the CLI's optional platform package. If it's missing, reinstall the CLI with optional dependencies enabled. Set `SPACEFAST_ZERO_BIN` to a `zero` binary to use your own build instead.
 
 ## sf zero import
 
-Translate a Payload CMS or EmDash project into an authored Zero capsule and its content files, and print the translation report. This is a local codegen step with no space flags.
-
-A Payload config carrying anything Zero cannot hold is refused outright, and nothing is written. A content model missing the fields that refused would publish a site that silently lost content.
+Translate a Payload, EmDash, or Sanity schema into a new `zero.config.ts`, check that it compiles, and print what mapped and what did not. Fully local, no space flags.
 
 ```text
-sf zero import <source> <directory> [--out <dir>] [--capsule <path>] [--force]
+sf zero import <source> <input> [--out <file>]
 ```
 
-### Arguments
-
-| Argument | What it is |
+| Argument or flag | What it does |
 | --- | --- |
-| `<source>` | Project format to translate: `payloadcms` or `emdash`. Required |
-| `<directory>` | Directory holding the project to translate. Required |
+| `<source>` | `payload`, `emdash`, or `sanity`. `payloadcms` is accepted for `payload` |
+| `<input>` | The schema file, or the project directory to find it in (`payload.config.ts`, `.emdash/seed.json`, `sanity.config.ts`) |
+| `--out=<file>` | Config file to write. Defaults to `zero.config.ts`, and it must not exist yet |
 
-### Flags
-
-| Flag | Default | What it does |
-| --- | --- | --- |
-| `--out=<dir>` | current directory | Directory to write the capsule and content into |
-| `--capsule=<path>` | `server/index.ts` | Capsule module to write, relative to `--out` |
-| `--force` | `false` | Overwrite files the import would otherwise refuse to replace |
+It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the whole import, and nothing is written. Every write rule in the result starts as denied, so set `access` before you publish.
 
 ```bash
-sf zero import payloadcms ../my-payload-app
-sf zero import emdash ../my-emdash-site --out .
+sf zero import payload ../my-payload-app
+sf zero import emdash ../site --out app/zero.config.ts
 ```
 
-### Errors
+### Output
 
-| Code | Exit | When |
-| --- | --- | --- |
-| `zero_import_refused` | 1 | The source config carries something Zero cannot hold. Nothing is written |
+One line per schema entry: its outcome, its JSON pointer, and the reason. With `--json`, `data` carries `source`, `from`, `out`, and `report.entries[]`.
+
+## sf zero migrate
+
+Convert an older Zero app's source into a `zero.config.ts` project. See [Migrate an older Zero app](/zero-migrate).
 
 ## sf wp
 
@@ -169,7 +158,7 @@ sf wp -- --version
 
 Show what a Space is serving: its live version, the URL it answers on, and what the live version deployed when it ships code.
 
-A capsule lists tables, queries, mutations, endpoints, migration count, and schema digest. A worker lists entry, bundle digest, routes, endpoints, and capabilities. All of it comes from version metadata, so it answers while the runtime is asleep or moving.
+A worker lists entry, bundle digest, routes, endpoints, and capabilities. All of it comes from version metadata, so it answers while the runtime is asleep or moving.
 
 ```text
 sf runtime status [--space <value>]
@@ -193,7 +182,7 @@ Live URL: https://docs.view.fast
 
 Then one table per runtime section. A static Space has no app and prints nothing further.
 
-With `--json`, `data` carries `liveVersionId`, `pendingVersionId`, `liveUrl`, `runtimeState`, `liveVersionStatus`, `pendingVersionStatus`, `app` (with a `capsule` or a `worker`), and `operation`.
+With `--json`, `data` carries `liveVersionId`, `pendingVersionId`, `liveUrl`, `runtimeState`, `liveVersionStatus`, `pendingVersionStatus`, `app`, and `operation`.
 
 ## sf pages pull
 
@@ -245,7 +234,7 @@ The command sets exit code 2 when any diagnostic has severity `error`. Warnings 
 
 Read `DESIGN.md`'s ` ```theme.json ` and ` ```layout.html ` fenced blocks and write `theme.json` plus `_layout.html`. Fully local, no API call.
 
-`theme.json` can seed Pages tokens and feeds a Zero capsule's Tailwind compile. `_layout.html` provides site chrome. `DESIGN.md` itself is never read at finalize or serve time; this is an authoring-time codegen step.
+`theme.json` can seed Pages tokens. `_layout.html` provides site chrome. `DESIGN.md` itself is never read at finalize or serve time; this is an authoring-time codegen step.
 
 ```text
 sf design generate [-f]

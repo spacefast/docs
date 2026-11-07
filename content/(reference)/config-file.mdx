@@ -52,7 +52,7 @@ sidebar:
   },
 
   // Run code alongside the files.
-  "runtime": { "kind": "zero", "server": "server/index.ts", "client": "client/index.tsx" },
+  "runtime": { "kind": "functions" },
 
   // Scheduled GETs against this space's own paths.
   "crons": [{ "path": "/api/digest", "schedule": "daily" }],
@@ -121,7 +121,7 @@ While `name` is set in the file, the API refuses to rename the Space. The file w
 
 Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names. `theme` is a closed object, so an unknown key is an error.
 
-A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file.
+A `theme.json` file next to `sf.jsonc` is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it.
 
 What these tokens paint, and how to replace those pages outright, is on [Layout, theme, and site pages](/site-pages).
 
@@ -178,16 +178,9 @@ Data location is chosen once, when the Space is created, and never changes.
 
 ## Runtime
 
-One runtime per version, discriminated on `kind`. Omit the block for a static site.
+Omit the block for a static site.
 
-### `kind: "zero"`
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `runtime.server` | string, required | none | Server entry, relative to the published directory |
-| `runtime.client` | string, required | none | Client entry, relative to the published directory |
-
-Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero-runtime).
+A [Zero](/zero-runtime) app needs no `runtime` block. A `zero.config.ts` at the project root is the declaration, and a project that has one must not also set `runtime.kind` to `"zero"`: publish refuses it with `zero_mixed_generation`.
 
 ### `kind: "functions"`
 

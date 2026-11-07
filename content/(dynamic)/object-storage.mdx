@@ -28,28 +28,9 @@ An object is addressed by a bare 32-character hexadecimal id. There is no key, n
 
 `filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
 
-## Upload from a capsule
+## Uploads in a Zero app
 
-The client SDK is the upload path for a [Zero](/zero-runtime) app.
-
-```tsx client/upload.tsx
-import { storage } from "@spacefast/zero/client";
-
-async function onFile(file: File) {
-  const object = await storage.upload(file);
-  console.log(object.id, object.url);
-}
-```
-
-`storage` has three methods.
-
-| Method | Returns |
-| --- | --- |
-| `upload(file: Blob)` | `{ id, contentType, size, url }` |
-| `get(id: string)` | A `Response`, or `null` |
-| `delete(id: string)` | Nothing |
-
-In local `sf dev`, uploads live in memory.
+A [Zero](/zero-runtime) app handles its own uploads. Declare a `media()` column for images your content shows, or a `file()` column for private files that download through a signed link valid for five minutes.
 
 ## Upload from the API
 
@@ -78,7 +59,7 @@ sf storage rm 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
 
 `sf storage rm` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
 
-There is no `sf storage upload`. Uploads go through the client SDK, the API, or the dashboard.
+Upload from the CLI with `sf storage put <file>`, or through the API or the dashboard.
 
 ## Dashboard
 

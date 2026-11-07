@@ -35,7 +35,7 @@ The first positional is a target, which can be a Space id, slug, live URL, or cu
 | `--follow`, `-f` | off | Polls every 2 seconds until Ctrl-C |
 | `--cursor` | none | Continues from the cursor the previous page printed |
 | `--request-id` | none | Runtime only. Everything logged while serving one request |
-| `--handler` | none | Runtime only. Lines from one Zero mutation or Functions handler |
+| `--handler` | none | Runtime only. Lines from one Functions handler |
 
 `--request-id` and `--handler` on the access log are refused rather than ignored, with `Flags --request-id and --handler only apply to \`sf logs runtime\`.`
 
@@ -58,12 +58,12 @@ Runtime entries carry more.
 | `timestamp` | When the line was written |
 | `level` | `debug`, `info`, `warn`, or `error` |
 | `requestId` | Nullable. Pass it to `--request-id` |
-| `handlerName` | Nullable. Zero names the mutation, Functions names the handler |
+| `handlerName` | Nullable. The Functions handler that wrote the line |
 | `versionId` | Nullable |
 | `message` | What you logged |
 | `metadata` | The data bag you passed |
 
-In a Zero capsule, `ctx.log.info(message, data)` writes here, as do `warn` and `error`. A static Space returns an empty runtime stream, because it runs no code.
+A [Functions](/functions) worker's console output lands here. A static Space returns an empty runtime stream, because it runs no code.
 
 ## Two things that surprise people
 

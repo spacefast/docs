@@ -1,0 +1,79 @@
+---
+title: Migrate from Zero 0.8
+description: Zero 0.8 apps keep working and publishing. Automatic migration to the current Zero is coming; until then, port the source by hand with sf zero migrate app.
+sidebar:
+  order: 8
+---
+
+Your Zero 0.8 app keeps working. Its Space keeps serving, and you can keep publishing updates to it. New Spaces start on the current Zero, the `zero.config.ts` compiler described in [Dynamic sites with Zero](/zero-runtime).
+
+A Zero 0.8 app is one built on `@spacefast/zero`: a `capsule()` in `server/index.ts`, declared in `sf.jsonc` as `"runtime": { "kind": "zero" }`.
+
+## What's coming
+
+Automatic migration is coming. This page will show how to run it when it ships. Until then, nothing changes for your app, and you do not need to do anything.
+
+## Port the source now
+
+To start early, convert the source on your machine. The converter writes a new project and never touches the Space.
+
+```bash
+sf zero migrate app --from zero-0.8 ./old-app --out ./candidate --space spc_123 --dry-run
+sf zero migrate app --from zero-0.8 ./old-app --out ./candidate --space spc_123
+sf zero check ./candidate
+```
+
+`./old-app` is the 0.8 project root, the directory with `sf.jsonc` and `server/index.ts`. `--out` must be a new directory, and a refusal writes nothing. Pass the Space's ID with `--space` whenever the capsule declares tables: the converter binds each table to the exact MySQL table the Space already stores it in. Add `--users` when the Space has Space Users turned on but the capsule has no `auth` declaration.
+
+The command prints a JSON report:
+
+| Field | What it holds |
+| --- | --- |
+| `entries` | Every declaration, `mapped` or `review` |
+| `errors` | Everything the converter refused, each with an RFC 6901 pointer into your source |
+| `adoption_sql` | The SQL that checks the existing tables before first use |
+| `connector_roles` | Connector role mappings, also written to `connector-roles.json` |
+
+The exit code is `0` for a candidate or a clean dry run, `1` for a refusal, and `2` for bad arguments. Fix every `errors` pointer, then read every `review` entry. A candidate with review entries still compiles, but it may not behave the way your 0.8 app did.
+
+Keep the 0.8 source, the candidate, its `zero/migrations/`, and `connector-roles.json` together.
+
+## What converts
+
+| Zero 0.8 | Current Zero |
+| --- | --- |
+| `capsule()` in `server/index.ts` | `defineConfig()` in `zero.config.ts` |
+| `schema` tables | `table()` entries under `tables`, bound to the existing MySQL tables |
+| `query()` | An action that reads |
+| `mutation()` | An action that writes, in one transaction |
+| `action()` | An action |
+| `ctx.db` `get`, `insert`, `update`, `delete`, and static `withIndex` chains ending in `collect`, `count`, `first`, or `take` | `db.query` and `db.insert`/`update`/`delete` |
+| `auth` | A `members` user projection with a unique email. `auth.requireSignIn` becomes a signed-in rule on each action |
+| Native `posts`, or a `content/posts` directory | A `posts` collection with title and rich-text body |
+| Connectors | `connector-roles.json`: `owner` becomes `personal`, `team` and `visitor` stay |
+
+Ported tables keep their storage. IDs stay text in action results, numbers stay doubles, and booleans match both the old `true`/`false` text and the new `1`/`0`. The converter copies no rows and renames no columns.
+
+Every write starts denied. Open `zero.config.ts` and set `access` on each collection, table, and action before you rely on it.
+
+## What you port by hand
+
+The converter refuses these, with a pointer to each:
+
+- **Endpoints.** Rewrite each one as a named action at `POST /wp-json/zero/v1/actions/<name>`, then update its callers.
+- **Pages, layouts, and islands.** Rebuild them as [TSX pages](/zero-runtime#pages).
+- **Connector calls inside handlers.**
+- **Realtime.** Declarations are dropped with a review hint. The current Zero has no live queries, so a client reads again after a write.
+- **Pagination, dynamic query builders, and range comparisons on optional fields.**
+- **npm imports and unknown `ctx` services.**
+- **Row IDs above JavaScript's safe integer range.**
+
+The converter reads only the server. Your `client/` code uses `@spacefast/zero/client`, which has no counterpart: call the generated client in `zero/client/` from your frontend instead, or move the UI to TSX pages.
+
+## Publishing the port
+
+A Space's data moves with the app. Publishing a `zero.config.ts` app to a Space that still runs Zero 0.8 is refused with `zero_migration_required`, because a plain publish would leave the posts, users, and sessions behind. The automatic migration is the way across. It copies the data and switches the Space in one operation.
+
+The candidate belongs to this Space. `--space` binds its tables by name to the tables this Space already stores, so it is not a starting point for a different Space.
+
+A project with both `"runtime": { "kind": "zero" }` in `sf.jsonc` and a `zero.config.ts` fails to publish with `zero_mixed_generation`. Delete that block from the candidate's `sf.jsonc` if it has one.
