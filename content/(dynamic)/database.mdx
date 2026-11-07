@@ -26,7 +26,7 @@ No route, flag, or dashboard field returns a DSN. Your code reaches the database
 In a Zero app, hooks and actions read and write through `db`. Your schema is the API, and its column and relation names are checked at build time.
 
 ```ts zero.config.ts
-import { action, db, defineConfig, integer, table, text } from "zero";
+import { action, db, defineConfig, HttpError, integer, table, text } from "zero";
 
 const notes = table({
   body: text().notNull(),
@@ -37,27 +37,31 @@ export default defineConfig({
   tables: { notes },
   actions: {
     recent: action({
-      input: { ownerId: integer().notNull() },
+      input: {},
       access: "authenticated",
-      async handler({ ownerId }) {
+      async handler(_input, ctx) {
+        if (!ctx.user) throw new HttpError(401, "unauthenticated", "Sign in first");
         return await db.query.notes.findMany({
-          where: { ownerId },
+          where: { ownerId: ctx.user.id },
           orderBy: { id: "desc" },
           limit: 20,
         });
       },
     }),
     add: action({
-      input: { body: text().notNull(), ownerId: integer().notNull() },
+      input: { body: text().notNull() },
       access: "authenticated",
-      async handler(input) {
-        const [row] = await db.insert(notes).values(input).returning();
+      async handler({ body }, ctx) {
+        if (!ctx.user) throw new HttpError(401, "unauthenticated", "Sign in first");
+        const [row] = await db.insert(notes).values({ body, ownerId: ctx.user.id }).returning();
         return row;
       },
     }),
   },
 });
 ```
+
+The owner comes from `ctx.user`, the signed-in caller, never from `input`. Anything in `input` is whatever the client sent, so an `ownerId` there would let any signed-in account read or write another user's notes.
 
 | Call | What it does |
 | --- | --- |
