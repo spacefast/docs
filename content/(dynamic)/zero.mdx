@@ -11,7 +11,7 @@ Zero turns one `zero.config.ts` into a WordPress app: collections, tables, actio
 
 Zero is a compiler. You describe your data and your server logic in TypeScript, and Zero compiles it to WordPress plugins: a post type for each collection, a SQL table for each table, REST routes for both, and plain PHP for your hooks and actions. Nothing runs JavaScript on the server.
 
-A project is a Zero app when it has a `zero.config.ts` at its root. There is no runtime block to declare and no switch to turn on.
+<a id="declare-it"></a>A project is a Zero app when it has a `zero.config.ts` at its root. There is no runtime block to declare and no switch to turn on.
 
 The other runtime is [Functions](/functions), a worker for npm-heavy code and framework output like OpenNext.
 
@@ -104,7 +104,7 @@ export default defineConfig({ collections, tables, relations });
 
 Every row gets an `id`. The registry key is the name everywhere: `shoppingList` is `zero.shoppingList` in the client and `/wp-json/zero/v1/shopping_list` over REST.
 
-Column builders include `text()`, `integer()`, `real()`, `boolean()`, `timestamp()`, `date()`, `json()`, `email()`, `url()`, `slug()`, `richText()`, `media()`, `select()`, `group()`, `repeater()`, and `blocks()`. Chain `.notNull()`, `.default(value)`, `.unique()`, `.min(n)`, `.max(n)`, `.pattern(/re/)`, or `.references(...)` to constrain one. A modifier that makes no sense for its column, like `.max()` on a boolean, fails the build at that line.
+Column builders include `text()`, `integer()`, `real()`, `boolean()`, `timestamp()`, `date()`, `json()`, `email()`, `url()`, `slug()`, `richText()`, `media()`, `file()`, `select()`, `group()`, `repeater()`, and `blocks()`. Chain `.notNull()`, `.default(value)`, `.unique()`, `.min(n)`, `.max(n)`, `.pattern(/re/)`, or `.references(...)` to constrain one. A modifier that makes no sense for its column, like `.max()` on a boolean, fails the build at that line.
 
 ## Access rules
 
@@ -248,7 +248,7 @@ sf zero build
 
 ```bash
 sf zero import payload ../my-payload-app
-sf zero import emdash ../site --out app/zero.config.ts
+sf zero import emdash ../site --output app/zero.config.ts
 ```
 
 `sf zero import` reads a Payload, EmDash, or Sanity schema and writes a new `zero.config.ts`. It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the import, and nothing is written. Every write rule starts as denied, so set `access` before you publish.

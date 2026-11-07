@@ -99,20 +99,20 @@ sf zero build ./app --out ./dist
 Translate a Payload, EmDash, or Sanity schema into a new `zero.config.ts`, check that it compiles, and print what mapped and what did not. Fully local, no space flags.
 
 ```text
-sf zero import <source> <input> [--out <file>]
+sf zero import <source> <input> [--output <file>]
 ```
 
 | Argument or flag | What it does |
 | --- | --- |
 | `<source>` | `payload`, `emdash`, or `sanity`. `payloadcms` is accepted for `payload` |
 | `<input>` | The schema file, or the project directory to find it in (`payload.config.ts`, `.emdash/seed.json`, `sanity.config.ts`) |
-| `--out=<file>` | Config file to write. Defaults to `zero.config.ts`, and it must not exist yet |
+| `--output=<file>` | Config file to write. Defaults to `zero.config.ts`, and it must not exist yet |
 
 It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the whole import, and nothing is written. Every write rule in the result starts as denied, so set `access` before you publish.
 
 ```bash
 sf zero import payload ../my-payload-app
-sf zero import emdash ../site --out app/zero.config.ts
+sf zero import emdash ../site --output app/zero.config.ts
 ```
 
 ### Output
@@ -121,7 +121,24 @@ One line per schema entry: its outcome, its JSON pointer, and the reason. With `
 
 ## sf zero migrate
 
-Convert an older Zero app's source into a `zero.config.ts` project. See [Migrate an older Zero app](/zero-migrate).
+Bring a schema, a site's content, or an older Zero app into a `zero.config.ts` project. Everything after `migrate` passes to the Zero compiler unchanged.
+
+```text
+sf zero migrate config --from <emdash|payload|sanity> <input> --out <new-config>
+sf zero migrate site <content-model.php> [--dry-run]
+sf zero migrate app ...
+```
+
+| Subcommand | What it does |
+| --- | --- |
+| `config` | The same schema import as [`sf zero import`](#sf-zero-import), with its own flags |
+| `site` | Moves an older Zero site's content into the app's collections on a standalone WordPress, through WP-CLI. It does not touch a Space. `--dry-run` previews it. Needs the native compiler, like `sf zero build` |
+| `app` | Converts an older Zero app's source. See [Migrate an older Zero app](/zero-migrate) |
+
+```bash
+sf zero migrate config --from payload payload.config.ts --out app/zero.config.ts
+sf zero migrate site content-model.php --dry-run
+```
 
 ## sf wp
 
