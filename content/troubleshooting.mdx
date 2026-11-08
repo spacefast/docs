@@ -81,7 +81,7 @@ If two files would answer the same URL after that resolution, the publish stops 
 sf domains diagnostics example.com --space my-site
 ```
 
-`dns_records_missing` means the records have not been observed yet. The usual cause is a leftover `A` record from your previous host sitting beside the correct one. Every observed `A` record has to point at Spacefast, so delete the old ones. Spacefast issues `A`, `AAAA`, and `TXT` records only, never a CNAME. See [Custom domains](/domains).
+`dns_records_missing` means the records have not been observed yet. The usual cause is a leftover `A` record from your previous host sitting beside the correct one. Every observed `A` record has to point at Spacefast, so delete the old ones, and any `AAAA` left from your previous host. An apex gets two `A` records and a `www` CNAME; a TXT record appears only when the hostname is in use elsewhere. See [Custom domains](/domains).
 
 ### The domain went `failed` after working
 
