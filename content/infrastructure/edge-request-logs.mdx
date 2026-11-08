@@ -1,0 +1,51 @@
+---
+title: Edge request logs
+description: Inspect edge cache hits, rate limits, and browser challenges for a Space hostname.
+---
+
+Edge request logs show requests handled by the edge, including cached responses, rate limits, and browser challenges that may never reach your Space's origin.
+
+## Read edge requests
+
+```bash
+sf logs edge --space my-site
+sf logs edge --space my-site --hostname example.com --status 429
+sf logs edge --space my-site --status 403 --json
+```
+
+In the dashboard, open the Space's logs and select the edge view. For application output and origin requests, use [Access and runtime logs](/logs).
+
+Each query covers one assigned hostname and defaults to the primary hostname. Use `--hostname` to inspect a different mapped domain. An apex and its `www` hostname are separate queries.
+
+## Filters and time windows
+
+| CLI flag | Selects |
+| --- | --- |
+| `--hostname` | One hostname assigned to the Space |
+| `--remote-addr` | Client IPv4 or IPv6 address |
+| `--ja3-hash` | JA3 TLS fingerprint, exactly 32 hexadecimal characters |
+| `--method` | HTTP method, such as `GET` |
+| `--status` | HTTP response status |
+| `--user-agent` | Exact complete `User-Agent` value |
+| `--asn` | Source network's autonomous system number |
+| `--since`, `--until` | ISO 8601 timestamps for the query window |
+
+`--remote-addr`, `--ja3-hash`, `--method`, `--status`, `--user-agent`, and `--asn` can be repeated to include more values. `--hostname`, `--since`, and `--until` take one value each. Values within one field use OR; different fields use AND.
+
+The default window is the past hour. A query can span at most one hour within the past 24 hours, and your plan's retention can shorten that window. Results arrive newest first. Use smaller windows to investigate busy periods.
+
+## What a record contains
+
+Records include `timestamp`, `hostname`, `method`, `path`, `status`, client IP, user agent, country, timing, and `cacheStatus`. Rate-limit details appear in `rateLimited` and `rateLimitReason`. Browser-check details appear in `defensiveMode.cookieStatus`, `challengeReason`, and `challengeResult`.
+
+Some details can be `null`. Access credentials in request URLs are redacted.
+
+## Pagination and truncation
+
+Spacefast returns up to 100 entries per page through `GET /v1/spaces/{spaceId}/logs/edge`. Continue with `pagination.nextCursor`, or the CLI's `--cursor`. A cursor refers to a fixed snapshot and expires after five minutes; the original window and filters still apply.
+
+The underlying query can return at most 5,000 records. An `edge_logs_truncated` warning means the snapshot may omit matches. Paging cannot recover records absent from that snapshot. Narrow the time range or add filters. Reaching the end of a cursor does not prove you exported every matching request.
+
+For traffic trends, use [Stats](/stats). Edge logs are individual request records, not a complete analytics export or a live stream.
+
+<WpCloudDocs title="Edge request logs" href="https://wp.cloud/docs/monitoring-logs/logs/edge-request-logs/" />

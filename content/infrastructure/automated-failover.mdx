@@ -1,0 +1,26 @@
+---
+title: Automated failover
+description: How regional replicas keep Spacefast sites available when an origin fails.
+---
+
+Spacefast sites run on infra with primary and secondary origin servers in different geographic data centers. WP Cloud continuously replicates site data between them and can move traffic when the primary server or its data center becomes unavailable.
+
+## What happens during failover
+
+WP Cloud monitors origin health and performance. When a failure requires a switch, it redirects traffic to the secondary origin. Once the primary is restored, traffic returns to it automatically.
+
+You do not need to republish your Space or change its DNS records. The public address reaches the [edge network](/infrastructure/origin-edge-servers), which routes requests to the active origin.
+
+The active origin location and outbound IP address can change during a switch. Do not use either as a permanent identifier for your Space. See [IP ranges](/infrastructure/ip-ranges) before connecting an external service that requires an IP allowlist.
+
+## Cached responses during an origin error
+
+Graceful failover is a separate protection. If an origin returns an HTTP 5xx error, the edge may serve an eligible cached response instead. It can keep an already cached page available while the origin has a problem.
+
+This does not repair application errors or create cached copies of responses that were never stored. Personalized pages, API calls that bypass the cache, and writes still depend on a working origin. See [Caching](/caching) for what Spacefast caches.
+
+## Data location
+
+The redundant copy lives in another region. An origin preference is not a guarantee that all site data stays in one geographic location. WP Cloud can store site data in both the United States and the European Union.
+
+<WpCloudDocs title="Automated failover" href="https://wp.cloud/docs/infrastructure/automated-failover/" />

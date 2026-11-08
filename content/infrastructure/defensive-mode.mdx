@@ -1,0 +1,37 @@
+---
+title: Defensive Mode
+description: Understand browser challenges and their effect on visitors and automated clients.
+---
+
+Defensive Mode challenges browsers before they reach a site, reducing unwanted automated traffic. Spacefast sites use WP Cloud's challenge system as part of their edge protection.
+
+A browser-check page does not, by itself, prove that Defensive Mode is active. Traffic classification and a Spacefast firewall rule can also trigger a challenge.
+
+## What visitors see
+
+Most challenges use an automated browser check. The visitor briefly sees a checking page, completes the check, and continues to the requested URL. The usual automated check can take up to five seconds. The platform can require a harder challenge with an action such as selecting a checkbox.
+
+Challenge responses use HTTP `403`. A client that cannot complete the challenge does not reach the requested page. HTTP `429` belongs to [rate limiting](/infrastructure/rate-limiting), a separate mechanism.
+
+API clients, webhooks, uptime monitors, and other automated services may be unable to solve a browser challenge. Test essential integrations when adding challenge rules.
+
+## What triggers a challenge
+
+| Trigger | Behavior |
+| --- | --- |
+| Manual Defensive Mode | WP Cloud supports an expiration from 30 minutes through seven days. Contact Spacefast support if site-wide protection is needed during an incident. |
+| Automatic Defensive Mode | The infra can temporarily enable protection after a PHP resource-limit event. |
+| Traffic classification | Suspicious or spoofed requests can be challenged even when Defensive Mode is off. |
+| Spacefast firewall rule | A rule with the `challenge` action targets the request patterns you choose. |
+
+The platform challenge system cannot be fully disabled. Ending a manual mode or removing your own rule does not turn off classification challenges.
+
+For targeted rules, see [`sf rules`](/cli/reference#sf-rules). These rules are separate from the site-wide Defensive Mode setting in the WP Cloud API.
+
+## Help legitimate automation
+
+Send a specific, accurate `User-Agent`, such as `ExampleMonitor/1.0`. Do not impersonate a browser or a known crawler. Sending a Googlebot header from outside Google's network can itself trigger a spoofed-crawler challenge.
+
+An accurate header does not bypass protection. For a false positive, preserve the timestamp, source IP, full URL, and complete `User-Agent` from [edge request logs](/infrastructure/edge-request-logs), then contact Spacefast support.
+
+<WpCloudDocs title="Defensive Mode" href="https://wp.cloud/docs/security/traffic-protection/defensive-mode/" />

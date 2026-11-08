@@ -52,8 +52,9 @@ ID: dom_xxxxxxxx
 Verification: pending
 
 Configure DNS for example.com:
-  TXT  _stattic-verify.example.com  stattic-team-verification=tm_xxxxxxxx
-  A    example.com                  192.0.79.132
+  A      example.com      192.0.79.157
+  A      example.com      192.0.79.175
+  CNAME  www.example.com  example.com
 
 Next: `sf domains check example.com`
 ```

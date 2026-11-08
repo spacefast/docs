@@ -18,7 +18,7 @@ questions:
     routes: /anonymous-and-claim
   - id: domain-dns-records
     question: Which DNS records do I add to connect example.com?
-    expected: ["TXT record at _stattic-verify.example.com", "A records", "www is set up alongside the apex"]
+    expected: ["A records for example.com", "a CNAME for www.example.com", "no TXT record unless the hostname is already in use elsewhere"]
     routes: /domains
   - id: domains-rm
     question: Does `sf domains rm` delete the domain?

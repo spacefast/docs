@@ -7,15 +7,16 @@ sidebar:
 
 Use `sf logs` for requests, `sf logs runtime` for your code's output, and `sf builds logs` for build failures.
 
-## Three streams
+## Four streams
 
 | Stream | What it holds | How to read it |
 | --- | --- | --- |
-| Access | Every request the edge served | `sf logs`, dashboard **Logs** with source **Access** |
+| Access | Requests that reached the origin | `sf logs`, dashboard **Logs** with source **Access** |
+| Edge | Requests handled by the edge, including cache hits and challenges | [`sf logs edge`](/infrastructure/edge-request-logs), dashboard **Logs** with source **Edge Logs** |
 | Runtime | Lines your own code wrote | `sf logs runtime`, dashboard **Logs** with source **App** |
 | Build | A build runner's output | `sf builds logs <bld_...>` |
 
-Access and runtime are per Space. Build logs belong to one build.
+Access, edge, and runtime are per Space. Build logs belong to one build.
 
 ## Read them
 
@@ -27,7 +28,7 @@ sf logs https://example.com access
 sf logs runtime --follow
 ```
 
-The first positional is a target, which can be a Space id, slug, live URL, or custom domain. The second is the kind. The command shifts a bare kind out of the first slot, so `sf logs runtime` and `sf logs docs runtime` both work. The kind defaults to `access`, and anything other than `access` or `runtime` is refused.
+The first positional is a target, which can be a Space id, slug, live URL, or custom domain. The second is the kind. The command shifts a bare kind out of the first slot, so `sf logs runtime` and `sf logs docs runtime` both work. The kind defaults to `access`. Use `edge` for requests handled by the edge, including cache hits and security challenges. See [Edge request logs](/infrastructure/edge-request-logs) for its filters and query limits.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
@@ -77,7 +78,7 @@ A record is written on the origin, shipped off the box, and indexed before it ca
 
 `--request-id` and `--handler` are applied over pages already fetched, because the provider indexes neither. That makes them precise but not free, so give a `--limit` that covers the window you care about.
 
-The `since` and `until` window exists on the API query, but the CLI exposes no flags for it.
+Use `--since` and `--until` for an ISO 8601 time window. Edge logs have their own [window and retention limits](/infrastructure/edge-request-logs#filters-and-time-windows).
 
 ## Retention
 
@@ -99,5 +100,6 @@ sf builds logs bld_123 --follow
 | Operation | Route |
 | --- | --- |
 | [`listSpaceAccessLogs`](/api/reference/activity/listspaceaccesslogs) | `GET /v1/spaces/{spaceId}/logs/access` |
+| [`listSpaceEdgeLogs`](/api/reference/activity/listspaceedgelogs) | `GET /v1/spaces/{spaceId}/logs/edge` |
 | [`listSpaceRuntimeLogs`](/api/reference/activity/listspaceruntimelogs) | `GET /v1/spaces/{spaceId}/logs/runtime` |
 | [`listBuildLogs`](/api/reference/builds/listbuildlogs) | `GET /v1/builds/{buildId}/logs` |

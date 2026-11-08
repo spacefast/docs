@@ -1,0 +1,28 @@
+---
+title: DDoS protection
+description: How edge routing, caching, and traffic classification protect your Space.
+---
+
+Spacefast sites inherit WP Cloud's platform-level protection against denial-of-service and distributed denial-of-service attacks. It operates without a setup step or a plugin in your Space.
+
+## Before traffic reaches your application
+
+Anycast routing distributes inbound requests across the edge network. The edge can serve eligible cached responses, classify suspicious traffic, and apply [rate limits](/infrastructure/rate-limiting) before requests consume origin resources.
+
+WP Cloud monitors the network and adjusts protections as traffic changes. Caching and filtering can absorb repeated or unwanted requests, but they do not guarantee that every application remains available under every attack.
+
+## Browser challenges
+
+[Defensive Mode](/infrastructure/defensive-mode) adds browser challenges during suspected bot or DDoS activity. Certain suspicious traffic can also receive a challenge independently of Defensive Mode.
+
+A challenge normally returns HTTP `403`. A rate limit normally returns `429`. Inspect [edge request logs](/infrastructure/edge-request-logs) to distinguish them before changing your application.
+
+For a known unwanted pattern, Spacefast also supports traffic rules through `sf rules`. A firewall rule can block a request or ask for a browser challenge. The [CLI reference](/cli/reference#sf-rules) lists the supported matches and actions.
+
+## During an incident
+
+Check whether legitimate visitors or integrations are failing, then preserve request samples. Include the affected hostname, UTC timestamp, URL, source IP address, complete `User-Agent`, and the response status when contacting Spacefast support.
+
+Send traffic directly to Spacefast's supplied DNS addresses where possible. An extra proxy can hide classification signals and change how visitors reach the edge. If you use one, include that detail in the incident report.
+
+<WpCloudDocs title="DDoS protection" href="https://wp.cloud/docs/security/traffic-protection/ddos-protection/" />

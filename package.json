@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "blume": "2.2.6",
-    "zod": "4.6.0"
+    "zod": "4.6.5"
   },
   "devDependencies": {
     "@spacefast/routing": "0.0.24",

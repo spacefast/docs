@@ -88,7 +88,7 @@ Five Abilities in the `zero-storage` category are registered by the runtime, so 
 | `zero/storage-move` | write | Moves a file into a folder, creating the folder path if needed | `edit_post` |
 | `zero/storage-delete` | write | Trashes a file. It leaves every listing and stays recoverable | `delete_post` |
 
-The "Needs" column is a WordPress capability. The Space projects it from the calling credential's Grant, so what a credential may do is decided per request against the path it asked for. See [Access and sharing](/access).
+The "Needs" column is a WordPress capability. The Space projects it from the calling credential's Grant, so what a credential may do is decided per request against the path it asked for. See [Spacefast Share](/share).
 
 WordPress decides which file types `zero/storage-upload` accepts.
 
@@ -107,7 +107,7 @@ curl -X POST https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/zero/token \
 
 | Field | Value |
 | --- | --- |
-| `credentialId` | A live `mch_` machine credential of this Space. Required. Create one with `sf share token create`. See [Machine credentials](/access#machine-credentials) |
+| `credentialId` | A live `mch_` machine credential of this Space. Required. Create one with `sf share token create`. See [Machine credentials](/share#machine-credentials) |
 | `ttlSeconds` | 60 to 3,600. Defaults to 900 |
 
 Send the token to the Space in `X-SF-Authorization`, never in `Authorization`:
