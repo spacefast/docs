@@ -24,6 +24,8 @@ const internalMarkers = [
   ["do not", "distribute"].join(" "),
   ["confi", "dential"].join(""),
 ];
+// OAuth (RFC 6749) names a client type with this one marker word.
+const oauthClientType = ["confi", "dential"].join("");
 const decoder = new TextDecoder("utf-8", { fatal: true });
 
 const files = [];
@@ -127,11 +129,11 @@ const scanText = (path, text) => {
   for (const marker of internalMarkers) {
     const needle = marker.toLowerCase();
     let index = lower.indexOf(needle);
-    // OAuth (RFC 6749) names a client type with one of these words. Its CLI
-    // flag (`--<word>`) and the phrases "<word> app" and "<word> client" are
-    // public product vocabulary, not a document classification.
+    // The OAuth client-type word is public vocabulary in its CLI flag
+    // (`--<word>`) and in "<word> app" / "<word> client". Other markers never are.
     while (
       index !== -1 &&
+      needle === oauthClientType &&
       (lower.startsWith("--", index - 2) ||
         /^[ \t]+(?:app|client)\b/u.test(lower.slice(index + needle.length, index + needle.length + 12)))
     ) {

@@ -53,6 +53,14 @@ test("accepts the OAuth client-type term while rejecting the same word as a mark
     const split = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
     assert.equal(split.status, 1);
     assert.match(split.stderr, /reference\.md:1 — internal-only marker/u);
+
+    // Only the OAuth word gets the "app"/"client" exemption; every other marker is still caught.
+    for (const phrase of [["Internal", "only"], ["Do not", "distribute"]]) {
+      writeFileSync(fixture, `${phrase.join(" ")} app\n${phrase.join(" ")} client\n--${phrase.join(" ").toLowerCase()}\n`);
+      const other = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+      assert.equal(other.status, 1, `${phrase.join(" ")} must be reported`);
+      assert.match(other.stderr, /reference\.md:1 — internal-only marker/u);
+    }
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
