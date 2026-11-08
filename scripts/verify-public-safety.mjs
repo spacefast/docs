@@ -124,8 +124,11 @@ const scanText = (path, text) => {
       report(path, lineForOffset(text, index), "private repository metadata");
     }
   }
+  const oauthClientKind = ["confi", "dential"].join("");
+  const publicOAuthTerms = new RegExp(`--${oauthClientKind}\\b|\\b${oauthClientKind} app\\b`, "gu");
+  const markerText = lower.replace(publicOAuthTerms, (match) => " ".repeat(match.length));
   for (const marker of internalMarkers) {
-    const index = lower.indexOf(marker.toLowerCase());
+    const index = markerText.indexOf(marker.toLowerCase());
     if (index !== -1) {
       report(path, lineForOffset(text, index), "internal-only marker");
     }

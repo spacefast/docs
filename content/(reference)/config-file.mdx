@@ -208,13 +208,15 @@ See [Functions](/functions).
 
 `sf.jsonc` is the only writer. See [Crons](/crons) for the schedule grammar.
 
-## Access
+<a id="access" />
+
+## Sharing
 
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
 | `access` | `"public"` or `{ public: string[] }` | none | Live paths that stay public whatever the Space's access setting is |
 
-`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed. See [Access](/access).
+`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed. See [Spacefast Share](/share).
 
 ## Routing
 

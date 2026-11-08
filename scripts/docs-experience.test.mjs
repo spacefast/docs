@@ -103,7 +103,7 @@ const firstFactCases = [
     evidence: [/Space-level value/iu, /wins/iu, /team/iu],
   },
   {
-    route: "/access",
+    route: "/share",
     question: "Does removing one public grant remove all access?",
     evidence: [/removing a public grant/iu, /no other public grant matches/iu, /links, people, and team access can remain/iu],
   },

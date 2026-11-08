@@ -8,11 +8,12 @@ import { fileURLToPath } from "node:url";
 
 const verifier = fileURLToPath(new URL("./verify-public-safety.mjs", import.meta.url));
 
-test("accepts UUID literals while rejecting a separate short commit hash", () => {
+test("accepts UUIDs and public OAuth terms while rejecting private markers and commit hashes", () => {
   const directory = mkdtempSync(join(tmpdir(), "docs-public-safety-"));
   try {
     const fixture = join(directory, "schema.json");
     const schema = {
+      oauth: "--confidential; Rotate a confidential app’s secret.",
       pattern:
         "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
     };
@@ -26,6 +27,10 @@ test("accepts UUID literals while rejecting a separate short commit hash", () =>
     assert.equal(rejected.status, 1);
     assert.match(rejected.stderr, /1 violation\(s\)/u);
     assert.match(rejected.stderr, /short commit hash/u);
+    writeFileSync(fixture, JSON.stringify({ notice: ["Confi", "dential product roadmap"].join("") }));
+    const privateMarker = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+    assert.equal(privateMarker.status, 1);
+    assert.match(privateMarker.stderr, /internal-only marker/u);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

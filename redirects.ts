@@ -3,7 +3,8 @@
 // Blume prefixes deployment.base on both sides.
 
 export const redirects: { from: string; to: string; status: 301 }[] = [
-  { from: "/access-control", to: "/access", status: 301 },
+  { from: "/access", to: "/share", status: 301 },
+  { from: "/access-control", to: "/share", status: 301 },
   { from: "/analytics", to: "/stats", status: 301 },
   { from: "/anonymous-publish", to: "/anonymous-and-claim", status: 301 },
   { from: "/api/docs", to: "/api/reference#docs", status: 301 },
@@ -23,7 +24,7 @@ export const redirects: { from: string; to: string; status: 301 }[] = [
   { from: "/api/versioning", to: "/api", status: 301 },
   { from: "/builds", to: "/git", status: 301 },
   { from: "/claim", to: "/anonymous-and-claim", status: 301 },
-  { from: "/cli/access", to: "/access", status: 301 },
+  { from: "/cli/access", to: "/share", status: 301 },
   { from: "/cli/analytics", to: "/stats", status: 301 },
   { from: "/cli/channels", to: "/cli/versions", status: 301 },
   { from: "/cli/docs", to: "/cli", status: 301 },

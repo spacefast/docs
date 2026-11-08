@@ -40,6 +40,9 @@ test("the complete compatibility map reserves the website's splats and host-spec
   assert.deepEqual(compilation.diagnostics.filter(({ severity }) => severity === "error"), []);
   assert.ok(compilation.stats.dynamicRedirectCount <= 100, JSON.stringify(compilation.stats));
   for (const [source, destination] of [
+    ["/access", "/share/"],
+    ["/access-control", "/share/"],
+    ["/cli/access", "/share/"],
     ["/platform-api", "/platforms/api/reference/"],
     ["/platform-api/spaces/getspace", "/platforms/api/reference/spaces/getspace/"],
   ]) {
