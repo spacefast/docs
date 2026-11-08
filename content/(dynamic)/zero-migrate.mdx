@@ -1,17 +1,17 @@
 ---
 title: Migrate from Zero 0.8
-description: Zero 0.8 apps keep working and publishing. Automatic migration to the current Zero is coming; until then, port the source by hand with sf zero migrate app.
+description: Publishing a Zero 0.8 app moves it to the current Zero whenever nothing would be lost. When something would, it publishes as 0.8 and tells you exactly what to change.
 sidebar:
   order: 8
 ---
 
-Your Zero 0.8 app keeps working. Its Space keeps serving, and you can keep publishing updates to it. New Spaces start on the current Zero, the `zero.config.ts` compiler described in [Dynamic sites with Zero](/zero).
+Your Zero 0.8 app keeps working. Publish it with a current CLI and it moves to the current Zero, the `zero.config.ts` compiler described in [Dynamic sites with Zero](/zero), whenever nothing would be lost. When something would, it publishes as 0.8, keeps serving, and the receipt lists each blocker. New Spaces start on the current Zero.
 
 A Zero 0.8 app is one built on `@spacefast/zero`: a `capsule()` in `server/index.ts`, declared in `sf.jsonc` as `"runtime": { "kind": "zero" }`.
 
 ## Keep working on a 0.8 app
 
-A 0.8 app keeps its own local dev server and database commands. The [`sf zero`](/cli/zero) development commands are for `zero.config.ts` apps, not for this one. The exception is `sf zero migrate app`, which [ports it](#port-the-source-now).
+A 0.8 app keeps its own local dev server and database commands. The [`sf zero`](/cli/zero) development commands are for `zero.config.ts` apps, not for this one. The exception is `sf zero migrate app`, which [previews the conversion](#preview-the-conversion).
 
 ### Run it locally
 
@@ -55,13 +55,26 @@ sf db migrate
 
 Pass `--port <n>` or `--local-url <url>` to `sf db`, `sf db list`, `sf db dump`, or `sf db export` to read a running `sf dev` server instead of the live version.
 
-## What's coming
+## Migrate by publishing
 
-Automatic migration is coming. This page will show how to run it when it ships. Until then, nothing changes for your app, and you do not need to do anything.
+From the 0.8 project root, publish as usual:
 
-## Port the source now
+```bash
+sf publish --space spc_123 --json
+```
 
-To start early, convert the source on your machine. The converter writes a new project and never touches the Space.
+The CLI converts the app on your machine and checks the result. Then one of two things happens:
+
+| Result | What you see |
+| --- | --- |
+| Nothing would be lost | The Space moves to the current Zero, on its existing tables. `version.zero.migration.status` is `migrated` |
+| Something would be lost | The app publishes as 0.8 and keeps serving. `status` is `refused`, and `diagnostics` lists each blocker with its `code`, `file`, `line`, `feature` and `fix` |
+
+Fix what `diagnostics` names and publish again. Nothing about your app changes until a publish migrates it. `waiting_on_runtime` means the app can move but the Space's runtime can't run the current Zero yet. It publishes as 0.8, and the next publish after the runtime update migrates it.
+
+## Preview the conversion
+
+To read the converted source before you publish, run the converter yourself. It writes a new project and never touches the Space.
 
 ```bash
 sf zero migrate app --from zero-0.8 ./old-app --out ./candidate --space spc_123 --dry-run
@@ -69,7 +82,7 @@ sf zero migrate app --from zero-0.8 ./old-app --out ./candidate --space spc_123
 sf zero check ./candidate
 ```
 
-`./old-app` is the 0.8 project root, the directory with `sf.jsonc` and `server/index.ts`. `--out` must be a new directory, and a refusal writes nothing. Pass the Space's ID with `--space` whenever the capsule declares tables: the converter binds each table to the exact MySQL table the Space already stores it in. Add `--users` when the Space has Space Users turned on but the capsule has no `auth` declaration.
+`./old-app` is the 0.8 project root, the directory with `sf.jsonc` and `server/index.ts`. `--out` must be a new directory, and a refusal writes nothing. Pass the Space's ID with `--space` so the converter binds each table to the exact MySQL table the Space already stores it in, or `--fresh` for an app that has no Space yet. Add `--users` when the Space has Space Users turned on but the capsule has no `auth` declaration.
 
 The command prints a JSON report:
 
@@ -81,8 +94,6 @@ The command prints a JSON report:
 | `connector_roles` | Connector role mappings, also written to `connector-roles.json` |
 
 The exit code is `0` for a candidate or a clean dry run, `1` for a refusal, and `2` for bad arguments. Fix every `errors` pointer, then read every `review` entry. A candidate with review entries still compiles, but it may not behave the way your 0.8 app did.
-
-Keep the 0.8 source, the candidate, its `zero/migrations/`, and `connector-roles.json` together.
 
 ## What converts
 
@@ -116,10 +127,8 @@ The converter refuses these, with a pointer to each:
 
 The converter reads only the server. Your `client/` code uses `@spacefast/zero/client`, which has no counterpart: call the generated client in `zero/client/` from your frontend instead, or move the UI to TSX pages.
 
-## Publishing the port
+## Publishing a hand-ported app
 
-A Space's data moves with the app. Publishing a `zero.config.ts` app to a Space that still runs Zero 0.8 is refused with `zero_migration_required`, because a plain publish would leave the posts, users, and sessions behind. The automatic migration is the way across. It copies the data and switches the Space in one operation.
+Publish the 0.8 project, not a hand-edited candidate. A Space's data moves with the app: publishing a `zero.config.ts` app to a Space that still runs Zero 0.8 is refused with `zero_migration_required`, because it would leave the posts, users, and sessions behind. Once a publish has migrated the Space, edit and publish the current Zero app as usual.
 
-The candidate belongs to this Space. `--space` binds its tables by name to the tables this Space already stores, so it is not a starting point for a different Space.
-
-A project with both `"runtime": { "kind": "zero" }` in `sf.jsonc` and a `zero.config.ts` fails to publish with `zero_mixed_generation`. Delete that block from the candidate's `sf.jsonc` if it has one.
+A project with both `"runtime": { "kind": "zero" }` in `sf.jsonc` and a `zero.config.ts` fails to publish with `zero_mixed_generation`. Delete that block if it has one.
