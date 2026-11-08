@@ -202,7 +202,7 @@ See [Functions](/functions).
 
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
-| `crons` | array, up to 8 entries | none | Scheduled requests |
+| `crons` | array, up to 8 entries for now | none | Scheduled requests. Your plan sets how many run, see [Crons](/crons#allowance-by-plan) |
 | `crons[].path` | string, up to 512 chars | none | Path to GET. Starts with `/`, no query, no wildcards, no `:placeholders` |
 | `crons[].schedule` | string | none | A named schedule, a shorthand, or a five-field crontab |
 
@@ -236,7 +236,7 @@ See [Redirects, rewrites, and headers](/routing).
 | --- | --- |
 | File size | 256 KiB |
 | `templates` entries | 100 |
-| `crons` entries | 8 |
+| `crons` entries | 8 for now |
 | `crons[].path` | 512 characters |
 | `name` | 255 characters |
 | `meta.title` | 300 characters |
@@ -244,7 +244,7 @@ See [Redirects, rewrites, and headers](/routing).
 | `meta.image`, `meta.favicon` | 2000 characters |
 | `superpowers.javascriptTags` entries | 16, each `code` up to 8 KiB |
 
-A plan may lower these caps. None of them can be raised.
+A plan may lower these caps. None of them can be raised. The `crons` cap is the same on every plan: your plan sets how many of the declared crons run, see [Crons](/crons#allowance-by-plan).
 
 ## The strict v1 shape
 
