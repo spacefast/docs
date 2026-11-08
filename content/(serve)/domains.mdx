@@ -89,7 +89,7 @@ Every observed `A` record has to point at Spacefast. A leftover record from your
 Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours:
 
 - **Another host still holds it.** The record is named for the hostname, its value starts with `atomic-domain-`, and the domain waits until it is published. Remove any CNAME at that name first; a TXT record cannot sit beside one.
-- **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record. Publish it, then verify. The move to this Space happens once you can also remove the domain from the Space that holds it; otherwise remove it there first, as in [Moving a domain to another Space](#moving-a-domain-to-another-space). A claim expires after 24 hours.
+- **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record. If you can also manage the Space that holds it, verify with move and the domain moves without the record. Otherwise publish the record at your DNS host and verify: once Spacefast sees it, the domain moves to this Space and the old Space stops serving it. Either way, a claim expires 24 hours after it was created; add the domain again for a new one.
 
 Keep exactly one `atomic-domain-` record per hostname. Two of them, even when one is correct, make the claim fail.
 
@@ -183,7 +183,7 @@ Every domain a team owns lives on one page, whether or not it is assigned. In th
 
 Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains ls` is the per-Space list.
 
-Two different teams may add the same hostname. Only serving is exclusive, so a team that proves control can take over a hostname whose current holder has stopped verifying.
+Two different teams may add the same hostname. Only serving is exclusive: a team that publishes its claim's TXT record moves the hostname to its own Space.
 
 Adding a domain also counts against a plan limit, measured in external domain groups. One group is a registrable apex plus all of its subdomains. Over the limit, the add fails with `domain_quota_exceeded`.
 
@@ -207,7 +207,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | --- | --- | --- |
 | `dns_records_missing` | The required records have not been observed. Verification keeps polling. | Add the records at your DNS host. |
 | `verification_required` | The hostname needs proof of DNS control to keep serving. | Add the verification TXT record. |
-| `hostname_claim_conflict` | Another verified claim is serving this hostname. | Prove control here. The takeover completes once the other claim stops verifying. |
+| `domain_ownership_required` | Another Space serves this hostname. | Publish the claim's TXT record, then verify to move it here. |
 | `ssl_pending` | Certificate issuance is in progress. | Wait. |
 | `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry SSL. |
 | `provider_pending` | The edge has not observed the hostname yet. | Wait. |
