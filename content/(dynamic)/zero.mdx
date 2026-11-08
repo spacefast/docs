@@ -37,11 +37,12 @@ export const posts = collection({
   body: text(),
 }, { title: "title" });
 
-// Tables are plain MySQL tables for app data.
+// Tables are plain MySQL tables for app data. Signups hold visitors' emails, so only the
+// signup action writes them and only admins read them.
 export const signups = table({
   email: text().notNull().unique().max(191),
   createdAt: timestamp().notNull().defaultNow(),
-});
+}, { access: { read: "admin", create: false, update: false, delete: false } });
 
 export default defineConfig({
   name: "my-app",
