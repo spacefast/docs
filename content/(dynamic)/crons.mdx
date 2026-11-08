@@ -23,7 +23,7 @@ A response under 400 is a success and is silent. A response of 400 or worse, or 
 
 ## Declare it
 
-There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free.
+There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free, placed against your current allowance.
 
 ```jsonc sf.jsonc
 {
@@ -82,17 +82,17 @@ Each Space runs a set number of simple and advanced crons, by plan:
 
 Boost is a per-Space add-on on Go and Plus. It adds 20 simple crons and raises advanced crons to at least 5, so on Plus it adds simple crons only. Free has no Boost: upgrading the plan is the way to more crons.
 
-Crons are placed in the order you declare them:
+Each cron takes a slot of its own kind, in the order you declare them. A later crontab can still take an advanced slot after an earlier simple cron ran out of simple slots:
 
 - A crontab takes an advanced slot while one is left.
 - A crontab with no advanced slot left still publishes, with a warning. It runs at its closest simple schedule and counts against the simple allowance. That can run more or less often than the crontab asked, and not at the times it names: `*/5 * * * *` runs `12h` (12 times an hour), and `0 9 * * 1-5` runs `5w` (5 times a week, not necessarily on weekdays at 9:00).
-- Crons past the allowance still publish, and the publish carries a warning. The first ones declared run. The rest show as not scheduled, "over this plan's cron limit", on the dashboard's **Crons** page and in `sf crons ls`.
+- Crons past the allowance still publish, and the publish carries a warning. Within each kind of slot, the first ones declared run. The rest show as not scheduled, "over this plan's cron limit", on the dashboard's **Crons** page and in `sf crons ls`.
 
 Advanced crons also run at their closest simple schedule for now, until advanced scheduling is enabled for the platform.
 
 A raised limit applies right away. After an upgrade or Boost, crons that were waiting start running without a publish.
 
-A lowered limit applies at your next publish. A downgrade, or Boost ending, never stops a cron that is already running.
+A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing: crons that are running keep running.
 
 Whatever the plan, a Space can declare at most **95** crons. Past that, the publish fails validation.
 
