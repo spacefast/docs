@@ -28,10 +28,21 @@ In a Zero app, hooks and actions read and write through `db`. Your schema is the
 ```ts zero.config.ts
 import { action, db, defineConfig, HttpError, integer, table, text } from "zero";
 
-const notes = table({
-  body: text().notNull(),
-  ownerId: integer().notNull(),
-});
+// Each signed-in account reads and writes only its own rows, through every route.
+const notes = table(
+  {
+    body: text().notNull(),
+    ownerId: integer().notNull(),
+  },
+  {
+    access: {
+      read: ({ user }) => (user ? { ownerId: user.id } : false),
+      create: false,
+      update: false,
+      delete: false,
+    },
+  },
+);
 
 export default defineConfig({
   tables: { notes },
@@ -61,7 +72,7 @@ export default defineConfig({
 });
 ```
 
-The owner comes from `ctx.user`, the signed-in caller, never from `input`. Anything in `input` is whatever the client sent, so an `ownerId` there would let any signed-in account read or write another user's notes.
+The owner comes from `ctx.user`, the signed-in caller, never from `input`. Anything in `input` is whatever the client sent, so an `ownerId` there would let any signed-in account read or write another user's notes. The table's `access` rule enforces the same thing on the generated REST routes, which skip your actions. Without it a table is readable by anyone. Writes go only through `add`, so the table refuses direct writes.
 
 | Call | What it does |
 | --- | --- |

@@ -133,7 +133,7 @@ const scanText = (path, text) => {
     while (
       index !== -1 &&
       (lower.startsWith("--", index - 2) ||
-        /^\s+(?:app|client)\b/u.test(lower.slice(index + needle.length, index + needle.length + 12)))
+        /^[ \t]+(?:app|client)\b/u.test(lower.slice(index + needle.length, index + needle.length + 12)))
     ) {
       index = lower.indexOf(needle, index + needle.length);
     }

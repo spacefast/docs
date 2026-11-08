@@ -220,7 +220,7 @@ jobs: {
 },
 ```
 
-Call `jobs.notifyEditors.enqueue({ postId })` to queue one. A `webhooks` entry POSTs each matching write to a URL, signed in the `zero-signature` header, and retries the same way. On Spacefast a due job can wait up to five minutes before it starts.
+Call `jobs.notifyEditors.enqueue({ postId })` to queue one. A `webhooks` entry sends each matching write to a URL as a POST request, signed in the `zero-signature` header, and retries the same way. On Spacefast a due job can wait up to five minutes before it starts.
 
 ## No realtime
 

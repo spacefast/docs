@@ -47,6 +47,12 @@ test("accepts the OAuth client-type term while rejecting the same word as a mark
     const rejected = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
     assert.equal(rejected.status, 1);
     assert.match(rejected.stderr, /reference\.md:3 — internal-only marker/u);
+
+    // A heading can't borrow "app" from the next line to pass as the OAuth phrase.
+    writeFileSync(fixture, `${marker.toUpperCase()}\nApp roadmap\n`);
+    const split = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+    assert.equal(split.status, 1);
+    assert.match(split.stderr, /reference\.md:1 — internal-only marker/u);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
