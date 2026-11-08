@@ -5,7 +5,7 @@ sidebar:
   order: 23
 ---
 
-List your app's stored objects and read access or runtime logs within your plan's retention window. Runtime lines take time to appear, and static Spaces have no runtime logs.
+List your app's stored objects and read access, edge, or runtime logs within your plan's retention window. Runtime lines take time to appear, and static Spaces have no runtime logs.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
@@ -84,7 +84,7 @@ With `--json`, `data` carries `deleted`.
 
 Read a Space's logs.
 
-`access` is every request the edge served. `runtime` is what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
+`access` is every request that reached your Space's origin. `edge` is every request the edge served, cache hits included; see [Edge request logs](/infrastructure/edge-request-logs) for its filters. `runtime` is what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
 
 A line you just triggered takes a while to appear — it's written on the origin, shipped, and indexed before it can be read back. **An empty page means not yet, not broken.** Keep paging while the cursor is there: a page can come back empty while there's still more to read.
 
@@ -98,7 +98,7 @@ sf logs [target] [kind] [--space <value>] [--limit <n>] [-f] [--cursor <value>]
 | Argument | What it is |
 | --- | --- |
 | `[target]` | Space ID, slug, live URL, or domain. Defaults to the linked Space |
-| `[kind]` | `access` or `runtime`. Defaults to `access` |
+| `[kind]` | `access`, `edge`, or `runtime`. Defaults to `access` |
 
 A bare kind in the first slot works: `sf logs runtime` is the same as `sf logs --space <linked> runtime`.
 
@@ -136,5 +136,5 @@ Log history is a plan limit. A request that reaches past your retention window i
 
 | Code | Exit | When |
 | --- | --- | --- |
-| `validation_error` | 2 | `kind` is not `access` or `runtime` |
+| `validation_error` | 2 | `kind` is not `access`, `edge`, or `runtime` |
 | `validation_error` | 2 | `--request-id` or `--handler` passed with the access log |

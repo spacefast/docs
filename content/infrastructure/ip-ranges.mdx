@@ -20,7 +20,7 @@ sf domains diagnostics example.com --space my-site
 
 ## Outbound connections
 
-A request from your Space to an external service uses an origin pool's outbound address. That address can change after [automated failover](/infrastructure/automated-failover), relocation, or replacement of the underlying site.
+A request your Space's origin makes to an external service uses an origin pool's outbound address. Functions workers are different: they send from Cloudflare's shared network, so an allowlist built on the origin pool does not cover them. See [Functions outbound HTTP](/functions#outbound-http). That address can change after [automated failover](/infrastructure/automated-failover), relocation, or replacement of the underlying site.
 
 Outbound addresses can be shared with other sites. An IP allowlist covering a complete infra range does not authenticate your application, and a single observed address is not a stable integration contract. Use the external service's authentication mechanism. If it also requires an IP allowlist, contact Spacefast support to discuss the requirement before depending on a fixed address.
 

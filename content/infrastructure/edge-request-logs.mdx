@@ -30,7 +30,7 @@ Each query covers one assigned hostname and defaults to the primary hostname. Us
 | `--asn` | Source network's autonomous system number |
 | `--since`, `--until` | ISO 8601 timestamps for the query window |
 
-Repeat a filter flag to include more values. Values within one field use OR; different fields use AND.
+`--remote-addr`, `--ja3-hash`, `--method`, `--status`, `--user-agent`, and `--asn` can be repeated to include more values. `--hostname`, `--since`, and `--until` take one value each. Values within one field use OR; different fields use AND.
 
 The default window is the past hour. A query can span at most one hour within the past 24 hours, and your plan's retention can shorten that window. Results arrive newest first. Use smaller windows to investigate busy periods.
 
