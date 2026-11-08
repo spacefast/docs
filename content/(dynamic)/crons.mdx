@@ -48,7 +48,7 @@ Three grammars in two kinds. Named and shorthand schedules are **simple** crons.
 | Kind | Examples | Notes |
 | --- | --- | --- |
 | Named (simple) | `hourly`, `daily`, `twicedaily`, `weekly` | The provider picks the moment |
-| Shorthand (simple) | `3h`, `2d`, `1w` | Hours up to 12, days up to 23, weeks up to 6. `N` is at least 1 |
+| Shorthand (simple) | `3h`, `2d`, `1w` | `N` runs per hour, day, or week: `3h` runs three times an hour. Up to 12 an hour, 23 a day, 6 a week |
 | Crontab (advanced) | `30 16 * * 1-5`, `*/15 * * * *` | Five numeric fields, down to every minute |
 
 Crontab fields are minute `0-59`, hour `0-23`, day of month `1-31`, month `1-12`, weekday `0-7`. Lists (`1,15`), ranges (`1-5`), `*`, and a `/step` over a span are supported.
@@ -78,21 +78,23 @@ Each Space runs a set number of simple and advanced crons, by plan:
 | Free | 1 | 0 | No Boost. Upgrade the plan |
 | Go | 5 | 0 | 25 simple, 5 advanced |
 | Plus | 10 | 5 | 30 simple, 5 advanced |
-| Gold | 50 | 25 | 70 simple, 25 advanced |
+| Enterprise | 50 | 25 | No Boost |
 
-Boost is a per-Space add-on on Go, Plus, and Gold. It adds 20 simple crons and raises advanced crons to at least 5, so it adds no advanced crons to a plan that already has 5 or more. Free has no Boost: upgrading the plan is the way to more crons.
+Boost is a per-Space add-on on Go and Plus. It adds 20 simple crons and raises advanced crons to at least 5, so on Plus it adds simple crons only. Free has no Boost: upgrading the plan is the way to more crons.
 
 Crons are placed in the order you declare them:
 
 - A crontab takes an advanced slot while one is left.
-- A crontab with no advanced slot left still publishes, with a warning. It runs at its closest simple schedule and counts against the simple allowance: `*/5 * * * *` runs `12h`, and `0 9 * * 1-5` runs `5w`.
-- Crons past the allowance still publish, and the publish carries a warning. The first ones declared run. The rest show as "not scheduled · over this plan's cron limit" on the dashboard's **Crons** page and in `sf crons ls`.
+- A crontab with no advanced slot left still publishes, with a warning. It runs at its closest simple schedule and counts against the simple allowance. That can run more or less often than the crontab asked, and not at the times it names: `*/5 * * * *` runs `12h` (12 times an hour), and `0 9 * * 1-5` runs `5w` (5 times a week, not necessarily on weekdays at 9:00).
+- Crons past the allowance still publish, and the publish carries a warning. The first ones declared run. The rest show as not scheduled, "over this plan's cron limit", on the dashboard's **Crons** page and in `sf crons ls`.
 
 Advanced crons also run at their closest simple schedule for now, until advanced scheduling is enabled for the platform.
 
-Limits apply when you publish. Changing the plan or adding or removing Boost never stops a cron that is already running; your next publish applies the new limit. Raising the limit, with an upgrade or Boost, lets more crons run right away.
+A raised limit applies right away. After an upgrade or Boost, crons that were waiting start running without a publish.
 
-Whatever the plan, a Space can declare at most **95** crons. Past that, the publish fails with `config_cron_too_many`.
+A lowered limit applies at your next publish. A downgrade, or Boost ending, never stops a cron that is already running.
+
+Whatever the plan, a Space can declare at most **95** crons. Past that, the publish fails validation.
 
 ## List and trigger
 
@@ -132,8 +134,9 @@ Only the newest failures are kept, with no history behind them. A real failure a
 
 | Field | Meaning |
 | --- | --- |
-| `tier` | `simple` or `advanced` |
-| `runsAs` | The schedule that actually runs |
-| `reason` | `over_plan_limit` when the cron is past the allowance |
+| `scheduled` | Whether the cron runs |
+| `tier` | `simple` or `advanced`. `null` when not scheduled |
+| `runsAs` | The schedule that actually runs. `null` when not scheduled |
+| `reason` | `over_plan_limit` past the allowance, `unsupported_schedule` for a schedule that cannot run. `null` when scheduled |
 
-The response's `allowance` carries the Space's `simple` and `advanced` counts and `upgrade`, the step that unlocks more.
+The response's `allowance` carries the Space's `simple` and `advanced` counts and `upgrade`, the step that unlocks more: `upgrade_plan`, `upgrade_or_boost`, `boost`, or `null` when there is none.
