@@ -94,7 +94,7 @@ A raised limit applies right away. After an upgrade or Boost, crons that were wa
 
 A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing: crons that are running keep running.
 
-For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. That ceiling rises to the plan limits above as the runtime update reaches every box.
+For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. Each tier is capped at 8 too, so `allowance` in the API reports the capped numbers (8 simple and 5 advanced on Plus, 8 and 8 on Gold and Enterprise), and Boost adds no crons on a plan already at the cap. The ceiling rises to the plan limits above as the runtime update reaches every box.
 
 ## List and trigger
 
