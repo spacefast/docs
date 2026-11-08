@@ -199,7 +199,7 @@ Outbound access has nothing to do with who can open your space. Calling an API d
 
 ### Example: invite People from your app
 
-There is no `ctx.people`. To invite someone to a private space, or resend their invite, call the People API from an action with a [machine credential](/access#machine-credentials).
+There is no `ctx.people`. To invite someone to a private space, or resend their invite, call the People API from an action with a [machine credential](/share#machine-credentials).
 
 ```bash
 sf share token create --name invites --path '/**' --role manager --show-secret --json \

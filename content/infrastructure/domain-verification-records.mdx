@@ -3,7 +3,7 @@ title: Domain verification records
 description: Publish the exact TXT records needed to prove control of a Space hostname.
 ---
 
-Spacefast uses DNS verification records to prove that you control a hostname before it serves your Space. Copy the exact record names and values from your domain's setup instructions.
+Most hostnames need no verification record: the address records are enough. A TXT record appears only when the hostname is already in use elsewhere. Copy the exact record names and values from your domain's setup instructions.
 
 ## Get the records for your hostname
 
@@ -14,7 +14,7 @@ sf domains diagnostics example.com --space my-site
 
 The dashboard's domain setup also shows the required records. Add them wherever your DNS is managed. For the complete connection flow, see [Custom domains](/domains).
 
-Instructions can include both a Spacefast ownership record and a WP Cloud verification record. They prove different claims. Do not substitute one for the other or build a TXT value from an example.
+There are two kinds, and they prove different claims. A WP Cloud record (`atomic-domain-…`) proves the hostname to WP Cloud when another host holds it. A `_spacefast-claim.<domain>` record moves a hostname away from another Space. Do not substitute one for the other or build a TXT value from an example.
 
 ## When WP Cloud verification is required
 
