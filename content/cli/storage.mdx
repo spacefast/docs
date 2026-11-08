@@ -84,7 +84,7 @@ With `--json`, `data` carries `deleted`.
 
 Read a Space's logs.
 
-`access` is every request that reached your Space's origin. `edge` is every request the edge served, cache hits included; see [Edge request logs](/infrastructure/edge-request-logs) for its filters. `runtime` is what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
+`access` covers requests that reached your Space's origin. `edge` covers requests handled at the edge, cache hits included. Each edge query reads one hostname (the primary unless you pass `--hostname`), and a busy window can be truncated; see [Edge request logs](/infrastructure/edge-request-logs) for its filters and limits. With `runtime` you get what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
 
 A line you just triggered takes a while to appear — it's written on the origin, shipped, and indexed before it can be read back. **An empty page means not yet, not broken.** Keep paging while the cursor is there: a page can come back empty while there's still more to read.
 
