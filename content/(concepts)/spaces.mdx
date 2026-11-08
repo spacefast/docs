@@ -66,7 +66,9 @@ The owner depends on how the Space was created:
 
 To move a Space to another team, run `sf spaces transfer <team> --space docs`, or open **Space settings → General → Transfer this space → Transfer space…**. If you are an owner or admin of both teams, the move is instant. The Space keeps serving at its current address. Otherwise the target team has 7 days to accept, and nothing changes until they do. Roles and membership are on [Teams](/teams).
 
-## Access when you create one
+<a id="access-when-you-create-one" />
+
+## Sharing when you create one
 
 A new team-owned Space starts at one of two presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/anonymous-and-claim).
 
@@ -79,7 +81,7 @@ The API still accepts `team` and treats it as `private`.
 
 Set it on the request that creates the Space, with `sf publish --access public` or the `access` field on `createPublish` and [`createSpace`](/api/reference/spaces/createspace). Sending `access` together with a `spaceId` is a validation error, because the field only applies at creation. Omit it and the Space takes the owning team's default for new Spaces.
 
-Everything after that, including people, share links, passwords, and access requests, is on [Access and sharing](/access).
+Everything after that, including people, share links, passwords, and access requests, is on [Spacefast Share](/share).
 
 ## Find your Spaces
 
