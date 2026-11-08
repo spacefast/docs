@@ -1,0 +1,98 @@
+---
+title: Subteams
+description: Split an Enterprise team into subteams, each with its own members and Spaces, on the parent's plan and seats
+---
+
+<Badge variant="accent">Enterprise</Badge>
+
+A subteam is a team inside your team. It has its own name, URL, members, and Spaces. It uses the parent team's plan, seats, and billing.
+
+Subteams need an Enterprise parent team. On every other plan, subteam operations return `enterprise_required`. Plans are on [Plans and billing](/billing).
+
+## How subteams work
+
+- **The parent's owners and admins are in every subteam.** They hold the same role there. To change that role, change it on the parent team.
+- **Parent members can join a subteam.** A subteam appears in **Teams you can join** for parent members. Pressing **Join** makes them a subteam `member`, with no new seat. A person removed from a subteam does not see it there. An owner or admin of the parent team must add them again.
+- **Seats are shared.** Seats count across the parent and all its subteams. A person in several teams of the family uses one seat.
+- **Subteams do not nest.** A subteam cannot have subteams of its own.
+- **Leaving the parent leaves every subteam.** When someone leaves or is removed from the parent team, they also lose every subteam membership.
+
+Each subteam owns its Spaces. Access to them follows subteam membership and the member's subteam role. Teams, roles, and Space ownership work as described in [Teams and members](/teams).
+
+## Create a subteam
+
+Only owners and admins of the parent team can create a subteam.
+
+1. Open the parent team and go to **Subteams**.
+2. Press **New subteam**.
+3. Enter a **Name**, then press **Create subteam**.
+
+Spacefast creates the subteam and opens it. Its URL slug starts with the parent's slug, followed by the name.
+
+Over HTTP, send [`createSubTeam`](/api/reference/teams/createsubteam) with a `name` of 1 to 255 characters:
+
+```bash
+curl "https://api.spacefast.com/v1/teams/$TEAM_ID/subteams" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Design"}'
+```
+
+The `201` response holds the subteam: `id`, `teamId` (the parent), `name`, `slug`, `memberCount`, `createdAt`, and `updatedAt`. From a terminal, run `sf teams subteams create Design`.
+
+## List subteams
+
+[`listSubTeams`](/api/reference/teams/listsubteams) returns the parent's subteams, sorted by name. Every member of the parent team can list them. From a terminal, run `sf teams subteams ls`.
+
+The **Subteams** page shows the subteams you are in, each with **Open**. Below them are the subteams you can join, each with **Join**.
+
+## Rename a subteam
+
+Send [`updateSubTeam`](/api/reference/teams/updatesubteam) with a new `name`. The slug does not change. From a terminal:
+
+```bash
+sf teams subteams rename "$SUBTEAM_ID" "Brand design"
+```
+
+You can also open the subteam and rename it in **Team settings → General**.
+
+## Manage subteam members
+
+Adding and removing members needs an owner or admin of the parent team.
+
+```bash
+sf teams subteams members ls "$SUBTEAM_ID"
+sf teams subteams members add "$SUBTEAM_ID" "$USER_ID"
+sf teams subteams members rm "$SUBTEAM_ID" "$USER_ID"
+```
+
+| Operation | What it does |
+| --- | --- |
+| [`listSubTeamMembers`](/api/reference/teams/listsubteammembers) | Lists members with their `userId`, `name`, `email`, and `image`. Subteam members and the parent's owners and admins can read it |
+| [`addSubTeamMember`](/api/reference/teams/addsubteammember) | Adds a parent member as a subteam `member`. No invitation is sent and no seat is used. Repeating the request keeps one membership |
+| [`removeSubTeamMember`](/api/reference/teams/removesubteammember) | Removes the person from the subteam and its Spaces. They stay on the parent team |
+
+Find a user ID with `sf teams members ls --json` on the parent team. You can also invite someone from the **Members** page of the subteam. The subteam role picker offers **Admin** and **Member**. A subteam has no owner of its own.
+
+A person you remove from a subteam cannot rejoin it through **Teams you can join**. To bring them back, add them again.
+
+## Delete a subteam
+
+A subteam with Spaces cannot be deleted. Delete or move its Spaces first. See [Move a Space to another team](/teams#move-a-space-to-another-team).
+
+Send [`deleteSubTeam`](/api/reference/teams/deletesubteam), or run `sf teams subteams rm <subteam-id>`. In the dashboard, open the subteam and go to **Team settings → Danger zone → Delete this team**. Deleting a subteam ends its memberships.
+
+A parent team cannot be deleted while it has subteams. Delete every subteam first.
+
+## Errors
+
+| Code | Status | Meaning |
+| --- | --- | --- |
+| `enterprise_required` | 403 | The parent team is not on Enterprise |
+| `parent_authority_required` | 403 | Only an owner or admin of the parent team can do this |
+| `subteam_nesting_unsupported` | 422 | The team is already a subteam, or it is a system or partner team |
+| `role_managed_by_parent` | 409 | The person's subteam role comes from the parent team. Change it there |
+| `team_has_spaces` | 409 | The subteam still has Spaces |
+| `team_has_subteams` | 409 | The parent team still has subteams |
+| `not_found` | 404 | The subteam does not exist, or the user is not a member of the parent team |
+| `forbidden` | 403 | Your role cannot manage members, or you are not in the subteam whose members you asked for |

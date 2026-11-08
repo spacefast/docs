@@ -1,0 +1,239 @@
+---
+title: Call connectors from your Space
+description: Declare connector roles in a Zero capsule, bind team accounts to them, and call them from Zero handlers and Workers
+sidebar:
+  order: 1.6
+---
+
+A Space's code calls a connected service through a **role**. The capsule declares the role by name. A person on the team binds a connection to that role on the Space. Code calls the role, never a connection id, so you can change the account without a republish.
+
+Set up the connection itself first. See [Connectors](/connectors) for registering a connector, connecting an account, and team policies.
+
+## Before you start
+
+- The Space is claimed and belongs to a team. An unclaimed Space cannot bind connectors.
+- The Space runs a [Zero](/zero-runtime) capsule. Only a capsule declares roles.
+- The team has a connection for the service in **Team connectors**.
+
+## Declare roles in the capsule
+
+Add a `connectors` map to `capsule()`. Each key is a role name. Each value is a `connector()` call.
+
+```ts server/index.ts
+import { capsule, connector, query } from "@spacefast/zero/server";
+
+export default capsule({
+  name: "support",
+  connectors: {
+    tracker: connector({ as: "team", connector: "linear-app" }),
+  },
+  queries: {
+    openIssues: query((ctx) => ctx.connectors.tracker.issues.list({ limit: 10 })),
+  },
+});
+```
+
+| Key | Required | What it does |
+| --- | --- | --- |
+| `as` | yes | Whose account the role uses: `team`, `owner`, or `visitor` |
+| `connector` | no | The connector slug for the role. The dashboard offers only connections for this connector. A `visitor` role needs it |
+
+| `as` | Account | Condition |
+| --- | --- | --- |
+| `team` | A team connection | The connection allows sites to use it |
+| `owner` | Your own personal connection | The Space is private |
+| `visitor` | Each signed-in visitor's own account | The visitor connects it on the Space. See [Let visitors connect their own account](#let-visitors-connect-their-own-account) |
+
+A role name starts with a lowercase letter and holds only letters and digits, up to 64 characters. The compiler reads the `connectors` map from source without running it, so write it as a literal. A map that is not a literal object of roles fails the publish with "capsule() connectors must be a role map."
+
+Roles come from the live version. Publish the capsule before you bind its roles.
+
+## Bind a connection to a role
+
+A binding links one role on one Space to one connection. Binding a role that already has a connection replaces it.
+
+The connection must fit the role:
+
+- A `team` role needs a team connection that allows sites to use it. Turn that on with **Allow sites to use this account** in the dashboard, `sf connectors connections edit <connection> --serving`, or [`updateConnection`](/api/reference/connectors/updateconnection) with `serving: true`.
+- An `owner` role needs a personal connection that you created, on a private Space. If the Space stops being private, Spacefast removes its owner bindings.
+- A `visitor` role cannot be bound. Binding one fails with `visitor_role_not_bindable`.
+
+The request must act for a user who can manage the Space. A credential that acts for no user gets `forbidden`.
+
+### Bind in the dashboard
+
+1. Open the Space and choose **Integrations** in the sidebar. The page title is **Connectors**.
+2. Find the role and choose **Bind account**.
+3. For a `team` role, turn on **Allow sites to use this account** for the connection.
+4. Choose **Bind**.
+
+Each row shows the role, the bound connection, and its status. Choose **Change** to pick another connection or **Unbind** to remove it. If no connection matches, the dialog says **No matching accounts**. Connect one in **Team connectors** first.
+
+### Bind from the CLI
+
+```bash
+sf connectors bindings --space my-app
+sf connectors connections edit cxn_abc123 --serving
+sf connectors bind tracker cxn_abc123 --space my-app
+sf connectors unbind tracker --space my-app --yes
+```
+
+`--space` is required for `bindings`, `bind`, and `unbind`. `sf connectors bindings` prints `ROLE`, `AS`, `CONNECTION`, and `STATUS` for each role. `unbind` asks for confirmation unless you pass `--yes`. Unbinding removes the binding and keeps the connection. See [`sf connectors`](/cli/connectors) for every flag.
+
+### Bind through the API
+
+| Operation | What it does |
+| --- | --- |
+| [`listSpaceConnectorBindings`](/api/reference/spaces/listspaceconnectorbindings) | Lists the live version's roles with their bindings, plus the Space's `access`: `private`, `team`, or `public` |
+| [`bindSpaceConnector`](/api/reference/spaces/bindspaceconnector) | Binds `connectionId` to a role |
+| [`unbindSpaceConnector`](/api/reference/spaces/unbindspaceconnector) | Removes a role's binding without disconnecting the account |
+
+All three need the `connectors:write` scope.
+
+## Let visitors connect their own account
+
+A `visitor` role calls the service as the signed-in visitor, with that visitor's own account. Nobody on the team binds it, and the dashboard row has no **Bind account** button.
+
+```ts server/index.ts
+connectors: {
+  myTracker: connector({ as: "visitor", connector: "linear-app" }),
+},
+```
+
+1. A call returns `connect_required` until the visitor connects an account.
+2. `ConnectorGate` shows a **Connect** button for that state. The button opens the service's sign-in in a popup.
+3. A visitor who is not signed in to the Space signs in first.
+4. After the service sign-in, the popup closes and the gate runs the call again.
+
+The connector must support OAuth sign-in. Each connection belongs to one visitor, one Space, and one role. For `reconnect_required`, the gate shows **Reconnect** instead.
+
+To disconnect, call `disconnect()` on the result of `useConnectorState(result, role)`. To see who connected, call [`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers). It returns counts and roles per Space user, not the accounts. To disconnect one user, call [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection).
+
+## Call a role from Zero
+
+`ctx.connectors.<role>` is on every query, mutation, action, and endpoint context. The property path after the role is the tool name, joined with dots. `ctx.connectors.tracker.issues.create(args)` calls the `issues.create` tool on the bound connection.
+
+```ts server/index.ts
+import { capsule, connector, mutation } from "@spacefast/zero/server";
+
+export default capsule({
+  connectors: {
+    tracker: connector({ as: "team", connector: "linear-app" }),
+  },
+  mutations: {
+    reportBug: mutation((ctx, title: string) => ctx.connectors.tracker.issues.create({ title })),
+  },
+});
+```
+
+The tool name is the part of a tool address after the connection id. List a connection's tools with [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+
+The call resolves to the tool's result, or `null` when the tool returned nothing. Any other outcome throws a `ConnectorCallError` that carries a [call state](#call-states) on `error.state`.
+
+Queries and read endpoints can call only read-only tools. A tool that writes answers `forbidden` there. Call it from a mutation, an action, or a write endpoint instead.
+
+### Show the state in the client
+
+When a `ConnectorCallError` leaves a query, mutation, or action, the runtime rolls back the handler's database writes. The client receives the call state instead of a result.
+
+`ConnectorGate` from `@spacefast/zero/kit` renders its children while the role works. Otherwise it shows the state message. It adds a **View approval** link while a call waits for approval and a **Try again** button when the service is unavailable. While a call waits, it retries every 3 seconds.
+
+```tsx client/issues.tsx
+import { useQuery } from "@spacefast/zero/client";
+import { ConnectorGate } from "@spacefast/zero/kit";
+
+export function Issues() {
+  const issues = useQuery<{ id: string; title: string }[]>("openIssues");
+  return (
+    <ConnectorGate role="tracker">
+      <ul>{Array.isArray(issues) && issues.map((issue) => <li key={issue.id}>{issue.title}</li>)}</ul>
+    </ConnectorGate>
+  );
+}
+```
+
+To read the state of one result yourself, call `useConnectorState(result)` from `@spacefast/zero/client`.
+
+## Call a role from a Worker
+
+A [Worker](/functions) gets `env.CONNECTORS` when the version's capsule declares roles or the Space has a binding. To ship a Worker beside a capsule, add a `functions/` directory or a root `handler.ts`, `handler.js`, or `handler.mjs` to the Zero project. `sf publish` compiles both into one version.
+
+The role proxy works as it does in Zero. It resolves to the tool's result and throws a `ConnectorCallError` for any other state.
+
+```js handler.js
+export default {
+  async fetch(request, env) {
+    if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
+    const secret = env.REPORT_SECRET;
+    if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    const { title } = await request.json();
+    const issue = await env.CONNECTORS.tracker.issues.create({ title });
+    return Response.json(issue, { status: 201 });
+  },
+};
+```
+
+A `team` role acts with the team's account for every request that reaches the Worker. Call a tool that writes only on a write method, and only after you check the caller. This example requires a secret that you set with `sf env set REPORT_SECRET --value-from-stdin`.
+
+To handle every state without a throw, call `env.CONNECTORS.call(role, tool, args)`. It resolves to `{ state, run }`. Check `state.code` before you read `run`.
+
+```js handler.js
+export default {
+  async fetch(request, env) {
+    const { state, run } = await env.CONNECTORS.call("tracker", "issues.list", { limit: 10 });
+    if (state.code !== "ok") return Response.json({ error: state.message }, { status: 503 });
+    return Response.json(run.result);
+  },
+};
+```
+
+`call()` throws only when the connector service refuses or cannot be reached. The error carries a `code`, for example `service_upstream_unavailable` or `connector_forbidden`.
+
+A Worker call can use any tool that policy allows. The read-only rule applies only to Zero read handlers. A binding stays usable from a Worker after a later version removes the capsule that declared the role. `env.CONNECTORS` forwards the request's signed visitor cookie. The runtime verifies the cookie before it acts for that visitor.
+
+## Call states
+
+Every call ends in one state. `state.message` carries the text below.
+
+| `code` | `message` | When |
+| --- | --- | --- |
+| `ok` | Connected. | The tool ran |
+| `unbound` | The site owner needs to connect this service. | No usable connection is bound to the role, or the Space has no team. An owner binding stops working when its owner leaves the team |
+| `forbidden` | You do not have permission to use this connection. | The bound connection does not fit the role, policy blocks the tool, or a Zero read handler called a tool that writes |
+| `connect_required` | Connect your account to continue. | The bound connection is still waiting for authorization, or the visitor has not connected an account for a `visitor` role |
+| `reconnect_required` | Reconnect your account to continue. | The connection was revoked or needs a new sign-in |
+| `approval_pending` | This action is waiting for approval. | Policy parked the call. `pendingReason` is `approval`, and `approvalUrl` links to the decision |
+| `approval_pending` | Still working on it. Try again in a moment. | The run did not finish within 25 seconds. `pendingReason` is `running` |
+| `unavailable` | This service is unavailable. Try again. | The tool failed for another reason |
+
+A parked call carries `runId`. In the Zero client, `useConnectorState` reports a still-running call as `running`.
+
+## Policies and approvals
+
+A Space call runs under the same team policies as any other connector run. The policy for the tool address decides the outcome:
+
+| Policy action | Result in the Space |
+| --- | --- |
+| `approve` | The tool runs |
+| `require_approval` | The run parks and the call returns `approval_pending`. A person decides it |
+| `block` | The call returns `forbidden` |
+
+Each call is a connector run. Its origin is `zero` when the version includes a capsule and `function` when it does not. Its handler is the Zero handler name, or `fetch` for a Worker. To list one Space's calls, filter [`listConnectorRuns`](/api/reference/connectors/listconnectorruns) by `space` and `origin`.
+
+Each call has an idempotency key built from the version, the request id, the handler, the role, the tool, and the arguments. While a mutation's call waits, the Zero client retries the mutation with the same request id. The retry gets the same run back instead of a second call. After a person decides, the retry returns the outcome.
+
+## API errors
+
+`bindSpaceConnector` can fail with these codes.
+
+| Code | When |
+| --- | --- |
+| `space_must_be_claimed` | The Space does not belong to a team |
+| `connector_role_unknown` | The live version does not declare the role |
+| `visitor_role_not_bindable` | The role is a `visitor` role. Each visitor connects their own account |
+| `connection_serving_not_granted` | A `team` role got a personal connection, or a team connection that does not allow sites to use it |
+| `owner_binding_requires_private_space` | An `owner` role got a connection that is not your personal one, or the Space is not private |
+| `forbidden` | The credential does not act for a user |
+| `not_found` | The connection is revoked or does not exist |

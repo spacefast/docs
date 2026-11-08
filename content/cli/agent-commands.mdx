@@ -278,11 +278,12 @@ Every failure receipt carries `error.code` and `error.requestId`. Passing both t
 ### Output
 
 ```text
-Feedback ref: fb_0123456789abcdef
-Delivered — thanks!
+Feedback ref: fdb_0123456789abcdef
+Thanks! We read every one.
+Signed in with `sf login`? Read it back with `sf feedback get fdb_0123456789abcdef`.
 ```
 
-`data` carries `ref` and `delivered`.
+`data` carries `ref` and `status`. `status` is `stored`.
 
 ## sf plugins
 

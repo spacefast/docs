@@ -1,0 +1,243 @@
+---
+title: Traffic rules
+description: Block or challenge requests, skip the cache for some paths, test a URL against your rules, and pause every rule at once
+---
+
+A traffic rule matches requests on facts such as the path, the country, the client address, or a header. A firewall rule blocks or challenges a matching request before it reaches your Space. A cache-bypass rule serves a matching request fresh instead of from the edge cache.
+
+The **Traffic Rules** page in the dashboard also lists your redirects, rewrites, and headers, with where each one runs. Their grammar is on [Redirects, rewrites, and headers](/routing). This page covers firewall and cache-bypass rules.
+
+## Pick where a rule lives
+
+You declare a rule in one of two places. Spacefast puts it at the edge for you.
+
+| Where | `origin` in the rule list | A change reaches the edge after |
+| --- | --- | --- |
+| The `firewall` and `cache.bypass` keys of your config file | `config` | A publish |
+| The Space settings: the dashboard, `sf rules add`, or `updateSpace` | `overlay` | A settings save. No publish |
+
+The config file is `sf.jsonc`, one of its aliases, or `spacefast.config.ts`. See the [project config reference](/config-file).
+
+Settings rules answer before config file rules. A settings rule with the same name and kind as a config file rule replaces it at the edge.
+
+Keep rules that ship with your code in the config file. Put an urgent fix, such as a block on an abusive network, in the settings, because it applies without a publish.
+
+A Space gets its edge at its first publish. Publish once before you add rules. Until then, validation, pause, and resume fail with [`traffic_rules_unavailable`](/errors/traffic_rules_unavailable).
+
+## Write a rule
+
+```jsonc sf.jsonc
+{
+  "firewall": [
+    { "name": "protect-admin", "action": "challenge", "match": { "path": "/admin/*" } },
+    { "name": "block-logins", "action": "block", "status": 403, "match": { "path": "/wp-login.php*" } }
+  ],
+  "cache": {
+    "bypass": [
+      { "name": "fresh-api", "match": { "path": "/api/*" } },
+      { "name": "previews", "match": { "query": { "preview": { "op": "exists" } } } }
+    ]
+  }
+}
+```
+
+The same keys work in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  firewall: [{ name: "protect-admin", action: "challenge", match: { path: "/admin/*" } }],
+});
+```
+
+| Field | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `name` | string | none | Lowercase letters, digits, `-`, and `_`, up to 61 characters. Not all digits and not a reserved word such as `add` or `validate`. The CLI and the API address the rule by it. Unique within its list |
+| `description` | string, up to 255 characters | none | What the rule is for |
+| `action` | `block` or `challenge` | required | Firewall rules only. `block` answers without reaching the Space. `challenge` asks for proof of a human |
+| `status` | integer, 400 to 499 | `403` | The status of a blocked request. Only with `block` |
+| `match` | object | required | The request facts to compare. At least one field |
+| `any` | boolean | `false` | When `true`, one matching field is enough. Otherwise every field has to match |
+
+Each list answers with its first matching rule, so put the specific rule above the general one.
+
+### Match fields
+
+| Field | Compares with |
+| --- | --- |
+| `path`, `host` | `eq`, `neq`, `in`, `contains`, `startsWith`, `endsWith`, `wildcard` |
+| `method`, `country`, `asn` | `eq`, `neq`, `in` |
+| `ip` | `eq`, `neq`, `in`, `inCidr` |
+| `userAgent`, `referer` | `eq`, `neq`, `in`, `contains`, `startsWith`, `endsWith`, `wildcard`, `exists` |
+| `header`, `cookie`, `query` | The same as `userAgent`, per name |
+| `extension` | `eq`, `neq`, `in`, `exists` |
+| `ja3`, `ja4` | `eq`, `in`, `exists` |
+
+`country` takes two-letter codes. `extension` takes the extension without the dot. `header`, `cookie`, and `query` take an object of names, for example `{ "x-api-client": { "op": "exists" } }`.
+
+A value can be a shorthand or an explicit clause.
+
+| Value | Reads as |
+| --- | --- |
+| `"/admin/*"` | `wildcard`. A `*` matches any run of characters |
+| `"GET"` | `eq`. Text fields ignore case |
+| `["US", "CA"]` | `in`. Any of the values |
+| `"203.0.113.0/24"` on `ip` | `inCidr`. A range |
+| `{ "op": "startsWith", "value": "/admin/" }` | The named comparison |
+| `{ "op": "in", "values": ["RU"], "not": true }` | The opposite of the comparison |
+
+`in` and `inCidr` take `values`. `exists` takes no value. Every other comparison takes `value`. A comparison that a field does not offer fails validation, and so does a `*` in a field without `wildcard`.
+
+[`getTrafficRuleCatalog`](/api/reference/spaces/gettrafficrulecatalog) returns this catalog of fields, comparisons, and limits as JSON.
+
+Firewall rules never match the platform's own transport paths, such as `/__spacefast/health.php` and paths under `/__stattic/blob/`.
+
+## Add a rule from the CLI
+
+To add a rule to the Space settings, run `sf rules add`:
+
+```bash
+sf rules add --kind firewall --action challenge --path '/wp-login.php*'
+sf rules add --kind firewall --action block --country US,CA --not country
+sf rules add --kind cache-bypass --path '/api/*' --name fresh-api
+```
+
+The new rule goes first in its list. The command waits for the edge to answer for the rule, then prints the result, for example `Live at the edge.` Every flag is on [`sf rules`](/cli/rules).
+
+## Add a rule in the dashboard
+
+1. Open the Space and go to **Traffic Rules**.
+2. Click **New rule**.
+3. Pick **Firewall** or **Cache**.
+4. Enter a **Path pattern**, or click **Match on something else** to compare other request facts.
+5. For a firewall rule, pick the **Action** and, for **Block**, an optional **Status code**.
+6. Click **Create rule**.
+
+The dashboard validates the whole list before it saves. A problem shows on the control that can fix it.
+
+A Space with no rules shows three starters. **Protect a path** opens a firewall rule that challenges everything under `/admin/`.
+
+To change the order of your dashboard rules, use **Move up** and **Move down** on the rule.
+
+## Test a URL against your rules
+
+To see which rule answers a request, run `sf rules test`:
+
+```bash
+sf rules test /wp-login.php --country RU
+sf rules test /api/orders --file sf.jsonc
+```
+
+The CLI evaluates the rules locally, the way the edge evaluates them. It sends no request to your Space and changes nothing. It prints the first matching rule of each list. With `--file`, it reads rules from a config file you did not publish yet.
+
+In the dashboard, open **Test a request against your rules** under the list. Enter a path and click **Test path**. **Add request details** sets a **Country**, an **IP address**, a **User agent**, a **Header**, or a **Cookie**. The dashboard tester has no method, ASN, referrer, JA3, or JA4 facts, so rules on those can match differently there than at the edge.
+
+Both testers check firewall and cache-bypass rules only. Redirects and headers have their own checker, `sf routing inspect`. See [Redirects, rewrites, and headers](/routing#checking-your-rules).
+
+## Validate rules before you publish
+
+To check the rules in your config file against the rule grammar and the edge, run:
+
+```bash
+sf rules validate
+```
+
+It reports every problem with the field it is in, for example `firewall[0].match.country`, and exits `2`. It writes nothing. The same check is [`validateSpaceTrafficRules`](/api/reference/spaces/validatespacetrafficrules), which takes up to 50 rules per list.
+
+## Read what the edge holds
+
+```bash
+sf rules ls
+```
+
+The list is in the order the edge reads the rules. Each rule shows its kind, its action, where it was declared, where it runs, and what the edge last said about it. [`listSpaceTrafficRules`](/api/reference/spaces/listspacetrafficrules) returns the same data.
+
+| Dashboard | `edgeState` or `desiredState` | Meaning |
+| --- | --- | --- |
+| **Live** | `live` | The edge answers with the rule |
+| **Applying** | `pending` | The edge accepted the rule and is still applying it |
+| **Over quota** | `over_quota` | The Space has more rules than the edge allows, so the edge left this one off |
+| **Invalid**, **Failed** | `invalid`, `failed` | The edge refused the rule. `lastError` says why |
+| **Paused** | `suspended` | Rules are paused |
+| **Serving** | `unknown`, at the Space | The edge does not hold this rule. The Space answers it |
+
+The dashboard row also shows **Edge** or **Origin**. **Origin** means the Space answers the rule, and the row says why.
+
+The **Edge allowance** card shows **Rules at the edge**: how many rules the Space has at the edge, and how many the edge allows. The edge sets that allowance, and it can be lower than the 50 rules per list a Space may declare. When the edge does not answer, the card shows Spacefast's own count and **limit unknown**.
+
+A declared rule that duplicates an earlier rule, or reuses its name, never reaches the edge. The list reports it under the rules, and the API reports it in `collapsed`.
+
+## Remove a rule
+
+To remove a rule from the Space settings, run:
+
+```bash
+sf rules rm block-logins --kind firewall
+```
+
+In the dashboard, click **Remove** on the rule, then **Remove rule**.
+
+A rule from your config file is not removable here. Delete it from the file and publish. To change it without a publish, click **Override in dashboard**. The dashboard copies the rule into the settings, where it answers first.
+
+## Pause and resume all rules
+
+To stop every rule at once, run `sf rules pause`, or click **Pause all edge rules** in the dashboard. The Space then serves as if it declared no rules. Requests that rules blocked or challenged reach the Space. Requests that skipped the cache can serve from it again.
+
+The rules stay saved. A rule you add while paused is parked when it arrives.
+
+To put the rules back, run `sf rules resume`, or click **Resume** in the **Traffic rules are paused** notice. Resume is safe on a Space that is not paused.
+
+Pause and resume apply at once, with no publish. Both need a Space with an edge. The API operations are [`pauseSpaceTrafficRules`](/api/reference/spaces/pausespacetrafficrules) and [`resumeSpaceTrafficRules`](/api/reference/spaces/resumespacetrafficrules).
+
+## Run redirects and headers at the edge
+
+By default your Space answers its own redirects and headers. To move the ones the edge can answer to the edge, set `config.placement.edge` to `true` with [`updateSpace`](/api/reference/spaces/updatespace). It takes effect at the next publish.
+
+Some rules stay at the Space anyway. Examples are a rule that captures part of the path, a proxy, a `404` rule, and a redirect with a status other than 301, 302, 307, or 308. The rule list names the reason for each one.
+
+While rules are paused, a publish that places redirects or headers at the edge fails with [`traffic_rules_placement_incomplete`](/errors/traffic_rules_placement_incomplete). Resume, then publish again.
+
+## Know what needs a publish
+
+| Change | Takes effect after |
+| --- | --- |
+| A firewall or cache-bypass rule in the config file | A publish |
+| A firewall or cache-bypass rule in the Space settings | The settings save |
+| A redirect, rewrite, or header in the Space settings | The settings apply on a Space with a live version. Otherwise the first publish |
+| A rule in `_redirects`, `_headers`, or the config file `redirects`, `rewrites`, and `headers` | A publish |
+| Pause or resume | Immediately |
+| `placement.edge` | The next publish |
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Rules in one `firewall` or `cache.bypass` list | 50 |
+| Comparisons in one firewall rule | 47 |
+| Comparisons in one cache-bypass rule | 50 |
+| Values in one `in` or `inCidr` | 1,000 |
+| Characters in one value | 4,096 |
+| Characters in a header, cookie, or query name | 128 |
+| Characters in a `description` | 255 |
+| Rules at the edge | Set by the edge. See **Edge allowance** |
+
+The Space settings and the config file each hold their own lists. A keyed field counts one comparison per name. A firewall rule with `any: true` takes one edge rule per comparison.
+
+## API operations
+
+| Operation | What it does |
+| --- | --- |
+| [`listSpaceTrafficRules`](/api/reference/spaces/listspacetrafficrules) | The rules, the edge allowance, the pause state, and the hostnames the rules answer on |
+| [`validateSpaceTrafficRules`](/api/reference/spaces/validatespacetrafficrules) | Checks firewall and cache-bypass rules. Writes nothing |
+| [`pauseSpaceTrafficRules`](/api/reference/spaces/pausespacetrafficrules) | Parks every rule |
+| [`resumeSpaceTrafficRules`](/api/reference/spaces/resumespacetrafficrules) | Puts parked rules back |
+| [`getTrafficRuleCatalog`](/api/reference/spaces/gettrafficrulecatalog) | The match fields, comparisons, and limits |
+| [`updateSpace`](/api/reference/spaces/updatespace) | Writes settings rules in `config.firewall` and `config.cache.bypass` |
+
+```bash curl
+curl -sS "https://api.spacefast.com/v1/spaces/$SPACE_ID/rules" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+To write settings rules, read the Space with [`getSpace`](/api/reference/spaces/getspace). Send its whole `config` back with your lists changed, because `config` replaces the stored settings. Send its `settingsDigest` as `baseSettingsDigest`. The write then fails with `publish_base_changed` instead of overwriting a change saved in between.

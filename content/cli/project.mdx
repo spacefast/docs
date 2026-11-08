@@ -49,32 +49,30 @@ sf init my-app --runtime zero --template guestbook
 
 ### What it writes
 
-`sf init` writes `sf.jsonc`, commented out down to the keys you are likely to want:
+`sf init` writes `spacefast.config.ts`, with the keys you are likely to want commented out:
 
-```jsonc sf.jsonc
-{
-  "$schema": "https://spacefast.com/schemas/sf.json",
-  // Project link: .spacefast/space.json (written by sf init --space, sf link, or sf publish).
-  // "index": "index.html",
-  // "fallback": "/index.html", // SPA fallback; or { "path": "/404.html", "status": 404 }
-  // "listing": false,
-  // "access": "public", // whole live space public; or { "public": ["/assets/**", "!/assets/private/**"] }
-  // "meta": { "title": "", "description": "", "image": "/og.png", "favicon": "/favicon.svg" },
-  // "templates": [], // files that receive {{ vars.NAME }} substitution
-  // "build": { "rootDirectory": ".", "buildCommand": "npm run build", "outputDirectory": "dist" },
-}
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  // fallback: "/index.html",
+  // meta: { title: "", description: "", image: "/og.png" },
+  // build: { buildCommand: "npm run build", outputDirectory: "dist" },
+});
 ```
+
+The `zero` and `functions` runtimes also write `spacefast.config.ts`, with `name` and `runtime` set.
 
 With `--space` it also writes `.spacefast/space.json` and refreshes `.spacefast/state.json`. If the cache write fails you get a warning, not a failure, because the committed link is the source of truth.
 
-Other config filenames still work, in this precedence order: `sf.jsonc`, `spacefast.jsonc`, `spacefast.json`, `sf.json`, `.sf/sf.json`, `.sf/config.jsonc`, `.sf/config.json`. The highest one present wins and the rest produce a warning naming the winner.
+`sf.jsonc` and the other JSON config names still work. `spacefast.config.ts` takes precedence over all of them. The highest one present wins and the rest produce a warning naming the winner. See [Project config reference](/config-file) for the full order.
 
-`sf init` refuses to overwrite an existing config without `--force`, and refuses a symlinked or non-regular config outright. `sf init <name>` removes the directory it created if init fails.
+`sf init` refuses to overwrite an existing config in any supported format without `--force`, and refuses a symlinked or non-regular config outright. With `--force`, it overwrites the selected config file and keeps its format. A forced `sf.jsonc` gets only the `$schema` line. `sf init <name>` removes the directory it created if init fails.
 
 ### Output
 
 ```text
-{ "data": { "created": true, "configPath": "…/sf.jsonc" } }
+{ "data": { "created": true, "configPath": "…/spacefast.config.ts" } }
 ```
 
 With `--space`, `data` also carries `linkPath`, `space`, `statePath`, and `stateSaved`.

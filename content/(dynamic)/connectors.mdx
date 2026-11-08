@@ -1,0 +1,195 @@
+---
+title: Connectors
+description: Register an OpenAPI spec, GraphQL endpoint, or remote MCP server for your team, connect an account, decide what agents may call, and run tools
+---
+
+A connector is a source of tools that a team registers once: an OpenAPI spec, a GraphQL endpoint, or a remote MCP server. A connection is one account on that connector. Agents get the tools. The credential stays in Spacefast, and no endpoint ever returns it.
+
+## Before you start
+
+- Only team owners and admins can open the connectors pages. A member sees **Only team owners and admins can manage connectors**.
+- An API key needs connector scopes. `connectors:read` reads everything. `connectors:write` registers connectors, connects accounts, and sets policy. `connectors:execute` runs tools. `write` and `execute` both include `read`, but neither includes the other. See [API keys](/api-keys).
+
+The pages live under **Connectors** in the team sidebar. A switch in the header moves between **Connectors**, **Runs**, and **Policies**.
+
+## Add a connector from the catalog
+
+The catalog lists curated presets, the public registry, and your team's own connectors. It has one row per surface, so a service with an API and an MCP server is two rows.
+
+1. Open **Connectors** in the team sidebar.
+2. Click **Browse connectors**.
+3. Search, or filter by **All**, **API**, **GraphQL**, or **MCP**.
+4. Click **Add** on the row you want.
+
+The row changes to **View** when the connector exists. A row that needs a provider-specific endpoint shows **Set up** instead of **Add**, and opens the add form.
+
+From the CLI, pass a catalog slug:
+
+```bash
+sf connectors add linear
+```
+
+## Add a connector from a URL
+
+Paste any URL the service published. Detection looks behind it, so the URL it registers can differ from the one you pasted.
+
+1. On **Browse**, paste the URL into the search box.
+2. Click **Detect**.
+3. Click **Continue** on the candidate you want.
+4. Check **Name**, **Namespace**, and **Description**.
+5. Click **Register**.
+
+**Namespace** is the connector slug. It takes lowercase letters, digits, and dashes, and starts with a letter or a digit. Every tool address of the connector starts with it. Agents read **Description** when they choose between connectors.
+
+You enter no credential here. Authentication comes from the source. Spacefast asks an MCP server how it authenticates, so a server that wants OAuth gets an OAuth connector.
+
+```bash
+sf connectors detect https://api.example.com
+sf connectors add https://api.example.com/openapi.json
+```
+
+## Connect an account
+
+1. On **Connectors**, open the connector row.
+2. Click **Connect account**.
+3. Under **Who can use it**, choose **Workspace** or **Personal**.
+4. If the connector offers more than one method, choose one under **Method**.
+5. Optional: enter a **Label**. Agents see it when a connector has more than one account.
+6. Click **Connect**.
+
+**Workspace** shares the account with everyone on the team and every agent that acts for it. **Personal** keeps it yours, and only within this team. An API key can connect **Workspace** accounts only.
+
+Connecting ends in one of three ways:
+
+| Result | What to do |
+| --- | --- |
+| `connected` | Nothing. The account is ready |
+| `authorization_required` | Sign in at the provider. In the dashboard, click **Open sign-in**. The CLI prints the URL. The callback finishes the connection, so there is nothing to paste back |
+| `input_required` | Give the values the connector asks for, then connect again |
+
+For an `input_required` answer, the dashboard shows each field with the provider's own help when the registry has some: setup notes, steps, a **Create one** link, and a **Provider docs** link. The CLI prints the same help under each `--field`. The same help is available from [`getConnectorCredentialGuidance`](/api/reference/connectors/getconnectorcredentialguidance).
+
+```bash
+sf connectors connections add stripe --api-key "$STRIPE_KEY"
+sf connectors connections add linear --owner personal
+```
+
+A tool address is `<connectionId>/<tool>`. While exactly one usable account matches, `<connector>/<tool>` also works. Connect a second account and the short form fails with `connection_ambiguous`, so use the connection id.
+
+## Keep a connection working
+
+Open a connector, then the **Accounts** tab. Each account has an actions menu.
+
+| Action | What it does | CLI |
+| --- | --- | --- |
+| **Edit…** | Changes the **Label** and the agent note, **What it's for** | `sf connectors connections edit` |
+| **Check health** | Probes the provider and reports what came back. It changes nothing | `sf connectors connections health` |
+| **Re-sync tools** | Reads the tool list again, so new or dropped tools show up | `sf connectors connections refresh` |
+| **Reconnect…** | Signs in again, or replaces the key. The account keeps its id, label, policies, and Space bindings | `sf connectors connections reconnect` |
+| **Disconnect…** | Destroys the stored credential. Anything that uses the account stops working | `sf connectors connections rm` |
+
+An account in `needs_reauth` or `degraded` also shows a **Reconnect** button. Token refresh happens on its own, so reconnect only when the status asks for it.
+
+Credentials cannot be edited. To rotate a key, reconnect the account. A disconnected account cannot be reconnected. Connecting the service again makes a new account with a new id.
+
+## Decide what agents can call
+
+A policy rule pairs an address pattern with an action.
+
+| Pattern | Matches |
+| --- | --- |
+| `*` | Every tool |
+| `<connector>/*` | Every tool on every account of one connector |
+| `<connector>/<tool>` | One tool on every account of one connector |
+| `<connectionId>/*` | Every tool of one account |
+| `<connectionId>/<tool>` | One tool on one account |
+
+| Action | Dashboard label | When an agent calls a matching tool |
+| --- | --- | --- |
+| `approve` | **Runs freely** | The call runs |
+| `require_approval` | **Ask first** | The run parks until a person decides |
+| `block` | **Blocked** | The run fails with `connector_tool_blocked` |
+
+How rules combine:
+
+- The most specific pattern wins. Spacefast orders rules by specificity, not by the order you add them.
+- A **Workspace** rule is a floor. A **Personal** rule can tighten it but never loosen it.
+- When no rule matches, the tool's own default from its source applies. A tool can also ask for approval on its own.
+- A rule's pattern and owner are fixed. To change either, delete the rule and add a new one.
+- Deleting a rule hands its tools to the next matching rule. Deleting a block can open a tool again.
+
+To add a rule:
+
+1. Click **Policies** in the connectors header.
+2. Type a **Pattern**. The hint below it counts the tools it matches today.
+3. Choose an action under **Then**.
+4. Choose **Workspace** or **Personal** under **Applies to**.
+5. Click **Add rule**.
+
+A pattern that names an unknown connector or connection is refused. An API key can add **Workspace** rules only.
+
+To check one address without calling it, run `sf connectors policies explain`. It prints the effect, the rule that decided it, and the reason. The API equivalent is [`resolveConnectorPolicy`](/api/reference/connectors/resolveconnectorpolicy).
+
+```bash
+sf connectors policies add '*' --action require_approval
+sf connectors policies explain cxn_abc123/charges.create
+```
+
+## Find a tool
+
+Click **See tools** on a connector row, or open **Connector tools** from the command palette. The **Tools** page lists every tool the team's accounts reach. Each row shows the tool name, its summary, its resolved effect, and its safety: **Read-only**, **Writes**, or **Destructive**. Safety comes from the source and is not a setting.
+
+Open a tool to see its address, the rule that decided its effect, and its **Input schema**. The API equivalents are [`listConnectorTools`](/api/reference/connectors/listconnectortools) and [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+
+## Run a tool
+
+To try a tool yourself, open it on **Tools**, fill in **Arguments** as a form or as JSON, and click **Run**. Your run follows the same policy an agent gets.
+
+From the CLI, pass the tool address and its arguments:
+
+```bash
+sf connectors run --tool cxn_abc123/issues.list --args '{"limit":5}'
+```
+
+A run is one tool call, or a program that calls several tools. Both get one run id (`cxr_…`) and the same statuses.
+
+| Status | Meaning |
+| --- | --- |
+| `running` | Still working. Read it again with `sf connectors run get` |
+| `awaiting_approval` | Parked on a decision |
+| `succeeded` | Done. The result is in `result` |
+| `failed` | Done. The reason is in `error`, a problem document |
+| `expired` | Parked too long. Submit it again |
+
+The request waits up to 30 seconds for a final status by default. Set `--wait` to change that, up to 120 seconds. A failed run is still a successful request, so read the run's status before you report success. The CLI exits `1` for a `failed` or `expired` run.
+
+## Decide a parked run
+
+A parked run carries an `approvalUrl` that opens the dashboard on the decision. You can also find it in two places:
+
+- **Approvals**, under **Connector calls**.
+- **Runs**, with the **Waiting on you** filter. Click **Review** to see the rule, the arguments, and the deadline, then approve. **Deny** sits on the row.
+
+**Approve** runs the call once. **Deny** fails the run with `connector_tool_blocked`. A run left parked for 15 minutes expires.
+
+A run parks for a person. A CLI login or an API key cannot approve it, and an attempt fails with `human_approval_required`. After a person decides, read the outcome with `sf connectors run get`.
+
+To fail fast instead of parking when nobody is watching, pass `--deny-unattended`. The run then fails with `connector_approval_required`.
+
+## Let an agent use connectors
+
+On-device MCP, `sf mcp`, has one gateway tool, `search_connector_tools`. It searches the team's connected services, calls a tool, and resumes a parked call. Hosted MCP and `sf mcp proxy` do not offer it, and they have no connector operation tools. See [MCP server](/agents/mcp-server).
+
+The CLI and the [connectors API](/api/connectors) give an agent everything else.
+
+## Use a connection in a Space
+
+A Space can bind its connector roles to team connections. See [Zero connectors](/zero-connectors).
+
+## Remove a connector
+
+```bash
+sf connectors rm linear --yes
+```
+
+Removing a connector disconnects every account on it, then deletes the connector and its tools. Built-in connectors cannot be removed.

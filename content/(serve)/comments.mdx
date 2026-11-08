@@ -1,0 +1,215 @@
+---
+title: Comments
+description: Turn on Comments, leave feedback on a version or the live Space, reply, mention, react, resolve, and export threads
+---
+
+Comments put feedback threads on the page they are about. A reviewer pins a thread to an element, a whole page, or a file. You answer from the page, the dashboard, the CLI, or the API.
+
+## Before you start
+
+- Comments run only on claimed Spaces that belong to a team. Other Spaces get `team_required`.
+- **Page enhancements** must be on. Turn it on in the Space's settings under **General**. With it off, the API answers `comments_disabled`. The switch is `superpowers.enabled` in [the config file](/config-file#superpowers).
+- Who can comment comes from the Space's grants. A grant needs the `commenter` role or higher. See [Access and sharing](/access#roles).
+
+## Choose where Comments run
+
+| Setting | Dashboard label | Where people can comment |
+| --- | --- | --- |
+| `off` | **Off** | Nowhere. Spacefast keeps the threads, but nobody can read them until you turn Comments on again |
+| `previews` | **Previews only** | Version preview URLs only. The live Space shows nothing |
+| `everywhere` | **Everywhere** | Version preview URLs and the live Space |
+
+A Space gets **Previews only** at its first publish. A change applies right away, without a republish. While Comments are off, the **Comments** page shows **Turn on comments**, which sets **Previews only**.
+
+To change the setting in the dashboard:
+
+1. Open the Space and go to **Comments**.
+2. Open the settings control in the page header. It shows the current setting.
+3. Under **Where people can comment**, choose an option.
+
+To change it from the terminal, run `sf comments settings set --surface everywhere`. See [sf comments](/cli/comments#sf-comments-settings-set).
+
+Over HTTP, read the settings with [`getSpaceCollaboration`](/api/reference/spaces/getspacecollaboration). Then send only the settings to change to [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration), with the `revision` you read as `expectedRevision`. If someone changed the settings after your read, the update returns 409 `resource_revision_changed` with the current settings in `details`. The dashboard shows "Comment settings changed elsewhere" with **Apply my change** and **Use latest**.
+
+:::note[Grants must match the setting]
+With **Previews only**, a new `commenter` grant on the `live` target is refused with `comments_target_unavailable`. With **Off**, every new `commenter` grant is refused. Point the grant at a version, or change the setting. Existing grants do not change when you change the setting.
+:::
+
+## Comment on a page
+
+1. Open a version preview URL. In the dashboard, **Open page to comment** opens one. With **Everywhere**, the live Space works too.
+2. Select **Comments** on the page to open the toolbar.
+3. Select **Comment**, then select the element or the page area.
+4. Write the comment and select **Comment**.
+
+To draw on the page, select **Draw** in the toolbar. To add a file, select **Attach a file** in the composer. The **Sidebar** lists the threads on the page and on other pages.
+
+A visitor without a Spacefast account comments under a name that Spacefast picks. To change it, the visitor selects the name. In the same dialog, the visitor can give an email and confirm it from the inbox to get reply emails.
+
+## Comment on a version or the live Space
+
+A thread belongs to the version where someone left it.
+
+- A thread on the live version belongs to the page path. It stays on that page after you publish again.
+- A thread on any other version stays with that version. It does not appear on the live Space.
+
+The version page in the dashboard has a **Comments on this version** section. Select a row to open the thread on the **Comments** page.
+
+To start a thread on a version from the CLI, pass `--version`. Without it, the thread goes on the live version:
+
+```bash
+sf comments create --version v3 --page /pricing --body "The annual price is wrong."
+```
+
+Over HTTP, use [`createSpaceVersionComment`](/api/reference/versions/createspaceversioncomment) to start one and [`listSpaceVersionComments`](/api/reference/versions/listspaceversioncomments) to list one version's threads.
+
+## Comment from the CLI or the API
+
+A thread points at one of three anchors.
+
+| Anchor | CLI | API `target` |
+| --- | --- | --- |
+| A whole page | `--page /pricing` | Omit `target`. The API stores a page anchor |
+| An element on a page | `--page / --selector "#hero-title"` | An element anchor with CSS `selectors` |
+| A file, optionally some lines | `--file src/app.js --lines 7-14` | A file anchor. Its `file.path` becomes the thread's page path |
+
+Writing a comment needs a credential that acts as a person and carries `spaces:write`. Any other credential gets 403 "Comments require a credential that acts as a user."
+
+If a request can be retried, send the same `idempotencyKey` each time. A repeated reply returns `status: "existing"` instead of a second reply.
+
+## Reply and mention teammates
+
+To reply, write in the thread's reply box on the page or the **Comments** page. From the terminal, run `sf comments reply`. Over HTTP, call [`createSpaceCommentReply`](/api/reference/spaces/createspacecommentreply).
+
+A mention notifies one teammate. You can mention the members of the Space's team who can open the Space. The `listSpaceCommentMentionable` operation returns them.
+
+- A comment or reply takes up to 50 mentions, each person once.
+- An ID outside that list fails with `validation_error` and a `pointer` such as `/mentions/0`.
+- `sf comments create --mention` and `sf comments reply --mention` take an email, a name, or a user ID.
+- On a page, only people with the `editor` or `manager` role see the list of people to mention.
+
+## React to a thread
+
+A thread takes six reactions: 👍, ❤️, 🎉, 👀, 🚀, and 🙏. Select one on the page or the **Comments** page. Select it again to take yours back.
+
+From the terminal, run `sf comments react` and `sf comments unreact`. Over HTTP, send `emoji` and `op` (`add` or `remove`) to [`updateSpaceCommentReaction`](/api/reference/spaces/updatespacecommentreaction).
+
+## Resolve and reopen a thread
+
+A resolved thread leaves the open list and keeps every reply. Reopen it to put it back.
+
+- On the page, you can resolve your own threads. People with the `editor` or `manager` role can resolve any thread. The **Sidebar** menu has **Resolve all**.
+- On the **Comments** page, open the thread and select **Resolve** or **Reopen**.
+- From the terminal, run `sf comments resolve` or `sf comments reopen`.
+- Over HTTP, send `status: "archived"` to resolve or `status: "open"` to reopen with [`updateSpaceComment`](/api/reference/spaces/updatespacecomment).
+
+The API, its exports, and the CLI's JSON name the resolved state `archived`. The dashboard, the page, and the CLI's human output say resolved.
+
+## Track what you have read
+
+A thread is unread for you when it is open and someone else posted in it after your last read. A resolved thread is never unread. Each thread carries `unread` and `unreadCount`.
+
+| Where | How to mark a thread read |
+| --- | --- |
+| **Comments** page | Opening the thread |
+| Page | **Mark all as read** in the **Sidebar** menu |
+| CLI | `sf comments mark-read`. `sf comments get` and `sf comments list` never mark a thread read |
+| API | [`markSpaceCommentRead`](/api/reference/spaces/markspacecommentread). Reading a thread with [`getSpaceComment`](/api/reference/spaces/getspacecomment) does not mark it |
+
+The **Comments** item in the Space's sidebar shows a badge with the unread count.
+
+## Use the Comments page
+
+Open the Space and go to **Comments**. The list is on the left and the open thread is on the right.
+
+| Control | What it does |
+| --- | --- |
+| Status | **Open**, **Resolved**, **All**, or **Spam**. Only team owners and admins see **Spam** |
+| Version | **All versions**, or one version. The live version shows `· live` |
+| Page | **All pages**, or one page path |
+| Author | **Anyone**, or one author |
+| **Search comments** | Text in thread and reply bodies |
+| **Unread** | Only threads you have not read |
+| **Download comments** | A Markdown file of every thread in the Space |
+
+Filters and the open thread live in the URL, so you can share a filtered view. `?thread=cmt_...` opens one thread. Each thread from the API and the CLI carries this link as `dashboardUrl`.
+
+A thread on a file opens in **Files**, at that file. Other threads open their page in a new tab.
+
+## Handle spam
+
+**Spam filtering** is on by default. It holds suspected spam out of the open list.
+
+Team owners and admins can review held threads in the **Spam** folder. Open a thread and select **Not spam** to release it. Select **Mark as spam** on any thread to hold it.
+
+Over HTTP, team owners and admins send `status: "spam"` to [`updateSpaceComment`](/api/reference/spaces/updatespacecomment) to hold a thread, and `status: "open"` to release one. Add `spamCommentId` to judge one held reply. List held threads with `filter=spam` on [`listSpaceComments`](/api/reference/spaces/listspacecomments). Other callers get 403.
+
+## Get notified
+
+Spacefast sends comment notifications to the dashboard **Notifications** panel and by email.
+
+| Event | Who hears about it | Setting that controls it |
+| --- | --- | --- |
+| New thread | The Space's creator. If the creator is not on the team, the team owners | `newThreads` |
+| New reply | Everyone who follows the thread. Posting in a thread follows it | `newReplies` |
+| Resolve or reopen | Everyone who follows the thread | `statusChanges` |
+| Mention | The person mentioned | None. Mentions always notify |
+
+- Nobody hears about their own action.
+- A recipient must still be able to read comments on that page.
+- Only a mention from a member of the Space's team notifies.
+- A visitor without an account gets reply emails only after they confirm an address. Each email has a **Stop reply emails** link.
+
+All three settings are on by default. In the settings control on the **Comments** page, under **Advanced**, **Notify on new comments** sets `newThreads` and `newReplies` together. **Notify on status changes** sets `statusChanges`. Over HTTP, send `notificationPreferences` to [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration). Each key you leave out keeps its value.
+
+## Export comments
+
+| Where | Format | What it holds |
+| --- | --- | --- |
+| **Download comments** on the **Comments** page | Markdown, `spacefast-comments-<space>.md` | Every thread in the Space |
+| **Download comments** on a version page | JSON, `spacefast-comments-<version-id>.json` | The version's threads |
+| `sf comments export` | Markdown by default, or JSON | All threads, or one version's with `--version` |
+| [`exportSpaceComments`](/api/reference/spaces/exportspacecomments) | `format=markdown` (default) or `format=json` | All threads |
+| [`exportSpaceVersionComments`](/api/reference/versions/exportspaceversioncomments) | `format=markdown` (default) or `format=json` | One version's threads |
+
+Both endpoints and the CLI take `status` to export only open or only resolved threads. The JSON export is `{ "data": [...] }` with the same thread objects the list returns.
+
+The Markdown export starts with `# Spacefast comments`. Each thread is a `## <id> <status>` section. The API writes `open` or `archived` there, and `sf comments export` writes `open` or `resolved`. A section lists the page, URL, permalink, author, `viewport`, `selectors`, and attachments, then the body and one `- Reply by <name>: <body>` line per reply.
+
+## Let another site embed Comments
+
+A site that you list can run this Space's Comments for its own visitors. There is no dashboard control for the list. Use the CLI or [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration):
+
+```bash
+sf comments settings set --embed-allow https://docs.example.com
+```
+
+- Each entry is one exact `https` origin. Wildcards and paths are refused.
+- A Space takes up to 20 origins.
+- Each site gets its own threads. They are separate from the threads on your Space's own pages.
+- An embedded site gets no screenshots and no attachments.
+- Comments must be on, and the Space must have a ready live version.
+
+The site calls [`getSpaceCommentsEmbedConfig`](/api/reference/spaces/getspacecommentsembedconfig) and [`createSpaceCommentsEmbedTicket`](/api/reference/spaces/createspacecommentsembedticket) from the browser, with no credential. Both answer only to a listed origin. Every other caller gets the same 404.
+
+Allowing a site lets its visitors comment in this Space without an account. `sf comments settings set` asks for confirmation before it adds or removes a site.
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Comment or reply body | 1 to 16,000 characters |
+| Page path | 2,048 characters |
+| Mentions per comment or reply | 50 |
+| Attachments per thread or reply | 10 |
+| Attachment size | 5 MB |
+| Screenshots | 1 per thread, none on replies |
+| List page size | 1 to 100, default 20 |
+| Search text, author filter | 160 characters |
+| Embed origins | 20 |
+| New threads and replies from visitors without an account | 10 per minute per network |
+| Reactions | 60 per minute per person. Without an account, per network |
+| Embed configuration reads | 120 per minute per IP address, 600 per minute per Space |
+| Embed tickets | 30 per minute per IP address, 120 per minute per site, 600 per minute per Space |
+
+A request over an embed rate limit fails with `rate_limited`.

@@ -1,0 +1,331 @@
+---
+title: rules
+description: List, add, remove, test, and validate a Space's firewall and cache-bypass rules, and pause or resume every rule at once
+sidebar:
+  order: 19
+---
+
+`sf rules` manages a Space's traffic rules: what it blocks, challenges, or serves past the cache. For what the rules do and where they live, see [Traffic rules](/traffic-rules).
+
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+
+`sf rules` with no subcommand prints the help for the group.
+
+## sf rules ls
+
+List the Space's traffic rules in the order the edge reads them. Aliased as `sf rules list`.
+
+```text
+sf rules ls [--space <value>]
+```
+
+No command-specific flags.
+
+```bash
+sf rules ls --space docs
+```
+
+### Output
+
+A table of `NAME | KIND | ACTION | ORIGIN | WHERE | STATE`.
+
+| Column | Values |
+| --- | --- |
+| `NAME` | The name the author gave the rule, otherwise its name at the edge |
+| `KIND` | `firewall`, `cache-bypass`, `redirect`, `rewrite`, or `header` |
+| `ACTION` | `block`, `block <status>`, `challenge`, `bypass`, or `-` |
+| `ORIGIN` | `file`, `config`, `overlay`, or `platform` |
+| `WHERE` | `edge` or `origin` |
+| `STATE` | The edge state (`pending`, `live`, `invalid`, `over_quota`, `failed`, `unknown`), or `disabled` or `suspended` for a rule that is not enabled |
+
+Lines after the table:
+
+- `Rules are paused. This space serves as if it declared none.` before the table, while rules are paused.
+- `<name>: <message>` for a rule the edge refused.
+- `<name>: <reason>` for a rule that runs at the origin, with a code such as `edge_ineligible_capture`.
+- `<name> was skipped: an earlier rule already has this name.` or `... already does the same thing.` for a rule the edge never got.
+- `Answers on: <hostnames>`.
+- `Edge rules: <used>/<limit>`. When the edge does not answer, the line says the count is Spacefast's own record or that the limit is unknown.
+
+With no rules: `` No traffic rules. Add one with `sf rules add`, or declare it in sf.jsonc. ``
+
+With `--json`, `data` is the [`listSpaceTrafficRules`](/api/reference/spaces/listspacetrafficrules) response: `{ rules, quota, paused, hostnames, collapsed }`.
+
+## sf rules add
+
+Add a firewall or cache-bypass rule to the Space settings. The rule goes first in its list, so it answers before the rules already there. The change reaches the edge without a publish.
+
+```text
+sf rules add --kind firewall|cache-bypass [--action block|challenge] [--status <400-499>]
+  [--name <value>] [--description <value>] [--any] [match flags] [--no-wait] [--space <value>]
+```
+
+### Rule flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--kind=<option>` | required | `firewall` or `cache-bypass` |
+| `--action=<option>` | none | `block` or `challenge`. Required for a firewall rule. Refused for a cache-bypass rule |
+| `--status=<n>` | `403` | Status a blocked request gets, 400 to 499. Blocks only |
+| `--name=<value>` | none | Lowercase letters, digits, `-`, and `_`, up to 61 characters. Not all digits and not a reserved word. `sf rules rm` addresses the rule by it |
+| `--description=<value>` | none | What the rule is for |
+| `--any` | `false` | Fire when any match field holds. By default all of them have to |
+| `--[no-]wait` | `true` | Wait until the edge answers for the rule |
+
+### Match flags
+
+Give at least one. Every match flag repeats.
+
+| Flag | Matches | Commas |
+| --- | --- | --- |
+| `--path=<value>` | Request path, for example `'/wp-login.php*'` | Taken verbatim |
+| `--host=<value>` | Request hostname | Taken verbatim |
+| `--method=<value>` | HTTP method | Split |
+| `--ip=<value>` | Client address, or a CIDR range like `203.0.113.0/24` | Split |
+| `--country=<value>` | Two-letter country codes, for example `US,CA` | Split |
+| `--asn=<value>` | The client network's ASN | Split |
+| `--user-agent=<value>` | User agent, for example `'*bot*'` | Taken verbatim |
+| `--referer=<value>` | The `Referer` header | Taken verbatim |
+| `--header=<name=value>` | A header condition | Taken verbatim |
+| `--cookie=<name=value>` | A cookie condition | Taken verbatim |
+| `--query=<name=value>` | A query parameter condition | Taken verbatim |
+| `--extension=<value>` | Path extension without the dot, for example `php` | Split |
+| `--ja3=<value>` | TLS JA3 fingerprint | Split |
+| `--ja4=<value>` | TLS JA4 fingerprint | Split |
+| `--not=<field>` | Match the opposite of one field, for example `--not country`. A header, cookie, or query field names its key: `--not header:x-api-client` | |
+
+A value with a `*` matches as a wildcard. Several values match any of them. An `--ip` value with a `/` matches a range. Header names in `--not` ignore case. Cookie and query names do not.
+
+```bash
+sf rules add --kind firewall --action challenge --path '/wp-login.php*'
+sf rules add --kind firewall --action block --country US,CA --not country
+sf rules add --kind cache-bypass --path '/api/*'
+sf rules add --kind firewall --action block --status 429 --user-agent '*bot*' --name no-bots
+```
+
+### Output
+
+`Added <kind> rule <name>.`, then what the edge did:
+
+| Line | When |
+| --- | --- |
+| `Live at the edge.` | The edge answers with the rule |
+| `The edge left this rule <state>: <message>` | The edge refused the rule or left it over quota |
+| `` Still applying; run `sf rules ls` to check. `` | The wait ran out, or `--no-wait` was set and the edge has not answered yet |
+
+If the config file declares a rule with the same name and kind, the command also prints `<name> is also declared in <file>; this rule replaces it until you remove one.`
+
+A wait that runs out does not fail the command. The settings write already landed.
+
+With `--json`, `data` is `{ rule, space }`. `rule` is the rule as [`listSpaceTrafficRules`](/api/reference/spaces/listspacetrafficrules) reports it, or `null`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--kind` is missing or not `firewall` or `cache-bypass` |
+| `validation_error` | 2 | A firewall rule without `--action`, or a cache-bypass rule with `--action` or `--status` |
+| `validation_error` | 2 | No match flag |
+| `validation_error` | 2 | `--header`, `--cookie`, or `--query` is not `name=value` |
+| `validation_error` | 2 | `--not` names a field that is not a match field, names a header, cookie, or query without its key, or names a field the rule does not match on |
+| `validation_error` | 2 | `--name` breaks the name grammar, or the Space settings already declare a rule of this kind with that name |
+
+## sf rules rm
+
+Remove a rule the Space settings declare. Aliased as `sf rules remove` and `sf rules delete`.
+
+```text
+sf rules rm <name> [--kind firewall|cache-bypass] [--no-wait] [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<name>` | Name of the rule to remove. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--kind=<option>` | none | `firewall` or `cache-bypass`. Needed when both lists have a rule with this name |
+| `--[no-]wait` | `true` | Wait until the edge no longer holds the rule |
+
+The command prompts for confirmation unless you pass `-y`. A rule that a config file declares is not removable here. Delete it from the file and publish.
+
+```bash
+sf rules rm block-logins --kind firewall
+sf rules rm fresh-api --yes
+```
+
+### Output
+
+`Removed <kind> rule <name>.`, then `Gone from the edge.` or `` Still applying; run `sf rules ls` to check. ``
+
+If the config file declares a rule with the same name, the command also prints `<name> is still declared in <file>; the edge keeps that rule.`
+
+With `--json`, `data` is `{ removed: { name, kind }, space }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--kind` is not `firewall` or `cache-bypass` |
+| `validation_error` | 2 | The name is on a firewall rule and a cache-bypass rule, and `--kind` is absent |
+| `validation_error` | 2 | `--kind` names one list, and the rule is in the other |
+| `validation_error` | 2 | The config file declares the rule: `<name> is declared in <file>; remove it there and publish.` |
+| `rule_not_found` | 20 | The Space declares no rule with this name |
+| `confirmation_required` | 2 | No terminal to prompt on, and no `--yes` |
+| `cancelled` | 130 | You answered no at the prompt |
+
+## sf rules pause
+
+Park every traffic rule at the edge. The Space then serves as if it declared none. The rules stay saved, and a rule added while paused is parked when it arrives.
+
+```text
+sf rules pause [--space <value>]
+```
+
+No command-specific flags.
+
+```bash
+sf rules pause --space docs
+```
+
+### Output
+
+`Paused this space's traffic rules. It now serves as if it declared none.`
+
+With `--json`, `data` is the [`pauseSpaceTrafficRules`](/api/reference/spaces/pausespacetrafficrules) response, the same shape as `sf rules ls`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `traffic_rules_unavailable` | 30 | The Space has no edge yet. Publish it once |
+
+## sf rules resume
+
+Put every parked rule back into the state it was paused from. Safe to run on a Space that is not paused.
+
+```text
+sf rules resume [--space <value>]
+```
+
+No command-specific flags.
+
+```bash
+sf rules resume --space docs
+```
+
+### Output
+
+`Resumed this space's traffic rules.`, then the same listing as `sf rules ls`.
+
+With `--json`, `data` is the [`resumeSpaceTrafficRules`](/api/reference/spaces/resumespacetrafficrules) response, the same shape as `sf rules ls`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `traffic_rules_unavailable` | 30 | The Space has no edge yet. Publish it once |
+
+## sf rules test
+
+Answer one request against the Space's traffic rules, and print the first rule of each list that matches. The CLI evaluates the rules the way the edge does. It sends no request to the Space and changes nothing.
+
+```text
+sf rules test <url> [--file <path>] [--method <value>] [--ip <value>] [--country <value>]
+  [--asn <value>] [--user-agent <value>] [--referer <value>] [--ja3 <value>] [--ja4 <value>]
+  [--header <name=value>]... [--cookie <name=value>]... [--space <value>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<url>` | URL or path to answer, for example `/wp-login.php`. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--file=<path>` | none | Answer from this config file instead of the Space's live rules |
+| `--method=<value>` | none | HTTP method. With none, no method condition matches |
+| `--ip=<value>` | none | Client address |
+| `--country=<value>` | none | Two-letter country code |
+| `--asn=<value>` | none | The client network's ASN |
+| `--user-agent=<value>` | none | User agent |
+| `--referer=<value>` | none | The `Referer` header |
+| `--ja3=<value>` | none | TLS JA3 fingerprint |
+| `--ja4=<value>` | none | TLS JA4 fingerprint |
+| `--header=<name=value>` | none | A request header. Repeatable |
+| `--cookie=<name=value>` | none | A request cookie. Repeatable |
+
+Without `--file`, the command reads the enabled rules from [`listSpaceTrafficRules`](/api/reference/spaces/listspacetrafficrules). A bare path is then tested against the Space's first hostname. With `--file`, a bare path is tested against `localhost`.
+
+Firewall rules never match the platform's own transport paths, such as `/__spacefast/health.php`.
+
+```bash
+sf rules test /wp-login.php --country RU
+sf rules test https://docs.example.com/admin/ --ip 203.0.113.7
+sf rules test /api/orders --file spacefast.config.ts
+```
+
+### Output
+
+```text
+Answered from the space's live rules.
+No host given; answering as docs.example.com.
+firewall: block-logins block 403 at the edge, from overlay
+cache-bypass: no rule matches
+```
+
+While rules are paused, the output adds `Rules are paused, so the live space answers this request normally.`
+
+With `--json`, `data` is `{ request, source, paused, firewall, cacheBypass }`. `firewall` and `cacheBypass` are each `null` or `{ name, kind, action, placement, origin }`.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `validation_error` | 2 | `--header` or `--cookie` is not `name=value` |
+| `validation_error` | 2 | A rule in the `--file` config does not parse. Run `sf rules validate` |
+| `config_not_found` | 2 | `--file` names a JSONC or JSON file that does not exist |
+| `config_invalid` | 2 | The `--file` config is not valid JSON, or its `firewall` or `cache` keys have the wrong shape |
+
+## sf rules validate
+
+Check the rules a local config file declares against the rule grammar and the edge. It reports every problem with the field it is in. It writes nothing.
+
+```text
+sf rules validate [--file <path>] [--space <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--file=<path>` | the config file in this directory | Config file to read |
+
+Without `--file`, the command reads the first config file it finds in the current directory: `spacefast.config.ts`, then `sf.jsonc` and its aliases. The check runs against the selected Space's edge.
+
+```bash
+sf rules validate
+sf rules validate --file build/spacefast.config.ts
+```
+
+### Output
+
+`<file> declares <n> traffic rules the edge accepts.`, or `<file> declares no traffic rules.` when the file has none.
+
+With `--json`, `data` is `{ valid, issues }`, the [`validateSpaceTrafficRules`](/api/reference/spaces/validatespacetrafficrules) response.
+
+### Errors
+
+| Code | Exit | When |
+| --- | --- | --- |
+| `traffic_rules_invalid` | 2 | One or more rules have problems. `details.issues` lists each `{ path, message }`, for example `firewall[0].match.country` |
+| `config_not_found` | 2 | No config file in this directory, or `--file` names a JSONC or JSON file that does not exist |
+| `config_invalid` | 2 | The config is not valid JSON, or its `firewall` or `cache` keys have the wrong shape |
+| `traffic_rules_unavailable` | 30 | The Space has no edge yet. Publish it once |

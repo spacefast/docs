@@ -44,7 +44,7 @@ export const redirects: { from: string; to: string; status: 301 }[] = [
   { from: "/integrations/vite", to: "/frameworks", status: 301 },
   { from: "/json-output", to: "/cli", status: 301 },
   { from: "/login", to: "/cli/login", status: 301 },
-  { from: "/migrate-from", to: "/publish", status: 301 },
+  { from: "/migrate-from", to: "/migrate", status: 301 },
   { from: "/partner/events", to: "/platforms/partner-api/configuration", status: 301 },
   { from: "/partner/onboarding", to: "/platforms/partner-api", status: 301 },
   { from: "/partner/principals", to: "/platforms/partner-api/customers", status: 301 },

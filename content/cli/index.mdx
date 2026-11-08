@@ -181,11 +181,27 @@ Other files the CLI owns:
 | `~/.spacefast/credentials/profile-*.json` | One credential file per profile |
 | `.spacefast/space.json` | Committable link: which Space, team, and API base URL |
 | `.spacefast/state.json` | Local cache and credentials. Never commit it, and `sf` adds it to `.gitignore` for you |
-| `sf.jsonc` | Project config written by `sf init` |
+| `spacefast.config.ts` or `sf.jsonc` | [Project config](/config-file). `sf init` writes `spacefast.config.ts` |
 
 ## Update checks
 
 The CLI checks npm for a newer version every 7 days and prints the exact upgrade command for how you installed it. It skips the check whenever the invocation looks machine-driven: `--json` anywhere in the arguments, an `mcp` invocation, or a non-TTY stderr.
+
+## Shell completion
+
+The npm package completes commands and flags in `zsh`, `bash`, and PowerShell. The standalone binaries and Homebrew do not include completion. To set it up, run `sf autocomplete` with your shell:
+
+```bash
+sf autocomplete zsh
+```
+
+The command builds the completion cache and prints the setup steps. For `zsh`, the step adds one line to `~/.zshrc`:
+
+```bash
+printf "$(sf autocomplete script zsh)" >> ~/.zshrc; source ~/.zshrc
+```
+
+For `bash`, the line goes in `~/.bashrc`. PowerShell adds the script to `$PROFILE`. Without a shell argument, `sf autocomplete` detects your shell. To pick up new commands after an upgrade, run `sf autocomplete --refresh-cache`.
 
 ## Command reference
 
@@ -207,5 +223,8 @@ The CLI checks npm for a newer version every 7 days and prints the exact upgrade
   </Card>
   <Card title="Inspection and agent helpers" href="/cli/agent-commands" icon="wrench">
     `inspect`, `fetch`, `apply`, `continue`, `map`, `docs`, `doctor`, `feedback`, `plugins`
+  </Card>
+  <Card title="Send feedback" href="/feedback" icon="message-square">
+    `feedback`, `feedback list`, `feedback get`
   </Card>
 </CardGroup>

@@ -1,0 +1,345 @@
+---
+title: Connectors
+description: Register tool sources, connect accounts, set policy rules, and run connector tools over the API, with the scopes, shapes, and error codes each step uses
+sidebar:
+  order: 9
+---
+
+The connectors API lets a team register tool sources, connect accounts, set policy rules, and run tools. Every operation sits under `/v1/connectors` with the `Connectors` tag. For the concepts and the dashboard, see [Connectors](/connectors).
+
+## Scopes and team selection
+
+| Scope | Grants |
+| --- | --- |
+| `connectors:read` | Read the catalog, connectors, connections, tools, policy rules, and runs |
+| `connectors:write` | Register and remove connectors, connect and disconnect accounts, set policy rules. Includes `connectors:read` |
+| `connectors:execute` | Create and resume runs. Includes `connectors:read` |
+
+`connectors:write` does not include `connectors:execute`, and `connectors:execute` does not include `connectors:write`. A dashboard session has these actions for team owners and admins only. See [Authentication](/api/authentication).
+
+Connector routes are team-scoped but carry no team in the path. Pass `?team=<id-or-slug>` when your credential can act for more than one team. Without it, the request fails with `team_required`. A team with connectors turned off answers `feature_unavailable`.
+
+## Register a connector
+
+<CodeGroup>
+
+```bash curl
+curl -sS -X POST "https://api.spacefast.com/v1/connectors?team=acme" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "slug": "widgets",
+        "title": "Widgets",
+        "source": { "kind": "openapi", "specUrl": "https://api.example.com/openapi.json" }
+      }'
+```
+
+```ts SDK
+const connector = await client.post("/v1/connectors", {
+  query: { team: "acme" },
+  body: {
+    slug: "widgets",
+    title: "Widgets",
+    source: { kind: "openapi", specUrl: "https://api.example.com/openapi.json" },
+  },
+});
+```
+
+</CodeGroup>
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `slug` | string | Team-unique slug and tool namespace. 1 to 64 characters matching `^[a-z0-9][a-z0-9-]*$`. Required |
+| `title` | string | Display name, 1 to 255 characters. Required |
+| `description` | string | Agent-visible note, up to 1,000 characters |
+| `source` | object | `{ kind: "openapi", specUrl \| spec, baseUrl? }`, `{ kind: "graphql", endpoint }`, or `{ kind: "mcp", endpoint }`. Required unless `presetId` carries one |
+| `presetId` | string | A catalog row `id`. It supplies the source and the authentication recipe |
+| `authMethods` | array | Override the authentication the source declares. Items are `api_key`, `oauth2`, or `none` |
+| `specOverrides` | array | Up to 200 RFC 6902 JSON Patch operations applied to the fetched spec |
+
+The call fetches the source, builds the tool list, and answers `201` with the connector. An MCP endpoint must be remote. Spacefast asks it how it authenticates, so a server that wants OAuth gets an `oauth2` method.
+
+```json
+{
+  "data": {
+    "slug": "widgets",
+    "title": "Widgets",
+    "description": null,
+    "source": "openapi",
+    "sourceUrl": "https://api.example.com/openapi.json",
+    "firstParty": false,
+    "presetId": null,
+    "authMethods": [{ "kind": "api_key", "slug": "api_key", "label": "API key" }],
+    "toolCount": 12,
+    "connections": [],
+    "specSyncedAt": "2026-10-24T09:14:02.111Z",
+    "createdAt": "2026-10-24T09:14:02.111Z",
+    "updatedAt": "2026-10-24T09:14:02.111Z"
+  }
+}
+```
+
+To find what is behind a URL first, call `detectConnectorSource` with `{ "url": "..." }`. It answers an array of candidates, most confident first. Each carries `kind`, `confidence` (`high`, `medium`, or `low`), `endpoint`, `title`, `slug`, and `presetId`. Register the `endpoint`, which can differ from the URL you sent.
+
+The catalog lists curated presets, the public registry, and the team's own connectors. Filter it with `query`, `surface` (`openapi`, `graphql`, `mcp`), and `kind` (`preset`, `registry`, `team`). Each row carries `alreadyAdded` and `connectorSlug`. Pass a row's `id` as `presetId` to register it. A row with `endpointInputRequired: true` also needs a `source` with the provider-specific endpoint.
+
+| Operation | Path | Scope |
+| --- | --- | --- |
+| [`getConnectorCatalog`](/api/reference/connectors/getconnectorcatalog) | `GET /v1/connectors/catalog` | `connectors:read` |
+| [`detectConnectorSource`](/api/reference/connectors/detectconnectorsource) | `POST /v1/connectors/detect` | `connectors:write` |
+| [`registerConnector`](/api/reference/connectors/registerconnector) | `POST /v1/connectors` | `connectors:write` |
+| [`listConnectors`](/api/reference/connectors/listconnectors) | `GET /v1/connectors` | `connectors:read` |
+| [`getConnector`](/api/reference/connectors/getconnector) | `GET /v1/connectors/{connectorRef}` | `connectors:read` |
+| [`updateConnector`](/api/reference/connectors/updateconnector) | `PATCH /v1/connectors/{connectorRef}` | `connectors:write` |
+| [`deleteConnector`](/api/reference/connectors/deleteconnector) | `DELETE /v1/connectors/{connectorRef}` | `connectors:write` |
+| [`getConnectorCatalogLogo`](/api/reference/connectors/getconnectorcataloglogo) | `GET /v1/connectors/catalog/logo/{domain}` | none |
+
+`updateConnector` accepts `title`, `description`, `refreshSpec`, and `specOverrides`. `refreshSpec: true` fetches the source again and rebuilds the tools. Connections and policy rules survive it. `deleteConnector` disconnects every account on the connector, then removes it. A connector with `firstParty: true` cannot be edited or removed.
+
+Registration, detection, and source refreshes share one budget of 60 per team per hour. Past it, requests fail with `429` and `rate_limited`. See [Rate limits](/api/rate-limits).
+
+## Connect an account
+
+```bash
+curl -sS -X POST "https://api.spacefast.com/v1/connectors/connections?team=acme" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "connector": "widgets",
+        "owner": "team",
+        "credential": { "kind": "api_key", "value": "sk_example_key" }
+      }'
+```
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `connector` | string | Connector slug. Required |
+| `owner` | `team` or `personal` | `team` shares it with the team. `personal` keeps it yours, within this team. Required |
+| `displayName` | string | Label, 1 to 255 characters. Defaults to the connector's title |
+| `description` | string | Agent-visible note, up to 1,000 characters |
+| `authMethod` | string | Auth method slug. Required only when more than one method applies |
+| `credential` | object | `{ kind: "api_key", value }` or `{ kind: "fields", values }`. Omit it and the server says what it needs |
+| `returnPath` | string | Same-origin dashboard path to land on after authorization. Up to 512 characters, starting with `/` |
+
+Credentials are write-only. No endpoint ever returns one. Only a person can create a `personal` connection. An API key gets `connection_forbidden`.
+
+The `200` answer has one of three `status` values. Branch on it.
+
+```json
+{ "data": { "status": "connected", "connection": { "id": "cxn_3f9c2d1a4b5e6f70", "status": "active" } } }
+```
+
+```json
+{
+  "data": {
+    "status": "authorization_required",
+    "connection": { "id": "cxn_3f9c2d1a4b5e6f70", "status": "pending_authorization" },
+    "authorizeUrl": "https://provider.example.com/oauth/authorize?state=example",
+    "expiresAt": "2026-10-24T09:24:02.111Z"
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "status": "input_required",
+    "connector": "widgets",
+    "authMethod": "api_key",
+    "fields": [{ "name": "value", "label": "API key", "secret": true, "required": true, "guidance": null }]
+  }
+}
+```
+
+The connection objects above are shortened. For `authorization_required`, send the person to `authorizeUrl`. The provider callback completes the connection, and the dashboard calls `completeConnection` with the `state` and `code`. For `input_required`, nothing was created. Collect `fields`, then call again with `credential.values` and the same `authMethod`. `getConnectorCredentialGuidance` returns the provider's help for a domain: `label`, `mintUrl`, `docsUrl`, `notes`, and `steps`.
+
+A connection carries `id`, `connector`, `owner`, `displayName`, `description`, `status`, `identityLabel`, `credentialConfigured`, `authMethod`, `scopes`, `isDefault`, `toolCount`, `createdBy`, `lastCheckedAt`, `revokedAt`, `createdAt`, and `updatedAt`. `status` is `pending_authorization`, `active`, `degraded`, `needs_reauth`, or `revoked`. `isDefault` marks the connection an agent gets when it names the connector alone.
+
+| Operation | Path | Scope |
+| --- | --- | --- |
+| [`createConnection`](/api/reference/connectors/createconnection) | `POST /v1/connectors/connections` | `connectors:write` |
+| [`completeConnection`](/api/reference/connectors/completeconnection) | `POST /v1/connectors/connections/complete` | `connectors:write` |
+| [`getConnectorCredentialGuidance`](/api/reference/connectors/getconnectorcredentialguidance) | `GET /v1/connectors/catalog/{domain}/guidance` | `connectors:read` |
+| [`listConnections`](/api/reference/connectors/listconnections) | `GET /v1/connectors/connections` | `connectors:read` |
+| [`getConnection`](/api/reference/connectors/getconnection) | `GET /v1/connectors/connections/{connectionId}` | `connectors:read` |
+| [`updateConnection`](/api/reference/connectors/updateconnection) | `PATCH /v1/connectors/connections/{connectionId}` | `connectors:write` |
+| [`checkConnectionHealth`](/api/reference/connectors/checkconnectionhealth) | `POST /v1/connectors/connections/{connectionId}/health` | `connectors:read` |
+| [`refreshConnection`](/api/reference/connectors/refreshconnection) | `POST /v1/connectors/connections/{connectionId}/refresh` | `connectors:write` |
+| [`reconnectConnection`](/api/reference/connectors/reconnectconnection) | `POST /v1/connectors/connections/{connectionId}/reconnect` | `connectors:write` |
+| [`disconnectConnection`](/api/reference/connectors/disconnectconnection) | `POST /v1/connectors/connections/{connectionId}/disconnect` | `connectors:write` |
+
+`listConnections` filters by `owner` (`team`, `personal`, or `any`, the default), `connector`, `status`, and `includeRevoked`. `updateConnection` changes `displayName`, `description`, and `serving`. It cannot change a credential. `reconnectConnection` takes an optional `credential`, answers with the same three statuses as `createConnection`, and keeps the connection's id, label, policy rules, and Space bindings. `checkConnectionHealth` returns `connectionId`, `status`, `reachable`, `latencyMs`, `detail`, `toolCount`, and `checkedAt`. `refreshConnection` reads the provider's tools again. `disconnectConnection` purges the credential and marks the connection `revoked`. Calling it again changes nothing.
+
+A connection the credential may not use answers `404`, the same as one that does not exist.
+
+## Read tools and policy
+
+A tool address is `<connectionId>/<tool>`. While exactly one usable connection matches, `<connector>/<tool>` also works. A second connection turns the short form into `connection_ambiguous`.
+
+Each tool carries `address`, `name`, `summary`, `safety` (`read_only`, `write`, or `destructive`), `effect`, `decidedBy`, and `inputSchema`. `effect` is the policy result: `approve`, `require_approval`, or `block`. `decidedBy` is `{ ruleId, pattern, owner }`, or `null` when the tool's own default applied.
+
+A policy rule has `id`, `pattern`, `action`, `owner`, `position`, and `createdAt`.
+
+| `pattern` | Matches |
+| --- | --- |
+| `*` | Every tool |
+| `<connector>/*` | Every tool on every connection of one connector |
+| `<connector>/<tool>` | One tool on every connection of one connector |
+| `<connectionId>/*` | Every tool of one connection |
+| `<connectionId>/<tool>` | One tool on one connection |
+
+The server sets `position` from the pattern's specificity, so the most specific rule wins. A `team` rule is a floor that a `personal` rule can tighten but never loosen. Only a person can create a `personal` rule. A rule's `pattern` and `owner` are fixed. `updateConnectorPolicy` changes `action` only.
+
+```bash
+curl -sS "https://api.spacefast.com/v1/connectors/policies/resolve?team=acme&address=cxn_3f9c2d1a4b5e6f70/charges.create" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+```json
+{
+  "data": {
+    "address": "cxn_3f9c2d1a4b5e6f70/charges.create",
+    "effect": "require_approval",
+    "decidedBy": { "ruleId": "pol_example", "pattern": "*", "owner": "team" },
+    "explanation": "The team rule \"*\" resolves this address to require_approval."
+  }
+}
+```
+
+| Operation | Path | Scope |
+| --- | --- | --- |
+| [`listConnectorTools`](/api/reference/connectors/listconnectortools) | `GET /v1/connectors/{connectorRef}/tools` | `connectors:read` |
+| [`listConnectionTools`](/api/reference/connectors/listconnectiontools) | `GET /v1/connectors/connections/{connectionId}/tools` | `connectors:read` |
+| [`listConnectorPolicies`](/api/reference/connectors/listconnectorpolicies) | `GET /v1/connectors/policies` | `connectors:read` |
+| [`createConnectorPolicy`](/api/reference/connectors/createconnectorpolicy) | `POST /v1/connectors/policies` | `connectors:write` |
+| [`updateConnectorPolicy`](/api/reference/connectors/updateconnectorpolicy) | `PATCH /v1/connectors/policies/{policyRuleId}` | `connectors:write` |
+| [`deleteConnectorPolicy`](/api/reference/connectors/deleteconnectorpolicy) | `DELETE /v1/connectors/policies/{policyRuleId}` | `connectors:write` |
+| [`resolveConnectorPolicy`](/api/reference/connectors/resolveconnectorpolicy) | `GET /v1/connectors/policies/resolve` | `connectors:read` |
+
+The tool lists filter by `query` and `effect`.
+
+## Run a tool
+
+```bash
+curl -sS -X POST "https://api.spacefast.com/v1/connectors/runs?team=acme" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "input": { "kind": "tool", "address": "cxn_3f9c2d1a4b5e6f70/issues.list", "args": { "limit": 5 } },
+        "idempotencyKey": "list-issues-1"
+      }'
+```
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `input` | object | `{ kind: "tool", address, args? }` for one call, or `{ kind: "code", code }` for a program. Required |
+| `waitMs` | integer | How long to wait for a final status, 0 to 120000. Defaults to 30000 |
+| `idempotencyKey` | string | Retry with the same key to get the original run back, 1 to 320 characters |
+| `unattendedApprovals` | `park` or `deny` | When a call needs approval: park it, the default, or fail at once |
+
+`args` is validated against the tool's `inputSchema` and defaults to `{}`. A program can call any tool the credential may use, and it runs for at most 10 seconds.
+
+A new run answers `201`, whatever its `status` when the wait ends. A retry with the same `idempotencyKey` and the same input answers `200` with the original run. The same key with a different input fails with `409` and `idempotency_key_reused`.
+
+A run that fails is not an HTTP error. The request succeeded and the run did not, so read `status`.
+
+```json
+{
+  "data": {
+    "id": "cxr_8c1d4a7f2e6b0c3d",
+    "status": "awaiting_approval",
+    "origin": "api",
+    "space": null,
+    "handler": null,
+    "visitor": false,
+    "input": { "kind": "tool", "address": "cxn_3f9c2d1a4b5e6f70/issues.create", "digest": "sha256-example" },
+    "usage": { "toolCalls": 0, "egressBytes": 0, "durationMs": 41 },
+    "createdAt": "2026-10-24T09:14:02.111Z",
+    "approval": {
+      "decisionId": null,
+      "mode": "human",
+      "address": "cxn_3f9c2d1a4b5e6f70/issues.create",
+      "preview": { "title": "Broken link on pricing page" },
+      "reason": "policy_require_approval",
+      "matchedPattern": "*",
+      "approvalUrl": "https://my.spacefast.com/approvals?run=cxr_8c1d4a7f2e6b0c3d",
+      "expiresAt": "2026-10-24T09:29:02.111Z"
+    }
+  }
+}
+```
+
+| `status` | Extra fields | Meaning |
+| --- | --- | --- |
+| `running` | none | Still working. Read the run again |
+| `awaiting_approval` | `approval` | Parked on a decision |
+| `succeeded` | `completedAt`, `result` | Done |
+| `failed` | `completedAt`, `error` | Done. `error` is a problem document with `code`, `status`, and `detail` |
+| `expired` | `completedAt` | Parked for 15 minutes with no decision. Submit it again |
+
+`input` never echoes the arguments. `approval.preview` masks values whose keys look like secrets. `approval.reason` is `policy_require_approval` when a rule parked the call, or `annotation_requires_approval` when the tool asked for approval itself.
+
+| Operation | Path | Scope |
+| --- | --- | --- |
+| [`createConnectorRun`](/api/reference/connectors/createconnectorrun) | `POST /v1/connectors/runs` | `connectors:execute` |
+| [`getConnectorRun`](/api/reference/connectors/getconnectorrun) | `GET /v1/connectors/runs/{runId}` | `connectors:read` |
+| [`listConnectorRuns`](/api/reference/connectors/listconnectorruns) | `GET /v1/connectors/runs` | `connectors:read` |
+| [`resumeConnectorRun`](/api/reference/connectors/resumeconnectorrun) | `POST /v1/connectors/runs/{runId}/resume` | `connectors:execute` |
+
+`listConnectorRuns` returns the team's runs newest first, and filters by `status`, `origin`, `space`, and `connection`. `status=awaiting_approval` lists the runs waiting on a decision.
+
+Runs share a budget of 1,200 per team per hour. Past it, requests fail with `429` and `rate_limited`.
+
+## Resume a parked run
+
+`resumeConnectorRun` takes `action` (`accept`, `decline`, or `cancel`) and `content`, the values a parked call asked for. A `decline` fails the run with `connector_tool_blocked`.
+
+A run parked in `human` mode refuses a decision from an API key or an agent with `human_approval_required`. A person decides at `approvalUrl`. Then call `resumeConnectorRun` with no `action` to read back the outcome and let the run continue. While nobody has decided, that call fails with `connector_approval_required`.
+
+## Errors
+
+Every failure is an RFC 9457 problem document. See [Errors](/api/errors).
+
+| Code | Status | When |
+| --- | --- | --- |
+| `team_required` | 422 | The credential can act for several teams and `team` is missing |
+| `feature_unavailable` | 422 | Connectors are turned off for the team |
+| `connector_slug_taken` | 409 | The team already has a connector with that slug |
+| `connector_source_unreachable` | 422 | The source did not load when registering or refreshing |
+| `connector_source_blocked` | 422 | The source URL is not reachable from Spacefast |
+| `connector_source_invalid` | 422 | `source.kind` does not match the catalog row named by `presetId` |
+| `connector_not_found` | 422 | `presetId` matches no catalog row, or a policy pattern names an unknown connector or connection |
+| `connector_first_party_immutable` | 409 | The connector is built into Spacefast |
+| `connection_forbidden` | 422 | An API key asked for a `personal` connection or rule |
+| `connection_needs_reauth` | 409 | A health probe found no credential, or the authorization is not finished |
+| `connection_revoked` | 409 | The connection is disconnected |
+| `connection_serving_not_granted` | 422 | `serving` was set on a personal connection |
+| `malformed_policy_pattern` | 422 | The pattern does not fit the grammar |
+| `malformed_tool_address` | 422 | `resolveConnectorPolicy` got an address that does not resolve |
+| `idempotency_key_reused` | 409 | The run key was used with a different input |
+| `human_approval_required` | 403 | A non-person tried to decide a run parked for a person |
+| `connector_approval_required` | 422 | No decision is recorded yet |
+| `connector_run_not_resumable` | 409 | The run already settled, or the decision was already claimed |
+| `rate_limited` | 429 | The team passed the hourly budget for registrations or runs |
+
+These codes appear in a failed run's `error`, inside a `200` response:
+
+| Code | Status in `error` | When |
+| --- | --- | --- |
+| `connector_tool_blocked` | 403 | A `block` rule matched, or a person denied the call |
+| `connector_approval_required` | 403 | The call needed approval and `unattendedApprovals` was `deny` |
+| `connection_ambiguous` | 409 | A `<connector>/<tool>` address matched more than one connection |
+| `connection_not_found` | 404 | The address names no connection the credential can use |
+| `connection_forbidden` | 403 | The credential may not use that connection |
+| `connection_needs_reauth` | 401 | The provider refused the stored credential. Reconnect it |
+| `connector_tool_not_found` | 404 | The connection has no tool by that name |
+| `connector_tool_failed` | varies | The provider call failed |
+| `connector_program_failed` | 422 | A code program threw |
+| `connector_run_budget_exhausted` | 429 | The run passed its budget of 400 outbound requests or 64 MiB read |
+| `run_replay_diverged` | 409 | A resumed program made different calls than before the pause |
+
+## Space bindings and agents
+
+A Space binds its connector roles to team connections through `listSpaceConnectorBindings`, `bindSpaceConnector`, and `unbindSpaceConnector` under the `Spaces` tag. See [Zero connectors](/zero-connectors).
+
+Hosted MCP exposes no connector operations. On-device MCP, `sf mcp`, reaches connectors through one gateway tool. See [MCP server](/agents/mcp-server).
