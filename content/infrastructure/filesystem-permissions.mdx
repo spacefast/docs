@@ -1,0 +1,32 @@
+---
+title: Filesystem permissions
+description: Understand PHP filesystem controls and how they differ from published versions and application data.
+---
+
+A published Space version is an immutable snapshot. Changing files means publishing a new version. WP Cloud's PHP filesystem permissions are a separate control over writes made by PHP web requests.
+
+## What the infra control does
+
+WP Cloud supports the `php_fs_permissions` site setting:
+
+| Value | Effect on PHP web requests |
+| --- | --- |
+| `rw` | PHP can read and write the site's filesystem. This is WP Cloud's default. |
+| `ro` | PHP can read files but cannot write them. Uploads, updates, and other file-writing operations can fail. |
+| `loggedin` | Changes write behavior for some logged-in WordPress requests. The feature is evolving and requires testing against the site's actual workflows. |
+
+These are upstream capabilities, not fields to add to `sf.jsonc`. Spacefast manages the filesystem policy for its sites. Use [publish](/publish), [Storage](/object-storage), and the documented [WordPress tools](/wordpress) for the changes your application needs.
+
+## Read-only files do not mean read-only data
+
+A PHP filesystem restriction does not make the database read-only or prevent WordPress administration from changing database content. It also does not change SSH or SFTP access controls.
+
+For your Space, keep the two kinds of data separate. Published version files stay with their snapshot. Application records belong in [Database](/database), and mutable media belongs in [Storage](/object-storage).
+
+## Security incidents
+
+Read-only mode can help contain filesystem changes during an investigation. It does not remove malicious files or rotate compromised credentials. It can also break legitimate uploads, plugin updates, scheduled tasks, and integrations that write files.
+
+Contact Spacefast support before depending on an infra filesystem restriction. Check all affected application workflows after a policy change, including logged-out requests and background work.
+
+<WpCloudDocs title="Filesystem permissions" href="https://wp.cloud/docs/security/site-security/filesystem-permissions/" />

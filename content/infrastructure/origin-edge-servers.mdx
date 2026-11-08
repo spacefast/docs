@@ -1,0 +1,30 @@
+---
+title: Origin and edge servers
+description: How requests reach the edge, use the cache, and continue to the origin.
+---
+
+The edge receives requests close to your visitors. The origin stores site data and handles requests the edge cannot answer from cache.
+
+## A request through Spacefast
+
+1. Your hostname resolves to an Anycast address. Network routing takes the visitor to an edge location.
+2. The edge applies traffic protections and can return an eligible cached response.
+3. A request that needs the origin continues to the site running your Space. Spacefast serves the published files or runs the application behavior the request needs.
+
+Edge Cache and origin caching are separate layers. A cache hit at the edge avoids an origin request. An origin cache hit can avoid running WordPress again. See [Caching](/caching) for Spacefast's response and invalidation rules.
+
+## Origin regions
+
+WP Cloud operates origin locations in Amsterdam, Ashburn, Dallas, and Los Angeles, with edge locations across more regions. The public IP address does not identify the physical origin.
+
+Spacefast manages site placement. A WP Cloud origin preference is a provisioning choice, not a per-request routing rule or a Spacefast setting for moving an existing Space. WP Cloud can relocate sites for platform health and performance, and [failover](/infrastructure/automated-failover) can temporarily change the active origin.
+
+Site replicas can span the United States and the European Union. Do not infer a data-residency guarantee from an origin location, a DNS answer, or the edge that served one request.
+
+## Which logs show the request?
+
+[Edge request logs](/infrastructure/edge-request-logs) include requests handled at the edge, including cache hits and security challenges that never reach the origin. [Access and runtime logs](/logs) cover origin requests and application output.
+
+Use [Stats](/stats) to inspect traffic trends. A missing origin log entry does not mean the edge never received the request.
+
+<WpCloudDocs title="Origin and edge servers" href="https://wp.cloud/docs/infrastructure/origin-edge-servers/" />

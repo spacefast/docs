@@ -167,6 +167,12 @@ export default defineConfig({
   },
   agents: {
     llmsTxt: { details: llmsDetails },
+    // The WP Cloud footer, written out as Markdown for .md pages, llms-full.txt
+    // and MCP: without this the component ships as raw JSX.
+    markdownComponents: {
+      WpCloudDocs: ({ props }) =>
+        `Spacefast is built on Automattic's [WP Cloud](https://wp.cloud/). Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) on WP Cloud Docs.`,
+    },
     // The Website publishes Spacefast's agent skill at the site root; a second,
     // generated Docs skill would compete with it.
     skillMd: false,

@@ -86,12 +86,14 @@ Every observed `A` record has to point at Spacefast. A leftover record from your
 
 ### When a TXT record shows up
 
-Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours:
+Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours (see [Domain verification records](/infrastructure/domain-verification-records) for how they interact with older proofs):
 
 - **Another host still holds it.** The record is named for the hostname, its value starts with `atomic-domain-`, and the domain waits until it is published. Remove any CNAME at that name first; a TXT record cannot sit beside one.
 - **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record. If you can also manage the Space that holds it, verify with move and the domain moves without the record. Otherwise publish the record at your DNS host and verify: once Spacefast sees it, the domain moves to this Space and the old Space stops serving it. Either way, a claim expires 24 hours after it was created; add the domain again for a new one.
 
 Keep exactly one `atomic-domain-` record per hostname. Two of them, even when one is correct, make the claim fail.
+
+Certificates are provisioned and renewed automatically once the hostname can be validated. See [TLS certificates](/infrastructure/tls-certificates) for issuance checks and retries, and [IP ranges](/infrastructure/ip-ranges) for inbound and outbound address behavior.
 
 ## Apex and www travel together
 
@@ -209,7 +211,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | `verification_required` | The hostname needs proof of DNS control to keep serving. | Add the verification TXT record. |
 | `domain_ownership_required` | Another Space serves this hostname. | Publish the claim's TXT record, then verify to move it here. |
 | `ssl_pending` | Certificate issuance is in progress. | Wait. |
-| `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry SSL. |
+| `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry HTTPS. |
 | `provider_pending` | The edge has not observed the hostname yet. | Wait. |
 | `provider_rejected` | The hostname claim was rejected. | Contact support. |
 | `provider_error` | Attaching or detaching the hostname failed. | Contact support. |

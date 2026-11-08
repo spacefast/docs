@@ -1,0 +1,33 @@
+---
+title: IP ranges
+description: Use the DNS addresses Spacefast returns and account for changing outbound addresses.
+---
+
+Copy the DNS records Spacefast gives you for your hostname. Inbound addresses route visitors to the edge; they do not identify the server running your Space.
+
+## Inbound traffic
+
+Spacefast uses WP Cloud's Anycast network. The same published address can send visitors to different edge locations, usually near the requester, before a request reaches the origin.
+
+Connect a domain through the [custom domain flow](/domains). The CLI and dashboard return the required address and verification records. Use those exact values, including the hostname on each record.
+
+WP Cloud's default inbound load-balancer range is `192.0.79.128/26`, but approved addresses can differ between partner configurations. Do not select an address from that range yourself or copy one from another Space. Spacefast obtains the addresses for your setup.
+
+```bash
+sf domains add example.com --space my-site
+sf domains diagnostics example.com --space my-site
+```
+
+## Outbound connections
+
+A request your Space's origin makes to an external service uses an origin pool's outbound address. That address can change after [automated failover](/infrastructure/automated-failover), relocation, or replacement of the underlying site.
+
+Functions workers are different: they send from Cloudflare's shared network, so an allowlist built on the origin pool does not cover them. See [Functions outbound HTTP](/functions#outbound-http).
+
+Outbound addresses can be shared with other sites. An IP allowlist covering a complete infra range does not authenticate your application, and a single observed address is not a stable integration contract. Use the external service's authentication mechanism. If it also requires an IP allowlist, contact Spacefast support to discuss the requirement before depending on a fixed address.
+
+## Keep DNS and location separate
+
+A public DNS lookup tells you where to send inbound traffic. It does not reveal a permanent origin location or the address an outbound connection will use. Changing DNS is not how you select an origin region.
+
+<WpCloudDocs title="IP ranges" href="https://wp.cloud/docs/infrastructure/ip-ranges/" />
