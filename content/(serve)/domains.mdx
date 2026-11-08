@@ -70,24 +70,28 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
 An unassigned domain has no records to show. Instructions appear once the domain is assigned to a Space, which is why `sf domains add` assigns in the same command.
 
-Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` produces six of them in the common case, because the `www` twin is set up alongside it.
+Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` usually produces three, because the `www` twin is set up alongside it.
 
 | Type | Name | Value | Purpose |
 | --- | --- | --- | --- |
-| `TXT` | `_stattic-verify.example.com` | `stattic-team-verification=tm_xxxxxxxx` | `verification` |
-| `TXT` | `_stattic-verify.www.example.com` | `stattic-team-verification=tm_xxxxxxxx` | `verification` |
-| `A` | `example.com` | `192.0.79.132` | `routing` |
-| `A` | `www.example.com` | `192.0.79.132` | `routing` |
-| `AAAA` | `example.com` | the IPv6 address in your instructions | `routing` |
-| `AAAA` | `www.example.com` | the IPv6 address in your instructions | `routing` |
+| `A` | `example.com` | `192.0.79.157` | `routing` |
+| `A` | `example.com` | `192.0.79.175` | `routing` |
+| `CNAME` | `www.example.com` | `example.com` | `routing` |
 
-The TXT value carries your team id and proves you control the zone. The address records are generated for your hostname, so copy the exact values from your own output rather than the ones above.
+A subdomain like `app.example.com` usually gets just its two `A` records. The addresses are generated for your hostname, so copy the exact values from your own output rather than the ones above.
 
 :::warning[Delete the old address records first]
-Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live. The same rule applies to `AAAA` when IPv6 is offered.
+Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live. Remove any `AAAA` record left from your previous host too: it sends IPv6 visitors there.
 :::
 
-Spacefast generates `A`, `AAAA` and `TXT` records only. There is no CNAME or ALIAS instruction.
+### When a TXT record shows up
+
+Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours:
+
+- **Another host still holds it.** The record is named for the hostname, its value starts with `atomic-domain-`, and the domain waits until it is published. Remove any CNAME at that name first; a TXT record cannot sit beside one.
+- **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record. If you can also manage the Space that holds it, verify with move and the domain moves without the record. Otherwise publish the record at your DNS host and verify: once Spacefast sees it, the domain moves to this Space and the old Space stops serving it. Either way, a claim expires 24 hours after it was created; add the domain again for a new one.
+
+Keep exactly one `atomic-domain-` record per hostname. Two of them, even when one is correct, make the claim fail.
 
 ## Apex and www travel together
 
@@ -153,14 +157,14 @@ The redirect target is either an absolute URL or another Space. There is no path
 
 ## Moving a domain to another Space
 
-There is no move operation. Unassign, then assign:
+Unassign, then assign:
 
 ```bash
 sf domains rm example.com --space old-site
 sf domains add example.com --space new-site
 ```
 
-Assigning a domain that is still bound elsewhere fails with `domain_in_use`, and reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains rm` does that for you and is on by default.
+Adding a domain another Space still serves creates a claim with a TXT record to publish, as described in [When a TXT record shows up](#when-a-txt-record-shows-up). Reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains rm` does that for you and is on by default.
 
 ## Removing versus deleting
 
@@ -179,7 +183,7 @@ Every domain a team owns lives on one page, whether or not it is assigned. In th
 
 Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains ls` is the per-Space list.
 
-Two different teams may add the same hostname. Only serving is exclusive, so a team that proves control can take over a hostname whose current holder has stopped verifying.
+Two different teams may add the same hostname. Only serving is exclusive: a team that publishes its claim's TXT record moves the hostname to its own Space.
 
 Adding a domain also counts against a plan limit, measured in external domain groups. One group is a registrable apex plus all of its subdomains. Over the limit, the add fails with `domain_quota_exceeded`.
 
@@ -203,7 +207,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | --- | --- | --- |
 | `dns_records_missing` | The required records have not been observed. Verification keeps polling. | Add the records at your DNS host. |
 | `verification_required` | The hostname needs proof of DNS control to keep serving. | Add the verification TXT record. |
-| `hostname_claim_conflict` | Another verified claim is serving this hostname. | Prove control here. The takeover completes once the other claim stops verifying. |
+| `domain_ownership_required` | Another Space serves this hostname. | Publish the claim's TXT record, then verify to move it here. |
 | `ssl_pending` | Certificate issuance is in progress. | Wait. |
 | `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry SSL. |
 | `provider_pending` | The edge has not observed the hostname yet. | Wait. |
@@ -223,7 +227,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | `managed_domain_protected` | 400 | You passed the id of a built-in `space.fast` or `view.fast` hostname. |
 | `domain_already_exists` | 409 | The team already has that hostname. |
 | `domain_quota_exceeded` | 409 | The plan's external domain group limit is reached. |
-| `domain_in_use` | 409 | Another verified claim serves it, or it is still assigned to a Space. |
+| `domain_in_use` | 409 | The hostname is already on this Space, a previous attachment is still being removed, or you tried to delete a domain that is still assigned. |
 | `domain_detach_in_progress` | 409 | A previous unassign is still draining. |
 | `domain_not_bound` | 409 | You set a redirect, or retried SSL, on a domain with no Space. |
 | `domain_primary_redirect_conflict` | 400 | A redirecting domain cannot be primary. Clear the redirect first. |
