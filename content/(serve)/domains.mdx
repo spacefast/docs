@@ -211,7 +211,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 | `verification_required` | The hostname needs proof of DNS control to keep serving. | Add the verification TXT record. |
 | `domain_ownership_required` | Another Space serves this hostname. | Publish the claim's TXT record, then verify to move it here. |
 | `ssl_pending` | Certificate issuance is in progress. | Wait. |
-| `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry SSL. |
+| `ssl_renewal_blocked` | A DNS record, usually CAA, is blocking issuance. | Fix the record, then retry HTTPS. |
 | `provider_pending` | The edge has not observed the hostname yet. | Wait. |
 | `provider_rejected` | The hostname claim was rejected. | Contact support. |
 | `provider_error` | Attaching or detaching the hostname failed. | Contact support. |

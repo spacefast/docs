@@ -33,7 +33,7 @@ Issuer names and chains can change. Do not pin an integration to a particular is
 
 Check that the hostname's address records match Spacefast's instructions. Remove old addresses that still send some requests elsewhere. If CAA records restrict certificate authorities, allow the authorities used for issuance. Check that an extra proxy or redirect does not block the HTTP validation request.
 
-After fixing the cause, use **Retry SSL** in the domain's dashboard controls or `POST /v1/domains/{domainId}/ssl/retry`. Retries are rate limited; repeated retries do not repair a DNS or CAA error.
+After fixing the cause, use **Retry HTTPS** on the domain's page in the dashboard (it appears while a certificate is failing) or `POST /v1/domains/{domainId}/ssl/retry`. Retries are rate limited; repeated retries do not repair a DNS or CAA error.
 
 See [Custom domains](/domains#troubleshooting) for diagnostic codes such as `ssl_pending` and `ssl_renewal_blocked`.
 
