@@ -31,9 +31,8 @@ const span = columns.length + 1;
         ))}
       </tr>
     </thead>
-    <tbody>
-      {groups.map(([group, rows]) => (
-        <>
+    {groups.map(([group, rows]) => (
+        <tbody>
           {group && (
             <tr class="sf-group">
               <th scope="rowgroup">{group}</th>
@@ -54,14 +53,13 @@ const span = columns.length + 1;
               </th>
               {row.values.map((value, index) => (
                 <td class:list={[{ "sf-highlight": columns[index]?.name === highlight, "sf-none": value === "—" }]} data-label={columns[index]?.name}>
-                  {value === "✓" ? <span class="sf-yes" aria-label="Included">✓</span> : value === "—" ? <span aria-label="Not included">—</span> : value === "TBD" ? <span class="sf-tag sf-tag-tbd" title="To be decided before Business launches">TBD</span> : value}
+                  {value === "✓" ? <><span class="sf-yes" aria-hidden="true">✓</span><span class="sf-visually-hidden">Included</span></> : value === "—" ? <><span aria-hidden="true">—</span><span class="sf-visually-hidden">Not included</span></> : value === "TBD" ? <span class="sf-tag sf-tag-tbd" title="To be decided before Business launches">TBD</span> : value}
                 </td>
               ))}
             </tr>
           ))}
-        </>
+        </tbody>
       ))}
-    </tbody>
   </table>
 </div>
 
@@ -117,6 +115,9 @@ const span = columns.length + 1;
     background: var(--blume-background);
     box-shadow: 1px 0 0 var(--blume-border);
   }
+  tbody th[scope="row"]:has(.sf-tip:hover, .sf-tip:focus) {
+    z-index: 4;
+  }
   thead th:first-child {
     z-index: 3;
     background: var(--blume-background);
@@ -148,7 +149,7 @@ const span = columns.length + 1;
     letter-spacing: 0.04em;
     color: var(--blume-muted-foreground);
   }
-  tbody tr:last-child > * {
+  tbody:last-child tr:last-child > * {
     border-bottom: 0;
   }
   td {

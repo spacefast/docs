@@ -216,10 +216,8 @@ const FEATURES = [
 ];
 
 // Business (coming soon): from $500 a month, $25 per member, no included usage.
-// Per-Space limits are 5x Pro, capped where the platform has a hard ceiling.
-// A row without an override takes Pro's value.
-// Business is coming soon: its price is set, its limits aren't. Every other
-// Business cell renders as a TBD badge.
+// Its prices are set; its limits aren't. A row without an override copies Pro
+// when Pro's cell is a yes/no, Beta, Soon or Contact sales, and is TBD otherwise.
 const TBD = "TBD";
 const BUSINESS_TEAM = {
   "Included usage": "None",
@@ -246,12 +244,13 @@ const BUSINESS_FEATURES = {
   Support: "Slack Connect channel",
 };
 
-/** Insert the Business column after Pro: overrides, Pro's yes/no, or TBD. */
+/** Insert the Business column after Pro: an override, Pro's non-limit value, or TBD. */
 export function withBusiness(groups, overrides, proIndex = 2) {
   const used = new Set();
   const out = groups.map(([group, rows]) => [group, rows.map((item) => {
     const pro = item.values[proIndex];
-    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : pro === YES || pro === NO ? pro : TBD;
+    const copies = [YES, NO, BETA, SOON, "Contact sales"].includes(pro);
+    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : copies ? pro : TBD;
     if (Object.hasOwn(overrides, item.label)) used.add(item.label);
     return { ...item, values: [...item.values.slice(0, proIndex + 1), value, ...item.values.slice(proIndex + 1)] };
   })]);
@@ -260,35 +259,20 @@ export function withBusiness(groups, overrides, proIndex = 2) {
   return out;
 }
 
-export const CARDS = [
-  { name: "Personal", price: "$0", per: "per month, no card", tag: "For your own projects and ideas.",
-    items: ["$1 of usage included", "100 build minutes", "1 TB cached traffic", "20 Spaces, 20 custom domains", "1 GB disk per Space", "Daily database backups you can restore", "Analytics and 5 GB VideoPress per Space"] },
-  { name: "Go", price: "$5", per: "per month", tag: "$5 of usage included.",
-    items: ["Everything in Personal", "Fair-use cached traffic", "100 Spaces, 100 custom domains", "10 GB disk, 100 GB VideoPress per Space", "Hourly database backups", "Choose a datacenter", "Team skills, memories and design systems", "Boost any Space"] },
-  { name: "Pro", price: "$15", per: "per month", tag: "$15 of usage included. Free up to 5 members, then $15/month each.",
-    items: ["Everything in Go", "Team roles", "500 Spaces, 500 custom domains", "4 compute workers per Space", "25 GB disk per Space", "Wildcard domains and page templates", "Hourly backups, restore 30 days back", "Priority email support"] },
-  { name: "Business", soon: true, price: "$500", per: "a month to start, $25 per member", tag: "Usage at the same prices, no included usage.",
-    items: ["Everything in Pro, with 5x the limits per Space", "20 compute workers per Space, bursting to 40", "125 GB disk, 1.25 TB VideoPress per Space", "2,500 Spaces and custom domains", "Hourly backups, restore 150 days back", "Custom certificates and log drains", "Support in a Slack Connect channel"] },
-  { name: "Enterprise", price: "Custom", per: "talk to a person", tag: "For bigger requirements.",
-    items: ["Everything in Business", "SSO, SAML and SCIM", "Subteams", "Custom access pages, no branding", "Network policies and egress firewall", "Log drains, SLA, volume pricing"] },
-];
-export const BOOST = { name: "Boost", price: "$9", per: "per Space, per month", tag: "On Go and up, for the Space that needs more.",
-  items: ["8 compute workers, bursting to 16", "2 GB compute memory per request", "250 MB functions, 300 s run time", "50 GB disk, 1 TB VideoPress", "40 crons, including crontab", "More redirects and firewall rules", "Custom certificate", "5,000 more emails a day"] };
-
 // Example bills. The first two use real usage across every Space in the last
 // 30 days (median and 99th percentile per Space, measured 9 Nov 2026).
 export const EXAMPLES = [
   { title: "A typical Space", plan: "Personal", price: "$0", basis: "Real usage: the median Space over the last 30 days.",
-    lines: [["387 dynamic requests", "Included"], ["0.13 CPU-hours of PHP", "$0.02"], ["0.28 GB stored", "Under the 1 GB not counted"], ["2 build minutes", "Included"]],
+    lines: [["387 dynamic requests", "Included"], ["0.13 CPU-hours of compute", "$0.02"], ["0.28 GB stored", "Under the 1 GB not counted"], ["2 build minutes", "Included"]],
     note: "Uses $0.02 of the $1 included." },
   { title: "A busy Space", plan: "Personal", price: "$0", basis: "Real usage: busier than 99% of Spaces, plus as many build minutes as a team in the top 1%, over the last 30 days.",
-    lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of PHP", "$0.15"], ["0.83 GB stored", "Under the 1 GB not counted"], ["247 build minutes", "100 included, then $0.81"]],
+    lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of compute", "$0.15"], ["0.83 GB stored", "Under the 1 GB not counted"], ["247 build minutes", "100 included, then $0.81"]],
     note: "Uses $0.96 of the $1 included. On Go, the same Space uses $0.15 of $5." },
   { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client sites and five members.",
-    lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of PHP, 10 of MySQL", "$5.95"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "30 GB counted, $3.00"], ["1,500 build minutes", "Included"]],
+    lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of compute, 10 of MySQL", "$5.95"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "30 GB counted, $3.00"], ["1,500 build minutes", "Included"]],
     note: "Uses $8.95 of the $15 included." },
   { title: "A busy app", plan: "Pro + Boost", price: "$24", basis: "Estimate: one app with 10 million requests a month, 70% cached.",
-    lines: [["3 million dynamic requests", "Included"], ["25 CPU-hours of PHP, 8.3 of MySQL", "$3.97"], ["600 GB uncached", "500 included, then $4.00"], ["10 GB stored", "9 GB counted, $0.90"], ["5 million Workers requests", "$1.50"]],
+    lines: [["3 million dynamic requests", "Included"], ["25 CPU-hours of compute, 8.3 of MySQL", "$3.97"], ["600 GB uncached", "500 included, then $4.00"], ["10 GB stored", "9 GB counted, $0.90"], ["5 million Workers requests", "$1.50"]],
     note: "Uses $10.37 of the $15 included. Boost adds $9." },
 ];
 
