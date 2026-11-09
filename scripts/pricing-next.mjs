@@ -15,6 +15,8 @@ export const PLANS = ["Personal", "Go", "Pro", "Business", "Enterprise"];
 export const SPACE_PLANS = ["Personal", "Go", "Pro", "Business", "Boost", "Enterprise"];
 
 const row = (label, tip, values, tag) => ({ label, tip, values, tag });
+const NO_LIMIT = "No predefined limit";
+const all5 = (value) => [value, value, value, value, value];
 const CPU = "$0.119 per CPU-hour";
 
 // Per team, per month: [Personal, Go, Pro, Enterprise]. Business is added from BUSINESS_TEAM.
@@ -119,8 +121,8 @@ const SPACE = [
   ]],
   ["Email and sharing", [
     row("Extra email a day", "Added to the team's daily limit, for this Space only.", [NO, NO, NO, "+5,000", "Custom"]),
-    row("Share links", "A safety limit against abuse, the same on every self-serve plan.", ["100", "100", "100", "100", "Custom"]),
-    row("Pending invitations", "A safety limit against abuse, the same on every self-serve plan.", ["500", "500", "500", "500", "Custom"]),
+    row("Share links", "No set number on any plan. Abuse protections still apply.", all5(NO_LIMIT)),
+    row("Pending invitations", "No set number on any plan. Abuse protections still apply.", all5(NO_LIMIT)),
   ]],
 ];
 
@@ -232,8 +234,8 @@ const BUSINESS_SPACE = {
   "Extra email a day": TBD,
   "DDoS challenge mode": YES,
   "Custom certificate": YES,
-  "Share links": "100",
-  "Pending invitations": "500",
+  "Share links": NO_LIMIT,
+  "Pending invitations": NO_LIMIT,
 };
 const BUSINESS_FEATURES = {
   "Edge locations": "28+",
