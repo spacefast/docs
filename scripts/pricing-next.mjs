@@ -23,7 +23,7 @@ const TEAM = [
     row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month; unused usage doesn't roll over.",
       ["$1", "$5", "$15", "Contract"]),
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free and never count.",
-      ["1", "1", "5, then $15 each (no extra usage)", "Contract"]),
+      ["1", "1", "Free up to 5, then $15/month each", "Contract"]),
   ]],
   ["Compute", [
     row("Compute", "Active CPU time running your Space's code, including Zero apps. Time spent waiting on the network or the database doesn't count.",
@@ -215,8 +215,8 @@ const FEATURES = [
 // Business cell renders as a TBD badge.
 const TBD = "TBD";
 const BUSINESS_TEAM = {
-  "Included usage": "$100 welcome credit in month one",
-  Members: "$25 each",
+  "Included usage": "None",
+  Members: "$25/month each",
   Compute: CPU,
   "MySQL compute": CPU,
   "Workers requests": "$0.30 per million",
@@ -255,9 +255,9 @@ export const CARDS = [
     items: ["$1 of usage included", "100 build minutes", "1 TB cached traffic", "20 Spaces, 20 custom domains", "1 GB disk per Space", "Daily database backups you can restore", "Analytics and 5 GB VideoPress per Space"] },
   { name: "Go", price: "$5", per: "per month", tag: "$5 of usage included.",
     items: ["Everything in Personal", "Fair-use cached traffic", "100 Spaces, 100 custom domains", "10 GB disk, 100 GB VideoPress per Space", "Hourly database backups", "Choose a datacenter", "Team skills, memories and design systems", "Boost any Space"] },
-  { name: "Pro", price: "$15", per: "per month, 5 members included", tag: "$15 of usage included. Extra members are $15 each.",
+  { name: "Pro", price: "$15", per: "per month", tag: "$15 of usage included. Free up to 5 members, then $15/month each.",
     items: ["Everything in Go", "Team roles", "500 Spaces, 500 custom domains", "4 compute workers per Space", "25 GB disk per Space", "Wildcard domains and page templates", "Hourly backups, restore 30 days back", "Priority email support"] },
-  { name: "Business", soon: true, price: "$500", per: "a month to start, $25 per member", tag: "Usage at the same prices, no included usage. $100 welcome credit in your first month.",
+  { name: "Business", soon: true, price: "$500", per: "a month to start, $25 per member", tag: "Usage at the same prices, no included usage.",
     items: ["Everything in Pro, with 5x the limits per Space", "20 compute workers per Space, bursting to 40", "125 GB disk, 1.25 TB VideoPress per Space", "2,500 Spaces and custom domains", "Hourly backups, restore 150 days back", "Custom certificates and log drains", "Support in a Slack Connect channel"] },
   { name: "Enterprise", price: "Custom", per: "talk to a person", tag: "For bigger requirements.",
     items: ["Everything in Business", "SSO, SAML and SCIM", "Subteams", "Custom access pages, no branding", "Network policies and egress firewall", "Log drains, SLA, volume pricing"] },
@@ -300,7 +300,7 @@ export const PAYMENTS = [
 const PLAN_HEAD = {
   Personal: { note: "$0, no card" },
   Go: { note: "$5 a month" },
-  Pro: { note: "$15 a month, 5 members" },
+  Pro: { note: "$15 a month" },
   Business: { tag: "soon", note: "From $500, $25 per member" },
   Boost: { note: "+$9 per Space" },
   Enterprise: { note: "Talk to us" },
@@ -309,8 +309,8 @@ const columnsFor = (names) => names.map((name) => ({ name, ...PLAN_HEAD[name] })
 
 const AT_A_GLANCE = [
   ["", [
-    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month.", ["$1", "$5", "$15", "$100 in month one", "Contract"]),
-    row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "5, then $15 each", "$25 each", "Contract"]),
+    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month.", ["$1", "$5", "$15", "None", "Contract"]),
+    row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "Free up to 5, then $15/month each", "$25/month each", "Contract"]),
     row("Spaces and custom domains", null, ["20", "100", "500", TBD, "Custom"]),
     row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", TBD, "Custom"]),
     row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", TBD, "Up to 1 TB"]),
