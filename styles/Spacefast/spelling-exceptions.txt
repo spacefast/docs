@@ -5,6 +5,7 @@ accountless
 Afterpay
 allowlist
 allowlisted
+allowlists
 alphanumerics
 Anycast
 api
@@ -48,6 +49,9 @@ cron
 crons
 crontab
 cutover
+datacenter
+Datacenters
+datacenters
 debounced
 dedupe
 dedupes
@@ -258,6 +262,8 @@ unarchive
 unassign
 Unassign
 unassigns
+uncached
+Uncached
 uncategorized
 unclaimed
 unconfigured
