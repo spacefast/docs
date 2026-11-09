@@ -15,7 +15,7 @@ Upgrades apply immediately and prorate to the day. Downgrades apply at renewal. 
 
 ## Read the plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Plan codes are stable: `free` is Personal, `go` is Go, `plus` is Pro, and the others are `business`, `enterprise` and `internal`. `GET /v1/pricing` returns every plan's public prices and limits.
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Plan codes are stable: `free` is Personal, `go` is Go and `plus` is Pro. The others are `gold`, `enterprise` and `internal`.
 
 Use the returned entitlements for feature checks.
 

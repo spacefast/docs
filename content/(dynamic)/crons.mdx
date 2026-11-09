@@ -71,16 +71,17 @@ Each entry gets a **key** derived by slugging its path. `/api/cron/digest` becom
 
 ## Allowance by plan
 
-Each Space runs a set number of simple and advanced crons, by plan:
+Each Space runs a set number of crons, by plan. Advanced (crontab) crons come with Boost and count toward the total:
 
-| Plan | Simple | Advanced | With Boost |
-| --- | --- | --- | --- |
-| Personal | 1 | 0 | No Boost. Upgrade the plan |
-| Go | 5 | 0 | 25 simple, 5 advanced |
-| Pro | 10 | 5 | 30 simple, 5 advanced |
-| Enterprise | 50 | 25 | No Boost |
+| Plan | Crons per Space | Advanced crons |
+| --- | --- | --- |
+| Personal | 3 | None |
+| Go | 10 | None |
+| Pro | 20 | None |
+| Boost (Go and up) | 40 | Up to 10 |
+| Enterprise | Custom | Custom |
 
-Boost is a per-Space add-on on Go and up. It adds 20 simple crons and raises advanced crons to at least 5, so on Pro it adds simple crons only. Personal has no Boost: upgrading the plan is the way to more crons.
+Boost is a per-Space add-on on Go and up. See [Pricing & Limits](/pricing) for every plan's limits.
 
 Each cron takes a slot of its own kind, in the order you declare them. A later crontab can still take an advanced slot after an earlier simple cron ran out of simple slots:
 
@@ -94,7 +95,7 @@ A raised limit applies right away. After an upgrade or Boost, crons that were wa
 
 A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing: crons that are running keep running.
 
-For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. Each tier is capped at 8 too, so `allowance` in the API reports the capped numbers (8 simple and 5 advanced on Pro, 8 and 8 on Gold and Enterprise), and Boost adds no crons on a plan already at the cap. The ceiling rises to the plan limits above as the runtime update reaches every box.
+For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. `allowance` in the API reports the capped numbers. The ceiling rises to the plan limits above as the runtime update reaches every box.
 
 ## List and trigger
 
