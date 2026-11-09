@@ -218,20 +218,20 @@ const FEATURES = [
 ];
 
 // Business (coming soon): from $500 a month with $500 of included usage, $25 per member.
-// Its prices are set; its limits aren't. A row without an override copies Pro
-// when Pro's cell is a yes/no, Beta, Soon or Contact sales, and is TBD otherwise.
-const TBD = "TBD";
+// A row without an override copies Pro when Pro's cell is a yes/no, Beta, Soon
+// or Contact sales, and otherwise matches Enterprise, with Contract shown as Custom.
 const BUSINESS_TEAM = {
   "Included usage": "$500",
   Members: "$25/month each",
   Compute: CPU,
   "MySQL compute": CPU,
   "Workers requests": "$0.30 per million",
+  "Workers compute": "Free now, then $0.072 per CPU-hour†",
   Storage: "1 GB per Space, then $0.10 per GB-month",
 };
 const BUSINESS_SPACE = {
-  "Advanced crons": TBD,
-  "Extra email a day": TBD,
+  "Advanced crons": "Custom",
+  "Extra email a day": "Custom",
   "DDoS challenge mode": YES,
   "Custom certificate": YES,
   "Share links": NO_LIMIT,
@@ -245,13 +245,14 @@ const BUSINESS_FEATURES = {
   Support: "Slack Connect channel",
 };
 
-/** Insert the Business column after Pro: an override, Pro's non-limit value, or TBD. */
+/** Insert the Business column after Pro: an override, Pro's non-limit value, or Enterprise's. */
 export function withBusiness(groups, overrides, proIndex = 2) {
   const used = new Set();
   const out = groups.map(([group, rows]) => [group, rows.map((item) => {
     const pro = item.values[proIndex];
     const copies = [YES, NO, BETA, SOON, "Contact sales"].includes(pro);
-    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : copies ? pro : TBD;
+    const enterprise = item.values.at(-1);
+    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : copies ? pro : enterprise === "Contract" ? "Custom" : enterprise;
     if (Object.hasOwn(overrides, item.label)) used.add(item.label);
     return { ...item, values: [...item.values.slice(0, proIndex + 1), value, ...item.values.slice(proIndex + 1)] };
   })]);
@@ -306,10 +307,10 @@ const AT_A_GLANCE = [
   ["", [
     row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month; unused usage doesn't roll over on any plan.", ["$1", "$5", "$15", "$500", "Contract"]),
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "Free up to 5, then $15/month each", "$25/month each", "Contract"]),
-    row("Spaces and custom domains", null, ["20", "100", "500", TBD, "Custom"]),
-    row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", TBD, "Custom"]),
-    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", TBD, "Up to 1 TB"]),
-    row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", TBD, "Custom"]),
+    row("Spaces and custom domains", null, ["20", "100", "500", "Custom", "Custom"]),
+    row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", "Custom", "Custom"]),
+    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", "Up to 1 TB", "Up to 1 TB"]),
+    row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", "Custom", "Custom"]),
     row("Support", null, ["Community", "Email", "Priority email", "Slack Connect", "Dedicated, with SLA"]),
   ]],
 ];
