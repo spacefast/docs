@@ -1,0 +1,272 @@
+---
+/*
+ * One pricing table for the draft Pricing & Limits page. It reads the plan
+ * data straight from scripts/pricing-next.mjs, so every number has one source.
+ * Row explanations open from a small "i" next to the row name (hover, focus or
+ * tap); labels such as Beta sit on the row name, and the price lives in the cell.
+ */
+import { contentHref } from "blume/components/content/base-href.ts";
+import { pricingTable } from "../scripts/pricing-next.mjs";
+
+interface Props {
+  table: "plans" | "team" | "space" | "features" | "examples" | "payments";
+}
+
+const { table } = Astro.props;
+const { columns, groups, highlight } = pricingTable(table);
+const span = columns.length + 1;
+---
+
+<div class="sf-pricing not-prose" data-pricing-table={table} tabindex="0" role="region" aria-label={`${table} pricing table, scroll sideways for every plan`}>
+  <table style={`--sf-cols: ${columns.length}`}>
+    <thead>
+      <tr>
+        <th scope="col"><span class="sf-visually-hidden">Item</span></th>
+        {columns.map((column) => (
+          <th scope="col" class:list={[{ "sf-highlight": column.name === highlight }]}>
+            {column.name}
+            {column.tag && <span class:list={["sf-tag", `sf-tag-${column.tag}`]}>{column.tag === "soon" ? "Soon" : column.tag}</span>}
+            {column.note && <small>{column.note}</small>}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    {groups.map(([group, rows]) => (
+        <tbody>
+          {group && (
+            <tr class="sf-group">
+              <th scope="rowgroup">{group}</th>
+              <td colspan={span - 1} aria-hidden="true"></td>
+            </tr>
+          )}
+          {rows.map((row) => (
+            <tr>
+              <th scope="row">
+                {row.href ? <a class="sf-label" href={contentHref(row.href)}>{row.label}</a> : <span class="sf-label">{row.label}</span>}
+                {row.tag && <span class:list={["sf-tag", `sf-tag-${row.tag}`]}>{{ beta: "Beta", soon: "Soon", comp: "Complimentary" }[row.tag]}</span>}
+                {row.tip && (
+                  <span class="sf-tip" tabindex="0" role="note" aria-label={row.tip}>
+                    <span class="sf-tip-mark" aria-hidden="true">i</span>
+                    <span class="sf-tip-body" aria-hidden="true">{row.tip}</span>
+                  </span>
+                )}
+              </th>
+              {row.values.map((value, index) => (
+                <td class:list={[{ "sf-highlight": columns[index]?.name === highlight, "sf-none": value === "—" }]} data-label={columns[index]?.name}>
+                  {value === "✓" ? <><span class="sf-yes" aria-hidden="true">✓</span><span class="sf-visually-hidden">Included</span></> : value === "—" ? <><span aria-hidden="true">—</span><span class="sf-visually-hidden">Not included</span></> : value === "TBD" ? <span class="sf-tag sf-tag-tbd" title="To be decided before Business launches">TBD</span> : value}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      ))}
+  </table>
+</div>
+
+<style>
+  .sf-pricing {
+    margin: 1rem 0 2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    border: 1px solid var(--blume-border);
+    border-radius: var(--blume-radius, 0.5rem);
+    scrollbar-width: thin;
+  }
+  .sf-pricing:focus-visible {
+    outline: 2px solid var(--blume-foreground);
+    outline-offset: 2px;
+  }
+  table {
+    /* Every plan column gets a readable width; past the page width the table scrolls sideways. */
+    width: max(100%, calc(13rem + var(--sf-cols) * 10.5rem));
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+  th,
+  td {
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--blume-border);
+  }
+  thead th {
+    background: var(--blume-background);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  thead small {
+    display: block;
+    color: var(--blume-muted-foreground);
+    font-weight: 400;
+    white-space: normal;
+  }
+  /* The row names stay put while plan columns scroll under them. */
+  tbody th[scope="row"],
+  thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 13rem;
+    font-weight: 500;
+    background: var(--blume-background);
+    box-shadow: 1px 0 0 var(--blume-border);
+  }
+  tbody th[scope="row"]:has(.sf-tip:hover, .sf-tip:focus) {
+    z-index: 4;
+  }
+  thead th:first-child {
+    z-index: 3;
+    background: var(--blume-background);
+  }
+  td,
+  thead th:not(:first-child) {
+    scroll-snap-align: start;
+  }
+  @media (max-width: 640px) {
+    table {
+      width: calc(9rem + var(--sf-cols) * 9rem);
+    }
+    tbody th[scope="row"],
+    thead th:first-child {
+      width: 9rem;
+    }
+  }
+  tr.sf-group th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--blume-background);
+    box-shadow: 1px 0 0 var(--blume-border);
+    white-space: nowrap;
+    padding-top: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--blume-muted-foreground);
+  }
+  tbody:last-child tr:last-child > * {
+    border-bottom: 0;
+  }
+  td {
+    color: var(--blume-foreground);
+  }
+  a.sf-label {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 25%, transparent);
+    text-underline-offset: 3px;
+  }
+  a.sf-label:hover {
+    text-decoration-color: currentColor;
+  }
+  .sf-none {
+    color: var(--blume-muted-foreground);
+  }
+  .sf-yes {
+    font-weight: 600;
+  }
+  .sf-highlight {
+    background: var(--blume-muted);
+  }
+  .sf-tag {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1.35rem;
+    vertical-align: 1px;
+    background: var(--blume-muted);
+    color: var(--blume-muted-foreground);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .sf-tag-beta {
+    color: #a16207;
+    background: color-mix(in oklch, #eab308 16%, transparent);
+  }
+  .sf-tag-tbd {
+    margin-left: 0;
+    color: var(--blume-muted-foreground);
+    border: 1px dashed var(--blume-border);
+    background: transparent;
+  }
+  .sf-tag-comp {
+    color: #15803d;
+    background: color-mix(in oklch, #22c55e 16%, transparent);
+  }
+  :global(:root[data-theme="dark"]) .sf-tag-beta {
+    color: #facc15;
+  }
+  :global(:root[data-theme="dark"]) .sf-tag-comp {
+    color: #4ade80;
+  }
+  .sf-tip {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.35rem;
+    border: 1px solid var(--blume-border);
+    border-radius: 999px;
+    color: var(--blume-muted-foreground);
+    font-size: 0.625rem;
+    line-height: 1;
+    cursor: help;
+    vertical-align: 1px;
+  }
+  .sf-tip-mark {
+    font: italic 600 0.625rem/1 Georgia, serif;
+  }
+  .sf-tip:hover,
+  .sf-tip:focus-visible {
+    color: var(--blume-foreground);
+    border-color: var(--blume-foreground);
+    outline: none;
+  }
+  .sf-tip-body {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 0.4rem);
+    z-index: 20;
+    width: max-content;
+    max-width: min(18rem, 70vw);
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--blume-border);
+    border-radius: 0.375rem;
+    background: var(--blume-background);
+    color: var(--blume-foreground);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.45;
+    font-style: normal;
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  }
+  .sf-tip:hover .sf-tip-body,
+  .sf-tip:focus .sf-tip-body {
+    display: block;
+  }
+  /* The table scrolls sideways, which also clips vertically, so the last rows open their tip upward. */
+  tbody:last-child tr:nth-last-child(-n + 3) .sf-tip-body {
+    top: auto;
+    bottom: calc(100% + 0.4rem);
+  }
+  .sf-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+title: Pricing & Limits
+description: Every plan's price, allowances and limits, per team and per Space
+draft: true
+mode: wide
+---
+
+:::warning[Draft: these plans are not live yet]
+Current prices and limits are in [Plans and billing](/billing), [Usage](/usage) and [Limits](/limits).
+:::
+
+Every plan allows commercial use. Hover the <kbd>i</kbd> on any row for what it counts. Tables scroll sideways for every plan.
+
+## Plans at a glance
+
+<PricingTable table="plans" />
+
+## Team pricing & limits
+
+Shared by every Space on a [team](/teams). Your included usage pays first. Track it on [Usage](/usage).
+
+<PricingTable table="team" />
+
+## Space pricing & limits
+
+Set per [Space](/spaces). Boost raises one Space; upgrading raises them all.
+
+<PricingTable table="space" />
+
+## Features
+
+<PricingTable table="features" />
+
+## Example bills
+
+The first two are real usage from the last 30 days.
+
+<PricingTable table="examples" />
+
+## At the limit
+
+| When | Pauses | Keeps working |
+| --- | --- | --- |
+| Personal uses its $1 | New [builds](/ci) and [Workers](/functions) | Deployed Spaces: serving, compute, email |
+| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces |
+| A Space hits one of its limits | That request gets a 429 ([rate limiting](/infrastructure/rate-limiting)), or that publish gets an [error](/errors) naming the limit | The rest of the Space |
+
+## Domains
+
+| Domain | Price | Counts toward your limit |
+| --- | --- | --- |
+| Registered through Spacefast | At cost: registry price plus ICANN fee | No |
+| Registered through WordPress.com, or on Spacefast DNS | Free to connect | No |
+| Any other domain | Free to connect | Yes |
+
+Managed HTTPS is included. See [Custom domains](/domains) and [TLS certificates](/infrastructure/tls-certificates).
+
+## Store and payments <Badge variant="warning">Beta</Badge>
+
+No monthly fee and no Spacefast commission. US card processing rates:
+
+<PricingTable table="payments" />
+
+## Billing questions
+
+### How am I billed?
+
+Monthly, in US dollars, before tax. Plans and Boost bill at the start of the month; usage past what's included bills at the end. Manage it in [Plans and billing](/billing).
+
+### What if I upgrade or downgrade?
+
+Upgrades apply right away, prorated to the day. Downgrades apply at renewal; anything over the new limits keeps serving but becomes read-only until it's back under.
+
+### Can prices change?
+
+We may change our fees going forward, in line with the [Terms of Service](https://wordpress.com/tos/). If the price of a plan you already pay for goes up, you keep your current price for at least 12 months and get at least 60 days' notice. If you don't agree, you can cancel. Price cuts apply to everyone.
+
+### Can I cap my spending?
+
+Yes, on Go, Pro and Business. The cap starts at twice your plan price, with alerts at 50%, 75% and 100%. You're never charged above it, even if usage briefly runs past it.
+
+### Do you have nonprofit or education pricing?
+
+Yes. Contact sales.
+
+## Fine print
+
+| Term | Meaning |
+| --- | --- |
+| <Badge variant="warning">Beta</Badge> | Free while in beta; limits still apply. A price marked \* is subject to change |
+| <Badge variant="success">Complimentary</Badge> | Free for a limited time. The price marked † starts after a month's notice |
+| <Badge>Soon</Badge> | Not available yet; may change before launch |
+| TBD | Not decided yet. Business limits are set before it launches |
+| Generally available | Out of beta. Billing starts at the listed price after a month's notice |
+| Fair use | Normal use for a website or app. If a Space puts an unreasonable or disproportionately large load on our infrastructure, usually file sharing or storage, we ask you to adjust before restricting it. Deployed Spaces keep serving cached traffic |
+| Storage | Measured daily, averaged over the month. The first 1 GB per Space isn't counted for now; it covers platform files on each site. See [Server specs](/infrastructure/server-specs-settings) |
+| Business minimum | $500 a month. Members and usage count toward it; you pay whichever is higher |
+| Example bills | Illustrations. Your bill depends on your actual usage |
+| Abuse | We may restrict a Space that harms others or breaks the [Terms of Service](https://wordpress.com/tos/). We tell you why, and you can always export your data |
+| Privacy | How we handle personal data is in the [Privacy Policy](https://automattic.com/privacy/) |

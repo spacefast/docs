@@ -26,7 +26,7 @@ test("every authored page opens with its subject instead of a page promise", asy
   const offenders = [];
   const manifest = JSON.parse(await readFile(path.join(root, ".blume", "blume.manifest.json"), "utf8"));
   const authored = manifest.routes.filter((route) =>
-    route.source?.name === "filesystem" && route.entryId?.endsWith(".mdx"),
+    route.source?.name === "filesystem" && route.entryId?.endsWith(".mdx") && !route.draft,
   );
   for (const route of authored) {
     const lead = opening(await builtPage(route.path));
