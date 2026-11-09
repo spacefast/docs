@@ -98,7 +98,7 @@ export default capsule({
     }),
   },
   endpoints: {
-    status: endpoint({ mode: "read", method: "GET", path: "/api/status" }, () => text("ok")),
+    status: endpoint({ method: "GET", path: "/api/status" }, () => text("ok")),
   },
 });
 ```
@@ -149,7 +149,7 @@ An action runs without a transaction. It reads the database but cannot write to 
 
 ### Endpoints
 
-`endpoint(route, handler)` takes `{ method, path, mode }`, where `mode` is `"read"` or `"write"`. Both `method` and `path` must be literal strings, because the compiler reads them from source without running it. The handler gets `(ctx, req)`, where `req` carries `method`, `path`, `url`, `headers`, `query`, and `text()` / `json()` / `bytes()`.
+`endpoint(route, handler)` takes `{ method, path, readOnly? }`. `GET` and `HEAD` are read endpoints by default; every other method is a write endpoint. Set `readOnly: true` for a read-only `POST`, or `readOnly: false` for a `GET` that writes. Both `method` and `path` must be literal strings, because the compiler reads them from source without running it. The handler gets `(ctx, req)`, where `req` carries `method`, `path`, `url`, `headers`, `query`, and `text()` / `json()` / `bytes()`.
 
 Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for a 204, `redirect(url)` for a 302, or `new ImageResponse(element)` for a rendered 1200x630 image.
 
