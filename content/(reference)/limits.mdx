@@ -9,15 +9,7 @@ Plan allowances, platform limits, and the errors returned when you exceed them.
 
 ## Plan allowances
 
-See [Plans and billing](/billing) for prices and [Usage](/usage) for metered allowances.
-
-<include>/_pricing/limits.md</include>
-
-<include>/_pricing/capabilities.md</include>
-
-Free and Go cannot buy extra editing seats. Pending invitations reserve capacity but are not billed. Domains registered through Spacefast or WordPress.com, or using Spacefast DNS, do not count toward the Free plan's domain allowance.
-
-Free allowance exhaustion triggers review and may lead to suspension. Paid plans bill usage above their shared credit.
+Every plan's allowances and per-Space limits, and what Boost raises, are on [Pricing & Limits](/pricing). The limits below are the same on every plan.
 
 ## Enforcement
 
@@ -77,8 +69,8 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 | Unfinished publish drafts | 24 hours | The draft is swept |
 | Deleted team | 30 days | The team is reaped |
 | Past-due account | 7 days | The account is suspended and its spaces go dark |
-| Activity events | Plan window, {{free-auditLogRetentionHours}} hours on Free | Events are deleted |
-| HTTP access logs | Plan window, {{free-buildAccessLogRetentionHours}} hours on Free | Reads are clamped to the window |
+| Activity history | Plan window, see [Pricing & Limits](/pricing) | Older entries are hidden, not deleted |
+| Logs | Plan window, see [Pricing & Limits](/pricing) | Reads are clamped to the window |
 
 The two anonymous rows work together. A space that stops serving at its deadline is still recoverable through the claim link for another 7 days. Claim-page loads can push that deadline out by up to 6 hours. See [Publish without an account](/anonymous-and-claim).
 
