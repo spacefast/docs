@@ -17,7 +17,7 @@ export const SPACE_PLANS = ["Personal", "Go", "Pro", "Business", "Boost", "Enter
 const row = (label, tip, values, tag) => ({ label, tip, values, tag });
 const NO_LIMIT = "No predefined limit";
 const all5 = (value) => [value, value, value, value, value];
-const CPU = "$0.119 per CPU-hour";
+const CPU = "$0.1188 per CPU-hour";
 
 // Per team, per month: [Personal, Go, Pro, Enterprise]. Business is added from BUSINESS_TEAM.
 const TEAM = [
@@ -30,8 +30,8 @@ const TEAM = [
   ["Compute", [
     row("Compute", "Active CPU time running your Space's code, including Zero apps. Time spent waiting on the network or the database doesn't count.",
       [CPU, CPU, CPU, "Contract"]),
-    row("MySQL compute", "Active CPU time your database spends answering queries. Memories and other team data we keep for you are part of this.",
-      [CPU, CPU, CPU, "Contract"]),
+    row("MySQL compute", "Active CPU time your database spends answering queries. Free for a limited time while we finish measuring it.",
+      ["Free now, then $0.1188 per CPU-hour†", "Free now, then $0.1188 per CPU-hour†", "Free now, then $0.1188 per CPU-hour†", "Contract"], "comp"),
     row("Dynamic requests", "Requests that run PHP. Requests served from cache are free and never count.",
       ["1 million, then $0.25 per million", "3 million, then $0.25 per million", "10 million, then $0.25 per million", "Contract"]),
     row("CI compute (builds)", "Elapsed minutes on a 4 vCPU, 8 GB build machine, including install time. Up to 1 / 1 / 3 builds at once.",
@@ -49,7 +49,7 @@ const TEAM = [
   ]],
   ["Storage", [
     row("Storage", "Everything a Space keeps on its site: published versions, media and its MySQL database. Measured daily and averaged over the month. For now, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site.",
-      ["1 GB per Space, then $0.10 per GB-month", "1 GB per Space, then $0.10 per GB-month", "1 GB per Space, then $0.10 per GB-month", "Contract"]),
+      ["Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Contract"], "comp"),
     row("Bucket storage", "Files your app stores through the storage API. Free during the beta.",
       ["Free now; 10 GB, then $0.016 per GB-month*", "Free now; 25 GB, then $0.016 per GB-month*", "Free now; 100 GB, then $0.016 per GB-month*", "Contract"], "beta"),
     row("Source control storage", "Your Spaces' Git repositories. Free for a limited time while we finish measuring it.",
@@ -225,9 +225,9 @@ const BUSINESS_TEAM = {
   "Included usage": "None",
   Members: "$25/month each",
   Compute: CPU,
-  "MySQL compute": CPU,
+  "MySQL compute": "Free now, then $0.1188 per CPU-hour†",
   "Workers requests": "$0.30 per million",
-  Storage: "1 GB per Space, then $0.10 per GB-month",
+  Storage: "Free now; 1 GB per Space, then $0.10 per GB-month†",
 };
 const BUSINESS_SPACE = {
   "Advanced crons": TBD,
@@ -270,11 +270,11 @@ export const EXAMPLES = [
     lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of compute", "$0.15"], ["0.83 GB stored", "Under the 1 GB not counted"], ["247 build minutes", "100 included, then $0.81"]],
     note: "Uses $0.96 of the $1 included. On Go, the same Space uses $0.15 of $5." },
   { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client sites and five members.",
-    lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of compute, 10 of MySQL", "$5.95"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "30 GB counted, $3.00"], ["1,500 build minutes", "Included"]],
-    note: "Uses $8.95 of the $15 included." },
+    lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of compute, 10 of MySQL", "$4.75 (MySQL free for now)"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "Free for now"], ["1,500 build minutes", "Included"]],
+    note: "Uses $4.75 of the $15 included." },
   { title: "A busy app", plan: "Pro + Boost", price: "$24", basis: "Estimate: one app with 10 million requests a month, 70% cached.",
-    lines: [["3 million dynamic requests", "Included"], ["25 CPU-hours of compute, 8.3 of MySQL", "$3.97"], ["600 GB uncached", "500 included, then $4.00"], ["10 GB stored", "9 GB counted, $0.90"], ["5 million Workers requests", "$1.50"]],
-    note: "Uses $10.37 of the $15 included. Boost adds $9." },
+    lines: [["3 million dynamic requests", "Included"], ["25 CPU-hours of compute, 8.3 of MySQL", "$2.97 (MySQL free for now)"], ["600 GB uncached", "500 included, then $4.00"], ["10 GB stored", "Free for now"], ["5 million Workers requests", "$1.50"]],
+    note: "Uses $8.47 of the $15 included. Boost adds $9." },
 ];
 
 // Card processing for Store and payments, at US rates.
