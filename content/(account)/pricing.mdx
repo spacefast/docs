@@ -1,0 +1,148 @@
+---
+title: Pricing & Limits
+description: Personal, Go, Pro, Business, Enterprise and Boost, with what each plan includes per team and per Space
+draft: true
+mode: wide
+---
+
+:::warning[Draft: these plans are not live yet]
+This page previews plans that haven't launched. Current prices and limits are in [Plans and billing](/billing), [Usage](/usage) and [Limits](/limits).
+:::
+
+Every plan allows commercial use and comes with usage included. Each step up raises what your team gets each month and what every Space can handle. Boost raises one Space further when it needs it.
+
+## Plans
+
+<include>/_pricing-next/plans.mdx</include>
+
+## What it costs in practice
+
+The first three use real usage from every Space on Spacefast over the last 30 days. The last two are estimates for bigger workloads.
+
+<include>/_pricing-next/examples.mdx</include>
+
+## For your team, every month
+
+Shared by every Space on the team and reset each month. Each line says what's included and what more costs. Your included usage pays for it first; you're only billed past that.
+
+<include>/_pricing-next/team.mdx</include>
+
+## For each Space
+
+Each Space runs on its own isolated site, so these are reserved for it. Your plan sets them for every Space. To go higher on one Space, add Boost; to go higher on all of them, upgrade.
+
+<include>/_pricing-next/space.mdx</include>
+
+## Domains
+
+<CardGroup cols={2}>
+<Card title="Registration and renewal at cost">
+
+You pay what the registry charges us, plus the ICANN fee, with nothing added, for registration and every renewal. Prices for every ending are on the domain prices page.
+
+</Card>
+<Card title="They never count against your limit">
+
+Domains registered through Spacefast or WordPress.com, and domains using Spacefast DNS, don't count toward your plan's custom domains. Managed HTTPS is included for every domain.
+
+</Card>
+</CardGroup>
+
+## Store and payments <Badge variant="warning">Beta</Badge>
+
+Sell from any Space with no monthly fee and no Spacefast commission. You pay only card processing, at these US rates; other countries have their own. In private beta.
+
+<include>/_pricing-next/payments.mdx</include>
+
+## Infrastructure on every plan
+
+| On every plan | What you get |
+| --- | --- |
+| **28+** | edge locations serving cached pages |
+| **4** | datacenters: Amsterdam, Burbank, Washington DC, Dallas |
+| **Hourly** | database backups, plus daily file backups |
+| **Firewall** | web application firewall and DDoS protection |
+| **Failover** | full datacenter redundancy with automated failover |
+| **2 to 10+** | compute workers per Space, bursting up to 110 when the platform has room |
+
+<Expandable title="What is automated failover?">
+
+Each Space's data is kept in more than one place. If the server running your Space fails, the platform detects it and moves your Space to healthy hardware on its own, without you doing anything and without losing data. Visitors keep getting cached pages from the edge while that happens. See [Automated failover](/infrastructure/automated-failover) for how the switch works.
+
+</Expandable>
+
+## What happens at the limit
+
+<CardGroup cols={3}>
+<Card title="Personal">
+
+When your $1 of usage runs out, new builds and Workers pause until next month or until you upgrade. Deployed Spaces keep serving, running PHP and sending email. Nothing is deleted.
+
+</Card>
+<Card title="Go, Pro and Business">
+
+Usage past what's included bills at the listed prices, up to the spending cap you set. At the cap, new builds and Workers pause and you're not charged for anything above it. Deployed Spaces keep serving.
+
+</Card>
+<Card title="A Space's own limits">
+
+Requests beyond a Space's compute workers wait briefly, then get a 429 with Retry-After. Publishes and crons over a limit get an error that names the limit and how to raise it.
+
+</Card>
+</CardGroup>
+
+## Billing questions
+
+<Accordion>
+<AccordionItem title="How am I billed?" defaultOpen>
+
+Monthly, in US dollars, before tax. Plans and Boost bill at the start of the month. Usage past what's included bills at the end of the month.
+
+</AccordionItem>
+<AccordionItem title="What happens when I upgrade or downgrade?">
+
+Upgrades apply right away, prorated to the day. When you downgrade, your limits drop at renewal. Anything over the new limits keeps serving but becomes read-only: you can delete or export it, but not add to it, until it's back under the limit.
+
+</AccordionItem>
+<AccordionItem title="Can prices change?">
+
+We may change our fees going forward, in line with our Terms of Service. New prices apply to new purchases right away. If we raise the price of a plan you already pay for, you keep your current price for at least 12 months, and we give you at least 60 days' notice before your renewal price changes. If you don't agree with a change, you can cancel your plan. Price cuts apply to everyone at their next bill.
+
+</AccordionItem>
+<AccordionItem title="Can I cap my spending?">
+
+Yes, on Go, Pro and Business. Set a monthly cap; it starts at twice your plan price, with alerts at 50%, 75% and 100%. Usage can briefly go past the cap while we stop it, depending on server availability, and you're never charged for anything above it. At the cap, new builds and Workers pause until you raise the cap or the month ends. Deployed Spaces keep serving.
+
+</AccordionItem>
+<AccordionItem title="Do prices depend on the datacenter?">
+
+Not today. Spaces run in Amsterdam, Burbank, Washington DC and Dallas, and every datacenter costs the same. Prices may differ by datacenter in the future, under the same notice rules.
+
+</AccordionItem>
+<AccordionItem title="Do you have nonprofit or education pricing?">
+
+Yes. Contact sales.
+
+</AccordionItem>
+</Accordion>
+
+## Every feature
+
+<Badge variant="warning">Beta</Badge> is free during the beta. <Badge>Soon</Badge> is not available yet.
+
+<include>/_pricing-next/features.mdx</include>
+
+## The fine print
+
+- **<Badge variant="warning">Beta</Badge> Beta**: A feature we're still building with customers. It's free on every plan while it's in beta, and its limits still apply. Where we already know the price after the beta, it's listed with an asterisk. \* Subject to change.
+- **General availability**: When a feature leaves beta, it becomes generally available and starts billing at its listed price. We give you a month's notice first.
+- **<Badge variant="success">Complimentary</Badge> Complimentary**: Free for a limited time while we finish measuring it. The price it will have is listed with a dagger. † Starts after a month's notice.
+- **<Badge>Soon</Badge> Coming soon**: Not available yet. Plans, prices and limits for anything coming soon can change before launch.
+- **Fair use**: Normal use for a website or app. A Space may not impose an unreasonable or disproportionately large load on our infrastructure, which usually only happens when it's used for file sharing or storage. If a Space's storage or bandwidth burdens our systems, we'll ask you to make adjustments before we restrict its resources. A person reviews it first, and deployed Spaces keep serving cached traffic.
+- **Storage**: Measured once a day and averaged over the month. For now, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site and will go away once those files move out of your Space's storage.
+- **Examples**: Example bills are illustrations. Your bill depends on what your Spaces actually use.
+- **Prices**: In US dollars, before tax. Plans and Boost bill monthly; usage past what's included bills at the end of the month.
+- **Datacenters**: Prices can differ by datacenter in the future. Today there is no difference.
+- **Fair use with minimums**: On Business, fair-use items come with published minimums you can always count on. We'll set them before Business launches.
+- **Business minimum**: Business starts at $500 a month. Members ($25 each) and usage count toward it, and you pay whichever is higher. The $100 welcome credit applies to usage in your first month only.
+- **Abuse**: We may restrict a Space that harms other customers or breaks our Terms of Service. We tell you why, and your data stays yours to export.

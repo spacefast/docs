@@ -1,4 +1,4 @@
-import { readdir } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const GENERATED_ROUTES = [
@@ -61,9 +61,15 @@ export function routesFromSidebar(source) {
   return routes;
 }
 
+// `blume build` drops a page whose frontmatter sets `draft: true`, so a draft
+// is not a built route until it ships.
+export const isDraft = (source) =>
+  /^draft:\s*true\s*$/mu.test(/^---\n([\s\S]*?)\n---(?:\n|$)/u.exec(source)?.[1] ?? "");
+
 export async function readSidebarRoutes(root = process.cwd()) {
   const routes = new Set(GENERATED_ROUTES);
   for (const file of await authoredFiles(root)) {
+    if (isDraft(await readFile(path.join(root, "content", file), "utf8"))) continue;
     const route = routeFromContentPath(file);
     if (route && route !== "/cli/reference") routes.add(route);
   }

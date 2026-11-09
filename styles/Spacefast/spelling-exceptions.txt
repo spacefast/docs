@@ -2,6 +2,7 @@ _headers
 _redirects
 _site
 accountless
+Afterpay
 allowlist
 allowlisted
 alphanumerics
@@ -104,6 +105,7 @@ jittered
 joinable
 JWTs
 keyset
+Klarna
 Lakebed
 letterboxed
 letterboxing

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { buildLlmsIndex, discoveryFileForUrl, routeOf } from "./build-llms-index.mjs";
-import { routesFromSidebar } from "./sidebar-routes.mjs";
+import { isDraft, routesFromSidebar } from "./sidebar-routes.mjs";
 
 const entry = (route, title = route) =>
   `- [${title}](https://spacefast.com/docs${route === "/" ? "" : route}): A summary.`;
@@ -150,6 +150,12 @@ test("the sidebar parser agrees with the real config", async () => {
   assert.ok(routes.has("/errors"));
   assert.ok(routes.has("/changelog"));
   assert.ok(routes.size > 40);
+});
+
+test("a draft page is not a built route; only its frontmatter decides", () => {
+  assert.equal(isDraft("---\ntitle: Next\ndraft: true\n---\n\nBody."), true);
+  assert.equal(isDraft("---\ntitle: Live\n---\n\n```yaml\ndraft: true\n```"), false);
+  assert.equal(isDraft("---\ndraft: false\n---\n"), false);
 });
 
 test("the sidebar parser rejects a config it cannot read", () => {
