@@ -3,7 +3,8 @@
 // to the Docs home. Docs are always served inside the Website artifact at
 // /docs, so the configured root-relative `logo.href` ("/") is emitted as is,
 // without the deployment base, and reaches the Website home on whatever origin
-// serves the page.
+// serves the page. The Website is not part of the Docs' client router, so the
+// mark's link does a plain page load instead of a router fetch first.
 import { withBase } from "blume/components/islands/base-path.ts";
 import type { BlumeLogo } from "blume/core/data.ts";
 
@@ -16,16 +17,20 @@ interface Props {
 const { site, logo } = Astro.props;
 const label = logo?.text ?? site.title;
 const link = "inline-flex items-center transition-opacity hover:opacity-80";
+// The config inlines the wordmark so it follows the theme. Fail the build
+// rather than ship a header whose mark silently disappeared.
+if (!logo?.svg) throw new Error("components/Logo.astro needs blume.config.ts `logo` to resolve to an inline SVG.");
 ---
 
 <div class="flex min-w-0 items-center gap-2" data-sf-brand>
-  {
-    logo?.svg && (
-      <a aria-label={`${logo.alt || "Spacefast"} home`} class:list={[link, "shrink-0 text-foreground"]} href={logo.href}>
-        <span aria-hidden="true" class="inline-flex h-5 items-center [&>svg]:h-5 [&>svg]:w-auto" set:html={logo.svg} />
-      </a>
-    )
-  }
+  <a
+    aria-label={`${logo.alt || "Spacefast"} home`}
+    class:list={[link, "shrink-0 text-foreground"]}
+    data-astro-reload
+    href={logo.href}
+  >
+    <span aria-hidden="true" class="inline-flex h-5 items-center [&>svg]:h-5 [&>svg]:w-auto" set:html={logo.svg} />
+  </a>
   {
     label && (
       <a class:list={[link, "min-w-0 font-semibold text-base text-foreground"]} href={withBase("/")}>
