@@ -295,7 +295,7 @@ Start the local dev server.
 sf dev
 ```
 
-In a Pages project, `sf dev` serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. It is not a local mirror of what publish serves, and there is no static file server for your site on that path. For a [First](/first) app, run `sf first dev`. A Zero 0.8 app, one that declares `"runtime": { "kind": "zero" }` in `sf.jsonc`, gets its own Zero 0.8 dev server from `sf dev` instead of a Pages preview. See [Zero 0.8](/zero-migrate#keep-working-on-a-08-app). For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
+In a Pages project, `sf dev` serves a Pages preview with sample data and the publish-time expander at `/_spacefast/pages/<id>`. It is not a local mirror of what publish serves, and there is no static file server for your site on that path. For a [First](/first) app, run `sf first dev`. A Zero 0.8 app, one that declares `"runtime": { "kind": "zero" }` in `sf.jsonc`, gets its own Zero 0.8 dev server from `sf dev` instead of a Pages preview. See [Zero 0.8](/zero#keep-working-on-a-08-app). For a framework project, use that framework's own dev server (`next dev`, `vite`), then run `sf publish` when you're ready.
 
 | Flag | Default | What it does |
 | --- | --- | --- |

@@ -10,12 +10,15 @@ import path from "node:path";
 
 const root = process.cwd();
 
-// 1. File moves. The v2 page and the CLI page become /first and /cli/first.
-// zero-migrate stays: it is the page about Zero 0.8.
+// 1. File moves, in order. The v2 page and its CLI page become /first and
+// /cli/first; then the Zero 0.8 page takes over /zero, which documents Zero.
+// A move runs only while its source exists and its target does not.
 const moves = [
   ["content/(dynamic)/zero.mdx", "content/(dynamic)/first.mdx"],
   ["content/cli/zero.mdx", "content/cli/first.mdx"],
+  ["content/(dynamic)/zero-migrate.mdx", "content/(dynamic)/zero.mdx"],
 ];
+const zero08Page = path.join("content", "(dynamic)", "zero.mdx");
 
 // 2. Names that must survive the text pass untouched, because Zero 0.8 or the
 // production API and engine already ship them. Each is swapped for a token
@@ -28,8 +31,8 @@ const kept = [
   "@spacefast/zero/client",
   "@spacefast/zero",
   "--from zero-0.8",
-  "/zero-migrate",
-  "zero-migrate",
+  // Links to the Zero 0.8 page at /zero; longer entries before shorter ones.
+  "Zero 0.8](/zero",
   "Zero 0.8",
   "Zero 0.9",
   "older Zero app",
@@ -86,6 +89,10 @@ const replacements = [
   ["(/cli/zero#", "(/cli/first#"],
   ['href="/cli/zero"', 'href="/cli/first"'],
   ["#sf-zero-", "#sf-first-"],
+  // Navigation entries in meta.ts.
+  ['["zero", "functions"', '["first", "functions"'],
+  ['"wordpress", "zero-migrate"]', '"wordpress", "zero"]'],
+  ['    "zero",\n', '    "first",\n'],
   // Files, folders and wire names of a First app.
   ["zero.config.ts", "first.config.ts"],
   ["zero.gen.ts", "first.gen.ts"],
@@ -113,8 +120,6 @@ const replacements = [
   ["static\\|zero\\|functions", "static\\|first\\|functions"],
   ["`zero` writes a starter", "`first` writes a starter"],
   ["Zero compiler", "First compiler"],
-  // Navigation entries in meta.ts.
-  ['"zero"', '"first"'],
   // Product name in prose, after every 0.8 phrase is protected above.
   ["Zero v2", "First"],
   ["Zero's", "First's"],
@@ -158,22 +163,27 @@ async function files(entry) {
   return out;
 }
 
+// Links to the Zero 0.8 page, rewritten before any name is protected: the page
+// moved from /zero-migrate to /zero, and its title is now "Zero 0.8".
+const prepass = [["[Migrate an older Zero app](/zero-migrate", "[Zero 0.8](/zero"]];
+
 function renameText(source, file) {
   // The Zero 0.8 page names the old runtime throughout; only its links to the
   // First pages and First's own names change there.
-  const zero08Page = file.endsWith(path.join("(dynamic)", "zero-migrate.mdx"));
+  const isZero08Page = file === path.join(root, zero08Page);
   const tokens = [];
   let text = source;
+  for (const [from, to] of prepass) text = text.split(from).join(to);
   const protect = (value) => {
     text = text.split(value).join(`\u0000${tokens.length}\u0000`);
     tokens.push(value);
   };
   for (const value of kept) protect(value);
-  if (zero08Page) {
+  if (isZero08Page) {
     for (const value of ["Zero app", "Zero apps", "a Zero", "Zero's", "Zero 0.9", "Zero."]) protect(value);
   }
   for (const [from, to] of replacements) {
-    if (zero08Page && (from === "Zero" || from === "Zero's")) continue;
+    if (isZero08Page && (from === "Zero" || from === "Zero's")) continue;
     text = text.split(from).join(to);
   }
   return text.replace(/\u0000(\d+)\u0000/gu, (_, index) => tokens[Number(index)]);
@@ -181,7 +191,7 @@ function renameText(source, file) {
 
 let moved = 0;
 for (const [from, to] of moves) {
-  if (await exists(path.join(root, from))) {
+  if ((await exists(path.join(root, from))) && !(await exists(path.join(root, to)))) {
     await rename(path.join(root, from), path.join(root, to));
     moved += 1;
   }
