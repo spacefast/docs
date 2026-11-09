@@ -53,7 +53,7 @@ const span = columns.length + 1;
               </th>
               {row.values.map((value, index) => (
                 <td class:list={[{ "sf-highlight": columns[index]?.name === highlight, "sf-none": value === "—" }]} data-label={columns[index]?.name}>
-                  {value === "✓" ? <><span class="sf-yes" aria-hidden="true">✓</span><span class="sf-visually-hidden">Included</span></> : value === "—" ? <><span aria-hidden="true">—</span><span class="sf-visually-hidden">Not included</span></> : value === "TBD" ? <span class="sf-tag sf-tag-tbd" title="To be decided before Business launches">TBD</span> : value}
+                  {value === "✓" ? <><span class="sf-yes" aria-hidden="true">✓</span><span class="sf-visually-hidden">Included</span></> : value === "—" ? <><span aria-hidden="true">—</span><span class="sf-visually-hidden">Not included</span></> : value}
                 </td>
               ))}
             </tr>
@@ -190,12 +190,6 @@ const span = columns.length + 1;
   .sf-tag-beta {
     color: #a16207;
     background: color-mix(in oklch, #eab308 16%, transparent);
-  }
-  .sf-tag-tbd {
-    margin-left: 0;
-    color: var(--blume-muted-foreground);
-    border: 1px dashed var(--blume-border);
-    background: transparent;
   }
   .sf-tag-comp {
     color: #15803d;
