@@ -296,18 +296,15 @@ export const CARDS = [
 export const BOOST = { name: "Boost", price: "$9", per: "per Space, per month", tag: "On Go and up, for the Space that needs more.",
   items: ["8 compute workers, bursting to 16", "2 GB compute memory per request", "250 MB functions, 300 s run time", "50 GB disk, 1 TB VideoPress", "40 crons, including crontab", "More redirects and firewall rules", "Custom certificate", "5,000 more emails a day"] };
 
-// Example bills. The first three use real usage across every Space in the last
+// Example bills. The first two use real usage across every Space in the last
 // 30 days (median and 99th percentile per Space, measured 9 Nov 2026).
 export const EXAMPLES = [
   { title: "A typical Space", plan: "Personal", price: "$0", basis: "Real usage: the median Space over the last 30 days.",
     lines: [["387 dynamic requests", "Included"], ["0.13 CPU-hours of PHP", "$0.02"], ["0.28 GB stored", "Under the 1 GB not counted"], ["2 build minutes", "Included"]],
     note: "Uses $0.02 of the $1 included." },
-  { title: "A busy Space", plan: "Personal", price: "$0", basis: "Real usage: busier than 99% of Spaces over the last 30 days.",
+  { title: "A busy Space", plan: "Personal", price: "$0", basis: "Real usage: busier than 99% of Spaces, plus as many build minutes as a team in the top 1%, over the last 30 days.",
     lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of PHP", "$0.15"], ["0.83 GB stored", "Under the 1 GB not counted"], ["247 build minutes", "100 included, then $0.81"]],
     note: "Uses $0.96 of the $1 included. On Go, the same Space uses $0.15 of $5." },
-  { title: "Ten busy Spaces", plan: "Go", price: "$5", basis: "Real usage: ten Spaces like the one above on one team.",
-    lines: [["406,860 dynamic requests", "Included"], ["12.9 CPU-hours of PHP", "$1.54"], ["8.3 GB stored", "Under 1 GB per Space, not counted"], ["247 build minutes", "Included"]],
-    note: "Uses $1.54 of the $5 included." },
   { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client sites and five members.",
     lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of PHP, 10 of MySQL", "$5.95"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "30 GB counted, $3.00"], ["1,500 build minutes", "Included"]],
     note: "Uses $8.95 of the $15 included." },
