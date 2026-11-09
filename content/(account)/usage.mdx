@@ -1,47 +1,11 @@
 ---
 title: Usage
-description: Free allowances, Go and Plus usage rates, storage classes, and how to read current usage
+description: How to read your team's and each Space's current usage
 sidebar:
   order: 4
 ---
 
-Free has fixed allowances. Go and Plus use shared monthly credit: {{go-credit}} on Go and {{plus-credit}} on Plus. Usage above the credit is billed monthly at the same rates on both plans.
-
-## Free allowances
-
-These are per team each month, except storage, which is a retained-byte allowance, and email, which has a daily limit. Free is for personal and non-commercial use.
-
-<include>/_pricing/usage.md</include>
-
-The CPU allowance combines PHP, Zero and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
-
-Exceeding an allowance alerts Spacefast for review. A Space may be suspended until the applicable allowance resets, retained storage falls below its limit, or the team upgrades. Data stays and exports remain available.
-
-## Go and Plus rates
-
-Prices are USD before tax. The included quantities below belong to the whole team, not to each Space. Remaining charges draw from one shared monthly credit.
-
-CPU means active processing time, excluding waits. There is no memory charge. Build minutes measure elapsed machine time, including installation and idle time; platform-caused retries are not billed.
-
-An invocation is one PHP or Zero origin execution, including a request that bypasses the cache or cron run. Cached hits and Worker requests are excluded. Workers have their own request meter.
-
-Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or Zero response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
-
-Email counts recipient deliveries, so one message to three people counts as three. Daily delivery safeguards still apply. A credit balance does not override them; check the current entitlement before sending.
-
-## Storage classes
-
-Files and media include app-user uploads, media, source and Git history, non-live versions, and customer-saved backup archives. Their paid rate appears in the usage table above. Storage uses time-weighted logical bytes, not upload volume. GB is decimal.
-
-Live storage is the currently published version's files plus SQL data and indexes. It has no usage charge. Both classes share the Free storage pool in the usage table above.
-
-Each logical byte belongs to one class. Internal replicas and recovery copies do not add customer charges. Files downloaded to your own computer do not become retained Spacefast storage. If you keep backup archives in Spacefast, their average retained size counts as files and media.
-
-## Scheduled jobs and backups
-
-Scheduling has no separate fee. Runs use ordinary CPU, invocation, SQL and Workers meters as applicable. Email and saved output use their existing meters. Scheduled response bodies retained on the server add no delivery charge; a manual HTTPS request has its own delivery path.
-
-Managed recovery copies have no separate customer charge.
+Allowances, unit prices and what each meter counts are on [Pricing & Limits](/pricing). This page covers reading your current usage.
 
 ## Read current usage
 
@@ -57,9 +21,9 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 | Meter | Field | What it counts | At the limit |
 | --- | --- | --- | --- |
-| Spaces | `spaces` | Live spaces in the team | Blocks on Free. `409` `space_quota_exceeded` |
+| Spaces | `spaces` | Live spaces in the team | Blocks at the plan limit. `409` `space_quota_exceeded` |
 | Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` `domain_quota_exceeded` |
-| Team members | `members` | Billable seats, live members plus pending invitations | Blocks on Free. `409` `team_member_quota_exceeded` |
+| Team members | `members` | Billable seats, live members plus pending invitations | Blocks at the plan limit. `409` `team_member_quota_exceeded` |
 | Storage | `storageBytes` | Disk your spaces occupy | Displayed only. Nothing blocks |
 | Publishes | `deploysToday` | Publishes since the UTC day started, your pushes and CI builds pooled | Warns only. Publishing continues |
 
