@@ -11,7 +11,7 @@ Spacefast draws five pages for a Space that has not written its own. Three level
 | --- | --- | --- |
 | Tokens | `theme.json` | Every plan |
 | Chrome | `_layout.html` | Every plan |
-| The whole document | `_pages/<id>.html` | Plus and up |
+| The whole document | `_pages/<id>.html` | Pro and up |
 
 All three are ordinary files in the directory you publish, so they roll forward and back with the version.
 
@@ -98,9 +98,9 @@ The contract is short.
 
 A layout resolves upward from the request's directory, so `docs/_layout.html` wraps the pages under `/docs/` and the root one covers everything else. The nearest ancestor wins.
 
-## `_pages/<id>.html` <Badge variant="accent">Plus and up</Badge>
+## `_pages/<id>.html` <Badge variant="accent">Pro and up</Badge>
 
-A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives. The layout does not apply, and the theme controls stop repainting the page. This full takeover requires Plus or Enterprise.
+A file at `_pages/<id>.html` replaces that page's document entirely. Nothing of the built-in template survives. The layout does not apply, and the theme controls stop repainting the page. This full takeover requires Pro or Enterprise.
 
 Each file has to be a complete HTML document beginning with `<!doctype html>`, and each is capped at 2 MiB. Like layouts, they resolve upward from the request's directory.
 
@@ -128,14 +128,14 @@ An `index` page that never renders `<sf-files>` publishes with a warning rather 
 
 ### The plan gate
 
-`_pages/*.html` full-page takeovers require Plus or Enterprise. Check the team's `pagesTemplates` entitlement. Publishing without it fails:
+`_pages/*.html` full-page takeovers require Pro or Enterprise. Check the team's `pagesTemplates` entitlement. Publishing without it fails:
 
 ```text
 pages_templates_not_entitled
 _pages/*.html takeovers require Plus or Enterprise. Remove the templates or upgrade before publishing.
 ```
 
-`_layout.html` is not gated. Free and Go Spaces can wrap the built-in page; Spaces on Plus or Enterprise can replace the whole document.
+`_layout.html` is not gated. Personal and Go Spaces can wrap the built-in page; Spaces on Pro or Enterprise can replace the whole document.
 
 ## Write them
 

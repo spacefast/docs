@@ -1,47 +1,11 @@
 ---
 title: Plans and billing
-description: Free, Go and Plus plans, shared usage credit, editor seats, and billing terms
+description: Change or cancel a plan, read it through the API, and what happens when a payment fails
 sidebar:
   order: 3
 ---
 
-Prices are USD before tax, per team. Paid plans are billed monthly.
-
-## Plans
-
-<include>/_pricing/plans.md</include>
-
-Free needs no card and is for personal, non-commercial projects. Enterprise plans are arranged through WordPress VIP.
-
-<include>/_pricing/limits.md</include>
-
-<include>/_pricing/capabilities.md</include>
-
-See [Usage](/usage) for Free allowances, shared pools, and paid usage rates.
-
-PHP, Zero, Workers, SQL, private sharing, managed publishing, Git, CLI, API, MCP and exports are available across plans. Usage limits still apply. Connecting a domain has no extra fee. Domain registration, renewal and third-party licenses are separate purchases.
-
-Domains registered through Spacefast or WordPress.com, and domains using Spacefast DNS, do not count toward the Free plan's {{free-customDomains}}-domain allowance. Other connected domains and individually connected subdomains count toward it. Managed HTTPS is included. Wildcards such as `*.example.com` require Plus or Enterprise.
-
-## Shared usage credit
-
-Go and Plus share one credit across all the team's Spaces and members. It resets monthly and does not roll over. Included cached delivery, invocations and spam checks are applied before their remaining usage draws from the credit.
-
-The monthly bill is:
-
-- The plan price.
-- Extra Plus seats, at {{plus-extra-seat}} each beyond the included {{plus-seats}}.
-- Metered usage above the team's credit.
-
-For example, a Go team with $8 of metered usage pays {{go-example-total}} total: the {{go-price}} plan and {{go-example-overage}} of usage above its credit. A Plus team with 12 editors and $20 of usage pays {{plus-example-total}}: {{plus-price}} for the plan, {{plus-example-seats}} for seats and {{plus-example-overage}} for extra usage.
-
-## Seats
-
-Free includes {{free-seats}} editor and Go includes {{go-seats}} editor, the owner. Additional seats cannot be bought on those plans; a second team member needs Plus.
-
-Plus includes {{plus-seats}} active team members, including the owner. Each additional active member costs {{plus-extra-seat}} a month, prorated to the day. Pending invitations reserve capacity but are not billed. Cancel stale invitations if the team cannot invite another person.
-
-Reviewers, commenters, agents acting for an owner, and app users do not add seats. A Space-level editor grant is not a team membership. Seat fees do not add usage credit.
+Prices, allowances and limits for every plan are on [Pricing & Limits](/pricing). This page covers managing a plan.
 
 ## Upgrade, downgrade or cancel
 
@@ -51,7 +15,7 @@ Upgrades apply immediately and prorate to the day. Downgrades apply at renewal. 
 
 ## Read the plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Go can appear as `personal` or `go`, and Plus as `work` or `plus`. The other codes are `free`, `enterprise` and `internal`.
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Plan codes are stable: `free` is Personal, `go` is Go and `plus` is Pro. The others are `gold`, `enterprise` and `internal`.
 
 Use the returned entitlements for feature checks.
 
