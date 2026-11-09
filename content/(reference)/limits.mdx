@@ -77,7 +77,7 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 | Unfinished publish drafts | 24 hours | The draft is swept |
 | Deleted team | 30 days | The team is reaped |
 | Past-due account | 7 days | The account is suspended and its spaces go dark |
-| Activity events | Plan window, {{free-auditLogRetentionHours}} hours on Free | Events are deleted |
+| Activity events | Plan window, {{free-auditLogRetentionHours}} hours on Free | Older events stop showing in your feeds |
 | HTTP access logs | Plan window, {{free-buildAccessLogRetentionHours}} hours on Free | Reads are clamped to the window |
 
 The two anonymous rows work together. A space that stops serving at its deadline is still recoverable through the claim link for another 7 days. Claim-page loads can push that deadline out by up to 6 hours. See [Publish without an account](/anonymous-and-claim).
