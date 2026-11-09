@@ -74,11 +74,12 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 | --- | --- | --- |
 | Unclaimed space | {{anonymous-ttlSeconds}} from creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation | The space stops serving |
 | Claiming an expired anonymous space | 7 more days | The claim link stops working |
-| Unfinished publish drafts | 24 hours | The draft is swept |
-| Deleted team | 30 days | The team is reaped |
+| Unfinished publish drafts | 24 hours | The draft expires and can't be resumed; it stays in your version history |
 | Past-due account | 7 days | The account is suspended and its spaces go dark |
 | Activity events | Plan window, {{free-auditLogRetentionHours}} hours on Free | Events are deleted |
 | HTTP access logs | Plan window, {{free-buildAccessLogRetentionHours}} hours on Free | Reads are clamped to the window |
+
+Nothing is deleted when a window ends. Spacefast keeps your data until you delete it, and a delete hides the thing from everyone but you. Removing data for good is a manual step our team takes on request.
 
 The two anonymous rows work together. A space that stops serving at its deadline is still recoverable through the claim link for another 7 days. Claim-page loads can push that deadline out by up to 6 hours. See [Publish without an account](/anonymous-and-claim).
 
