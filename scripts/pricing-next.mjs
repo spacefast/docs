@@ -2,18 +2,17 @@
 // draft Pricing & Limits page, content/(account)/pricing.mdx. They are not
 // live: GET /v1/pricing still serves the current plans, so this module is the
 // one source for every number on that page until the API does.
-// scripts/prepare-pricing.mjs renders it into content/_pricing-next/*.mdx.
+// components/PricingTable.astro renders it, and blume.config.ts renders the same
+// tables as Markdown for .md pages and agents.
 
-const BETA = '<Badge variant="warning">Beta</Badge>';
-const SOON = "<Badge>Soon</Badge>";
-const COMP = '<Badge variant="success">Complimentary</Badge>';
+const BETA = "Beta";
+const SOON = "Soon";
+const COMP = "Complimentary";
 const YES = "✓";
 const NO = "—";
-const TAGS = { beta: BETA, soon: SOON, comp: COMP };
 
 export const PLANS = ["Personal", "Go", "Pro", "Business", "Enterprise"];
 export const SPACE_PLANS = ["Personal", "Go", "Pro", "Business", "Boost", "Enterprise"];
-const HEAD = { Business: `Business ${SOON}` };
 
 const row = (label, tip, values, tag) => ({ label, tip, values, tag });
 const CPU = "$0.119 per CPU-hour";
@@ -326,68 +325,79 @@ export const PAYMENTS = [
   ["Instant payout", "1.5% of the payout"],
 ];
 
-// Markdown treats a bare * as emphasis; the footnote marks stay literal.
-const cell = (value) => value.replaceAll("*", String.raw`\*`).replaceAll("|", String.raw`\|`);
-const title = (item) => (item.tag ? `${item.label} ${TAGS[item.tag]}` : item.label);
+// Structured tables for components/PricingTable.astro: columns, then [group, rows].
+// Row values are plain text; tags and tips are rendered by the component.
+const PLAN_HEAD = {
+  Personal: { note: "$0, no card" },
+  Go: { note: "$5 a month" },
+  Pro: { note: "$15 a month, 5 members" },
+  Business: { tag: "soon", note: "From $500, $25 per member" },
+  Boost: { note: "+$9 per Space" },
+  Enterprise: { note: "Talk to us" },
+};
+const columnsFor = (names) => names.map((name) => ({ name, ...PLAN_HEAD[name] }));
 
-function table(first, columns, groups) {
-  const lines = [
-    `| ${[first, ...columns.map((column) => HEAD[column] ?? column)].join(" | ")} |`,
-    `| ${[first, ...columns].map(() => "---").join(" | ")} |`,
-  ];
+const AT_A_GLANCE = [
+  ["", [
+    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month.", ["$1", "$5", "$15", "$100 in month one", "Contract"]),
+    row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "5, then $15 each", "$25 each", "Contract"]),
+    row("Spaces and custom domains", null, ["20", "100", "500", "2,500", "Custom"]),
+    row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", "20", "Custom"]),
+    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", "125 GB", "Up to 1 TB"]),
+    row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", "Hourly, 150 days", "Custom"]),
+    row("Support", null, ["Community", "Email", "Priority email", "Slack Connect", "Dedicated, with SLA"]),
+  ]],
+];
+
+// In structured tables, a cell that is only a Beta or Soon badge becomes a ✓ (or —),
+// and the label moves to the row title, so the cells stay plain values.
+function plainRows(groups) {
+  return groups.map(([group, rows]) => [group, rows.map((item) => {
+    const badges = new Set(item.values.filter((v) => v === BETA || v === SOON));
+    if (badges.size === 0) return item;
+    const tag = item.tag ?? (badges.has(SOON) ? "soon" : "beta");
+    return { ...item, tag, values: item.values.map((v) => (v === BETA ? YES : v === SOON ? "Soon" : v)) };
+  })]);
+}
+
+export function pricingTable(name) {
+  switch (name) {
+    case "plans":
+      return { columns: columnsFor(PLANS), groups: AT_A_GLANCE };
+    case "team":
+      return { columns: columnsFor(PLANS), groups: withBusiness(TEAM, BUSINESS_TEAM) };
+    case "space":
+      return { columns: columnsFor(SPACE_PLANS), groups: withBusiness(SPACE, BUSINESS_SPACE), highlight: "Boost" };
+    case "features":
+      return { columns: columnsFor(PLANS), groups: plainRows(withBusiness(FEATURES, BUSINESS_FEATURES)) };
+    case "examples":
+      return {
+        columns: [{ name: "Plan" }, { name: "Usage" }, { name: "Bill" }],
+        groups: [["", EXAMPLES.map(({ title: label, plan, price, basis, lines, note }) =>
+          row(label, basis, [plan, lines.map(([what, cost]) => `${what}: ${cost}`).join(" · "), `${price} a month. ${note}`]))]],
+      };
+    case "payments":
+      return { columns: [{ name: "Rate" }], groups: [["", PAYMENTS.map(([what, rate]) => row(what, null, [rate]))]] };
+    default:
+      throw new Error(`Unknown pricing table: ${name}`);
+  }
+}
+
+const TAG_TEXT = { beta: "Beta", soon: "Soon", comp: "Complimentary" };
+const md = (value) => String(value).replaceAll("*", String.raw`\*`).replaceAll("|", String.raw`\|`);
+
+/** The same table as plain Markdown, for .md pages, llms-full.txt and MCP. */
+export function pricingTableMarkdown(name) {
+  const { columns, groups } = pricingTable(name);
+  const head = columns.map((c) => [c.name, c.tag ? `(${TAG_TEXT[c.tag]})` : "", c.note ? `— ${c.note}` : ""].filter(Boolean).join(" "));
+  const lines = [`| Item | ${head.map(md).join(" | ")} |`, `| --- | ${columns.map(() => "---").join(" | ")} |`];
+  const notes = [];
   for (const [group, rows] of groups) {
-    lines.push(`| **${group}** | ${columns.map(() => "").join(" | ")} |`);
+    if (group) lines.push(`| **${md(group)}** | ${columns.map(() => "").join(" | ")} |`);
     for (const item of rows) {
-      if (item.values.length !== columns.length) throw new Error(`${item.label} has ${item.values.length} values for ${columns.length} plans`);
-      lines.push(`| ${[title(item), ...item.values].map(cell).join(" | ")} |`);
+      lines.push(`| ${md(item.label)}${item.tag ? ` (${TAG_TEXT[item.tag]})` : ""} | ${item.values.map(md).join(" | ")} |`);
+      if (item.tip) notes.push(`- **${md(item.label)}**: ${md(item.tip)}`);
     }
   }
-  const notes = groups.flatMap(([, rows]) => rows).filter((item) => item.tip);
-  if (notes.length === 0) return lines.join("\n");
-  return [
-    lines.join("\n"),
-    "",
-    '<Expandable title="What each row counts">',
-    "",
-    ...notes.map((item) => `- **${item.label}**: ${item.tip}`),
-    "",
-    "</Expandable>",
-  ].join("\n");
-}
-
-// Plans as one table: one row per plan, no cards.
-function plansTable() {
-  const row = ({ name, soon, price, per, tag }) => `| ${cell(name)}${soon ? ` ${SOON}` : ""} | ${cell(price)} | ${cell(per)} | ${cell(tag)} |`;
-  return [
-    "| Plan | Price | Billed | Included |",
-    "| --- | --- | --- | --- |",
-    ...CARDS.map(row),
-    row(BOOST),
-  ].join("\n");
-}
-
-// Example bills as one table: one row per example, the arithmetic in the last column.
-function examplesTable() {
-  return [
-    "| Example | Plan | Bill | Usage | What it uses |",
-    "| --- | --- | --- | --- | --- |",
-    ...EXAMPLES.map(({ title: name, plan, price, basis, lines, note }) =>
-      `| ${cell(name)}<br/>${cell(basis)} | ${cell(plan)} | ${cell(price)} a month | ${lines.map(([what, cost]) => `${cell(what)}: ${cell(cost)}`).join("<br/>")} | ${cell(note)} |`),
-  ].join("\n");
-}
-
-/** The draft page's includes, keyed by file name under content/_pricing-next/. */
-export function pricingNextSnippets() {
-  return {
-    plans: plansTable(),
-    examples: examplesTable(),
-    team: table("Per team, per month", PLANS, withBusiness(TEAM, BUSINESS_TEAM)),
-    space: table("Per Space", SPACE_PLANS, withBusiness(SPACE, BUSINESS_SPACE)),
-    features: table("Feature", PLANS, withBusiness(FEATURES, BUSINESS_FEATURES)),
-    payments: [
-      "| Payment | Rate |",
-      "| --- | --- |",
-      ...PAYMENTS.map(([payment, rate]) => `| ${cell(payment)} | ${cell(rate)} |`),
-    ].join("\n"),
-  };
+  return notes.length ? `${lines.join("\n")}\n\n${notes.join("\n")}` : lines.join("\n");
 }

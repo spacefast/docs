@@ -8,6 +8,7 @@ import { pagefind } from "blume/search";
 import { loadPricing, pricingVariables } from "./scripts/pricing.mjs";
 
 import { redirects } from "./redirects.ts";
+import { pricingTableMarkdown } from "./scripts/pricing-next.mjs";
 
 const deploymentBase = "/docs";
 // Agent guidance for llms.txt, kept as Markdown so Vale lints it with the pages.
@@ -170,6 +171,7 @@ export default defineConfig({
     // The WP Cloud footer, written out as Markdown for .md pages, llms-full.txt
     // and MCP: without this the component ships as raw JSX.
     markdownComponents: {
+      PricingTable: ({ props }) => pricingTableMarkdown(String(props.table)),
       WpCloudDocs: ({ props }) =>
         `Spacefast is built on Automattic's [WP Cloud](https://wp.cloud/). Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) on WP Cloud Docs.`,
     },

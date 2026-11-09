@@ -1,120 +1,109 @@
 ---
 title: Pricing & Limits
-description: Personal, Go, Pro, Business, Enterprise and Boost, with what each plan includes per team and per Space
+description: Every plan's price, allowances and limits, per team and per Space
 draft: true
 mode: wide
 ---
 
 :::warning[Draft: these plans are not live yet]
-This page previews plans that haven't launched. Current prices and limits are in [Plans and billing](/billing), [Usage](/usage) and [Limits](/limits).
+Current prices and limits are in [Plans and billing](/billing), [Usage](/usage) and [Limits](/limits).
 :::
 
-Every plan allows commercial use and comes with usage included. Each step up raises what your team gets each month and what every Space can handle. Boost raises one Space further when it needs it.
+Every plan allows commercial use. Hover the <kbd>i</kbd> on any row for what it counts.
 
-## Plans
+## Plans at a glance
 
-<include>/_pricing-next/plans.mdx</include>
+<PricingTable table="plans" />
 
-## What it costs in practice
+## Per team, every month
 
-The first two use real usage from every Space on Spacefast over the last 30 days. The last two are estimates for bigger workloads.
+Your included usage pays first. You're billed only past it.
 
-<include>/_pricing-next/examples.mdx</include>
+<PricingTable table="team" />
 
-## For your team, every month
+## Per Space
 
-Shared by every Space on the team and reset each month. Each line says what's included and what more costs. Your included usage pays for it first; you're only billed past that.
+Boost raises one Space. Upgrading raises them all.
 
-<include>/_pricing-next/team.mdx</include>
+<PricingTable table="space" />
 
-## For each Space
+## Features
 
-Each Space runs on its own isolated site, so these are reserved for it. Your plan sets them for every Space. To go higher on one Space, add Boost; to go higher on all of them, upgrade.
+<PricingTable table="features" />
 
-<include>/_pricing-next/space.mdx</include>
+## Example bills
+
+The first two are real usage from the last 30 days.
+
+<PricingTable table="examples" />
+
+## At the limit
+
+| When | Pauses | Keeps working |
+| --- | --- | --- |
+| Personal uses its $1 | New builds and Workers | Deployed Spaces: serving, PHP, email |
+| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces |
+| A Space hits one of its limits | That request gets a 429, or that publish gets an error naming the limit | The rest of the Space |
 
 ## Domains
 
-| Domain | Price | Counts toward custom domains |
+| Domain | Price | Counts toward your limit |
 | --- | --- | --- |
-| Registered or renewed through Spacefast | At cost: what the registry charges us plus the ICANN fee, nothing added | No |
-| Registered through WordPress.com, or using Spacefast DNS | No charge to connect | No |
-| Any other domain you connect | No charge to connect | Yes |
-
-Managed HTTPS is included for every domain.
+| Registered through Spacefast | At cost: registry price plus ICANN fee | No |
+| Registered through WordPress.com, or on Spacefast DNS | Free to connect | No |
+| Any other domain | Free to connect | Yes |
 
 ## Store and payments <Badge variant="warning">Beta</Badge>
 
-Sell from any Space with no monthly fee and no Spacefast commission. You pay only card processing, at these US rates; other countries have their own. In private beta.
+No monthly fee and no Spacefast commission. US card processing rates:
 
-<include>/_pricing-next/payments.mdx</include>
+<PricingTable table="payments" />
 
-## Infrastructure on every plan
+## Infrastructure
 
-| On every plan | What you get |
+| Every plan gets | |
 | --- | --- |
-| **28+** | edge locations serving cached pages |
-| **4** | datacenters: Amsterdam, Burbank, Washington DC, Dallas |
-| **Hourly** | database backups, plus daily file backups |
-| **Firewall** | web application firewall and DDoS protection |
-| **Failover** | full datacenter redundancy with automated failover |
-| **2 to 10+** | compute workers per Space, bursting up to 110 when the platform has room |
+| Edge locations | 28+ |
+| Datacenters | Amsterdam, Burbank, Washington DC, Dallas. Same price in each |
+| Backups | Hourly database, daily files |
+| Protection | Web application firewall, DDoS protection |
+| Failover | Automated, with full datacenter redundancy |
 
-### What is automated failover?
-
-Each Space's data is kept in more than one place. If the server running your Space fails, the platform detects it and moves your Space to healthy hardware on its own, without you doing anything and without losing data. Visitors keep getting cached pages from the edge while that happens. See [Automated failover](/infrastructure/automated-failover) for how the switch works.
-
-## What happens at the limit
-
-| When | What pauses | What keeps working |
-| --- | --- | --- |
-| Personal runs out of its $1 of usage | New builds and Workers, until next month or until you upgrade | Deployed Spaces keep serving, running PHP and sending email. Nothing is deleted |
-| Go, Pro or Business reaches its spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces keep serving |
-| A Space reaches one of its own limits | Requests beyond its compute workers wait briefly, then get a 429 with Retry-After. Publishes and crons over a limit get an error that names the limit and how to raise it | Everything else on the Space |
+If the server running your Space fails, it moves to healthy hardware on its own, with no data lost. Visitors keep getting cached pages meanwhile. [How failover works](/infrastructure/automated-failover).
 
 ## Billing questions
 
 ### How am I billed?
 
-Monthly, in US dollars, before tax. Plans and Boost bill at the start of the month. Usage past what's included bills at the end of the month.
+Monthly, in US dollars, before tax. Plans and Boost bill at the start of the month; usage past what's included bills at the end.
 
-### What happens when I upgrade or downgrade?
+### What if I upgrade or downgrade?
 
-Upgrades apply right away, prorated to the day. When you downgrade, your limits drop at renewal. Anything over the new limits keeps serving but becomes read-only: you can delete or export it, but not add to it, until it's back under the limit.
+Upgrades apply right away, prorated to the day. Downgrades apply at renewal; anything over the new limits keeps serving but becomes read-only until it's back under.
 
 ### Can prices change?
 
-We may change our fees going forward, in line with our Terms of Service. New prices apply to new purchases right away. If we raise the price of a plan you already pay for, you keep your current price for at least 12 months, and we give you at least 60 days' notice before your renewal price changes. If you don't agree with a change, you can cancel your plan. Price cuts apply to everyone at their next bill.
+We may change our fees going forward, in line with our Terms of Service. If the price of a plan you already pay for goes up, you keep your current price for at least 12 months and get at least 60 days' notice. If you don't agree, you can cancel. Price cuts apply to everyone.
 
 ### Can I cap my spending?
 
-Yes, on Go, Pro and Business. Set a monthly cap; it starts at twice your plan price, with alerts at 50%, 75% and 100%. Usage can briefly go past the cap while we stop it, depending on server availability, and you're never charged for anything above it. At the cap, new builds and Workers pause until you raise the cap or the month ends. Deployed Spaces keep serving.
-
-### Do prices depend on the datacenter?
-
-Not today. Spaces run in Amsterdam, Burbank, Washington DC and Dallas, and every datacenter costs the same. Prices may differ by datacenter in the future, under the same notice rules.
+Yes, on Go, Pro and Business. The cap starts at twice your plan price, with alerts at 50%, 75% and 100%. You're never charged above it, even if usage briefly runs past it.
 
 ### Do you have nonprofit or education pricing?
 
 Yes. Contact sales.
 
-## Every feature
+## Fine print
 
-<Badge variant="warning">Beta</Badge> is free during the beta. <Badge>Soon</Badge> is not available yet.
-
-<include>/_pricing-next/features.mdx</include>
-
-## The fine print
-
-- **<Badge variant="warning">Beta</Badge> Beta**: A feature we're still building with customers. It's free on every plan while it's in beta, and its limits still apply. Where we already know the price after the beta, it's listed with an asterisk. \* Subject to change.
-- **General availability**: When a feature leaves beta, it becomes generally available and starts billing at its listed price. We give you a month's notice first.
-- **<Badge variant="success">Complimentary</Badge> Complimentary**: Free for a limited time while we finish measuring it. The price it will have is listed with a dagger. † Starts after a month's notice.
-- **<Badge>Soon</Badge> Coming soon**: Not available yet. Plans, prices and limits for anything coming soon can change before launch.
-- **Fair use**: Normal use for a website or app. A Space may not impose an unreasonable or disproportionately large load on our infrastructure, which usually only happens when it's used for file sharing or storage. If a Space's storage or bandwidth burdens our systems, we'll ask you to make adjustments before we restrict its resources. A person reviews it first, and deployed Spaces keep serving cached traffic.
-- **Storage**: Measured once a day and averaged over the month. For now, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site and will go away once those files move out of your Space's storage.
-- **Examples**: Example bills are illustrations. Your bill depends on what your Spaces actually use.
-- **Prices**: In US dollars, before tax. Plans and Boost bill monthly; usage past what's included bills at the end of the month.
-- **Datacenters**: Prices can differ by datacenter in the future. Today there is no difference.
-- **Fair use with minimums**: On Business, fair-use items come with published minimums you can always count on. We'll set them before Business launches.
-- **Business minimum**: Business starts at $500 a month. Members ($25 each) and usage count toward it, and you pay whichever is higher. The $100 welcome credit applies to usage in your first month only.
-- **Abuse**: We may restrict a Space that harms other customers or breaks our Terms of Service. We tell you why, and your data stays yours to export.
+| Term | Meaning |
+| --- | --- |
+| <Badge variant="warning">Beta</Badge> | Free while in beta; limits still apply. A price marked \* is subject to change |
+| <Badge variant="success">Complimentary</Badge> | Free for a limited time. The price marked † starts after a month's notice |
+| <Badge>Soon</Badge> | Not available yet; may change before launch |
+| Generally available | Out of beta. Billing starts at the listed price after a month's notice |
+| Fair use | Normal use for a website or app. If a Space puts an unreasonable or disproportionately large load on our infrastructure, usually file sharing or storage, we ask you to adjust before restricting it. Deployed Spaces keep serving cached traffic |
+| Fair use with minimums | Business only: published minimums you can count on, set before launch |
+| Storage | Measured daily, averaged over the month. The first 1 GB per Space isn't counted for now; it covers platform files on each site |
+| Business minimum | $500 a month. Members and usage count toward it; you pay whichever is higher. The $100 credit covers first-month usage |
+| Example bills | Illustrations. Your bill depends on your actual usage |
+| Abuse | We may restrict a Space that harms others or breaks our Terms of Service. We tell you why, and you can always export your data |
