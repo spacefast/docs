@@ -64,7 +64,7 @@ export function routesFromSidebar(source) {
 // `blume build` drops a page whose frontmatter sets `draft: true`, so a draft
 // is not a built route until it ships.
 export const isDraft = (source) =>
-  /^draft:\s*true\s*$/mu.test(/^---\n([\s\S]*?)\n---(?:\n|$)/u.exec(source)?.[1] ?? "");
+  /^draft:\s*true\s*$/mu.test(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/u.exec(source)?.[1] ?? "");
 
 export async function readSidebarRoutes(root = process.cwd()) {
   const routes = new Set(GENERATED_ROUTES);

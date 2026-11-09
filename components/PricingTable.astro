@@ -257,6 +257,11 @@ const span = columns.length + 1;
   .sf-tip:focus .sf-tip-body {
     display: block;
   }
+  /* The table scrolls sideways, which also clips vertically, so the last rows open their tip upward. */
+  tbody:last-child tr:nth-last-child(-n + 3) .sf-tip-body {
+    top: auto;
+    bottom: calc(100% + 0.4rem);
+  }
   .sf-visually-hidden {
     position: absolute;
     width: 1px;

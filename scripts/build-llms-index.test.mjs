@@ -154,6 +154,7 @@ test("the sidebar parser agrees with the real config", async () => {
 
 test("a draft page is not a built route; only its frontmatter decides", () => {
   assert.equal(isDraft("---\ntitle: Next\ndraft: true\n---\n\nBody."), true);
+  assert.equal(isDraft("---\r\ntitle: Next\r\ndraft: true\r\n---\r\n\r\nBody."), true);
   assert.equal(isDraft("---\ntitle: Live\n---\n\n```yaml\ndraft: true\n```"), false);
   assert.equal(isDraft("---\ndraft: false\n---\n"), false);
 });
