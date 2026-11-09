@@ -13,7 +13,7 @@ These are per team each month, except storage, which is a retained-byte allowanc
 
 <include>/_pricing/usage.md</include>
 
-The CPU allowance combines PHP, Zero and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
+The CPU allowance combines PHP, First and SQL. Each other allowance stands on its own; unused build minutes cannot buy more transfer. Free has no dollar credit and no automatic overage bill.
 
 Exceeding an allowance alerts Spacefast for review. A Space may be suspended until the applicable allowance resets, retained storage falls below its limit, or the team upgrades. Data stays and exports remain available.
 
@@ -23,9 +23,9 @@ Prices are USD before tax. The included quantities below belong to the whole tea
 
 CPU means active processing time, excluding waits. There is no memory charge. Build minutes measure elapsed machine time, including installation and idle time; platform-caused retries are not billed.
 
-An invocation is one PHP or Zero origin execution, including a request that bypasses the cache or cron run. Cached hits and Worker requests are excluded. Workers have their own request meter.
+An invocation is one PHP or First origin execution, including a request that bypasses the cache or cron run. Cached hits and Worker requests are excluded. Workers have their own request meter.
 
-Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or Zero response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
+Cached delivery counts cached response bytes. Non-cached transfer counts origin misses, bypasses and PHP or First response bytes. Worker responses are excluded from that transfer charge. Bytes are counted once on the path that produced them.
 
 Email counts recipient deliveries, so one message to three people counts as three. Daily delivery safeguards still apply. A credit balance does not override them; check the current entitlement before sending.
 

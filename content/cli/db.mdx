@@ -5,13 +5,13 @@ sidebar:
   order: 22
 ---
 
-Open a single-use SQL console on a Space's database, and exercise its scheduled jobs on demand. A [Zero](/zero) app's schema lives in its `zero.config.ts` and migrates on publish. See [Database](/database).
+Open a single-use SQL console on a Space's database, and exercise its scheduled jobs on demand. A [First](/first) app's schema lives in its `first.config.ts` and migrates on publish. See [Database](/database).
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
 There is no connection string anywhere in the CLI or the API. `sf db console` is how you reach the database directly.
 
-An older Zero app that declares `"runtime": { "kind": "zero" }` in `sf.jsonc` also has `sf db`, `sf db list`, `sf db dump`, `sf db export`, and `sf db migrate`. See [Migrate an older Zero app](/zero-migrate#read-and-migrate-its-database).
+A Zero 0.8 app that declares `"runtime": { "kind": "zero" }` in `sf.jsonc` also has `sf db`, `sf db list`, `sf db dump`, `sf db export`, and `sf db migrate`. See [Zero 0.8](/zero-migrate#read-and-migrate-its-database).
 
 ## sf db console
 

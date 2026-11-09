@@ -68,10 +68,10 @@ questions:
     question: What is the project config file called?
     expected: ["sf.jsonc"]
     routes: /config-file
-  - id: zero-declare
-    question: How do I turn on the Zero runtime for a project?
-    expected: ["a zero.config.ts at the project root", "no runtime block in sf.jsonc"]
-    routes: /zero
+  - id: first-declare
+    question: How do I turn on the First runtime for a project?
+    expected: ["a first.config.ts at the project root", "no runtime block in sf.jsonc"]
+    routes: /first
   - id: routing-precedence
     question: If both a _redirects file and sf.jsonc rules match a path, which wins?
     expected: ["_redirects"]

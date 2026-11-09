@@ -1,63 +1,63 @@
 ---
-title: zero, wp, runtime, pages, design, analytics
-description: Start, check, run, and build Zero apps, import a CMS schema, run WP-CLI, see what a Space is serving, and read its traffic
+title: first, wp, runtime, pages, design, analytics
+description: Start, check, run, and build First apps, import a CMS schema, run WP-CLI, see what a Space is serving, and read its traffic
 sidebar:
   order: 25
 ---
 
-`sf zero` builds and runs [Zero](/zero) apps: a `zero.config.ts` compiled to WordPress. The rest of this page covers WP-CLI, runtime status, site pages, design tokens, and analytics.
+`sf first` builds and runs [First](/first) apps: a `first.config.ts` compiled to WordPress. The rest of this page covers WP-CLI, runtime status, site pages, design tokens, and analytics.
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). `sf wp`, `sf runtime status`, and `sf analytics` also take the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
-To publish a Zero app, run `sf publish` from its root. See [Dynamic sites with Zero](/zero).
+To publish a First app, run `sf publish` from its root. See [Dynamic sites with First](/first).
 
-## sf zero init
+## sf first init
 
-Start a Zero app: a starter `zero.config.ts` with one collection, one table, and one action, named after the directory.
+Start a First app: a starter `first.config.ts` with one collection, one table, and one action, named after the directory.
 
 ```text
-sf zero init [name] [-f]
+sf first init [name] [-f]
 ```
 
 | Argument or flag | What it does |
 | --- | --- |
 | `[name]` | Directory to create. Omit to initialize the current directory |
-| `-f, --force` | Overwrite an existing `zero.config.ts` |
+| `-f, --force` | Overwrite an existing `first.config.ts` |
 
-It also adds `.zero/` and `node_modules/` to `.gitignore`. `sf init --runtime zero` writes the same starter.
+It also adds `.first/` and `node_modules/` to `.gitignore`. `sf init --runtime first` writes the same starter.
 
 ```bash
-sf zero init my-app
-sf zero init
+sf first init my-app
+sf first init
 ```
 
-## sf zero check
+## sf first check
 
-Compile `zero.config.ts` and report diagnostics without writing anything.
+Compile `first.config.ts` and report diagnostics without writing anything.
 
 ```text
-sf zero check [project] [--json]
+sf first check [project] [--json]
 ```
 
-Each diagnostic names a `file:line:col` and a fix. `--json` prints the diagnostics envelope instead of text. `sf zero check` uses the compiler bundled with the CLI, so it needs no native download.
+Each diagnostic names a `file:line:col` and a fix. `--json` prints the diagnostics envelope instead of text. `sf first check` uses the compiler bundled with the CLI, so it needs no native download.
 
 ```bash
-sf zero check
-sf zero check ./app --json
+sf first check
+sf first check ./app --json
 ```
 
-## sf zero dev
+## sf first dev
 
 Run the app on a local WordPress and rebuild when its source changes.
 
 ```text
-sf zero dev [project] [--port <n>] [--no-watch] [--allow-destructive]
-sf zero dev stop [project]
-sf zero dev status [project]
-sf zero dev wp [project] -- <WP-CLI args>
+sf first dev [project] [--port <n>] [--no-watch] [--allow-destructive]
+sf first dev stop [project]
+sf first dev status [project]
+sf first dev wp [project] -- <WP-CLI args>
 ```
 
-`sf zero dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer, and the first start downloads WordPress and the plugins the app needs. It watches TypeScript, config, and `public/` files. Ctrl-C stops WordPress and keeps the local database for the next start.
+`sf first dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer, and the first start downloads WordPress and the plugins the app needs. It watches TypeScript, config, and `public/` files. Ctrl-C stops WordPress and keeps the local database for the next start.
 
 | Argument or flag | What it does |
 | --- | --- |
@@ -71,73 +71,73 @@ sf zero dev wp [project] -- <WP-CLI args>
 The login it prints is for local development only.
 
 ```bash
-sf zero dev
-sf zero dev --no-watch
-sf zero dev wp -- user application-password create admin local --porcelain
-sf zero dev stop
+sf first dev
+sf first dev --no-watch
+sf first dev wp -- user application-password create admin local --porcelain
+sf first dev stop
 ```
 
-## sf zero build
+## sf first build
 
-Compile `zero.config.ts` into WordPress plugins.
+Compile `first.config.ts` into WordPress plugins.
 
 ```text
-sf zero build [project] [--out <dir>]
+sf first build [project] [--out <dir>]
 ```
 
-It writes the plugins to `.zero/wp-content/`, new migrations to `zero/migrations/`, the typed client to `zero/client/`, and editor types to `zero.gen.ts`. Commit everything except `.zero/`.
+It writes the plugins to `.first/wp-content/`, new migrations to `first/_generated/migrations/`, the typed client to `first/client/`, and editor types to `first.gen.ts`. Commit everything except `.first/`.
 
 ```bash
-sf zero build
-sf zero build ./app --out ./dist
+sf first build
+sf first build ./app --out ./dist
 ```
 
-`sf zero dev` and `sf zero build` run the native compiler from the CLI's optional platform package. If it's missing, reinstall the CLI with optional dependencies enabled. Set `SPACEFAST_ZERO_BIN` to a `zero` binary to use your own build instead.
+`sf first dev` and `sf first build` run the native compiler from the CLI's optional platform package. If it's missing, reinstall the CLI with optional dependencies enabled. Set `SPACEFAST_FIRST_BIN` to a `first` binary to use your own build instead.
 
-## sf zero import
+## sf first import
 
-Translate a Payload, EmDash, or Sanity schema into a new `zero.config.ts`, check that it compiles, and print what mapped and what did not. Fully local, no space flags.
+Translate a Payload, EmDash, or Sanity schema into a new `first.config.ts`, check that it compiles, and print what mapped and what did not. Fully local, no space flags.
 
 ```text
-sf zero import <source> <input> [--output <file>]
+sf first import <source> <input> [--output <file>]
 ```
 
 | Argument or flag | What it does |
 | --- | --- |
 | `<source>` | `payload`, `emdash`, or `sanity`. `payloadcms` is accepted for `payload` |
 | `<input>` | The schema file, or the project directory to find it in (`payload.config.ts`, `.emdash/seed.json`, `sanity.config.ts`) |
-| `--output=<file>` | Config file to write. Defaults to `zero.config.ts`, and it must not exist yet |
+| `--output=<file>` | Config file to write. Defaults to `first.config.ts`, and it must not exist yet |
 
-It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the whole import, and nothing is written. Every write rule in the result starts as denied, so set `access` before you publish.
+It never runs code from the other CMS and never overwrites a file. Anything First cannot hold refuses the whole import, and nothing is written. Every write rule in the result starts as denied, so set `access` before you publish.
 
 ```bash
-sf zero import payload ../my-payload-app
-sf zero import emdash ../site --output app/zero.config.ts
+sf first import payload ../my-payload-app
+sf first import emdash ../site --output app/first.config.ts
 ```
 
 ### Output
 
 One line per schema entry: its outcome, its JSON pointer, and the reason. With `--json`, `data` carries `source`, `from`, `out`, and `report.entries[]`.
 
-## sf zero migrate
+## sf first migrate
 
-Bring a schema, a site's content, or an older Zero app into a `zero.config.ts` project. Everything after `migrate` passes to the Zero compiler unchanged.
+Bring a schema, a site's content, or a Zero 0.8 app into a `first.config.ts` project. Everything after `migrate` passes to the First compiler unchanged.
 
 ```text
-sf zero migrate config --from <emdash|payload|sanity> <input> --out <new-config>
-sf zero migrate site <content-model.php> [--dry-run]
-sf zero migrate app ...
+sf first migrate config --from <emdash|payload|sanity> <input> --out <new-config>
+sf first migrate site <content-model.php> [--dry-run]
+sf first migrate app ...
 ```
 
 | Subcommand | What it does |
 | --- | --- |
-| `config` | The same schema import as [`sf zero import`](#sf-zero-import), with its own flags |
-| `site` | Moves an older Zero site's content into the app's collections on a standalone WordPress, through WP-CLI. It does not touch a Space. `--dry-run` previews it. Needs the native compiler, like `sf zero build` |
-| `app` | Converts an older Zero app's source. See [Migrate an older Zero app](/zero-migrate) |
+| `config` | The same schema import as [`sf first import`](#sf-first-import), with its own flags |
+| `site` | Moves a Zero 0.8 site's content into the app's collections on a standalone WordPress, through WP-CLI. It does not touch a Space. `--dry-run` previews it. Needs the native compiler, like `sf first build` |
+| `app` | Converts a Zero 0.8 app's source. See [Zero 0.8](/zero-migrate) |
 
 ```bash
-sf zero migrate config --from payload payload.config.ts --out app/zero.config.ts
-sf zero migrate site content-model.php --dry-run
+sf first migrate config --from payload payload.config.ts --out app/first.config.ts
+sf first migrate site content-model.php --dry-run
 ```
 
 ## sf wp

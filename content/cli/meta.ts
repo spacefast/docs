@@ -16,7 +16,7 @@ export default defineMeta({
     "storage",
     "git",
     "source",
-    "zero",
+    "first",
     "share",
     "teams",
     "api-keys",

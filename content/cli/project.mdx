@@ -16,7 +16,7 @@ Every command here also takes the [global flags](/cli#global-flags).
 Create a Spacefast project.
 
 ```text
-sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functions]
+sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|first|functions]
 ```
 
 ### Arguments
@@ -30,7 +30,7 @@ sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functio
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-f, --force` | `false` | Overwrite existing generated files. |
-| `--runtime=<static\|zero\|functions>` | `static` | Project to scaffold. `zero` writes a starter [Zero](/zero) `zero.config.ts`, the same one `sf zero init` writes. |
+| `--runtime=<static\|first\|functions>` | `static` | Project to scaffold. `first` writes a starter [First](/first) `first.config.ts`, the same one `sf first init` writes. |
 | `--space=<value>` | none | Space ID, live URL, domain, or slug to link the directory to. Only with `--runtime static`. Env `SPACEFAST_SPACE`. |
 | `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 | `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
@@ -41,7 +41,7 @@ sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functio
 sf init
 sf init my-site
 sf init --space docs
-sf init my-app --runtime zero
+sf init my-app --runtime first
 ```
 
 ### What it writes

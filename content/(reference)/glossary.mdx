@@ -23,9 +23,13 @@ Attaching an anonymous Space (one published with no account) to a real account a
 
 The drag-and-drop publish flow at [drop.fast](https://drop.fast): drag a folder, a `.zip`, or a single `index.html` onto the window. No install, no account required. See [Publishing](/publish#publish).
 
+## First
+
+The compiler that turns one `first.config.ts` (collections, tables, actions, and pages) into a WordPress app, hosted on the Space with its own MySQL database. [Functions](#functions) also provides a database, and [crons](/crons) can call either runtime or static files. See [Dynamic sites with First](/first).
+
 ## Functions
 
-The runtime for shipping a worker alongside your site — npm packages, framework server output, outbound HTTP. The other option, alongside [Zero](#zero), for sites that need more than static files. See [Functions](/functions).
+The runtime for shipping a worker alongside your site — npm packages, framework server output, outbound HTTP. The other option, alongside [First](#first), for sites that need more than static files. See [Functions](/functions).
 
 ## Grant
 
@@ -49,4 +53,4 @@ An immutable snapshot created when a publish produces a new version. A ready ver
 
 ## Zero
 
-The compiler that turns one `zero.config.ts` (collections, tables, actions, and pages) into a WordPress app, hosted on the Space with its own MySQL database. [Functions](#functions) also provides a database, and [crons](/crons) can call either runtime or static files. See [Dynamic sites with Zero](/zero).
+The retired runtime that First replaced: a `capsule()` in `server/index.ts`, declared in `sf.jsonc` as `"runtime": { "kind": "zero" }`. Existing Zero Spaces keep serving and publishing. Zero 0.9 is its last release apart from security fixes, and it moves apps to First. See [Zero 0.8](/zero-migrate).

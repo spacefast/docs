@@ -1,35 +1,35 @@
 ---
-title: Dynamic sites with Zero
-description: Zero compiles one zero.config.ts (collections, tables, actions, and TSX pages) into WordPress, and Spacefast hosts it on your Space.
+title: Dynamic sites with First
+description: First compiles one first.config.ts (collections, tables, actions, and TSX pages) into WordPress, and Spacefast hosts it on your Space.
 sidebar:
   order: 0
 ---
 
-Zero turns one `zero.config.ts` into a WordPress app: collections, tables, actions, access rules, and pages. `sf publish` sends the source, and Spacefast compiles it and runs it on the Space's own WordPress. Zero is available on every account, with [usage allowances and metered rates](/usage).
+First (formerly Zero v2) turns one `first.config.ts` into a WordPress app: collections, tables, actions, access rules, and pages. `sf publish` sends the source, and Spacefast compiles it and runs it on the Space's own WordPress. First is available on every account, with [usage allowances and metered rates](/usage).
 
-## What Zero is
+## What First is
 
-Zero is a compiler. You describe your data and your server logic in TypeScript, and Zero compiles it to WordPress plugins: a post type for each collection, a SQL table for each table, REST routes for both, and plain PHP for your hooks and actions. Nothing runs JavaScript on the server.
+First is a compiler. You describe your data and your server logic in TypeScript, and First compiles it to WordPress plugins: a post type for each collection, a SQL table for each table, REST routes for both, and plain PHP for your hooks and actions. Nothing runs JavaScript on the server.
 
-<a id="declare-it"></a>A project is a Zero app when it has a `zero.config.ts` at its root. There is no runtime block to declare and no switch to turn on.
+<a id="declare-it"></a>A project is a First app when it has a `first.config.ts` at its root. There is no runtime block to declare and no switch to turn on.
 
 The other runtime is [Functions](/functions), a worker for npm-heavy code and framework output like OpenNext.
 
 ## Start an app
 
 ```bash
-sf init my-app --runtime zero
+sf init my-app --runtime first
 cd my-app
-sf zero dev
+sf first dev
 sf publish
 ```
 
-`sf init --runtime zero` writes a starter `zero.config.ts` named after the directory. `sf zero init` writes the same file. `sf zero dev` runs the app on a local WordPress and rebuilds when you save. `sf publish` publishes it to a new Space.
+`sf init --runtime first` writes a starter `first.config.ts` named after the directory. `sf first init` writes the same file. `sf first dev` runs the app on a local WordPress and rebuilds when you save. `sf publish` publishes it to a new Space.
 
 The starter holds one collection, one table, and one action:
 
-```ts zero.config.ts
-import { action, collection, db, defineConfig, table, text, timestamp } from "zero";
+```ts first.config.ts
+import { action, collection, db, defineConfig, table, text, timestamp } from "first";
 
 // Collections are WordPress posts: they show up in wp-admin and the REST API.
 export const posts = collection({
@@ -61,7 +61,7 @@ export default defineConfig({
 });
 ```
 
-Everything comes from the `"zero"` module.
+Everything comes from the `"first"` module.
 
 ## What you get
 
@@ -69,11 +69,11 @@ Everything comes from the `"zero"` module.
 | --- | --- |
 | Collections | Editorial content. Each is a WordPress post type with the block editor, drafts, and revisions |
 | Tables | App data in its own SQL table |
-| REST routes | `/wp-json/zero/v1/<collection>` for every collection and table, with relations loaded through `with` |
-| Actions | Named server functions at `POST /wp-json/zero/v1/actions/<name>` |
+| REST routes | `/wp-json/first/v1/<collection>` for every collection and table, with relations loaded through `with` |
+| Actions | Named server functions at `POST /wp-json/first/v1/actions/<name>` |
 | Hooks | Code that runs before or after a collection write, inside the same transaction |
 | Access rules | Who may read and write each collection, table, field, and action |
-| Sign-in | Accounts, sessions, guests, passkeys, and MFA through the `zero-identity` plugin |
+| Sign-in | Accounts, sessions, guests, passkeys, and MFA through the `first-identity` plugin |
 | Jobs and webhooks | Background work that runs after a request commits |
 | Pages | TSX routes and layouts that WordPress renders per request |
 | Typed client | A `fetch` client generated from your schema |
@@ -84,8 +84,8 @@ Your data lives in the Space's MySQL database. See [Database](/database).
 
 Pick the storage by what the data is. A `collection()` is content people edit: it gets a WordPress post type, an editor in wp-admin, drafts, and revisions. A `table()` is app data: it gets its own SQL table and nothing else.
 
-```ts zero.config.ts
-import { collection, defineConfig, defineRelations, integer, richText, table, text } from "zero";
+```ts first.config.ts
+import { collection, defineConfig, defineRelations, integer, richText, table, text } from "first";
 
 const posts = collection({ title: text().notNull(), body: richText() }, { content: "body" });
 const stock = table({
@@ -103,7 +103,7 @@ const relations = defineRelations({ ...collections, ...tables }, (r) => ({
 export default defineConfig({ collections, tables, relations });
 ```
 
-Every row gets an `id`. The registry key is the name everywhere: `shoppingList` is `zero.shoppingList` in the client and `/wp-json/zero/v1/shopping_list` over REST.
+Every row gets an `id`. The registry key is the name everywhere: `shoppingList` is `first.shoppingList` in the client and `/wp-json/first/v1/shopping_list` over REST.
 
 Column builders include `text()`, `integer()`, `real()`, `boolean()`, `timestamp()`, `date()`, `json()`, `email()`, `url()`, `slug()`, `richText()`, `media()`, `file()`, `select()`, `group()`, `repeater()`, and `blocks()`. Chain `.notNull()`, `.default(value)`, `.unique()`, `.min(n)`, `.max(n)`, `.pattern(/re/)`, or `.references(...)` to constrain one. A modifier that makes no sense for its column, like `.max()` on a boolean, fails the build at that line.
 
@@ -115,14 +115,14 @@ Every collection and table takes `access: { read, create, update, delete }`. Eac
 { access: { read: "anyone", create: "author", update: "author", delete: "editor" } }
 ```
 
-The default is read by `"anyone"`, write by `"editor"`. Actions default to `"editor"` too, so an action a visitor calls needs `access: "anyone"`. The rules hold on every path into the data: Zero's REST routes, WordPress's own `/wp/v2` routes, wp-admin, and Abilities.
+The default is read by `"anyone"`, write by `"editor"`. Actions default to `"editor"` too, so an action a visitor calls needs `access: "anyone"`. The rules hold on every path into the data: First's REST routes, WordPress's own `/wp/v2` routes, wp-admin, and Abilities.
 
 ## Actions
 
 An action takes typed input and returns JSON. `input` uses the same column builders as your schema, so a bad request is refused before your handler runs.
 
 ```bash
-curl -X POST https://my-site.view.fast/wp-json/zero/v1/actions/signup \
+curl -X POST https://my-site.view.fast/wp-json/first/v1/actions/signup \
   -H 'Content-Type: application/json' \
   --data '{"email":"sam@example.com"}'
 ```
@@ -146,26 +146,26 @@ hooks: {
 
 ## What compiles
 
-Hooks, actions, and access functions are a checked subset of TypeScript compiled to PHP. Functions, closures, spread, classes, `async`/`await` on Zero calls, and the usual control flow all work. `eval`, generators, `any`, and dynamic `import()` do not. Anything outside the subset fails the build at `file:line:col` with a fix:
+Hooks, actions, and access functions are a checked subset of TypeScript compiled to PHP. Functions, closures, spread, classes, `async`/`await` on First calls, and the usual control flow all work. `eval`, generators, `any`, and dynamic `import()` do not. Anything outside the subset fails the build at `file:line:col` with a fix:
 
 ```bash
-sf zero check
-sf zero check --json
+sf first check
+sf first check --json
 ```
 
-Imports can be `"zero"`, your own relative modules, and installed source packages. `sf publish` captures the installed packages it needs. Spacefast never runs `npm install`.
+Imports can be `"first"`, your own relative modules, and installed source packages. `sf publish` captures the installed packages it needs. Spacefast never runs `npm install`.
 
 ## Call it from a frontend
 
-`sf zero build` and `sf zero dev` write a typed client to `zero/client/`. It is plain `fetch`, so it works from any framework.
+`sf first build` and `sf first dev` write a typed client to `first/client/`. It is plain `fetch`, so it works from any framework.
 
 ```ts
-import { createClient } from "./zero/client/index.ts";
+import { createClient } from "./first/client/index.ts";
 
-const zero = createClient({ url: "https://my-site.view.fast/wp-json/zero/v1" });
+const first = createClient({ url: "https://my-site.view.fast/wp-json/first/v1" });
 
-const posts = await zero.posts.list({ orderBy: { title: "asc" } });
-await zero.actions.signup({ email: "sam@example.com" });
+const posts = await first.posts.list({ orderBy: { title: "asc" } });
+await first.actions.signup({ email: "sam@example.com" });
 ```
 
 Every argument and result is typed from your schema. A published Space also serves its client at `/__spacefast/client.js`, with types at `/__spacefast/client.d.ts`.
@@ -193,7 +193,7 @@ A page reads data with a `load()` function and renders request values through he
 Read a Space variable with `env()`. Set it with `sf env set`, or put it in `.env.server` and publish.
 
 ```ts
-import { action, env } from "zero";
+import { action, env } from "first";
 
 const checkout = action({
   access: "anyone",
@@ -221,11 +221,11 @@ jobs: {
 },
 ```
 
-Call `jobs.notifyEditors.enqueue({ postId })` to queue one. A `webhooks` entry sends each matching write to a URL as a POST request, signed in the `zero-signature` header, and retries the same way. On Spacefast a due job can wait up to five minutes before it starts.
+Call `jobs.notifyEditors.enqueue({ postId })` to queue one. A `webhooks` entry sends each matching write to a URL as a POST request, signed in the `first-signature` header, and retries the same way. On Spacefast a due job can wait up to five minutes before it starts.
 
 ## No realtime
 
-Zero has no live subscriptions. A client sees a change when it reads again.
+First has no live subscriptions. A client sees a change when it reads again.
 
 ## Before you publish a schema change
 
@@ -234,27 +234,27 @@ Every version of a Space shares one database, migrated forward to the newest sch
 ## Run it locally
 
 ```bash
-sf zero dev
-sf zero dev stop
-sf zero build
+sf first dev
+sf first dev stop
+sf first build
 ```
 
-`sf zero dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer. The first start downloads WordPress and the plugins the app needs. Keep it running and it rebuilds on every save. It prints the local URL and an admin login for local use only.
+`sf first dev` boots WordPress through WordPress Studio, with no Docker. It needs Node 22 or newer. The first start downloads WordPress and the plugins the app needs. Keep it running and it rebuilds on every save. It prints the local URL and an admin login for local use only.
 
-`sf zero build` writes the plugins to `.zero/wp-content/`, new migrations to `zero/migrations/`, and the client to `zero/client/`. Commit `zero/migrations/`, `zero/client/`, and `zero.gen.ts`. `.zero/` is local state, and publish skips it.
+`sf first build` writes the plugins to `.first/wp-content/`, new migrations to `first/_generated/migrations/`, and the client to `first/client/`. Commit `first/_generated/migrations/`, `first/client/`, and `first.gen.ts`. `.first/` is local state, and publish skips it.
 
-`sf zero check` and `sf publish` use the compiler bundled with the CLI. `sf zero dev` and `sf zero build` need the CLI's native optional package. If it is missing, reinstall the CLI with optional dependencies enabled.
+`sf first check` and `sf publish` use the compiler bundled with the CLI. `sf first dev` and `sf first build` need the CLI's native optional package. If it is missing, reinstall the CLI with optional dependencies enabled.
 
 ## Bring a schema from another CMS
 
 ```bash
-sf zero import payload ../my-payload-app
-sf zero import emdash ../site --output app/zero.config.ts
+sf first import payload ../my-payload-app
+sf first import emdash ../site --output app/first.config.ts
 ```
 
-`sf zero import` reads a Payload, EmDash, or Sanity schema and writes a new `zero.config.ts`. It never runs code from the other CMS and never overwrites a file. Anything Zero cannot hold refuses the import, and nothing is written. Every write rule starts as denied, so set `access` before you publish.
+`sf first import` reads a Payload, EmDash, or Sanity schema and writes a new `first.config.ts`. It never runs code from the other CMS and never overwrites a file. Anything First cannot hold refuses the import, and nothing is written. Every write rule starts as denied, so set `access` before you publish.
 
-Have a Zero app on Spacefast with no `zero.config.ts`? See [Migrate an older Zero app](/zero-migrate).
+Have a Zero app on Spacefast, one with `"runtime": { "kind": "zero" }` in `sf.jsonc`? Zero is retired. See [Zero 0.8](/zero-migrate).
 
 <CardGroup cols={2}>
   <Card title="Database" href="/database" icon="database">
@@ -266,7 +266,7 @@ Have a Zero app on Spacefast with no `zero.config.ts`? See [Migrate an older Zer
   <Card title="Functions" href="/functions" icon="zap">
     Workers, the `functions/` file router, and OpenNext.
   </Card>
-  <Card title="CLI: sf zero" href="/cli/zero" icon="terminal">
-    Every `sf zero` command and its flags.
+  <Card title="CLI: sf first" href="/cli/first" icon="terminal">
+    Every `sf first` command and its flags.
   </Card>
 </CardGroup>

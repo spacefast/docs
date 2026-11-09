@@ -92,10 +92,10 @@ EOF
 sf publish
 ```
 
-A [Zero](/zero) action or hook reads it with `env()`, which returns `null` for a name that isn't set.
+A [First](/first) action or hook reads it with `env()`, which returns `null` for a name that isn't set.
 
-```ts zero.config.ts
-import { action, defineConfig, env } from "zero";
+```ts first.config.ts
+import { action, defineConfig, env } from "first";
 
 export default defineConfig({
   actions: {
@@ -109,7 +109,7 @@ export default defineConfig({
 });
 ```
 
-A Zero app sees **Space** variables only. Team variables do not reach it, so set what the app needs on the Space.
+A First app sees **Space** variables only. Team variables do not reach it, so set what the app needs on the Space.
 
 A [Functions](/functions) worker reads the same values from `env`, its second handler argument.
 

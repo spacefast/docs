@@ -149,7 +149,7 @@ const representativePages = [
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
   ["recipes/vite/index.html", `${docsRoot}/recipes/vite`, "Vite"],
-  ["zero/index.html", `${docsRoot}/zero`, "What Zero is"],
+  ["first/index.html", `${docsRoot}/first`, "What First is"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);

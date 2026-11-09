@@ -1,32 +1,32 @@
 ---
 title: Database
-description: Every Space gets its own MySQL. A Zero app's collections and tables live there, Spacefast migrates it on publish, and a single-use SQL console opens it when you need raw SQL.
+description: Every Space gets its own MySQL. A First app's collections and tables live there, Spacefast migrates it on publish, and a single-use SQL console opens it when you need raw SQL.
 sidebar:
   order: 2
 ---
 
-There's no connection string for this database. Your code reaches it through Zero's `db` or a worker's `env.DB`, and you reach it through a single-use SQL console.
+There's no connection string for this database. Your code reaches it through First's `db` or a worker's `env.DB`, and you reach it through a single-use SQL console.
 
 :::note[Don't have a database yet?]
-Start a [Zero](/zero) app with `sf init --runtime zero`. Its `zero.config.ts` declares the collections and tables, and Spacefast creates them when you publish. A [Functions](/functions#what-is-on-env) worker also gets the database, through `env.DB`.
+Start a [First](/first) app with `sf init --runtime first`. Its `first.config.ts` declares the collections and tables, and Spacefast creates them when you publish. A [Functions](/functions#what-is-on-env) worker also gets the database, through `env.DB`.
 :::
 
 ## What it is
 
-Every Space has one database, the MySQL that lives on the machine serving the site. A [Zero](/zero) app keeps its collections and tables there. A [Functions](/functions) worker gets it as `env.DB`.
+Every Space has one database, the MySQL that lives on the machine serving the site. A [First](/first) app keeps its collections and tables there. A [Functions](/functions) worker gets it as `env.DB`.
 
 You do not create it, size it, or connect to it. Your config declares the schema, and Spacefast applies it when a version initializes.
 
 :::warning[There is no external connection string]
-No route, flag, or dashboard field returns a DSN. Your code reaches the database through `db` (Zero) or `env.DB` (Functions). For everything else there is the [SQL console](#the-sql-console).
+No route, flag, or dashboard field returns a DSN. Your code reaches the database through `db` (First) or `env.DB` (Functions). For everything else there is the [SQL console](#the-sql-console).
 :::
 
 ## Query it from code
 
-In a Zero app, hooks and actions read and write through `db`. Your schema is the API, and its column and relation names are checked at build time.
+In a First app, hooks and actions read and write through `db`. Your schema is the API, and its column and relation names are checked at build time.
 
-```ts zero.config.ts
-import { action, db, defineConfig, HttpError, integer, table, text } from "zero";
+```ts first.config.ts
+import { action, db, defineConfig, HttpError, integer, table, text } from "first";
 
 // Each signed-in account reads and writes only its own rows, through every route.
 const notes = table(
@@ -99,12 +99,12 @@ export default {
 
 ## Migrations
 
-Your `zero.config.ts` is the schema. When you publish a version that changes it, Spacefast diffs it against the schema the Space already runs and applies the difference while the new version initializes, before it can go live.
+Your `first.config.ts` is the schema. When you publish a version that changes it, Spacefast diffs it against the schema the Space already runs and applies the difference while the new version initializes, before it can go live.
 
-To see the SQL a change produces, build locally and read the newest file in `zero/migrations/`:
+To see the SQL a change produces, build locally and read the newest file in `first/_generated/migrations/`:
 
 ```bash
-sf zero build
+sf first build
 ```
 
 :::warning[Rollback does not roll back the schema]
@@ -130,7 +130,7 @@ sf db console --show-secret
 
 `sf db console` opens a browser by default, because the URL grants full SQL authority over the Space's database. `--show-secret` prints it instead, and is the deliberate override. The URL is masked in `--json` receipts unless you pass it. Opening the console needs write access to the Space.
 
-A Zero app's tables share a prefix that starts with `sfz_`.
+A First app's tables share a prefix that starts with `sfz_`.
 
 ## Limits
 
