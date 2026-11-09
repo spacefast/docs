@@ -189,6 +189,13 @@ const FEATURES = [
     row("Build logs, kept with each version", null, all(YES)),
     row("Log drains", null, [NO, NO, NO, YES]),
   ]],
+  ["Infrastructure", [
+    row("Edge locations", "Cached pages are served from the location closest to each visitor.", all("28+")),
+    row("Datacenters", "Amsterdam, Burbank, Washington DC and Dallas. Every datacenter costs the same.", all("4")),
+    row("Platform backups", "Hourly database and daily file backups, on every Space.", all("Hourly database, daily files")),
+    row("DDoS protection and firewall", "DDoS protection, defensive mode and a web application firewall.", all(YES)),
+    row("Automated failover", "If a Space's server fails, it moves to healthy hardware on its own, with no data lost.", all(YES)),
+  ]],
   ["Data", [
     row("Database backups", null, ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", "Custom"]),
     row("Export everything", null, all(YES)),
@@ -231,6 +238,9 @@ const BUSINESS_SPACE = {
   "Pending invitations": "500",
 };
 const BUSINESS_FEATURES = {
+  "Edge locations": "28+",
+  Datacenters: "4",
+  "Platform backups": "Hourly database, daily files",
   "Custom certificates": YES,
   "Log drains": YES,
   Support: "Slack Connect channel",
@@ -366,6 +376,11 @@ const ROW_LINKS = {
   "Header rules": "/routing",
   "Firewall and cache rules": "/infrastructure/rate-limiting",
   "DDoS challenge mode": "/infrastructure/defensive-mode",
+  "Edge locations": "/infrastructure/origin-edge-servers",
+  Datacenters: "/infrastructure/origin-edge-servers",
+  "Platform backups": "/database",
+  "DDoS protection and firewall": "/infrastructure/ddos-protection",
+  "Automated failover": "/infrastructure/automated-failover",
   "Custom certificate": "/infrastructure/tls-certificates",
   "Share links": "/share",
   "Pending invitations": "/share",
@@ -384,7 +399,7 @@ export function pricingTable(name) {
     case "space":
       return { columns: columnsFor(SPACE_PLANS), groups: withLinks(withBusiness(SPACE, BUSINESS_SPACE)), highlight: "Boost" };
     case "features":
-      return { columns: columnsFor(PLANS), groups: plainRows(withBusiness(FEATURES, BUSINESS_FEATURES)) };
+      return { columns: columnsFor(PLANS), groups: withLinks(plainRows(withBusiness(FEATURES, BUSINESS_FEATURES))) };
     case "examples":
       return {
         columns: [{ name: "Plan" }, { name: "Usage" }, { name: "Bill" }],
