@@ -22,7 +22,7 @@ const CPU = "$0.119 per CPU-hour";
 // Per team, per month: [Personal, Go, Pro, Enterprise]. Business is added from BUSINESS_TEAM.
 const TEAM = [
   ["Usage", [
-    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month; unused usage doesn't roll over.",
+    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month; unused usage doesn't roll over on any plan.",
       ["$1", "$5", "$15", "Contract"]),
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free and never count.",
       ["1", "1", "Free up to 5, then $15/month each", "Contract"]),
@@ -217,12 +217,12 @@ const FEATURES = [
   ]],
 ];
 
-// Business (coming soon): from $500 a month, $25 per member, no included usage.
+// Business (coming soon): from $500 a month with $500 of included usage, $25 per member.
 // Its prices are set; its limits aren't. A row without an override copies Pro
 // when Pro's cell is a yes/no, Beta, Soon or Contact sales, and is TBD otherwise.
 const TBD = "TBD";
 const BUSINESS_TEAM = {
-  "Included usage": "None",
+  "Included usage": "$500",
   Members: "$25/month each",
   Compute: CPU,
   "MySQL compute": CPU,
@@ -304,7 +304,7 @@ const columnsFor = (names) => names.map((name) => ({ name, ...PLAN_HEAD[name] })
 
 const AT_A_GLANCE = [
   ["", [
-    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month.", ["$1", "$5", "$15", "None", "Contract"]),
+    row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month; unused usage doesn't roll over on any plan.", ["$1", "$5", "$15", "$500", "Contract"]),
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "Free up to 5, then $15/month each", "$25/month each", "Contract"]),
     row("Spaces and custom domains", null, ["20", "100", "500", TBD, "Custom"]),
     row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", TBD, "Custom"]),
