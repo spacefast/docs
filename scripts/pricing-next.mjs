@@ -48,7 +48,7 @@ const TEAM = [
       ["10 GB, then $0.04 per GB", "100 GB, then $0.04 per GB", "500 GB, then $0.04 per GB", "Contract"]),
   ]],
   ["Storage", [
-    row("Storage", "Everything a Space keeps on its site: published versions, media and its MySQL database. Measured daily and averaged over the month. For now, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site.",
+    row("Storage", "Everything a Space keeps on its site: published versions, media and its MySQL database. Measured daily and averaged over the month. Free for a limited time while we finish measuring it. Once billed, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site.",
       ["Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Contract"], "comp"),
     row("Bucket storage", "Files your app stores through the storage API. Free during the beta.",
       ["Free now; 10 GB, then $0.016 per GB-month*", "Free now; 25 GB, then $0.016 per GB-month*", "Free now; 100 GB, then $0.016 per GB-month*", "Contract"], "beta"),
@@ -264,10 +264,10 @@ export function withBusiness(groups, overrides, proIndex = 2) {
 // 30 days (median and 99th percentile per Space, measured 9 Nov 2026).
 export const EXAMPLES = [
   { title: "A typical Space", plan: "Personal", price: "$0", basis: "Real usage: the median Space over the last 30 days.",
-    lines: [["387 dynamic requests", "Included"], ["0.13 CPU-hours of compute", "$0.02"], ["0.28 GB stored", "Under the 1 GB not counted"], ["2 build minutes", "Included"]],
+    lines: [["387 dynamic requests", "Included"], ["0.13 CPU-hours of compute", "$0.02"], ["0.28 GB stored", "Free for now"], ["2 build minutes", "Included"]],
     note: "Uses $0.02 of the $1 included." },
   { title: "A busy Space", plan: "Personal", price: "$0", basis: "Real usage: busier than 99% of Spaces, plus as many build minutes as a team in the top 1%, over the last 30 days.",
-    lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of compute", "$0.15"], ["0.83 GB stored", "Under the 1 GB not counted"], ["247 build minutes", "100 included, then $0.81"]],
+    lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of compute", "$0.15"], ["0.83 GB stored", "Free for now"], ["247 build minutes", "100 included, then $0.81"]],
     note: "Uses $0.96 of the $1 included. On Go, the same Space uses $0.15 of $5." },
   { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client sites and five members.",
     lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of compute, 10 of MySQL", "$4.75 (MySQL free for now)"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "Free for now"], ["1,500 build minutes", "Included"]],
