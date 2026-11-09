@@ -35,18 +35,13 @@ Each Space runs on its own isolated site, so these are reserved for it. Your pla
 
 ## Domains
 
-<CardGroup cols={2}>
-<Card title="Registration and renewal at cost">
+| Domain | Price | Counts toward custom domains |
+| --- | --- | --- |
+| Registered or renewed through Spacefast | At cost: what the registry charges us plus the ICANN fee, nothing added | No |
+| Registered through WordPress.com, or using Spacefast DNS | No charge to connect | No |
+| Any other domain you connect | No charge to connect | Yes |
 
-You pay what the registry charges us, plus the ICANN fee, with nothing added, for registration and every renewal. Prices for every ending are on the domain prices page.
-
-</Card>
-<Card title="They never count against your limit">
-
-Domains registered through Spacefast or WordPress.com, and domains using Spacefast DNS, don't count toward your plan's custom domains. Managed HTTPS is included for every domain.
-
-</Card>
-</CardGroup>
+Managed HTTPS is included for every domain.
 
 ## Store and payments <Badge variant="warning">Beta</Badge>
 
@@ -65,66 +60,43 @@ Sell from any Space with no monthly fee and no Spacefast commission. You pay onl
 | **Failover** | full datacenter redundancy with automated failover |
 | **2 to 10+** | compute workers per Space, bursting up to 110 when the platform has room |
 
-<Expandable title="What is automated failover?">
+### What is automated failover?
 
 Each Space's data is kept in more than one place. If the server running your Space fails, the platform detects it and moves your Space to healthy hardware on its own, without you doing anything and without losing data. Visitors keep getting cached pages from the edge while that happens. See [Automated failover](/infrastructure/automated-failover) for how the switch works.
 
-</Expandable>
-
 ## What happens at the limit
 
-<CardGroup cols={3}>
-<Card title="Personal">
-
-When your $1 of usage runs out, new builds and Workers pause until next month or until you upgrade. Deployed Spaces keep serving, running PHP and sending email. Nothing is deleted.
-
-</Card>
-<Card title="Go, Pro and Business">
-
-Usage past what's included bills at the listed prices, up to the spending cap you set. At the cap, new builds and Workers pause and you're not charged for anything above it. Deployed Spaces keep serving.
-
-</Card>
-<Card title="A Space's own limits">
-
-Requests beyond a Space's compute workers wait briefly, then get a 429 with Retry-After. Publishes and crons over a limit get an error that names the limit and how to raise it.
-
-</Card>
-</CardGroup>
+| When | What pauses | What keeps working |
+| --- | --- | --- |
+| Personal runs out of its $1 of usage | New builds and Workers, until next month or until you upgrade | Deployed Spaces keep serving, running PHP and sending email. Nothing is deleted |
+| Go, Pro or Business reaches its spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces keep serving |
+| A Space reaches one of its own limits | Requests beyond its compute workers wait briefly, then get a 429 with Retry-After. Publishes and crons over a limit get an error that names the limit and how to raise it | Everything else on the Space |
 
 ## Billing questions
 
-<Accordion>
-<AccordionItem title="How am I billed?" defaultOpen>
+### How am I billed?
 
 Monthly, in US dollars, before tax. Plans and Boost bill at the start of the month. Usage past what's included bills at the end of the month.
 
-</AccordionItem>
-<AccordionItem title="What happens when I upgrade or downgrade?">
+### What happens when I upgrade or downgrade?
 
 Upgrades apply right away, prorated to the day. When you downgrade, your limits drop at renewal. Anything over the new limits keeps serving but becomes read-only: you can delete or export it, but not add to it, until it's back under the limit.
 
-</AccordionItem>
-<AccordionItem title="Can prices change?">
+### Can prices change?
 
 We may change our fees going forward, in line with our Terms of Service. New prices apply to new purchases right away. If we raise the price of a plan you already pay for, you keep your current price for at least 12 months, and we give you at least 60 days' notice before your renewal price changes. If you don't agree with a change, you can cancel your plan. Price cuts apply to everyone at their next bill.
 
-</AccordionItem>
-<AccordionItem title="Can I cap my spending?">
+### Can I cap my spending?
 
 Yes, on Go, Pro and Business. Set a monthly cap; it starts at twice your plan price, with alerts at 50%, 75% and 100%. Usage can briefly go past the cap while we stop it, depending on server availability, and you're never charged for anything above it. At the cap, new builds and Workers pause until you raise the cap or the month ends. Deployed Spaces keep serving.
 
-</AccordionItem>
-<AccordionItem title="Do prices depend on the datacenter?">
+### Do prices depend on the datacenter?
 
 Not today. Spaces run in Amsterdam, Burbank, Washington DC and Dallas, and every datacenter costs the same. Prices may differ by datacenter in the future, under the same notice rules.
 
-</AccordionItem>
-<AccordionItem title="Do you have nonprofit or education pricing?">
+### Do you have nonprofit or education pricing?
 
 Yes. Contact sales.
-
-</AccordionItem>
-</Accordion>
 
 ## Every feature
 

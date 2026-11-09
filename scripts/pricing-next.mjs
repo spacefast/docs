@@ -355,45 +355,32 @@ function table(first, columns, groups) {
   ].join("\n");
 }
 
-function card({ name, soon, price, per, tag, items }, attributes = "") {
+// Plans as one table: one row per plan, no cards.
+function plansTable() {
+  const row = ({ name, soon, price, per, tag }) => `| ${cell(name)}${soon ? ` ${SOON}` : ""} | ${cell(price)} | ${cell(per)} | ${cell(tag)} |`;
   return [
-    `<Card title="${name}"${attributes}>`,
-    "",
-    `${soon ? `${SOON} ` : ""}**${price}** ${per}`,
-    "",
-    tag,
-    "",
-    ...items.map((item) => `- ${item}`),
-    "",
-    "</Card>",
+    "| Plan | Price | Billed | Included |",
+    "| --- | --- | --- | --- |",
+    ...CARDS.map(row),
+    row(BOOST),
   ].join("\n");
 }
 
-function example({ title: name, plan, price, basis, lines, note }) {
+// Example bills as one table: one row per example, the arithmetic in the last column.
+function examplesTable() {
   return [
-    `<Card title="${name}">`,
-    "",
-    `**${price} a month** on ${plan}. ${basis}`,
-    "",
-    ...lines.map(([what, cost]) => `- ${what}: ${cost}`),
-    "",
-    note,
-    "",
-    "</Card>",
+    "| Example | Plan | Bill | Usage | What it uses |",
+    "| --- | --- | --- | --- | --- |",
+    ...EXAMPLES.map(({ title: name, plan, price, basis, lines, note }) =>
+      `| ${cell(name)}<br/>${cell(basis)} | ${cell(plan)} | ${cell(price)} a month | ${lines.map(([what, cost]) => `${cell(what)}: ${cell(cost)}`).join("<br/>")} | ${cell(note)} |`),
   ].join("\n");
 }
 
 /** The draft page's includes, keyed by file name under content/_pricing-next/. */
 export function pricingNextSnippets() {
   return {
-    plans: [
-      '<CardGroup cols={3}>',
-      ...CARDS.map((plan) => card(plan)),
-      "</CardGroup>",
-      "",
-      card(BOOST, ' icon="rocket"'),
-    ].join("\n"),
-    examples: ["<CardGroup cols={2}>", ...EXAMPLES.map(example), "</CardGroup>"].join("\n"),
+    plans: plansTable(),
+    examples: examplesTable(),
     team: table("Per team, per month", PLANS, withBusiness(TEAM, BUSINESS_TEAM)),
     space: table("Per Space", SPACE_PLANS, withBusiness(SPACE, BUSINESS_SPACE)),
     features: table("Feature", PLANS, withBusiness(FEATURES, BUSINESS_FEATURES)),
