@@ -26,7 +26,7 @@ const TEAM = [
       ["1", "1", "5, then $15 each (no extra usage)", "Contract"]),
   ]],
   ["Compute", [
-    row("PHP compute", "Active CPU time running PHP, including Zero apps. Time spent waiting on the network or the database doesn't count.",
+    row("Compute", "Active CPU time running your Space's code, including Zero apps. Time spent waiting on the network or the database doesn't count.",
       [CPU, CPU, CPU, "Contract"]),
     row("MySQL compute", "Active CPU time your database spends answering queries. Memories and other team data we keep for you are part of this.",
       [CPU, CPU, CPU, "Contract"]),
@@ -211,67 +211,37 @@ const FEATURES = [
 // Business (coming soon): from $500 a month, $25 per member, no included usage.
 // Per-Space limits are 5x Pro, capped where the platform has a hard ceiling.
 // A row without an override takes Pro's value.
+// Business is coming soon: its price is set, its limits aren't. Every other
+// Business cell renders as a TBD badge.
+const TBD = "TBD";
 const BUSINESS_TEAM = {
-  "Included usage": "None; $100 welcome credit in month one",
+  "Included usage": "$100 welcome credit in month one",
   Members: "$25 each",
-  "PHP compute": CPU,
+  Compute: CPU,
   "MySQL compute": CPU,
-  "Dynamic requests": "Fair use with minimums (TBD)",
-  "CI compute (builds)": "Fair use with minimums (TBD)",
   "Workers requests": "$0.30 per million",
-  "Cached traffic": "Fair use with minimums (TBD)",
-  "Uncached traffic": "Fair use with minimums (TBD)",
   Storage: "1 GB per Space, then $0.10 per GB-month",
-  "Bucket storage": "Free now; 500 GB, then $0.016 per GB-month*",
-  "Source control storage": "Free now; 250 GB, then $0.07 per GB-month†",
-  "Transactional email": "Free now; 10,000 a day, then $0.50 per 1,000*",
-  Spaces: "2,500",
-  "Custom domains": "2,500",
-  Logs: "Last 30 days",
-  "Activity history": "Last 5 years",
 };
 const BUSINESS_SPACE = {
-  "Compute workers": "20",
-  Burst: "Up to 40",
-  "Compute memory per request": "2 GB",
-  "Function bundle": "250 MB",
-  "Function run time": "600 s",
-  Disk: "125 GB",
-  "VideoPress storage": "1.25 TB",
-  "Version size": "10 GB",
-  "File size": "5 GB",
-  "Files per version": "500,000",
-  "Stored file size": "5 GB",
-  "Database backups": "Hourly, restore 150 days back",
-  "Build timeout": "4 h",
-  Crons: "100",
-  "Advanced crons": "Up to 25",
-  "Cron run time": "25 min",
-  Redirects: "7,500 + 375 dynamic",
-  "Header rules": "375",
-  "Firewall and cache rules": "250",
+  "Advanced crons": TBD,
+  "Extra email a day": TBD,
+  "DDoS challenge mode": YES,
   "Custom certificate": YES,
-  "Extra email a day": "+10,000",
   "Share links": "100",
   "Pending invitations": "500",
 };
 const BUSINESS_FEATURES = {
-  "Custom domains": "2,500",
-  "Redirects and header rules": "7,500 per Space",
-  "Firewall and cache rules": "250 per Space",
   "Custom certificates": YES,
-  Crons: "100 per Space",
-  "Runtime and edge logs": "Last 30 days",
-  "Database backups": "Hourly, 150 days",
   "Log drains": YES,
   Support: "Slack Connect channel",
 };
 
-/** Insert the Business column after Pro, from the overrides or Pro's own value. */
+/** Insert the Business column after Pro: overrides, Pro's yes/no, or TBD. */
 export function withBusiness(groups, overrides, proIndex = 2) {
   const used = new Set();
   const out = groups.map(([group, rows]) => [group, rows.map((item) => {
-    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : item.values[proIndex];
+    const pro = item.values[proIndex];
+    const value = Object.hasOwn(overrides, item.label) ? overrides[item.label] : pro === YES || pro === NO ? pro : TBD;
     if (Object.hasOwn(overrides, item.label)) used.add(item.label);
     return { ...item, values: [...item.values.slice(0, proIndex + 1), value, ...item.values.slice(proIndex + 1)] };
   })]);
@@ -341,10 +311,10 @@ const AT_A_GLANCE = [
   ["", [
     row("Included usage", "Pays for every metered resource on this page, at the listed prices. Resets every month.", ["$1", "$5", "$15", "$100 in month one", "Contract"]),
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "5, then $15 each", "$25 each", "Contract"]),
-    row("Spaces and custom domains", null, ["20", "100", "500", "2,500", "Custom"]),
-    row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", "20", "Custom"]),
-    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", "125 GB", "Up to 1 TB"]),
-    row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", "Hourly, 150 days", "Custom"]),
+    row("Spaces and custom domains", null, ["20", "100", "500", TBD, "Custom"]),
+    row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", TBD, "Custom"]),
+    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", TBD, "Up to 1 TB"]),
+    row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", TBD, "Custom"]),
     row("Support", null, ["Community", "Email", "Priority email", "Slack Connect", "Dedicated, with SLA"]),
   ]],
 ];
@@ -360,14 +330,59 @@ function plainRows(groups) {
   })]);
 }
 
+// Docs pages that explain a row, linked from its name.
+const ROW_LINKS = {
+  "Included usage": "/usage",
+  Members: "/teams",
+  Compute: "/functions",
+  "MySQL compute": "/database",
+  "Dynamic requests": "/caching",
+  "CI compute (builds)": "/ci",
+  "Workers requests": "/functions",
+  "Workers compute": "/functions",
+  "Cached traffic": "/caching",
+  Storage: "/object-storage",
+  "Bucket storage": "/object-storage",
+  "Source control storage": "/git",
+  "Transactional email": "/functions",
+  Spaces: "/spaces",
+  "Custom domains": "/domains",
+  Logs: "/logs",
+  "Activity history": "/logs",
+  "Compute workers": "/infrastructure/server-specs-settings",
+  Burst: "/infrastructure/server-specs-settings",
+  "Compute memory per request": "/infrastructure/server-specs-settings",
+  "Function bundle": "/functions",
+  "Function run time": "/functions",
+  "Version size": "/versions",
+  "Files per version": "/versions",
+  "Environment variables": "/environment-variables",
+  "Database backups": "/database",
+  "Build timeout": "/ci",
+  Crons: "/crons",
+  "Advanced crons": "/crons",
+  "Cron run time": "/crons",
+  Redirects: "/routing",
+  "Header rules": "/routing",
+  "Firewall and cache rules": "/infrastructure/rate-limiting",
+  "DDoS challenge mode": "/infrastructure/defensive-mode",
+  "Custom certificate": "/infrastructure/tls-certificates",
+  "Share links": "/share",
+  "Pending invitations": "/share",
+  "Spaces and custom domains": "/spaces",
+  "Compute workers per Space": "/infrastructure/server-specs-settings",
+  "Disk per Space": "/infrastructure/server-specs-settings",
+};
+const withLinks = (groups) => groups.map(([group, rows]) => [group, rows.map((item) => ({ ...item, href: item.href ?? ROW_LINKS[item.label] }))]);
+
 export function pricingTable(name) {
   switch (name) {
     case "plans":
-      return { columns: columnsFor(PLANS), groups: AT_A_GLANCE };
+      return { columns: columnsFor(PLANS), groups: withLinks(AT_A_GLANCE) };
     case "team":
-      return { columns: columnsFor(PLANS), groups: withBusiness(TEAM, BUSINESS_TEAM) };
+      return { columns: columnsFor(PLANS), groups: withLinks(withBusiness(TEAM, BUSINESS_TEAM)) };
     case "space":
-      return { columns: columnsFor(SPACE_PLANS), groups: withBusiness(SPACE, BUSINESS_SPACE), highlight: "Boost" };
+      return { columns: columnsFor(SPACE_PLANS), groups: withLinks(withBusiness(SPACE, BUSINESS_SPACE)), highlight: "Boost" };
     case "features":
       return { columns: columnsFor(PLANS), groups: plainRows(withBusiness(FEATURES, BUSINESS_FEATURES)) };
     case "examples":

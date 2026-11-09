@@ -5,6 +5,7 @@
  * Row explanations open from a small "i" next to the row name (hover, focus or
  * tap); labels such as Beta sit on the row name, and the price lives in the cell.
  */
+import { contentHref } from "blume/components/content/base-href.ts";
 import { pricingTable } from "../scripts/pricing-next.mjs";
 
 interface Props {
@@ -16,8 +17,8 @@ const { columns, groups, highlight } = pricingTable(table);
 const span = columns.length + 1;
 ---
 
-<div class="sf-pricing not-prose" data-pricing-table={table}>
-  <table>
+<div class="sf-pricing not-prose" data-pricing-table={table} tabindex="0" role="region" aria-label={`${table} pricing table, scroll sideways for every plan`}>
+  <table style={`--sf-cols: ${columns.length}`}>
     <thead>
       <tr>
         <th scope="col"><span class="sf-visually-hidden">Item</span></th>
@@ -35,13 +36,14 @@ const span = columns.length + 1;
         <>
           {group && (
             <tr class="sf-group">
-              <th scope="rowgroup" colspan={span}>{group}</th>
+              <th scope="rowgroup">{group}</th>
+              <td colspan={span - 1} aria-hidden="true"></td>
             </tr>
           )}
           {rows.map((row) => (
             <tr>
               <th scope="row">
-                <span class="sf-label">{row.label}</span>
+                {row.href ? <a class="sf-label" href={contentHref(row.href)}>{row.label}</a> : <span class="sf-label">{row.label}</span>}
                 {row.tag && <span class:list={["sf-tag", `sf-tag-${row.tag}`]}>{{ beta: "Beta", soon: "Soon", comp: "Complimentary" }[row.tag]}</span>}
                 {row.tip && (
                   <span class="sf-tip" tabindex="0" role="note" aria-label={row.tip}>
@@ -52,7 +54,7 @@ const span = columns.length + 1;
               </th>
               {row.values.map((value, index) => (
                 <td class:list={[{ "sf-highlight": columns[index]?.name === highlight, "sf-none": value === "—" }]} data-label={columns[index]?.name}>
-                  {value === "✓" ? <span class="sf-yes" aria-label="Included">✓</span> : value === "—" ? <span aria-label="Not included">—</span> : value}
+                  {value === "✓" ? <span class="sf-yes" aria-label="Included">✓</span> : value === "—" ? <span aria-label="Not included">—</span> : value === "TBD" ? <span class="sf-tag sf-tag-tbd" title="To be decided before Business launches">TBD</span> : value}
                 </td>
               ))}
             </tr>
@@ -67,11 +69,20 @@ const span = columns.length + 1;
   .sf-pricing {
     margin: 1rem 0 2rem;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
     border: 1px solid var(--blume-border);
     border-radius: var(--blume-radius, 0.5rem);
+    scrollbar-width: thin;
+  }
+  .sf-pricing:focus-visible {
+    outline: 2px solid var(--blume-foreground);
+    outline-offset: 2px;
   }
   table {
-    width: 100%;
+    /* Every plan column gets a readable width; past the page width the table scrolls sideways. */
+    width: max(100%, calc(13rem + var(--sf-cols) * 10.5rem));
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 0.875rem;
     line-height: 1.4;
@@ -85,8 +96,6 @@ const span = columns.length + 1;
     border-bottom: 1px solid var(--blume-border);
   }
   thead th {
-    position: sticky;
-    top: 0;
     background: var(--blume-background);
     font-weight: 500;
     white-space: nowrap;
@@ -97,31 +106,41 @@ const span = columns.length + 1;
     font-weight: 400;
     white-space: normal;
   }
-  tbody th[scope="row"] {
+  /* The row names stay put while plan columns scroll under them. */
+  tbody th[scope="row"],
+  thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 13rem;
     font-weight: 500;
-    min-width: 11rem;
+    background: var(--blume-background);
+    box-shadow: 1px 0 0 var(--blume-border);
   }
-  td {
-    min-width: 7rem;
+  thead th:first-child {
+    z-index: 3;
+    background: var(--blume-background);
+  }
+  td,
+  thead th:not(:first-child) {
+    scroll-snap-align: start;
   }
   @media (max-width: 640px) {
+    table {
+      width: calc(9rem + var(--sf-cols) * 9rem);
+    }
     tbody th[scope="row"],
     thead th:first-child {
-      position: sticky;
-      left: 0;
-      z-index: 1;
-      min-width: 8.5rem;
-      max-width: 8.5rem;
-      background: var(--blume-background);
-    }
-    thead th:first-child {
-      z-index: 3;
-    }
-    tr.sf-group th {
-      position: static;
+      width: 9rem;
     }
   }
   tr.sf-group th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--blume-background);
+    box-shadow: 1px 0 0 var(--blume-border);
+    white-space: nowrap;
     padding-top: 1rem;
     font-size: 0.75rem;
     font-weight: 500;
@@ -134,6 +153,15 @@ const span = columns.length + 1;
   }
   td {
     color: var(--blume-foreground);
+  }
+  a.sf-label {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 25%, transparent);
+    text-underline-offset: 3px;
+  }
+  a.sf-label:hover {
+    text-decoration-color: currentColor;
   }
   .sf-none {
     color: var(--blume-muted-foreground);
@@ -161,6 +189,12 @@ const span = columns.length + 1;
   .sf-tag-beta {
     color: #a16207;
     background: color-mix(in oklch, #eab308 16%, transparent);
+  }
+  .sf-tag-tbd {
+    margin-left: 0;
+    color: var(--blume-muted-foreground);
+    border: 1px dashed var(--blume-border);
+    background: transparent;
   }
   .sf-tag-comp {
     color: #15803d;
