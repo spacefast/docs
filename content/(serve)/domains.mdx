@@ -89,7 +89,7 @@ Every observed `A` record has to point at Spacefast. A leftover record from your
 Most domains need no TXT record. One appears only when the hostname is already in use elsewhere and you have to prove it is yours (see [Domain verification records](/infrastructure/domain-verification-records) for how they interact with older proofs):
 
 - **Another host still holds it.** The record is named for the hostname, its value starts with `atomic-domain-`, and the domain waits until it is published. Remove any CNAME at that name first; a TXT record cannot sit beside one.
-- **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record. If you can also manage the Space that holds it, verify with move and the domain moves without the record. Otherwise publish the record at your DNS host and verify: once Spacefast sees it, the domain moves to this Space and the old Space stops serving it. Either way, a claim expires 24 hours after it was created; add the domain again for a new one.
+- **Another Space serves it.** Adding it here creates a claim instead of failing, and returns a `_spacefast-claim.<domain>` TXT record made for this claim. Publish it at your DNS host and verify. Once Spacefast sees it, the domain moves to this Space and the old Space stops serving it. A claim doesn't expire, and it holds nothing until you prove it. If you manage both Spaces, you can also remove the domain from the other one and add it here.
 
 Keep exactly one `atomic-domain-` record per hostname. Two of them, even when one is correct, make the claim fail.
 
