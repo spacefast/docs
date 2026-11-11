@@ -89,8 +89,11 @@ alerts is the bar.
   rules, which mirror the vocabulary registry in the product monorepo
   (`packages/common/src/vocabulary.ts`): "API key" never "access token". The
   infra brand is "WP Cloud" (never dotted or hyphenated). Prefer "infra";
-  name WP Cloud only when the external reference is necessary — never the
-  euphemism "the hosting provider". Marketing may use the family line "the
+  name WP Cloud only when the external reference is necessary. Never use the
+  word "hosting" in prose: say publish, serve, live, infrastructure, or
+  runtime (`Hosting.yml`). Generated error pages, OpenAPI prose, and the
+  shipped changelog are exempt until the generated snapshot is refreshed.
+  Marketing may use the family line "the
   same infra as Automattic, WP Cloud, Pressable, and WordPress.com".
 - Unknown technical words go in `styles/Spacefast/spelling-exceptions.txt`
   (sorted, case matters for proper nouns). Identifiers in prose — commands,
