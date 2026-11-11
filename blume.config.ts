@@ -126,7 +126,7 @@ export default defineConfig({
       { label: "CLI", path: "/cli", icon: icons.terminal },
       { label: "API", path: "/api", icon: icons.braces },
       { label: "Agents", path: "/agents", icon: icons.robot },
-      { label: "Platforms", path: "/platforms", icon: icons.handshake },
+      { label: "Spacefast for Platforms", path: "/platforms", icon: icons.handshake },
     ],
   },
   reference: [
