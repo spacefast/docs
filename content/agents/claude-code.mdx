@@ -38,7 +38,7 @@ Two entries, hosted and local.
 }
 ```
 
-`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio. `npx` starts it on Node.js, so its `publish` takes inline files too; Claude Code publishes a folder with `sf publish <path>`. The version in `args` is stamped at release; the shipped file pins whatever the release built.
+`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio. `npx` starts it on Node.js, so its `publish` takes inline files too. To publish a folder, Claude Code uses `sf publish <path>` when the `sf` CLI is installed and signed in. The version in `args` is stamped at release; the shipped file pins whatever the release built.
 
 The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
 
