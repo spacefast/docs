@@ -95,7 +95,7 @@ That's why two roles have extra rules:
 
 Writes need a signed-in viewer. An anonymous visitor of a public Space reads through a `team` role and never writes through it: the call answers `connector_write_sign_in_required`. Send viewers to sign in with `space.access.signIn()`. A `visitor` role asks the viewer to sign in first, then to connect their account.
 
-A team's connector policy still applies to every call. A blocked tool answers `connector_tool_blocked`, and a call the policy holds for approval answers `approval_pending`.
+A team's connector policy still applies to every call. A tool it blocks is refused, and a call it holds for approval answers `approval_pending`.
 
 ## Call it from a page
 
@@ -190,7 +190,7 @@ A call answers `{ state, data }`. When `state` is `ok`, `data` holds the tool's 
 | `ok` | `data` is the provider's payload. An HTTP-backed tool adds `http` with the upstream `status` and `headers`, and a shared read adds `cachedAt` | Render it |
 | `unbound` | No account serves this role yet | Tell the viewer it isn't set up. The Space's owner binds an account |
 | `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
-| `reconnect_required` | The account's authorization expired | Link to `connectUrl` when it's there |
+| `reconnect_required` | The account's authorization expired | On a `visitor` role, link to `connectUrl`. A shared account is reconnected by the team |
 | `approval_pending` | The call is waiting for approval | Say so, and link to `approvalUrl` when it's there |
 | `running` | The call is still going | Try again shortly. A watched read retries by itself |
 
@@ -198,12 +198,12 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 
 | Code | Status | When |
 | --- | --- | --- |
-| [`connection_forbidden`](/errors/connection_forbidden) | 403 | The team's policy blocks the connector, the account doesn't serve sites, or the Space is too open for the role |
+| [`connection_forbidden`](/errors/connection_forbidden) | 403 | The team's policy blocks the connector or a read tool, the account doesn't serve sites, or the Space is too open for the role |
 | [`connector_role_unknown`](/errors/connector_role_unknown) | 404 | The live version doesn't declare this role |
 | `connector_tool_not_allowed` | 403 | The role's `tools` doesn't list this tool |
 | `connector_arg_pinned` | 422 | The call sent a different value for a pinned argument |
 | `connector_write_sign_in_required` | 403 | A write through a `team` or `personal` role from a viewer who isn't signed in as a member |
-| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | The team's connector policy blocks this tool |
+| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | The team's connector policy blocks this write tool |
 | [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a tool that writes. Send a `POST` |
 | [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | The call came from another site, or a write without same-origin proof |
 | `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer. Try again |
@@ -212,7 +212,7 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 
 A `visitor` role's `connectUrl` is `/__spacefast/connectors/<role>/connect`. It signs the viewer in if needed, then sends them to the provider and back. Add `?return_to=/some/path` to land somewhere other than `/`. A `POST` to `/__spacefast/connectors/<role>/disconnect` from the Space's own page forgets the viewer's account.
 
-Space owners see who connected with [`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers) and remove one with [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection).
+[`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers) counts which of the Space's users connected each role, and [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection) disconnects one user's account for a role.
 
 ## Pinned arguments
 
