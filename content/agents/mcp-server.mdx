@@ -17,7 +17,7 @@ The same server ships in two runtimes. Both expose the eligible API operations b
 |---|---|---|
 | Transport | Streamable HTTP | stdio |
 | Endpoint or command | `https://mcp.spacefast.com` | `sf mcp`, or `npx -y spacefast mcp` |
-| Filesystem | None. `publish` requires inline `files` | Reads your workspace. With the installed `sf` binary, `publish` takes a `path` or publishes the current workspace; through `npx` (Node.js), it takes inline `files` |
+| Filesystem | None. `publish` requires inline `files` | Reads your workspace. With the standalone or Homebrew `sf` on macOS or Linux, `publish` takes a `path` or publishes the current workspace. Through `npx`, the npm package (Node.js), or on Windows, it takes inline `files` |
 | Auth | OAuth, per client | Your CLI login, or `SPACEFAST_TOKEN` |
 | Where it runs | Spacefast | Your machine |
 
@@ -87,7 +87,7 @@ Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connecto
 
 | Field | Type | What it does |
 |---|---|---|
-| `path` | string | Local runtime with the installed `sf` binary only. One local directory, file, or archive. Omit `path` and `files` to publish the current workspace |
+| `path` | string | Local runtime only, with the standalone or Homebrew `sf` on macOS or Linux. One local directory, file, or archive. Omit `path` and `files` to publish the current workspace |
 | `files` | array of 1 to 1000 | Inline files. Required on hosted. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
 | `spaceId` | string starting `spc_` | Update this Space. Omit to create one, or on local to use the Space linked to this workspace |
 | `teamId` | string | Destination team id or slug for a new Space. Send one after a `team_required` error |
