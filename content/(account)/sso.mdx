@@ -1,0 +1,82 @@
+---
+title: SSO for members
+description: Let people on your company's email domains sign in to Spacefast through your OpenID Connect identity provider
+sidebar:
+  order: 2
+---
+
+People on your company's verified email domains can sign in to Spacefast through your identity provider. SSO adds a way in. Email codes, passwords, and social sign-in keep working, and so do existing sessions, API keys, and CLI logins.
+
+SSO sign-in is on the Enterprise plan. An owner of the top-level team sets it up, and its subteams use the same setup. Spacefast supports OpenID Connect (OIDC) only, not SAML.
+
+## Before you start
+
+- You're an owner of an Enterprise team that isn't a subteam.
+- Your identity provider can host an OIDC web app that uses the authorization code flow. Its discovery and sign-in endpoints must be reachable over public HTTPS.
+- You can add DNS records for each email domain your members use.
+
+## Set it up
+
+<Steps>
+  <Step title="Create an app in your identity provider">
+    Create an OIDC web app with a client secret and the authorization code grant. Copy its issuer URL, client ID, and client secret. Leave the redirect URI for now: Spacefast shows it in step 3.
+  </Step>
+  <Step title="Add the connection">
+    Open your team's **Settings → Access** and find **SSO providers**. Press **Add SSO provider**, pick **OpenID Connect**, and fill in a name, the **Issuer**, the **Client ID**, and the **Client secret**. Press **Add connection**.
+  </Step>
+  <Step title="Turn on member sign-in">
+    In the **Member sign-in** card on the same page, choose **Use for member sign-in** for the connection. Copy the **Return address** it shows into your identity provider's allowed redirect URIs. The address belongs to this connection, so paste it exactly.
+  </Step>
+  <Step title="Verify your email domains">
+    Type a domain and press **Add domain**. Publish the TXT record it shows at `_spacefast-sso.<domain>`, then press **Verify**. A pending domain can't route anyone to SSO. A verified domain also covers its subdomains.
+
+    Keep the TXT record published. You need it if the domain has to be verified again.
+  </Step>
+  <Step title="Pick a session length">
+    **Member session length** runs from 1 hour to 30 days. The default is 7 days. It applies only to sessions that start through SSO.
+  </Step>
+</Steps>
+
+The team's Activity log records each change, including the old and new session length. To read the setup from a terminal, run `sf teams sign-in inspect`. To manage the identity connection itself, see [`sf share identity`](/cli/share).
+
+### Example: Okta
+
+1. In the Okta Admin Console, go to **Applications → Applications → Create App Integration**. Pick **OIDC - OpenID Connect**, then **Web Application**.
+2. Keep **Authorization Code** as the only grant type. Leave Demonstrating Proof of Possession (DPoP) off.
+3. Use your Okta org URL as the issuer, for example `https://your-org.okta.com`. To check it, open `https://your-org.okta.com/.well-known/openid-configuration` and copy the `issuer` value exactly.
+4. After step 3 above, paste the **Return address** into **Sign-in redirect URIs**.
+5. Assign the app to the people who should sign in to Spacefast.
+
+## Sign in with SSO
+
+Type your work email on the usual sign-in page. For a verified domain, the next screen names your company's team. Press **Continue to** that team to sign in through your identity provider. **Use another method** keeps the email code or password, and **Use a different email** goes back to the email field.
+
+The first SSO sign-in for an address takes one extra step. Spacefast mails a code to that address, and asks for an authenticator code if the account has two-factor on. Then it sends you to your identity provider once more and finishes. Later SSO sign-ins skip this step.
+
+- A new person joins the company team without getting a personal team.
+- For an existing account, the identity provider's email must match the account's primary email. Linking adds a security notice and an Activity entry. Personal teams, Spaces, and roles stay as they are.
+- An address outside the verified domains, or one that's a secondary email on another account, can't sign in through SSO.
+- A removed member can't rejoin through SSO. An admin has to restore their membership.
+- A team's two-factor requirement still applies.
+
+## Sessions and turning SSO off
+
+An SSO session ends at a fixed time: using it doesn't extend it. Shortening **Member session length** also shortens sessions that already exist. Lengthening it doesn't extend or revive earlier sessions.
+
+Turning off member sign-in, revoking its connection, or deleting the team signs out every session that started through SSO. OAuth access tokens issued under those sessions stop working, and live Comments disconnect. Apps that use Sign in with Spacefast get no logout notice. Sessions from other sign-in methods stay signed in. CLI logins, API keys, and OAuth grants approved during an SSO session keep their own lifetimes.
+
+Turning off member sign-in keeps the connection for Space visitors. Revoking the connection removes it for visitors too.
+
+## Troubleshooting
+
+| What you see | What to do |
+|---|---|
+| `enterprise_required` | Member sign-in needs the Enterprise plan. |
+| `sso_connection_not_oidc` | Member sign-in needs an OIDC connection, not a white-label signer. |
+| `sso_provider_exists` | A team has one SSO connection for members. Turn off member sign-in on the current one first. |
+| `sso_domain_txt_missing` | Spacefast can't find the TXT record in public DNS yet. Check the name and value, wait for DNS to update, and verify again. |
+| `sso_domain_dns_unavailable` | Public DNS didn't answer. The domain stays pending. Verify again shortly. |
+| `sso_domain_claimed` | Another team already verified this domain or a domain that covers it. Use a domain your team controls, or contact support. |
+| `team_has_member_sign_in` | A team with member sign-in on can't become a subteam. Turn member sign-in off first. |
+| "That address is outside the domains this company's SSO covers." | The identity provider returned an email outside your verified domains. Verify that domain, or fix the email in your identity provider. |
+| A redirect URI error on your identity provider's page | The redirect URI there doesn't match the **Return address**. Copy it again from the **Member sign-in** card. |
