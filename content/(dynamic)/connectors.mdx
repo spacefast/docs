@@ -114,7 +114,7 @@ import { space } from "./spacefast.generated";
 
 const answer = await space.connectors.crm.list_deals({ stage: "won" });
 if (answer.state === "ok") render(answer.data);
-else showNotice(answer.message, answer.connectUrl);
+else showNotice(answer.message);
 ```
 
 Each tool knows its HTTP method. A read-only tool reads with `GET`, and a tool that writes sends a `POST`. Pass `{ idempotencyKey }` as the last argument to make a retried write run once.
@@ -139,7 +139,6 @@ import { space } from "./spacefast.generated";
 export function Deals() {
   const deals = useConnector(space.connectors.crm.list_deals, { stage: "won" }, { every: "60s" });
   if (deals.state === "ok") return <DealList deals={deals.data} />;
-  if (deals.connectUrl) return <a href={deals.connectUrl}>{deals.message}</a>;
   return <p>{deals.message ?? "Loading…"}</p>;
 }
 ```
@@ -191,8 +190,8 @@ A call answers `{ state, data }`. When `state` is `ok`, `data` holds the tool's 
 | --- | --- | --- |
 | `ok` | `data` is the provider's payload. An HTTP-backed tool adds `http` with the upstream `status` and `headers`, and an answer served from a shared read adds `cachedAt` | Render it |
 | `unbound` | No account serves this role yet | Tell the viewer it isn't set up. The Space's owner binds an account |
-| `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
-| `reconnect_required` | The account's authorization expired | On a `visitor` role, link to `connectUrl`. A shared account is reconnected by the team |
+| `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl`. See [Visitor accounts](#visitor-accounts) |
+| `reconnect_required` | The account's authorization expired | On a `visitor` role, link to `connectUrl`. On a `team` or `personal` role, the team reconnects the account; the answer still carries a `connectUrl`, but it only works for `visitor` roles, so don't show it |
 | `approval_pending` | The call is waiting for approval | Say so, and link to `approvalUrl` when it's there |
 | `running` | The call is still going | Try again shortly. A watched read retries by itself |
 
@@ -200,12 +199,12 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 
 | Code | Status | When |
 | --- | --- | --- |
-| [`connection_forbidden`](/errors/connection_forbidden) | 403 | The team's policy blocks the connector or a read tool, the account doesn't serve sites, or the Space is too open for the role |
+| [`connection_forbidden`](/errors/connection_forbidden) | 403 | The team's policy blocks the connector, a read tool, or a write on a `visitor` role; an approval was denied; the account doesn't serve sites; or the Space is too open for the role |
 | [`connector_role_unknown`](/errors/connector_role_unknown) | 404 | The live version doesn't declare this role |
 | `connector_tool_not_allowed` | 403 | The role's `tools` doesn't list this tool |
 | `connector_arg_pinned` | 422 | The call sent a different value for a pinned argument |
 | `connector_write_sign_in_required` | 403 | A write through a `team` or `personal` role from a viewer who isn't signed in as a member |
-| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | The team's connector policy blocks this write tool |
+| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | The team's connector policy blocks this write tool on a `team` or `personal` role |
 | [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a tool that writes. Send a `POST` |
 | [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | The call came from another site, or a write without same-origin proof |
 | `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer. Try again |
