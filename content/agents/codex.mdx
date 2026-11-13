@@ -24,17 +24,12 @@ Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` instal
     "spacefast": {
       "type": "streamable-http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-Codex uses the portable transport name `streamable-http` for the same endpoint that Claude Code and Cursor call `http`. The version in `args` is stamped at release.
+Codex uses the portable transport name `streamable-http` for the same endpoint that Claude Code and Cursor call `http`. For a server on your machine, run [On-Device MCP](/agents/mcp-server) with `sf mcp`.
 
 ### The Spacefast skill
 

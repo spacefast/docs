@@ -20,7 +20,7 @@ Two other lanes exist. `npx -y plugins add spacefast/plugins -t claude-code -y` 
 
 ### MCP servers
 
-Two entries, hosted and local.
+One entry, the hosted server.
 
 ```json .mcp.json
 {
@@ -28,17 +28,12 @@ Two entries, hosted and local.
     "spacefast": {
       "type": "http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio. `npx` starts it on Node.js, so its `publish` takes inline files too. To publish a folder, Claude Code uses `sf publish <path>` when the `sf` CLI is installed and signed in. The version in `args` is stamped at release; the shipped file pins whatever the release built.
+`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. To publish a folder, Claude Code uses `sf publish <path>` when the `sf` CLI is installed and signed in. For a server on your machine, run [On-Device MCP](/agents/mcp-server) with `sf mcp`.
 
 The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
 
