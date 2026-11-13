@@ -33,17 +33,16 @@ sf login
 ```
 
 ```text
-Signing in to https://api.spacefast.com.
-Requesting Agent access — create and publish sites, manage domains and DNS, create teams, and use Spacefast tools.
-Complete device login in your browser.
-Code: XXXX-XXXX
-Link: https://…/device
-Opened your browser.
+  Sign in to Spacefast
+  Opened https://…/device
+  Code XXXX-XXXX · check it matches
+
+✓ Signed in as Ada Lovelace · Acme
 ```
 
 All of that goes to stderr. Only the approving side needs a browser, so this works over SSH and in containers. When the CLI cannot open one it says so, tells you to approve the link from any device, and waits. [Sign in and security](/authentication#log-the-cli-in) has the code lifetime, the poll cadence, and the lifetime of the credential you end up with.
 
-With `--json`, one line goes to stdout before the poll blocks, so an agent can hand the code to a person:
+With `--json`, one line goes to stderr before the poll blocks, so an agent can hand the code to a person:
 
 ```json
 {"requiresAction":{"actionType":"device_authorization","verificationUrl":"…","userCode":"…","interval":5,"expiresAt":"…"}}
@@ -53,8 +52,8 @@ With `--json`, one line goes to stdout before the poll blocks, so an agent can h
 
 | `--access` | Grants |
 | --- | --- |
-| `read` | Read your teams, sites, and domains. Changes nothing. |
-| `agent` (default) | Create and publish sites, manage domains and DNS, create teams, and use Spacefast tools. It cannot delete sites, manage team members, change billing, or mint credentials. |
+| `read` | Read your teams, Spaces, and domains. Changes nothing. |
+| `agent` (default) | Create and publish Spaces, and manage their access and domains. Invite team members, create teams, manage Sell, and act on the services your team connected. It asks you before it deletes a Space, and a team admin confirms every purchase. It can't remove team members or change roles or billing. |
 
 The approval page shows the same scopes and lets you narrow them.
 
