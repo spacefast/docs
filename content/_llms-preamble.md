@@ -48,7 +48,7 @@ npx -y skills add spacefast/plugins --skill spacefast -g -y
 The raw skill Markdown is at `https://api.spacefast.com/skill` for agents that
 can only fetch and import. Hosted MCP runs at `https://mcp.spacefast.com` and
 signs in through browser OAuth. Per-agent instructions live at
-[agent setup](https://my.spacefast.com/setup/).
+[agent setup](https://my.spacefast.com/start).
 
 ## Search the docs
 
