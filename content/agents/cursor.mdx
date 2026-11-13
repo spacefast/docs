@@ -33,7 +33,7 @@ npx -y plugins add spacefast/plugins -t cursor -y
 }
 ```
 
-`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. `spacefast-local` runs on your machine over stdio and can publish a folder. The version in `args` is stamped at release.
+`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. `spacefast-local` runs on your machine over stdio. `npx` starts it on Node.js, so its `publish` takes inline files too; the agent publishes a folder with `sf publish <path>`. The version in `args` is stamped at release.
 
 ### A rule, not a skill directory
 
