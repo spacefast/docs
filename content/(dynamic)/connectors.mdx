@@ -48,6 +48,8 @@ Or in `sf.jsonc`, with the same shape:
 
 When both files exist, `spacefast.config.ts` wins. Publish to apply the roles: each version freezes the roles it was published with.
 
+The tool names and arguments on this page, such as `list_deals` and `stage`, are examples. Use the names your connection lists: [`listConnectionTools`](/api/reference/connectors/listconnectiontools) returns each tool with its input schema.
+
 | Key | Required | What it does |
 | --- | --- | --- |
 | `connector` | yes | The slug your team registered the connector under, such as `hubspot`. `sf connectors list` shows them |
@@ -167,7 +169,7 @@ const response = await fetch(`/__spacefast/connectors/crm/list_deals?__args=${ar
 const { state, data } = await response.json();
 ```
 
-A `POST` sends its arguments as a JSON body of at most 64 KiB. The route answers only the Space's own pages: a read from another site and a write without same-origin proof both answer `browser_origin_not_allowed`. Every answer is `private, no-store`.
+A `POST` sends its arguments as a JSON body of at most 64 KiB. Other sites' pages can't call the route with a viewer's cookies. A browser read that says it came from elsewhere, through `Sec-Fetch-Site` or an `Origin` naming another host, answers `browser_origin_not_allowed`, and so does a write without same-origin proof. A request that sends neither header passes that check but still goes through the Space's access check. Every answer is `private, no-store`.
 
 ## The typed client
 
@@ -187,7 +189,7 @@ A call answers `{ state, data }`. When `state` is `ok`, `data` holds the tool's 
 
 | State | What it means | What the page can do |
 | --- | --- | --- |
-| `ok` | `data` is the provider's payload. An HTTP-backed tool adds `http` with the upstream `status` and `headers`, and a shared read adds `cachedAt` | Render it |
+| `ok` | `data` is the provider's payload. An HTTP-backed tool adds `http` with the upstream `status` and `headers`, and an answer served from a shared read adds `cachedAt` | Render it |
 | `unbound` | No account serves this role yet | Tell the viewer it isn't set up. The Space's owner binds an account |
 | `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
 | `reconnect_required` | The account's authorization expired | On a `visitor` role, link to `connectUrl`. A shared account is reconnected by the team |
@@ -209,6 +211,8 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 | `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer. Try again |
 
 ### Visitor accounts
+
+A `visitor` role needs a connector with an OAuth sign-in method, since each viewer signs in to their own account. A connector that only takes API keys can't serve one: connecting answers `connector_oauth_required`. When the connector needs an OAuth app your team hasn't registered, it answers `connector_oauth_app_required`.
 
 A `visitor` role's `connectUrl` is `/__spacefast/connectors/<role>/connect`. It signs the viewer in if needed, then sends them to the provider and back. Add `?return_to=/some/path` to land somewhere other than `/`. A `POST` to `/__spacefast/connectors/<role>/disconnect` from the Space's own page forgets the viewer's account.
 
@@ -240,7 +244,7 @@ A `team` or `personal` role shows every viewer the same account, so every viewer
 - **One viewer fills a cold key.** Others arriving meanwhile wait for that read rather than starting their own.
 - **The budget** is 60 upstream reads per role per rolling minute, for each Space.
 - **Stale serving.** When the budget is spent, the last value keeps answering for up to an hour past its window. With no value to fall back on, the call answers `connectors_unavailable`.
-- **`cachedAt`** on an `ok` answer says when a shared value was fetched.
+- **`cachedAt`** appears on an `ok` answer served from the shared value and says when it was fetched. The read that fetches it answers without one.
 
 Only successful reads are shared. `cache: "0"` turns sharing off, but each call still spends the budget. Writes, `visitor` roles, and tools the team's policy holds for approval are never shared: each call runs.
 
@@ -294,7 +298,7 @@ The role proxy returns the tool's result, or throws a `ConnectorCallError` whose
 
 ## Call it from outside the Space
 
-The page route answers only the Space's own pages. Anywhere else, such as a script, a CI job, or an agent, run the tool with your own API key through [`createConnectorRun`](/api/reference/connectors/createconnectorrun):
+The page route is for the Space's own pages: it acts for the viewer, and other sites' pages can't use it. From anywhere else, such as a script, a CI job, or an agent, run the tool with your own API key through [`createConnectorRun`](/api/reference/connectors/createconnectorrun):
 
 ```bash
 curl -X POST https://api.spacefast.com/v1/connectors/runs \
