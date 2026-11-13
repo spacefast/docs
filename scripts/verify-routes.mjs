@@ -140,6 +140,7 @@ const representativePages = [
   ["index.html", docsRoot, "Spacefast hosts"],
   ["quickstart/index.html", `${docsRoot}/quickstart`, "Before you start"],
   ["publish/index.html", `${docsRoot}/publish`, "What gets uploaded"],
+  ["migrate/index.html", `${docsRoot}/migrate`, "https://spacefast.com/migrate/"],
   ["versions/index.html", `${docsRoot}/versions`, "immutable"],
   ["agents/mcp-server/index.html", `${docsRoot}/agents/mcp-server`, "MCP"],
   ["api/index.html", `${docsRoot}/api`, "Response envelopes"],
@@ -272,7 +273,7 @@ const sidebarOf = async (file) => {
   return html.slice(start, html.indexOf("</aside>", start));
 };
 const sidebarExpectations = [
-  ["quickstart/index.html", ["/cli", "/agents"], ["/setup/vscode", "Other agents"]],
+  ["quickstart/index.html", ["/cli", "/agents", "/migrate"], ["/setup/vscode", "Other agents"]],
   ["agents/index.html", ["/agents/mcp-server", "/setup/vscode", "Other agents"], ["/setup/codex"]],
   ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
   ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],

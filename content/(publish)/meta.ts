@@ -6,6 +6,7 @@ export default defineMeta({
   order: 3,
   pages: [
     "publish",
+    "migrate",
     "frameworks",
     "anonymous-and-claim",
     "git",
