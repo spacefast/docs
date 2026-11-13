@@ -39,13 +39,18 @@ By default a client asks for these scopes.
 |---|---|
 | `teams:read` | Read the teams the account belongs to |
 | `teams:create` | Create teams |
-| `spaces:read` | Read spaces, versions, and build status |
-| `spaces:write` | Create and update spaces and their settings |
-| `spaces:rename` | Rename space slugs and managed addresses |
+| `teams:members.write` | Invite people to teams that the account can administer |
+| `sell:write` | Set up Sell, enable live sales, resend downloads, and mark orders shipped |
+| `spaces:read` | Read Spaces, versions, and build status |
+| `spaces:write` | Create and update Spaces and their settings |
+| `spaces:rename` | Rename Space slugs and managed addresses |
+| `spaces:access.write` | Change who can open a Space, including making it public through its published configuration |
+| `versions:download` | Read files from deployment versions |
 | `publish:write` | Publish new immutable versions |
-| `domains:read` | Read domain inventory and DNS diagnostics |
-| `domains:write` | Attach, verify, and mutate domains and DNS records |
-| `offline_access` | Refresh access without another sign-in |
+| `domains:read` | Read Space hostnames and certificate status. Read domain registrations and DNS records when enabled |
+| `domains:write` | Manage Space hostnames. Start domain purchases and manage DNS records when enabled |
+| `oauth-apps:write` | Register and manage the team's Sign in with Spacefast apps |
+| `offline_access` | Refresh access without another interactive sign-in |
 
 Each tool declares the scopes it needs, and clients can read them from `tools/list` before calling.
 
