@@ -168,7 +168,7 @@ const response = await fetch(`/__spacefast/connectors/crm/list_deals?__args=${ar
 const { state, data } = await response.json();
 ```
 
-A `POST` sends its arguments as a JSON body of at most 64 KiB. Other sites' pages can't call the route with a viewer's cookies. A browser read that says it came from elsewhere, through `Sec-Fetch-Site` or an `Origin` naming another host, answers `browser_origin_not_allowed`, and so does a write without same-origin proof. A request that sends neither header passes that check but still goes through the Space's access check. Every answer is `private, no-store`.
+A `POST` sends its arguments as a JSON body of at most 64 KiB. Other sites' pages can't call the route with a viewer's cookies. A browser read that says it came from elsewhere, through `Sec-Fetch-Site` or an `Origin` naming another host, answers `browser_origin_not_allowed`. A read that sends neither header passes that check but still goes through the Space's access check. A write always needs an `Origin` naming this host or `Sec-Fetch-Site: same-origin`, which browsers send for you. Every answer is `private, no-store`.
 
 ## The typed client
 
