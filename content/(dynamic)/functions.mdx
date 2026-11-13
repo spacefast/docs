@@ -130,6 +130,8 @@ Outbound requests from a worker leave from Cloudflare's shared network addresses
 
 `env` carries the space's environment variables. See [Environment variables](/environment-variables) for how to set them.
 
+`env.CONNECTORS` calls your Space's [connector roles](/connectors#call-it-from-functions) when the version declares any.
+
 `env.DB` is always there. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
 
 Two groups of variable names never reach a worker, dropped rather than blanked so your code reads them as absent instead of as "configured, but empty".
