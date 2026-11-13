@@ -1,52 +1,56 @@
 ---
-title: Platforms
-description: Offer hosting under your own brand. Spacefast runs the infra, and your product keeps the customer, the pricing, and the relationship.
+title: Spacefast for Platforms
+description: Sell Spacefast infrastructure under your own brand. You keep the customer, the pricing, and the relationship.
 ---
 
-Spacefast Platforms is for companies that sell hosting as part of their own product: hosting companies, domain registrars, agencies, and organizations that run many sites. Spacefast runs the infra. Your customers see your brand, your pricing, and your dashboard.
+Spacefast for Platforms is for web hosts, domain registrars, agencies, and any organization that runs a lot of sites. You put Spacefast infrastructure inside your own product. Customers see your brand, your prices, and your dashboard, and you don't run any servers.
 
-Platforms is part of WP Cloud, the platform hosting companies use to power their own WordPress hosting products. It runs on the same infra as Automattic, WP Cloud, Pressable, and WordPress.com. The [Partner API](/platforms/partner-api) extends it to the sites and apps your customers build with agents.
+It's part of WP Cloud (the infrastructure that runs WordPress.com, Pressable, and more). Web hosts already use WP Cloud to sell WordPress under their own names. The [Partner API](/platforms/partner-api) adds the sites and apps your customers build with agents.
+
+<Card title="Talk to the founder" href="https://spacefast.com/founder-chat/" icon="calendar" cta="Book a founder chat" horizontal>
+  Tell us what you want to sell and who you sell it to. We'll set up your partner account.
+</Card>
 
 ## Who it's for
 
-| You are | What Platforms gives you |
+| You are | What you get |
 | --- | --- |
-| A hosting company | Managed publishing and hosting for your customers, without running servers or a control panel |
-| A domain registrar | A live site at the point of registration, with no infrastructure to build |
-| An agency or reseller | One integration for every client site, billed and branded as your own |
-| An organization with many sites | Sites provisioned from code for each team, with one account over all of them |
+| A web host | Sites and apps for your customers, without running servers or building a control panel |
+| A domain registrar | A live site for each new domain, right at registration |
+| An agency or reseller | One integration for every client site, billed and branded as yours |
+| An organization with many sites | A site for each team, created from code, all under one account |
 
 ## What you control
 
-- **Your brand.** Set your name, logo, support links, and error docs once. Claims and access handoffs land on your own portal.
-- **Your customers.** Each customer is an ID from your own system. Spacefast creates them on first use, with no separate signup.
-- **Your pricing.** Declare plans with their own features and quotas. Read usage records per customer and bill however you want.
-- **Your domains.** Serve customer sites from your own hostname, and put the API behind your own origin.
-- **Your UX.** Everything is API-first. Build your own interface, or give customers scoped tokens and let their apps call Spacefast directly.
+- **Brand.** Set your name, logo, support links, and error docs once. When customers claim a site or get access to one, they land on your portal.
+- **Customers.** Each customer is an ID from your own system. Spacefast creates the customer the first time you use that ID, so there's no separate signup.
+- **Pricing.** Define plans with their own features and quotas. Read each customer's usage records and bill them however you like.
+- **Domains.** Serve customer sites from your own hostname, and put the API behind your own origin.
+- **Interface.** Everything is API-first. Build your own interface, or give customers scoped tokens so their apps call Spacefast directly.
 
-## What Spacefast runs
+## What Spacefast handles
 
-Publishing, builds, versions and rollbacks, custom domains and certificates, and CDN and caching. Customer sites get the same serving path as every other Space.
+Publishing, builds, versions and rollbacks, custom domains and certificates, and the CDN and cache. Spacefast serves your customers' sites the same way it serves every other Space.
 
 ## How integration works
 
-1. **Get partner access.** Your account gets a live tenant and a linked test tenant. The test tenant simulates provisioning and is metered at zero.
-2. **Create customer Spaces.** Publish for a customer with a tenant API key and their ID. See the [Partner API quickstart](/platforms/partner-api).
-3. **Configure your account.** Branding, signing keys, plans, event subscriptions, and hostnames live in one [system Space](/platforms/partner-api/configuration).
-4. **Hand customers access.** Issue [customer JWTs](/platforms/partner-api/tokens) scoped to one customer.
-5. **Go live.** Exercise failures in test mode, then [promote your configuration](/platforms/partner-api/go-live) to the live tenant.
+1. **Get partner access.** Your account gets a live tenant and a linked test tenant. Provisioning on the test tenant is simulated, and its usage costs nothing.
+2. **Create customer Spaces.** Publish for a customer with a tenant API key and the customer's ID. See the [Partner API quickstart](/platforms/partner-api).
+3. **Configure your account.** Branding, signing keys, plans, event subscriptions, and hostnames all live in one [system Space](/platforms/partner-api/configuration).
+4. **Give customers access.** Issue [customer JWTs](/platforms/partner-api/tokens), each scoped to one customer.
+5. **Go live.** Try the failure cases in test mode, then [promote your configuration](/platforms/partner-api/go-live) to the live tenant.
 
 <CardGroup cols={2}>
   <Card title="Partner API" href="/platforms/partner-api" icon="rocket">
     Create your first customer Space with a tenant API key.
   </Card>
   <Card title="Partner API reference" href="/platforms/api/reference" icon="braces">
-    Every tenant, customer, and usage operation with its schemas.
+    Every tenant, customer, and usage operation, with schemas.
   </Card>
   <Card title="Customers and usage" href="/platforms/partner-api/customers" icon="users">
     Plans, suspension, and the usage records you bill from.
   </Card>
   <Card title="Go live" href="/platforms/partner-api/go-live" icon="check">
-    Test failure handling, then promote configuration to live.
+    Test failure handling, then promote your configuration to live.
   </Card>
 </CardGroup>

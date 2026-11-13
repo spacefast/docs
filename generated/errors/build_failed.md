@@ -5,7 +5,7 @@ description: "The build run failed before producing a version."
 
 The build run failed before producing a version.
 
-**How to resolve:** Inspect the build logs, fix the failure, and start a new build.
+**How to resolve:** Run `sf builds logs <buildId> --follow` for a remote build and find the first command error; for a local build, inspect the command output in your terminal. Fix that command or its inputs before publishing again. See [Builds](/docs/cli/builds/) and [Frameworks](/docs/frameworks/).
 
 <div data-pagefind-ignore>
 

@@ -1,0 +1,37 @@
+---
+title: Rate limiting
+description: Diagnose visitor-facing 429 responses and distinguish edge limits from application capacity.
+---
+
+A request to your Space can receive HTTP `429` when traffic matches an infra rate limit or exceeds application capacity. Occasional limits on scanners and unwanted bots are expected. Investigate when legitimate visitors or integrations cannot continue.
+
+## Edge traffic limits
+
+WP Cloud classifies requests using signals such as request rate, URL patterns, user agent, proxy characteristics, and connection behavior. Limits can apply to a pattern, a site, or the wider platform.
+
+Thresholds can change as traffic changes. Do not build a client around an undocumented requests-per-second allowance. Send an accurate `User-Agent` and reduce repeated requests when a limit appears.
+
+## Resource limits are different
+
+A visitor-facing rate-limit page can also represent a PHP resource-limit event, recorded by WP Cloud as HTTP `599`. That means a PHP connection was not available in time; it does not require CPU usage to reach a maximum.
+
+Spacefast also limits concurrent application work. When that admission limit is reached, it returns `429` with `Retry-After`. Respect that header and retry with backoff. Repeating the same work immediately adds pressure.
+
+A [Defensive Mode](/infrastructure/defensive-mode) challenge uses `403` instead. Look at the request details before treating every rejected request as the same problem.
+
+## Find the affected requests
+
+```bash
+sf logs edge --space my-site --status 429
+sf logs access --space my-site
+```
+
+[Edge request logs](/infrastructure/edge-request-logs) show cache handling, rate-limit reasons, and challenge details. Origin [access and runtime logs](/logs) help explain requests that reached your application. Compare the same hostname and time window.
+
+For an authorized crawler or integration, reduce its request rate, check for loops and repeated missing URLs, and confirm its identity header. If a legitimate workflow remains blocked, contact Spacefast support with exact request samples.
+
+## Management API limits
+
+Limits on calls to `api.spacefast.com` are a separate contract. See [API rate limits](/api/rate-limits) for response headers, quotas, and retry behavior.
+
+<WpCloudDocs title="Rate limiting" href="https://wp.cloud/docs/security/traffic-protection/rate-limiting/" />

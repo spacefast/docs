@@ -5,7 +5,7 @@ description: "Someone published new space settings after the base you loaded, so
 
 Someone published new space settings after the base you loaded, so saving would overwrite their change.
 
-**How to resolve:** Reload the latest settings, review the difference, and save again. Pass `force` only to overwrite deliberately.
+**How to resolve:** Reload the latest settings and current version, review the changes made since your base, then save against that base. Use `force` only when you intend to overwrite the newer settings. See [Config file](/docs/config-file/).
 
 <div data-pagefind-ignore>
 

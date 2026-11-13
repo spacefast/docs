@@ -46,8 +46,8 @@ const DISCOVERY_ROUTES = new Set([
   "/llms-full.txt",
   "/index.md",
   "/api/docs/pages.json",
-  "/.well-known/api-catalog",
-  "/.well-known/ai-catalog.json",
+  "/api-catalog.json",
+  "/ai-catalog.json",
   "/agent-readability.json",
 ]);
 export const isDiscoveryResource = (route) => route.endsWith(".xml") || DISCOVERY_ROUTES.has(route);
@@ -97,7 +97,7 @@ export function routeOf(line) {
     new RegExp(`\\]\\(${DOCS_ROOT.replaceAll(".", "\\.")}([^)]*)\\)`, "u"),
   );
   if (!match) return undefined;
-  return match[1] === "" ? "/" : match[1];
+  return match[1].replace(/\/$/u, "") || "/";
 }
 
 export function buildLlmsIndex({ source, sidebarRoutes }) {

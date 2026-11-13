@@ -5,7 +5,7 @@ description: "Publish content does not match its declared sha256."
 
 Publish content does not match its declared sha256.
 
-**How to resolve:** Re-send the file with matching bytes, or correct the declared hash.
+**How to resolve:** Recompute the SHA-256 from the exact bytes being uploaded and compare it with the manifest. Re-upload those bytes or correct the manifest; do not modify a file between hashing and uploading. See [Publishing](/docs/publishing/).
 
 <div data-pagefind-ignore>
 

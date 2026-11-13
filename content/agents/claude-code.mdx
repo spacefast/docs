@@ -44,7 +44,7 @@ The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url":
 
 ### The Spacefast skill
 
-`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool and sets the publish-poll-report loop. It also holds the rule against printing claim credentials. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
+`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool and sets the publish-poll-report loop. It also explains how to relay claim links without printing the separate Space key. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
 
 ### One SessionStart hook
 
@@ -76,7 +76,7 @@ The live URL is appended only when it starts with `https://`. If the file is mis
 
 ## Verify it works
 
-Ask the agent to find a documentation page through `execute`. It should search for the documentation operation, describe it, and call it before attempting a publish.
+Ask the agent to call `searchDocs` for a documentation query, then `getDocsPage` with a returned slug before attempting a publish.
 
 <Prompt description="Use the Spacefast MCP server to search the docs for custom domains." actions={["copy"]}>
 Use the Spacefast MCP server to search the docs for custom domains.
@@ -116,4 +116,8 @@ How much traffic did this Space get in the last 30 days?
 Roll this Space back to the previous version.
 </Prompt>
 
-The first five map to typed tools. The rollback goes through `execute`, which may pause and ask you to approve the write in the browser before it runs. See [approvals](/agents/mcp-server).
+The inspection prompts open Space Apps. Rollback calls `promoteSpaceVersion`, which may pause for your approval before the write runs. See [approvals](/agents/mcp-server).
+
+## Next steps
+
+For an existing export, follow [Share a Claude artifact publicly](/agents/share-claude-artifact).

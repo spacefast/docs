@@ -16,3 +16,4 @@ public/_redirects
 /.spacefast-*
 .spacefast/.spacefast-*
 .spacefast/.space-link-*.tmp
+content/_pricing/

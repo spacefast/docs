@@ -94,7 +94,7 @@ Five Abilities in the `zero-storage` category are registered by the runtime, so 
 | `zero/storage-move` | write | Moves a file into a folder, creating the folder path if needed | `edit_post` |
 | `zero/storage-delete` | write | Trashes a file. It leaves every listing and stays recoverable | `delete_post` |
 
-The "Needs" column is a WordPress capability. The Space projects it from the calling credential's Grant, so what a credential may do is decided per request against the path it asked for. See [Access and sharing](/access).
+The "Needs" column is a WordPress capability. The Space projects it from the calling credential's Grant, so what a credential may do is decided per request against the path it asked for. See [Spacefast Share](/share).
 
 WordPress decides which file types `zero/storage-upload` accepts.
 
@@ -147,3 +147,7 @@ The token is bound to the host the Space serves on, and the runtime re-derives w
 ## The database
 
 The same WordPress owns a MySQL database. `sf db` reads its schema and rows, and the dashboard mints a single-use SQL console URL for raw queries. See [Database](/database).
+
+## Next steps
+
+To read WordPress content from another app, use [WordPress data sources](/wordpress-data-sources).

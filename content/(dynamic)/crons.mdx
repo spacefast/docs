@@ -23,7 +23,7 @@ A response under 400 is a success and is silent. A response of 400 or worse, or 
 
 ## Declare it
 
-There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free.
+There is no write API and no dashboard editor. `sf.jsonc` is the only writer, and a publish is the only edit. That is what makes a rollback restore the previous schedules for free, placed against your current allowance.
 
 ```jsonc sf.jsonc
 {
@@ -43,13 +43,13 @@ Validation is blocking. A bad cron fails the publish rather than shipping a sche
 
 ## Schedule syntax
 
-Three grammars. Pick whichever reads best.
+Three grammars in two kinds. Named and shorthand schedules are **simple** crons. Five-field crontab schedules are **advanced** crons, and your plan sets how many of each a Space runs.
 
 | Kind | Examples | Notes |
 | --- | --- | --- |
-| Named | `hourly`, `daily`, `twicedaily`, `weekly` | The provider picks the moment |
-| Shorthand | `3h`, `2d`, `1w` | Hours up to 12, days up to 23, weeks up to 6. `N` is at least 1 |
-| Crontab | `30 16 * * 1-5`, `*/15 * * * *` | Five fields, down to every minute |
+| Named (simple) | `hourly`, `daily`, `twicedaily`, `weekly` | The provider picks the moment |
+| Shorthand (simple) | `3h`, `2d`, `1w` | `N` runs per hour, day, or week: `3h` runs three times an hour. Up to 12 an hour, 23 a day, 6 a week |
+| Crontab (advanced) | `30 16 * * 1-5`, `*/15 * * * *` | Five numeric fields, down to every minute |
 
 Crontab fields are minute `0-59`, hour `0-23`, day of month `1-31`, month `1-12`, weekday `0-7`. Lists (`1,15`), ranges (`1-5`), `*`, and a `/step` over a span are supported.
 
@@ -69,7 +69,33 @@ Your schedule string is stored verbatim and never normalized.
 
 Each entry gets a **key** derived by slugging its path. `/api/cron/digest` becomes `api-cron-digest`. Two paths that slug to the same key are rejected at publish.
 
-A Space can declare at most **8** crons.
+## Allowance by plan
+
+Each Space runs a set number of crons, by plan. Advanced (crontab) crons come with Boost and count toward the total:
+
+| Plan | Crons per Space | Advanced crons |
+| --- | --- | --- |
+| Personal | 3 | None |
+| Go | 10 | None |
+| Pro | 20 | None |
+| Boost (Go and up) | 40 | Up to 10 |
+| Enterprise | Custom | Custom |
+
+Boost is a per-Space add-on on Go and up. See [Pricing & Limits](/pricing) for every plan's limits.
+
+Each cron takes a slot of its own kind, in the order you declare them. A later crontab can still take an advanced slot after an earlier simple cron ran out of simple slots:
+
+- A crontab takes an advanced slot while one is left.
+- A crontab with no advanced slot left still publishes, with a warning. It runs at its closest simple schedule and counts against the simple allowance. That can run more or less often than the crontab asked, and not at the times it names: `*/5 * * * *` runs `12h` (12 times an hour), and `0 9 * * 1-5` runs `5w` (5 times a week, not necessarily on weekdays at 9:00).
+- Crons past the allowance still publish, and the publish carries a warning. Within each kind of slot, the first ones declared run. The rest show as not scheduled, "over this plan's cron limit", on the dashboard's **Crons** page and in `sf crons ls`.
+
+Advanced crons also run at their closest simple schedule for now, until advanced scheduling is enabled for the platform.
+
+A raised limit applies right away. After an upgrade or Boost, crons that were waiting start running without a publish.
+
+A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing: crons that are running keep running.
+
+For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. `allowance` in the API reports the capped numbers. The ceiling rises to the plan limits above as the runtime update reaches every box.
 
 ## List and trigger
 
@@ -105,4 +131,13 @@ Only the newest failures are kept, with no history behind them. A real failure a
 
 ## API
 
-[`listSpaceCrons`](/api/reference/spaces/listspacecrons) is `GET /v1/spaces/{spaceId}/crons`. It returns the version the schedules came from, which is `null` before the first publish. Each entry carries its key, path, schedule, and recent failures.
+[`listSpaceCrons`](/api/reference/spaces/listspacecrons) is `GET /v1/spaces/{spaceId}/crons`. It returns the version the schedules came from, which is `null` before the first publish. Each entry carries its key, path, schedule, and recent failures, plus:
+
+| Field | Meaning |
+| --- | --- |
+| `scheduled` | Whether the cron runs |
+| `tier` | `simple` or `advanced`. `null` when not scheduled |
+| `runsAs` | The schedule that actually runs. `null` when not scheduled |
+| `reason` | `over_plan_limit` past the allowance, `unsupported_schedule` for a schedule that cannot run. `null` when scheduled |
+
+The response's `allowance` carries the Space's `simple` and `advanced` counts and `upgrade`, the step that unlocks more: `upgrade_plan`, `upgrade_or_boost`, `boost`, or `null` when there is none.

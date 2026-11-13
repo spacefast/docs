@@ -1,77 +1,23 @@
 ---
 title: Plans and billing
-description: Free, Go and Plus plans, shared usage credit, editor seats, and billing terms
+description: Change or cancel a plan, read it through the API, and what happens when a payment fails
 sidebar:
   order: 3
 ---
 
-Spacefast's upcoming plans are Free for personal projects, Go for one person, and Plus for a team. Prices are USD before tax. Paid plans are monthly, with no annual option.
-
-:::note[Upcoming pricing]
-These are the new plan terms. Checkout, metering and feature availability are still changing. **Settings → Billing** shows the plans currently available to your team and the price before you pay. The new retention windows are planned.
-:::
-
-## Plans
-
-| Plan | Per team, per month | Monthly usage | Editors | Commercial use |
-| --- | --- | --- | --- | --- |
-| Free | $0 | Fixed allowances | 1 | No |
-| Go | $5 | $5 shared credit | 1 | Yes |
-| Plus | $15 | $15 shared credit | 10, then $5 per extra editor | Yes |
-| Enterprise | Custom | Custom | Custom | Yes |
-
-Free needs no card. Go and Plus include their monthly price as usage credit. Enterprise plans are arranged through WordPress VIP.
-
-| Allowance or feature | Free | Go | Plus |
-| --- | --- | --- | --- |
-| Spaces | 20 | Unlimited | Unlimited |
-| Custom domains per team | 20 | Unlimited | Unlimited |
-| Wildcard domains | No | No | Included |
-| Cached delivery per month | 100 GB | 1 TB, then $0.02/GB | 1 TB, then $0.02/GB |
-| Storage | 500 MB across both classes | Usage-based files and media | Usage-based files and media |
-| Concurrent builds | 1 | 1 | 3 |
-| Email recipients per day | 20 | 200 | 2,000 |
-| Full-page templates | No | No | Included |
-
-Live files and database storage have no usage charge. On Free, they still count toward the 500 MB storage allowance. See [Usage](/usage) for all Free allowances and paid usage rates.
-
-PHP, Zero, Workers, SQL, private sharing, managed publishing, Git, CLI, API, MCP and exports are available across plans. Usage limits still apply. Connecting a domain has no extra fee. Domain registration, renewal and third-party licenses are separate purchases.
-
-Domains registered through Spacefast or WordPress.com, and domains using Spacefast DNS, do not count toward the Free plan's 20-domain allowance. Other connected domains and individually connected subdomains count toward it. Managed HTTPS is included. Wildcards such as `*.example.com` require Plus or Enterprise.
-
-## Shared usage credit
-
-Go and Plus share one credit across all the team's Spaces and members. It resets monthly and does not roll over. Included cached delivery, invocations and spam checks are applied before their remaining usage draws from the credit.
-
-The monthly bill is:
-
-- The plan price.
-- Extra Plus seats, at $5 each beyond the included 10.
-- Metered usage above the team's credit.
-
-For example, a Go team with $8 of metered usage pays $8 total: the $5 plan and $3 of usage above its credit. A Plus team with 12 editors and $20 of usage pays $30: $15 for the plan, $10 for seats and $5 for extra usage.
-
-Overage is on by default under the new terms. An optional hard spending cap pauses metered work when reached. Alerts are planned at 50%, 80% and 100% of credit or a Free allowance. Confirm which spending controls are available in your team's billing settings.
-
-## Seats
-
-Free and Go allow one editor, the owner. Additional seats cannot be bought on those plans; a second team member needs Plus.
-
-Plus includes 10 active team members, including the owner. Each additional active member costs $5 a month, prorated to the day. Pending invitations reserve capacity but are not billed. Cancel stale invitations if the team cannot invite another person.
-
-Reviewers, commenters, agents acting for an owner, and app users do not add seats. A Space-level editor grant is not a team membership. Seat fees do not add usage credit.
+Prices, allowances and limits for every plan are on [Pricing & Limits](/pricing). This page covers managing a plan.
 
 ## Upgrade, downgrade or cancel
 
-In the dashboard, open your team's **Settings → Billing**. Only owners and admins can change billing. Choose an available plan and review the price at checkout. Use Billing to change or cancel a plan. **Open billing portal** holds invoices and payment methods.
+Open your team's **Settings → Billing** to change or cancel a plan. Only owners and admins can change billing. Choose **Open billing portal** for invoices and payment methods.
 
-Under the new terms, upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the effective date in Billing before confirming a change.
+Upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the price and effective date before confirming.
 
-## Reading the current plan through the API
+## Read the plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. During the plan change, Go can appear as `personal` or `go`, and Plus as `work` or `plus`. The other codes are `free`, `enterprise` and `internal`.
+`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Plan codes are stable: `free` is Personal, `go` is Go and `plus` is Pro. The others are `gold`, `enterprise` and `internal`.
 
-Use the returned entitlements for feature checks and **Settings → Billing** for the subscription currently offered to the team.
+Use the returned entitlements for feature checks.
 
 ## When a payment fails
 
@@ -82,10 +28,10 @@ Your sites keep serving through a grace period, but you cannot change anything.
 | Past due | 7 days from the failed payment | Sites serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
 | Suspended | After the grace period ends | Every space serves `402` and the text `This space is paused.` | Reads work. Every write returns `403` with code `tenant_suspended` |
 
-Reading is never blocked in either state. Settle the payment from the billing portal to lift the block and light the spaces back up.
+Settle the payment in the billing portal to restore access. API reads remain available in either state.
 
 ## Billing is dashboard-only
 
 Plans, checkout, and cancellation live in the dashboard. There is no `sf` command and no API endpoint for changing a plan. API keys and agent credentials cannot make those changes.
 
-Reading is a different story. An agent can pull the resolved plan and limits from `GET /v1/teams/{teamId}/entitlements`, current counters from `GET /v1/teams/{teamId}/usage`, and the limits as they are enforced at publish time from `GET /v1/teams/{teamId}/plan-policy`. See [Usage](/usage) for what those numbers mean.
+Agents can read [plan entitlements](#read-the-plan-through-the-api) and [usage](/usage) through the API.

@@ -5,7 +5,7 @@ description: "This exact action already has a decision, and a retry without its 
 
 This exact action already has a decision, and a retry without its continuation token cannot clear the gate.
 
-**How to resolve:** Resume the existing decision with its continuation token instead of repeating the original request.
+**How to resolve:** Send the original request again with the continuation token from its first `confirmation_required` response, in the `X-Spacefast-Continuation-Token` header (`--continuation-token` on `sf rollback` and `sf promote`).
 
 <div data-pagefind-ignore>
 

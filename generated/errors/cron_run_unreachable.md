@@ -1,11 +1,11 @@
 ---
 title: "cron_run_unreachable"
-description: "The space never answered the on-demand cron request before the timeout."
+description: "The space did not answer the on-demand cron request: either it exceeded the response limit (HTTP 422, the handler may still be running) or the connection failed (HTTP 503)."
 ---
 
-The space never answered the on-demand cron request before the timeout.
+The space did not answer the on-demand cron request: either it exceeded the response limit (HTTP 422, the handler may still be running) or the connection failed (HTTP 503).
 
-**How to resolve:** Check the space's runtime logs for that path, then try again. A handler that legitimately runs long will still complete on its own schedule; only this preview gives up.
+**How to resolve:** Check the space's runtime logs for that path before running it again, since a timed-out handler may still be running and a second run could repeat its side effects. A handler that legitimately runs long will still complete on its own schedule; only this preview gives up.
 
 <div data-pagefind-ignore>
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/cron_run_unreachable",
   "title": "Cron run unreachable",
   "status": 400,
-  "detail": "The space never answered the on-demand cron request before the timeout.",
+  "detail": "The space did not answer the on-demand cron request: either it exceeded the response limit (HTTP 422, the handler may still be running) or the connection failed (HTTP 503).",
   "code": "cron_run_unreachable",
   "requestId": "req_4mz0v8qk"
 }

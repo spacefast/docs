@@ -5,7 +5,7 @@ description: "This action requires an interactive browser session."
 
 This action requires an interactive browser session.
 
-**How to resolve:** Sign in to the operator dashboard in a browser. API keys and bearer tokens cannot perform this action.
+**How to resolve:** Sign in to the dashboard in a browser and make the change there. API keys, agent tokens and bearer sessions cannot perform this action.
 
 <div data-pagefind-ignore>
 

@@ -5,7 +5,7 @@ description: "The domain is in use by another binding or assignment."
 
 The domain is in use by another binding or assignment.
 
-**How to resolve:** Remove the existing use of the domain before retrying.
+**How to resolve:** Read the problem detail for the binding, DNS resource or in-flight domain action that blocks this change. For a Space attachment, unassign the domain from that Space and wait for detachment before reassigning or deleting it. Do not delete DNS or registration still serving another hostname. See [Domains](/docs/domains/).
 
 <div data-pagefind-ignore>
 

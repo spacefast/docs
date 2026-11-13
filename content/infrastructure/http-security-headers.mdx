@@ -1,0 +1,45 @@
+---
+title: HTTP and security headers
+description: Set application security headers while leaving transport policy to the platform.
+---
+
+Set security headers for your published pages in `_headers` or the supported routing configuration. Spacefast manages transport headers, including HTTP Strict Transport Security, at the platform level.
+
+## Add a header policy
+
+Place `_headers` in the directory you publish. For example:
+
+```text _headers
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+```
+
+This example prevents MIME sniffing, limits referrer information, and blocks framing. If your page must appear inside another site, choose an appropriate framing policy before copying it.
+
+Publish the change with your site. Rules apply to the URL the visitor requested, including when a rewrite serves another file. Matching header blocks accumulate. See [Redirects, rewrites, and headers](/routing) for ordering, removals, and validation.
+
+## Which settings belong where?
+
+| Header | What to know |
+| --- | --- |
+| `Content-Security-Policy` | Restricts scripts, frames, fonts, and other resources. Start with a report-only policy when practical and test required integrations. |
+| `Access-Control-Allow-*` | Controls browser cross-origin access. Test the real requesting origin and any `OPTIONS` preflight. |
+| `X-Frame-Options` | Controls framing. A restrictive policy can break embeds. |
+| `X-Content-Type-Options` | Use `nosniff` to prevent MIME sniffing. |
+| `Referrer-Policy` | Controls which referrer details accompany outgoing requests. |
+| `Strict-Transport-Security` | Managed by the infra. Authored routing rules cannot replace it. |
+| `Cache-Control` | Allowed for browser responses, with a platform-managed caching warning. Shared caching follows [Spacefast's caching rules](/caching). |
+
+Inspect the exact URL instead of assuming every response has the same headers. Application routes, published files, errors, and cached responses can take different paths.
+
+## Check the result
+
+```bash
+curl -sS -D - -o /dev/null https://example.com/path/
+```
+
+Test while logged out and repeat the request to inspect cached responses. A successful `curl` request does not prove that a browser permits a cross-origin response or that a Content Security Policy allows every required resource. Check the browser console and the application's real forms, scripts, embeds, and payment flows.
+
+<WpCloudDocs title="HTTP and security headers" href="https://wp.cloud/docs/security/site-security/http-security-headers/" />

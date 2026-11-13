@@ -2,7 +2,7 @@
 title: "Connect Poke to Spacefast"
 description: "Add Spacefast to Poke so it can publish for you."
 seo:
-  canonical: "https://spacefast.com/setup/poke/"
+  canonical: "https://spacefast.com/docs/setup/poke/"
 ---
 
 Add Spacefast to Poke so it can publish for you.
@@ -26,4 +26,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Poke documentation](https://poke.com/docs/mcp-servers)
+[Agent documentation](/agents/) · [Poke documentation](https://poke.com/docs/mcp-servers)

@@ -2,7 +2,7 @@
 title: "Connect Cursor to Spacefast"
 description: "Add Spacefast to Cursor so its agent can publish what you build."
 seo:
-  canonical: "https://spacefast.com/setup/cursor/"
+  canonical: "https://spacefast.com/docs/setup/cursor/"
 ---
 
 Add Spacefast to Cursor so its agent can publish what you build.
@@ -77,4 +77,4 @@ Fetch https://spacefast.com/setup.md
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
 
-[Agent documentation](/agents) · [Cursor documentation](https://cursor.com/docs/mcp)
+[Agent documentation](/agents/) · [Cursor documentation](https://cursor.com/docs/mcp)

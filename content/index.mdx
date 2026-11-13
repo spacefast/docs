@@ -7,7 +7,7 @@ sidebar:
 
 Spacefast hosts the sites people build with AI agents. You hand it a folder, it hands back a URL. Publish from the dashboard, the `sf` CLI, the HTTP API, or an MCP server. An agent with publishing permission can ship the site it built.
 
-Prefer a browser to a terminal? Drag a folder onto the dashboard instead — no install, no account required. See [Drop](/publish#publish).
+Prefer a browser to a terminal? Drag a folder onto [drop.fast](https://drop.fast) instead — no install, no account required. See [Drop](/publish#publish).
 
 ## Publish in one command
 
@@ -43,14 +43,14 @@ A **Space** holds a site and its **versions**, immutable snapshots with their ow
 
 Static output is the default path. Point `sf publish` at a build directory and it uploads only the files that changed. If you'd rather publish source, Spacefast detects the framework and builds it. Sites that need a database, server functions, or scheduled jobs declare a [Zero runtime](/zero-runtime#declare-it) and server entry.
 
-In a self-serve account, your team owns the Spaces you claim, even when you are its only member. On [Plus](/billing#seats), you can add members who publish and roll back without sharing your login. Free and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
+In a self-serve account, your team owns the Spaces you claim, even when you are its only member. On [Pro](/pricing), you can add members who publish and roll back without sharing your login. Personal and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
 
 <CardGroup cols={2}>
   <Card title="Quickstart" href="/quickstart" icon="rocket">
     Install, sign in, publish, and attach a domain in five minutes.
   </Card>
   <Card title="Drop" href="/publish#publish" icon="mouse-pointer-click">
-    Drag a folder onto the dashboard. No install, no account required.
+    Drag a folder onto drop.fast. No install, no account required.
   </Card>
   <Card title="Glossary" href="/glossary" icon="book-open">
     Space, version, live, capsule, Ability, grant — core terms in one place.
@@ -74,3 +74,7 @@ In a self-serve account, your team owns the Spaces you claim, even when you are 
     Auth, envelopes, errors, and the full operation reference.
   </Card>
 </CardGroup>
+
+## Next steps
+
+Have an exported page already? [Share a Claude artifact publicly](/agents/share-claude-artifact). Building publishing into another product? Start with [Spacefast for Platforms](/platforms).

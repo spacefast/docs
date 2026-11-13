@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { buildLlmsIndex, discoveryFileForUrl, routeOf } from "./build-llms-index.mjs";
-import { routesFromSidebar } from "./sidebar-routes.mjs";
+import { isDraft, routesFromSidebar } from "./sidebar-routes.mjs";
 
 const entry = (route, title = route) =>
   `- [${title}](https://spacefast.com/docs${route === "/" ? "" : route}): A summary.`;
@@ -53,7 +53,7 @@ const fixture = [
   entry("/setup/claude-code"),
   "",
   "## Discovery",
-  ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/.well-known/api-catalog", "/.well-known/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
+  ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/api-catalog.json", "/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
   "",
   "## RSS Feeds",
   "",
@@ -112,7 +112,7 @@ test("relabels the leftover bucket and drops emptied headings", () => {
   assert.ok(!text.includes("## Other"), "the Other label should not survive");
   assert.ok(text.includes("## Agent setup"));
   assert.ok(text.includes("## RSS Feeds"), "feeds are not pages and are never collapsed");
-  for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/.well-known/api-catalog", "/agent-readability.json"]) {
+  for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/api-catalog.json", "/agent-readability.json"]) {
     assert.ok(text.includes(`https://spacefast.com/docs${route}`));
     assert.equal(discoveryFileForUrl(`https://spacefast.com/docs${route}`), route.slice(1));
   }
@@ -150,6 +150,13 @@ test("the sidebar parser agrees with the real config", async () => {
   assert.ok(routes.has("/errors"));
   assert.ok(routes.has("/changelog"));
   assert.ok(routes.size > 40);
+});
+
+test("a draft page is not a built route; only its frontmatter decides", () => {
+  assert.equal(isDraft("---\ntitle: Next\ndraft: true\n---\n\nBody."), true);
+  assert.equal(isDraft("---\r\ntitle: Next\r\ndraft: true\r\n---\r\n\r\nBody."), true);
+  assert.equal(isDraft("---\ntitle: Live\n---\n\n```yaml\ndraft: true\n```"), false);
+  assert.equal(isDraft("---\ndraft: false\n---\n"), false);
 });
 
 test("the sidebar parser rejects a config it cannot read", () => {

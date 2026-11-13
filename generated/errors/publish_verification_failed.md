@@ -5,7 +5,7 @@ description: "Post-publish verification did not see the new content serving."
 
 Post-publish verification did not see the new content serving.
 
-**How to resolve:** Retry. If the space still serves stale content, contact support.
+**How to resolve:** Check the publish receipt and the served content before starting another publish: upload completion alone does not prove the expected version is live. If the address still serves stale content, contact support with the Space, version and request IDs. See [Publishing](/docs/publishing/).
 
 <div data-pagefind-ignore>
 

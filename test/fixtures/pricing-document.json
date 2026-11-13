@@ -1,0 +1,269 @@
+{
+  "data": {
+    "revision": "2026-10-11",
+    "currency": "USD",
+    "plans": [
+      {
+        "code": "free",
+        "name": "Free",
+        "monthlyPriceUsd": 0,
+        "usageCreditUsd": 0,
+        "selfServe": false,
+        "seats": {
+          "included": 1,
+          "extraMonthlyUsd": null
+        },
+        "limits": {
+          "storageBytes": 500000000,
+          "teamMembers": 1,
+          "liveSpaces": 20,
+          "customDomains": 20,
+          "auditLogRetentionHours": 48,
+          "buildAccessLogRetentionHours": 48,
+          "buildsDeploysDaily": 100,
+          "shareLinksPerSpace": 100,
+          "invitesPerSpace": 500,
+          "inviteEmailsPerSpaceDaily": 200,
+          "inviteEmailsPerAccountDaily": 500,
+          "pendingAccessRequestsPerSpace": 100
+        },
+        "capabilities": {
+          "externalProxy": true,
+          "pagesTemplates": false,
+          "hideSpacefastBranding": false,
+          "networkPolicies": false
+        }
+      },
+      {
+        "code": "go",
+        "name": "Go",
+        "monthlyPriceUsd": 5,
+        "usageCreditUsd": 5,
+        "selfServe": true,
+        "seats": {
+          "included": 1,
+          "extraMonthlyUsd": null
+        },
+        "limits": {
+          "storageBytes": "unlimited",
+          "teamMembers": 1,
+          "liveSpaces": "unlimited",
+          "customDomains": "unlimited",
+          "auditLogRetentionHours": 720,
+          "buildAccessLogRetentionHours": 720,
+          "buildsDeploysDaily": 6000,
+          "shareLinksPerSpace": 100,
+          "invitesPerSpace": 500,
+          "inviteEmailsPerSpaceDaily": 200,
+          "inviteEmailsPerAccountDaily": 500,
+          "pendingAccessRequestsPerSpace": 100
+        },
+        "capabilities": {
+          "externalProxy": true,
+          "pagesTemplates": false,
+          "hideSpacefastBranding": false,
+          "networkPolicies": false
+        }
+      },
+      {
+        "code": "plus",
+        "name": "Plus",
+        "monthlyPriceUsd": 15,
+        "usageCreditUsd": 15,
+        "selfServe": true,
+        "seats": {
+          "included": 10,
+          "extraMonthlyUsd": 5
+        },
+        "limits": {
+          "storageBytes": "unlimited",
+          "teamMembers": 10,
+          "liveSpaces": "unlimited",
+          "customDomains": "unlimited",
+          "auditLogRetentionHours": "unlimited",
+          "buildAccessLogRetentionHours": "unlimited",
+          "buildsDeploysDaily": "unlimited",
+          "shareLinksPerSpace": 100,
+          "invitesPerSpace": 500,
+          "inviteEmailsPerSpaceDaily": 200,
+          "inviteEmailsPerAccountDaily": 500,
+          "pendingAccessRequestsPerSpace": 100
+        },
+        "capabilities": {
+          "externalProxy": true,
+          "pagesTemplates": true,
+          "hideSpacefastBranding": false,
+          "networkPolicies": false
+        }
+      },
+      {
+        "code": "enterprise",
+        "name": "Enterprise",
+        "monthlyPriceUsd": null,
+        "usageCreditUsd": null,
+        "selfServe": false,
+        "seats": {
+          "included": "unlimited",
+          "extraMonthlyUsd": null
+        },
+        "limits": {
+          "storageBytes": "unlimited",
+          "teamMembers": "unlimited",
+          "liveSpaces": "unlimited",
+          "customDomains": "unlimited",
+          "auditLogRetentionHours": "unlimited",
+          "buildAccessLogRetentionHours": "unlimited",
+          "buildsDeploysDaily": "unlimited",
+          "shareLinksPerSpace": "unlimited",
+          "invitesPerSpace": "unlimited",
+          "inviteEmailsPerSpaceDaily": "unlimited",
+          "inviteEmailsPerAccountDaily": "unlimited",
+          "pendingAccessRequestsPerSpace": "unlimited"
+        },
+        "capabilities": {
+          "externalProxy": true,
+          "pagesTemplates": true,
+          "hideSpacefastBranding": true,
+          "networkPolicies": true
+        }
+      }
+    ],
+    "usage": [
+      {
+        "meter": "cached_bytes",
+        "label": "Cached delivery",
+        "unit": "GB",
+        "freeIncluded": 100,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 1000,
+        "paidRateUsd": 0.02
+      },
+      {
+        "meter": "origin_bytes",
+        "label": "Non-cached transfer",
+        "unit": "GB",
+        "freeIncluded": 10,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 0,
+        "paidRateUsd": 0.054
+      },
+      {
+        "meter": "runtime_cpu_microseconds",
+        "label": "PHP and Zero CPU",
+        "unit": "CPU-second",
+        "freeIncluded": 3600,
+        "freePeriod": "month",
+        "freePool": "compute",
+        "paidIncluded": 0,
+        "paidRateUsd": 0.000033
+      },
+      {
+        "meter": "sql_cpu_microseconds",
+        "label": "SQL CPU",
+        "unit": "CPU-second",
+        "freeIncluded": 3600,
+        "freePeriod": "month",
+        "freePool": "compute",
+        "paidIncluded": 0,
+        "paidRateUsd": 0.000033
+      },
+      {
+        "meter": "origin_invocations",
+        "label": "PHP and Zero invocations",
+        "unit": "million",
+        "freeIncluded": 1,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 1,
+        "paidRateUsd": 0.25
+      },
+      {
+        "meter": "build_milliseconds",
+        "label": "Builds",
+        "unit": "minute",
+        "freeIncluded": 100,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 0,
+        "paidRateUsd": 0.012
+      },
+      {
+        "meter": "worker_cpu_microseconds",
+        "label": "Workers CPU",
+        "unit": "CPU-second",
+        "freeIncluded": 1000,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 0,
+        "paidRateUsd": 0.00002
+      },
+      {
+        "meter": "worker_requests",
+        "label": "Workers requests",
+        "unit": "million",
+        "freeIncluded": 0.1,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 0,
+        "paidRateUsd": 0.3
+      },
+      {
+        "meter": "live_byte_seconds",
+        "label": "Live files and SQL",
+        "unit": "GB-month",
+        "freeIncluded": 0.5,
+        "freePeriod": "stored",
+        "freePool": "storage",
+        "paidIncluded": 0,
+        "paidRateUsd": 0
+      },
+      {
+        "meter": "file_byte_seconds",
+        "label": "Files and media",
+        "unit": "GB-month",
+        "freeIncluded": 0.5,
+        "freePeriod": "stored",
+        "freePool": "storage",
+        "paidIncluded": 0,
+        "paidRateUsd": 0.1
+      },
+      {
+        "meter": "email_recipients",
+        "label": "Transactional email",
+        "unit": "recipient",
+        "freeIncluded": 20,
+        "freePeriod": "day",
+        "freePool": null,
+        "paidIncluded": 0,
+        "paidRateUsd": 0.0005
+      },
+      {
+        "meter": "spam_checks",
+        "label": "Spam checks",
+        "unit": "check",
+        "freeIncluded": 1000,
+        "freePeriod": "month",
+        "freePool": null,
+        "paidIncluded": 1000,
+        "paidRateUsd": 0.001
+      }
+    ],
+    "boost": {
+      "monthlyUsd": 9,
+      "plans": [
+        "go",
+        "plus"
+      ]
+    },
+    "anonymous": {
+      "ttlSeconds": 120000,
+      "publishAbsoluteCapSeconds": 2592000,
+      "claimPageExtensionSeconds": 3600,
+      "claimPageTotalExtensionSeconds": 21600,
+      "recoveryWindowSeconds": 604800,
+      "resetOn": "publish-with-changed-files"
+    }
+  }
+}

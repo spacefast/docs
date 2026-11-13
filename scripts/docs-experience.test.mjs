@@ -26,7 +26,7 @@ test("every authored page opens with its subject instead of a page promise", asy
   const offenders = [];
   const manifest = JSON.parse(await readFile(path.join(root, ".blume", "blume.manifest.json"), "utf8"));
   const authored = manifest.routes.filter((route) =>
-    route.source?.name === "filesystem" && route.entryId?.endsWith(".mdx"),
+    route.source?.name === "filesystem" && route.entryId?.endsWith(".mdx") && !route.draft,
   );
   for (const route of authored) {
     const lead = opening(await builtPage(route.path));
@@ -44,7 +44,7 @@ test("a browser-first reader sees Drop before the CLI install on the homepage", 
   const drop = home.indexOf("no install, no account required");
   const install = home.indexOf("npm install -g spacefast");
   assert.ok(drop >= 0 && install > drop, "show Drop before the install command");
-  assert.match(home, /\[Drop\]\(\/docs\/publish#publish\)/u);
+  assert.match(home, /\[Drop\]\(\/docs\/publish\/#publish\)/u);
   assert.match(publish.replaceAll("**", ""), /Drop takes a folder/iu);
 });
 
@@ -53,13 +53,13 @@ test("Quickstart gives a no-install route before the CLI steps", async () => {
   const drop = quickstart.indexOf("Don't want to install anything?");
   const install = quickstart.indexOf("Install the CLI");
   assert.ok(drop >= 0 && install > drop, "offer Drop before CLI instructions");
-  assert.match(quickstart.slice(drop, install), /\[Drop\]\(\/docs\/publish#publish\)/u);
+  assert.match(quickstart.slice(drop, install), /\[Drop\]\(\/docs\/publish\/#publish\)/u);
 });
 
 test("unfamiliar homepage terms have a linked glossary with definitions", async () => {
   const home = await builtPage("/");
   const glossary = await builtPage("/glossary");
-  assert.match(home, /\[glossary\]\(\/docs\/glossary\)/iu);
+  assert.match(home, /\[glossary\]\(\/docs\/glossary\/\)/iu);
   for (const term of ["Ability", "Capsule", "Grant", "Live", "Space", "Version", "Zero"]) {
     assert.match(glossary, new RegExp(`^## ${term}(?:\\b| \\()`, "mu"), `${term} needs a definition`);
   }
@@ -70,9 +70,9 @@ test("Database gives the Zero prerequisite before query instructions", async () 
   const prerequisite = database.indexOf("Don't have a database yet?");
   const query = database.indexOf("## Query it from code");
   assert.ok(prerequisite >= 0 && query > prerequisite);
-  assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\)/u);
+  assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\/\)/u);
   assert.match(database.slice(prerequisite, query), /kind: "zero"/u);
-  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime#declare-it\)/u);
+  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime\/#declare-it\)/u);
   assert.match(database.slice(prerequisite, query), /`server`/u);
   assert.match(database.slice(prerequisite, query), /server file is required/iu);
   assert.match(database.slice(prerequisite, query), /sf init --runtime zero/u);
@@ -103,7 +103,7 @@ const firstFactCases = [
     evidence: [/Space-level value/iu, /wins/iu, /team/iu],
   },
   {
-    route: "/access",
+    route: "/share",
     question: "Does removing one public grant remove all access?",
     evidence: [/removing a public grant/iu, /no other public grant matches/iu, /links, people, and team access can remain/iu],
   },
