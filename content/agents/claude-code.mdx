@@ -33,7 +33,7 @@ One entry, the hosted server.
 }
 ```
 
-`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. To publish a folder, Claude Code uses `sf publish <path>` when the `sf` CLI is installed and signed in. For a server on your machine, run [On-Device MCP](/agents/mcp-server) with `sf mcp`.
+`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. To publish a folder, Claude Code uses `sf publish <path>` when the [`sf` CLI](/cli) is installed and signed in. For a server on your machine, run [On-Device MCP](/agents/mcp-server) with `sf mcp`.
 
 The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
 
