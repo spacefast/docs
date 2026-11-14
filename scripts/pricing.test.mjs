@@ -22,3 +22,13 @@ test("pricing rejects failed requests and documents without the unclaimed-Space 
   await assert.rejects(loadPricing({ fixture: "", fetcher: async () => new Response("unavailable", { status: 503 }) }), /HTTP 503/u);
   await assert.rejects(loadPricing({ fixture: "", fetcher: async () => Response.json({ data: { revision: "x" } }) }));
 });
+
+test("a single pricing row comes from the same data as the full table", async () => {
+  const { pricingTable, pricingTableMarkdown } = await import("./pricing-next.mjs");
+  const full = pricingTable("space").groups.flatMap(([, rows]) => rows).find((row) => row.label === "Compute memory per request");
+  const one = pricingTable("space", "Compute memory per request");
+  assert.deepEqual(one.groups[0][1].map((row) => row.values), [full.values]);
+  assert.equal(one.columns.length, full.values.length);
+  assert.match(pricingTableMarkdown("space", "Compute memory per request"), /^\| Item \|.*\n\| --- \|.*\n\| Compute memory per request \|/u);
+  assert.throws(() => pricingTable("space", "No such row"), /0 rows/u);
+});

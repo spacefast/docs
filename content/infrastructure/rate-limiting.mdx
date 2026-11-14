@@ -7,13 +7,13 @@ A request to your Space can receive HTTP `429` when traffic matches an infra rat
 
 ## Edge traffic limits
 
-WP Cloud classifies requests using signals such as request rate, URL patterns, user agent, proxy characteristics, and connection behavior. Limits can apply to a pattern, a site, or the wider platform.
+The edge classifies requests using signals such as request rate, URL patterns, user agent, proxy characteristics, and connection behavior. Limits can apply to a pattern, a site, or the wider platform.
 
 Thresholds can change as traffic changes. Do not build a client around an undocumented requests-per-second allowance. Send an accurate `User-Agent` and reduce repeated requests when a limit appears.
 
 ## Resource limits are different
 
-A visitor-facing rate-limit page can also represent a PHP resource-limit event, recorded by WP Cloud as HTTP `599`. That means a PHP connection was not available in time; it does not require CPU usage to reach a maximum.
+A visitor-facing rate-limit page can also represent a PHP resource-limit event, recorded as HTTP `599`. That means a PHP connection was not available in time; it does not require CPU usage to reach a maximum.
 
 Spacefast also limits concurrent application work. When that admission limit is reached, it returns `429` with `Retry-After`. Respect that header and retry with backoff. Repeating the same work immediately adds pressure.
 

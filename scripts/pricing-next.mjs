@@ -376,7 +376,16 @@ const ROW_LINKS = {
 };
 const withLinks = (groups) => groups.map(([group, rows]) => [group, rows.map((item) => ({ ...item, href: item.href ?? ROW_LINKS[item.label] }))]);
 
-export function pricingTable(name) {
+/** One table, or just the row labelled `rowLabel`, so another page can show a plan limit without copying it. */
+export function pricingTable(name, rowLabel) {
+  const table = fullPricingTable(name);
+  if (!rowLabel) return table;
+  const rows = table.groups.flatMap(([, items]) => items).filter((item) => item.label === rowLabel);
+  if (rows.length !== 1) throw new Error(`Pricing table ${name} has ${rows.length} rows labelled ${rowLabel}`);
+  return { ...table, groups: [["", [{ ...rows[0], href: undefined }]]] };
+}
+
+function fullPricingTable(name) {
   switch (name) {
     case "plans":
       return { columns: columnsFor(PLANS), groups: withLinks(AT_A_GLANCE) };
@@ -403,8 +412,8 @@ const TAG_TEXT = { beta: "Beta", soon: "Soon", comp: "Complimentary" };
 const md = (value) => String(value).replaceAll("*", String.raw`\*`).replaceAll("|", String.raw`\|`);
 
 /** The same table as plain Markdown, for .md pages, llms-full.txt and MCP. */
-export function pricingTableMarkdown(name) {
-  const { columns, groups } = pricingTable(name);
+export function pricingTableMarkdown(name, rowLabel) {
+  const { columns, groups } = pricingTable(name, rowLabel);
   const head = columns.map((c) => [c.name, c.tag ? `(${TAG_TEXT[c.tag]})` : "", c.note ? `— ${c.note}` : ""].filter(Boolean).join(" "));
   const lines = [`| Item | ${head.map(md).join(" | ")} |`, `| --- | ${columns.map(() => "---").join(" | ")} |`];
   const notes = [];

@@ -7,7 +7,7 @@ Spacefast provisions and renews HTTPS certificates for your Space's hostnames au
 
 ## Provisioning and renewal
 
-WP Cloud manages certificates through Let's Encrypt and Google Trust Services. Issuance uses the ACME HTTP-01 challenge, so each hostname must resolve to the supplied infra addresses and allow validation over HTTP.
+Spacefast issues certificates through Let's Encrypt and Google Trust Services. Issuance uses the ACME HTTP-01 challenge, so each hostname must resolve to the supplied infra addresses and allow validation over HTTP.
 
 The apex and `www` are validated independently. One can have a working certificate while the other is still pending. Check every hostname returned by your domain setup.
 
@@ -39,6 +39,6 @@ See [Custom domains](/domains#troubleshooting) for diagnostic codes such as `ssl
 
 ## Protocol support
 
-WP Cloud disables TLS 1.0 and TLS 1.1. Modern clients negotiate TLS 1.2 or TLS 1.3. Some TLS 1.2 ciphers remain for older-client compatibility, so evaluate scanner findings against the protocol and cipher the affected client actually negotiates.
+Spacefast disables TLS 1.0 and TLS 1.1. Modern clients negotiate TLS 1.2 or TLS 1.3. Some TLS 1.2 ciphers remain for older-client compatibility, so evaluate scanner findings against the protocol and cipher the affected client actually negotiates.
 
 <WpCloudDocs title="TLS certificates" href="https://wp.cloud/docs/sites/domains/tls-certificates/" />

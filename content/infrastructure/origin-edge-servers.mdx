@@ -15,9 +15,9 @@ Edge Cache and origin caching are separate layers. A cache hit at the edge avoid
 
 ## Origin regions
 
-WP Cloud operates origin locations in Amsterdam, Ashburn, Dallas, and Los Angeles, with edge locations across more regions. The public IP address does not identify the physical origin.
+Spacefast's origin datacenters are in Amsterdam, Burbank, Washington DC, and Dallas, with edge locations across more regions. The public IP address does not identify the physical origin.
 
-Spacefast manages site placement. A WP Cloud origin preference is a provisioning choice, not a per-request routing rule or a Spacefast setting for moving an existing Space. WP Cloud can relocate sites for platform health and performance, and [failover](/infrastructure/automated-failover) can temporarily change the active origin.
+Spacefast manages site placement. An origin preference is a provisioning choice, not a per-request routing rule or a Spacefast setting for moving an existing Space. Spacefast can relocate sites for platform health and performance, and [failover](/infrastructure/automated-failover) can temporarily change the active origin.
 
 Site replicas can span the United States and the European Union. Do not infer a data-residency guarantee from an origin location, a DNS answer, or the edge that served one request.
 

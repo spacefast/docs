@@ -3,19 +3,19 @@ title: Filesystem permissions
 description: Understand PHP filesystem controls and how they differ from published versions and application data.
 ---
 
-A published Space version is an immutable snapshot. Changing files means publishing a new version. WP Cloud's PHP filesystem permissions are a separate control over writes made by PHP web requests.
+A published Space version is an immutable snapshot. Changing files means publishing a new version. PHP filesystem permissions are a separate control over writes made by PHP web requests.
 
 ## What the infra control does
 
-WP Cloud supports the `php_fs_permissions` site setting:
+Spacefast's infra has three PHP filesystem permission modes:
 
 | Value | Effect on PHP web requests |
 | --- | --- |
-| `rw` | PHP can read and write the site's filesystem. This is WP Cloud's default. |
+| `rw` | PHP can read and write the site's filesystem. This is the default. |
 | `ro` | PHP can read files but cannot write them. Uploads, updates, and other file-writing operations can fail. |
 | `loggedin` | Changes write behavior for some logged-in WordPress requests. The feature is evolving and requires testing against the site's actual workflows. |
 
-These are upstream capabilities, not fields to add to `sf.jsonc`. Spacefast manages the filesystem policy for its sites. Use [publish](/publish), [Storage](/object-storage), and the documented [WordPress tools](/wordpress) for the changes your application needs.
+Spacefast sets the mode for its sites. There is no `sf.jsonc` field for it. Use [publish](/publish), [Storage](/object-storage), and the documented [WordPress tools](/wordpress) for the changes your application needs.
 
 ## Read-only files do not mean read-only data
 

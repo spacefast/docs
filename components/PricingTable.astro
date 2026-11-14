@@ -10,10 +10,12 @@ import { pricingTable } from "../scripts/pricing-next.mjs";
 
 interface Props {
   table: "plans" | "team" | "space" | "features" | "examples" | "payments";
+  /** Show only this row, so another page can quote a plan limit from the same data. */
+  row?: string;
 }
 
-const { table } = Astro.props;
-const { columns, groups, highlight } = pricingTable(table);
+const { table, row: rowLabel } = Astro.props;
+const { columns, groups, highlight } = pricingTable(table, rowLabel);
 const span = columns.length + 1;
 ---
 
