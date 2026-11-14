@@ -1,0 +1,63 @@
+---
+title: Move from Netlify
+description: Publish a Netlify site on Spacefast. netlify.toml build settings, redirects, and headers carry across when Spacefast builds the project
+---
+
+Spacefast reads `netlify.toml` and the `_redirects` and `_headers` files you already have, so a static or prerendered Netlify site usually moves with one publish.
+
+## Move the site
+
+<Steps>
+  <Step title="Create the Space">
+    In the project directory, create an empty Space. Later publishes from this directory update it.
+
+    ```bash
+    sf spaces add --slug my-site
+    ```
+  </Step>
+  <Step title="Bring the environment variables">
+    Export the site's variables from Netlify as a dotenv file, then import it before the first build so the build can read them.
+
+    ```bash
+    sf env import .env --from netlify --space my-site
+    ```
+
+    A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
+  </Step>
+  <Step title="Publish the project">
+    Run `sf publish` in the project and let Spacefast build it. `netlify.toml` is read when Spacefast builds, so a folder you built yourself carries over only the `_redirects` and `_headers` files inside it.
+
+    ```bash
+    sf publish
+    ```
+
+    To build on every push instead, connect the repository with [Publish from Git](/git).
+  </Step>
+  <Step title="Check what was flagged">
+    Anything Spacefast cannot convert is flagged at publish. Move it to a supported equivalent, or pass `--allow-unsupported-platform-features` to publish without it.
+  </Step>
+  <Step title="Point your domain">
+    Add the domain to the Space and add the DNS records it asks for. Delete the address records that point at Netlify, because a leftover record blocks verification. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
+  </Step>
+</Steps>
+
+## What carries over
+
+| From Netlify | On Spacefast |
+| --- | --- |
+| `netlify.toml` build command and publish directory | Read after framework detection, and they override the detected build command and output directory |
+| Redirects and headers in `netlify.toml` | Converted to `_redirects` and `_headers` rules |
+| `_redirects` and `_headers` files | Published with your pages and applied as routing rules |
+| Environment variables | Imported from a dotenv export with `sf env import --from netlify` |
+
+The full rules for build detection are on [Frameworks and builds](/frameworks). Rule order, conditions, and limits are on [Redirects, rewrites, and headers](/routing).
+
+## What doesn't
+
+- **Netlify Functions and edge functions.** Move request handling to a [Functions](/functions) route or a supported framework's server. Edge functions are flagged at publish.
+- **`netlify-cdn-cache-control`** is rejected with `header_cdn_cache_unsupported`. Spacefast manages shared caching; `Cache-Control` still applies to browsers. See [Caching](/caching).
+- **The `.netlify` folder** is dropped at publish, along with `node_modules` and `.env` files. See [what gets uploaded](/publish#what-gets-uploaded).
+
+## Choose who can open it
+
+A team's new Spaces start private unless the team changed its default. Make the Space public, or share it with a link, in [Spacefast Share](/share).

@@ -1,0 +1,80 @@
+---
+title: Move from Vercel
+description: Publish a Vercel project on Spacefast. vercel.json settings, redirects, headers, and crons carry across; Vercel functions are flagged at publish
+---
+
+Spacefast reads `vercel.json`, converts its routing rules and crons, and runs supported Next.js versions with their server. Vercel functions are the part that needs moving by hand.
+
+## Move the project
+
+<Steps>
+  <Step title="Create the Space">
+    In the project directory, create an empty Space. Later publishes from this directory update it.
+
+    ```bash
+    sf spaces add --slug my-app
+    ```
+  </Step>
+  <Step title="Bring the environment variables">
+    Export the project's variables from Vercel as a dotenv file, then import it before the first build so the build can read them.
+
+    ```bash
+    sf env import .env --from vercel --space my-app
+    ```
+
+    A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
+  </Step>
+  <Step title="Publish the project">
+    Run `sf publish` in the project and let Spacefast build it. `vercel.json` is read when Spacefast builds.
+
+    ```bash
+    sf publish
+    ```
+
+    To build on every push instead, connect the repository with [Publish from Git](/git).
+  </Step>
+  <Step title="Check what was flagged">
+    Anything Spacefast cannot convert, such as Vercel functions, is flagged at publish. Move it to a supported equivalent, or pass `--allow-unsupported-platform-features` to publish without it.
+  </Step>
+  <Step title="Point your domain">
+    Add the domain to the Space and add the DNS records it asks for. Delete the address records that point at Vercel, because a leftover record blocks verification. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
+  </Step>
+</Steps>
+
+## What carries over
+
+| From Vercel | On Spacefast |
+| --- | --- |
+| `vercel.json` root directory, install command, build command, and output directory | Read after framework detection, and they override what detection set |
+| The `framework` field in `vercel.json` | Overrides the detected framework |
+| Redirects, rewrites, and headers in `vercel.json` | Converted to `_redirects` and `_headers` rules |
+| Crons in `vercel.json` | Converted to `sf.jsonc` crons |
+| Environment variables | Imported from a dotenv export with `sf env import --from vercel` |
+
+## Crons
+
+A Spacefast cron is a scheduled `GET` against a path on your own site, like a Vercel cron. The schedule is where they differ:
+
+- A five-field crontab schedule is an **advanced** cron. Advanced crons come with Boost. Without a free advanced slot, a crontab still publishes and runs at its closest simple schedule, which may not match the times it names.
+- Your plan sets how many crons each Space runs, and for now a Space can declare at most 8.
+
+[Crons](/crons) has the schedule grammar and the allowance by plan.
+
+## Next.js
+
+| Next.js | What runs |
+| --- | --- |
+| 16.2.x, 16.3.x | Server-rendered builds, through the adapter `sf publish` wires in for you |
+| 15.5.24 and later 15.5 releases | Server-rendered builds |
+| 14.2, 15.0 to 15.5.23, 16.0, 16.1, 16.4 | `output: "export"` only |
+
+Other versions are refused before anything builds. The [Next.js recipe](/recipes/next) has the details and the export fallback.
+
+## What doesn't
+
+- **Vercel functions** are flagged at publish. Move request handling to a [Functions](/functions) route or a supported framework's server.
+- **The `.vercel` folder** is dropped at publish, along with `node_modules` and `.env` files. See [what gets uploaded](/publish#what-gets-uploaded).
+
+## Choose who can open it
+
+A team's new Spaces start private unless the team changed its default. Make the Space public, or share it with a link, in [Spacefast Share](/share).

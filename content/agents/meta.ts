@@ -5,6 +5,7 @@ export default defineMeta({
   pages: [
     "index",
     "share-claude-artifact",
+    "share-chatgpt-html",
     "mcp-server",
     "claude-code",
     "codex",

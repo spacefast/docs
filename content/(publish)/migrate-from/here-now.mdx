@@ -1,0 +1,42 @@
+---
+title: Move from here.now
+description: Publish the same folder from the same agent. Connect Spacefast to your agent, ask it to publish, and choose who can open the result
+---
+
+If an agent published your site to here.now, the same agent can publish the same folder to Spacefast. Connect Spacefast to it once, then ask.
+
+## Move the site
+
+<Steps>
+  <Step title="Connect your agent">
+    Add Spacefast to the agent you publish from. [Agents](/agents) covers the three ways to connect and links the setup page for each client.
+  </Step>
+  <Step title="Publish the folder">
+    Ask your agent to publish the site's folder. It sends back the live link.
+
+    <Prompt description="Publish this site's folder to Spacefast." actions={["copy"]}>
+    Publish this site's folder to Spacefast and give me the live URL and claim link if it needs claiming.
+    </Prompt>
+  </Step>
+  <Step title="Choose who can open it">
+    A team's new Spaces start private unless the team changed its default. Make the Space public, add people, or create a share link in [Spacefast Share](/share).
+  </Step>
+  <Step title="Point your domain">
+    Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
+  </Step>
+</Steps>
+
+Without an agent, drag the folder onto [drop.fast](https://drop.fast), or run `sf publish` in it. See [Publishing](/publish).
+
+## What carries over
+
+| From here.now | On Spacefast |
+| --- | --- |
+| A folder of HTML, CSS, images, and scripts | Published exactly as it sits on disk. See the [plain HTML recipe](/recipes/html) |
+| Your agent workflow | The same prompt, sent to Spacefast instead |
+
+An agent that publishes without a Spacefast account gets a live URL and a claim link. Claim the Space before it expires to keep it. See [Publish without an account](/anonymous-and-claim).
+
+## When the site needs a backend
+
+A site that calls an API with a secret, stores form entries, or runs on a schedule needs a server side. On Spacefast that is a [Functions](/functions) route, which reads secrets from [environment variables](/environment-variables) and the Space's [database](/database) on `env.DB`, plus [crons](/crons) for schedules.
