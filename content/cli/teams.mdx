@@ -9,7 +9,7 @@ Use `sf teams` to create or select a team and set defaults for new Spaces. Addin
 
 A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
 
-Most subcommands accept `-o, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
+Most subcommands accept `-T, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
 
 ## sf teams ls
 
@@ -51,7 +51,7 @@ Sets the default team for future CLI publishes. The selection is stored per logi
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | none | Team slug, ID, or name, as an alternative to the positional. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | none | Team slug, ID, or name, as an alternative to the positional. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -136,7 +136,7 @@ Shows or sets the access preset materialized for Spaces this team creates in the
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Examples
 
@@ -166,7 +166,7 @@ sf teams members ls
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -198,7 +198,7 @@ Remove the member from the dashboard under **Members**. With CLI credentials, th
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ## sf teams invitations ls
 
@@ -214,7 +214,7 @@ Lists pending and historical invitations.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -247,7 +247,7 @@ Send the invitation from the dashboard under **Members → Invite member**. With
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ## sf teams invitations resend
 

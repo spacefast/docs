@@ -16,6 +16,7 @@ import {
 } from "./redirect-rules.mjs";
 import { discoveryFileForUrl } from "./build-llms-index.mjs";
 import { readSidebarRoutes } from "./sidebar-routes.mjs";
+import { websiteDependencies } from "./website-dependencies.mjs";
 
 const root = path.resolve(process.cwd());
 const dist = path.join(root, "dist");
@@ -289,6 +290,21 @@ for (const [file, present, absent] of sidebarExpectations) {
     );
   }
 }
+// The header lockup (components/Logo.astro) is two links: the mark to the
+// Website home at the origin root, the label to the Docs home.
+for (const file of ["index.html", "quickstart/index.html", "api/reference/index.html"]) {
+  const html = await readBuilt(file);
+  const start = html.indexOf("data-sf-brand");
+  const brand = start < 0 ? "" : html.slice(start, html.indexOf("</div>", start));
+  const links = [...brand.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gu)].map(([, attributes, body]) => ({
+    href: /\bhref="([^"]*)"/u.exec(attributes)?.[1],
+    name: /\baria-label="([^"]*)"/u.exec(attributes)?.[1] ?? body.replace(/<[^>]*>/gu, "").trim(),
+  }));
+  const want = [{ href: "/", name: "Spacefast home" }, { href: `${deploymentBase}/`, name: "Docs" }];
+  if (JSON.stringify(links) !== JSON.stringify(want)) {
+    throw new Error(`dist/${file} header lockup is wrong: ${JSON.stringify(links)}.`);
+  }
+}
 // Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
 for (const [file, prev, next] of [
   ["troubleshooting/index.html", "/quickstart", "/spaces"],
@@ -555,7 +571,7 @@ for (const file of htmlFiles) {
   const html = await readFile(path.join(dist, file), "utf8");
   for (const match of html.matchAll(/\b(?:action|href|src)=["'](\/[^"']*)["']/giu)) {
     const url = match[1];
-    if (url.startsWith("//")) continue;
+    if (url.startsWith("//") || websiteDependencies.includes(url)) continue;
     if (url !== deploymentBase && !url.startsWith(`${deploymentBase}/`)) {
       throw new Error(`Built URL misses the ${deploymentBase} base in dist/${file}: ${url}`);
     }

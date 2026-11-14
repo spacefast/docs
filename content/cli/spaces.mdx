@@ -33,7 +33,7 @@ sf spaces ls
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | all teams | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | all teams | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--limit=<value>` | `50` | Maximum spaces to return. 1 to 100 |
 
 ### Examples
@@ -62,7 +62,7 @@ Prints the Space's live runtime state and its current version.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 
 ### Examples
@@ -99,7 +99,7 @@ Creates the Space and saves it to `.spacefast/state.json`. You rarely need this:
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `-n, --name=<value>` | none | Set the Space title |
 | `--slug=<value>` | generated | Set the Space slug |
 | `--mode=website\|files` | `website` | Space serving mode |
@@ -133,7 +133,7 @@ Patches Space identity, serving metadata, and generated viewer metadata.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--slug=<value>` | unchanged | New Space slug. Must be sent without other update flags |
 | `-n, --name=<value>` | unchanged | Space title |
@@ -170,7 +170,7 @@ Downloads the files of one version. Defaults to the latest.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `-v, --version=<value>` | `latest` | Version ID, ref, number, or `latest` |
 | `--output=<value>` | `.` | Directory to write downloaded files into |
@@ -203,7 +203,7 @@ Downloads an existing version and publishes those files as a new Space.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Source Space. ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--version=<value>` | live version | Version to duplicate |
 | `--slug=<value>` | generated | Slug for the duplicate Space |
@@ -233,7 +233,7 @@ Moves a saved anonymous Space into your account, starting browser login if you a
 | --- | --- | --- |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--space=<value>` | saved Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--keep-publishing` / `--no-keep-publishing` | prompted | Keep the agent that published this Space authorized to publish to it |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 
@@ -302,7 +302,7 @@ Takes the Space offline. The slug, versions, and data are retained rather than d
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 
@@ -351,7 +351,7 @@ Requests a transfer. It applies once a member of the target team accepts.
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Source team. Slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Source team. Slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 
 ### Example

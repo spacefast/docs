@@ -64,6 +64,8 @@ export default defineConfig({
   title: "Spacefast Docs",
   variables: pricingVariables(await loadPricing({ fixture: new URL("./content/_pricing/document.json", import.meta.url) })),
   description: "Publish and host the sites your agents build.",
+  // Two links (components/Logo.astro): the mark goes to the Website home at the
+  // origin root, outside the /docs base; "Docs" goes to the Docs home.
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
   // The 2026-10 brand: neutral greys, one green, dark first like the Website.
   // The green is a ground with ink on it, never type on white, so light mode

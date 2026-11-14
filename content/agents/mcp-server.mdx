@@ -17,7 +17,7 @@ The same server ships in two runtimes. Both expose the eligible API operations b
 |---|---|---|
 | Transport | Streamable HTTP | stdio |
 | Endpoint or command | `https://mcp.spacefast.com` | `sf mcp`, or `npx -y spacefast mcp` |
-| Filesystem | None. `publish` requires inline `files` | Reads your workspace. `publish` takes a `path` or publishes the current workspace |
+| Filesystem | None. `publish` takes inline `files` or a completed `uploadId` | Reads your workspace. `publish` also takes a `path` or publishes the current workspace |
 | Auth | OAuth, per client | Your CLI login, or `SPACEFAST_TOKEN` |
 | Where it runs | Spacefast | Your machine |
 
@@ -39,15 +39,22 @@ By default a client asks for these scopes.
 |---|---|
 | `teams:read` | Read the teams the account belongs to |
 | `teams:create` | Create teams |
-| `spaces:read` | Read spaces, versions, and build status |
-| `spaces:write` | Create and update spaces and their settings |
-| `spaces:rename` | Rename space slugs and managed addresses |
+| `teams:members.write` | Invite people to teams that the account can administer |
+| `sell:write` | Set up Sell, enable live sales, resend downloads, and mark orders shipped |
+| `spaces:read` | Read Spaces, versions, and build status |
+| `spaces:write` | Create and update Spaces and their settings |
+| `spaces:rename` | Rename Space slugs and managed addresses |
+| `spaces:access.write` | Change who can open a Space, including making it public through its published configuration |
+| `versions:download` | Read files from deployment versions |
 | `publish:write` | Publish new immutable versions |
-| `domains:read` | Read domain inventory and DNS diagnostics |
-| `domains:write` | Attach, verify, and mutate domains and DNS records |
-| `offline_access` | Refresh access without another sign-in |
+| `domains:read` | Read Space hostnames and certificate status. Read domain registrations and DNS records when enabled |
+| `domains:write` | Manage Space hostnames. Start domain purchases and manage DNS records when enabled |
+| `oauth-apps:write` | Register and manage the team's Sign in with Spacefast apps |
+| `offline_access` | Refresh access without another interactive sign-in |
 
-Each tool declares the scopes it needs, and clients can read them from `tools/list` before calling.
+The default leaves out `spaces:delete` and `billing:purchase`. Add `spaces:delete` to the request, or approve it when an agent asks to delete a Space. Hosted MCP carries no connector scopes.
+
+Each tool declares the scopes it needs in `tools/list`, under `_meta["spacefast/requiredScopes"]`, so clients can read them before calling.
 
 Read each operation's required scopes in its tool schema and the [API reference](/api/reference). `publish` requires `publish:write`; deployment and analytics reads require `spaces:read`. Domain inspection also needs the domain scopes declared by its tool.
 
@@ -75,7 +82,9 @@ Use the API operation tool directly. For example, `searchDocs` searches document
 
 Space Apps provide visual views through tools such as `show_space_deployments`, `show_space_domains`, and `show_space_analytics`. Use `show_domains` for the domain library. These views and the publish card remain available alongside operation tools.
 
-`publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. Read each tool's schema before calling it.
+`publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. `choose_space` asks you to pick a Space when the target is unclear, and `cli_login` signs the `sf` CLI in with this connection's access when you ask for it. Read each tool's schema before calling it.
+
+Every result is capped at 24,000 characters of text across the whole structured value, with an explicit truncation marker when it hits the cap.
 
 ### Connector access
 
@@ -87,8 +96,9 @@ Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connecto
 
 | Field | Type | What it does |
 |---|---|---|
-| `path` | string | Local runtime only. One local directory, file, or archive. Omit `path` and `files` to publish the current workspace |
-| `files` | array of 1 to 1000 | Inline files. Required on hosted. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
+| `path` | string | Local runtime only. One local directory, file, or archive. Omit `path`, `files`, and `uploadId` to publish the current workspace |
+| `uploadId` | string | A completed durable upload from `completeUpload`, for files too big to send inline. Reuse it when retrying |
+| `files` | array of 1 to 1000 | Inline files. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
 | `spaceId` | string starting `spc_` | Update this Space. Omit to create one, or on local to use the Space linked to this workspace |
 | `teamId` | string | Destination team id or slug for a new Space. Send one after a `team_required` error |
 | `access` | `private` or `public` | Initial root access for a Space this publish creates. `private` admits the owning team, `public` also admits anyone on the web. Omit to use the team default. Invalid with `spaceId` |
@@ -98,6 +108,8 @@ Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connecto
 | `description` | string, up to 2000 | Changelog for this version. It does not change the Space description |
 | `requestId` | string, 16 to 200 | Idempotency handle. Reuse the same value only when retrying a call that timed out |
 
+Send at most one of `path`, `files`, and `uploadId`.
+
 ```json
 {
   "path": "dist",
@@ -105,7 +117,7 @@ Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connecto
 }
 ```
 
-The result carries `status` of `publishing` or `published`, `liveUrl`, `immutableUrl`, and a `receipt` with the Space, the version, and any diagnostics. When `status` is `publishing`, `result.job.poll.operationId` is the handle for `operation_status`.
+The result carries `status` of `publishing` or `published`, `liveUrl`, `immutableUrl`, and a `receipt` with the Space, the version, and any diagnostics. When `status` is `publishing`, `result.job.poll` holds the handle for `operation_status`.
 
 Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
@@ -113,7 +125,10 @@ Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
 | Field | Type | What it does |
 |---|---|---|
-| `operationId` | string, required | Copy `publish.result.job.poll.operationId` |
+| `url` | string | Copy `publish.result.job.poll.url`. Prefer it when present |
+| `operationId` | string | Copy `publish.result.job.poll.operationId` |
+
+Send exactly one of the two.
 
 ```json
 { "operationId": "opr_7f2b8c1d4e5a6b7c" }
@@ -131,7 +146,7 @@ For an error, open the problem document's `type` URL to read its matching error 
 
 An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard.
 
-Keep the returned execution ID and call `resume_execution` using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
+A paused operation waits up to 24 hours for a decision. Keep the returned execution ID and call `resume_execution` with that same `executionId`, using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
 
 See [Agent permissions](/agents/permissions) for the actions that require a person and the scope of standing access.
 

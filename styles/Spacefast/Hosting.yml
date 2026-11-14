@@ -1,0 +1,11 @@
+# Ruling 2026-11-11: never define or describe Spacefast with the word
+# "hosting". Say publish, serve, live, infrastructure, or runtime instead.
+# Narrow uses about something else (a third-party product) are rare; rephrase
+# first, and only suppress a line with an inline Vale comment when it is truly
+# about something other than Spacefast.
+extends: existence
+message: "Don't use '%s' to describe Spacefast. Say publish, serve, live, infrastructure, or runtime."
+level: error
+ignorecase: true
+tokens:
+  - hosting
