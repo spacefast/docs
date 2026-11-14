@@ -96,14 +96,14 @@ While `name` is set in the file, the API refuses to rename the Space. The file w
 
 | Key | Type | Default | What it does |
 | --- | --- | --- | --- |
-| `index` | string or `false` | inferred, see below | The directory index file. `false` disables index resolution |
-| `fallback` | string, or `{ path, status }` | none | The committed file served when no exact route matches. `status` is 100 to 599 |
-| `cleanUrls` | boolean | `true`, unless a 200-status `fallback` is set | Serves `about.html` at `/about` |
+| `index` | string or `false` | inferred, see below | The homepage file `/` serves. Folders always serve their own `index.html`. `false` serves no homepage |
+| `fallback` | string, `false`, or `{ path, status }` | inferred for a single-page app, see below | The committed file served when no exact route matches. `status` is 100 to 599. `false` turns the inference off |
+| `cleanUrls` | boolean | `true` | Serves `about.html` at `/about`, ahead of any fallback |
 | `listing` | boolean | on when no index could be inferred and the version runs no worker | Automatic directory listings |
 
-`index` defaults to `index.html` when the version has one at the root. Otherwise, if the version publishes exactly one HTML file, that file. Otherwise, if there is exactly one HTML file at the root, that one. Otherwise `false`.
+`index` defaults to `index.html` when the version has one at the root. Otherwise, if a 200-status `fallback` names a committed file and the version runs no worker, that file. Otherwise, if the version publishes exactly one HTML file, that file. Otherwise, if there is exactly one HTML file at the root, that one. Otherwise `false`.
 
-`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it also turns `cleanUrls` and `listing` off unless you set them yourself. A `fallback` path that is not a committed file fails the publish.
+`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it turns `listing` off unless you set it yourself. Committed pages still answer their own URLs. With `"cleanUrls": false`, a flat `about.html` no longer answers `/about`, so that route reaches the shell. A `fallback` path that is not a committed file fails the publish. Left unset, `fallback` is inferred: a root `200.html`, else `_shell.html`, else a root `index.html` beside a build tool's output when there's no root `404.html`. See [SPA fallback](/routing#spa-fallback).
 
 ## Metadata and appearance
 
