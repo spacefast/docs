@@ -1,0 +1,73 @@
+---
+title: Owner details and privacy
+description: The contact details a registered domain needs, who owns it, and what WHOIS shows about you
+sidebar: { order: 2 }
+---
+
+Every registered domain needs valid owner details. [ICANN](https://www.icann.org/), the organization that sets the rules for domain names, requires them. They identify who owns the domain and are used to settle ownership disputes. Spacefast hides them from the public by default, at no extra cost.
+
+## What you need to provide
+
+The first time you buy a domain, checkout asks for the **Domain owner**:
+
+| Field | Required |
+| --- | --- |
+| First and last name | Yes |
+| Organization | No. Fill it in when a company owns the domain. |
+| Street address, city, state or region, postal code, country | Yes. State or region is required for every country. |
+| Email address | Yes |
+| Phone number | Yes |
+
+Spacefast saves these details and fills them in next time, so you type them once. Use a real person or company: registries can suspend a domain registered to made-up details.
+
+:::tip[Pick an email address that doesn't depend on the domain]
+Avoid an address on the domain itself, like `admin@yourgroovydomain.com` for `yourgroovydomain.com`. If the domain stops working, so does that inbox, and that's where the important mail goes.
+:::
+
+From the terminal, save owner details from a JSON file, then list them:
+
+```bash
+sf domains contacts add --file contact.json
+sf domains contacts ls
+```
+
+The file takes `firstName`, `lastName`, `organization`, `address1`, `address2`, `city`, `state`, `postalCode`, `countryCode` (two letters), `email`, and `phone`. Pass the saved contact to a purchase with `--contact dcon_...`. Without it, the newest contact you saved is used.
+
+## Who owns the domain
+
+Saved owner details belong to the person who saved them, not to the whole team. That matters:
+
+- **Only that person can change the name, organization, or email address** on them. Anyone who can buy domains for the team can fix the street address or phone number.
+- **Changes apply to future purchases.** Domains already registered keep the details they were registered with.
+- **API keys can't save owner details.** An owner is always a person, so a team API key gets `domain_contact_requires_person`. Sign in as a person, or save the details in the dashboard first.
+
+An agent buying a domain for you should ask you for these details and never invent them. To keep them out of the chat, save them yourself (in the dashboard's domain search or with `sf domains contacts add`) and let the agent reuse the saved contact.
+
+## Verify your email address
+
+ICANN requires registrars to confirm the owner's email address. If you get an email asking you to verify the contact details for your domain, open it and click the link. Registries can suspend a domain whose owner details stay unverified.
+## Privacy protection
+
+Privacy protection is on by default for every domain you register through Spacefast, at no extra cost. Public WHOIS and RDAP lookups don't show your name, address, email, or phone number. Those fields come back redacted.
+
+Your details still exist, and in a few cases they can be shared:
+
+- **To run the domain.** The registry for the extension, the registrar, and the data escrow provider that ICANN requires all hold a copy.
+- **To settle a dispute.** When someone files a [UDRP](https://www.icann.org/resources/pages/help/dndr/udrp-en) or [URS](https://www.icann.org/resources/pages/urs-2014-01-09-en) complaint about the domain, ICANN requires the registrar to reveal the owner details to the dispute provider, privacy or not.
+- **Through tiered access.** ICANN lets parties with a legitimate purpose, such as law enforcement, request registrant data from the registrar. The registrar reviews each request case by case.
+
+## Who the registrar is
+
+Spacefast registers domains through Automattic Inc., the same registrar behind WordPress.com. Automattic is the ICANN-accredited registrar of record you'll see in WHOIS.
+
+To report spam, phishing, malware, or other abuse on a domain registered through Spacefast, email the registrar's abuse contact at `domainabuse@automattic.com`.
+
+## Errors you might see
+
+| Code | What happened | What to do |
+| --- | --- | --- |
+| [`domain_contact_not_found`](/errors/domain_contact_not_found) | The contact ID doesn't exist, or belongs to another team. | List contacts with `sf domains contacts ls` and use one from there. |
+| `domain_contact_not_owned` | The contact belongs to someone else, so you can't register a domain to it. | Save your own details, or ask that person to buy it. |
+| `domain_contact_identity_locked` | Only the person who saved the contact can change its name, organization, or email address. | Ask them, or save new details. |
+| `domain_contact_requires_person` | A team API key tried to save owner details. | Use a personal sign-in, or let a person fill them in at checkout. |
+| [`registrant_contact_invalid`](/errors/registrant_contact_invalid) | The registrar rejected the owner details. Your payment for the domain was refunded. | Fix the details (a full street address, a valid phone with country code) and buy again. |

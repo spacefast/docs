@@ -1,0 +1,127 @@
+---
+title: Register a domain
+description: Buy a domain name through Spacefast, what happens after you pay, and which extensions you can register
+sidebar: { order: 1 }
+---
+
+You can register a domain name (for example, `yourgroovydomain.com`) through Spacefast and point it at any of your Spaces. The domain belongs to your team, sits next to any domains you connected yourself, and runs on Spacefast DNS from the moment it registers.
+
+Already own a domain somewhere else? You don't need to register it again. [Connect it](/domains) instead.
+
+## Register a new domain name
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open your team and select **Domains**.
+2. Click **Buy domain**.
+3. Type the name you want, or describe your project to get suggestions. You can search by keyword and pick different extensions like `.com`, `.blog`, `.app`, or `.dev`.
+4. Pick up to ten names and continue to **Review and buy**.
+5. Fill in the **Domain owner** details, or keep the saved ones. These go to the registry, so use a real person or company and an email address you can read. See [Owner details and privacy](/registration/contacts-and-privacy).
+6. Check **Total today** and click **Buy 1 domain** (or **Buy 2 domains**, and so on).
+7. Pay with the team's saved payment method, or add one when asked.
+
+</Tab>
+<Tab title="CLI">
+
+Find a name, then buy it:
+
+```bash
+sf domains search "a ceramics studio in Porto"
+sf domains registration purchase yourgroovydomain.com
+```
+
+On its own, the purchase command holds the names, shows the total, and prints a link where an owner or admin finishes the purchase. Nothing is charged yet. Pass `--contact-file contact.json` to save new owner details on the way.
+
+To pay in the same step, add the total you agreed to: `--expect-total 12.00`. If you can pay for the team, the saved payment method is charged right away. If the total before tax isn't exactly that, the purchase is refused and nothing is charged. See the [CLI reference](/cli/reference) for every flag.
+
+</Tab>
+<Tab title="Agents">
+
+Ask your agent: "Is yourgroovydomain.com available?", "Suggest some names for a bakery in Dublin," or "Get me a checkout link for yourgroovydomain.com."
+
+Over MCP the agent opens the domain search with `show_domains`, where you pick names, fill in the owner details, and pay. Over the API the agent saves owner details you give it, calls `purchaseDomain`, and gets back a `confirmUrl` for an owner or admin to open and pay. Agents never see the card.
+
+An agent only pays on its own when you've explicitly given it purchasing power for the team. Without it, a person always confirms the charge.
+
+</Tab>
+</Tabs>
+
+Only team owners and admins can buy domains. An agent or API key without purchasing power can hold the names, but an owner or admin confirms the charge.
+
+## How pricing works
+
+- **Prices are in US dollars, plus tax.** Search results show the first-year price per name. The [pricing page](/pricing#domains) explains what that price covers.
+- **One year at a time.** Every registration and renewal is for one year.
+- **A checkout holds for 24 hours.** An unpaid purchase keeps its names and quote for a day, then expires. If the registry's price moved by the time the registration goes through, that name is refunded automatically.
+- **Renewals cost the current price.** A renewal is charged at that extension's registration price on the day it renews, not what you paid the first time.
+- **Registered domains are free to connect.** They don't count against your plan's custom domain limit.
+
+## After you register
+
+### Wait for the registration to finish
+
+Spacefast asks the registry for the name the moment your payment clears. The domains list shows "Paid. Registering your domains now." until the registry confirms. Check one from the terminal:
+
+```bash
+sf domains registration yourgroovydomain.com
+```
+
+If the registry turns a name down (someone grabbed it first, the price changed, or the registry is down for maintenance), that name is **refunded automatically**, tax included. Nothing else to do. The domain's **Registration** card shows the refund.
+
+### Point it at a Space
+
+A new domain lands in your team's **Domains** list, ready for any of your Spaces. It isn't attached to one yet. Add it to a Space to serve your site there:
+
+```bash
+sf domains add yourgroovydomain.com --space my-site --role primary
+```
+
+Because the domain is on Spacefast DNS, Spacefast writes the records for you. There's nothing to copy into a DNS panel. See [Custom domains](/domains) for primary addresses, redirects, and certificates.
+
+### Wait for it to resolve everywhere
+
+Your new domain should start working almost immediately, but DNS caches around the world can take up to 48 hours to catch up. This waiting period is called propagation. During that window, the domain may not load the same everywhere.
+
+## Which extensions you can register
+
+Spacefast sells more than 370 generic extensions, including `.com`, `.org`, `.net`, `.blog`, `.app`, `.dev`, `.page`, `.shop`, `.studio`, and `.xyz`. Search shows each name's live price and whether it can be bought.
+
+A few limits:
+
+- **No country-code extensions.** Two-letter extensions such as `.co`, `.me`, `.io`, `.uk`, or `.de` can't be registered through Spacefast. Register them elsewhere and [connect them](/domains).
+- **No premium names.** Registries price some short or popular names as premium. Those can't be bought through Spacefast; search marks them as unavailable.
+- **Apex names only.** You buy `yourgroovydomain.com`, not `shop.yourgroovydomain.com`. Subdomains are free: add them as DNS records once you own the domain.
+
+### .app, .dev, and .page need HTTPS
+
+The `.app`, `.dev`, and `.page` extensions are on the HSTS preload list, so browsers only load them over HTTPS. Spacefast issues a certificate for every hostname it serves, so this works out of the box. It matters if you point one of these domains at a server somewhere else: that server needs a valid certificate, or browsers refuse to load it.
+
+## Transfers
+
+Moving a domain registration to Spacefast from another registrar, or from Spacefast to another registrar, isn't available. To use a domain registered elsewhere, keep it where it is and [connect it](/domains).
+
+## Cancelling
+
+Before you pay, you can cancel a purchase from its checkout page with **Cancel purchase**. Nothing is charged. An unpaid purchase also expires on its own after 24 hours.
+
+Once a domain is registered, there is no cancel button. If you no longer want it, turn off [auto-renew](/registration/renewal-and-expiration) and let the registration run out at the end of its year. Spacefast won't let you delete a domain from your team while its registration is active, so a renewal can't slip past you.
+
+## Errors you might see
+
+| Code | What happened | What to do |
+| --- | --- | --- |
+| [`domain_not_purchasable`](/errors/domain_not_purchasable) | A name in the cart can't be bought: taken, premium, an unsupported extension, or its registry is in maintenance. One bad name refuses the whole cart. | Remove that name and try again. |
+| [`domain_purchase_apex_required`](/errors/domain_purchase_apex_required) | You tried to buy a subdomain. | Buy the apex, then add the subdomain as a DNS record. |
+| [`domain_cart_duplicate`](/errors/domain_cart_duplicate) | The same name is in the cart twice. | Remove the duplicate. |
+| `purchase_total_changed` | The price moved since you looked. Nothing was charged. | Check the new total and buy again. |
+| `purchase_pending` | Another unfinished purchase already holds some of these names. | Finish or cancel that one, or wait 24 hours for it to expire. |
+| [`domain_unavailable`](/errors/domain_unavailable) | Someone registered the name first. Your payment for it was refunded. | Pick another name. |
+| [`registrar_unavailable`](/errors/registrar_unavailable) | The registrar didn't answer. Nothing was charged. | Try again in a minute. |
+| [`registrar_writes_disabled`](/errors/registrar_writes_disabled) | Registrations are briefly paused. Nothing was charged. | Try again later. |
+
+## Next steps
+
+- [Owner details and privacy](/registration/contacts-and-privacy): who the domain is registered to and what WHOIS shows.
+- [Renewal and expiration](/registration/renewal-and-expiration): keep the domain, or let it go on purpose.
+- [DNS and nameservers](/registration/dns-and-nameservers): add email records, or move DNS elsewhere.
