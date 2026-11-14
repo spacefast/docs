@@ -180,8 +180,8 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 | `internal_error` | retry | yes | Something went wrong on our side. |
 | `maintenance_in_progress` | wait | yes | This change is temporarily unavailable while maintenance finishes. |
 | `provider_error` | retry | yes | Spacefast could not complete the operation. |
-| `provider_job_failed` | retry | yes | A hosting-provider job failed while processing this operation. |
-| `provider_job_timeout` | retry | yes | A hosting-provider job timed out while processing this operation. |
+| `provider_job_failed` | retry | yes | A provider job failed while processing this operation. |
+| `provider_job_timeout` | retry | yes | A provider job timed out while processing this operation. |
 | `space_disabled` | fix_input | no | The space is disabled and cannot be served or modified. |
 
 ## Every error code

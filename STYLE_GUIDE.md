@@ -211,9 +211,9 @@ that is.
   (`ProductName.yml`).
 - **WP Cloud** — exact casing, never "wp cloud," "wp.cloud," or hyphenated
   (`WpCloudBrand.yml`). Prefer "infra" generally; name WP Cloud only when
-  the external reference is genuinely necessary. Never say "the hosting
-  provider" for Spacefast's own infra (`HostingProvider.yml`) — generic
-  references to *other* hosting providers are fine.
+  the external reference is genuinely necessary. Never use the word
+  "hosting" for Spacefast or its features (`Hosting.yml`). Say publish,
+  serve, live, infrastructure, or runtime.
 - **"API key," never "access token"** (`ApiKey.yml`) — "OAuth access
   token" is the one exempted phrase, since that's the protocol's own term.
 
