@@ -1,6 +1,6 @@
 ---
 title: Move from Glitch
-description: Publish a Glitch project you downloaded on Spacefast. Static projects publish as they are; a Node server moves to Functions
+description: Publish a Glitch project you downloaded on Spacefast. Static projects publish as they are; a Node server is rewritten as Functions routes
 ---
 
 Glitch stopped serving projects on July 8, 2025, and its dashboard offered code downloads through the end of 2025 ([Glitch's announcement](https://blog.glitch.com/post/changes-are-coming-to-glitch), checked 2026-11-14). If you kept the download, your AI can publish it on Spacefast.
@@ -18,7 +18,7 @@ Glitch stopped serving projects on July 8, 2025, and its dashboard offered code 
     Publish the project in this folder on Spacefast. It used to run on Glitch. Keep it working the same way and send me the link.
     </Prompt>
 
-    A project with only HTML, CSS, and browser scripts publishes as it is. A Node server needs its routes moved to [Functions](/functions) or to a [supported framework](/frameworks), and your agent can do that rewrite.
+    A project with only HTML, CSS, and browser scripts publishes as it is. A Node server needs its routes rewritten as [Functions](/functions) routes or moved to a [supported framework](/frameworks), and your agent can do that rewrite.
   </Step>
   <Step title="Set the secrets">
     `.env` files are never published. Set each value on the Space instead, with `sf env set` or `sf env import .env`. See [Environment variables](/environment-variables).
@@ -37,10 +37,9 @@ No agent? A folder with an `index.html` and no `package.json` publishes from [dr
 | Static files | Published as they sit in the folder |
 | Server routes | Rewritten as [Functions](/functions) routes, which take a standard `Request` and return a `Response` |
 | Secrets from `.env` | Set as [environment variables](/environment-variables) and read from `env` |
-| Data the server stored | Moved to the Space's [database](/database), which a Functions worker reaches through `env.DB` |
 
 ## What doesn't
 
 - **Timers inside a running server.** A Functions worker answers requests. Work that ran on a timer becomes a [cron](/crons), a scheduled `GET` against one of your own paths.
-- **Local database files.** The Space's database is MySQL behind the `env.DB` binding, so data stored in files or SQLite needs moving into it, and SQLite-specific SQL needs checking.
+- **Local data files.** A Functions worker reaches the Space's [database](/database) through the D1-shaped `env.DB` binding, not through a file in the project. Code that read or wrote a JSON or SQLite file needs rewriting against `env.DB`, and existing rows go in through the [SQL console](/database#the-sql-console).
 - **The old project address.** Point your own domain at the Space with [Custom domains](/domains), and update links to the old address.

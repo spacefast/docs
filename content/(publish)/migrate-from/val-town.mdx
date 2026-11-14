@@ -33,14 +33,14 @@ Val Town closes on January 10, 2027, and code on Val Town becomes read-only on D
 | HTTP val | A [Functions](/functions) route. A module in `functions/` exports a handler per HTTP method, or a root `handler.ts` default-exports `{ fetch }` and answers the whole site |
 | Scheduled val | A [cron](/crons) in `sf.jsonc`: a scheduled `GET` against a Functions route on your own site |
 | SQLite tables | The Space's [database](/database), through the D1-shaped `env.DB` binding |
-| Environment variables | [Environment variables](/environment-variables) on the Space, read from `env` |
+| Environment variables | [Environment variables](/environment-variables) on the Space, read from the handler's `env` argument |
 | Static pages | Published files. See the [plain HTML recipe](/recipes/html) |
 
-Handlers take a standard `Request` and return a standard `Response`, so the handler body of an HTTP val usually carries over.
+Handlers take a standard `Request` and return a standard `Response`, which is the shape HTTP vals use too.
 
 ## What to check
 
-- **SQL.** The Space's database is MySQL behind the `env.DB` binding, so check queries that use SQLite-specific syntax.
-- **Imports.** Replace `esm.town` imports with local files or npm packages before you publish.
-- **Cron allowance.** Your plan sets how many crons each Space runs, and a cron runs approximately on schedule, with no retries. See [Crons](/crons).
+- **Imports and runtime calls.** Replace `esm.town` imports with local files or npm packages, and replace `Deno.env.get` with the handler's `env` argument. The [Functions](/functions) page lists the supported module types.
+- **SQL.** Queries move from SQLite to the Space's database through `env.DB`. Check SQLite-specific syntax, and load existing rows through the [SQL console](/database#the-sql-console).
+- **Schedules.** A five-field crontab schedule is an advanced cron, which comes with Boost. Without a free advanced slot it runs at its closest simple schedule, and for now a Space can declare at most 8 crons. A cron runs approximately on schedule, with no retries. See [Crons](/crons).
 - **Outbound requests.** A worker's `fetch()` reaches any public host once the Space is claimed. See [Functions outbound HTTP](/functions#outbound-http).

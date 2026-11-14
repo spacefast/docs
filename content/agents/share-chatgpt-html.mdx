@@ -17,7 +17,7 @@ Copy the code into a file named `index.html`, and put any images beside it in th
 
 ## Publish the file
 
-Open [drop.fast](https://drop.fast) and drop the file or the folder on the window. You can publish without an account. Keep the returned claim link and open it to claim the Space before anonymous expiry; see [Publish without an account](/anonymous-and-claim).
+Open [drop.fast](https://drop.fast) and drop the file or the folder on the window. You can publish without an account. Keep the returned claim link and open it to claim the Space before anonymous expiry; see [Publish without an account](/anonymous-and-claim). When the claim lands, the claim page asks who can see the Space.
 
 Keep the folder to the page and its assets. A `package.json`, a lockfile, or a framework config next to `index.html` makes Spacefast build the folder instead of publishing it as it is. See the [plain HTML recipe](/recipes/html).
 
@@ -25,7 +25,7 @@ Keep the folder to the page and its assets. A `package.json`, a lockfile, or a f
 
 Connect Spacefast to ChatGPT on the web once. [Connect ChatGPT to Spacefast](/setup/chatgpt) has the plugin directory link and the custom MCP server steps. Custom MCP servers need a Business, Enterprise, or Edu workspace.
 
-Then, in a new chat, type @, pick Spacefast, and ask:
+Then ask ChatGPT to publish the page:
 
 <Prompt description="Publish this page and make it public." actions={["copy"]}>
 Publish this page to Spacefast, enable public access, and give me the live URL.
@@ -33,7 +33,7 @@ Publish this page to Spacefast, enable public access, and give me the live URL.
 
 ## Choose who can open it
 
-New personal Spaces are private by default, and a bare URL to a private Space does not grant access. To let anyone on the web open it, set **General access** to **Public** in the Space's **Share** settings.
+A team's new Spaces start private unless the team changed its default, and a bare URL to a private Space does not grant access. To let anyone on the web open it, set **General access** to **Public** in the Space's **Share** settings.
 
 For a restricted audience, keep the Space private and create a share link on the **Share link** card instead. Anyone with the share link can open the Space without an account. [Spacefast Share](/share) explains the choices and how to revoke access.
 

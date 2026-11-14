@@ -1,13 +1,29 @@
 ---
 title: Move from Cloudflare Pages
-description: Publish a Cloudflare Pages site on Spacefast. _redirects and _headers publish as they are, wrangler.toml build settings are read, and Pages Functions move to Spacefast Functions
+description: Publish a Cloudflare Pages site on Spacefast. _redirects and _headers publish as they are, wrangler.toml build settings are read, and Pages Functions are rewritten as Spacefast Functions
 ---
 
-Your `_redirects` and `_headers` files publish with your pages, and Spacefast reads `wrangler.toml`. A Pages Functions folder usually needs only a check against Spacefast's routing rules.
+Your `_redirects` and `_headers` files publish with your pages, and Spacefast reads the build settings in `wrangler.toml`. A Pages Functions folder needs rewriting, because Spacefast Functions uses different file and handler conventions.
 
 ## Move the site
 
 <Steps>
+  <Step title="Create the Space">
+    In the project directory, create an empty Space. Later publishes from this directory update it.
+
+    ```bash
+    sf spaces add --slug my-site
+    ```
+  </Step>
+  <Step title="Bring the environment variables">
+    Export the project's variables as a dotenv file, then import it before the first build so the build can read them.
+
+    ```bash
+    sf env import .env --from cloudflare --space my-site
+    ```
+
+    A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
+  </Step>
   <Step title="Publish the project">
     Run `sf publish` in the project and let Spacefast build it, or publish the output folder you deploy today.
 
@@ -17,20 +33,11 @@ Your `_redirects` and `_headers` files publish with your pages, and Spacefast re
 
     To build on every push instead, connect the repository with [Publish from Git](/git).
   </Step>
-  <Step title="Bring the environment variables">
-    Export the project's variables as a dotenv file, then import it.
-
-    ```bash
-    sf env import .env --from cloudflare
-    ```
-
-    Variables are write-only by default. See [Environment variables](/environment-variables).
-  </Step>
-  <Step title="Check your functions">
-    Compare your `functions/` folder with the [Functions file router](/functions#the-functions-file-router) before you rely on it. See the next section.
+  <Step title="Rewrite your functions">
+    Move each Pages function to the [Functions file router](/functions#the-functions-file-router). See the next section.
   </Step>
   <Step title="Point your domain">
-    Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. Keep the Pages project up until the new address answers. See [Custom domains](/domains).
+    Add the domain to the Space and add the DNS records it asks for. Delete the old address records, because a leftover record blocks verification. If a proxy sits in front of the hostname, check that it does not block the HTTP validation request. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains) and [TLS certificates](/infrastructure/tls-certificates).
   </Step>
 </Steps>
 
@@ -40,19 +47,26 @@ Your `_redirects` and `_headers` files publish with your pages, and Spacefast re
 | --- | --- |
 | `_redirects` and `_headers` files | Published with your pages and applied as routing rules |
 | `wrangler.toml` build settings | Read after framework detection, and they override the detected build command and output directory |
-| Redirects and headers in `wrangler.toml` | Converted to `_redirects` and `_headers` rules |
 | Environment variables | Imported from a dotenv export with `sf env import --from cloudflare` |
 
 Rule order, conditions, and limits are on [Redirects, rewrites, and headers](/routing).
 
 ## Functions
 
-Spacefast [Functions](/functions) detects two layouts Pages users already know:
+Spacefast [Functions](/functions) detects two layouts, and neither takes Pages Functions files as they are:
 
-- **A `functions/` folder** is a file router. A module's file name is its route, and the HTTP methods it exports are the methods it answers. `functions/haiku/[topic].ts` answers `/haiku/:topic`.
-- **A root `handler.ts`** default-exports an object with a `fetch` method, the shape Workers expects, and answers the whole site.
+- **A `functions/` folder** is a file router. A module's file name is its route. It exports one function per HTTP method, such as `GET` or `POST`, or a default export that answers every method. Each one takes `(request, context)`, with route parameters on `context.params`.
+- **A root `handler.ts`**, `handler.js`, or `handler.mjs` default-exports an object with a `fetch` method and answers the whole site.
 
-Each handler gets standard `Request` and `Response` objects, with no Spacefast wrapper. The Space's database is on `env.DB`, a D1-shaped binding. Check the [Functions](/functions) page for what each file answers and for the outbound `fetch()` rules.
+When you rewrite, check these differences:
+
+| Rule | On Spacefast |
+| --- | --- |
+| Catch-all routes | `[...rest].ts`, and only as the last segment |
+| Files starting with `_` | Never routed. A `_middleware.ts` does nothing |
+| Bindings on `env` | Environment variables, plus the Space's database as the D1-shaped `env.DB`. No other bindings are documented |
+
+Requests and responses are the standard `Request` and `Response`, so code inside a handler that uses only those usually needs little change.
 
 ## What doesn't
 

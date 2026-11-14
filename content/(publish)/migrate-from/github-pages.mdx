@@ -3,28 +3,31 @@ title: Move from GitHub Pages
 description: Connect the repository behind a GitHub Pages site and Spacefast builds it, with Jekyll detected from _config.yml
 ---
 
-Connect the repository and Spacefast builds it on every push to the production branch. Jekyll sites build without configuration, and other generators are detected the same way.
+Connect the repository and Spacefast builds it on every push to the production branch. Jekyll is detected from its config file, and other generators are detected the same way.
 
 ## Move the site
 
 <Steps>
-  <Step title="Connect the repository">
-    Open the Space's **Builds** page and click **Connect GitHub**, or connect it from the CLI.
+  <Step title="Create the Space and connect the repository">
+    In the dashboard, open the Space's **Builds** page, click **Connect GitHub**, and pick the repository. If it is missing from the list, **Add repositories** takes you to GitHub to grant the Spacefast app access to it.
+
+    From the CLI, create the Space, then connect it:
 
     ```bash
+    sf spaces add --slug my-site
     sf git connect --space my-site --provider github --repository owner/repo --production-branch main --build-now
     ```
 
     Pushes to the production branch publish. See [Publish from Git](/git) for every flag.
   </Step>
   <Step title="Let it build">
-    Spacefast detects Jekyll from `_config.yml`, `_config.yaml`, or `_config.toml`. It runs `bundle install` when a `Gemfile` is present, otherwise `gem install jekyll`, then builds and publishes `_site`, or the `destination` your config names.
+    Spacefast detects Jekyll from `_config.yml`, `_config.yaml`, or `_config.toml`, builds the site, and publishes `_site`, or the `destination` your config names. Commit a `Gemfile` that lists the `jekyll` gem, because the build command runs through `bundle exec`.
   </Step>
   <Step title="Choose who can open it">
     A team's new Spaces start private unless the team changed its default. Make the Space public, or share it with a link, in [Spacefast Share](/share).
   </Step>
   <Step title="Point your domain">
-    Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. Keep the GitHub Pages site up until the new address answers. See [Custom domains](/domains).
+    Add the domain to the Space and add the DNS records it asks for. Delete the address records that point at GitHub Pages, because a leftover record blocks verification. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
   </Step>
 </Steps>
 
@@ -33,9 +36,9 @@ Connect the repository and Spacefast builds it on every push to the production b
 | From GitHub Pages | On Spacefast |
 | --- | --- |
 | The repository | Stays on GitHub. Spacefast builds from its webhooks |
-| A Jekyll site | Detected from its config file and built with `bundle exec jekyll build` |
+| A Jekyll site with a `Gemfile` | Detected from its config file and built with `bundle exec jekyll build` |
 | Hugo, Eleventy, Astro, MkDocs, and other generators | Detected from their dependency or config file. See [Frameworks and builds](/frameworks) |
-| A plain HTML site | Published as it sits in the repository. See the [plain HTML recipe](/recipes/html) |
+| Pages served from a folder such as `/docs` | Set **Output directory**, or **Root directory** for a generator, under **Build settings** |
 
 ## What you get on top
 

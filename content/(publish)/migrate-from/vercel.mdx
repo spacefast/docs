@@ -8,8 +8,24 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
 ## Move the project
 
 <Steps>
+  <Step title="Create the Space">
+    In the project directory, create an empty Space. Later publishes from this directory update it.
+
+    ```bash
+    sf spaces add --slug my-app
+    ```
+  </Step>
+  <Step title="Bring the environment variables">
+    Export the project's variables from Vercel as a dotenv file, then import it before the first build so the build can read them.
+
+    ```bash
+    sf env import .env --from vercel --space my-app
+    ```
+
+    A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
+  </Step>
   <Step title="Publish the project">
-    Run `sf publish` in the project and let Spacefast build it.
+    Run `sf publish` in the project and let Spacefast build it. `vercel.json` is read when Spacefast builds.
 
     ```bash
     sf publish
@@ -17,20 +33,11 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
 
     To build on every push instead, connect the repository with [Publish from Git](/git).
   </Step>
-  <Step title="Bring the environment variables">
-    Export the project's variables from Vercel as a dotenv file, then import it.
-
-    ```bash
-    sf env import .env --from vercel
-    ```
-
-    Variables are write-only by default. See [Environment variables](/environment-variables).
-  </Step>
   <Step title="Check what was flagged">
     Anything Spacefast cannot convert, such as Vercel functions, is flagged at publish. Move it to a supported equivalent, or pass `--allow-unsupported-platform-features` to publish without it.
   </Step>
   <Step title="Point your domain">
-    Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. Keep the Vercel deployment up until the new address answers. See [Custom domains](/domains).
+    Add the domain to the Space and add the DNS records it asks for. Delete the address records that point at Vercel, because a leftover record blocks verification. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
   </Step>
 </Steps>
 
@@ -44,7 +51,14 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
 | Crons in `vercel.json` | Converted to `sf.jsonc` crons |
 | Environment variables | Imported from a dotenv export with `sf env import --from vercel` |
 
-A Spacefast cron is a scheduled `GET` against a path on your own site, and your plan sets how many each Space runs. See [Crons](/crons).
+## Crons
+
+A Spacefast cron is a scheduled `GET` against a path on your own site, like a Vercel cron. The schedule is where they differ:
+
+- A five-field crontab schedule is an **advanced** cron. Advanced crons come with Boost. Without a free advanced slot, a crontab still publishes and runs at its closest simple schedule, which may not match the times it names.
+- Your plan sets how many crons each Space runs, and for now a Space can declare at most 8.
+
+[Crons](/crons) has the schedule grammar and the allowance by plan.
 
 ## Next.js
 

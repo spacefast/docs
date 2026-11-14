@@ -16,7 +16,7 @@ Most sites move with one publish. Spacefast builds the same source, reads the co
     `_redirects`, `_headers`, and `wrangler.toml` build settings carry across.
   </Card>
   <Card title="GitHub Pages" href="/migrate-from/github-pages" icon="git-branch">
-    Connect the repository. Jekyll sites build without configuration.
+    Connect the repository. Jekyll and other generators are detected.
   </Card>
   <Card title="here.now" href="/migrate-from/here-now" icon="send">
     Publish the same folder from the same agent.
@@ -31,7 +31,7 @@ Most sites move with one publish. Spacefast builds the same source, reads the co
 
 ## What every move has in common
 
-1. **Publish the site.** Publish the built output, or hand Spacefast the source and let it build. See [Frameworks and builds](/frameworks).
+1. **Publish the site.** Hand Spacefast the source and let it build, so it reads your old platform's config file, or publish the built output. Set environment variables on the Space before the first build. See [Frameworks and builds](/frameworks).
 2. **Check what was flagged.** Platform features Spacefast cannot convert are flagged at publish. Move them to a supported equivalent, or pass `--allow-unsupported-platform-features` to publish without them.
 3. **Choose who can open it.** A team's new Spaces start private unless the team changed its default. Make the Space public or create a share link with [Spacefast Share](/share).
-4. **Point your domain.** Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains). Keep the old site up until the new address answers.
+4. **Point your domain.** Add the domain to the Space and add the DNS records it asks for. Delete the address records that point at your old platform, because a leftover record blocks verification. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains).
