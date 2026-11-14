@@ -23,17 +23,12 @@ npx -y plugins add spacefast/plugins -t cursor -y
     "spacefast": {
       "type": "http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. `spacefast-local` runs on your machine over stdio and can publish a folder. The version in `args` is stamped at release.
+`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. To publish a folder, the agent uses `sf publish <path>` when the [`sf` CLI](/cli) is installed and signed in. For a server on your machine, register [On-Device MCP](/agents/mcp-server) with `sf mcp install --agent cursor --local`. See [`sf mcp install`](/cli/agents) for the other options.
 
 ### A rule, not a skill directory
 

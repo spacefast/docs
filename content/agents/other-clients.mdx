@@ -25,7 +25,7 @@ MCP configuration varies by client: `mcp` for OpenCode, `servers` for VS Code, a
     The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright, and VS Code reads one as a stdio command. The short form is broken, not smaller.
   </Tab>
   <Tab title="Local stdio">
-    The server runs on your machine and can read your working directory, so `publish` accepts a path.
+    The server runs on your machine. `publish` accepts a path only when `sf mcp` runs from the standalone or Homebrew `sf` on macOS or Linux. Started through `npx` or the npm package, it runs on Node.js, and on Windows path publishing isn't supported yet; in both cases `publish` takes inline files.
 
     ```json
     {
