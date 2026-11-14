@@ -95,7 +95,7 @@ A few limits:
 
 ### .app, .dev, and .page need HTTPS
 
-The `.app`, `.dev`, and `.page` extensions are on the HSTS preload list, so browsers only load them over HTTPS. Spacefast issues a certificate for every hostname it serves, so this works out of the box. It matters if you point one of these domains at a server somewhere else: that server needs a valid certificate, or browsers refuse to load it.
+Browsers load `.app`, `.dev`, and `.page` domains only over HTTPS. The rule is built into every major browser for these extensions. Spacefast issues a certificate for every hostname it serves, so this works out of the box. It matters if you point one of these domains at a server somewhere else: that server needs a valid certificate, or browsers refuse to load it.
 
 ## Transfers
 
