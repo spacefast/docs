@@ -23,7 +23,7 @@ source named under Reference surfaces.
 
 ## Set up an agent
 
-Any agent that can fetch a URL learns to publish from one prompt:
+An agent that can fetch URLs and make HTTP requests can follow this publishing guide:
 
 ```
 Fetch https://spacefast.com/setup.md

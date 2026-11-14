@@ -48,7 +48,7 @@ The substring class survives numeric suffixing, so `paypal-2` fails for the same
 
 Dashboard route names are reserved too, and the reservation is scoped to the position. `settings` is refused as a Space slug and accepted as a team slug. Refused as Space slugs: `agents`, `api-keys`, `billing`, `connect`, `domains`, `drop`, `handoffs`, `members`, `new`, `partners`, `resume`, `settings`, `variables`, `webhooks`. The `422` carries a `details.suggestion` you can take as-is.
 
-A retired slug stays taken. After a rename the old slug belongs to that Space forever, and anyone else asking for it gets `422` `slug_unavailable`.
+A rename keeps the old slug reserved for that Space. Other Spaces asking for it get `422` `slug_unavailable`.
 
 Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getslugavailability).
 

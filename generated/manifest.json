@@ -1,10 +1,10 @@
 {
-  "contentDigest": "ca99f14edb14400c37f26970e9e1b7f8a3cea9b6b64e06e98ab8495c6998b583",
+  "contentDigest": "d715a566336bcf90fcdb4817e4a1db575ddebb54c43651600451190c942e88eb",
   "counts": {
     "apiOperations": 494,
     "changelogPackages": 24,
     "changelogVersions": 36,
-    "errorCodes": 802,
+    "errorCodes": 807,
     "partnerOperations": 459,
     "redirects": 3507,
     "setupPages": 28
@@ -406,9 +406,9 @@
       "sha256": "ab2530086cfb35750f9ead188255b9b09517c6eed0efdb76de8e05c159e90b4c"
     },
     {
-      "bytes": 1257,
+      "bytes": 1259,
       "path": "errors/anonymous_expired.md",
-      "sha256": "5e5b2b11aeed6b18ce1bc9ba5f1bf9585e5eaaa22d17bee82d4b16b16302ffa8"
+      "sha256": "acdb8f13ea64372ebc342f9822975f4d7bd5978f60c52510da7658caaeec74f4"
     },
     {
       "bytes": 1201,
@@ -1171,9 +1171,24 @@
       "sha256": "8c38cca06ea00065849fcace103f5623664a8ffb949e06975eaddd8b1ba58a73"
     },
     {
+      "bytes": 1311,
+      "path": "errors/domain_contact_identity_locked.md",
+      "sha256": "f01f71f847fa9e158b61f3d23f8dc9a952e0da154b6026fa6c672e8c5c5473e6"
+    },
+    {
       "bytes": 1179,
       "path": "errors/domain_contact_not_found.md",
       "sha256": "bda299ea603ed48dc84edd4a54316454ab83bf683adde2cc27bff6f70b1d45b7"
+    },
+    {
+      "bytes": 1236,
+      "path": "errors/domain_contact_not_owned.md",
+      "sha256": "009909a7017aa64a5408f4cea3dc1ef8b9c075b2c72a068120bee6323724607e"
+    },
+    {
+      "bytes": 1228,
+      "path": "errors/domain_contact_requires_person.md",
+      "sha256": "7656ce5c352b2287292695bf7429489c6b8ab45fdce7ad69a4b9919b2519b58f"
     },
     {
       "bytes": 1129,
@@ -1426,9 +1441,9 @@
       "sha256": "bb8045e7ba42a678616764fa7b4d09156b7c946b63d3652206f913058ff9af80"
     },
     {
-      "bytes": 105982,
+      "bytes": 106862,
       "path": "errors/index.md",
-      "sha256": "de7b54bec57b50a0c41ce9a27bc3a91c06b1ac8527f63443c569d18bc68a7d66"
+      "sha256": "982d1e85cab83bf29520330c3ab8e76a492009528c3462da5d6a6e66acfa9bf9"
     },
     {
       "bytes": 1112,
@@ -2339,6 +2354,11 @@
       "bytes": 1163,
       "path": "errors/repository_path_invalid.md",
       "sha256": "8b7875a6bcba227818e9e958cb2bf4052885ec2c0ffc98719a22a8c3a18564e1"
+    },
+    {
+      "bytes": 1452,
+      "path": "errors/repository_reauthorization_required.md",
+      "sha256": "9172ef285e921c8c5b51ddef6a234d938e0ef6e9753198bf5a02e32d634367de"
     },
     {
       "bytes": 1515,
@@ -3429,6 +3449,11 @@
       "bytes": 1167,
       "path": "errors/transfer_target_same_as_source.md",
       "sha256": "8a71a2b8cc91d6ccf201525899ada9e64775777940d88c7b7c2ccca59e4b7ffd"
+    },
+    {
+      "bytes": 1187,
+      "path": "errors/transfer_team_to_customer_unsupported.md",
+      "sha256": "8b10408125a2e04dd89cc85abb10269294cb16c6d11cdd0e432f6a77b434011c"
     },
     {
       "bytes": 1146,

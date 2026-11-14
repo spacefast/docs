@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 802 error codes in the registry.
+There are 807 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -182,7 +182,10 @@ There are 802 error codes in the registry.
 | [`domain_cart_duplicate`](/errors/domain_cart_duplicate) | The cart lists the same domain more than once. |
 | [`domain_checkout_pending`](/errors/domain_checkout_pending) | One or more of these domains is already waiting on an open payment. |
 | [`domain_checkout_total_changed`](/errors/domain_checkout_total_changed) | The live price of the cart no longer matches the total you expected. |
+| [`domain_contact_identity_locked`](/errors/domain_contact_identity_locked) | Only the person who saved this contact can change its name, company name, or email address. |
 | [`domain_contact_not_found`](/errors/domain_contact_not_found) | The registrant contact does not exist, or belongs to another team. |
+| [`domain_contact_not_owned`](/errors/domain_contact_not_owned) | This contact belongs to someone else, so you can't register or move a domain to it. |
+| [`domain_contact_requires_person`](/errors/domain_contact_requires_person) | Contacts belong to a person, and this credential acts as no one. |
 | [`domain_facet_already_managed`](/errors/domain_facet_already_managed) | This facet of the domain is already managed by Spacefast. |
 | [`domain_facet_external`](/errors/domain_facet_external) | This facet of the domain is managed outside Spacefast. |
 | [`domain_facet_not_applicable`](/errors/domain_facet_not_applicable) | The requested facet does not apply to this domain. |
@@ -415,6 +418,7 @@ There are 802 error codes in the registry.
 | [`repository_commit_unchanged`](/errors/repository_commit_unchanged) | The commit changes no files: the branch already holds this exact tree, so there is nothing to save. |
 | [`repository_patch_invalid`](/errors/repository_patch_invalid) | The repository refused the diff: it is malformed or does not apply to the selected base branch. |
 | [`repository_path_invalid`](/errors/repository_path_invalid) | The repository provider refused the requested file path. |
+| [`repository_reauthorization_required`](/errors/repository_reauthorization_required) | Spacefast can no longer reach this Space's connected repository: its access was revoked, or the Space moved to a team that has not connected it yet. |
 | [`repository_ref_not_found`](/errors/repository_ref_not_found) | The branch, tag, or commit you asked to read does not exist in this repository. A repository nothing has been pushed to yet answers this for its own default branch. |
 | [`repository_resource_not_found`](/errors/repository_resource_not_found) | The requested repository resource does not exist. |
 | [`repository_source_already_initialized`](/errors/repository_source_already_initialized) | The repository already has source history. |
@@ -633,6 +637,7 @@ There are 802 error codes in the registry.
 | [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime cannot push the space blobs into the transfer bucket. |
 | [`transfer_source_changed`](/errors/transfer_source_changed) | The space changed since the transfer was created, so it must be re-confirmed. |
 | [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The transfer target is the same principal that already owns the space. |
+| [`transfer_team_to_customer_unsupported`](/errors/transfer_team_to_customer_unsupported) | A team's space can only move to another team, not to a partner customer. |
 | [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime cannot verify transferred blob content. |
 | [`unauthorized`](/errors/unauthorized) | The request carried no valid credential. |
 | [`unsupported_publish_media_type`](/errors/unsupported_publish_media_type) | The publish content-type is not supported. |
