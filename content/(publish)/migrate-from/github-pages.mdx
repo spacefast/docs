@@ -1,0 +1,46 @@
+---
+title: Move from GitHub Pages
+description: Connect the repository behind a GitHub Pages site and Spacefast builds it, with Jekyll detected from _config.yml
+---
+
+Connect the repository and Spacefast builds it on every push to the production branch. Jekyll sites build without configuration, and other generators are detected the same way.
+
+## Move the site
+
+<Steps>
+  <Step title="Connect the repository">
+    Open the Space's **Builds** page and click **Connect GitHub**, or connect it from the CLI.
+
+    ```bash
+    sf git connect --space my-site --provider github --repository owner/repo --production-branch main --build-now
+    ```
+
+    Pushes to the production branch publish. See [Publish from Git](/git) for every flag.
+  </Step>
+  <Step title="Let it build">
+    Spacefast detects Jekyll from `_config.yml`, `_config.yaml`, or `_config.toml`. It runs `bundle install` when a `Gemfile` is present, otherwise `gem install jekyll`, then builds and publishes `_site`, or the `destination` your config names.
+  </Step>
+  <Step title="Choose who can open it">
+    A team's new Spaces start private unless the team changed its default. Make the Space public, or share it with a link, in [Spacefast Share](/share).
+  </Step>
+  <Step title="Point your domain">
+    Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. Keep the GitHub Pages site up until the new address answers. See [Custom domains](/domains).
+  </Step>
+</Steps>
+
+## What carries over
+
+| From GitHub Pages | On Spacefast |
+| --- | --- |
+| The repository | Stays on GitHub. Spacefast builds from its webhooks |
+| A Jekyll site | Detected from its config file and built with `bundle exec jekyll build` |
+| Hugo, Eleventy, Astro, MkDocs, and other generators | Detected from their dependency or config file. See [Frameworks and builds](/frameworks) |
+| A plain HTML site | Published as it sits in the repository. See the [plain HTML recipe](/recipes/html) |
+
+## What you get on top
+
+- **Previews.** Pushes to other branches and pull requests build previews with their own alias, alongside the production branch.
+- **Overrides.** When detection picks the wrong command or folder, set **Root directory**, **Install command**, **Build command**, or **Output directory** under **Build settings**.
+- **Logs.** Every run is listed under **Runs** on the **Builds** page, with its log.
+
+To publish from GitHub Actions instead of a connected repository, see [Publish from CI](/ci).

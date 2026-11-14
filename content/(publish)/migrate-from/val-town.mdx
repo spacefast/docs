@@ -1,0 +1,46 @@
+---
+title: Move from Val Town
+description: Move vals to Spacefast before Val Town closes. HTTP vals become Functions routes and scheduled vals become crons
+---
+
+Val Town closes on January 10, 2027, and code on Val Town becomes read-only on December 10, 2026 ([Val Town's announcement](https://blog.val.town/winding-down), checked 2026-11-14). Get your code out first, then have your AI move it to Spacefast.
+
+## Move your vals
+
+<Steps>
+  <Step title="Get the code">
+    Copy your vals and the vals they import into a folder. Val Town's [migration guides](https://docs.val.town/migration) cover exporting to GitHub.
+  </Step>
+  <Step title="Ask your AI">
+    Connect Spacefast to your agent ([Agents](/agents) lists the ways), open the folder, and send:
+
+    <Prompt description="Publish Val Town vals on Spacefast." actions={["copy"]}>
+    Publish the project in this folder on Spacefast. It used to run on Val Town. Keep it working the same way and send me the link.
+    </Prompt>
+  </Step>
+  <Step title="Set the secrets">
+    Set each environment variable your vals read on the Space, with `sf env set` or `sf env import`. See [Environment variables](/environment-variables).
+  </Step>
+  <Step title="Choose who can open it">
+    A team's new Spaces start private unless the team changed its default. Make the Space public or create a share link in [Spacefast Share](/share) once it works.
+  </Step>
+</Steps>
+
+## Where each kind of val goes
+
+| On Val Town | On Spacefast |
+| --- | --- |
+| HTTP val | A [Functions](/functions) route. A module in `functions/` exports a handler per HTTP method, or a root `handler.ts` default-exports `{ fetch }` and answers the whole site |
+| Scheduled val | A [cron](/crons) in `sf.jsonc`: a scheduled `GET` against a Functions route on your own site |
+| SQLite tables | The Space's [database](/database), through the D1-shaped `env.DB` binding |
+| Environment variables | [Environment variables](/environment-variables) on the Space, read from `env` |
+| Static pages | Published files. See the [plain HTML recipe](/recipes/html) |
+
+Handlers take a standard `Request` and return a standard `Response`, so the handler body of an HTTP val usually carries over.
+
+## What to check
+
+- **SQL.** The Space's database is MySQL behind the `env.DB` binding, so check queries that use SQLite-specific syntax.
+- **Imports.** Replace `esm.town` imports with local files or npm packages before you publish.
+- **Cron allowance.** Your plan sets how many crons each Space runs, and a cron runs approximately on schedule, with no retries. See [Crons](/crons).
+- **Outbound requests.** A worker's `fetch()` reaches any public host once the Space is claimed. See [Functions outbound HTTP](/functions#outbound-http).

@@ -1,0 +1,44 @@
+---
+title: Put HTML from ChatGPT online
+description: Save the HTML ChatGPT wrote as index.html and drop it on drop.fast, or connect Spacefast to ChatGPT and ask it to publish
+---
+
+Save the page ChatGPT wrote as one `index.html` and drop it on drop.fast, with no account. Or connect Spacefast to ChatGPT and ask it to publish the page for you.
+
+## Get one working file
+
+Ask ChatGPT for the whole page in a single file, with its styles and scripts inside:
+
+<Prompt description="Get a page you can publish as it is." actions={["copy"]}>
+Make this a complete website in one index.html file, with the CSS and JavaScript inside it. Use no build step and no packages.
+</Prompt>
+
+Copy the code into a file named `index.html`, and put any images beside it in the same folder. Open the file in a browser and check it before you publish. If ChatGPT wrote a framework project instead, follow [Frameworks and builds](/frameworks) to produce the directory to publish.
+
+## Publish the file
+
+Open [drop.fast](https://drop.fast) and drop the file or the folder on the window. You can publish without an account. Keep the returned claim link and open it to claim the Space before anonymous expiry; see [Publish without an account](/anonymous-and-claim).
+
+Keep the folder to the page and its assets. A `package.json`, a lockfile, or a framework config next to `index.html` makes Spacefast build the folder instead of publishing it as it is. See the [plain HTML recipe](/recipes/html).
+
+## Publish from ChatGPT
+
+Connect Spacefast to ChatGPT on the web once. [Connect ChatGPT to Spacefast](/setup/chatgpt) has the plugin directory link and the custom MCP server steps. Custom MCP servers need a Business, Enterprise, or Edu workspace.
+
+Then, in a new chat, type @, pick Spacefast, and ask:
+
+<Prompt description="Publish this page and make it public." actions={["copy"]}>
+Publish this page to Spacefast, enable public access, and give me the live URL.
+</Prompt>
+
+## Choose who can open it
+
+New personal Spaces are private by default, and a bare URL to a private Space does not grant access. To let anyone on the web open it, set **General access** to **Public** in the Space's **Share** settings.
+
+For a restricted audience, keep the Space private and create a share link on the **Share link** card instead. Anyone with the share link can open the Space without an account. [Spacefast Share](/share) explains the choices and how to revoke access.
+
+## Update the same link
+
+Publish the changed file to the same Space. Its live address stays the same, so recipients can keep using the link you sent. [Versions and rollback](/versions) explains retained versions and restoring an earlier one.
+
+To use your own address, [attach a custom domain](/domains). Check [Plans and billing](/billing) for the current plan allowances before choosing a plan.

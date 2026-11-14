@@ -1,0 +1,37 @@
+---
+title: Move from another platform
+description: Move a site to Spacefast from Netlify, Vercel, Cloudflare Pages, GitHub Pages, here.now, Glitch, or Val Town
+---
+
+Most sites move with one publish. Spacefast builds the same source, reads the config files other platforms leave in a project, and flags what it cannot convert. Pick the platform you are leaving.
+
+<CardGroup cols={2}>
+  <Card title="Netlify" href="/migrate-from/netlify" icon="cloud">
+    `netlify.toml` build settings, redirects, and headers carry across.
+  </Card>
+  <Card title="Vercel" href="/migrate-from/vercel" icon="zap">
+    `vercel.json` build settings, redirects, headers, and crons carry across.
+  </Card>
+  <Card title="Cloudflare Pages" href="/migrate-from/cloudflare-pages" icon="route">
+    `_redirects`, `_headers`, and `wrangler.toml` build settings carry across.
+  </Card>
+  <Card title="GitHub Pages" href="/migrate-from/github-pages" icon="git-branch">
+    Connect the repository. Jekyll sites build without configuration.
+  </Card>
+  <Card title="here.now" href="/migrate-from/here-now" icon="send">
+    Publish the same folder from the same agent.
+  </Card>
+  <Card title="Glitch" href="/migrate-from/glitch" icon="box">
+    Publish the code you downloaded before Glitch closed.
+  </Card>
+  <Card title="Val Town" href="/migrate-from/val-town" icon="hourglass">
+    Move HTTP vals to Functions and scheduled vals to crons before Val Town closes.
+  </Card>
+</CardGroup>
+
+## What every move has in common
+
+1. **Publish the site.** Publish the built output, or hand Spacefast the source and let it build. See [Frameworks and builds](/frameworks).
+2. **Check what was flagged.** Platform features Spacefast cannot convert are flagged at publish. Move them to a supported equivalent, or pass `--allow-unsupported-platform-features` to publish without them.
+3. **Choose who can open it.** A team's new Spaces start private unless the team changed its default. Make the Space public or create a share link with [Spacefast Share](/share).
+4. **Point your domain.** Add the domain to the Space and add the DNS records it asks for. Spacefast issues the certificate once DNS points at it. See [Custom domains](/domains). Keep the old site up until the new address answers.

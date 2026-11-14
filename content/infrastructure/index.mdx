@@ -1,0 +1,67 @@
+---
+title: Infrastructure
+description: What the infra under every Space does for you, from failover and edge protection to certificates and server settings
+---
+
+Every Space runs on the same infra, and most of it needs no setup. Certificates renew automatically, failover moves traffic without a republish, and edge protection works without a plugin. These pages explain what the platform handles and the few parts left to you.
+
+## Availability
+
+<CardGroup cols={2}>
+  <Card title="Automated failover" href="/infrastructure/automated-failover" icon="refresh-cw">
+    Primary and secondary origins sit in different data centers. When the primary fails, traffic moves to the secondary without a republish or a DNS change.
+  </Card>
+  <Card title="Origin and edge servers" href="/infrastructure/origin-edge-servers" icon="server">
+    The edge receives requests close to your visitors. The origin handles the requests the edge cannot answer from cache.
+  </Card>
+</CardGroup>
+
+## Edge and traffic
+
+<CardGroup cols={2}>
+  <Card title="DDoS protection" href="/infrastructure/ddos-protection" icon="shield">
+    Anycast routing, edge caching, and traffic classification work without a setup step or a plugin in your Space.
+  </Card>
+  <Card title="Defensive Mode" href="/infrastructure/defensive-mode" icon="shield-alert">
+    Browser challenges reduce unwanted automated traffic. A challenge answers with HTTP `403`.
+  </Card>
+  <Card title="Rate limiting" href="/infrastructure/rate-limiting" icon="gauge">
+    Tell an edge traffic limit apart from application capacity when a request gets HTTP `429`.
+  </Card>
+  <Card title="Edge request logs" href="/infrastructure/edge-request-logs" icon="scroll-text">
+    Cached responses, rate limits, and browser challenges, including requests that never reached your Space's origin.
+  </Card>
+</CardGroup>
+
+## Security
+
+<CardGroup cols={2}>
+  <Card title="TLS certificates" href="/infrastructure/tls-certificates" icon="badge-check">
+    Spacefast provisions and renews HTTPS certificates for your Space's hostnames automatically.
+  </Card>
+  <Card title="HTTP and security headers" href="/infrastructure/http-security-headers" icon="lock">
+    Set your own security headers in `_headers`. The platform manages transport headers, including HTTP Strict Transport Security.
+  </Card>
+  <Card title="Filesystem permissions" href="/infrastructure/filesystem-permissions" icon="folder-lock">
+    A published version is an immutable snapshot. PHP filesystem permissions are a separate control over writes from PHP web requests.
+  </Card>
+</CardGroup>
+
+## Network and DNS
+
+<CardGroup cols={2}>
+  <Card title="IP ranges" href="/infrastructure/ip-ranges" icon="network">
+    Use the DNS records Spacefast returns. Inbound addresses route visitors to the edge and do not identify the server running your Space.
+  </Card>
+  <Card title="Domain verification records" href="/infrastructure/domain-verification-records" icon="globe">
+    Most hostnames need only address records. A TXT record appears only when the hostname is already in use elsewhere.
+  </Card>
+</CardGroup>
+
+## Server
+
+<CardGroup cols={2}>
+  <Card title="Server specifications and settings" href="/infrastructure/server-specs-settings" icon="cpu">
+    Spacefast manages the servers behind your Space. You publish files and configure application behavior; the infra handles hardware, replication, and the edge network.
+  </Card>
+</CardGroup>
