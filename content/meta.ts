@@ -9,6 +9,7 @@ export default defineMeta({
     "concepts",
     "publish",
     "serve",
+    "registration",
     "dynamic",
     "infrastructure",
     "account",

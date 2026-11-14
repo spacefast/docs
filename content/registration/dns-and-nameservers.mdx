@@ -1,0 +1,118 @@
+---
+title: DNS and nameservers
+description: Manage DNS records for a domain registered through Spacefast, set up email, and move DNS to another provider
+sidebar: { order: 4 }
+---
+
+A domain you register through Spacefast uses Spacefast DNS from day one. Its nameservers are `ns1.spacefast.com` and `ns2.spacefast.com`, and you manage its records in the dashboard or the CLI. Agents connected over MCP can manage them too.
+
+## What's in a new zone
+
+A freshly registered domain starts with an empty zone: only the SOA and NS records every zone needs. It doesn't point anywhere yet.
+
+When you [add the domain to a Space](/domains), Spacefast writes the records that make it serve, including the `www` twin. You don't add those by hand. In the DNS list they're marked as managed for you. Remove the domain from the Space and those records go with it.
+
+Everything else (email, verification records for other services, subdomains that point somewhere else) you add yourself.
+
+## Add, edit, or delete records
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open your team's **Domains** and click the domain.
+2. In the **DNS** section, click **Add record**, or click an existing record to edit or delete it.
+3. Your changes are drafts until you click **Review changes**, check the diff, and click **Apply changes**. All changes in a batch apply together, or none do.
+
+To set up a mail provider in one go, click **Add a service** and pick it. Google Workspace, Microsoft 365, Fastmail, Proton Mail, Zoho Mail, iCloud Mail, and Resend are built in.
+
+</Tab>
+<Tab title="CLI">
+
+```bash
+sf domains dns ls yourgroovydomain.com
+sf domains dns add yourgroovydomain.com --type MX --name @ --value mail.example.com --priority 10
+sf domains dns add yourgroovydomain.com --type TXT --name @ --value "v=spf1 include:_spf.example.com ~all"
+```
+
+Use `sf domains dns update` and `sf domains dns rm` to change or remove a record, and `sf domains dns batch` to apply several changes at once.
+
+</Tab>
+</Tabs>
+
+### Supported record types
+
+| Type | What it's for |
+| --- | --- |
+| `A` | Points a name to an IPv4 address. |
+| `AAAA` | Points a name to an IPv6 address. |
+| `ALIAS` | Points the apex to another hostname, like a CNAME that's allowed at the root. |
+| `CNAME` | Makes one hostname an alias of another. |
+| `MX` | Routes email for this name to a mail server. Takes a priority. |
+| `TXT` | Holds verification, SPF, DKIM, DMARC, or other text values. |
+| `SRV` | Publishes a service with priority, weight, and port. |
+| `CAA` | Limits which certificate authorities can issue certificates. |
+| `NS` | Delegates a subdomain to other nameservers. |
+
+TTL goes from 60 seconds to one day, and defaults to one hour. Use a short TTL while you're setting things up and a longer one once it's stable.
+
+### Import and export
+
+Moving from another DNS provider? Export a BIND zone file there, then click **Import zone** and paste it in. Records become drafts you review before applying. Turn on **Remove records not in the file** to replace the zone instead of adding to it. Lines with unsupported record types are skipped and listed.
+
+**Export zone** downloads the zone as a `.zone` file or copies it. **Copy for AI agent** copies it in a form you can paste straight into a chat.
+
+From the terminal:
+
+```bash
+sf domains dns export yourgroovydomain.com
+```
+
+## Set up email
+
+A domain registered through Spacefast doesn't come with a mailbox. Use any email provider and add the records it gives you:
+
+- **MX records** route incoming mail to the provider.
+- **SPF** (a `TXT` record at `@` starting `v=spf1`) lists the servers allowed to send as your domain.
+- **DKIM** (a `TXT` or `CNAME` record your provider names) signs outgoing mail.
+- **DMARC** (a `TXT` record at `_dmarc`) tells receivers what to do with mail that fails the checks. Gmail and Yahoo require it for anyone sending more than 5,000 messages a day.
+
+Only one email provider can receive mail for a domain at a time. Remove the old MX records when you switch.
+
+Your website and your email are separate. The records Spacefast writes for your Space never touch MX, SPF, DKIM, or DMARC.
+
+## Use other nameservers
+
+You can delegate the whole domain to another DNS provider (Cloudflare, Route 53, your mail host's DNS) by changing its nameservers.
+
+```bash
+sf domains nameservers set yourgroovydomain.com ns1.example-dns.com,ns2.example-dns.com
+```
+
+Give at least two nameservers. The command asks before it moves DNS off Spacefast. Your records in Spacefast DNS are kept, so you can come back.
+
+Once the domain uses other nameservers:
+
+- **Spacefast stops answering for it.** Records you add in Spacefast DNS no longer apply. Manage everything at the new provider.
+- **To serve a Space, add the records Spacefast asks for there.** See [Custom domains](/domains) for the records and verification.
+- **The registration doesn't move.** You still renew the domain through Spacefast.
+
+To bring DNS back to Spacefast, set the nameservers to Spacefast's pair:
+
+```bash
+sf domains nameservers set yourgroovydomain.com ns1.spacefast.com,ns2.spacefast.com
+```
+
+Check the current setup with `sf domains nameservers yourgroovydomain.com`.
+
+:::note[Changes take time to show up]
+Nameserver changes can take up to 48 hours to reach every network, and record changes up to the record's TTL. During that window some visitors see the old setup and some see the new one. Clearing your device's DNS cache or trying another network helps you see the change sooner.
+:::
+
+## Errors you might see
+
+| Code | What happened | What to do |
+| --- | --- | --- |
+| [`dns_zone_awaiting_registration`](/errors/dns_zone_awaiting_registration) | You changed DNS before the registration finished. The change is saved, and Spacefast DNS serves it once the domain is registered. | Wait for the registration to complete. |
+| [`nameservers_required`](/errors/nameservers_required) | A domain registered through Spacefast leaves Spacefast DNS only by naming other nameservers. | Pass the new provider's nameservers to `sf domains nameservers set`. |
+| [`registrar_nameservers_refused`](/errors/registrar_nameservers_refused) | The registry refused the nameserver change. Nothing changed. | Check the nameserver hostnames exist and resolve, then try again. |
+| [`registrar_writes_disabled`](/errors/registrar_writes_disabled) | Registrar changes are briefly paused. Nothing changed. | Try again later. |

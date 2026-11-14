@@ -1,0 +1,108 @@
+---
+title: Renewal and expiration
+description: How auto-renew works, renewing by hand, and what happens when a registered domain expires
+sidebar: { order: 3 }
+---
+
+A registration lasts one year. To keep the domain, renew it before it expires. Auto-renew is on by default and does this for you.
+
+## Auto-renew
+
+As long as **Auto-renew** is on, the domain renews itself for another year before it expires. Here's the timeline:
+
+| When | What happens |
+| --- | --- |
+| 60 days before expiry | The team's owners and admins get an email and a notification: the domain renews on this date, for this price. |
+| 30 days before expiry | Spacefast charges the team's saved payment method and adds a year to the registration. |
+| If the charge fails | Owners and admins are told what went wrong (declined card, no card, bank verification needed), with a link to fix it. Spacefast tries again on its own, several times, until the expiry date. |
+| On the expiry date | Nothing more is tried. The domain [expires](#when-a-domain-expires). |
+
+If you buy a domain, or turn auto-renew on, less than 37 days before it expires, the charge waits at least a week after the notice. The **Registration** card shows the exact date with "Auto-renew charges the saved payment method from…".
+
+The renewal price is the extension's registration price on the day it renews, in US dollars plus tax. It may differ from what you paid the first time.
+
+We strongly recommend leaving auto-renew on. Once a domain expires, getting it back can be hard, and someone else may register it first.
+
+### Turn auto-renew off or on
+
+<Tabs>
+<Tab title="Dashboard">
+
+Open your team's **Domains**, click the domain, and flip the **Auto-renew** switch on the **Registration** card. Only team owners and admins can change it.
+
+</Tab>
+<Tab title="API">
+
+`PATCH /v1/domains/{domainId}/registration` with `{"autoRenew": false}`. The registration's `autoRenewChargesFrom` gives the earliest charge date, or `null` when auto-renew can't renew this term.
+
+</Tab>
+</Tabs>
+
+Turning auto-renew off cancels any automatic renewal that hasn't been charged yet.
+
+## Renew by hand
+
+You can renew a domain yourself at any time before it's gone. The dashboard shows the button from 30 days before expiry; the CLI renews whenever you ask.
+
+<Tabs>
+<Tab title="Dashboard">
+
+Open the domain and click **Renew for 1 year** on the **Registration** card. You go to checkout to pay.
+
+</Tab>
+<Tab title="CLI">
+
+```bash
+sf domains registration renew yourgroovydomain.com
+```
+
+This prints a checkout link. Nothing is charged until someone pays there.
+
+</Tab>
+</Tabs>
+
+A renewal adds one year to the current expiry date, so renewing early never costs you days. After paying, the page says "Paid. Renewing now; the new expiry shows up in a minute."
+
+If a renewal can't go through at the registry, it's refunded automatically and the **Registration** card says so.
+
+## When a domain expires
+
+Spacefast sends no renewal charge after the expiry date. The domain's status turns to **Expired**, and the card says "Expired on [date]. Renew it soon, before someone else can register it."
+
+### The redemption window
+
+Spacefast keeps an expired domain renewable for about **30 days** after it expires. During that window:
+
+- **Your Space keeps serving** on the domain as long as the registry keeps it in the DNS. Some registries park or stop resolving an expired name sooner. Your site content is never deleted.
+- **You can renew** with **Renew for 1 year** or `sf domains registration renew`, the same way as before it expired.
+
+The exact grace and redemption rules come from the registry for each extension. A name the registry has already moved into its own redemption period may not renew through Spacefast. If the renewal is refused, your payment is refunded.
+
+### After the window
+
+If the domain isn't renewed, Spacefast checks with the registrar once the window ends:
+
+- If the registration was renewed or restored at the registrar, Spacefast picks up the new expiry date.
+- If the registry released the name, the registration is marked as deleted and Spacefast DNS stops answering for it. The domain stays in your team's list as a regular, unregistered domain.
+
+Once a name goes back on the market, anyone can register it, often within seconds. Back-order services wait for exactly that. Never let a domain you care about expire.
+
+## Check when a domain expires
+
+Open your team's **Domains**. Each registered domain shows "Expires [date]", and you can sort by **Expires soonest**. Badges flag **Renewal due** and **Expired**.
+
+From the terminal:
+
+```bash
+sf domains registration yourgroovydomain.com
+```
+
+## Errors you might see
+
+| Code | What happened | What to do |
+| --- | --- | --- |
+| [`domain_registration_not_renewable`](/errors/domain_registration_not_renewable) | The registration isn't active or expired (it's still registering, failed, or was released), so there's nothing to renew. | Check the registration with `sf domains registration`. |
+| `purchase_pending` | A renewal for this domain is already waiting to be paid. | Finish that one from the **Registration** card. |
+| `purchase_in_progress` | The domain is paid for, and its renewal or refund is still going through. | Wait a minute and check again. |
+| [`registration_expiring`](/errors/registration_expiring) | Diagnostic: the registration expires soon. | Renew it, or make sure auto-renew is on with a working payment method. |
+| [`registration_expired`](/errors/registration_expired) | Diagnostic: the registration has expired. | Renew it before the redemption window ends. |
