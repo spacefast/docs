@@ -42,5 +42,5 @@ Handlers take a standard `Request` and return a standard `Response`, which is th
 
 - **Imports and runtime calls.** Replace `esm.town` imports with local files or npm packages, and replace `Deno.env.get` with the handler's `env` argument. The [Functions](/functions) page lists the supported module types.
 - **SQL.** Queries move from SQLite to the Space's database through `env.DB`. Check SQLite-specific syntax, and load existing rows through the [SQL console](/database#the-sql-console).
-- **Schedules.** A five-field crontab schedule is an advanced cron, which comes with Boost. Without a free advanced slot it runs at its closest simple schedule, and for now a Space can declare at most 8 crons. A cron runs approximately on schedule, with no retries. See [Crons](/crons).
+- **Schedules.** A five-field crontab schedule is an advanced cron, which comes with Boost. For now every crontab runs at its closest simple schedule until advanced scheduling is enabled, and a Space can declare at most 8 crons. A cron runs approximately on schedule, with no retries. See [Crons](/crons).
 - **Outbound requests.** A worker's `fetch()` reaches any public host once the Space is claimed. See [Functions outbound HTTP](/functions#outbound-http).

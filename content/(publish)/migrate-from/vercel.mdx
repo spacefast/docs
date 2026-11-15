@@ -55,7 +55,7 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
 
 A Spacefast cron is a scheduled `GET` against a path on your own Space, like a Vercel cron. The schedule is where they differ:
 
-- A five-field crontab schedule is an **advanced** cron. Advanced crons come with Boost. Without a free advanced slot, a crontab still publishes and runs at its closest simple schedule, which may not match the times it names.
+- A five-field crontab schedule is an **advanced** cron. Advanced crons come with Boost. For now every crontab runs at its closest simple schedule, which may not match the times it names, until advanced scheduling is enabled. See [Crons](/crons#allowance-by-plan).
 - Your plan sets how many crons each Space runs, and for now a Space can declare at most 8.
 
 [Crons](/crons) has the schedule grammar and the allowance by plan.
