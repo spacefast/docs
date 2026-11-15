@@ -57,7 +57,7 @@ Three roles, and the one you hold in a team caps everything you do there, whethe
 | Grant the owner role | Yes | No | No |
 | Transfer ownership | Yes | No | No |
 
-Invitation and membership changes require a signed-in person in the dashboard. CLI and API credentials cannot perform them, even for an owner or admin. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
+A credential with the `teams:members.write` scope, such as Agent access, can invite people. Cancelling or resending an invitation and every other membership change need a signed-in person in the dashboard, even for an owner or admin. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
 Owner and admin differ in exactly one place. An admin can hand out `admin` and `member`, but only an owner can make someone else an owner.
 
@@ -77,7 +77,7 @@ Your team needs [Pro](/pricing) to add another member. Personal and Go include o
   </Step>
 </Steps>
 
-From a terminal, `sf teams invitations ls` lists invitations. Use the dashboard to send, resend, cancel, or accept one.
+From a terminal, `sf teams invitations ls` lists invitations. Send one from the dashboard or through an agent with Agent access. Resend, cancel, or accept one in the dashboard.
 
 To skip invitations for coworkers, add your company's [allowed email domain](/auto-enroll).
 

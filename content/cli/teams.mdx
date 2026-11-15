@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations, but invitation and membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
+Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations. The CLI has no command to send an invitation: send it from the dashboard, or through an agent with Agent access, which calls [`createTeamInvitation`](/api/reference/teams/createteaminvitation). Other membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
 A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
 
@@ -225,29 +225,6 @@ sf teams invitations ls
 ### Output
 
 A table of `EMAIL`, `ROLE`, `STATUS`, `INVITATION ID`. `--json` returns `{ data: [...] }`.
-
-## sf teams invitations add
-
-Create a team invitation. Alias: `sf teams invitations create`.
-
-```text
-sf teams invitations add EMAIL
-```
-
-Send the invitation from the dashboard under **Members → Invite member**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
-
-### Arguments
-
-| Argument | Default | What it is |
-| --- | --- | --- |
-| `<email>` | required | Email address to invite |
-
-### Flags
-
-| Flag | Default | What it does |
-| --- | --- | --- |
-| `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
-| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ## sf teams invitations resend
 
