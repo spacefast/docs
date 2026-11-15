@@ -16,7 +16,7 @@ Every command here also takes the [global flags](/cli#global-flags).
 Create a Spacefast project.
 
 ```text
-sf init [NAME] [--space <value>] [-o <team>] [-f] [--runtime static|zero|functions]
+sf init [NAME] [--space <value>] [-T <team>] [-f] [--runtime static|zero|functions]
 ```
 
 ### Arguments
@@ -82,7 +82,7 @@ With `--space`, `data` also carries `linkPath`, `space`, `statePath`, and `state
 Link the current directory to a Space.
 
 ```text
-sf link --space <value> [-o <team>] [--claim-token <value>]
+sf link --space <value> [-T <team>] [--claim-token <value>]
 ```
 
 | Flag | Default | What it does |
@@ -145,7 +145,7 @@ Removed .spacefast/state.json.
 Switch teams.
 
 ```text
-sf switch [TEAM] [-o <team>]
+sf switch [TEAM] [-T <team>]
 ```
 
 | Argument | What it does |
@@ -252,7 +252,7 @@ Deletes the profile and its stored credential after confirming. It refuses with 
 Open a private Space.
 
 ```text
-sf open [TARGET] [--path <route>] [--show-secret] [-o <team>] [--claim-token <value>]
+sf open [TARGET] [--path <route>] [--show-secret] [-T <team>] [--claim-token <value>]
 ```
 
 ### Arguments

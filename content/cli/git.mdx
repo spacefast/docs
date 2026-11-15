@@ -7,7 +7,7 @@ sidebar:
 
 Connect a GitHub repository to a Space with `sf git connect`, then request a build. The GitHub App installation must grant that repository to your team.
 
-Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-o`/`--team`, `--claim-token`). See [the CLI overview](/cli).
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-T`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
 ## Two connection types, two spellings
 
@@ -80,12 +80,12 @@ sf git connect --space docs --repository owner/repo --production-branch main --s
 | `github_repository_not_authorized` | 20 | The installation does not grant that repository |
 | `github_installation_ambiguous` | 2 | More than one installation grants it. Pass `--installation-id` |
 
-## sf git ls
+## sf git inspect
 
 Show a repository connection.
 
 ```text
-sf git ls [--space <value>] [--connection-type connected|hosted]
+sf git inspect [--space <value>] [--connection-type connected|hosted]
 ```
 
 ### Flags
@@ -95,7 +95,7 @@ sf git ls [--space <value>] [--connection-type connected|hosted]
 | `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
 
 ```bash
-sf git ls --space docs
+sf git inspect --space docs
 ```
 
 ### Output

@@ -32,7 +32,7 @@ Every version that reaches ready gets a fixed hostname of its own:
 https://{label}--v{number}.{apex}/
 ```
 
-The apex is the Space's original domain, either `space.fast` or `view.fast`. Version 7 of a new Space named `my-site` is `https://my-site--v7.space.fast/`. The URL is computed once when the version turns ready and stored on the version row. It survives a slug rename and serves that build while the version is retained. [Deleting or expiring a version](/versions#how-many-versions-are-kept) removes its files.
+The apex is the Space's original domain, either `space.fast` or `view.fast`. Version 7 of a new Space named `my-site` is `https://my-site--v7.space.fast/`. The URL is computed once when the version turns ready and stored on the version row. It survives a slug rename and serves that build while the version is retained. [Deleting a version](/versions#how-many-versions-are-kept) stops its hostname from serving.
 
 Existing URLs such as `https://v7--my-site.view.fast/` retain their format. Use the returned `immutableUrl` rather than composing a version URL yourself.
 
@@ -94,4 +94,4 @@ Any hostname ending in `.space.fast` or `.view.fast` is refused as a custom doma
 
 ## Hostnames that do not serve
 
-A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell "nothing here yet" apart from a missing page on a published site.
+A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell "nothing here yet" apart from a missing page on a published Space.

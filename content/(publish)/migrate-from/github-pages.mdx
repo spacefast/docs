@@ -14,7 +14,7 @@ Connect the repository and Spacefast builds it on every push to the production b
     From the CLI, create the Space, then connect it:
 
     ```bash
-    sf spaces add --slug my-site
+    sf spaces create --slug my-site
     sf git connect --space my-site --provider github --repository owner/repo --production-branch main --build-now
     ```
 

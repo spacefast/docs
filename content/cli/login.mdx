@@ -14,14 +14,14 @@ Every command here also takes the [global flags](/cli#global-flags).
 Log this machine in through the browser, or save an API key you already have.
 
 ```text
-sf login [--access read|agent] [--handoff] [-o <team>] [--token <key>]
+sf login [--access read|domains|agent|agent-personal-pages] [--handoff] [-T <team>] [--token <key>]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--access=<read\|agent>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
+| `--access=<read\|domains\|agent\|agent-personal-pages>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
 | `--handoff` | off | Redeem a one-use agent handoff link from the dashboard. Read from stdin. Cannot be combined with `--token`. |
 | `--token=<key>` | none | Store an API key you already have instead of running the browser flow. Env `SPACEFAST_TOKEN`. |
 | `-T, --team=<value>` | none | Team slug, ID, or name to make the default after signing in. Env `SPACEFAST_TEAM`. |
@@ -180,12 +180,12 @@ sf access
 
 Running it bare prints help.
 
-### sf access logout-all
+### sf access sessions revoke
 
 Revoke every active private-open, share-link, and signed-in visitor session for the Space.
 
 ```text
-sf access logout-all [--space <value>] [-o <team>] [--claim-token <value>] [-y]
+sf access sessions revoke [--space <value>] [-T <team>] [--claim-token <value>] [-y]
 ```
 
 | Flag | Default | What it does |
@@ -196,7 +196,7 @@ sf access logout-all [--space <value>] [-o <team>] [--claim-token <value>] [-y]
 | `-y, --yes` | `false` | Skip the confirmation prompt. Env `SPACEFAST_YES`. |
 
 ```bash
-sf access logout-all --space docs
+sf access sessions revoke --space docs
 ```
 
 This is destructive and confirms first: `Revoke ALL opened visitor access for <slug>?`. Everyone currently reading a private Space is signed out, links included. In a non-interactive context, pass `--yes` or it fails with `confirmation_required` (exit 2).

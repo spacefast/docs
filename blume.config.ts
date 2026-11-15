@@ -179,7 +179,7 @@ export default defineConfig({
     markdownComponents: {
       PricingTable: ({ props }) => pricingTableMarkdown(String(props.table), props.row ? String(props.row) : undefined),
       WpCloudDocs: ({ props }) =>
-        `Using the [Partner API](${deploymentBase}/platforms/partner-api)? [${String(props.title)}](${String(props.href)}) has the platform-level details.`,
+        `Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) in the upstream infrastructure reference.`,
     },
     // The Website publishes Spacefast's agent skill at the site root; a second,
     // generated Docs skill would compete with it.

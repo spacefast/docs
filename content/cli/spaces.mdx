@@ -47,12 +47,12 @@ sf spaces ls --team acme
 
 A table of `SLUG`, `ID`, `TEAM`, `LIVE URL`. `--json` returns `{ data: [...], pagination }`, one Space object per row with `id`, `slug`, `title`, `teamSlug`, `status`, `defaultHostname`, `liveUrl`, `anonymous`, `config`, and timestamps.
 
-## sf spaces get
+## sf spaces inspect
 
 Show a space.
 
 ```text
-sf spaces get
+sf spaces inspect
 ```
 
 Prints the Space's live runtime state and its current version.
@@ -68,8 +68,8 @@ Prints the Space's live runtime state and its current version.
 ### Examples
 
 ```bash
-sf spaces get
-sf spaces get --space docs
+sf spaces inspect
+sf spaces inspect --space docs
 ```
 
 ### Output
@@ -135,12 +135,12 @@ When a name is taken, the suggestion lines name the closest free slug and hostna
 | `forbidden` | 11 | You can't create Spaces in that team |
 | `missing_scope` | 2 | You belong to several teams and none was picked. Pass `--team` |
 
-## sf spaces add
+## sf spaces create
 
-Create an empty space. Alias: `sf spaces create`.
+Create an empty Space.
 
 ```text
-sf spaces add
+sf spaces create
 ```
 
 Creates the Space and saves it to `.spacefast/state.json`. You rarely need this: `sf publish` creates a Space when there is none.
@@ -161,7 +161,7 @@ Creates the Space and saves it to `.spacefast/state.json`. You rarely need this:
 ### Example
 
 ```bash
-sf spaces add --name docs
+sf spaces create --name docs
 ```
 
 ### Output
@@ -306,12 +306,12 @@ Team acme
 
 With `--keep-publishing`, one more line: `The publishing agent stays authorized for one credential upgrade.` Run `sf continue` afterwards to swap the saved space key for a durable API key. See [Anonymous publish and claiming](/anonymous-and-claim).
 
-## sf spaces rotate-claim
+## sf spaces key rotate
 
 Rotate an anonymous Space's key.
 
 ```text
-sf spaces rotate-claim
+sf spaces key rotate
 ```
 
 Replaces an anonymous Space's key, live URL, and claim link. Recipient Links keep working. Use it when the old key leaked.
@@ -326,7 +326,7 @@ Replaces an anonymous Space's key, live URL, and claim link. Recipient Links kee
 ### Example
 
 ```bash
-sf spaces rotate-claim
+sf spaces key rotate
 ```
 
 ### Output

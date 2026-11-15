@@ -84,7 +84,7 @@ Space Apps provide visual views through tools such as `show_space_deployments`, 
 
 `publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. `choose_space` asks you to pick a Space when the target is unclear, and `cli_login` signs the `sf` CLI in with this connection's access when you ask for it. Read each tool's schema before calling it.
 
-Every result is capped at 24,000 characters of text across the whole structured value, with an explicit truncation marker when it hits the cap.
+Results from the built-in tools are capped at 24,000 characters of text across the whole structured value, with an explicit truncation marker. Source-file views refuse results over 1 MiB with `source_result_too_large`.
 
 ### Connector access
 
@@ -108,7 +108,7 @@ Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connecto
 | `description` | string, up to 2000 | Changelog for this version. It does not change the Space description |
 | `requestId` | string, 16 to 200 | Idempotency handle. Reuse the same value only when retrying a call that timed out |
 
-Send at most one of `path`, `files`, and `uploadId`.
+Send at most one of `path`, `files`, and `uploadId`. Hosted MCP needs exactly one of `files` or `uploadId`.
 
 ```json
 {

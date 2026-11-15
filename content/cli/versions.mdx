@@ -53,12 +53,12 @@ The Space summary, then one block per version:
 
 Version statuses are `created`, `uploading`, `uploaded`, `finalizing`, `ready`, and the terminal `failed`, `canceled`, `expired`. `ref` and `number` are null until the version is ready.
 
-## sf versions get
+## sf versions inspect
 
 Show a version.
 
 ```text
-sf versions get [VERSION]
+sf versions inspect [VERSION]
 ```
 
 Shows one version's status, source, version URL, diagnostics, and failure details.
@@ -80,8 +80,8 @@ Shows one version's status, source, version URL, diagnostics, and failure detail
 ### Examples
 
 ```bash
-sf versions get v12
-sf versions get ver_123 --space docs --json
+sf versions inspect v12
+sf versions inspect ver_123 --space docs --json
 ```
 
 ## sf versions rm

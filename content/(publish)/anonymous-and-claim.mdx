@@ -20,7 +20,7 @@ What comes back is a `claim` block. Four fields:
 | Field | What it is |
 | --- | --- |
 | `key` | The space key, `sfc_` plus 22 characters. The only credential for this Space |
-| `url` | The Space door. Opening it exchanges the key for a private view session |
+| `url` | The live URL with the Space key in `/__/<key>` form. Opening it exchanges the key for a private view session |
 | `claimUrl` | The dashboard claim page, with the key in the URL fragment |
 | `expiresAt` | When the Space stops serving unless someone claims it |
 
@@ -131,10 +131,10 @@ For the full picture of what a credential like this can and cannot do, see [what
 If the key leaked, replace it:
 
 ```bash
-sf spaces rotate-claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
+sf spaces key rotate --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
 ```
 
-You get a fresh `claim` receipt. The old key, its Space door, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
+You get a fresh `claim` receipt. The old key, its `url`, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
 
 ## Checking on it
 

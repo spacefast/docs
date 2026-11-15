@@ -133,4 +133,4 @@ Only owners and admins can transfer a Space. Two consequences to plan for: the o
 
 **Leave team** is blocked while you are the only member ("Add another owner before you can leave") or the only owner ("Transfer ownership before you can leave").
 
-**Delete this team** asks you to type the team slug. A team that still has live Spaces refuses to be deleted, so delete or move them first. For 30 days after the delete, an owner or admin of the team can restore it, and only the person who deleted it sees it in their team list. After that it can't be restored, but Spacefast keeps its records.
+**Delete this team** asks you to type the team slug. A team that still has live Spaces refuses to be deleted, so delete or move them first. For 30 days after the delete, an owner or admin of the team can restore it. The dashboard has no restore button yet, so ask support. Only the person who deleted the team can list it, with `GET /v1/teams?deleted=true`. After 30 days it can't be restored, but Spacefast keeps its records.
