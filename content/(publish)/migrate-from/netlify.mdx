@@ -25,10 +25,10 @@ Spacefast reads `netlify.toml` and the `_redirects` and `_headers` files you alr
     A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
-    Run `sf publish` in the project and let Spacefast build it. `netlify.toml` is read when Spacefast builds, so a folder you built yourself carries over only the `_redirects` and `_headers` files inside it.
+    Run `sf publish --space my-site` in the project and let Spacefast build it. `netlify.toml` is read when Spacefast builds, so a folder you built yourself carries over only the `_redirects` and `_headers` files inside it.
 
     ```bash
-    sf publish
+    sf publish --space my-site
     ```
 
     To build on every push instead, connect the repository with [Publish from Git](/git).

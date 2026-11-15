@@ -25,10 +25,10 @@ Your `_redirects` and `_headers` files publish with your pages, and Spacefast re
     A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
-    Run `sf publish` in the project and let Spacefast build it, or publish the output folder you deploy today.
+    Run `sf publish --space my-site` in the project and let Spacefast build it, or publish the output folder you deploy today.
 
     ```bash
-    sf publish
+    sf publish --space my-site
     ```
 
     To build on every push instead, connect the repository with [Publish from Git](/git).

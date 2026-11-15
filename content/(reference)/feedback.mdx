@@ -95,11 +95,12 @@ Spacefast identifies the sender from the credential on the request:
 
 | Credential | Sender |
 | --- | --- |
-| A login, or an API key a person created | That person |
+| A login (dashboard, `sf login`, or MCP sign-in) | That person |
+| A team API key, OAuth client, or partner key | The person who created it |
 | A space key (`sfc_…`) | The unclaimed Space the key belongs to |
 | None | Anonymous |
 
-To read notes back, call [`listFeedback`](/api/reference/spaces/listfeedback) (`limit` 1 to 100, default 20) or [`getFeedback`](/api/reference/spaces/getfeedback) with the reference. Both need a credential that acts for the person who sent the note.
+To read notes back, call [`listFeedback`](/api/reference/spaces/listfeedback) (`limit` 1 to 100, default 20) or [`getFeedback`](/api/reference/spaces/getfeedback) with the reference. Both need a login as the person who sent the note. Team API keys, OAuth clients, partner keys, and Space keys can send notes but can't read them back.
 
 ## Send feedback from an agent
 
@@ -124,5 +125,5 @@ Each docs page ends with **Was this page helpful?** and the buttons **Yes** and 
 | `validation_error` | 2 | The message is empty or too long, a context field is out of range, or the category is unknown |
 | `rate_limited` | 1 | You reached the limit for your sender type. Wait for the `Retry-After` time |
 | `unauthorized` | 10 | `sf feedback list` or `inspect` with no credential |
-| `forbidden` | 11 | `sf feedback list` or `inspect` with a space key, team key, OAuth client key, or partner key |
+| `forbidden` | 11 | `sf feedback list` or `inspect` with a Space key, team API key, OAuth client key, or partner key |
 | `not_found` | 20 | The reference does not exist, or another person sent it |

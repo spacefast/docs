@@ -158,7 +158,7 @@ The `200` answer has one of three `status` values. Branch on it.
 
 The connection objects above are shortened. For `authorization_required`, send the person to `authorizeUrl`. The provider callback completes the connection, and the dashboard calls `completeConnection` with the `state` and `code`. For `input_required`, nothing was created. Collect `fields`, then call again with `credential.values` and the same `authMethod`. `getConnectorCredentialGuidance` returns the provider's help for a domain: `label`, `mintUrl`, `docsUrl`, `notes`, and `steps`.
 
-A connection carries `id`, `connector`, `owner`, `displayName`, `description`, `status`, `identityLabel`, `credentialConfigured`, `authMethod`, `scopes`, `isDefault`, `serving`, `servingRequest`, `toolCount`, `createdBy`, `lastCheckedAt`, `revokedAt`, `createdAt`, and `updatedAt`. `status` is `pending_authorization`, `active`, `degraded`, `needs_reauth`, or `revoked`. `isDefault` marks the connection an agent gets when it names the connector alone.
+A connection carries `id`, `connector`, `owner`, `displayName`, `description`, `status`, `identityLabel`, `credentialConfigured`, `authMethod`, `scopes`, `isDefault`, `serving`, `servingRequest`, `toolCount`, `createdBy`, `lastCheckedAt`, `revokedAt`, `createdAt`, and `updatedAt`. `status` is `pending_authorization`, `active`, `degraded`, `needs_reauth`, or `revoked`. `isDefault` is true when this is the only live connection on its connector, so an agent that names the connector alone gets it. Nobody sets it.
 
 | Operation | Path | Scope |
 | --- | --- | --- |
@@ -179,7 +179,7 @@ A connection the credential may not use answers `404`, the same as one that does
 
 ## Read tools and policy
 
-A tool address is `<connectionId>/<tool>`. While exactly one usable connection matches, `<connector>/<tool>` also works. A second connection turns the short form into `connection_ambiguous`.
+A tool address is `<connectionId>/<tool>`. While exactly one usable connection matches, `<connector>/<tool>` also works. A second usable connection turns the short form into `connection_ambiguous`, and no connection is then the default.
 
 Each tool carries `address`, `name`, `summary`, `safety` (`read_only`, `write`, or `destructive`), `effect`, `decidedBy`, and `inputSchema`. `effect` is the policy result: `approve`, `require_approval`, or `block`. `decidedBy` is `{ ruleId, pattern, owner }`, or `null` when the tool's own default applied.
 
@@ -328,7 +328,7 @@ Every failure is an RFC 9457 problem document. See [Errors](/api/errors).
 | `connector_run_not_resumable` | 409 | The run already settled, or the decision was already claimed |
 | `rate_limited` | 429 | The team passed the hourly budget for registrations or runs |
 
-These codes appear in a failed run's `error`, inside a `200` response:
+These codes appear in a failed run's `error`, inside a successful HTTP response (`200` or `201`):
 
 | Code | Status in `error` | When |
 | --- | --- | --- |

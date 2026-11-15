@@ -25,10 +25,10 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
     A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
-    Run `sf publish` in the project and let Spacefast build it. `vercel.json` is read when Spacefast builds.
+    Run `sf publish --space my-app` in the project and let Spacefast build it. `vercel.json` is read when Spacefast builds.
 
     ```bash
-    sf publish
+    sf publish --space my-app
     ```
 
     To build on every push instead, connect the repository with [Publish from Git](/git).

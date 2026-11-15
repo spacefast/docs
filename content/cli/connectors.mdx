@@ -702,6 +702,6 @@ These three commands connect a Space's connector roles to team connections. They
 | `sf connectors bind <role> <connection> --space <ref>` | Bind one role to a connection id |
 | `sf connectors unbind <role> --space <ref>` | Remove one binding. Prompts unless you pass `--yes` |
 
-Without `--space`, each fails with `validation_error` and exit 2.
+Without `--space` or `SPACEFAST_SPACE`, each fails with `validation_error` and exit 2.
 
 `sf connectors` also has `serving` and `public-serving set` commands. Run `sf connectors serving --help` for their flags.
