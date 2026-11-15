@@ -68,7 +68,7 @@ sf feedback inspect fdb_0123456789abcdef
 
 `sf feedback inspect` prints one note in full: the reference, the category, the time sent, any context, and the message.
 
-Only the person who sent a note can read it. Sign in with `sf login` or the dashboard first. Feedback sent without a login cannot be read back.
+Only the person who sent a note can read it. Sign in with `sf login` or the dashboard first. A note sent with a team API key, OAuth client, or partner key belongs to the person who created that key, who can read it after signing in. A note sent anonymously or with a Space key has no person sender and cannot be read back.
 
 ## Send feedback through the API
 
