@@ -19,7 +19,7 @@ const { columns, groups, highlight } = pricingTable(table, rowLabel);
 const span = columns.length + 1;
 ---
 
-<div class="sf-pricing not-prose" data-pricing-table={table} tabindex="0" role="region" aria-label={`${table} pricing table, scroll sideways for every plan`}>
+<div class="sf-pricing not-prose" data-pricing-table={table} tabindex="0" role="region" aria-label={`${rowLabel ? rowLabel.replaceAll(" | ", ", ") : `${table} pricing table`}, scroll sideways for every plan`}>
   <table style={`--sf-cols: ${columns.length}`}>
     <thead>
       <tr>

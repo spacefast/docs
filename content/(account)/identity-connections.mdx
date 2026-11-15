@@ -29,12 +29,12 @@ Spacefast reads `<issuer>/.well-known/openid-configuration` over HTTPS. The `iss
 ## Add a connection in the dashboard
 
 1. Open the team and go to **Team settings → Access**.
-2. In **SSO providers**, press **Add identity provider**. The **Add SSO provider** dialog opens.
+2. In **SSO Providers**, press **Add Identity Provider**. The **Add SSO Provider** dialog opens.
 3. Pick a **Connection type**: **OpenID Connect** or **White-label signer**.
 4. Enter a **Name** and the **Issuer**.
 5. For OpenID Connect, enter the **Client ID** and **Client secret**.
 6. For a signer, enter the **Sign-in URL**. Add the **Ed25519 public keys**, one `kid:base64url-key` per line.
-7. Press **Add connection**.
+7. Press **Add Connection**.
 
 The connection appears as a row with an **OIDC** or **Signer** badge and its issuer.
 
@@ -78,7 +78,7 @@ The `201` response holds the connection. Its `id` starts with `acn_`, and grants
 
 The connection proves identity. A grant on the Space decides what that identity can open.
 
-To add a grant in the dashboard, open the Space and go to **Share**. Open **Advanced**, then find **SSO and identity**. Pick the **Connection**, then fill in **Subject**, **Name**, **Paths**, and an optional **Expires**. Choose **What this identity can do** and press **Add identity grant**. If the team has no connection, the card shows **No SSO provider**.
+To add a grant in the dashboard, open the Space and go to **Share**. Open **Advanced**, then find **SSO and Identity**. Pick the **Connection**, then fill in **Subject**, **Name**, **Paths**, and an optional **Expires**. Choose **What this identity can do** and press **Add Identity Grant**. If the team has no connection, the card shows **No SSO Provider**.
 
 From a terminal, run `sf share identity grant`:
 
@@ -115,12 +115,12 @@ The proof-exchange protocol is not part of the public API reference. Contact [su
 
 ## Update a connection
 
-In **SSO providers**, press **Update** on the connection's row.
+In **SSO Providers**, press **Update** on the connection's row.
 
 | Type | Fields | Button |
 | --- | --- | --- |
-| OpenID Connect | **Client ID**, **Replacement client secret**, **Session lifetime in minutes** | **Update connection** |
-| White-label signer | **Replacement Ed25519 key set**, **Session lifetime in minutes** | **Rotate key set** |
+| OpenID Connect | **Client ID**, **Replacement client secret**, **Session lifetime in minutes** | **Update Connection** |
+| White-label signer | **Replacement Ed25519 key set**, **Session lifetime in minutes** | **Rotate Key Set** |
 
 Leave **Replacement client secret** blank to keep the current secret. To rename a connection or change a signer's sign-in URL, use the API or the CLI.
 
@@ -143,7 +143,7 @@ A team can have one active connection per issuer. Revoking a connection also rev
 
 ## Revoke a connection
 
-Press **Revoke** on the row, then **Revoke connection** in the dialog. Over HTTP, send [`revokeTeamIdentityConnection`](/api/reference/teams/revoketeamidentityconnection). It answers `204`. From a terminal, run `sf share identity revoke`.
+Press **Revoke** on the row, then **Revoke Connection** in the dialog. Over HTTP, send [`revokeTeamIdentityConnection`](/api/reference/teams/revoketeamidentityconnection). It answers `204`. From a terminal, run `sf share identity revoke`.
 
 Revoking removes the grants too. Spacefast revokes every grant on the team's Spaces that trusts the connection's issuer, then the connection itself. If team members sign in to Spacefast through the connection, revoking it also turns member sign-in off.
 

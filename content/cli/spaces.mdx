@@ -150,7 +150,7 @@ Creates the Space and saves it to `.spacefast/state.json`. You rarely need this:
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
-| `-n, --name=<value>` | none | Set the Space title |
+| `--name=<value>` | none | Set the Space title |
 | `--slug=<value>` | generated | Set the Space slug |
 | `--mode=website\|files` | `website` | Space serving mode |
 | `--spa=auto\|true\|false` | `auto` | Control single-page app fallback detection |
@@ -186,7 +186,7 @@ Patches Space identity, serving metadata, and generated viewer metadata.
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--slug=<value>` | unchanged | New Space slug. Must be sent without other update flags |
-| `-n, --name=<value>` | unchanged | Space title |
+| `--name=<value>` | unchanged | Space title |
 | `--mode=website\|files` | unchanged | Serving mode |
 | `--spa=auto\|true\|false` | unchanged | Enable or disable SPA fallback. `auto` leaves the current setting alone |
 | `--viewer-title=<value>` | unchanged | Viewer page title. Pass `null` to clear |

@@ -317,7 +317,7 @@ Every failure is an RFC 9457 problem document. See [Errors](/api/errors).
 | `connector_first_party_immutable` | 409 | The connector is built into Spacefast |
 | `connection_forbidden` | 422 | An API key asked for a `personal` connection or rule |
 | `connection_needs_reauth` | 409 | A health probe found no credential, or the authorization is not finished |
-| `connection_needs_reauth` | 422 | Connecting failed: the chosen method isn't one the connector offers |
+| `connection_needs_reauth` | 422 | Connecting failed: the method doesn't fit the connector or the credential, the authorization failed, or the sign-in expired |
 | `connection_revoked` | 409 | The connection is disconnected |
 | `connection_serving_not_granted` | 422 | `serving` was set on a personal connection |
 | `malformed_policy_pattern` | 422 | The pattern does not fit the grammar |

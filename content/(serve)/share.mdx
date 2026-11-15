@@ -221,7 +221,7 @@ Two behaviors are worth knowing because they look like bugs and are not. A rewri
 ## Revoking everything at once
 
 ```bash
-sf access logout-all --space my-site
+sf access sessions revoke --space my-site
 ```
 
 This ends every active visitor session on the Space, whatever admitted them: share link, password, private open, or signed-in account. It takes effect immediately, without a republish. Grants themselves are untouched, so anyone still holding a valid link or password can open the Space again on their next visit. Revoke the grant when you want the credential itself dead.
