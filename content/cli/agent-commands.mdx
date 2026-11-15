@@ -256,21 +256,21 @@ Without `--paths`, one line per command with its usage and summary, and `data.co
 Send feedback to Spacefast with optional error, request, Space, or URL context.
 
 ```text
-sf feedback -m <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space-id <id>] [--url <url>]
+sf feedback --message <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space <space>] [--url <url>]
 ```
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-m, --message=<value>` | required | The feedback itself. |
+| `--message=<value>` | required | The feedback itself. |
 | `--category=<value>` | `other` | One of `bug`, `docs`, `limit`, `idea`, `other`. |
 | `--error-code=<value>` | none | Related API error code, straight from an `{ error }` receipt. |
 | `--request-id=<value>` | none | Related API request ID, also from the receipt. |
-| `--space-id=<value>` | none | Related Space ID. |
+| `--space=<value>` | none | Related Space. |
 | `--url=<value>` | none | Related URL. |
 
 ```bash
-sf feedback -m "The continuation docs are unclear" --category docs
-sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id req_123
+sf feedback --message "The continuation docs are unclear" --category docs
+sf feedback --message "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id req_123
 ```
 
 Every failure receipt carries `error.code` and `error.requestId`. Passing both turns a complaint into something traceable.
@@ -278,11 +278,12 @@ Every failure receipt carries `error.code` and `error.requestId`. Passing both t
 ### Output
 
 ```text
-Feedback ref: fb_0123456789abcdef
-Delivered — thanks!
+Feedback ref: fdb_0123456789abcdef
+Thanks. We read every one.
+Signed in with `sf login`? Read it back with `sf feedback inspect fdb_0123456789abcdef`.
 ```
 
-`data` carries `ref` and `delivered`.
+`data` carries `ref` and `status`. `status` is `stored`.
 
 ## sf plugins
 
