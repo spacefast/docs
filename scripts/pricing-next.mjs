@@ -18,6 +18,8 @@ const row = (label, tip, values, tag) => ({ label, tip, values, tag });
 const NO_LIMIT = "No predefined limit";
 const all5 = (value) => [value, value, value, value, value];
 const CPU = "$0.1188 per CPU-hour";
+// Origin datacenters, named the same everywhere the docs list them.
+export const DATACENTERS = "Amsterdam, Burbank, Washington DC, and Dallas";
 
 // Per team, per month: [Personal, Go, Pro, Enterprise]. Business is added from BUSINESS_TEAM.
 const TEAM = [
@@ -48,7 +50,7 @@ const TEAM = [
       ["10 GB, then $0.04 per GB", "100 GB, then $0.04 per GB", "500 GB, then $0.04 per GB", "Contract"]),
   ]],
   ["Storage", [
-    row("Storage", "Everything a Space keeps on its site: published versions, media and its MySQL database. Measured daily and averaged over the month. Free for a limited time while we finish measuring it. Once billed, the first 1 GB of every Space isn't counted; it covers platform files we load onto each site.",
+    row("Storage", "Everything a Space keeps: published versions, media and its MySQL database. Measured daily and averaged over the month. Free for a limited time while we finish measuring it. Once billed, the first 1 GB of every Space isn't counted; it covers platform files we load onto each Space.",
       ["Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Free now; 1 GB per Space, then $0.10 per GB-month†", "Contract"], "comp"),
     row("Bucket storage", "Files your app stores through the storage API. Free during the beta.",
       ["Free now; 10 GB, then $0.016 per GB-month*", "Free now; 25 GB, then $0.016 per GB-month*", "Free now; 100 GB, then $0.016 per GB-month*", "Contract"], "beta"),
@@ -88,7 +90,7 @@ const SPACE = [
       ["60 s", "60 s", "120 s", "300 s", "Custom"]),
   ]],
   ["Storage", [
-    row("Disk", "The live site's files and its MySQL database.",
+    row("Disk", "The live Space's files and its MySQL database.",
       ["1 GB", "10 GB", "25 GB", "50 GB", "Up to 1 TB"]),
     row("VideoPress storage", "Ad-free 4K adaptive video. Streaming has no bandwidth limit and never counts toward your traffic. Each video can be up to 5 GB.",
       ["5 GB", "100 GB", "256 GB", "1 TB", "Custom"]),
@@ -148,7 +150,7 @@ const FEATURES = [
     row("Global edge cache and purge", null, all(YES)),
     row("Redirects and header rules", null, ["500 per Space", "1,000 per Space", "1,500 per Space", "Custom"]),
     row("Firewall and cache rules", null, ["10 per Space", "25 per Space", "50 per Space", "Custom"]),
-    row("Choose a datacenter", "Amsterdam, Burbank, Washington DC or Dallas.", [NO, YES, YES, YES]),
+    row("Choose a datacenter", `${DATACENTERS}.`, [NO, YES, YES, YES]),
     row("DDoS challenge mode", "Turn on a browser challenge for every visitor while a Space is under attack, then turn it off.", all(YES)),
     row("Custom certificates", "Bring your own TLS certificate for a Space's domain instead of the managed one.", [NO, "With Boost", "With Boost", YES]),
   ]],
@@ -193,7 +195,7 @@ const FEATURES = [
   ]],
   ["Infrastructure", [
     row("Edge locations", "Cached pages are served from the location closest to each visitor.", all("28+")),
-    row("Datacenters", "Amsterdam, Burbank, Washington DC and Dallas. Every datacenter costs the same.", all("4")),
+    row("Datacenters", `${DATACENTERS}. Every datacenter costs the same.`, all("4")),
     row("Disaster-recovery backups", "Platform backups we keep to recover from hardware failure, on every Space. They are separate from the database backups you restore yourself, listed under Data.", all(YES)),
     row("DDoS protection and firewall", "DDoS protection, defensive mode and a web application firewall.", all(YES)),
     row("Automated failover", "If a Space's server fails, it moves to healthy hardware on its own, with no data lost.", all(YES)),
@@ -270,7 +272,7 @@ export const EXAMPLES = [
   { title: "A busy Space", plan: "Personal", price: "$0", basis: "Real usage: busier than 99% of Spaces, plus as many build minutes as a team in the top 1%, over the last 30 days.",
     lines: [["40,686 dynamic requests", "Included"], ["1.29 CPU-hours of compute", "$0.15"], ["0.83 GB stored", "Free for now"], ["247 build minutes", "100 included, then $0.81"]],
     note: "Uses $0.96 of the $1 included. On Go, the same Space uses $0.15 of $5." },
-  { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client sites and five members.",
+  { title: "A studio of five", plan: "Pro", price: "$15", basis: "Estimate: 20 client Spaces and five members.",
     lines: [["5 million dynamic requests", "Included"], ["40 CPU-hours of compute, 10 of MySQL", "$4.75 (MySQL free for now)"], ["2 TB cached, 300 GB uncached", "Included"], ["50 GB stored on 20 Spaces", "Free for now"], ["1,500 build minutes", "Included"]],
     note: "Uses $4.75 of the $15 included." },
   { title: "A busy app", plan: "Pro + Boost", price: "$24", basis: "Estimate: one app with 10 million requests a month, 70% cached.",
@@ -309,7 +311,7 @@ const AT_A_GLANCE = [
     row("Members", "People who can publish and change settings. Reviewers, commenters, agents and app users are free.", ["1", "1", "Free up to 5, then $15/month each", "$25/month each", "Contract"]),
     row("Spaces and custom domains", null, ["20", "100", "500", "Custom", "Custom"]),
     row("Compute workers per Space", "Dynamic requests one Space runs at the same time.", ["2", "2", "4", "Custom", "Custom"]),
-    row("Disk per Space", "The live site's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", "Up to 1 TB", "Up to 1 TB"]),
+    row("Disk per Space", "The live Space's files and its MySQL database.", ["1 GB", "10 GB", "25 GB", "Up to 1 TB", "Up to 1 TB"]),
     row("Database backups", "How far back you can restore yourself. Older backups aren't deleted.", ["Daily, 7 days", "Hourly, 7 days", "Hourly, 30 days", "Custom", "Custom"]),
     row("Support", null, ["Community", "Email", "Priority email", "Slack Connect", "Dedicated, with SLA"]),
   ]],
@@ -376,7 +378,45 @@ const ROW_LINKS = {
 };
 const withLinks = (groups) => groups.map(([group, rows]) => [group, rows.map((item) => ({ ...item, href: item.href ?? ROW_LINKS[item.label] }))]);
 
-export function pricingTable(name) {
+/**
+ * One table, or only some of its rows, so another page can show plan limits
+ * without copying them. `rowLabels` is one label or several joined with " | ".
+ */
+export function pricingTable(name, rowLabels) {
+  const table = fullPricingTable(name);
+  if (!rowLabels) return table;
+  const all = table.groups.flatMap(([, items]) => items);
+  const rows = rowLabels.split(" | ").map((label) => {
+    const matches = all.filter((item) => item.label === label);
+    if (matches.length !== 1) throw new Error(`Pricing table ${name} has ${matches.length} rows labelled ${label}`);
+    return { ...matches[0], href: undefined };
+  });
+  return { ...table, groups: [["", rows]] };
+}
+
+const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/gu, "-").replace(/^-|-$/gu, "");
+
+/**
+ * `{{plan-<table>-<row>-<plan>}}` content variables for every cell of the team
+ * and space tables, such as `{{plan-team-members-pro}}`, so prose quotes the
+ * same value Pricing & Limits shows.
+ */
+export function planVariables() {
+  const variables = { "plan-datacenters": DATACENTERS };
+  for (const name of ["team", "space"]) {
+    const { columns, groups } = fullPricingTable(name);
+    for (const [, rows] of groups) {
+      for (const item of rows) {
+        item.values.forEach((value, index) => {
+          variables[`plan-${name}-${slug(item.label)}-${slug(columns[index].name)}`] = value;
+        });
+      }
+    }
+  }
+  return variables;
+}
+
+function fullPricingTable(name) {
   switch (name) {
     case "plans":
       return { columns: columnsFor(PLANS), groups: withLinks(AT_A_GLANCE) };
@@ -403,8 +443,8 @@ const TAG_TEXT = { beta: "Beta", soon: "Soon", comp: "Complimentary" };
 const md = (value) => String(value).replaceAll("*", String.raw`\*`).replaceAll("|", String.raw`\|`);
 
 /** The same table as plain Markdown, for .md pages, llms-full.txt and MCP. */
-export function pricingTableMarkdown(name) {
-  const { columns, groups } = pricingTable(name);
+export function pricingTableMarkdown(name, rowLabels) {
+  const { columns, groups } = pricingTable(name, rowLabels);
   const head = columns.map((c) => [c.name, c.tag ? `(${TAG_TEXT[c.tag]})` : "", c.note ? `— ${c.note}` : ""].filter(Boolean).join(" "));
   const lines = [`| Item | ${head.map(md).join(" | ")} |`, `| --- | ${columns.map(() => "---").join(" | ")} |`];
   const notes = [];

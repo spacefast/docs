@@ -21,11 +21,11 @@ Use the returned entitlements for feature checks.
 
 ## When a payment fails
 
-Your sites keep serving through a grace period, but you cannot change anything.
+Your Spaces keep serving through a grace period, but you cannot change anything.
 
 | Stage | How long | What visitors get | What you get |
 | --- | --- | --- | --- |
-| Past due | 7 days from the failed payment | Sites serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
+| Past due | 7 days from the failed payment | Spaces serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
 | Suspended | After the grace period ends | Every space serves `402` and the text `This space is paused.` | Reads work. Every write returns `403` with code `tenant_suspended` |
 
 Settle the payment in the billing portal to restore access. API reads remain available in either state.

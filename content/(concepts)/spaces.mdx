@@ -5,11 +5,11 @@ sidebar:
   order: 1
 ---
 
-A Space is one site with a stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
+A Space is what you publish to: one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
 
 ## What a Space is
 
-A Space is one site. It owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
+A Space owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
 
 Ids are `spc_` plus 32 hex characters:
 
@@ -48,7 +48,7 @@ The substring class survives numeric suffixing, so `paypal-2` fails for the same
 
 Dashboard route names are reserved too, and the reservation is scoped to the position. `settings` is refused as a Space slug and accepted as a team slug. Refused as Space slugs: `agents`, `api-keys`, `billing`, `connect`, `domains`, `drop`, `handoffs`, `members`, `new`, `partners`, `resume`, `settings`, `variables`, `webhooks`. The `422` carries a `details.suggestion` you can take as-is.
 
-A retired slug stays taken. After a rename the old slug belongs to that Space forever, and anyone else asking for it gets `422` `slug_unavailable`.
+A rename keeps the old slug reserved for that Space, and only that Space can take it back. Another Space asking for it gets `slug_unavailable`: `422` on create, `409` on rename.
 
 Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getslugavailability).
 
@@ -72,7 +72,7 @@ To move a Space to another team, run `sf spaces transfer <team> --space docs`, o
 
 A new team-owned Space starts at one of two presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/anonymous-and-claim).
 
-| Preset | Who can open the live site |
+| Preset | Who can open the live Space |
 | --- | --- |
 | `private` | The owning team, plus anyone you add |
 | `public` | The owning team, plus anyone on the web |
@@ -91,10 +91,10 @@ Everything after that, including people, share links, passwords, and access requ
 ```bash
 sf spaces ls
 sf spaces ls --team acme --limit 100
-sf spaces get --space docs
+sf spaces inspect --space docs
 ```
 
-`sf spaces get` prints the live runtime state and the current version. `sf status` tells you which Space the current directory is linked to.
+`sf spaces inspect` prints the live runtime state and the current version. `sf status` tells you which Space the current directory is linked to.
 
 </Tab>
 <Tab title="Dashboard">

@@ -20,7 +20,7 @@ What comes back is a `claim` block. Four fields:
 | Field | What it is |
 | --- | --- |
 | `key` | The space key, `sfc_` plus 22 characters. The only credential for this Space |
-| `url` | The site door. Opening it exchanges the key for a private view session |
+| `url` | The live URL with the Space key in `/__/<key>` form. Opening it exchanges the key for a private view session |
 | `claimUrl` | The dashboard claim page, with the key in the URL fragment |
 | `expiresAt` | When the Space stops serving unless someone claims it |
 
@@ -74,7 +74,7 @@ One more difference. An unclaimed Space accepts every file type, but only *serve
 
 Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from.
 
-The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the site while you decide.
+The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the Space while you decide.
 
 </Step>
 <Step title="Sign in">
@@ -114,7 +114,7 @@ After the claim lands the page says **&lt;space&gt; is yours.** and offers a **C
 
 The dashboard says the last row out loud, under **Sharing that stays with this space**. Claiming changes ownership, not who you already shared with.
 
-Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create — a team already at its Space limit answers `space_quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
+Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create — a team already at its Space limit answers `quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
 
 ## Keeping your agent publishing
 
@@ -131,10 +131,10 @@ For the full picture of what a credential like this can and cannot do, see [what
 If the key leaked, replace it:
 
 ```bash
-sf spaces rotate-claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
+sf spaces key rotate --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
 ```
 
-You get a fresh `claim` receipt. The old key, its site door, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
+You get a fresh `claim` receipt. The old key, its `url`, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
 
 ## Checking on it
 

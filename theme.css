@@ -39,17 +39,6 @@
   color: var(--sf-ink);
 }
 
-/* The wordmark beside the mark reads as part of the logo, not a link. */
-[data-blume-header] > a:first-of-type {
-  gap: 0.625rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-
-[data-blume-header] > a:first-of-type > span:last-child {
-  color: var(--blume-muted-foreground);
-}
-
 /*
  * Headings follow the brand's type scale: Medium for display sizes, slight
  * negative tracking, no serif.

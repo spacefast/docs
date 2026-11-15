@@ -82,12 +82,12 @@ Keys created through the API can also be scoped to a single Space instead of the
 
 Some actions are reserved for a signed-in person, at every permission level. No API key, agent grant, or OAuth token can do them:
 
-- Invite a member, cancel or resend an invitation
+- Cancel or resend an invitation
 - Change a member's role
 - Remove a member
 - Accept a team invitation
 
-A credential that tries gets a `403` with `authorization_level_not_allowed`. Do those in the dashboard. Once you accept an invitation there, the device credentials you already approved pick the new team up on their own. More detail in [what agents are allowed to do](/agents/permissions).
+A credential that tries gets a `403` with `authorization_level_not_allowed`. Do those in the dashboard. Creating an invitation is the exception: a credential with the `teams:members.write` scope, such as Agent access, can invite people with [`createTeamInvitation`](/api/reference/teams/createteaminvitation). Once you accept an invitation in the dashboard, the device credentials you already approved pick the new team up on their own. More detail in [what agents are allowed to do](/agents/permissions).
 
 ## Rotate a key
 

@@ -8,7 +8,7 @@ import { pagefind } from "blume/search";
 import { loadPricing, pricingVariables } from "./scripts/pricing.mjs";
 
 import { redirects } from "./redirects.ts";
-import { pricingTableMarkdown } from "./scripts/pricing-next.mjs";
+import { planVariables, pricingTableMarkdown } from "./scripts/pricing-next.mjs";
 
 const deploymentBase = "/docs";
 // Agent guidance for llms.txt, kept as Markdown so Vale lints it with the pages.
@@ -62,8 +62,14 @@ const icons = {
 
 export default defineConfig({
   title: "Spacefast Docs",
-  variables: pricingVariables(await loadPricing({ fixture: new URL("./content/_pricing/document.json", import.meta.url) })),
-  description: "Publish and host the sites your agents build.",
+  variables: {
+    ...pricingVariables(await loadPricing({ fixture: new URL("./content/_pricing/document.json", import.meta.url) })),
+    // Plan values from scripts/pricing-next.mjs, the source Pricing & Limits renders.
+    ...planVariables(),
+  },
+  description: "Publish what your agents build.",
+  // Two links (components/Logo.astro): the mark goes to the Website home at the
+  // origin root, outside the /docs base; "Docs" goes to the Docs home.
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
   // The 2026-10 brand: neutral greys, one green, dark first like the Website.
   // The green is a ground with ink on it, never type on white, so light mode
@@ -168,12 +174,12 @@ export default defineConfig({
   },
   agents: {
     llmsTxt: { details: llmsDetails },
-    // The WP Cloud footer, written out as Markdown for .md pages, llms-full.txt
+    // The upstream reference footer, written out as Markdown for .md pages, llms-full.txt
     // and MCP: without this the component ships as raw JSX.
     markdownComponents: {
-      PricingTable: ({ props }) => pricingTableMarkdown(String(props.table)),
+      PricingTable: ({ props }) => pricingTableMarkdown(String(props.table), props.row ? String(props.row) : undefined),
       WpCloudDocs: ({ props }) =>
-        `Spacefast is built on Automattic's [WP Cloud](https://wp.cloud/). Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) on WP Cloud Docs.`,
+        `Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) in the upstream infrastructure reference.`,
     },
     // The Website publishes Spacefast's agent skill at the site root; a second,
     // generated Docs skill would compete with it.

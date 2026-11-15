@@ -124,8 +124,16 @@ const scanText = (path, text) => {
       report(path, lineForOffset(text, index), "private repository metadata");
     }
   }
+  // The shipped `--confidential` flag and OAuth's lowercase client type
+  // (RFC 6749 §2.1) name a product concept, not a release marker. Only those
+  // exact spellings are blanked, case-sensitively, before the marker scan.
+  const blank = (match) => " ".repeat(match.length);
+  const markerText = text
+    .replace(new RegExp(`(?<![\\w-])--(?:\\[no-\\])?${internalMarkers[3]}(?![\\w-])`, "gu"), blank)
+    .replace(new RegExp(`\\b${internalMarkers[3]} (?:app|client)s?\\b`, "gu"), blank)
+    .toLowerCase();
   for (const marker of internalMarkers) {
-    const index = lower.indexOf(marker.toLowerCase());
+    const index = markerText.indexOf(marker.toLowerCase());
     if (index !== -1) {
       report(path, lineForOffset(text, index), "internal-only marker");
     }

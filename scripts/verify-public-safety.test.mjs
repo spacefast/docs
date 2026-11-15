@@ -30,3 +30,32 @@ test("accepts UUID literals while rejecting a separate short commit hash", () =>
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("rejects release markers in prose but not a CLI flag that spells one", () => {
+  const directory = mkdtempSync(join(tmpdir(), "docs-public-safety-"));
+  try {
+    const fixture = join(directory, "page.md");
+    writeFileSync(
+      fixture,
+      "Pass `--confidential` for a server-side app. A confidential client keeps its secret.\n",
+    );
+    const accepted = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+    assert.equal(accepted.status, 0, accepted.stderr);
+
+    const marker = ["CONFI", "DENTIAL"].join("");
+    for (const line of [
+      `${marker}: draft pricing.`,
+      `<!--${marker}-->`,
+      `--${marker}-- draft pricing`,
+      `${marker} client roadmap for Q3`,
+      `<!--${["INTERNAL", "ONLY"].join(" ")}-->`,
+    ]) {
+      writeFileSync(fixture, `${line}\n`);
+      const rejected = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+      assert.equal(rejected.status, 1, line);
+      assert.match(rejected.stderr, /internal-only marker/u);
+    }
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});

@@ -70,7 +70,7 @@ sf builds ls
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--limit=<value>` | `20` | Maximum builds to return. 1 to 100 |
 | `--cursor=<value>` | none | Pagination cursor from a previous response |
@@ -88,12 +88,12 @@ Newest first, as a table of `ID`, `STATUS`, `INPUT`, `VERSION`, `CREATED`. When 
 
 Build statuses are `waiting_for_source`, `uploading_source`, `queued`, `running`, `succeeded`, `failed`, `canceled`, and `skipped`. The first four are in flight; the rest are terminal. `skipped` means the runner decided not to run the build at all, for example because a newer build for the same branch superseded it.
 
-## sf builds get
+## sf builds inspect
 
 Show a build.
 
 ```text
-sf builds get BUILD
+sf builds inspect BUILD
 ```
 
 ### Arguments
@@ -105,7 +105,7 @@ sf builds get BUILD
 ### Example
 
 ```bash
-sf builds get bld_123
+sf builds inspect bld_123
 ```
 
 ### Output
@@ -171,7 +171,7 @@ sf builds cancel bld_123
 
 ### Output
 
-The same build block `sf builds get` prints, in its new state. `--json` returns `{ build }`.
+The same build block `sf builds inspect` prints, in its new state. `--json` returns `{ build }`.
 
 ## sf builds retry
 
@@ -205,12 +205,12 @@ sf builds retry bld_123
 | --- | --- | --- |
 | `build_retry_requires_terminal_state` | 2 | The build is still running. Wait, or cancel it first |
 
-## sf builds refresh-upload
+## sf builds upload refresh
 
 Refresh source archive upload.
 
 ```text
-sf builds refresh-upload BUILD
+sf builds upload refresh BUILD
 ```
 
 Refreshes the upload instruction for a build waiting on its source archive. Source-archive upload URLs expire after 60 minutes; this mints a new one without creating a new build.
@@ -224,7 +224,7 @@ Refreshes the upload instruction for a build waiting on its source archive. Sour
 ### Example
 
 ```bash
-sf builds refresh-upload bld_123
+sf builds upload refresh bld_123
 ```
 
 ### Output
@@ -246,7 +246,7 @@ Inspects a Space's repository connection and shows the detected app, ranked cand
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--connection-type=connected\|hosted` | `connected` | Repository connection type |
 | `--ref=<value>` | default branch | Git ref to inspect |
