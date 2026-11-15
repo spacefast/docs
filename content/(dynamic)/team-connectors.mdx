@@ -80,7 +80,7 @@ sf connectors connections connect stripe --api-key "$STRIPE_KEY"
 sf connectors connections connect linear --owner personal
 ```
 
-A tool address is `<connectionId>/<tool>`. While exactly one usable account matches, `<connector>/<tool>` also works. Connect a second account and the short form fails with `connection_ambiguous`, so use the connection id.
+A tool address is `<connectionId>/<tool>`. While exactly one usable account matches, `<connector>/<tool>` also works. Connect a second account and the short form fails with `connection_ambiguous`, so use the connection id. No account is the default once a connector has two.
 
 ## Keep a connection working
 
