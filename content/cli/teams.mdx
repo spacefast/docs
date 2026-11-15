@@ -5,7 +5,7 @@ sidebar:
   order: 6
 ---
 
-Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations. The CLI has no command to send an invitation: send it from the dashboard, or through an agent with Agent access, which calls [`createTeamInvitation`](/api/reference/teams/createteaminvitation). Other membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
+Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations. `sf teams members invite` sends invitations with a credential that has `teams:members.write`, such as `sf login` with Agent access. Other membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
 A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
 
@@ -177,6 +177,39 @@ sf teams members ls
 ### Output
 
 A table of `USER`, `NAME`, `ROLE`, `MEMBER ID`. `--json` returns `{ data: [...] }`.
+
+## sf teams members invite
+
+Invite one or more people to a team.
+
+```text
+sf teams members invite EMAIL... [--role owner|admin|member] [-T <team>]
+```
+
+Sends one invitation per address, up to 50 at a time, through [`createTeamInvitation`](/api/reference/teams/createteaminvitation). It needs a credential with `teams:members.write`, such as `sf login` with Agent access, and your team role decides which roles you can grant. Adding a member requires [Pro](/pricing).
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<emails>` | required | One or more email addresses |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams members invite jane@example.com alex@example.com --role member
+```
+
+### Output
+
+One `Invited <email> as <role>` line per address. If any address fails, the command exits with that error.
 
 ## sf teams members rm
 
