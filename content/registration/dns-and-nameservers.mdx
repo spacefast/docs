@@ -84,6 +84,8 @@ Your website and your email are separate. The records Spacefast writes for your 
 
 You can delegate the whole domain to another DNS provider (Cloudflare, Route 53, your mail host's DNS) by changing its nameservers.
 
+First copy your records to the new provider, or the site and email stop working when the nameservers change. Export them with `sf domains dns export yourgroovydomain.com`, import the file at the new provider, and check that every record arrived, including MX, SPF, DKIM, and DMARC. Then change the nameservers:
+
 ```bash
 sf domains nameservers set yourgroovydomain.com ns1.example-dns.com,ns2.example-dns.com
 ```

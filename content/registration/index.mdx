@@ -31,9 +31,9 @@ sf domains search "a ceramics studio in Porto"
 sf domains registration purchase yourgroovydomain.com
 ```
 
-On its own, the purchase command holds the names, shows the total, and prints a link where an owner or admin finishes the purchase. Nothing is charged yet. Pass `--contact-file contact.json` to save new owner details on the way.
+The purchase command holds the names for 24 hours, shows the total, and prints a link. Open it to pay: nothing is charged and nothing is registered until someone with purchasing power pays there. Pass `--contact-file contact.json` to save new owner details on the way.
 
-To pay in the same step, add the total you agreed to: `--expect-total 12.00`. If you can pay for the team, the saved payment method is charged right away. If the total before tax isn't exactly that, the purchase is refused and nothing is charged. See the [CLI reference](/cli/reference) for every flag.
+To make sure the price is what you agreed to, add `--expect-total 12.00`. If the total before tax isn't exactly that, the purchase is refused and nothing is held. You still pay at the printed link. See the [CLI reference](/cli/reference) for every flag.
 
 </Tab>
 <Tab title="Agents">
@@ -99,7 +99,13 @@ Browsers load `.app`, `.dev`, and `.page` domains only over HTTPS. The rule is b
 
 ## Transfers
 
-Moving a domain registration to Spacefast from another registrar, or from Spacefast to another registrar, isn't available. To use a domain registered elsewhere, keep it where it is and [connect it](/domains).
+Moving a domain registration to Spacefast from another registrar, or from Spacefast to another registrar, isn't available yet. To use a domain registered elsewhere, keep it where it is and [connect it](/domains).
+
+When transfers open, they follow ICANN's rules for every registrar:
+
+- **60-day lock after registration.** A domain can't move to another registrar for 60 days after it's registered or transferred, and for 60 days after its owner's name, organization, or email changes.
+- **Only team owners and admins can transfer a domain out**, and an agent asks you first.
+- **The authorization code goes to the owner's email address**, never to the person who asked for it.
 
 ## Cancelling
 

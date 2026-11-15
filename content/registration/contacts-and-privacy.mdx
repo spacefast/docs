@@ -38,7 +38,8 @@ The file takes `firstName`, `lastName`, `organization`, `address1`, `address2`, 
 Saved owner details belong to the person who saved them, not to the whole team. That matters:
 
 - **Only that person can change the name, organization, or email address** on them. Anyone who can buy domains for the team can fix the street address or phone number.
-- **Changes apply to future purchases.** Domains already registered keep the details they were registered with.
+- **Changes reach the registry.** Editing saved details updates every domain registered to them. To register a domain to other saved details, its owner sends `contactId` with `updateDomainRegistration`.
+- **A new owner locks the domain for 60 days.** Changing the owner's name, organization, or email is a change of owner under ICANN's rules, so the registrar keeps the domain from moving to another registrar for 60 days.
 - **API keys can't save owner details.** An owner is always a person, so a team API key gets `domain_contact_requires_person`. Sign in as a person, or save the details in the dashboard first.
 
 An agent buying a domain for you should ask you for these details and never invent them. To keep them out of the chat, save them yourself (in the dashboard's domain search or with `sf domains contacts add`) and let the agent reuse the saved contact.
@@ -49,6 +50,8 @@ ICANN requires registrars to confirm the owner's email address. If you get an em
 ## Privacy protection
 
 Privacy protection is on by default for every domain you register through Spacefast, at no extra cost. Public WHOIS and RDAP lookups don't show your name, address, email, or phone number. Those fields come back redacted.
+
+You can turn privacy off on the domain's **Registration** card (or with `privacySetting` on the API). The owner details then become public in WHOIS. Turn it off only when you want them listed, for example for a business that publishes its address anyway.
 
 Your details still exist, and in a few cases they can be shared:
 
