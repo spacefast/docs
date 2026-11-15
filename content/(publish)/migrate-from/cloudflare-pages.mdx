@@ -22,7 +22,7 @@ Your `_redirects` and `_headers` files publish with your pages, and Spacefast re
     sf env import .env --from cloudflare --space my-site
     ```
 
-    A line with an empty value fails the import. Set those values with `sf env set NAME --value-from-stdin`. See [Environment variables](/environment-variables).
+    A line with an empty value fails the import, and empty values aren't supported. Remove the line, or give the variable a real value. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
     Run `sf publish --space my-site` in the project and let Spacefast build it, or publish the output folder you deploy today.

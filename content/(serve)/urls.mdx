@@ -94,4 +94,4 @@ Any hostname ending in `.space.fast` or `.view.fast` is refused as a custom doma
 
 ## Hostnames that do not serve
 
-A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell "nothing here yet" apart from a missing page on a published Space.
+A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell "nothing here yet" apart from a missing page on a published Space. A Space removed under the strictest safety category sends the same response, so the header alone does not prove the Space was never published.

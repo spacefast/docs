@@ -92,7 +92,7 @@ Delete a version. Aliases: `sf versions remove`, `sf versions delete`.
 sf versions rm [VERSION]
 ```
 
-Deletes a version. It leaves your version list and its version URL serves a tombstone. Spacefast keeps the record and its files. A version a channel points at cannot be deleted; promote another version first.
+Deletes a version. It leaves your version list and its version URL serves a tombstone. Spacefast keeps the record and its files on the server, and nobody can open them through the version URL. A version a channel points at cannot be deleted; promote another version first.
 
 ### Arguments
 

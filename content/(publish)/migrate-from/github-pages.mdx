@@ -21,7 +21,7 @@ Connect the repository and Spacefast builds it on every push to the production b
     Pushes to the production branch publish. See [Publish from Git](/git) for every flag.
   </Step>
   <Step title="Let it build">
-    Spacefast detects Jekyll from `_config.yml`, `_config.yaml`, or `_config.toml`, builds the site, and publishes `_site`, or the `destination` your config names. Commit a `Gemfile` that lists the `jekyll` gem, because the build command runs through `bundle exec`.
+    Spacefast detects Jekyll from `_config.yml`, `_config.yaml`, or `_config.toml`, builds the site, and publishes `_site`, or the `destination` your config names. A project site built with `baseurl: /repo` links its assets under `/repo/`, but a Space serves from the root, so set `baseurl: ""` and set `url` to the new address. Commit a `Gemfile` that lists the `jekyll` gem, because the build command runs through `bundle exec`.
   </Step>
   <Step title="Choose who can open it">
     A team's new Spaces start private unless the team changed its default. Make the Space public, or share it with a link, in [Spacefast Share](/share).
