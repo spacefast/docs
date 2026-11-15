@@ -209,7 +209,9 @@ sf teams members invite jane@example.com alex@example.com --role member
 
 ### Output
 
-One `Invited <email> as <role>` line per address. If any address fails, the command exits with that error.
+One address prints `Invited <email> as <role>` and the invitation ID. Several print how many people were invited. `--json` returns `{ invitation }` or `{ invitations }`.
+
+The invitations go out together. If any fail, the command exits with the error, or with "Multiple invitation requests failed.", and doesn't list the ones that went out. Run `sf teams invitations ls` to see which were sent. Sending again to an address with a pending invitation fails with `invitation_already_exists`, so a rerun only invites the addresses that failed. Resend an existing invitation from the dashboard under **Members → Pending**.
 
 ## sf teams members rm
 
