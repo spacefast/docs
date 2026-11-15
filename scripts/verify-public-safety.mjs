@@ -124,8 +124,15 @@ const scanText = (path, text) => {
       report(path, lineForOffset(text, index), "private repository metadata");
     }
   }
+  // OAuth's client type (RFC 6749 §2.1) and shipped CLI flags that spell a
+  // marker name a product concept, not a release marker, so they are blanked
+  // before the marker scan.
+  const blank = (match) => " ".repeat(match.length);
+  const markerText = lower
+    .replace(/--[a-z][a-z-]*/gu, blank)
+    .replace(new RegExp(`\\b${internalMarkers[3]} (?:app|client)s?\\b`, "gu"), blank);
   for (const marker of internalMarkers) {
-    const index = lower.indexOf(marker.toLowerCase());
+    const index = markerText.indexOf(marker.toLowerCase());
     if (index !== -1) {
       report(path, lineForOffset(text, index), "internal-only marker");
     }

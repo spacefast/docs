@@ -20,8 +20,8 @@ Tell your agent to pick the smallest lane that does the job:
 $ npm install -g spacefast
 $ sf COMMAND
 running command...
-$ sf (--version)
-spacefast/0.8.1
+$ sf (--version|-v)
+spacefast/0.9.0
 $ sf --help [COMMAND]
 USAGE
   $ sf COMMAND
@@ -34,12 +34,12 @@ These flags are available on most commands:
 
 ```text
 SPACE SELECTION FLAGS
-  -o, --team=<value>   [env: SPACEFAST_TEAM] Team slug, ID, or name.
-      --space=<value>  [env: SPACEFAST_SPACE] Space ID, live URL, domain, or slug.
+  -T, --team=<TEAM>    [env: SPACEFAST_TEAM] Team slug, ID, or name.
+      --space=<SPACE>  [env: SPACEFAST_SPACE] Space ID, live URL, domain, or slug.
 
 AUTHENTICATION FLAGS
-  --claim-token=<value>  [env: SPACEFAST_CLAIM_TOKEN] Anonymous space claim token.
-  --token=<value>        [env: SPACEFAST_TOKEN] API key for non-interactive auth.
+  --claim-token=<value>  [env: SPACEFAST_CLAIM_TOKEN] Space key (sfc_…) or claim link; - reads stdin.
+  --token=<TOKEN>        [env: SPACEFAST_TOKEN] API key for non-interactive auth.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -48,39 +48,41 @@ GLOBAL FLAGS
 ## Commands
 
 - [`sf access`](#sf-access)
-- [`sf access logout-all`](#sf-access-logout-all)
+- [`sf access sessions revoke`](#sf-access-sessions-revoke)
 - [`sf activity`](#sf-activity)
 - [`sf agents init [DIRECTORY]`](#sf-agents-init-directory)
 - [`sf analytics`](#sf-analytics)
-- [`sf api METHODORPATH [PATH]`](#sf-api-methodorpath-path)
+- [`sf api METHOD [PATH]`](#sf-api-method-path)
 - [`sf api-keys`](#sf-api-keys)
 - [`sf api-keys create`](#sf-api-keys-create)
 - [`sf api-keys list`](#sf-api-keys-list)
-- [`sf api-keys revoke ID`](#sf-api-keys-revoke-id)
+- [`sf api-keys revoke KEY`](#sf-api-keys-revoke-key)
 - [`sf apply`](#sf-apply)
 - [`sf auth`](#sf-auth)
 - [`sf auth as NAME`](#sf-auth-as-name)
 - [`sf auth reset`](#sf-auth-reset)
 - [`sf autocomplete [SHELL]`](#sf-autocomplete-shell)
+- [`sf billing card`](#sf-billing-card)
 - [`sf build [DIR]`](#sf-build-dir)
 - [`sf builds cancel BUILD`](#sf-builds-cancel-build)
-- [`sf builds detect`](#sf-builds-detect)
-- [`sf builds get BUILD`](#sf-builds-get-build)
+- [`sf builds detect [DIR]`](#sf-builds-detect-dir)
+- [`sf builds inspect BUILD`](#sf-builds-inspect-build)
+- [`sf builds list`](#sf-builds-list)
 - [`sf builds logs BUILD`](#sf-builds-logs-build)
-- [`sf builds ls`](#sf-builds-ls)
-- [`sf builds refresh-upload BUILD`](#sf-builds-refresh-upload-build)
 - [`sf builds retry BUILD`](#sf-builds-retry-build)
+- [`sf builds upload refresh BUILD`](#sf-builds-upload-refresh-build)
 - [`sf channels`](#sf-channels)
 - [`sf channels history [NAME]`](#sf-channels-history-name)
-- [`sf channels ls`](#sf-channels-ls)
+- [`sf channels list`](#sf-channels-list)
 - [`sf channels set NAME`](#sf-channels-set-name)
+- [`sf client`](#sf-client)
 - [`sf comments`](#sf-comments)
 - [`sf comments create`](#sf-comments-create)
 - [`sf comments export`](#sf-comments-export)
-- [`sf comments get COMMENT`](#sf-comments-get-comment)
+- [`sf comments inspect COMMENT`](#sf-comments-inspect-comment)
 - [`sf comments list`](#sf-comments-list)
-- [`sf comments mark-read COMMENT`](#sf-comments-mark-read-comment)
 - [`sf comments react COMMENT EMOJI`](#sf-comments-react-comment-emoji)
+- [`sf comments read COMMENT`](#sf-comments-read-comment)
 - [`sf comments reopen COMMENT`](#sf-comments-reopen-comment)
 - [`sf comments reply COMMENT`](#sf-comments-reply-comment)
 - [`sf comments resolve COMMENT`](#sf-comments-resolve-comment)
@@ -88,35 +90,56 @@ GLOBAL FLAGS
 - [`sf comments settings set`](#sf-comments-settings-set)
 - [`sf comments unreact COMMENT EMOJI`](#sf-comments-unreact-comment-emoji)
 - [`sf connectors`](#sf-connectors)
-- [`sf connectors add TARGET`](#sf-connectors-add-target)
 - [`sf connectors bind ROLE CONNECTION`](#sf-connectors-bind-role-connection)
 - [`sf connectors bindings`](#sf-connectors-bindings)
 - [`sf connectors connections`](#sf-connectors-connections)
-- [`sf connectors connections add CONNECTOR`](#sf-connectors-connections-add-connector)
-- [`sf connectors connections edit CONNECTION`](#sf-connectors-connections-edit-connection)
+- [`sf connectors connections connect CONNECTOR`](#sf-connectors-connections-connect-connector)
+- [`sf connectors connections disconnect CONNECTION`](#sf-connectors-connections-disconnect-connection)
 - [`sf connectors connections health CONNECTION`](#sf-connectors-connections-health-connection)
-- [`sf connectors connections ls`](#sf-connectors-connections-ls)
+- [`sf connectors connections inspect CONNECTION`](#sf-connectors-connections-inspect-connection)
+- [`sf connectors connections list`](#sf-connectors-connections-list)
 - [`sf connectors connections reconnect CONNECTION`](#sf-connectors-connections-reconnect-connection)
 - [`sf connectors connections refresh CONNECTION`](#sf-connectors-connections-refresh-connection)
-- [`sf connectors connections rm CONNECTION`](#sf-connectors-connections-rm-connection)
+- [`sf connectors connections update CONNECTION`](#sf-connectors-connections-update-connection)
+- [`sf connectors create TARGET`](#sf-connectors-create-target)
+- [`sf connectors delete CONNECTOR`](#sf-connectors-delete-connector)
 - [`sf connectors detect URL`](#sf-connectors-detect-url)
-- [`sf connectors ls`](#sf-connectors-ls)
+- [`sf connectors inspect CONNECTOR`](#sf-connectors-inspect-connector)
+- [`sf connectors list`](#sf-connectors-list)
 - [`sf connectors policies`](#sf-connectors-policies)
 - [`sf connectors policies add PATTERN`](#sf-connectors-policies-add-pattern)
 - [`sf connectors policies explain ADDRESS`](#sf-connectors-policies-explain-address)
-- [`sf connectors policies ls`](#sf-connectors-policies-ls)
-- [`sf connectors policies rm RULE`](#sf-connectors-policies-rm-rule)
+- [`sf connectors policies list`](#sf-connectors-policies-list)
+- [`sf connectors policies remove RULE`](#sf-connectors-policies-remove-rule)
 - [`sf connectors policies set RULE`](#sf-connectors-policies-set-rule)
-- [`sf connectors rm CONNECTOR`](#sf-connectors-rm-connector)
+- [`sf connectors public-serving`](#sf-connectors-public-serving)
+- [`sf connectors public-serving set ROLE`](#sf-connectors-public-serving-set-role)
+- [`sf connectors roles`](#sf-connectors-roles)
+- [`sf connectors roles list`](#sf-connectors-roles-list)
+- [`sf connectors roles remove ROLE`](#sf-connectors-roles-remove-role)
+- [`sf connectors roles reset ROLE`](#sf-connectors-roles-reset-role)
+- [`sf connectors roles set ROLE`](#sf-connectors-roles-set-role)
 - [`sf connectors run [CODE]`](#sf-connectors-run-code)
-- [`sf connectors run get RUN`](#sf-connectors-run-get-run)
+- [`sf connectors run inspect RUN`](#sf-connectors-run-inspect-run)
 - [`sf connectors run list`](#sf-connectors-run-list)
 - [`sf connectors run resume RUN`](#sf-connectors-run-resume-run)
+- [`sf connectors search [QUERY]`](#sf-connectors-search-query)
+- [`sf connectors serving`](#sf-connectors-serving)
+- [`sf connectors serving approve REQUEST`](#sf-connectors-serving-approve-request)
+- [`sf connectors serving create ROLE`](#sf-connectors-serving-create-role)
+- [`sf connectors serving deny REQUEST`](#sf-connectors-serving-deny-request)
+- [`sf connectors serving inspect REQUEST`](#sf-connectors-serving-inspect-request)
+- [`sf connectors serving list`](#sf-connectors-serving-list)
+- [`sf connectors serving set`](#sf-connectors-serving-set)
 - [`sf connectors unbind ROLE`](#sf-connectors-unbind-role)
+- [`sf connectors update CONNECTOR`](#sf-connectors-update-connector)
+- [`sf connectors visitors`](#sf-connectors-visitors)
+- [`sf connectors visitors list`](#sf-connectors-visitors-list)
+- [`sf connectors visitors revoke USER ROLE`](#sf-connectors-visitors-revoke-user-role)
 - [`sf content dashboard [TARGET]`](#sf-content-dashboard-target)
 - [`sf continue`](#sf-continue)
 - [`sf crons`](#sf-crons)
-- [`sf crons ls`](#sf-crons-ls)
+- [`sf crons list`](#sf-crons-list)
 - [`sf crons run TARGET`](#sf-crons-run-target)
 - [`sf db [TARGET]`](#sf-db-target)
 - [`sf db console [TARGET]`](#sf-db-console-target)
@@ -127,44 +150,55 @@ GLOBAL FLAGS
 - [`sf design`](#sf-design)
 - [`sf design generate`](#sf-design-generate)
 - [`sf dev`](#sf-dev)
-- [`sf dev run-many`](#sf-dev-run-many)
+- [`sf dev instances`](#sf-dev-instances)
 - [`sf docs [QUERY]`](#sf-docs-query)
 - [`sf doctor`](#sf-doctor)
 - [`sf domains`](#sf-domains)
 - [`sf domains add HOSTNAME`](#sf-domains-add-hostname)
 - [`sf domains check DOMAIN`](#sf-domains-check-domain)
+- [`sf domains connect`](#sf-domains-connect)
+- [`sf domains connect access DOMAIN`](#sf-domains-connect-access-domain)
+- [`sf domains connect disconnect LINK`](#sf-domains-connect-disconnect-link)
+- [`sf domains connect links`](#sf-domains-connect-links)
+- [`sf domains connect list DOMAIN`](#sf-domains-connect-list-domain)
+- [`sf domains connect remove DOMAIN TEMPLATE`](#sf-domains-connect-remove-domain-template)
+- [`sf domains connect revoke DOMAIN AUTHORIZATION`](#sf-domains-connect-revoke-domain-authorization)
 - [`sf domains contacts`](#sf-domains-contacts)
 - [`sf domains contacts add`](#sf-domains-contacts-add)
-- [`sf domains contacts ls`](#sf-domains-contacts-ls)
+- [`sf domains contacts list`](#sf-domains-contacts-list)
+- [`sf domains delete DOMAIN`](#sf-domains-delete-domain)
 - [`sf domains diagnostics DOMAIN`](#sf-domains-diagnostics-domain)
 - [`sf domains dns`](#sf-domains-dns)
 - [`sf domains dns add DOMAIN`](#sf-domains-dns-add-domain)
 - [`sf domains dns batch DOMAIN`](#sf-domains-dns-batch-domain)
 - [`sf domains dns capabilities DOMAIN`](#sf-domains-dns-capabilities-domain)
 - [`sf domains dns export DOMAIN`](#sf-domains-dns-export-domain)
-- [`sf domains dns ls DOMAIN`](#sf-domains-dns-ls-domain)
+- [`sf domains dns list DOMAIN`](#sf-domains-dns-list-domain)
 - [`sf domains dns refresh DOMAIN`](#sf-domains-dns-refresh-domain)
+- [`sf domains dns remove DOMAIN RECORD`](#sf-domains-dns-remove-domain-record)
 - [`sf domains dns replace DOMAIN`](#sf-domains-dns-replace-domain)
-- [`sf domains dns rm DOMAIN RECORD`](#sf-domains-dns-rm-domain-record)
 - [`sf domains dns update DOMAIN RECORD`](#sf-domains-dns-update-domain-record)
-- [`sf domains ls`](#sf-domains-ls)
+- [`sf domains list`](#sf-domains-list)
 - [`sf domains nameservers DOMAIN`](#sf-domains-nameservers-domain)
 - [`sf domains nameservers set DOMAIN NAMESERVERS`](#sf-domains-nameservers-set-domain-nameservers)
 - [`sf domains registration DOMAIN`](#sf-domains-registration-domain)
 - [`sf domains registration purchase DOMAIN... [flags]`](#sf-domains-registration-purchase-domain-flags)
+- [`sf domains registration relock DOMAIN`](#sf-domains-registration-relock-domain)
 - [`sf domains registration renew DOMAIN`](#sf-domains-registration-renew-domain)
-- [`sf domains rm DOMAIN`](#sf-domains-rm-domain)
+- [`sf domains registration transfer-in DOMAIN`](#sf-domains-registration-transfer-in-domain)
+- [`sf domains registration transfer-out DOMAIN`](#sf-domains-registration-transfer-out-domain)
+- [`sf domains remove DOMAIN`](#sf-domains-remove-domain)
 - [`sf domains search [QUERY]`](#sf-domains-search-query)
 - [`sf domains update DOMAIN`](#sf-domains-update-domain)
 - [`sf env`](#sf-env)
-- [`sf env export-template [DIR]`](#sf-env-export-template-dir)
 - [`sf env import FILE`](#sf-env-import-file)
-- [`sf env ls`](#sf-env-ls)
+- [`sf env list`](#sf-env-list)
 - [`sf env pull [FILE]`](#sf-env-pull-file)
-- [`sf env rm NAME`](#sf-env-rm-name)
+- [`sf env remove NAME`](#sf-env-remove-name)
 - [`sf env set NAME [VALUE]`](#sf-env-set-name-value)
+- [`sf env template [DIR]`](#sf-env-template-dir)
 - [`sf feedback`](#sf-feedback)
-- [`sf feedback get REF`](#sf-feedback-get-ref)
+- [`sf feedback inspect REF`](#sf-feedback-inspect-ref)
 - [`sf feedback list`](#sf-feedback-list)
 - [`sf fetch [PATH]`](#sf-fetch-path)
 - [`sf functions`](#sf-functions)
@@ -175,7 +209,7 @@ GLOBAL FLAGS
 - [`sf git github`](#sf-git-github)
 - [`sf git github installations`](#sf-git-github-installations)
 - [`sf git github repos [INSTALLATION]`](#sf-git-github-repos-installation)
-- [`sf git ls`](#sf-git-ls)
+- [`sf git inspect`](#sf-git-inspect)
 - [`sf git origin`](#sf-git-origin)
 - [`sf git sync`](#sf-git-sync)
 - [`sf git update`](#sf-git-update)
@@ -191,43 +225,55 @@ GLOBAL FLAGS
 - [`sf mcp install`](#sf-mcp-install)
 - [`sf mcp proxy`](#sf-mcp-proxy)
 - [`sf migrate URL`](#sf-migrate-url)
+- [`sf oauth-apps`](#sf-oauth-apps)
+- [`sf oauth-apps create`](#sf-oauth-apps-create)
+- [`sf oauth-apps delete APP`](#sf-oauth-apps-delete-app)
+- [`sf oauth-apps inspect APP`](#sf-oauth-apps-inspect-app)
+- [`sf oauth-apps list`](#sf-oauth-apps-list)
+- [`sf oauth-apps secret rotate APP`](#sf-oauth-apps-secret-rotate-app)
+- [`sf oauth-apps update APP`](#sf-oauth-apps-update-app)
 - [`sf open [TARGET]`](#sf-open-target)
-- [`sf operations [ID]`](#sf-operations-id)
+- [`sf operations [OPERATION]`](#sf-operations-operation)
 - [`sf pages`](#sf-pages)
 - [`sf pages pull [TARGET]`](#sf-pages-pull-target)
 - [`sf pages validate`](#sf-pages-validate)
 - [`sf plugins`](#sf-plugins)
 - [`sf profiles`](#sf-profiles)
-- [`sf profiles rm NAME`](#sf-profiles-rm-name)
+- [`sf profiles remove NAME`](#sf-profiles-remove-name)
 - [`sf profiles set NAME`](#sf-profiles-set-name)
 - [`sf profiles use NAME`](#sf-profiles-use-name)
 - [`sf promote [VERSION]`](#sf-promote-version)
 - [`sf publish [DIR]`](#sf-publish-dir)
+- [`sf purchases cancel ID`](#sf-purchases-cancel-id)
+- [`sf purchases confirm ID`](#sf-purchases-confirm-id)
+- [`sf purchases inspect ID`](#sf-purchases-inspect-id)
 - [`sf redeploy [BUILD]`](#sf-redeploy-build)
+- [`sf resolve [REF]`](#sf-resolve-ref)
 - [`sf rollback VERSION`](#sf-rollback-version)
 - [`sf routing`](#sf-routing)
 - [`sf routing compute`](#sf-routing-compute)
 - [`sf routing inspect`](#sf-routing-inspect)
 - [`sf rules`](#sf-rules)
 - [`sf rules add`](#sf-rules-add)
-- [`sf rules ls`](#sf-rules-ls)
+- [`sf rules list`](#sf-rules-list)
 - [`sf rules pause`](#sf-rules-pause)
+- [`sf rules remove NAME`](#sf-rules-remove-name)
 - [`sf rules resume`](#sf-rules-resume)
-- [`sf rules rm NAME`](#sf-rules-rm-name)
 - [`sf rules test URL`](#sf-rules-test-url)
 - [`sf rules validate`](#sf-rules-validate)
 - [`sf runtime`](#sf-runtime)
 - [`sf runtime status`](#sf-runtime-status)
+- [`sf search`](#sf-search)
 - [`sf sell activate`](#sf-sell-activate)
 - [`sf sell demo`](#sf-sell-demo)
 - [`sf sell onboard`](#sf-sell-onboard)
-- [`sf sell orders get SESSIONID`](#sf-sell-orders-get-sessionid)
-- [`sf sell orders ls`](#sf-sell-orders-ls)
-- [`sf sell orders resend SESSIONID`](#sf-sell-orders-resend-sessionid)
-- [`sf sell orders ship SESSIONID`](#sf-sell-orders-ship-sessionid)
+- [`sf sell orders inspect ORDER`](#sf-sell-orders-inspect-order)
+- [`sf sell orders list`](#sf-sell-orders-list)
+- [`sf sell orders resend ORDER`](#sf-sell-orders-resend-order)
+- [`sf sell orders ship ORDER`](#sf-sell-orders-ship-order)
 - [`sf sell products archive KEY`](#sf-sell-products-archive-key)
 - [`sf sell products create`](#sf-sell-products-create)
-- [`sf sell products ls`](#sf-sell-products-ls)
+- [`sf sell products list`](#sf-sell-products-list)
 - [`sf sell products update KEY`](#sf-sell-products-update-key)
 - [`sf sell refresh`](#sf-sell-refresh)
 - [`sf sell status`](#sf-sell-status)
@@ -236,42 +282,43 @@ GLOBAL FLAGS
 - [`sf share`](#sf-share)
 - [`sf share check`](#sf-share-check)
 - [`sf share grant`](#sf-share-grant)
-- [`sf share grant edit ID`](#sf-share-grant-edit-id)
+- [`sf share grant update GRANT`](#sf-share-grant-update-grant)
 - [`sf share identity`](#sf-share-identity)
 - [`sf share identity create`](#sf-share-identity-create)
 - [`sf share identity grant`](#sf-share-identity-grant)
-- [`sf share identity ls`](#sf-share-identity-ls)
+- [`sf share identity list`](#sf-share-identity-list)
 - [`sf share identity revoke CONNECTION`](#sf-share-identity-revoke-connection)
 - [`sf share identity update CONNECTION`](#sf-share-identity-update-connection)
 - [`sf share link`](#sf-share-link)
-- [`sf share link copy ID`](#sf-share-link-copy-id)
+- [`sf share link copy LINK`](#sf-share-link-copy-link)
 - [`sf share link create`](#sf-share-link-create)
-- [`sf share link edit ID`](#sf-share-link-edit-id)
-- [`sf share link ls`](#sf-share-link-ls)
-- [`sf share link revoke ID`](#sf-share-link-revoke-id)
+- [`sf share link list`](#sf-share-link-list)
+- [`sf share link revoke LINK`](#sf-share-link-revoke-link)
+- [`sf share link update LINK`](#sf-share-link-update-link)
 - [`sf share list`](#sf-share-list)
 - [`sf share password`](#sf-share-password)
 - [`sf share password create`](#sf-share-password-create)
-- [`sf share password ls`](#sf-share-password-ls)
-- [`sf share password revoke ID`](#sf-share-password-revoke-id)
-- [`sf share password rotate ID`](#sf-share-password-rotate-id)
+- [`sf share password list`](#sf-share-password-list)
+- [`sf share password revoke CREDENTIAL`](#sf-share-password-revoke-credential)
+- [`sf share password rotate CREDENTIAL`](#sf-share-password-rotate-credential)
 - [`sf share people`](#sf-share-people)
-- [`sf share people edit PERSON`](#sf-share-people-edit-person)
 - [`sf share people invite EMAIL`](#sf-share-people-invite-email)
-- [`sf share people ls`](#sf-share-people-ls)
+- [`sf share people list`](#sf-share-people-list)
 - [`sf share people remove PERSON`](#sf-share-people-remove-person)
 - [`sf share people resend PERSON`](#sf-share-people-resend-person)
+- [`sf share people update PERSON`](#sf-share-people-update-person)
 - [`sf share request`](#sf-share-request)
-- [`sf share request approve ID`](#sf-share-request-approve-id)
-- [`sf share request deny ID`](#sf-share-request-deny-id)
-- [`sf share request ls`](#sf-share-request-ls)
-- [`sf share revoke ID`](#sf-share-revoke-id)
+- [`sf share request approve REQUEST`](#sf-share-request-approve-request)
+- [`sf share request deny REQUEST`](#sf-share-request-deny-request)
+- [`sf share request list`](#sf-share-request-list)
+- [`sf share revoke GRANT`](#sf-share-revoke-grant)
 - [`sf share token`](#sf-share-token)
 - [`sf share token create`](#sf-share-token-create)
-- [`sf share token ls`](#sf-share-token-ls)
-- [`sf share token revoke ID`](#sf-share-token-revoke-id)
-- [`sf share token rotate ID`](#sf-share-token-rotate-id)
+- [`sf share token list`](#sf-share-token-list)
+- [`sf share token revoke CREDENTIAL`](#sf-share-token-revoke-credential)
+- [`sf share token rotate CREDENTIAL`](#sf-share-token-rotate-credential)
 - [`sf skills`](#sf-skills)
+- [`sf skills install`](#sf-skills-install)
 - [`sf skills remove`](#sf-skills-remove)
 - [`sf skills status`](#sf-skills-status)
 - [`sf source archive`](#sf-source-archive)
@@ -280,41 +327,41 @@ GLOBAL FLAGS
 - [`sf source cat PATH`](#sf-source-cat-path)
 - [`sf source commits apply`](#sf-source-commits-apply)
 - [`sf source commits create`](#sf-source-commits-create)
-- [`sf source commits get SHA`](#sf-source-commits-get-sha)
-- [`sf source commits ls`](#sf-source-commits-ls)
+- [`sf source commits inspect SHA`](#sf-source-commits-inspect-sha)
+- [`sf source commits list`](#sf-source-commits-list)
 - [`sf source diff`](#sf-source-diff)
 - [`sf source import`](#sf-source-import)
-- [`sf source ls`](#sf-source-ls)
+- [`sf source list`](#sf-source-list)
 - [`sf source merge SOURCE TARGET`](#sf-source-merge-source-target)
 - [`sf source search PATTERN`](#sf-source-search-pattern)
 - [`sf source tags create NAME`](#sf-source-tags-create-name)
-- [`sf source tags ls`](#sf-source-tags-ls)
+- [`sf source tags list`](#sf-source-tags-list)
 - [`sf spaces`](#sf-spaces)
-- [`sf spaces add`](#sf-spaces-add)
 - [`sf spaces archive`](#sf-spaces-archive)
 - [`sf spaces check NAME`](#sf-spaces-check-name)
 - [`sf spaces claim`](#sf-spaces-claim)
+- [`sf spaces create`](#sf-spaces-create)
+- [`sf spaces delete`](#sf-spaces-delete)
 - [`sf spaces download`](#sf-spaces-download)
 - [`sf spaces duplicate`](#sf-spaces-duplicate)
-- [`sf spaces get`](#sf-spaces-get)
-- [`sf spaces ls`](#sf-spaces-ls)
+- [`sf spaces inspect`](#sf-spaces-inspect)
+- [`sf spaces key rotate`](#sf-spaces-key-rotate)
+- [`sf spaces list`](#sf-spaces-list)
 - [`sf spaces restore`](#sf-spaces-restore)
-- [`sf spaces rm`](#sf-spaces-rm)
-- [`sf spaces rotate-claim`](#sf-spaces-rotate-claim)
 - [`sf spaces transfer TEAM`](#sf-spaces-transfer-team)
 - [`sf spaces update`](#sf-spaces-update)
 - [`sf status`](#sf-status)
 - [`sf storage [TARGET]`](#sf-storage-target)
-- [`sf storage get ID`](#sf-storage-get-id)
-- [`sf storage ls [TARGET]`](#sf-storage-ls-target)
+- [`sf storage delete [OBJECT]`](#sf-storage-delete-object)
+- [`sf storage download OBJECT`](#sf-storage-download-object)
+- [`sf storage list [TARGET]`](#sf-storage-list-target)
 - [`sf storage put FILE`](#sf-storage-put-file)
-- [`sf storage rm [ID]`](#sf-storage-rm-id)
 - [`sf switch [TEAM]`](#sf-switch-team)
 - [`sf tags`](#sf-tags)
 - [`sf tags apply FILE`](#sf-tags-apply-file)
 - [`sf tags debug`](#sf-tags-debug)
 - [`sf tags releases`](#sf-tags-releases)
-- [`sf tags releases get ENVIRONMENT`](#sf-tags-releases-get-environment)
+- [`sf tags releases inspect ENVIRONMENT`](#sf-tags-releases-inspect-environment)
 - [`sf tags releases rollback ENVIRONMENT REVISION`](#sf-tags-releases-rollback-environment-revision)
 - [`sf tags releases set ENVIRONMENT REVISION`](#sf-tags-releases-set-environment-revision)
 - [`sf tags revisions`](#sf-tags-revisions)
@@ -328,56 +375,64 @@ GLOBAL FLAGS
 - [`sf teams`](#sf-teams)
 - [`sf teams accept INVITATION`](#sf-teams-accept-invitation)
 - [`sf teams create NAME`](#sf-teams-create-name)
-- [`sf teams defaults [ROOTACCESS]`](#sf-teams-defaults-rootaccess)
+- [`sf teams defaults [ACCESS]`](#sf-teams-defaults-access)
 - [`sf teams domains`](#sf-teams-domains)
 - [`sf teams domains add DOMAIN`](#sf-teams-domains-add-domain)
-- [`sf teams domains ls`](#sf-teams-domains-ls)
-- [`sf teams domains rm DOMAIN`](#sf-teams-domains-rm-domain)
+- [`sf teams domains list`](#sf-teams-domains-list)
+- [`sf teams domains remove DOMAIN`](#sf-teams-domains-remove-domain)
 - [`sf teams invitations`](#sf-teams-invitations)
-- [`sf teams invitations add EMAILS`](#sf-teams-invitations-add-emails)
 - [`sf teams invitations cancel INVITATION`](#sf-teams-invitations-cancel-invitation)
-- [`sf teams invitations ls`](#sf-teams-invitations-ls)
+- [`sf teams invitations list`](#sf-teams-invitations-list)
 - [`sf teams invitations resend INVITATION`](#sf-teams-invitations-resend-invitation)
 - [`sf teams join [TEAM]`](#sf-teams-join-team)
 - [`sf teams join-link`](#sf-teams-join-link)
-- [`sf teams ls`](#sf-teams-ls)
+- [`sf teams list`](#sf-teams-list)
 - [`sf teams members`](#sf-teams-members)
-- [`sf teams members ls`](#sf-teams-members-ls)
-- [`sf teams members rm MEMBER`](#sf-teams-members-rm-member)
+- [`sf teams members invite EMAILS`](#sf-teams-members-invite-emails)
+- [`sf teams members list`](#sf-teams-members-list)
+- [`sf teams members remove MEMBER`](#sf-teams-members-remove-member)
+- [`sf teams people`](#sf-teams-people)
+- [`sf teams sign-in`](#sf-teams-sign-in)
+- [`sf teams sign-in inspect`](#sf-teams-sign-in-inspect)
 - [`sf teams subteams`](#sf-teams-subteams)
 - [`sf teams subteams create NAME`](#sf-teams-subteams-create-name)
-- [`sf teams subteams ls`](#sf-teams-subteams-ls)
+- [`sf teams subteams delete SUBTEAM`](#sf-teams-subteams-delete-subteam)
+- [`sf teams subteams list`](#sf-teams-subteams-list)
 - [`sf teams subteams members`](#sf-teams-subteams-members)
 - [`sf teams subteams members add SUBTEAM USER`](#sf-teams-subteams-members-add-subteam-user)
-- [`sf teams subteams members ls SUBTEAM`](#sf-teams-subteams-members-ls-subteam)
-- [`sf teams subteams members rm SUBTEAM USER`](#sf-teams-subteams-members-rm-subteam-user)
+- [`sf teams subteams members list SUBTEAM`](#sf-teams-subteams-members-list-subteam)
+- [`sf teams subteams members remove SUBTEAM USER`](#sf-teams-subteams-members-remove-subteam-user)
 - [`sf teams subteams rename SUBTEAM NAME`](#sf-teams-subteams-rename-subteam-name)
-- [`sf teams subteams rm SUBTEAM`](#sf-teams-subteams-rm-subteam)
 - [`sf teams switch [TEAM]`](#sf-teams-switch-team)
-- [`sf transfers accept ID`](#sf-transfers-accept-id)
-- [`sf transfers cancel ID`](#sf-transfers-cancel-id)
-- [`sf transfers get ID`](#sf-transfers-get-id)
-- [`sf transfers ls`](#sf-transfers-ls)
+- [`sf transfers accept TRANSFER`](#sf-transfers-accept-transfer)
+- [`sf transfers cancel TRANSFER`](#sf-transfers-cancel-transfer)
+- [`sf transfers inspect TRANSFER`](#sf-transfers-inspect-transfer)
+- [`sf transfers list`](#sf-transfers-list)
 - [`sf unlink`](#sf-unlink)
 - [`sf users`](#sf-users)
 - [`sf users delete USER`](#sf-users-delete-user)
-- [`sf users get USER`](#sf-users-get-user)
-- [`sf users ls`](#sf-users-ls)
+- [`sf users inspect USER`](#sf-users-inspect-user)
+- [`sf users list`](#sf-users-list)
 - [`sf users reactivate USER`](#sf-users-reactivate-user)
 - [`sf users revoke USER`](#sf-users-revoke-user)
 - [`sf users sessions USER`](#sf-users-sessions-user)
 - [`sf users settings`](#sf-users-settings)
 - [`sf users suspend USER`](#sf-users-suspend-user)
 - [`sf versions`](#sf-versions)
-- [`sf versions get [VERSION]`](#sf-versions-get-version)
-- [`sf versions ls`](#sf-versions-ls)
-- [`sf versions rm [VERSION]`](#sf-versions-rm-version)
+- [`sf versions delete [VERSION]`](#sf-versions-delete-version)
+- [`sf versions inspect [VERSION]`](#sf-versions-inspect-version)
+- [`sf versions list`](#sf-versions-list)
 - [`sf whoami`](#sf-whoami)
 - [`sf wp`](#sf-wp)
 - [`sf zero`](#sf-zero)
 - [`sf zero abilities`](#sf-zero-abilities)
+- [`sf zero build`](#sf-zero-build)
 - [`sf zero call ABILITY`](#sf-zero-call-ability)
-- [`sf zero import SOURCE DIRECTORY`](#sf-zero-import-source-directory)
+- [`sf zero check`](#sf-zero-check)
+- [`sf zero dev`](#sf-zero-dev)
+- [`sf zero import SOURCE INPUT`](#sf-zero-import-source-input)
+- [`sf zero init [NAME]`](#sf-zero-init-name)
+- [`sf zero migrate`](#sf-zero-migrate)
 - [`sf zero queries`](#sf-zero-queries)
 - [`sf zero types`](#sf-zero-types)
 
@@ -387,39 +442,43 @@ Revoke visitor sessions.
 
 ```text
 USAGE
-  $ sf access [--profile <value>] [-y]
+  $ sf access [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke visitor sessions.
 
   Revoke active visitor sessions. Use `sf share` to manage who can open a space.
-
-EXAMPLES
-  Revoke visitor sessions.
-
-    $ sf access
 ```
 
-## `sf access logout-all`
+## `sf access sessions revoke`
 
 Revoke all visitor sessions.
 
 ```text
 USAGE
-  $ sf access logout-all [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf access sessions revoke [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke all visitor sessions.
@@ -429,7 +488,7 @@ DESCRIPTION
 EXAMPLES
   Revoke every visitor session on the space.
 
-    $ sf access logout-all --space docs
+    $ sf access sessions revoke --space docs
 ```
 
 ## `sf activity`
@@ -438,23 +497,27 @@ Show activity events.
 
 ```text
 USAGE
-  $ sf activity [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--all] [--code <value>] [--since <value>] [--until <value>] [--limit
-    <value>] [--cursor <value>]
+  $ sf activity [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--all] [--code <value>]
+    [--since <value>] [--until <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --all             Read account-wide activity instead of a single space.
-  --code=<value>    Filter by activity taxonomy code, for example version.promoted.
-  --cursor=<value>  Pagination cursor from a previous response.
-  --limit=<value>   Maximum number of events to return (default 50, max 100).
-  --since=<value>   Only events at or after this ISO timestamp.
-  --until=<value>   Only events before this ISO timestamp.
+  --all              Read account-wide activity instead of a single space.
+  --code=<value>     Filter by activity taxonomy code, for example version.promoted.
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of events to return (default 50, max 100).
+  --since=<value>    Only events at or after this ISO timestamp.
+  --until=<value>    Only events before this ISO timestamp.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show activity events.
@@ -475,8 +538,8 @@ Write Spacefast agent instructions.
 
 ```text
 USAGE
-  $ sf agents init [DIRECTORY] [--profile <value>] [-y] [--agent
-    generic|claude-code]
+  $ sf agents init [DIRECTORY] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--agent generic|claude-code]
 
 ARGUMENTS
   [DIRECTORY]  Directory that will contain AGENTS.md and CLAUDE.md. Defaults to the current directory.
@@ -486,10 +549,14 @@ FLAGS
                     <options: generic|claude-code>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Write Spacefast agent instructions.
@@ -512,18 +579,22 @@ Print runtime analytics.
 
 ```text
 USAGE
-  $ sf analytics [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--window 48h|7d|30d]
+  $ sf analytics [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--window 48h|7d|30d]
 
 FLAGS
   --window=<option>  [default: 7d] Analytics window.
                      <options: 48h|7d|30d>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Print runtime analytics.
@@ -540,18 +611,19 @@ EXAMPLES
     $ sf analytics --space docs --window 30d
 ```
 
-## `sf api METHODORPATH [PATH]`
+## `sf api METHOD [PATH]`
 
 Call the Spacefast API directly.
 
 ```text
 USAGE
-  $ sf api METHODORPATH [PATH] [--profile <value>] [-y]
-    [--experimental] [-i <value>] [--idempotency-key <value>] [--include] [--output <value> | --raw-stdout] [--paginate]
+  $ sf api METHOD [PATH] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--experimental] [-i <value>] [--idempotency-key <value>] [--include]
+    [--output <value> | --raw-stdout] [--paginate]
 
 ARGUMENTS
-  METHODORPATH  HTTP method (GET, POST, PATCH, PUT, DELETE) or request path.
-  [PATH]        Request path, for example /v1/spaces/{spaceId}/versions.
+  METHOD  HTTP method (GET, POST, PATCH, PUT, DELETE) or request path.
+  [PATH]  Request path, for example /v1/spaces/{spaceId}/versions.
 
 FLAGS
   -i, --input=<value>            JSON request body: a literal string, @file, or - for stdin.
@@ -563,10 +635,14 @@ FLAGS
       --raw-stdout               Write a non-JSON response body to stdout.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Call the Spacefast API directly.
@@ -595,23 +671,23 @@ Manage API keys.
 
 ```text
 USAGE
-  $ sf api-keys [--profile <value>] [-y]
+  $ sf api-keys [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage API keys.
 
   Manage API keys.
-
-EXAMPLES
-  Manage API keys.
-
-    $ sf api-keys
 ```
 
 ## `sf api-keys create`
@@ -620,28 +696,33 @@ Create an API key.
 
 ```text
 USAGE
-  $ sf api-keys create [--profile <value>] [-y] [-n <value>] [--preset
+  $ sf api-keys create [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--open] [--name <value>] [--preset
     ci_deploy|space_publisher|space_admin|domain_manager|team_admin|billing_viewer|partner_admin]
 
 FLAGS
-  -n, --name=<value>     Human-readable API key name.
-      --preset=<option>  [default: space_publisher] Access preset for the new API key.
-                         <options:
-                         ci_deploy|space_publisher|space_admin|domain_manager|team_admin|billing_viewer|partner_admin>
+  --name=<value>     Human-readable API key name.
+  --preset=<option>  [default: space_publisher] Access preset for the new API key.
+                     <options:
+                     ci_deploy|space_publisher|space_admin|domain_manager|team_admin|billing_viewer|partner_admin>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 DESCRIPTION
   Create an API key.
 
   Create an API key. A device login opens browser approval before the CLI prints the one-time secret.
-
-ALIASES
-  $ sf api-keys add
 
 EXAMPLES
   Create an API key and print its one-time secret.
@@ -659,17 +740,22 @@ List API keys.
 
 ```text
 USAGE
-  $ sf api-keys list [--profile <value>] [-y] [-o <value>] [--limit
-    <value>]
+  $ sf api-keys list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --limit=<value>  Maximum number of API keys to return (default 50, max 100).
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of API keys to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List API keys.
@@ -682,35 +768,35 @@ ALIASES
 EXAMPLES
   List API keys for the selected team.
 
-    $ sf api-keys ls
+    $ sf api-keys list
 ```
 
-## `sf api-keys revoke ID`
+## `sf api-keys revoke KEY`
 
 Revoke an API key.
 
 ```text
 USAGE
-  $ sf api-keys revoke ID [--profile <value>] [-y]
+  $ sf api-keys revoke KEY [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
-  ID  API key id.
+  KEY  API key id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke an API key.
 
   Revoke an API key.
-
-ALIASES
-  $ sf api-keys delete
-  $ sf api-keys remove
-  $ sf api-keys rm
 
 EXAMPLES
   Revoke an API key by ID.
@@ -724,14 +810,19 @@ Apply saved changes to the live runtime.
 
 ```text
 USAGE
-  $ sf apply [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>]
+  $ sf apply [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait] [--wait-timeout
+    <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -758,13 +849,18 @@ Authenticate the CLI.
 
 ```text
 USAGE
-  $ sf auth [--profile <value>] [-y]
+  $ sf auth [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Authenticate the CLI.
@@ -772,7 +868,7 @@ DESCRIPTION
   Authenticate the CLI with Spacefast.
 
 EXAMPLES
-  $ sf auth login
+  $ sf login
 ```
 
 ## `sf auth as NAME`
@@ -781,7 +877,8 @@ Set the local dev guest identity.
 
 ```text
 USAGE
-  $ sf auth as NAME [--profile <value>] [-y] [--dir <value>]
+  $ sf auth as NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--dir <value>]
 
 ARGUMENTS
   NAME  Local guest name.
@@ -790,15 +887,15 @@ FLAGS
   --dir=<value>  [default: .] Local Zero project directory.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Set the local dev guest identity.
-
-    $ sf auth as <name>
 ```
 
 ## `sf auth reset`
@@ -807,21 +904,22 @@ Clear the local dev guest identity.
 
 ```text
 USAGE
-  $ sf auth reset [--profile <value>] [-y] [--dir <value>]
+  $ sf auth reset [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--dir <value>]
 
 FLAGS
   --dir=<value>  [default: .] Local Zero project directory.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Clear the local dev guest identity.
-
-    $ sf auth reset
 ```
 
 ## `sf autocomplete [SHELL]`
@@ -853,25 +951,59 @@ EXAMPLES
   $ sf autocomplete --refresh-cache
 ```
 
+## `sf billing card`
+
+Show the team's saved payment method.
+
+```text
+USAGE
+  $ sf billing card [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show the team's saved payment method.
+
+  Show the saved payment method (card, Link, bank account, …) every team purchase charges, and where to add or change
+  it. The CLI never changes it.
+
+EXAMPLES
+  $ sf billing card --team acme
+```
+
 ## `sf build [DIR]`
 
 Build and pack project output.
 
 ```text
 USAGE
-  $ sf build [DIR] [--profile <value>] [-y]
-    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
-    [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--skip-install]
-    [--skip-build] [--prebuilt] [--output <value>] [--dry-run] [--stream]
+  $ sf build [DIR] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--root-directory <value>] [--install-directory <value>]
+    [--install-command <value>] [--build-command <value>] [--output-directory <value>] [--env-file <value>...]
+    [--ignored-build-command <value>] [--skip-install] [--skip-build] [--prebuilt] [--output <value>] [--dry-run]
+    [--stream]
 
 ARGUMENTS
   [DIR]  Project directory to build. Defaults to the current directory.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
   --build-command=<value>          Build command. Defaults to framework and package script detection.
@@ -894,8 +1026,8 @@ EXECUTION FLAGS
 DESCRIPTION
   Build and pack project output.
 
-  Detect build settings, run the build, and pack its output. A Zero project with no framework build compiles its capsule
-  into the publish directory instead.
+  Detect build settings, run the build, and pack its output. A Zero 0.8 app is not built: run `npx spacefast@latest
+  publish` to move it to Zero v2.
 
 EXAMPLES
   Detect build settings, run the build, and pack the output archive.
@@ -913,16 +1045,21 @@ Cancel a build.
 
 ```text
 USAGE
-  $ sf builds cancel BUILD [--profile <value>] [-y]
+  $ sf builds cancel BUILD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Cancel a build.
@@ -933,24 +1070,32 @@ EXAMPLES
   $ sf builds cancel bld_123
 ```
 
-## `sf builds detect`
+## `sf builds detect [DIR]`
 
 Detect framework and build settings.
 
 ```text
 USAGE
-  $ sf builds detect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--root-directory
-    <value>] [--apply-best]
+  $ sf builds detect [DIR] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local]
+    [--connection-type connected|hosted] [--ref <value>] [--root-directory <value>] [--apply-best]
+
+ARGUMENTS
+  [DIR]  Local project directory to detect. Defaults to the current directory when no space is selected.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
   --apply-best              Save the highest-ranked detected app candidate as repository build settings.
+  --local                   Inspect local files even when the current project is linked to a space.
   --root-directory=<value>  App root directory to inspect.
 
 REPOSITORY FLAGS
@@ -961,10 +1106,15 @@ REPOSITORY FLAGS
 DESCRIPTION
   Detect framework and build settings.
 
-  Detect the framework and build settings for a space's repository connection. Shows the detected app, ranked candidates
-  when the repository has more than one, and unsupported platform config found along the way.
+  Detect the framework and build settings for a local project or a space's repository connection. Pass a directory or
+  --local to inspect local files without authentication. With a selected space, inspects its repository and optionally
+  saves the best candidate.
 
 EXAMPLES
+  Detect local build settings without installing or building.
+
+    $ sf builds detect ./apps/web
+
   Show detected framework and build settings for the repository connection.
 
     $ sf builds detect --space docs
@@ -974,22 +1124,27 @@ EXAMPLES
     $ sf builds detect --space docs --root-directory apps/web --apply-best
 ```
 
-## `sf builds get BUILD`
+## `sf builds inspect BUILD`
 
 Show a build.
 
 ```text
 USAGE
-  $ sf builds get BUILD [--profile <value>] [-y]
+  $ sf builds inspect BUILD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a build.
@@ -999,7 +1154,49 @@ DESCRIPTION
 EXAMPLES
   Show a build by ID.
 
-    $ sf builds get bld_123
+    $ sf builds inspect bld_123
+```
+
+## `sf builds list`
+
+List builds.
+
+```text
+USAGE
+  $ sf builds list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--limit <NUMBER>] [--cursor
+    <CURSOR>]
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of builds to return (default 20, max 100).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List builds.
+
+  List a space's builds, newest first.
+
+ALIASES
+  $ sf builds ls
+
+EXAMPLES
+  List recent builds for a space.
+
+    $ sf builds list --space docs
+
+  Show only the five most recent builds.
+
+    $ sf builds list --space docs --limit 5
 ```
 
 ## `sf builds logs BUILD`
@@ -1008,22 +1205,27 @@ Print build logs.
 
 ```text
 USAGE
-  $ sf builds logs BUILD [--profile <value>] [-y] [--limit
-    <value>] [--cursor <value>] [-f]
+  $ sf builds logs BUILD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--limit <NUMBER>] [--cursor <CURSOR>] [--wait-timeout <value> -f]
 
 ARGUMENTS
   BUILD  Build ID (bld_...).
 
 FLAGS
-  -f, --follow          Follow live build logs until the build reaches a terminal state.
-      --cursor=<value>  Pagination cursor from a previous response.
-      --limit=<value>   Maximum number of log lines.
+  -f, --follow                Follow live build logs until the build reaches a terminal state.
+      --cursor=<CURSOR>       Continue from the cursor the previous page returned.
+      --limit=<NUMBER>        Maximum number of log lines.
+      --wait-timeout=<value>  With --follow: stop following after this many seconds and exit 0.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Print build logs.
@@ -1040,87 +1242,27 @@ EXAMPLES
     $ sf builds logs bld_123 --follow
 ```
 
-## `sf builds ls`
-
-List builds.
-
-```text
-USAGE
-  $ sf builds ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--limit <value>] [--cursor <value>]
-
-FLAGS
-  --cursor=<value>  Pagination cursor from a previous response.
-  --limit=<value>   Maximum number of builds to return (default 20, max 100).
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List builds.
-
-  List a space's builds, newest first.
-
-ALIASES
-  $ sf builds list
-
-EXAMPLES
-  List recent builds for a space.
-
-    $ sf builds ls --space docs
-
-  Show only the five most recent builds.
-
-    $ sf builds ls --space docs --limit 5
-```
-
-## `sf builds refresh-upload BUILD`
-
-Refresh source archive upload.
-
-```text
-USAGE
-  $ sf builds refresh-upload BUILD [--profile <value>] [-y]
-
-ARGUMENTS
-  BUILD  Build ID (bld_...) waiting for source archive upload.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Refresh source archive upload.
-
-  Refresh the upload instruction for a build waiting on its source archive.
-
-EXAMPLES
-  Refresh the source archive upload instruction for a build.
-
-    $ sf builds refresh-upload bld_123
-```
-
 ## `sf builds retry BUILD`
 
 Retry a terminal build.
 
 ```text
 USAGE
-  $ sf builds retry BUILD [--profile <value>] [-y]
+  $ sf builds retry BUILD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   BUILD  Build ID (bld_...) to retry.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Retry a terminal build.
@@ -1131,29 +1273,62 @@ EXAMPLES
   $ sf builds retry bld_123
 ```
 
+## `sf builds upload refresh BUILD`
+
+Refresh source archive upload.
+
+```text
+USAGE
+  $ sf builds upload refresh BUILD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
+
+ARGUMENTS
+  BUILD  Build ID (bld_...) waiting for source archive upload.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Refresh source archive upload.
+
+  Refresh the upload instruction for a build waiting on its source archive.
+
+EXAMPLES
+  Refresh the source archive upload instruction for a build.
+
+    $ sf builds upload refresh bld_123
+```
+
 ## `sf channels`
 
 Manage channels.
 
 ```text
 USAGE
-  $ sf channels [--profile <value>] [-y]
+  $ sf channels [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage channels.
 
   List channels, set how each promotes, and inspect promotion history.
-
-EXAMPLES
-  Manage channels.
-
-    $ sf channels
 ```
 
 ## `sf channels history [NAME]`
@@ -1162,17 +1337,21 @@ Show channel history.
 
 ```text
 USAGE
-  $ sf channels history [NAME] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf channels history [NAME] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   [NAME]  Channel name. Defaults to `live`.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show channel history.
@@ -1189,20 +1368,24 @@ EXAMPLES
     $ sf channels history live --space docs
 ```
 
-## `sf channels ls`
+## `sf channels list`
 
 List channels.
 
 ```text
 USAGE
-  $ sf channels ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf channels list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List channels.
@@ -1210,12 +1393,12 @@ DESCRIPTION
   List channels for a space and where each one points.
 
 ALIASES
-  $ sf channels list
+  $ sf channels ls
 
 EXAMPLES
   List channels for the docs space.
 
-    $ sf channels ls --space docs
+    $ sf channels list --space docs
 ```
 
 ## `sf channels set NAME`
@@ -1224,8 +1407,8 @@ Set a channel's promotion policy.
 
 ```text
 USAGE
-  $ sf channels set NAME --promotion auto|manual [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>]
+  $ sf channels set NAME --promotion auto|manual [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   NAME  Channel name (live).
@@ -1235,10 +1418,14 @@ FLAGS
                         <options: auto|manual>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Set a channel's promotion policy.
@@ -1261,6 +1448,35 @@ FLAG DESCRIPTIONS
     auto: publishes and green builds go live. manual: hold everything until an explicit promote.
 ```
 
+## `sf client`
+
+Write the unified client for this Space.
+
+```text
+USAGE
+  $ sf client [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>] [--out <value>]
+
+FLAGS
+  --out=<value>  Where to write the module. Default: next to the config file.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Write the unified client for this Space.
+
+  Writes spacefast.generated.ts with Spacefast Share, typed connectors, and collaboration. Spacefast regenerates it
+  before app builds in projects that install @spacefast/client, including projects without connector roles.
+```
+
 ## `sf comments`
 
 Manage comments.
@@ -1273,11 +1489,6 @@ DESCRIPTION
   Manage comments.
 
   Read, start, reply to, react to, and resolve Space comment threads, and set where Comments run.
-
-EXAMPLES
-  Manage comments.
-
-    $ sf comments
 ```
 
 ## `sf comments create`
@@ -1286,9 +1497,10 @@ Start a comment thread.
 
 ```text
 USAGE
-  $ sf comments create --body <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--mention <value>...] [--page <value> | --file <value>]
-    [--selector <value> | ] [--lines <value> ] [--version <value>] [--idempotency-key <value>]
+  $ sf comments create --body <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--mention
+    <value>...] [--page <value> | --file <value>] [--selector <value> | ] [--lines <value> ] [--version <value>]
+    [--idempotency-key <value>]
 
 FLAGS
   --body=<value>             (required) What the comment says.
@@ -1297,10 +1509,14 @@ FLAGS
   --version=<value>          Version ID, ref, or number to comment on. Defaults to the live version.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 ANCHOR FLAGS
   --file=<value>      File path to comment on, for example src/app.js.
@@ -1338,8 +1554,9 @@ Export comments.
 
 ```text
 USAGE
-  $ sf comments export [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--version <value>] [--format markdown|json] [--status open|resolved]
+  $ sf comments export [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--version <value>] [--format
+    markdown|json] [--status open|resolved]
 
 FLAGS
   --format=<option>  [default: markdown] Export format.
@@ -1349,10 +1566,14 @@ FLAGS
   --version=<value>  Only threads left on this version ID, ref, or number.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Export comments.
@@ -1369,23 +1590,27 @@ EXAMPLES
     $ sf comments export --version v3 --status open --format json
 ```
 
-## `sf comments get COMMENT`
+## `sf comments inspect COMMENT`
 
 Show a comment.
 
 ```text
 USAGE
-  $ sf comments get COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments inspect COMMENT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a comment.
@@ -1393,7 +1618,7 @@ DESCRIPTION
   Show one comment thread with its replies and reactions. Reading it does not mark it read.
 
 EXAMPLES
-  $ sf comments get cmt_123
+  $ sf comments inspect cmt_123
 ```
 
 ## `sf comments list`
@@ -1402,25 +1627,31 @@ List comments.
 
 ```text
 USAGE
-  $ sf comments list [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--status open|resolved] [--unread] [--path <value>] [--version <value>]
-    [--author <value>] [--search <value>] [--limit <value>]
+  $ sf comments list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--status open|resolved]
+    [--unread] [--path <value>] [--version <value>] [--author <value>] [--query <value>] [--limit <NUMBER>] [--cursor
+    <CURSOR>]
 
 FLAGS
   --author=<value>   Only threads started by this author name.
-  --limit=<value>    Maximum threads to return.
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum threads to return. Every thread when unset.
   --path=<value>     Only threads on this page or file path, for example /pricing.
-  --search=<value>   Only threads whose text contains this.
+  --query=<value>    Only threads whose text contains this.
   --status=<option>  Only open or only resolved threads.
                      <options: open|resolved>
   --unread           Only threads with comments you haven't read.
   --version=<value>  Only threads left on this version ID, ref, or number.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List comments.
@@ -1444,53 +1675,28 @@ EXAMPLES
     $ sf comments list --version v3
 ```
 
-## `sf comments mark-read COMMENT`
-
-Mark a comment read.
-
-```text
-USAGE
-  $ sf comments mark-read COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-ARGUMENTS
-  COMMENT  Thread id, for example cmt_123.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Mark a comment read.
-
-  Mark a comment thread read for you. Reading a thread with `comments get` leaves it unread.
-
-EXAMPLES
-  Clear a thread from `comments list --unread`.
-
-    $ sf comments mark-read cmt_123
-```
-
 ## `sf comments react COMMENT EMOJI`
 
 React to a comment.
 
 ```text
 USAGE
-  $ sf comments react COMMENT EMOJI [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf comments react COMMENT EMOJI [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
   EMOJI    Reaction: thumbsup, heart, tada, eyes, rocket, pray, 👍, ❤️, 🎉, 👀, 🚀, 🙏.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   React to a comment.
@@ -1507,23 +1713,60 @@ EXAMPLES
     $ sf comments react cmt_123 🎉
 ```
 
+## `sf comments read COMMENT`
+
+Mark a comment read.
+
+```text
+USAGE
+  $ sf comments read COMMENT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+ARGUMENTS
+  COMMENT  Thread id, for example cmt_123.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Mark a comment read.
+
+  Mark a comment thread read for you. Reading a thread with `comments get` leaves it unread.
+
+EXAMPLES
+  Clear a thread from `comments list --unread`.
+
+    $ sf comments read cmt_123
+```
+
 ## `sf comments reopen COMMENT`
 
 Reopen a comment thread.
 
 ```text
 USAGE
-  $ sf comments reopen COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments reopen COMMENT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Reopen a comment thread.
@@ -1542,8 +1785,9 @@ Reply to a comment.
 
 ```text
 USAGE
-  $ sf comments reply COMMENT --body <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--mention <value>...] [--idempotency-key <value>]
+  $ sf comments reply COMMENT --body <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--mention <value>...] [--idempotency-key <value>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
@@ -1554,10 +1798,14 @@ FLAGS
   --mention=<value>...       Teammate to notify, by email, name, or user ID. Repeat for more.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Reply to a comment.
@@ -1580,17 +1828,21 @@ Resolve a comment thread.
 
 ```text
 USAGE
-  $ sf comments resolve COMMENT [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments resolve COMMENT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Resolve a comment thread.
@@ -1609,14 +1861,18 @@ Show Comments settings.
 
 ```text
 USAGE
-  $ sf comments settings [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf comments settings [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show Comments settings.
@@ -1636,15 +1892,19 @@ Change Comments settings.
 
 ```text
 USAGE
-  $ sf comments settings set [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--surface off|previews|everywhere] [--embed-allow <value>...]
-    [--embed-remove <value>...]
+  $ sf comments settings set [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--surface
+    off|previews|everywhere] [--embed-allow <value>...] [--embed-remove <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EMBEDDING FLAGS
   --embed-allow=<value>...   Site allowed to embed this Space's Comments, e.g. https://docs.example.com.
@@ -1680,18 +1940,22 @@ Remove your reaction.
 
 ```text
 USAGE
-  $ sf comments unreact COMMENT EMOJI [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf comments unreact COMMENT EMOJI [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   COMMENT  Thread id, for example cmt_123.
   EMOJI    Reaction to take back: thumbsup, heart, tada, eyes, rocket, pray, 👍, ❤️, 🎉, 👀, 🚀, 🙏.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove your reaction.
@@ -1710,88 +1974,49 @@ Manage connectors.
 
 ```text
 USAGE
-  $ sf connectors [--profile <value>] [-y]
+  $ sf connectors [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage connectors.
 
   Everything about a team's connectors: register tool sources (OpenAPI specs, GraphQL endpoints, remote MCP servers),
   connect accounts, decide policies, and run tools.
-
-EXAMPLES
-  Manage connectors.
-
-    $ sf connectors
-```
-
-## `sf connectors add TARGET`
-
-Register a connector.
-
-```text
-USAGE
-  $ sf connectors add TARGET [--profile <value>] [-y] [-o <value>]
-    [--slug <value>] [--title <value>] [--description <value>]
-
-ARGUMENTS
-  TARGET  Spec, endpoint, or MCP URL to detect, or a catalog slug to add straight from the catalog.
-
-FLAGS
-  --description=<value>  Agent-visible note on what this connector reaches.
-  --slug=<value>         Connector slug. Defaults to the detected or catalog slug.
-  --title=<value>        Display name. Defaults to what the source calls itself.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Register a connector.
-
-  Register a connector. A URL is probed first and registered as whatever the detectors recognize; a catalog slug skips
-  the probe and adds the curated row.
-
-EXAMPLES
-  Detect what is behind a URL and register it.
-
-    $ sf connectors add https://api.example.com/openapi.json
-
-  Add a catalog row by slug.
-
-    $ sf connectors add linear --slug linear
 ```
 
 ## `sf connectors bind ROLE CONNECTION`
 
-Bind a capsule role to a connection.
+Bind a Space's team or personal connector role to a connection.
 
 ```text
 USAGE
-  $ sf connectors bind ROLE CONNECTION [--profile <value>] [-y]
-    [--space <value>] [-o <value>]
+  $ sf connectors bind ROLE CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>]
 
 ARGUMENTS
-  ROLE        Capsule connector role.
+  ROLE        Connector role declared in the Space config.
   CONNECTION  Connection id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Bind a capsule role to a connection.
-
-    $ sf connectors bind <role> <connection>
 ```
 
 ## `sf connectors bindings`
@@ -1800,19 +2025,19 @@ List a Space's connector roles and bindings.
 
 ```text
 USAGE
-  $ sf connectors bindings [--profile <value>] [-y] [--space <value>] [-o
-    <value>]
+  $ sf connectors bindings [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  List a Space's connector roles and bindings.
-
-    $ sf connectors bindings
 ```
 
 ## `sf connectors connections`
@@ -1821,35 +2046,35 @@ Manage connections.
 
 ```text
 USAGE
-  $ sf connectors connections [--profile <value>] [-y]
+  $ sf connectors connections [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage connections.
 
   Connect accounts to a team's connectors and inspect the ones you can already use. Credentials are write-only: they go
   in here and no endpoint hands them back.
-
-EXAMPLES
-  Manage connections.
-
-    $ sf connectors connections
 ```
 
-## `sf connectors connections add CONNECTOR`
+## `sf connectors connections connect CONNECTOR`
 
 Connect an account.
 
 ```text
 USAGE
-  $ sf connectors connections add CONNECTOR [--profile <value>] [-y] [-o <value>]
-    [--api-key <value>] [--field <value>...] [--owner team|personal] [--name <value>] [--description <value>]
-    [--auth-method <value>]
+  $ sf connectors connections connect CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--api-key <value>] [--field <value>...] [--owner
+    team|personal] [--name <value>] [--description <value>] [--auth-method <value>]
 
 ARGUMENTS
   CONNECTOR  Connector slug to connect.
@@ -1862,10 +2087,14 @@ FLAGS
                          <options: team|personal>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CREDENTIAL FLAGS
   --api-key=<value>   API key for connectors that take one. Never echoed back, in any output mode.
@@ -1877,59 +2106,48 @@ DESCRIPTION
   Connect an account in one call. The answer is one of three: connected, an authorization URL to open in a browser, or
   the fields to collect and pass back. Credentials are sealed on arrival and never returned.
 
-ALIASES
-  $ sf connectors connections connect
-
 EXAMPLES
   Connect with an API key the team shares.
 
-    $ sf connectors connections add stripe --api-key $STRIPE_KEY
+    $ sf connectors connections connect stripe --api-key $STRIPE_KEY
 
   Start an OAuth connection that only you can use.
 
-    $ sf connectors connections add linear --owner personal
+    $ sf connectors connections connect linear --owner personal
 ```
 
-## `sf connectors connections edit CONNECTION`
+## `sf connectors connections disconnect CONNECTION`
 
-Edit a connection.
+Disconnect a connection.
 
 ```text
 USAGE
-  $ sf connectors connections edit CONNECTION [--profile <value>] [-y] [-o
-    <value>] [--serving] [--name <value>] [--description <value>]
+  $ sf connectors connections disconnect CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   CONNECTION  Connection id, for example cxn_abc123.
 
-FLAGS
-  --description=<value>  Replacement agent-visible note. Pass an empty string to clear it.
-  --name=<value>         Replacement label.
-  --[no-]serving         Allow bound sites to act as this team account for every visitor.
-
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Edit a connection.
+  Disconnect a connection.
 
-  Rename a connection, change its agent-visible note, or grant sites access. Credentials are immutable: to rotate one,
-  reconnect.
-
-ALIASES
-  $ sf connectors connections update
+  Disconnect a connection: the stored credential is purged, the row tombstones, and anything addressing it stops
+  working.
 
 EXAMPLES
-  Rename a connection.
+  Disconnect without prompting.
 
-    $ sf connectors connections edit cxn_abc123 --name "Stripe (prod)"
-
-  Tell agents what it is for.
-
-    $ sf connectors connections edit cxn_abc123 --description "Billing, production"
+    $ sf connectors connections disconnect cxn_abc123 --yes
 ```
 
 ## `sf connectors connections health CONNECTION`
@@ -1938,17 +2156,21 @@ Probe a connection.
 
 ```text
 USAGE
-  $ sf connectors connections health CONNECTION [--profile <value>] [-y]
-  [-o <value>]
+  $ sf connectors connections health CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   CONNECTION  Connection id, for example cxn_abc123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Probe a connection.
@@ -1962,30 +2184,73 @@ EXAMPLES
     $ sf connectors connections health cxn_abc123
 ```
 
-## `sf connectors connections ls`
+## `sf connectors connections inspect CONNECTION`
+
+Show a connection and its tools.
+
+```text
+USAGE
+  $ sf connectors connections inspect CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--effect approve|require_approval|block]
+    [--limit <NUMBER>] [--cursor <CURSOR>]
+
+ARGUMENTS
+  CONNECTION  Connection id, for example cxn_abc123.
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --effect=<option>  Show only tools policy resolves to this effect.
+                     <options: approve|require_approval|block>
+  --limit=<NUMBER>   Maximum tools to return (default 50).
+  --query=<value>    Filter tools by name or summary.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show a connection and its tools.
+
+  Shows one connection's state, whether it serves sites, and the tools it reaches with the policy effect each resolves
+  to.
+```
+
+## `sf connectors connections list`
 
 List connections.
 
 ```text
 USAGE
-  $ sf connectors connections ls [--profile <value>] [-y] [-o <value>] [--owner
-    team|personal|any] [--connector <value>] [--status pending_authorization|active|degraded|needs_reauth|revoked]
-    [--include-revoked] [--limit <value>]
+  $ sf connectors connections list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--owner team|personal|any] [--connector <value>] [--status
+    pending_authorization|active|degraded|needs_reauth|revoked] [--include-revoked] [--limit <NUMBER>] [--cursor
+    <CURSOR>]
 
 FLAGS
   --connector=<value>  Show only connections of this connector.
+  --cursor=<CURSOR>    Continue from the cursor the previous page returned.
   --include-revoked    Include disconnected connections.
-  --limit=<value>      Maximum connections to return (default 50).
+  --limit=<NUMBER>     Maximum connections to return (default 50).
   --owner=<option>     Whose connections to list. `any` is everything you may use (default).
                        <options: team|personal|any>
   --status=<option>    Show only connections in this state.
                        <options: pending_authorization|active|degraded|needs_reauth|revoked>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List connections.
@@ -1993,16 +2258,16 @@ DESCRIPTION
   List the connections this credential may use: the team's shared ones plus your own personal ones.
 
 ALIASES
-  $ sf connectors connections list
+  $ sf connectors connections ls
 
 EXAMPLES
   List usable connections.
 
-    $ sf connectors connections ls
+    $ sf connectors connections list
 
   List only your own connections in this team.
 
-    $ sf connectors connections ls --owner personal
+    $ sf connectors connections list --owner personal
 ```
 
 ## `sf connectors connections reconnect CONNECTION`
@@ -2011,17 +2276,21 @@ Reconnect an account.
 
 ```text
 USAGE
-  $ sf connectors connections reconnect CONNECTION [--profile <value>] [-y] [-o
-    <value>] [--api-key <value>] [--field <value>...]
+  $ sf connectors connections reconnect CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--api-key <value>] [--field <value>...]
 
 ARGUMENTS
   CONNECTION  Connection id, for example cxn_abc123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CREDENTIAL FLAGS
   --api-key=<value>   API key for connectors that take one. Never echoed back, in any output mode.
@@ -2050,17 +2319,21 @@ Re-sync a connection's tools.
 
 ```text
 USAGE
-  $ sf connectors connections refresh CONNECTION [--profile <value>] [-y]
-  [-o <value>]
+  $ sf connectors connections refresh CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   CONNECTION  Connection id, for example cxn_abc123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Re-sync a connection's tools.
@@ -2068,47 +2341,133 @@ DESCRIPTION
   Re-resolve the tool catalog behind a connection, so tools the provider added or dropped show up. Token refresh happens
   on its own; this is about the tools.
 
-ALIASES
-  $ sf connectors connections sync
-
 EXAMPLES
   Pick up the provider's newest tools.
 
     $ sf connectors connections refresh cxn_abc123
 ```
 
-## `sf connectors connections rm CONNECTION`
+## `sf connectors connections update CONNECTION`
 
-Disconnect a connection.
+Edit a connection.
 
 ```text
 USAGE
-  $ sf connectors connections rm CONNECTION [--profile <value>] [-y] [-o
-  <value>]
+  $ sf connectors connections update CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--serving] [--name <value>] [--description <value>]
 
 ARGUMENTS
   CONNECTION  Connection id, for example cxn_abc123.
 
+FLAGS
+  --description=<value>  Replacement agent-visible note. Pass an empty string to clear it.
+  --name=<value>         Replacement label.
+  --[no-]serving         Allow bound sites to act as this team account for every visitor.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Disconnect a connection.
+  Edit a connection.
 
-  Disconnect a connection: the stored credential is purged, the row tombstones, and anything addressing it stops
-  working.
-
-ALIASES
-  $ sf connectors connections remove
-  $ sf connectors connections disconnect
+  Rename a connection, change its agent-visible note, or grant sites access. Credentials are immutable: to rotate one,
+  reconnect.
 
 EXAMPLES
-  Disconnect without prompting.
+  Rename a connection.
 
-    $ sf connectors connections rm cxn_abc123 --yes
+    $ sf connectors connections update cxn_abc123 --name "Stripe (prod)"
+
+  Tell agents what it is for.
+
+    $ sf connectors connections update cxn_abc123 --description "Billing, production"
+```
+
+## `sf connectors create TARGET`
+
+Register a connector.
+
+```text
+USAGE
+  $ sf connectors create TARGET [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--slug <value>] [--title <value>] [--description <value>]
+
+ARGUMENTS
+  TARGET  Spec, endpoint, or MCP URL to detect, or a catalog slug to add straight from the catalog.
+
+FLAGS
+  --description=<value>  Agent-visible note on what this connector reaches.
+  --slug=<value>         Connector slug. Defaults to the detected or catalog slug.
+  --title=<value>        Display name. Defaults to what the source calls itself.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Register a connector.
+
+  Register a connector. A URL is probed first and registered as whatever the detectors recognize; a catalog slug skips
+  the probe and adds the curated row.
+
+EXAMPLES
+  Detect what is behind a URL and register it.
+
+    $ sf connectors create https://api.example.com/openapi.json
+
+  Add a catalog row by slug.
+
+    $ sf connectors create linear --slug linear
+```
+
+## `sf connectors delete CONNECTOR`
+
+Delete a connector.
+
+```text
+USAGE
+  $ sf connectors delete CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  CONNECTOR  Connector slug.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a connector.
+
+  Delete a connector and its tools. The API refuses while any live connection still uses it — disconnect those first.
+
+ALIASES
+  $ sf connectors rm
+  $ sf connectors del
+
+EXAMPLES
+  Remove a connector without prompting.
+
+    $ sf connectors delete linear --yes
 ```
 
 ## `sf connectors detect URL`
@@ -2117,16 +2476,21 @@ Detect what is behind a URL.
 
 ```text
 USAGE
-  $ sf connectors detect URL [--profile <value>] [-y] [-o <value>]
+  $ sf connectors detect URL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   URL  Any URL a service published.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Detect what is behind a URL.
@@ -2140,26 +2504,73 @@ EXAMPLES
     $ sf connectors detect https://api.example.com
 ```
 
-## `sf connectors ls`
+## `sf connectors inspect CONNECTOR`
+
+Show a connector and its tools.
+
+```text
+USAGE
+  $ sf connectors inspect CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--effect approve|require_approval|block]
+    [--limit <NUMBER>] [--cursor <CURSOR>]
+
+ARGUMENTS
+  CONNECTOR  Connector slug.
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --effect=<option>  Show only tools policy resolves to this effect.
+                     <options: approve|require_approval|block>
+  --limit=<NUMBER>   Maximum tools to return (default 50).
+  --query=<value>    Filter tools by name or summary.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show a connector and its tools.
+
+  Shows one connector, the connections you can use on it, and its tools with the policy effect each resolves to.
+
+EXAMPLES
+  See HubSpot's deal tools and whether policy lets them run.
+
+    $ sf connectors inspect hubspot --query deals
+```
+
+## `sf connectors list`
 
 List connectors.
 
 ```text
 USAGE
-  $ sf connectors ls [--profile <value>] [-y] [-o <value>] [--query
-    <value>] [--source openapi|graphql|mcp] [--limit <value>]
+  $ sf connectors list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--source openapi|graphql|mcp] [--limit <NUMBER>]
+    [--cursor <CURSOR>]
 
 FLAGS
-  --limit=<value>    Maximum connectors to return (default 50).
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum connectors to return (default 50).
   --query=<value>    Filter over slug, title, and description.
   --source=<option>  Show only connectors built from this kind of source.
                      <options: openapi|graphql|mcp>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List connectors.
@@ -2167,16 +2578,16 @@ DESCRIPTION
   List the connectors this team registered, with how many connections you can use on each.
 
 ALIASES
-  $ sf connectors list
+  $ sf connectors ls
 
 EXAMPLES
   List the team's connectors.
 
-    $ sf connectors ls
+    $ sf connectors list
 
   List only connectors backed by an MCP server.
 
-    $ sf connectors ls --source mcp
+    $ sf connectors list --source mcp
 ```
 
 ## `sf connectors policies`
@@ -2185,13 +2596,18 @@ Manage connector policy rules.
 
 ```text
 USAGE
-  $ sf connectors policies [--profile <value>] [-y]
+  $ sf connectors policies [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage connector policy rules.
@@ -2199,11 +2615,6 @@ DESCRIPTION
   Decide what an agent may call. A rule is an address pattern — `*`, `<connector>/*`, `<connectionId>/*`, or
   `<connectionId>/<tool>` — and what happens when it matches. The most specific pattern wins, and team rules are a floor
   personal rules cannot loosen.
-
-EXAMPLES
-  Manage connector policy rules.
-
-    $ sf connectors policies
 ```
 
 ## `sf connectors policies add PATTERN`
@@ -2212,8 +2623,9 @@ Add a policy rule.
 
 ```text
 USAGE
-  $ sf connectors policies add PATTERN [--profile <value>] [-y] [-o <value>]
-    [--action approve|require_approval|block] [--owner team|personal]
+  $ sf connectors policies add PATTERN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--action approve|require_approval|block] [--owner
+    team|personal]
 
 ARGUMENTS
   PATTERN  `*`, `<connector>/*`, `<connectionId>/*`, or `<connectionId>/<tool>`. Quote it — the shell eats a bare `*`.
@@ -2225,10 +2637,14 @@ FLAGS
                      <options: team|personal>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Add a policy rule.
@@ -2252,17 +2668,21 @@ Explain what happens for one address.
 
 ```text
 USAGE
-  $ sf connectors policies explain ADDRESS [--profile <value>] [-y] [-o
-  <value>]
+  $ sf connectors policies explain ADDRESS [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   ADDRESS  Tool address: `<connectionId>/<tool>`.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Explain what happens for one address.
@@ -2276,19 +2696,24 @@ EXAMPLES
     $ sf connectors policies explain cxn_abc123/charges.create
 ```
 
-## `sf connectors policies ls`
+## `sf connectors policies list`
 
 List policy rules.
 
 ```text
 USAGE
-  $ sf connectors policies ls [--profile <value>] [-y] [-o <value>]
+  $ sf connectors policies list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List policy rules.
@@ -2297,30 +2722,35 @@ DESCRIPTION
   falls through to the connector's own default.
 
 ALIASES
-  $ sf connectors policies list
+  $ sf connectors policies ls
 
 EXAMPLES
   List the rules in force.
 
-    $ sf connectors policies ls
+    $ sf connectors policies list
 ```
 
-## `sf connectors policies rm RULE`
+## `sf connectors policies remove RULE`
 
 Remove a policy rule.
 
 ```text
 USAGE
-  $ sf connectors policies rm RULE [--profile <value>] [-y] [-o <value>]
+  $ sf connectors policies remove RULE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
-  RULE  Rule id, from `sf connectors policies ls`.
+  RULE  Rule id, from `sf connectors policies list`.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a policy rule.
@@ -2329,13 +2759,12 @@ DESCRIPTION
   removing a block can open a tool back up.
 
 ALIASES
-  $ sf connectors policies remove
-  $ sf connectors policies delete
+  $ sf connectors policies rm
 
 EXAMPLES
   Remove a rule without prompting.
 
-    $ sf connectors policies rm pol_abc123 --yes
+    $ sf connectors policies remove pol_abc123 --yes
 ```
 
 ## `sf connectors policies set RULE`
@@ -2344,21 +2773,25 @@ Change a policy rule's action.
 
 ```text
 USAGE
-  $ sf connectors policies set RULE [--profile <value>] [-y] [-o <value>]
-    [--action approve|require_approval|block]
+  $ sf connectors policies set RULE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--action approve|require_approval|block]
 
 ARGUMENTS
-  RULE  Rule id, from `sf connectors policies ls`.
+  RULE  Rule id, from `sf connectors policies list`.
 
 FLAGS
   --action=<option>  Run the call, park it for a person, or refuse it.
                      <options: approve|require_approval|block>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Change a policy rule's action.
@@ -2371,36 +2804,240 @@ EXAMPLES
     $ sf connectors policies set pol_abc123 --action block
 ```
 
-## `sf connectors rm CONNECTOR`
+## `sf connectors public-serving`
 
-Remove a connector.
+Let a team role serve a Space anyone can open, or stop it.
 
 ```text
 USAGE
-  $ sf connectors rm CONNECTOR [--profile <value>] [-y] [-o <value>]
-
-ARGUMENTS
-  CONNECTOR  Connector slug.
+  $ sf connectors public-serving [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Remove a connector.
+  Let a team role serve a Space anyone can open, or stop it.
 
-  Remove a connector and its tools. The API refuses while any live connection still uses it — disconnect those first.
+  Team connector roles serve only Spaces that need a sign-in. A team owner or admin can let one role serve a public,
+  link or password Space; anyone who opens it can then read through that team account.
+```
 
-ALIASES
-  $ sf connectors remove
-  $ sf connectors delete
+## `sf connectors public-serving set ROLE`
+
+Let a team role serve a Space anyone can open, or stop it.
+
+```text
+USAGE
+  $ sf connectors public-serving set ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>] [--enable]
+
+ARGUMENTS
+  ROLE  Team connector role.
+
+FLAGS
+  --[no-]enable  Allow (--enable) or stop (--no-enable) public serving for this role.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Let a team role serve a Space anyone can open, or stop it.
+
+  Team roles serve only Spaces that need a sign-in. With --enable, a team owner or admin lets one role serve while the
+  Space is public or shared by link or password: anyone who opens it can read through that team account.
 
 EXAMPLES
-  Remove a connector without prompting.
+  Let anyone who opens launch-page read through the crm role's team account.
 
-    $ sf connectors rm linear --yes
+    $ sf connectors public-serving set crm --enable --space launch-page
+```
+
+## `sf connectors roles`
+
+Add, change, or turn off a Space's connector roles.
+
+```text
+USAGE
+  $ sf connectors roles [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Add, change, or turn off a Space's connector roles.
+
+  Connector roles are what a Space's pages call at /__spacefast/connectors/<role>/<tool>. They come from `connectors` in
+  spacefast.config.ts or sf.jsonc. Change one here without a publish: set replaces the file's role, remove turns it off,
+  and reset hands it back to the file.
+```
+
+## `sf connectors roles list`
+
+List a Space's connector roles.
+
+```text
+USAGE
+  $ sf connectors roles list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List a Space's connector roles.
+
+  Each role the live version serves, where it comes from, and its state, plus roles turned off here.
+
+ALIASES
+  $ sf connectors roles ls
+```
+
+## `sf connectors roles remove ROLE`
+
+Turn off a Space's connector role.
+
+```text
+USAGE
+  $ sf connectors roles remove ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
+
+ARGUMENTS
+  ROLE  Role to turn off.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
+
+DESCRIPTION
+  Turn off a Space's connector role.
+
+  Turns a role off on this Space, even one the config file declares. Pages calling it get connector_role_unknown. `sf
+  connectors roles reset` brings it back.
+
+ALIASES
+  $ sf connectors roles rm
+```
+
+## `sf connectors roles reset ROLE`
+
+Use the config file's connector role again.
+
+```text
+USAGE
+  $ sf connectors roles reset ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
+
+ARGUMENTS
+  ROLE  Role to hand back to the config file.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
+
+DESCRIPTION
+  Use the config file's connector role again.
+
+  Drops this Space's change to a role, so the config file's role applies again. A role the file does not declare goes
+  away, so this asks first unless the role was turned off here.
+```
+
+## `sf connectors roles set ROLE`
+
+Add or change a Space's connector role.
+
+```text
+USAGE
+  $ sf connectors roles set ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connector <value>] [--as
+    team|personal|visitor] [--tools <value>...] [--args <value>] [--cache <value>] [--wait]
+
+ARGUMENTS
+  ROLE  Role name in camelCase, such as crm.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+ROLE FLAGS
+  --args=<value>       Arguments pinned per tool, as JSON: {"list_deals":{"pipeline":"sales"}}. Accepts @file or - for
+                       stdin.
+  --as=<option>        Whose account answers: a team connection, yours, or each viewer's own.
+                       <options: team|personal|visitor>
+  --cache=<value>      How long viewers share one read, such as 30s or 5m. "0" turns it off.
+  --connector=<value>  Connector slug the role uses, such as hubspot. Required for a new role.
+  --tools=<value>...   Tools the role may call: names, comma-separated or repeated, or "*". Required for a new role.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
+
+DESCRIPTION
+  Add or change a Space's connector role.
+
+  Adds a role, or changes one, on this Space without a publish. It replaces the config file's role of the same name;
+  flags you leave out keep the role's current values. The live version picks it up once the change applies.
+
+EXAMPLES
+  Add a crm role that reads HubSpot deals through a team connection.
+
+    $ sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s
+
+  Change only which tools the crm role may call.
+
+    $ sf connectors roles set crm --tools list_deals,get_deal
 ```
 
 ## `sf connectors run [CODE]`
@@ -2409,8 +3046,9 @@ Run a connector tool or a program.
 
 ```text
 USAGE
-  $ sf connectors run [CODE] [--profile <value>] [-y] [-o <value>]
-    [--tool <value>] [--args <value>] [--wait <value>] [--idempotency-key <value>] [--deny-unattended]
+  $ sf connectors run [CODE] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--tool <value>] [--args <value>] [--wait <value>]
+    [--idempotency-key <value>] [--deny-unattended]
 
 ARGUMENTS
   [CODE]  A program to run in the sandbox. It may call any tool this credential is granted. Omit it when using --tool.
@@ -2420,10 +3058,14 @@ FLAGS
   --tool=<value>  Tool address: `<connectionId>/<tool>`, or `<connector>/<tool>` when unambiguous.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --deny-unattended          Fail fast instead of parking when a call needs approval and nobody is watching.
@@ -2446,22 +3088,27 @@ EXAMPLES
     $ sf connectors run 'return await tools.linear.issues.list({limit: 5})'
 ```
 
-## `sf connectors run get RUN`
+## `sf connectors run inspect RUN`
 
 Read one run.
 
 ```text
 USAGE
-  $ sf connectors run get RUN [--profile <value>] [-y] [-o <value>]
+  $ sf connectors run inspect RUN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   RUN  Run id, for example cxr_abc123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Read one run.
@@ -2472,7 +3119,7 @@ DESCRIPTION
 EXAMPLES
   Check where a run got to.
 
-    $ sf connectors run get cxr_abc123
+    $ sf connectors run inspect cxr_abc123
 ```
 
 ## `sf connectors run list`
@@ -2481,20 +3128,26 @@ List runs.
 
 ```text
 USAGE
-  $ sf connectors run list [--profile <value>] [-y] [-o <value>] [--status
-    running|awaiting_approval|succeeded|failed|expired] [--connection <value>] [--limit <value>]
+  $ sf connectors run list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status running|awaiting_approval|succeeded|failed|expired]
+    [--connection <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
   --connection=<value>  Show only runs that touched this connection.
-  --limit=<value>       Maximum runs to return (default 50).
+  --cursor=<CURSOR>     Continue from the cursor the previous page returned.
+  --limit=<NUMBER>      Maximum runs to return (default 50).
   --status=<option>     Show only runs in this state.
                         <options: running|awaiting_approval|succeeded|failed|expired>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List runs.
@@ -2520,8 +3173,8 @@ Resume a parked run.
 
 ```text
 USAGE
-  $ sf connectors run resume RUN [--profile <value>] [-y] [-o <value>]
-    [--accept] [--deny] [--cancel] [--content <value>]
+  $ sf connectors run resume RUN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--accept] [--deny] [--cancel] [--content <value>]
 
 ARGUMENTS
   RUN  Run id, for example cxr_abc123.
@@ -2533,10 +3186,14 @@ FLAGS
   --deny             Refuse the parked call; the run reports the refusal.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Resume a parked run.
@@ -2554,28 +3211,407 @@ EXAMPLES
     $ sf connectors run resume cxr_abc123
 ```
 
-## `sf connectors unbind ROLE`
+## `sf connectors search [QUERY]`
 
-Remove a capsule connector binding.
+Search the connector catalog.
 
 ```text
 USAGE
-  $ sf connectors unbind ROLE [--profile <value>] [-y] [--space <value>]
-    [-o <value>]
+  $ sf connectors search [QUERY] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--source openapi|graphql|mcp] [--limit <NUMBER>] [--cursor
+    <CURSOR>]
 
 ARGUMENTS
-  ROLE  Capsule connector role.
+  [QUERY]  What to look for, such as calendar.
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum rows to return (default 50).
+  --source=<option>  Show only rows built from this kind of source.
+                     <options: openapi|graphql|mcp>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Search the connector catalog.
+
+  Searches the connectors a team can add: Spacefast presets and the public registry, with the ones already added marked.
+  Add a row with `sf connectors create <ID>`.
 
 EXAMPLES
-  Remove a capsule connector binding.
+  Find calendar connectors to add.
 
-    $ sf connectors unbind <role>
+    $ sf connectors search calendar
+```
+
+## `sf connectors serving`
+
+Ask for and decide site serving on team connections.
+
+```text
+USAGE
+  $ sf connectors serving [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Ask for and decide site serving on team connections.
+
+  A team connection serves sites only after a team owner or admin allows it. Anyone who manages a Space can ask for a
+  role's connection; owners and admins approve or deny, and set which connectors may serve at all.
+```
+
+## `sf connectors serving approve REQUEST`
+
+Approve a site-serving request.
+
+```text
+USAGE
+  $ sf connectors serving approve REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  REQUEST  Request id, for example csr_abc123.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Approve a site-serving request.
+
+  Turns site serving on for the requested team connection. Only team owners and admins can approve.
+```
+
+## `sf connectors serving create ROLE`
+
+Ask a team admin to let a role's connection serve sites.
+
+```text
+USAGE
+  $ sf connectors serving create ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>]
+
+ARGUMENTS
+  ROLE  Team connector role whose connection needs site serving.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Ask a team admin to let a role's connection serve sites.
+
+  Asks the team's owners and admins to let the connection a role is bound to serve sites. Asking again returns the same
+  pending request. If you may grant serving yourself, it turns on now.
+
+EXAMPLES
+  Ask for the crm role's team connection to serve sites.
+
+    $ sf connectors serving create crm --space launch-page
+```
+
+## `sf connectors serving deny REQUEST`
+
+Deny a site-serving request.
+
+```text
+USAGE
+  $ sf connectors serving deny REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  REQUEST  Request id, for example csr_abc123.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Deny a site-serving request.
+
+  Declines the request and leaves site serving off. Only team owners and admins can deny.
+```
+
+## `sf connectors serving inspect REQUEST`
+
+Show a site-serving request.
+
+```text
+USAGE
+  $ sf connectors serving inspect REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  REQUEST  Request id, for example csr_abc123.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show a site-serving request.
+
+  Shows one site-serving request and whether it is still pending.
+```
+
+## `sf connectors serving list`
+
+List site-serving requests.
+
+```text
+USAGE
+  $ sf connectors serving list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status pending|approved|denied|canceled] [--limit <NUMBER>] [--cursor
+    <CURSOR>]
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum requests to return (default 20).
+  --status=<option>  Which requests to list. Defaults to pending.
+                     <options: pending|approved|denied|canceled>
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+ALIASES
+  $ sf connectors serving ls
+```
+
+## `sf connectors serving set`
+
+Set the team's site-serving policy.
+
+```text
+USAGE
+  $ sf connectors serving set [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--admin-only] [--allow <value>...] [--any-connector]
+
+FLAGS
+  --[no-]admin-only   Only owners and admins turn serving on (--admin-only), or anyone with connector rights
+                      (--no-admin-only).
+  --allow=<value>...  Connector slugs that may serve sites, comma-separated or repeated. Replaces the list.
+  --any-connector     Let every connector serve sites.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Set the team's site-serving policy.
+
+  Shows or changes who may turn site serving on for the team's connections, and which connectors may serve sites at all.
+  Team owners and admins only. With no flags, prints the policy.
+
+EXAMPLES
+  Only admins turn serving on, and only for HubSpot and Linear.
+
+    $ sf connectors serving set --admin-only --allow hubspot,linear
+```
+
+## `sf connectors unbind ROLE`
+
+Remove a Space's connector role binding.
+
+```text
+USAGE
+  $ sf connectors unbind ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [-T <TEAM>]
+
+ARGUMENTS
+  ROLE  Connector role declared in the Space config.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+```
+
+## `sf connectors update CONNECTOR`
+
+Rename or refresh a connector.
+
+```text
+USAGE
+  $ sf connectors update CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--title <value>] [--description <value>] [--refresh]
+
+ARGUMENTS
+  CONNECTOR  Connector slug.
+
+FLAGS
+  --description=<value>  Replacement agent-visible note. Pass an empty string to clear it.
+  --refresh              Re-fetch the source and rebuild the tool list.
+  --title=<value>        Replacement display name.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Rename or refresh a connector.
+
+  Renames a connector, changes the note agents read, or re-fetches its source and rebuilds its tools. Connections and
+  policy rules survive a refresh.
+
+EXAMPLES
+  Pick up tools HubSpot added to its spec.
+
+    $ sf connectors update hubspot --refresh
+```
+
+## `sf connectors visitors`
+
+See and revoke the accounts a Space's visitors connected.
+
+```text
+USAGE
+  $ sf connectors visitors [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  See and revoke the accounts a Space's visitors connected.
+
+  A visitor role connects each signed-in viewer's own account. List who connected, or disconnect one Space user's
+  account for a role.
+```
+
+## `sf connectors visitors list`
+
+List the Space users who connected an account.
+
+```text
+USAGE
+  $ sf connectors visitors list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List the Space users who connected an account.
+
+  Each Space user with a connected account, how many, and for which roles. Account identities stay private.
+
+ALIASES
+  $ sf connectors visitors ls
+```
+
+## `sf connectors visitors revoke USER ROLE`
+
+Revoke a Space user's connected account.
+
+```text
+USAGE
+  $ sf connectors visitors revoke USER ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+ARGUMENTS
+  USER  Space user, as `sf connectors visitors list` prints it.
+  ROLE  Visitor role whose connection to revoke.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Revoke a Space user's connected account.
+
+  Disconnects one Space user's account for one visitor role. They can connect again the next time a page asks.
+
+EXAMPLES
+  Disconnect user 42's calendar account.
+
+    $ sf connectors visitors revoke 42 calendar --space launch-page
 ```
 
 ## `sf content dashboard [TARGET]`
@@ -2584,20 +3620,27 @@ Open a space's content dashboard.
 
 ```text
 USAGE
-  $ sf content dashboard [TARGET] [--profile <value>] [-y] [-o <value>]
-    [--space <value>] [--screen collections|users | --path <value>] [--open | --show-secret]
+  $ sf content dashboard [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--screen collections|users | --path
+    <value>] [--open | --show-secret]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 DASHBOARD FLAGS
-  --open             Open the one-use sign-in link in this machine's browser, even from an agent.
   --path=<value>     Classic WordPress page to land on, within /wp-admin/.
   --screen=<option>  Dashboard screen to land on. Default: collections.
                      <options: collections|users>
@@ -2635,13 +3678,18 @@ Continue publishing after claim.
 
 ```text
 USAGE
-  $ sf continue [--profile <value>] [-y]
+  $ sf continue [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Continue publishing after claim.
@@ -2660,39 +3708,43 @@ Manage scheduled jobs.
 
 ```text
 USAGE
-  $ sf crons [--profile <value>] [-y]
+  $ sf crons [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage scheduled jobs.
 
   Inspect and exercise a space's scheduled jobs.
-
-EXAMPLES
-  Manage scheduled jobs.
-
-    $ sf crons
 ```
 
-## `sf crons ls`
+## `sf crons list`
 
 List scheduled jobs.
 
 ```text
 USAGE
-  $ sf crons ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf crons list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List scheduled jobs.
@@ -2701,12 +3753,12 @@ DESCRIPTION
   spacefast.config.ts, so publishing is how you change them.
 
 ALIASES
-  $ sf crons list
+  $ sf crons ls
 
 EXAMPLES
   List scheduled jobs for the docs space.
 
-    $ sf crons ls --space docs
+    $ sf crons list --space docs
 ```
 
 ## `sf crons run TARGET`
@@ -2715,20 +3767,25 @@ Run a scheduled job now.
 
 ```text
 USAGE
-  $ sf crons run TARGET [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--header <value>...]
+  $ sf crons run TARGET [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--header
+    <value>...]
 
 ARGUMENTS
-  TARGET  Cron key or path, as shown by `sf crons ls`.
+  TARGET  Cron key or path, as shown by `sf crons list`.
 
 FLAGS
   --header=<value>...  Request header as 'name: value'. Repeat for multiple headers.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run a scheduled job now.
@@ -2753,17 +3810,22 @@ Inspect a space's database.
 
 ```text
 USAGE
-  $ sf db [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
+  $ sf db [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
@@ -2794,17 +3856,25 @@ Open a database console.
 
 ```text
 USAGE
-  $ sf db console [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--show-secret]
+  $ sf db console [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--space <SPACE>]
+    [--show-secret]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 OPEN FLAGS
   --show-secret  Print the single-use console URL instead of opening it.
@@ -2831,18 +3901,22 @@ Dump database rows.
 
 ```text
 USAGE
-  $ sf db dump [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--table <value>]
-    [--limit <value>]
+  $ sf db dump [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>] [--table <value>] [--limit <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --limit=<value>      Maximum rows per table (default 25, max 100). 0 prints row counts only.
@@ -2875,24 +3949,29 @@ Export a complete database backup.
 
 ```text
 USAGE
-  $ sf db export [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--out <value>]
+  $ sf db export [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>] [--output <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
 
 OUTPUT FLAGS
-  --out=<value>  Backup file path (default spacefast-backup-<space>-<timestamp>.json).
+  --output=<value>  Backup file path (default spacefast-backup-<space>-<timestamp>.json).
 
 DESCRIPTION
   Export a complete database backup.
@@ -2907,9 +3986,9 @@ EXAMPLES
 
   Export a selected space to a named file.
 
-    $ sf db export docs --out ./docs-backup.json
+    $ sf db export docs --output ./docs-backup.json
 
-  Export a running local Zero capsule.
+  Export a running local Zero app.
 
     $ sf db export --port 4173
 ```
@@ -2920,26 +3999,29 @@ List database tables and columns.
 
 ```text
 USAGE
-  $ sf db list [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
+  $ sf db list [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
 
-EXAMPLES
-  List database tables and columns.
-
-    $ sf db list [target]
+ALIASES
+  $ sf db ls
 ```
 
 ## `sf db migrate [SOURCE]`
@@ -2948,17 +4030,22 @@ Apply database schema migrations.
 
 ```text
 USAGE
-  $ sf db migrate [SOURCE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--previous-artifact <value>] [--drop | --rename]
+  $ sf db migrate [SOURCE] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--previous-artifact
+    <value>] [--drop | --rename]
 
 ARGUMENTS
-  [SOURCE]  [default: .] Capsule source directory.
+  [SOURCE]  [default: .] App source directory.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --drop                       Preview drop operations in the source plan; does not apply that plan.
@@ -2970,10 +4057,10 @@ DESCRIPTION
 
   Apply the live version's schema migrations, and report what this source tree would change on top of them. Source plans
   are previews only. Build and publish support additive source changes; destructive and rename source migrations are
-  unsupported. Zero capsules only: a worker declares no schema.
+  unsupported. Zero apps only: a worker declares no schema.
 
 EXAMPLES
-  Re-apply the live capsule's migration plan.
+  Re-apply the live app's migration plan.
 
     $ sf db migrate
 
@@ -2988,23 +4075,23 @@ Generate design files from DESIGN.md.
 
 ```text
 USAGE
-  $ sf design [--profile <value>] [-y]
+  $ sf design [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Generate design files from DESIGN.md.
 
   Generate committed presentation files (theme.json and _layout.html) from an authoring-time DESIGN.md.
-
-EXAMPLES
-  Generate design files from DESIGN.md.
-
-    $ sf design
 ```
 
 ## `sf design generate`
@@ -3013,16 +4100,21 @@ Generate theme and layout files from DESIGN.md.
 
 ````text
 USAGE
-  $ sf design generate [--profile <value>] [-y] [-f]
-
-EXECUTION FLAGS
-  -f, --force  Overwrite existing generated files.
+  $ sf design generate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--force]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --force  Overwrite existing generated files.
 
 DESCRIPTION
   Generate theme and layout files from DESIGN.md.
@@ -3047,19 +4139,23 @@ Start the local dev server.
 
 ```text
 USAGE
-  $ sf dev [--profile <value>] [-y] [-p <value>] [-d
-    <value>] [--host <value>] [--allow-network] [--state-backend memory|sqlite] [--watch] [--watch-interval <value>]
-    [--dry-run]
+  $ sf dev [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--port <value>] [--dir <value>] [--host <value>] [--allow-network] [--state-backend
+    memory|sqlite] [--watch] [--watch-interval <value>] [--dry-run]
 
 FLAGS
-  -d, --dir=<value>   [default: .] Project directory.
-  -p, --port=<value>  [default: 4173] Preview port.
+  --dir=<value>   [default: .] Project directory.
+  --port=<value>  [default: 4173] Preview port.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --allow-network           Allow an explicit non-loopback runtime dev-server binding.
@@ -3073,23 +4169,18 @@ RUNTIME FLAGS
 DESCRIPTION
   Start the local dev server.
 
-  Run this project locally. A zero runtime starts the capsule dev server; anything else previews Pages with sample data
-  and the publish-time expander.
-
-EXAMPLES
-  Start the local dev server.
-
-    $ sf dev
+  Run this project locally. A zero runtime starts the Zero dev server; anything else previews Pages with sample data and
+  the publish-time expander.
 ```
 
-## `sf dev run-many`
+## `sf dev instances`
 
 Run multiple isolated copies of a Zero app.
 
 ```text
 USAGE
-  $ sf dev run-many [--profile <value>] [-y] [--dir <value>]
-    [--count <value>] [--base-port <value>] [--dry-run]
+  $ sf dev instances [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--dir <value>] [--count <value>] [--base-port <value>] [--dry-run]
 
 FLAGS
   --base-port=<value>  [default: 4173] First instance port.
@@ -3098,24 +4189,20 @@ FLAGS
   --dry-run            Print the ports without starting servers.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run multiple isolated copies of a Zero app.
 
   Start local servers on consecutive ports. Each has its own in-memory database. Source is compiled at startup; restart
   the command to rebuild.
-
-ALIASES
-  $ sf run-many
-
-EXAMPLES
-  Run multiple isolated copies of a Zero app.
-
-    $ sf dev run-many
 ```
 
 ## `sf docs [QUERY]`
@@ -3124,26 +4211,31 @@ Search the bundled docs (offline).
 
 ```text
 USAGE
-  $ sf docs [QUERY...] [--profile <value>] [-y] [--full]
-    [--all]
+  $ sf docs [QUERY...] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--full] [--all]
 
 ARGUMENTS
   [QUERY...]  Search terms, or an exact topic slug to print (e.g. `publish`).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DISCLOSURE FLAGS
-  --all   Include every doc, reference tier included.
-  --full  Include full-tier docs (everything but advanced reference).
+  --all   List every doc, reference tier included.
+  --full  List full-tier docs too (everything but advanced reference).
 
 DESCRIPTION
   Search the bundled docs (offline).
 
-  Search the bundled docs offline: guides, CLI, API reference, and recipes. An exact topic slug prints that page.
+  Search the bundled docs offline: guides, CLI, API reference, and recipes. A search covers every doc; an exact topic
+  slug prints that page. With no query, --full and --all widen the listing.
 
 EXAMPLES
   List the essential docs.
@@ -3158,9 +4250,9 @@ EXAMPLES
 
     $ sf docs publishing
 
-  Search across the full docs set.
+  List the full docs set.
 
-    $ sf docs domains --full
+    $ sf docs --full
 
   Every doc as machine-readable JSON.
 
@@ -3173,14 +4265,18 @@ Diagnose Spacefast CLI setup.
 
 ```text
 USAGE
-  $ sf doctor [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf doctor [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Diagnose Spacefast CLI setup.
@@ -3203,23 +4299,23 @@ Manage domains.
 
 ```text
 USAGE
-  $ sf domains [--profile <value>] [-y]
+  $ sf domains [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage domains.
 
   Manage space domains.
-
-EXAMPLES
-  Manage domains.
-
-    $ sf domains
 ```
 
 ## `sf domains add HOSTNAME`
@@ -3228,18 +4324,23 @@ Attach a domain.
 
 ```text
 USAGE
-  $ sf domains add HOSTNAME [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--role
-    standard|primary|redirect] [--redirect-to <value>] [--redirect-status 301|302|307|308] [--primary]
+  $ sf domains add HOSTNAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
+    [--wait-timeout <value>] [--role standard|primary|redirect] [--redirect-to <value>] [--redirect-status
+    301|302|307|308] [--primary]
 
 ARGUMENTS
   HOSTNAME  Hostname to attach.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DOMAIN BEHAVIOR FLAGS
   --primary                   Make this domain the space's primary address. Same as `--role primary`.
@@ -3258,9 +4359,6 @@ DESCRIPTION
   Attach a domain.
 
   Attach a custom domain directly to a space. An apex or www hostname includes its counterpart.
-
-ALIASES
-  $ sf domains create
 
 EXAMPLES
   Attach a domain to a space.
@@ -3282,20 +4380,25 @@ Check a domain.
 
 ```text
 USAGE
-  $ sf domains check DOMAIN [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--move] [--wait] [--wait-timeout <value>]
+  $ sf domains check DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--retry-ssl]
+    [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 FLAGS
-  --move  Move a domain you control from another Space without TXT verification.
+  --retry-ssl  Ask for a new HTTPS certificate now instead of waiting for the next scheduled attempt.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -3304,12 +4407,248 @@ EXECUTION FLAGS
 DESCRIPTION
   Check a domain.
 
-  Verify domain ownership or check DNS readiness. Ownership verification moves a contested domain to this space.
+  Check DNS readiness, or verify a claim's TXT record. A verified claim moves the domain to this space.
 
 EXAMPLES
   Queue a DNS readiness check for a domain.
 
     $ sf domains check example.com --space docs
+
+  Ask for a new HTTPS certificate after fixing DNS.
+
+    $ sf domains check example.com --space docs --retry-ssl
+```
+
+## `sf domains connect`
+
+Manage Domain Connect templates and access.
+
+```text
+USAGE
+  $ sf domains connect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage Domain Connect templates and access.
+
+  See and undo what services set up on a Spacefast DNS zone through Domain Connect. See `domains connect list`,
+  `remove`, `access`, and `revoke`; for zones at another DNS host, `links` and `disconnect`.
+```
+
+## `sf domains connect access DOMAIN`
+
+List Domain Connect access.
+
+```text
+USAGE
+  $ sf domains connect access DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List Domain Connect access.
+
+  List the services allowed to apply Domain Connect templates to the domain later, without you present.
+
+EXAMPLES
+  List services with Domain Connect access.
+
+    $ sf domains connect access example.com
+```
+
+## `sf domains connect disconnect LINK`
+
+Turn off automatic DNS.
+
+```text
+USAGE
+  $ sf domains connect disconnect LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  LINK  Automatic DNS link ID (dcl_...).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Turn off automatic DNS.
+
+  Stop keeping a domain's records in sync at its DNS host. Records already there stay; remove Spacefast's access at the
+  DNS host too.
+
+EXAMPLES
+  Turn off automatic DNS after confirmation.
+
+    $ sf domains connect disconnect dcl_123
+```
+
+## `sf domains connect links`
+
+List automatic DNS hosts.
+
+```text
+USAGE
+  $ sf domains connect links [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List automatic DNS hosts.
+
+  List the DNS hosts that keep your Space records in sync through Domain Connect, so new Spaces on their hosts go live
+  without copying records. Turn one on from a Space domain's setup page or `sf domains add`.
+
+EXAMPLES
+  List automatic DNS hosts for a team.
+
+    $ sf domains connect links --team acme
+```
+
+## `sf domains connect list DOMAIN`
+
+List applied Domain Connect templates.
+
+```text
+USAGE
+  $ sf domains connect list DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List applied Domain Connect templates.
+
+  List the Domain Connect templates services applied to the domain's Spacefast DNS zone, with the records each still
+  owns.
+
+ALIASES
+  $ sf domains connect ls
+
+EXAMPLES
+  List applied templates.
+
+    $ sf domains connect list example.com
+```
+
+## `sf domains connect remove DOMAIN TEMPLATE`
+
+Remove an applied Domain Connect template.
+
+```text
+USAGE
+  $ sf domains connect remove DOMAIN TEMPLATE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN    Domain ID or hostname.
+  TEMPLATE  Applied template ID (dcti_...).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Remove an applied Domain Connect template.
+
+  Remove an applied Domain Connect template and every DNS record it still owns, including records edited since.
+
+ALIASES
+  $ sf domains connect rm
+
+EXAMPLES
+  Remove an applied template after confirmation.
+
+    $ sf domains connect remove example.com dcti_123
+```
+
+## `sf domains connect revoke DOMAIN AUTHORIZATION`
+
+Revoke Domain Connect access.
+
+```text
+USAGE
+  $ sf domains connect revoke DOMAIN AUTHORIZATION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN         Domain ID or hostname.
+  AUTHORIZATION  Authorization ID (grt_...).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Revoke Domain Connect access.
+
+  Stop a service from applying Domain Connect templates to the domain. Records it already applied stay.
+
+EXAMPLES
+  Revoke a service's Domain Connect access after confirmation.
+
+    $ sf domains connect revoke example.com grt_123
 ```
 
 ## `sf domains contacts`
@@ -3318,23 +4657,23 @@ Manage registrant contacts.
 
 ```text
 USAGE
-  $ sf domains contacts [--profile <value>] [-y]
+  $ sf domains contacts [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage registrant contacts.
 
   Manage the registrant contacts domains are bought under. See `domains contacts ls` and `add`.
-
-EXAMPLES
-  Manage registrant contacts.
-
-    $ sf domains contacts
 ```
 
 ## `sf domains contacts add`
@@ -3343,17 +4682,21 @@ Save a registrant contact.
 
 ```text
 USAGE
-  $ sf domains contacts add --file <value> [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains contacts add --file <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 FLAGS
   --file=<value>  (required) JSON file with the registrant's details.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Save a registrant contact.
@@ -3365,19 +4708,24 @@ EXAMPLES
   $ sf domains contacts add --file contact.json
 ```
 
-## `sf domains contacts ls`
+## `sf domains contacts list`
 
 List registrant contacts.
 
 ```text
 USAGE
-  $ sf domains contacts ls [--profile <value>] [-y] [-o <value>]
+  $ sf domains contacts list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List registrant contacts.
@@ -3385,10 +4733,45 @@ DESCRIPTION
   List saved registrant contacts, newest first.
 
 ALIASES
-  $ sf domains contacts list
+  $ sf domains contacts ls
 
 EXAMPLES
-  $ sf domains contacts ls
+  $ sf domains contacts list
+```
+
+## `sf domains delete DOMAIN`
+
+Delete a team domain.
+
+```text
+USAGE
+  $ sf domains delete DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a team domain.
+
+  Delete a domain from the team's domains. Spacefast DNS stops answering for it. Refused while it is still in use:
+  attached to a Space, registered or being transferred through Spacefast, or served by a connected DNS provider. To take
+  a domain off a Space, use `sf domains remove`.
+
+EXAMPLES
+  Delete a domain the team no longer uses, after confirmation.
+
+    $ sf domains delete example.com
 ```
 
 ## `sf domains diagnostics DOMAIN`
@@ -3397,17 +4780,21 @@ Inspect domain diagnostics.
 
 ```text
 USAGE
-  $ sf domains diagnostics DOMAIN [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf domains diagnostics DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Inspect domain diagnostics.
@@ -3424,24 +4811,24 @@ Manage domain DNS records.
 
 ```text
 USAGE
-  $ sf domains dns [--profile <value>] [-y]
+  $ sf domains dns [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage domain DNS records.
 
   Manage DNS records for a domain zone. See `domains dns ls`, `capabilities`, `refresh`, `add`, `update`, `rm`, `batch`,
   `export`, and `replace`.
-
-EXAMPLES
-  Manage domain DNS records.
-
-    $ sf domains dns
 ```
 
 ## `sf domains dns add DOMAIN`
@@ -3450,9 +4837,9 @@ Add a DNS record.
 
 ```text
 USAGE
-  $ sf domains dns add DOMAIN [--profile <value>] [-y] [--type
-    A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl <value>] [--priority <value>] [-o
-    <value>]
+  $ sf domains dns add DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--type A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value
+    <value>] [--ttl <value>] [--priority <value>] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -3466,18 +4853,19 @@ FLAGS
   --value=<value>     Record value.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Add a DNS record.
 
   Add a DNS record to the domain's Spacefast-managed zone.
-
-ALIASES
-  $ sf domains dns create
 
 EXAMPLES
   $ sf domains dns add example.com --type MX --name @ --value mail.example.com --priority 10
@@ -3489,20 +4877,24 @@ Apply a DNS record batch.
 
 ```text
 USAGE
-  $ sf domains dns batch DOMAIN -i <value> [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains dns batch DOMAIN --input <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 FLAGS
-  -i, --input=<value>  (required) JSON batch body: a literal string, @file, or - for stdin.
+  --input=<value>  (required) JSON batch body: a literal string, @file, or - for stdin.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Apply a DNS record batch.
@@ -3521,17 +4913,21 @@ Show DNS capabilities.
 
 ```text
 USAGE
-  $ sf domains dns capabilities DOMAIN [--profile <value>] [-y] [-o
-  <value>]
+  $ sf domains dns capabilities DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show DNS capabilities.
@@ -3548,16 +4944,21 @@ Export the DNS zone.
 
 ```text
 USAGE
-  $ sf domains dns export DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains dns export DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Export the DNS zone.
@@ -3570,27 +4971,31 @@ EXAMPLES
     $ sf domains dns export example.com
 ```
 
-## `sf domains dns ls DOMAIN`
+## `sf domains dns list DOMAIN`
 
 List DNS records.
 
 ```text
 USAGE
-  $ sf domains dns ls DOMAIN [--profile <value>] [-y] [-o <value>]
-    [--limit <value>] [--cursor <value>]
+  $ sf domains dns list DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 FLAGS
-  --cursor=<value>  Pagination cursor from a previous response.
-  --limit=<value>   Maximum number of records to return (default 200, max 500).
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of records to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List DNS records.
@@ -3598,12 +5003,12 @@ DESCRIPTION
   List DNS records in the domain's Spacefast-managed zone.
 
 ALIASES
-  $ sf domains dns list
+  $ sf domains dns ls
 
 EXAMPLES
   List DNS records in the managed zone.
 
-    $ sf domains dns ls example.com
+    $ sf domains dns list example.com
 ```
 
 ## `sf domains dns refresh DOMAIN`
@@ -3612,16 +5017,21 @@ Refresh DNS provider snapshot.
 
 ```text
 USAGE
-  $ sf domains dns refresh DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains dns refresh DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Refresh DNS provider snapshot.
@@ -3634,14 +5044,52 @@ EXAMPLES
     $ sf domains dns refresh example.com
 ```
 
+## `sf domains dns remove DOMAIN RECORD`
+
+Remove a DNS record.
+
+```text
+USAGE
+  $ sf domains dns remove DOMAIN RECORD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+  RECORD  DNS record ID.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Remove a DNS record.
+
+  Remove a DNS record from the domain's zone.
+
+ALIASES
+  $ sf domains dns rm
+
+EXAMPLES
+  Remove a DNS record from the zone.
+
+    $ sf domains dns remove example.com rec_123
+```
+
 ## `sf domains dns replace DOMAIN`
 
 Replace DNS records that block a domain.
 
 ```text
 USAGE
-  $ sf domains dns replace DOMAIN [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--name <value>...] [--wait] [--wait-timeout <value>]
+  $ sf domains dns replace DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--name <value>...]
+    [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -3650,10 +5098,14 @@ FLAGS
   --name=<value>...  Hostname to replace. Repeat for both names. Defaults to every blocked name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait             Wait until queued work finishes before returning.
@@ -3676,49 +5128,15 @@ EXAMPLES
     $ sf domains dns replace example.com --space docs --name www.example.com --yes
 ```
 
-## `sf domains dns rm DOMAIN RECORD`
-
-Delete a DNS record.
-
-```text
-USAGE
-  $ sf domains dns rm DOMAIN RECORD [--profile <value>] [-y] [-o
-    <value>]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-  RECORD  DNS record ID.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Delete a DNS record.
-
-  Delete a DNS record from the domain's zone.
-
-ALIASES
-  $ sf domains dns remove
-  $ sf domains dns delete
-
-EXAMPLES
-  Delete a DNS record from the zone.
-
-    $ sf domains dns rm example.com rec_123
-```
-
 ## `sf domains dns update DOMAIN RECORD`
 
 Update a DNS record.
 
 ```text
 USAGE
-  $ sf domains dns update DOMAIN RECORD [--profile <value>] [-y] [--type
-    A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value <value>] [--ttl <value>] [--priority <value>] [-o
-    <value>]
+  $ sf domains dns update DOMAIN RECORD [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--type A|AAAA|ALIAS|CAA|CNAME|MX|NS|SRV|TXT] [--name <value>] [--value
+    <value>] [--ttl <value>] [--priority <value>] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
@@ -3733,10 +5151,14 @@ FLAGS
   --value=<value>     Record value.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Update a DNS record.
@@ -3749,20 +5171,24 @@ EXAMPLES
     $ sf domains dns update example.com rec_123 --value 1.2.3.4 --ttl 3600
 ```
 
-## `sf domains ls`
+## `sf domains list`
 
 List space domains.
 
 ```text
 USAGE
-  $ sf domains ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf domains list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List space domains.
@@ -3770,10 +5196,10 @@ DESCRIPTION
   List domains attached to a space.
 
 ALIASES
-  $ sf domains list
+  $ sf domains ls
 
 EXAMPLES
-  $ sf domains ls --space docs
+  $ sf domains list --space docs
 ```
 
 ## `sf domains nameservers DOMAIN`
@@ -3782,16 +5208,21 @@ Show domain nameservers.
 
 ```text
 USAGE
-  $ sf domains nameservers DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains nameservers DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show domain nameservers.
@@ -3810,18 +5241,22 @@ Set domain nameservers.
 
 ```text
 USAGE
-  $ sf domains nameservers set DOMAIN NAMESERVERS [--profile <value>] [-y] [-o
-    <value>]
+  $ sf domains nameservers set DOMAIN NAMESERVERS [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN       Domain ID or hostname.
   NAMESERVERS  Comma-separated nameservers (at least two).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Set domain nameservers.
@@ -3840,27 +5275,41 @@ Show a domain's registration.
 
 ```text
 USAGE
-  $ sf domains registration DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf domains registration DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--auto-renew] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
+FLAGS
+  --[no-]auto-renew  Turn auto-renew on or off. It charges the team's saved payment method from 30 days before expiry,
+                     and no sooner than a week after the team is told.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a domain's registration.
 
-  Show a domain's registration: status, expiry, and any failure or refund. Buy with `domains registration purchase`,
-  renew with `domains registration renew`.
+  Show a domain's registration: status, expiry, auto-renew and the earliest day it charges, and any failure or refund.
+  Auto-renew is on by default; turn it off with --no-auto-renew. Buy with `domains registration purchase`, renew with
+  `domains registration renew`.
 
 EXAMPLES
   Check whether a purchase has registered.
 
     $ sf domains registration example.com
+
+  Stop the domain from renewing on its own.
+
+    $ sf domains registration example.com --no-auto-renew
 ```
 
 ## `sf domains registration purchase DOMAIN... [flags]`
@@ -3872,30 +5321,65 @@ USAGE
   $ sf domains registration purchase DOMAIN... [flags]
 
 FLAGS
-  --contact=<value>       Saved registrant contact id (dcon_...).
-  --contact-file=<value>  JSON file with a new registrant; saved before buying.
-  --expect-total=<value>  Refuse if the total before tax is not this amount in USD (e.g. 45.68).
+  --contact=<value>        Saved registrant contact id (dcon_...).
+  --contact-file=<value>   JSON file with a new registrant; saved before buying.
+  --expect-total=<value>   Charge the team's payment method now for exactly this total before tax, in USD (e.g. 45.68).
+  --payment-token=<value>  Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the team's
+                           payment method. Needs --expect-total.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Buy domains.
 
-  Hold up to 10 domains for one payment and print the checkout link. Nothing is charged until you pay there. Without
-  --contact or --contact-file, the newest saved registrant is used.
+  Buy up to 10 domains with the team's saved payment method. With --expect-total and purchasing power, it is charged
+  now. Without either, nothing is charged: you get the command or the dashboard link that finishes the purchase. Without
+  --contact or --contact-file, your newest saved registrant is used.
 
 EXAMPLES
-  Buy two domains with your newest saved registrant.
+  Hold two domains and see the total. Nothing is charged.
 
     $ sf domains registration purchase acme.com acme.dev
 
-  Save a registrant and buy, refusing if the price moved.
+  Save a registrant and charge now, refusing if the price moved.
 
     $ sf domains registration purchase acme.com --contact-file contact.json --expect-total 10.34
+```
+
+## `sf domains registration relock DOMAIN`
+
+Enable a domain's transfer lock.
+
+```text
+USAGE
+  $ sf domains registration relock DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Enable a domain's transfer lock.
+
+  Relocks the registration at the registrar. Available for recovery even when new transfers are disabled.
 ```
 
 ## `sf domains registration renew DOMAIN`
@@ -3904,44 +5388,136 @@ Renew a domain.
 
 ```text
 USAGE
-  $ sf domains registration renew DOMAIN [--profile <value>] [-y] [-o
-  <value>]
+  $ sf domains registration renew DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--expect-total <value>] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
+FLAGS
+  --expect-total=<value>  Charge the team's payment method now for exactly this total before tax, in USD (e.g. 15.00).
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Renew a domain.
 
-  Renew a domain for one year and print the checkout link. Nothing is charged until you pay there.
+  Renew for one year. With --expect-total, charge the team's saved payment method now; without it, print the total and
+  how to confirm. Nothing is charged until then.
 
 EXAMPLES
   $ sf domains registration renew example.com
+
+  $ sf domains registration renew example.com --expect-total 15.00
 ```
 
-## `sf domains rm DOMAIN`
+## `sf domains registration transfer-in DOMAIN`
+
+Transfer a domain registration to Spacefast.
+
+```text
+USAGE
+  $ sf domains registration transfer-in DOMAIN --auth-code-file <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--contact <value> | --contact-file
+    <value>] [--payment-token <value> --expect-total <value>]
+
+ARGUMENTS
+  DOMAIN  Existing team domain ID or hostname.
+
+FLAGS
+  --auth-code-file=<value>  (required) File containing the authorization code; - reads stdin.
+  --contact=<value>         Saved registrant contact ID.
+  --contact-file=<value>    JSON file containing a registrant.
+  --expect-total=<value>    Charge the team's card now for exactly this transfer price before tax, in USD (e.g. 12.00).
+  --payment-token=<value>   Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the
+                            team's card. Needs --expect-total.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Transfer a domain registration to Spacefast.
+
+  Unlock the domain at its current registrar first. Supply its authorization code through a file or stdin. With
+  --expect-total and purchasing power the team's saved card is charged now; otherwise it returns the purchase to
+  confirm. DNS stays as it is. It costs the name's registration price; a name without one (premium, or a TLD the
+  registrar doesn't price) is refused with domain_not_purchasable (reason no_price) and nothing is charged.
+
+EXAMPLES
+  $ sf domains registration transfer-in example.com --auth-code-file code.txt
+```
+
+## `sf domains registration transfer-out DOMAIN`
+
+Prepare a domain for transfer to another registrar.
+
+```text
+USAGE
+  $ sf domains registration transfer-out DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--resend]
+
+ARGUMENTS
+  DOMAIN  Domain ID or hostname.
+
+FLAGS
+  --resend  Explicitly request another authorization email after checking the registrant's inbox.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Prepare a domain for transfer to another registrar.
+
+  Unlocks the registration and requests an authorization email to its registrant. Start the transfer at the new
+  registrar with that code. DNS and serving stay intact. Requires confirmation.
+
+EXAMPLES
+  $ sf domains registration transfer-out example.com --yes
+```
+
+## `sf domains remove DOMAIN`
 
 Remove a domain.
 
 ```text
 USAGE
-  $ sf domains rm DOMAIN [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait]
+  $ sf domains remove DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -3952,13 +5528,12 @@ DESCRIPTION
   Remove a custom domain and its automatic apex or www counterpart from a space.
 
 ALIASES
-  $ sf domains remove
-  $ sf domains delete
+  $ sf domains rm
 
 EXAMPLES
   Remove a domain from a space after confirmation.
 
-    $ sf domains rm example.com --space docs
+    $ sf domains remove example.com --space docs
 ```
 
 ## `sf domains search [QUERY]`
@@ -3967,29 +5542,33 @@ Find domain names in a conversation.
 
 ```text
 USAGE
-  $ sf domains search [QUERY] [--profile <value>] [-y] [-i <value>]
-    [--interactive | --json | --local] [--limit <value>] [--like <value>...] [--dislike <value>...] [--neutral
-    <value>...] [--select <value>...] [--unselect <value>...] [-o <value>]
+  $ sf domains search [QUERY] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--input <value>] [--interactive | --json | --local] [--limit <NUMBER>] [--like
+    <value>...] [--dislike <value>...] [--neutral <value>...] [--select <value>...] [--unselect <value>...] [-T <TEAM>]
 
 ARGUMENTS
   [QUERY]  Keyword, naming brief, or follow-up message.
 
 FLAGS
-  -i, --input=<value>        Previous search receipt, session, or request: JSON, @file, or - for stdin.
-      --dislike=<value>...   Dismiss a saved suggestion. Repeat for more than one.
-      --interactive          Keep a search conversation open, with previews, refinements and feedback.
-      --like=<value>...      Like a saved suggestion. Repeat for more than one.
-      --limit=<value>        Number of offline suggestions to print with --local. Ignored otherwise.
-      --local                Print offline name ideas without an account or live checks.
-      --neutral=<value>...   Clear a saved suggestion's like or dismissal.
-      --select=<value>...    Select a saved suggestion. Repeat for more than one.
-      --unselect=<value>...  Remove a saved suggestion from the selection.
+  --dislike=<value>...   Dismiss a saved suggestion. Repeat for more than one.
+  --input=<value>        Previous search receipt, session, or request: JSON, @file, or - for stdin.
+  --interactive          Keep a search conversation open, with previews, refinements and feedback.
+  --like=<value>...      Like a saved suggestion. Repeat for more than one.
+  --limit=<NUMBER>       Number of offline suggestions to print with --local. Ignored otherwise.
+  --local                Print offline name ideas without an account or live checks.
+  --neutral=<value>...   Clear a saved suggestion's like or dismissal.
+  --select=<value>...    Select a saved suggestion. Repeat for more than one.
+  --unselect=<value>...  Remove a saved suggestion from the selection.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Find domain names in a conversation.
@@ -4030,17 +5609,22 @@ Change which hostname serves.
 
 ```text
 USAGE
-  $ sf domains update DOMAIN --serve-from <value> [--profile <value>]
-    [-y] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>]
+  $ sf domains update DOMAIN --serve-from <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DOMAIN BEHAVIOR FLAGS
   --serve-from=<value>  (required) Which of the domain's two hostnames serves the space. Pass the apex or its `www`
@@ -4071,60 +5655,23 @@ Manage env vars.
 
 ```text
 USAGE
-  $ sf env [--profile <value>] [-y]
+  $ sf env [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage env vars.
 
   Manage space environment variables.
-
-EXAMPLES
-  Manage env vars.
-
-    $ sf env
-```
-
-## `sf env export-template [DIR]`
-
-Create a dotenv import template from platform config.
-
-```text
-USAGE
-  $ sf env export-template [DIR] [--profile <value>] [-y] [--format
-    env|json]
-
-ARGUMENTS
-  [DIR]  Project directory to inspect. Defaults to the current directory.
-
-FLAGS
-  --format=<option>  [default: env] Output format.
-                     <options: env|json>
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Create a dotenv import template from platform config.
-
-  Read platform config files and print a dotenv template for variables to import into Spacefast.
-
-EXAMPLES
-  Print a dotenv import template from platform config in the current directory.
-
-    $ sf env export-template
-
-  Emit the import template as JSON.
-
-    $ sf env export-template ./app --format json
 ```
 
 ## `sf env import FILE`
@@ -4133,9 +5680,9 @@ Import variables from a .env file.
 
 ```text
 USAGE
-  $ sf env import FILE [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--[no-]secret] [--production] [--preview] [--branch <value>...] [--from
-    dotenv|vercel|netlify|cloudflare]
+  $ sf env import FILE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--[no-]secret] [--production]
+    [--preview] [--branch <value>...] [--from dotenv|vercel|netlify|cloudflare]
 
 ARGUMENTS
   FILE  .env file to import.
@@ -4151,10 +5698,14 @@ FLAGS
                        classifications.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Import variables from a .env file.
@@ -4171,23 +5722,27 @@ EXAMPLES
     $ sf env import public.env --space docs --no-secret
 ```
 
-## `sf env ls`
+## `sf env list`
 
 List space variables.
 
 ```text
 USAGE
-  $ sf env ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--show-values]
+  $ sf env list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--show-values]
 
 FLAGS
   --show-values  Print plaintext variable values.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List space variables.
@@ -4195,12 +5750,12 @@ DESCRIPTION
   List space variables.
 
 ALIASES
-  $ sf env list
+  $ sf env ls
 
 EXAMPLES
   List space variables (values masked).
 
-    $ sf env ls --space docs
+    $ sf env list --space docs
 ```
 
 ## `sf env pull [FILE]`
@@ -4209,8 +5764,9 @@ Pull variables.
 
 ```text
 USAGE
-  $ sf env pull [FILE] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--format env|json] [--force] [--stdout]
+  $ sf env pull [FILE] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--format env|json]
+    [--force] [--stdout]
 
 ARGUMENTS
   [FILE]  File to write the pulled variables to. Defaults to .env.local.
@@ -4222,10 +5778,14 @@ FLAGS
   --stdout           Print variables to stdout instead of writing a file.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Pull variables.
@@ -4251,37 +5811,40 @@ EXAMPLES
     $ sf env pull --space docs --stdout --format json
 ```
 
-## `sf env rm NAME`
+## `sf env remove NAME`
 
-Delete a space variable.
+Remove a space variable.
 
 ```text
 USAGE
-  $ sf env rm NAME [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf env remove NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   NAME  Variable name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Delete a space variable.
+  Remove a space variable.
 
-  Delete a space variable.
+  Remove a variable from a space.
 
 ALIASES
-  $ sf env remove
-  $ sf env delete
+  $ sf env rm
 
 EXAMPLES
-  Delete a space variable after confirmation.
+  Remove a space variable after confirmation.
 
-    $ sf env rm API_URL --space docs
+    $ sf env remove API_URL --space docs
 ```
 
 ## `sf env set NAME [VALUE]`
@@ -4290,9 +5853,9 @@ Set a space variable.
 
 ```text
 USAGE
-  $ sf env set NAME [VALUE] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--value-from-stdin] [--[no-]secret] [--production-value <value>]
-    [--preview-value <value>] [--branch-value <value>...]
+  $ sf env set NAME [VALUE] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--value-from-stdin]
+    [--[no-]secret] [--production-value <value>] [--preview-value <value>] [--branch-value <value>...]
 
 ARGUMENTS
   NAME     Variable name.
@@ -4304,10 +5867,14 @@ FLAGS
   --value-from-stdin  Read the value from standard input, keeping it out of your shell history and process list.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 BUILD FLAGS
   --branch-value=<value>...   Value to inject for a branch build, formatted as branch=value. Repeat for multiple
@@ -4331,29 +5898,71 @@ EXAMPLES
     $ sf env set PUBLIC_ORIGIN https://www.example.com --no-secret --space docs
 ```
 
+## `sf env template [DIR]`
+
+Create a dotenv import template from platform config.
+
+```text
+USAGE
+  $ sf env template [DIR] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
+
+ARGUMENTS
+  [DIR]  Project directory to inspect. Defaults to the current directory.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Create a dotenv import template from platform config.
+
+  Read platform config files and print a dotenv template for variables to import into Spacefast.
+
+EXAMPLES
+  Print a dotenv import template from platform config in the current directory.
+
+    $ sf env template
+
+  Return the import template as JSON.
+
+    $ sf env template ./app --json
+```
+
 ## `sf feedback`
 
 Send feedback to Spacefast.
 
 ```text
 USAGE
-  $ sf feedback -m <value> [--profile <value>] [-y] [--category
-    bug|docs|limit|idea|other] [--error-code <value>] [--request-id <value>] [--space-id <value>] [--url <value>]
+  $ sf feedback --message <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [--category bug|docs|limit|idea|other] [--error-code
+    <value>] [--request-id <value>] [--space <SPACE>] [--url <value>]
 
 FLAGS
-  -m, --message=<value>     (required) Feedback message.
-      --category=<option>   [default: other] Feedback category.
-                            <options: bug|docs|limit|idea|other>
-      --error-code=<value>  Related API error code.
-      --request-id=<value>  Related API request id.
-      --space-id=<value>    Related space id.
-      --url=<value>         Related URL.
+  --category=<option>   [default: other] Feedback category.
+                        <options: bug|docs|limit|idea|other>
+  --error-code=<value>  Related API error code.
+  --message=<value>     (required) Feedback message.
+  --request-id=<value>  Related API request id.
+  --space=<SPACE>       Related space.
+  --url=<value>         Related URL.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Send feedback to Spacefast.
@@ -4363,30 +5972,35 @@ DESCRIPTION
 EXAMPLES
   Send docs feedback.
 
-    $ sf feedback -m "The continuation docs are unclear" --category docs
+    $ sf feedback --message "The continuation docs are unclear" --category docs
 
   Send machine-readable feedback with error context.
 
-    $ sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available \
-      --request-id req_123 --json
+    $ sf feedback --message "Publish failed after claim" --category bug --error-code \
+      space_claimed_credential_available --request-id req_123 --json
 ```
 
-## `sf feedback get REF`
+## `sf feedback inspect REF`
 
 Show feedback you sent.
 
 ```text
 USAGE
-  $ sf feedback get REF [--profile <value>] [-y]
+  $ sf feedback inspect REF [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   REF  Feedback reference that `sf feedback` returned, for example fdb_123.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show feedback you sent.
@@ -4394,7 +6008,7 @@ DESCRIPTION
   Show one feedback entry you sent, by the reference `sf feedback` returned. Requires the signed-in login that sent it.
 
 EXAMPLES
-  $ sf feedback get fdb_123
+  $ sf feedback inspect fdb_123
 ```
 
 ## `sf feedback list`
@@ -4403,21 +6017,29 @@ List the feedback you sent.
 
 ```text
 USAGE
-  $ sf feedback list [--profile <value>] [-y] [--limit <value>]
+  $ sf feedback list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--limit <NUMBER>]
 
 FLAGS
-  --limit=<value>  Maximum number of feedback entries to return (default 20, max 100).
+  --limit=<NUMBER>  Maximum number of feedback entries to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List the feedback you sent.
 
   List the feedback you sent with `sf feedback`, newest first. Requires a signed-in login.
+
+ALIASES
+  $ sf feedback ls
 
 EXAMPLES
   List your recent feedback.
@@ -4435,17 +6057,22 @@ Fetch private content.
 
 ```text
 USAGE
-  $ sf fetch [PATH] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--headers] [--output <value>] [--status] [--verify <value>]
+  $ sf fetch [PATH] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--headers]
+    [--output <value>] [--status] [--verify <value>]
 
 ARGUMENTS
   [PATH]  Canonical route to fetch, or a full https URL of a page shared with you. Defaults to /.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 VERIFICATION FLAGS
   --headers         Include response headers, excluding credential-bearing headers.
@@ -4485,27 +6112,27 @@ Use Workers with Spacefast bindings.
 
 ```text
 USAGE
-  $ sf functions [--profile <value>] [-y]
+  $ sf functions [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Use Workers with Spacefast bindings.
 
   Publish a Worker with sf publish. env.CONNECTORS.call(role, tool, args) calls a connector role;
-  env.CONNECTORS.tracker.issues.create(args) is the role proxy. The Space must have bindings or its capsule must declare
-  roles. When the version includes a capsule, env.ZERO.query(name, ...args) and env.ZERO.mutate(name, ...args) call it.
-  Both bindings forward the request's signed Zero identity cookie. ZERO uses the Space's service principal when no
-  visitor is signed in.
-
-EXAMPLES
-  Use Workers with Spacefast bindings.
-
-    $ sf functions
+  env.CONNECTORS.tracker.issues.create(args) is the role proxy. The Space must have bindings or its Zero app must
+  declare roles. When the version includes a Zero app, env.ZERO.query(name, ...args) and env.ZERO.mutate(name, ...args)
+  call it. Both bindings forward the request's signed Zero identity cookie. ZERO uses the Space's service principal when
+  no visitor is signed in.
 ```
 
 ## `sf git`
@@ -4514,23 +6141,23 @@ Manage repository connections.
 
 ```text
 USAGE
-  $ sf git [--profile <value>] [-y]
+  $ sf git [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage repository connections.
 
   Manage repository connections and Git push deploys.
-
-EXAMPLES
-  Manage repository connections.
-
-    $ sf git
 ```
 
 ## `sf git build`
@@ -4539,18 +6166,22 @@ Build repository source.
 
 ```text
 USAGE
-  $ sf git build [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--branch <value>]
-    [--commit <value>] [--pull-request <value>] [--config <value>] [--target production|preview] [--root-directory
-    <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>] [--output-directory
-    <value>] [--ignored-build-command <value>] [--auto-finalize] [--allow-unsupported-platform-features] [--wait]
-    [--wait-timeout <value>]
+  $ sf git build [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--branch <value>] [--commit <value>] [--pull-request <value>] [--config <value>]
+    [--target production|preview] [--root-directory <value>] [--install-directory <value>] [--install-command <value>]
+    [--build-command <value>] [--output-directory <value>] [--ignored-build-command <value>] [--auto-finalize]
+    [--allow-unsupported-platform-features] [--wait] [--wait-timeout <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
   --[no-]allow-unsupported-platform-features  Allow unsupported Vercel or Cloudflare migration features for this build.
@@ -4602,26 +6233,31 @@ Connect repository.
 
 ```text
 USAGE
-  $ sf git connect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--provider github|gitlab|bitbucket|generic] [--connection-type
-    connected|hosted] [--repository <value>] [--repository-id <value>] [--repository-name <value>] [--installation-id
-    <value>] [--credential <value>] [--default-branch <value>] [--production-branch <value>] [--ref <value>] [--config
-    <value>] [--auto-deploy-production] [--auto-deploy-previews] [--root-directory <value>] [--install-directory
-    <value>] [--install-command <value>] [--build-command <value>] [--ignored-build-command <value>] [--output-directory
-    <value>] [--framework-preset <value>] [--platform-preset <value>] [--allow-unsupported-platform-features]
-    [--apply-best] [--sync] [--build-now]
+  $ sf git connect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--provider
+    github|gitlab|bitbucket|generic] [--connection-type connected|hosted] [--repository <value>] [--repository-number
+    <value>] [--repository-name <value>] [--installation <value>] [--credential <value>] [--default-branch <value>]
+    [--production-branch <value>] [--ref <value>] [--config <value>] [--auto-deploy-production] [--auto-deploy-previews]
+    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
+    [--ignored-build-command <value>] [--output-directory <value>] [--framework-preset <value>] [--platform-preset
+    <value>] [--allow-unsupported-platform-features] [--apply-best] [--sync] [--wait-timeout <value>] [--build-now]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
   --allow-unsupported-platform-features  Allow unsupported migration features.
 
 AUTOMATION FLAGS
-  --apply-best                   Detect and save the highest-ranked build settings after connecting.
+  --apply-best                   After connecting, sync the repository, wait for it, then save the highest-ranked
+                                 detected build settings.
   --[no-]auto-deploy-previews    Automatically build preview branches and pull requests.
   --[no-]auto-deploy-production  Automatically build pushes to the production branch.
   --build-now                    Queue a generic Build after connecting.
@@ -4645,16 +6281,19 @@ REPOSITORY FLAGS
   --credential=<value>         [env: SPACEFAST_REPOSITORY_CREDENTIAL] Generic Git clone token. Stored encrypted by the
                                API.
   --default-branch=<value>     Repository default branch.
-  --installation-id=<value>    [env: SPACEFAST_REPOSITORY_INSTALLATION_ID] GitHub App installation ID. Resolved from
+  --installation=<value>       [env: SPACEFAST_REPOSITORY_INSTALLATION_ID] GitHub App installation ID. Resolved from
                                your installations when omitted; pass it to pick one when several grant the repository.
   --production-branch=<value>  Branch that publishes to production.
   --provider=<option>          Repository host.
                                <options: github|gitlab|bitbucket|generic>
   --ref=<value>                [env: SPACEFAST_BUILD_REF] Ref, branch, tag, or commit to sync or build after connecting.
-  --repository=<value>         Repository full name, for example owner/repo. Defaults to the current branch’s upstream
+  --repository=<value>         Repository full name, for example owner/repo. Defaults to the current branch's upstream
                                remote, then origin.
-  --repository-id=<value>      Repository ID from the host. Resolved from GitHub when omitted.
   --repository-name=<value>    Repository name from the host.
+  --repository-number=<value>  Repository's numeric ID on the host. Resolved from GitHub when omitted.
+
+EXECUTION FLAGS
+  --wait-timeout=<value>  Seconds to wait for queued work to finish before giving up.
 
 DESCRIPTION
   Connect repository.
@@ -4669,7 +6308,7 @@ EXAMPLES
 
   Pick the installation when more than one grants the repository.
 
-    $ sf git connect --space docs --provider github --repository owner/repo --installation-id 12345678
+    $ sf git connect --space docs --provider github --repository owner/repo --installation 12345678
 
   Connect a repository, set the production branch, and sync.
 
@@ -4682,14 +6321,19 @@ Disconnect repository.
 
 ```text
 USAGE
-  $ sf git disconnect [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted]
+  $ sf git disconnect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
@@ -4712,23 +6356,23 @@ Manage GitHub App setup.
 
 ```text
 USAGE
-  $ sf git github [--profile <value>] [-y]
+  $ sf git github [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage GitHub App setup.
 
   Inspect GitHub App installations and repositories.
-
-EXAMPLES
-  Manage GitHub App setup.
-
-    $ sf git github
 ```
 
 ## `sf git github installations`
@@ -4737,13 +6381,18 @@ List GitHub installations.
 
 ```text
 USAGE
-  $ sf git github installations [--profile <value>] [-y] [-o <value>]
+  $ sf git github installations [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List GitHub installations.
@@ -4762,43 +6411,59 @@ List GitHub repositories.
 
 ```text
 USAGE
-  $ sf git github repos [INSTALLATION] [--profile <value>] [-y] [-o
-    <value>]
+  $ sf git github repos [INSTALLATION] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
-  [INSTALLATION]  GitHub App installation ID.
+  [INSTALLATION]  GitHub App installation ID from `sf git github installations`. Optional when the team has one
+                  installation.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List GitHub repositories.
 
-  List the repositories a team can connect through a GitHub App installation, most recently pushed first.
+  List the repositories a team can connect through a GitHub App installation, most recently pushed first. Pass the
+  installation ID that `sf git github installations` prints; when the team has exactly one installation it is used
+  automatically.
 
 EXAMPLES
-  List repositories for a GitHub App installation.
+  List repositories for the team's only GitHub App installation.
+
+    $ sf git github repos
+
+  List repositories for a specific GitHub App installation.
 
     $ sf git github repos 12345678
 ```
 
-## `sf git ls`
+## `sf git inspect`
 
 Show repository connection.
 
 ```text
 USAGE
-  $ sf git ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted]
+  $ sf git inspect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
@@ -4809,13 +6474,10 @@ DESCRIPTION
 
   Show a repository connection.
 
-ALIASES
-  $ sf git list
-
 EXAMPLES
   Show the repository connection.
 
-    $ sf git ls --space docs
+    $ sf git inspect --space docs
 ```
 
 ## `sf git origin`
@@ -4824,14 +6486,18 @@ Install Spacefast git remote.
 
 ```text
 USAGE
-  $ sf git origin [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--set-origin]
+  $ sf git origin [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--set-origin]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 GIT FLAGS
   --set-origin  Update origin instead of adding or updating the Spacefast remote.
@@ -4857,15 +6523,19 @@ Sync remote repository source.
 
 ```text
 USAGE
-  $ sf git sync [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--ttl-seconds <value>]
-    [--read-only-ref <value>...]
+  $ sf git sync [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--ttl-seconds <value>] [--read-only-ref <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
@@ -4895,18 +6565,23 @@ Update repository connection.
 
 ```text
 USAGE
-  $ sf git update [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--production-branch <value>]
-    [--credential <value>] [--clear-credential] [--auto-deploy-production] [--auto-deploy-previews] [--config <value>]
-    [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command <value>]
-    [--ignored-build-command <value>] [--output-directory <value>] [--framework-preset <value>] [--platform-preset
-    <value>] [--allow-unsupported-platform-features]
+  $ sf git update [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--production-branch <value>] [--credential <value>] [--clear-credential]
+    [--auto-deploy-production] [--auto-deploy-previews] [--config <value>] [--root-directory <value>]
+    [--install-directory <value>] [--install-command <value>] [--build-command <value>] [--ignored-build-command
+    <value>] [--output-directory <value>] [--framework-preset <value>] [--platform-preset <value>]
+    [--allow-unsupported-platform-features]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 MIGRATION FLAGS
   --[no-]allow-unsupported-platform-features  Allow unsupported migration features.
@@ -4962,11 +6637,6 @@ FLAGS
 
 DESCRIPTION
   Display help for sf.
-
-EXAMPLES
-  Display help for sf.
-
-    $ sf help [command]
 ```
 
 ## `sf init [NAME]`
@@ -4975,27 +6645,25 @@ Create a Spacefast project.
 
 ```text
 USAGE
-  $ sf init [NAME] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-f] [--runtime static|zero|functions] [--template
-    todo|guestbook|contact|context] [--title <value>] [--no-git]
+  $ sf init [NAME] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--force] [--runtime
+    static|zero|functions]
 
 ARGUMENTS
   [NAME]  Directory name for a new project. Omit to initialize the current directory.
 
-EXECUTION FLAGS
-  -f, --force  Overwrite existing generated files.
-
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-ZERO FLAGS
-  --no-git             Skip initializing git for a Zero starter app.
-  --template=<option>  Zero starter template to scaffold.
-                       <options: todo|guestbook|contact|context>
-  --title=<value>      Zero starter app title.
+EXECUTION FLAGS
+  --force  Overwrite existing generated files.
 
 PROJECT FLAGS
   --runtime=<option>  [default: static] Project runtime to scaffold.
@@ -5005,7 +6673,7 @@ DESCRIPTION
   Create a Spacefast project.
 
   Create a Spacefast project, in a new directory when given a name and in the current one otherwise. Use --runtime to
-  scaffold a Zero capsule or a Functions worker instead of a static config.
+  start a Zero app or a Functions worker instead of a static config.
 
 EXAMPLES
   Write a starter spacefast.config.ts in the current directory.
@@ -5020,9 +6688,9 @@ EXAMPLES
 
     $ sf init --space docs
 
-  Scaffold a Zero capsule in a new directory.
+  Start a Zero app (zero.config.ts) in a new directory.
 
-    $ sf init my-app --runtime zero --template guestbook
+    $ sf init my-app --runtime zero
 
   Scaffold a Functions worker in the current directory.
 
@@ -5035,16 +6703,21 @@ Inspect a space by ID, slug, URL, or domain.
 
 ```text
 USAGE
-  $ sf inspect [TARGET] [--profile <value>] [-y] [-o <value>]
+  $ sf inspect [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Inspect a space by ID, slug, URL, or domain.
@@ -5075,14 +6748,18 @@ Link the current directory to a space.
 
 ```text
 USAGE
-  $ sf link [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf link [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Link the current directory to a space.
@@ -5106,21 +6783,32 @@ Log in to Spacefast.
 
 ```text
 USAGE
-  $ sf login [--profile <value>] [-y] [--access
-    read|domains|agent|agent-personal-pages] [--handoff] [-o <value>]
+  $ sf login [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--open] [--read-only | --access read|domains|agent|agent-personal-pages | --handoff
+    | --device-code] [-T <TEAM>]
 
 FLAGS
   --access=<option>  Access to request for this machine: read or domains or agent or agent-personal-pages. Defaults to
                      agent. You confirm or narrow it in the browser.
                      <options: read|domains|agent|agent-personal-pages>
-  --handoff          Redeem a one-use link from a dashboard agent setup prompt or the MCP cli_login tool. Read from
-                     stdin: pipe it or paste it at the hidden prompt, never as an argument.
+  --device-code      Redeem a sign-in code from the MCP cli_login tool. Read from stdin: pipe it or paste it at the
+                     hidden prompt, never as an argument.
+  --handoff          Redeem a one-use link from a dashboard agent setup prompt. Read from stdin: pipe it or paste it at
+                     the hidden prompt, never as an argument.
+  --read-only        Same as --access read: a read-only credential.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 DESCRIPTION
   Log in to Spacefast.
@@ -5133,9 +6821,6 @@ DESCRIPTION
   If browser login is interrupted, run the same login command again. Keep the same CLI home, API URL, and --access
   profile. The CLI resumes the saved request or prints a new link if it expired. Approve the link printed by that run if
   asked. If the command stops while you approve, run it again after approval.
-
-ALIASES
-  $ sf auth login
 
 EXAMPLES
   Start browser-assisted device login.
@@ -5152,15 +6837,19 @@ EXAMPLES
 
   Ask for a read-only credential instead of full agent access.
 
-    $ sf login --access read
+    $ sf login --read-only
 
   Agent access that can also fetch private pages other people shared with you.
 
     $ sf login --access agent-personal-pages
 
-  Redeem a link from a dashboard agent setup prompt or the MCP cli_login tool.
+  Redeem a link from a dashboard agent setup prompt.
 
     printf '%s\n' "$HANDOFF_LINK" | sf login --handoff
+
+  Redeem a sign-in code from the MCP cli_login tool.
+
+    printf '%s\n' "$SIGN_IN_CODE" | sf login --device-code
 ```
 
 ## `sf logout`
@@ -5169,13 +6858,18 @@ Log out of Spacefast.
 
 ```text
 USAGE
-  $ sf logout [--profile <value>] [-y]
+  $ sf logout [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Log out of Spacefast.
@@ -5194,10 +6888,11 @@ Read a space's request and handler logs.
 
 ```text
 USAGE
-  $ sf logs [TARGET] [KIND] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--limit <value>] [-f] [--hostname <value>] [--remote-addr
-    <value>...] [--ja3-hash <value>...] [--method <value>...] [--status <value>...] [--user-agent <value>...] [--asn
-    <value>...] [--since <value>] [--until <value>] [--cursor <value>] [--request-id <value>] [--handler <value>]
+  $ sf logs [TARGET] [KIND] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--limit <NUMBER>]
+    [--wait-timeout <value> -f] [--hostname <value>] [--remote-addr <value>...] [--ja3-hash <value>...] [--method
+    <value>...] [--status <value>...] [--user-agent <value>...] [--asn <value>...] [--since <value>] [--until <value>]
+    [--cursor <CURSOR>] [--request-id <value>] [--handler <value>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
@@ -5207,11 +6902,11 @@ ARGUMENTS
 FLAGS
   -f, --follow                  Poll for new log entries every 2 seconds until interrupted (Ctrl-C).
       --asn=<value>...          Edge logs only: autonomous system number. Repeat to include more numbers.
-      --cursor=<value>          Continue from the cursor printed by the previous page.
+      --cursor=<CURSOR>         Continue from the cursor the previous page returned.
       --handler=<value>         Runtime logs only: lines from one Zero mutation or Functions handler.
       --hostname=<value>        Edge logs only: hostname assigned to the space.
       --ja3-hash=<value>...     Edge logs only: JA3 fingerprint. Repeat to include more fingerprints.
-      --limit=<value>           [default: 50] Maximum number of log entries.
+      --limit=<NUMBER>          [default: 50] Maximum number of log entries.
       --method=<value>...       Edge logs only: HTTP method. Repeat to include more methods.
       --remote-addr=<value>...  Edge logs only: client IP address. Repeat to include more addresses.
       --request-id=<value>      Runtime logs only: everything logged while serving one request.
@@ -5219,12 +6914,17 @@ FLAGS
       --status=<value>...       Edge logs only: HTTP status code. Repeat to include more codes.
       --until=<value>           End of the log window as an ISO 8601 timestamp.
       --user-agent=<value>...   Edge logs only: exact User-Agent value. Repeat to include more values.
+      --wait-timeout=<value>    With --follow: stop following after this many seconds and exit 0.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Read a space's request and handler logs.
@@ -5272,16 +6972,21 @@ Print the machine-readable command map.
 
 ```text
 USAGE
-  $ sf map [--profile <value>] [-y] [--paths]
+  $ sf map [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--paths]
 
 FLAGS
   --paths  Print only canonical command invocations.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Print the machine-readable command map.
@@ -5289,7 +6994,7 @@ DESCRIPTION
   List the flat CLI command surface for agents and other programmatic callers.
 
 EXAMPLES
-  Return canonical commands, aliases, and invocations as JSON.
+  Return every command with its arguments, options, and aliases as JSON.
 
     $ sf map --json
 
@@ -5304,15 +7009,19 @@ Run the Spacefast MCP server.
 
 ```text
 USAGE
-  $ sf mcp [--profile <value>] [--workspace-root <value>]
+  $ sf mcp [--profile <NAME>] [--workspace-root <value>]
+    [--read-only | --groups <GROUPS>]
 
 FLAGS
   --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
+  --groups=<GROUPS>         List only tools in these permission groups, comma-separated: spaces, publishing, domains,
+                            teams, money.
+  --read-only               List only read-only tools, and ask hosted MCP only for Read-only access.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
 GLOBAL FLAGS
-  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+  --profile=<NAME>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run the Spacefast MCP server.
@@ -5321,6 +7030,14 @@ DESCRIPTION
 
 EXAMPLES
   $ sf mcp
+
+  Serve only read-only tools.
+
+    $ sf mcp --read-only
+
+  Serve only the tools for Spaces and domains.
+
+    $ sf mcp --groups spaces,domains
 ```
 
 ## `sf mcp install`
@@ -5329,19 +7046,24 @@ Install MCP client config.
 
 ```text
 USAGE
-  $ sf mcp install [--profile <value>] [-y] [--agent
+  $ sf mcp install [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [--local | --remote | --oauth]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--local |
+    --remote | --oauth] [--read-only | --groups <GROUPS>]
 
 FLAGS
   --agent=<option>...
       Agent/client to configure. Repeat to configure more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+
+  --groups=<GROUPS>
+      List only tools in these permission groups, comma-separated: spaces, publishing, domains, teams, money.
 
   --local
       Use checkout-aware local stdio MCP instead of the hosted proxy.
@@ -5349,14 +7071,21 @@ FLAGS
   --oauth
       With --remote, connect directly and let the editor handle OAuth.
 
+  --read-only
+      List only read-only tools, and ask hosted MCP only for Read-only access.
+
   --remote
       Use hosted MCP through `sf mcp proxy` and the current CLI login.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Install MCP client config.
@@ -5371,6 +7100,10 @@ EXAMPLES
   Install direct hosted MCP with editor-managed OAuth for Cursor.
 
     $ sf mcp install --agent cursor --remote --oauth
+
+  Install a connection that lists only read-only tools.
+
+    $ sf mcp install --agent claude-code --read-only
 ```
 
 ## `sf mcp proxy`
@@ -5379,19 +7112,26 @@ Run the authenticated remote MCP proxy.
 
 ```text
 USAGE
-  $ sf mcp proxy [--profile <value>] [-y] [--endpoint <value>]
-    [--allow-credential-origin <value>...]
+  $ sf mcp proxy [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile <NAME>]
+    [--token <TOKEN>] [-y] [--endpoint <value>] [--allow-credential-origin <value>...] [--read-only | --groups <GROUPS>]
 
 FLAGS
   --allow-credential-origin=<value>...  [env: SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN] Send your Spacefast login to this
                                         MCP origin even though it was not issued for it. Repeatable.
   --endpoint=<value>                    [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on
                                         loopback.
+  --groups=<GROUPS>                     List only tools in these permission groups, comma-separated: spaces, publishing,
+                                        domains, teams, money.
+  --read-only                           List only read-only tools, and ask hosted MCP only for Read-only access.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Run the authenticated remote MCP proxy.
@@ -5399,9 +7139,11 @@ DESCRIPTION
   Proxy remote Spacefast MCP over stdio using the current CLI login.
 
 EXAMPLES
-  Run the authenticated remote MCP proxy.
+  $ sf mcp proxy
 
-    $ sf mcp proxy
+  Connect to read-only hosted MCP.
+
+    $ sf mcp proxy --read-only
 ```
 
 ## `sf migrate URL`
@@ -5410,8 +7152,9 @@ Capture a public website and publish a static copy to Spacefast.
 
 ```text
 USAGE
-  $ sf migrate URL [--profile <value>] [-y] [--team <value>]
-    [--name <value>] [--idempotency-key <value>] [--wait] [--wait-timeout <value>] [--show-secret]
+  $ sf migrate URL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--team <value>] [--name <value>] [--idempotency-key <value>] [--wait]
+    [--wait-timeout <value>] [--show-secret]
 
 ARGUMENTS
   URL  Public HTTPS website URL to capture.
@@ -5425,10 +7168,14 @@ FLAGS
   --wait-timeout=<value>     [default: 900] Seconds to wait for capture and publication.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until the target version is ready and, for production, live before returning.
@@ -5448,23 +7195,278 @@ EXAMPLES
   $ sf migrate https://example.com --no-wait --json
 ```
 
+## `sf oauth-apps`
+
+Manage Sign in with Spacefast apps.
+
+```text
+USAGE
+  $ sf oauth-apps [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage Sign in with Spacefast apps.
+
+  Manage the OAuth apps that let a site's visitors sign in with their Spacefast account.
+```
+
+## `sf oauth-apps create`
+
+Create an OAuth app.
+
+```text
+USAGE
+  $ sf oauth-apps create --name <value> --redirect-uri <value>... [--api-url <URL>] [--cwd <DIR>] [-d]
+    [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--homepage <value>] [--logo
+    <value>] [--confidential]
+
+FLAGS
+  --confidential             Issue a client secret for a server-side app.
+  --homepage=<value>         The app's https homepage.
+  --logo=<value>             An https URL of the app's logo.
+  --name=<value>             (required) App name, shown on the consent screen.
+  --redirect-uri=<value>...  (required) URL sign-in returns to. Repeat for each URL.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Create an OAuth app.
+
+  Register an OAuth app so a site's visitors can sign in with Spacefast. Apps are public and use PKCE from the browser;
+  pass --confidential only for a server-side app, whose secret is shown once.
+
+EXAMPLES
+  Register a browser app for a Space.
+
+    $ sf oauth-apps create --name 'Guestbook' --redirect-uri https://guestbook.space.fast/auth/callback
+
+  Also allow sign-in while developing locally.
+
+    $ sf oauth-apps create --name 'Guestbook' --redirect-uri https://guestbook.space.fast/auth/callback \
+      --redirect-uri http://localhost:5173/auth/callback
+```
+
+## `sf oauth-apps delete APP`
+
+Delete an OAuth app.
+
+```text
+USAGE
+  $ sf oauth-apps delete APP [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  APP  The app's client ID.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete an OAuth app.
+
+  Delete an OAuth app. Sign-in on every site using it stops working immediately.
+
+ALIASES
+  $ sf oauth-apps rm
+  $ sf oauth-apps del
+
+EXAMPLES
+  Delete an OAuth app.
+
+    $ sf oauth-apps delete <client-id>
+```
+
+## `sf oauth-apps inspect APP`
+
+Show an OAuth app.
+
+```text
+USAGE
+  $ sf oauth-apps inspect APP [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  APP  The app's client ID.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show an OAuth app.
+
+  Show an OAuth app, its redirect URLs, and its OIDC endpoints.
+
+EXAMPLES
+  Show one OAuth app.
+
+    $ sf oauth-apps inspect <client-id>
+```
+
+## `sf oauth-apps list`
+
+List OAuth apps.
+
+```text
+USAGE
+  $ sf oauth-apps list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List OAuth apps.
+
+  List the team's OAuth apps and the OIDC endpoints they use.
+
+ALIASES
+  $ sf oauth-apps ls
+
+EXAMPLES
+  List OAuth apps for the selected team.
+
+    $ sf oauth-apps list
+```
+
+## `sf oauth-apps secret rotate APP`
+
+Rotate an OAuth app's client secret.
+
+```text
+USAGE
+  $ sf oauth-apps secret rotate APP [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  APP  The app's client ID.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Rotate an OAuth app's client secret.
+
+  Issue a new client secret for a confidential app and print it once. The old secret stops working immediately.
+
+EXAMPLES
+  Rotate a confidential app's secret.
+
+    $ sf oauth-apps secret rotate <client-id>
+```
+
+## `sf oauth-apps update APP`
+
+Update an OAuth app.
+
+```text
+USAGE
+  $ sf oauth-apps update APP [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--name <value>] [--redirect-uri <value>...] [--homepage <value>] [--logo
+    <value>]
+
+ARGUMENTS
+  APP  The app's client ID.
+
+FLAGS
+  --homepage=<value>         The app's https homepage. Empty clears it.
+  --logo=<value>             An https URL of the app's logo. Empty clears it.
+  --name=<value>             New app name.
+  --redirect-uri=<value>...  Redirect URL. Repeat for each; replaces the current list.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Update an OAuth app.
+
+  Change an OAuth app. --redirect-uri replaces the whole list; pass an empty --homepage or --logo to clear it. People
+  who already signed in keep their access.
+
+EXAMPLES
+  Allow sign-in from a custom domain too.
+
+    $ sf oauth-apps update <client-id> --redirect-uri https://guestbook.space.fast/auth/callback --redirect-uri \
+      https://guestbook.example.com/auth/callback
+```
+
 ## `sf open [TARGET]`
 
 Open a private Space.
 
 ```text
 USAGE
-  $ sf open [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--path <value>] [--show-secret]
+  $ sf open [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--path <value>]
+    [--show-secret]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, Version URL, or domain. Defaults to the linked space.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 OPEN FLAGS
   --path=<value>  [default: /] Clean route to open after the exchange.
@@ -5485,40 +7487,41 @@ EXAMPLES
     $ sf open docs
 ```
 
-## `sf operations [ID]`
+## `sf operations [OPERATION]`
 
 Inspect async operations.
 
 ```text
 USAGE
-  $ sf operations [ID] [--profile <value>] [-y] [--space <value>]
-    [--limit <value>] [--cursor <value>]
+  $ sf operations [OPERATION] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 ARGUMENTS
-  [ID]  Operation ID. Omit to list recent operations.
+  [OPERATION]  Operation ID. Omit to list recent operations.
 
 FLAGS
-  --cursor=<value>  Pagination cursor from a previous response.
-  --limit=<value>   Maximum number of operations to return (default 50, max 100).
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of operations to return (default 50, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Inspect async operations.
 
   List recent async operations or read one by ID. Pass --space to scope the list to a space.
 
-ALIASES
-  $ sf ops
-
 EXAMPLES
-  $ sf ops
+  $ sf operations
 
-  $ sf ops op_123
+  $ sf operations op_123
 
   $ sf operations --space spc_123
 ```
@@ -5529,23 +7532,23 @@ Manage Pages templates.
 
 ```text
 USAGE
-  $ sf pages [--profile <value>] [-y]
+  $ sf pages [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage Pages templates.
 
   Pull, validate, and preview Spacefast-authored pages.
-
-EXAMPLES
-  Manage Pages templates.
-
-    $ sf pages
 ```
 
 ## `sf pages pull [TARGET]`
@@ -5554,26 +7557,26 @@ Own a default page template.
 
 ```text
 USAGE
-  $ sf pages pull [TARGET] [--profile <value>] [-y]
+  $ sf pages pull [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   [TARGET]  Page id, layout, or all.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Own a default page template.
 
   Copy Spacefast's readable default page HTML into your project.
-
-EXAMPLES
-  Own a default page template.
-
-    $ sf pages pull [target]
 ```
 
 ## `sf pages validate`
@@ -5582,26 +7585,26 @@ Validate local Pages templates.
 
 ```text
 USAGE
-  $ sf pages validate [--profile <value>] [-y] [-d <value>]
+  $ sf pages validate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--dir <value>]
 
 FLAGS
-  -d, --dir=<value>  [default: .] Project directory.
+  --dir=<value>  [default: .] Project directory.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Validate local Pages templates.
 
   Run the same structural Pages checks used by publish.
-
-EXAMPLES
-  Validate local Pages templates.
-
-    $ sf pages validate
 ```
 
 ## `sf plugins`
@@ -5610,28 +7613,33 @@ Install the Spacefast agent plugin.
 
 ```text
 USAGE
-  $ sf plugins [--profile <value>] [-y] [--agent
+  $ sf plugins [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf] [--dry-run]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf] [--dry-run]
 
 FLAGS
   --agent=<option>
       [default: claude-code] Plugin-capable agent to configure.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --dry-run
       Print the pinned installer command without changing agent configuration.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Install the Spacefast agent plugin.
@@ -5658,13 +7666,18 @@ List provider profiles.
 
 ```text
 USAGE
-  $ sf profiles [--profile <value>] [-y]
+  $ sf profiles [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List provider profiles.
@@ -5678,22 +7691,27 @@ EXAMPLES
     $ sf profiles
 ```
 
-## `sf profiles rm NAME`
+## `sf profiles remove NAME`
 
 Remove a provider profile.
 
 ```text
 USAGE
-  $ sf profiles rm NAME [--profile <value>] [-y]
+  $ sf profiles remove NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   NAME  Profile name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a provider profile.
@@ -5701,13 +7719,12 @@ DESCRIPTION
   Delete a named provider profile and its stored credential.
 
 ALIASES
-  $ sf profiles remove
-  $ sf profiles delete
+  $ sf profiles rm
 
 EXAMPLES
   Delete the staging provider profile.
 
-    $ sf profiles rm staging
+    $ sf profiles remove staging
 ```
 
 ## `sf profiles set NAME`
@@ -5716,16 +7733,21 @@ Create or update a provider profile.
 
 ```text
 USAGE
-  $ sf profiles set NAME [--profile <value>] [-y]
+  $ sf profiles set NAME [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [-y]
 
 ARGUMENTS
   NAME  Profile name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
       --api-url=<value>  Provider API base URL for this profile.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create or update a provider profile.
@@ -5745,16 +7767,21 @@ Select the active provider profile.
 
 ```text
 USAGE
-  $ sf profiles use NAME [--profile <value>] [-y]
+  $ sf profiles use NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   NAME  Profile name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Select the active provider profile.
@@ -5773,18 +7800,26 @@ Promote a version to a channel.
 
 ```text
 USAGE
-  $ sf promote [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--channel <value>] [--continuation-token <value>] [--wait]
-    [--wait-timeout <value>]
+  $ sf promote [VERSION] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--refresh-rewrites]
+    [--channel <value>] [--continuation-token <value>] [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
 
+FLAGS
+  --[no-]refresh-rewrites  Refresh rewrites on rollback and create a version; use --no-refresh-rewrites for the saved
+                           output.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --channel=<value>             [default: live] Channel to point at this version (default "live").
@@ -5820,49 +7855,45 @@ Publish files or built projects to Spacefast.
 
 ```text
 USAGE
-  $ sf publish [DIR] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa
-    auto|true|false] [-m <value>] [--git-branch <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository
-    <value>] [--source-type direct-upload|git] [--access private|public] [--mode website|files] [--target
-    production|preview] [--dry-run] [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret]
-    [--build] [--remote] [--prebuilt] [--root-directory <value>] [--install-directory <value>] [--install-command
-    <value>] [--build-command <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command
-    <value>] [--source-include <value>...] [--skip-install] [--skip-build] [--publish-mode additive|snapshot]
-    [--immutable-asset-prefix <value>...] [--allow-unsupported-platform-features] [--auto-finalize]
+  $ sf publish [DIR] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--space <SPACE>] [--name
+    <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--message <value>] [--git-branch
+    <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository <value>] [--source-type direct-upload|git]
+    [--access private|parent_team|public] [--noindex] [--mode website|files] [--target production|preview] [--dry-run]
+    [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote] [--prebuilt]
+    [--git] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
+    <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include
+    <value>...] [--skip-install] [--skip-build] [--publish-mode additive|snapshot] [--immutable-asset-prefix <value>...]
+    [--allow-unsupported-platform-features] [--auto-finalize]
 
 ARGUMENTS
   [DIR]  File, directory, project, or .zip/.tar.gz archive to publish. Defaults to the current directory.
 
-VERSION SOURCE FLAGS
-  -m, --message=<value>         [env: SPACEFAST_PUBLISH_MESSAGE] Changelog entry shown in version history. Overrides the
-                                detected git commit message.
-      --git-branch=<value>      [env: SPACEFAST_GIT_BRANCH] Git branch name to record on the version.
-      --git-commit=<value>      [env: SPACEFAST_GIT_COMMIT] Git commit SHA to record on the version.
-      --git-ref=<value>         [env: SPACEFAST_GIT_REF] Git ref to record on the version.
-      --git-repository=<value>  [env: SPACEFAST_GIT_REPOSITORY] Git repository to record on the version, for example
-                                owner/repo.
-      --source-type=<option>    [env: SPACEFAST_SOURCE_TYPE] Version source type to record.
-                                <options: direct-upload|git>
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 SPACE METADATA FLAGS
-  -n, --name=<value>             Set the space title.
-      --access=private|public    Set initial access when this publish creates a team-owned space: private (your team) or
-                                 public (anyone).
-      --hostname-scope=<option>  Managed hostname scope for newly created spaces.
-                                 <options: team|global>
-      --mode=<option>            Serve the space as a website (default) or as a raw file listing. Usually set in
-                                 spacefast.config.ts.
-                                 <options: website|files>
-      --slug=<value>             Set the space slug when creating a new space. Reserved names are rejected, as are slugs
-                                 containing spacefast, stattic, automattic, wordpress, or paypal anywhere.
-      --spa=<option>             [default: auto] Control single-page app fallback detection.
-                                 <options: auto|true|false>
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+  --access=private|parent_team|public  Set initial access when this publish creates a team-owned space: private (your
+                                       team), parent_team (your team and its parent team, who can view and comment), or
+                                       public (anyone).
+  --hostname-scope=<option>            Managed hostname scope for newly created spaces.
+                                       <options: team|global>
+  --mode=<option>                      Serve the space as a website (default) or as a raw file listing. Usually set in
+                                       spacefast.config.ts.
+                                       <options: website|files>
+  --name=<value>                       Set the space title.
+  --noindex                            Hide a new Space from search engines from its first publication. Creation only.
+  --slug=<value>                       Set the space slug when creating a new space. Reserved names are rejected, as are
+                                       slugs containing spacefast, stattic, automattic, wordpress, or paypal anywhere.
+  --spa=<option>                       [default: auto] Control single-page app fallback detection.
+                                       <options: auto|true|false>
 
 MIGRATION FLAGS
   --allow-unsupported-platform-features  Publish even when imported platform config includes features Spacefast cannot
@@ -5897,6 +7928,21 @@ BUILD FLAGS
   --source-include=<value>...      Ignored file or directory to include in a remote source archive. Repeat for multiple
                                    paths.
 
+GIT FLAGS
+  --git  Publish this Git repository by pushing it: sign in if needed, create its space (or use the linked one), add a
+         push remote, and push. Every later push publishes too.
+
+VERSION SOURCE FLAGS
+  --git-branch=<value>      [env: SPACEFAST_GIT_BRANCH] Git branch name to record on the version.
+  --git-commit=<value>      [env: SPACEFAST_GIT_COMMIT] Git commit SHA to record on the version.
+  --git-ref=<value>         [env: SPACEFAST_GIT_REF] Git ref to record on the version.
+  --git-repository=<value>  [env: SPACEFAST_GIT_REPOSITORY] Git repository to record on the version, for example
+                            owner/repo.
+  --message=<value>         [env: SPACEFAST_PUBLISH_MESSAGE] Changelog entry shown in version history. Overrides the
+                            detected git commit message.
+  --source-type=<option>    [env: SPACEFAST_SOURCE_TYPE] Version source type to record.
+                            <options: direct-upload|git>
+
 VERSION FLAGS
   --immutable-asset-prefix=<value>...  Path prefix whose files are content-addressed and kept from the previous version,
                                        so a tab loaded before this publish can still fetch its chunks. Snapshot mode
@@ -5905,6 +7951,9 @@ VERSION FLAGS
                                        published (additive).
                                        <options: additive|snapshot>
 
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
+
 OUTPUT FLAGS
   --show-secret  Print the access URL and claim link in JSON or non-interactive output.
 
@@ -5912,12 +7961,8 @@ DESCRIPTION
   Publish files or built projects to Spacefast.
 
   Publish a file, directory, project, or archive to Spacefast. Files and static directories deploy directly; archives
-  always use remote detection, which packs static content unchanged and builds detected applications. sf deploy is an
-  exact alias. Deploying is publishing: a deployment is a version, and the canonical nouns are version, channel, and
-  build.
-
-ALIASES
-  $ sf deploy
+  always use remote detection, which packs static content unchanged and builds detected applications. Deploying is
+  publishing: a deployment is a version, and the canonical nouns are version, channel, and build.
 
 EXAMPLES
   Publish a file or directory directly.
@@ -5936,6 +7981,10 @@ EXAMPLES
 
     $ sf publish ./site.zip
 
+  Publish this Git repository and keep publishing on every push. Signs in through the browser if needed.
+
+    $ sf publish --git
+
   Publish an unpromoted preview without moving the live channel.
 
     $ sf publish --target preview --json
@@ -5945,23 +7994,129 @@ EXAMPLES
     $ sf publish --json --stream
 ```
 
+## `sf purchases cancel ID`
+
+Cancel a purchase.
+
+```text
+USAGE
+  $ sf purchases cancel ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  ID  Purchase ID (bpi_...).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Cancel a purchase.
+
+  Cancel a purchase before it is charged, and release what it held.
+
+EXAMPLES
+  $ sf purchases cancel bpi_123 --team acme
+```
+
+## `sf purchases confirm ID`
+
+Confirm a purchase and charge the saved payment method.
+
+```text
+USAGE
+  $ sf purchases confirm ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--payment-token <value> --expect-total <value>] [-T <TEAM>]
+
+ARGUMENTS
+  ID  Purchase ID (bpi_...).
+
+FLAGS
+  --expect-total=<value>   The total before tax you agreed to, in USD (e.g. 10.34).
+  --payment-token=<value>  Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the team's
+                           payment method. Needs --expect-total.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Confirm a purchase and charge the saved payment method.
+
+  Charge the team's saved payment method for a purchase waiting on confirmation. --expect-total is the confirmation: it
+  is charged only if the total before tax is still exactly that. Needs purchasing power (team owners and admins have
+  it).
+
+EXAMPLES
+  Charge the saved payment method for a purchase you agreed to.
+
+    $ sf purchases confirm bpi_123 --expect-total 10.34 --team acme
+```
+
+## `sf purchases inspect ID`
+
+Inspect a purchase.
+
+```text
+USAGE
+  $ sf purchases inspect ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  ID  Purchase ID (bpi_...).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Inspect a purchase.
+
+  Show a team purchase: what it buys, its total, and what happens next.
+
+EXAMPLES
+  $ sf purchases inspect bpi_123 --team acme
+```
+
 ## `sf redeploy [BUILD]`
 
 Retry the latest build (alias of `sf builds retry`).
 
 ```text
 USAGE
-  $ sf redeploy [BUILD] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf redeploy [BUILD] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   [BUILD]  Build ID (bld_...) to retry. Defaults to the space's most recent build.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Retry the latest build (alias of `sf builds retry`).
@@ -5980,24 +8135,75 @@ EXAMPLES
     $ sf redeploy bld_123
 ```
 
+## `sf resolve [REF]`
+
+Resolve an id, URL, hostname, or slug.
+
+```text
+USAGE
+  $ sf resolve [REF] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
+
+ARGUMENTS
+  [REF]  An id, hostname, URL (Space, dashboard, or API), Git repository, or slug. Omit, or pass `.`, for the folder's
+         linked Space.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Resolve an id, URL, hostname, or slug.
+
+  Resolve any reference to everything it names that you can read: a team, Space, version, build, domain, operation, or
+  another resource, with its ids and URLs. Exits with the not-found code when it names nothing you can read.
+
+EXAMPLES
+  Resolve the Space linked to this folder.
+
+    $ sf resolve
+
+  Resolve a custom domain to its domain record and Space.
+
+    $ sf resolve https://docs.example.com/guide
+
+  Resolve a build id to the build and its Space, as JSON.
+
+    $ sf resolve bld_123 --json
+```
+
 ## `sf rollback VERSION`
 
 Roll back to a previous version.
 
 ```text
 USAGE
-  $ sf rollback VERSION [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--channel <value>] [--continuation-token <value>] [--wait] [--wait-timeout
-    <value>]
+  $ sf rollback VERSION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--refresh-rewrites]
+    [--channel <value>] [--continuation-token <value>] [--wait] [--wait-timeout <value>]
 
 ARGUMENTS
   VERSION  Version ID, ref, or number to make live, for example ver_123, v12, or 12.
 
+FLAGS
+  --[no-]refresh-rewrites  Refresh rewrites on rollback and create a version; use --no-refresh-rewrites for the saved
+                           output.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --channel=<value>             [default: live] Channel to point at this version (default "live").
@@ -6009,13 +8215,14 @@ EXECUTION FLAGS
 DESCRIPTION
   Roll back to a previous version.
 
-  Roll live traffic back to an existing ready version. Use `versions ls` to find a version. After approval completes,
-  retry the same rollback with --continuation-token or SPACEFAST_CONTINUATION_TOKEN.
+  Restore an earlier version’s files with current rewrites. Use --no-refresh-rewrites to activate the saved version
+  exactly. Use `versions ls` to find a version. After approval completes, retry the same rollback with
+  --continuation-token or SPACEFAST_CONTINUATION_TOKEN.
 
 EXAMPLES
   List versions and find the target rollback version.
 
-    $ sf versions ls
+    $ sf versions list
 
   Make version v12 live.
 
@@ -6032,23 +8239,23 @@ Routing utilities.
 
 ```text
 USAGE
-  $ sf routing [--profile <value>] [-y]
+  $ sf routing [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Routing utilities.
 
   Inspect routing configuration and compute redirects/headers.
-
-EXAMPLES
-  Routing utilities.
-
-    $ sf routing
 ```
 
 ## `sf routing compute`
@@ -6057,14 +8264,18 @@ Compute routing.
 
 ```text
 USAGE
-  $ sf routing compute [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf routing compute [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Compute routing.
@@ -6083,18 +8294,22 @@ Inspect local routing files.
 
 ```text
 USAGE
-  $ sf routing inspect [--profile <value>] [-y] [-r <value>] [--url
-    <value>...]
+  $ sf routing inspect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--routing <value>] [--url <value>...]
 
 FLAGS
-  -r, --routing=<value>  [default: .] Directory containing _redirects, _headers, and spacefast.config.ts to inspect.
-      --url=<value>...   URL or path to match against local routing rules. Repeat for multiple URLs.
+  --routing=<value>  [default: .] Directory containing _redirects, _headers, and spacefast.config.ts to inspect.
+  --url=<value>...   URL or path to match against local routing rules. Repeat for multiple URLs.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Inspect local routing files.
@@ -6118,23 +8333,23 @@ Manage traffic rules.
 
 ```text
 USAGE
-  $ sf rules [--profile <value>] [-y]
+  $ sf rules [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage traffic rules.
 
   Inspect, declare, and try out a space's traffic rules: what it blocks, challenges, or serves past the cache.
-
-EXAMPLES
-  Manage traffic rules.
-
-    $ sf rules
 ```
 
 ## `sf rules add`
@@ -6143,18 +8358,22 @@ Add a traffic rule.
 
 ```text
 USAGE
-  $ sf rules add --kind firewall|cache-bypass [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--action block|challenge] [--status <value>]
-    [--name <value>] [--description <value>] [--any] [--path <value>...] [--host <value>...] [--method <value>...] [--ip
-    <value>...] [--country <value>...] [--asn <value>...] [--user-agent <value>...] [--referer <value>...] [--header
-    <value>...] [--cookie <value>...] [--query <value>...] [--extension <value>...] [--ja3 <value>...] [--ja4
-    <value>...] [--not <value>...] [--wait]
+  $ sf rules add --kind firewall|cache-bypass [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--action block|challenge] [--status <value>] [--name <value>] [--description <value>] [--any] [--path <value>...]
+    [--host <value>...] [--method <value>...] [--ip <value>...] [--country <value>...] [--asn <value>...] [--user-agent
+    <value>...] [--referer <value>...] [--header <value>...] [--cookie <value>...] [--query <value>...] [--extension
+    <value>...] [--ja3 <value>...] [--ja4 <value>...] [--not <value>...] [--wait]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RULE FLAGS
   --action=<option>      What a firewall rule does: block answers without reaching the space, challenge asks for proof
@@ -6164,7 +8383,7 @@ RULE FLAGS
   --description=<value>  What this rule is for.
   --kind=<option>        (required) Which list the rule belongs to.
                          <options: firewall|cache-bypass>
-  --name=<value>         Name for this rule, so `sf rules rm` can address it.
+  --name=<value>         Name for this rule, so `sf rules remove` can address it.
   --status=<value>       Status a blocked request gets. Defaults to 403. Blocks only.
 
 MATCH FLAGS
@@ -6208,20 +8427,24 @@ EXAMPLES
     $ sf rules add --kind cache-bypass --path '/api/*'
 ```
 
-## `sf rules ls`
+## `sf rules list`
 
 List traffic rules.
 
 ```text
 USAGE
-  $ sf rules ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf rules list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List traffic rules.
@@ -6230,12 +8453,12 @@ DESCRIPTION
   last said about it.
 
 ALIASES
-  $ sf rules list
+  $ sf rules ls
 
 EXAMPLES
   List traffic rules for the docs space.
 
-    $ sf rules ls --space docs
+    $ sf rules list --space docs
 ```
 
 ## `sf rules pause`
@@ -6244,14 +8467,18 @@ Pause traffic rules.
 
 ```text
 USAGE
-  $ sf rules pause [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf rules pause [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Pause traffic rules.
@@ -6265,49 +8492,28 @@ EXAMPLES
     $ sf rules pause --space docs
 ```
 
-## `sf rules resume`
-
-Resume traffic rules.
-
-```text
-USAGE
-  $ sf rules resume [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Resume traffic rules.
-
-  Put every parked traffic rule back into the state it was paused from. Safe to run on a space that is not paused.
-
-EXAMPLES
-  Put the docs space's rules back.
-
-    $ sf rules resume --space docs
-```
-
-## `sf rules rm NAME`
+## `sf rules remove NAME`
 
 Remove a traffic rule.
 
 ```text
 USAGE
-  $ sf rules rm NAME [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--kind firewall|cache-bypass] [--wait]
+  $ sf rules remove NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--kind firewall|cache-bypass]
+    [--wait]
 
 ARGUMENTS
   NAME  Name of the rule to remove.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RULE FLAGS
   --kind=<option>  Which list the rule belongs to.
@@ -6323,13 +8529,42 @@ DESCRIPTION
   there and published.
 
 ALIASES
-  $ sf rules remove
-  $ sf rules delete
+  $ sf rules rm
 
 EXAMPLES
   Remove a firewall rule after confirmation.
 
-    $ sf rules rm block-logins --kind firewall
+    $ sf rules remove block-logins --kind firewall
+```
+
+## `sf rules resume`
+
+Resume traffic rules.
+
+```text
+USAGE
+  $ sf rules resume [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Resume traffic rules.
+
+  Put every parked traffic rule back into the state it was paused from. Safe to run on a space that is not paused.
+
+EXAMPLES
+  Put the docs space's rules back.
+
+    $ sf rules resume --space docs
 ```
 
 ## `sf rules test URL`
@@ -6338,19 +8573,23 @@ Try a request against the traffic rules.
 
 ```text
 USAGE
-  $ sf rules test URL [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--method <value>] [--ip <value>] [--country <value>] [--asn <value>]
-    [--user-agent <value>] [--referer <value>] [--ja3 <value>] [--ja4 <value>] [--header <value>...] [--cookie
-    <value>...] [--file <value>]
+  $ sf rules test URL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--method <value>] [--ip
+    <value>] [--country <value>] [--asn <value>] [--user-agent <value>] [--referer <value>] [--ja3 <value>] [--ja4
+    <value>] [--header <value>...] [--cookie <value>...] [--file <value>]
 
 ARGUMENTS
   URL  URL or path to answer, for example /wp-login.php.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REQUEST FLAGS
   --asn=<value>         Client network's ASN.
@@ -6389,14 +8628,18 @@ Check traffic rules before publishing them.
 
 ```text
 USAGE
-  $ sf rules validate [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--file <value>]
+  $ sf rules validate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--file <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RULE FLAGS
   --file=<value>  Config file to read. Defaults to the spacefast.config.ts in this directory.
@@ -6423,23 +8666,23 @@ Inspect a space's runtime.
 
 ```text
 USAGE
-  $ sf runtime [--profile <value>] [-y]
+  $ sf runtime [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Inspect a space's runtime.
 
   Inspect what a space is serving and what runs it.
-
-EXAMPLES
-  Inspect a space's runtime.
-
-    $ sf runtime
 ```
 
 ## `sf runtime status`
@@ -6448,20 +8691,24 @@ Show what a space is serving.
 
 ```text
 USAGE
-  $ sf runtime status [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf runtime status [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show what a space is serving.
 
   Show what a space is serving: its live version, the URL it answers on, and what the live version deployed when it
-  ships code. A capsule lists tables, queries, mutations, endpoints, migration count and schema digest; a worker lists
+  ships code. A Zero app lists tables, queries, mutations, endpoints, migration count and schema digest; a worker lists
   entry, bundle digest, routes, endpoints and capabilities. All of it comes from version metadata, so it answers while
   the runtime is asleep or moving.
 
@@ -6475,24 +8722,67 @@ EXAMPLES
     $ sf runtime status --space docs
 ```
 
+## `sf search`
+
+Find the command for a task.
+
+```text
+USAGE
+  $ sf search [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--limit <NUMBER>]
+
+FLAGS
+  --limit=<NUMBER>  Most matches to return (default 5).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Find the command for a task.
+
+  Describe a task in plain words and get the commands that do it, best match first. It ranks the same commands `sf map`
+  lists, needs no login, and never uses the network. Keep queries anonymous: describe the action and the resource, not
+  names or IDs.
+
+EXAMPLES
+  Find the command that follows a Space's logs.
+
+    $ sf search "tail runtime logs"
+
+  The top matches as JSON, with usage and an example for each.
+
+    $ sf search "add a custom domain" --json
+```
+
 ## `sf sell activate`
 
 Enable live Sell sales after Stripe readiness checks.
 
 ```text
 USAGE
-  $ sf sell activate [--profile <value>] [-y] [-o <value>] [--mode
-    test|live]
+  $ sf sell activate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 FLAGS
   --mode=<option>  [default: test] Payment mode. Never falls back between test and live.
                    <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Enable live Sell sales after Stripe readiness checks.
@@ -6511,23 +8801,23 @@ Prepare a test seller without live onboarding.
 
 ```text
 USAGE
-  $ sf sell demo [--profile <value>] [-y] [-o <value>] [--mode
-    test|live]
+  $ sf sell demo [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 FLAGS
   --mode=<option>  [default: test] Payment mode. Never falls back between test and live.
                    <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Prepare a test seller without live onboarding.
-
-    $ sf sell demo
 ```
 
 ## `sf sell onboard`
@@ -6536,8 +8826,8 @@ Start or resume hosted Stripe seller onboarding.
 
 ```text
 USAGE
-  $ sf sell onboard --country <value> [--profile <value>] [-y] [-o
-    <value>] [--mode test|live]
+  $ sf sell onboard --country <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 FLAGS
   --country=<value>  (required) Seller ISO country code, such as US or PL.
@@ -6545,10 +8835,14 @@ FLAGS
                      <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Start or resume hosted Stripe seller onboarding.
@@ -6561,72 +8855,74 @@ EXAMPLES
     $ sf sell onboard --mode live --country US
 ```
 
-## `sf sell orders get SESSIONID`
+## `sf sell orders inspect ORDER`
 
 Read payment, delivery and private shipping details.
 
 ```text
 USAGE
-  $ sf sell orders get SESSIONID [--profile <value>] [-y] [-o <value>]
-    [--mode test|live]
+  $ sf sell orders inspect ORDER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 ARGUMENTS
-  SESSIONID  Checkout Session ID.
+  ORDER  Checkout Session ID.
 
 FLAGS
   --mode=<option>  [default: test] Payment mode. Never falls back between test and live.
                    <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Read payment, delivery and private shipping details.
-
-    $ sf sell orders get <sessionId>
 ```
 
-## `sf sell orders ls`
+## `sf sell orders list`
 
 List seller orders without buyer addresses.
 
 ```text
 USAGE
-  $ sf sell orders ls [--profile <value>] [-y] [-o <value>] [--mode
-    test|live] [--limit <value>] [--cursor <value>]
+  $ sf sell orders list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --cursor=<value>  Continue from the previous page's nextCursor.
-  --limit=<value>   [default: 20] Native orders per page.
-  --mode=<option>   [default: test] Payment mode. Never falls back between test and live.
-                    <options: test|live>
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   [default: 20] Native orders per page.
+  --mode=<option>    [default: test] Payment mode. Never falls back between test and live.
+                     <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  List seller orders without buyer addresses.
-
-    $ sf sell orders ls
+ALIASES
+  $ sf sell orders ls
 ```
 
-## `sf sell orders resend SESSIONID`
+## `sf sell orders resend ORDER`
 
 Resend digital delivery and replace the previous download link.
 
 ```text
 USAGE
-  $ sf sell orders resend SESSIONID [--profile <value>] [-y] [-o <value>]
-    [--mode test|live] [--attempt-key <value>]
+  $ sf sell orders resend ORDER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live] [--attempt-key <value>]
 
 ARGUMENTS
-  SESSIONID  Checkout Session ID.
+  ORDER  Checkout Session ID.
 
 FLAGS
   --attempt-key=<value>  UUID for retrying this exact request without creating another operation.
@@ -6634,28 +8930,29 @@ FLAGS
                          <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Resend digital delivery and replace the previous download link.
-
-    $ sf sell orders resend <sessionId>
 ```
 
-## `sf sell orders ship SESSIONID`
+## `sf sell orders ship ORDER`
 
 Record a physical order's manual shipment.
 
 ```text
 USAGE
-  $ sf sell orders ship SESSIONID [--profile <value>] [-y] [-o <value>]
-    [--mode test|live] [--attempt-key <value>] [--tracking <value>] [--test-shipment]
+  $ sf sell orders ship ORDER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live] [--attempt-key <value>] [--tracking
+    <value>] [--test-shipment]
 
 ARGUMENTS
-  SESSIONID  Checkout Session ID.
+  ORDER  Checkout Session ID.
 
 FLAGS
   --attempt-key=<value>  UUID for retrying this exact request without creating another operation.
@@ -6665,15 +8962,15 @@ FLAGS
   --tracking=<value>     Optional tracking reference.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Record a physical order's manual shipment.
-
-    $ sf sell orders ship <sessionId>
 ```
 
 ## `sf sell products archive KEY`
@@ -6682,8 +8979,8 @@ Archive a source product; new sales stop after publishing.
 
 ```text
 USAGE
-  $ sf sell products archive KEY [--profile <value>] [-y] [--directory
-    <value>]
+  $ sf sell products archive KEY [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--directory <value>]
 
 ARGUMENTS
   KEY  Stable product key.
@@ -6692,15 +8989,15 @@ FLAGS
   --directory=<value>  [default: .] Project root containing your Spacefast config.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Archive a source product; new sales stop after publishing.
-
-    $ sf sell products archive <key>
 ```
 
 ## `sf sell products create`
@@ -6709,46 +9006,49 @@ Add a product to the configured source catalog.
 
 ```text
 USAGE
-  $ sf sell products create --file <value> [--profile <value>] [-y]
-    [--directory <value>]
+  $ sf sell products create --file <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--directory <value>]
 
 FLAGS
   --directory=<value>  [default: .] Project root containing your Spacefast config.
   --file=<value>       (required) JSON file containing the complete product declaration.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Add a product to the configured source catalog.
-
-    $ sf sell products create --file <file>
 ```
 
-## `sf sell products ls`
+## `sf sell products list`
 
 List products in the configured source catalog.
 
 ```text
 USAGE
-  $ sf sell products ls [--profile <value>] [-y] [--directory <value>]
+  $ sf sell products list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--directory <value>]
 
 FLAGS
   --directory=<value>  [default: .] Project root containing your Spacefast config.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  List products in the configured source catalog.
-
-    $ sf sell products ls
+ALIASES
+  $ sf sell products ls
 ```
 
 ## `sf sell products update KEY`
@@ -6757,8 +9057,8 @@ Replace a product declaration while preserving its stable key.
 
 ```text
 USAGE
-  $ sf sell products update KEY --file <value> [--profile <value>] [-y]
-    [--directory <value>]
+  $ sf sell products update KEY --file <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [--directory <value>]
 
 ARGUMENTS
   KEY  Stable product key.
@@ -6768,15 +9068,15 @@ FLAGS
   --file=<value>       (required) JSON file containing the complete product declaration.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Replace a product declaration while preserving its stable key.
-
-    $ sf sell products update <key> --file <file>
 ```
 
 ## `sf sell refresh`
@@ -6785,18 +9085,22 @@ Refresh Stripe payment and payout readiness.
 
 ```text
 USAGE
-  $ sf sell refresh [--profile <value>] [-y] [-o <value>] [--mode
-    test|live]
+  $ sf sell refresh [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 FLAGS
   --mode=<option>  [default: test] Payment mode. Never falls back between test and live.
                    <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Refresh Stripe payment and payout readiness.
@@ -6815,48 +9119,93 @@ Show Sell payment and payout readiness.
 
 ```text
 USAGE
-  $ sf sell status [--profile <value>] [-y] [-o <value>] [--mode
-    test|live]
+  $ sf sell status [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live]
 
 FLAGS
   --mode=<option>  [default: test] Payment mode. Never falls back between test and live.
                    <options: test|live>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Show Sell payment and payout readiness.
-
-    $ sf sell status
 ```
 
 ## `sf setup`
 
-Generate setup instructions.
+Sign in, install Spacefast, and publish this project.
 
 ```text
 USAGE
-  $ sf setup [--profile <value>] [-y]
+  $ sf setup [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--agent
+    auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
+    |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
+    [--publish]
+
+FLAGS
+  --agent=<option>...
+      Agent to set up. Repeat to set up more than one.
+      <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
+      opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+
+  --project
+      Install into this project only: skills in this folder, no plugins.
+
+  --[no-]publish
+      Publish this project after setting up. In a terminal it asks; without one it publishes only with --yes.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 DESCRIPTION
-  Generate setup instructions.
+  Sign in, install Spacefast, and publish this project.
 
-  Generate setup instructions for agents and integrations.
+  Sign in, install the Spacefast CLI and agent plugins or skills, then publish this project. In a terminal it asks
+  first. `--yes` takes every default: the CLI when it runs through npx, bunx or pnpm dlx and `sf` isn't installed, the
+  detected agents for every project, and a publish. That publish pushes this repository when it has a commit, else
+  builds and publishes the project when `sf publish` finds a build, else publishes the first of dist, build, out that
+  exists, or this folder when it has an index.html, else nothing. Without a terminal and without `--yes`, it does only
+  what `--agent` and `--project` say: no CLI install, no publish. It won't publish a checkout saved with an anonymous
+  space's key, or one linked to a space in another team. Use `sf setup agent` to install agent tooling alone.
 
 EXAMPLES
-  Generate setup instructions.
+  In a terminal: choose what to set up, then whether to publish.
 
     $ sf setup
+
+  Take every default for the team, without questions.
+
+    $ sf setup -y --team my-team
+
+  Install Cursor skills into this project and publish nothing.
+
+    $ sf setup --agent cursor --project --no-publish
+
+  Without a terminal: set up Cursor for every project, and nothing else.
+
+    $ sf setup --agent cursor --json
 ```
 
 ## `sf setup agent`
@@ -6865,17 +9214,16 @@ Install Spacefast agent tooling.
 
 ```text
 USAGE
-  $ sf setup agent [--profile <value>] [-y] [--agent
+  $ sf setup agent [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--open] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [--local | --remote | --oauth]
-    [--skip-mcp] [--force] [--agent-name <value> --handoff]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
+    [--local | --remote | --oauth] [--skip-mcp] [--read-only | --groups <GROUPS>] [--force] [--agent-name <value>
+    --handoff]
 
 FLAGS
-  -p, --project
-      Install skills and VS Code MCP config into this project, not global directories.
-
   -y, --yes
       Skip prompts, auto-detect agents, and accept hosted MCP through `sf mcp proxy`.
 
@@ -6883,19 +9231,22 @@ FLAGS
       Agent/client to configure. Repeat to configure more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --agent-name=<value>
       With --handoff, the name your user calls you, or your product name, such as Claude Code. The user sees it as the
-      connection's name. Defaults to the detected agent.
+      connection's name. Defaults to the detected agent. A product name also picks the client to set up when --agent is
+      not given.
 
   --force
       Overwrite locally modified or unverified Spacefast skill files.
 
+  --groups=<GROUPS>
+      List only tools in these permission groups, comma-separated: spaces, publishing, domains, teams, money.
+
   --handoff
-      Redeem a one-use handoff link from the dashboard or the MCP cli_login tool before generating setup. The link is read
-      from stdin.
+      Redeem a one-use handoff link from the dashboard before generating setup. The link is read from stdin.
 
   --local
       Use checkout-aware local stdio MCP instead of the hosted proxy.
@@ -6903,13 +9254,29 @@ FLAGS
   --oauth
       With --remote, connect directly and let the editor handle OAuth.
 
+  --project
+      Install skills and VS Code MCP config into this project, not global directories.
+
+  --read-only
+      List only read-only tools, and ask hosted MCP only for Read-only access.
+
   --remote
       Use hosted MCP through `sf mcp proxy` and the current CLI login.
 
   --skip-mcp
       Install skills without configuring MCP.
-  --json             Format output as json.
-  --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 DESCRIPTION
   Install Spacefast agent tooling.
@@ -6932,24 +9299,24 @@ Manage Space Grants.
 
 ```text
 USAGE
-  $ sf share [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage Space Grants.
 
-  List every active Grant. Use `sf share grant`, `link`, `password`, `token`, or `identity` to add access.
-
-EXAMPLES
-  Manage Space Grants.
-
-    $ sf share
+  Manage Spacefast Share. List every active Grant. Use `sf share grant`, `link`, `password`, `token`, or `identity` to
+  add access.
 ```
 
 ## `sf share check`
@@ -6958,42 +9325,43 @@ Explain effective Grant access.
 
 ```text
 USAGE
-  $ sf share check [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--path <value>] [--as public|team|person|link|password|machine|external]
-    [--person <value>] [--link <value>] [--password <value>] [--machine <value>] [--issuer <value>] [--subject <value>]
-    [--verified-email] [--ip <value>] [--target live|version|branch] [--target-id <value>]
+  $ sf share check [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--path <value>] [--as
+    public|team|person|link|password|machine|external] [--person <value>] [--link <value>] [--password <value>]
+    [--machine <value>] [--issuer <value>] [--subject <value>] [--verified-email] [--ip <value>] [--target
+    live|version|branch] [--version <value>] [--branch <value>]
 
 FLAGS
-  --as=<option>        [default: public] Audience to simulate.
-                       <options: public|team|person|link|password|machine|external>
-  --ip=<value>         Hypothetical IP. IP-constrained Grants remain unsupported and denied.
-  --issuer=<value>     External identity issuer when --as external.
-  --link=<value>       Link id when --as link.
-  --machine=<value>    Machine credential id when --as machine.
-  --password=<value>   Password credential id when --as password.
-  --path=<value>       [default: /] Canonical route to check.
-  --person=<value>     Person id when --as person.
-  --subject=<value>    External identity subject when --as external.
-  --target=<option>    [default: live] Published target kind.
-                       <options: live|version|branch>
-  --target-id=<value>  Version id or branch name.
-  --verified-email     Simulate a principal with a verified email.
+  --as=<option>       [default: public] Audience to simulate.
+                      <options: public|team|person|link|password|machine|external>
+  --branch=<value>    Branch to check, with --target branch.
+  --ip=<value>        Hypothetical IP. IP-constrained Grants remain unsupported and denied.
+  --issuer=<value>    External identity issuer when --as external.
+  --link=<value>      Link id when --as link.
+  --machine=<value>   Machine credential id when --as machine.
+  --password=<value>  Password credential id when --as password.
+  --path=<value>      [default: /] Canonical route to check.
+  --person=<value>    Person id when --as person.
+  --subject=<value>   External identity subject when --as external.
+  --target=<option>   [default: live] Published target kind.
+                      <options: live|version|branch>
+  --verified-email    Simulate a principal with a verified email.
+  --version=<value>   Version to check, with --target version.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Explain effective Grant access.
 
   Explain the exact additive Grants and capabilities matching one route, audience, and target.
-
-EXAMPLES
-  Explain effective Grant access.
-
-    $ sf share check
 ```
 
 ## `sf share grant`
@@ -7002,16 +9370,21 @@ Create a Space Grant.
 
 ```text
 USAGE
-  $ sf share grant --to public|team --role viewer|commenter|editor|manager --path <value>... [--api-url
-    <value>] [--profile <value>] [-y] [-o <value>] [--space <value>] [--wait]
-    [--exclude <value>...] [--target <value>] [--name <value>] [--expires <value>] [--network <value>...] [--country
-    <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...]
+  $ sf share grant --to public|team|parent_team [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--wait] [--role viewer|commenter|editor|manager] [--path <value>...] [--exclude <value>...] [--target <value>]
+    [--name <value>] [--expires <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
+    [--exclude-user-agent <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -7023,12 +9396,12 @@ GRANT FLAGS
   --exclude=<value>...  [default: ] Excluded route pattern local to this Grant. Repeatable.
   --expires=<value>     Expire after a duration such as 7d or 30m.
   --name=<value>        Human-readable Grant name.
-  --path=<value>...     (required) Included route pattern. Repeat for disjoint paths.
-  --role=<option>       (required) Role: viewer, commenter, editor, or manager.
+  --path=<value>...     Included route pattern. Repeat for disjoint paths. Required for public and team.
+  --role=<option>       Role: viewer, commenter, editor, or manager. Required for public and team.
                         <options: viewer|commenter|editor|manager>
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
-  --to=<option>         (required) Audience: public or team.
-                        <options: public|team>
+  --to=<option>         (required) Audience: public, team, or parent_team.
+                        <options: public|team|parent_team>
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -7037,12 +9410,17 @@ DESCRIPTION
   Create a Space Grant.
 
   Create one additive Grant. Credential-backed audiences use `sf share link`, `password`, `token`, or `identity` so
-  their proof and Grant are created together.
+  their proof and Grant are created together. `--to parent_team` lets everyone in the owning subteam's parent team view
+  the whole live space (Enterprise and Internal families); it takes no role, path, target, or constraint flags.
 
 EXAMPLES
   Let the owning team view the docs subtree.
 
     $ sf share grant --to team --role viewer --path '/docs/**'
+
+  Let everyone in the parent team view this subteam's live space.
+
+    $ sf share grant --to parent_team
 
   Publish a review subtree with anonymous Comments.
 
@@ -7053,19 +9431,20 @@ EXAMPLES
     $ sf share grant --to public --role viewer --path '/**' --target all-versions
 ```
 
-## `sf share grant edit ID`
+## `sf share grant update GRANT`
 
 Edit a direct managed Grant.
 
 ```text
 USAGE
-  $ sf share grant edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--name <value>] [--role viewer|commenter|editor|manager]
-    [--exclude <value>... --path <value>...] [--target <value>] [--expires <value> | --no-expiry] [--network <value>...
-    | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
+  $ sf share grant update GRANT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait] [--name
+    <value>] [--role viewer|commenter|editor|manager] [--exclude <value>... --path <value>...] [--target <value>]
+    [--expires <value> | --no-expiry] [--network <value>... | --no-network] [--country <value>... | ] [--exclude-country
+    <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
-  ID  Managed Grant id.
+  GRANT  Managed Grant id.
 
 FLAGS
   --exclude=<value>...  Excluded route pattern for the replacement path set. Repeatable.
@@ -7078,10 +9457,14 @@ FLAGS
   --target=<value>      Replace the target: live, all-versions, version:<id>, or branch:<name>.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             Replace allowed ISO country codes. Repeatable.
@@ -7097,11 +9480,6 @@ DESCRIPTION
   Edit a direct managed Grant.
 
   Replace editable dimensions of a direct managed Grant while preserving its stable id.
-
-EXAMPLES
-  Edit a direct managed Grant.
-
-    $ sf share grant edit <id>
 ```
 
 ## `sf share identity`
@@ -7110,23 +9488,23 @@ Manage external identity access.
 
 ```text
 USAGE
-  $ sf share identity [--profile <value>] [-y]
+  $ sf share identity [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage external identity access.
 
   Connect OIDC or a white-label signer, then grant external subjects precise capabilities and paths.
-
-EXAMPLES
-  Manage external identity access.
-
-    $ sf share identity
 ```
 
 ## `sf share identity create`
@@ -7135,9 +9513,9 @@ Create an identity connection.
 
 ```text
 USAGE
-  $ sf share identity create --type oidc|signer --name <value> --issuer <value> [--profile
-    <value>] [-y] [-o <value>] [--client-id <value>] [--client-secret <value>] [--authorize-url
-    <value>] [--key <value>...]
+  $ sf share identity create --type oidc|signer --name <value> --issuer <value> [--api-url <URL>] [--cwd <DIR>]
+    [-d] [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--client-id <value>]
+    [--client-secret <value>] [--authorize-url <value>] [--key <value>...]
 
 FLAGS
   --authorize-url=<value>  HTTPS URL visitors are sent to for proof. Required with --type signer.
@@ -7151,10 +9529,14 @@ FLAGS
                            <options: oidc|signer>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create an identity connection.
@@ -7179,11 +9561,11 @@ Create an external identity Grant.
 
 ```text
 USAGE
-  $ sf share identity grant --connection <value> --subject <value> --name <value> [--profile
-    <value>] [-y] [-o <value>] [--space <value>] [--role
-    viewer|commenter|editor|manager] [--path <value>...] [--except <value>...] [--target <value>] [--not-before <value>]
-    [--expires <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country
-    <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
+  $ sf share identity grant --connection <value> --subject <value> --name <value> [--api-url <URL>] [--cwd <DIR>]
+    [-d] [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+    [--space <SPACE>] [--role viewer|commenter|editor|manager] [--path <value>...] [--except <value>...] [--target
+    <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network <value>...] [--country
+    <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
   --connection=<value>  (required) Identity connection id (acn_...) that proves this subject.
@@ -7196,10 +9578,14 @@ FLAGS
   --target=<value>      [default: live] live, all-versions, version:<id>, or branch:<name>.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -7228,19 +9614,24 @@ EXAMPLES
       "/**" --except "/internal/**"
 ```
 
-## `sf share identity ls`
+## `sf share identity list`
 
 List identity connections.
 
 ```text
 USAGE
-  $ sf share identity ls [--profile <value>] [-y] [-o <value>]
+  $ sf share identity list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List identity connections.
@@ -7248,12 +9639,12 @@ DESCRIPTION
   List Team OIDC and white-label signer connections.
 
 ALIASES
-  $ sf share identity list
+  $ sf share identity ls
 
 EXAMPLES
   List the connections a Team can grant against.
 
-    $ sf share identity ls --team acme
+    $ sf share identity list --team acme
 ```
 
 ## `sf share identity revoke CONNECTION`
@@ -7262,17 +9653,21 @@ Revoke an identity connection.
 
 ```text
 USAGE
-  $ sf share identity revoke CONNECTION [--profile <value>] [-y] [-o
-  <value>]
+  $ sf share identity revoke CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   CONNECTION  Identity connection id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke an identity connection.
@@ -7291,9 +9686,9 @@ Update or rotate an identity connection.
 
 ```text
 USAGE
-  $ sf share identity update CONNECTION [--profile <value>] [-y] [-o
-    <value>] [--name <value>] [--client-id <value>] [--client-secret <value>] [--authorize-url <value>] [--key
-    <value>...] [--session-ttl <value>]
+  $ sf share identity update CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--name <value>] [--client-id <value>] [--client-secret
+    <value>] [--authorize-url <value>] [--key <value>...] [--session-ttl <value>]
 
 ARGUMENTS
   CONNECTION  Identity connection id.
@@ -7308,10 +9703,14 @@ FLAGS
   --session-ttl=<value>    Admitted session lifetime, for example 30m or 8h.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Update or rotate an identity connection.
@@ -7334,43 +9733,47 @@ Manage Links.
 
 ```text
 USAGE
-  $ sf share link [--profile <value>] [-y]
+  $ sf share link [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage Links.
 
   Create, list, edit, copy, and revoke named Links. Each Link owns one Grant with paths, exclusions, capabilities, and a
   serving target.
-
-EXAMPLES
-  Manage Links.
-
-    $ sf share link
 ```
 
-## `sf share link copy ID`
+## `sf share link copy LINK`
 
 Copy a Link.
 
 ```text
 USAGE
-  $ sf share link copy ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--show-secret]
+  $ sf share link copy LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--show-secret]
 
 ARGUMENTS
-  ID  Share link id (see `sf share link ls`).
+  LINK  Share link id (see `sf share link list`).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 LINK FLAGS
   --show-secret  Print the share URL even when output is JSON or non-interactive.
@@ -7392,17 +9795,21 @@ Create a Link.
 
 ```text
 USAGE
-  $ sf share link create --name <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--landing <value>] [--path <value>...] [--exclude
-    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses
-    <value>] [--require-verified-email] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
-    [--exclude-user-agent <value>...] [--show-secret]
+  $ sf share link create --name <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--landing <value>]
+    [--path <value>...] [--exclude <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>]
+    [--expires <value>] [--max-uses <value>] [--require-verified-email] [--network <value>...] [--country <value>...]
+    [--exclude-country <value>...] [--exclude-user-agent <value>...] [--show-secret]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -7416,7 +9823,8 @@ CONSTRAINTS FLAGS
 
 LINK FLAGS
   --exclude=<value>...  [default: ] Excluded route pattern local to this Link. Repeatable.
-  --landing=<value>     [default: /] Clean route opened after exchange.
+  --landing=<value>     Page opened by the Link. Defaults to / when allowed, then to a permitted path or directory from
+                        --path. For a scope like /docs/*, supply a matching page.
   --name=<value>        (required) Human name shown in the Links list.
   --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
   --role=<option>       [default: viewer] Role: viewer or commenter. Defaults to viewer. A commenter on the live target
@@ -7437,27 +9845,98 @@ EXAMPLES
       --role commenter --target version:ver_123 --name "Client review" --expires 7d
 ```
 
-## `sf share link edit ID`
+## `sf share link list`
+
+List Links.
+
+```text
+USAGE
+  $ sf share link list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List Links.
+
+  List named Links with Grant paths, capabilities, target, expiry, and lifecycle. List reads never carry credentials.
+
+ALIASES
+  $ sf share link ls
+
+EXAMPLES
+  List share links for the docs space.
+
+    $ sf share link list --space docs
+```
+
+## `sf share link revoke LINK`
+
+Revoke a Link.
+
+```text
+USAGE
+  $ sf share link revoke LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+ARGUMENTS
+  LINK  Share link id (see `sf share link list`).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Revoke a Link.
+
+  Revoke a share link. The grant drops from the compiled rule set in the same write, so every outstanding URL stops
+  working on the next request.
+
+EXAMPLES
+  Revoke a share link.
+
+    $ sf share link revoke lnk_123
+```
+
+## `sf share link update LINK`
 
 Edit Link metadata.
 
 ```text
 USAGE
-  $ sf share link edit ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--name <value>] [--landing <value>] [--exclude <value>... --path
-    <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value> | --no-not-before] [--expires <value>
-    | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email | --allow-unverified-email] [--network
-    <value>... | --no-network] [--country <value>... | ] [--exclude-country <value>... | ] [--exclude-user-agent
-    <value>... | ]
+  $ sf share link update LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--name <value>] [--landing
+    <value>] [--exclude <value>... --path <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>
+    | --no-not-before] [--expires <value> | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email
+    | --allow-unverified-email] [--network <value>... | --no-network] [--country <value>... | ] [--exclude-country
+    <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
-  ID  Link id.
+  LINK  Link id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --allow-unverified-email         Remove the verified-email requirement.
@@ -7488,70 +9967,6 @@ DESCRIPTION
   Edit Link metadata.
 
   Replace a Link's metadata or Grant dimensions without rotating its stable URL.
-
-EXAMPLES
-  Edit Link metadata.
-
-    $ sf share link edit <id>
-```
-
-## `sf share link ls`
-
-List Links.
-
-```text
-USAGE
-  $ sf share link ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List Links.
-
-  List named Links with Grant paths, capabilities, target, expiry, and lifecycle. List reads never carry credentials.
-
-ALIASES
-  $ sf share link list
-
-EXAMPLES
-  List share links for the docs space.
-
-    $ sf share link ls --space docs
-```
-
-## `sf share link revoke ID`
-
-Revoke a Link.
-
-```text
-USAGE
-  $ sf share link revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
-
-ARGUMENTS
-  ID  Share link id (see `sf share link ls`).
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Revoke a Link.
-
-  Revoke a share link. The grant drops from the compiled rule set in the same write, so every outstanding URL stops
-  working on the next request.
-
-EXAMPLES
-  Revoke a share link.
-
-    $ sf share link revoke lnk_123
 ```
 
 ## `sf share list`
@@ -7560,14 +9975,18 @@ List Space Grants.
 
 ```text
 USAGE
-  $ sf share list [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List Space Grants.
@@ -7576,11 +9995,6 @@ DESCRIPTION
 
 ALIASES
   $ sf share ls
-
-EXAMPLES
-  List Space Grants.
-
-    $ sf share list
 ```
 
 ## `sf share password`
@@ -7589,23 +10003,23 @@ Manage password access.
 
 ```text
 USAGE
-  $ sf share password [--profile <value>] [-y]
+  $ sf share password [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage password access.
 
   Create, list, rotate, and revoke named password Grants. Passwords never live in sf.jsonc.
-
-EXAMPLES
-  Manage password access.
-
-    $ sf share password
 ```
 
 ## `sf share password create`
@@ -7614,11 +10028,11 @@ Create password access.
 
 ```text
 USAGE
-  $ sf share password create --name <value> --path <value>... [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--password <value>] [--password-from-stdin]
-    [--role viewer|commenter] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>]
-    [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
-    [--exclude-user-agent <value>...] [--require-verified-email]
+  $ sf share password create --name <value> --path <value>... [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--password <value>] [--password-from-stdin] [--role viewer|commenter] [--exclude <value>...] [--target <value>]
+    [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network <value>...] [--country <value>...]
+    [--exclude-country <value>...] [--exclude-user-agent <value>...] [--require-verified-email]
 
 FLAGS
   --exclude=<value>...   [default: ] Local exclusion pattern.
@@ -7631,10 +10045,14 @@ FLAGS
   --target=<value>       [default: live] Published target selector.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -7650,27 +10068,26 @@ DESCRIPTION
   Create password access.
 
   Create a named scoped password Grant. The verifier is Argon2id and rotation fences existing sessions.
-
-EXAMPLES
-  Create password access.
-
-    $ sf share password create --name <name> --path <path>
 ```
 
-## `sf share password ls`
+## `sf share password list`
 
 List password access.
 
 ```text
 USAGE
-  $ sf share password ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share password list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List password access.
@@ -7678,74 +10095,68 @@ DESCRIPTION
   List password proof metadata and the Grants they admit.
 
 ALIASES
-  $ sf share password list
-
-EXAMPLES
-  List password access.
-
-    $ sf share password ls
+  $ sf share password ls
 ```
 
-## `sf share password revoke ID`
+## `sf share password revoke CREDENTIAL`
 
 Revoke password access.
 
 ```text
 USAGE
-  $ sf share password revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share password revoke CREDENTIAL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
-  ID  Password credential id.
+  CREDENTIAL  Password credential id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke password access.
 
   Revoke password access and its canonical Grant.
-
-EXAMPLES
-  Revoke password access.
-
-    $ sf share password revoke <id>
 ```
 
-## `sf share password rotate ID`
+## `sf share password rotate CREDENTIAL`
 
 Rotate a password.
 
 ```text
 USAGE
-  $ sf share password rotate ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--password <value>] [--password-from-stdin]
+  $ sf share password rotate CREDENTIAL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--password <value>]
+    [--password-from-stdin]
 
 ARGUMENTS
-  ID  Password credential id.
+  CREDENTIAL  Password credential id.
 
 FLAGS
   --password=<value>     [env: SPACEFAST_SHARE_PASSWORD] New password, or set SPACEFAST_SHARE_PASSWORD.
   --password-from-stdin  Read the new password from standard input.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Rotate a password.
 
   Replace a password and immediately fence sessions using the old one.
-
-EXAMPLES
-  Rotate a password.
-
-    $ sf share password rotate <id>
 ```
 
 ## `sf share people`
@@ -7754,56 +10165,23 @@ Manage People.
 
 ```text
 USAGE
-  $ sf share people [--profile <value>] [-y]
+  $ sf share people [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage People.
 
   Invite, list, resend, edit, and remove People. A Person can hold roles on multiple route subtrees.
-
-EXAMPLES
-  Manage People.
-
-    $ sf share people
-```
-
-## `sf share people edit PERSON`
-
-Edit a Person's scoped roles.
-
-```text
-USAGE
-  $ sf share people edit PERSON --grant <value>... [--profile <value>]
-    [-y] [-o <value>] [--space <value>] [--target <value>]
-
-ARGUMENTS
-  PERSON  Person id or email address.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-PEOPLE FLAGS
-  --grant=<value>...  (required) Scoped role in <path>=<role> form. Repeat to replace the full grant set.
-  --target=<value>    [default: live] live, all-versions, version:<id>, or branch:<name>.
-
-DESCRIPTION
-  Edit a Person's scoped roles.
-
-  Replace a Person's scoped roles atomically. Repeat --grant for every route subtree they should retain.
-
-EXAMPLES
-  Keep root viewing and grant editing under /docs.
-
-    $ sf share people edit person@example.com --grant /=viewer --grant /docs=editor
 ```
 
 ## `sf share people invite EMAIL`
@@ -7812,18 +10190,22 @@ Invite a Person.
 
 ```text
 USAGE
-  $ sf share people invite EMAIL [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>...] [--target
-    <value>]
+  $ sf share people invite EMAIL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--role
+    viewer|commenter|editor|manager] [--scope <value>...] [--target <value>]
 
 ARGUMENTS
   EMAIL  Email address to invite.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 PEOPLE FLAGS
   --role=<option>     [default: viewer] Role granted on every supplied scope.
@@ -7847,20 +10229,24 @@ EXAMPLES
     $ sf share people invite client@example.com --role viewer --target version:ver_123
 ```
 
-## `sf share people ls`
+## `sf share people list`
 
 List People.
 
 ```text
 USAGE
-  $ sf share people ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share people list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List People.
@@ -7868,12 +10254,7 @@ DESCRIPTION
   List People and every scoped role they hold.
 
 ALIASES
-  $ sf share people list
-
-EXAMPLES
-  List People.
-
-    $ sf share people ls
+  $ sf share people ls
 ```
 
 ## `sf share people remove PERSON`
@@ -7882,27 +10263,29 @@ Remove a Person.
 
 ```text
 USAGE
-  $ sf share people remove PERSON [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share people remove PERSON [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
-  PERSON  Person id or email (see `sf share people ls`).
+  PERSON  Person id or email (see `sf share people list`).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a Person.
 
   Remove a Person and all of their scoped grants.
 
-EXAMPLES
-  Remove a Person.
-
-    $ sf share people remove <person>
+ALIASES
+  $ sf share people rm
 ```
 
 ## `sf share people resend PERSON`
@@ -7911,27 +10294,64 @@ Resend a Person invitation.
 
 ```text
 USAGE
-  $ sf share people resend PERSON [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share people resend PERSON [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   PERSON  Person id or email.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Resend a Person invitation.
 
   Replace a pending Person invitation and send a fresh accountless acceptance email.
+```
+
+## `sf share people update PERSON`
+
+Edit a Person's scoped roles.
+
+```text
+USAGE
+  $ sf share people update PERSON --grant <value>... [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--target <value>]
+
+ARGUMENTS
+  PERSON  Person id or email address.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+PEOPLE FLAGS
+  --grant=<value>...  (required) Scoped role in <path>=<role> form. Repeat to replace the full grant set.
+  --target=<value>    [default: live] live, all-versions, version:<id>, or branch:<name>.
+
+DESCRIPTION
+  Edit a Person's scoped roles.
+
+  Replace a Person's scoped roles atomically. Repeat --grant for every route subtree they should retain.
 
 EXAMPLES
-  Resend a Person invitation.
+  Keep root viewing and grant editing under /docs.
 
-    $ sf share people resend <person>
+    $ sf share people update person@example.com --grant /=viewer --grant /docs=editor
 ```
 
 ## `sf share request`
@@ -7940,42 +10360,47 @@ Manage access requests.
 
 ```text
 USAGE
-  $ sf share request [--profile <value>] [-y]
+  $ sf share request [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage access requests.
 
   List, approve, and deny inbox-verified access requests.
-
-EXAMPLES
-  Manage access requests.
-
-    $ sf share request
 ```
 
-## `sf share request approve ID`
+## `sf share request approve REQUEST`
 
 Approve an access request.
 
 ```text
 USAGE
-  $ sf share request approve ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager] [--scope <value>]
+  $ sf share request approve REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--role
+    viewer|commenter|editor|manager] [--scope <value>]
 
 ARGUMENTS
-  ID  Access request id.
+  REQUEST  Access request id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 APPROVE FLAGS
   --role=<option>  Approved role. Defaults to the requested role.
@@ -7986,56 +10411,54 @@ DESCRIPTION
   Approve an access request.
 
   Approve an access request into the canonical People list. Override the requested role or route scopes when needed.
-
-EXAMPLES
-  Approve an access request.
-
-    $ sf share request approve <id>
 ```
 
-## `sf share request deny ID`
+## `sf share request deny REQUEST`
 
 Deny an access request.
 
 ```text
 USAGE
-  $ sf share request deny ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share request deny REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
-  ID  Access request id.
+  REQUEST  Access request id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Deny an access request.
 
   Deny a pending access request.
-
-EXAMPLES
-  Deny an access request.
-
-    $ sf share request deny <id>
 ```
 
-## `sf share request ls`
+## `sf share request list`
 
 List access requests.
 
 ```text
 USAGE
-  $ sf share request ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share request list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List access requests.
@@ -8043,31 +10466,30 @@ DESCRIPTION
   List pending access requests with requested role and route scope.
 
 ALIASES
-  $ sf share request list
-
-EXAMPLES
-  List access requests.
-
-    $ sf share request ls
+  $ sf share request ls
 ```
 
-## `sf share revoke ID`
+## `sf share revoke GRANT`
 
 Revoke a Space Grant.
 
 ```text
 USAGE
-  $ sf share revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait]
+  $ sf share revoke GRANT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
 
 ARGUMENTS
-  ID  Grant id (see `sf share list`).
+  GRANT  Grant id (see `sf share list`).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -8077,11 +10499,6 @@ DESCRIPTION
 
   Revoke one managed Grant. Change config Grants in sf.jsonc. Credential Grants normally revoke through their credential
   command.
-
-EXAMPLES
-  Revoke a Space Grant.
-
-    $ sf share revoke <id>
 ```
 
 ## `sf share token`
@@ -8090,23 +10507,23 @@ Manage machine access.
 
 ```text
 USAGE
-  $ sf share token [--profile <value>] [-y]
+  $ sf share token [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage machine access.
 
-  Manage header-only machine credentials backed by scoped Grants.
-
-EXAMPLES
-  Manage machine access.
-
-    $ sf share token
+  Manage machine credentials backed by scoped Grants. Tokens are sent as `X-SF-Authorization: Bearer <token>`.
 ```
 
 ## `sf share token create`
@@ -8115,10 +10532,11 @@ Create a machine credential.
 
 ```text
 USAGE
-  $ sf share token create --name <value> --path <value>... [--profile <value>] [--token
-    <value>] [-y] [-o <value>] [--space <value>] [--role viewer|commenter|editor|manager]
-    [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires <value>] [--max-uses <value>] [--network
-    <value>...] [--country <value>...] [--exclude-country <value>...] [--exclude-user-agent <value>...] [--show-secret]
+  $ sf share token create --name <value> --path <value>... [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--role viewer|commenter|editor|manager] [--exclude <value>...] [--target <value>] [--not-before <value>] [--expires
+    <value>] [--max-uses <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...]
+    [--exclude-user-agent <value>...] [--show-secret]
 
 FLAGS
   --exclude=<value>...  [default: ] Local exclusion pattern.
@@ -8130,10 +10548,14 @@ FLAGS
   --target=<value>      [default: live] Published target selector.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
   --country=<value>...             [default: ] Allowed ISO country code. Repeatable.
@@ -8147,28 +10569,38 @@ CONSTRAINTS FLAGS
 DESCRIPTION
   Create a machine credential.
 
-  Create a named header-only machine credential and scoped Grant. The token is returned once.
+  Create a named machine credential and scoped Grant. The token is returned once. Send it on every request as
+  `X-SF-Authorization: Bearer <token>`; the plain Authorization header belongs to the Space's own app and is not
+  checked.
 
 EXAMPLES
-  Create a machine credential.
+  Mint a viewer token for CI.
 
-    $ sf share token create --name <name> --path <path>
+    $ sf share token create --name ci --path '/**' --show-secret --json | jq -r .data.token
+
+  Read the private Space with it.
+
+    curl -H "X-SF-Authorization: Bearer $TOKEN" https://my-space.space.fast/
 ```
 
-## `sf share token ls`
+## `sf share token list`
 
 List machine access.
 
 ```text
 USAGE
-  $ sf share token ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share token list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List machine access.
@@ -8176,130 +10608,151 @@ DESCRIPTION
   List machine credential metadata and the Grants they admit.
 
 ALIASES
-  $ sf share token list
-
-EXAMPLES
-  List machine access.
-
-    $ sf share token ls
+  $ sf share token ls
 ```
 
-## `sf share token revoke ID`
+## `sf share token revoke CREDENTIAL`
 
 Revoke machine access.
 
 ```text
 USAGE
-  $ sf share token revoke ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf share token revoke CREDENTIAL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
-  ID  Machine credential id.
+  CREDENTIAL  Machine credential id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Revoke machine access.
 
   Revoke a machine credential and its canonical Grant.
-
-EXAMPLES
-  Revoke machine access.
-
-    $ sf share token revoke <id>
 ```
 
-## `sf share token rotate ID`
+## `sf share token rotate CREDENTIAL`
 
 Rotate a machine credential.
 
 ```text
 USAGE
-  $ sf share token rotate ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--show-secret]
+  $ sf share token rotate CREDENTIAL [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--show-secret]
 
 ARGUMENTS
-  ID  Machine credential id.
+  CREDENTIAL  Machine credential id.
 
 FLAGS
   --show-secret  Print the one-time token in JSON or non-interactive output.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Rotate a machine credential.
 
   Rotate a machine credential, fence the old token, and return the replacement once.
-
-EXAMPLES
-  Rotate a machine credential.
-
-    $ sf share token rotate <id>
 ```
 
 ## `sf skills`
+
+Manage Spacefast agent skills.
+
+```text
+USAGE
+  $ sf skills [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Manage Spacefast agent skills.
+
+  Install, check, and remove the Spacefast agent skill bundled with this CLI.
+```
+
+## `sf skills install`
 
 Install or update Spacefast agent skills.
 
 ```text
 USAGE
-  $ sf skills [--profile <value>] [-y] [--agent
+  $ sf skills install [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [-l] [--force]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
+    [--list] [--force]
 
 FLAGS
-  -l, --list
-      List bundled skill files without installing.
-
-  -p, --project
-      Install into this project instead of the agent's global skills directory.
-
   --agent=<option>...
       Agent to install for. `auto` configures detected agents plus .agents/skills.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --force
       Overwrite locally modified or unverified Spacefast skill files.
 
+  --list
+      List bundled skill files without installing.
+
+  --project
+      Install into this project instead of the agent's global skills directory.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Install or update Spacefast agent skills.
 
   Install or update the Spacefast agent skill bundled with this CLI.
 
-ALIASES
-  $ sf skills install
-
 EXAMPLES
   Install or update the Spacefast skill for detected agents.
 
-    $ sf skills
+    $ sf skills install
 
   Install or update the Spacefast skill for Codex.
 
-    $ sf skills --agent codex
+    $ sf skills install --agent codex
 
   Install the Spacefast skill to every supported agent.
 
-    $ sf skills --agent all
+    $ sf skills install --agent all
 ```
 
 ## `sf skills remove`
@@ -8308,31 +10761,37 @@ Remove Spacefast agent skills.
 
 ```text
 USAGE
-  $ sf skills remove [--profile <value>] [-y] [--agent
+  $ sf skills remove [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p] [--force]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
+    [--force]
 
 FLAGS
-  -p, --project
-      Remove project-local skills instead of global skills.
-
   --agent=<option>...
       Agent to remove from. Repeat to remove from more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --force
       Remove locally modified or unverified Spacefast skill files.
 
+  --project
+      Remove project-local skills instead of global skills.
+
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove Spacefast agent skills.
@@ -8341,7 +10800,6 @@ DESCRIPTION
 
 ALIASES
   $ sf skills rm
-  $ sf skills uninstall
 
 EXAMPLES
   Remove the global Codex installation.
@@ -8359,36 +10817,38 @@ Check Spacefast skill installation.
 
 ```text
 USAGE
-  $ sf skills status [--profile <value>] [-y] [--agent
+  $ sf skills status [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot|devi
-    n|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf...] [-p]
+    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
+    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
 
 FLAGS
-  -p, --project
-      Check project-local skills instead of global skill directories.
-
   --agent=<option>...
       Agent to check. `auto` checks detected agents plus .agents/skills.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|co
-      pilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
+      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+
+  --project
+      Check project-local skills instead of global skill directories.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Check Spacefast skill installation.
 
   Check installed Spacefast skills against the revision bundled with this CLI.
-
-ALIASES
-  $ sf skills doctor
 
 EXAMPLES
   Check all common global skill locations.
@@ -8397,7 +10857,7 @@ EXAMPLES
 
   Check the Codex Spacefast skill location.
 
-    $ sf skills doctor --agent codex
+    $ sf skills status --agent codex
 
   Check this project's Claude Code skill location.
 
@@ -8410,25 +10870,30 @@ Download a repository archive.
 
 ```text
 USAGE
-  $ sf source archive [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--output <value>]
-    [--overwrite] [--include-glob <value>] [--exclude-glob <value>] [--max-blob-size <value>] [--archive-prefix <value>]
+  $ sf source archive [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--output <value>] [--force] [--include-glob <value>] [--exclude-glob <value>]
+    [--max-blob-size <value>] [--archive-prefix <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --archive-prefix=<value>    Directory prefix inside the archive.
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
   --exclude-glob=<value>      Glob to exclude from the archive.
+  --force                     Overwrite an existing archive file.
   --include-glob=<value>      Glob to include in the archive.
   --max-blob-size=<value>     Maximum blob size to include.
   --output=<value>            Archive file path, or an existing directory to write the archive into.
-  --overwrite                 Overwrite an existing archive file.
   --ref=<value>               Branch, tag, commit, or ref to archive.
 
 DESCRIPTION
@@ -8448,8 +10913,9 @@ Read or set Source available.
 
 ```text
 USAGE
-  $ sf source availability [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--enable | --disable] [--remix-button]
+  $ sf source availability [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--enable | --disable]
+    [--remix-button]
 
 FLAGS
   --disable            Disable future remixes.
@@ -8457,10 +10923,14 @@ FLAGS
   --[no-]remix-button  Show a Remix button on the live site while source is available.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Read or set Source available.
@@ -8485,18 +10955,24 @@ Manage ephemeral repository branches.
 
 ```text
 USAGE
-  $ sf source branch --branch <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--base-ref <value>] [--base-branch <value>]
-    [--connection-type connected|hosted] [--remote] [--delete] [--ttl-seconds <value>] [--read-only-ref <value>...]
+  $ sf source branch --branch <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--base-ref <value>] [--base-branch <value>] [--connection-type connected|hosted] [--remote] [--delete]
+    [--ttl-seconds <value>] [--read-only-ref <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
-  --base-branch=<value>       Branch to create the branch from.
+  --base-branch=<value>       Branch to create the branch from. Defaults to the production branch when --base-ref is
+                              omitted.
   --base-ref=<value>          Commit, tag, or ref to create the branch from.
   --branch=<value>            (required) Ephemeral branch name.
   --connection-type=<option>  Repository connection to use.
@@ -8527,17 +11003,22 @@ Print a repository file.
 
 ```text
 USAGE
-  $ sf source cat PATH [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--max-bytes <value>]
+  $ sf source cat PATH [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--max-bytes <value>]
 
 ARGUMENTS
   PATH  Repository file path to print.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
@@ -8561,15 +11042,20 @@ Create a repository commit from a diff.
 ```text
 USAGE
   $ sf source commits apply --connection-type connected|hosted --target-branch <value> --message <value> --diff <value>
-    [--profile <value>] [-y] [-o <value>]
-    [--space <value>] [--expected-head-sha <value>] [--base-branch <value>] [--ephemeral] [--ephemeral-base]
-    [--author-name <value>] [--author-email <value>] [--committer-name <value>] [--committer-email <value>]
+    [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>]
+    [-y] [-T <TEAM>] [--space <SPACE>] [--expected-head-sha <value>] [--base-branch <value>]
+    [--ephemeral] [--ephemeral-base] [--author-name <value>] [--author-email <value>] [--committer-name <value>]
+    [--committer-email <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --author-email=<value>       Commit author email.
@@ -8602,16 +11088,20 @@ Create a repository commit.
 ```text
 USAGE
   $ sf source commits create --connection-type connected|hosted --target-branch <value> --message <value>
-    [--profile <value>] [-y] [-o <value>] [--space
-    <value>] [--expected-head-sha <value>] [--base-branch <value>] [--ephemeral] [--ephemeral-base] [--author-name
-    <value>] [--author-email <value>] [--committer-name <value>] [--committer-email <value>] [--file <value>...]
-    [--delete <value>...] [--mode 100644|100755|120000|160000]
+    [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y]
+    [-T <TEAM>] [--space <SPACE>] [--expected-head-sha <value>] [--base-branch <value>]
+    [--ephemeral] [--ephemeral-base] [--author-name <value>] [--author-email <value>] [--committer-name <value>]
+    [--committer-email <value>] [--file <value>...] [--delete <value>...] [--mode 100644|100755|120000|160000]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --author-email=<value>       Commit author email.
@@ -8640,23 +11130,28 @@ EXAMPLES
   $ sf source commits create --space docs --connection-type hosted --target-branch main --message "Update" --file index.html=./index.html
 ```
 
-## `sf source commits get SHA`
+## `sf source commits inspect SHA`
 
 Show a repository commit.
 
 ```text
 USAGE
-  $ sf source commits get SHA [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted]
+  $ sf source commits inspect SHA [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted]
 
 ARGUMENTS
   SHA  Commit SHA to inspect.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
@@ -8670,32 +11165,36 @@ DESCRIPTION
 EXAMPLES
   Read commit metadata for a SHA.
 
-    $ sf source commits get <commit-sha> --space docs
+    $ sf source commits inspect <commit-sha> --space docs
 ```
 
-## `sf source commits ls`
+## `sf source commits list`
 
 List repository commits.
 
 ```text
 USAGE
-  $ sf source commits ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--branch <value>] [--path <value>]
-    [--cursor <value>] [--limit <value>] [--ephemeral]
+  $ sf source commits list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--branch <value>] [--path <value>] [--cursor <CURSOR>] [--limit <NUMBER>] [--ephemeral]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --branch=<value>            Branch to list commits from.
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
-  --cursor=<value>            Pagination cursor.
+  --cursor=<CURSOR>           Continue from the cursor the previous page returned.
   --ephemeral                 Treat the branch as ephemeral.
-  --limit=<value>             Maximum commits to return.
+  --limit=<NUMBER>            Maximum commits to return.
   --path=<value>              Repository path to filter commit history.
 
 DESCRIPTION
@@ -8703,10 +11202,13 @@ DESCRIPTION
 
   List commit history from a space's source repository.
 
+ALIASES
+  $ sf source commits ls
+
 EXAMPLES
   List commit history for the main branch.
 
-    $ sf source commits ls --space docs --branch main
+    $ sf source commits list --space docs --branch main
 ```
 
 ## `sf source diff`
@@ -8715,15 +11217,19 @@ Show a repository branch diff.
 
 ```text
 USAGE
-  $ sf source diff --branch <value> [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--connection-type connected|hosted] [--base <value>] [--path
-    <value>] [--ephemeral] [--ephemeral-base]
+  $ sf source diff --branch <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--connection-type connected|hosted] [--base <value>] [--path <value>] [--ephemeral] [--ephemeral-base]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --base=<value>              Base branch, tag, commit, or ref.
@@ -8751,14 +11257,19 @@ Create repository import remote.
 
 ```text
 USAGE
-  $ sf source import [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--ttl-seconds <value>] [--read-only-ref <value>...]
+  $ sf source import [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--ttl-seconds <value>]
+    [--read-only-ref <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --read-only-ref=<value>...  Ref glob to keep read-only on the signed remote. Repeat for multiple refs.
@@ -8775,26 +11286,30 @@ EXAMPLES
     $ sf source import
 ```
 
-## `sf source ls`
+## `sf source list`
 
 List repository files.
 
 ```text
 USAGE
-  $ sf source ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--path <value>]
-    [--recursive] [--metadata] [--limit <value>]
+  $ sf source list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--path <value>] [--recursive] [--metadata] [--limit <NUMBER>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
-  --limit=<value>             Maximum number of entries to return.
+  --limit=<NUMBER>            Maximum number of entries to return.
   --metadata                  Include size and last-commit metadata.
   --path=<value>              Repository directory to list.
   --recursive                 List files recursively.
@@ -8805,10 +11320,13 @@ DESCRIPTION
 
   List files in a space's source repository.
 
+ALIASES
+  $ sf source ls
+
 EXAMPLES
   List files under src recursively.
 
-    $ sf source ls --space docs --path src --recursive
+    $ sf source list --space docs --path src --recursive
 ```
 
 ## `sf source merge SOURCE TARGET`
@@ -8817,20 +11335,24 @@ Merge repository branches.
 
 ```text
 USAGE
-  $ sf source merge SOURCE TARGET --connection-type connected|hosted [--profile
-    <value>] [-y] [-o <value>] [--space <value>] [--strategy
-    merge|ff_only|ff_prefer] [--source-ephemeral] [--target-ephemeral] [--expected-target-sha <value>] [--message
-    <value>] [--allow-unrelated-histories] [--squash]
+  $ sf source merge SOURCE TARGET --connection-type connected|hosted [--api-url <URL>] [--cwd <DIR>] [-d]
+    [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+    [--space <SPACE>] [--strategy merge|ff_only|ff_prefer] [--source-ephemeral] [--target-ephemeral]
+    [--expected-target-sha <value>] [--message <value>] [--allow-unrelated-histories] [--squash]
 
 ARGUMENTS
   SOURCE  Source branch to merge from.
   TARGET  Target branch to merge into.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --allow-unrelated-histories    Allow merging unrelated histories.
@@ -8861,20 +11383,24 @@ Search repository files.
 
 ```text
 USAGE
-  $ sf source search PATTERN [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--ref <value>] [--path <value>]
-    [--include-glob <value>] [--exclude-glob <value>] [--extension <value>] [--case-sensitive] [--context-before
-    <value>] [--context-after <value>] [--max-lines <value>] [--max-matches-per-file <value>] [--cursor <value>]
-    [--limit <value>]
+  $ sf source search PATTERN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--ref <value>] [--path <value>] [--include-glob <value>] [--exclude-glob <value>] [--extension
+    <value>] [--case-sensitive] [--context-before <value>] [--context-after <value>] [--max-lines <value>]
+    [--max-matches-per-file <value>] [--cursor <CURSOR>] [--limit <NUMBER>]
 
 ARGUMENTS
   PATTERN  Text or pattern to search for.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --case-sensitive                Use case-sensitive matching.
@@ -8882,11 +11408,11 @@ REPOSITORY FLAGS
                                   <options: connected|hosted>
   --context-after=<value>         Context lines after each match.
   --context-before=<value>        Context lines before each match.
-  --cursor=<value>                Pagination cursor.
+  --cursor=<CURSOR>               Continue from the cursor the previous page returned.
   --exclude-glob=<value>          Glob to exclude from search.
   --extension=<value>             File extension filter.
   --include-glob=<value>          Glob to include in search.
-  --limit=<value>                 Maximum files to return.
+  --limit=<NUMBER>                Maximum files to return.
   --max-lines=<value>             Maximum matched lines to return.
   --max-matches-per-file=<value>  Maximum matches to return per file.
   --path=<value>                  Repository path to search.
@@ -8909,17 +11435,22 @@ Create a repository tag.
 
 ```text
 USAGE
-  $ sf source tags create NAME --connection-type connected|hosted --target <value>
-    [--profile <value>] [-y] [-o <value>] [--space <value>]
+  $ sf source tags create NAME --connection-type connected|hosted --target <value> [--api-url <URL>] [--cwd
+    <DIR>] [-d] [--no-color] [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T
+    <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   NAME  Tag name to create.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  (required) Repository connection type.
@@ -8937,34 +11468,42 @@ EXAMPLES
     $ sf source tags create v1.0.0 --space docs --connection-type hosted --target main
 ```
 
-## `sf source tags ls`
+## `sf source tags list`
 
 List repository tags.
 
 ```text
 USAGE
-  $ sf source tags ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--connection-type connected|hosted] [--cursor <value>] [--limit <value>]
+  $ sf source tags list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connection-type
+    connected|hosted] [--cursor <CURSOR>] [--limit <NUMBER>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
-  --cursor=<value>            Pagination cursor.
-  --limit=<value>             Maximum tags to return.
+  --cursor=<CURSOR>           Continue from the cursor the previous page returned.
+  --limit=<NUMBER>            Maximum tags to return.
 
 DESCRIPTION
   List repository tags.
 
   List tags in a space's source repository.
 
+ALIASES
+  $ sf source tags ls
+
 EXAMPLES
-  $ sf source tags ls --space docs
+  $ sf source tags list --space docs
 ```
 
 ## `sf spaces`
@@ -8973,71 +11512,23 @@ Manage spaces.
 
 ```text
 USAGE
-  $ sf spaces [--profile <value>] [-y]
+  $ sf spaces [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage spaces.
 
   Manage Spacefast spaces.
-
-EXAMPLES
-  Manage spaces.
-
-    $ sf spaces
-```
-
-## `sf spaces add`
-
-Create a Space or remix a shared Space.
-
-```text
-USAGE
-  $ sf spaces add [--profile <value>] [-y] [-o <value>] [--git
-    <value>] [-n <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode website|files]
-    [--save-state] [--show-secret]
-
-SPACE METADATA FLAGS
-  -n, --name=<value>             Set the space title.
-      --hostname-scope=<option>  Managed hostname scope for newly created spaces.
-                                 <options: team|global>
-      --mode=<option>            Space serving mode.
-                                 <options: website|files>
-      --slug=<value>             Set the space slug when creating a new space. Reserved names are rejected, as are slugs
-                                 containing spacefast, stattic, automattic, wordpress, or paypal anywhere.
-      --spa=<option>             [default: auto] Control single-page app fallback detection.
-                                 <options: auto|true|false>
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-REPOSITORY FLAGS
-  --git=<value>  Remix a Source available Spacefast repository’s main branch.
-
-EXECUTION FLAGS
-  --[no-]save-state  Write the created space to .spacefast/state.json.
-
-OUTPUT FLAGS
-  --show-secret  Print the access URL and claim link in JSON or non-interactive output.
-
-DESCRIPTION
-  Create a Space or remix a shared Space.
-
-  Create a space and save it to .spacefast/state.json.
-
-ALIASES
-  $ sf spaces create
-
-EXAMPLES
-  $ sf spaces add --name docs
 ```
 
 ## `sf spaces archive`
@@ -9046,14 +11537,18 @@ Archive a space.
 
 ```text
 USAGE
-  $ sf spaces archive [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>...]
+  $ sf spaces archive [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <value>...]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Archive a space.
@@ -9073,16 +11568,21 @@ Check whether a space name is available.
 
 ```text
 USAGE
-  $ sf spaces check NAME [--profile <value>] [-y] [-o <value>]
+  $ sf spaces check NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   NAME  Space name or slug to check.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Check whether a space name is available.
@@ -9102,14 +11602,22 @@ Claim an anonymous space.
 
 ```text
 USAGE
-  $ sf spaces claim [--profile <value>] [-y] [--claim-token
-    <value>] [--keep-publishing] [--space <value>] [-o <value>] [--wait]
+  $ sf spaces claim [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--open] [--keep-publishing] [--space <SPACE>] [-T <TEAM>]
+    [--wait]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
 
 EXECUTION FLAGS
   --[no-]wait  Wait until queued work finishes before returning.
@@ -9133,26 +11641,127 @@ EXAMPLES
     printf '%s' "$CLAIM_LINK" | sf spaces claim --space spc_xxx --claim-token - --team my-team
 ```
 
+## `sf spaces create`
+
+Create a Space or remix a shared Space.
+
+```text
+USAGE
+  $ sf spaces create [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--path <value> --git <value>] [--ref <value> ] [--name <value>] [--slug
+    <value>] [--hostname-scope team|global] [--spa auto|true|false] [--mode website|files] [--save-state]
+    [--show-secret]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+REPOSITORY FLAGS
+  --git=<value>   Start from a repository: a Source available Spacefast Space, or a public github.com or gitlab.com
+                  repository.
+  --path=<value>  Copy only this folder of the --git repository, as one commit at the new root.
+  --ref=<value>   Branch, tag, or commit of the --git repository to copy.
+
+SPACE METADATA FLAGS
+  --hostname-scope=<option>  Managed hostname scope for newly created spaces.
+                             <options: team|global>
+  --mode=<option>            Space serving mode.
+                             <options: website|files>
+  --name=<value>             Set the space title.
+  --slug=<value>             Set the space slug when creating a new space. Reserved names are rejected, as are slugs
+                             containing spacefast, stattic, automattic, wordpress, or paypal anywhere.
+  --spa=<option>             [default: auto] Control single-page app fallback detection.
+                             <options: auto|true|false>
+
+EXECUTION FLAGS
+  --[no-]save-state  Write the created space to .spacefast/state.json.
+
+OUTPUT FLAGS
+  --show-secret  Print the access URL and claim link in JSON or non-interactive output.
+
+DESCRIPTION
+  Create a Space or remix a shared Space.
+
+  Create a space and save it to .spacefast/state.json.
+
+EXAMPLES
+  $ sf spaces create --name docs
+```
+
+## `sf spaces delete`
+
+Delete a space.
+
+```text
+USAGE
+  $ sf spaces delete [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+EXECUTION FLAGS
+  --[no-]wait  Wait until queued work finishes before returning.
+
+DESCRIPTION
+  Delete a space.
+
+  Delete the selected space: it goes offline and you can't restore it. Its slug stays reserved to prevent link takeover;
+  only an operator can release it. Versions and data are kept for operator cleanup. To stop serving a space and bring it
+  back later, use `sf spaces archive`.
+
+ALIASES
+  $ sf spaces rm
+  $ sf spaces del
+
+EXAMPLES
+  Delete a space after confirmation.
+
+    $ sf spaces delete --space docs
+
+  Delete a space without the confirmation prompt.
+
+    $ sf spaces delete --space docs --yes
+```
+
 ## `sf spaces download`
 
 Download a space version.
 
 ```text
 USAGE
-  $ sf spaces download [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--output <value>] [--overwrite] [-j <value>] [-v <value>]
+  $ sf spaces download [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--output <value>] [--force]
+    [--concurrency <value>] [--version <value>]
 
 FLAGS
-  -j, --concurrency=<value>  [default: 10] Number of files to download at the same time.
-  -v, --version=<value>      [default: latest] Version ID, version ref, number, or "latest".
-      --output=<value>       [default: .] Directory to write downloaded files into.
-      --overwrite            Overwrite files that already exist in the output directory.
+  --concurrency=<value>  [default: 10] Number of files to download at the same time.
+  --force                Overwrite files that already exist in the output directory.
+  --output=<value>       [default: .] Directory to write downloaded files into.
+  --version=<value>      [default: latest] Version ID, version ref, number, or "latest".
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Download a space version.
@@ -9166,7 +11775,7 @@ EXAMPLES
 
   Download version v3, overwriting existing files.
 
-    $ sf spaces download --space docs --version v3 --overwrite
+    $ sf spaces download --space docs --version v3 --force
 ```
 
 ## `sf spaces duplicate`
@@ -9175,15 +11784,19 @@ Duplicate a space.
 
 ```text
 USAGE
-  $ sf spaces duplicate [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--slug <value>] [--title <value>] [--version <value>] [--wait]
-    [--wait-timeout <value>]
+  $ sf spaces duplicate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--slug <value>] [--title
+    <value>] [--version <value>] [--wait] [--wait-timeout <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DUPLICATE TARGET FLAGS
   --slug=<value>   Slug for the duplicate space. Reserved names are rejected, as are slugs containing spacefast,
@@ -9208,57 +11821,93 @@ EXAMPLES
     $ sf spaces duplicate --space docs --slug docs-copy
 ```
 
-## `sf spaces get`
+## `sf spaces inspect`
 
 Show a space.
 
 ```text
 USAGE
-  $ sf spaces get [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf spaces inspect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a space.
 
   Print a space's live runtime state and current version.
 
-ALIASES
-  $ sf spaces show
-
 EXAMPLES
   Show the space linked to the current directory.
 
-    $ sf spaces get
+    $ sf spaces inspect
 
   Show a specific space by slug, ID, or URL.
 
-    $ sf spaces get --space docs
+    $ sf spaces inspect --space docs
 ```
 
-## `sf spaces ls`
+## `sf spaces key rotate`
+
+Rotate an anonymous Space's key.
+
+```text
+USAGE
+  $ sf spaces key rotate [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--space <SPACE>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Rotate an anonymous Space's key.
+
+  Replace an anonymous space's key, live URL, and claim link without changing recipient Links.
+
+EXAMPLES
+  Rotate the anonymous Space saved in the current directory.
+
+    $ sf spaces key rotate
+```
+
+## `sf spaces list`
 
 List spaces.
 
 ```text
 USAGE
-  $ sf spaces ls [--profile <value>] [-y] [-o <value>] [--limit
-    <value>] [--inactive-for <value>]
+  $ sf spaces list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--inactive-for <value>] [--cursor <CURSOR>]
 
 FLAGS
+  --cursor=<CURSOR>       Continue from the cursor the previous page returned.
   --inactive-for=<value>  Only list the team's spaces with no publish or change in this many days.
-  --limit=<value>         Maximum number of spaces to return (default 50, max 100).
+  --limit=<NUMBER>        Maximum number of spaces to return (default 50, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List spaces.
@@ -9268,20 +11917,20 @@ DESCRIPTION
   owners and admins can use --inactive-for.
 
 ALIASES
-  $ sf spaces list
+  $ sf spaces ls
 
 EXAMPLES
   List spaces accessible to the current login.
 
-    $ sf spaces ls
+    $ sf spaces list
 
   List spaces for a specific team.
 
-    $ sf spaces ls --team acme
+    $ sf spaces list --team acme
 
   List the team's spaces with no publish or change in 90 days.
 
-    $ sf spaces ls --team acme --inactive-for 90
+    $ sf spaces list --team acme --inactive-for 90
 ```
 
 ## `sf spaces restore`
@@ -9290,14 +11939,18 @@ Restore a space.
 
 ```text
 USAGE
-  $ sf spaces restore [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf spaces restore [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Restore a space.
@@ -9308,94 +11961,34 @@ EXAMPLES
   $ sf spaces restore --space docs
 ```
 
-## `sf spaces rm`
-
-Take a space offline.
-
-```text
-USAGE
-  $ sf spaces rm [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait  Wait until queued work finishes before returning.
-
-DESCRIPTION
-  Take a space offline.
-
-  Take the selected space offline. Its slug stays reserved to prevent link takeover; only an operator can release it.
-  Versions and data stay retained for operator cleanup.
-
-ALIASES
-  $ sf spaces remove
-  $ sf spaces delete
-
-EXAMPLES
-  Take a space offline after confirmation.
-
-    $ sf spaces rm --space docs
-
-  Take a space offline without the confirmation prompt.
-
-    $ sf spaces rm --space docs --yes
-```
-
-## `sf spaces rotate-claim`
-
-Rotate an anonymous Space's key.
-
-```text
-USAGE
-  $ sf spaces rotate-claim [--profile <value>] [-y] [--claim-token
-    <value>] [--space <value>]
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Rotate an anonymous Space's key.
-
-  Replace an anonymous space's key, live URL, and claim link without changing recipient Links.
-
-EXAMPLES
-  Rotate the anonymous Space saved in the current directory.
-
-    $ sf spaces rotate-claim
-```
-
 ## `sf spaces transfer TEAM`
 
-Transfer a space to another team.
+Move a space to another team.
 
 ```text
 USAGE
-  $ sf spaces transfer TEAM [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf spaces transfer TEAM [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   TEAM  Target team slug, ID, or name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Transfer a space to another team.
+  Move a space to another team.
 
-  Transfer the selected space to another team. It moves at once if you can accept for the target team, or are a member
-  there and the space has no custom domain, database, or paid resource. Otherwise an owner or admin of the target team
-  must accept.
+  Move the selected space to another team. It moves at once if you can accept for the target team, or are a member
+  there, the team lets members create spaces, and the space has no custom domain, database, or paid resource. Otherwise
+  an owner or admin of the target team must accept. Only one move can be pending at a time.
 
 EXAMPLES
   $ sf spaces transfer acme --space spc_123
@@ -9407,25 +12000,28 @@ Rename or update a space.
 
 ```text
 USAGE
-  $ sf spaces update [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--wait] [--wait-timeout <value>] [--mode website|files] [--spa
-    auto|true|false] [--noindex true|false] [--slug <value>] [-n <value>] [--viewer-description <value>]
-    [--viewer-og-image-path <value>] [--viewer-title <value>]
-
-SPACE METADATA FLAGS
-  -n, --name=<value>      Space title.
-      --mode=<option>     Serving mode.
-                          <options: website|files>
-      --noindex=<option>  Ask search engines not to index the live space. Pass false to allow indexing.
-                          <options: true|false>
-      --spa=<option>      Enable or disable SPA fallback. `auto` leaves the current setting unchanged.
-                          <options: auto|true|false>
+  $ sf spaces update [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait] [--wait-timeout
+    <value>] [--mode website|files] [--spa auto|true|false] [--noindex] [--slug <value>] [--name <value>]
+    [--viewer-description <value>] [--viewer-og-image-path <value>] [--viewer-title <value>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+SPACE METADATA FLAGS
+  --mode=<option>  Serving mode.
+                   <options: website|files>
+  --name=<value>   Space title.
+  --[no-]noindex   Ask search engines not to index the live space; --no-noindex allows indexing.
+  --spa=<option>   Enable or disable SPA fallback. `auto` leaves the current setting unchanged.
+                   <options: auto|true|false>
 
 IDENTITY FLAGS
   --slug=<value>  New space slug. Must be sent without other update flags. Reserved names are rejected, as are slugs
@@ -9465,13 +12061,18 @@ Show CLI status.
 
 ```text
 USAGE
-  $ sf status [--profile <value>] [-y] [--include-claim-url]
+  $ sf status [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [--include-claim-url]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
   --include-claim-url  Include the still-pending claim link.
@@ -9497,22 +12098,26 @@ List a space's stored objects.
 
 ```text
 USAGE
-  $ sf storage [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--limit <value>]
-    [--cursor <value>]
+  $ sf storage [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 FLAGS
-  --cursor=<value>  Continue from an opaque cursor returned by the last page.
-  --limit=<value>   Maximum objects to return (default 50, max 100).
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum objects to return (default 50, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
@@ -9533,122 +12138,28 @@ EXAMPLES
     $ sf storage docs --limit 10
 ```
 
-## `sf storage get ID`
-
-Download an app storage object.
-
-```text
-USAGE
-  $ sf storage get ID [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--out <value>]
-
-ARGUMENTS
-  ID  Storage object id.
-
-FLAGS
-  --out=<value>  Save to this path; defaults to the object id. Existing files are never overwritten.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-RUNTIME FLAGS
-  --local-url=<value>  Use a local `sf dev` server instead of the live version.
-  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
-
-EXAMPLES
-  Download an app storage object.
-
-    $ sf storage get <id>
-```
-
-## `sf storage ls [TARGET]`
-
-List a space's stored objects.
-
-```text
-USAGE
-  $ sf storage ls [TARGET] [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--limit <value>]
-    [--cursor <value>]
-
-ARGUMENTS
-  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
-
-FLAGS
-  --cursor=<value>  Continue from an opaque cursor returned by the last page.
-  --limit=<value>   Maximum objects to return (default 50, max 100).
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-RUNTIME FLAGS
-  --local-url=<value>  Use a local `sf dev` server instead of the live version.
-  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
-
-ALIASES
-  $ sf storage list
-
-EXAMPLES
-  List a space's stored objects.
-
-    $ sf storage ls [target]
-```
-
-## `sf storage put FILE`
-
-Upload a file to app storage.
-
-```text
-USAGE
-  $ sf storage put FILE [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--public] [--content-type <value>]
-
-ARGUMENTS
-  FILE  File to upload.
-
-FLAGS
-  --content-type=<value>  [default: application/octet-stream] Object MIME type.
-  --public                Make the uploaded object publicly readable.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-RUNTIME FLAGS
-  --local-url=<value>  Use a local `sf dev` server instead of the live version.
-  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
-
-EXAMPLES
-  Upload a file to app storage.
-
-    $ sf storage put <file>
-```
-
-## `sf storage rm [ID]`
+## `sf storage delete [OBJECT]`
 
 Delete a stored object.
 
 ```text
 USAGE
-  $ sf storage rm [ID] [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>]
+  $ sf storage delete [OBJECT] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>]
 
 ARGUMENTS
-  [ID]  Object id, for example 0123456789abcdef0123456789abcdef.
+  [OBJECT]  Object id, for example 0123456789abcdef0123456789abcdef.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
@@ -9660,13 +12171,111 @@ DESCRIPTION
   Force-delete an app storage object as the space owner, regardless of who uploaded it.
 
 ALIASES
-  $ sf storage remove
-  $ sf storage delete
+  $ sf storage rm
+  $ sf storage del
 
 EXAMPLES
   Delete a stored object without prompting.
 
-    $ sf storage rm 0123456789abcdef0123456789abcdef --yes
+    $ sf storage delete 0123456789abcdef0123456789abcdef --yes
+```
+
+## `sf storage download OBJECT`
+
+Download an app storage object.
+
+```text
+USAGE
+  $ sf storage download OBJECT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>] [--output <value>]
+
+ARGUMENTS
+  OBJECT  Storage object id.
+
+FLAGS
+  --output=<value>  Save to this path; defaults to the object id. Existing files are never overwritten.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --local-url=<value>  Use a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+```
+
+## `sf storage list [TARGET]`
+
+List a space's stored objects.
+
+```text
+USAGE
+  $ sf storage list [TARGET] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url
+    <value>] [--port <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
+
+ARGUMENTS
+  [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum objects to return (default 50, max 100).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --local-url=<value>  Use a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
+
+ALIASES
+  $ sf storage ls
+```
+
+## `sf storage put FILE`
+
+Upload a file to app storage.
+
+```text
+USAGE
+  $ sf storage put FILE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url <value>] [--port
+    <value>] [--public] [--content-type <value>]
+
+ARGUMENTS
+  FILE  File to upload.
+
+FLAGS
+  --content-type=<value>  [default: application/octet-stream] Object MIME type.
+  --public                Make the uploaded object publicly readable.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+RUNTIME FLAGS
+  --local-url=<value>  Use a local `sf dev` server instead of the live version.
+  --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
 ```
 
 ## `sf switch [TEAM]`
@@ -9675,16 +12284,21 @@ Switch teams.
 
 ```text
 USAGE
-  $ sf switch [TEAM] [--profile <value>] [-y] [-o <value>]
+  $ sf switch [TEAM] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   [TEAM]  Team slug, ID, or name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Switch teams.
@@ -9703,17 +12317,21 @@ List effective tags.
 
 ```text
 USAGE
-  $ sf tags [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--environment <value>]
+  $ sf tags [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--environment <value>]
 
 FLAGS
   --environment=<value>  Release environment to inspect.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List effective tags.
@@ -9736,26 +12354,30 @@ Apply declarative tags.
 
 ```text
 USAGE
-  $ sf tags apply FILE [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--submit] [--release <value>]
-    [--expected-current-revision <value>] [--idempotency-key <value>]
+  $ sf tags apply FILE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--title <value>] [--message
+    <value>] [--submit] [--release <value>] [--expected-current-revision <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   FILE  spacefast.tags.json file.
 
 FLAGS
-  -m, --message=<value>                    Draft or submission message.
-      --expected-current-revision=<value>  Optimistic release current revision check.
-      --idempotency-key=<value>            Idempotency key for replay-safe apply.
-      --release=<value>                    Release environment after approval policy allows.
-      --submit                             Submit after validation when policy allows.
-      --title=<value>                      Draft title.
+  --expected-current-revision=<value>  Optimistic release current revision check.
+  --idempotency-key=<value>            Idempotency key for replay-safe apply.
+  --message=<value>                    Draft or submission message.
+  --release=<value>                    Release environment after approval policy allows.
+  --submit                             Submit after validation when policy allows.
+  --title=<value>                      Draft title.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Apply declarative tags.
@@ -9778,9 +12400,9 @@ Create a tag debug session.
 
 ```text
 USAGE
-  $ sf tags debug [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--revision <value>] [--revoke-session <value>] [--url <value>]
-    [--environment <value>] [--idempotency-key <value>]
+  $ sf tags debug [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--revision <value>]
+    [--revoke-session <value>] [--url <value>] [--environment <value>] [--idempotency-key <value>]
 
 FLAGS
   --environment=<value>      Release environment to debug.
@@ -9790,10 +12412,14 @@ FLAGS
   --url=<value>              Page URL to open in debug mode.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create a tag debug session.
@@ -9812,14 +12438,18 @@ List tag releases.
 
 ```text
 USAGE
-  $ sf tags releases [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf tags releases [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List tag releases.
@@ -9832,23 +12462,27 @@ EXAMPLES
     $ sf tags releases --space docs
 ```
 
-## `sf tags releases get ENVIRONMENT`
+## `sf tags releases inspect ENVIRONMENT`
 
 Read a tag release.
 
 ```text
 USAGE
-  $ sf tags releases get ENVIRONMENT [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf tags releases inspect ENVIRONMENT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Read a tag release.
@@ -9858,7 +12492,7 @@ DESCRIPTION
 EXAMPLES
   Read the production tag release pointer.
 
-    $ sf tags releases get production --space docs
+    $ sf tags releases inspect production --space docs
 ```
 
 ## `sf tags releases rollback ENVIRONMENT REVISION`
@@ -9867,9 +12501,9 @@ Roll back a tag release.
 
 ```text
 USAGE
-  $ sf tags releases rollback ENVIRONMENT REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--expected-current-revision <value>] [--notes <value>]
-    [--idempotency-key <value>]
+  $ sf tags releases rollback ENVIRONMENT REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--expected-current-revision <value>] [--notes <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
@@ -9881,10 +12515,14 @@ FLAGS
   --notes=<value>                      Rollback notes.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Roll back a tag release.
@@ -9903,9 +12541,9 @@ Set a tag release.
 
 ```text
 USAGE
-  $ sf tags releases set ENVIRONMENT REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--expected-current-revision <value>] [--notes <value>]
-    [--idempotency-key <value>]
+  $ sf tags releases set ENVIRONMENT REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
+    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+    [--expected-current-revision <value>] [--notes <value>] [--idempotency-key <value>]
 
 ARGUMENTS
   ENVIRONMENT  Release environment, for example production.
@@ -9917,10 +12555,14 @@ FLAGS
   --notes=<value>                      Release notes.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Set a tag release.
@@ -9939,19 +12581,24 @@ List tag revisions.
 
 ```text
 USAGE
-  $ sf tags revisions [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--status <value>] [--cursor <value>] [--limit <value>]
+  $ sf tags revisions [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--status <value>] [--cursor
+    <CURSOR>] [--limit <NUMBER>]
 
 FLAGS
-  --cursor=<value>  Pagination cursor.
-  --limit=<value>   Maximum number of revisions to return.
-  --status=<value>  Filter by revision status.
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of revisions to return.
+  --status=<value>   Filter by revision status.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List tag revisions.
@@ -9974,8 +12621,9 @@ Abandon a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions abandon REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+  $ sf tags revisions abandon REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--idempotency-key
+    <value>]
 
 ARGUMENTS
   REVISION  Tag revision ID.
@@ -9984,10 +12632,14 @@ FLAGS
   --idempotency-key=<value>  Idempotency key for replay-safe abandon.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Abandon a tag revision.
@@ -10004,8 +12656,9 @@ Approve a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions approve REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+  $ sf tags revisions approve REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--idempotency-key
+    <value>]
 
 ARGUMENTS
   REVISION  Tag revision ID.
@@ -10014,15 +12667,20 @@ FLAGS
   --idempotency-key=<value>  Idempotency key for replay-safe approval.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Approve a tag revision.
 
-  Approve a tag revision after validation and policy gates pass.
+  Approve a tag revision after validation and policy gates pass. When the Space requires review, only an owner or admin
+  who did not submit the revision can approve it.
 
 EXAMPLES
   $ sf tags revisions approve tver_123 --space docs
@@ -10034,36 +12692,37 @@ Create a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions create [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--title <value>] [-m <value>] [--base-revision <value>] [-i <value>]
-    [--template <value>] [--field <value>...] [--trigger <value>...] [--tag-id <value>] [--name <value>]
-    [--idempotency-key <value>]
+  $ sf tags revisions create [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--title <value>] [--message
+    <value>] [--base-revision <value>] [--input <value>] [--template <value>] [--field <value>...] [--trigger
+    <value>...] [--tag <value>] [--name <value>] [--idempotency-key <value>]
 
 FLAGS
-  -i, --input=<value>            JSON body: literal JSON, @file, or - for stdin.
-  -m, --message=<value>          Draft changelog or description.
-      --base-revision=<value>    Base tag revision ID.
-      --field=<value>...         Template field as key=value. Repeat for multiple fields.
-      --idempotency-key=<value>  Idempotency key for replay-safe creation.
-      --name=<value>             Display name for the generated template tag.
-      --tag-id=<value>           Stable tag ID for the generated template tag.
-      --template=<value>         Built-in template ID to add, for example google-analytics or segment.
-      --title=<value>            Draft title.
-      --trigger=<value>...       Template trigger preset. Repeat for multiple triggers.
+  --base-revision=<value>    Base tag revision ID.
+  --field=<value>...         Template field as key=value. Repeat for multiple fields.
+  --idempotency-key=<value>  Idempotency key for replay-safe creation.
+  --input=<value>            JSON body: literal JSON, @file, or - for stdin.
+  --message=<value>          Draft changelog or description.
+  --name=<value>             Display name for the generated template tag.
+  --tag=<value>              Stable tag ID for the generated template tag.
+  --template=<value>         Built-in template ID to add, for example google-analytics or segment.
+  --title=<value>            Draft title.
+  --trigger=<value>...       Template trigger preset. Repeat for multiple triggers.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create a tag revision.
 
   Create a mutable draft tag revision from a release, base revision, or graph body.
-
-ALIASES
-  $ sf tags revisions add
 
 EXAMPLES
   Create a draft tag revision.
@@ -10072,7 +12731,7 @@ EXAMPLES
 
   Create a draft from a built-in template.
 
-    $ sf tags revisions create --space docs --template google-analytics --field measurementId=G-123
+    $ sf tags revisions create --space docs --template google-analytics --field measurementId=G-ABC123
 ```
 
 ## `sf tags revisions diff REVISION`
@@ -10081,17 +12740,21 @@ Diff a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions diff REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf tags revisions diff REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   REVISION  Tag revision ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Diff a tag revision.
@@ -10110,8 +12773,9 @@ Submit a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions submit REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+  $ sf tags revisions submit REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--idempotency-key
+    <value>]
 
 ARGUMENTS
   REVISION  Tag revision ID.
@@ -10120,10 +12784,14 @@ FLAGS
   --idempotency-key=<value>  Idempotency key for replay-safe submit.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Submit a tag revision.
@@ -10142,8 +12810,9 @@ Validate a tag revision.
 
 ```text
 USAGE
-  $ sf tags revisions validate REVISION [--profile <value>] [-y]
-    [-o <value>] [--space <value>] [--idempotency-key <value>]
+  $ sf tags revisions validate REVISION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--idempotency-key
+    <value>]
 
 ARGUMENTS
   REVISION  Tag revision ID.
@@ -10152,10 +12821,14 @@ FLAGS
   --idempotency-key=<value>  Idempotency key for replay-safe validation.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Validate a tag revision.
@@ -10174,13 +12847,18 @@ List tag templates.
 
 ```text
 USAGE
-  $ sf tags templates [--profile <value>] [-y]
+  $ sf tags templates [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List tag templates.
@@ -10199,23 +12877,23 @@ Manage teams.
 
 ```text
 USAGE
-  $ sf teams [--profile <value>] [-y]
+  $ sf teams [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage teams.
 
   Manage teams and members.
-
-EXAMPLES
-  Manage teams.
-
-    $ sf teams
 ```
 
 ## `sf teams accept INVITATION`
@@ -10224,16 +12902,21 @@ Accept a team invitation.
 
 ```text
 USAGE
-  $ sf teams accept INVITATION [--profile <value>] [-y]
+  $ sf teams accept INVITATION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   INVITATION  Invitation id from the invite link.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Accept a team invitation.
@@ -10250,24 +12933,27 @@ Create a team.
 
 ```text
 USAGE
-  $ sf teams create NAME [--profile <value>] [-y]
+  $ sf teams create NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   NAME  Display name for the new team.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create a team.
 
-  Create a new team owned by the current login.
-
-ALIASES
-  $ sf teams add
+  Create a new team owned by the current login. Your first team is free; every other team you create needs a
+  subscription before it can be used.
 
 EXAMPLES
   Create a new team.
@@ -10275,30 +12961,41 @@ EXAMPLES
     $ sf teams create "Acme Inc"
 ```
 
-## `sf teams defaults [ROOTACCESS]`
+## `sf teams defaults [ACCESS]`
 
 Manage team space access.
 
 ```text
 USAGE
-  $ sf teams defaults [ROOTACCESS] [--profile <value>] [-y] [-o
-    <value>]
+  $ sf teams defaults [ACCESS] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--new-subteams private|parent_team] [-T <TEAM>]
 
 ARGUMENTS
-  [ROOTACCESS]  Access new spaces start with: private (your team) or public (anyone on the web).
+  [ACCESS]  Access new spaces start with: private (your team), parent_team (your team and everyone in its parent team,
+            who can view and comment), or public (anyone on the web).
+
+FLAGS
+  --new-subteams=<option>  Root teams on Enterprise or Internal: the access new spaces start with in each subteam
+                           created from now on. Existing subteams keep theirs.
+                           <options: private|parent_team>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage team space access.
 
-  Show who can view this team's spaces, or set the access new spaces start with. Private spaces only and Hide from
-  search engines are shown here but change only in the dashboard (Team settings → Access): they guard against agents, so
-  no CLI login can turn them off.
+  Show who can view this team's spaces, or set the access new spaces start with. `parent_team` is for a subteam on an
+  Enterprise or Internal family. On a root team there, `--new-subteams` sets the default each subteam created from now
+  on starts with. Private spaces only and Hide from search engines are shown here but change only in the dashboard (Team
+  settings → Access): they guard against agents, so no CLI login can turn them off.
 
 EXAMPLES
   Show the team's space access settings.
@@ -10308,6 +13005,14 @@ EXAMPLES
   Make new spaces private by default.
 
     $ sf teams defaults private
+
+  Let the parent team view every new space of the design subteam.
+
+    $ sf teams defaults parent_team --team design
+
+  Let everyone in this team view new spaces in every subteam created from now on.
+
+    $ sf teams defaults --new-subteams parent_team
 ```
 
 ## `sf teams domains`
@@ -10316,23 +13021,23 @@ Manage team email domains.
 
 ```text
 USAGE
-  $ sf teams domains [--profile <value>] [-y]
+  $ sf teams domains [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage team email domains.
 
   Manage the company email domains whose verified owners can join the team.
-
-EXAMPLES
-  Manage team email domains.
-
-    $ sf teams domains
 ```
 
 ## `sf teams domains add DOMAIN`
@@ -10341,16 +13046,21 @@ Add a team email domain.
 
 ```text
 USAGE
-  $ sf teams domains add DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf teams domains add DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Company email domain, such as example.com.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Add a team email domain.
@@ -10362,19 +13072,24 @@ EXAMPLES
   $ sf teams domains add example.com
 ```
 
-## `sf teams domains ls`
+## `sf teams domains list`
 
 List team email domains.
 
 ```text
 USAGE
-  $ sf teams domains ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams domains list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List team email domains.
@@ -10382,28 +13097,33 @@ DESCRIPTION
   List the company email domains whose verified owners can join the team.
 
 ALIASES
-  $ sf teams domains list
+  $ sf teams domains ls
 
 EXAMPLES
-  $ sf teams domains ls
+  $ sf teams domains list
 ```
 
-## `sf teams domains rm DOMAIN`
+## `sf teams domains remove DOMAIN`
 
 Remove a team email domain.
 
 ```text
 USAGE
-  $ sf teams domains rm DOMAIN [--profile <value>] [-y] [-o <value>]
+  $ sf teams domains remove DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Email domain to remove, such as example.com.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a team email domain.
@@ -10411,10 +13131,10 @@ DESCRIPTION
   Stop letting people at this email domain join on their own. Current members stay.
 
 ALIASES
-  $ sf teams domains remove
+  $ sf teams domains rm
 
 EXAMPLES
-  $ sf teams domains rm example.com
+  $ sf teams domains remove example.com
 ```
 
 ## `sf teams invitations`
@@ -10423,59 +13143,23 @@ Manage team invitations.
 
 ```text
 USAGE
-  $ sf teams invitations [--profile <value>] [-y]
+  $ sf teams invitations [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage team invitations.
 
   Manage team invitations.
-
-EXAMPLES
-  Manage team invitations.
-
-    $ sf teams invitations
-```
-
-## `sf teams invitations add EMAILS`
-
-Create team invitations.
-
-```text
-USAGE
-  $ sf teams invitations add EMAILS... [--profile <value>] [-y] [-o <value>]
-    [--role owner|admin|member]
-
-ARGUMENTS
-  EMAILS...  Email addresses to invite.
-
-FLAGS
-  --role=<option>  [default: member] Role to grant when the invitation is accepted.
-                   <options: owner|admin|member>
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Create team invitations.
-
-  Invite one or more people to a team.
-
-ALIASES
-  $ sf teams invitations create
-
-EXAMPLES
-  Invite multiple members to the team.
-
-    $ sf teams invitations add jane@example.com alex@example.com --role member
 ```
 
 ## `sf teams invitations cancel INVITATION`
@@ -10484,16 +13168,21 @@ Cancel a team invitation.
 
 ```text
 USAGE
-  $ sf teams invitations cancel INVITATION [--profile <value>] [-y]
+  $ sf teams invitations cancel INVITATION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   INVITATION  Invitation id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Cancel a team invitation.
@@ -10504,19 +13193,28 @@ EXAMPLES
   $ sf teams invitations cancel inv_123
 ```
 
-## `sf teams invitations ls`
+## `sf teams invitations list`
 
 List team invitations.
 
 ```text
 USAGE
-  $ sf teams invitations ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams invitations list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum invitations to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List team invitations.
@@ -10524,10 +13222,10 @@ DESCRIPTION
   List pending and historical team invitations.
 
 ALIASES
-  $ sf teams invitations list
+  $ sf teams invitations ls
 
 EXAMPLES
-  $ sf teams invitations ls
+  $ sf teams invitations list
 ```
 
 ## `sf teams invitations resend INVITATION`
@@ -10536,16 +13234,21 @@ Resend a team invitation.
 
 ```text
 USAGE
-  $ sf teams invitations resend INVITATION [--profile <value>] [-y]
+  $ sf teams invitations resend INVITATION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   INVITATION  Invitation id.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Resend a team invitation.
@@ -10562,16 +13265,21 @@ Join a team.
 
 ```text
 USAGE
-  $ sf teams join [TEAM] [--profile <value>] [-y]
+  $ sf teams join [TEAM] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
   [TEAM]  Team slug, ID, or name. Omit it to list the teams you can join.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Join a team.
@@ -10590,16 +13298,21 @@ Get the team join link.
 
 ```text
 USAGE
-  $ sf teams join-link [--profile <value>] [-y] [-o <value>] [--reset]
+  $ sf teams join-link [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--reset]
 
 FLAGS
   --reset  Replace the link with a new one. The old link stops working.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Get the team join link.
@@ -10614,19 +13327,24 @@ EXAMPLES
     $ sf teams join-link --reset
 ```
 
-## `sf teams ls`
+## `sf teams list`
 
 List teams.
 
 ```text
 USAGE
-  $ sf teams ls [--profile <value>] [-y]
+  $ sf teams list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List teams.
@@ -10634,10 +13352,10 @@ DESCRIPTION
   List teams available to the current login.
 
 ALIASES
-  $ sf teams list
+  $ sf teams ls
 
 EXAMPLES
-  $ sf teams ls
+  $ sf teams list
 ```
 
 ## `sf teams members`
@@ -10646,38 +13364,84 @@ Manage team members.
 
 ```text
 USAGE
-  $ sf teams members [--profile <value>] [-y]
+  $ sf teams members [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage team members.
 
   Manage team members.
-
-EXAMPLES
-  Manage team members.
-
-    $ sf teams members
 ```
 
-## `sf teams members ls`
+## `sf teams members invite EMAILS`
+
+Create team invitations.
+
+```text
+USAGE
+  $ sf teams members invite EMAILS... [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--role owner|admin|member]
+
+ARGUMENTS
+  EMAILS...  Email addresses to invite.
+
+FLAGS
+  --role=<option>  [default: member] Role to grant when the invitation is accepted.
+                   <options: owner|admin|member>
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Create team invitations.
+
+  Invite one or more people to a team.
+
+EXAMPLES
+  Invite multiple members to the team.
+
+    $ sf teams members invite jane@example.com alex@example.com --role member
+```
+
+## `sf teams members list`
 
 List team members.
 
 ```text
 USAGE
-  $ sf teams members ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams members list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum members to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List team members.
@@ -10685,28 +13449,33 @@ DESCRIPTION
   List members in a team.
 
 ALIASES
-  $ sf teams members list
+  $ sf teams members ls
 
 EXAMPLES
-  $ sf teams members ls
+  $ sf teams members list
 ```
 
-## `sf teams members rm MEMBER`
+## `sf teams members remove MEMBER`
 
 Remove a team member.
 
 ```text
 USAGE
-  $ sf teams members rm MEMBER [--profile <value>] [-y] [-o <value>]
+  $ sf teams members remove MEMBER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   MEMBER  Member id or email.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a team member.
@@ -10714,11 +13483,112 @@ DESCRIPTION
   Remove a member from a team.
 
 ALIASES
-  $ sf teams members remove
-  $ sf teams members delete
+  $ sf teams members rm
 
 EXAMPLES
-  $ sf teams members rm jane@example.com
+  $ sf teams members remove jane@example.com
+```
+
+## `sf teams people`
+
+List everyone with access across a team and its subteams.
+
+```text
+USAGE
+  $ sf teams people [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--subteam <value>] [--show all|members|invited|guests]
+    [--outside-domains] [--search <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
+
+FLAGS
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   People per page (default 20, max 100).
+  --outside-domains  Only people with no verified address at a company domain.
+  --search=<value>   Match a name or email.
+  --show=<option>    Who to list. Guests have Space access but no team in this view.
+                     <options: all|members|invited|guests>
+  --subteam=<value>  Only people in this subteam or holding access to a Space in it.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  List everyone with access across a team and its subteams.
+
+  List everyone with access across a team and its subteams, one row per person: members, pending invitations, people
+  invited to Spaces and SSO identities. Enterprise and Internal plans only. `--outside-domains` reports people with no
+  verified address at a company domain; those domains offer joining and don't restrict sign-in or invitations.
+
+EXAMPLES
+  $ sf teams people
+
+  $ sf teams people --show guests
+
+  $ sf teams people --subteam design --search maya
+
+  $ sf teams people --outside-domains --json
+```
+
+## `sf teams sign-in`
+
+Show member sign-in.
+
+```text
+USAGE
+  $ sf teams sign-in [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show member sign-in.
+
+  Show how team members sign in through the team's identity provider. Owners change it in the dashboard.
+```
+
+## `sf teams sign-in inspect`
+
+Show the team's member sign-in.
+
+```text
+USAGE
+  $ sf teams sign-in inspect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Show the team's member sign-in.
+
+  Show which identity connection the team's members sign in through, the return address its identity provider must
+  allow, and each domain with its TXT record. Owners change member sign-in in the dashboard.
+
+EXAMPLES
+  Show the current team's member sign-in.
+
+    $ sf teams sign-in inspect
 ```
 
 ## `sf teams subteams`
@@ -10727,23 +13597,23 @@ Manage Enterprise subteams.
 
 ```text
 USAGE
-  $ sf teams subteams [--profile <value>] [-y]
+  $ sf teams subteams [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage Enterprise subteams.
 
   Manage Enterprise subteams and members.
-
-EXAMPLES
-  Manage Enterprise subteams.
-
-    $ sf teams subteams
 ```
 
 ## `sf teams subteams create NAME`
@@ -10752,16 +13622,21 @@ Create an Enterprise subteam.
 
 ```text
 USAGE
-  $ sf teams subteams create NAME [--profile <value>] [-y] [-o <value>]
+  $ sf teams subteams create NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   NAME  Name of the subteam.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Create an Enterprise subteam.
@@ -10772,27 +13647,70 @@ EXAMPLES
   $ sf teams subteams create Design
 ```
 
-## `sf teams subteams ls`
+## `sf teams subteams delete SUBTEAM`
+
+Delete a subteam.
+
+```text
+USAGE
+  $ sf teams subteams delete SUBTEAM [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
+
+ARGUMENTS
+  SUBTEAM  Subteam ID.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a subteam.
+
+  Delete a subteam.
+
+ALIASES
+  $ sf teams subteams rm
+  $ sf teams subteams del
+
+EXAMPLES
+  $ sf teams subteams delete subteam_example
+```
+
+## `sf teams subteams list`
 
 List Enterprise subteams.
 
 ```text
 USAGE
-  $ sf teams subteams ls [--profile <value>] [-y] [-o <value>]
+  $ sf teams subteams list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List Enterprise subteams.
 
   List Enterprise subteams.
 
-EXAMPLES
+ALIASES
   $ sf teams subteams ls
+
+EXAMPLES
+  $ sf teams subteams list
 ```
 
 ## `sf teams subteams members`
@@ -10801,23 +13719,23 @@ Manage subteam members.
 
 ```text
 USAGE
-  $ sf teams subteams members [--profile <value>] [-y]
+  $ sf teams subteams members [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage subteam members.
 
   List, add, and remove the members of an Enterprise subteam.
-
-EXAMPLES
-  Manage subteam members.
-
-    $ sf teams subteams members
 ```
 
 ## `sf teams subteams members add SUBTEAM USER`
@@ -10826,18 +13744,22 @@ Add a member to a subteam.
 
 ```text
 USAGE
-  $ sf teams subteams members add SUBTEAM USER [--profile <value>] [-y] [-o
-    <value>]
+  $ sf teams subteams members add SUBTEAM USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   SUBTEAM  Subteam ID.
   USER     User ID of an existing team member.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Add a member to a subteam.
@@ -10848,59 +13770,73 @@ EXAMPLES
   $ sf teams subteams members add subteam_example usr_example
 ```
 
-## `sf teams subteams members ls SUBTEAM`
+## `sf teams subteams members list SUBTEAM`
 
 List members of a subteam.
 
 ```text
 USAGE
-  $ sf teams subteams members ls SUBTEAM [--profile <value>] [-y] [-o
-  <value>]
+  $ sf teams subteams members list SUBTEAM [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   SUBTEAM  Subteam ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List members of a subteam.
 
   List members of a subteam.
 
+ALIASES
+  $ sf teams subteams members ls
+
 EXAMPLES
-  $ sf teams subteams members ls subteam_example
+  $ sf teams subteams members list subteam_example
 ```
 
-## `sf teams subteams members rm SUBTEAM USER`
+## `sf teams subteams members remove SUBTEAM USER`
 
 Remove a member from a subteam.
 
 ```text
 USAGE
-  $ sf teams subteams members rm SUBTEAM USER [--profile <value>] [-y] [-o
-    <value>]
+  $ sf teams subteams members remove SUBTEAM USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   SUBTEAM  Subteam ID.
   USER     User ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Remove a member from a subteam.
 
   Remove a member from a subteam.
 
+ALIASES
+  $ sf teams subteams members rm
+
 EXAMPLES
-  $ sf teams subteams members rm subteam_example usr_example
+  $ sf teams subteams members remove subteam_example usr_example
 ```
 
 ## `sf teams subteams rename SUBTEAM NAME`
@@ -10909,18 +13845,22 @@ Rename a subteam.
 
 ```text
 USAGE
-  $ sf teams subteams rename SUBTEAM NAME [--profile <value>] [-y] [-o
-    <value>]
+  $ sf teams subteams rename SUBTEAM NAME [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   SUBTEAM  Subteam ID.
   NAME     New subteam name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Rename a subteam.
@@ -10931,48 +13871,27 @@ EXAMPLES
   $ sf teams subteams rename subteam_example Design
 ```
 
-## `sf teams subteams rm SUBTEAM`
-
-Delete a subteam.
-
-```text
-USAGE
-  $ sf teams subteams rm SUBTEAM [--profile <value>] [-y] [-o <value>]
-
-ARGUMENTS
-  SUBTEAM  Subteam ID.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Delete a subteam.
-
-  Delete a subteam.
-
-EXAMPLES
-  $ sf teams subteams rm subteam_example
-```
-
 ## `sf teams switch [TEAM]`
 
 Set default team.
 
 ```text
 USAGE
-  $ sf teams switch [TEAM] [--profile <value>] [-y] [-o <value>]
+  $ sf teams switch [TEAM] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   [TEAM]  Team slug, ID, or name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Set default team.
@@ -10985,53 +13904,60 @@ EXAMPLES
     $ sf teams switch acme
 ```
 
-## `sf transfers accept ID`
+## `sf transfers accept TRANSFER`
 
 Accept a space transfer.
 
 ```text
 USAGE
-  $ sf transfers accept ID [--profile <value>] [-y]
+  $ sf transfers accept TRANSFER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
-  ID  Transfer ID.
+  TRANSFER  Transfer ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Accept a space transfer.
 
-  Accept a pending space transfer as an owner or admin of the target team.
-
-ALIASES
-  $ sf transfers confirm
+  Accept a pending space transfer as an owner or admin of the target team. Asks for confirmation; --yes skips it.
 
 EXAMPLES
-  Accept a pending space transfer.
+  Accept a pending space transfer without prompting.
 
-    $ sf transfers accept trf_123
+    $ sf transfers accept trf_123 --yes
 ```
 
-## `sf transfers cancel ID`
+## `sf transfers cancel TRANSFER`
 
 Cancel a space transfer.
 
 ```text
 USAGE
-  $ sf transfers cancel ID [--profile <value>] [-y]
+  $ sf transfers cancel TRANSFER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
-  ID  Transfer ID.
+  TRANSFER  Transfer ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Cancel a space transfer.
@@ -11042,22 +13968,27 @@ EXAMPLES
   $ sf transfers cancel trf_123
 ```
 
-## `sf transfers get ID`
+## `sf transfers inspect TRANSFER`
 
 Show a space transfer.
 
 ```text
 USAGE
-  $ sf transfers get ID [--profile <value>] [-y]
+  $ sf transfers inspect TRANSFER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y]
 
 ARGUMENTS
-  ID  Transfer ID.
+  TRANSFER  Transfer ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a space transfer.
@@ -11065,17 +13996,18 @@ DESCRIPTION
   Show a space transfer's parties, status, and expiry.
 
 EXAMPLES
-  $ sf transfers get trf_123
+  $ sf transfers inspect trf_123
 ```
 
-## `sf transfers ls`
+## `sf transfers list`
 
 List space transfers.
 
 ```text
 USAGE
-  $ sf transfers ls [--profile <value>] [-y] [-o <value>] [--status
-    pending_confirmation|completed|canceled|expired] [--space <value>]
+  $ sf transfers list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status pending_confirmation|completed|canceled|expired] [--space
+    <value>]
 
 FLAGS
   --space=<value>    Filter by Space ID (spc_...).
@@ -11083,10 +14015,14 @@ FLAGS
                      <options: pending_confirmation|completed|canceled|expired>
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List space transfers.
@@ -11095,10 +14031,10 @@ DESCRIPTION
   Shows pending transfers by default, up to the newest 100.
 
 ALIASES
-  $ sf transfers list
+  $ sf transfers ls
 
 EXAMPLES
-  $ sf transfers ls --team acme
+  $ sf transfers list --team acme
 ```
 
 ## `sf unlink`
@@ -11107,13 +14043,18 @@ Unlink this checkout from its space.
 
 ```text
 USAGE
-  $ sf unlink [--profile <value>] [-y]
+  $ sf unlink [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Unlink this checkout from its space.
@@ -11136,18 +14077,19 @@ Manage app users and sign-in methods.
 
 ```text
 USAGE
-  $ sf users [--profile <value>] [-y]
+  $ sf users [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Manage app users and sign-in methods.
-
-    $ sf users
 ```
 
 ## `sf users delete USER`
@@ -11156,72 +14098,78 @@ Complete a requested app account deletion.
 
 ```text
 USAGE
-  $ sf users delete USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf users delete USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   USER  App user ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Complete a requested app account deletion.
-
-    $ sf users delete <user>
+ALIASES
+  $ sf users rm
+  $ sf users del
 ```
 
-## `sf users get USER`
+## `sf users inspect USER`
 
 Inspect an app user.
 
 ```text
 USAGE
-  $ sf users get USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf users inspect USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   USER  App user ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Inspect an app user.
-
-    $ sf users get <user>
 ```
 
-## `sf users ls`
+## `sf users list`
 
 List app users.
 
 ```text
 USAGE
-  $ sf users ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--search <value>] [--page <value>] [--limit <value>]
+  $ sf users list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--query <value>] [--page
+    <value>] [--limit <NUMBER>]
 
 FLAGS
-  --limit=<value>
+  --limit=<NUMBER>  Maximum number of results to return.
   --page=<value>
-  --search=<value>  Search names and email addresses.
+  --query=<value>   Search names and email addresses.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  List app users.
-
-    $ sf users ls
+ALIASES
+  $ sf users ls
 ```
 
 ## `sf users reactivate USER`
@@ -11230,22 +14178,22 @@ Reactivate an app account.
 
 ```text
 USAGE
-  $ sf users reactivate USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf users reactivate USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   USER  App user ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Reactivate an app account.
-
-    $ sf users reactivate <user>
 ```
 
 ## `sf users revoke USER`
@@ -11254,8 +14202,8 @@ Revoke app user sessions.
 
 ```text
 USAGE
-  $ sf users revoke USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--session <value>]
+  $ sf users revoke USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--session <value>]
 
 ARGUMENTS
   USER  App user ID.
@@ -11264,15 +14212,15 @@ FLAGS
   --session=<value>  Revoke this session only; omit to revoke all sessions.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Revoke app user sessions.
-
-    $ sf users revoke <user>
 ```
 
 ## `sf users sessions USER`
@@ -11281,22 +14229,22 @@ List app user sessions.
 
 ```text
 USAGE
-  $ sf users sessions USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf users sessions USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   USER  App user ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  List app user sessions.
-
-    $ sf users sessions <user>
 ```
 
 ## `sf users settings`
@@ -11305,30 +14253,33 @@ Read or update app sign-in settings.
 
 ```text
 USAGE
-  $ sf users settings [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--enabled true|false] [--google managed|direct|disabled] [--gravatar
-    true|false] [--spacefast true|false] [--google-client-id <value>] [--clear-google-secret] [--google-secret-file
-    <value>]
+  $ sf users settings [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--enabled] [--google
+    direct|disabled] [--sign-in-with-spacefast] [--spacefast] [--wpcom] [--managed-google] [--google-client-id <value>]
+    [--clear-google-secret] [--google-secret-file <value>]
 
 FLAGS
-  --clear-google-secret         Remove the saved direct Google secret.
-  --enabled=<option>            <options: true|false>
-  --google=<option>             <options: managed|direct|disabled>
+  --clear-google-secret          Remove the saved direct Google secret.
+  --[no-]enabled                 Turn app sign-in on or off.
+  --google=<option>              Google through your own Google app (direct) or off.
+                                 <options: direct|disabled>
   --google-client-id=<value>
-  --google-secret-file=<value>  Read the direct Google secret from this file.
-  --gravatar=<option>           <options: true|false>
-  --spacefast=<option>          <options: true|false>
+  --google-secret-file=<value>   Read the direct Google secret from this file.
+  --[no-]managed-google          Offer Google through Spacefast's Google app.
+  --[no-]sign-in-with-spacefast  Turn Sign in with Spacefast on or off: the sign-in methods Spacefast provides.
+  --[no-]spacefast               Offer sign-in with a Spacefast account.
+  --[no-]wpcom                   Offer WordPress.com sign-in.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Read or update app sign-in settings.
-
-    $ sf users settings
 ```
 
 ## `sf users suspend USER`
@@ -11337,22 +14288,22 @@ Suspend an app account.
 
 ```text
 USAGE
-  $ sf users suspend USER [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf users suspend USER [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   USER  App user ID.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-EXAMPLES
-  Suspend an app account.
-
-    $ sf users suspend <user>
 ```
 
 ## `sf versions`
@@ -11361,42 +14312,88 @@ Manage versions.
 
 ```text
 USAGE
-  $ sf versions [--profile <value>] [-y]
+  $ sf versions [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Manage versions.
 
   List, promote, and roll back space versions.
-
-EXAMPLES
-  Manage versions.
-
-    $ sf versions
 ```
 
-## `sf versions get [VERSION]`
+## `sf versions delete [VERSION]`
 
-Show a version.
+Delete a version.
 
 ```text
 USAGE
-  $ sf versions get [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
+  $ sf versions delete [VERSION] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 ARGUMENTS
   [VERSION]  Version ID, ref, or number, for example ver_123, v12, or 12.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Delete a version.
+
+  Delete a version and purge its files. Versions referenced by a channel (live) cannot be deleted; promote another
+  version first. The version URL starts serving a tombstone.
+
+ALIASES
+  $ sf versions rm
+  $ sf versions del
+
+EXAMPLES
+  Delete version v12 of the linked space.
+
+    $ sf versions delete v12
+
+  Delete without a confirmation prompt.
+
+    $ sf versions delete ver_123 --space docs --yes
+```
+
+## `sf versions inspect [VERSION]`
+
+Show a version.
+
+```text
+USAGE
+  $ sf versions inspect [VERSION] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
+
+ARGUMENTS
+  [VERSION]  Version ID, ref, or number, for example ver_123, v12, or 12.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show a version.
@@ -11406,94 +14403,63 @@ DESCRIPTION
 EXAMPLES
   Inspect version v12 of the linked space.
 
-    $ sf versions get v12
+    $ sf versions inspect v12
 
   Print a version of a selected space as JSON.
 
-    $ sf versions get ver_123 --space docs --json
+    $ sf versions inspect ver_123 --space docs --json
 ```
 
-## `sf versions ls`
+## `sf versions list`
 
 List space versions.
 
 ```text
 USAGE
-  $ sf versions ls [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--commit <value>]
+  $ sf versions list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--commit <value>] [--limit
+    <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --commit=<value>  Only versions published from this commit.
+  --commit=<value>   Only versions published from this commit.
+  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --limit=<NUMBER>   Maximum number of versions to return (default 20, max 100).
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List space versions.
 
-  List space versions, marking the live one and any still publishing.
+  List space versions, newest first, marking the live one and any still publishing.
 
 ALIASES
-  $ sf versions list
+  $ sf versions ls
 
 EXAMPLES
   List versions for the linked space.
 
-    $ sf versions ls
+    $ sf versions list
 
   List versions for a specific space.
 
-    $ sf versions ls --space docs
+    $ sf versions list --space docs
 
   Find the version published from a commit.
 
-    $ sf versions ls --commit $(git rev-parse HEAD)
+    $ sf versions list --commit $(git rev-parse HEAD)
 
 FLAG DESCRIPTIONS
   --commit=<value>  Only versions published from this commit.
 
     Full 40-character git commit SHA. Short SHAs are rejected — the match is exact.
-```
-
-## `sf versions rm [VERSION]`
-
-Delete a version.
-
-```text
-USAGE
-  $ sf versions rm [VERSION] [--profile <value>] [-y]
-    [-o <value>] [--space <value>]
-
-ARGUMENTS
-  [VERSION]  Version ID, ref, or number, for example ver_123, v12, or 12.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Delete a version.
-
-  Delete a version and purge its files. Versions referenced by a channel (live) cannot be deleted; promote another
-  version first. The version URL starts serving a tombstone.
-
-ALIASES
-  $ sf versions remove
-  $ sf versions delete
-
-EXAMPLES
-  Delete version v12 of the linked space.
-
-    $ sf versions rm v12
-
-  Delete without a confirmation prompt.
-
-    $ sf versions rm ver_123 --space docs --yes
 ```
 
 ## `sf whoami`
@@ -11502,13 +14468,18 @@ Show the current Spacefast account.
 
 ```text
 USAGE
-  $ sf whoami [--profile <value>] [-y]
+  $ sf whoami [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Show the current Spacefast account.
@@ -11531,14 +14502,19 @@ Run a WP-CLI command.
 
 ```text
 USAGE
-  $ sf wp [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--local] [--path <value>] [--mode full|limited]
+  $ sf wp [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local] [--path <value>]
+    [--mode full|limited]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local          Run against a local WordPress instead of the space's.
@@ -11576,27 +14552,28 @@ EXAMPLES
 
 ## `sf zero`
 
-Work with a space's Zero capsule.
+Build and run Zero apps.
 
 ```text
 USAGE
-  $ sf zero [--profile <value>] [-y]
+  $ sf zero [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Work with a space's Zero capsule.
+  Build and run Zero apps.
 
-  Inspect and call the Abilities a space's Zero capsule publishes, and move a Payload CMS or EmDash project onto Zero.
-
-EXAMPLES
-  Work with a space's Zero capsule.
-
-    $ sf zero
+  Build, check, and run Zero apps (zero.config.ts) and import a CMS schema into one. `abilities`, `call`, `queries`, and
+  `types` read a live Space.
 ```
 
 ## `sf zero abilities`
@@ -11605,28 +14582,55 @@ List a space's Zero Abilities.
 
 ```text
 USAGE
-  $ sf zero abilities [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>]
+  $ sf zero abilities [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   List a space's Zero Abilities.
 
-  List the Abilities the space's live capsule publishes: what an agent can call, what category it belongs to, and
+  List the Abilities the space's live version publishes: what an agent can call, what category it belongs to, and
   whether it reads or writes.
-
-ALIASES
-  $ sf zero ls
 
 EXAMPLES
   List the Abilities the live version publishes.
 
     $ sf zero abilities
+```
+
+## `sf zero build`
+
+Compile zero.config.ts into WordPress plugins.
+
+```text
+USAGE
+  $ sf zero build
+
+DESCRIPTION
+  Compile zero.config.ts into WordPress plugins.
+
+  Writes the plugins to .zero/wp-content, new migrations to zero/migrations, the typed client to zero/client and
+  zero.gen.ts. Arguments pass to `zero build` unchanged. Publish, check and source migration use the included wasm
+  compiler. Dev and build require optional native packages; reinstall with optional dependencies enabled if missing. For
+  a local native compiler, set SPACEFAST_ZERO_BIN to target/release/zero from a github.com/spacefast/zero checkout.
+
+EXAMPLES
+  Build the project in the current directory.
+
+    $ sf zero build
+
+  Build another directory into ./dist.
+
+    $ sf zero build ./app --out ./dist
 ```
 
 ## `sf zero call ABILITY`
@@ -11635,8 +14639,9 @@ Call one of a space's Zero Abilities.
 
 ```text
 USAGE
-  $ sf zero call ABILITY [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--credential <value>] [--input <value>]
+  $ sf zero call ABILITY [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--credential
+    <value>] [--input <value>]
 
 ARGUMENTS
   ABILITY  Ability name, as shown by `sf zero abilities`.
@@ -11645,10 +14650,14 @@ FLAGS
   --input=<value>  Ability input as inline JSON, or @path to read it from a file.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
   Call one of a space's Zero Abilities.
@@ -11659,83 +14668,216 @@ DESCRIPTION
 EXAMPLES
   Run a read Ability with no input.
 
-    $ sf zero call content.posts.list
+    $ sf zero call storage.list
 
   Pass the Ability's input as inline JSON.
 
-    $ sf zero call content.posts.get --input '{"slug":"hello"}'
+    $ sf zero call storage.get --input '{"id":42}'
 
   Read the input from a JSON file.
 
-    $ sf zero call content.posts.save --input @post.json
+    $ sf zero call wp.users.create --input @user.json
 ```
 
-## `sf zero import SOURCE DIRECTORY`
+## `sf zero check`
 
-Import a Payload CMS or EmDash project as a Zero capsule.
+Compile zero.config.ts and report diagnostics without writing anything.
 
 ```text
 USAGE
-  $ sf zero import SOURCE DIRECTORY [--profile <value>] [-y]
-    [--out <value>] [--capsule <value>] [--force]
-
-ARGUMENTS
-  SOURCE     Project format to translate: payloadcms or emdash.
-  DIRECTORY  Directory holding the project to translate.
-
-FLAGS
-  --capsule=<value>  Capsule module to write, relative to --out. Defaults to server/index.ts.
-  --force            Overwrite files the import would otherwise refuse to replace.
-  --out=<value>      Directory to write the capsule and content into. Defaults to the current directory.
-
-GLOBAL FLAGS
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+  $ sf zero check
 
 DESCRIPTION
-  Import a Payload CMS or EmDash project as a Zero capsule.
+  Compile zero.config.ts and report diagnostics without writing anything.
 
-  Translate a foreign CMS project into an authored Zero capsule and its content files. Prints the translation report: a
-  Payload config with anything Zero cannot hold is refused outright and nothing is written.
+  Uses the included wasm compiler; `--json` prints the diagnostics envelope. Publish, check and source migration use the
+  included wasm compiler. Dev and build require optional native packages; reinstall with optional dependencies enabled
+  if missing. For a local native compiler, set SPACEFAST_ZERO_BIN to target/release/zero from a
+  github.com/spacefast/zero checkout.
 
 EXAMPLES
-  Translate a Payload CMS config into a capsule in this directory.
+  Check the project in the current directory.
 
-    $ sf zero import payloadcms ../my-payload-app
+    $ sf zero check
 
-  Translate an EmDash seed, writing its Markdown content alongside the capsule.
+  Print machine-readable diagnostics.
 
-    $ sf zero import emdash ../my-emdash-site --out .
+    $ sf zero check ./app --json
+```
+
+## `sf zero dev`
+
+Run the app on a local WordPress, rebuilding on change.
+
+```text
+USAGE
+  $ sf zero dev
+
+DESCRIPTION
+  Run the app on a local WordPress, rebuilding on change.
+
+  Boots WordPress through Studio (Node 22+, no Docker) and watches the config. Arguments pass to `zero dev` unchanged,
+  including `stop`, `status` and `wp -- <WP-CLI args>`. Publish, check and source migration use the included wasm
+  compiler. Dev and build require optional native packages; reinstall with optional dependencies enabled if missing. For
+  a local native compiler, set SPACEFAST_ZERO_BIN to target/release/zero from a github.com/spacefast/zero checkout.
+
+EXAMPLES
+  Start the app in the current directory.
+
+    $ sf zero dev
+
+  Stop it.
+
+    $ sf zero dev stop
+```
+
+## `sf zero import SOURCE INPUT`
+
+Import a Payload, EmDash, or Sanity schema as a Zero config.
+
+```text
+USAGE
+  $ sf zero import SOURCE INPUT [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--output <value>]
+
+ARGUMENTS
+  SOURCE  CMS to import from: payload, payloadcms, emdash, sanity.
+  INPUT   The schema file, or the project directory to find it in (payload.config.ts, .emdash/seed.json,
+          sanity.config.ts, ...).
+
+FLAGS
+  --output=<value>  [default: zero.config.ts] The config file to write. Must not exist yet.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Import a Payload, EmDash, or Sanity schema as a Zero config.
+
+  Runs `zero migrate config`: translates the CMS schema into a new zero.config.ts, checks that it compiles, and prints
+  what mapped and what did not. It never runs the CMS's code and never overwrites a file; anything Zero cannot hold
+  refuses the import and nothing is written. Content moves separately, with `sf zero migrate site`. Publish, check and
+  source migration use the included wasm compiler. Dev and build require optional native packages; reinstall with
+  optional dependencies enabled if missing. For a local native compiler, set SPACEFAST_ZERO_BIN to target/release/zero
+  from a github.com/spacefast/zero checkout.
+
+EXAMPLES
+  Import a Payload config into ./zero.config.ts.
+
+    $ sf zero import payload ../my-payload-app
+
+  Import an EmDash seed into a new app directory.
+
+    $ sf zero import emdash ../site --output app/zero.config.ts
+```
+
+## `sf zero init [NAME]`
+
+Start a Zero app: a zero.config.ts to build on.
+
+```text
+USAGE
+  $ sf zero init [NAME] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [--force]
+
+ARGUMENTS
+  [NAME]  Directory to create. Omit to initialize the current directory.
+
+FLAGS
+  --force  Overwrite an existing zero.config.ts.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Start a Zero app: a zero.config.ts to build on.
+
+  Writes a starter zero.config.ts with one collection, one table and one action, named after the directory. Then `sf
+  zero dev` runs it on a local WordPress. Publish, check and source migration use the included wasm compiler. Dev and
+  build require optional native packages; reinstall with optional dependencies enabled if missing. For a local native
+  compiler, set SPACEFAST_ZERO_BIN to target/release/zero from a github.com/spacefast/zero checkout.
+
+EXAMPLES
+  Create my-app with a starter config.
+
+    $ sf zero init my-app
+
+  Add a starter config to this directory.
+
+    $ sf zero init
+```
+
+## `sf zero migrate`
+
+Import a CMS schema or move a site's content into a Zero app.
+
+```text
+USAGE
+  $ sf zero migrate
+
+DESCRIPTION
+  Import a CMS schema or move a site's content into a Zero app.
+
+  `migrate config` imports an EmDash, Payload or Sanity schema into a new zero.config.ts; `migrate site` moves content.
+  Arguments pass to `zero migrate` unchanged. Publish, check and source migration use the included wasm compiler. Dev
+  and build require optional native packages; reinstall with optional dependencies enabled if missing. For a local
+  native compiler, set SPACEFAST_ZERO_BIN to target/release/zero from a github.com/spacefast/zero checkout.
+
+EXAMPLES
+  Import a Payload config.
+
+    $ sf zero migrate config --from payload payload.config.ts --out app/zero.config.ts
+
+  Preview a content migration.
+
+    $ sf zero migrate site content-model.php --dry-run
 ```
 
 ## `sf zero queries`
 
-List a capsule's declared queries.
+List the queries a space's live version declares.
 
 ```text
 USAGE
-  $ sf zero queries [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--local-url <value>] [--port <value>] [--name <value>]
+  $ sf zero queries [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--local-url <value>] [--port
+    <value>] [--name <value>]
 
 FLAGS
   --name=<value>  Inspect one declared query by name.
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 RUNTIME FLAGS
   --local-url=<value>  Use a local `sf dev` server instead of the live version.
   --port=<value>       Local `sf dev` server port; shorthand for --local-url http://127.0.0.1:<port>.
 
-EXAMPLES
-  List a capsule's declared queries.
+DESCRIPTION
+  List the queries a space's live version declares.
 
-    $ sf zero queries
+  Lists the queries the live version declares.
 ```
 
 ## `sf zero types`
@@ -11744,18 +14886,22 @@ Generate types from a space's content model, Abilities, and database.
 
 ```text
 USAGE
-  $ sf zero types [--profile <value>] [-y] [--claim-token
-    <value>] [-o <value>] [--space <value>] [--out <value>] [--check]
+  $ sf zero types [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--output <value>] [--check]
 
 GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
   -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<value>  [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --json             Format output as json.
-      --profile=<value>  [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 OUTPUT FLAGS
-  --check        Compare instead of writing, and exit non-zero when the file is stale or missing.
-  --out=<value>  File to write, relative to the current directory. Defaults to zero-types.ts.
+  --check           Compare instead of writing, and exit non-zero when the file is stale or missing.
+  --output=<value>  File to write, relative to the current directory. Defaults to zero-types.ts.
 
 DESCRIPTION
   Generate types from a space's content model, Abilities, and database.
