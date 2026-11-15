@@ -7,7 +7,7 @@ A request to your Space can receive HTTP `429` when traffic matches an infra rat
 
 ## Edge traffic limits
 
-The edge classifies requests using signals such as request rate, URL patterns, user agent, proxy characteristics, and connection behavior. Limits can apply to a pattern, a site, or the wider platform.
+The edge classifies requests using signals such as request rate, URL patterns, user agent, proxy characteristics, and connection behavior. Limits can apply to a pattern, a Space, or the wider platform.
 
 Thresholds can change as traffic changes. Do not build a client around an undocumented requests-per-second allowance. Send an accurate `User-Agent` and reduce repeated requests when a limit appears.
 

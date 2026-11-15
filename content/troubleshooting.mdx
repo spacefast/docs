@@ -21,7 +21,7 @@ If you expected a change, check you published the built output rather than a sta
 
 ### The publish was rejected
 
-These fail the whole publish rather than dropping the file, because ignoring them would change what your site serves.
+These fail the whole publish rather than dropping the file, because ignoring them would change what your Space serves.
 
 | Code | What happened | Fix |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ sf domains diagnostics example.com --space my-site
 
 `failed` means there is no current proof of DNS control. Either the records were never observed, or the domain verified in the past and stopped. Almost always someone edited the zone.
 
-Verification failure never takes a live site down. Compiled routes and certificates stay in place while the domain re-proves itself. Run `sf domains diagnostics` to see which records are observed now, and restore the TXT record if it is the one that went missing.
+Verification failure never takes a live Space down. Compiled routes and certificates stay in place while the domain re-proves itself. Run `sf domains diagnostics` to see which records are observed now, and restore the TXT record if it is the one that went missing.
 
 ### The certificate is `broken`
 

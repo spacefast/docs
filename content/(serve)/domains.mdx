@@ -114,9 +114,9 @@ The apex is decided by the public suffix list, not by counting labels. `example.
 | `verified` | A current positive signal proves control. | Nothing. |
 | `failed` | No current proof. Either the records were never observed, or the domain verified in the past and has stopped proving. | Run `sf domains diagnostics` to see which records are observed. |
 
-`failed` on a domain that used to work almost always means someone edited the zone. It does not mean the site is down.
+`failed` on a domain that used to work almost always means someone edited the zone. It does not mean the Space is down.
 
-**Verification failure never takes a live site down.** Compiled routes and certificates stay in place while the domain re-proves itself. Only sustained failure past the notice window blocks the attachment.
+**Verification failure never takes a live Space down.** Compiled routes and certificates stay in place while the domain re-proves itself. Only sustained failure past the notice window blocks the attachment.
 
 ## Certificates
 

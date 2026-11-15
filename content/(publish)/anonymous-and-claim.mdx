@@ -20,7 +20,7 @@ What comes back is a `claim` block. Four fields:
 | Field | What it is |
 | --- | --- |
 | `key` | The space key, `sfc_` plus 22 characters. The only credential for this Space |
-| `url` | The site door. Opening it exchanges the key for a private view session |
+| `url` | The Space door. Opening it exchanges the key for a private view session |
 | `claimUrl` | The dashboard claim page, with the key in the URL fragment |
 | `expiresAt` | When the Space stops serving unless someone claims it |
 
@@ -74,7 +74,7 @@ One more difference. An unclaimed Space accepts every file type, but only *serve
 
 Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from.
 
-The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the site while you decide.
+The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the Space while you decide.
 
 </Step>
 <Step title="Sign in">
@@ -134,7 +134,7 @@ If the key leaked, replace it:
 sf spaces rotate-claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
 ```
 
-You get a fresh `claim` receipt. The old key, its site door, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
+You get a fresh `claim` receipt. The old key, its Space door, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
 
 ## Checking on it
 

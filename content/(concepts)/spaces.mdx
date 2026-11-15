@@ -5,11 +5,11 @@ sidebar:
   order: 1
 ---
 
-A Space is one site with a stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
+A Space is what you publish to: one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
 
 ## What a Space is
 
-A Space is one site. It owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
+A Space owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
 
 Ids are `spc_` plus 32 hex characters:
 
@@ -72,7 +72,7 @@ To move a Space to another team, run `sf spaces transfer <team> --space docs`, o
 
 A new team-owned Space starts at one of two presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/anonymous-and-claim).
 
-| Preset | Who can open the live site |
+| Preset | Who can open the live Space |
 | --- | --- |
 | `private` | The owning team, plus anyone you add |
 | `public` | The owning team, plus anyone on the web |

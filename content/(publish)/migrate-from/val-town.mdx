@@ -30,8 +30,8 @@ Val Town closes on January 10, 2027, and code on Val Town becomes read-only on D
 
 | On Val Town | On Spacefast |
 | --- | --- |
-| HTTP val | A [Functions](/functions) route. A module in `functions/` exports a handler per HTTP method, or a root `handler.ts` default-exports `{ fetch }` and answers the whole site |
-| Scheduled val | A [cron](/crons) in `sf.jsonc`: a scheduled `GET` against a Functions route on your own site |
+| HTTP val | A [Functions](/functions) route. A module in `functions/` exports a handler per HTTP method, or a root `handler.ts` default-exports `{ fetch }` and answers the whole Space |
+| Scheduled val | A [cron](/crons) in `sf.jsonc`: a scheduled `GET` against a Functions route on your own Space |
 | SQLite tables | The Space's [database](/database), through the D1-shaped `env.DB` binding |
 | Environment variables | [Environment variables](/environment-variables) on the Space, read from the handler's `env` argument |
 | Static pages | Published files. See the [plain HTML recipe](/recipes/html) |

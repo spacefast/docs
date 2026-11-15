@@ -56,7 +56,7 @@ Rule order, conditions, and limits are on [Redirects, rewrites, and headers](/ro
 Spacefast [Functions](/functions) detects two layouts, and neither takes Pages Functions files as they are:
 
 - **A `functions/` folder** is a file router. A module's file name is its route. It exports one function per HTTP method, such as `GET` or `POST`, or a default export that answers every method. Each one takes `(request, context)`, with route parameters on `context.params`.
-- **A root `handler.ts`**, `handler.js`, or `handler.mjs` default-exports an object with a `fetch` method and answers the whole site.
+- **A root `handler.ts`**, `handler.js`, or `handler.mjs` default-exports an object with a `fetch` method and answers the whole Space.
 
 When you rewrite, check these differences:
 

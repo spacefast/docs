@@ -138,7 +138,7 @@ if (requiredIaRoutes.length === 0) {
   throw new Error("The content directory declares no routes.");
 }
 const representativePages = [
-  ["index.html", docsRoot, "Spacefast hosts"],
+  ["index.html", docsRoot, "Spacefast publishes"],
   ["quickstart/index.html", `${docsRoot}/quickstart`, "Before you start"],
   ["publish/index.html", `${docsRoot}/publish`, "What gets uploaded"],
   ["versions/index.html", `${docsRoot}/versions`, "immutable"],

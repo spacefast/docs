@@ -1,6 +1,6 @@
 ---
 title: Functions
-description: Ship a worker with your site. A single handler, a functions/ file router, or an OpenNext build, detected at publish and dispatched only for the paths it claims.
+description: Ship a worker with your Space. A single handler, a functions/ file router, or an OpenNext build, detected at publish and dispatched only for the paths it claims.
 sidebar:
   order: 1
 ---
@@ -17,8 +17,8 @@ Detection is the normal case. `sf publish` looks at the tree and picks the first
 
 | Layout | What it is | Route table |
 | --- | --- | --- |
-| `.open-next/worker.js` | An OpenNext build of a Next.js app | The build's own classified routes, or the whole site when the publish did not run the build |
-| `handler.ts`, `handler.js`, `handler.mjs` | One hand-written worker at the root | The whole site |
+| `.open-next/worker.js` | An OpenNext build of a Next.js app | The build's own classified routes, or the whole Space when the publish did not run the build |
+| `handler.ts`, `handler.js`, `handler.mjs` | One hand-written worker at the root | The whole Space |
 | `functions/` with at least one route module | A file router | Exactly the routes its files declare |
 
 A directory matching none of these is a static site, which is the safe default.

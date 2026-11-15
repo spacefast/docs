@@ -13,7 +13,7 @@ For [Zero](/zero-runtime), start with `sf init --runtime zero`, or add the full 
 
 ## What it is
 
-Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the site. A [Functions](/functions) worker gets one too, as `env.DB`.
+Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the Space. A [Functions](/functions) worker gets one too, as `env.DB`.
 
 You do not create it, size it, or connect to it. Your capsule declares the tables. The platform applies the migration when a version finalizes.
 
