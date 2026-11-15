@@ -222,6 +222,8 @@ Two command groups take an explicit path.
 
 The server does not run TypeScript. When `sf publish` or `sf build` packs a version, the CLI evaluates `spacefast.config.ts`. It writes the result into the version as `sf.jsonc`, in place of any `sf.jsonc` on disk. Your source files do not change.
 
+The CLI also stores your `spacefast.config.ts` in the version, as `.spacefast/config-source.ts`, so each version shows which config produced it. It is never served. Your team can read it with the version's files. If you make the Space's source available, anyone can read it in the public source. Keep tokens and internal URLs out of the file and read them from Space variables. The first time you publish with the source available, `sf publish` warns you once.
+
 Files that the config imports are ordinary files. If they are in the published directory, they are published and served.
 
 Hosted Git builds run the same CLI build, so they evaluate a committed `spacefast.config.ts` too.
