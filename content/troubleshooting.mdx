@@ -21,7 +21,7 @@ If you expected a change, check you published the built output rather than a sta
 
 ### The publish was rejected
 
-These fail the whole publish rather than dropping the file, because ignoring them would change what your site serves.
+These fail the whole publish rather than dropping the file, because ignoring them would change what your Space serves.
 
 | Code | What happened | Fix |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ Every limit and its number is on [Limits](/limits). Every code, with whether ret
 
 ### The publish failed while provisioning
 
-`publish_setup_failed` means provisioning for this publish did not complete. It is not a limit and not something in your files. Retry the publish. If it persists, contact support with the `requestId` from the error.
+`publish_setup_failed` means provisioning for this publish did not complete. It is not a limit and not something in your files. Retry the publish. If it persists, contact support with the `requestId` from the error, or [send feedback](/feedback) with the code and request ID attached.
 
 `publish_session_expired` is different. Declared uploads are kept for 24 hours, and a publish resumed after that has to start again.
 
@@ -67,7 +67,7 @@ Full policy on [Caching](/caching).
 
 Three rules decide this, and your local dev server implements none of them.
 
-Clean URLs are on by default, so `about.html` answers `/about` and `/about/` redirects to `/about` with a 308. A directory serves its `index.html`. A single-page app needs an explicit `fallback` in `sf.jsonc`. The fallback is skipped for around 110 asset extensions, so a missing `.js` returns 404 instead of your HTML shell.
+Clean URLs are on by default, so `about.html` answers `/about` and `/about/` redirects to `/about` with a 308. A directory serves its `index.html`. A single-page app gets a fallback shell inferred from a root `200.html`, `_shell.html`, or an `index.html` next to build output, or set `fallback` yourself. The fallback is skipped for around 110 asset extensions, so a missing `.js` returns 404 instead of your HTML shell.
 
 If two files would answer the same URL after that resolution, the publish stops with `publish_path_collision` rather than letting lookup order decide. See [Redirects, rewrites, and headers](/routing).
 
@@ -87,7 +87,7 @@ sf domains diagnostics example.com --space my-site
 
 `failed` means there is no current proof of DNS control. Either the records were never observed, or the domain verified in the past and stopped. Almost always someone edited the zone.
 
-Verification failure never takes a live site down. Compiled routes and certificates stay in place while the domain re-proves itself. Run `sf domains diagnostics` to see which records are observed now, and restore the TXT record if it is the one that went missing.
+Verification failure never takes a live Space down. Compiled routes and certificates stay in place while the domain re-proves itself. Run `sf domains diagnostics` to see which records are observed now, and restore the TXT record if it is the one that went missing.
 
 ### The certificate is `broken`
 

@@ -4,6 +4,7 @@ export default defineMeta({
   title: "Infrastructure",
   collapsed: true,
   pages: [
+    "index",
     "automated-failover",
     "ip-ranges",
     "origin-edge-servers",

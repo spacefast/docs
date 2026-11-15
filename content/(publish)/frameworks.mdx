@@ -66,7 +66,7 @@ Where the table says "package script", the build command comes from your `packag
 2. Only if no dependency matched, the first row whose config file is present.
 3. Otherwise nothing is detected, and the output directory falls back to `dist` if a `dist` directory exists.
 
-A `vercel.json`, `netlify.toml`, or `wrangler.toml` is read **after** framework detection and overrides whatever it set for root directory, install command, build command, and output directory. Vercel's `framework` field also overrides the detected framework. Redirects, rewrites, headers, and crons in those files are converted into `_redirects`, `_headers`, and `sf.jsonc` crons. Anything Spacefast cannot convert, such as Vercel functions or Netlify edge functions, is flagged, and `--allow-unsupported-platform-features` publishes anyway.
+A `vercel.json`, `netlify.toml`, or `wrangler.toml` is read **after** framework detection and overrides whatever it set for root directory, install command, build command, and output directory. Vercel's `framework` field also overrides the detected framework. Redirects, rewrites, headers, and crons in those files are converted into `_redirects`, `_headers`, and `sf.jsonc` crons. Anything Spacefast cannot convert, such as Vercel functions or Netlify edge functions, is flagged, and `--allow-unsupported-platform-features` publishes anyway. Moving a whole site from one of those platforms? See [Move from another platform](/migrate-from).
 
 ### Install commands
 

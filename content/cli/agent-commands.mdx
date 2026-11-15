@@ -14,7 +14,7 @@ Every command here also takes the [global flags](/cli#global-flags).
 Look up a Space by ID, slug, live URL, or attached domain.
 
 ```text
-sf inspect TARGET [-o <team>]
+sf inspect TARGET [-T <team>]
 ```
 
 ### Arguments
@@ -27,7 +27,7 @@ sf inspect TARGET [-o <team>]
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 
 ```bash
 sf inspect docs
@@ -71,7 +71,7 @@ sf fetch [PATH] (--output <file> | --status | --headers | --verify <versionId>) 
 | `--headers` | off | Include response headers, minus any that carry credentials. |
 | `--verify=<versionId>` | none | Require a successful response serving this exact version ID. |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 | `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
 
 You must pass at least one of `--output`, `--status`, `--headers`, or `--verify`, or the command fails rather than guessing what to do with the response.
@@ -118,7 +118,7 @@ sf apply [--space <value>] [--no-wait] [--wait-timeout <seconds>]
 | `--wait` / `--no-wait` | `--wait` | Wait until the apply finishes before returning. |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait. Minimum 1. |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 | `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
 
 ```bash
@@ -180,7 +180,7 @@ Saved a durable API key to .spacefast/state.json.
 Check local CLI state, auth, API reachability, and Space selection for the current directory.
 
 ```text
-sf doctor [--space <value>] [-o <team>] [--claim-token <value>]
+sf doctor [--space <value>] [-T <team>] [--claim-token <value>]
 ```
 
 ```bash
@@ -256,21 +256,21 @@ Without `--paths`, one line per command with its usage and summary, and `data.co
 Send feedback to Spacefast with optional error, request, Space, or URL context.
 
 ```text
-sf feedback -m <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space-id <id>] [--url <url>]
+sf feedback --message <message> [--category <category>] [--error-code <code>] [--request-id <id>] [--space <space>] [--url <url>]
 ```
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-m, --message=<value>` | required | The feedback itself. |
+| `--message=<value>` | required | The feedback itself. |
 | `--category=<value>` | `other` | One of `bug`, `docs`, `limit`, `idea`, `other`. |
 | `--error-code=<value>` | none | Related API error code, straight from an `{ error }` receipt. |
 | `--request-id=<value>` | none | Related API request ID, also from the receipt. |
-| `--space-id=<value>` | none | Related Space ID. |
+| `--space=<value>` | none | Related Space. |
 | `--url=<value>` | none | Related URL. |
 
 ```bash
-sf feedback -m "The continuation docs are unclear" --category docs
-sf feedback -m "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id req_123
+sf feedback --message "The continuation docs are unclear" --category docs
+sf feedback --message "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id req_123
 ```
 
 Every failure receipt carries `error.code` and `error.requestId`. Passing both turns a complaint into something traceable.
@@ -278,11 +278,12 @@ Every failure receipt carries `error.code` and `error.requestId`. Passing both t
 ### Output
 
 ```text
-Feedback ref: fb_0123456789abcdef
-Delivered — thanks!
+Feedback ref: fdb_0123456789abcdef
+Thanks. We read every one.
+Signed in with `sf login`? Read it back with `sf feedback inspect fdb_0123456789abcdef`.
 ```
 
-`data` carries `ref` and `delivered`.
+`data` carries `ref` and `status`. `status` is `stored`.
 
 ## sf plugins
 

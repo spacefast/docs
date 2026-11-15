@@ -68,13 +68,13 @@ sf share grant --to public --role viewer --path '/docs/**' --exclude '/docs/inte
 
 A public grant cannot carry publish or manage capabilities.
 
-Grants default to `live`. Opening the live site does not open branch previews or version URLs. To make immutable version URLs public too, add a grant for `all-versions`:
+Grants default to `live`. Opening the live Space does not open branch previews or version URLs. To make immutable version URLs public too, add a grant for `all-versions`:
 
 ```bash
 sf share grant --to public --role viewer --path '/**' --target all-versions --space my-site
 ```
 
-Use `version:<id>` to open only one version. Branch previews need a `branch:<name>` grant; `all-versions` does not cover them or the live site. A team grant admits the owning team; it cannot name another team you belong to.
+Use `version:<id>` to open only one version. Branch previews need a `branch:<name>` grant; `all-versions` does not cover them or the live Space. A team grant admits the owning team; it cannot name another team you belong to.
 
 ## Share links
 
@@ -221,7 +221,7 @@ Two behaviors are worth knowing because they look like bugs and are not. A rewri
 ## Revoking everything at once
 
 ```bash
-sf access logout-all --space my-site
+sf access sessions revoke --space my-site
 ```
 
 This ends every active visitor session on the Space, whatever admitted them: share link, password, private open, or signed-in account. It takes effect immediately, without a republish. Grants themselves are untouched, so anyone still holding a valid link or password can open the Space again on their next visit. Revoke the grant when you want the credential itself dead.

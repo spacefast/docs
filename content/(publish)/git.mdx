@@ -152,7 +152,7 @@ The API exposes the same list.
 ## Managing the connection
 
 ```bash
-sf git ls --space docs
+sf git inspect --space docs
 sf git sync --space docs --ref main
 sf git update --space docs --credential "$TOKEN"
 sf git disconnect --space docs
@@ -168,7 +168,7 @@ The exact values each command family uses:
 
 | Command family | Values | Meaning |
 | --- | --- | --- |
-| `sf git connect`, `git ls`, `git sync`, `git build` | `connected`, `hosted` | `connected` is an external host with a webhook. `hosted` is the Spacefast remote |
+| `sf git connect`, `git inspect`, `git sync`, `git build` | `connected`, `hosted` | `connected` is an external host with a webhook. `hosted` is the Spacefast remote |
 | `sf source ls`, `source cat`, `source diff`, `source branch`, `source merge`, `source tags`, `source commits` | `remote`, `push`, `import` | `remote` is the same thing as `connected`, `push` the same as `hosted`, and `import` is a one-off import remote |
 
 `--connection-type` defaults to `connected` on the `git` commands and to `remote` on most `source` commands. Which commands require it, and which values each one takes, is on [sf git](/cli/git) and [sf source](/cli/source).

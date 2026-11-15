@@ -5,11 +5,11 @@ sidebar:
   order: 6
 ---
 
-Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations, but invitation and membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
+Use `sf teams` to create or select a team and set defaults for new Spaces. Adding a member requires [Pro](/pricing); CLI credentials can list members and invitations. `sf teams members invite` sends invitations with a credential that has `teams:members.write`, such as `sf login` with Agent access. Other membership changes require the dashboard. [`sf login`](/authentication#log-the-cli-in) stores an API key, not a browser session. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
 A team owns Spaces, domains, and billing. Every member holds one team role: `owner`, `admin`, or `member`. See [Teams](/teams) for the model, and [`sf share`](/cli/share) for per-Space access, which is a separate system.
 
-Most subcommands accept `-o, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
+Most subcommands accept `-T, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
 
 ## sf teams ls
 
@@ -51,7 +51,7 @@ Sets the default team for future CLI publishes. The selection is stored per logi
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | none | Team slug, ID, or name, as an alternative to the positional. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | none | Team slug, ID, or name, as an alternative to the positional. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -136,7 +136,7 @@ Shows or sets the access preset materialized for Spaces this team creates in the
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Examples
 
@@ -166,7 +166,7 @@ sf teams members ls
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -177,6 +177,41 @@ sf teams members ls
 ### Output
 
 A table of `USER`, `NAME`, `ROLE`, `MEMBER ID`. `--json` returns `{ data: [...] }`.
+
+## sf teams members invite
+
+Invite one or more people to a team.
+
+```text
+sf teams members invite EMAIL... [--role owner|admin|member] [-T <team>]
+```
+
+Sends one invitation per address, up to 50 at a time, through [`createTeamInvitation`](/api/reference/teams/createteaminvitation). It needs a credential with `teams:members.write`, such as `sf login` with Agent access, and your team role decides which roles you can grant. Adding a member requires [Pro](/pricing).
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `<emails>` | required | One or more email addresses |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+
+### Example
+
+```bash
+sf teams members invite jane@example.com alex@example.com --role member
+```
+
+### Output
+
+One address prints `Invited <email> as <role>` and the invitation ID. Several print how many people were invited. `--json` returns `{ invitation }` or `{ invitations }`.
+
+The invitations go out together. If any fail, the command exits with the error, or with "Multiple invitation requests failed.", and doesn't list the ones that went out. Run `sf teams invitations ls` to see which were sent. Sending again to an address with a pending invitation fails with `invitation_already_exists`, so a rerun only invites the addresses that failed. Resend an existing invitation from the dashboard under **Members → Pending**.
 
 ## sf teams members rm
 
@@ -198,7 +233,7 @@ Remove the member from the dashboard under **Members**. With CLI credentials, th
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ## sf teams invitations ls
 
@@ -214,7 +249,7 @@ Lists pending and historical invitations.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Example
 
@@ -225,29 +260,6 @@ sf teams invitations ls
 ### Output
 
 A table of `EMAIL`, `ROLE`, `STATUS`, `INVITATION ID`. `--json` returns `{ data: [...] }`.
-
-## sf teams invitations add
-
-Create a team invitation. Alias: `sf teams invitations create`.
-
-```text
-sf teams invitations add EMAIL
-```
-
-Send the invitation from the dashboard under **Members → Invite member**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
-
-### Arguments
-
-| Argument | Default | What it is |
-| --- | --- | --- |
-| `<email>` | required | Email address to invite |
-
-### Flags
-
-| Flag | Default | What it does |
-| --- | --- | --- |
-| `--role=owner\|admin\|member` | `member` | Role to grant when the invitation is accepted |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ## sf teams invitations resend
 

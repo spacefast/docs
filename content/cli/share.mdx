@@ -21,9 +21,9 @@ See [Spacefast Share](/share) for the concepts.
 
 ## Space selection flags
 
-Every command takes `--space` (env `SPACEFAST_SPACE`), `-o, --team` (env `SPACEFAST_TEAM`), and `--claim-token` (env `SPACEFAST_CLAIM_TOKEN`), plus the global flags. The exceptions are `sf share identity create`, `ls`, `update`, and `revoke`, which are team-scoped and take `-o, --team` only. `sf share identity grant` is space-scoped like everything else.
+Every command takes `--space` (env `SPACEFAST_SPACE`), `-T, --team` (env `SPACEFAST_TEAM`), and `--claim-token` (env `SPACEFAST_CLAIM_TOKEN`), plus the global flags. The exceptions are `sf share identity create`, `ls`, `update`, and `revoke`, which are team-scoped and take `-T, --team` only. `sf share identity grant` is space-scoped like everything else.
 
-`sf share grant`, `sf share grant edit`, and `sf share revoke` also take `--wait` / `--no-wait`, default `--wait`, which holds until queued work finishes.
+`sf share grant`, `sf share grant update`, and `sf share revoke` also take `--wait` / `--no-wait`, default `--wait`, which holds until queued work finishes.
 
 ## Constraints
 
@@ -104,9 +104,9 @@ sf share grant --to public --role viewer --path '/**' --target all-versions
 | `validation_error` | 2 | No `--path`. Use `--path '/**'` for the whole Space |
 | `validation_error` | 2 | A public Grant above `commenter`. Public Grants can view or comment only |
 
-## sf share grant edit
+## sf share grant update
 
-`sf share grant edit ID` replaces the editable dimensions of a managed Grant while keeping its ID. Every flag replaces rather than merges, so pass the full set you want to keep. It takes the same `--name`, `--role`, `--path`, `--exclude`, `--target`, `--expires`, `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` flags as `sf share grant`, where each defaults to unchanged, plus:
+`sf share grant update ID` replaces the editable dimensions of a managed Grant while keeping its ID. Every flag replaces rather than merges, so pass the full set you want to keep. It takes the same `--name`, `--role`, `--path`, `--exclude`, `--target`, `--expires`, `--network`, `--country`, `--exclude-country`, and `--exclude-user-agent` flags as `sf share grant`, where each defaults to unchanged, plus:
 
 | Flag | Default | What it does |
 | --- | --- | --- |

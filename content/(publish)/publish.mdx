@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-A folder can be published from the CLI, dashboard, or API, and the receipt it returns tells you whether the site is live.
+A folder can be published from the CLI, dashboard, or API, and the receipt it returns tells you whether the Space is live.
 
 ## The mental model
 
@@ -80,7 +80,7 @@ Symlinks are skipped, not followed. The CLI prints `Warning: skipped symlink <pa
 
 ### Rejected with an error
 
-These fail the publish rather than getting dropped, because silently ignoring them would change what your site does.
+These fail the publish rather than getting dropped, because silently ignoring them would change what your Space does.
 
 | Path | Error code |
 | --- | --- |
@@ -119,7 +119,7 @@ Deleting a file means leaving it out of the declaration. There is no delete list
 
 | Mode | What your file list means |
 | --- | --- |
-| `snapshot` | The complete site. Paths you leave out are removed |
+| `snapshot` | The complete Space. Paths you leave out are removed |
 | `additive` | Additions and replacements. Paths you leave out stay |
 
 `sf publish` defaults to `snapshot`. `POST /v1/publish` defaults to `additive`. Set it with `--publish-mode` or the `publishMode` field, and in the dashboard Drop it is the **Add & update** and **Replace all** choice.
@@ -154,7 +154,7 @@ The parts you actually read:
 | `space.liveUrl` | The URL to open |
 | `version.id`, `version.ref`, `version.number` | The version this publish created |
 | `version.status` | `ready` means finalized |
-| `version.immutableUrl` | The permanent per-version URL, null while finalizing |
+| `version.immutableUrl` | The fixed URL for a retained version, null while finalizing |
 | `activation.outcome` | `activated`, `unpromoted`, `superseded`, or `pending` |
 | `next.action` | `done`, `upload`, `finalize`, or `poll` |
 | `next.url` | Where to go for that action |
@@ -197,7 +197,7 @@ An archive that needs a build returns a receipt with a `build` object and `next.
 | --- | --- | --- |
 | `manifest_too_many_files` | More files than your plan allows | Publish a built output directory, not a source tree |
 | `version_file_too_large` | One file over the per-plan ceiling | Host the asset elsewhere, or move up a plan |
-| `version_total_bytes_exceeded` | The version is over 2 GiB | Split the site, or drop unused assets |
+| `version_total_bytes_exceeded` | The version is over 2 GiB | Split it across Spaces, or drop unused assets |
 | `manifest_duplicate_path` | Two entries canonicalize to one path | Two files differ only by encoding or case folding. Rename one |
 | `invalid_file_path` | A path Spacefast cannot canonicalize | Remove backslashes, doubled slashes, and trailing dots or spaces |
 | `static_control_file_not_supported` | An `.htaccess` or `.user.ini` shipped | Delete it. Use `_redirects` and `_headers` instead |

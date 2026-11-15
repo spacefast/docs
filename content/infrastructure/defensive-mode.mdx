@@ -3,7 +3,7 @@ title: Defensive Mode
 description: Understand browser challenges and their effect on visitors and automated clients.
 ---
 
-Defensive Mode challenges browsers before they reach a site, reducing unwanted automated traffic. Spacefast sites use WP Cloud's challenge system as part of their edge protection.
+Defensive Mode challenges browsers before they reach a Space, reducing unwanted automated traffic. It is part of Spacefast's edge protection.
 
 A browser-check page does not, by itself, prove that Defensive Mode is active. Traffic classification and a Spacefast firewall rule can also trigger a challenge.
 
@@ -19,14 +19,14 @@ API clients, webhooks, uptime monitors, and other automated services may be unab
 
 | Trigger | Behavior |
 | --- | --- |
-| Manual Defensive Mode | WP Cloud supports an expiration from 30 minutes through seven days. Contact Spacefast support if site-wide protection is needed during an incident. |
+| Manual Defensive Mode | Lasts from 30 minutes to seven days. Contact Spacefast support if site-wide protection is needed during an incident. |
 | Automatic Defensive Mode | The infra can temporarily enable protection after a PHP resource-limit event. |
 | Traffic classification | Suspicious or spoofed requests can be challenged even when Defensive Mode is off. |
 | Spacefast firewall rule | A rule with the `challenge` action targets the request patterns you choose. |
 
 The platform challenge system cannot be fully disabled. Ending a manual mode or removing your own rule does not turn off classification challenges.
 
-For targeted rules, see [`sf rules`](/cli/reference#sf-rules). These rules are separate from the site-wide Defensive Mode setting in the WP Cloud API.
+For targeted rules, see [`sf rules`](/cli/reference#sf-rules). These rules are separate from the site-wide Defensive Mode setting.
 
 ## Help legitimate automation
 

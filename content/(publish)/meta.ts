@@ -12,5 +12,7 @@ export default defineMeta({
     "ci",
     "wordpress-data-sources",
     "recipes",
+    "migrate",
+    "migrate-from",
   ],
 });

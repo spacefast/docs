@@ -14,15 +14,15 @@ sf domains diagnostics example.com --space my-site
 
 The dashboard's domain setup also shows the required records. Add them wherever your DNS is managed. For the complete connection flow, see [Custom domains](/domains).
 
-There are two kinds, and they prove different claims. A WP Cloud record (`atomic-domain-…`) proves the hostname to WP Cloud when another host holds it. A `_spacefast-claim.<domain>` record moves a hostname away from another Space. Do not substitute one for the other or build a TXT value from an example.
+There are two kinds, and they prove different claims. An `atomic-domain-…` record proves you control a hostname that another site on the same infra already uses. A `_spacefast-claim.<domain>` record moves a hostname away from another Space. Do not substitute one for the other or build a TXT value from an example.
 
-## When WP Cloud verification is required
+## When an `atomic-domain-` record is required
 
-A hostname already used by another WP Cloud client can require an extra TXT record before it can attach to Spacefast. Spacefast retrieves that proof and includes it in the DNS instructions.
+A hostname already attached to a site elsewhere on the same infra, such as WordPress.com or Pressable, can require an extra TXT record before it can attach to Spacefast. Spacefast retrieves that proof and includes it in the DNS instructions.
 
 The upstream value starts with `atomic-domain-` and belongs at the exact hostname being verified. The apex `example.com` and `www.example.com` can require separate values.
 
-Publish only the currently required WP Cloud verification value at each hostname. Multiple distinct TXT values starting with `atomic-domain-` at the same hostname can prevent verification, even when one matches Spacefast's instructions. Remove a superseded WP Cloud proof when moving the hostname. Keep unrelated TXT records, including email authentication records.
+Publish only the currently required verification value at each hostname. Multiple distinct TXT values starting with `atomic-domain-` at the same hostname can prevent verification, even when one matches Spacefast's instructions. Remove a superseded `atomic-domain-` value when moving the hostname. Keep unrelated TXT records, including email authentication records.
 
 A CNAME cannot coexist with the required TXT record at the same hostname. Follow Spacefast's address-record instructions instead.
 

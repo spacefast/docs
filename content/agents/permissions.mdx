@@ -22,7 +22,7 @@ Device login is covered step by step in [sign in and security](/authentication).
 
 Interactive approval screens ask for two things: how much the agent may do, and where.
 
-**Access.** The device page names the profile it asked for. **Read-only access** reads your teams, sites, and domains and changes nothing. **Agent access** can create and publish sites, manage domains and DNS, create teams, and use Spacefast tools. Its own limits line says it cannot delete sites, manage team members, change billing, or mint credentials.
+**Access.** The device page names the profile it asked for. **Read-only access** reads your teams, Spaces, and domains and changes nothing. **Agent access** can create and publish Spaces, and manage their access, domains, and DNS. It can invite team members, create teams, manage Sell, and register sign-in apps. Its limits line says that to delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase, and it can't remove team members or change roles or billing.
 
 **Teams.** You pick **All teams** ("Includes teams you join or create later"), **Choose teams** with a picker, or **No team access** ("Sign-in only. This device can't touch any team").
 
@@ -37,7 +37,7 @@ Two behaviors matter more than the checkboxes:
 
 These are refused for every agent credential, at every permission level:
 
-- Inviting a member, or cancelling or resending an invitation
+- Cancelling or resending an invitation
 - Changing a member's role
 - Removing a member
 - Accepting a team invitation
@@ -62,7 +62,7 @@ Press **Review** to see the rationale the agent gave, which Space or domain it t
 - **Denying is final.** The agent cannot re-ask on the same request. It has to start over.
 - Decided requests move to a **Decided** table with **What**, **Outcome**, and **Decided** columns, showing **Approved**, **Completed**, **Executing**, **Denied**, or **Expired**.
 
-Only genuinely risky operations prompt: publishing over a live site, deploying, rolling a version back, buying a domain, and changing DNS. Routine publishing does not, on purpose. An approval prompt on every publish is an approval prompt nobody reads.
+Only genuinely risky operations prompt: publishing over a live Space, deploying, rolling a version back, buying a domain, and changing DNS. Routine publishing does not, on purpose. An approval prompt on every publish is an approval prompt nobody reads.
 
 Ask for one of those to see the flow end to end.
 
@@ -93,6 +93,6 @@ A handoff link lives 15 minutes and can be redeemed once. A team can have 10 pen
 **Account settings → Connected apps** lists everything acting as you, labelled **Agent**, **App**, **CLI**, **One-time handoff**, **API key**, or **Machine OAuth client**. Opening one shows which teams it reaches, which permissions it holds, and its recent activity.
 
 - Revoking one connection kills the whole thing: its API keys, its OAuth tokens, its handoff links, and any temporary elevation.
-- **Stop all agent access** is the account-wide emergency stop. It revokes everything acting as you and cancels handoff links that were never redeemed. Team-owned automation is not yours alone, so it survives.
+- **Stop All Agent Access** is the account-wide emergency stop. It revokes everything acting as you and cancels handoff links that were never redeemed. Team-owned automation is not yours alone, so it survives.
 
 Team owners and admins have the same control from the team's **Agents** page, under **Who can act here**. **Remove from team** takes an agent's reach into that one team away and leaves the rest alone.

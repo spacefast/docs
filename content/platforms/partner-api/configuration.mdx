@@ -27,7 +27,7 @@ Add a `system` block to the system Space's `sf.jsonc`. Keep the other project se
 {
   "system": {
     "presentation": {
-      "name": "Example Hosting",
+      "name": "Example Cloud",
       "logo": "https://example.com/logo.png",
       "supportUrl": "https://example.com/support",
       "claimOrigin": "https://portal.example.com",
@@ -106,7 +106,7 @@ Publish `system.hostnames.apex`, for example `sites.example.com`. Read `domainSe
 
 Add the supplied ownership TXT record and wildcard address records. Use the returned addresses rather than copied values from another tenant. Spacefast rechecks pending declarations. Wait for the `hostnames` manifest item to become `active` before relying on the namespace.
 
-Each customer site provisions its own TLS certificate. Verify an actual published site's HTTPS URL before switching customer traffic. Test tenants do not claim or configure live hostnames.
+Each customer Space provisions its own TLS certificate. Verify an actual published Space's HTTPS URL before switching customer traffic. Test tenants do not claim or configure live hostnames.
 
 ## Configure a custom API origin
 

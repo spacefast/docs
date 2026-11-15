@@ -4,5 +4,5 @@ export default defineMeta({
   title: "Account",
   collapsed: false,
   order: 6,
-  pages: ["authentication", "api-keys", "pricing", "billing", "usage"],
+  pages: ["authentication", "api-keys", "identity-connections", "auto-enroll", "subteams", "pricing", "billing", "usage"],
 });

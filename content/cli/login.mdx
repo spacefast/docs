@@ -14,17 +14,17 @@ Every command here also takes the [global flags](/cli#global-flags).
 Log this machine in through the browser, or save an API key you already have.
 
 ```text
-sf login [--access read|agent] [--handoff] [-o <team>] [--token <key>]
+sf login [--access read|domains|agent|agent-personal-pages] [--handoff] [-T <team>] [--token <key>]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--access=<read\|agent>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
+| `--access=<read\|domains\|agent\|agent-personal-pages>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
 | `--handoff` | off | Redeem a one-use agent handoff link from the dashboard. Read from stdin. Cannot be combined with `--token`. |
 | `--token=<key>` | none | Store an API key you already have instead of running the browser flow. Env `SPACEFAST_TOKEN`. |
-| `-o, --team=<value>` | none | Team slug, ID, or name to make the default after signing in. Env `SPACEFAST_TEAM`. |
+| `-T, --team=<value>` | none | Team slug, ID, or name to make the default after signing in. Env `SPACEFAST_TEAM`. |
 
 ### The browser flow
 
@@ -33,17 +33,16 @@ sf login
 ```
 
 ```text
-Signing in to https://api.spacefast.com.
-Requesting Agent access — create and publish sites, manage domains and DNS, create teams, and use Spacefast tools.
-Complete device login in your browser.
-Code: XXXX-XXXX
-Link: https://…/device
-Opened your browser.
+  Sign in to Spacefast
+  Opened https://…/device
+  Code XXXX-XXXX · check it matches
+
+✓ Signed in as Ada Lovelace · Acme
 ```
 
-All of that goes to stderr. Only the approving side needs a browser, so this works over SSH and in containers. When the CLI cannot open one it says so, tells you to approve the link from any device, and waits. [Sign in and security](/authentication#log-the-cli-in) has the code lifetime, the poll cadence, and the lifetime of the credential you end up with.
+All of that goes to stderr. The receipt that follows, `You are logged in as …`, goes to stdout. Only the approving side needs a browser, so this works over SSH and in containers. When the CLI cannot open one it says so, tells you to approve the link from any device, and waits. [Sign in and security](/authentication#log-the-cli-in) has the code lifetime, the poll cadence, and the lifetime of the credential you end up with.
 
-With `--json`, one line goes to stdout before the poll blocks, so an agent can hand the code to a person:
+With `--json`, one line goes to stderr before the poll blocks, so an agent can hand the code to a person:
 
 ```json
 {"requiresAction":{"actionType":"device_authorization","verificationUrl":"…","userCode":"…","interval":5,"expiresAt":"…"}}
@@ -53,8 +52,10 @@ With `--json`, one line goes to stdout before the poll blocks, so an agent can h
 
 | `--access` | Grants |
 | --- | --- |
-| `read` | Read your teams, sites, and domains. Changes nothing. |
-| `agent` (default) | Create and publish sites, manage domains and DNS, create teams, and use Spacefast tools. It cannot delete sites, manage team members, change billing, or mint credentials. |
+| `read` | Read your teams, Spaces, and domains. Changes nothing. |
+| `domains` | Buy domains for your teams, and manage your domains and their DNS. |
+| `agent` (default) | Create and publish Spaces, and manage their access, domains, and DNS. Invite team members, create teams, manage Sell, and register sign-in apps. To delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase. It can't remove team members or change roles or billing. |
+| `agent-personal-pages` | Agent access, plus private pages other people shared with you. |
 
 The approval page shows the same scopes and lets you narrow them.
 
@@ -179,23 +180,23 @@ sf access
 
 Running it bare prints help.
 
-### sf access logout-all
+### sf access sessions revoke
 
 Revoke every active private-open, share-link, and signed-in visitor session for the Space.
 
 ```text
-sf access logout-all [--space <value>] [-o <team>] [--claim-token <value>] [-y]
+sf access sessions revoke [--space <value>] [-T <team>] [--claim-token <value>] [-y]
 ```
 
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE`. |
-| `-o, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
+| `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
 | `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
 | `-y, --yes` | `false` | Skip the confirmation prompt. Env `SPACEFAST_YES`. |
 
 ```bash
-sf access logout-all --space docs
+sf access sessions revoke --space docs
 ```
 
 This is destructive and confirms first: `Revoke ALL opened visitor access for <slug>?`. Everyone currently reading a private Space is signed out, links included. In a non-interactive context, pass `--yes` or it fails with `confirmation_required` (exit 2).

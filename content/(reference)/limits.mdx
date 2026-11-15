@@ -13,7 +13,7 @@ Every plan's allowances and per-Space limits, and what Boost raises, are on [Pri
 
 ## Enforcement
 
-Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `space_quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
+Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
 
 The daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The storage usage counter reports overage without blocking writes. These counters are not invoice line items.
 
@@ -66,11 +66,13 @@ Until a space is claimed, the runtime serves a restricted set of content types: 
 | --- | --- | --- |
 | Unclaimed space | {{anonymous-ttlSeconds}} from creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation | The space stops serving |
 | Claiming an expired anonymous space | 7 more days | The claim link stops working |
-| Unfinished publish drafts | 24 hours | The draft is swept |
-| Deleted team | 30 days | The team is reaped |
+| Unfinished publish drafts | 24 hours | The draft expires and can't be resumed; it stays in your version history |
+| Deleted team | 30 days | It can no longer be restored. Its records stay |
 | Past-due account | 7 days | The account is suspended and its spaces go dark |
 | Activity history | Plan window, see [Pricing & Limits](/pricing) | Older entries are hidden, not deleted |
 | Logs | Plan window, see [Pricing & Limits](/pricing) | Reads are clamped to the window |
+
+Nothing is deleted when a window ends. Spacefast keeps your data until you delete it. Most deletes are soft deletes: the record stays but no longer appears, and you can list teams and domains you deleted yourself. Removing data for good is a manual step our team takes on request.
 
 The two anonymous rows work together. A space that stops serving at its deadline is still recoverable through the claim link for another 7 days. Claim-page loads can push that deadline out by up to 6 hours. See [Publish without an account](/anonymous-and-claim).
 
@@ -80,15 +82,15 @@ A space that stops serving does not fall back to a blank 404. The status code an
 
 | Situation | Status | Body | Writes to the space |
 | --- | --- | --- | --- |
-| Account past due, inside the grace period | Serves normally | Your site | `402` `tenant_past_due` |
+| Account past due, inside the grace period | Serves normally | Your Space | `402` `tenant_past_due` |
 | Account suspended | `402` | `This space is paused.` | `403` `tenant_suspended` |
 | Space disabled, expired, or taken down | `404` | `This space is no longer available.` | `409` with the disable reason |
 | Removed after a legal complaint | `451` | `This content is unavailable for legal reasons.` | `409` |
-| Removed under the strictest safety category | `503` | `This space hasn't been published yet.` | `409` |
+| Removed under the strictest safety category | `404` | `This space hasn't been published yet.` | `409` |
 
-Reads are never blocked by account state. Only writes are. A past-due account keeps serving every site at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
+A past-due account blocks only writes. A suspended account also stops serving its Spaces. A past-due account keeps serving every Space at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
 
-The 451 and 404 pages are customizable like any other error page. The 503 case is byte-identical to a host that has never published anything.
+The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything: `404` with `X-Spacefast-Undeployed: 1` and the unpublished body. That header tells it apart from a missing page on a published Space.
 
 ## Rate limits
 
