@@ -32,3 +32,15 @@ test("a single pricing row comes from the same data as the full table", async ()
   assert.match(pricingTableMarkdown("space", "Compute memory per request"), /^\| Item \|.*\n\| --- \|.*\n\| Compute memory per request \|/u);
   assert.throws(() => pricingTable("space", "No such row"), /0 rows/u);
 });
+
+test("plan variables quote the same cells as the pricing tables", async () => {
+  const { planVariables, pricingTable, DATACENTERS } = await import("./pricing-next.mjs");
+  const variables = planVariables();
+  const members = pricingTable("team").groups.flatMap(([, rows]) => rows).find((row) => row.label === "Members");
+  assert.equal(variables["plan-team-members-pro"], members.values[2]);
+  const crons = pricingTable("space", "Crons | Advanced crons").groups[0][1];
+  assert.deepEqual(crons.map((row) => row.label), ["Crons", "Advanced crons"]);
+  assert.equal(variables["plan-space-crons-boost"], crons[0].values[4]);
+  assert.equal(variables["plan-datacenters"], DATACENTERS);
+  for (const [name, value] of Object.entries(variables)) assert.match(name, /^[\w-]+$/u, `${name} = ${value}`);
+});

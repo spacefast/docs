@@ -18,6 +18,8 @@ const row = (label, tip, values, tag) => ({ label, tip, values, tag });
 const NO_LIMIT = "No predefined limit";
 const all5 = (value) => [value, value, value, value, value];
 const CPU = "$0.1188 per CPU-hour";
+// Origin datacenters, named the same everywhere the docs list them.
+export const DATACENTERS = "Amsterdam, Burbank, Washington DC, and Dallas";
 
 // Per team, per month: [Personal, Go, Pro, Enterprise]. Business is added from BUSINESS_TEAM.
 const TEAM = [
@@ -148,7 +150,7 @@ const FEATURES = [
     row("Global edge cache and purge", null, all(YES)),
     row("Redirects and header rules", null, ["500 per Space", "1,000 per Space", "1,500 per Space", "Custom"]),
     row("Firewall and cache rules", null, ["10 per Space", "25 per Space", "50 per Space", "Custom"]),
-    row("Choose a datacenter", "Amsterdam, Burbank, Washington DC or Dallas.", [NO, YES, YES, YES]),
+    row("Choose a datacenter", `${DATACENTERS}.`, [NO, YES, YES, YES]),
     row("DDoS challenge mode", "Turn on a browser challenge for every visitor while a Space is under attack, then turn it off.", all(YES)),
     row("Custom certificates", "Bring your own TLS certificate for a Space's domain instead of the managed one.", [NO, "With Boost", "With Boost", YES]),
   ]],
@@ -193,7 +195,7 @@ const FEATURES = [
   ]],
   ["Infrastructure", [
     row("Edge locations", "Cached pages are served from the location closest to each visitor.", all("28+")),
-    row("Datacenters", "Amsterdam, Burbank, Washington DC and Dallas. Every datacenter costs the same.", all("4")),
+    row("Datacenters", `${DATACENTERS}. Every datacenter costs the same.`, all("4")),
     row("Disaster-recovery backups", "Platform backups we keep to recover from hardware failure, on every Space. They are separate from the database backups you restore yourself, listed under Data.", all(YES)),
     row("DDoS protection and firewall", "DDoS protection, defensive mode and a web application firewall.", all(YES)),
     row("Automated failover", "If a Space's server fails, it moves to healthy hardware on its own, with no data lost.", all(YES)),
@@ -376,13 +378,42 @@ const ROW_LINKS = {
 };
 const withLinks = (groups) => groups.map(([group, rows]) => [group, rows.map((item) => ({ ...item, href: item.href ?? ROW_LINKS[item.label] }))]);
 
-/** One table, or just the row labelled `rowLabel`, so another page can show a plan limit without copying it. */
-export function pricingTable(name, rowLabel) {
+/**
+ * One table, or only some of its rows, so another page can show plan limits
+ * without copying them. `rowLabels` is one label or several joined with " | ".
+ */
+export function pricingTable(name, rowLabels) {
   const table = fullPricingTable(name);
-  if (!rowLabel) return table;
-  const rows = table.groups.flatMap(([, items]) => items).filter((item) => item.label === rowLabel);
-  if (rows.length !== 1) throw new Error(`Pricing table ${name} has ${rows.length} rows labelled ${rowLabel}`);
-  return { ...table, groups: [["", [{ ...rows[0], href: undefined }]]] };
+  if (!rowLabels) return table;
+  const all = table.groups.flatMap(([, items]) => items);
+  const rows = rowLabels.split(" | ").map((label) => {
+    const matches = all.filter((item) => item.label === label);
+    if (matches.length !== 1) throw new Error(`Pricing table ${name} has ${matches.length} rows labelled ${label}`);
+    return { ...matches[0], href: undefined };
+  });
+  return { ...table, groups: [["", rows]] };
+}
+
+const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/gu, "-").replace(/^-|-$/gu, "");
+
+/**
+ * `{{plan-<table>-<row>-<plan>}}` content variables for every cell of the team
+ * and space tables, such as `{{plan-team-members-pro}}`, so prose quotes the
+ * same value Pricing & Limits shows.
+ */
+export function planVariables() {
+  const variables = { "plan-datacenters": DATACENTERS };
+  for (const name of ["team", "space"]) {
+    const { columns, groups } = fullPricingTable(name);
+    for (const [, rows] of groups) {
+      for (const item of rows) {
+        item.values.forEach((value, index) => {
+          variables[`plan-${name}-${slug(item.label)}-${slug(columns[index].name)}`] = value;
+        });
+      }
+    }
+  }
+  return variables;
 }
 
 function fullPricingTable(name) {
@@ -412,8 +443,8 @@ const TAG_TEXT = { beta: "Beta", soon: "Soon", comp: "Complimentary" };
 const md = (value) => String(value).replaceAll("*", String.raw`\*`).replaceAll("|", String.raw`\|`);
 
 /** The same table as plain Markdown, for .md pages, llms-full.txt and MCP. */
-export function pricingTableMarkdown(name, rowLabel) {
-  const { columns, groups } = pricingTable(name, rowLabel);
+export function pricingTableMarkdown(name, rowLabels) {
+  const { columns, groups } = pricingTable(name, rowLabels);
   const head = columns.map((c) => [c.name, c.tag ? `(${TAG_TEXT[c.tag]})` : "", c.note ? `— ${c.note}` : ""].filter(Boolean).join(" "));
   const lines = [`| Item | ${head.map(md).join(" | ")} |`, `| --- | ${columns.map(() => "---").join(" | ")} |`];
   const notes = [];

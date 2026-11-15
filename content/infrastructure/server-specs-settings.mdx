@@ -11,13 +11,15 @@ Spacefast runs origin pools on AMD EPYC processors with NVMe storage and redunda
 
 Those are pool specifications, not dedicated resources reserved for each Space. Your product entitlements come from your [plan limits](/limits).
 
-## Memory and compression
+## Compute, memory, and disk
 
-Spacefast's compute memory limit per request depends on the plan:
+Spacefast's compute workers, memory per request, and disk per Space depend on the plan:
 
-<PricingTable table="space" row="Compute memory per request" />
+<PricingTable table="space" row="Compute workers | Burst | Compute memory per request | Disk" />
 
 See [Pricing & Limits](/pricing) for every other per-Space limit.
+
+## Compression
 
 Spacefast supports Brotli and gzip compression. A client that accepts Brotli can receive it; gzip is available as a fallback. Compression headers belong to the platform, so do not set `Content-Encoding` in your published header rules.
 

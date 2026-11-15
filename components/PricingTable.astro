@@ -10,7 +10,7 @@ import { pricingTable } from "../scripts/pricing-next.mjs";
 
 interface Props {
   table: "plans" | "team" | "space" | "features" | "examples" | "payments";
-  /** Show only this row, so another page can quote a plan limit from the same data. */
+  /** Show only these rows, joined with " | ", so another page can quote plan limits from the same data. */
   row?: string;
 }
 
