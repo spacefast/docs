@@ -42,10 +42,19 @@ test("rejects release markers in prose but not a CLI flag that spells one", () =
     const accepted = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
     assert.equal(accepted.status, 0, accepted.stderr);
 
-    writeFileSync(fixture, `${["CONFI", "DENTIAL"].join("")}: draft pricing.\n`);
-    const rejected = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
-    assert.equal(rejected.status, 1);
-    assert.match(rejected.stderr, /internal-only marker/u);
+    const marker = ["CONFI", "DENTIAL"].join("");
+    for (const line of [
+      `${marker}: draft pricing.`,
+      `<!--${marker}-->`,
+      `--${marker}-- draft pricing`,
+      `${marker} client roadmap for Q3`,
+      `<!--${["INTERNAL", "ONLY"].join(" ")}-->`,
+    ]) {
+      writeFileSync(fixture, `${line}\n`);
+      const rejected = spawnSync(process.execPath, [verifier], { cwd: directory, encoding: "utf8" });
+      assert.equal(rejected.status, 1, line);
+      assert.match(rejected.stderr, /internal-only marker/u);
+    }
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

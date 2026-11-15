@@ -62,7 +62,6 @@ GLOBAL FLAGS
 - [`sf auth as NAME`](#sf-auth-as-name)
 - [`sf auth reset`](#sf-auth-reset)
 - [`sf autocomplete [SHELL]`](#sf-autocomplete-shell)
-- [`sf billing card`](#sf-billing-card)
 - [`sf build [DIR]`](#sf-build-dir)
 - [`sf builds cancel BUILD`](#sf-builds-cancel-build)
 - [`sf builds detect [DIR]`](#sf-builds-detect-dir)
@@ -96,7 +95,6 @@ GLOBAL FLAGS
 - [`sf connectors connections connect CONNECTOR`](#sf-connectors-connections-connect-connector)
 - [`sf connectors connections disconnect CONNECTION`](#sf-connectors-connections-disconnect-connection)
 - [`sf connectors connections health CONNECTION`](#sf-connectors-connections-health-connection)
-- [`sf connectors connections inspect CONNECTION`](#sf-connectors-connections-inspect-connection)
 - [`sf connectors connections list`](#sf-connectors-connections-list)
 - [`sf connectors connections reconnect CONNECTION`](#sf-connectors-connections-reconnect-connection)
 - [`sf connectors connections refresh CONNECTION`](#sf-connectors-connections-refresh-connection)
@@ -104,7 +102,6 @@ GLOBAL FLAGS
 - [`sf connectors create TARGET`](#sf-connectors-create-target)
 - [`sf connectors delete CONNECTOR`](#sf-connectors-delete-connector)
 - [`sf connectors detect URL`](#sf-connectors-detect-url)
-- [`sf connectors inspect CONNECTOR`](#sf-connectors-inspect-connector)
 - [`sf connectors list`](#sf-connectors-list)
 - [`sf connectors policies`](#sf-connectors-policies)
 - [`sf connectors policies add PATTERN`](#sf-connectors-policies-add-pattern)
@@ -114,28 +111,16 @@ GLOBAL FLAGS
 - [`sf connectors policies set RULE`](#sf-connectors-policies-set-rule)
 - [`sf connectors public-serving`](#sf-connectors-public-serving)
 - [`sf connectors public-serving set ROLE`](#sf-connectors-public-serving-set-role)
-- [`sf connectors roles`](#sf-connectors-roles)
-- [`sf connectors roles list`](#sf-connectors-roles-list)
-- [`sf connectors roles remove ROLE`](#sf-connectors-roles-remove-role)
-- [`sf connectors roles reset ROLE`](#sf-connectors-roles-reset-role)
-- [`sf connectors roles set ROLE`](#sf-connectors-roles-set-role)
 - [`sf connectors run [CODE]`](#sf-connectors-run-code)
 - [`sf connectors run inspect RUN`](#sf-connectors-run-inspect-run)
 - [`sf connectors run list`](#sf-connectors-run-list)
 - [`sf connectors run resume RUN`](#sf-connectors-run-resume-run)
-- [`sf connectors search [QUERY]`](#sf-connectors-search-query)
 - [`sf connectors serving`](#sf-connectors-serving)
 - [`sf connectors serving approve REQUEST`](#sf-connectors-serving-approve-request)
 - [`sf connectors serving create ROLE`](#sf-connectors-serving-create-role)
 - [`sf connectors serving deny REQUEST`](#sf-connectors-serving-deny-request)
-- [`sf connectors serving inspect REQUEST`](#sf-connectors-serving-inspect-request)
 - [`sf connectors serving list`](#sf-connectors-serving-list)
-- [`sf connectors serving set`](#sf-connectors-serving-set)
 - [`sf connectors unbind ROLE`](#sf-connectors-unbind-role)
-- [`sf connectors update CONNECTOR`](#sf-connectors-update-connector)
-- [`sf connectors visitors`](#sf-connectors-visitors)
-- [`sf connectors visitors list`](#sf-connectors-visitors-list)
-- [`sf connectors visitors revoke USER ROLE`](#sf-connectors-visitors-revoke-user-role)
 - [`sf content dashboard [TARGET]`](#sf-content-dashboard-target)
 - [`sf continue`](#sf-continue)
 - [`sf crons`](#sf-crons)
@@ -156,17 +141,9 @@ GLOBAL FLAGS
 - [`sf domains`](#sf-domains)
 - [`sf domains add HOSTNAME`](#sf-domains-add-hostname)
 - [`sf domains check DOMAIN`](#sf-domains-check-domain)
-- [`sf domains connect`](#sf-domains-connect)
-- [`sf domains connect access DOMAIN`](#sf-domains-connect-access-domain)
-- [`sf domains connect disconnect LINK`](#sf-domains-connect-disconnect-link)
-- [`sf domains connect links`](#sf-domains-connect-links)
-- [`sf domains connect list DOMAIN`](#sf-domains-connect-list-domain)
-- [`sf domains connect remove DOMAIN TEMPLATE`](#sf-domains-connect-remove-domain-template)
-- [`sf domains connect revoke DOMAIN AUTHORIZATION`](#sf-domains-connect-revoke-domain-authorization)
 - [`sf domains contacts`](#sf-domains-contacts)
 - [`sf domains contacts add`](#sf-domains-contacts-add)
 - [`sf domains contacts list`](#sf-domains-contacts-list)
-- [`sf domains delete DOMAIN`](#sf-domains-delete-domain)
 - [`sf domains diagnostics DOMAIN`](#sf-domains-diagnostics-domain)
 - [`sf domains dns`](#sf-domains-dns)
 - [`sf domains dns add DOMAIN`](#sf-domains-dns-add-domain)
@@ -183,10 +160,7 @@ GLOBAL FLAGS
 - [`sf domains nameservers set DOMAIN NAMESERVERS`](#sf-domains-nameservers-set-domain-nameservers)
 - [`sf domains registration DOMAIN`](#sf-domains-registration-domain)
 - [`sf domains registration purchase DOMAIN... [flags]`](#sf-domains-registration-purchase-domain-flags)
-- [`sf domains registration relock DOMAIN`](#sf-domains-registration-relock-domain)
 - [`sf domains registration renew DOMAIN`](#sf-domains-registration-renew-domain)
-- [`sf domains registration transfer-in DOMAIN`](#sf-domains-registration-transfer-in-domain)
-- [`sf domains registration transfer-out DOMAIN`](#sf-domains-registration-transfer-out-domain)
 - [`sf domains remove DOMAIN`](#sf-domains-remove-domain)
 - [`sf domains search [QUERY]`](#sf-domains-search-query)
 - [`sf domains update DOMAIN`](#sf-domains-update-domain)
@@ -244,11 +218,7 @@ GLOBAL FLAGS
 - [`sf profiles use NAME`](#sf-profiles-use-name)
 - [`sf promote [VERSION]`](#sf-promote-version)
 - [`sf publish [DIR]`](#sf-publish-dir)
-- [`sf purchases cancel ID`](#sf-purchases-cancel-id)
-- [`sf purchases confirm ID`](#sf-purchases-confirm-id)
-- [`sf purchases inspect ID`](#sf-purchases-inspect-id)
 - [`sf redeploy [BUILD]`](#sf-redeploy-build)
-- [`sf resolve [REF]`](#sf-resolve-ref)
 - [`sf rollback VERSION`](#sf-rollback-version)
 - [`sf routing`](#sf-routing)
 - [`sf routing compute`](#sf-routing-compute)
@@ -263,7 +233,6 @@ GLOBAL FLAGS
 - [`sf rules validate`](#sf-rules-validate)
 - [`sf runtime`](#sf-runtime)
 - [`sf runtime status`](#sf-runtime-status)
-- [`sf search`](#sf-search)
 - [`sf sell activate`](#sf-sell-activate)
 - [`sf sell demo`](#sf-sell-demo)
 - [`sf sell onboard`](#sf-sell-onboard)
@@ -504,7 +473,7 @@ USAGE
 FLAGS
   --all              Read account-wide activity instead of a single space.
   --code=<value>     Filter by activity taxonomy code, for example version.promoted.
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Pagination cursor from a previous response.
   --limit=<NUMBER>   Maximum number of events to return (default 50, max 100).
   --since=<value>    Only events at or after this ISO timestamp.
   --until=<value>    Only events before this ISO timestamp.
@@ -741,11 +710,10 @@ List API keys.
 ```text
 USAGE
   $ sf api-keys list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum number of API keys to return (default 20, max 100).
+  --limit=<NUMBER>  Maximum number of API keys to return (default 50, max 100).
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -951,35 +919,6 @@ EXAMPLES
   $ sf autocomplete --refresh-cache
 ```
 
-## `sf billing card`
-
-Show the team's saved payment method.
-
-```text
-USAGE
-  $ sf billing card [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show the team's saved payment method.
-
-  Show the saved payment method (card, Link, bank account, …) every team purchase charges, and where to add or change
-  it. The CLI never changes it.
-
-EXAMPLES
-  $ sf billing card --team acme
-```
-
 ## `sf build [DIR]`
 
 Build and pack project output.
@@ -1026,8 +965,8 @@ EXECUTION FLAGS
 DESCRIPTION
   Build and pack project output.
 
-  Detect build settings, run the build, and pack its output. A Zero 0.8 app is not built: run `npx spacefast@latest
-  publish` to move it to Zero v2.
+  Detect build settings, run the build, and pack its output. A Zero app with no framework build compiles into the
+  publish directory instead.
 
 EXAMPLES
   Detect build settings, run the build, and pack the output archive.
@@ -1168,7 +1107,7 @@ USAGE
     <CURSOR>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Pagination cursor from a previous response.
   --limit=<NUMBER>   Maximum number of builds to return (default 20, max 100).
 
 GLOBAL FLAGS
@@ -1213,7 +1152,7 @@ ARGUMENTS
 
 FLAGS
   -f, --follow                Follow live build logs until the build reaches a terminal state.
-      --cursor=<CURSOR>       Continue from the cursor the previous page returned.
+      --cursor=<CURSOR>       Pagination cursor from a previous response.
       --limit=<NUMBER>        Maximum number of log lines.
       --wait-timeout=<value>  With --follow: stop following after this many seconds and exit 0.
 
@@ -1629,13 +1568,11 @@ List comments.
 USAGE
   $ sf comments list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--status open|resolved]
-    [--unread] [--path <value>] [--version <value>] [--author <value>] [--query <value>] [--limit <NUMBER>] [--cursor
-    <CURSOR>]
+    [--unread] [--path <value>] [--version <value>] [--author <value>] [--query <value>] [--limit <NUMBER>]
 
 FLAGS
   --author=<value>   Only threads started by this author name.
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum threads to return. Every thread when unset.
+  --limit=<NUMBER>   Maximum threads to return.
   --path=<value>     Only threads on this page or file path, for example /pricing.
   --query=<value>    Only threads whose text contains this.
   --status=<option>  Only open or only resolved threads.
@@ -2184,43 +2121,6 @@ EXAMPLES
     $ sf connectors connections health cxn_abc123
 ```
 
-## `sf connectors connections inspect CONNECTION`
-
-Show a connection and its tools.
-
-```text
-USAGE
-  $ sf connectors connections inspect CONNECTION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--effect approve|require_approval|block]
-    [--limit <NUMBER>] [--cursor <CURSOR>]
-
-ARGUMENTS
-  CONNECTION  Connection id, for example cxn_abc123.
-
-FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --effect=<option>  Show only tools policy resolves to this effect.
-                     <options: approve|require_approval|block>
-  --limit=<NUMBER>   Maximum tools to return (default 50).
-  --query=<value>    Filter tools by name or summary.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a connection and its tools.
-
-  Shows one connection's state, whether it serves sites, and the tools it reaches with the policy effect each resolves
-  to.
-```
-
 ## `sf connectors connections list`
 
 List connections.
@@ -2229,12 +2129,10 @@ List connections.
 USAGE
   $ sf connectors connections list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--owner team|personal|any] [--connector <value>] [--status
-    pending_authorization|active|degraded|needs_reauth|revoked] [--include-revoked] [--limit <NUMBER>] [--cursor
-    <CURSOR>]
+    pending_authorization|active|degraded|needs_reauth|revoked] [--include-revoked] [--limit <NUMBER>]
 
 FLAGS
   --connector=<value>  Show only connections of this connector.
-  --cursor=<CURSOR>    Continue from the cursor the previous page returned.
   --include-revoked    Include disconnected connections.
   --limit=<NUMBER>     Maximum connections to return (default 50).
   --owner=<option>     Whose connections to list. `any` is everything you may use (default).
@@ -2504,47 +2402,6 @@ EXAMPLES
     $ sf connectors detect https://api.example.com
 ```
 
-## `sf connectors inspect CONNECTOR`
-
-Show a connector and its tools.
-
-```text
-USAGE
-  $ sf connectors inspect CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--effect approve|require_approval|block]
-    [--limit <NUMBER>] [--cursor <CURSOR>]
-
-ARGUMENTS
-  CONNECTOR  Connector slug.
-
-FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --effect=<option>  Show only tools policy resolves to this effect.
-                     <options: approve|require_approval|block>
-  --limit=<NUMBER>   Maximum tools to return (default 50).
-  --query=<value>    Filter tools by name or summary.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a connector and its tools.
-
-  Shows one connector, the connections you can use on it, and its tools with the policy effect each resolves to.
-
-EXAMPLES
-  See HubSpot's deal tools and whether policy lets them run.
-
-    $ sf connectors inspect hubspot --query deals
-```
-
 ## `sf connectors list`
 
 List connectors.
@@ -2553,10 +2410,8 @@ List connectors.
 USAGE
   $ sf connectors list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--source openapi|graphql|mcp] [--limit <NUMBER>]
-    [--cursor <CURSOR>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
   --limit=<NUMBER>   Maximum connectors to return (default 50).
   --query=<value>    Filter over slug, title, and description.
   --source=<option>  Show only connectors built from this kind of source.
@@ -2867,179 +2722,6 @@ EXAMPLES
     $ sf connectors public-serving set crm --enable --space launch-page
 ```
 
-## `sf connectors roles`
-
-Add, change, or turn off a Space's connector roles.
-
-```text
-USAGE
-  $ sf connectors roles [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Add, change, or turn off a Space's connector roles.
-
-  Connector roles are what a Space's pages call at /__spacefast/connectors/<role>/<tool>. They come from `connectors` in
-  spacefast.config.ts or sf.jsonc. Change one here without a publish: set replaces the file's role, remove turns it off,
-  and reset hands it back to the file.
-```
-
-## `sf connectors roles list`
-
-List a Space's connector roles.
-
-```text
-USAGE
-  $ sf connectors roles list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List a Space's connector roles.
-
-  Each role the live version serves, where it comes from, and its state, plus roles turned off here.
-
-ALIASES
-  $ sf connectors roles ls
-```
-
-## `sf connectors roles remove ROLE`
-
-Turn off a Space's connector role.
-
-```text
-USAGE
-  $ sf connectors roles remove ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
-
-ARGUMENTS
-  ROLE  Role to turn off.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait  Wait until queued work finishes before returning.
-
-DESCRIPTION
-  Turn off a Space's connector role.
-
-  Turns a role off on this Space, even one the config file declares. Pages calling it get connector_role_unknown. `sf
-  connectors roles reset` brings it back.
-
-ALIASES
-  $ sf connectors roles rm
-```
-
-## `sf connectors roles reset ROLE`
-
-Use the config file's connector role again.
-
-```text
-USAGE
-  $ sf connectors roles reset ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--wait]
-
-ARGUMENTS
-  ROLE  Role to hand back to the config file.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-EXECUTION FLAGS
-  --[no-]wait  Wait until queued work finishes before returning.
-
-DESCRIPTION
-  Use the config file's connector role again.
-
-  Drops this Space's change to a role, so the config file's role applies again. A role the file does not declare goes
-  away, so this asks first unless the role was turned off here.
-```
-
-## `sf connectors roles set ROLE`
-
-Add or change a Space's connector role.
-
-```text
-USAGE
-  $ sf connectors roles set ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--connector <value>] [--as
-    team|personal|visitor] [--tools <value>...] [--args <value>] [--cache <value>] [--wait]
-
-ARGUMENTS
-  ROLE  Role name in camelCase, such as crm.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-ROLE FLAGS
-  --args=<value>       Arguments pinned per tool, as JSON: {"list_deals":{"pipeline":"sales"}}. Accepts @file or - for
-                       stdin.
-  --as=<option>        Whose account answers: a team connection, yours, or each viewer's own.
-                       <options: team|personal|visitor>
-  --cache=<value>      How long viewers share one read, such as 30s or 5m. "0" turns it off.
-  --connector=<value>  Connector slug the role uses, such as hubspot. Required for a new role.
-  --tools=<value>...   Tools the role may call: names, comma-separated or repeated, or "*". Required for a new role.
-
-EXECUTION FLAGS
-  --[no-]wait  Wait until queued work finishes before returning.
-
-DESCRIPTION
-  Add or change a Space's connector role.
-
-  Adds a role, or changes one, on this Space without a publish. It replaces the config file's role of the same name;
-  flags you leave out keep the role's current values. The live version picks it up once the change applies.
-
-EXAMPLES
-  Add a crm role that reads HubSpot deals through a team connection.
-
-    $ sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s
-
-  Change only which tools the crm role may call.
-
-    $ sf connectors roles set crm --tools list_deals,get_deal
-```
-
 ## `sf connectors run [CODE]`
 
 Run a connector tool or a program.
@@ -3130,11 +2812,10 @@ List runs.
 USAGE
   $ sf connectors run list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status running|awaiting_approval|succeeded|failed|expired]
-    [--connection <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
+    [--connection <value>] [--limit <NUMBER>]
 
 FLAGS
   --connection=<value>  Show only runs that touched this connection.
-  --cursor=<CURSOR>     Continue from the cursor the previous page returned.
   --limit=<NUMBER>      Maximum runs to return (default 50).
   --status=<option>     Show only runs in this state.
                         <options: running|awaiting_approval|succeeded|failed|expired>
@@ -3211,47 +2892,6 @@ EXAMPLES
     $ sf connectors run resume cxr_abc123
 ```
 
-## `sf connectors search [QUERY]`
-
-Search the connector catalog.
-
-```text
-USAGE
-  $ sf connectors search [QUERY] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--source openapi|graphql|mcp] [--limit <NUMBER>] [--cursor
-    <CURSOR>]
-
-ARGUMENTS
-  [QUERY]  What to look for, such as calendar.
-
-FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum rows to return (default 50).
-  --source=<option>  Show only rows built from this kind of source.
-                     <options: openapi|graphql|mcp>
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Search the connector catalog.
-
-  Searches the connectors a team can add: Spacefast presets and the public registry, with the ones already added marked.
-  Add a row with `sf connectors create <ID>`.
-
-EXAMPLES
-  Find calendar connectors to add.
-
-    $ sf connectors search calendar
-```
-
 ## `sf connectors serving`
 
 Ask for and decide site serving on team connections.
@@ -3275,7 +2915,7 @@ DESCRIPTION
   Ask for and decide site serving on team connections.
 
   A team connection serves sites only after a team owner or admin allows it. Anyone who manages a Space can ask for a
-  role's connection; owners and admins approve or deny, and set which connectors may serve at all.
+  role's connection; owners and admins approve or deny.
 ```
 
 ## `sf connectors serving approve REQUEST`
@@ -3368,34 +3008,6 @@ DESCRIPTION
   Declines the request and leaves site serving off. Only team owners and admins can deny.
 ```
 
-## `sf connectors serving inspect REQUEST`
-
-Show a site-serving request.
-
-```text
-USAGE
-  $ sf connectors serving inspect REQUEST [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  REQUEST  Request id, for example csr_abc123.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a site-serving request.
-
-  Shows one site-serving request and whether it is still pending.
-```
-
 ## `sf connectors serving list`
 
 List site-serving requests.
@@ -3403,12 +3015,12 @@ List site-serving requests.
 ```text
 USAGE
   $ sf connectors serving list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status pending|approved|denied|canceled] [--limit <NUMBER>] [--cursor
-    <CURSOR>]
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--status pending|approved|denied|canceled] [--limit <value>] [--cursor
+    <value>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum requests to return (default 20).
+  --cursor=<value>   Continue from the cursor the last page printed.
+  --limit=<value>    Maximum requests to return (default 20).
   --status=<option>  Which requests to list. Defaults to pending.
                      <options: pending|approved|denied|canceled>
 
@@ -3424,43 +3036,6 @@ GLOBAL FLAGS
 
 ALIASES
   $ sf connectors serving ls
-```
-
-## `sf connectors serving set`
-
-Set the team's site-serving policy.
-
-```text
-USAGE
-  $ sf connectors serving set [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--admin-only] [--allow <value>...] [--any-connector]
-
-FLAGS
-  --[no-]admin-only   Only owners and admins turn serving on (--admin-only), or anyone with connector rights
-                      (--no-admin-only).
-  --allow=<value>...  Connector slugs that may serve sites, comma-separated or repeated. Replaces the list.
-  --any-connector     Let every connector serve sites.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Set the team's site-serving policy.
-
-  Shows or changes who may turn site serving on for the team's connections, and which connectors may serve sites at all.
-  Team owners and admins only. With no flags, prints the policy.
-
-EXAMPLES
-  Only admins turn serving on, and only for HubSpot and Linear.
-
-    $ sf connectors serving set --admin-only --allow hubspot,linear
 ```
 
 ## `sf connectors unbind ROLE`
@@ -3485,133 +3060,6 @@ GLOBAL FLAGS
       --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
       --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
-```
-
-## `sf connectors update CONNECTOR`
-
-Rename or refresh a connector.
-
-```text
-USAGE
-  $ sf connectors update CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--title <value>] [--description <value>] [--refresh]
-
-ARGUMENTS
-  CONNECTOR  Connector slug.
-
-FLAGS
-  --description=<value>  Replacement agent-visible note. Pass an empty string to clear it.
-  --refresh              Re-fetch the source and rebuild the tool list.
-  --title=<value>        Replacement display name.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Rename or refresh a connector.
-
-  Renames a connector, changes the note agents read, or re-fetches its source and rebuilds its tools. Connections and
-  policy rules survive a refresh.
-
-EXAMPLES
-  Pick up tools HubSpot added to its spec.
-
-    $ sf connectors update hubspot --refresh
-```
-
-## `sf connectors visitors`
-
-See and revoke the accounts a Space's visitors connected.
-
-```text
-USAGE
-  $ sf connectors visitors [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  See and revoke the accounts a Space's visitors connected.
-
-  A visitor role connects each signed-in viewer's own account. List who connected, or disconnect one Space user's
-  account for a role.
-```
-
-## `sf connectors visitors list`
-
-List the Space users who connected an account.
-
-```text
-USAGE
-  $ sf connectors visitors list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List the Space users who connected an account.
-
-  Each Space user with a connected account, how many, and for which roles. Account identities stay private.
-
-ALIASES
-  $ sf connectors visitors ls
-```
-
-## `sf connectors visitors revoke USER ROLE`
-
-Revoke a Space user's connected account.
-
-```text
-USAGE
-  $ sf connectors visitors revoke USER ROLE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>]
-
-ARGUMENTS
-  USER  Space user, as `sf connectors visitors list` prints it.
-  ROLE  Visitor role whose connection to revoke.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Revoke a Space user's connected account.
-
-  Disconnects one Space user's account for one visitor role. They can connect again the next time a page asks.
-
-EXAMPLES
-  Disconnect user 42's calendar account.
-
-    $ sf connectors visitors revoke 42 calendar --space launch-page
 ```
 
 ## `sf content dashboard [TARGET]`
@@ -4419,238 +3867,6 @@ EXAMPLES
     $ sf domains check example.com --space docs --retry-ssl
 ```
 
-## `sf domains connect`
-
-Manage Domain Connect templates and access.
-
-```text
-USAGE
-  $ sf domains connect [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Manage Domain Connect templates and access.
-
-  See and undo what services set up on a Spacefast DNS zone through Domain Connect. See `domains connect list`,
-  `remove`, `access`, and `revoke`; for zones at another DNS host, `links` and `disconnect`.
-```
-
-## `sf domains connect access DOMAIN`
-
-List Domain Connect access.
-
-```text
-USAGE
-  $ sf domains connect access DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List Domain Connect access.
-
-  List the services allowed to apply Domain Connect templates to the domain later, without you present.
-
-EXAMPLES
-  List services with Domain Connect access.
-
-    $ sf domains connect access example.com
-```
-
-## `sf domains connect disconnect LINK`
-
-Turn off automatic DNS.
-
-```text
-USAGE
-  $ sf domains connect disconnect LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  LINK  Automatic DNS link ID (dcl_...).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Turn off automatic DNS.
-
-  Stop keeping a domain's records in sync at its DNS host. Records already there stay; remove Spacefast's access at the
-  DNS host too.
-
-EXAMPLES
-  Turn off automatic DNS after confirmation.
-
-    $ sf domains connect disconnect dcl_123
-```
-
-## `sf domains connect links`
-
-List automatic DNS hosts.
-
-```text
-USAGE
-  $ sf domains connect links [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List automatic DNS hosts.
-
-  List the DNS hosts that keep your Space records in sync through Domain Connect, so new Spaces on their hosts go live
-  without copying records. Turn one on from a Space domain's setup page or `sf domains add`.
-
-EXAMPLES
-  List automatic DNS hosts for a team.
-
-    $ sf domains connect links --team acme
-```
-
-## `sf domains connect list DOMAIN`
-
-List applied Domain Connect templates.
-
-```text
-USAGE
-  $ sf domains connect list DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  List applied Domain Connect templates.
-
-  List the Domain Connect templates services applied to the domain's Spacefast DNS zone, with the records each still
-  owns.
-
-ALIASES
-  $ sf domains connect ls
-
-EXAMPLES
-  List applied templates.
-
-    $ sf domains connect list example.com
-```
-
-## `sf domains connect remove DOMAIN TEMPLATE`
-
-Remove an applied Domain Connect template.
-
-```text
-USAGE
-  $ sf domains connect remove DOMAIN TEMPLATE [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN    Domain ID or hostname.
-  TEMPLATE  Applied template ID (dcti_...).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Remove an applied Domain Connect template.
-
-  Remove an applied Domain Connect template and every DNS record it still owns, including records edited since.
-
-ALIASES
-  $ sf domains connect rm
-
-EXAMPLES
-  Remove an applied template after confirmation.
-
-    $ sf domains connect remove example.com dcti_123
-```
-
-## `sf domains connect revoke DOMAIN AUTHORIZATION`
-
-Revoke Domain Connect access.
-
-```text
-USAGE
-  $ sf domains connect revoke DOMAIN AUTHORIZATION [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
-    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN         Domain ID or hostname.
-  AUTHORIZATION  Authorization ID (grt_...).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Revoke Domain Connect access.
-
-  Stop a service from applying Domain Connect templates to the domain. Records it already applied stay.
-
-EXAMPLES
-  Revoke a service's Domain Connect access after confirmation.
-
-    $ sf domains connect revoke example.com grt_123
-```
-
 ## `sf domains contacts`
 
 Manage registrant contacts.
@@ -4737,41 +3953,6 @@ ALIASES
 
 EXAMPLES
   $ sf domains contacts list
-```
-
-## `sf domains delete DOMAIN`
-
-Delete a team domain.
-
-```text
-USAGE
-  $ sf domains delete DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Delete a team domain.
-
-  Delete a domain from the team's domains. Spacefast DNS stops answering for it. Refused while it is still in use:
-  attached to a Space, registered or being transferred through Spacefast, or served by a connected DNS provider. To take
-  a domain off a Space, use `sf domains remove`.
-
-EXAMPLES
-  Delete a domain the team no longer uses, after confirmation.
-
-    $ sf domains delete example.com
 ```
 
 ## `sf domains diagnostics DOMAIN`
@@ -4984,8 +4165,8 @@ ARGUMENTS
   DOMAIN  Domain ID or hostname.
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum number of records to return (default 20, max 100).
+  --cursor=<CURSOR>  Pagination cursor from a previous response.
+  --limit=<NUMBER>   Maximum number of records to return (default 200, max 500).
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -5276,91 +4457,6 @@ Show a domain's registration.
 ```text
 USAGE
   $ sf domains registration DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [--auto-renew] [-T <TEAM>]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-
-FLAGS
-  --[no-]auto-renew  Turn auto-renew on or off. It charges the team's saved payment method from 30 days before expiry,
-                     and no sooner than a week after the team is told.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Show a domain's registration.
-
-  Show a domain's registration: status, expiry, auto-renew and the earliest day it charges, and any failure or refund.
-  Auto-renew is on by default; turn it off with --no-auto-renew. Buy with `domains registration purchase`, renew with
-  `domains registration renew`.
-
-EXAMPLES
-  Check whether a purchase has registered.
-
-    $ sf domains registration example.com
-
-  Stop the domain from renewing on its own.
-
-    $ sf domains registration example.com --no-auto-renew
-```
-
-## `sf domains registration purchase DOMAIN... [flags]`
-
-Buy domains.
-
-```text
-USAGE
-  $ sf domains registration purchase DOMAIN... [flags]
-
-FLAGS
-  --contact=<value>        Saved registrant contact id (dcon_...).
-  --contact-file=<value>   JSON file with a new registrant; saved before buying.
-  --expect-total=<value>   Charge the team's payment method now for exactly this total before tax, in USD (e.g. 45.68).
-  --payment-token=<value>  Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the team's
-                           payment method. Needs --expect-total.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Buy domains.
-
-  Buy up to 10 domains with the team's saved payment method. With --expect-total and purchasing power, it is charged
-  now. Without either, nothing is charged: you get the command or the dashboard link that finishes the purchase. Without
-  --contact or --contact-file, your newest saved registrant is used.
-
-EXAMPLES
-  Hold two domains and see the total. Nothing is charged.
-
-    $ sf domains registration purchase acme.com acme.dev
-
-  Save a registrant and charge now, refusing if the price moved.
-
-    $ sf domains registration purchase acme.com --contact-file contact.json --expect-total 10.34
-```
-
-## `sf domains registration relock DOMAIN`
-
-Enable a domain's transfer lock.
-
-```text
-USAGE
-  $ sf domains registration relock DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
     [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
@@ -5377,9 +4473,54 @@ GLOBAL FLAGS
       --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 DESCRIPTION
-  Enable a domain's transfer lock.
+  Show a domain's registration.
 
-  Relocks the registration at the registrar. Available for recovery even when new transfers are disabled.
+  Show a domain's registration: status, expiry, and any failure or refund. Buy with `domains registration purchase`,
+  renew with `domains registration renew`.
+
+EXAMPLES
+  Check whether a purchase has registered.
+
+    $ sf domains registration example.com
+```
+
+## `sf domains registration purchase DOMAIN... [flags]`
+
+Buy domains.
+
+```text
+USAGE
+  $ sf domains registration purchase DOMAIN... [flags]
+
+FLAGS
+  --contact=<value>       Saved registrant contact id (dcon_...).
+  --contact-file=<value>  JSON file with a new registrant; saved before buying.
+  --expect-total=<value>  Refuse if the total before tax is not this amount in USD (e.g. 45.68).
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+DESCRIPTION
+  Buy domains.
+
+  Hold up to 10 domains for one payment and print the checkout link. Nothing is charged until you pay there. Without
+  --contact or --contact-file, your newest saved registrant is used.
+
+EXAMPLES
+  Buy two domains with your newest saved registrant.
+
+    $ sf domains registration purchase acme.com acme.dev
+
+  Save a registrant and buy, refusing if the price moved.
+
+    $ sf domains registration purchase acme.com --contact-file contact.json --expect-total 10.34
 ```
 
 ## `sf domains registration renew DOMAIN`
@@ -5389,13 +4530,10 @@ Renew a domain.
 ```text
 USAGE
   $ sf domains registration renew DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [--expect-total <value>] [-T <TEAM>]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 ARGUMENTS
   DOMAIN  Domain ID or hostname.
-
-FLAGS
-  --expect-total=<value>  Charge the team's payment method now for exactly this total before tax, in USD (e.g. 15.00).
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -5410,91 +4548,10 @@ GLOBAL FLAGS
 DESCRIPTION
   Renew a domain.
 
-  Renew for one year. With --expect-total, charge the team's saved payment method now; without it, print the total and
-  how to confirm. Nothing is charged until then.
+  Renew a domain for one year and print the checkout link. Nothing is charged until you pay there.
 
 EXAMPLES
   $ sf domains registration renew example.com
-
-  $ sf domains registration renew example.com --expect-total 15.00
-```
-
-## `sf domains registration transfer-in DOMAIN`
-
-Transfer a domain registration to Spacefast.
-
-```text
-USAGE
-  $ sf domains registration transfer-in DOMAIN --auth-code-file <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color]
-    [--non-interactive] [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--contact <value> | --contact-file
-    <value>] [--payment-token <value> --expect-total <value>]
-
-ARGUMENTS
-  DOMAIN  Existing team domain ID or hostname.
-
-FLAGS
-  --auth-code-file=<value>  (required) File containing the authorization code; - reads stdin.
-  --contact=<value>         Saved registrant contact ID.
-  --contact-file=<value>    JSON file containing a registrant.
-  --expect-total=<value>    Charge the team's card now for exactly this transfer price before tax, in USD (e.g. 12.00).
-  --payment-token=<value>   Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the
-                            team's card. Needs --expect-total.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Transfer a domain registration to Spacefast.
-
-  Unlock the domain at its current registrar first. Supply its authorization code through a file or stdin. With
-  --expect-total and purchasing power the team's saved card is charged now; otherwise it returns the purchase to
-  confirm. DNS stays as it is. It costs the name's registration price; a name without one (premium, or a TLD the
-  registrar doesn't price) is refused with domain_not_purchasable (reason no_price) and nothing is charged.
-
-EXAMPLES
-  $ sf domains registration transfer-in example.com --auth-code-file code.txt
-```
-
-## `sf domains registration transfer-out DOMAIN`
-
-Prepare a domain for transfer to another registrar.
-
-```text
-USAGE
-  $ sf domains registration transfer-out DOMAIN [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--resend]
-
-ARGUMENTS
-  DOMAIN  Domain ID or hostname.
-
-FLAGS
-  --resend  Explicitly request another authorization email after checking the registrant's inbox.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Prepare a domain for transfer to another registrar.
-
-  Unlocks the registration and requests an authorization email to its registrant. Start the transfer at the new
-  registrar with that code. DNS and serving stay intact. Requires confirmation.
-
-EXAMPLES
-  $ sf domains registration transfer-out example.com --yes
 ```
 
 ## `sf domains remove DOMAIN`
@@ -6784,8 +5841,8 @@ Log in to Spacefast.
 ```text
 USAGE
   $ sf login [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [--open] [--read-only | --access read|domains|agent|agent-personal-pages | --handoff
-    | --device-code] [-T <TEAM>]
+    <NAME>] [--token <TOKEN>] [-y] [--open] [--device-code | --handoff | --access
+    read|domains|agent|agent-personal-pages] [-T <TEAM>]
 
 FLAGS
   --access=<option>  Access to request for this machine: read or domains or agent or agent-personal-pages. Defaults to
@@ -6795,7 +5852,6 @@ FLAGS
                      hidden prompt, never as an argument.
   --handoff          Redeem a one-use link from a dashboard agent setup prompt. Read from stdin: pipe it or paste it at
                      the hidden prompt, never as an argument.
-  --read-only        Same as --access read: a read-only credential.
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -6837,7 +5893,7 @@ EXAMPLES
 
   Ask for a read-only credential instead of full agent access.
 
-    $ sf login --read-only
+    $ sf login --access read
 
   Agent access that can also fetch private pages other people shared with you.
 
@@ -6902,7 +5958,7 @@ ARGUMENTS
 FLAGS
   -f, --follow                  Poll for new log entries every 2 seconds until interrupted (Ctrl-C).
       --asn=<value>...          Edge logs only: autonomous system number. Repeat to include more numbers.
-      --cursor=<CURSOR>         Continue from the cursor the previous page returned.
+      --cursor=<CURSOR>         Continue from the cursor printed by the previous page.
       --handler=<value>         Runtime logs only: lines from one Zero mutation or Functions handler.
       --hostname=<value>        Edge logs only: hostname assigned to the space.
       --ja3-hash=<value>...     Edge logs only: JA3 fingerprint. Repeat to include more fingerprints.
@@ -7010,13 +6066,9 @@ Run the Spacefast MCP server.
 ```text
 USAGE
   $ sf mcp [--profile <NAME>] [--workspace-root <value>]
-    [--read-only | --groups <GROUPS>]
 
 FLAGS
   --api-url=<value>         [env: SPACEFAST_API_URL] Spacefast API base URL for MCP tool calls.
-  --groups=<GROUPS>         List only tools in these permission groups, comma-separated: spaces, publishing, domains,
-                            teams, money.
-  --read-only               List only read-only tools, and ask hosted MCP only for Read-only access.
   --token=<value>           [env: SPACEFAST_TOKEN] Spacefast API token for MCP tool calls.
   --workspace-root=<value>  [env: SPACEFAST_MCP_WORKSPACE_ROOT] Root allowed for On-Device MCP path publishing.
 
@@ -7030,14 +6082,6 @@ DESCRIPTION
 
 EXAMPLES
   $ sf mcp
-
-  Serve only read-only tools.
-
-    $ sf mcp --read-only
-
-  Serve only the tools for Spaces and domains.
-
-    $ sf mcp --groups spaces,domains
 ```
 
 ## `sf mcp install`
@@ -7050,29 +6094,22 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--local |
-    --remote | --oauth] [--read-only | --groups <GROUPS>]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--local | --remote | --oauth]
 
 FLAGS
   --agent=<option>...
       Agent/client to configure. Repeat to configure more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
-
-  --groups=<GROUPS>
-      List only tools in these permission groups, comma-separated: spaces, publishing, domains, teams, money.
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --local
       Use checkout-aware local stdio MCP instead of the hosted proxy.
 
   --oauth
       With --remote, connect directly and let the editor handle OAuth.
-
-  --read-only
-      List only read-only tools, and ask hosted MCP only for Read-only access.
 
   --remote
       Use hosted MCP through `sf mcp proxy` and the current CLI login.
@@ -7100,10 +6137,6 @@ EXAMPLES
   Install direct hosted MCP with editor-managed OAuth for Cursor.
 
     $ sf mcp install --agent cursor --remote --oauth
-
-  Install a connection that lists only read-only tools.
-
-    $ sf mcp install --agent claude-code --read-only
 ```
 
 ## `sf mcp proxy`
@@ -7113,16 +6146,13 @@ Run the authenticated remote MCP proxy.
 ```text
 USAGE
   $ sf mcp proxy [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile <NAME>]
-    [--token <TOKEN>] [-y] [--endpoint <value>] [--allow-credential-origin <value>...] [--read-only | --groups <GROUPS>]
+    [--token <TOKEN>] [-y] [--endpoint <value>] [--allow-credential-origin <value>...]
 
 FLAGS
   --allow-credential-origin=<value>...  [env: SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN] Send your Spacefast login to this
                                         MCP origin even though it was not issued for it. Repeatable.
   --endpoint=<value>                    [env: SPACEFAST_MCP_URL] Remote MCP endpoint. HTTPS is required except on
                                         loopback.
-  --groups=<GROUPS>                     List only tools in these permission groups, comma-separated: spaces, publishing,
-                                        domains, teams, money.
-  --read-only                           List only read-only tools, and ask hosted MCP only for Read-only access.
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -7137,13 +6167,6 @@ DESCRIPTION
   Run the authenticated remote MCP proxy.
 
   Proxy remote Spacefast MCP over stdio using the current CLI login.
-
-EXAMPLES
-  $ sf mcp proxy
-
-  Connect to read-only hosted MCP.
-
-    $ sf mcp proxy --read-only
 ```
 
 ## `sf migrate URL`
@@ -7500,7 +6523,7 @@ ARGUMENTS
   [OPERATION]  Operation ID. Omit to list recent operations.
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Pagination cursor from a previous response.
   --limit=<NUMBER>   Maximum number of operations to return (default 50, max 100).
 
 GLOBAL FLAGS
@@ -7617,16 +6640,16 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf] [--dry-run]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf] [--dry-run]
 
 FLAGS
   --agent=<option>
       [default: claude-code] Plugin-capable agent to configure.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --dry-run
       Print the pinned installer command without changing agent configuration.
@@ -7859,7 +6882,7 @@ USAGE
     [--profile <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--space <SPACE>] [--name
     <value>] [--slug <value>] [--hostname-scope team|global] [--spa auto|true|false] [--message <value>] [--git-branch
     <value>] [--git-commit <value>] [--git-ref <value>] [--git-repository <value>] [--source-type direct-upload|git]
-    [--access private|parent_team|public] [--noindex] [--mode website|files] [--target production|preview] [--dry-run]
+    [--access private|parent_team|public] [--mode website|files] [--target production|preview] [--dry-run]
     [--config-only] [--wait] [--wait-timeout <value>] [--stream] [--show-secret] [--build] [--remote] [--prebuilt]
     [--git] [--root-directory <value>] [--install-directory <value>] [--install-command <value>] [--build-command
     <value>] [--output-directory <value>] [--env-file <value>...] [--ignored-build-command <value>] [--source-include
@@ -7889,7 +6912,6 @@ SPACE METADATA FLAGS
                                        spacefast.config.ts.
                                        <options: website|files>
   --name=<value>                       Set the space title.
-  --noindex                            Hide a new Space from search engines from its first publication. Creation only.
   --slug=<value>                       Set the space slug when creating a new space. Reserved names are rejected, as are
                                        slugs containing spacefast, stattic, automattic, wordpress, or paypal anywhere.
   --spa=<option>                       [default: auto] Control single-page app fallback detection.
@@ -7994,108 +7016,6 @@ EXAMPLES
     $ sf publish --json --stream
 ```
 
-## `sf purchases cancel ID`
-
-Cancel a purchase.
-
-```text
-USAGE
-  $ sf purchases cancel ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  ID  Purchase ID (bpi_...).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Cancel a purchase.
-
-  Cancel a purchase before it is charged, and release what it held.
-
-EXAMPLES
-  $ sf purchases cancel bpi_123 --team acme
-```
-
-## `sf purchases confirm ID`
-
-Confirm a purchase and charge the saved payment method.
-
-```text
-USAGE
-  $ sf purchases confirm ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [--payment-token <value> --expect-total <value>] [-T <TEAM>]
-
-ARGUMENTS
-  ID  Purchase ID (bpi_...).
-
-FLAGS
-  --expect-total=<value>   The total before tax you agreed to, in USD (e.g. 10.34).
-  --payment-token=<value>  Pay with a Stripe shared payment token (spt_...) from your agent wallet instead of the team's
-                           payment method. Needs --expect-total.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Confirm a purchase and charge the saved payment method.
-
-  Charge the team's saved payment method for a purchase waiting on confirmation. --expect-total is the confirmation: it
-  is charged only if the total before tax is still exactly that. Needs purchasing power (team owners and admins have
-  it).
-
-EXAMPLES
-  Charge the saved payment method for a purchase you agreed to.
-
-    $ sf purchases confirm bpi_123 --expect-total 10.34 --team acme
-```
-
-## `sf purchases inspect ID`
-
-Inspect a purchase.
-
-```text
-USAGE
-  $ sf purchases inspect ID [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
-
-ARGUMENTS
-  ID  Purchase ID (bpi_...).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Inspect a purchase.
-
-  Show a team purchase: what it buys, its total, and what happens next.
-
-EXAMPLES
-  $ sf purchases inspect bpi_123 --team acme
-```
-
 ## `sf redeploy [BUILD]`
 
 Retry the latest build (alias of `sf builds retry`).
@@ -8133,49 +7053,6 @@ EXAMPLES
   Retry a specific terminal build.
 
     $ sf redeploy bld_123
-```
-
-## `sf resolve [REF]`
-
-Resolve an id, URL, hostname, or slug.
-
-```text
-USAGE
-  $ sf resolve [REF] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y]
-
-ARGUMENTS
-  [REF]  An id, hostname, URL (Space, dashboard, or API), Git repository, or slug. Omit, or pass `.`, for the folder's
-         linked Space.
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Resolve an id, URL, hostname, or slug.
-
-  Resolve any reference to everything it names that you can read: a team, Space, version, build, domain, operation, or
-  another resource, with its ids and URLs. Exits with the not-found code when it names nothing you can read.
-
-EXAMPLES
-  Resolve the Space linked to this folder.
-
-    $ sf resolve
-
-  Resolve a custom domain to its domain record and Space.
-
-    $ sf resolve https://docs.example.com/guide
-
-  Resolve a build id to the build and its Space, as JSON.
-
-    $ sf resolve bld_123 --json
 ```
 
 ## `sf rollback VERSION`
@@ -8722,45 +7599,6 @@ EXAMPLES
     $ sf runtime status --space docs
 ```
 
-## `sf search`
-
-Find the command for a task.
-
-```text
-USAGE
-  $ sf search [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [--limit <NUMBER>]
-
-FLAGS
-  --limit=<NUMBER>  Most matches to return (default 5).
-
-GLOBAL FLAGS
-  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
-  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
-      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
-      --cwd=<DIR>        Working directory for this invocation.
-      --[no-]json        Print the result as JSON.
-      --no-color         Disable color (NO_COLOR).
-      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
-      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
-
-DESCRIPTION
-  Find the command for a task.
-
-  Describe a task in plain words and get the commands that do it, best match first. It ranks the same commands `sf map`
-  lists, needs no login, and never uses the network. Keep queries anonymous: describe the action and the resource, not
-  names or IDs.
-
-EXAMPLES
-  Find the command that follows a Space's logs.
-
-    $ sf search "tail runtime logs"
-
-  The top matches as JSON, with usage and an example for each.
-
-    $ sf search "add a custom domain" --json
-```
-
 ## `sf sell activate`
 
 Enable live Sell sales after Stripe readiness checks.
@@ -8893,7 +7731,7 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--mode test|live] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Continue from the previous page's nextCursor.
   --limit=<NUMBER>   [default: 20] Native orders per page.
   --mode=<option>    [default: test] Payment mode. Never falls back between test and live.
                      <options: test|live>
@@ -9148,17 +7986,16 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--open] [-T <TEAM>] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
-    [--publish]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project] [--publish]
 
 FLAGS
   --agent=<option>...
       Agent to set up. Repeat to set up more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --project
       Install into this project only: skills in this folder, no plugins.
@@ -9183,12 +8020,12 @@ DESCRIPTION
   Sign in, install Spacefast, and publish this project.
 
   Sign in, install the Spacefast CLI and agent plugins or skills, then publish this project. In a terminal it asks
-  first. `--yes` takes every default: the CLI when it runs through npx, bunx or pnpm dlx and `sf` isn't installed, the
-  detected agents for every project, and a publish. That publish pushes this repository when it has a commit, else
-  builds and publishes the project when `sf publish` finds a build, else publishes the first of dist, build, out that
-  exists, or this folder when it has an index.html, else nothing. Without a terminal and without `--yes`, it does only
-  what `--agent` and `--project` say: no CLI install, no publish. It won't publish a checkout saved with an anonymous
-  space's key, or one linked to a space in another team. Use `sf setup agent` to install agent tooling alone.
+  first. `--yes` takes every default: the CLI when it runs through npx and `sf` isn't installed, the detected agents for
+  every project, and a publish. That publish pushes this repository when it has a commit, else builds and publishes the
+  project when `sf publish` finds a build, else publishes the first of dist, build, out that exists, or this folder when
+  it has an index.html, else nothing. Without a terminal and without `--yes`, it does only what `--agent` and
+  `--project` say: no CLI install, no publish. It won't publish a checkout saved with an anonymous space's key, or one
+  linked to a space in another team. Use `sf setup agent` to install agent tooling alone.
 
 EXAMPLES
   In a terminal: choose what to set up, then whether to publish.
@@ -9218,10 +8055,9 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--open] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
-    [--local | --remote | --oauth] [--skip-mcp] [--read-only | --groups <GROUPS>] [--force] [--agent-name <value>
-    --handoff]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project] [--local | --remote |
+    --oauth] [--skip-mcp] [--force] [--agent-name <value> --handoff]
 
 FLAGS
   -y, --yes
@@ -9231,19 +8067,15 @@ FLAGS
       Agent/client to configure. Repeat to configure more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --agent-name=<value>
       With --handoff, the name your user calls you, or your product name, such as Claude Code. The user sees it as the
-      connection's name. Defaults to the detected agent. A product name also picks the client to set up when --agent is
-      not given.
+      connection's name. Defaults to the detected agent.
 
   --force
       Overwrite locally modified or unverified Spacefast skill files.
-
-  --groups=<GROUPS>
-      List only tools in these permission groups, comma-separated: spaces, publishing, domains, teams, money.
 
   --handoff
       Redeem a one-use handoff link from the dashboard before generating setup. The link is read from stdin.
@@ -9256,9 +8088,6 @@ FLAGS
 
   --project
       Install skills and VS Code MCP config into this project, not global directories.
-
-  --read-only
-      List only read-only tools, and ask hosted MCP only for Read-only access.
 
   --remote
       Use hosted MCP through `sf mcp proxy` and the current CLI login.
@@ -10705,17 +9534,16 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
-    [--list] [--force]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project] [--list] [--force]
 
 FLAGS
   --agent=<option>...
       Agent to install for. `auto` configures detected agents plus .agents/skills.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --force
       Overwrite locally modified or unverified Spacefast skill files.
@@ -10765,17 +9593,16 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
-    [--force]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project] [--force]
 
 FLAGS
   --agent=<option>...
       Agent to remove from. Repeat to remove from more than one.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --force
       Remove locally modified or unverified Spacefast skill files.
@@ -10821,16 +9648,16 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [--agent
     auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-copilot-app
     |devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|indent|herm
-    es|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai
-    |clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
+    es|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawhub|copilot
+    |devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf...] [--project]
 
 FLAGS
   --agent=<option>...
       Agent to check. `auto` checks detected agents plus .agents/skills.
       <options: auto|all|generic|claude-code|claude-app|claude-desktop|cursor|codex|chatgpt|vscode|github-copilot|github-c
       opilot-app|devin-desktop|devin-cloud|zed|gemini-cli|opencode|amp|warp|factory-droid|cline|continue|raycast|poke|pi|i
-      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|antigravity|agy|app.devin.ai|chatgpt-work|claude|claude-code-cli
-      |claude.ai|clawhub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
+      ndent|hermes|openclaw|grok|grok-build|grok-bot|muse|app.devin.ai|chatgpt-work|claude|claude-code-cli|claude.ai|clawh
+      ub|copilot|devin|droid|earendil|factory|gemini|grok.com|grokbot|muse.ai|pi.dev|windsurf>
 
   --project
       Check project-local skills instead of global skill directories.
@@ -11192,7 +10019,7 @@ REPOSITORY FLAGS
   --branch=<value>            Branch to list commits from.
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
-  --cursor=<CURSOR>           Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>           Pagination cursor.
   --ephemeral                 Treat the branch as ephemeral.
   --limit=<NUMBER>            Maximum commits to return.
   --path=<value>              Repository path to filter commit history.
@@ -11408,7 +10235,7 @@ REPOSITORY FLAGS
                                   <options: connected|hosted>
   --context-after=<value>         Context lines after each match.
   --context-before=<value>        Context lines before each match.
-  --cursor=<CURSOR>               Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>               Pagination cursor.
   --exclude-glob=<value>          Glob to exclude from search.
   --extension=<value>             File extension filter.
   --include-glob=<value>          Glob to include in search.
@@ -11491,7 +10318,7 @@ GLOBAL FLAGS
 REPOSITORY FLAGS
   --connection-type=<option>  [default: connected] Repository connection type.
                               <options: connected|hosted>
-  --cursor=<CURSOR>           Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>           Pagination cursor.
   --limit=<NUMBER>            Maximum tags to return.
 
 DESCRIPTION
@@ -11895,7 +10722,7 @@ USAGE
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--inactive-for <value>] [--cursor <CURSOR>]
 
 FLAGS
-  --cursor=<CURSOR>       Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>       Continue from the cursor a previous page printed.
   --inactive-for=<value>  Only list the team's spaces with no publish or change in this many days.
   --limit=<NUMBER>        Maximum number of spaces to return (default 50, max 100).
 
@@ -12106,7 +10933,7 @@ ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Continue from an opaque cursor returned by the last page.
   --limit=<NUMBER>   Maximum objects to return (default 50, max 100).
 
 GLOBAL FLAGS
@@ -12225,7 +11052,7 @@ ARGUMENTS
   [TARGET]  Space ID, slug, live URL, or domain. Defaults to the linked space.
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Continue from an opaque cursor returned by the last page.
   --limit=<NUMBER>   Maximum objects to return (default 50, max 100).
 
 GLOBAL FLAGS
@@ -12586,7 +11413,7 @@ USAGE
     <CURSOR>] [--limit <NUMBER>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Pagination cursor.
   --limit=<NUMBER>   Maximum number of revisions to return.
   --status=<value>   Filter by revision status.
 
@@ -12679,8 +11506,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Approve a tag revision.
 
-  Approve a tag revision after validation and policy gates pass. When the Space requires review, only an owner or admin
-  who did not submit the revision can approve it.
+  Approve a tag revision after validation and policy gates pass.
 
 EXAMPLES
   $ sf tags revisions approve tver_123 --space docs
@@ -12731,7 +11557,7 @@ EXAMPLES
 
   Create a draft from a built-in template.
 
-    $ sf tags revisions create --space docs --template google-analytics --field measurementId=G-ABC123
+    $ sf tags revisions create --space docs --template google-analytics --field measurementId=G-123
 ```
 
 ## `sf tags revisions diff REVISION`
@@ -12952,8 +11778,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Create a team.
 
-  Create a new team owned by the current login. Your first team is free; every other team you create needs a
-  subscription before it can be used.
+  Create a new team owned by the current login.
 
 EXAMPLES
   Create a new team.
@@ -13200,11 +12025,7 @@ List team invitations.
 ```text
 USAGE
   $ sf teams invitations list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
-
-FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum invitations to return (default 20, max 100).
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -13427,11 +12248,7 @@ List team members.
 ```text
 USAGE
   $ sf teams members list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--limit <NUMBER>] [--cursor <CURSOR>]
-
-FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum members to return (default 20, max 100).
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>]
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -13500,7 +12317,7 @@ USAGE
     [--outside-domains] [--search <value>] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
+  --cursor=<CURSOR>  Pagination cursor from a previous response.
   --limit=<NUMBER>   People per page (default 20, max 100).
   --outside-domains  Only people with no verified address at a company domain.
   --search=<value>   Match a name or email.
@@ -14417,13 +13234,10 @@ List space versions.
 ```text
 USAGE
   $ sf versions list [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
-    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--commit <value>] [--limit
-    <NUMBER>] [--cursor <CURSOR>]
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--commit <value>]
 
 FLAGS
-  --commit=<value>   Only versions published from this commit.
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum number of versions to return (default 20, max 100).
+  --commit=<value>  Only versions published from this commit.
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -14438,7 +13252,7 @@ GLOBAL FLAGS
 DESCRIPTION
   List space versions.
 
-  List space versions, newest first, marking the live one and any still publishing.
+  List space versions, marking the live one and any still publishing.
 
 ALIASES
   $ sf versions ls
@@ -14668,15 +13482,15 @@ DESCRIPTION
 EXAMPLES
   Run a read Ability with no input.
 
-    $ sf zero call storage.list
+    $ sf zero call content.posts.list
 
   Pass the Ability's input as inline JSON.
 
-    $ sf zero call storage.get --input '{"id":42}'
+    $ sf zero call content.posts.get --input '{"slug":"hello"}'
 
   Read the input from a JSON file.
 
-    $ sf zero call wp.users.create --input @user.json
+    $ sf zero call content.posts.save --input @post.json
 ```
 
 ## `sf zero check`
