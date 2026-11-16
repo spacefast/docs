@@ -64,11 +64,10 @@ A Spacefast cron is a scheduled `GET` against a path on your own Space, like a V
 
 | Next.js | What runs |
 | --- | --- |
-| 16.2.x, 16.3.x, 16.4.5 and later 16.4 releases | Server-rendered builds, through the adapter `sf publish` wires in for you |
-| 15.5.24 and later 15.5 releases | Server-rendered builds |
-| 14.2, 15.0 to 15.5.23, 16.0, 16.1, 16.4.0 to 16.4.4 | `output: "export"` only |
+| 16.4.5 and later 16.4 releases | Server-rendered builds, through the adapter `sf publish` wires in for you |
+| 15.5.29 and later 15.5 releases | Server-rendered builds |
 
-Other versions are refused before anything builds. The [Next.js recipe](/recipes/next) has the details and the export fallback.
+Older releases have known security vulnerabilities, so they are refused before anything builds, with the version to upgrade to. The [Next.js recipe](/recipes/next) has the details and the export fallback.
 
 ## What doesn't
 
