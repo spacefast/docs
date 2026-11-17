@@ -1,23 +1,22 @@
 ---
 title: Next.js
-description: Build a Next.js app with the bundled Spacefast adapter, or publish a static export from an older Next
+description: Build a Next.js app with the bundled Spacefast adapter on a supported, patched Next release
 ---
 
 Next.js is detected by its `next` dependency. A project that also depends on `nextra` matches the Nextra row instead, which builds and outputs the same way.
 
 ## What to build
 
-The default `next build`. On Next 16.2 and 16.3, the CLI first points Next at the bundled `@spacefast/next-adapter` through the `NEXT_ADAPTER_PATH` environment variable, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
+The default `next build`. On Next 16.4.5 and later 16.4 releases, the CLI first points Next at the bundled `@spacefast/next-adapter` through the `NEXT_ADAPTER_PATH` environment variable, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
 
 ## Supported Next versions
 
 | Next.js | Server-rendered build | `output: "export"` |
 | --- | --- | --- |
-| 16.2.x, 16.3.x | Yes, through the bundled adapter | Yes |
-| 15.5.24 and later 15.5 releases | Yes | Yes |
-| 14.2, 15.0 to 15.5.23, 16.0, 16.1, 16.4 | No | Yes |
+| 16.4.5 and later 16.4 releases | Yes, through the bundled adapter | Yes |
+| 15.5.29 and later 15.5 releases | Yes | Yes |
 
-Only stable releases count; canary and other prerelease versions are refused.
+Spacefast builds the same releases its server bundler, OpenNext, supports. Its minimum versions follow Next.js security releases, so every older release has published [security advisories](https://github.com/vercel/next.js/security/advisories), and Spacefast refuses to build it. Only stable releases count; canary and other prerelease versions are refused.
 
 ## The output directory
 
@@ -42,15 +41,15 @@ Published: https://quiet-harbor.space.fast
 
 ## The gotcha
 
-Both refusals fail with this code:
+A version outside the table fails with this code, before anything builds, and exits with code 2:
 
 ```text
 next_version_unsupported
 ```
 
-A version outside the table stops before anything builds. A server-rendered config on an export-only version runs `next build` first, then stops once the CLI sees the output is not an export. Both exit with code 2. There is no guessing fallback, because a publish classified from guessed facts is worse than a refused one.
+For an older release, the error says it has known security vulnerabilities and names the version to upgrade to. Upgrade, then publish again. There is no guessing fallback, because a publish classified from guessed facts is worse than a refused one.
 
-On an export-only version, set `output: "export"` and let `sf publish` build it. On an unsupported version, do the export yourself and upload it:
+If you can't upgrade yet, build a static export yourself and upload it:
 
 ```js next.config.js
 module.exports = { output: "export" };
@@ -61,4 +60,4 @@ npx next build
 sf publish ./out --prebuilt
 ```
 
-One related failure mode on Next 16.2 and 16.3. If a custom build command runs `next build` in a way that loses the environment the CLI set, the adapter never runs. The publish then stops with `build_failed`, saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.
+One related failure mode on Next 16.4. If a custom build command runs `next build` in a way that loses the environment the CLI set, the adapter never runs. The publish then stops with `build_failed`, saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.
