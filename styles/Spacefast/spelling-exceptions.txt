@@ -73,6 +73,7 @@ ETag
 exif
 extensionless
 failover
+Fastmail
 Favicon
 fetchable
 Figma
@@ -324,3 +325,4 @@ wordmark
 wp
 WP
 www
+Zoho
