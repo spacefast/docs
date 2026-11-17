@@ -1,13 +1,25 @@
 ---
 title: Copy a website
-description: Capture a public website with sf migrate, publish it as a static Space, and finish the move with a claim and a domain
+description: Copy a public website into a static Space from your browser or with sf migrate, then finish the move with a claim and a domain
 sidebar:
   order: 3.5
 ---
 
-`sf migrate` takes the URL of a live website and publishes a static copy of it to a new Space. It does not read your current directory, and the result is a new Space every time.
+Give Spacefast the URL of a live website and it publishes a static copy to a new Space. Your original site stays where it is, and copying it again makes another Space.
 
-## Copy a site
+## Copy from your browser
+
+Open [spacefast.com/migrate](https://spacefast.com/migrate/), paste the address, and select **Migrate**. If you belong to more than one team, pick the one that receives the copy.
+
+The page shows each step and counts pages as they're copied. A small site takes about a minute. A site with hundreds of pages can take most of an hour. Reloading the tab picks the progress back up, but a new tab starts empty.
+
+Keep the tab open until it finishes. Signed in, the copy keeps going if you close it, and the new Space shows up in your [dashboard](https://my.spacefast.com). Signed out, the tab holds your only claim link, so if you close it you can't claim the copy.
+
+When it finishes, the page links to the copy and says how many pages it copied. Check it before you move anything. See [Know what the copy contains](#know-what-the-copy-contains).
+
+## Copy from the CLI
+
+`sf migrate` does the same from a terminal. It doesn't read your current directory.
 
 ```bash
 sf migrate https://example.com
@@ -57,7 +69,9 @@ The URL must:
 
 The capture renders the site as portable HTML and publishes those files as a static Space. If the capture produces no HTML file, the build fails.
 
-The copy is static files only. Server-side code, accounts, stored data, and domains stay with the old site.
+The copy is static files only. Server-side code, accounts, stored data, and domains stay with the old site. Forms, comments, logins, and search that depend on the old server stop working in the copy.
+
+A large site can finish with only part of its pages copied. The result still publishes, and it says how many pages were copied out of how many it found. Links to pages that weren't copied still point at the old site, so they break once you move your domain. Open the copy and check the pages you need before you switch.
 
 Without a login, the copy publishes as an anonymous Space and gets the anonymous limits:
 
