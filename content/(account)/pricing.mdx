@@ -37,7 +37,8 @@ The first two are real usage from the last 30 days.
 | When | Pauses | Keeps working |
 | --- | --- | --- |
 | Personal uses its $1 | New [builds](/ci) and [Workers](/functions) | Deployed Spaces: serving, compute, email |
-| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces |
+| You reach a budget you set | New builds and Workers. Nothing above the budget is charged | Deployed Spaces |
+| Usage reaches twice that budget | Serving too. Visitors see "This space is paused" | Your content and settings. Raise the budget or wait for the month to reset, and serving returns within the hour |
 | A Space hits one of its limits | That request gets a 429 ([rate limiting](/infrastructure/rate-limiting)), or that publish gets an [error](/errors) naming the limit | The rest of the Space |
 
 ## Domains
@@ -72,7 +73,7 @@ We may change our fees going forward, in line with the [Terms of Service](https:
 
 ### Can I cap my spending?
 
-Yes, on Go, Pro and Business. The cap starts at twice your plan price, with alerts at 50%, 75% and 100%. You're never charged above it, even if usage briefly runs past it.
+Yes. Set a monthly budget for a team, a subteam or a Space in your team's **Settings**, or with `sf budget set`. You get alerts at 50%, 80% and 100%. At the budget, new builds and Workers pause; at twice the budget, serving pauses too. You can move both points. You're never charged above the budget, even if usage briefly runs past it.
 
 ### Do you have nonprofit or education pricing?
 
