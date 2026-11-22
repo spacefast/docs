@@ -186,7 +186,7 @@ Conditions are combined with AND, and an invalid one drops itself while the rule
 `Role=` is refused: `Role-based routing is not supported. Remove this condition before publishing.`
 
 :::warning[A conditional rule turns off shared caching for that URL]
-The edge cache key is host, path, and query. It does not read `Vary`. Any conditional rule encountered on a URL forces `no-store` for everyone, matching or not. Prefer distinct URLs over conditions on pages that get traffic.
+The edge cache key is host, path, and query. It does not read `Vary`. Any URL a conditional rule touches is `no-store` for everyone, whether the condition matched or not. Prefer distinct URLs over conditions on pages that get traffic.
 :::
 
 ### Rules versus real files
@@ -222,7 +222,7 @@ Those 308s carry the incoming query across. The `/dir` and `/page/` ones accept 
 
 ## Index files and clean URLs
 
-`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and `/docs` redirects there with a 308. With clean URLs on, `/docs/index` and `/docs/index.html` also redirect there. A folder always serves its own `index.html`, the file every static site generator and framework writes for a folder.
+`index.html` at the root answers `/`. `docs/index.html` answers `/docs/`, and `/docs` redirects there with a 308. With clean URLs on, `/docs/index` and `/docs/index.html` also redirect there. A folder always serves its own `index.html`.
 
 With no `index` set, Spacefast infers the homepage: a root `index.html`, else the file a 200 `fallback` names (unless the version runs a worker, which keeps `/`), else a single public HTML file, else the one root-level HTML file, else none, which puts the Space in files mode with directory listings.
 
@@ -273,7 +273,7 @@ The long form takes a status: `{"path": "/index.html", "status": 200}`. `false` 
 
 Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` and a flat `about.html` no longer answers `/about`, so that route reaches the shell; folders still serve their `index.html`.
 
-The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. It is a denylist on purpose, which keeps dotted client routes such as `/users/jane.doe` and `/v1.2.3` reaching the shell.
+The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. Because only listed extensions are skipped, client routes with dots in them, such as `/users/jane.doe` and `/v1.2.3`, still reach the shell.
 
 Files mode and an SPA fallback cannot be combined. The CLI refuses with `files_mode_does_not_support_spa`.
 
