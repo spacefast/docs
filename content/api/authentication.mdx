@@ -153,7 +153,7 @@ The code lifetime, the poll cadence, and what the approved credential is good fo
 
 ## Which routes refuse which credential
 
-Three refusals are worth knowing before you debug one.
+Check these three refusals first when a request is rejected.
 
 **Person-only operations.** An operation whose only declared scheme is the session cookie needs a human behind the request. Account email changes, adding a password, approving a device authorization, approving or denying an agent action, and listing repository installations all refuse an API key or a machine credential. The same session token still works as a bearer token, so this is about the credential kind, not the transport.
 

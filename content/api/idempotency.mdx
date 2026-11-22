@@ -52,7 +52,7 @@ The request runs normally and non-idempotently, and you get no error saying so. 
 
 ## What is not stored
 
-Some outcomes deliberately release the key so the next attempt actually re-executes.
+Some outcomes release the key, so the next attempt runs the request again.
 
 | Outcome | Behaviour |
 | --- | --- |

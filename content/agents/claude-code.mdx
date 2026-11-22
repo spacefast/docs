@@ -40,7 +40,7 @@ Two entries, hosted and local.
 
 `spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio, so `publish` can read a folder instead of taking inline files. The version in `args` is stamped at release; the shipped file pins whatever the release built.
 
-The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
+The `"type": "http"` field is required. Claude Code rejects a bare `{ "url": ... }` entry.
 
 ### The Spacefast skill
 

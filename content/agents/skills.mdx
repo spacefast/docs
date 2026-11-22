@@ -137,7 +137,7 @@ There is also a standalone installer that does not need the `sf` CLI.
 npx -y skills add spacefast/plugins --skill spacefast -g -y
 ```
 
-## Two behaviors worth knowing
+## Install and update behavior
 
 Installs are fail-closed. If the skill directory holds a file the manifest does not recognize, the CLI marks the state unverifiable and refuses to install or remove without `--force`. Only `.DS_Store`, `.localized`, `Thumbs.db`, and `desktop.ini` are exempt.
 
