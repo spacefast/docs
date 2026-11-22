@@ -57,7 +57,7 @@ A WordPress-compatible `theme.json` next to your config is read as an inference 
 }
 ```
 
-Every other WordPress key rides through and is never read. Slugs are lowercase letters, digits, and dashes, up to 64 characters. The palette takes at most 64 entries and `fontFamilies` at most 32. The file is read up to 64 KiB at publish; a larger one is ignored rather than failing the publish.
+Spacefast ignores every other WordPress key. Slugs are lowercase letters, digits, and dashes, up to 64 characters. The palette takes at most 64 entries and `fontFamilies` at most 32. The file is read up to 64 KiB at publish; a larger one is ignored rather than failing the publish.
 
 `theme.json` is the weakest of the three theme sources. What `sf.jsonc` sets under `theme` overrides it, and what the Space's [Customization](/customization) tab sets overrides both. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file, so one file styles both.
 
@@ -122,9 +122,9 @@ The runtime fills a small set of elements. Which ones are legal depends on the p
 
 An element used on the wrong page is `page_element_not_allowed`, and an `sf-` name that is not on this list is `unknown_page_element`.
 
-Two of those are load-bearing rather than decorative. The `access` page **must** render `<sf-access-lanes>`. Otherwise the gate ships with no way in, and publish fails with `access_lanes_missing`. And if that page declares a CSP with `form-action`, it has to include `'self'`. Otherwise its own runtime forms are blocked, and publish fails with `access_csp_form_action_missing_self`.
+Two rules on the `access` page are required. It **must** render `<sf-access-lanes>`, or visitors would have no way in, so publish fails with `access_lanes_missing`. And if that page declares a CSP with `form-action`, it has to include `'self'`. Otherwise its own runtime forms are blocked, and publish fails with `access_csp_form_action_missing_self`.
 
-An `index` page that never renders `<sf-files>` publishes with a warning rather than an error, since a listing with no list is a choice you may have meant.
+An `index` page that doesn't render `<sf-files>` publishes with a warning, not an error, in case you left the list out on purpose.
 
 ### The plan gate
 
