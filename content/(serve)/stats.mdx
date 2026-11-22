@@ -15,7 +15,7 @@ Open the Space and go to **Settings → Stats**. A segmented control labelled **
 | 7 days | Daily |
 | 30 days | Daily |
 
-Thirty days is the widest window. There is no longer one.
+Thirty days is the longest window.
 
 The page shows **Requests**, **Visitor requests**, and **Visitors per day**. Visitor requests include assets, not only page loads. Visitors per day averages complete UTC days in the selected window.
 
@@ -29,20 +29,20 @@ Buckets are labelled in UTC. Bandwidth is available in the table's field picker 
 
 ## What counts as a view
 
-A **request** is any HTTP request the Space answered. A **view** is a request from something that is not a crawler with a status under 400, assets included. So `views` cannot exceed `requests`, and the gap comes from crawlers and responses with a status of 400 or higher.
+A **request** is any HTTP request the Space answered. A **view** is a request with a status under 400 that didn't come from a crawler, assets included. `views` can't exceed `requests`; the difference is crawler traffic and responses with a status of 400 or higher.
 
-**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it merges every hostname mapped to the Space into one count. Daily is the finest resolution available, and days are never summed into a window total. The dashboard shows daily counts and an average over complete days, rather than adding daily visitors into a window total.
+**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it counts every hostname mapped to the Space together. Visitors are only counted per day. Daily counts aren't added into a window total, so the dashboard shows daily counts and an average over complete days instead.
 
 **Top paths** and top hosts are capped at 10 entries each.
 
 ## Where the numbers come from
 
-The edge that serves your Space counts its own requests. Nothing is injected into your pages, no script runs in the visitor's browser, and there is no cookie. A static HTML file with no JavaScript in it is measured exactly like anything else.
+The edge that serves your Space counts the requests. Nothing is added to your pages, no script runs in the visitor's browser, and no cookie is set. A static HTML file with no JavaScript is counted like any other file.
 
-Every read goes straight to the edge on request. Spacefast keeps no copy, because a copy could only ever be stale. Two consequences worth knowing:
+Each time you open stats, Spacefast reads them from the edge. It doesn't store its own copy. As a result:
 
 - A Space that has never published a version has no runtime to read, and the request answers `runtime_not_provisioned`. Publish first.
-- When the measurement is unreachable the page says **Analytics are temporarily unavailable** and offers **Try again**. It does not show zeros. Your Space keeps serving either way.
+- When stats can't be read, the page says **Analytics are temporarily unavailable** and offers **Try again** instead of showing zeros. Your Space keeps serving.
 
 ## From the CLI
 
@@ -76,4 +76,4 @@ There is no window-level request total in the payload. Sum `series[].requests` f
 
 ## Add browser analytics
 
-For browser analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement id or a Tag Manager container id. Its own switch controls whether the tag loads. See [Customization](/customization).
+For browser analytics, add your own tag. **Customization → Google Analytics** takes a GA4 measurement ID or a Tag Manager container ID, each with a switch that controls whether the tag loads. See [Customization](/customization).

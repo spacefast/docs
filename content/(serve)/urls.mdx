@@ -8,7 +8,7 @@ Adding a custom domain leaves the Space's managed hostname in place. A later slu
 
 ## The default hostname
 
-Every new Space gets one hostname the moment it exists:
+Every new Space gets a hostname as soon as it's created:
 
 ```text
 https://{label}.space.fast/
@@ -38,7 +38,7 @@ Existing URLs such as `https://v7--my-site.view.fast/` retain their format. Use 
 
 The API and the CLI report it as `immutableUrl`, with an `immutableUrlStatus` of `pending` until the hostname is routable.
 
-Version hostnames always carry `X-Robots-Tag: noindex, nofollow`, and their `/robots.txt` is a deny-all that outranks any `robots.txt` you published. Search engines index the live hostname, not the snapshots.
+Version hostnames always send `X-Robots-Tag: noindex, nofollow`, and their `/robots.txt` blocks all crawlers, even if you published your own `robots.txt`. Search engines index the live hostname, not the versions.
 
 ## Branch preview URLs
 
@@ -50,11 +50,11 @@ https://{label}--br-{alias}.{apex}/
 
 The apex stays the same as the Space's default hostname. Existing branch URLs such as `https://br-preview--my-site.view.fast/` retain their format.
 
-The alias is clamped to 16 characters. Branch hostnames follow the branch: pushing again repoints the same URL at the newer version. They are noindex for the same reason version hostnames are.
+The alias is cut to 16 characters. A branch hostname follows the branch: each push points the same URL at the newer version. Branch hostnames are also noindex.
 
 ## What the live URL points at
 
-`liveUrl` is the field the publish receipt, the CLI, and the dashboard all report. It resolves through exactly one rule.
+The publish receipt, the CLI, and the dashboard all report the live URL as `liveUrl`:
 
 | Space state | `liveUrl` |
 | --- | --- |
@@ -62,21 +62,21 @@ The alias is clamped to 16 characters. Branch hostnames follow the branch: pushi
 | Primary domain, state `active` | `https://{primary hostname}/` |
 | Primary domain still verifying, or blocked | The Space's default hostname |
 
-It is always `https`, always with a trailing slash on the root, so the same host produces a byte-identical URL everywhere. A primary domain that has not reached `active` does not displace the default hostname, which is why a half-configured domain never publishes a link nobody can load.
+It always uses `https` and ends the root with a trailing slash. A primary domain doesn't replace the default hostname until it's `active`, so Spacefast never reports a link to a domain that isn't serving yet.
 
 ## After a custom domain becomes primary
 
-Both hostnames serve. Adding a custom domain leaves the managed hostname serving content. What changes is the URL Spacefast reports for the Space.
+Both hostnames keep serving. The only change is the URL Spacefast reports for the Space.
 
-If you want the managed hostname to stop answering with content, there is no switch for it. Point people at the custom domain instead.
+You can't turn off the managed hostname. Share the custom domain instead.
 
 The apex and `www` pair is different. When one of them serves, the other gets an automatic 308 to it. See [Custom domains](/domains).
 
 ## Renaming a Space
 
-Renaming the slug moves the default hostname to the new label on the same domain. A `view.fast` Space stays on `view.fast`. A `space.fast` Space stays on `space.fast`. The old hostname keeps a temporary 307 to the new one, preserving path and query, so links you already handed out still land. Branch hostnames under the old label get the same 307.
+Renaming the slug moves the default hostname to the new label on the same domain. A `view.fast` Space stays on `view.fast`. A `space.fast` Space stays on `space.fast`. The old hostname redirects to the new one with a temporary 307 that keeps the path and query, so links you already shared still work. Branch hostnames under the old label get the same 307.
 
-Version URLs do not change on a rename. They were computed once and stay put.
+Version URLs don't change when you rename a Space.
 
 ## Share links
 
@@ -86,12 +86,12 @@ A share link is the page you want with the secret in the query string:
 https://my-site.space.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-At the current hostname, one request returns that page without an access redirect or interstitial, so `curl` and an agent get the same document a browser does. Creating, scoping, and revoking them is on [Spacefast Share](/share).
+At the current hostname, one request returns that page with no redirect or interstitial, so `curl` and agents get the same page a browser does. Creating, scoping, and revoking them is on [Spacefast Share](/share).
 
 ## Hostnames you cannot claim
 
-Any hostname ending in `.space.fast` or `.view.fast` is refused as a custom domain with `domain_reserved_suffix`. Default hostnames pass DNS verification automatically, so allowing them as custom domains would let one team claim an address owned by another team.
+Any hostname ending in `.space.fast` or `.view.fast` is refused as a custom domain with `domain_reserved_suffix`. Default hostnames pass DNS verification automatically, so allowing them as custom domains would let one team claim another team's address.
 
 ## Hostnames that do not serve
 
-A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell "nothing here yet" apart from a missing page on a published Space. A Space removed under the strictest safety category sends the same response, so the header alone does not prove the Space was never published.
+A request to a hostname Spacefast does not route, or to a Space that has never published, answers `404` with `Cache-Control: no-store` and the body `This space hasn't been published yet.` The response includes `X-Spacefast-Undeployed: 1`. Use that header or the body to tell an unpublished Space apart from a missing page on a published one. A Space removed under the strictest safety category sends the same response, so the header alone does not prove the Space was never published.

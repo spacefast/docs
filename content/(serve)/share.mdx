@@ -4,7 +4,7 @@ description: Make a Space public, hand out scoped share links or a password, inv
 sidebar: { order: 5 }
 ---
 
-Spacefast Share (formerly Spacefast Access) decides who can open a Space. Visitor access comes from additive grants. Removing a public grant closes that route to the public only if no other public grant matches; links, people, and team access can remain.
+Spacefast Share (formerly Spacefast Access) controls who can open a Space. Access comes from grants, and any matching grant lets a visitor in. Removing one public grant doesn't remove other public grants, links, people, or team access.
 
 <a id="access-is-a-list-not-a-switch" />
 
@@ -12,9 +12,9 @@ Spacefast Share (formerly Spacefast Access) decides who can open a Space. Visito
 
 Access is a set of additive **grants**, each one naming an audience, a set of capabilities, the paths it covers, and which published target it applies to. A matching grant admits a visitor. Revoking one grant does not revoke other matching grants or remove the owning team's permissions.
 
-That model is why a Space can be public at `/docs/**` and closed everywhere else, and why revoking a share link takes effect on the next request rather than at the next publish.
+Grants let a Space be public at `/docs/**` and closed everywhere else. Revoking a share link takes effect on the next request, without a publish.
 
-The dashboard puts the three common shapes behind one control, and the CLI and API let you write any grant you want.
+The dashboard covers the common cases. The CLI and API can create any grant.
 
 | Audience | Who it admits |
 | --- | --- |
@@ -37,7 +37,7 @@ A role is a named bundle of capabilities. Every grant carries one.
 | `editor` | The above, plus publish |
 | `manager` | The above, plus manage access |
 
-Share links and passwords are forwardable secrets, so they cap at `viewer` or `commenter`. Neither can be given `manage`.
+Anyone can forward a share link or password, so they're limited to `viewer` or `commenter`.
 
 ## In the dashboard
 
@@ -82,13 +82,13 @@ A new team-owned Space does not create a share link in the current CLI or dashbo
 
 Team requests to `POST /v1/spaces` that do not send `capabilities: ["optional_access"]`, such as older CLI versions and dashboard tabs, still receive a compatibility Open link. Team Spaces created by current publish clients get no automatic link. Team requests that send the capability get no link, and their successful receipt can omit `access`. Anonymous Spaces keep their expiring Open link.
 
-A share link is a durable URL that opens exactly the paths you scoped it to, with no account needed. The secret rides in the query string, so the link is the page:
+A share link is a lasting URL that opens only the paths you scoped it to, with no account needed. The secret is in the query string, so the link goes straight to the page:
 
 ```text
 https://my-site.view.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-One request returns that document. There is no redirect and no interstitial, so `curl`, an agent, and a browser all get the same page.
+One request returns the page, with no redirect or interstitial, so `curl`, agents, and browsers all get the same page.
 
 ### Create one
 
@@ -130,17 +130,17 @@ sf share link copy lnk_xxxxxxxx --space my-site --show-secret
 sf share link revoke lnk_xxxxxxxx --space my-site
 ```
 
-List reads never carry the secret. The URL is returned only to callers who may manage the Space's access, and `--show-secret` is what prints it in a non-interactive shell.
+Listing links never returns the secret. Only callers who can manage the Space's access can get the URL, and in a non-interactive shell you need `--show-secret` to print it.
 
-Revoking drops the grant in the same write, so every outstanding copy of the URL stops working on the next request. The dashboard confirms with "Anyone using this link will immediately lose access."
+Revoking a link removes its grant, so every copy of the URL stops working on the next request.
 
-`sf share link edit` changes a link's scope, role, target and constraints without rotating its URL, so a link you already sent can be narrowed rather than replaced.
+`sf share link edit` changes a link's scope, role, target, and constraints without changing its URL, so you can narrow a link you already sent instead of replacing it.
 
 A Space that has not been claimed yet may keep up to 50 active links, and further creates return `anonymous_share_link_limit`.
 
 ## Passwords
 
-A password is a separate audience with its own scope, not a lock on the whole Space. Several named passwords can coexist, each covering different paths.
+A password is its own grant with its own scope, not a lock on the whole Space. You can have several named passwords, each covering different paths.
 
 ```bash
 sf share password create \
@@ -161,7 +161,7 @@ sf share password revoke pwd_xxxxxxxx --space my-site
 
 Rotating keeps the grant and its scope, and immediately signs out sessions that used the old password. Revoking removes the grant, so those sessions lose access too.
 
-The dashboard's **Password** card carries **Set password**, **Change** and **Remove**, with **Expires**, **Paths** and **What password holders can do** under **Password options**. It manages one password; the card's own footnote points at the CLI and API for more.
+The dashboard's **Password** card has **Set password**, **Change**, and **Remove**, with **Expires**, **Paths**, and **What password holders can do** under **Password options**. It manages one password. Use the CLI or API for more.
 
 ## Inviting people
 
@@ -188,7 +188,7 @@ sf share token rotate mch_xxxxxxxx --space my-site
 sf share token revoke mch_xxxxxxxx --space my-site
 ```
 
-The token is shown once, right after creation. The dashboard says it plainly: "Copy it now. It won't be shown again." Rotating keeps the grant and its scope and invalidates the old token immediately.
+The token is shown only once, right after you create it. Rotating keeps the grant and its scope and stops the old token from working immediately.
 
 ## Access requests
 
@@ -204,19 +204,19 @@ Approving invites the requester to the path they asked about.
 
 ## What a visitor sees
 
-**On a public Space**, the page loads. No access code runs at all.
+**On a public Space**, the page loads with no access check.
 
-**With a share link**, the link is the page. The token is redeemed before anything is read from disk, so the first request returns the document. The response is never stored in any cache. It also carries `Referrer-Policy: no-referrer`, so the secret does not leak through the referrer header on outbound clicks.
+**With a share link**, the token is checked before the file is read, so the first request returns the page. The response is never cached. It also carries `Referrer-Policy: no-referrer`, so the secret does not leak through the referrer header on outbound clicks.
 
 **On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page offers whichever lanes you configured: a password box, an email code, a request-access form, or a sign-in with a Spacefast account.
 
-**Signing in** sends the visitor to Spacefast, then back. The path they originally asked for is carried through the round trip, so they land on the page they wanted rather than the homepage.
+**Signing in** sends the visitor to Spacefast and back to the page they originally asked for.
 
-**Submitting a password** posts it from the same origin and checks it against the platform, not anything on the box. On success, it sets the visitor's session cookie and sends a **303** back to where they were. Passwords are capped at 1024 bytes. Failures come back as rate limited, invalid password, or exchange unavailable.
+**Submitting a password** posts it from the same origin, and Spacefast checks it. On success, it sets the visitor's session cookie and sends a **303** back to where they were. Passwords are capped at 1024 bytes. Failures come back as rate limited, invalid password, or exchange unavailable.
 
-A visitor session is idle-expiring after 7 days and absolutely expiring after 30 days.
+A visitor session expires after 7 days without use, or 30 days after it started.
 
-Two behaviors are worth knowing because they look like bugs and are not. A rewrite cannot widen access: both the URL the visitor asked for and the path it rewrote to have to be admitted. And a directory listing on a protected Space silently omits the rows that visitor cannot reach, rather than showing them and challenging.
+Two behaviors can look like bugs. A rewrite can't widen access: the visitor needs access to both the URL they asked for and the path it rewrote to. And a directory listing on a protected Space leaves out entries the visitor can't open.
 
 ## Revoking everything at once
 
@@ -224,11 +224,11 @@ Two behaviors are worth knowing because they look like bugs and are not. A rewri
 sf access sessions revoke --space my-site
 ```
 
-This ends every active visitor session on the Space, whatever admitted them: share link, password, private open, or signed-in account. It takes effect immediately, without a republish. Grants themselves are untouched, so anyone still holding a valid link or password can open the Space again on their next visit. Revoke the grant when you want the credential itself dead.
+This ends every active visitor session on the Space, whatever admitted them: share link, password, private open, or signed-in account. It takes effect immediately, without a republish. Grants stay in place, so anyone with a valid link or password can open the Space again on their next visit. To stop a link or password from working, revoke its grant.
 
 ## Defaults for new Spaces
 
-A team decides what its new Spaces start as. In the dashboard, open team settings and go to **Access**, headed "Choose how new spaces on this team start."
+A team chooses the starting access for its new Spaces. In the dashboard, open team settings and go to **Access**.
 
 | Preset | New Spaces start with |
 | --- | --- |

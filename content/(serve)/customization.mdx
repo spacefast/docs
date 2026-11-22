@@ -3,21 +3,21 @@ title: Customization
 description: Theme the pages Spacefast draws, set the title and image links unfurl with, add an analytics tag, and run one site-wide script
 ---
 
-Everything you set here lives on the Space, not a version — it survives every publish, and it wins over whatever `theme` or `meta` your `sf.jsonc` declares.
+Customization settings are saved on the Space, not on a version, and they override the `theme` and `meta` in your `sf.jsonc`.
 
-Open the Space and go to **Customization**. Four tabs, in order: **Theme**, **Search & sharing**, **Google Analytics**, and **Custom JS**. A large live preview sits beside the controls, labelled **Visitor sees**, painted from your unsaved draft.
+Open the Space and go to **Customization**. It has four tabs: **Theme**, **Search & sharing**, **Google Analytics**, and **Custom JS**. A preview labeled **Visitor sees** shows your unsaved changes beside the controls.
 
 ## What lives on the Space, not the version
 
-Everything on this page is stored on the Space rather than on a version, so it survives a publish and a rollback alike. It also wins over the published `sf.jsonc`: the Space's `theme` replaces the file's rather than merging with it. So a project that sets `theme` in its config, then edits Theme here, keeps seeing the dashboard's answer until you clear it. The same holds for `meta`.
+Because these settings are stored on the Space, they stay in place through publishes and rollbacks. They also override the published `sf.jsonc`: the Space's `theme` replaces the file's `theme` instead of merging with it. If your config sets `theme` and you also edit the Theme tab, the dashboard values win until you clear them. The same applies to `meta`.
 
-Theme and share metadata apply without republishing. Save, and the next request gets them. **Custom JS** is the exception, and its own field note says so: a script change takes effect on the next publish.
+Theme and share metadata apply without republishing: the next request after you save gets them. **Custom JS** is different. A script change takes effect on the next publish.
 
-Everything the four tabs write is `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
+The four tabs write `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
 
 ## Theme
 
-Blank means the platform default. The tab's own lead says everything here is optional and suggests starting with an accent.
+Every field is optional. A blank field uses the platform default.
 
 | Group | Field | Config key | What it does |
 | --- | --- | --- | --- |
@@ -32,19 +32,19 @@ Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names, up
 
 ### The background pins the color scheme
 
-Leave **Background** blank and the pages follow each visitor's device, light or dark. The field's default note says exactly that.
+With **Background** blank, pages follow each visitor's device setting, light or dark.
 
-Set it, and it stops following. Spacefast reads the color you gave, decides whether it is light or dark, and serves that one scheme to everyone. The field flips to **Pinned.**, with a line saying the color reads as dark or light so every visitor gets that scheme. It also shows **Clear to follow visitors again**. The preview's Auto/Light/Dark switcher is replaced by a locked **Pinned · Dark** or **Pinned · Light** chip, because there is no longer anything to simulate.
+Set a background and Spacefast decides whether that color is light or dark, then serves that one scheme to every visitor. The field shows **Pinned.** and a **Clear to follow visitors again** option. In the preview, a locked **Pinned · Dark** or **Pinned · Light** label replaces the Auto/Light/Dark switcher.
 
 ### Check the branding entitlement
 
 The dashboard enables badge removal when the team has the branding entitlement or the Space used badge removal before the new plans took effect. Other Spaces need the entitlement.
 
-The gate is enforced at publish too. Publishing a version whose effective theme sets `hideSpacefastBranding` without either allowance fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding is not included on this plan."
+Publishing checks this too. Publishing a version whose effective theme sets `hideSpacefastBranding` without either allowance fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding is not included on this plan."
 
 ### Code override
 
-A page your version ships as its own file is not repainted by these controls. The preview badges it **Code override.** and says the page ships from that file, with a hint pointing at `_pages/<id>.html`. See [Layout, theme, and site pages](/site-pages).
+These controls don't restyle a page that your version ships as its own file. The preview marks that page **Code override.** and points at its `_pages/<id>.html` file. See [Layout, theme, and site pages](/site-pages).
 
 ## Search and sharing
 
@@ -57,7 +57,7 @@ What a browser tab, a link unfurl, and a search result show.
 | **Social image** | `meta.image` | 2000 characters |
 | **Favicon** | `meta.favicon` | 2000 characters |
 
-The Title help text reads "Browser tabs, link unfurls, and search results." The Social image note says 1200 × 630 fills the card exactly, with placeholder `/og.png`. Favicon takes an upload or a path, placeholder `/favicon.ico`. A value longer than what previews show appends ", cut off in most previews" under the field rather than refusing it.
+A 1200 × 630 social image fills the card exactly. Favicon takes an upload or a path. A value longer than most previews can show is still saved, with a note under the field that it will be cut off.
 
 **Import from a live page** under **Shortcut** pulls title, description, and image from a page you have already published. Give it a path and press **Fetch**.
 
@@ -72,19 +72,19 @@ The **Google Analytics** tab holds two cards, **Google Analytics** and **Google 
 | Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-` followed by 4 or more letters or digits |
 | Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-` followed by 4 or more letters or digits |
 
-An id that does not match is refused on save with "Enter a valid GA4 measurement ID." or "Enter a valid web container ID.", and the card's badge reads **Invalid ID**. A card with its switch off reads **Off** and says nothing is sent until you turn it on. With it on and the id valid, the badge reads **Enabled** and the field note becomes "This tool loads on every published page."
+Saving an ID that doesn't match fails, and the card shows **Invalid ID**. A card with its switch off shows **Off** and sends nothing. With the switch on and a valid ID, the card shows **Enabled** and the tag loads on every published page.
 
 ### Page enhancements has to be on first
 
-Analytics and custom code both ride the Space's injection master switch. With it off, both tabs show the warning **Page enhancements is off.** / "Turn it on before analytics can load on published pages." and every control is disabled, with an **Enable page enhancements** button that flips it in place.
+Analytics and custom code only load when the Space's **Page enhancements** switch is on. With it off, both tabs show **Page enhancements is off.**, every control is disabled, and an **Enable page enhancements** button turns it on.
 
-The switch itself lives in **Settings** under **Page enhancements**, described as "Inject performance, SEO, analytics, and comment features into published pages." Turning it off keeps every saved setting ready to restore. When it is on, an **Active now** row lists what is being injected right now.
+The switch is in **Settings** under **Page enhancements**. It controls the performance, SEO, analytics, and comment features Spacefast adds to published pages. Turning it off keeps your saved settings. When it's on, an **Active now** row lists what is being added.
 
 ## Custom JS
 
 One card, **Site-wide JavaScript**, with a **Run custom code** switch and a **JavaScript** textarea. The script applies to every published page view and is stored as the first entry in `superpowers.javascriptTags`.
 
-Do not include `<script>` tags. The field's own note says changes take effect on the next publish. A snippet is capped at 8 KiB.
+Don't include `<script>` tags. Changes take effect on the next publish. A snippet can be up to 8 KiB.
 
 :::warning[Custom code runs with your page]
 Only paste code you trust. A broken script can break the page for visitors.
@@ -92,7 +92,7 @@ Only paste code you trust. A broken script can break the page for visitors.
 
 ## Copy as spacefast.jsonc
 
-The header's **Copy as spacefast.jsonc** button, titled "Theme and share metadata for your repo", copies the current draft as JSON. It emits exactly the `meta` and `theme` objects, with empty fields dropped:
+The **Copy as spacefast.jsonc** button in the header copies your current draft as JSON. It includes only the `meta` and `theme` objects, without empty fields:
 
 ```jsonc sf.jsonc
 {
@@ -112,6 +112,6 @@ The header's **Copy as spacefast.jsonc** button, titled "Theme and share metadat
 }
 ```
 
-Paste it into your project's `sf.jsonc` and those two keys travel with the repository. `spacefast.jsonc` is the button's wording and a legacy filename the loader still accepts; the canonical name is `sf.jsonc`. The rest of the file is unaffected, and both keys work under either name.
+Paste it into your project's `sf.jsonc` to keep those settings in the repository. The button says `spacefast.jsonc`, an older filename that still works, but the current name is `sf.jsonc`.
 
-One thing to know before you paste it: as long as the Space also carries a `theme`, the Space keeps winning. Clear the Theme tab's fields if you want the file to be the source of truth.
+While the Space has its own `theme`, it still overrides the file. Clear the Theme tab's fields if you want the file to control the theme.

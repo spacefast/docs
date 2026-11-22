@@ -8,7 +8,7 @@ You can redirect, rewrite, proxy, and set response headers on a published Space.
 
 To block, challenge, or skip the cache for requests, see [Traffic rules](/traffic-rules).
 
-Nothing here is evaluated per request. Spacefast compiles your rules at publish time into a table the edge reads, so a rule that behaves unexpectedly is almost always a compile-time problem. `sf routing inspect` shows you the compiled result before you publish.
+Spacefast compiles your rules into a table when you publish, and the edge reads that table. If a rule behaves unexpectedly, run `sf routing inspect` to see the compiled result before you publish.
 
 ## Three sources, one order
 
@@ -75,7 +75,7 @@ An unindented line starts a matcher block. Indented lines under it are operation
   !X-Frame-Options
 ```
 
-Headers accumulate. Every block that matches contributes, unlike redirects where the first match ends the walk. A `remove` deletes what earlier blocks set, and removals run before sets. Repeating the same header name inside one file folds the values into a comma-joined list.
+Headers add up. Every matching block applies, unlike redirects, where the first match wins. A `remove` deletes what earlier blocks set, and removals run before sets. Repeating the same header name inside one file folds the values into a comma-joined list.
 
 Header names must match `^[A-Za-z0-9-]+$`. Some names are owned by the platform and are refused at publish:
 
@@ -87,7 +87,7 @@ Header names must match `^[A-Za-z0-9-]+$`. Some names are owned by the platform 
 | `cdn-cache-control`, `cloudflare-cdn-cache-control`, `netlify-cdn-cache-control`, `surrogate-control` | `header_cdn_cache_unsupported` |
 | `Basic-Auth` | `header_basic_auth_unsupported` |
 
-`Basic-Auth` is rejected before anything else. The offending line is redacted from the diagnostics and stripped from the compiled bytes, so the credential never reaches a log. For real access control, see [Spacefast Share](/share).
+`Basic-Auth` is rejected before anything else. The line is redacted from the diagnostics and removed from the compiled rules, so the credential never reaches a log. For real access control, see [Spacefast Share](/share).
 
 `Cache-Control` is allowed and warns with `header_cache_control_platform_managed`. It applies to browser responses; shared caching is managed for you. See [Caching](/caching).
 
