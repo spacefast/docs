@@ -1,6 +1,6 @@
 ---
 title: Publishing
-description: What one sf publish actually does, which files it sends, how change-only uploads work, and what the receipt tells you
+description: What one sf publish does, which files it sends, how change-only uploads work, and what the receipt tells you
 sidebar:
   order: 1
 ---
@@ -64,7 +64,7 @@ Publishing walks the directory and builds a manifest. Three things can happen to
 
 ### Dropped without complaint
 
-Some paths are never worth failing a whole publish over, so they are dropped and counted instead. Exact names at any depth:
+Some paths are dropped and counted instead of failing the publish. Exact names at any depth:
 
 ```text
 .DS_Store  .gitignore  .npmrc  .netrc
@@ -93,7 +93,7 @@ These fail the publish rather than getting dropped, because silently ignoring th
 | Under a runtime control prefix, such as a top-level `__sf` or `__spacefast` | `static_runtime_control_path_not_supported` |
 | Two entries that canonicalize to the same path | `manifest_duplicate_path` |
 
-Two artifacts claiming the same request route also stop the publish, so a lookup-order coin flip never decides which one visitors get.
+Two artifacts that claim the same request route also stop the publish, so visitors never get an arbitrary one of them.
 
 ### Size and count
 
@@ -117,7 +117,7 @@ Every declared file carries a `sha256`. The server compares your declaration aga
 { "upload": 3, "reused": 41, "ignored": 0 }
 ```
 
-Deleting a file means leaving it out of the declaration. There is no delete list. That has one consequence worth knowing:
+Deleting a file means leaving it out of the declaration. There is no delete list, which has one consequence:
 
 | Mode | What your file list means |
 | --- | --- |
@@ -136,7 +136,7 @@ noop_publish
 
 That diagnostic is the only signal. There is no separate boolean.
 
-One catch. A file declared without a `sha256` cannot prove it is unchanged, so a manifest missing any hash always materializes a new version.
+A file declared without a `sha256` can't be shown to be unchanged, so a manifest missing any hash always creates a new version.
 
 ## Waiting, or not
 
@@ -148,7 +148,7 @@ On the CLI it is `--wait` (on by default), `--no-wait`, and `--wait-timeout` in 
 
 ## Reading the receipt
 
-The parts you actually read:
+The fields you'll use most:
 
 | Field | What it tells you |
 | --- | --- |
@@ -208,7 +208,7 @@ An archive that needs a build returns a receipt with a `build` object and `next.
 | `slug_reserved`, `slug_unavailable` | The slug you asked for is taken or held | Take the `details.suggestion` |
 | `space_selection_conflict` | You passed both a Space and a creation-only flag such as `--access` | Drop the creation flag |
 
-Every code, with whether it is worth retrying, is on [Error codes](/api/errors).
+Every code, and whether to retry it, is on [Error codes](/api/errors).
 
 ## Next steps
 

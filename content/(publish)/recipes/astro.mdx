@@ -54,7 +54,7 @@ export default defineConfig({
 
 ## The gotcha
 
-The integration's `failOnRoutingError` defaults to `true`. A malformed line in `_redirects` or `_headers` stops `astro build` with an error rather than shipping a site whose routing quietly does nothing. That is the point of it, but it does mean adding the integration can break a build that used to pass. Set `failOnRoutingError: false` to downgrade it to a log line while you fix the file.
+The integration's `failOnRoutingError` defaults to `true`. A malformed line in `_redirects` or `_headers` stops `astro build` with an error instead of shipping a site whose routing silently doesn't work. This means adding the integration can break a build that used to pass. Set `failOnRoutingError: false` to downgrade it to a log line while you fix the file.
 
 The integration needs Astro 6 or newer. Everything else on this page works on any Astro version, because publishing `dist` is a file upload.
 

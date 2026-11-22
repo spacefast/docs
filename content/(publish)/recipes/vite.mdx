@@ -57,6 +57,6 @@ For a single-page app, say so:
 spacefast({ mode: "spa" });
 ```
 
-That writes an `/index.html` fallback for `/*` into the output, and then checks the fallback file actually exists. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`.
+That writes an `/index.html` fallback for `/*` into the output, and then checks that the fallback file exists. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`.
 
 The plugin needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`. More on [Frameworks and builds](/frameworks).

@@ -184,7 +184,7 @@ Logs are capped at 500 entries and 512 KiB per build. Past that the oldest entri
 | Per-phase timeout | 180 seconds |
 | Build output archive | 512 MiB by default |
 
-Your build commands are never retried automatically. A crashed run fails the build deterministically instead of silently running your commands a second time. Only infrastructure failures that happen before the build starts are requeued, at most twice.
+Spacefast doesn't retry your build commands. If a run crashes, the build fails instead of running your commands again. Only infrastructure failures that happen before the build starts are requeued, at most twice.
 
 Retrying is explicit and makes a **new** build, linked back to the original and reusing its exact input and settings snapshot.
 
@@ -224,7 +224,7 @@ export default defineConfig({
 });
 ```
 
-Same routing conventions as the Astro integration, plus a check that the build is actually publishable. `mode` defaults to `static`, and a static build with no `.html` file anywhere in the output fails rather than deploying a blank site. `mode: "spa"` writes an `/index.html` fallback for `/*` instead. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`. Needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`.
+Same routing conventions as the Astro integration, plus a check that the build can be published. `mode` defaults to `static`, and a static build with no `.html` file anywhere in the output fails rather than deploying a blank site. `mode: "spa"` writes an `/index.html` fallback for `/*` instead. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`. Needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`.
 
 ### `@spacefast/next-adapter`
 
