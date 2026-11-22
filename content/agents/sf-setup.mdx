@@ -41,7 +41,7 @@ sf setup agent -y
 `--yes` skips both prompts, auto-detects your clients, and configures **remote proxy** MCP. That is the same default the interactive picker offers.
 
 :::warning
-The `--yes` flag's own help text says it accepts local stdio MCP. That text is wrong. The default is the remote proxy. Pass `--local` when you actually want the local stdio server.
+With `--yes`, setup accepts the hosted MCP server through `sf mcp proxy`. Pass `--local` to use the local stdio server instead.
 :::
 
 ## Flags
