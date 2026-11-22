@@ -35,7 +35,7 @@ A file gets the one-year immutable policy when either of these is true.
 
 **Or it sits under a known build output directory** and is not `.html`, `.htm`, `.php`, `.txt` or `.xml`. Those directories are `_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`, and `_spacefast/platform/`.
 
-A build that emits unhashed filenames gets the ten-minute shared policy on every file. That works, but hashed filenames make repeat visits faster.
+Outside those directories, a file with an unhashed name gets the ten-minute shared policy. That works, but hashed filenames make repeat visits faster.
 
 A precompressed sidecar such as `app.js.gz` is served at its own literal URL and is never selected as the answer for `app.js`.
 
@@ -78,7 +78,7 @@ Immutable version hostnames aren't purged, because their content never changes.
 
 A purge can fail. If it does, the page still refreshes within ten minutes, when the shared copy expires.
 
-Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their next request. Files with a content hash in their name are cached for a year, but a new build gives changed files new names.
+Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Files with a content hash in their name are cached for a year, but a new build gives changed files new names.
 
 ## Getting a fresh response
 
