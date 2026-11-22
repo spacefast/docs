@@ -78,7 +78,7 @@ Immutable version hostnames aren't purged, because their content never changes.
 
 A purge can fail. If it does, the page still refreshes within ten minutes, when the shared copy expires.
 
-Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Files with a content hash in their name are cached for a year, but a new build gives changed files new names.
+Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Hashed files and files under the build output directories above are cached for a year. A new build gives changed hashed files new names, but an unhashed file in one of those directories keeps its URL, so browsers can keep the old copy. Rename it when its content changes.
 
 ## Getting a fresh response
 
