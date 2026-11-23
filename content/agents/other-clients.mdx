@@ -98,7 +98,7 @@ Your login is origin-bound. The proxy sends it only to the API and MCP origins o
 | `--endpoint` | `SPACEFAST_MCP_URL` | Remote MCP endpoint. Defaults to the `mcp.` sibling of your login's API host |
 | `--allow-credential-origin` | `SPACEFAST_MCP_ALLOW_CREDENTIAL_ORIGIN` | Send your credential to this origin even though it was not issued for it. Repeatable |
 
-Each request and response pair is capped at 32 MiB and 30 seconds.
+Responses are capped at 32 MiB, and each request times out after 55 seconds.
 
 ## Running the local server directly
 
@@ -125,19 +125,16 @@ Diagnostics go to stderr, because stdout carries the protocol.
 
 | Client | Config file |
 |---|---|
-| `claude-code` | `~/.claude.json` |
+| `claude-code` | `~/.claude.json`, or `$CLAUDE_CONFIG_DIR/.claude.json` |
 | `cursor` | `~/.cursor/mcp.json` |
-| `codex` | `~/.codex/config.toml` |
-| `vscode` | `<project>/.vscode/mcp.json` |
+| `codex` | `~/.codex/config.toml`, or `$CODEX_HOME/config.toml` |
+| `vscode` | `mcp.json` in your VS Code user folder, or `<project>/.vscode/mcp.json` from a remote terminal |
 | `github-copilot` | `~/.copilot/mcp-config.json` |
-| `devin-desktop` | `~/.devin/mcp_config.json` |
+| `devin-desktop` | `~/.config/devin/mcp_config.json` |
 | `zed` | `~/.config/zed/settings.json` |
-| `gemini-cli` | `~/.gemini/settings.json` |
 | `opencode` | `~/.config/opencode/opencode.json` |
-| `amp` | `~/.config/amp/mcp.json` |
-| `warp` | `~/.warp/mcp.json` |
+| `amp` | `~/.config/amp/settings.json` |
+| `warp` | `~/.warp/.mcp.json` |
 | `factory-droid` | `~/.factory/mcp.json` |
 | `cline` | `~/.cline/data/settings/cline_mcp_settings.json` |
 | `generic` | `<project>/.mcp.json` |
-
-VS Code is the exception. Its MCP config is project-scoped while every other client's is global. `continue` takes skills but no MCP config.

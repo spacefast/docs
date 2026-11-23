@@ -3,20 +3,20 @@ title: Skills
 description: The base Spacefast skill and the task skills for saving and using a team's Design System
 ---
 
-The Spacefast plugins and `sf skills` install the base `spacefast` skill for publishing, inspection, and management. The format and tool choices depend on the client; adding only an MCP connection does not install the skill.
+The Spacefast plugins and `sf skills install` install the base `spacefast` skill for publishing, inspection, and management. The format and tool choices depend on the client. Adding only an MCP connection doesn't install the skill.
 
-Spacefast plugins also include task skills for saving and using a team's Design System.
+The plugins also include task skills for building a site, editing a Space, sharing, custom domains, fixing a deployment, and saving and using a team's Design System.
 
 ## The base `spacefast` skill
 
-Every lane ships a skill named `spacefast`. It is two markdown files, `SKILL.md` and `references.md`, rendered from one template into per-client variants.
+Every lane ships a skill named `spacefast`: a `SKILL.md` and a `references.md`, rendered from one template into per-client variants.
 
-| Lane | What lands | Bundled scripts |
-|---|---|---|
-| Claude Code plugin | `skills/spacefast/SKILL.md` and `references.md` | Seven bash scripts |
-| Codex plugin | The same two files, plus a section of Codex notes | Seven bash scripts |
-| Cursor plugin | `rules/spacefast.mdc` | None. A `.mdc` rule cannot bundle scripts |
-| `sf skills` | `spacefast/SKILL.md` and `references.md` in the client's skills directory | None |
+| Lane | What lands |
+|---|---|
+| Claude Code plugin | `skills/spacefast/` and the task skills |
+| Codex plugin | The same skills in the Codex variant |
+| Cursor plugin | The same skills, plus a `rules/spacefast.mdc` rule |
+| `sf skills install` | `spacefast/SKILL.md` and `references.md` in the client's skills directory |
 
 The plugin lanes carry the MCP variant, which routes work to the typed tools. The copy bundled with the CLI carries the curl and HTTP API variant instead, for agents that have no MCP connection at all. Same name, same product rules, different lane.
 
@@ -40,24 +40,24 @@ The trigger line is the frontmatter `description`. Your client matches it agains
 <Tabs param="client">
 <Tab title="Claude Code">
 
-The MCP variant routes publishing, inspection, and management requests to the current tools.
+The plugin's base skill triggers on publishing an existing artifact and on team Memories and Skills. Content and design changes go to the `edit-space` task skill.
 
 ```text
-Use publish for files, operation_status for an active publish, and the matching Space App for inspection. Call API operation tools directly for reads and mutations. Use resume_execution to continue a saved execution.
+Publish an existing website, app, report, or other artifact to Spacefast and verify its live link. Also use to read or manage team Memories and inspect team Skills. For changes to an existing Space's content or design, use edit-space.
 ```
 
 </Tab>
 <Tab title="Codex">
 
-The Codex variant follows the same tool routing and includes Codex-specific environment notes.
+The Codex variant uses the same trigger and tool routing.
 
 </Tab>
 <Tab title="Cursor">
 
-The Cursor rule carries a shorter one.
+The Cursor skills use the same triggers. The `rules/spacefast.mdc` rule carries a broader one.
 
 ```text
-Publish and manage Spacefast spaces when the user wants to deploy, host, publish, share, update, claim, inspect, roll back, or configure a site.
+Build and publish websites, edit existing Spaces, manage sharing and domains, and apply saved team standards with Spacefast. Use the installed task skill for the requested workflow.
 ```
 
 Cursor's rule sets `alwaysApply: false`, so it loads on a match instead of on every request.
@@ -65,7 +65,7 @@ Cursor's rule sets `alwaysApply: false`, so it loads on a match instead of on ev
 </Tab>
 <Tab title="Other">
 
-The curl variant that `sf skills` installs triggers on the same requests, phrased around publishing with curl. It fires on "publish this", "put this live", "host this folder", "make a live URL", and on updating, claiming, or inspecting a Space.
+The HTTP variant that `sf skills install` adds triggers on publishing without installing anything: anonymous uploads, claiming, updates, buildable archives, and domain search.
 
 </Tab>
 </Tabs>
@@ -118,8 +118,8 @@ sf skills
 | Flag | What it does |
 |---|---|
 | `--agent <id>` | Install for one agent. Repeat for more. `auto` uses detected agents plus `.agents/skills`. `all` installs everywhere |
-| `--project`, `-p` | Install into this project instead of the agent's global skills directory |
-| `--list`, `-l` | List the bundled skill files without installing |
+| `--project` | Install into this project instead of the agent's global skills directory |
+| `--list` | List the bundled skill files without installing |
 | `--force` | Overwrite locally modified or unverified Spacefast skill files |
 
 Two sibling commands round it out.

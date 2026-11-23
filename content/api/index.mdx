@@ -13,7 +13,7 @@ Use the Spacefast API to publish files, inspect Spaces, and manage resources wit
 https://api.spacefast.com
 ```
 
-Every operation lives under `/v1`. The version is in the path, so a future `/v2` never changes what `/v1` returns. The spec that generates [the reference](/api/reference) is served at `https://api.spacefast.com/openapi.json` and stamps its own version in `info.version` (currently `0.3.0`).
+Every operation lives under `/v1`. The version is in the path, so a future `/v2` never changes what `/v1` returns. The spec that generates [the reference](/api/reference) is served at `https://api.spacefast.com/openapi.json` and stamps its own version in `info.version`.
 
 `HEAD` works for every `GET`.
 
@@ -25,7 +25,7 @@ One header for API keys, Space credentials, sessions, OAuth tokens, and partner 
 
 ```bash curl
 curl -sS https://api.spacefast.com/v1/me \
-  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 ```ts SDK

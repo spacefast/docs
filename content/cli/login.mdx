@@ -14,7 +14,8 @@ Every command here also takes the [global flags](/cli#global-flags).
 Log this machine in through the browser, or save an API key you already have.
 
 ```text
-sf login [--access read|domains|agent|agent-personal-pages] [--handoff] [-T <team>] [--token <key>]
+sf login [--access read|domains|agent|agent-personal-pages | --handoff | --device-code]
+  [--no-open] [-T <team>] [--token <key>]
 ```
 
 ### Flags
@@ -23,6 +24,8 @@ sf login [--access read|domains|agent|agent-personal-pages] [--handoff] [-T <tea
 | --- | --- | --- |
 | `--access=<read\|domains\|agent\|agent-personal-pages>` | `agent` | Access to request for this machine. You confirm or narrow it in the browser. Cannot be combined with `--handoff` or `--token`. |
 | `--handoff` | off | Redeem a one-use agent handoff link from the dashboard. Read from stdin. Cannot be combined with `--token`. |
+| `--device-code` | off | Redeem a sign-in code from the MCP `cli_login` tool. Read from stdin, never as an argument. |
+| `--[no-]open` | on | Open the browser. `--no-open` prints the link instead. |
 | `--token=<key>` | none | Store an API key you already have instead of running the browser flow. Env `SPACEFAST_TOKEN`. |
 | `-T, --team=<value>` | none | Team slug, ID, or name to make the default after signing in. Env `SPACEFAST_TEAM`. |
 
@@ -54,7 +57,7 @@ With `--json`, one line goes to stderr before the poll blocks, so an agent can h
 | --- | --- |
 | `read` | Read your teams, Spaces, and domains. Changes nothing. |
 | `domains` | Buy domains for your teams, and manage your domains and their DNS. |
-| `agent` (default) | Create and publish Spaces, and manage their access, domains, and DNS. Invite team members, create teams, manage Sell, and register sign-in apps. To delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase. It can't remove team members or change roles or billing. |
+| `agent` (default) | Create and publish Spaces, and manage their access, domains, and DNS. Invite team members, create teams, manage Sell, and register sign-in apps. Read team subscriptions, usage, and masked payment method details. To delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase. It can't remove team members or change roles or billing. |
 | `agent-personal-pages` | Agent access, plus private pages other people shared with you. |
 
 The approval page shows the same scopes and lets you narrow them.
@@ -168,7 +171,7 @@ Authenticate the CLI.
 sf auth
 ```
 
-A topic, not an action. Running it prints the help for its subcommands. `sf auth login` is an alias for `sf login` and renders identical help.
+A topic, not an action. Running it bare prints help. Its subcommands, `sf auth as <name>` and `sf auth reset`, set and clear the local dev guest identity for a Zero project (`--dir`, default `.`). Sign in with `sf login`.
 
 ## sf access
 

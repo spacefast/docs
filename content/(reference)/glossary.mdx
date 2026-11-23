@@ -37,7 +37,7 @@ One rule in a Space's access list: it names an audience (public, team, one perso
 
 ## Live (the live channel)
 
-The pointer that selects the version served at the live URL. Promoting or rolling back moves it to a retained, ready version without rebuilding. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
+The pointer that selects the version served at the live URL. Promoting or rolling back points it at a retained, ready version without running a build. By default that applies your current rewrites, which makes a new version from the selected one's files. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
 
 ## Space
 

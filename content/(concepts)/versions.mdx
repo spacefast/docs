@@ -1,11 +1,11 @@
 ---
 title: Versions and the live channel
-description: Immutable versions, the live channel, promotion policies, and rollback to a retained ready version without rebuilding
+description: Immutable versions, the live channel, promotion policies, and rollback to a retained ready version
 sidebar:
   order: 2
 ---
 
-A rollback doesn't rebuild anything. It repoints `live` at a retained, ready version; deleted or expired versions cannot be rollback targets.
+A rollback points `live` back at a retained, ready version and doesn't rebuild it. By default it applies your current rewrites, which makes a new version from that version's files. Deleted or expired versions cannot be rollback targets.
 
 ## A version is a snapshot
 
@@ -48,21 +48,21 @@ A channel has a promotion policy.
 On a manual channel an ordinary publish comes back with `activation.outcome` of `unpromoted` and `reason` `channel_promotion_manual`. Nothing failed. The version is ready and waiting for an explicit promote.
 
 ```bash
-sf channels ls --space docs
+sf channels list --space docs
 sf channels set live --promotion manual --space docs
 ```
 
 ## Promote and roll back
 
-Promoting points `live` at a ready version. No files move, nothing is rebuilt, and the previous version keeps its own URL.
+Promoting points `live` at a ready version. By default it applies your current rewrites to that version's files, which makes a new version and puts that live. Pass `--no-refresh-rewrites` (API: `refreshRewrites: false`) to make the selected version live exactly as saved. Either way, the previous version keeps its own URL.
 
-Rolling back is the same operation, pointed at an older version. Neither one rebuilds anything, and both take effect in seconds.
+Rolling back is the same operation, pointed at an older version.
 
 <Tabs>
 <Tab title="CLI">
 
 ```bash
-sf versions ls --space docs
+sf versions list --space docs
 sf rollback v12 --space docs
 sf promote v14 --space docs
 ```
@@ -119,7 +119,7 @@ All of them. Ready versions stay until you delete them, on every plan.
 To delete one:
 
 ```bash
-sf versions rm v12 --space docs
+sf versions delete v12 --space docs
 ```
 
 A version the `live` channel points at cannot be deleted, and neither can one a branch hostname serves. Promote something else first. The refusal is `version_in_use` and names what is holding it.
@@ -143,9 +143,9 @@ To browse rather than diff, [`listSpaceVersionFiles`](/api/reference/versions/li
 
 | Task | CLI | Dashboard |
 | --- | --- | --- |
-| List versions | `sf versions ls` | **Versions** |
+| List versions | `sf versions list` | **Versions** |
 | Inspect one | `sf versions inspect v12` | A version row, then the detail page |
 | Make one live | `sf promote v12` | **Make live** |
 | Go back | `sf rollback v12` | **Roll back to** on Overview |
-| Delete one | `sf versions rm v12` | Version detail page |
-| Change promotion policy | `sf channels set live --promotion manual` | Not in the dashboard |
+| Delete one | `sf versions delete v12` | Version detail page |
+| Change promotion policy | `sf channels set live --promotion manual` | **Publishing** on **Versions**: **Automatic** or **Manual** |

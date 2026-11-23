@@ -48,7 +48,7 @@ The host runs WP-CLI as a job and does not return its output; only success or fa
 Run with --local against a local WordPress to see what the command prints.
 ```
 
-When you need the bytes, run the same command locally, or reach for `sf db` and the database console.
+When you need the bytes, run the same command locally, or use `sf db` and the database console.
 
 ```bash
 sf wp --local --path ./wordpress core version
@@ -132,7 +132,7 @@ Send the token to the Space in `X-SF-Authorization`, never in `Authorization`:
 
 ```bash
 curl -X POST \
-  https://my-site.view.fast/wp-json/wp-abilities/v1/abilities/zero/storage-list/run \
+  https://my-site.space.fast/wp-json/wp-abilities/v1/abilities/zero/storage-list/run \
   -H "X-SF-Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{ "perPage": 20 }'

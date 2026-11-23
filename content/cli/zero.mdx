@@ -11,7 +11,7 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 ## sf zero abilities
 
-List the Abilities the Space's live capsule publishes: what an agent can call, what category it belongs to, and whether it reads or writes. Aliased as `sf zero ls`.
+List the Abilities the Space's live capsule publishes: what an agent can call, what category it belongs to, and whether it reads or writes.
 
 ```text
 sf zero abilities [--space <value>]
@@ -73,14 +73,14 @@ The HTTP status, then the Ability's JSON result. With `--json`, `data` is `{ abi
 Generate TypeScript for everything the platform owns rather than your source: the live content model's types, the Ability catalog with the capability each one needs, and a row type per database table. Commit the result and use `--check` in CI.
 
 ```text
-sf zero types [--space <value>] [--out <path>] [--check]
+sf zero types [--space <value>] [--output <path>] [--check]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--out=<path>` | `zero-types.ts` | File to write, relative to the current directory |
+| `--output=<path>` | `zero-types.ts` | File to write, relative to the current directory |
 | `--check` | `false` | Compare instead of writing, and exit non-zero when the file is stale or missing |
 
 ```bash
@@ -100,39 +100,66 @@ With `--json`, `data` is `{ out, spaceId, versionId, contentModelRevision, abili
 
 ## sf zero import
 
-Translate a Payload CMS or EmDash project into an authored Zero capsule and its content files, and print the translation report. This is a local codegen step with no space flags.
+Translate a Payload, EmDash, or Sanity schema into a new `zero.config.ts`, check that it compiles, and print what mapped and what did not. This is a local codegen step with no space flags.
 
-A Payload config carrying anything Zero cannot hold is refused outright, and nothing is written. A content model missing the fields that refused would publish a site that silently lost content.
+It never runs the CMS code and never overwrites a file. Anything Zero cannot hold refuses the import, and nothing is written. Content moves separately, with `sf zero migrate site`.
 
 ```text
-sf zero import <source> <directory> [--out <dir>] [--capsule <path>] [--force]
+sf zero import <source> <input> [--output <file>]
 ```
 
 ### Arguments
 
 | Argument | What it is |
 | --- | --- |
-| `<source>` | Project format to translate: `payloadcms` or `emdash`. Required |
-| `<directory>` | Directory holding the project to translate. Required |
+| `<source>` | CMS to import from: `payload`, `payloadcms`, `emdash`, or `sanity`. Required |
+| `<input>` | The schema file, or the project directory to find it in, such as `payload.config.ts`, `.emdash/seed.json`, or `sanity.config.ts`. Required |
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--out=<dir>` | current directory | Directory to write the capsule and content into |
-| `--capsule=<path>` | `server/index.ts` | Capsule module to write, relative to `--out` |
-| `--force` | `false` | Overwrite files the import would otherwise refuse to replace |
+| `--output=<file>` | `zero.config.ts` | Config file to write. It must not exist yet |
 
 ```bash
-sf zero import payloadcms ../my-payload-app
-sf zero import emdash ../my-emdash-site --out .
+sf zero import payload ../my-payload-app
+sf zero import emdash ../my-emdash-site --output ./zero.config.ts
 ```
 
 ### Errors
 
 | Code | Exit | When |
 | --- | --- | --- |
-| `zero_import_refused` | 1 | The source config carries something Zero cannot hold. Nothing is written |
+| `zero_import_refused` | 2 | The source config carries something Zero cannot hold. Nothing is written |
+
+## Local Zero projects
+
+These commands work on a `zero.config.ts` in the current directory, or in the directory you pass. They take no space flags.
+
+| Command | What it does |
+| --- | --- |
+| `sf zero init [NAME]` | Write a starter `zero.config.ts` with one collection, one table, and one action. `--force` overwrites an existing config |
+| `sf zero check` | Compile the config and report diagnostics without writing anything. `--json` prints the diagnostics envelope |
+| `sf zero build` | Compile the config into WordPress plugins under `.zero/wp-content`, plus new migrations, the typed client, and `zero.gen.ts` |
+| `sf zero dev` | Run the app on a local WordPress through Studio (Node 22 or newer, no Docker) and rebuild on change. `sf zero dev stop` stops it |
+| `sf zero migrate` | `migrate config` imports an EmDash, Payload, or Sanity schema; `migrate site` moves content |
+
+`check`, publish, and source migration use the bundled WebAssembly compiler. `dev` and `build` need optional native packages, so reinstall with optional dependencies enabled if they are missing. Extra arguments to `build`, `dev`, and `migrate` pass through to `zero` unchanged.
+
+```bash
+sf zero init my-app
+sf zero check ./my-app --json
+sf zero dev
+sf zero migrate site content-model.php --dry-run
+```
+
+## sf zero queries
+
+List the queries the Space's live version declares. `--name` inspects one query. `--local-url` or `--port` reads a local `sf dev` server instead of the live version.
+
+```bash
+sf zero queries --space docs
+```
 
 ## sf wp
 
@@ -188,7 +215,7 @@ sf runtime status --space docs
 State: active
 Live version: ver_0123456789abcdef
 Pending version: none
-Live URL: https://docs.view.fast
+Live URL: https://docs.space.fast
 ```
 
 Then one table per runtime section. A static Space has no app and prints nothing further.
@@ -223,20 +250,20 @@ sf pages pull 404
 Run the same structural page checks publish runs. Fully local.
 
 ```text
-sf pages validate [-d <dir>]
+sf pages validate [--dir <dir>]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-d, --dir=<dir>` | `.` | Project directory |
+| `--dir=<dir>` | `.` | Project directory |
 
 Discovery skips `.git`, `.spacefast`, and `node_modules`, and collects only `_pages/**` and `_layout.html`. The theme is read from `theme.json`, then overridden by `sf.jsonc`'s `theme` key.
 
 ```bash
 sf pages validate
-sf pages validate -d ./dist
+sf pages validate --dir ./dist
 ```
 
 The command sets exit code 2 when any diagnostic has severity `error`. Warnings do not change the exit code.
@@ -248,14 +275,14 @@ Read `DESIGN.md`'s ` ```theme.json ` and ` ```layout.html ` fenced blocks and wr
 `theme.json` can seed Pages tokens and feeds a Zero capsule's Tailwind compile. `_layout.html` provides site chrome. `DESIGN.md` itself is never read at finalize or serve time; this is an authoring-time codegen step.
 
 ```text
-sf design generate [-f]
+sf design generate [--force]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-f, --force` | `false` | Overwrite existing generated files |
+| `--force` | `false` | Overwrite existing generated files |
 
 The command also accepts ` ```json:theme.json ` and ` ```html:layout.html ` fences. The first matching fence wins. Each block is validated with the same finalizer publish uses, and an invalid block produces a warning and is not written. Without `--force`, an existing target is skipped rather than overwritten. Files are written with mode `0644`.
 

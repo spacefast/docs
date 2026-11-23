@@ -57,12 +57,12 @@ sf build --dry-run
 
 Human output is the build plan and the build's own stdout, then the archive path. With `--json --stream` each line is one event (`build.started`, `build.log`, `build.succeeded`, `build.failed`).
 
-## sf builds ls
+## sf builds list
 
-List builds. Alias: `sf builds list`.
+List builds. Alias: `sf builds ls`.
 
 ```text
-sf builds ls
+sf builds list
 ```
 
 ### Flags
@@ -78,8 +78,8 @@ sf builds ls
 ### Examples
 
 ```bash
-sf builds ls --space docs
-sf builds ls --space docs --limit 5
+sf builds list --space docs
+sf builds list --space docs --limit 5
 ```
 
 ### Output
@@ -135,6 +135,7 @@ Prints build runner log lines, newest first. With `--follow` it streams until th
 | `-f, --follow` | off | Follow live build logs until the build reaches a terminal state |
 | `--limit=<value>` | server default | Maximum number of log lines. 1 to 100 |
 | `--cursor=<value>` | none | Pagination cursor from a previous response |
+| `--wait-timeout=<seconds>` | none | With `--follow`, stop following after this many seconds and exit 0 |
 
 ### Examples
 
@@ -236,10 +237,18 @@ sf builds upload refresh bld_123
 Detect framework and build settings.
 
 ```text
-sf builds detect
+sf builds detect [DIR] [--local]
 ```
 
-Inspects a Space's repository connection and shows the detected app, ranked candidates when the repository holds more than one, and any platform config it found that Spacefast cannot convert. This reads the repository, not your working directory.
+With a selected Space, inspects its repository connection and shows the detected app, ranked candidates when the repository holds more than one, and any platform config it found that Spacefast cannot convert. This reads the repository, not your working directory.
+
+Pass a directory or `--local` to inspect local files instead, with no sign-in.
+
+### Arguments
+
+| Argument | Default | What it is |
+| --- | --- | --- |
+| `[DIR]` | `.` when no Space is selected | Local project directory to inspect |
 
 ### Flags
 
@@ -248,6 +257,7 @@ Inspects a Space's repository connection and shows the detected app, ranked cand
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
+| `--local` | off | Inspect local files even when the directory is linked to a Space |
 | `--connection-type=connected\|hosted` | `connected` | Repository connection type |
 | `--ref=<value>` | default branch | Git ref to inspect |
 | `--root-directory=<value>` | repository root | App root directory to inspect |
@@ -256,6 +266,7 @@ Inspects a Space's repository connection and shows the detected app, ranked cand
 ### Examples
 
 ```bash
+sf builds detect ./apps/web
 sf builds detect --space docs
 sf builds detect --space docs --root-directory apps/web --apply-best
 ```

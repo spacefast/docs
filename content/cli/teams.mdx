@@ -11,12 +11,12 @@ A team owns Spaces, domains, and billing. Every member holds one team role: `own
 
 Most subcommands accept `-T, --team` (slug, ID, or name; env `SPACEFAST_TEAM`). Without it they use the default team set by `sf teams switch`.
 
-## sf teams ls
+## sf teams list
 
-List teams. Alias: `sf teams list`.
+List teams. Alias: `sf teams ls`.
 
 ```text
-sf teams ls
+sf teams list
 ```
 
 Lists teams available to the current login.
@@ -24,7 +24,7 @@ Lists teams available to the current login.
 ### Example
 
 ```bash
-sf teams ls
+sf teams list
 ```
 
 ### Output
@@ -71,7 +71,7 @@ sf teams switch acme
 
 ## sf teams create
 
-Create a team. Alias: `sf teams add`.
+Create a team.
 
 ```text
 sf teams create NAME
@@ -118,24 +118,25 @@ Accept the invitation through its join link in the dashboard. With CLI credentia
 
 ## sf teams defaults
 
-Manage future-space defaults.
+Show who can view this team's Spaces, or set the access new Spaces start with.
 
 ```text
-sf teams defaults [ROOTACCESS]
+sf teams defaults [ACCESS] [--new-subteams private|parent_team]
 ```
 
-Shows or sets the access preset materialized for Spaces this team creates in the future. It never changes an existing Space.
+Setting a value changes only Spaces created from now on. Existing Spaces keep their access. **Private spaces only** and **Hide from search engines** show up here but change only in the dashboard, under Team settings → Access.
 
 ### Arguments
 
 | Argument | Default | What it is |
 | --- | --- | --- |
-| `[rootAccess]` | show only | Future Space preset: `private` (owning team) or `public` (also anyone on the web). `team` is accepted as `private` |
+| `[access]` | show only | `private` (your team), `parent_team` (your team plus everyone in its parent team, who can view and comment), or `public` (anyone on the web). `parent_team` is for a subteam in an Enterprise or Internal family |
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `--new-subteams=<private\|parent_team>` | unchanged | Root teams on Enterprise or Internal: the access new Spaces start with in each subteam created from now on. Existing subteams keep theirs |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
 ### Examples
@@ -143,23 +144,29 @@ Shows or sets the access preset materialized for Spaces this team creates in the
 ```bash
 sf teams defaults
 sf teams defaults private
+sf teams defaults parent_team --team design
+sf teams defaults --new-subteams parent_team
 ```
 
 ### Output
 
 ```text
-New Spaces: private
-This setting affects future spaces only.
+Private spaces only: off
+Hide from search engines: off
+New spaces: private
+Public spaces now: 0
 ```
+
+A root team with a subteam default also prints `New subteams start with:`. While **Private spaces only** is on, the last line counts the Spaces that would turn public again if it were turned off.
 
 `--json` returns `{ teamId, defaults }`. To override the preset for one publish, pass `sf publish --access`. To change an existing Space, use [`sf share`](/cli/share).
 
-## sf teams members ls
+## sf teams members list
 
-List team members. Alias: `sf teams members list`.
+List team members. Alias: `sf teams members ls`.
 
 ```text
-sf teams members ls
+sf teams members list
 ```
 
 ### Flags
@@ -171,7 +178,7 @@ sf teams members ls
 ### Example
 
 ```bash
-sf teams members ls
+sf teams members list
 ```
 
 ### Output
@@ -211,14 +218,14 @@ sf teams members invite jane@example.com alex@example.com --role member
 
 One address prints `Invited <email> as <role>` and the invitation ID. Several print how many people were invited. `--json` returns `{ invitation }` or `{ invitations }`.
 
-The invitations go out together. If any fail, the command exits with the error, or with "Multiple invitation requests failed.", and doesn't list the ones that went out. Run `sf teams invitations ls` to see which were sent. Sending again to an address with a pending invitation fails with `invitation_already_exists`, so a rerun only invites the addresses that failed. Resend an existing invitation from the dashboard under **Members → Pending**.
+The invitations go out together. If any fail, the command exits with the error, or with "Multiple invitation requests failed.", and doesn't list the ones that went out. Run `sf teams invitations list` to see which were sent. Sending again to an address with a pending invitation fails with `invitation_already_exists`, so a rerun only invites the addresses that failed. Resend an existing invitation from the dashboard under **Members → Pending**.
 
-## sf teams members rm
+## sf teams members remove
 
-Remove a team member. Aliases: `sf teams members remove`, `sf teams members delete`.
+Remove a team member. Alias: `sf teams members rm`.
 
 ```text
-sf teams members rm MEMBER
+sf teams members remove MEMBER
 ```
 
 Remove the member from the dashboard under **Members**. With CLI credentials, this request is refused with `403 authorization_level_not_allowed`.
@@ -235,12 +242,12 @@ Remove the member from the dashboard under **Members**. With CLI credentials, th
 | --- | --- | --- |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
-## sf teams invitations ls
+## sf teams invitations list
 
-List team invitations. Alias: `sf teams invitations list`.
+List team invitations. Alias: `sf teams invitations ls`.
 
 ```text
-sf teams invitations ls
+sf teams invitations list
 ```
 
 Lists pending and historical invitations.
@@ -254,7 +261,7 @@ Lists pending and historical invitations.
 ### Example
 
 ```bash
-sf teams invitations ls
+sf teams invitations list
 ```
 
 ### Output
@@ -292,3 +299,63 @@ Cancel the invitation from the dashboard under **Members → Pending**. With CLI
 | Argument | Default | What it is |
 | --- | --- | --- |
 | `<invitation>` | required | Invitation ID |
+
+## sf teams join
+
+`sf teams join [TEAM]` joins a team that your verified email or a pending invitation lets you into. Leave out the team to list the teams you can join.
+
+```bash
+sf teams join
+sf teams join acme
+```
+
+## sf teams join-link
+
+Print the team's join link. Only people with a verified email at one of the team's email domains can join through it. `--reset` replaces the link, and the old one stops working at once.
+
+```bash
+sf teams join-link
+sf teams join-link --reset
+```
+
+## sf teams domains
+
+Team email domains let anyone with a verified email at that domain join the team.
+
+- `sf teams domains add DOMAIN` adds a company email domain, such as `example.com`. A current member must already have a verified email there.
+- `sf teams domains list` lists the domains. Alias: `sf teams domains ls`.
+- `sf teams domains remove DOMAIN` stops people at that domain from joining on their own. Current members stay. Alias: `sf teams domains rm`.
+
+```bash
+sf teams domains add example.com
+sf teams domains remove example.com
+```
+
+## sf teams people
+
+List everyone with access across a team and its subteams, one row per person: members, pending invitations, people invited to Spaces, and SSO identities. Enterprise and Internal plans only.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--show=<all\|members\|invited\|guests>` | everyone | Who to list. Guests have Space access but no team in this view |
+| `--subteam=<value>` | none | Only people in this subteam or with access to a Space in it |
+| `--search=<value>` | none | Match a name or email |
+| `--outside-domains` | off | Only people with no verified address at a company domain |
+| `--limit=<n>` | `20` | People per page, up to 100 |
+| `--cursor=<cursor>` | none | Pagination cursor from a previous response |
+
+```bash
+sf teams people --show guests
+sf teams people --subteam design --search maya
+```
+
+## sf teams sign-in inspect
+
+Show which identity connection the team's members sign in through, the return address the identity provider must allow, and each domain with its TXT record. Owners change member sign-in in the dashboard.
+
+```bash
+sf teams sign-in inspect
+```
+
+Subteam commands (`sf teams subteams …`) are covered on [Subteams](/subteams).
+

@@ -11,12 +11,12 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 The `--connection-type` values here are the older spelling, `remote|push|import`. `remote` is the same connection as `connected` on the `sf git` commands. `push` is the same as `hosted`. `import` is the one-time ingestion remote and has no `sf git` equivalent. See [two connection types, two spellings](/cli/git#two-connection-types-two-spellings).
 
-## sf source ls
+## sf source list
 
-List files in a Space's source repository.
+List files in a Space's source repository. Aliased as `sf source ls`.
 
 ```text
-sf source ls [--space <value>] [--connection-type remote|push|import] [--ref <value>]
+sf source list [--space <value>] [--connection-type remote|push|import] [--ref <value>]
   [--path <dir>] [--recursive] [--metadata] [--limit <n>]
 ```
 
@@ -32,7 +32,7 @@ sf source ls [--space <value>] [--connection-type remote|push|import] [--ref <va
 | `--limit=<n>` | none | Maximum number of entries to return |
 
 ```bash
-sf source ls --space docs --path src --recursive
+sf source list --space docs --path src --recursive
 ```
 
 ## sf source cat
@@ -128,7 +128,7 @@ Download a `tar.gz` archive of a Space's source repository.
 
 ```text
 sf source archive [--space <value>] [--connection-type remote|push|import] [--ref <value>]
-  [--output <path>] [--overwrite] ...
+  [--output <path>] [--force] ...
 ```
 
 ### Flags
@@ -138,13 +138,13 @@ sf source archive [--space <value>] [--connection-type remote|push|import] [--re
 | `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
 | `--ref=<value>` | none | Branch, tag, commit, or ref to archive |
 | `--output=<path>` | none | Archive file path, or an existing directory to write the archive into |
-| `--overwrite` | `false` | Overwrite an existing archive file |
+| `--force` | `false` | Overwrite an existing archive file |
 | `--include-glob=<glob>` | none | Glob to include in the archive |
 | `--exclude-glob=<glob>` | none | Glob to exclude from the archive |
 | `--max-blob-size=<n>` | none | Maximum blob size to include |
 | `--archive-prefix=<dir>` | none | Directory prefix inside the archive |
 
-The download is written to a temp file and renamed, so a failed run leaves an existing file alone. An existing destination without `--overwrite` is refused.
+The download is written to a temp file and renamed, so a failed run leaves an existing file alone. An existing destination without `--force` is refused.
 
 ```bash
 sf source archive --space docs --ref main --output ./repo.tar.gz
@@ -238,12 +238,34 @@ sf source import [--space <value>] [--ttl-seconds <n>] [--read-only-ref <glob>]
 sf source import
 ```
 
-## sf source commits ls
+## sf source availability
 
-List commit history from a Space's source repository.
+Read or change whether others can remix the Space's source. Website access is a separate setting.
 
 ```text
-sf source commits ls [--space <value>] [--connection-type remote|push|import]
+sf source availability [--space <value>] [--enable | --disable] [--[no-]remix-button]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--enable` | off | Allow remixes of the main branch. Known draft commits may also be reachable in remixes |
+| `--disable` | off | Stop future remixes |
+| `--remix-button` / `--no-remix-button` | unchanged | Show or hide a Remix button on the live site while source is available |
+
+Run it without flags to read the current setting.
+
+```bash
+sf source availability --space docs --enable --remix-button
+```
+
+## sf source commits list
+
+List commit history from a Space's source repository. Aliased as `sf source commits ls`.
+
+```text
+sf source commits list [--space <value>] [--connection-type remote|push|import]
   [--branch <name>] [--path <path>] [--cursor <value>] [--limit <n>] [--ephemeral]
 ```
 
@@ -259,15 +281,15 @@ sf source commits ls [--space <value>] [--connection-type remote|push|import]
 | `--ephemeral` | `false` | Treat the branch as ephemeral |
 
 ```bash
-sf source commits ls --space docs --branch main
+sf source commits list --space docs --branch main
 ```
 
-## sf source commits get
+## sf source commits inspect
 
 Read commit metadata from a Space's source repository.
 
 ```text
-sf source commits get <sha> [--space <value>] [--connection-type remote|push|import]
+sf source commits inspect <sha> [--space <value>] [--connection-type remote|push|import]
 ```
 
 ### Arguments
@@ -283,7 +305,7 @@ sf source commits get <sha> [--space <value>] [--connection-type remote|push|imp
 | `--connection-type=<remote\|push\|import>` | `remote` | Repository connection type |
 
 ```bash
-sf source commits get a1b2c3d4e5f6a7b8 --space docs
+sf source commits inspect a1b2c3d4e5f6a7b8 --space docs
 ```
 
 ## sf source commits create
@@ -354,12 +376,12 @@ sf source commits apply --space docs --connection-type push --target-branch main
   --message "Patch" --diff ./change.patch
 ```
 
-## sf source tags ls
+## sf source tags list
 
-List tags in a Space's source repository.
+List tags in a Space's source repository. Aliased as `sf source tags ls`.
 
 ```text
-sf source tags ls [--space <value>] [--connection-type remote|push|import]
+sf source tags list [--space <value>] [--connection-type remote|push|import]
   [--cursor <value>] [--limit <n>]
 ```
 
@@ -372,7 +394,7 @@ sf source tags ls [--space <value>] [--connection-type remote|push|import]
 | `--limit=<n>` | none | Maximum tags to return |
 
 ```bash
-sf source tags ls --space docs
+sf source tags list --space docs
 ```
 
 ## sf source tags create

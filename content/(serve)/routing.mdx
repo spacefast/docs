@@ -273,7 +273,7 @@ The long form takes a status: `{"path": "/index.html", "status": 200}`. `false` 
 
 Committed files win over the fallback, as on Netlify, Vercel, and Cloudflare Pages. A framework that builds some routes as static pages and leaves the rest to a client-side shell needs no config beyond the fallback: `about.html` answers `/about`, `docs/index.html` answers `/docs/`, and every other route gets the shell. Set `"cleanUrls": false` and a flat `about.html` no longer answers `/about`, so that route reaches the shell; folders still serve their `index.html`.
 
-The fallback is skipped for around 110 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. Because only listed extensions are skipped, client routes with dots in them, such as `/users/jane.doe` and `/v1.2.3`, still reach the shell.
+The fallback is skipped for around 90 asset extensions, including `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf` and `zip`, so a missing asset returns 404 instead of your HTML shell. Because only listed extensions are skipped, client routes with dots in them, such as `/users/jane.doe` and `/v1.2.3`, still reach the shell.
 
 Files mode and an SPA fallback cannot be combined. The CLI refuses with `files_mode_does_not_support_spa`.
 

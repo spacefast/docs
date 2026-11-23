@@ -58,7 +58,7 @@ A Zod-level validation failure is `422 validation_error`. A request body that is
 
 ## HTTP statuses
 
-The API uses this set, and no others:
+The statuses you will see:
 
 | Status | Typical code | When |
 | --- | --- | --- |
@@ -86,6 +86,8 @@ Every code carries two classifications in the shipped contract. They are not res
 | `retry` | Transient or infrastructure failure. The same request may succeed now. |
 | `wait` | In progress, pending, or rate-limited. Retry after a delay. |
 | `re_auth` | Credential problem. Re-authenticate or re-authorize. |
+| `browser_sign_in` | Needs a signed-in browser session. Another bearer credential cannot satisfy it. |
+| `ask_owner` | Your role or a team policy refuses it. A team owner or admin has to grant access or act. Signing in again returns the same refusal. |
 | `fix_input` | Validation, conflict, or not found. Change the request, then retry. |
 | `contact_support` | Enforcement or an unrecoverable client state. The caller cannot self-serve. |
 
@@ -113,7 +115,7 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 | Code | Recovery | Retryable | Meaning |
 | --- | --- | --- | --- |
 | `unauthorized` | re_auth | no | The request carried no valid credential. |
-| `forbidden` | re_auth | no | The credential is valid but does not allow this action. |
+| `forbidden` | ask_owner | no | The credential is valid but does not allow this action. |
 | `insufficient_scope` | re_auth | no | The credential authenticated, but its granted scopes do not include a set this operation accepts. |
 | `authorization_pending` | wait | yes | The device login is not approved yet. |
 | `policy_exceeds_grantor` | fix_input | no | The requested key policy grants more than your own credential allows. |

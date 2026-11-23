@@ -3,7 +3,7 @@ title: Codex
 description: Install the Spacefast plugin in Codex, or add the MCP server to config.toml by hand
 ---
 
-Codex publishes your project to Spacefast through the plugin, and falls back to curl scripts when MCP isn't available.
+The Spacefast plugin lets Codex publish your project and manage your Spaces through the hosted MCP server.
 
 ## Install
 
@@ -16,7 +16,7 @@ Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` instal
 
 ## What the plugin adds
 
-### MCP servers
+### MCP server
 
 ```json .mcp.json
 {
@@ -24,35 +24,20 @@ Two other lanes exist. `npx -y plugins add spacefast/plugins -t codex -y` instal
     "spacefast": {
       "type": "streamable-http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-Codex uses the portable transport name `streamable-http` for the same endpoint that Claude Code and Cursor call `http`. The version in `args` is stamped at release.
+Codex uses the transport name `streamable-http` for the same endpoint that Claude Code and Cursor call `http`. The hosted server needs a signed-in connection, so anonymous publishing goes through `sf publish` instead.
 
-### The Spacefast skill
+### Skills
 
-`skills/spacefast/` holds `SKILL.md`, `references.md`, and the bundled scripts. The Codex variant is the same skill with one extra section of Codex notes. Its trigger line reads "Trigger when Codex must publish, host, deploy, share, update, claim, inspect, roll back, or configure a space."
+`skills/spacefast/` is the base skill, in the Codex variant. The plugin also ships the task skills for building a site, editing a Space, sharing, custom domains, fixing a deployment, and the Design System. Each skill has a `SKILL.md`, a `references.md`, and an `agents/openai.yaml` with its display name and default prompt. See [skills](/agents/skills).
 
-### Bash fallback scripts
+### Hooks
 
-The plugin ships seven scripts next to the skill. They cover publish and update over plain curl, so Codex is not stuck when MCP is unreachable. Prefer the MCP tools; these are the fallback.
-
-| Script | What it does |
-|---|---|
-| `scripts/publish.sh [path]` | First publish. Defers to `update.sh` when saved state exists |
-| `scripts/update.sh [path]` | Publishes a new version to the saved Space. Self-corrects after a claim |
-| `scripts/status.sh [versionId] [--wait]` | Polls anonymous publish and claim status. `--wait` polls every 3 seconds for up to 2 minutes |
-| `scripts/continue.sh` | One-time credential exchange after you claim a Space. Rewrites the saved state |
-| `scripts/feedback.sh "message" [category]` | Sends feedback without echoing secrets |
-| `scripts/save-state.sh` | State writer the others call |
-| `scripts/lib.sh` | Shared helpers |
+The plugin includes the same two advisory hooks as [Claude Code](/agents/claude-code#hooks): a `SessionStart` note when the directory is linked to a Space, and a Design System reminder before publishing. Codex doesn't trust new or changed hooks on install. Review them with `/hooks` first.
 
 ### Agent manifest
 

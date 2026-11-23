@@ -34,13 +34,13 @@ Zero is never inferred. A runtime that owns a database does not spring into exis
 The fastest way to get that file plus a working app is the scaffold.
 
 ```bash
-sf init my-app --runtime zero --template todo
+sf init my-app --runtime zero
 cd my-app
 sf dev
 sf publish
 ```
 
-`--template` accepts `todo`, `guestbook`, or `contact`. The client entry is optional on disk. If no file backs it, the build generates a shell and the capsule is server-only. The server entry is not optional.
+The client entry is optional on disk. If no file backs it, the build generates a shell and the capsule is server-only. The server entry is not optional.
 
 ## What you get
 
@@ -62,7 +62,7 @@ The scaffold's `package.json` pins the package to the compiler's own version. No
 | --- | --- | --- |
 | `@spacefast/zero/server` | `server/` | `capsule`, `query`, `mutation`, `action`, `endpoint`, `table`, field constructors, response helpers |
 | `@spacefast/zero/client` | `client/` | `useQuery`, `usePaginatedQuery`, `useMutation`, `useAction`, `useAuth`, `storage`, `Router` and friends |
-| `@spacefast/zero/kit` | `client/` | The component set: `Button`, `Card`, `Input`, `Dialog`, `Table`, and about 30 more |
+| `@spacefast/zero/kit` | `client/` | The component set: `Button`, `Card`, `Input`, `Dialog`, `Table`, and about 40 more |
 | `@spacefast/zero/charts` | `client/` | `LineChart`, `BarChart`, `Sparkline`, `StatTile` |
 
 `action`, `useAction`, and the `actions` capsule field require compiler 0.5.0 or later.
@@ -173,10 +173,10 @@ Only three source roots are read: `client/`, `server/`, and `shared/`. Beyond th
 | Limit | Value |
 | --- | --- |
 | Server bundle | 768 KiB |
-| Client bundle, your code and your npm packages | 8 MiB |
+| Client bundle, your code and your npm packages | 24 MiB |
 | Server imports | `@spacefast/zero/server`, `preact`, `preact/jsx-runtime`, `preact/jsx-dev-runtime` |
 | Client imports | Anything except the server SDK and `node:*` built-ins |
-| Endpoint request body | 2 MiB |
+| Endpoint request body | 1 MiB |
 | Rejected everywhere | `eval`, `Function`, `require()`, dynamic `import()`, `process`, `__dirname`, `__filename`, `Bun`, `Deno` |
 | Rejected in `server/` and `shared/` | `window`, `document`, `localStorage`, `WebSocket`, `Worker`, `XMLHttpRequest`, `globalThis` |
 

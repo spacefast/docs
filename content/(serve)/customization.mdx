@@ -69,8 +69,8 @@ The **Google Analytics** tab holds two cards, **Google Analytics** and **Google 
 
 | Card | Field | Config key | Accepted |
 | --- | --- | --- | --- |
-| Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-` followed by 4 or more letters or digits |
-| Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-` followed by 4 or more letters or digits |
+| Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-`, `GT-`, `AW-`, `DC-`, or `UA-`, then letters or digits joined by single `_` or `-` |
+| Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-`, then letters or digits joined by single `_` or `-` |
 
 Saving an ID that doesn't match fails, and the card shows **Invalid ID**. A card with its switch off shows **Off** and sends nothing. With the switch on and a valid ID, the card shows **Enabled** and the tag loads on every published page.
 

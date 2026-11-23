@@ -107,7 +107,7 @@ async function settle(operationId: string) {
 }
 ```
 
-Start at a few hundred milliseconds and back off toward a second. The publish helpers in `@spacefast/sdk` already do this, with a 900 second budget by default.
+Start at a few hundred milliseconds and back off toward a second. The publish helpers in `@spacefast/sdk` already do this, following `next.retryAfter` with at most 5 seconds between polls. An archive build gets 15 minutes by default.
 
 ## List operations
 

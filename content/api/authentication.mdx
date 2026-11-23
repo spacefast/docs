@@ -86,7 +86,7 @@ The presets and what they grant:
 | --- | --- |
 | Space publisher | Publish actions plus `teams:read`. The default. |
 | CI publish | Same actions as Space publisher, labelled for pipelines. |
-| Space admin | Publish, rename, delete, transfer, export, import, version delete, domains, webhooks read and write. |
+| Space admin | Publish, rename, delete, transfer, export, import, version delete, access, domains, webhooks read and write. |
 | Domain manager | The `domains:write` actions. |
 | Billing viewer | `teams:read`, `billing:read`. |
 | Team admin | `*`, everything the team can do. |
@@ -107,7 +107,7 @@ It is a management capability for an unclaimed Space, not a share link. Anyone h
 
 ## Space machine credentials
 
-An `sfm_` credential is `sfm_` plus a 32-character opaque token, minted for one Space so a machine can reach it without a team-wide key. `POST /v1/spaces/{spaceId}/machine-credentials` takes a `name`, the `resources` and `capabilities` the credential may use, and a `target`, then returns `{ credential, token }`.
+An `sfm_` credential is `sfm_` plus a 43-character opaque token, minted for one Space so a machine can reach it without a team-wide key. `POST /v1/spaces/{spaceId}/machine-credentials` takes a `name`, the `resources` and `capabilities` the credential may use, and a `target`, then returns `{ credential, token }`.
 
 The token is returned exactly once, on create and on rotate, and it is accepted only in the `Authorization` header. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
 
@@ -131,14 +131,26 @@ Authorization code is the flow for people, client credentials for machines. The 
 | --- | --- |
 | `teams:read` | Read the teams the account belongs to. |
 | `teams:create` | Create teams. |
+| `teams:members.write` | Invite people to teams the account can administer. |
+| `sell:write` | Set up Sell, enable live sales, resend downloads, and mark orders shipped. |
 | `spaces:read` | Read Spaces, versions, and build status. |
 | `spaces:write` | Create and update Spaces and their settings. |
 | `spaces:rename` | Rename Space slugs and managed addresses. |
+| `spaces:access.write` | Change who can open a Space, including making it public. |
+| `spaces:delete` | Delete Spaces. |
+| `versions:download` | Read files from deployment versions. |
 | `publish:write` | Publish new immutable versions. |
 | `spaces:publish` | Publish a version to an existing Space. |
 | `builds:trigger` | Start a build for an existing version. |
-| `domains:read` | Read domain inventory and DNS diagnostics. |
-| `domains:write` | Attach, verify, and mutate domains and DNS records. |
+| `domains:read` | Read Space hostnames and certificate status, plus domain registrations and DNS records when enabled. |
+| `domains:write` | Manage Space hostnames, and start domain purchases and manage DNS records when enabled. |
+| `billing:read` | Read team plans, subscriptions, usage, and saved payment method details. |
+| `billing:purchase` | Charge the team's saved payment method for purchases, such as domains, without asking first. |
+| `oauth-apps:write` | Register and manage the team's Sign in with Spacefast apps. |
+| `connectors:read` | Read connected services, their tools, and what policy allows. |
+| `connectors:write` | Connect and disconnect services, and set tool policy. |
+| `connectors:execute` | Run tools on services the team connected, with real accounts and data. |
+| `person-pages:read` | Read private pages other people shared with the account personally. |
 | `offline_access` | Refresh access without another interactive sign-in. |
 
 `spaces:publish` and `builds:trigger` exist only on the API resource. Their actions are already covered by `publish:write`.

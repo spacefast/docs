@@ -12,7 +12,7 @@ A team owns its Spaces, domains, API keys, and billing. Your role in that team c
 Personal and Go allow only the owner. Adding another member needs [Pro](/pricing). Members on Pro: {{plan-team-members-pro}}.
 
 - **Publish together.** Members can create Spaces, publish new versions, and roll back. The Space stays with the team when a member leaves.
-- **Keep access in one place.** Invite someone to the team to give them access to team-owned work at their role. Remove them to take that access away across the team's Spaces. Set the default access for each new Space to `private` or `public`.
+- **Keep access in one place.** Invite someone to the team to give them access to team-owned work at their role. Remove them to take that access away across the team's Spaces. Set the access each new Space starts with.
 - **Separate routine work from administration.** Members can publish, while owners and admins manage invitations, domains, and billing. The [role table](#roles) shows the full boundary.
 
 ## What a team is
@@ -47,7 +47,8 @@ Three roles, and the one you hold in a team caps everything you do there, whethe
 | Read domains | Yes | Yes | Yes |
 | Read billing and usage | Yes | Yes | Yes |
 | Delete a Space or a version, export, import | Yes | Yes | No |
-| Add, verify, or assign domains and DNS | Yes | Yes | No |
+| Attach a domain to a Space and verify it | Yes | Yes | Yes |
+| Detach or buy domains, change DNS | Yes | Yes | No |
 | Team variables and webhooks | Yes | Yes | No |
 | Transfer a Space to another team | Yes | Yes | No |
 | Change billing | Yes | Yes | No |
@@ -107,8 +108,9 @@ To hand the team over, use **Team settings → Danger zone → Transfer ownershi
 |---|---|
 | `private` | Access for the owning team |
 | `public` | Access for the owning team, plus view access for anyone on the web |
+| `parent_team` | Access for the owning team, plus view and comment access for everyone in its parent team. Needs subteams, which are on Enterprise |
 
-The default is `private`. The API accepts `team` as a legacy spelling of `private`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [Spacefast Share](/share).
+The default is `private`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [Spacefast Share](/share).
 
 ## Move a Space to another team
 

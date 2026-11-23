@@ -43,7 +43,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
     sf domains check example.com --space my-site
     ```
 
-    Spacefast also checks on its own, roughly every 30 seconds for the first ten minutes after you add or assign a domain, then every 15 minutes. A manual check only shortens the wait.
+    Spacefast also rechecks on its own, every 15 to 60 minutes while a domain is pending, depending on what it waits for, and once a day after it is live. A manual check only shortens the wait.
   </Step>
 
   <Step title="Make it primary">
@@ -162,11 +162,11 @@ The redirect target is either an absolute URL or another Space. There is no path
 Unassign, then assign:
 
 ```bash
-sf domains rm example.com --space old-site
+sf domains remove example.com --space old-site
 sf domains add example.com --space new-site
 ```
 
-Adding a domain another Space still serves creates a claim with a TXT record to publish, as described in [When a TXT record shows up](#when-a-txt-record-shows-up). Reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains rm` does that for you and is on by default.
+Adding a domain another Space still serves creates a claim with a TXT record to publish, as described in [When a TXT record shows up](#when-a-txt-record-shows-up). Reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains remove` does that for you and is on by default.
 
 ## Removing versus deleting
 
@@ -174,16 +174,16 @@ These are two different operations. The CLI only unassigns.
 
 | Action | What happens | How |
 | --- | --- | --- |
-| Unassign | The domain stops routing to the Space and stays in the team's inventory, ready to reuse. | `sf domains rm <domain> --space <space>`, or `PATCH /v1/domains/{domainId}` with `{"spaceId": null}` |
+| Unassign | The domain stops routing to the Space and stays in the team's inventory, ready to reuse. | `sf domains remove <domain> --space <space>`, or `PATCH /v1/domains/{domainId}` with `{"spaceId": null}` |
 | Delete | The inventory record is gone. | `DELETE /v1/domains/{domainId}`, or **Delete domain** on the team's domain detail page |
 
-`sf domains rm` prompts with "Remove this domain from the space?" and unassigns. Deleting requires the domain to be unassigned first, otherwise it refuses with `domain_in_use`.
+`sf domains remove` prompts with "Remove this domain from the space?" and unassigns. Deleting requires the domain to be unassigned first, otherwise it refuses with `domain_in_use`.
 
 ## The team's domain inventory
 
 Every domain a team owns lives on one page, whether or not it is assigned. In the dashboard, open the team and go to **Domains**. Rows are labelled **Apex** or **Subdomain**, and each one links to a detail page with **Status**, **Space**, **Provider** and **Added**, plus **Check** and **Visit** actions and a **DNS** section.
 
-Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains ls` is the per-Space list.
+Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains list` is the per-Space list.
 
 Two teams can add the same hostname, but only one Space serves it. A team that publishes its claim's TXT record moves the hostname to its own Space.
 

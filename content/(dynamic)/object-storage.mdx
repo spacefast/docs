@@ -5,13 +5,13 @@ sidebar:
   order: 5
 ---
 
-Storage holds files uploaded by a running app, separate from published version files. Each object has a 32-character hexadecimal id; its returned read URL also carries a read key.
+Storage holds files uploaded by a running app, separate from published version files. Each object has a 32-character hexadecimal id. Objects are private unless uploaded as public.
 
 ## What it is
 
 Storage holds files a running app uploaded, not the files you published. Only a Space with a runtime app has it. Version files are a different thing and live in [Publishing](/publish).
 
-An object is addressed by a bare 32-character hexadecimal id. There is no key, no path, and no visibility flag. The id is the identity.
+An object is addressed by a bare 32-character hexadecimal id. There is no key or path. The id is the identity. Uploads are private by default; set `public` at upload time to make an object readable by visitors.
 
 | Field | Notes |
 | --- | --- |
@@ -22,9 +22,10 @@ An object is addressed by a bare 32-character hexadecimal id. There is no key, n
 | `sha256` | Content digest |
 | `uploaderId` | Who uploaded it |
 | `createdAt` | Timestamp |
-| `url` | Path-relative, `/__stattic/u/<id>?k=<key>` |
+| `public` | Whether visitors can read it |
+| `url` | Path-relative. `/__stattic/u/<id>?k=<key>` for a public object, the authenticated `/storage/<id>` path for a private one |
 
-`url` is path-relative and carries the read key current at the time of the response. Absolutize it against whichever of the space's hostnames you are serving from.
+A public object's `url` carries the read key current at the time of the response. Absolutize it against whichever of the space's hostnames you are serving from.
 
 `filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
 
@@ -36,7 +37,7 @@ The client SDK is the upload path for a [Zero](/zero-runtime) app.
 import { storage } from "@spacefast/zero/client";
 
 async function onFile(file: File) {
-  const object = await storage.upload(file);
+  const object = await storage.upload(file, { public: true });
   console.log(object.id, object.url);
 }
 ```
@@ -45,7 +46,7 @@ async function onFile(file: File) {
 
 | Method | Returns |
 | --- | --- |
-| `upload(file: Blob)` | `{ id, contentType, size, url }` |
+| `upload(file: Blob, options?: { public?: boolean })` | `{ id, public, contentType, size, url }`. Private unless `public: true` |
 | `get(id: string)` | A `Response`, or `null` |
 | `delete(id: string)` | Nothing |
 
@@ -53,7 +54,7 @@ In local `sf dev`, uploads live in memory.
 
 ## Upload from the API
 
-The request body is the file itself. The `Content-Type` header becomes the object's content type, and `?filename=` sets the display name.
+The request body is the file itself. The `Content-Type` header becomes the object's content type, `?filename=` sets the display name, and `?public=true` makes the object public. Without it, the object is private.
 
 ```bash
 curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/storage?filename=receipt.pdf" \
@@ -64,25 +65,26 @@ curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/storage?filename=rec
 
 A successful upload answers `201`.
 
-## List and delete
+## Upload, list, and delete from the CLI
 
 ```bash
+sf storage put receipt.pdf --content-type application/pdf
 sf storage
-sf storage ls
-sf storage ls --limit 100
-sf storage ls --cursor <cursor>
-sf storage rm 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
+sf storage list --limit 100
+sf storage list --cursor <cursor>
+sf storage download 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
+sf storage delete 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
 ```
 
-`sf storage` and `sf storage ls` do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
+`sf storage` and `sf storage list` (alias `ls`) do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
 
-`sf storage rm` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
+`sf storage delete` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
 
-There is no `sf storage upload`. Uploads go through the client SDK, the API, or the dashboard.
+`sf storage put` uploads a private object unless you pass `--public`. `sf storage download` saves to `--output` or a file named after the id, and never overwrites an existing file.
 
 ## Dashboard
 
-Open **Storage** for the space. It has a **Choose files to upload** input and an **Upload files** button. It also prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
+Open **Storage** for the space. It has a **Choose Files** picker and an **Upload Files** button. It also prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
 
 ## Limits
 
@@ -113,4 +115,4 @@ Listing needs the `versions:read` scope. As the Space owner you can delete any o
 
 ## Next steps
 
-See [CLI storage](/cli/storage) for upload, list, and download commands.
+See [CLI storage](/cli/storage) for every flag.

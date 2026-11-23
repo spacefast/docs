@@ -11,7 +11,7 @@ Manage your plan here. Prices, allowances, and limits for every plan are on [Pri
 
 Open your team's **Settings → Billing** to change or cancel a plan. Only owners and admins can change billing. Choose **Open billing portal** for invoices and payment methods.
 
-Upgrades apply immediately and prorate to the day. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the price and effective date before confirming.
+Upgrades apply immediately and are prorated. Downgrades apply at renewal. Cancellation stops renewal, with access continuing until the paid period ends. There are no refunds. Review the price and effective date before confirming.
 
 ## Read the plan through the API
 
@@ -26,7 +26,7 @@ Your Spaces keep serving through a grace period, but you cannot change anything.
 | Stage | How long | What visitors get | What you get |
 | --- | --- | --- | --- |
 | Past due | 7 days from the failed payment | Spaces serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
-| Suspended | After the grace period ends | Every space serves `402` and the text `This space is paused.` | Reads work. Every write returns `403` with code `tenant_suspended` |
+| Suspended | After the grace period ends | Every space serves `402` with a **This space is paused** page | Reads work. Every write returns `403` with code `tenant_suspended` |
 
 Settle the payment in the billing portal to restore access. API reads remain available in either state.
 

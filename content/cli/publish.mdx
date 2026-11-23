@@ -9,7 +9,7 @@ Use `sf publish` for a file, directory, supported project, or `.zip`/`.tar.gz` a
 
 ## sf publish
 
-Publish files or built projects to Spacefast. `sf deploy` is an exact alias.
+Publish files or built projects to Spacefast.
 
 ```text
 sf publish [DIR]
@@ -39,7 +39,7 @@ These apply when the publish creates the Space. On an existing Space with `--tar
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-n, --name=<value>` | none | Set the Space title |
+| `--name=<value>` | none | Set the Space title |
 | `--slug=<value>` | generated | Set the Space slug when creating a new Space. Fails with `space_selection_conflict` if a Space is already selected |
 | `--access=private\|public` | team default | Set initial root access when this publish creates a team-owned Space. Private admits the owning team; Public also admits anyone on the web. `team` is accepted as `private`. Requires a login or `--token`, and fails with `space_selection_conflict` if a Space is already selected |
 | `--hostname-scope=team\|global` | server default | Managed hostname scope for newly created Spaces |
@@ -54,7 +54,7 @@ Every value here is recorded on the version. On GitHub Actions, GitLab CI, and B
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-m, --message=<value>` | git commit message | Changelog entry shown in version history. Env `SPACEFAST_PUBLISH_MESSAGE` |
+| `--message=<value>` | git commit message | Changelog entry shown in version history. Env `SPACEFAST_PUBLISH_MESSAGE` |
 | `--git-branch=<value>` | detected | Git branch name to record. Env `SPACEFAST_GIT_BRANCH` |
 | `--git-commit=<value>` | detected | Git commit SHA to record. Env `SPACEFAST_GIT_COMMIT` |
 | `--git-ref=<value>` | detected | Git ref to record. Env `SPACEFAST_GIT_REF` |
@@ -93,6 +93,8 @@ Every value here is recorded on the version. On GitHub Actions, GitLab CI, and B
 | `--target=production\|preview` | `production` | Publish to production (live), or create a preview version without changing live traffic or existing Space settings |
 | `--config-only` | off | Publish a config-only version that carries the prior artifact forward without building or uploading content |
 | `--dry-run` | off | Print the resolved publish plan without uploading files or writing state |
+| `--git` | off | Publish this Git repository by pushing it: sign in if needed, create its Space (or use the linked one), add a push remote, and push. Every later push publishes too |
+| `--[no-]open` | on | Open the browser when a step needs it. `--no-open` prints the link instead |
 | `--wait` / `--no-wait` | `--wait` | Wait until the version is ready and, for production, live before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become ready |
 | `--stream` / `--no-stream` | `--no-stream` | With `--json`, emit a JSONL publish event stream instead of a single result |
@@ -299,8 +301,8 @@ sf dev
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-d, --dir=<value>` | `.` | Project directory |
-| `-p, --port=<value>` | `4173` | Preview port. 1 to 65535 |
+| `--dir=<value>` | `.` | Project directory |
+| `--port=<value>` | `4173` | Preview port. 1 to 65535 |
 | `--host=<value>` | `127.0.0.1` | Host interface for the local dev server |
 | `--allow-network` | off | Allow an explicit non-loopback binding |
 | `--state-backend=memory\|sqlite` | `memory` | Local state adapter for a runtime dev server |

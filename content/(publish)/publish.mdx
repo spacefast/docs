@@ -69,12 +69,12 @@ Some paths are dropped and counted instead of failing the publish. Exact names a
 ```text
 .DS_Store  .gitignore  .npmrc  .netrc
 .env  .env.local  .env.production  .env.development  .env.test
-_routes.json  .spacefast/state.json  .stattic/state.json
+_routes.json  .spacefast/state.json  .spacefast/space.json  .stattic/state.json
 ```
 
-Whole directories at any depth: `.git`, `.hg`, `.svn`, `.ssh`, `.aws`, `.cache`, `.turbo`, `.vercel`, `.netlify`, `.wrangler`, `node_modules`, and `.next/cache`.
+Whole directories at any depth: `.git`, `.hg`, `.svn`, `.ssh`, `.aws`, `.cache`, `.turbo`, `.vercel`, `.netlify`, `.wrangler`, `.zero`, `node_modules`, `.next/cache`, and `__MACOSX`.
 
-Anything that looks like a credential is dropped the same way: names starting `.env.`, SSH private keys (`id_rsa`, `id_ed25519`, and friends), files named like a private key, and any `.pem`, `.key`, `.p12`, or `.pfx`.
+Anything that looks like a credential is dropped the same way: names starting `.env.` or `.dev.vars`, `.envrc`, SSH keys (`id_rsa`, `id_ed25519`, and friends), files named like a private key, and any `.pem`, `.key`, `.p12`, or `.pfx`.
 
 Symlinks are skipped, not followed. The CLI prints `Warning: skipped symlink <path> (symlinks are not published).` for each one.
 
@@ -89,7 +89,7 @@ These fail the publish rather than getting dropped, because silently ignoring th
 | Untrimmed, starting `/`, containing `\` or `//`, or not canonical | `invalid_file_path` |
 | A segment ending in `.` or a space | `invalid_file_path` |
 | Canonical path over 1,024 bytes | `path_too_long` |
-| Named `.htaccess` or `.user.ini` | `static_control_file_not_supported` |
+| Named `.htaccess`, `.user.ini`, or `spacefast.config.ts` | `static_control_file_not_supported` |
 | Under a runtime control prefix, such as a top-level `__sf` or `__spacefast` | `static_runtime_control_path_not_supported` |
 | Two entries that canonicalize to the same path | `manifest_duplicate_path` |
 

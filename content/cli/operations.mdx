@@ -19,7 +19,6 @@ Inspect async operations.
 sf operations [ID] [--space <spaceId>] [--limit <n>] [--cursor <value>]
 ```
 
-Alias: `sf ops`.
 
 ### Arguments
 
@@ -38,8 +37,8 @@ Alias: `sf ops`.
 ### Examples
 
 ```bash
-sf ops
-sf ops op_0123456789abcdef
+sf operations
+sf operations op_0123456789abcdef
 sf operations --space spc_0123456789abcdef
 ```
 
@@ -49,7 +48,7 @@ Listing prints a table with ID, kind, status, resources, created, and finished. 
 
 ```text
 Operation: op_0123456789abcdef
-Kind: space_publish
+Kind: version_finalize
 Status: succeeded
 Resources: space:spc_0123456789abcdef
 Created: 2026-06-02T00:00:00.000Z
@@ -65,7 +64,7 @@ With `--json`, a single operation returns `{ "data": { "operation": { … } } }`
   "data": [
     {
       "id": "op_0123456789abcdef",
-      "kind": "space_publish",
+      "kind": "version_finalize",
       "status": "succeeded",
       "resources": [{ "type": "space", "id": "spc_0123456789abcdef" }],
       "diagnostics": [],
@@ -84,7 +83,7 @@ With `--json`, a single operation returns `{ "data": { "operation": { … } } }`
 
 | Code | Exit | When |
 | --- | --- | --- |
-| `validation_error` | 2 | Not authenticated. "Run `sf login` or pass --token before reading operations." |
+| `auth_required` | 10 | Not authenticated. "Run `sf login` or pass --token before reading operations." |
 | `not_found` | 20 | No operation with that ID. |
 
 ## sf activity
@@ -128,7 +127,7 @@ TIME                      CODE             ACTOR              MESSAGE
 
 When there is more, the CLI prints the exact flag to get it: `More: --cursor <value>`.
 
-With `--json` you get the list envelope from the API. Each event carries `id`, `sequence`, `spaceId`, `actor` (`type` and `id`), `code`, `message`, `details`, and `createdAt`. Actor types are `user`, `api_key`, `partner_token`, `oauth_client`, `anonymous_claim`, and `system`, so the feed tells you whether a person, a CI key, or the platform made a change.
+With `--json` you get the list envelope from the API. Each event carries `id`, `sequence`, `spaceId`, `actor` (`type` and `id`), `code`, `message`, `details`, and `createdAt`. Actor types are `visitor`, `user`, `api_key`, `partner_token`, `oauth_client`, `anonymous_claim`, and `system`, so the feed tells you whether a person, a CI key, or the platform made a change.
 
 Codes are grouped by the thing they describe: `space.*`, `version.*`, `channel.*`, `build.*`, `domain.*`, and access events like `space.share_link_created`. Pass a full code to `--code`.
 
@@ -136,5 +135,5 @@ Codes are grouped by the thing they describe: `space.*`, `version.*`, `channel.*
 
 | Code | Exit | When |
 | --- | --- | --- |
-| `validation_error` | 2 | `--all` without authentication. "Run `sf login` or pass --token before reading activity." |
+| `auth_required` | 10 | `--all` without authentication. "Run `sf login` or pass --token before reading activity." |
 | `no_space_selected` | 2 | No `--all` and no Space could be resolved. |

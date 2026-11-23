@@ -85,7 +85,7 @@ Team requests to `POST /v1/spaces` that do not send `capabilities: ["optional_ac
 A share link is a lasting URL that opens only the paths you scoped it to, with no account needed. The secret is in the query string, so the link goes straight to the page:
 
 ```text
-https://my-site.view.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+https://my-site.space.fast/docs?__=sfl_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 One request returns the page, with no redirect or interstitial, so `curl`, agents, and browsers all get the same page.
@@ -107,16 +107,16 @@ sf share link create \
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--name` | required | The name shown in the links list |
-| `--landing` | `/` | The clean route the link opens at. It has to be inside the link's paths |
+| `--landing` | `/` if the link covers it, else a covered path | The clean route the link opens at. It has to be inside the link's paths |
 | `--path` | `/**` | An included pattern. Repeat for disjoint subtrees |
 | `--exclude` | none | An excluded pattern, local to this link |
-| `--role` | `commenter` | `viewer` or `commenter` |
+| `--role` | `viewer` | `viewer` or `commenter` |
 | `--target` | `live` | `live`, `all-versions`, `version:<id>`, or `branch:<name>` |
 | `--not-before` | none | Do not admit anyone before this timestamp |
 | `--expires` | never | A duration such as `30m`, `24h`, `7d` |
 | `--max-uses` | unlimited | Successful opens before the link stops working, 1 to 1,000,000 |
 | `--require-verified-email` | off | Admit only visitors whose session has a verified email |
-| `--network` | none | An allowed IP address or CIDR. Repeatable |
+| `--network` | none | Unsupported. The runtime has no trusted visitor IP, so the CLI refuses it |
 | `--country` / `--exclude-country` | none | Allowed or blocked ISO country codes |
 | `--exclude-user-agent` | none | Block user agents containing this text |
 
@@ -125,7 +125,7 @@ In the dashboard, the **Share link** card's **Create share link** button opens a
 ### List, copy, revoke
 
 ```bash
-sf share link ls --space my-site
+sf share link list --space my-site
 sf share link copy lnk_xxxxxxxx --space my-site --show-secret
 sf share link revoke lnk_xxxxxxxx --space my-site
 ```
@@ -134,7 +134,7 @@ Listing links never returns the secret. Only callers who can manage the Space's 
 
 Revoking a link removes its grant, so every copy of the URL stops working on the next request.
 
-`sf share link edit` changes a link's scope, role, target, and constraints without changing its URL, so you can narrow a link you already sent instead of replacing it.
+`sf share link update` changes a link's scope, role, target, and constraints without changing its URL, so you can narrow a link you already sent instead of replacing it.
 
 A Space that has not been claimed yet may keep up to 50 active links, and further creates return `anonymous_share_link_limit`.
 
@@ -154,7 +154,7 @@ sf share password create \
 Pass the value on stdin, or through `SPACEFAST_SHARE_PASSWORD`. It never goes into `sf.jsonc`. The verifier is Argon2id.
 
 ```bash
-sf share password ls --space my-site
+sf share password list --space my-site
 sf share password rotate pwd_xxxxxxxx --space my-site --password-from-stdin
 sf share password revoke pwd_xxxxxxxx --space my-site
 ```
@@ -167,7 +167,7 @@ The dashboard's **Password** card has **Set password**, **Change**, and **Remove
 
 ```bash
 sf share people invite person@example.com --space my-site --role commenter --scope /docs
-sf share people ls --space my-site
+sf share people list --space my-site
 sf share people remove person@example.com --space my-site
 ```
 
@@ -183,7 +183,7 @@ For a script or a job, issue a bearer token rather than sharing a link:
 
 ```bash
 sf share token create --space my-site --name "Nightly export" --path '/exports/**'
-sf share token ls --space my-site
+sf share token list --space my-site
 sf share token rotate mch_xxxxxxxx --space my-site
 sf share token revoke mch_xxxxxxxx --space my-site
 ```
@@ -195,7 +195,7 @@ The token is shown only once, right after you create it. Rotating keeps the gran
 A visitor who lands on a Space they cannot open can ask for access. Requests show up in the **Access requests** card and in the CLI:
 
 ```bash
-sf share request ls --space my-site
+sf share request list --space my-site
 sf share request approve arq_xxxxxxxx --space my-site
 sf share request deny arq_xxxxxxxx --space my-site
 ```

@@ -11,15 +11,15 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 ## sf storage
 
-List object metadata and quota usage for files uploaded by a Space's app.
+List object metadata for files uploaded by a Space's app.
 
-This is runtime object storage, not your published files. Only a Space with a runtime app has any. Objects are addressed by a bare 32-character hex id. There is no key and no per-object visibility.
+This is runtime object storage, not your published files. Only a Space with a runtime app has any. Objects are addressed by a bare 32-character hex id. Each object is private or public, set when it is uploaded.
 
 ```text
 sf storage [target] [--space <value>] [--limit <n>] [--cursor <value>]
 ```
 
-`sf storage ls` is the same command with the same flags, aliased as `sf storage list`.
+`sf storage list` is the same command with the same flags, aliased as `sf storage ls`.
 
 ### Arguments
 
@@ -31,22 +31,24 @@ sf storage [target] [--space <value>] [--limit <n>] [--cursor <value>]
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `--local-url=<url>` | none | Use a local `sf dev` server instead of the live version |
+| `--port=<port>` | none | Local `sf dev` server port. Shorthand for `--local-url http://127.0.0.1:<port>` |
 | `--limit=<n>` | `50` | Maximum objects to return. Maximum 100 |
 | `--cursor=<value>` | none | Continue from the opaque cursor returned by the last page |
 
 ```bash
 sf storage
 sf storage docs --limit 10
-sf storage ls --space docs
+sf storage list --space docs
 ```
 
 ### Output
 
 A table of `Id | Size | Type | Uploaded by | Created`, or "No stored objects." A further page prints as `Next cursor: <value>`.
 
-With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
+With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `public`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
 
-There is no `sf storage upload`. Uploading is an API call, or `storage.upload()` from the client SDK inside your app.
+To upload, use [`sf storage put`](#sf-storage-put), the API, or `storage.upload()` from the client SDK inside your app.
 
 ### Errors
 
@@ -54,12 +56,12 @@ There is no `sf storage upload`. Uploading is an API call, or `storage.upload()`
 | --- | --- | --- |
 | `validation_error` | 2 | `--limit` or `--cursor` did not parse. Raised before the request |
 
-## sf storage rm
+## sf storage delete
 
-Force-delete an app storage object as the Space owner, regardless of who uploaded it. Aliased as `sf storage remove` and `sf storage delete`.
+Force-delete an app storage object as the Space owner, regardless of who uploaded it. Aliased as `sf storage rm` and `sf storage del`.
 
 ```text
-sf storage rm [id] [--space <value>]
+sf storage delete [id] [--space <value>]
 ```
 
 ### Arguments
@@ -68,17 +70,79 @@ sf storage rm [id] [--space <value>]
 | --- | --- |
 | `[id]` | Object id, for example `0123456789abcdef0123456789abcdef` |
 
-No command-specific flags.
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--local-url=<url>` | none | Use a local `sf dev` server instead of the live version |
+| `--port=<port>` | none | Local `sf dev` server port. Shorthand for `--local-url http://127.0.0.1:<port>` |
 
 The id must be the 32-character hex id `sf storage` lists. A path-shaped value is rejected. This is a destructive remote action, so it prompts unless you pass `-y`. Delete is idempotent: an already-gone object prints "`<id>` was already gone."
 
 ```bash
-sf storage rm 0123456789abcdef0123456789abcdef --yes
+sf storage delete 0123456789abcdef0123456789abcdef --yes
 ```
 
 ### Output
 
 With `--json`, `data` carries `deleted`.
+
+## sf storage put
+
+Upload a file to app storage. The object is private unless you pass `--public`.
+
+```text
+sf storage put <file> [--space <value>] [--public] [--content-type <type>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<file>` | Path to a regular file. Required. Its base name becomes the object's `filename` |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--public` | off | Make the object readable by visitors |
+| `--content-type=<type>` | `application/octet-stream` | The object's MIME type |
+| `--local-url=<url>` | none | Use a local `sf dev` server instead of the live version |
+| `--port=<port>` | none | Local `sf dev` server port. Shorthand for `--local-url http://127.0.0.1:<port>` |
+
+```bash
+sf storage put receipt.pdf --content-type application/pdf
+```
+
+### Output
+
+`Uploaded <file>: <id> (<size> B).` With `--json`, `data` is the stored object.
+
+## sf storage download
+
+Download an app storage object.
+
+```text
+sf storage download <id> [--space <value>] [--output <path>]
+```
+
+### Arguments
+
+| Argument | What it is |
+| --- | --- |
+| `<id>` | The 32-character object id `sf storage` lists. Required |
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--output=<path>` | the object id | Where to save the file. An existing file is never overwritten |
+| `--local-url=<url>` | none | Use a local `sf dev` server instead of the live version |
+| `--port=<port>` | none | Local `sf dev` server port. Shorthand for `--local-url http://127.0.0.1:<port>` |
+
+### Output
+
+`Downloaded <id> to <path> (<size> B).` With `--json`, `data` is `{ id, path, size }`.
 
 ## sf logs
 
@@ -111,6 +175,16 @@ A bare kind in the first slot works: `sf logs runtime` is the same as `sf logs -
 | `--cursor=<value>` | none | Continue from the cursor printed by the previous page |
 | `--request-id=<value>` | none | Runtime logs only. Everything logged while serving one request |
 | `--handler=<value>` | none | Runtime logs only. Lines from one Zero mutation or Functions handler |
+| `--since=<iso>` | none | Start of the log window as an ISO 8601 timestamp |
+| `--until=<iso>` | none | End of the log window as an ISO 8601 timestamp |
+| `--wait-timeout=<seconds>` | none | With `--follow`, stop following after this many seconds and exit 0 |
+| `--hostname=<value>` | none | Edge logs only. Hostname assigned to the Space |
+| `--method=<value>` | any | Edge logs only. HTTP method. Repeatable |
+| `--status=<code>` | any | Edge logs only. HTTP status code. Repeatable |
+| `--remote-addr=<ip>` | any | Edge logs only. Client IP address. Repeatable |
+| `--user-agent=<value>` | any | Edge logs only. Exact User-Agent value. Repeatable |
+| `--asn=<number>` | any | Edge logs only. Autonomous system number. Repeatable |
+| `--ja3-hash=<value>` | any | Edge logs only. JA3 fingerprint. Repeatable |
 
 `--follow` polls, it does not stream over a socket. It dedupes by the whole entry and remembers up to 5,000 keys.
 

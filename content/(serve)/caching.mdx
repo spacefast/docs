@@ -4,20 +4,21 @@ description: Default cache policies for public static files, header overrides, r
 sidebar: { order: 4 }
 ---
 
-Public static files use one of two default cache policies. Protected responses, conditional routing, and header overrides change that. To get a fresh response from the edge, republish.
+Public static files use one of three default cache policies. Protected responses, conditional routing, and header overrides change that. To get a fresh response from the edge, republish.
 
-## Two policies
+## Default policies
 
 Public static files use these defaults unless a header override or a [no-cache rule](#responses-that-are-never-cached) applies.
 
 | Policy | `Cache-Control` |
 | --- | --- |
 | Immutable | `public, max-age=31536000, immutable` |
-| Everything else | `public, s-maxage=600, max-age=0, must-revalidate` |
+| HTML | `public, s-maxage=600, max-age=0, must-revalidate` |
+| Every other file | `public, s-maxage=86400, max-age=0, must-revalidate` |
 
-In the second policy, `max-age=0` makes the browser revalidate on every load, and the ETag turns that revalidation into a 304 when nothing changed. `s-maxage=600` lets shared caches keep a copy for ten minutes. A visitor's browser never serves a stale page from its own cache. Visitors see a new publish as soon as the shared copy refreshes.
+In the last two, `max-age=0` makes the browser revalidate on every load, and the ETag turns that revalidation into a 304 when nothing changed. Shared caches keep HTML for ten minutes and other files for a day. A visitor's browser never serves a stale page from its own cache. Visitors see a new publish as soon as the shared copy refreshes.
 
-**HTML gets the second policy, together with ordinary assets.** There is no separate HTML rule.
+**HTML always gets the ten-minute policy**, so a missed purge never leaves a page stale for long.
 
 ## Which files are immutable
 
@@ -35,7 +36,7 @@ A file gets the one-year immutable policy when either of these is true.
 
 **Or it sits under a known build output directory** and is not `.html`, `.htm`, `.php`, `.txt` or `.xml`. Those directories are `_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`, and `_spacefast/platform/`.
 
-Outside those directories, a file with an unhashed name gets the ten-minute shared policy. That works, but hashed filenames make repeat visits faster.
+Outside those directories, a file with an unhashed name gets the one-day shared policy. That works, but hashed filenames make repeat visits faster.
 
 A precompressed sidecar such as `app.js.gz` is served at its own literal URL and is never selected as the answer for `app.js`.
 
@@ -76,7 +77,7 @@ Activating a new version points the Space's hostnames at it and purges the edge 
 
 Immutable version hostnames aren't purged, because their content never changes.
 
-A purge can fail. If it does, the page still refreshes within ten minutes, when the shared copy expires.
+A purge can fail. If it does, HTML still refreshes within ten minutes and other files within a day, when the shared copy expires.
 
 Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Hashed files and files under the build output directories above are cached for a year. A new build gives changed hashed files new names, but an unhashed file in one of those directories keeps its URL, so browsers can keep the old copy. Rename it when its content changes.
 
@@ -90,14 +91,14 @@ Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a
     Every response carries `X-Spacefast-Runtime: 1`, and `X-Spacefast-Version` names the version that answered.
 
     ```bash
-    curl -sI https://my-site.view.fast/ | grep -i x-spacefast
+    curl -sI https://my-site.space.fast/ | grep -i x-spacefast
     ```
   </Step>
   <Step title="Bypass the shared copy while you compare">
     Add a unique query parameter. The query is part of the cache key, so `?cachebust=1` is a different entry.
 
     ```bash
-    curl -sI "https://my-site.view.fast/?cachebust=$(date +%s)"
+    curl -sI "https://my-site.space.fast/?cachebust=$(date +%s)"
     ```
   </Step>
   <Step title="Open the version URL">

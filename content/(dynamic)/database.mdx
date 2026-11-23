@@ -18,7 +18,7 @@ Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that li
 You do not create it, size it, or connect to it. Your capsule declares the tables. The platform applies the migration when a version finalizes.
 
 :::warning[There is no external connection string]
-No route, flag, or dashboard field returns a DSN, and none is coming. Your code reaches the database through `ctx.db` (Zero) or `env.DB` (Functions). For everything else there is the SQL console below.
+No route, flag, or dashboard field returns a DSN. Your code reaches the database through `ctx.db` (Zero) or `env.DB` (Functions). For everything else there is the SQL console below.
 :::
 
 ## Query it from code
@@ -115,10 +115,10 @@ sf db dump --table notes --limit 100
 
 ```bash
 sf db export
-sf db export docs --out ./docs-backup.json
+sf db export docs --output ./docs-backup.json
 ```
 
-`sf db export` walks every declared table in stable keyset pages of 500 rows and writes one JSON file. Without `--out` the file is `spacefast-backup-<space>-<timestamp>.json`.
+`sf db export` walks every declared table in stable keyset pages of 500 rows and writes one JSON file. Without `--output` the file is `spacefast-backup-<space>-<timestamp>.json`.
 
 The write is atomic and mode `0600`. If the export fails part-way, an existing destination is left exactly as it was.
 
@@ -180,7 +180,7 @@ Until the space runs a Zero app or a worker, the Database page shows **Database 
 | Databases per Space | 1 |
 | `sf db dump --limit` | 1 to 100, default 25 |
 | Export page size | 500 rows, fixed |
-| Field types you can declare | `string()`, `boolean()`, `id("table")` |
+| Field types you can declare | `string()`, `number()`, `boolean()`, `userId()`, `id("table")` |
 | Reserved column names | `id`, `createdAt`, `updatedAt` |
 | Reserved index name | `by_creation` |
 

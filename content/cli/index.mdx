@@ -23,14 +23,14 @@ brew install spacefast/tap/spacefast
 
 Upgrade with `brew upgrade spacefast`.
 
-The npm package needs Node.js 20.3 or newer. Homebrew and the standalone binaries bundle their own runtime. Check the install:
+The npm package needs Node.js 22.19 or newer. Homebrew and the standalone binaries bundle their own runtime. Check the install:
 
 ```bash
 sf --version
 ```
 
 ```text
-spacefast/0.3.0 darwin-arm64 node-v26.7.0
+spacefast/<version> darwin-arm64 node-<version>
 ```
 
 ## First login
@@ -102,11 +102,13 @@ Commands that act on a Space add `--space`, `-T, --team`, and `--claim-token`. C
 | `0` | ok | Success. |
 | `1` | unknown | Unexpected or uncategorized failure. |
 | `2` | validation | Bad flags or arguments, or validation failure (HTTP 422). |
-| `10` | auth | Authentication or authorization failure (HTTP 401/403). Run `sf login`. |
+| `10` | auth | Not signed in, or the credential is missing or expired (HTTP 401). Run `sf login`. |
+| `11` | permission | Signed in, but this credential or role can't do it (HTTP 403). Signing in again doesn't help. |
 | `20` | not-found | Resource not found or gone (HTTP 404/410). |
 | `30` | conflict | Request conflicts with the resource's current state (HTTP 409). |
 | `40` | network | Network failure reaching the API. Retryable. |
 | `50` | timeout | Timed out waiting for queued work. Retryable. |
+| `60` | unknown-outcome | A change may or may not have been applied. Check its state before repeating it. |
 | `130` | cancelled | Interrupted with Ctrl-C, or a confirmation prompt was declined. |
 
 `sf doctor` is the one exception: it exits `1` when any check fails, without classifying.
@@ -148,7 +150,7 @@ If nothing selects a Space and your account has exactly one, the CLI uses it, in
 | `SF_AGENT_ALLOW_DESTRUCTIVE` | Lets agent mode auto-confirm local protection-removing actions. |
 | `SPACEFAST_HOME` | CLI state directory, default `~/.spacefast`. |
 | `SPACEFAST_CREDENTIAL_STORE` | `keyring` forces the OS keyring, `plaintext` forces the file fallback. |
-| `SF_DEBUG` | Turns on diagnostics on stderr. Add `LOG_FORMAT=json` for JSON lines. |
+| `SPACEFAST_DEBUG` | Turns on diagnostics on stderr. Same as `-d, --debug`. Add `LOG_FORMAT=json` for JSON lines. |
 | `DO_NOT_TRACK`, `SPACEFAST_TELEMETRY_DISABLED` | `1`, `true`, `yes`, or `on` disables agent-setup telemetry. |
 | `NO_COLOR`, `FORCE_COLOR` | Color control. |
 

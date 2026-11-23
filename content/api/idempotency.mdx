@@ -57,6 +57,7 @@ Some outcomes release the key, so the next attempt runs the request again.
 | Outcome | Behaviour |
 | --- | --- |
 | `5xx` or `429` | Not cached. The key is released, so a retry runs again. Caching a 500 would poison the operation for the whole 24-hour window. |
+| A response waiting on a person's approval | Not cached. A retry after the decision runs again. |
 | Deterministic `4xx` | Cached and replayed. Sending the same bytes would earn the same rejection anyway. |
 | Response larger than 4 MiB | The key is released and the response is returned unstored. |
 
@@ -80,13 +81,13 @@ Because the scope includes `METHOD path`, the same key value on `POST /v1/publis
 X-Spacefast-Idempotency-Principal: 3f9a1c7e5b2d8a4f6c0e2b8d1a5f7c3e9b4d6a0f2c8e1b5d7a3f9c4e6b0d2a8f
 ```
 
-Exactly 64 hexadecimal characters, stable across every retry of that attempt, and known only to you. Without it the request fails:
+Exactly 64 lowercase hexadecimal characters, stable across every retry of that attempt, and known only to you. Without it the request fails:
 
 ```json
 {
   "status": 400,
   "code": "invalid_idempotency_key",
-  "detail": "Anonymous publish retries require X-Spacefast-Idempotency-Principal with 64 hexadecimal characters."
+  "detail": "Credential-free retries require X-Spacefast-Idempotency-Principal with 64 hexadecimal characters."
 }
 ```
 
