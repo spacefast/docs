@@ -53,7 +53,7 @@ Each code points at a different cause. `build_failed` means your command exited 
 
 ### The site still shows the old version
 
-Public HTML defaults to `public, s-maxage=600, max-age=0, must-revalidate`, and other unhashed files to `s-maxage=86400`. Your browser revalidates on every load, but a shared copy can be up to ten minutes stale for a page and up to a day for other files. Protected responses, conditional routing, and header overrides follow the exceptions on [Caching](/caching).
+Public HTML defaults to `public, s-maxage=600, max-age=0, must-revalidate`, and other unhashed files to `s-maxage=86400`. Your browser revalidates those on every load, but a shared copy can be up to ten minutes stale for a page and up to a day for other files. Unhashed files under build output directories are the exception: browsers can keep them for a year. Protected responses, conditional routing, and header overrides follow the exceptions on [Caching](/caching).
 
 Activating a new version requests a purge of the Space's serving hostnames; immutable version hostnames are not purged. If the purge isn't confirmed, you get a `runtime_purge_failed` diagnostic and the runtime retries. Even then, a shared copy of a page expires after ten minutes. Check which version answered you:
 

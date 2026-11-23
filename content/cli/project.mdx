@@ -264,7 +264,7 @@ sf open [TARGET] [--path <route>] [--show-secret] [--no-open] [-T <team>]
 | `--path=<route>` | `/` | Clean route to open after the exchange. |
 | `--show-secret` | `false` | Print the temporary handoff URL instead of opening it. |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
-| `--[no-]open` | on | Open the browser. `--no-open` prints the link instead. |
+| `--[no-]open` | on | Open the browser. `--no-open` skips it and keeps the URL hidden; pass `--show-secret` to print it. |
 
 ```bash
 sf open
