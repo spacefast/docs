@@ -69,7 +69,7 @@ Command arguments land in shell history and in the process list. `sf` aborts bef
 
 ## What it writes into your project
 
-Skills are the only thing that lands in your project, and only with `--project`. Everything else goes to the client's global config, with two exceptions. VS Code writes `<project>/.vscode/mcp.json` when run from a remote terminal, and `--agent generic` writes `<project>/.mcp.json`.
+Skills are the only thing that lands in your project, and only with `--project`. Everything else goes to the client's global config, with two exceptions. VS Code writes `<project>/.vscode/mcp.json` with `--project` or when run from a remote terminal, and `--agent generic` writes `<project>/.mcp.json`.
 
 With `--project`, the skill goes into that client's project skills directory. For most clients that is `<project>/.agents/skills/spacefast/`.
 

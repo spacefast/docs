@@ -42,7 +42,7 @@ The bundle is a manifest version `0.2` extension with a Node server. Its entry p
 }
 ```
 
-The extension publishes inline files and edits Space source without a local checkout. Publishing a local folder by path needs the native Linux `sf` build. On macOS and Windows, publish inline files or use the CLI.
+The extension publishes inline files and edits Space source without a local checkout. Because the extension runs on Node, it can't publish a local folder by path. That needs the native `sf` build on Linux or macOS. From the extension, publish inline files, or use the CLI.
 
 | Fact | Value |
 |---|---|

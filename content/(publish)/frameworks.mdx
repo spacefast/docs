@@ -32,7 +32,7 @@ Detection uses this table for both paths. The output directory column is what to
 
 | Framework | Detected by | Default build command | Output directory |
 | --- | --- | --- | --- |
-| `vinext` | `vinext` dependency, unless the build script runs `next build` | `vinext build` | `dist/client` |
+| `vinext` | `vinext` dependency, unless the build script runs `next build`. If `next` is also installed, the build script must run `vinext build`, `vinext deploy`, or `vinext export` | `vinext build` | `dist/client` |
 | [Next.js](/recipes/next) | `next` or `nextra` dependency | `next build` | `out` |
 | TanStack Start | `@tanstack/react-start` dependency | package script | `dist/client` |
 | Nuxt | `nuxt` dependency | `nuxt generate` | `.output/public` |

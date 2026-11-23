@@ -37,7 +37,7 @@ The first two are real usage from the last 30 days.
 | When | Pauses | Keeps working |
 | --- | --- | --- |
 | Personal uses its $1 | New [builds](/ci) and [Workers](/functions) | Deployed Spaces: serving, compute, email |
-| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces, until usage reaches twice the cap. Then they stop serving until you raise the cap or the month resets |
+| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces, until usage reaches the serving-pause threshold, twice the cap unless you change it. Then they stop serving until you raise the cap or the month resets |
 | A Space hits one of its limits | That request gets a 429 ([rate limiting](/infrastructure/rate-limiting)), or that publish gets an [error](/errors) naming the limit | The rest of the Space |
 
 ## Domains

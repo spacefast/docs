@@ -74,7 +74,7 @@ Your own browser session has no stored policy. Spacefast compiles one per team f
 Two rules follow from that:
 
 - **A key can never grant more than you have.** Minting a key whose policy exceeds your own is refused with `policy_exceeds_grantor`. A member cannot mint a key at all, because minting credentials is not on the member list.
-- **A key keeps the permissions it was granted.** A key that follows your team membership stops working if you leave the team, and its permissions are fixed when it's created, so redefining a preset later never widens or narrows an existing key.
+- **A key's ceiling is fixed when it's created.** A key that follows your team membership also tracks it: leaving a team ends the key's access to that team, and a role change there takes effect right away, while its access to your other teams continues. Redefining a preset later never widens or narrows an existing key.
 
 Keys created through the API can also be scoped to a single Space instead of the whole team, which narrows the policy to exactly that Space.
 

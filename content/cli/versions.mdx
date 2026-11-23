@@ -7,7 +7,7 @@ sidebar:
 
 Move live traffic to a retained, ready version with `sf promote` or `sf rollback`. Deleted, expired, and unfinished versions cannot serve as rollback targets.
 
-A publish can create an immutable version or report no changes. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer. By default they apply your current rewrites, which creates a new version; `--no-refresh-rewrites` makes the saved version live exactly. See [Versions](/versions) for the model.
+A publish can create an immutable version or report no changes. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer. Moving it to an older version applies your current rewrites by default, which creates a new version; `--no-refresh-rewrites` makes the saved version live exactly. See [Versions](/versions) for the model.
 
 ## sf versions list
 
@@ -149,7 +149,7 @@ Points the channel at an existing ready version. Use `sf rollback` to go backwar
 | `--channel=<value>` | `live` | Channel to point at this version |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
-| `--[no-]refresh-rewrites` | on | Rebuild the version with current rewrites, creating a new version. `--no-refresh-rewrites` activates the saved output exactly |
+| `--[no-]refresh-rewrites` | on | When the target is older than the live version, apply current rewrites to its files, creating a new version. `--no-refresh-rewrites` activates the saved output exactly. A newer target always goes live as saved |
 | `--continuation-token=<value>` | none | Resume an approved rollback with its original continuation token. Env `SPACEFAST_CONTINUATION_TOKEN` |
 
 ### Examples
@@ -207,7 +207,7 @@ Rolls live traffic back to an existing ready version. Same mechanism as promote,
 | `--channel=<value>` | `live` | Channel to point at this version |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
-| `--[no-]refresh-rewrites` | on | Rebuild the version with current rewrites, creating a new version. `--no-refresh-rewrites` activates the saved output exactly |
+| `--[no-]refresh-rewrites` | on | When the target is older than the live version, apply current rewrites to its files, creating a new version. `--no-refresh-rewrites` activates the saved output exactly. A newer target always goes live as saved |
 | `--continuation-token=<value>` | none | Resume an approved rollback with its original continuation token. Env `SPACEFAST_CONTINUATION_TOKEN` |
 
 ### Examples

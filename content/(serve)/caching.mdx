@@ -77,7 +77,7 @@ Activating a new version points the Space's hostnames at it and purges the edge 
 
 Immutable version hostnames aren't purged, because their content never changes.
 
-A purge can fail. If it does, HTML still refreshes within ten minutes and other files within a day, when the shared copy expires.
+A purge can fail. If it does, HTML still refreshes within ten minutes and other files on the one-day policy within a day, when the shared copy expires. Files on the one-year policy, including unhashed files under the build output directories above, can stay stale for up to a year.
 
 Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Hashed files and files under the build output directories above are cached for a year. A new build gives changed hashed files new names, but an unhashed file in one of those directories keeps its URL, so browsers can keep the old copy. Rename it when its content changes.
 

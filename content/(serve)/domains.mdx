@@ -43,7 +43,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
     sf domains check example.com --space my-site
     ```
 
-    Spacefast also rechecks on its own, every 15 to 60 minutes while a domain is pending, depending on what it waits for, and once a day after it is live. A manual check only shortens the wait.
+    Spacefast also rechecks on its own. While a domain is pending, it checks every 15 to 60 minutes at first, depending on what it waits for, and backs off to as long as seven days if nothing changes. Once the domain is live, the next check comes about three weeks before its certificate expires. A manual check only shortens the wait.
   </Step>
 
   <Step title="Make it primary">

@@ -74,7 +74,7 @@ _routes.json  .spacefast/state.json  .spacefast/space.json  .stattic/state.json
 
 Whole directories at any depth: `.git`, `.hg`, `.svn`, `.ssh`, `.aws`, `.cache`, `.turbo`, `.vercel`, `.netlify`, `.wrangler`, `.zero`, `node_modules`, `.next/cache`, and `__MACOSX`.
 
-Anything that looks like a credential is dropped the same way: names starting `.env.` or `.dev.vars`, `.envrc`, SSH keys (`id_rsa`, `id_ed25519`, and friends), files named like a private key, and any `.pem`, `.key`, `.p12`, or `.pfx`.
+Anything that looks like a credential is dropped the same way: `.env`, `.envrc`, and `.dev.vars`, plus those names with a dot suffix such as `.env.local` or `.dev.vars.production` (a name like `.dev.vars-backup` is not dropped), SSH keys (`id_rsa`, `id_ed25519`, and friends), files named like a private key, and any `.pem`, `.key`, `.p12`, or `.pfx`.
 
 Symlinks are skipped, not followed. The CLI prints `Warning: skipped symlink <path> (symlinks are not published).` for each one.
 

@@ -107,7 +107,7 @@ sf share link create \
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--name` | required | The name shown in the links list |
-| `--landing` | `/` if the link covers it, else a covered path | The clean route the link opens at. It has to be inside the link's paths |
+| `--landing` | `/` if the link covers it, else the first included path without a wildcard (`/docs/**` lands on `/docs`) | The clean route the link opens at. It has to be inside the link's paths. Required when every path uses a single wildcard, such as `/docs/*` |
 | `--path` | `/**` | An included pattern. Repeat for disjoint subtrees |
 | `--exclude` | none | An excluded pattern, local to this link |
 | `--role` | `viewer` | `viewer` or `commenter` |

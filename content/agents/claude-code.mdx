@@ -59,7 +59,7 @@ The base skill, `skills/spacefast/`, routes each request to the right tool and s
     ],
     "PreToolUse": [
       {
-        "matcher": "^(Bash|PowerShell|exec_command|shell_command|<publish tools>)$",
+        "matcher": "^(Bash|PowerShell|exec_command|shell_command|mcp__(?:plugin_spacefast(?:[-_]local)?_)?spacefast(?:[-_]local)?__(?:publish|createPublish|createSpaceBuild|retryBuild|finalizeSpaceVersion|promoteSpaceVersion|commitSpaceSourceWorkspaceChanges))$",
         "hooks": [
           {
             "type": "command",

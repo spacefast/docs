@@ -46,7 +46,7 @@ sf storage list --space docs
 
 A table of `Id | Size | Type | Uploaded by | Created`, or "No stored objects." A further page prints as `Next cursor: <value>`.
 
-With `--json`, `data` is `{ objects, cursor }`. Each object carries `id`, `public`, `contentType`, `createdAt`, `filename`, `size`, `uploaderId`, `sha256`, and `url`.
+With `--json`, `data` is the list of objects and `pagination.nextCursor` holds the cursor for the next page. Each object carries `id`, `public`, `contentType`, `createdAt`, `size`, `uploaderId`, `sha256`, `url`, and `filename` when it has one.
 
 To upload, use [`sf storage put`](#sf-storage-put), the API, or `storage.upload()` from the client SDK inside your app.
 

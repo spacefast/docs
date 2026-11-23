@@ -54,7 +54,7 @@ sf channels set live --promotion manual --space docs
 
 ## Promote and roll back
 
-Promoting points `live` at a ready version. By default it applies your current rewrites to that version's files, which makes a new version and puts that live. Pass `--no-refresh-rewrites` (API: `refreshRewrites: false`) to make the selected version live exactly as saved. Either way, the previous version keeps its own URL.
+Promoting points `live` at a ready version. A newer version goes live as saved. An older one is a rollback: by default it applies your current rewrites to that version's files, which makes a new version and puts that live. Pass `--no-refresh-rewrites` (API: `refreshRewrites: false`) to make the older version live exactly as saved. Either way, the previous version keeps its own URL.
 
 Rolling back is the same operation, pointed at an older version.
 
