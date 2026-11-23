@@ -146,7 +146,7 @@ const FEATURES = [
     row("Managed HTTPS", null, all(YES)),
     row("Custom domains", null, ["20", "100", "500", "Custom"]),
     row("Register and renew domains at cost", null, all(YES)),
-    row("Wildcard domains", null, [NO, NO, YES, YES]),
+    row("Wildcard domains", null, [NO, NO, SOON, SOON]),
     row("Global edge cache and purge", null, all(YES)),
     row("Redirects and header rules", null, ["500 per Space", "1,000 per Space", "1,500 per Space", "Custom"]),
     row("Firewall and cache rules", null, ["10 per Space", "25 per Space", "50 per Space", "Custom"]),
