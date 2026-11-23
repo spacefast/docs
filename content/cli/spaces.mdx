@@ -21,12 +21,12 @@ Most subcommands take `--space`. When you leave it out, the CLI resolves in this
 
 With nothing to go on and exactly one accessible Space, the CLI picks it, in scripts too. With several, an interactive terminal gets a prompt and a non-interactive one gets `no_space_selected` (exit 2). An empty `--space` or `SPACEFAST_SPACE` is an error, not "absent".
 
-## sf spaces ls
+## sf spaces list
 
-List spaces. Alias: `sf spaces list`.
+List spaces. Alias: `sf spaces ls`.
 
 ```text
-sf spaces ls
+sf spaces list
 ```
 
 ### Flags
@@ -35,12 +35,14 @@ sf spaces ls
 | --- | --- | --- |
 | `-T, --team=<value>` | all teams | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--limit=<value>` | `50` | Maximum spaces to return. 1 to 100 |
+| `--cursor=<value>` | none | Continue from the cursor a previous page printed |
+| `--inactive-for=<days>` | none | Only list the team's Spaces with no publish or change in this many days |
 
 ### Examples
 
 ```bash
-sf spaces ls
-sf spaces ls --team acme
+sf spaces list
+sf spaces list --team acme
 ```
 
 ### Output
@@ -78,7 +80,7 @@ sf spaces inspect --space docs
 Space:    Docs
 Slug:     docs
 Status:   active
-Live URL: https://docs.view.fast
+Live URL: https://docs.space.fast
 Team:     acme
 Mode:     website
 ```
@@ -131,7 +133,7 @@ When a name is taken, the suggestion lines name the closest free slug and hostna
 | Code | Exit | What to do |
 | --- | --- | --- |
 | `unauthorized` | 10 | No credential. Run `sf login` |
-| `not_found` | 20 | No team matches `--team`. Run `sf teams ls` |
+| `not_found` | 20 | No team matches `--team`. Run `sf teams list` |
 | `forbidden` | 11 | You can't create Spaces in that team |
 | `missing_scope` | 2 | You belong to several teams and none was picked. Pass `--team` |
 
@@ -149,6 +151,9 @@ Creates the Space and saves it to `.spacefast/state.json`. You rarely need this:
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `--git=<value>` | none | Start from a repository: a Source-available Spacefast Space, or a public github.com or gitlab.com repository |
+| `--path=<value>` | repository root | Copy only this folder of the `--git` repository, as one commit at the new root |
+| `--ref=<value>` | default branch | Branch, tag, or commit of the `--git` repository to copy |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--name=<value>` | none | Set the Space title |
 | `--slug=<value>` | generated | Set the Space slug |
@@ -182,6 +187,7 @@ Patches Space identity, serving metadata, and generated viewer metadata.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `--[no-]noindex` | unchanged | Ask search engines not to index the live Space. `--no-noindex` allows indexing |
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
@@ -193,7 +199,7 @@ Patches Space identity, serving metadata, and generated viewer metadata.
 | `--viewer-description=<value>` | unchanged | Social preview description. Pass `null` to clear |
 | `--viewer-og-image-path=<value>` | unchanged | Social preview image path. Pass `null` to clear |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
-| `--wait-timeout=<seconds>` | server default | Seconds to wait for queued work to finish |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work to finish |
 
 ### Examples
 
@@ -222,16 +228,16 @@ Downloads the files of one version. Defaults to the latest.
 | `--space=<value>` | linked Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
-| `-v, --version=<value>` | `latest` | Version ID, ref, number, or `latest` |
+| `--version=<value>` | `latest` | Version ID, ref, number, or `latest` |
 | `--output=<value>` | `.` | Directory to write downloaded files into |
-| `--overwrite` | off | Overwrite files that already exist in the output directory |
-| `-j, --concurrency=<value>` | `10` | Files to download at the same time. Minimum 1 |
+| `--force` | off | Overwrite files that already exist in the output directory |
+| `--concurrency=<value>` | `10` | Files to download at the same time. Minimum 1 |
 
 ### Examples
 
 ```bash
 sf spaces download --space docs --output ./out
-sf spaces download --space docs --version v3 --overwrite
+sf spaces download --space docs --version v3 --force
 ```
 
 ### Output
@@ -281,6 +287,7 @@ Moves a saved anonymous Space into your account, starting browser login if you a
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `--[no-]open` | on | Open the browser. `--no-open` prints the link instead |
 | `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--space=<value>` | saved Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
@@ -297,7 +304,7 @@ sf spaces claim --space spc_xxx --claim-token sfc_xxx --team my-team
 ### Output
 
 ```text
-Claimed: https://docs.view.fast
+Claimed: https://docs.space.fast
 
 This space is now saved to your account.
 Space spc_…
@@ -320,8 +327,8 @@ Replaces an anonymous Space's key, live URL, and claim link. Recipient Links kee
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 | `--space=<value>` | saved Space | Space ID, live URL, domain, or slug. Env `SPACEFAST_SPACE` |
+| `--claim-token=<value>` | saved key | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN` |
 
 ### Example
 
@@ -337,12 +344,29 @@ Claim link: https://…
 Saved the replacement space key to .spacefast/state.json.
 ```
 
-## sf spaces rm
+## sf spaces archive
 
-Delete a space. Aliases: `sf spaces remove`, `sf spaces delete`.
+Stop serving a Space and keep its versions, source, database, storage, and domains. Repeat `--space` to archive several Spaces in one run.
+
+```bash
+sf spaces archive --space docs
+sf spaces archive --team acme --space old-report --space q3-dashboard
+```
+
+## sf spaces restore
+
+Resume serving an archived Space with its retained versions, data, and domains.
+
+```bash
+sf spaces restore --space docs
+```
+
+## sf spaces delete
+
+Delete a space. Aliases: `sf spaces rm`, `sf spaces del`.
 
 ```text
-sf spaces rm
+sf spaces delete
 ```
 
 Takes the Space offline. The slug, versions, and data are retained rather than destroyed. The prompt names the resolved slug, and a non-interactive run needs `--yes`.
@@ -359,8 +383,8 @@ Takes the Space offline. The slug, versions, and data are retained rather than d
 ### Examples
 
 ```bash
-sf spaces rm --space docs
-sf spaces rm --space docs --yes
+sf spaces delete --space docs
+sf spaces delete --space docs --yes
 ```
 
 ### Output
@@ -418,11 +442,11 @@ The transfer block (`Transfer`, `Space`, `Status`, `From team`, `To team`, `Expi
 
 | Code | Exit | What to do |
 | --- | --- | --- |
-| `validation_error` | 2 | No accessible team matches the name. Run `sf teams ls` |
+| `validation_error` | 2 | No accessible team matches the name. Run `sf teams list` |
 
 ## sf transfers accept
 
-Accept a space transfer. Alias: `sf transfers confirm`.
+Accept a space transfer.
 
 ```text
 sf transfers accept ID
@@ -467,3 +491,24 @@ sf transfers cancel trf_123
 ### Output
 
 Both commands print the transfer block and return `{ transfer }` under `--json`.
+
+## sf transfers list
+
+List a team's incoming and outgoing Space transfers. Alias: `sf transfers ls`. It needs transfer authority, which team owners and admins hold, and shows pending transfers by default, up to the newest 100.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--status=<pending_confirmation\|completed\|canceled\|expired>` | pending | Filter by transfer status |
+| `--space=<value>` | none | Filter by Space ID (`spc_…`) |
+
+```bash
+sf transfers list --team acme
+```
+
+## sf transfers inspect
+
+`sf transfers inspect TRANSFER` shows a transfer's parties, status, and expiry.
+
+```bash
+sf transfers inspect trf_123
+```

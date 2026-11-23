@@ -29,15 +29,15 @@ The drag-and-drop publish flow at [drop.fast](https://drop.fast): drag a folder,
 
 ## Functions
 
-The runtime for shipping a worker alongside your Space — npm packages, framework server output, outbound HTTP. The other option, alongside [Zero](#zero), for Spaces that need more than static files. See [Functions](/functions).
+The runtime that runs a server worker next to your Space, with npm packages, framework server output, and outbound HTTP. It and [Zero](#zero) are the two options for Spaces that need more than static files. See [Functions](/functions).
 
 ## Grant
 
-One rule in a Space's access list: it names an audience (public, team, one person, a link, a password, a machine, or an external identity) and what that audience can do. A Space has no public-or-private flag — its access is just the sum of its grants. See [Spacefast Share](/share).
+One rule in a Space's access list: it names an audience (public, team, one person, a link, a password, a machine, or an external identity) and what that audience can do. A Space has no public or private switch. Its grants alone decide who can reach it. See [Spacefast Share](/share).
 
 ## Live (the live channel)
 
-The pointer that selects the version served at the live URL. Promoting or rolling back moves it to a retained, ready version without rebuilding. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
+The pointer that selects the version served at the live URL. Promoting or rolling back points it at a retained, ready version without running a build. Moving it to an older version applies your current rewrites by default, which makes a new version from that version's files. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
 
 ## Space
 

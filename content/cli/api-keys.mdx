@@ -14,16 +14,16 @@ All three subcommands need a login or a `--token` of their own, and they act on 
 Create an API key and print its one-time secret.
 
 ```text
-sf api-keys create [-n <name>] [--preset <preset>]
+sf api-keys create [--name <name>] [--preset <preset>]
 ```
 
-Alias: `sf api-keys add`.
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-n, --name=<value>` | none | Human-readable API key name. Worth setting, it is how you tell keys apart later. |
+| `--name=<value>` | none | Human-readable API key name. Set one so you can tell keys apart later |
+| `--[no-]open` | on | Open the browser. `--no-open` prints the link instead |
 | `--preset=<value>` | `space_publisher` | Access preset compiled into the key's policy. One of `ci_deploy`, `space_publisher`, `space_admin`, `domain_manager`, `team_admin`, `billing_viewer`. |
 
 ### Presets
@@ -64,7 +64,7 @@ Use the key by exporting `SPACEFAST_TOKEN`, passing `--token`, or storing it wit
 
 | Code | Exit | When |
 | --- | --- | --- |
-| `validation_error` | 2 | Not authenticated. "Run `sf login` or pass --token before managing API keys." |
+| `auth_required` | 10 | Not authenticated. "Run `sf login` or pass --token before managing API keys." |
 | `validation_error` | 2 | No team resolved. "Choose a default team with `sf teams switch <slug>` first." |
 
 ## sf api-keys list
@@ -83,8 +83,8 @@ Aliases: `sf api-keys ls`.
 | `--limit=<n>` | `50` | Maximum keys to return. Between 1 and 100. |
 
 ```bash
-sf api-keys ls
-sf api-keys ls --team acme
+sf api-keys list
+sf api-keys list --team acme
 ```
 
 ### Output
@@ -100,7 +100,7 @@ A table of keys, and with `--json` the list envelope from the API straight throu
       "preset": "space_publisher",
       "enabled": true,
       "revokedAt": null,
-      "secretPreview": "sfa_...cdef",
+      "secretPreview": "sfa_ab12...cdef",
       "lastUsedAt": null,
       "createdAt": "2026-06-01T00:00:00.000Z",
       "updatedAt": "2026-06-01T00:00:00.000Z"
@@ -120,11 +120,9 @@ Revoke an API key.
 sf api-keys revoke ID [-y]
 ```
 
-Aliases: `sf api-keys delete`, `sf api-keys remove`, `sf api-keys rm`.
-
 | Argument | What it does |
 | --- | --- |
-| `<id>` | API key ID, for example `key_0123456789abcdef`. Take it from `sf api-keys ls`. |
+| `<id>` | API key ID, for example `key_0123456789abcdef`. Take it from `sf api-keys list`. |
 
 ```bash
 sf api-keys revoke key_0123456789abcdef

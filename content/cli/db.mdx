@@ -13,7 +13,7 @@ Every command here takes the global flags (`--api-url`, `--profile`, `--token`, 
 
 ## sf db
 
-Inspect a Space's database. Unlike other topic commands, the bare `sf db` runs the inspect read instead of printing help.
+Inspect a Space's database. Unlike other topic commands, the bare `sf db` runs the inspect read instead of printing help. `sf db list` (alias `sf db ls`) runs the same read.
 
 ```text
 sf db [target] [--space <value>] [--local-url <value>] [--port <value>]
@@ -68,7 +68,7 @@ sf db dump [target] [--space <value>] [--table <name>] [--limit <n>]
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--table=<name>` | none | Restrict the dump to one table. Must match `^[A-Za-z_][A-Za-z0-9_]*$`, 1 to 128 characters |
-| `--limit=<n>` | `25` | Maximum rows per table. Maximum 100. Validated before the request |
+| `--limit=<n>` | `25` | Maximum rows per table. Maximum 100. `0` prints row counts only. Validated before the request |
 | `--local-url=<value>` | none | Read from a local `sf dev` server instead of the live version |
 | `--port=<value>` | none | Local `sf dev` server port |
 
@@ -86,7 +86,7 @@ With `--json`, `data` is `{ versionId, artifactId, schemaHash, tables: [{ name, 
 Export every declared table to one versioned JSON backup. Rows are read in stable keyset pages and the destination is replaced only after the complete export succeeds.
 
 ```text
-sf db export [target] [--space <value>] [--out <path>] [--local-url <value>] [--port <value>]
+sf db export [target] [--space <value>] [--output <path>] [--local-url <value>] [--port <value>]
 ```
 
 ### Arguments
@@ -99,7 +99,7 @@ sf db export [target] [--space <value>] [--out <path>] [--local-url <value>] [--
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--out=<path>` | `spacefast-backup-<space>-<timestamp>.json` | Backup file path |
+| `--output=<path>` | `spacefast-backup-<space>-<timestamp>.json` | Backup file path |
 | `--local-url=<value>` | none | Read from a local `sf dev` server instead of the live version |
 | `--port=<value>` | none | Local `sf dev` server port |
 
@@ -107,7 +107,7 @@ The file is written to a temp path with mode `0600`, fsynced, then renamed. A fa
 
 ```bash
 sf db export
-sf db export docs --out ./docs-backup.json
+sf db export docs --output ./docs-backup.json
 sf db export --port 4173
 ```
 
@@ -167,7 +167,7 @@ With `--json`, `data` is `{ plan, applied, operation }`.
 Open a phpMyAdmin console on the Space's database, for anything `sf db` and `sf db dump` cannot answer.
 
 ```text
-sf db console [target] [--space <value>] [--show-secret]
+sf db console [target] [--space <value>] [--show-secret] [--no-open]
 ```
 
 ### Arguments
@@ -181,6 +181,7 @@ sf db console [target] [--space <value>] [--show-secret]
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--show-secret` | `false` | Print the single-use console URL instead of opening it |
+| `--[no-]open` | on | Open the browser. `--no-open` prints the link instead |
 
 The URL is short-lived, single-use, and grants full SQL authority. That's why it opens in a browser instead of printing. It requires write access.
 
@@ -203,20 +204,20 @@ sf db console --show-secret
 
 `console.url` is `null` in the receipt unless you pass `--show-secret`.
 
-## sf crons ls
+## sf crons list
 
-List the scheduled jobs the live version declares, with the last failure reported for each. Aliased as `sf crons list`.
+List the scheduled jobs the live version declares, with the last failure reported for each. Aliased as `sf crons ls`.
 
 Crons are declared in `sf.jsonc` and there is no write API. Publishing is how you change them, which is also why a rollback restores the previous schedules.
 
 ```text
-sf crons ls [--space <value>]
+sf crons list [--space <value>]
 ```
 
 No arguments, no command-specific flags.
 
 ```bash
-sf crons ls --space docs
+sf crons list --space docs
 ```
 
 ### Output
@@ -237,7 +238,7 @@ sf crons run <target> [--space <value>] [--header 'name: value']
 
 | Argument | What it is |
 | --- | --- |
-| `<target>` | Cron key or path, as shown by `sf crons ls`. Required |
+| `<target>` | Cron key or path, as shown by `sf crons list`. Required |
 
 ### Flags
 

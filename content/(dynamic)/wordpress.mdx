@@ -5,7 +5,7 @@ description: Every Space runs a WordPress behind its static files. Run WP-CLI ag
 
 Every Space includes a WordPress install behind its published files. Reach it through `sf wp` or its published Abilities.
 
-Your published files serve in front of WordPress, so a static Space never touches it and never pays for it. It is there because it is what makes a Space more than a bucket: [Zero](/zero-runtime) apps run on it, [Storage](/object-storage) is its media library, and [Database](/database) is its MySQL. This page covers the two ways to reach that WordPress directly.
+Your published files are served in front of WordPress, so a static Space never uses it or pays for it. WordPress runs the dynamic features: [Zero](/zero-runtime) apps run on it, [Storage](/object-storage) is its media library, and [Database](/database) is its MySQL. You can reach it directly in two ways.
 
 ## `sf wp`
 
@@ -21,7 +21,7 @@ Everything after `sf`'s own flags is handed to `wp` unchanged. `--format=csv` ab
 
 ### The `--` rule
 
-`sf` stops claiming flags at the first token that is not one of its own, and `--` ends the argument outright. So a `wp` flag can never collide with an `sf` flag by accident. A `wp` command that genuinely needs `--path` or `--space` is still reachable — just put it after `--` or after any positional.
+`sf` stops claiming flags at the first token that is not one of its own, and `--` ends the argument outright. So a `wp` flag can't collide with an `sf` flag by accident. To pass `--path` or `--space` to `wp`, put it after `--` or after any positional argument.
 
 ```bash
 sf wp -- --version
@@ -48,7 +48,7 @@ The host runs WP-CLI as a job and does not return its output; only success or fa
 Run with --local against a local WordPress to see what the command prints.
 ```
 
-When you need the bytes, run the same command locally, or reach for `sf db` and the database console.
+When you need the bytes, run the same command locally, or use `sf db` and the database console.
 
 ```bash
 sf wp --local --path ./wordpress core version
@@ -132,7 +132,7 @@ Send the token to the Space in `X-SF-Authorization`, never in `Authorization`:
 
 ```bash
 curl -X POST \
-  https://my-site.view.fast/wp-json/wp-abilities/v1/abilities/zero/storage-list/run \
+  https://my-site.space.fast/wp-json/wp-abilities/v1/abilities/zero/storage-list/run \
   -H "X-SF-Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{ "perPage": 20 }'

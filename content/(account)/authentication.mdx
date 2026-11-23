@@ -5,7 +5,7 @@ sidebar:
   order: 1
 ---
 
-Creating a Spacefast account takes nothing but an email address and a six-digit code — no password required until you add one later.
+To create a Spacefast account, you need an email address and the six-digit code sent to it. A password is optional, and you can add one later.
 
 ## Create an account
 
@@ -71,7 +71,7 @@ There is no side door. Turn two-factor off, then set it up again for a fresh set
 
 Sensitive changes ask you to prove it's you again before they go through: setting or changing a password, connecting or disconnecting a provider, turning two-factor on or off, and adding, removing, or repointing account email addresses.
 
-The screen is titled **Confirm it's you** and takes your password, an emailed code, or your authenticator code. One confirmation covers the next ten minutes. A sign-in from the last 24 hours counts as fresh already, so most of the time you never see it.
+The screen is titled **Confirm it's you** and takes your password, an emailed code, or your authenticator code. One confirmation covers the next ten minutes, so several changes in a row ask only once. Signing in doesn't count as a confirmation.
 
 ## Sessions
 
@@ -115,7 +115,7 @@ Sessions are separate from agent access. To cut off an agent or a CLI, use **Acc
   </Step>
 </Steps>
 
-Facts worth knowing about that credential:
+About that credential:
 
 | Fact | Value |
 |---|---|
@@ -124,9 +124,9 @@ Facts worth knowing about that credential:
 | What the CLI receives | A one-time API key, not a session |
 | Access lifetime | 30 days after approval |
 | Idle lifetime | 7 days without use |
-| Where it is stored | The OS keychain on macOS and Linux, otherwise `~/.spacefast/auth.json` with `0600` permissions |
+| Where it is stored | The macOS Keychain, or the Secret Service keyring on Linux when one is available. Otherwise `~/.spacefast/auth.json` with `0600` permissions |
 
-Inside each team the credential can never do more than your own role allows there. Change your role and the same credential retunes itself on the next request.
+Inside each team, the credential can't do more than your current role allows there. If your role changes, the new role applies from the credential's next request.
 
 `sf logout` deletes the local login and revokes the key when the CLI minted it. To kill it from the browser instead, revoke the connection under **Account settings → Connected apps**.
 

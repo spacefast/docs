@@ -87,7 +87,7 @@ publish:
 </Tab>
 </Tabs>
 
-The CLI needs Node.js 20.3 or newer. `sf publish` waits by default, but a successful command can leave a version ready without making it live. Check the receipt's activation outcome, especially for previews or a manual promotion policy.
+The CLI needs Node.js 22.19 or newer. `sf publish` waits by default, but a successful command can leave a version ready without making it live. Check the receipt's activation outcome, especially for previews or a manual promotion policy.
 
 ## What `CI` changes
 
@@ -95,13 +95,13 @@ GitHub Actions and GitLab CI both set `CI` for you, and a truthy `CI` puts the C
 
 | Change | Detail |
 | --- | --- |
-| `--json` is appended | Every command prints `{ data }` on stdout, `{ error }` on stderr. Passing `--json` yourself is redundant, and worth writing anyway so the pipeline reads the same locally |
-| Prompts are off | The CLI never asks a question it cannot get an answer to |
-| `--yes` is still yours | Agent mode never implies it |
+| `--json` is appended | Every command prints `{ data }` on stdout, `{ error }` on stderr. Pass `--json` anyway so the command behaves the same when you run it locally |
+| Prompts are off | The CLI doesn't prompt |
+| `--yes` is not implied | Agent mode doesn't add it |
 
-That last one bites. A destructive command in CI without `--yes` fails with `confirmation_required` and exit code 2, every time. Add `--yes` to the command that needs it rather than setting it globally.
+A destructive command in CI without `--yes` fails with `confirmation_required` and exit code 2. Add `--yes` to the command that needs it rather than setting it globally.
 
-Credentials also behave differently under `CI`. The plaintext credential store is the default there, so a locked or absent OS keyring never wedges a job.
+Credentials also behave differently under `CI`. The plaintext credential store is the default there, so a locked or missing OS keyring doesn't block a job.
 
 ## Version provenance
 
@@ -129,7 +129,7 @@ A preview on an existing Space refuses `--name`, `--mode`, and a non-`auto` `--s
 
 ## Reading the receipt
 
-The fields worth branching on in a script:
+The fields a script usually checks:
 
 | Field | Use |
 | --- | --- |
@@ -143,4 +143,4 @@ A publish whose files reproduce the live version byte for byte creates no versio
 
 ## Rate limits
 
-Publishing is capped per hour, per credential and per account, with the numbers set by your plan. A pipeline that publishes on every push to a busy repository can reach them. A `429` carries `Retry-After` in seconds. See [Rate limits](/api/rate-limits).
+Publishing is capped per hour, both per person or API key and per account, with the numbers set by your plan. A pipeline that publishes on every push to a busy repository can reach them. A `429` carries `Retry-After` in seconds. See [Rate limits](/api/rate-limits).

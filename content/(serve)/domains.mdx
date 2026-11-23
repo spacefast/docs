@@ -4,7 +4,7 @@ description: Connect a domain you own, add the DNS records Spacefast asks for, g
 sidebar: { order: 2 }
 ---
 
-A domain you own can be pointed at a Space and promoted to its primary, live address.
+Point a domain you own at a Space, then make it the Space's primary address, the one Spacefast reports as its live URL.
 
 A domain belongs to a **team**, not to a Space. You add it once to the team's inventory, then assign it to a Space. One hostname serves exactly one Space; one Space can hold many hostnames.
 
@@ -15,7 +15,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
     <Tabs>
     <Tab title="CLI">
 
-    The CLI does the whole first step in one command: it creates the domain on the team, assigns it to the Space, and queues the first DNS check.
+    One command creates the domain on the team, assigns it to the Space, and queues the first DNS check.
 
     ```bash
     sf domains add example.com --space my-site
@@ -43,7 +43,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
     sf domains check example.com --space my-site
     ```
 
-    Spacefast also polls on its own, roughly every 30 seconds for the first ten minutes after you add or assign a domain, then every 15 minutes as a backstop. Checking by hand only shortens the wait.
+    Spacefast also rechecks on its own. While a domain is pending, it checks every 15 to 60 minutes at first, depending on what it waits for, and backs off to as long as seven days if nothing changes. Once the domain is live, the next check comes about three weeks before its certificate expires. A manual check only shortens the wait.
   </Step>
 
   <Step title="Make it primary">
@@ -70,7 +70,7 @@ A domain belongs to a **team**, not to a Space. You add it once to the team's in
 
 An unassigned domain has no records to show. Instructions appear once the domain is assigned to a Space, which is why `sf domains add` assigns in the same command.
 
-Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` usually produces three, because the `www` twin is set up alongside it.
+Each record the API returns has four fields: `type`, `name`, `value`, and `purpose`. Adding the apex `example.com` usually produces three records, because `www.example.com` is set up with it.
 
 | Type | Name | Value | Purpose |
 | --- | --- | --- | --- |
@@ -81,7 +81,7 @@ Each record the API returns has four fields: `type`, `name`, `value`, and `purpo
 A subdomain like `app.example.com` usually gets just its two `A` records. The addresses are generated for your hostname, so copy the exact values from your own output rather than the ones above.
 
 :::warning[Delete the old address records first]
-Every observed `A` record has to point at Spacefast. A leftover record from your previous host sitting beside the correct one blocks verification, and the diagnostics will report the hostname as not configured while both are live. Remove any `AAAA` record left from your previous host too: it sends IPv6 visitors there.
+Every `A` record for the hostname has to point at Spacefast. A leftover record from your previous host blocks verification, even next to the correct one, and diagnostics report the hostname as not configured until you remove it. Remove any `AAAA` record from your previous host too, or IPv6 visitors keep going there.
 :::
 
 ### When a TXT record shows up
@@ -97,26 +97,26 @@ Certificates are provisioned and renewed automatically once the hostname can be 
 
 ## Apex and www travel together
 
-If the hostname you add is the registrable apex or its `www` twin, both hostnames get set up. `example.com` pulls in `www.example.com`, and `www.example.com` pulls in `example.com`. Any other subdomain, like `app.example.com`, is connected on its own.
+If you add a registrable apex or its `www` hostname, Spacefast sets up both. `example.com` adds `www.example.com`, and `www.example.com` adds `example.com`. Any other subdomain, like `app.example.com`, is connected on its own.
 
-Whichever of the pair serves the Space, the other one answers `308` to it. You do not write that redirect. If only one of the two is ever bound, the domain reports a `companion_hostname_unbound` diagnostic telling you what visitors typing the other spelling will hit.
+Whichever of the pair serves the Space, the other redirects to it with a `308`, which Spacefast creates for you. If only one of the two is bound, the domain reports a `companion_hostname_unbound` diagnostic that says what visitors who type the other one will get.
 
 The apex is decided by the public suffix list, not by counting labels. `example.co.uk` is an apex; `www.example.com` is not.
 
 ## Verification states
 
-`verification.status` on the domain record answers one question: is DNS control proved right now?
+`verification.status` on the domain record says whether you currently have proven control of the DNS.
 
 | Status | What it means | What to do |
 | --- | --- | --- |
 | `not_required` | The domain is in the team inventory but not assigned to a Space. | Assign it to a Space. |
 | `pending` | Assigned, waiting for the records to show up in public DNS. | Add the records, then wait or run `sf domains check`. |
 | `verified` | A current positive signal proves control. | Nothing. |
-| `failed` | No current proof. Either the records were never observed, or the domain verified in the past and has stopped proving. | Run `sf domains diagnostics` to see which records are observed. |
+| `failed` | No current proof. Either the records were never observed, or the domain verified once and later stopped verifying. | Run `sf domains diagnostics` to see which records are observed. |
 
-`failed` on a domain that used to work almost always means someone edited the zone. It does not mean the Space is down.
+When a domain that used to work shows `failed`, check whether someone edited the zone. It doesn't mean the Space is down.
 
-**Verification failure never takes a live Space down.** Compiled routes and certificates stay in place while the domain re-proves itself. Only sustained failure past the notice window blocks the attachment.
+**A verification failure doesn't take a live Space down right away.** Routes and certificates stay in place while the domain verifies again. Only a failure that lasts past the notice window blocks the attachment.
 
 ## Certificates
 
@@ -137,11 +137,11 @@ sf domains diagnostics example.com --space my-site
 
 The retry route is `POST /v1/domains/{domainId}/ssl/retry`, or **Verify** in the connect wizard. It refuses with `domain_not_bound` when the domain has no Space.
 
-Manual verification and certificate retries are capped at **6 per hour per domain** and **120 per hour per team**, returning `rate_limited`. Looping the button does not make DNS propagate or a certificate issue any faster.
+Manual verification checks and certificate retries are each limited to **6 per hour per domain** and **120 per hour per team**. Past that, they return `rate_limited`. Retrying more often doesn't make DNS propagate or a certificate issue faster.
 
 ## Primary, and redirecting a whole host
 
-A domain assigned to a Space does one of two things. It serves the Space, or it redirects away from it. Never both.
+A domain assigned to a Space either serves the Space or redirects away from it, never both.
 
 **Primary** is the one assigned, `active` domain that Spacefast reports as the Space's `liveUrl`. Setting a new primary releases the previous holder. A domain that is verifying or blocked can be marked primary, but the live URL stays on the default hostname until it reaches `active`.
 
@@ -162,30 +162,30 @@ The redirect target is either an absolute URL or another Space. There is no path
 Unassign, then assign:
 
 ```bash
-sf domains rm example.com --space old-site
+sf domains remove example.com --space old-site
 sf domains add example.com --space new-site
 ```
 
-Adding a domain another Space still serves creates a claim with a TXT record to publish, as described in [When a TXT record shows up](#when-a-txt-record-shows-up). Reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains rm` does that for you and is on by default.
+Adding a domain another Space still serves creates a claim with a TXT record to publish, as described in [When a TXT record shows up](#when-a-txt-record-shows-up). Reassigning while the previous teardown is still draining fails with `domain_detach_in_progress`. Wait for the unassign to finish. The `--wait` flag on `sf domains remove` does that for you and is on by default.
 
 ## Removing versus deleting
 
-These are two different operations, and the CLI only does the first one.
+These are two different operations. The CLI only unassigns.
 
 | Action | What happens | How |
 | --- | --- | --- |
-| Unassign | The domain stops routing to the Space and stays in the team's inventory, ready to reuse. | `sf domains rm <domain> --space <space>`, or `PATCH /v1/domains/{domainId}` with `{"spaceId": null}` |
+| Unassign | The domain stops routing to the Space and stays in the team's inventory, ready to reuse. | `sf domains remove <domain> --space <space>`, or `PATCH /v1/domains/{domainId}` with `{"spaceId": null}` |
 | Delete | The inventory record is gone. | `DELETE /v1/domains/{domainId}`, or **Delete domain** on the team's domain detail page |
 
-`sf domains rm` prompts with "Remove this domain from the space?" and unassigns. Deleting requires the domain to be unassigned first, otherwise it refuses with `domain_in_use`.
+`sf domains remove` prompts with "Remove this domain from the space?" and unassigns. Deleting requires the domain to be unassigned first, otherwise it refuses with `domain_in_use`.
 
 ## The team's domain inventory
 
 Every domain a team owns lives on one page, whether or not it is assigned. In the dashboard, open the team and go to **Domains**. Rows are labelled **Apex** or **Subdomain**, and each one links to a detail page with **Status**, **Space**, **Provider** and **Added**, plus **Check** and **Visit** actions and a **DNS** section.
 
-Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains ls` is the per-Space list.
+Over the API, `GET /v1/domains` lists the team's inventory and `GET /v1/spaces/{spaceId}/domains` lists what one Space serves on. The CLI's `sf domains list` is the per-Space list.
 
-Two different teams may add the same hostname. Only serving is exclusive: a team that publishes its claim's TXT record moves the hostname to its own Space.
+Two teams can add the same hostname, but only one Space serves it. A team that publishes its claim's TXT record moves the hostname to its own Space.
 
 Adding a domain also counts against a plan limit, measured in external domain groups. One group is a registrable apex plus all of its subdomains. Over the limit, the add fails with `domain_quota_exceeded`.
 
@@ -237,7 +237,7 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 
 ### Checking before you commit
 
-`GET /v1/domains/preflight?name=example.com` runs the same name validation and serving check as the add, so terminal problems surface before any record exists. Its `canHost` verdict is advisory. A `false` still lets you add the domain and claim it with the TXT proof, and `null` means the check was unavailable rather than negative.
+`GET /v1/domains/preflight?name=example.com` runs the same name validation and serving check as adding the domain, so you see blocking problems before any record exists. Its `canHost` result is advisory. A `false` still lets you add the domain and claim it with the TXT proof, and `null` means the check was unavailable rather than negative.
 
 ## Next steps
 

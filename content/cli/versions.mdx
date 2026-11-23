@@ -7,14 +7,14 @@ sidebar:
 
 Move live traffic to a retained, ready version with `sf promote` or `sf rollback`. Deleted, expired, and unfinished versions cannot serve as rollback targets.
 
-A publish can create an immutable version or report no changes. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer; they never rebuild anything. See [Versions](/versions) for the model.
+A publish can create an immutable version or report no changes. A channel is a named pointer at one version. Only `live` exists today. Promoting and rolling back move that pointer. Moving it to an older version applies your current rewrites by default, which creates a new version; `--no-refresh-rewrites` makes the saved version live exactly. See [Versions](/versions) for the model.
 
-## sf versions ls
+## sf versions list
 
-List space versions. Alias: `sf versions list`.
+List space versions. Alias: `sf versions ls`.
 
 ```text
-sf versions ls
+sf versions list
 ```
 
 Lists versions newest first, marking the live one and any still publishing.
@@ -31,9 +31,9 @@ Lists versions newest first, marking the live one and any still publishing.
 ### Examples
 
 ```bash
-sf versions ls
-sf versions ls --space docs
-sf versions ls --commit $(git rev-parse HEAD)
+sf versions list
+sf versions list --space docs
+sf versions list --commit $(git rev-parse HEAD)
 ```
 
 ### Output
@@ -42,10 +42,10 @@ The Space summary, then one block per version:
 
 ```text
 * v13 (live) status=ready source=git@a1b2c3d4e5f6a7b8 mode=website
-    version url: https://v13--docs.view.fast
+    version url: https://docs--v13.space.fast
     updated: 2026-06-02T00:00:00.000Z
   v12 status=ready source=direct_upload mode=website
-    version url: https://v12--docs.view.fast
+    version url: https://docs--v12.space.fast
     updated: 2026-06-01T00:00:00.000Z
 ```
 
@@ -84,12 +84,12 @@ sf versions inspect v12
 sf versions inspect ver_123 --space docs --json
 ```
 
-## sf versions rm
+## sf versions delete
 
-Delete a version. Aliases: `sf versions remove`, `sf versions delete`.
+Delete a version. Aliases: `sf versions rm`, `sf versions del`.
 
 ```text
-sf versions rm [VERSION]
+sf versions delete [VERSION]
 ```
 
 Deletes a version. It leaves your version list and its version URL serves a tombstone. Spacefast keeps the record and its files on the server, and nobody can open them through the version URL. A version a channel points at cannot be deleted; promote another version first.
@@ -111,8 +111,8 @@ Deletes a version. It leaves your version list and its version URL serves a tomb
 ### Examples
 
 ```bash
-sf versions rm v12
-sf versions rm ver_123 --space docs --yes
+sf versions delete v12
+sf versions delete ver_123 --space docs --yes
 ```
 
 ### Errors
@@ -149,6 +149,8 @@ Points the channel at an existing ready version. Use `sf rollback` to go backwar
 | `--channel=<value>` | `live` | Channel to point at this version |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
+| `--[no-]refresh-rewrites` | on | When the target is older than the live version, apply current rewrites to its files, creating a new version. `--no-refresh-rewrites` activates the saved output exactly. A newer target always goes live as saved |
+| `--continuation-token=<value>` | none | Resume an approved rollback with its original continuation token. Env `SPACEFAST_CONTINUATION_TOKEN` |
 
 ### Examples
 
@@ -176,7 +178,7 @@ Promoting the version that is already live short-circuits and prints `Already li
 | Code | Exit | What to do |
 | --- | --- | --- |
 | `channel_unsupported` | 2 | Only the `live` channel exists today. Use `live` |
-| `validation_error` | 2 | No version given. Name one, `sf versions ls` lists them |
+| `validation_error` | 2 | No version given. Name one; `sf versions list` lists them |
 | `timeout_error` | 50 | The wait budget elapsed. Re-run with `--no-wait` and poll the operation |
 
 ## sf rollback
@@ -205,11 +207,13 @@ Rolls live traffic back to an existing ready version. Same mechanism as promote,
 | `--channel=<value>` | `live` | Channel to point at this version |
 | `--wait` / `--no-wait` | `--wait` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the version to become live |
+| `--[no-]refresh-rewrites` | on | When the target is older than the live version, apply current rewrites to its files, creating a new version. `--no-refresh-rewrites` activates the saved output exactly. A newer target always goes live as saved |
+| `--continuation-token=<value>` | none | Resume an approved rollback with its original continuation token. Env `SPACEFAST_CONTINUATION_TOKEN` |
 
 ### Examples
 
 ```bash
-sf versions ls              # find the version to roll back to
+sf versions list            # find the version to roll back to
 sf rollback v12
 sf rollback 12 --space docs
 ```
@@ -260,12 +264,12 @@ sf redeploy bld_123
 | `no_builds_found` | 20 | The Space has never built. Run `sf publish --remote` or `sf build` first |
 | `build_not_terminal` | 30 | The latest build is still running. Follow it with `sf builds logs <id> --follow`, or cancel it |
 
-## sf channels ls
+## sf channels list
 
-List channels. Alias: `sf channels list`.
+List channels. Alias: `sf channels ls`.
 
 ```text
-sf channels ls
+sf channels list
 ```
 
 Lists a Space's channels and where each one points.
@@ -281,7 +285,7 @@ Lists a Space's channels and where each one points.
 ### Example
 
 ```bash
-sf channels ls --space docs
+sf channels list --space docs
 ```
 
 ### Output

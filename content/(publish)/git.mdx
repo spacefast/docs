@@ -7,9 +7,9 @@ sidebar:
 
 Keep your source in Git and publish from a Spacefast remote or a connected GitHub repository. Connected repository pushes queue builds only when auto-deploy is enabled for that branch; deleting a branch does not build it.
 
-Two lanes. The Spacefast remote needs no external host and no app install. A GitHub connection keeps your repository where it is and reacts to its webhooks.
+There are two ways to connect. The Spacefast remote needs no external Git provider and no app install. A GitHub connection keeps your repository where it is and reacts to its webhooks.
 
-The `sf git` and `sf source` command families name the same two connection types in different words — on purpose, not a typo.
+The `sf git` and `sf source` command families use different names for the same two connection types.
 
 ## Source and deployment files
 
@@ -34,7 +34,7 @@ Spacefast hosts a Git endpoint. `sf git origin` mints a signed remote and instal
   </Step>
   <Step title="Watch it">
     ```bash
-    sf builds ls
+    sf builds list
     ```
     Or open **Builds** for the Space.
   </Step>
@@ -56,7 +56,7 @@ Treat that URL as a secret. It expires, and the `sf git origin` receipt reports 
 sf git connect --space docs --provider github --repository owner/repo --production-branch main --sync
 ```
 
-GitHub connections resolve their installation and repository ids from your GitHub App installations, so `--repository owner/repo` is enough. When several installations grant the same repository, pass `--installation-id` to pick one.
+GitHub connections resolve their installation and repository ids from your GitHub App installations, so `--repository owner/repo` is enough. When several installations grant the same repository, pass `--installation` to pick one.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
@@ -66,7 +66,6 @@ GitHub connections resolve their installation and repository ids from your GitHu
 | `--production-branch` | none | The branch that publishes to production |
 | `--default-branch` | none | The repository's default branch |
 | `--credential` | none | A clone token for a generic host, stored encrypted |
-| `--detect-urls` / `--no-detect-urls` | on | Reads clone and upstream URLs from the `origin` remote |
 | `--auto-deploy-production` / `--no-…` | on | Builds pushes to the production branch |
 | `--auto-deploy-previews` / `--no-…` | on | Builds preview branches and pull requests |
 | `--apply-best` | off | Detects and saves the highest-ranked build settings after connecting |
@@ -106,7 +105,7 @@ sf git build --space docs --ref main --target production --wait
 
 The platform builds your repository and publishes the output. It detects the framework and fills in the commands, so an unconfigured repository usually works.
 
-Detected presets include Astro, Next, Nuxt, SvelteKit, Remix, TanStack Start, Vite, Solid Start, Qwik, Angular, Ember, Gatsby, Docusaurus, Eleventy, VitePress, Nextra, Hugo, Jekyll, Zola, MkDocs, and Sphinx. See [Frameworks](/frameworks).
+Detected presets include Astro, Next, Nuxt, SvelteKit, Remix, TanStack Start, Vite, Solid Start, Qwik, Angular, Ember, Gatsby, Docusaurus, Eleventy, VitePress, Hugo, Jekyll, Zola, MkDocs, and Sphinx. See [Frameworks](/frameworks).
 
 Override any of it in `sf.jsonc` or on the connection.
 
@@ -129,7 +128,7 @@ Every run appears under **Runs** on the Builds page, and a run's detail view car
 From the CLI:
 
 ```bash
-sf builds ls
+sf builds list
 sf builds logs bld_123 --follow
 ```
 

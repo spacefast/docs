@@ -49,7 +49,9 @@ By default a client asks for these scopes.
 | `publish:write` | Publish new immutable versions |
 | `domains:read` | Read Space hostnames and certificate status. Read domain registrations and DNS records when enabled |
 | `domains:write` | Manage Space hostnames. Start domain purchases and manage DNS records when enabled |
+| `billing:read` | Read team plans, subscriptions, usage, and saved payment method details |
 | `oauth-apps:write` | Register and manage the team's Sign in with Spacefast apps |
+| `person-pages:read` | Read private pages other people shared with the account personally |
 | `offline_access` | Refresh access without another interactive sign-in |
 
 The default leaves out `spaces:delete` and `billing:purchase`. Add `spaces:delete` to the request, or approve it when an agent asks to delete a Space. Hosted MCP carries no connector scopes.
@@ -175,8 +177,8 @@ Size caps are checked before any bytes are read.
 
 | Cap | Value |
 |---|---|
-| Total upload | 128 MiB |
-| One file | 64 MiB |
+| Total upload, folder or archive | 128 MiB |
+| One regular file | 1 GiB |
 | File count | 100,000 |
 | One path | 1,024 bytes |
 

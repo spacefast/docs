@@ -42,7 +42,7 @@ curl https://api.spacefast.com/v1/spaces \
   -H "Authorization: Bearer sfa_xxxxxxxx"
 ```
 
-An `sfa_` key is 56 characters after the prefix. Spacefast stores only a hash of it, which is why nobody can read a key back to you, ever.
+An `sfa_` key is 56 characters after the prefix. Spacefast stores only a hash of it, so nobody can show you the key again.
 
 ## Presets
 
@@ -57,7 +57,7 @@ A preset is a named bundle of permissions. Pick the narrowest one that does the 
 | `billing_viewer` | Billing viewer | Read team and billing information, nothing else |
 | `team_admin` | Team admin | Everything this team can do |
 
-`space_publisher` and `ci_deploy` carry the same publish permissions. `space_admin` is the default when a request names no preset. It deliberately stops short of `team_admin`: it can never mint keys, manage members, or touch billing.
+`space_publisher` and `ci_deploy` carry the same publish permissions. `space_admin` is the default when a request names no preset. Unlike `team_admin`, it can't create keys, manage members, or change billing.
 
 ## How permissions compile
 
@@ -69,12 +69,12 @@ Your own browser session has no stored policy. Spacefast compiles one per team f
 |---|---|
 | `owner` | Every action (`*`) |
 | `admin` | Every action (`*`) |
-| `member` | A fixed list: read, create, update, rename, and publish spaces; read, promote, and download versions; read domains; read, trigger, and create builds; read the team; read billing |
+| `member` | A fixed list: read, create, update, rename, and publish spaces; read, promote, and download versions; read, attach, and verify domains; read, trigger, and create builds; read the team; read billing |
 
 Two rules follow from that:
 
 - **A key can never grant more than you have.** Minting a key whose policy exceeds your own is refused with `policy_exceeds_grantor`. A member cannot mint a key at all, because minting credentials is not on the member list.
-- **A key follows your role, not a snapshot of it.** Keys that follow team membership pin the exact permissions they were granted, so redefining a preset later never quietly widens an existing key.
+- **A key's ceiling is fixed when it's created.** A key that follows your team membership also tracks it: leaving a team ends the key's access to that team, and a role change there takes effect right away, while its access to your other teams continues. Redefining a preset later never widens or narrows an existing key.
 
 Keys created through the API can also be scoped to a single Space instead of the whole team, which narrows the policy to exactly that Space.
 

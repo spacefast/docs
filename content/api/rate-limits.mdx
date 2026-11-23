@@ -35,7 +35,7 @@ A `429` adds `Retry-After`, also in seconds.
 When a stricter hourly limiter is the one that rejected you, these headers describe that limiter's window rather than the per-minute one. So the number you see on a publish 429 is the publish window, and waiting that long is the right move.
 
 :::warning[The headers can be missing]
-Rate limiting fails open. If the accounting backend is unavailable, the request goes through anyway. The response then deliberately carries no `RateLimit-*` headers, rather than reporting invented numbers. Client code must not require them to be present.
+Rate limiting fails open. If the accounting backend is unavailable, the request goes through anyway. The response then has no `RateLimit-*` headers, because there are no real numbers to report. Client code must not require them to be present.
 :::
 
 ## Hourly limits on publishes, builds, and Spaces

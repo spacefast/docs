@@ -15,7 +15,7 @@ npx -y plugins add spacefast/plugins -t cursor -y
 
 ## What the plugin adds
 
-### MCP servers
+### MCP server
 
 ```json .mcp.json
 {
@@ -23,31 +23,26 @@ npx -y plugins add spacefast/plugins -t cursor -y
     "spacefast": {
       "type": "http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-`spacefast` is the hosted server, which has no filesystem, so `publish` there takes inline files. `spacefast-local` runs on your machine over stdio and can publish a folder. The version in `args` is stamped at release.
+This is the hosted server. Complete the browser OAuth flow when Cursor prompts you. It has no filesystem, so `publish` takes inline files, and anonymous publishing goes through `sf publish` instead.
 
-### A rule, not a skill directory
+### A rule and skills
 
-Cursor reads rules, so the plugin ships `rules/spacefast.mdc` instead of a skill folder. A `.mdc` file cannot bundle scripts, which is why the Cursor lane has no curl fallbacks.
+The plugin ships the Spacefast skills plus a `rules/spacefast.mdc` rule.
 
 ```md rules/spacefast.mdc
 ---
-description: "Publish and manage Spacefast spaces when the user wants to deploy, host, publish, share, update, claim, inspect, roll back, or configure a site."
+description: "Build and publish websites, edit existing Spaces, manage sharing and domains, and apply saved team standards with Spacefast. Use the installed task skill for the requested workflow."
 globs:
 alwaysApply: false
 ---
 ```
 
-`alwaysApply: false` means Cursor pulls the rule in when the description matches what you asked for, rather than pinning it to every request. The body is the same routing guidance the skill carries. See [skills](/agents/skills).
+`alwaysApply: false` means Cursor pulls the rule in when the description matches what you asked for, rather than adding it to every request. The body is the same routing guidance the base skill carries. See [skills](/agents/skills).
 
 ## Manual config
 

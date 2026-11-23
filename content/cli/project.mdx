@@ -16,7 +16,7 @@ Every command here also takes the [global flags](/cli#global-flags).
 Create a Spacefast project.
 
 ```text
-sf init [NAME] [--space <value>] [-T <team>] [-f] [--runtime static|zero|functions]
+sf init [NAME] [--space <value>] [-T <team>] [--force] [--runtime static|zero|functions]
 ```
 
 ### Arguments
@@ -29,14 +29,10 @@ sf init [NAME] [--space <value>] [-T <team>] [-f] [--runtime static|zero|functio
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-f, --force` | `false` | Overwrite existing generated files. |
+| `--force` | `false` | Overwrite existing generated files. |
 | `--runtime=<static\|zero\|functions>` | `static` | Project runtime to scaffold. |
-| `--template=<todo\|guestbook\|contact>` | none | Zero starter template to scaffold. |
-| `--title=<value>` | none | Zero starter app title. |
-| `--no-git` | off | Skip initializing git for a Zero starter app. |
 | `--space=<value>` | none | Space ID, live URL, domain, or slug to link the directory to. Env `SPACEFAST_SPACE`. |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
-| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
 
 ### Examples
 
@@ -44,7 +40,7 @@ sf init [NAME] [--space <value>] [-T <team>] [-f] [--runtime static|zero|functio
 sf init
 sf init my-site
 sf init --space docs
-sf init my-app --runtime zero --template guestbook
+sf init my-app --runtime zero
 ```
 
 ### What it writes
@@ -205,7 +201,7 @@ sf profiles set NAME [--api-url <url>] [--token <key>]
 
 | Argument | What it does |
 | --- | --- |
-| `<name>` | Profile name. Starts with a letter or number, then up to 64 letters, numbers, dots, underscores, or hyphens. |
+| `<name>` | Profile name. Starts with a letter or number, then up to 63 more letters, numbers, dots, underscores, or hyphens. |
 
 | Flag | Default | What it does |
 | --- | --- | --- |
@@ -233,12 +229,12 @@ sf profiles use staging
 
 Sets the profile used when no `--profile` flag or `SPACEFAST_PROFILE` is present. Fails with `unknown_profile` (exit 2) if the profile is not configured.
 
-### sf profiles rm
+### sf profiles remove
 
-Remove a provider profile.
+Remove a provider profile. Aliased as `sf profiles rm`.
 
 ```text
-sf profiles rm NAME [-y]
+sf profiles remove NAME [-y]
 ```
 
 ```bash
@@ -252,7 +248,7 @@ Deletes the profile and its stored credential after confirming. It refuses with 
 Open a private Space.
 
 ```text
-sf open [TARGET] [--path <route>] [--show-secret] [-T <team>] [--claim-token <value>]
+sf open [TARGET] [--path <route>] [--show-secret] [--no-open] [-T <team>]
 ```
 
 ### Arguments
@@ -268,7 +264,7 @@ sf open [TARGET] [--path <route>] [--show-secret] [-T <team>] [--claim-token <va
 | `--path=<route>` | `/` | Clean route to open after the exchange. |
 | `--show-secret` | `false` | Print the temporary handoff URL instead of opening it. |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM`. |
-| `--claim-token=<value>` | none | Space key (`sfc_…`) for an unclaimed anonymous Space. Env `SPACEFAST_CLAIM_TOKEN`. |
+| `--[no-]open` | on | Open the browser. `--no-open` skips it and keeps the URL hidden; pass `--show-secret` to print it. |
 
 ```bash
 sf open

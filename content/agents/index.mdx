@@ -3,7 +3,7 @@ title: Agents
 description: What an agent can do on Spacefast, and the three ways to connect your client to the Spacefast MCP server
 ---
 
-Connect your coding agent to Spacefast once, then ask it to publish. This page covers what an agent can reach, the three connection lanes, and which one to pick.
+Connect your coding agent to Spacefast once, then ask it to publish.
 
 ## What an agent can do
 
@@ -33,7 +33,7 @@ Read [the MCP server page](/agents/mcp-server) for operation tools, runtime diff
 
 <CardGroup cols={3}>
   <Card title="Vendor plugin" icon="package">
-    Your client's own marketplace installs MCP config, the Spacefast skill, and any hooks in one step.
+    Your client's own marketplace installs MCP config, the Spacefast skills, and any hooks in one step.
   </Card>
   <Card title="Universal installer" icon="download">
     One `npx` command that writes the same plugin into any of seven supported clients.
@@ -52,7 +52,7 @@ claude plugin marketplace add spacefast/plugins
 claude plugin install spacefast@spacefast
 ```
 
-You get MCP config, the `spacefast` skill, and for Claude Code one SessionStart hook. Nothing assumes the `sf` CLI is installed.
+You get the hosted MCP connection, the Spacefast skills, and, for Claude Code and Codex, two advisory hooks. Nothing assumes the `sf` CLI is installed.
 
 ### Universal plugins installer
 
@@ -80,16 +80,16 @@ The default connection method is `remote-proxy`, which points your client at `sf
 
 <CardGroup cols={2}>
   <Card title="Claude Code" href="/agents/claude-code" icon="bot">
-    Plugin with skill, bundled scripts, and a SessionStart hook.
+    Plugin with the hosted MCP server, skills, and two advisory hooks.
   </Card>
   <Card title="Codex" href="/agents/codex" icon="terminal">
-    Plugin with skill and bash fallback scripts, or a TOML entry.
+    Plugin with the hosted MCP server and skills, or a TOML entry.
   </Card>
   <Card title="Cursor" href="/agents/cursor" icon="mouse-pointer">
-    Plugin with an always-available rule, or a one-click deeplink.
+    Plugin with skills and a rule, or a one-click deeplink.
   </Card>
   <Card title="Claude Desktop" href="/agents/claude-desktop" icon="monitor">
-    A double-click desktop extension with an optional token field.
+    A double-click desktop extension that runs the MCP server on your computer.
   </Card>
   <Card title="Any other MCP client" href="/agents/other-clients" icon="plug">
     The stdio command, the hosted URL, and generic JSON config.

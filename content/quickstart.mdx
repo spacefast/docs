@@ -11,7 +11,7 @@ You can publish a folder of static files and get a live `space.fast` URL in one 
 
 You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you, see [Frameworks and builds](/frameworks).
 
-Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window — no account needed. See [Drop](/publish#publish) for the full walkthrough.
+Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window. No account needed. See [Drop](/publish#publish) for the full walkthrough.
 
 <Steps>
   <Step title="Install the CLI">
@@ -20,7 +20,7 @@ Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a f
     npm install -g spacefast
     ```
 
-    The npm package needs Node.js 20.3 or newer. On macOS or Linux you can use Homebrew instead (`brew install spacefast/tap/spacefast`). Standalone binaries are also available. Check the install:
+    The npm package needs Node.js 22.19 or newer. On macOS or Linux you can use Homebrew instead (`brew install spacefast/tap/spacefast`). Standalone binaries are also available. Check the install:
 
     ```bash
     sf --version
@@ -64,16 +64,16 @@ Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a f
   </Step>
   <Step title="Publish again, then roll back">
 
-    If you skipped sign-in, run `sf spaces claim` in this directory first. It asks you to sign in and attach the Space to a team. `sf versions ls` and rollback by version number need a claimed Space.
+    If you skipped sign-in, run `sf spaces claim` in this directory first. It asks you to sign in and attach the Space to a team. `sf versions list` and rollback by version number need a claimed Space.
 
     Change a file and run `sf publish ./dist` again. Only changed files upload. You get `v2`, and `live` now points at it. The version URL for a retained `v1` still serves the old build.
 
     ```bash
-    sf versions ls
+    sf versions list
     sf rollback v1
     ```
 
-    Rolling back moves the `live` channel to `v1`. Nothing is rebuilt. `sf promote v2` moves it forward again.
+    Rolling back puts `v1`'s files live without running a build. By default it applies your current rewrites, so the result is a new version. To put `v2` back, run `sf promote v2`.
 
   </Step>
   <Step title="Add your domain">

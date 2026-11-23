@@ -37,7 +37,7 @@ The first two are real usage from the last 30 days.
 | When | Pauses | Keeps working |
 | --- | --- | --- |
 | Personal uses its $1 | New [builds](/ci) and [Workers](/functions) | Deployed Spaces: serving, compute, email |
-| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces |
+| You reach your spending cap | New builds and Workers. Nothing above the cap is charged | Deployed Spaces, until usage reaches the serving-pause threshold, twice the cap unless you change it. Then they stop serving until you raise the cap or the month resets |
 | A Space hits one of its limits | That request gets a 429 ([rate limiting](/infrastructure/rate-limiting)), or that publish gets an [error](/errors) naming the limit | The rest of the Space |
 
 ## Domains
@@ -64,7 +64,7 @@ Monthly, in US dollars, before tax. Plans and Boost bill at the start of the mon
 
 ### What if I upgrade or downgrade?
 
-Upgrades apply right away, prorated to the day. Downgrades apply at renewal; anything over the new limits keeps serving but becomes read-only until it's back under.
+Upgrades apply right away and are prorated. Downgrades apply at renewal; anything over the new limits keeps serving but becomes read-only until it's back under.
 
 ### Can prices change?
 
@@ -72,7 +72,7 @@ We may change our fees going forward, in line with the [Terms of Service](https:
 
 ### Can I cap my spending?
 
-Yes, on Go, Pro and Business. The cap starts at twice your plan price, with alerts at 50%, 75% and 100%. You're never charged above it, even if usage briefly runs past it.
+Yes, on Go, Pro and Business. The cap starts at twice your plan price, with alerts at 50%, 80% and 100%. You're never charged above it, even if usage briefly runs past it.
 
 ### Do you have nonprofit or education pricing?
 

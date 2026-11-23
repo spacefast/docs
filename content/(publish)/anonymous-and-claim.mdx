@@ -34,7 +34,7 @@ The key is returned once, at creation, and once more if you rotate it. The CLI c
 
 CLI and MCP receipts include the preview URL, claim link, and message for you to relay. CI masks these links. The separate Space key is never printed on its own.
 
-The claim link is a fragment URL on purpose. Browsers never send a fragment to a server, so the key reaches the claim page without being logged anywhere in between.
+The key is in the claim link's URL fragment. Browsers don't send fragments to servers, so the key reaches the claim page without being logged on the way.
 
 From the dashboard, **Drop** does the same thing while signed out. The eyebrow reads **Anonymous drop · Claim it later**, and the result carries a **Claim this space** button.
 

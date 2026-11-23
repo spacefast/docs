@@ -3,7 +3,7 @@ title: Build from a WordPress site
 description: Point a Space's repository build at a public WordPress site, read its content over the REST API during the build, and publish the static output
 ---
 
-Data sources only reach repository builds — a folder publish, or a local `sf publish` of a built directory, never sees them.
+Data sources only reach repository builds. A folder publish, or a local `sf publish` of a built directory, doesn't get them.
 
 A data source is a public WordPress site a build reads content from. Nothing is copied into the Space and nothing is written back. The platform hands the build a URL and a source map. Your build code fetches over the WordPress REST API, and the output publishes like any other static build.
 
@@ -83,7 +83,7 @@ Two variables are injected into every repository build on a Space that has at le
 | `WORDPRESS_URL` | The default source's canonical URL |
 | `SPACEFAST_DATA_SOURCES` | JSON: `{"dataSources":{"<name>":{"kind":"wordpress","url":"..."}},"defaultDataSource":"<name>"}` |
 
-Your own build variables win. Defining `SPACEFAST_DATA_SOURCES` yourself, or the older spelling `SPACEFAST_DATASOURCES`, suppresses the generated map entirely and no `WORDPRESS_URL` is injected either. Defining `WORDPRESS_URL` alone overrides just the default URL and leaves the map intact. Set them with `sf env set`, described in [Frameworks and builds](/frameworks).
+Your own build variables win. Defining `SPACEFAST_DATA_SOURCES` yourself suppresses the generated map entirely and no `WORDPRESS_URL` is injected either. Defining `WORDPRESS_URL` alone overrides just the default URL and leaves the map intact. Set them with `sf env set`, described in [Frameworks and builds](/frameworks).
 
 The source map is serialized with names in bytewise order, so the value is stable across builds that changed nothing.
 

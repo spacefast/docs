@@ -29,10 +29,11 @@ sf domains add <hostname> [--space <value>] [--role standard|primary|redirect]
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--role=<standard\|primary\|redirect>` | none | How the domain behaves. `primary` makes it the Space's main address |
-| `--redirect-to=<value>` | none | Destination for redirect domains. Requires `--role`. A value starting with `/` or carrying a scheme is kept verbatim, otherwise `https://` is prepended |
-| `--redirect-status=<301\|302\|307\|308>` | `308` | HTTP status for redirect domains. Requires `--role` |
+| `--redirect-to=<value>` | none | Destination for redirect domains. Requires `--role redirect`. Must be an absolute URL: a value with a scheme is kept as written, a bare hostname gets `https://`, and a path such as `/docs` is refused |
+| `--redirect-status=<301\|302\|307\|308>` | `308` | HTTP status for redirect domains. Requires `--role redirect` |
 | `--wait` / `--no-wait` | `false` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work. Minimum 1 |
+| `--primary` | off | Make this domain the Space's primary address. Same as `--role primary` |
 
 The command makes three calls: it creates the domain in the Space's team, attaches it to the Space with the role you asked for, and queues a DNS check.
 
@@ -91,6 +92,7 @@ sf domains check <domain> [--space <value>] [--wait] [--wait-timeout <seconds>]
 | --- | --- | --- |
 | `--wait` / `--no-wait` | `false` | Wait until queued work finishes before returning |
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work. Minimum 1 |
+| `--retry-ssl` | off | Ask for a new HTTPS certificate now instead of waiting for the next scheduled attempt |
 
 ```bash
 sf domains check example.com --space docs
@@ -101,10 +103,10 @@ sf domains check example.com --space docs
 ```text
 Checked example.com.
 Verification: verified
-Operation: opr_xxxxxxxx
+Operation: op_xxxxxxxx
 ```
 
-On `pending` or `failed` it reprints the required DNS records and tells you to rerun the check. Run `sf domains diagnostics <name>` instead to see the records it actually observed.
+On `pending` or `failed` it reprints the required DNS records and tells you to rerun the check. Run `sf domains diagnostics <name>` instead to see the records it found.
 
 ## sf domains diagnostics
 
@@ -138,32 +140,32 @@ www.example.com  purpose=www   dns=not_configured txt=missing   ssl=missing
 
 `dns` is `ok` or `not_configured`. `txt` is `ok`, `missing`, or `not_required`.
 
-## sf domains ls
+## sf domains list
 
-List domains attached to a Space. Aliased as `sf domains list`.
+List domains attached to a Space. Aliased as `sf domains ls`.
 
 ```text
-sf domains ls [--space <value>]
+sf domains list [--space <value>]
 ```
 
 No arguments, no command-specific flags.
 
 ```bash
-sf domains ls --space docs
+sf domains list --space docs
 ```
 
 ### Output
 
 A table of `DOMAIN | VERIFICATION | KIND | LAST CHECKED`, or the line "No domains attached to this space."
 
-## sf domains rm
+## sf domains remove
 
-Remove a domain assignment from a Space. Aliased as `sf domains remove` and `sf domains delete`.
+Remove a domain assignment from a Space. Aliased as `sf domains rm`.
 
 **This unassigns, it does not delete.** The command sends `{"spaceId": null}`, so the hostname stays in your team's domain inventory and can be attached to another Space. The Space pointer is cleared only after provider teardown finishes, so the record keeps pointing at the Space while it drains.
 
 ```text
-sf domains rm <domain> [--space <value>] [--wait]
+sf domains remove <domain> [--space <value>] [--wait]
 ```
 
 ### Arguments
@@ -181,7 +183,7 @@ sf domains rm <domain> [--space <value>] [--wait]
 This is a destructive remote action. It prompts "Remove this domain from the space?" unless you pass `-y`. In agent mode it refuses with `confirmation_required` (exit 2) until you pass `-y` explicitly.
 
 ```bash
-sf domains rm example.com --space docs
+sf domains remove example.com --space docs
 ```
 
 ## sf routing compute
@@ -209,14 +211,14 @@ A `# _redirects` block, a `# _headers` block, then one `severity: file:line mess
 Compile local `_redirects`, `_headers`, and `sf.jsonc` routing rules, and optionally match URLs against the merged result. This runs entirely on your machine. It takes no space selection flags and makes no API call.
 
 ```text
-sf routing inspect [-r <dir>] [--url <value>]
+sf routing inspect [--routing <dir>] [--url <value>]
 ```
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `-r, --routing=<dir>` | `.` | Directory holding `_redirects`, `_headers`, and `sf.jsonc` |
+| `--routing=<dir>` | `.` | Directory holding `_redirects`, `_headers`, and the Space config file (`spacefast.config.ts` or `sf.jsonc`) |
 | `--url=<value>` | none | URL or path to match against the compiled rules. Repeatable |
 
 ```bash

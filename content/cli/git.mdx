@@ -35,12 +35,9 @@ sf git connect [--space <value>] [--provider github|gitlab|bitbucket|generic]
 | `--provider=<github\|gitlab\|bitbucket\|generic>` | none | Repository host |
 | `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
 | `--repository=<owner/repo>` | origin remote | Repository full name |
-| `--repository-id=<value>` | resolved from GitHub | Repository ID from the host |
+| `--repository-number=<value>` | resolved from GitHub | Repository's numeric ID on the host |
 | `--repository-name=<value>` | none | Repository name from the host |
-| `--clone-url=<value>` | none | Clone URL when safe to expose |
-| `--upstream-url=<value>` | none | Upstream repository URL |
-| `--detect-urls` / `--no-detect-urls` | `true` | Detect clone and upstream URLs from the origin remote |
-| `--installation-id=<value>` | resolved | GitHub App installation ID. Env `SPACEFAST_REPOSITORY_INSTALLATION_ID`. Pass it when several installations grant the repository |
+| `--installation=<value>` | resolved | GitHub App installation ID. Env `SPACEFAST_REPOSITORY_INSTALLATION_ID`. Pass it when several installations grant the repository |
 | `--credential=<value>` | none | Generic Git clone token, stored encrypted by the API. Env `SPACEFAST_REPOSITORY_CREDENTIAL` |
 | `--default-branch=<value>` | none | Repository default branch |
 | `--production-branch=<value>` | none | Branch that publishes to production |
@@ -60,6 +57,7 @@ sf git connect [--space <value>] [--provider github|gitlab|bitbucket|generic]
 | `--apply-best` | `false` | Detect and save the highest-ranked build settings after connecting |
 | `--sync` | `false` | Request repository sync after connecting |
 | `--build-now` | `false` | Queue a build after connecting |
+| `--wait-timeout=<seconds>` | `900` | Seconds to wait for queued work to finish before giving up |
 
 `--apply-best`, `--sync`, and `--build-now` require `--connection-type connected`. Passing neither `--repository` nor a local git origin is a validation error.
 
@@ -67,7 +65,7 @@ The connection carries one `productionBranch`. Every other branch is a preview.
 
 ```bash
 sf git connect --space docs --provider github --repository owner/repo
-sf git connect --space docs --provider github --repository owner/repo --installation-id 12345678
+sf git connect --space docs --provider github --repository owner/repo --installation 12345678
 sf git connect --space docs --repository owner/repo --production-branch main --sync
 ```
 
@@ -78,7 +76,7 @@ sf git connect --space docs --repository owner/repo --production-branch main --s
 | `github_repository_integration_not_ready` | 30 | GitHub App integration is not ready yet |
 | `github_installation_not_found` | 20 | No matching installation |
 | `github_repository_not_authorized` | 20 | The installation does not grant that repository |
-| `github_installation_ambiguous` | 2 | More than one installation grants it. Pass `--installation-id` |
+| `github_installation_ambiguous` | 2 | More than one installation grants it. Pass `--installation` |
 
 ## sf git inspect
 
@@ -115,8 +113,6 @@ sf git update [--space <value>] [--connection-type connected|hosted] ...
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--connection-type=<connected\|hosted>` | `connected` | Repository connection type |
-| `--clone-url=<value>` | unchanged | Clone URL when safe to expose |
-| `--upstream-url=<value>` | unchanged | Upstream repository URL |
 | `--production-branch=<value>` | unchanged | Branch that publishes to production |
 | `--credential=<value>` | unchanged | Generic Git clone token, stored encrypted by the API. Env `SPACEFAST_REPOSITORY_CREDENTIAL` |
 | `--clear-credential` | `false` | Clear the stored generic Git clone token |
@@ -255,7 +251,7 @@ sf git origin --set-origin
 List GitHub App installations available to the current user.
 
 ```text
-sf git github installations [--space <value>]
+sf git github installations
 ```
 
 No arguments, no command-specific flags.
@@ -269,7 +265,7 @@ sf git github installations
 List repositories available to a GitHub App installation.
 
 ```text
-sf git github repos <installation> [--space <value>]
+sf git github repos [installation]
 ```
 
 ### Arguments

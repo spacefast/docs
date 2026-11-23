@@ -27,6 +27,7 @@ If the first argument matches a method it is treated as one and the second argum
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `-i, --input=<value>` | none | JSON request body. A literal string, `@file`, or `-` for stdin. |
+| `--experimental` | off | Allow a feature-gated operation that is enabled for your account or team, even though it sits outside the public contract. |
 | `--idempotency-key=<value>` | none | Replay-safe logical-attempt key for retryable mutations. Sent as the idempotency header. |
 | `--include` | off | Write the HTTP status and a safe subset of response headers to stderr. |
 | `--paginate` | off | Emit every page of a cursor-paginated list `GET` as JSON Lines. |
@@ -54,8 +55,10 @@ sf api GET /v1/spaces/spc_123/versions/ver_123/archive --output site.tar.gz
 | Anything outside `/v1/` | `path_not_public` (exit 2) |
 | `/v1/mcp…` | `audience_not_callable` (exit 2) |
 | `/v1/auth/agent-handoffs…` | `audience_not_callable` (exit 2) |
-| `/v1/teams/{teamId}/billing…` | `audience_not_callable` (exit 2), manage billing in the dashboard |
+| `/v1/teams/{teamId}/billing/…` | `audience_not_callable` (exit 2), manage billing in the dashboard. `GET /v1/teams/{teamId}/billing` itself is public |
 | `/v1/internal…` | `audience_not_callable` (exit 2) |
+
+`--experimental` lifts the `audience_not_callable` refusal only for a dashboard operation enabled for your account or team. It never opens `/v1/mcp`, agent handoffs, or internal paths.
 
 Paths are also normalized before they go out. A URL fragment, a backslash, a `.` or `..` segment, an encoded separator, or invalid percent-encoding each fails with `validation_error` (exit 2) rather than being sent.
 

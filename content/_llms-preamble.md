@@ -4,7 +4,7 @@ description: Agent guidance that Blume places at the top of dist/llms.txt throug
 ---
 
 Spacefast publishes static sites and runs apps. You can drive all of it from the
-CLI, the REST API, the SDK, or MCP. Team membership and billing changes need a person in the dashboard.
+CLI, the REST API, the SDK, or MCP. Billing changes need a person in the dashboard.
 
 The sections below index every authored page. Read this header first: it covers
 the things an agent needs that a link list cannot express.

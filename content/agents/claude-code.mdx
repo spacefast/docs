@@ -18,9 +18,9 @@ Two other lanes exist. `npx -y plugins add spacefast/plugins -t claude-code -y` 
 
 ## What the plugin adds
 
-### MCP servers
+### MCP server
 
-Two entries, hosted and local.
+One entry, the hosted server.
 
 ```json .mcp.json
 {
@@ -28,25 +28,20 @@ Two entries, hosted and local.
     "spacefast": {
       "type": "http",
       "url": "https://mcp.spacefast.com"
-    },
-    "spacefast-local": {
-      "command": "npx",
-      "args": ["-y", "spacefast@<version>", "mcp"],
-      "env": {}
     }
   }
 }
 ```
 
-`spacefast` is the hosted server. `spacefast-local` runs the same server on your machine over stdio, so `publish` can read a folder instead of taking inline files. The version in `args` is stamped at release; the shipped file pins whatever the release built.
+Claude Code stores the OAuth credential for it. The `"type": "http"` field is required. Claude Code rejects a bare `{ "url": ... }` entry.
 
-The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url": ... }` entry.
+The plugin doesn't add the local stdio server. If you need it to read folders on your machine, set it up separately with [sf setup agent](/agents/sf-setup).
 
-### The Spacefast skill
+### Skills
 
-`skills/spacefast/` holds `SKILL.md`, `references.md`, and seven bash scripts. The skill routes each request to the right tool and sets the publish-poll-report loop. It also explains how to relay claim links without printing the separate Space key. The scripts are a curl fallback for when MCP is unavailable. See [skills](/agents/skills).
+The base skill, `skills/spacefast/`, routes each request to the right tool and sets the publish-poll-report loop. Task skills cover building a site, editing a Space, sharing, custom domains, fixing a deployment, and the Design System. Each skill is a `SKILL.md` plus a `references.md`. See [skills](/agents/skills).
 
-### One SessionStart hook
+### Hooks
 
 ```json hooks.json
 {
@@ -61,18 +56,32 @@ The `"type": "http"` field is load-bearing. Claude Code rejects a bare `{ "url":
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(Bash|PowerShell|exec_command|shell_command|mcp__(?:plugin_spacefast(?:[-_]local)?_)?spacefast(?:[-_]local)?__(?:publish|createPublish|createSpaceBuild|retryBuild|finalizeSpaceVersion|promoteSpaceVersion|commitSpaceSourceWorkspaceChanges))$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${GROK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}/hooks/design-reminder.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }
 ```
 
-The script reads `.spacefast/space.json` in your working directory. If that file names a Space, it writes one line into the session and nothing else.
+The `SessionStart` script reads `.spacefast/space.json` in your working directory. If that file names a Space, it writes this line into the session, followed by a reminder to check the team's Design System before publishing.
 
 ```text
 Spacefast project detected. This directory is linked to <space> at <liveUrl>. Use the Spacefast skill and preserve .spacefast/space.json. Treat .spacefast/state.json as credential material: never print, commit, or archive it.
 ```
 
-The live URL is appended only when it starts with `https://`. If the file is missing or holds no Space, the hook prints nothing. It makes no network calls and sends no telemetry.
+The live URL is appended only when it starts with `https://`. If the file is missing or holds no Space, the hook prints nothing.
+
+The `PreToolUse` script adds the same Design System reminder before a Spacefast publish, build, or promote tool call, or before a shell command that runs `sf`. It's advisory and never blocks the call. Neither hook makes network calls or sends telemetry.
 
 ## Verify it works
 
@@ -88,7 +97,7 @@ If the tools are wired up, Claude Code names the tool it called. Then try a publ
 Publish this folder to Spacefast and give me the live URL.
 </Prompt>
 
-A first publish with no account returns a claim link. Claim it in the browser to keep the Space. See [Publish without an account](/anonymous-and-claim).
+The hosted server needs a signed-in connection, so the plugin can't publish anonymously. To publish without an account, use `sf publish`, which returns a claim link. See [Publish without an account](/anonymous-and-claim).
 
 ## Typical prompts
 

@@ -41,7 +41,7 @@ sf setup agent -y
 `--yes` skips both prompts, auto-detects your clients, and configures **remote proxy** MCP. That is the same default the interactive picker offers.
 
 :::warning
-The `--yes` flag's own help text says it accepts local stdio MCP. That text is wrong. The default is the remote proxy. Pass `--local` when you actually want the local stdio server.
+With `--yes`, setup accepts the hosted MCP server through `sf mcp proxy`. Pass `--local` to use the local stdio server instead.
 :::
 
 ## Flags
@@ -50,13 +50,14 @@ The `--yes` flag's own help text says it accepts local stdio MCP. That text is w
 |---|---|
 | `--agent <id>` | Configure one client. Repeat for more. `auto` detects, `all` covers everything, `generic` writes a project `.mcp.json` |
 | `--yes`, `-y` | Skip prompts and auto-detect |
-| `--project`, `-p` | Install skills into this project instead of the client's global skills directory |
+| `--project` | Install skills into this project instead of the client's global skills directory |
 | `--remote` | Hosted MCP through `sf mcp proxy` and your CLI login |
 | `--local` | Local stdio MCP instead of the proxy. Cannot be combined with `--remote` or `--oauth` |
 | `--oauth` | With `--remote`, connect to the hosted URL directly and let the editor handle OAuth. Requires `--remote` |
 | `--skip-mcp` | Install skills without configuring MCP |
 | `--force` | Overwrite locally modified or unverified Spacefast skill files |
 | `--handoff` | Redeem a one-use handoff link from the dashboard before generating setup. The link is read from stdin |
+| `--agent-name <name>` | With `--handoff`, the name shown for the connection, such as `Claude Code`. Defaults to the detected client |
 
 ```bash
 sf setup agent -y --agent cursor --remote --oauth
@@ -68,7 +69,7 @@ Command arguments land in shell history and in the process list. `sf` aborts bef
 
 ## What it writes into your project
 
-Skills are the only thing that lands in your project, and only with `--project`. Everything else goes to the client's global config, with two exceptions. VS Code's MCP config is project-scoped at `<project>/.vscode/mcp.json`, and `--agent generic` writes `<project>/.mcp.json`.
+Skills are the only thing that lands in your project, and only with `--project`. Everything else goes to the client's global config, with two exceptions. VS Code writes `<project>/.vscode/mcp.json` with `--project` or when run from a remote terminal, and `--agent generic` writes `<project>/.mcp.json`.
 
 With `--project`, the skill goes into that client's project skills directory. For most clients that is `<project>/.agents/skills/spacefast/`.
 

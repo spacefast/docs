@@ -32,8 +32,8 @@ Detection uses this table for both paths. The output directory column is what to
 
 | Framework | Detected by | Default build command | Output directory |
 | --- | --- | --- | --- |
-| Nextra | `nextra` dependency | `next build` | `out` |
-| [Next.js](/recipes/next) | `next` dependency | `next build` | `out` |
+| `vinext` | `vinext` dependency, unless the build script runs `next build`. If `next` is also installed, the build script must run `vinext build`, `vinext deploy`, or `vinext export` | `vinext build` | `dist/client` |
+| [Next.js](/recipes/next) | `next` or `nextra` dependency | `next build` | `out` |
 | TanStack Start | `@tanstack/react-start` dependency | package script | `dist/client` |
 | Nuxt | `nuxt` dependency | `nuxt generate` | `.output/public` |
 | [Astro](/recipes/astro) | `astro` dependency or `astro.config.*` | `astro build` | `dist` |
@@ -119,7 +119,7 @@ printf %s "$TOKEN" | sf env set BUILD_TOKEN --value-from-stdin --space docs
 
 Secrets are redacted from build logs. Every non-empty resolved value becomes a redaction string, along with its base64 and URI-encoded forms, so a value that gets encoded mid-build still comes out masked. What Spacefast stores about a variable on the build is its name, a hash of the value, whether it is secret, and which scope it came from. Never the value.
 
-Two variables are injected for you, and only on builds that are not going to `live`, and only when you have not defined them yourself:
+Two variables are injected for you on builds that target no channel, such as platform preview builds, when you have not defined them yourself:
 
 | Variable | Value |
 | --- | --- |
@@ -149,7 +149,7 @@ A build whose output is byte-identical to the live version succeeds without mint
 <Tab title="CLI">
 
 ```bash
-sf builds ls --space docs
+sf builds list --space docs
 sf builds logs bld_7c3e0a19d84b42f0916d5ac8b7e21f34 --follow
 ```
 
@@ -184,7 +184,7 @@ Logs are capped at 500 entries and 512 KiB per build. Past that the oldest entri
 | Per-phase timeout | 180 seconds |
 | Build output archive | 512 MiB by default |
 
-Your build commands are never retried automatically. A crashed run fails the build deterministically instead of silently running your commands a second time. Only infrastructure failures that happen before the build starts are requeued, at most twice.
+Spacefast doesn't retry your build commands. If a run crashes, the build fails instead of running your commands again. Only infrastructure failures that happen before the build starts are requeued, at most twice.
 
 Retrying is explicit and makes a **new** build, linked back to the original and reusing its exact input and settings snapshot.
 
@@ -224,13 +224,13 @@ export default defineConfig({
 });
 ```
 
-Same routing conventions as the Astro integration, plus a check that the build is actually publishable. `mode` defaults to `static`, and a static build with no `.html` file anywhere in the output fails rather than deploying a blank site. `mode: "spa"` writes an `/index.html` fallback for `/*` instead. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`. Needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`.
+Same routing conventions as the Astro integration, plus a check that the build can be published. `mode` defaults to `static`, and a static build with no `.html` file anywhere in the output fails rather than deploying a blank site. `mode: "spa"` writes an `/index.html` fallback for `/*` instead. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`. Needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`.
 
 ### `@spacefast/next-adapter`
 
-Wired for you. When `sf publish` runs `next build` on Next 16.2 or 16.3, it points Next at the bundled adapter through `NEXT_ADAPTER_PATH`, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
+Wired for you. When `sf publish` runs `next build` on Next 16.4, it points Next at the bundled adapter through `NEXT_ADAPTER_PATH`, so there is nothing to add to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
 
-The adapter runs on Next 16.2 and 16.3, the releases with the `experimental.adapterPath` hook it needs. Server-rendered builds also work on Next 15.5.24 and later 15.5 releases without the adapter. Other releases from 14.2 through 16.4 build only with `output: "export"`. See the [Next.js recipe](/recipes/next) for the full table.
+Automatic builds accept Next 16.4.5 and later 16.4 releases, which use the adapter, and Next 15.5.29 and later 15.5 releases, which build without it. Other releases are refused. See the [Next.js recipe](/recipes/next) for the export fallback.
 
 ## Next steps
 
