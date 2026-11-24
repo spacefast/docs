@@ -50,6 +50,18 @@ can only fetch and import. Hosted MCP runs at `https://mcp.spacefast.com` and
 signs in through browser OAuth. Per-agent instructions live at
 [agent setup](https://spacefast.com/docs/setup/).
 
+## Find and buy a domain
+
+Spacefast sells domains at cost. Search with
+`POST https://api.spacefast.com/v1/domains/search` or
+`sf domains search "your idea" --json`, and confirm a name with
+`GET https://api.spacefast.com/v1/domains/research/availability?name=example.com`.
+Neither needs an account. Buying needs the user's own sign-in, a saved
+registrant contact, and `POST /v1/domains/purchases` with the total the user
+agreed to. Without `billing:purchase`, give the user `purchase.confirmUrl`.
+The whole flow is in
+[Find and buy a domain](https://spacefast.com/docs/buy-domains/).
+
 ## Search the docs
 
 Search returns matching pages without crawling this file:
