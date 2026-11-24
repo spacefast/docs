@@ -3,14 +3,14 @@ title: Connectors
 description: Register tool sources, connect accounts, set policy rules, and run connector tools over the API, with the scopes, shapes, and error codes each step uses
 sidebar:
   order: 9
-  badge: Private Beta
+  badge: Public Beta
 ---
 
-<Badge variant="warning">Private Beta</Badge>
+<Badge variant="warning">Public Beta</Badge>
 
-Connectors are in Private Beta. A team without access gets `feature_unavailable`.
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`.
 
-The connectors API lets a team register tool sources, connect accounts, set policy rules, and run tools. Every operation sits under `/v1/connectors` with the `Connectors` tag. For the concepts and the dashboard, see [Team connectors](/team-connectors). To show a connection's data on a Space's pages, see [Connectors](/connectors).
+The connectors API lets a team register tool sources, connect accounts, set policy rules, and run tools. Every operation sits under `/v1/connectors` with the `Connectors` tag. For concepts and dashboard workflows, see [Connectors](/connectors). To show a connection's data on a Space's pages, see [Connectors in Spaces](/space-connectors).
 
 ## Scopes and team selection
 
@@ -20,9 +20,13 @@ The connectors API lets a team register tool sources, connect accounts, set poli
 | `connectors:write` | Register and remove connectors, connect and disconnect accounts, set policy rules. Includes `connectors:read` |
 | `connectors:execute` | Create and resume runs. Includes `connectors:read` |
 
-`connectors:write` does not include `connectors:execute`, and `connectors:execute` does not include `connectors:write`. A dashboard session has these actions for team owners and admins only. See [Authentication](/api/authentication).
+`connectors:write` does not include `connectors:execute`, and `connectors:execute` does not include `connectors:write`.
 
-Connector routes are team-scoped but carry no team in the path. Pass `?team=<id-or-slug>` when your credential can act for more than one team. Without it, the request fails with `team_required`. A team with connectors turned off answers `feature_unavailable`.
+A signed-in session compiles scopes from the caller's team role: team owners and admins receive all three scopes, and team members receive `connectors:read` and `connectors:execute`. Team policy rules and per-credential connection limits still apply to every member call.
+
+To limit an API key to specific connections, pass `connectorAccess: { connectionIds: ["cxn_…"] }` when creating or updating the key (`POST /v1/api-keys` or `PATCH /v1/api-keys/{apiKeyId}`). Send `connectorAccess: null` to remove the limit. OAuth grants can be limited to specific connections on the consent screen or updated later on **Connected apps**. See [Authentication](/api/authentication).
+
+Connector routes are team-scoped but carry no team in the path. Pass `?team=<id-or-slug>` when your credential can act for more than one team. Without it, the request fails with `team_required`. A team without connectors access answers `feature_unavailable`.
 
 ## Register a connector
 
@@ -297,9 +301,9 @@ Runs share a budget of 1,200 per team per hour. Past it, requests fail with `429
 
 ## Resume a parked run
 
-`resumeConnectorRun` takes `action` (`accept`, `decline`, or `cancel`) and `content`, the values a parked call asked for. A `decline` fails the run with `connector_tool_blocked`.
+`resumeConnectorRun` takes `action` (`accept`, `decline`, or `cancel`) and `content`, the values a parked call asked for. A `decline` or `cancel` fails the run with `connector_approval_declined`.
 
-A run parked in `human` mode refuses a decision from an API key or an agent with `human_approval_required`. A person decides at `approvalUrl`. Then call `resumeConnectorRun` with no `action` to read back the outcome and let the run continue. While nobody has decided, that call fails with `connector_approval_required`.
+A run parked in `human` mode refuses a decision from an API key or an agent with `human_approval_required`. A person decides at `approvalUrl`, which executes the call and settles the run. Read the settled status and `result` with `getConnectorRun` (`sf connectors run inspect <runId>`). Calling `resumeConnectorRun` on a settled run fails with `connector_run_not_resumable`, and calling it without an `action` before a decision fails with `connector_approval_required`.
 
 ## Errors
 
@@ -332,7 +336,8 @@ These codes appear in a failed run's `error`, inside a successful HTTP response 
 
 | Code | Status in `error` | When |
 | --- | --- | --- |
-| `connector_tool_blocked` | 403 | A `block` rule matched, or a person denied the call |
+| `connector_tool_blocked` | 403 | A `block` rule matched |
+| `connector_approval_declined` | 403 | A person declined or canceled the parked call |
 | `connector_approval_required` | 403 | The call needed approval and `unattendedApprovals` was `deny` |
 | `connection_ambiguous` | 409 | A `<connector>/<tool>` address matched more than one connection |
 | `connection_not_found` | 404 | The address names no connection the credential can use |
@@ -344,8 +349,15 @@ These codes appear in a failed run's `error`, inside a successful HTTP response 
 | `connector_run_budget_exhausted` | 429 | The run passed its budget of 400 outbound requests or 64 MiB read |
 | `run_replay_diverged` | 409 | A resumed program made different calls than before the pause |
 
-## Space bindings and agents
+## Space bindings, serving, and agents
 
-A Space binds its connector roles to team connections through `listSpaceConnectorBindings`, `bindSpaceConnector`, and `unbindSpaceConnector` under the `Spaces` tag. See [Connectors](/connectors#bind-an-account).
+A Space manages its connector roles, bindings, site-serving requests, public-serving allowances, and visitor connections under the `Spaces` tag:
 
-Hosted MCP exposes no connector operations. On-device MCP, `sf mcp`, reaches connectors through one gateway tool. See [MCP server](/agents/mcp-server).
+- **Roles:** `getSpace` (for the current `config` overlay and `settingsDigest`) and `updateSpace` (sending the full `config` with your `config.connectors` change and `settingsDigest` as `baseSettingsDigest`, because `config` replaces the stored settings overlay).
+- **Bindings:** `listSpaceConnectorBindings`, `bindSpaceConnector`, and `unbindSpaceConnector`.
+- **Site serving:** `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, `denyConnectorServingRequest`, and `setSpaceConnectorPublicServing`.
+- **Visitor connections:** `listVisitorConnectionUsers` and `revokeVisitorConnection`.
+
+See [Connectors in Spaces](/space-connectors#bind-an-account-and-turn-on-site-serving) for the Space workflow.
+
+Hosted MCP exposes no connector operations. On-device MCP, `sf mcp`, reaches connectors through one gateway tool, `search_connector_tools`. See [MCP server](/agents/mcp-server).

@@ -69,7 +69,7 @@ Your own browser session has no stored policy. Spacefast compiles one per team f
 |---|---|
 | `owner` | Every action (`*`) |
 | `admin` | Every action (`*`) |
-| `member` | A fixed list: read, create, update, rename, and publish spaces; read, promote, and download versions; read, attach, and verify domains; read, trigger, and create builds; read the team; read billing |
+| `member` | A fixed list: read, create, update, rename, and publish spaces; read, promote, and download versions; read, attach, and verify domains; read, trigger, and create builds; read and run team connectors (`connectors:read`, `connectors:execute`); read the team; read billing |
 
 Two rules follow from that:
 
@@ -77,6 +77,18 @@ Two rules follow from that:
 - **A key's ceiling is fixed when it's created.** A key that follows your team membership also tracks it: leaving a team ends the key's access to that team, and a role change there takes effect right away, while its access to your other teams continues. Redefining a preset later never widens or narrows an existing key.
 
 Keys created through the API can also be scoped to a single Space instead of the whole team, which narrows the policy to exactly that Space.
+
+## Limit connector access
+
+By default, a key with connector scopes (such as `team_admin`) can reach every team connection. Narrow it to specific connections when an integration should only touch one account:
+
+```bash
+sf api-keys create --name linear-bot --preset team_admin --connection cxn_abc123
+sf api-keys update key_0123456789abcdef --connection cxn_abc123 --connection cxn_def456
+sf api-keys update key_0123456789abcdef --all-connections
+```
+
+Over the API, pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` on `POST /v1/api-keys` or `PATCH /v1/api-keys/{apiKeyId}`, or `connectorAccess: null` to remove the limit. For OAuth apps and CLI logins, choose specific connections under **Choose Connections** on the consent screen, or edit them later on **Connected apps**. See [Connectors](/connectors).
 
 ## What an agent grant cannot do
 

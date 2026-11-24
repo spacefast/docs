@@ -7,14 +7,14 @@ sidebar:
 
 API keys authenticate anything that cannot run a browser login: CI jobs, scripts, servers, agents. A key belongs to a team and carries the permissions of the preset you created it with.
 
-All three subcommands need a login or a `--token` of their own, and they act on your default team unless you name another. Every command here also takes the [global flags](/cli#global-flags).
+Every subcommand needs a login or a `--token` of its own, and acts on your default team unless you name another. Every command here also takes the [global flags](/cli#global-flags).
 
 ## sf api-keys create
 
 Create an API key and print its one-time secret.
 
 ```text
-sf api-keys create [--name <name>] [--preset <preset>]
+sf api-keys create [--name <name>] [--preset <preset>] [--connection <id>...]
 ```
 
 
@@ -25,6 +25,7 @@ sf api-keys create [--name <name>] [--preset <preset>]
 | `--name=<value>` | none | Human-readable API key name. Set one so you can tell keys apart later |
 | `--[no-]open` | on | Open the browser. `--no-open` prints the link instead |
 | `--preset=<value>` | `space_publisher` | Access preset compiled into the key's policy. One of `ci_deploy`, `space_publisher`, `space_admin`, `domain_manager`, `team_admin`, `billing_viewer`. |
+| `--connection=<value>` | all team connections | Connector connection (`cxn_…`) the key may use. Repeat for more. Only `team_admin` includes connector access. |
 
 ### Presets
 
@@ -42,6 +43,7 @@ sf api-keys create [--name <name>] [--preset <preset>]
 ```bash
 sf api-keys create --name ci
 sf api-keys create --name domains-bot --preset domain_manager
+sf api-keys create --name linear-bot --preset team_admin --connection cxn_abc123
 ```
 
 ### Output
@@ -111,6 +113,25 @@ A table of keys, and with `--json` the list envelope from the API straight throu
 ```
 
 `secretPreview` is the only fragment of the secret you ever see again. `lastUsedAt` tells you which keys are dead weight.
+
+## sf api-keys update
+
+Rename an API key, or change which connector connections it may use.
+
+```text
+sf api-keys update <key> [--name <value>] [--connection <id>... | --all-connections]
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--name=<value>` | unchanged | New API key name |
+| `--connection=<value>` | unchanged | Connector connection (`cxn_…`) the key may use. Repeat for more. Cannot be combined with `--all-connections` |
+| `--all-connections` | `false` | Remove the connection limit so the key can use every team connection again |
+
+```bash
+sf api-keys update key_0123456789abcdef --connection cxn_abc123 --connection cxn_def456
+sf api-keys update key_0123456789abcdef --all-connections
+```
 
 ## sf api-keys revoke
 

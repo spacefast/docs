@@ -93,6 +93,8 @@ Things that catch people out:
 
 On **Members**, each row has role and removal actions for owners and admins. Removing someone takes away their access to the team and every Space in it. Anything they published stays where it is, and you can invite them back later.
 
+If the team uses [Connectors](/connectors), the removal review lists the departing member's connector dependencies. Their personal connections disconnect automatically along with any Space bindings pointing to them. Team connections they created stay active while their existing Space bindings stay in place; if an owner or admin rebinds a role on a public, link-shared, or password-protected Space, restore its public-serving allowance before expecting calls to succeed.
+
 Two guards you cannot talk your way past:
 
 - The last owner cannot be removed, and cannot be demoted. Add another owner first.
