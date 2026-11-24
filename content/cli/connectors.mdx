@@ -308,7 +308,7 @@ sf connectors connections update <connection> [--name <value>] [--description <v
 | --- | --- | --- |
 | `--name=<value>` | unchanged | New label. Must not be blank |
 | `--description=<value>` | unchanged | New agent note. An empty string clears it |
-| `--serving`, `--no-serving` | unchanged | Let Spaces bound to this team connection act as this account. See [Connectors in Spaces](/space-connectors#site-serving-for-team-connections) |
+| `--serving`, `--no-serving` | unchanged | Let Spaces bound to this team connection act as this account. See [Connectors](/connectors#bind-an-account-and-site-serving) |
 
 Credentials cannot be edited. To rotate one, run `sf connectors connections reconnect`.
 
@@ -750,7 +750,7 @@ The same as `sf connectors run`, with the same exit codes.
 
 ## Space bindings, roles, serving, and visitors
 
-These commands manage how a Space declares roles, binds team connections, turns on site serving, and handles visitor accounts. Space-scoped commands require `--space` or `SPACEFAST_SPACE` (without one, they fail with `validation_error` and exit 2). See [Connectors in Spaces](/space-connectors).
+These commands manage how a Space declares roles, binds team connections, turns on site serving, and handles visitor accounts. Space-scoped commands require `--space` or `SPACEFAST_SPACE` (without one, they fail with `validation_error` and exit 2). See [Connectors](/connectors#use-connectors-in-a-space).
 
 ### Bindings
 

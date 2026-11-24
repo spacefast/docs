@@ -130,7 +130,7 @@ Outbound requests from a worker leave from Cloudflare's shared network addresses
 
 `env` carries the space's environment variables. See [Environment variables](/environment-variables) for how to set them.
 
-`env.CONNECTORS` calls your Space's [connector roles](/space-connectors#call-it-from-functions) when the version declares any.
+`env.CONNECTORS` calls your Space's [connector roles](/connectors#call-from-functions) when the version declares any.
 
 `env.DB` is always there. It uses the D1 API (`env.DB.prepare(sql).bind(...).all()`) and reaches the space's own database through a broker, so no connection string ever lands in the bundle.
 
