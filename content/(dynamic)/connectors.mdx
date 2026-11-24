@@ -169,7 +169,7 @@ A parked run returns an `approvalUrl` and appears in two dashboard views:
 - **Approvals**, under **Connector calls awaiting approval**.
 - **Runs**, filtered to **Waiting on you**. Click **Review** to inspect the matched rule, arguments, and deadline before approving, or click **Deny** on the row.
 
-**Approve** runs the call once. **Deny** fails it with `connector_tool_blocked`. A parked run expires after 15 minutes.
+**Approve** runs the call once. **Deny** fails it with `connector_approval_declined`. A parked run expires after 15 minutes.
 
 Approvals require a signed-in person. A CLI login or API key trying to approve fails with `human_approval_required`. Read the outcome with `sf connectors run inspect <runId>`. Approving in the dashboard executes the call and settles the run, so `sf connectors run resume <runId>` applies only while the run still awaits a decision (a settled run returns `connector_run_not_resumable`). Pass `--deny-unattended` on `sf connectors run` to fail immediately with `connector_approval_required` instead of parking.
 
@@ -202,7 +202,7 @@ By default, a credential with connector scopes reaches every team connection it 
 - **API keys:** Pass `--connection <connectionId>` (repeatable) on `sf api-keys create` or `sf api-keys update`, or pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` over the API. Remove the limit with `--all-connections` or `connectorAccess: null`. See [API keys](/api-keys#limit-connector-access).
 - **OAuth apps and CLI logins:** Open **Choose Connections** on the consent screen, or edit the allowlist later on **Connected apps** without re-authorizing.
 
-Direct lookups of a connection outside a credential's allowlist answer `404` as if it doesn't exist. Tool runs still return a run record (HTTP `200` or `201`) with `connection_not_found` in the failed run's `error`; see [Errors](/api/connectors#errors).
+Direct lookups of a connection outside a credential's allowlist answer `404` as if it doesn't exist. Tool runs still return a run record (HTTP `200` or `201`): addressing a disallowed connection by ID (`<connectionId>/<tool>`) fails in `error` with `connection_forbidden`, while the short `<connector>/<tool>` form fails with `connection_not_found`; see [Errors](/api/connectors#errors).
 
 ## Keep connections working and clean up
 

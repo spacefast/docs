@@ -723,7 +723,7 @@ sf connectors run resume <run> [--accept | --deny | --cancel] [--content <json>]
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--accept` | `false` | Approve the parked call |
-| `--deny` | `false` | Refuse the parked call. The run fails with `connector_tool_blocked` |
+| `--deny` | `false` | Refuse the parked call. The run fails with `connector_approval_declined` |
 | `--cancel` | `false` | Abandon the run |
 | `--content=<json>` | none | JSON object of values the parked call asked for. Accepts `@file` or `-` for stdin |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |

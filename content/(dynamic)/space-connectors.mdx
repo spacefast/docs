@@ -281,7 +281,7 @@ sf connectors roles remove crm --space example
 sf connectors roles reset crm --space example
 ```
 
-Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, send `config.connectors` on [`updateSpace`](/api/reference/spaces/updatespace) (setting a role to `null` removes it) alongside `baseSettingsDigest` from [`getSpace`](/api/reference/spaces/getspace).
+Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, `config` on [`updateSpace`](/api/reference/spaces/updatespace) replaces the Space's whole stored settings overlay (except `config.network`), so read `config` and `settingsDigest` from [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your `config.connectors` change (setting a role to `null` removes it), and pass `settingsDigest` as `baseSettingsDigest`.
 
 ## Call it from Functions
 
