@@ -2,25 +2,26 @@
 title: Team connectors
 description: Register an OpenAPI spec, GraphQL endpoint, or remote MCP server for your team, connect an account, decide what agents may call, and run tools
 sidebar:
-  badge: Private Beta
+  badge: Public Beta
 ---
 
-<Badge variant="warning">Private Beta</Badge>
+<Badge variant="warning">Public Beta</Badge>
 
-A connector is a source of tools that a team registers once: an OpenAPI spec, a GraphQL endpoint, or a remote MCP server. A connection is one account on that connector. Agents get the tools. The credential stays in Spacefast, and no endpoint ever returns it.
+A connector is a source of tools that a team registers once: an OpenAPI spec, a GraphQL endpoint, or a remote MCP server. A connection is one account on that connector. Agents and Spaces get the tools. The credential stays in Spacefast, and no endpoint ever returns it.
 
-Connectors are in Private Beta. A team without access gets `feature_unavailable`.
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. Enterprise adds team-wide connector allowlists, blocklists, and site-serving governance.
 
 ## Before you start
 
-- Only team owners and admins can open the connectors pages. A member sees **Only Team Owners and Admins Can Manage Connectors**.
-- An API key needs connector scopes. `connectors:read` reads everything. `connectors:write` registers connectors, connects accounts, and sets policy. `connectors:execute` runs tools. `write` and `execute` both include `read`, but neither includes the other. See [API keys](/api-keys).
+- **Team owners and admins** manage connectors in the dashboard: registering tool sources, connecting or disconnecting team accounts, and setting team rules (`connectors:write`).
+- **Team members** can list and run team connections through the API, CLI, and On-Device MCP (`connectors:read` and `connectors:execute`), subject to the team's policy rules and any per-credential connection limits. The team's **Connectors** dashboard pages remain owner and admin only.
+- **API keys** need connector scopes. `connectors:read` reads connectors, connections, tools, rules, and runs. `connectors:write` registers connectors, connects accounts, and sets policy. `connectors:execute` runs tools. `write` and `execute` both include `read`, but neither includes the other. You can also limit an API key or OAuth grant to specific connections. See [API keys](/api-keys).
 
-The pages live under **Connectors** in the team sidebar. A switch in the header moves between **Connectors**, **Runs**, and **Policies**.
+The dashboard pages live under **Connectors** in the team sidebar. A switch in the header moves between **Connectors**, **Runs**, and **Policies**.
 
 ## Add a connector from the catalog
 
-The catalog lists curated presets, the public registry, and your team's own connectors. It has one row per surface, so a service with an API and an MCP server is two rows.
+The catalog lists curated presets, the public registry, and your team's own connectors. It has one row per source type, so a service with an API and an MCP server is two rows.
 
 1. Open **Connectors** in the team sidebar.
 2. Click **Browse Connectors**.
@@ -29,9 +30,10 @@ The catalog lists curated presets, the public registry, and your team's own conn
 
 The row changes to **View** when the connector exists. A row that needs a provider-specific endpoint shows **Set Up** instead of **Add**, and opens the add form.
 
-From the CLI, pass a catalog slug:
+From the CLI, search the catalog or pass a catalog slug:
 
 ```bash
+sf connectors search linear
 sf connectors create linear
 ```
 
@@ -98,6 +100,15 @@ An account in `needs_reauth` or `degraded` also shows a **Reconnect** button. To
 
 Credentials cannot be edited. To rotate a key, reconnect the account. A disconnected account cannot be reconnected. Connecting the service again makes a new account with a new id.
 
+## Limit which connections a key or app can use
+
+By default, a credential with connector scopes can reach every team connection it has permission for. Narrow it to specific connections when a script, CI job, or AI client should only touch one account:
+
+- **API keys:** Pass one or more `--connection <connectionId>` flags when creating or updating a key (`sf api-keys create --name linear-bot --preset team_admin --connection cxn_abc123`), or send `connectorAccess: { connectionIds: ["cxn_abc123"] }` over the API. Remove the limit later with `sf api-keys update <keyId> --all-connections` or `connectorAccess: null`. See [API keys](/api-keys#limit-connector-access).
+- **OAuth apps and CLI logins:** On the consent screen, open **Choose Connections** to pick which connections the app may reach. You can change that list later on **Connected apps** in the dashboard without re-authorizing.
+
+A connection outside a credential's allowlist answers `404` as if it doesn't exist.
+
 ## Decide what agents can call
 
 A policy rule pairs an address pattern with an action.
@@ -141,11 +152,13 @@ sf connectors policies add '*' --action require_approval
 sf connectors policies explain cxn_abc123/charges.create
 ```
 
+On Enterprise plans, team owners and admins can also set a team-wide connector allowlist or blocklist and restrict which connectors may serve Spaces.
+
 ## Find a tool
 
 Click **See tools** on a connector row, or open **Connector tools** from the command palette. The **Tools** page lists every tool the team's accounts reach. Each row shows the tool name, its summary, its resolved effect, and its safety: **Read-only**, **Writes**, or **Destructive**. Safety comes from the source and is not a setting.
 
-Open a tool to see its address, the rule that decided its effect, and its **Input schema**. The API equivalents are [`listConnectorTools`](/api/reference/connectors/listconnectortools) and [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+Open a tool to see its address, the rule that decided its effect, and its **Input schema**. From the CLI, inspect a connector or a connection's tools with `sf connectors inspect <connector>` or `sf connectors connections inspect <connectionId>`. The API equivalents are [`listConnectorTools`](/api/reference/connectors/listconnectortools) and [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
 
 ## Run a tool
 
@@ -191,6 +204,13 @@ The CLI and the [connectors API](/api/connectors) give an agent everything else.
 ## Use a connection in a Space
 
 To show a connection's data on a Space's pages, declare a role and bind the connection to it. See [Connectors](/connectors).
+
+## When a member leaves
+
+Before removing a team member, the dashboard lists the connector dependencies they own or created:
+
+- **Personal connections** owned by that member disconnect automatically when they leave or are removed. Their stored credentials are purged, pending sign-ins are canceled, and any Space bindings using them are removed.
+- **Team connections** the departing member created stay active, but are listed during member removal so an owner or admin can reconnect them with a team-owned account or rebind affected Spaces if the provider account will be deactivated.
 
 ## Remove a connector
 

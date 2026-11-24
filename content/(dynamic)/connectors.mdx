@@ -2,14 +2,14 @@
 title: Connectors
 description: Show live data from your team's tools on any Space page. Declare a role in your config, call it from the page, and the account's credentials never reach the browser.
 sidebar:
-  badge: Private Beta
+  badge: Public Beta
 ---
 
-<Badge variant="warning">Private Beta</Badge>
+<Badge variant="warning">Public Beta</Badge>
 
 Connectors put live data from your team's tools on any page of a Space, with no backend to write and no keys in the page. You declare a role in your config, bind an account to it, and the page calls `/__spacefast/connectors/<role>/<tool>`. Spacefast runs the tool with the account's credentials on the server and answers the page with JSON.
 
-Connectors are in Private Beta. A team without access gets `feature_unavailable`.
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. To register tool sources, connect accounts, and manage agent rules, see [Team connectors](/team-connectors).
 
 ## Declare a role
 
@@ -46,7 +46,7 @@ Or in `sf.jsonc`, with the same shape:
 }
 ```
 
-When both files exist, `spacefast.config.ts` wins. Publish to apply the roles: each version freezes the roles it was published with.
+When both files exist, `spacefast.config.ts` wins. Publish to apply the roles, because each version freezes the roles it was published with.
 
 The tool names and arguments on this page, such as `list_deals` and `stage`, are examples. Use the names your connection lists: [`listConnectionTools`](/api/reference/connectors/listconnectiontools) returns each tool with its input schema.
 
@@ -69,7 +69,7 @@ sf connectors create hubspot --slug hubspot
 sf connectors connections connect hubspot
 ```
 
-Publishing binds a role for you when exactly one eligible connection exists. The publish receipt lists the roles that still need one. Bind the rest yourself:
+Publishing a live version binds a role for you when exactly one eligible connection exists. The publish receipt lists any roles that still need one. Bind the rest yourself:
 
 ```bash
 sf connectors bindings --space example
@@ -84,8 +84,8 @@ A `visitor` role binds nothing. Each viewer connects their own account.
 
 | `as` | Whose account | Who reads through it | Who writes through it |
 | --- | --- | --- | --- |
-| `team` | A team connection with site serving on | Everyone who can open the Space | A signed-in member of the team or one of the Space's users |
-| `personal` | The connection of the person who bound it | Everyone who can open the Space, which only works while the Space is private | A signed-in member of the team or one of the Space's users |
+| `team` | A team connection with site serving on | Everyone who can open the Space | A signed-in current member of the owning team |
+| `personal` | The connection of the person who bound it | Everyone who can open the Space, which only works while the Space is private | A signed-in current member of the owning team |
 | `visitor` | Each viewer's own connection | That viewer | That viewer |
 
 The connectors route sits behind the Space's own access check, so the data is never more public than the pages. A private Space's data stays private. A share link or password admits anyone with the share link or the password, and they read too.
@@ -95,9 +95,17 @@ That's why two roles have extra rules:
 - **`team` on a Space anyone can open.** When the Space is public, or shared by link or password, a `team` role serves only after a team owner or admin allows it: `sf connectors public-serving set crm --enable --space example`. Until then, calls answer `connection_forbidden`. The allowance covers the account bound when it was given; rebinding the role takes it away.
 - **`personal` needs a private Space.** A `personal` role works only while the Space is private and has no share link or password. Otherwise every call answers `connection_forbidden`.
 
-Writes need a signed-in viewer. An anonymous visitor of a public Space reads through a `team` role and never writes through it: the call answers `connector_write_sign_in_required`. Send viewers to sign in with `space.access.signIn()`. A `visitor` role asks the viewer to sign in first, then to connect their account.
+Writes through a `team` or `personal` role require a signed-in current member of the owning team. Anyone else—an anonymous visitor, an external guest, or a non-member—reads through a `team` role and never writes through it: the call answers `connector_write_sign_in_required`. Send viewers to sign in with `space.access.signIn()`. A `visitor` role asks the viewer to sign in first, then to connect their own account.
 
 A team's connector policy still applies to every call. A tool it blocks is refused, and a call it holds for approval answers `approval_pending`.
+
+## Previews
+
+Preview and held versions protect your live Space's bindings and shared accounts:
+
+- **No auto-binding on preview publishes.** Publishing a version that doesn't go live leaves existing bindings untouched and binds no new roles. Promoting the version to live (or rolling back to it) binds its roles then.
+- **No shared writes from previews.** A preview version can read through already-bound `team` or `personal` roles, but non-read-only tools on shared bindings are refused with `connector_preview_write_not_allowed`. Promote the version to run writes.
+- **`visitor` roles work normally in previews**, because each call uses the viewer's own connected account.
 
 ## Call it from a page
 
@@ -203,7 +211,8 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 | [`connector_role_unknown`](/errors/connector_role_unknown) | 404 | The live version doesn't declare this role |
 | `connector_tool_not_allowed` | 403 | The role's `tools` doesn't list this tool |
 | `connector_arg_pinned` | 422 | The call sent a different value for a pinned argument |
-| `connector_write_sign_in_required` | 403 | A write through a `team` or `personal` role from a viewer who isn't signed in as a member |
+| `connector_preview_write_not_allowed` | 403 | A preview version tried to run a non-read-only tool through a shared `team` or `personal` role |
+| `connector_write_sign_in_required` | 403 | A write through a `team` or `personal` role from a viewer who isn't signed in as a current member of the owning team |
 | [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | The team's connector policy blocks this write tool on a `team` or `personal` role |
 | [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a tool that writes. Send a `POST` |
 | [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | The call came from another site, or a write without same-origin proof |
@@ -211,11 +220,11 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 
 ### Visitor accounts
 
-A `visitor` role needs a connector with an OAuth sign-in method, since each viewer signs in to their own account. A connector that only takes API keys can't serve one: connecting answers `connector_oauth_required`. When the connector needs an OAuth app your team hasn't registered, it answers `connector_oauth_app_required`.
+A `visitor` role needs a connector with an OAuth sign-in method, since each viewer signs in to their own account. A connector that only takes API keys can't serve one, and connecting answers `connector_oauth_required`. When the connector needs an OAuth app your team hasn't registered, it answers `connector_oauth_app_required`.
 
 A `visitor` role's `connectUrl` is `/__spacefast/connectors/<role>/connect`. It signs the viewer in if needed, then sends them to the provider and back. Add `?return_to=/some/path` to land somewhere other than `/`. A `POST` to `/__spacefast/connectors/<role>/disconnect` from the Space's own page forgets the viewer's account.
 
-[`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers) counts which of the Space's users connected each role, and [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection) disconnects one user's account for a role.
+Review or revoke visitor connections from the CLI with `sf connectors visitors list --space example` and `sf connectors visitors revoke <user> <role> --space example`. Through the API, [`listVisitorConnectionUsers`](/api/reference/spaces/listvisitorconnectionusers) lists which Space users connected each role, and [`revokeVisitorConnection`](/api/reference/spaces/revokevisitorconnection) disconnects one user's account for a role.
 
 ## Pinned arguments
 
@@ -267,16 +276,25 @@ sf connectors serving approve csr_abc123
 sf connectors serving deny csr_abc123
 ```
 
-Approving turns serving on, and the role's state flips to ready. A team can keep serving decisions to owners and admins, and can limit which connectors may serve sites at all.
+Approving turns serving on, and the role's state flips to ready. On Enterprise plans, owners and admins can keep serving decisions to admins and limit which connectors may serve sites with `sf connectors serving set`.
 
 The API operations are `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, and `denyConnectorServingRequest`. Public serving for a `team` role is `setSpaceConnectorPublicServing`.
 
-## Change roles from the dashboard
+## Change roles without a publish
 
 The Space's **Integrations** page lists every role. An override lives with the Space, not in your config file, and replaces that one role:
 
 - **Turn off** removes a role your config declares. It moves to **Removed roles**, where **Restore** brings it back.
 - **Use config file** drops an override and returns the role to what the file says.
+
+From the CLI, `sf connectors roles` manages the same overrides:
+
+```bash
+sf connectors roles list --space example
+sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s --space example
+sf connectors roles remove crm --space example
+sf connectors roles reset crm --space example
+```
 
 Saving re-applies the live version, so the change takes effect without a publish. The next publish keeps the overrides.
 
@@ -293,7 +311,7 @@ export async function GET(request, { env }) {
 }
 ```
 
-The role proxy returns the tool's result, or throws a `ConnectorCallError` whose `state.code` says why, such as `connect_required` or `forbidden`. `env.CONNECTORS.call("crm", "list_deals", args)` returns `{ state, result }` instead of throwing. The worker forwards the request's signed-in viewer, so `visitor` roles and writes follow the same rules as a page. Calls from a worker are never shared reads.
+The role proxy returns the tool's result, or throws a `ConnectorCallError` whose `state.code` says why, such as `connect_required` or `forbidden`. `env.CONNECTORS.call("crm", "list_deals", args)` returns `{ state, result }` instead of throwing. The worker forwards the request's signed-in viewer, so `visitor` roles, preview write rules, and writes follow the same rules as a page. Calls from a worker are never shared reads.
 
 ## Call it from outside the Space
 

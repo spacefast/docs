@@ -69,6 +69,7 @@ const created = await client.post("/v1/api-keys", {
 | `ipAllowlist` | up to 100 strings, each ≤ 255 chars | Restrict the key to these addresses. Optional, nullable. |
 | `expiresAt` | ISO 8601 | When the key stops working. Optional, nullable. Omit for no expiry. |
 | `notBefore` | ISO 8601 | When the key starts working. Optional, nullable. |
+| `connectorAccess` | `{ connectionIds: string[] }` or `null` | Limit the key to specific connector connections (`cxn_…`). Omit or pass `null` to allow every team connection. |
 
 Three rules the code enforces:
 
@@ -76,7 +77,7 @@ Three rules the code enforces:
 - **A key can never exceed its creator.** The derived policy must be a subset of the calling credential's policy. A wider request fails with `policy_exceeds_grantor`.
 - **Secrets are immutable.** There is no rotate-in-place. Create a new key, move traffic, then revoke the old one with `DELETE /v1/api-keys/{apiKeyId}`. That returns `204` and keeps the record for audit.
 
-`PATCH /v1/api-keys/{apiKeyId}` changes name, scope, permissions, allowlist, and expiry. `scope` and `permissions` must be sent together or both omitted.
+`PATCH /v1/api-keys/{apiKeyId}` changes name, scope, permissions, allowlist, expiry, and `connectorAccess`. `scope` and `permissions` must be sent together or both omitted.
 
 In the dashboard, keys live on the team's **Agents** page under **API keys**. The create form asks for **Name**, a **Policy preset**, and an optional **Expires**, then shows the secret once behind **Copy this key now. It won't be shown again.**
 
@@ -115,7 +116,7 @@ Creating, rotating, and revoking a machine credential all need an API key or a s
 
 ## Sessions and OAuth
 
-A signed-in browser session works as a cookie and as `Authorization: Bearer <session token>`. A session has no stored policy. It compiles one per team from the caller's live role, so an owner or admin gets everything the team can do and a member gets read, create, write, rename, publish, promote, download, and build actions.
+A signed-in browser session works as a cookie and as `Authorization: Bearer <session token>`. A session has no stored policy. It compiles one per team from the caller's live role, so an owner or admin gets everything the team can do and a member gets read, create, write, rename, publish, promote, download, build, and connector read/execute actions.
 
 For third-party apps, Spacefast is an OAuth 2.0 authorization server.
 

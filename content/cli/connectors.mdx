@@ -3,14 +3,16 @@ title: sf connectors
 description: Register tool sources for a team, connect accounts, set policy rules, and run connector tools from the terminal
 sidebar:
   order: 18
-  badge: Private Beta
+  badge: Public Beta
 ---
 
-<Badge variant="warning">Private Beta</Badge>
+<Badge variant="warning">Public Beta</Badge>
 
-`sf connectors` manages a team's connectors: tool sources, the accounts connected to them, the policy rules that decide what agents may call, and runs. For the concepts and the dashboard, see [Team connectors](/team-connectors).
+`sf connectors` manages a team's connectors: tool sources, the accounts connected to them, the policy rules that decide what agents may call, runs, and Space connector roles and bindings. For the concepts and the dashboard, see [Team connectors](/team-connectors).
 
-Connectors are in Private Beta. A team without access gets `feature_unavailable` and exits 2.
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable` and exits 2.
+
+To limit an API key to specific connections, pass `--connection <id>` to `sf api-keys create` or `sf api-keys update`. See [sf api-keys](/cli/api-keys).
 
 Every command takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and `-T`/`--team` (team slug, ID, or name, env `SPACEFAST_TEAM`). Without `--team`, the server picks the team your credential acts for. A credential that can act for several teams must name one. See [the CLI overview](/cli).
 
@@ -44,6 +46,46 @@ sf connectors list --source mcp
 A table of `SLUG | TITLE | SOURCE | TOOLS | CONNECTIONS`. `CONNECTIONS` shows the count and the worst status among them, or `none`. An empty team prints `No connectors.` and `Add one: sf connectors create <URL_OR_SLUG>` on stderr.
 
 With `--json`, the receipt is the API list envelope `{ data, pagination }`.
+
+## sf connectors search
+
+Search the connector catalog: curated presets and the public registry, with connectors already added to your team marked.
+
+```text
+sf connectors search [query] [--source openapi|graphql|mcp] [--limit <n>] [--cursor <value>]
+```
+
+```bash
+sf connectors search calendar
+sf connectors search --source mcp
+```
+
+Pass a row's id to `sf connectors create <id>` to add it.
+
+## sf connectors inspect
+
+Show one connector, the connections you can use on it, and its tools with the policy effect each resolves to.
+
+```text
+sf connectors inspect <connector> [--query <value>] [--effect approve|require_approval|block]
+  [--limit <n>] [--cursor <value>]
+```
+
+```bash
+sf connectors inspect hubspot --query deals
+```
+
+## sf connectors update
+
+Rename a connector, change the agent-visible description, or re-fetch its source and rebuild its tool list. Connections and policy rules survive a refresh.
+
+```text
+sf connectors update <connector> [--title <value>] [--description <value>] [--refresh]
+```
+
+```bash
+sf connectors update hubspot --refresh
+```
 
 ## sf connectors create
 
@@ -178,6 +220,19 @@ sf connectors connections list --owner personal
 ### Output
 
 A table of `ID | CONNECTOR | OWNER | NAME | STATUS | TOOLS`. `(default)` marks the connection an agent gets when it names the connector alone. With `--json`, the receipt is `{ data, pagination }`.
+
+## sf connectors connections inspect
+
+Show one connection's state, whether site serving is on, and the tools it reaches with the policy effect each resolves to.
+
+```text
+sf connectors connections inspect <connection> [--query <value>]
+  [--effect approve|require_approval|block] [--limit <n>] [--cursor <value>]
+```
+
+```bash
+sf connectors connections inspect cxn_abc123
+```
 
 ## sf connectors connections connect
 
@@ -693,16 +748,51 @@ The same as `sf connectors run`, with the same exit codes.
 | `connector_approval_required` | 2 | No action, and nobody has decided yet |
 | `connector_run_not_resumable` | 30 | The run already settled, or someone else claimed the decision |
 
-## Space bindings
+## Space bindings, roles, serving, and visitors
 
-These three commands connect a Space's connector roles to team connections. They require `--space` or `SPACEFAST_SPACE`. For roles and bindings, see [Connectors](/connectors).
+These commands manage how a Space declares roles, binds team connections, turns on site serving, and handles visitor accounts. Space-scoped commands require `--space` or `SPACEFAST_SPACE` (without one, they fail with `validation_error` and exit 2). See [Connectors](/connectors).
+
+### Bindings
 
 | Command | What it does |
 | --- | --- |
-| `sf connectors bindings --space <ref>` | List the Space's roles: `ROLE | AS | CONNECTOR | SOURCE | CONNECTION | STATE` |
+| `sf connectors bindings --space <ref>` | List the Space's roles: `ROLE \| AS \| CONNECTOR \| SOURCE \| CONNECTION \| STATE` |
 | `sf connectors bind <role> <connection> --space <ref>` | Bind one role to a connection id |
 | `sf connectors unbind <role> --space <ref>` | Remove one binding. Prompts unless you pass `--yes` |
 
-Without `--space` or `SPACEFAST_SPACE`, each fails with `validation_error` and exit 2.
+### Role overrides
 
-`sf connectors` also has `serving` and `public-serving set` commands. Run `sf connectors serving --help` for their flags.
+Change a Space's connector roles without a publish. Overrides replace the config file's role of the same name and apply to the live version right away.
+
+| Command | What it does |
+| --- | --- |
+| `sf connectors roles list --space <ref>` | List every role the live version serves, its source, its state, and any roles turned off here. Aliased as `ls` |
+| `sf connectors roles set <role> --space <ref>` | Add or update a role (`--connector`, `--as team\|personal\|visitor`, `--tools`, `--args`, `--cache`, `--wait`) |
+| `sf connectors roles remove <role> --space <ref>` | Turn off a role so pages calling it get `connector_role_unknown`. Aliased as `rm`. Prompts unless you pass `--yes` |
+| `sf connectors roles reset <role> --space <ref>` | Drop the Space's override and hand the role back to the config file |
+
+```bash
+sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s --space example
+sf connectors roles list --space example
+```
+
+### Site serving and public serving
+
+A team connection serves a Space only after site serving is turned on. On a public Space (or one shared by link or password), a team owner or admin must also allow public serving per role.
+
+| Command | What it does |
+| --- | --- |
+| `sf connectors serving create <role> --space <ref>` | Ask team owners and admins to turn site serving on for a role's bound connection (`csr_…`) |
+| `sf connectors serving list [--status pending\|approved\|denied\|canceled]` | List the team's site-serving requests. Aliased as `ls` |
+| `sf connectors serving inspect <request>` | Show one site-serving request and whether it is still pending |
+| `sf connectors serving approve <request>` | Approve a request and turn site serving on (owners and admins) |
+| `sf connectors serving deny <request>` | Deny a request and leave site serving off (owners and admins) |
+| `sf connectors serving set [--admin-only \| --no-admin-only] [--allow <slugs> \| --any-connector]` | View or update the team's site-serving policy (owners and admins) |
+| `sf connectors public-serving set <role> --enable\|--no-enable --space <ref>` | Allow or stop a `team` role from serving a public, link-shared, or password-protected Space (owners and admins) |
+
+### Visitor accounts
+
+| Command | What it does |
+| --- | --- |
+| `sf connectors visitors list --space <ref>` | List Space users who connected an account for `visitor` roles. Aliased as `ls` |
+| `sf connectors visitors revoke <user> <role> --space <ref>` | Disconnect one Space user's account for one `visitor` role. Prompts unless you pass `--yes` |
