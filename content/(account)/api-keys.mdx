@@ -88,7 +88,7 @@ sf api-keys update key_0123456789abcdef --connection cxn_abc123 --connection cxn
 sf api-keys update key_0123456789abcdef --all-connections
 ```
 
-Over the API, pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` on `POST /v1/api-keys` or `PATCH /v1/api-keys/{apiKeyId}`, or `connectorAccess: null` to remove the limit. For OAuth apps and CLI logins, choose specific connections under **Choose Connections** on the consent screen, or edit them later on **Connected apps**. See [Team connectors](/team-connectors).
+Over the API, pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` on `POST /v1/api-keys` or `PATCH /v1/api-keys/{apiKeyId}`, or `connectorAccess: null` to remove the limit. For OAuth apps and CLI logins, choose specific connections under **Choose Connections** on the consent screen, or edit them later on **Connected apps**. See [Connectors](/connectors).
 
 ## What an agent grant cannot do
 
