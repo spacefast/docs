@@ -54,7 +54,11 @@ Without `--expect-total`, this holds the names and shows the total. Nothing is c
 sf domains registration purchase example.com --expect-total 10.34
 ```
 
-Over the API, send `POST /v1/domains/purchases` with `domains`, `contactId`, and `expectedTotalCents`.
+Over the API, send `POST /v1/domains/purchases`. Each entry in `domains` is an object with a `name`, not a bare string:
+
+```json
+{ "domains": [{ "name": "example.com" }], "contactId": "dcon_...", "expectedTotalCents": 1034 }
+```
 
 What happens next depends on who's buying:
 
@@ -75,7 +79,7 @@ If any name in the cart can't be bought, the whole purchase is refused with [`do
 sf domains registration example.com
 ```
 
-A paid purchase moves from `pending_payment` to `pending_registration` to `active`. If the registry refuses the name, the registration shows `failed` with a reason, and the payment is refunded. Over the API, read `GET /v1/teams/{teamId}/purchases/{purchaseId}` until it's `paid`, then `GET /v1/domains/{domainId}/registration`.
+A paid purchase moves from `pending_payment` to `pending_registration` to `active`. If the registry refuses the name, the registration shows `failed` with a reason, and the payment is refunded. Over the API, read `GET /v1/teams/{teamId}/purchases/{purchaseId}` until it's `paid`, then `GET /v1/domains/{domainId}/registration`. If it shows `requires_action`, the bank wants the cardholder to verify the charge: open `confirmUrl` to finish.
 
 ## Renewals
 
