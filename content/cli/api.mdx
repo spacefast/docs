@@ -85,7 +85,7 @@ A JSON response prints verbatim on stdout, envelope and all. A success is `{ dat
 
 A non-JSON response needs somewhere to go. Pass `--output <file>` to write it to disk or `--raw-stdout` to stream it, or the command fails rather than dumping bytes into your terminal.
 
-`--include` writes the status line and these headers to stderr, leaving stdout parseable: `content-type`, `content-length`, `etag`, `cache-control`, `retry-after`, `ratelimit-limit`, `ratelimit-remaining`, `ratelimit-reset`, `idempotency-replayed`, `x-request-id`, `deprecation`, `sunset`, `link`.
+`--include` writes the status line and these headers to stderr so stdout stays parseable: `content-type`, `content-length`, `etag`, `cache-control`, `retry-after`, `ratelimit-limit`, `ratelimit-remaining`, `ratelimit-reset`, `idempotency-replayed`, `x-request-id`, `deprecation`, `sunset`, `link`.
 
 ## Errors
 

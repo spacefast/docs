@@ -43,7 +43,7 @@ Validation is blocking. A bad cron fails the publish rather than shipping a sche
 
 ## Schedule syntax
 
-Three grammars in two kinds. Named and shorthand schedules are **simple** crons. Five-field crontab schedules are **advanced** crons, and your plan sets how many of each a Space runs.
+Crons support three schedule formats across two tiers. Named and shorthand schedules are **simple** crons. Five-field crontab schedules are **advanced** crons, and your plan sets how many of each a Space runs.
 
 | Kind | Examples | Notes |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ Advanced crons also run at their closest simple schedule for now, until advanced
 
 A raised limit applies right away. After an upgrade or Boost, crons that were waiting start running without a publish.
 
-A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing: crons that are running keep running.
+A lowered limit applies at your next publish, promote or rollback. Until then, a downgrade or Boost ending changes nothing, and crons that are running keep running.
 
 For now, whatever the plan, a Space can declare at most **8** crons, and past that the publish fails validation. `allowance` in the API reports the capped numbers. The ceiling rises to the plan limits above as the runtime update reaches every box.
 

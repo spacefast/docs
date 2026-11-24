@@ -7,9 +7,9 @@ You approve an agent's scopes and teams, with your team role as the ceiling. Rev
 
 ## How an agent gets access
 
-Four lanes, all of them ending in something you approved in a browser.
+An agent can get access in four ways, each approved in your browser:
 
-| Lane | How it starts | What the agent ends up holding |
+| Method | How it starts | What the agent ends up holding |
 |---|---|---|
 | Device login | The agent runs `sf login` and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
 | API key | You mint one and paste it into the agent's config | A key with the permissions from the preset and your expiry |
@@ -60,7 +60,7 @@ Press **Review** to see the rationale the agent gave, which Space or domain it t
 
 - A decision is good for about 10 minutes, and never outlives the agent's own access.
 - **Denying is final.** The agent cannot re-ask on the same request. It has to start over.
-- Decided requests move to a **Decided** table with **What**, **Outcome**, and **Decided** columns, showing **Approved**, **Completed**, **Executing**, **Denied**, or **Expired**.
+- Decided requests move to a **Decided** table with **What**, **Outcome**, and **Decided** columns. Outcomes are **Approved**, **Completed**, **Executing**, **Denied**, or **Expired**.
 
 Only risky operations prompt: publishing over a live Space, deploying, rolling a version back, buying a domain, and changing DNS. Routine publishing doesn't, because people stop reading a prompt that appears on every publish.
 

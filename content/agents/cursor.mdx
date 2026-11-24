@@ -11,7 +11,7 @@ The Spacefast plugin lets Cursor publish your project and call API operation too
 npx -y plugins add spacefast/plugins -t cursor -y
 ```
 
-`sf setup agent --agent cursor` is the other lane. It writes `~/.cursor/mcp.json` and installs the skill into `~/.cursor/skills/spacefast/`, or into `<project>/.agents/skills/` with `--project`.
+You can also run `sf setup agent --agent cursor`. It writes `~/.cursor/mcp.json` and installs the skill into `~/.cursor/skills/spacefast/`, or into `<project>/.agents/skills/` with `--project`.
 
 ## What the plugin adds
 
@@ -59,7 +59,7 @@ Put this in `~/.cursor/mcp.json` to add the hosted server without the plugin.
 }
 ```
 
-The `"type"` field is required. A bare `{ "url": ... }` entry is broken, not shorter.
+The `"type"` field is required; omitting it breaks the config.
 
 Writing this file by hand or through the CLI keeps every other top-level key intact, but it drops comments. The CLI refuses to write through a symlinked config.
 

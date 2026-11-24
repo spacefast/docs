@@ -9,9 +9,9 @@ Open the Space and go to **Customization**. It has four tabs: **Theme**, **Searc
 
 ## What lives on the Space, not the version
 
-Because these settings are stored on the Space, they stay in place through publishes and rollbacks. They also override the published `sf.jsonc`: the Space's `theme` replaces the file's `theme` instead of merging with it. If your config sets `theme` and you also edit the Theme tab, the dashboard values win until you clear them. The same applies to `meta`.
+Because these settings are stored on the Space, they stay in place through publishes and rollbacks. They also override the published `sf.jsonc`, so the Space's `theme` replaces the file's `theme` instead of merging with it. If your config sets `theme` and you also edit the Theme tab, the dashboard values win until you clear them. The same applies to `meta`.
 
-Theme and share metadata apply without republishing: the next request after you save gets them. **Custom JS** is different. A script change takes effect on the next publish.
+Theme and share metadata apply without republishing, and the next request after you save gets them. **Custom JS** is different. A script change takes effect on the next publish.
 
 The four tabs write `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
 

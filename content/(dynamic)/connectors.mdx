@@ -46,7 +46,7 @@ Or in `sf.jsonc`, with the same shape:
 }
 ```
 
-When both files exist, `spacefast.config.ts` wins. Publish to apply the roles: each version freezes the roles it was published with.
+When both files exist, `spacefast.config.ts` wins. Publish to apply the roles, because each version freezes the roles it was published with.
 
 The tool names and arguments on this page, such as `list_deals` and `stage`, are examples. Use the names your connection lists: [`listConnectionTools`](/api/reference/connectors/listconnectiontools) returns each tool with its input schema.
 
@@ -211,7 +211,7 @@ Failures a page can't wait out come back as an RFC 9457 problem with a stable `c
 
 ### Visitor accounts
 
-A `visitor` role needs a connector with an OAuth sign-in method, since each viewer signs in to their own account. A connector that only takes API keys can't serve one: connecting answers `connector_oauth_required`. When the connector needs an OAuth app your team hasn't registered, it answers `connector_oauth_app_required`.
+A `visitor` role needs a connector with an OAuth sign-in method, since each viewer signs in to their own account. A connector that only takes API keys can't serve one, and connecting answers `connector_oauth_required`. When the connector needs an OAuth app your team hasn't registered, it answers `connector_oauth_app_required`.
 
 A `visitor` role's `connectUrl` is `/__spacefast/connectors/<role>/connect`. It signs the viewer in if needed, then sends them to the provider and back. Add `?return_to=/some/path` to land somewhere other than `/`. A `POST` to `/__spacefast/connectors/<role>/disconnect` from the Space's own page forgets the viewer's account.
 

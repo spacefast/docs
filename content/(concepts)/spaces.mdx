@@ -5,11 +5,11 @@ sidebar:
   order: 1
 ---
 
-A Space is what you publish to: one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
+A Space is what you publish to, with one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
 
 ## What a Space is
 
-A Space owns a slug, a hostname, an owner, and one pointer that says which version visitors get. A publish can create a new immutable version or report no changes, and the Space decides which version is live.
+Each Space has a slug, a managed hostname, an owner, and a pointer to the version visitors see. A publish creates a new immutable version or reports no changes, and the Space controls which version is live.
 
 Ids are `spc_` plus 32 hex characters:
 

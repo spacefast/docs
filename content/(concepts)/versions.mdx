@@ -9,7 +9,7 @@ A rollback points `live` back at a retained, ready version and doesn't rebuild i
 
 ## A version is a snapshot
 
-A publish that changes the files creates a version. A version is the exact set of files plus the config it finalized with, frozen. Nothing rewrites a version after it is ready. A publish with no changes can return `noop_publish` without creating a version.
+A publish that changes files creates a version, a frozen snapshot of those files and the config they finalized with. Nothing modifies a version after it is ready. A publish with no changes can return `noop_publish` without creating a version.
 
 Ids are `ver_` plus 32 hex characters. Once a version reaches `ready` it also gets a number, and the CLI and dashboard call it by that number.
 
@@ -27,7 +27,7 @@ Numbers are handed out in the order versions become ready, not the order they we
 | `uploading` | Bytes are landing |
 | `uploaded` | Every declared file arrived |
 | `finalizing` | The version is being compiled into its served form |
-| `ready` | Done, numbered, addressable, promotable |
+| `ready` | Ready to serve, numbered, and promotable |
 | `failed` | Finalize or the build that fed it failed |
 | `canceled` | Stopped before it finished |
 | `expired` | A draft that ran out of time before finalize |
@@ -74,7 +74,7 @@ Both take a version id, a ref such as `v12`, or a bare number. Both wait for the
 
 Open **Versions**, find the row, and hit **Make live**. Confirm on **Make v12 live?**. The Overview page carries the same action as **Roll back to** next to the previous version.
 
-Afterwards the list narrates the state you are in, for example *Rolled back from v13. Make it live below to roll forward.*
+Afterward, the list shows the rollback state, for example *Rolled back from v13. Make it live below to roll forward.*
 
 </Tab>
 <Tab title="API">

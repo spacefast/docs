@@ -105,7 +105,7 @@ Credentials also behave differently under `CI`. The plaintext credential store i
 
 ## Version provenance
 
-You do not pass any of it. On GitHub Actions the CLI reads the branch, commit SHA, ref, repository, run id, run attempt, run URL, workflow, job, actor, and event name from the environment, plus the pull request number when the ref starts `refs/pull/`. On GitLab CI it reads the equivalents, and takes the commit title as the version message. Bitbucket Pipelines is detected too.
+The CLI collects build provenance automatically. On GitHub Actions it reads the branch, commit SHA, ref, repository, run id, run attempt, run URL, workflow, job, actor, and event name from the environment, plus the pull request number when the ref starts `refs/pull/`. On GitLab CI it reads the equivalents, and takes the commit title as the version message. Bitbucket Pipelines is detected too.
 
 Every value shows up on the version, so version history says which commit and which run produced each build. Override any of them with `--git-branch`, `--git-commit`, `--git-ref`, `--git-repository`, or `--message`. Full flag table on [`sf publish`](/cli/publish).
 

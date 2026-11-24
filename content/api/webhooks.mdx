@@ -182,7 +182,7 @@ export function verifySpacefastWebhook(rawBody, header, secret) {
 }
 ```
 
-Three things that break naive verifiers. The header can carry more than one `v1=` entry, so accept a match on any of them. The body must be the raw bytes. The timestamp tolerance is yours to choose: the header carries the signing time, but the server does not enforce a window on your behalf.
+Three common verification mistakes: the header can carry more than one `v1=` entry (accept a match on any of them), the body must be the raw bytes, and the timestamp tolerance is up to you (the header carries the signing time, but the server does not enforce a window on your behalf).
 
 ## Rotate the secret
 

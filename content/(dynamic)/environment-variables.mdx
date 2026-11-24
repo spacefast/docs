@@ -109,7 +109,7 @@ export default capsule({
 
 A [Functions](/functions) worker reads the same values from `env`, its second handler argument.
 
-`.env.lakebed.server` is also accepted, for capsule portability. That file is treated as the full list: publishing also deletes Space-scope variables it doesn't name, even when the file is empty.
+`.env.lakebed.server` is also accepted, for capsule portability. That file is treated as the full list, so publishing also deletes Space-scope variables it doesn't name, even when the file is empty.
 
 
 An anonymous first publish, before you have an account, syncs nothing and reports `skipped: "anonymous"`.

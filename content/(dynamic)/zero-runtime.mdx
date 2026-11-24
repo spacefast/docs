@@ -17,7 +17,7 @@ The other runtime is [Functions](/functions), a worker for npm-heavy code and fr
 
 ## Declare it
 
-Zero is never inferred. A runtime that owns a database does not spring into existence from a directory shape, so both entry paths are required.
+Zero is never inferred. Because Zero provisions a database, Spacefast never enables it from directory detection; both entry paths are required.
 
 ```jsonc sf.jsonc
 {
@@ -160,7 +160,7 @@ Return one of the response helpers: `json(value)`, `text(value)`, `empty()` for 
 3. Your endpoint table matches. A hit runs the handler in the QuickJS runner on the space's own machine, in one transaction with the database.
 4. Everything else falls to the app shell, which serves your client bundle.
 
-Queries, mutations, and actions do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event. Every browser holding a matching subscription re-runs its query. That is the whole realtime story. Do not poll.
+Queries, mutations, and actions do not get their own URLs. The client sends them over `/__zero/run`. When a mutation commits, the runtime publishes an invalidation event and every browser holding a matching subscription re-runs its query automatically, so you don't need to poll.
 
 An endpoint cannot claim `/`, `/index.html`, `/client.js`, `/auth/callback`, anything under `/auth/`, or anything under `/_spacefast/`. The shell, the client bundle, and the sign-in flow already answer those.
 
@@ -257,7 +257,7 @@ Call them from the client with `useAction("invite")`. `scope: "/"` covers the wh
 
 ## Styling
 
-Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected, and `theme.json` plus utility classes are the whole styling story.
+Write Tailwind classes in your JSX. Zero compiles them at publish, so do not add a CSS, PostCSS, or Tailwind pipeline. `@plugin` and `@config` directives are rejected; use `theme.json` and utility classes for styling.
 
 Class names must be static strings. The compiler finds them by scanning source text, so `bg-${tone}-500` produces no CSS for that class. Branch to whole literals instead.
 
