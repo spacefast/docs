@@ -45,9 +45,9 @@ Published: https://quiet-harbor.space.fast
 sf publish --output-directory public
 ```
 
-Two smaller edges of the same rule:
+Two related caveats:
 
 - `eleventy.config.ts` is not one of the four config names. A TypeScript config on its own does not identify the project. The `@11ty/eleventy` dependency does, and a dependency match always wins over a config-file match.
-- `_site` is also Jekyll's output directory. Jekyll is the one preset that does read its config, taking `destination` from `_config.yml` when it is set.
+- `_site` is also Jekyll's output directory. Jekyll is the one preset that reads its config; it uses `destination` from `_config.yml` when set.
 
 The full table, the detection order, and every override flag are on [Frameworks and builds](/frameworks).

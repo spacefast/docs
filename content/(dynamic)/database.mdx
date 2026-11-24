@@ -150,7 +150,7 @@ sf db migrate --rename
 | `drop_table`, `drop_column`, `drop_index` | `--drop` |
 | `rename_table`, `rename_column` | `--rename` |
 
-`sf db migrate` decides Zero-ness from your local `sf.jsonc` before it contacts the API. A static or Functions project fails with `runtime_kind_mismatch` and exit code `30`, having sent no request. `--previous-artifact` diffs against a named artifact instead of the live schema.
+`sf db migrate` checks whether the project uses Zero from your local `sf.jsonc` before it contacts the API. A static or Functions project fails with `runtime_kind_mismatch` and exit code `30`, having sent no request. `--previous-artifact` diffs against a named artifact instead of the live schema.
 
 `sf db`, `sf db dump`, and `sf db migrate` are Zero-only. A worker declares no table set, so they answer `runtime_kind_mismatch` for one.
 

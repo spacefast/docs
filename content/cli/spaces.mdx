@@ -95,7 +95,7 @@ Check whether a space name is available.
 sf spaces check NAME
 ```
 
-Normalizes the name to a slug, then checks the slug and its managed hostname in the team. The answer is advisory: another create or rename can still take the name first. Reserved names fail, and so do slugs that contain `spacefast`, `stattic`, `automattic`, `wordpress`, or `paypal`. A space slug is at most 55 characters. Requires a login or `--token` that can create Spaces in the team.
+Normalizes the name to a slug, then checks the slug and its managed hostname in the team. The answer is advisory, because another create or rename can still take the name first. Reserved names fail, and so do slugs that contain `spacefast`, `stattic`, `automattic`, `wordpress`, or `paypal`. A space slug is at most 55 characters. Requires a login or `--token` that can create Spaces in the team.
 
 ### Arguments
 
@@ -209,7 +209,7 @@ sf spaces update --space docs --name "Developer docs"
 sf spaces update --space docs --mode files --spa false
 ```
 
-A slug change also renames the managed hostname. Version URLs are unaffected: they are minted once and survive renames. See [URLs and hostnames](/urls).
+A slug change also renames the managed hostname. Version URLs are unaffected because they are minted once and survive renames. See [URLs and hostnames](/urls).
 
 ## sf spaces download
 

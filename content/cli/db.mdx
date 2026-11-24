@@ -9,7 +9,7 @@ Inspect, migrate, and dump a Zero Space's database without a connection string. 
 
 Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and the space selection flags (`--space`, `-T`/`--team`, `--claim-token`). See [the CLI overview](/cli).
 
-`sf db`, `sf db dump`, and `sf db migrate` are Zero capsules only. A Functions worker declares no table set, so those routes answer `db_not_available` or `runtime_kind_mismatch`. There is no connection string anywhere in the CLI or the API. `sf db console` is the escape hatch.
+`sf db`, `sf db dump`, and `sf db migrate` are Zero capsules only. A Functions worker declares no table set, so those routes answer `db_not_available` or `runtime_kind_mismatch`. There is no connection string anywhere in the CLI or the API; use `sf db console` when you need raw SQL.
 
 ## sf db
 

@@ -150,7 +150,7 @@ Read a Space's logs.
 
 `access` covers requests that reached your Space's origin. `edge` covers requests handled at the edge, cache hits included. Each edge query reads one hostname (the primary unless you pass `--hostname`), and a busy window can be truncated; see [Edge request logs](/infrastructure/edge-request-logs) for its filters and limits. With `runtime` you get what your code logged, with the request id and handler for each line. A static Space has no runtime lines.
 
-A new line takes a while to appear, because it's written on the origin, shipped, and indexed before it can be read. **An empty page doesn't mean it's broken.** Keep paging while there's a cursor: a page can be empty even when more lines are coming.
+A new line takes a while to appear, because it's written on the origin, shipped, and indexed before it can be read. **An empty page doesn't mean it's broken.** Keep paging while there's a cursor, because a page can be empty even when more lines are coming.
 
 ```text
 sf logs [target] [kind] [--space <value>] [--limit <n>] [-f] [--cursor <value>]

@@ -9,16 +9,16 @@ The plugins also include task skills for building a site, editing a Space, shari
 
 ## The base `spacefast` skill
 
-Every lane ships a skill named `spacefast`: a `SKILL.md` and a `references.md`, rendered from one template into per-client variants.
+Every install method ships a skill named `spacefast`: a `SKILL.md` and a `references.md`, rendered from one template into per-client variants.
 
-| Lane | What lands |
+| Method | What lands |
 |---|---|
 | Claude Code plugin | `skills/spacefast/` and the task skills |
 | Codex plugin | The same skills in the Codex variant |
 | Cursor plugin | The same skills, plus a `rules/spacefast.mdc` rule |
 | `sf skills install` | `spacefast/SKILL.md` and `references.md` in the client's skills directory |
 
-The plugin lanes carry the MCP variant, which routes work to the typed tools. The copy bundled with the CLI carries the curl and HTTP API variant instead, for agents that have no MCP connection at all. Same name, same product rules, different lane.
+The plugins carry the MCP variant, which routes work to the typed tools. The copy bundled with the CLI carries the curl and HTTP API variant instead, for agents that have no MCP connection at all.
 
 ## Design System task skills
 

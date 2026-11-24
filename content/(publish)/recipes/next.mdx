@@ -58,4 +58,4 @@ npx next build
 sf publish ./out --prebuilt
 ```
 
-One related failure mode on Next 16.4. If a custom build command runs `next build` in a way that loses the environment the CLI set, the adapter never runs. The publish then stops with `build_failed`, saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.
+On Next 16.4, if a custom build command runs `next build` without preserving the CLI's environment, the adapter never runs. The publish then stops with `build_failed`, saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.

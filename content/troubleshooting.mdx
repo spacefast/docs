@@ -47,7 +47,15 @@ sf builds list --space my-site
 sf builds logs bld_xxxxxxxx --follow
 ```
 
-Each code points at a different cause. `build_failed` means your command exited non-zero. `build_timeout` means the build hit the time limit. `build_oom` means the build was killed, most likely because it ran out of memory. `build_output_dir_missing` means the build finished but the output directory you named was never produced. `build_no_index_html` means it produced output with no `index.html` at the root. Detection defaults, override flags, and the log limits are on [Frameworks and builds](/frameworks).
+Each code points to a different cause:
+
+- `build_failed`: your build command exited non-zero.
+- `build_timeout`: the build hit the time limit.
+- `build_oom`: the build was killed, usually from running out of memory.
+- `build_output_dir_missing`: the build finished without creating the configured output directory.
+- `build_no_index_html`: the output has no `index.html` at the root.
+
+Detection defaults, override flags, and log limits are on [Frameworks and builds](/frameworks).
 
 ## Serving
 
@@ -127,7 +135,7 @@ Claude Code on the web and mobile, Codex cloud, and similar hosted sandboxes blo
 
 1. **Add the Spacefast connector to Claude.** [Open the connector form](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Spacefast&connectorUrl=https%3A%2F%2Fmcp.spacefast.com) and choose **Connect**. Approve it, then enable it for the session. Connector traffic goes through Anthropic rather than the sandbox, so publishing works with no network changes, including from the mobile app.
 2. **Push to a connected GitHub repository.** Sandboxes can push to GitHub, and Spacefast builds the push itself. Connect the repository once from the Space's **Builds** page; see [Connect a GitHub repository](/git#connect-a-github-repository). Claude Code on the web pushes a working branch, which builds a preview; merge the pull request to go live.
-3. **Allow the hosts.** Add `spacefast.com`, `*.spacefast.com`, `*.space.fast`, and `*.view.fast` to the environment's allowlist. In Claude Code that is **Network access → Custom → Allowed domains**. Keep **Also include default list of common package managers** checked, or npm — and the CLI with it — is blocked too. In Codex cloud, turn on **Agent internet access** and add the domains. Leave HTTP methods unrestricted, since uploads use `PUT` and `POST`. Allowing only `api.spacefast.com` is not enough: uploads go to managed Space hostnames. New Spaces use `*.space.fast`, and existing Spaces can still use `*.view.fast`.
+3. **Allow the hosts.** Add `spacefast.com`, `*.spacefast.com`, `*.space.fast`, and `*.view.fast` to the environment's allowlist. In Claude Code that is **Network access → Custom → Allowed domains**. Keep **Also include default list of common package managers** checked, or npm and the CLI are blocked too. In Codex cloud, turn on **Agent internet access** and add the domains. Leave HTTP methods unrestricted, since uploads use `PUT` and `POST`. Allowing only `api.spacefast.com` is not enough, because uploads go to managed Space hostnames. New Spaces use `*.space.fast`, and existing Spaces can still use `*.view.fast`.
 
 ### An agent gets 403 on one tool
 

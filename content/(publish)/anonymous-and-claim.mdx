@@ -52,7 +52,7 @@ To get a warning before the clock runs out, leave an address. Set `email` on the
 
 ## Caps
 
-Anonymous publishing runs a tighter table than Personal on every axis.
+Anonymous publishing has stricter limits than the Personal plan.
 
 | Cap | Value |
 | --- | --- |
@@ -112,13 +112,13 @@ After the claim lands the page says **&lt;space&gt; is yours.** and offers a **C
 | Space key | The only credential | Demoted, see below |
 | Explicit people and links | Active | Survive unchanged |
 
-The dashboard says the last row out loud, under **Sharing that stays with this space**. Claiming changes ownership, not who you already shared with.
+The dashboard lists those people and links under **Sharing that stays with this space**. Claiming changes ownership, not who already has access.
 
-Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create — a team already at its Space limit answers `quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
+Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create. A team already at its Space limit answers `quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
 
 ## Keeping your agent publishing
 
-An agent that published the Space for you loses its credential the moment you claim, which would leave it unable to ship the next change. So a claim does not destroy the space key, it demotes it into a one-time voucher.
+An agent that published the Space for you loses its credential the moment you claim, which would leave it unable to ship the next change. Instead of destroying the space key, claiming demotes it into a one-time voucher.
 
 On the claim page that is the **Claim & keep access** button. On the CLI it is `sf spaces claim --keep-publishing`. Either way the choice is yours, explicitly, and the server decides whether the Space is even eligible.
 
