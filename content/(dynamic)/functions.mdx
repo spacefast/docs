@@ -145,10 +145,12 @@ Two groups of variable names never reach a worker, dropped rather than blanked s
 
 | Limit | Value |
 | --- | --- |
-| Compiled bundle | 24 MiB |
+| Uncompressed compiled bundle | 24 MiB |
 | Routes per version | 256 |
 | Next cache seed, one entry | 2 MiB minus 8192 bytes |
 | Next cache seed, total | 8 MiB |
+
+The bundle size includes the compiled JavaScript, embedded modules, and the JSON that describes them. Every plan uses the same bundle limit.
 
 Per-request CPU and memory are the isolate's own and are not restated here.
 

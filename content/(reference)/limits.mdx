@@ -30,6 +30,7 @@ See [Versions](/versions#how-many-versions-are-kept) for version cleanup.
 | Archive compression ratio | 100:1 | `publish_archive_compression_ratio_exceeded` |
 | Inline archive expanded size | 2 GiB, the version limit | `publish_archive_expanded_size_exceeded` |
 | Build output | 512 MiB | The build fails |
+| [Compiled Functions bundle](/functions#limits) | 24 MiB before compression | The build fails |
 | File path length | 1,024 bytes | `path_too_long` |
 | Manifest body | 16 MiB | `manifest_body_too_large` |
 | `sf.jsonc` file size | 256 KiB | Config validation error |
