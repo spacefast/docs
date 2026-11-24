@@ -9,8 +9,8 @@ export const docsDynamicRuleLimit = 88;
 const websiteDynamicRuleReserve = 16;
 const platformDynamicRuleLimit = 100;
 // The composed artifact shares the platform's 2,000 static and 2,100 total
-// redirects with the Website, which declares about 90 of its own.
-const websiteStaticRuleReserve = 120;
+// redirects with the Website, which currently declares 124 static redirects.
+const websiteStaticRuleReserve = 124;
 export const docsStaticRuleLimit = 2_000 - websiteStaticRuleReserve;
 const docsTotalRuleLimit = 2_100 - websiteStaticRuleReserve - websiteDynamicRuleReserve;
 
@@ -91,13 +91,38 @@ function redirectKey(redirect) {
   return `${redirect.from}\0${redirect.to}\0${redirect.status}`;
 }
 
-// Legacy operation namespaces contain no content pages. Compress only a prefix
-// whose complete published mapping preserves the suffix and destination.
+// Legacy operation namespaces contain no content pages. Static exact matches
+// and longer dynamic prefixes take precedence over shorter splats, so each
+// namespace can use one fallback splat for its largest tag while more-specific
+// pure prefixes compress the remaining tags without shadowing any rule.
 function compressOperationAliases(rules) {
   let statics = rules.filter((rule) => !isDynamic(rule));
+  const allStatics = [...statics];
   const dynamic = rules.filter(isDynamic);
   const aliasDynamicRuleLimit = Math.min(docsDynamicRuleLimit, platformDynamicRuleLimit - websiteDynamicRuleReserve)
     - mountRewriteRules.filter(isDynamic).length;
+
+  for (const namespace of ["/api/reference/operations/", "/platforms/api/reference/operations/"]) {
+    if (dynamic.length >= aliasDynamicRuleLimit) break;
+    const byTarget = new Map();
+    for (const rule of statics) {
+      if (!rule.from.startsWith(namespace)) continue;
+      const suffix = rule.from.slice(namespace.length);
+      if (!suffix || suffix.includes("/") || !rule.to.endsWith(`/${suffix}`)) continue;
+      const target = rule.to.slice(0, rule.to.length - suffix.length);
+      byTarget.set(target, (byTarget.get(target) ?? 0) + 1);
+    }
+    const best = [...byTarget.entries()].sort((a, b) => b[1] - a[1])[0];
+    if (!best || best[1] < 2) continue;
+    const [target] = best;
+    statics = statics.filter((rule) => {
+      if (!rule.from.startsWith(namespace)) return true;
+      const suffix = rule.from.slice(namespace.length);
+      return !suffix || suffix.includes("/") || rule.to !== `${target}${suffix}`;
+    });
+    dynamic.push({ from: `${namespace}*`, to: `${target}:splat`, status: 301 });
+  }
+
   const candidates = new Map();
   for (const rule of statics) {
     if (!rule.from.includes("/operations/")) continue;
@@ -107,8 +132,10 @@ function compressOperationAliases(rules) {
       const prefix = rule.from.slice(0, length);
       if (candidates.has(prefix)) continue;
       const target = rule.to.slice(0, rule.to.length - (rule.from.length - length));
-      const matches = statics.filter(({ from }) => from.startsWith(prefix));
-      if (matches.length > 1 && matches.every(({ from, to }) => to === target + from.slice(length))) candidates.set(prefix, { prefix, target, count: matches.length });
+      const allMatches = allStatics.filter(({ from }) => from.startsWith(prefix));
+      if (allMatches.length > 1 && allMatches.every(({ from, to }) => to === target + from.slice(length))) {
+        candidates.set(prefix, { prefix, target, count: allMatches.length });
+      }
     }
   }
   for (const candidate of [...candidates.values()].sort((a, b) => b.count - a.count)) {
@@ -213,14 +240,15 @@ export function buildRoutingRules(redirects) {
 
 export function verifyRoutingBudget(rules) {
   const dynamicRules = rules.filter(isDynamic).length;
-  const staticRules = rules.length - dynamicRules;
+  const redirectRules = rules.filter((rule) => rule.status !== 200);
+  const staticRules = redirectRules.filter((rule) => !isDynamic(rule)).length;
   if (
     dynamicRules > docsDynamicRuleLimit ||
     staticRules > docsStaticRuleLimit ||
-    rules.length > docsTotalRuleLimit
+    redirectRules.length > docsTotalRuleLimit
   ) {
     throw new Error(
-      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${rules.length}/${docsTotalRuleLimit} total`,
+      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${redirectRules.length}/${docsTotalRuleLimit} total`,
     );
   }
 }
