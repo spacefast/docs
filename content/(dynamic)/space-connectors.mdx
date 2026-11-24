@@ -14,7 +14,7 @@ Connectors are in Public Beta on Go, Pro, and Enterprise plans. If you haven't a
 ## How a Space call works
 
 1. **Declare a role** in `spacefast.config.ts` or `sf.jsonc` naming the connector, allowed tools, account mode (`team`, `personal`, or `visitor`), optional pinned arguments, and read cache window.
-2. **Bind an account** (for `team` or `personal` roles) and enable site serving on the connection. Publishing a live version auto-binds any role with a single eligible connection.
+2. **Bind an account** (for `team` or `personal` roles) and enable site serving on the connection. Publishing a live version as a team owner or admin auto-binds any role with a single eligible connection.
 3. **Call the role** from a page using `@spacefast/client`, `/__spacefast/client.js`, plain `fetch`, or from a Function via `env.CONNECTORS`.
 
 ## Declare a role
@@ -70,7 +70,7 @@ Role names are camelCase, start with a lowercase letter, and are up to 64 charac
 
 A `team` or `personal` role needs a bound account (`visitor` roles bind nothing; each viewer connects their own).
 
-Publishing a live version binds a role automatically when exactly one eligible connection exists. The publish receipt lists roles that still need a binding or site serving. Bind remaining roles from the CLI or the Space's **Integrations** page:
+Publishing a live version as a human team owner or admin (with `connectors:write` and access to the account) binds a role automatically when exactly one eligible connection exists. Publishes by team members without `connectors:write`, API keys, or settings republishes bind nothing. The publish receipt lists roles that still need a binding or site serving. Bind remaining roles from the CLI (`sf connectors bind`) or the Space's **Integrations** page:
 
 ```bash
 sf connectors bindings --space example
@@ -97,7 +97,7 @@ sf connectors serving approve csr_abc123
 sf connectors serving deny csr_abc123
 ```
 
-On Enterprise plans, owners and admins can restrict serving approvals to admins and allowlist which connectors may serve Spaces with `sf connectors serving set`. The API operations are `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, and `denyConnectorServingRequest`.
+Team owners and admins can also restrict serving approvals to admins and allowlist which connectors may serve Spaces with `sf connectors serving set`. The API operations are `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, and `denyConnectorServingRequest`.
 
 ## Who reads and who writes
 

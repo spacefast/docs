@@ -9,7 +9,7 @@ sidebar:
 
 Connectors let your team connect an external service once—an OpenAPI spec, a GraphQL endpoint, or a remote MCP server—and call its tools from AI agents, Space pages, Functions, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
 
-Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. Enterprise adds team-wide connector allowlists, blocklists, and site-serving controls.
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. Enterprise adds team-wide connector allowlists and blocklists.
 
 ## How Connectors work
 
@@ -19,7 +19,7 @@ Four building blocks cover everything Connectors do:
 | --- | --- |
 | **Connector** | A tool source your team registers once (from the catalog or by pasting any URL). Its slug becomes the tool namespace, such as `hubspot` or `linear`. |
 | **Connection** | One authenticated account (`cxn_…`) on a connector, owned by the **Team** (shared) or **Personal** (only yours within this team). |
-| **Policy** | Rules that decide whether a tool call **Runs freely** (`approve`), **Asks first** (`require_approval`), or is **Blocked** (`block`). |
+| **Policy** | Rules that decide whether a tool call **Runs freely** (`approve`), **Ask first** (`require_approval`), or is **Blocked** (`block`). |
 | **Role** | A Space-level declaration in `spacefast.config.ts` or `sf.jsonc` that exposes chosen tools to a Space's pages and Functions. See [Connectors in Spaces](/space-connectors). |
 
 ## Three ways to use a connector
@@ -48,17 +48,18 @@ Four building blocks cover everything Connectors do:
     ```
   </Step>
   <Step title="Connect an account">
-    Open the connector, click **Connect Account**, pick **Team** or **Personal**, and finish OAuth sign-in or enter the required API key. From the terminal:
+    Open the connector, click **Connect Account**, pick **Team** or **Personal**, and finish OAuth sign-in or enter the required API key. From the terminal, connect and then list your connection ID (OAuth connectors print a sign-in URL first; replace `cxn_abc123` below with your ID):
 
     ```bash
     sf connectors connections connect linear
+    sf connectors connections list --connector linear
     ```
   </Step>
   <Step title="Set policy rules">
-    Open **Policies** in the connectors header to decide which tools run freely, ask a person first, or stay blocked:
+    Open **Policies** in the connectors header to decide which tools run freely, ask a person first, or stay blocked. Start with a rule scoped to the tool you want to test so other tools keep running:
 
     ```bash
-    sf connectors policies add '*' --action require_approval
+    sf connectors policies add cxn_abc123/issues.list --action require_approval
     sf connectors policies explain cxn_abc123/issues.list
     ```
   </Step>
@@ -68,6 +69,8 @@ Four building blocks cover everything Connectors do:
     ```bash
     sf connectors run --tool cxn_abc123/issues.list --args '{"limit":5}'
     ```
+
+    Because the rule above asks first, the CLI prints an approval URL and pauses with `awaiting_approval`. Open the URL to approve the call, then read the settled result with `sf connectors run inspect <runId>`—no need to submit a new run.
   </Step>
 </Steps>
 
@@ -157,7 +160,7 @@ sf connectors policies add '*' --action require_approval
 sf connectors policies explain cxn_abc123/charges.create
 ```
 
-On Enterprise plans, team owners and admins can also set a team-wide connector allowlist or blocklist and restrict which connectors may serve Spaces.
+On Enterprise plans, team owners and admins can also set a team-wide connector allowlist or blocklist.
 
 ### Decide a parked run
 
@@ -168,7 +171,7 @@ A parked run returns an `approvalUrl` and appears in two dashboard views:
 
 **Approve** runs the call once. **Deny** fails it with `connector_tool_blocked`. A parked run expires after 15 minutes.
 
-Approvals require a signed-in person. A CLI login or API key trying to approve fails with `human_approval_required`; read back a person's decision with `sf connectors run inspect` or `sf connectors run resume <runId>`. Pass `--deny-unattended` on `sf connectors run` to fail immediately with `connector_approval_required` instead of parking.
+Approvals require a signed-in person. A CLI login or API key trying to approve fails with `human_approval_required`. Read the outcome with `sf connectors run inspect <runId>`. Approving in the dashboard executes the call and settles the run, so `sf connectors run resume <runId>` applies only while the run still awaits a decision (a settled run returns `connector_run_not_resumable`). Pass `--deny-unattended` on `sf connectors run` to fail immediately with `connector_approval_required` instead of parking.
 
 ## Find and run tools
 
@@ -199,7 +202,7 @@ By default, a credential with connector scopes reaches every team connection it 
 - **API keys:** Pass `--connection <connectionId>` (repeatable) on `sf api-keys create` or `sf api-keys update`, or pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` over the API. Remove the limit with `--all-connections` or `connectorAccess: null`. See [API keys](/api-keys#limit-connector-access).
 - **OAuth apps and CLI logins:** Open **Choose Connections** on the consent screen, or edit the allowlist later on **Connected apps** without re-authorizing.
 
-A connection outside a credential's allowlist answers `404` as if it doesn't exist.
+Direct lookups of a connection outside a credential's allowlist answer `404` as if it doesn't exist. Tool runs still return a run record (HTTP `200` or `201`) with `connection_not_found` in the failed run's `error`; see [Errors](/api/connectors#errors).
 
 ## Keep connections working and clean up
 

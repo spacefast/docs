@@ -782,7 +782,7 @@ A team connection serves a Space only after site serving is turned on. On a publ
 
 | Command | What it does |
 | --- | --- |
-| `sf connectors serving create <role> --space <ref>` | Ask team owners and admins to turn site serving on for a role's bound connection (`csr_…`) |
+| `sf connectors serving create <role> --space <ref>` | Turn site serving on immediately for a role's bound connection when you have permission, or create a pending request (`csr_…`) for team owners and admins to approve |
 | `sf connectors serving list [--status pending\|approved\|denied\|canceled]` | List the team's site-serving requests. Aliased as `ls` |
 | `sf connectors serving inspect <request>` | Show one site-serving request and whether it is still pending |
 | `sf connectors serving approve <request>` | Approve a request and turn site serving on (owners and admins) |

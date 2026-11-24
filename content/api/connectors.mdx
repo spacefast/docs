@@ -352,6 +352,7 @@ These codes appear in a failed run's `error`, inside a successful HTTP response 
 
 A Space manages its connector roles, bindings, site-serving requests, public-serving allowances, and visitor connections under the `Spaces` tag:
 
+- **Roles:** `getSpace` (for `baseSettingsDigest`) and `updateSpace` (with `config.connectors` to override, remove, or reset roles without publishing).
 - **Bindings:** `listSpaceConnectorBindings`, `bindSpaceConnector`, and `unbindSpaceConnector`.
 - **Site serving:** `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, `denyConnectorServingRequest`, and `setSpaceConnectorPublicServing`.
 - **Visitor connections:** `listVisitorConnectionUsers` and `revokeVisitorConnection`.
