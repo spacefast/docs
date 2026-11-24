@@ -16,7 +16,7 @@ npm run build
 sf publish ./dist
 ```
 
-**Let Spacefast build.** You hand over source. Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when the source is the thing you have, especially on a push to a connected repository.
+**Let Spacefast build.** You hand over source. Spacefast installs dependencies, runs the build in a sandbox, and publishes the output as a version. Use it when you only have source code, or when building from a connected repository.
 
 ```bash
 sf publish --remote
@@ -139,7 +139,7 @@ Two variables are injected for you on builds that target no channel, such as pla
 | `canceled` | You stopped it |
 | `skipped` | The runner decided not to run it at all |
 
-`skipped` is normal, not an error. A push that touched nothing under `rootDirectory` is skipped, and so is a build a newer build for the same branch has already overtaken.
+`skipped` is normal, not an error. A push that touched nothing under `rootDirectory` is skipped, and so is a build superseded by a newer push on the same branch.
 
 A build whose output is byte-identical to the live version succeeds without minting a version. It records the version it reused, and the dashboard shows **No changes. Reused v12.**
 

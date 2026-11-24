@@ -22,7 +22,7 @@ MCP configuration varies by client: `mcp` for OpenCode, `servers` for VS Code, a
     }
     ```
 
-    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright, and VS Code reads one as a stdio command. The short form is broken, not smaller.
+    The `"type"` field is required. Claude Code rejects a bare `{ "url": ... }` entry outright, and VS Code reads it as a stdio command.
   </Tab>
   <Tab title="Local stdio">
     The server runs on your machine and can read your working directory, so `publish` accepts a path.
@@ -83,7 +83,7 @@ Your client never holds a Spacefast API token. Each request mints an internal de
 
 `sf mcp proxy` is a bridge. Your editor speaks stdio to the `sf` process on your machine, and `sf` speaks HTTPS to `https://mcp.spacefast.com` using the login you already have from `sf login`.
 
-That buys three things.
+This gives you three benefits:
 
 - No editor-managed OAuth. Clients with weak or missing OAuth support still reach the hosted server.
 - No credential in your editor's config file. The token lives in the CLI's own state.

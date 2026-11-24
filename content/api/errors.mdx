@@ -95,7 +95,7 @@ Every code carries two classifications in the shipped contract. They are not res
 
 Two retry rules that come from the wire rather than the table. A `429` carries `Retry-After` in seconds, so honour that number instead of guessing. A `409 idempotency_conflict_in_progress` answering your own `Idempotency-Key` means the first attempt is still running, so keep asking until it resolves.
 
-## The codes you will meet first
+## Common error codes
 
 ### Request and routing
 
@@ -186,6 +186,6 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 
 ## Every error code
 
-The full registry lives at [Error codes](/errors), grouped by prefix, one page per code. A code that is not there is not something this API emits.
+The full registry lives at [Error codes](/errors), grouped by prefix, one page per code. The API only emits codes listed there.
 
 Each code's page is also the `type` URI in its problem document, so you can follow the link straight out of a failed response.

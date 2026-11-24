@@ -23,7 +23,7 @@ Detection is the normal case. `sf publish` looks at the tree and picks the first
 
 A directory matching none of these is a static site, which is the safe default.
 
-The OpenNext build wins over a stray `handler.ts`, because framework output is the thing the build produced while a loose file may be a leftover.
+The OpenNext build wins over a stray `handler.ts`, because a framework build takes precedence over a leftover handler file.
 
 ### The `functions/` file router
 
@@ -132,7 +132,7 @@ Outbound requests from a worker leave from Cloudflare's shared network addresses
 
 `env.CONNECTORS` calls your Space's [connector roles](/connectors#call-from-functions) when the version declares any.
 
-`env.DB` is always there. It is D1-shaped, so `env.DB.prepare(sql).bind(...).all()` is the call you already know. It reaches the space's own database through a broker, so no connection string ever lands in the bundle.
+`env.DB` is always there. It uses the D1 API (`env.DB.prepare(sql).bind(...).all()`) and reaches the space's own database through a broker, so no connection string ever lands in the bundle.
 
 Two groups of variable names never reach a worker, dropped rather than blanked so your code reads them as absent instead of as "configured, but empty".
 

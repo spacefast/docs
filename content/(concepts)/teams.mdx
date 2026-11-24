@@ -36,7 +36,7 @@ A team has a name and a slug. The slug is the first segment of its dashboard URL
 
 ## Roles
 
-Three roles, and the one you hold in a team caps everything you do there, whether through the dashboard, the CLI, the API, or an agent acting for you.
+Your team role caps what you can do across the dashboard, CLI, API, and any agent acting on your behalf.
 
 | Action | Owner | Admin | Member |
 |---|---|---|---|
@@ -60,7 +60,7 @@ Three roles, and the one you hold in a team caps everything you do there, whethe
 
 A credential with the `teams:members.write` scope, such as Agent access, can invite people. Cancelling or resending an invitation and every other membership change need a signed-in person in the dashboard, even for an owner or admin. See [credential limits](/api-keys#what-an-agent-grant-cannot-do).
 
-Owner and admin differ in exactly one place. An admin can hand out `admin` and `member`, but only an owner can make someone else an owner.
+Admins can assign the `admin` and `member` roles, while only owners can grant the `owner` role or transfer ownership.
 
 ## Invite someone
 
@@ -95,7 +95,7 @@ On **Members**, each row has role and removal actions for owners and admins. Rem
 
 If the team uses [Connectors](/connectors), the removal review lists the departing member's connector dependencies. Their personal connections disconnect automatically along with any Space bindings pointing to them. Team connections they created stay active while their existing Space bindings stay in place; if an owner or admin rebinds a role on a public, link-shared, or password-protected Space, restore its public-serving allowance before expecting calls to succeed.
 
-Two guards you cannot talk your way past:
+Two rules always apply:
 
 - The last owner cannot be removed, and cannot be demoted. Add another owner first.
 - An admin cannot create an owner.

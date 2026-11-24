@@ -46,7 +46,7 @@ Every key in the config file is documented on [Config file](/config-file). Routi
 
 ## Anonymous publish caps
 
-Publishing without an account runs on its own cap table, tighter than Personal on every axis.
+Publishing without an account uses stricter limits than the Personal plan.
 
 | Cap | Value | When you hit it |
 | --- | --- | --- |
@@ -89,7 +89,7 @@ A space that stops serving does not fall back to a blank 404. The status code an
 | Removed after a legal complaint | `451` | `This content is unavailable for legal reasons.` | `409` |
 | Removed under the strictest safety category | `404` | `This space hasn't been published yet.` | `409` |
 
-A past-due account blocks only writes. A suspended account also stops serving its Spaces. A past-due account keeps serving every Space at full speed for the whole grace period, and only the dashboard, CLI, and API stop accepting changes.
+During the grace period, a past-due account keeps serving Spaces that would otherwise serve normally while blocking writes in the dashboard, CLI, and API. Once suspended, it stops serving its Spaces too.
 
 The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything: `404` with `X-Spacefast-Undeployed: 1` and the unpublished body. That header tells it apart from a missing page on a published Space.
 

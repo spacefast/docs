@@ -19,7 +19,7 @@ https://spacefast.com/docs/publish/     ->  https://spacefast.com/docs/publish.m
 
 Every authored page below works both ways. The API reference is the exception:
 its Markdown is a section outline, and the operations themselves come from the
-source named under Reference surfaces.
+source named under Generated references.
 
 ## Set up an agent
 
@@ -75,7 +75,7 @@ Read one page with `GET https://api.spacefast.com/v1/docs/pages/{slug}`.
 Each result carries the page path, its full URL, and a summary, so you can go
 straight to the Markdown.
 
-## Reference surfaces
+## Generated references
 
 Three references are too large to list page by page, so each one appears here as
 its index. The URLs under them are frozen contracts and will not move.

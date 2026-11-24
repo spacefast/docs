@@ -105,7 +105,7 @@ Two artifacts that claim the same request route also stop the publish, so visito
 | Manifest request body | 16 MiB | `manifest_body_too_large` |
 | Inline archive body | 128 MiB | `publish_archive_too_large` |
 
-The file count is a platform ceiling: every claimed plan gets the same 100,000. Anonymous publishes run a tighter table, on [Limits](/limits).
+The file count is a platform ceiling, and every claimed plan gets the same 100,000. Anonymous publishes use stricter limits; see [Limits](/limits).
 
 Every plan publishes every file type. A PDF, a video, or a zip lands in the version like an HTML page does; only the size and count table above applies.
 
@@ -204,7 +204,7 @@ An archive that needs a build returns a receipt with a `build` object and `next.
 | `invalid_file_path` | A path Spacefast cannot canonicalize | Remove backslashes, doubled slashes, and trailing dots or spaces |
 | `static_control_file_not_supported` | An `.htaccess` or `.user.ini` shipped | Delete it. Use `_redirects` and `_headers` instead |
 | `unsupported_publish_media_type` | The content type is not one of the five above | Send a zip or a JSON manifest |
-| `publish_archive_compression_ratio_exceeded` | The archive expands over 100 times its size | Repack without the zip bomb shaped content |
+| `publish_archive_compression_ratio_exceeded` | The archive expands over 100 times its size | Repack without highly compressed or recursive entries |
 | `slug_reserved`, `slug_unavailable` | The slug you asked for is taken or held | Take the `details.suggestion` |
 | `space_selection_conflict` | You passed both a Space and a creation-only flag such as `--access` | Drop the creation flag |
 
