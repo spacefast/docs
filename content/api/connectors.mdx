@@ -303,7 +303,7 @@ Runs share a budget of 1,200 per team per hour. Past it, requests fail with `429
 
 `resumeConnectorRun` takes `action` (`accept`, `decline`, or `cancel`) and `content`, the values a parked call asked for. A `decline` or `cancel` fails the run with `connector_approval_declined`.
 
-A run parked in `human` mode refuses a decision from an API key or an agent with `human_approval_required`. A person decides at `approvalUrl`. Then call `resumeConnectorRun` with no `action` to read back the outcome and let the run continue. While nobody has decided, that call fails with `connector_approval_required`.
+A run parked in `human` mode refuses a decision from an API key or an agent with `human_approval_required`. A person decides at `approvalUrl`, which executes the call and settles the run. Read the settled status and `result` with `getConnectorRun` (`sf connectors run inspect <runId>`). Calling `resumeConnectorRun` on a settled run fails with `connector_run_not_resumable`, and calling it without an `action` before a decision fails with `connector_approval_required`.
 
 ## Errors
 

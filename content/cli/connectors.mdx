@@ -728,7 +728,7 @@ sf connectors run resume <run> [--accept | --deny | --cancel] [--content <json>]
 | `--content=<json>` | none | JSON object of values the parked call asked for. Accepts `@file` or `-` for stdin |
 | `-T, --team=<value>` | default team | Team slug, ID, or name. Env `SPACEFAST_TEAM` |
 
-Omit the action to read back a decision a person recorded in the dashboard. A run parked for a person refuses a decision from the CLI.
+A run parked for a person refuses a decision from the CLI with `human_approval_required`. Once a person decides in the dashboard, the run settles—read the outcome with `sf connectors run inspect <runId>` (`resume` returns `connector_run_not_resumable` on a settled run).
 
 ```bash
 sf connectors run resume cxr_abc123
