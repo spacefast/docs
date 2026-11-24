@@ -94,7 +94,7 @@ sf domains registration example.com
 
 ## sf purchases confirm
 
-Charge the saved payment method for a purchase that is waiting for confirmation. Needs purchasing power on the paying team.
+Charge the saved payment method for a purchase that is waiting for confirmation. Needs purchasing power on the paying team, or `domains:write` when paying with `--payment-token`.
 
 ```text
 sf purchases confirm <id> --expect-total <value> [--payment-token <value>]
