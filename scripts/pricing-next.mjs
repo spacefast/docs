@@ -168,7 +168,7 @@ const FEATURES = [
     row("Sign in with Spacefast for your apps", null, all(BETA)),
     row("Managed content", null, all(BETA)),
     row("Tag Manager", null, all(BETA)),
-    row("Connectors to other services", "Connect services like Linear or Google once and let agents and Spaces use them.", all(SOON)),
+    row("Connectors to other services", "Connect services like Linear or Google once and let agents and Spaces use them. Public Beta on Go, Pro, and Enterprise.", [NO, BETA, BETA, BETA], "beta"),
     row("Store and payments", "Sell digital downloads and physical products, with checkout and orders. In private beta.", all(BETA), "beta"),
     row("Draw on pages when giving feedback", null, all(SOON)),
   ]],

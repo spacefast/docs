@@ -6,6 +6,7 @@ export default defineMeta({
   order: 4,
   pages: [
     "urls",
+    "buy-domains",
     "domains",
     "routing",
     "traffic-rules",

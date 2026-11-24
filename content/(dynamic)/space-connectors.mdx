@@ -1,0 +1,307 @@
+---
+title: Connectors in Spaces
+description: Show live data from your team's connectors on any Space page or Function. Declare a role in your config, bind an account, and call it with no backend code and no credentials in the browser.
+sidebar:
+  badge: Public Beta
+---
+
+<Badge variant="warning">Public Beta</Badge>
+
+Put live data from a connected service on any page of a Space—or inside a [Function](/functions)—with no backend to write and no keys in the browser. You declare a role in your Space config, bind an account to it, and call `/__spacefast/connectors/<role>/<tool>`. Spacefast runs the tool with the account's sealed credentials on the server and returns JSON.
+
+Connectors are in Public Beta on Go, Pro, and Enterprise plans. If you haven't added a connector or connected an account to your team yet, start with [Connectors](/connectors).
+
+## How a Space call works
+
+1. **Declare a role** in `spacefast.config.ts` or `sf.jsonc` naming the connector, allowed tools, account mode (`team`, `personal`, or `visitor`), optional pinned arguments, and read cache window.
+2. **Bind an account** (for `team` or `personal` roles) and enable site serving on the connection. Publishing a live version as a team owner or admin auto-binds any role with a single eligible connection.
+3. **Call the role** from a page using `@spacefast/client`, `/__spacefast/client.js`, plain `fetch`, or from a Function via `env.CONNECTORS`.
+
+## Declare a role
+
+Put roles under `connectors` in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  connectors: {
+    crm: {
+      connector: "hubspot",
+      tools: ["list_deals"],
+      args: { list_deals: { pipeline: "sales" } },
+      cache: "60s",
+    },
+  },
+});
+```
+
+Or in `sf.jsonc`, with the same shape:
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "connectors": {
+    "crm": {
+      "connector": "hubspot",
+      "tools": ["list_deals"],
+      "args": { "list_deals": { "pipeline": "sales" } },
+      "cache": "60s"
+    }
+  }
+}
+```
+
+When both files exist, `spacefast.config.ts` wins. Publish to apply the roles, because each version freezes the roles it was published with.
+
+The tool names and arguments on this page, such as `list_deals` and `stage`, are examples. Check what your connection exposes with `sf connectors connections inspect <connectionId>` or [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+
+| Key | Required | What it does |
+| --- | --- | --- |
+| `connector` | yes | Connector slug registered on your team, such as `hubspot`. `sf connectors list` shows them |
+| `tools` | yes | A list of tool names, or `"*"` for every tool on the connection, including tools added later |
+| `as` | no | Whose account answers: `team` (default), `personal`, or `visitor`. See [Who reads and who writes](#who-reads-and-who-writes) |
+| `args` | no | Argument values pinned per tool on the server. See [Pinned arguments](#pinned-arguments) |
+| `cache` | no | How long viewers share one read: `"30s"` by default, up to `"1440m"` (1 day). `"0"` disables sharing. See [Shared reads](#shared-reads) |
+
+Role names are camelCase, start with a lowercase letter, and are up to 64 characters. A Space declares at most 32 roles, and each role lists at most 200 tools. Tool names use letters, digits, `_`, `.`, `:`, and `-`. `connect`, `callback`, and `disconnect` are reserved.
+
+## Bind an account and turn on site serving
+
+A `team` or `personal` role needs a bound account (`visitor` roles bind nothing; each viewer connects their own).
+
+Publishing a live version as a human team owner or admin (with `connectors:write` and access to the account) binds a role automatically when exactly one eligible connection exists. Publishes by team members without `connectors:write`, API keys, or settings republishes bind nothing. The publish receipt lists roles that still need a binding or site serving. Bind remaining roles from the CLI (`sf connectors bind`) or the Space's **Integrations** page:
+
+```bash
+sf connectors bindings --space example
+sf connectors bind crm cxn_abc123 --space example
+```
+
+Through the API, use [`listSpaceConnectorBindings`](/api/reference/spaces/listspaceconnectorbindings) and [`bindSpaceConnector`](/api/reference/spaces/bindspaceconnector).
+
+### Site serving for team connections
+
+A `team` connection serves Space viewers only after site serving is turned on. Until then, the role's state is `needs_serving_grant` and calls answer `connection_forbidden`.
+
+Owners and admins can turn serving on directly from the connection in the dashboard or with `sf connectors connections update cxn_abc123 --serving`. Anyone else can request it:
+
+```bash
+sf connectors serving create crm --space example
+```
+
+That returns a pending request (`csr_…`), or approves immediately if you already have permission. Owners and admins receive a notification and decide in the dashboard or CLI:
+
+```bash
+sf connectors serving list
+sf connectors serving approve csr_abc123
+sf connectors serving deny csr_abc123
+```
+
+Team owners and admins can also restrict serving approvals to admins and allowlist which connectors may serve Spaces with `sf connectors serving set`. The API operations are `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, and `denyConnectorServingRequest`.
+
+## Who reads and who writes
+
+| `as` | Whose account | Who reads through it | Who writes through it |
+| --- | --- | --- | --- |
+| `team` | A team connection with site serving on | Everyone who can open the Space | A signed-in current member of the owning team |
+| `personal` | The connection of the person who bound it | Everyone who can open the Space (private Spaces only) | A signed-in current member of the owning team |
+| `visitor` | Each viewer's own connection | That viewer | That viewer |
+
+The connectors route sits behind the Space's own access check, so data is never more public than the pages. A private Space's data stays private; a share link or password admits viewers with that link or password for reads.
+
+Two extra guardrails prevent accidental exposure:
+
+- **`team` on a Space anyone can open.** When a Space is public, or shared by link or password, a `team` role serves only after a team owner or admin allows public serving: `sf connectors public-serving set crm --enable --space example` (API: `setSpaceConnectorPublicServing`). Until then, calls answer `connection_forbidden`. Rebinding the role resets the allowance.
+- **`personal` requires a private Space.** A `personal` role works only while the Space is private with no share link or password. Otherwise every call answers `connection_forbidden`.
+
+Writes through a `team` or `personal` role require a signed-in current member of the owning team. Anyone else can read through an allowed `team` role, never write: writes answer `connector_write_sign_in_required`. Send viewers to sign in with `space.access.signIn()`. A `visitor` role signs the viewer in first, then asks them to connect their own account.
+
+Your team's connector policy still applies to every call: blocked tools are refused, and tools set to **Ask first** answer `approval_pending`.
+
+## Previews
+
+Preview and held versions protect your live Space's bindings and shared accounts:
+
+- **No auto-binding on preview publishes.** Publishing a version that doesn't go live leaves existing bindings untouched and binds no new roles. Promoting or rolling back to that version binds its roles then.
+- **No shared writes from previews.** A preview version can read through already-bound `team` or `personal` roles, but non-read-only tools on shared bindings are refused with `connector_preview_write_not_allowed`. Promote the version to run writes.
+- **`visitor` roles work normally in previews**, because each call uses the viewer's own connected account.
+
+## Call it from a page
+
+### Typed client (TypeScript and JavaScript)
+
+Install `@spacefast/client`:
+
+```bash
+npm install @spacefast/client
+```
+
+`sf dev` and `sf publish` generate `spacefast.generated.ts` next to your config file automatically (or run `sf client` by hand; pass `--out` to place it elsewhere). With roles declared, `sf publish` stops if regeneration fails so you never ship stale types; `sf dev` warns and continues.
+
+```ts
+import { space } from "./spacefast.generated";
+
+const answer = await space.connectors.crm.list_deals({ stage: "won" });
+if (answer.state === "ok") render(answer.data);
+else showNotice(answer.message);
+```
+
+Each generated method knows its HTTP method: read-only tools send `GET`, and write tools send `POST`. Pass `{ idempotencyKey }` as the last argument so a retried write runs once. Pinned arguments are omitted from the tool's parameter type, non-identifier tool names use bracket keys (`space.connectors.github["issues.list"]()`), and tools without an output schema return `unknown`.
+
+Keep a read live with `.watch()`, which refreshes on an interval and on window focus while sharing identical requests (writes cannot be watched):
+
+```ts
+const deals = space.connectors.crm.list_deals.watch({ stage: "won" }, { every: "60s" });
+const stop = deals.subscribe(() => render(deals.getSnapshot()));
+```
+
+`every` takes milliseconds or `"30s"`, `"5m"`, `"1h"`, never under one second.
+
+### React
+
+`useConnector` from `@spacefast/client/react` wraps `.watch()`:
+
+```tsx
+import { useConnector } from "@spacefast/client/react";
+import { space } from "./spacefast.generated";
+
+export function Deals() {
+  const deals = useConnector(space.connectors.crm.list_deals, { stage: "won" }, { every: "60s" });
+  if (deals.state === "ok") return <DealList deals={deals.data} />;
+  return <p>{deals.message ?? "Loading…"}</p>;
+}
+```
+
+It returns `data`, `state`, `message`, `connectUrl`, `approvalUrl`, `cachedAt`, `refreshing`, `error`, and `refresh`, keeping the last good `data` during refreshes and sharing requests across components.
+
+### Plain HTML and `fetch`
+
+Pages with no build step import the client directly from the Space (types live at `/__spacefast/client.d.ts`):
+
+```html
+<script type="module">
+  import { space } from "/__spacefast/client.js";
+
+  const { state, data, message } = await space.connectors.crm.list_deals({ stage: "won" });
+  document.querySelector("#deals").textContent = state === "ok" ? JSON.stringify(data) : message;
+</script>
+```
+
+Without generated types, every call uses `GET`; pass `{ method: "POST" }` for writes.
+
+You can also call the route with `fetch`. Query parameters pass string arguments (`?stage=won`), and `__args` passes typed JSON:
+
+```js
+const args = encodeURIComponent(JSON.stringify({ stage: "won", limit: 5 }));
+const response = await fetch(`/__spacefast/connectors/crm/list_deals?__args=${args}`);
+const { state, data } = await response.json();
+```
+
+A `POST` sends a JSON body of at most 64 KiB. Cross-site calls are blocked with `browser_origin_not_allowed` when `Sec-Fetch-Site` or `Origin` names another host, and writes always require same-origin proof (`Origin` or `Sec-Fetch-Site: same-origin`). Every response is `private, no-store`.
+
+## States and errors
+
+A call returns `{ state, data }`. When `state` is `ok`, `data` holds the tool's output; every other state returns `data: null` and a user-facing `message`:
+
+| State | What it means | What the page should do |
+| --- | --- | --- |
+| `ok` | `data` is the provider's payload. HTTP-backed tools add `http` (`status`, `headers`), and shared reads add `cachedAt` | Render `data` |
+| `unbound` | No account serves this role yet | Show `message`; the Space's owner binds an account |
+| `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
+| `reconnect_required` | The account's authorization expired | For `visitor` roles, link to `connectUrl`. For `team` or `personal` roles, the team reconnects it—don't show `connectUrl` |
+| `approval_pending` | The call is waiting for human approval | Show `message` and link to `approvalUrl` when present |
+| `running` | Still executing | Retry shortly (watched reads retry automatically) |
+
+Hard failures return an RFC 9457 problem document with a stable `code`, thrown as `ConnectorError` (`status`, `code`, `message`) by the client (`state: "error"` in `useConnector`):
+
+| Code | Status | When |
+| --- | --- | --- |
+| [`connection_forbidden`](/errors/connection_forbidden) | 403 | Policy blocks the connector, read tool, or visitor write; approval denied; site serving off; or Space too open for the role |
+| [`connector_role_unknown`](/errors/connector_role_unknown) | 404 | The live version doesn't declare this role |
+| `connector_tool_not_allowed` | 403 | The role's `tools` list omits this tool |
+| `connector_arg_pinned` | 422 | The call sent a different value for a pinned argument |
+| `connector_preview_write_not_allowed` | 403 | A preview version tried to run a non-read-only tool on a shared `team` or `personal` role |
+| `connector_write_sign_in_required` | 403 | A write on a `team` or `personal` role from someone who isn't a signed-in current member of the owning team |
+| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | Team policy blocks this write tool on a `team` or `personal` role |
+| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a write tool—send `POST` instead |
+| [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | Cross-site call, or write without same-origin proof |
+| `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer; retry |
+
+## Visitor accounts
+
+A `visitor` role requires a connector with an OAuth sign-in method (API-key-only connectors answer `connector_oauth_required`; missing team OAuth apps answer `connector_oauth_app_required`).
+
+Its `connectUrl` is `/__spacefast/connectors/<role>/connect`, which signs the viewer in if needed, sends them to the provider, and returns them to `/` (or `?return_to=/some/path`). A same-origin `POST` to `/__spacefast/connectors/<role>/disconnect` disconnects the viewer's account.
+
+Inspect or revoke visitor connections from the CLI or API (`listVisitorConnectionUsers`, `revokeVisitorConnection`):
+
+```bash
+sf connectors visitors list --space example
+sf connectors visitors revoke 42 calendar --space example
+```
+
+## Pinned arguments
+
+`args` fixes argument values per tool on the server:
+
+```jsonc sf.jsonc
+{
+  "connectors": {
+    "crm": {
+      "connector": "hubspot",
+      "tools": ["list_deals"],
+      "args": { "list_deals": { "pipeline": "sales" } }
+    }
+  }
+}
+```
+
+Every call to `list_deals` runs with `pipeline: "sales"` regardless of what the page sends. Sending a different value fails with `connector_arg_pinned` and a `pointer` naming the argument. Pin anything viewers shouldn't choose, such as a pipeline, project, or workspace id.
+
+## Shared reads
+
+Because a `team` or `personal` role queries one account for every viewer, Spacefast shares one upstream read across viewers for the role's `cache` window:
+
+- **Key:** Space, role, tool, and final arguments with pins applied (argument order ignored).
+- **Single-flight fill:** One viewer fills a cold key while concurrent viewers wait for it.
+- **Budget:** 60 upstream reads per role per rolling minute, per Space.
+- **Stale fallback:** When the budget is spent, the last cached value serves for up to an hour past its window (otherwise `connectors_unavailable`).
+- **`cachedAt`:** Included on cached `ok` answers; omitted on the request that fetched fresh data.
+
+Only successful reads are shared. `cache: "0"` disables sharing while still counting against the budget. Writes, `visitor` roles, and tools requiring approval are never shared.
+
+## Change roles without a publish
+
+Use the Space's **Integrations** page or `sf connectors roles` to override, turn off, or reset roles on a live Space without republishing:
+
+```bash
+sf connectors roles list --space example
+sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s --space example
+sf connectors roles remove crm --space example
+sf connectors roles reset crm --space example
+```
+
+Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, `config` on [`updateSpace`](/api/reference/spaces/updatespace) replaces the Space's whole stored settings overlay (except `config.network`), so read `config` and `settingsDigest` from [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your `config.connectors` change (setting a role to `null` removes it), and pass `settingsDigest` as `baseSettingsDigest`.
+
+## Call it from Functions
+
+A [Functions](/functions) worker whose version declares roles receives `env.CONNECTORS`:
+
+```js functions/deals.js
+export async function GET(request, { env }) {
+  const deals = await env.CONNECTORS.crm.list_deals({ stage: "won" });
+  return Response.json(deals);
+}
+```
+
+The proxy returns the tool's output or throws `ConnectorCallError` with `state.code` (such as `connect_required` or `forbidden`). `env.CONNECTORS.call("crm", "list_deals", args)` returns `{ state, result }` without throwing. Workers forward the request's signed-in viewer, so `visitor` roles, write permissions, and preview write rules match page calls. Worker calls are never shared reads.
+
+## Call it from outside the Space
+
+The `/__spacefast/connectors/...` route answers only the Space's own pages. From a script, CI job, or agent, call [`createConnectorRun`](/api/reference/connectors/createconnectorrun) or `sf connectors run` with your own API key:
+
+```bash
+sf connectors run --tool cxn_abc123/list_deals --args '{"stage":"won"}'
+```
+
+Direct runs follow your credential and team policy rather than a Space role (no pinned arguments, no shared reads).
