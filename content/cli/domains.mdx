@@ -1,13 +1,110 @@
 ---
 title: domains and routing
-description: Attach custom domains to a Space, check DNS and TLS readiness, and inspect the redirect and header rules a version serves
+description: Find and buy domains, attach them to a Space, check DNS and TLS readiness, and inspect the redirect and header rules a version serves
 sidebar:
   order: 20
 ---
 
-Attaching a custom domain to a Space is three API calls in one command, with DNS and TLS readiness tracked as they come up.
+Find a name and buy it, then attach it to a Space. Attaching a custom domain is three API calls in one command, with DNS and TLS readiness tracked as they come up.
 
-Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`) and, except `sf routing inspect`, the space selection flags (`--space`, `-T`/`--team`, `--claim-token`). See [the CLI overview](/cli) for those.
+Every command here takes the global flags (`--api-url`, `--profile`, `--token`, `-y`/`--yes`, `--json`). The search and buying commands also take `-T`/`--team`. The rest, except `sf routing inspect`, take the space selection flags (`--space`, `-T`/`--team`, `--claim-token`). See [the CLI overview](/cli) for those.
+
+## sf domains search
+
+Find domain names in a conversation. A keyword checks exact matches and domain hacks. A naming brief generates ideas. Both get live availability, prices, and scores. Search never buys anything.
+
+```text
+sf domains search [QUERY] [--input <value>] [--like <value>...] [--dislike <value>...]
+  [--neutral <value>...] [--select <value>...] [--unselect <value>...]
+  [--interactive | --local] [--limit <number>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--input=<value>` | none | Previous search receipt, session, or request: JSON, `@file`, or `-` for stdin |
+| `--like=<value>` | none | Like a saved suggestion. Repeat for more than one |
+| `--dislike=<value>` | none | Dismiss a saved suggestion. Repeat for more than one |
+| `--neutral=<value>` | none | Clear a saved suggestion's like or dismissal |
+| `--select=<value>` / `--unselect=<value>` | none | Add a saved suggestion to the selection, or remove it |
+| `--interactive` | `false` | Keep a search conversation open in the terminal |
+| `--local` | `false` | Print offline name ideas, with no account and no live checks |
+| `--limit=<number>` | `20` | Number of offline ideas to print with `--local` |
+
+Feedback flags take a domain, a suggestion ID, or the result number from the saved receipt. Save `--json` output and pass it back with `--input` to continue the same search.
+
+```bash
+sf domains search "a cozy bakery in Brooklyn" --json > names.json
+sf domains search "shorter, playful names" --input @names.json --like 2 --select 3 --json
+```
+
+## sf domains contacts add
+
+Save the person or organization domains are registered to.
+
+```text
+sf domains contacts add --file <value>
+```
+
+The JSON file needs `firstName`, `lastName`, `address1`, `city`, `state`, `postalCode`, `countryCode`, `email`, and `phone`. `organization` and `address2` are optional. `sf domains contacts list` lists saved contacts, newest first.
+
+A contact belongs to the person who saved it, so run this signed in as yourself. Team API keys can't save contacts or buy domains.
+
+## sf domains registration purchase
+
+Buy up to 10 apex domains with the team's saved payment method.
+
+```text
+sf domains registration purchase DOMAIN... [--contact <value> | --contact-file <value>]
+  [--expect-total <value>] [--payment-token <value>]
+```
+
+### Flags
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--contact=<value>` | your newest contact | Saved registrant contact ID (`dcon_...`) |
+| `--contact-file=<value>` | none | JSON file with a new registrant, saved before buying |
+| `--expect-total=<value>` | none | Charge the team's payment method now for exactly this total before tax, in USD (for example `10.34`) |
+| `--payment-token=<value>` | none | Pay with a Stripe shared payment token (`spt_...`) from an agent wallet instead. Needs `--expect-total` |
+
+With `--expect-total` and purchasing power (`billing:purchase` on the paying team), the payment method is charged now. Without either, nothing is charged: the output gives you the `sf purchases confirm` command, or a dashboard link for a team admin.
+
+```bash
+sf domains registration purchase example.com example.dev
+sf domains registration purchase example.com --expect-total 10.34
+```
+
+One name that can't be bought refuses the whole purchase with `domain_not_purchasable`. A total that moved refuses with `purchase_total_changed`.
+
+## sf domains registration
+
+Show a domain's registration: status, expiry, auto-renew and the earliest day it charges, and any failure or refund.
+
+```text
+sf domains registration <domain> [--auto-renew | --no-auto-renew]
+```
+
+A paid purchase moves from `pending_payment` to `pending_registration` to `active`. Auto-renew is on by default. It charges the team's saved payment method from 30 days before expiry, and no sooner than a week after the team is told. To renew now, run `sf domains registration renew <domain>`.
+
+```bash
+sf domains registration example.com
+```
+
+## sf purchases confirm
+
+Charge the saved payment method for a purchase that is waiting for confirmation. Needs purchasing power on the paying team.
+
+```text
+sf purchases confirm <id> --expect-total <value> [--payment-token <value>]
+```
+
+`sf purchases inspect <id>` shows a purchase and `sf purchases cancel <id>` releases one nobody has charged yet.
+
+```bash
+sf purchases confirm bpi_xxxxxxxx --expect-total 10.34 --team my-team
+```
 
 ## sf domains add
 
