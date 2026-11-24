@@ -9,8 +9,8 @@ export const docsDynamicRuleLimit = 88;
 const websiteDynamicRuleReserve = 16;
 const platformDynamicRuleLimit = 100;
 // The composed artifact shares the platform's 2,000 static and 2,100 total
-// redirects with the Website, which declares about 90 of its own.
-const websiteStaticRuleReserve = 120;
+// redirects with the Website, which currently declares 124 static redirects.
+const websiteStaticRuleReserve = 124;
 export const docsStaticRuleLimit = 2_000 - websiteStaticRuleReserve;
 const docsTotalRuleLimit = 2_100 - websiteStaticRuleReserve - websiteDynamicRuleReserve;
 
@@ -213,14 +213,15 @@ export function buildRoutingRules(redirects) {
 
 export function verifyRoutingBudget(rules) {
   const dynamicRules = rules.filter(isDynamic).length;
-  const staticRules = rules.length - dynamicRules;
+  const redirectRules = rules.filter((rule) => rule.status !== 200);
+  const staticRules = redirectRules.filter((rule) => !isDynamic(rule)).length;
   if (
     dynamicRules > docsDynamicRuleLimit ||
     staticRules > docsStaticRuleLimit ||
-    rules.length > docsTotalRuleLimit
+    redirectRules.length > docsTotalRuleLimit
   ) {
     throw new Error(
-      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${rules.length}/${docsTotalRuleLimit} total`,
+      `Generated compatibility routes exceed Docs limits: ${dynamicRules}/${docsDynamicRuleLimit} dynamic, ${staticRules}/${docsStaticRuleLimit} static, ${redirectRules.length}/${docsTotalRuleLimit} total`,
     );
   }
 }

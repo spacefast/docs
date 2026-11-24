@@ -64,7 +64,6 @@ export const redirects: { from: string; to: string; status: 301 }[] = [
   { from: "/runtimes/functions", to: "/functions", status: 301 },
   { from: "/runtimes/zero", to: "/zero-runtime", status: 301 },
   { from: "/sdk", to: "/api/sdk", status: 301 },
-  { from: "/space-connectors", to: "/connectors", status: 301 },
   { from: "/spaces/rename", to: "/spaces", status: 301 },
   { from: "/team-connectors", to: "/connectors", status: 301 },
   { from: "/versions-and-rollback", to: "/versions", status: 301 },
