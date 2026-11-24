@@ -57,9 +57,9 @@ So a brand new variable with no flag is write-only. Pass `--no-secret` when you 
 | Reserved | Names starting with `SPACEFAST_` |
 | Empty values | Refused. A variable always has a value |
 
-## Build time and runtime are different lanes
+## Build time and runtime are separate
 
-A plain variable reaches both lanes. It is filled into template files when a version finalizes, and server code reads it at runtime. A secret reaches server code only. A template that references one is blocked with `secret_variable_in_template`.
+A plain variable reaches both stages. It is filled into template files when a version finalizes, and server code reads it at runtime. A secret reaches server code only. A template that references one is blocked with `secret_variable_in_template`.
 
 ### Build time, `{{ vars.NAME }}`
 

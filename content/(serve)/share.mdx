@@ -208,7 +208,7 @@ Approving invites the requester to the path they asked about.
 
 **With a share link**, the token is checked before the file is read, so the first request returns the page. The response is never cached. It also carries `Referrer-Policy: no-referrer`, so the secret does not leak through the referrer header on outbound clicks.
 
-**On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page offers whichever lanes you configured: a password box, an email code, a request-access form, or a sign-in with a Spacefast account.
+**On a protected Space with no proof**, the request answers **403** with the Space's access page and `Cache-Control: private, no-store`. The page offers whichever sign-in methods you configured: a password box, an email code, a request-access form, or a sign-in with a Spacefast account.
 
 **Signing in** sends the visitor to Spacefast and back to the page they originally asked for.
 
