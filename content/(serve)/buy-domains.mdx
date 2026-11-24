@@ -3,7 +3,7 @@ title: Find and buy a domain
 description: Search for a name, check that it's available, and register it to your team at cost, from an agent, the CLI, or the API
 ---
 
-Spacefast registers domains at cost: the registry price plus the ICANN fee. A domain you buy belongs to your team, renews on its own, and doesn't count toward your plan's custom domain limit. Once it's registered, [connect it to a Space](/domains).
+Spacefast registers domains at cost: you pay the registry price plus the ICANN fee, and Spacefast adds nothing on top. A domain you buy belongs to your team, renews on its own, and doesn't count toward your plan's custom domain limit. Once it's registered, [connect it to a Space](/domains).
 
 The fastest path is to ask your agent: "Find me a domain for a cozy bakery in Brooklyn, and buy the one I pick." The rest of this page is what the agent does.
 
@@ -54,7 +54,11 @@ Without `--expect-total`, this holds the names and shows the total. Nothing is c
 sf domains registration purchase example.com --expect-total 10.34
 ```
 
-Over the API, send `POST /v1/domains/purchases` with `domains`, `contactId`, and `expectedTotalCents`.
+Over the API, send `POST /v1/domains/purchases`. Each entry in `domains` is an object with a `name`, not a bare string:
+
+```json
+{ "domains": [{ "name": "example.com" }], "contactId": "dcon_...", "expectedTotalCents": 1034 }
+```
 
 What happens next depends on who's buying:
 
@@ -75,7 +79,7 @@ If any name in the cart can't be bought, the whole purchase is refused with [`do
 sf domains registration example.com
 ```
 
-A paid purchase moves from `pending_payment` to `pending_registration` to `active`. If the registry refuses the name, the registration shows `failed` with a reason, and the payment is refunded. Over the API, read `GET /v1/teams/{teamId}/purchases/{purchaseId}` until it's `paid`, then `GET /v1/domains/{domainId}/registration`.
+A paid purchase moves from `pending_payment` to `pending_registration` to `active`. If the registry refuses the name, the registration shows `failed` with a reason, and the payment is refunded. Over the API, read `GET /v1/teams/{teamId}/purchases/{purchaseId}`. If the purchase shows `requires_action`, the bank wants the cardholder to verify the charge: open the purchase's `confirmUrl` to finish. Once it's `paid`, read `GET /v1/domains/{domainId}/registration`.
 
 ## Renewals
 
