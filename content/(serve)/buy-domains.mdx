@@ -5,7 +5,7 @@ description: Search for a name, check that it's available, and register it to yo
 
 Spacefast registers domains at cost: you pay the registry price plus the ICANN fee, and Spacefast adds nothing on top. A domain you buy belongs to your team, renews on its own, and doesn't count toward your plan's custom domain limit. Once it's registered, [connect it to a Space](/domains).
 
-The fastest path is to ask your agent: "Find me a domain for a cozy bakery in Brooklyn, and buy the one I pick." The rest of this page is what the agent does.
+The fastest path is to ask your agent: "Find me a domain for a cozy bakery in Brooklyn, and buy the one I pick." The rest of this page is what the agent does. If you're the agent, [Domain research for assistants](/agents/domain-research) covers checking names and showing the results.
 
 ## Find names
 
@@ -16,9 +16,9 @@ sf domains search "a cozy bakery in Brooklyn" --json > names.json
 sf domains search "shorter, playful names" --input @names.json --like 2 --select 3 --json
 ```
 
-Over the API, send `POST /v1/domains/search` with `{ "message": "a cozy bakery in Brooklyn" }`. Send the returned `data.session` back unchanged on the next call, with a new `message` or `feedback`. Each suggestion shows its availability, a fee-inclusive first-year price, and an estimate for later years.
+Over the API, send `POST /v1/domains/search` with `{ "message": "a cozy bakery in Brooklyn" }`. Send the returned `data.session` back unchanged on the next call, with a new `message` or `feedback`. Each suggestion shows its availability, a fee-inclusive first-year price, and an estimate for later years. Generated names get their availability from zone files, which lag the registry, so `availabilityMode` says `zone`.
 
-A suggestion isn't proof that a name can be bought. Check it before you buy.
+A suggestion isn't proof that a name can be bought. Check it live before you buy.
 
 ## Check availability and price
 
@@ -26,7 +26,7 @@ A suggestion isn't proof that a name can be bought. Check it before you buy.
 curl "https://api.spacefast.com/v1/domains/research/availability?name=example.com"
 ```
 
-The answer says whether the name is `available` and `purchasable`, and gives its `price`. Premium names can show as available but not purchasable. To check many names at once, send `POST /v1/domains/research/availability` with `mode: "live"`. The default mode uses older zone data without prices.
+This check is live. The answer says whether the name is `available` and `purchasable`, and gives its `price`. Premium names can show as available but not purchasable. To check many names at once, send `POST /v1/domains/research/availability` with `mode: "live"`. The default mode uses older zone data without prices.
 
 ## Save who owns it
 
