@@ -51,6 +51,8 @@ test("the complete compatibility map reserves the website's splats and host-spec
     ["/access", "/share/"],
     ["/access-control", "/share/"],
     ["/cli/access", "/share/"],
+    ["/setup", "/agents/"],
+    ["/setup/vscode", "/agents/vscode/"],
     ["/platform-api", "/platforms/api/reference/"],
     ["/platform-api/spaces/getspace", "/platforms/api/reference/spaces/getspace/"],
   ]) {

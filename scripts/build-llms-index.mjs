@@ -37,9 +37,9 @@ const COLLAPSED_ROOTS = [
   "/changelog",
 ];
 
-// The one route family that belongs in the index but is not a sidebar route:
-// the generated per-agent setup pages.
-const ALLOWED_NON_SIDEBAR_PREFIX = "/setup";
+// The one route family that belongs in the index but is not an authored sidebar route:
+// the generated per-agent setup pages mounted under /agents/.
+const ALLOWED_NON_SIDEBAR_PREFIX = "/agents/";
 
 // Blume's agent discovery endpoints belong in the index alongside page links.
 const DISCOVERY_ROUTES = new Set([

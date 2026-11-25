@@ -3,7 +3,7 @@ title: Codex
 description: Install the Spacefast plugin in Codex, or add the MCP server to config.toml by hand
 ---
 
-The Spacefast plugin lets Codex publish your project and manage your Spaces through the hosted MCP server.
+The Spacefast plugin lets Codex publish local folders and manage your Spaces with both local and hosted MCP plus Spacefast skills.
 
 ## Install
 
@@ -12,7 +12,15 @@ codex plugin marketplace add spacefast/plugins
 codex plugin add spacefast@spacefast
 ```
 
-Two other ways to install: `npx -y plugins add spacefast/plugins -t codex -y` installs the same plugin, and `sf setup agent --agent codex` writes the MCP table into `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`) and installs the skill into `$CODEX_HOME/skills/spacefast/`.
+Or install with the universal plugin command:
+
+```bash
+npx -y plugins add spacefast/plugins -t codex -y
+```
+
+Installing the Spacefast plugin is the fastest way to get local MCP alongside hosted MCP and skills in Codex on your computer. You can also run `npx -y spacefast setup` or `sf setup agent --agent codex` to write the MCP table into `$CODEX_HOME/config.toml` (default `~/.codex/config.toml`) and install the skill into `$CODEX_HOME/skills/spacefast/`.
+
+Using ChatGPT on the web or mobile instead? Connect the official [ChatGPT and Codex plugin](https://chatgpt.com/plugins/plugin_asdk_app_6aa80fbfddb0819188f1304e303c856d) and mention `@Spacefast` in any chat.
 
 ## What the plugin adds
 

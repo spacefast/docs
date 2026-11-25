@@ -5,7 +5,6 @@ export default defineMeta({
     "index",
     "quickstart",
     "troubleshooting",
-    "setup",
     "concepts",
     "publish",
     "serve",

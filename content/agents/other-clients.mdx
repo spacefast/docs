@@ -41,8 +41,8 @@ MCP configuration varies by client: `mcp` for OpenCode, `servers` for VS Code, a
 
     Set `SPACEFAST_TOKEN` in `env` to authenticate, or leave it empty to publish anonymously and claim the Space later.
   </Tab>
-  <Tab title="CLI proxy">
-    The server runs hosted, but your CLI login carries the auth instead of an editor OAuth flow.
+  <Tab title="CLI proxy (no-OAuth bridge)">
+    Use this when your editor does not support native MCP OAuth. The server runs hosted, and your `sf login` session carries authentication over stdio.
 
     ```json
     {

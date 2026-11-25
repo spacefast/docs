@@ -35,6 +35,16 @@ const authoredRedirectRules = [
     status: 301,
     to: `${deploymentBase}/object-storage/`,
   },
+  {
+    from: `${deploymentBase}/setup`,
+    status: 301,
+    to: `${deploymentBase}/agents/`,
+  },
+  {
+    from: `${deploymentBase}/setup/*`,
+    status: 301,
+    to: `${deploymentBase}/agents/:splat/`,
+  },
 ];
 
 // `route` is relative to the deployment base; a `#fragment` has no Markdown form.
@@ -51,7 +61,9 @@ function unbased(route) {
 // an HTTP redirect instead of HTML at those URLs. Moved pages also need a rule,
 // so both kinds get a 301 to the replacement's Markdown file.
 export const markdownTwinRules = [
-  ...authoredRedirectRules.map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
+  ...authoredRedirectRules
+    .filter(({ from }) => !from.includes("*"))
+    .map(({ from, to }) => ({ from: unbased(from), to: unbased(to) })),
   ...retiredRoutes,
 // Only .md: agents fetch it, and an .mdx twin per page would push the composed
 // site past the platform's 2,000 static redirects.

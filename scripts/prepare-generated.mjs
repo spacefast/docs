@@ -10,8 +10,12 @@ const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.
 const trees = [
   { source: "generated/errors", target: "content/(reference)/errors" },
   { source: "generated/changelog", target: "content/(reference)/changelog" },
-  { source: "generated/setup", target: "content/setup" },
 ];
+// Authored guides under content/agents/<slug>.mdx own those canonical routes;
+// every other generated client guide from generated/setup/ is mounted under
+// content/agents/(coding) or content/agents/(personal) so every agent lives at
+// /docs/agents/<slug>/.
+const authoredAgentPages = new Set(["claude-code", "codex", "cursor", "claude-desktop"]);
 // The Agents tab sidebar groups the generated /setup/<client> pages into these
 // sections (see components/Sidebar.astro). Every generated client must be listed.
 // Each section is also a parenthesized folder, so a page's breadcrumb names its
@@ -53,12 +57,17 @@ async function normalizeOverlayLinks(directory) {
   for (const entry of entries.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))) {
     const file = path.join(entry.parentPath, entry.name);
     const source = await readFile(file, "utf8");
-    const normalized = source.replace(/\]\(\/docs\/([^)]*)\)/gu, (_, target) => {
-      const [pathname, fragment] = target.split("#");
-      const route = `/${pathname.replace(/\/$/u, "")}`;
-      const final = retired.get(route) ?? route;
-      return `](${final}${fragment ? `#${fragment}` : ""})`;
-    });
+    const normalized = source
+      .replace(/\]\(\/docs\/([^)]*)\)/gu, (_, target) => {
+        const [pathname, fragment] = target.split("#");
+        const route = `/${pathname.replace(/\/$/u, "")}`;
+        const final = retired.get(route) ?? route;
+        return `](${final}${fragment ? `#${fragment}` : ""})`;
+      })
+      .replace(/\]\(\/setup\/([a-z0-9-]+)\/?([^)]*)\)/gu, "](/agents/$1$2)")
+      .replace(/\]\(\/setup\/?\)/gu, "](/agents)")
+      .replace(/https:\/\/spacefast\.com\/docs\/setup\/([a-z0-9-]+)\/?/gu, "https://spacefast.com/docs/agents/$1/")
+      .replace(/https:\/\/spacefast\.com\/docs\/setup\/?/gu, "https://spacefast.com/docs/agents/");
     if (normalized !== source) await writeFile(file, normalized);
   }
 }
@@ -141,24 +150,50 @@ for (const tree of trees) {
       if (match) await rm(path.join(target, `${match[1]}.md`), { force: true });
     }
   }
-  if (tree.source === "generated/setup") {
-    await writeFile(
-      path.join(target, "meta.ts"),
-      `import { defineMeta } from "blume";\n\nexport default defineMeta({ title: "Setup", collapsed: false });\n`,
-    );
-    await writeFile(path.join(target, "_sidebar.json"), setupSidebar);
-    for (const { folder, title, pages } of setupSections) {
-      await mkdir(path.join(target, folder));
-      await writeFile(
-        path.join(target, folder, "meta.ts"),
-        `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({ title, pages })});\n`,
-      );
-      for (const slug of pages.filter((slug) => setupClients.has(slug))) {
-        await rename(path.join(target, `${slug}.md`), path.join(target, folder, `${slug}.md`));
-      }
-    }
-  }
   await writeFile(marker, "spacefast-public-docs\n");
+}
+
+// Clean up any legacy content/setup overlay from earlier builds.
+const legacySetupTarget = path.join(root, "content/setup");
+if (await exists(legacySetupTarget)) {
+  const legacyMarker = path.join(legacySetupTarget, markerName);
+  if ((await readFile(legacyMarker, "utf8").catch(() => null)) === "spacefast-public-docs\n") {
+    await rm(legacySetupTarget, { recursive: true });
+  }
+}
+
+// Mount non-authored generated client guides directly under content/agents/ so
+// every client lives at /docs/agents/<slug>/ without duplicating authored pages.
+const setupSource = path.join(root, "generated/setup");
+const agentsRoot = path.join(root, "content/agents");
+await writeFile(path.join(agentsRoot, "_sidebar.json"), setupSidebar);
+for (const { folder, title, pages } of setupSections) {
+  const sectionTarget = path.join(agentsRoot, folder);
+  const sectionMarker = path.join(sectionTarget, markerName);
+  if (await exists(sectionTarget)) {
+    const info = await lstat(sectionTarget);
+    if (
+      !info.isDirectory() ||
+      info.isSymbolicLink() ||
+      (await readFile(sectionMarker, "utf8").catch(() => null)) !== "spacefast-public-docs\n"
+    ) {
+      throw new Error(`refusing to replace unowned generated overlay: content/agents/${folder}`);
+    }
+    await rm(sectionTarget, { recursive: true });
+  }
+  const mountedSlugs = pages.filter(
+    (slug) => setupClients.has(slug) && !authoredAgentPages.has(slug),
+  );
+  await mkdir(sectionTarget, { recursive: true });
+  await writeFile(
+    path.join(sectionTarget, "meta.ts"),
+    `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({ title, pages: mountedSlugs })});\n`,
+  );
+  for (const slug of mountedSlugs) {
+    await copyFile(path.join(setupSource, `${slug}.md`), path.join(sectionTarget, `${slug}.md`));
+  }
+  await normalizeOverlayLinks(sectionTarget);
+  await writeFile(sectionMarker, "spacefast-public-docs\n");
 }
 
 await mkdir(path.join(root, "content/cli"), { recursive: true });

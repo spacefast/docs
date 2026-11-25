@@ -11,7 +11,8 @@ const GENERATED_ROUTES = [
 const GENERATED_DIRECTORIES = new Set([
   "content/(reference)/changelog",
   "content/(reference)/errors",
-  "content/setup",
+  "content/agents/(coding)",
+  "content/agents/(personal)",
 ]);
 
 function routeFromContentPath(relativePath) {

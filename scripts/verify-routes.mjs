@@ -252,12 +252,12 @@ for (const file of htmlFiles) {
     throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
   }
 }
-// Each generated setup page's route, relative to its site: `setup/`, `setup/codex/`.
+// Each generated per-agent setup page mounted under `/agents/`: e.g. `agents/vscode/`.
 const setupRoutes = htmlFiles
-  .filter((file) => /^setup\/(?:[^/]+\/)?index\.html$/u.test(file))
+  .filter((file) => /^agents\/[^/]+\/index\.html$/u.test(file))
   .map((file) => file.replace(/index\.html$/u, ""));
 if (setupRoutes.length < 2) {
-  throw new Error("Expected generated /setup pages in the build; none are present.");
+  throw new Error("Expected generated /agents/<client> pages in the build; none are present.");
 }
 for (const route of setupRoutes) {
   const expected = `<link rel="canonical" href="https://spacefast.com/docs/${route}">`;
@@ -274,10 +274,10 @@ const sidebarOf = async (file) => {
   return html.slice(start, html.indexOf("</aside>", start));
 };
 const sidebarExpectations = [
-  ["quickstart/index.html", ["/cli", "/agents", "/migrate"], ["/setup/vscode", "Other agents"]],
-  ["agents/index.html", ["/agents/mcp-server", "/setup/vscode", "Other agents"], ["/setup/codex"]],
-  ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
-  ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],
+  ["quickstart/index.html", ["/cli", "/agents", "/migrate"], ["/agents/vscode", "Other agents"]],
+  ["agents/index.html", ["/agents/mcp-server", "/agents/vscode", "Other agents"], ["/setup/codex"]],
+  ["agents/vscode/index.html", ["/agents/mcp-server", "/agents/chatgpt", "Other agents"], ["/quickstart"]],
+  ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/agents/vscode"]],
 ];
 for (const [file, present, absent] of sidebarExpectations) {
   const sidebar = await sidebarOf(file);
@@ -306,11 +306,11 @@ for (const file of ["index.html", "quickstart/index.html", "api/reference/index.
     throw new Error(`dist/${file} header lockup is wrong: ${JSON.stringify(links)}.`);
   }
 }
-// Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
+// Docs previous/next stay inside Docs; generated /agents/<client> pages follow Blume's order.
 for (const [file, prev, next] of [
   ["troubleshooting/index.html", "/quickstart", "/spaces"],
   ["spaces/index.html", "/troubleshooting", "/versions"],
-  ["setup/vscode/index.html", "/setup/cursor", "/setup/github-copilot"],
+  ["agents/vscode/index.html", "/agents/permissions", "/agents/github-copilot"],
 ]) {
   const pager = (await readBuilt(file)).split("</article>").at(-1);
   const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
@@ -384,7 +384,7 @@ const llmsRoutes = new Set(
   }),
 );
 const strayLlmsRoutes = [...llmsRoutes].filter(
-  (route) => !requiredIaRoutes.includes(route) && !route.startsWith("/setup"),
+  (route) => !requiredIaRoutes.includes(route) && !route.startsWith("/agents/"),
 );
 if (strayLlmsRoutes.length > 0) {
   throw new Error(

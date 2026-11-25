@@ -8,6 +8,9 @@ content/cli/reference.md
 content/(reference)/errors/
 content/(reference)/changelog/
 content/setup/
+content/agents/(coding)/
+content/agents/(personal)/
+content/agents/_sidebar.json
 public/_redirects
 .env
 .env.*

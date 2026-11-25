@@ -1,69 +1,60 @@
 ---
 title: Claude Desktop
-description: Install the Spacefast desktop extension for Claude Desktop, or paste the hosted MCP server into your config
+description: Sync Spacefast into Claude Desktop from your Claude account, or configure hosted or local MCP directly
 ---
 
-The Spacefast desktop extension runs the Spacefast MCP server on your computer, so Claude Desktop can publish and manage your Spaces. It needs Node.js with `npx` where Claude Desktop can find it.
+Connectors and plugins you add to your Claude account sync straight into Claude Desktop. You do not need to download or install a separate desktop bundle.
 
-## Install the extension
+## Connect your Claude account (recommended)
 
-Download `claude-desktop.mcpb` from the latest release of `github.com/spacefast/plugins` and open it. Claude Desktop installs it as a desktop extension. If the bundle doesn't open, go to **Settings → Extensions → Advanced settings → Install Extension** and select the file.
+Add Spacefast once on your Claude account, and it works across Claude Desktop, Claude on the web, and mobile.
 
 <Steps>
-  <Step title="Download the bundle">
-    Grab `claude-desktop.mcpb` from the releases page.
+  <Step title="Add the Spacefast connector">
+    Open the [Spacefast connector in the Claude directory](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c) and choose **Connect**.
   </Step>
-  <Step title="Double-click it">
-    Claude Desktop reads the manifest and offers to install the extension.
+  <Step title="Sign in and approve">
+    Sign in to Spacefast and approve the permissions you want Claude to have.
   </Step>
-  <Step title="Sign in, or don't">
-    Ask Claude to sign you in to publish to your team. Signed out, it publishes anonymously and you claim the Space later.
+  <Step title="Add the Spacefast plugin (optional)">
+    In Claude, open **Plugins → Add → Add marketplace → Add from a repository**, enter `spacefast/plugins`, and add the Spacefast plugin so Claude also loads Spacefast skills.
   </Step>
 </Steps>
 
-Then ask for something small to prove the extension is live.
-
-<Prompt description="Publish this folder to Spacefast and give me the live URL." actions={["copy"]}>
-Publish this folder to Spacefast and give me the live URL.
-</Prompt>
+Then ask Claude Desktop to verify the connection:
 
 <Prompt description="List my Spacefast Spaces." actions={["copy"]}>
 List my Spacefast Spaces.
 </Prompt>
 
-## What the manifest declares
+<Prompt description="Publish this page to Spacefast and give me the live URL." actions={["copy"]}>
+Publish this page to Spacefast and give me the live URL.
+</Prompt>
 
-The bundle is a manifest version `0.2` extension with a Node server. Its entry point is `server/index.js`, a thin spawner that runs `npx -y spacefast@<version> mcp` over stdio, so the extension itself carries no server code.
+## Configure MCP in `claude_desktop_config.json`
 
-```json manifest.json
-"mcp_config": {
-  "command": "node",
-  "args": ["${__dirname}/server/index.js"]
+If you want to publish local folders directly from your computer or configure MCP without syncing from your Claude account, add Spacefast to `claude_desktop_config.json`.
+
+### Local stdio MCP (for local files)
+
+Runs the Spacefast MCP server on your machine so Claude Desktop can read folders on disk and access connected tools through `search_connector_tools`:
+
+```json claude_desktop_config.json
+{
+  "mcpServers": {
+    "spacefast": {
+      "command": "npx",
+      "args": ["-y", "spacefast", "mcp"]
+    }
+  }
 }
 ```
 
-The extension publishes inline files and edits Space source without a local checkout. Because the extension runs on Node, it can't publish a local folder by path. That needs the native `sf` build on Linux or macOS. From the extension, publish inline files, or use the CLI.
+Ask Claude to sign you in when you first use it — it shows a link and a code, and approves both the MCP server and the `sf` CLI on this computer. Signed out, an anonymous publish returns a claim link; see [Publish without an account](/anonymous-and-claim).
 
-| Fact | Value |
-|---|---|
-| Manifest version | `0.2` |
-| Server type | `node` |
-| Platforms | macOS, Windows, Linux |
-| Node | 20 or newer |
-| License | MIT |
-| Tools | Generated from the pinned CLI's tool catalog |
+### Hosted MCP
 
-## Authentication
-
-The extension has no settings. Ask Claude to sign you in: it shows a link and a code, and you approve them in the browser. That signs in both the extension and the `sf` CLI on this computer.
-
-Signed in, the extension can also reach services your team connected in Spacefast through `search_connector_tools`. The hosted server can't.
-
-Signed out, an anonymous publish returns a claim link. Open it in the browser to take ownership of the Space. See [Publish without an account](/anonymous-and-claim).
-
-## Or use the hosted server
-
-If you would rather connect to the hosted endpoint and sign in with OAuth, add this to `claude_desktop_config.json`.
+Connect directly to the hosted endpoint and sign in with OAuth:
 
 ```json claude_desktop_config.json
 {
@@ -76,10 +67,10 @@ If you would rather connect to the hosted endpoint and sign in with OAuth, add t
 }
 ```
 
-The hosted server has no filesystem, so `publish` requires inline files. Connectors you add on claude.ai sync down to Desktop; the bundle is the desktop-only option.
+The hosted server has no local filesystem access, so `publish` takes inline files.
 
 :::note
-`sf setup agent` doesn't configure Claude Desktop. Use the extension or the config file above.
+`sf setup agent` does not edit `claude_desktop_config.json`. Use your Claude account connector or add one of the entries above.
 :::
 
 ## Next steps

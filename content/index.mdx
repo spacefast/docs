@@ -5,21 +5,29 @@ sidebar:
   order: 0
 ---
 
-Spacefast publishes what people build with AI agents. You hand it a folder, it hands back a URL. Publish from the dashboard, the `sf` CLI, the HTTP API, or an MCP server. An agent with publishing permission can ship what it built.
+Spacefast publishes what people build with AI. Hand it a folder, a Git repository, or a prompt, and get back a live URL. Publish with your AI, drag files onto [drop.fast](https://drop.fast) (no install, no account required; see [Drop](/publish#publish)), push to `push.fast`, or run the CLI.
 
-If you prefer a browser, drag a folder onto [drop.fast](https://drop.fast) (no install, no account required; see [Drop](/publish#publish)). If you already have a website, paste its address into the [website importer](https://spacefast.com/migrate/) to copy it into a Space (see [Copy a website](/migrate)).
+If you already have a website, paste its address into the [website importer](https://spacefast.com/migrate/) to copy it into a Space (see [Copy a website](/migrate)).
 
-## Publish in one command
+## Publish in seconds
+
+### With your AI
+
+Paste this prompt into Claude, ChatGPT, Grok Bot, Codex, or any AI that can fetch URLs:
+
+<Prompt description="Paste into your AI to connect Spacefast and publish." actions={["copy"]}>
+Fetch https://spacefast.com/setup.md and follow it.
+</Prompt>
+
+Your AI connects to Spacefast, walks you through sign-in, and publishes what you built. See [Agents](/agents) for plugins, connectors, and MCP setup.
+
+### From your terminal
 
 ```bash
-npm install -g spacefast
+npx -y spacefast publish ./dist
 ```
 
-```bash
-sf publish ./dist
-```
-
-No account needed for the first publish. The CLI creates a Space, uploads the files, and prints a live URL plus a claim link. Sign in later to keep it.
+No account or global install needed for the first publish. Spacefast creates a Space, uploads the files, and prints a live URL plus a claim link. Sign in later to keep it, or install the `sf` CLI globally with `npm install -g spacefast`.
 
 ```text
 Published: https://quiet-harbor.space.fast

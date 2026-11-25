@@ -17,9 +17,9 @@ The `sf git` and `sf source` command families use different names for the same t
 
 Keep the editable project in Git. Connect its repository or push it to the Spacefast remote below. Add and commit the source files before pushing. A Git push transfers the committed history on the branch you push; it excludes files you have not committed. Keep an independent copy of your source and history for recovery. Rolling back a deployment restores published files, not deleted source files or branches.
 
-## Push to a Spacefast remote
+## Push to a Spacefast remote (`push.fast`)
 
-Spacefast hosts a Git endpoint. `sf git origin` mints a signed remote and installs it.
+Spacefast hosts a Git endpoint (`push.fast`). `sf git origin` mints a signed remote and installs it.
 
 <Steps>
   <Step title="Install the remote">

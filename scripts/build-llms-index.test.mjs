@@ -50,7 +50,7 @@ const fixture = [
   entry("/platforms/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
-  entry("/setup/claude-code"),
+  entry("/agents/vscode"),
   "",
   "## Discovery",
   ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/api-catalog.json", "/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
@@ -82,7 +82,7 @@ test("collapses generated descendants and keeps only navigated index pages", () 
   ]) {
     assert.ok(!routes.includes(gone), `${gone} should be collapsed`);
   }
-  assert.ok(routes.includes("/setup/claude-code"), "agent setup pages stay listed");
+  assert.ok(routes.includes("/agents/vscode"), "agent setup pages stay listed");
   assert.ok(!text.includes("### Spaces"), "a reference tag heading without entries is dropped");
   assert.ok(text.includes("## Reference"), "a heading that keeps entries survives");
   assert.ok(text.includes("## Read any page as Markdown"), "a prose section survives");
@@ -124,7 +124,7 @@ test("relabels the leftover bucket and drops emptied headings", () => {
 });
 
 test("throws when an unrecognized generated family survives", () => {
-  const invaded = fixture.replace(entry("/setup/claude-code"), entry("/widgets/blue"));
+  const invaded = fixture.replace(entry("/agents/vscode"), entry("/widgets/blue"));
   assert.throws(() => build({ source: invaded }), /widgets\/blue/u);
 });
 
