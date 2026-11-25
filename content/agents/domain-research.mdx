@@ -32,7 +32,7 @@ These instructions can't change your own platform's permissions or network rules
 | Save the registrant contact | `POST /v1/domains/contacts` | The person's own sign-in |
 | Buy | `POST /v1/domains/purchases` | The person's own sign-in and approval |
 
-The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Lookups are limited per IP address: 600 availability checks a minute (a batch counts each name), and 2 searches running at once. The `ratelimit-remaining` header says how many checks are left. If your requests leave from shared servers, other users count against the same limit, so expect an occasional 429.
+The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Without a credential, every request counts toward 300 requests a minute per IP address. Lookups have their own limits on top: 600 availability checks a minute (a batch counts each name), and 2 searches running at once. So checking names one per request stops at 300 a minute; batches go further. The `ratelimit-remaining` header says how many checks are left. If your requests leave from shared servers, other users count against the same limit, so expect an occasional 429.
 
 ## Pick your tool
 
@@ -227,7 +227,8 @@ Add your own reasoning around the facts: why a name fits, how it reads aloud, wh
 | `price` is `null` | Don't guess a price. Say it's unknown |
 | `unknown` with `available: null`, or a timeout | The check didn't finish. Retry it once on its own. Never report the name as taken |
 | `unknown` with `available: true` | Free, but Spacefast can't sell it. Don't retry; say it isn't for sale here |
-| HTTP 429 or `domain_lookup_rate_limited` | Wait for `Retry-After` or `retryAfterSeconds`, then retry. Send fewer names at once |
+| HTTP 429 with `domain_lookup_rate_limited` | Wait for `Retry-After` or `retryAfterSeconds`, then retry. Send fewer names at once |
+| HTTP 429 with `rate_limited` | Too many requests from your IP address. Wait for `Retry-After`, then check names in batches instead of one per request |
 | The request fails, or you can't reach the API | Say live checks aren't working here. Mark names unverified. Don't call any of them available |
 | `checkedAt` is old | Check again before the person buys |
 | `401` or `403` on contacts or purchases | Buying needs the person's own sign-in. Research still works without it |
