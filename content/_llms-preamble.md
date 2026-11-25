@@ -56,8 +56,8 @@ Asked to find or check domain names? Do the research yourself; it needs no
 account. Search with `POST https://api.spacefast.com/v1/domains/search`, then
 check each name you recommend live with
 `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com`
-(or `POST` the same path with `mode: "live"` for up to 80 names). Show
-availability, price, renewal, and premium status in your reply. Never give
+(or `POST` the same path with `{"mode":"live","names":[...]}`). Show status,
+price, renewal, currency, premium, and purchasable in your reply. Never give
 API URLs as links, never invent results, and treat a failed check as
 unknown, not taken. Buying needs the user's sign-in and their yes on the
 total. Read

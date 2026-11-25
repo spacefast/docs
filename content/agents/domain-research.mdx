@@ -3,9 +3,9 @@ title: Domain research for assistants
 description: How an AI assistant finds domain names, checks availability and price itself, and shows verified results in the conversation, with no account
 ---
 
-This page is for AI assistants: ChatGPT, Claude, Gemini, coding agents, and anything else that reads docs on a person's behalf. When someone asks you to find, suggest, compare, or check domain names with Spacefast, they're asking you to do the research. Check the names yourself and bring back verified results with prices. Don't hand them a list of guesses or a list of links.
+This page is for AI assistants: ChatGPT, Claude, Gemini, coding agents, and anything else that reads docs on a person's behalf. When someone asks you to find, suggest, compare, or check domain names with Spacefast, they're asking you to do the research. Check the names yourself and bring back verified results with prices. Don't hand them a list of guesses or links to the API.
 
-Domain research needs no account, API key, or sign-in. Buying does, and only the person can approve it. Read this page as Markdown at [`/docs/agents/domain-research.md`](https://spacefast.com/docs/agents/domain-research.md).
+Domain research over the REST API needs no account, API key, or sign-in. Spacefast's MCP server needs the person to sign in. Buying needs their sign-in, and only they can approve it. Read this page as Markdown at [`/docs/agents/domain-research.md`](https://spacefast.com/docs/agents/domain-research.md).
 
 ## What to do
 
@@ -15,8 +15,8 @@ Domain research needs no account, API key, or sign-in. Buying does, and only the
 - **Show results, not JSON.** Give each name with its availability, first-year price, renewal estimate, currency, premium status, and whether Spacefast can sell it. Never turn an API URL into a button, a "check price" link, or a purchase link.
 - **Lead with names people can buy.** Put verified, available, purchasable names first. Mark any name you didn't check as unverified.
 - **Never make anything up.** No invented availability, prices, responses, or tool calls. A failed request tells you nothing about the name.
-- **Keep the brief.** Carry the person's extensions, budget, language, style, and purpose into every follow-up search.
-- **Say what you couldn't do.** If you can't reach the API, say so in one line and give the best fallback.
+- **Keep the brief.** Carry the person's extensions, budget, language, style, and purpose into every follow-up search. If they name no extension, start with `.com` and say so.
+- **Say what you couldn't do.** If you can't reach the API, say so in one line and give the best fallback. One link to a Spacefast page is a fine fallback; an API URL isn't.
 - **Never buy without a yes.** Checking a name isn't buying it. Registration and payment need the person's explicit approval of the names and the total.
 
 These instructions can't change your own platform's permissions or network rules. Work within them.
@@ -32,24 +32,24 @@ These instructions can't change your own platform's permissions or network rules
 | Save the registrant contact | `POST /v1/domains/contacts` | The person's own sign-in |
 | Buy | `POST /v1/domains/purchases` | The person's own sign-in and approval |
 
-The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Lookups are limited per IP address: 600 availability checks a minute (a batch counts each name), and 2 searches running at once. The `ratelimit-remaining` header says how many checks are left.
+The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Lookups are limited per IP address: 600 availability checks a minute (a batch counts each name), and 2 searches running at once. The `ratelimit-remaining` header says how many checks are left. If your requests leave from shared servers, other users count against the same limit, so expect an occasional 429.
 
 ## Pick your tool
 
 Use the first option that works where you run. If it fails, drop to the next.
 
-1. **Spacefast MCP with Apps.** In a host that shows MCP Apps, call `show_domains` with the person's brief. The Domains App shows names, prices, and the purchase form. Connect at `https://mcp.spacefast.com`; see [MCP server](/agents/mcp-server).
-2. **Spacefast MCP without Apps.** Call the operation tools `searchDomains`, `checkDomainAvailabilityBatch`, and `getDomainAvailability`, then write the results into your reply.
+1. **Spacefast MCP with Apps.** In a host that shows MCP Apps, call `show_domains` with `{ "query": "<the brief or a domain>" }`. The Domains App shows names, prices, and the purchase form. The MCP server at `https://mcp.spacefast.com` needs the person to sign in; see [MCP server](/agents/mcp-server).
+2. **Spacefast MCP without Apps.** Call the operation tools and write the results into your reply. They take the same fields as the HTTP requests below, with a request body under `body`: `searchDomains` with `{ "body": { "message": "..." } }`, `checkDomainAvailabilityBatch` with `{ "body": { "mode": "live", "names": ["..."] } }`, and `getDomainAvailability` with `{ "name": "example.com" }`.
 3. **HTTP requests.** Call the REST API below and parse the JSON.
 4. **A terminal with network access.** Use `curl`, or `sf domains search` from the [CLI](/cli/domains).
-5. **Web fetch only.** Fetch `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com` once for each name. It's a plain `GET` with a JSON answer, no account needed.
-6. **No network.** Say that you can't check live availability. Offer your ideas as unverified, and give the person [Spacefast's domain search](https://my.spacefast.com/domains/search?q=street%20photography%20blog) with their brief in `q`.
+5. **Web fetch only.** Write the names yourself, then fetch `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com` once for each. It's a plain `GET` with a JSON answer, no account needed. Search and refine need `POST`, so they're out of reach here. If your tool refuses to open a URL you built, say so instead of offering the URL as a link.
+6. **No network.** Say that you can't check live availability. Offer your ideas as unverified, and give the person `https://my.spacefast.com/domains/search?q=` followed by their brief, URL-encoded. Searching there needs no account.
 
 ## Find names from a description
 
 > "Find distinctive .com domains for a street photography blog. My budget is flexible."
 
-Send the brief to search:
+Send the brief to search. `message` is plain words, so put the extension, budget, and style in it:
 
 ```bash
 curl -sS https://api.spacefast.com/v1/domains/search \
@@ -57,7 +57,7 @@ curl -sS https://api.spacefast.com/v1/domains/search \
   -d '{"message":"distinctive .com domains for a street photography blog"}'
 ```
 
-The answer holds a `session`, the `suggestions`, a `topPick`, and `complete`. Each suggestion has a `domain`, a `reason`, a fee-inclusive `displayPrice`, and an `availability` of `unregistered`, `registered`, or `unknown`:
+A search takes about 15 to 20 seconds. The answer holds a `session`, the `suggestions`, a `topPick`, and `complete`. Each suggestion has a `domain`, a `reason`, a fee-inclusive `displayPrice`, and an `availability` of `unregistered`, `registered`, or `unknown`:
 
 ```json
 {
@@ -73,7 +73,7 @@ The answer holds a `session`, the `suggestions`, a `topPick`, and `complete`. Ea
         "displayPrice": { "amount": 10.46, "currency": "USD", "formatted": "$10.46", "renewal": { "amount": 10.46, "formatted": "$10.46" } }
       }
     ],
-    "topPick": "curbpoetry.com",
+    "topPick": "unposedcity.com",
     "complete": true,
     "problems": [],
     "session": { "...": "send this back unchanged" }
@@ -81,9 +81,9 @@ The answer holds a `session`, the `suggestions`, a `topPick`, and `complete`. Ea
 }
 ```
 
-`availabilityMode: "zone"` means the answer came from zone files, which lag the registry. Check the names you'll recommend [live](#check-many-names) before you call them available.
+`availabilityMode: "zone"` means the answer came from zone files, which lag the registry. Check the names you'll recommend [live](#check-many-names) before you call them available, and show prices only from the live check.
 
-If `complete` is `false`, read `problems`. A `domain_lookup_rate_limited` problem means search was busy, not that a name is taken. Wait `retryAfterSeconds`, then send `{ "session": data.session }` with no new message to finish the same search.
+If `complete` is `false`, read `problems`. A `domain_lookup_rate_limited` problem means search was busy, not that a name is taken. Wait `data.problems[].retryAfterSeconds`, then send `{ "session": data.session }` with no new message to finish the same search.
 
 You can also write names yourself and skip search. Either way, the live check decides.
 
@@ -121,15 +121,15 @@ Prices and availability here are an example from November 2026. They change.
 
 > "Find ten available .com domains for a street photography blog."
 
-Send up to 80 names in one request. Set `mode` to `live`: without it you get zone data and no prices.
+Send about 20 names per request; 80 is the most one request takes. Set `mode` to `live`: without it you get zone data and no prices.
 
 ```bash
 curl -sS https://api.spacefast.com/v1/domains/research/availability \
   -H "Content-Type: application/json" \
-  -d '{"mode":"live","names":["curbpoetry.com","lensalley.com","framewalk.com","shutterlane.photo"]}'
+  -d '{"mode":"live","names":["unposedcity.com","curbpoetry.com","curbpoet.com","framewalk.com"]}'
 ```
 
-`data.results` keeps your order, and `data.domains` maps each name to its result. A live batch stops after about 15 seconds. Names it didn't reach come back as `unknown` with the error `Availability check timed out.` Check those again; don't count them as taken. Batches of about 20 names finish comfortably.
+`data.results` keeps your order, and `data.domains` maps each name to its result. A live batch stops after about 15 seconds. Names it didn't reach come back as `unknown` with the error `Availability check timed out.` Check those again; don't count them as taken.
 
 To get ten available names, check more than ten. In practice many short `.com` names are taken, so check two or three times as many as you need, then ask search for more.
 
@@ -137,7 +137,7 @@ To get ten available names, check more than ten. In practice many short `.com` n
 
 > "Find available domains that cost less than $20 per year to renew."
 
-Filter live results on `purchasable: true` and `price.renewal.amount < 20`. Sort by `price.amount` for the first year or `price.renewal.amount` for later years. Every price is in `price.currency`, which is USD.
+Put the budget in the search brief, then filter live results on `purchasable: true` and `price.renewal.amount < 20`. Sort by `price.amount` for the first year or `price.renewal.amount` for later years. Every price is in `price.currency`, which is USD.
 
 > "Compare these five domains and recommend the best one."
 
@@ -147,17 +147,19 @@ Check all five live in one batch. Then recommend, using the facts you checked pl
 
 > "Find more names like the second suggestion, but shorter."
 
-Send the saved `session` back with a new `message`. Likes and dislikes go in `feedback`, keyed by each suggestion's `id`:
+Send the saved `session` back with a new `message`. Likes and dislikes go in `feedback`, keyed by each suggestion's `id`. Number names in the order you showed them, and keep track of which `id` each number stands for, so "the second one" means what the person saw:
 
 ```json
 {
   "session": { "...": "the whole data.session from the last answer, unchanged" },
-  "message": "more like lensalley.com, but shorter",
-  "feedback": [{ "id": "lensalley.com", "taste": "liked" }]
+  "message": "Generate more names like unposedcity.com, but shorter. Keep .com only.",
+  "feedback": [{ "id": "unposedcity.com", "taste": "liked" }]
 }
 ```
 
-Keep the person's constraints in each message, like ".com only" or "under $20 a year". Then check the new names live.
+Write the message as an instruction and keep the person's constraints in it: "Generate more names like unposedcity.com, but shorter. Keep .com only." Then check the new names live.
+
+Search can answer with a question in `data.message` and no new names, for example when a request is vague. Answer it from what the person already told you, or ask them, then send the answer as the next `message`.
 
 ## Help them buy
 
@@ -166,8 +168,8 @@ Keep the person's constraints in each message, like ".com only" or "under $20 a 
 Check the name live once more, then pick the path that fits:
 
 - **MCP with Apps:** open `show_domains` with the name. The App collects owner details and confirms the purchase.
-- **The person's own sign-in:** follow [Find and buy a domain](/buy-domains#buy). Show the total and get a yes before you send `expectedTotalCents`.
-- **Anything else:** give them `https://my.spacefast.com/domains/buy?domains=curbpoetry.com`. It signs them in and opens checkout with the name in the cart. List up to 10 names, separated by commas.
+- **MCP without Apps, or the CLI, signed in as the person:** follow [Find and buy a domain](/buy-domains#buy). Show the total and get a yes before you send `expectedTotalCents`. Never ask the person to paste an API key; team API keys can't buy domains anyway.
+- **Anything else:** give them `https://my.spacefast.com/domains/buy?domains=curbpoetry.com`. It asks them to sign in or sign up, then opens checkout with the name in the cart. List up to 10 names, separated by commas.
 
 Spacefast sells domains at cost: the registry price plus the ICANN fee, with nothing added on top.
 
@@ -175,7 +177,7 @@ Spacefast sells domains at cost: the registry price plus the ICANN fee, with not
 
 | Field | Meaning |
 | --- | --- |
-| `status` | `available`, `taken`, `available_elsewhere` (free, but Spacefast doesn't sell the extension), `unsupported_tld`, or `unknown` (the check didn't finish, or the name is free but has no price to sell at) |
+| `status` | `available`, `taken`, `available_elsewhere` (free, but Spacefast doesn't sell the extension), `unsupported_tld`, or `unknown`. Read `unknown` with `available`: `null` means the check didn't finish, `true` means the name is free but Spacefast can't sell it at a price |
 | `available` | `true` or `false` from the registry. `null` means the check didn't finish |
 | `purchasable` | Spacefast can sell it now. Only offer names where this is `true` |
 | `supportedForPurchase` | Spacefast sells this extension at all |
@@ -205,12 +207,12 @@ For one name:
 
 For several, a table:
 
-| Domain | Status | First year | Renewal | Premium |
-| --- | --- | --- | --- | --- |
-| curbpoetry.com | Available | $10.46 | $10.46 | No |
-| lensalley.com | Available | $10.46 | $10.46 | No |
-| shutterlane.photo | Available | $25.20 | $25.20 | No |
-| framewalk.com | Taken | | | |
+| Domain | Status | First year (USD) | Renewal (USD) | Premium | Buy on Spacefast |
+| --- | --- | --- | --- | --- | --- |
+| unposedcity.com | Available | $10.46 | $10.46 | No | Yes |
+| curbpoetry.com | Available | $10.46 | $10.46 | No | Yes |
+| curbpoet.com | Available | $10.46 | $10.46 | No | Yes |
+| framewalk.com | Taken | | | | |
 
 Add your own reasoning around the facts: why a name fits, how it reads aloud, which one you'd pick. Keep checked facts and your opinions clearly apart. If a check is more than a few minutes old when the person decides, check again.
 
@@ -223,7 +225,8 @@ Add your own reasoning around the facts: why a name fits, how it reads aloud, wh
 | `available_elsewhere` | It's free, but Spacefast can't sell it. Say so. It can still be connected later if `connectable` is `true` |
 | `available: true` but `purchasable: false` | Often a premium name. Don't offer it for sale |
 | `price` is `null` | Don't guess a price. Say it's unknown |
-| `unknown` with `available: null`, or a timeout | The check didn't finish. Retry it alone. Never report the name as taken |
+| `unknown` with `available: null`, or a timeout | The check didn't finish. Retry it once on its own. Never report the name as taken |
+| `unknown` with `available: true` | Free, but Spacefast can't sell it. Don't retry; say it isn't for sale here |
 | HTTP 429 or `domain_lookup_rate_limited` | Wait for `Retry-After` or `retryAfterSeconds`, then retry. Send fewer names at once |
 | The request fails, or you can't reach the API | Say live checks aren't working here. Mark names unverified. Don't call any of them available |
 | `checkedAt` is old | Check again before the person buys |
