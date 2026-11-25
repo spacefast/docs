@@ -4,6 +4,7 @@ export default defineMeta({
   title: "Agents",
   pages: [
     "index",
+    "domain-research",
     "share-claude-artifact",
     "share-chatgpt-html",
     "mcp-server",

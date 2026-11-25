@@ -52,15 +52,16 @@ signs in through browser OAuth. Per-agent instructions live at
 
 ## Find and buy a domain
 
-Spacefast sells domains at cost. Search with
-`POST https://api.spacefast.com/v1/domains/search` or
-`sf domains search "your idea" --json`, and confirm a name with
-`GET https://api.spacefast.com/v1/domains/research/availability?name=example.com`.
-Neither needs an account. Buying needs the user's own sign-in, a saved
-registrant contact, and `POST /v1/domains/purchases` with the total the user
-agreed to. Without `billing:purchase`, give the user `purchase.confirmUrl`.
-The whole flow is in
-[Find and buy a domain](https://spacefast.com/docs/buy-domains/).
+Asked to find or check domain names? Do the research yourself; it needs no
+account. Search with `POST https://api.spacefast.com/v1/domains/search`, then
+check each name you recommend live with
+`GET https://api.spacefast.com/v1/domains/research/availability?name=example.com`
+(or `POST` the same path with `mode: "live"` for up to 80 names). Show
+availability, price, renewal, and premium status in your reply. Never give
+API URLs as links, never invent results, and treat a failed check as
+unknown, not taken. Buying needs the user's sign-in and their yes on the
+total. Read
+[Domain research for assistants](https://spacefast.com/docs/agents/domain-research.md).
 
 ## Search the docs
 
