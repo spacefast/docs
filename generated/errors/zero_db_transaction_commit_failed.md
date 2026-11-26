@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_commit_failed",
   "title": "Zero db transaction commit failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero database transaction cannot be committed.",
   "code": "zero_db_transaction_commit_failed",
   "requestId": "req_4mz0v8qk"

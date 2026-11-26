@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_not_finalizable",
   "title": "Version not finalizable",
-  "status": 400,
+  "status": 422,
   "detail": "The version cannot be finalized in its current status.",
   "code": "version_not_finalizable",
   "requestId": "req_4mz0v8qk"

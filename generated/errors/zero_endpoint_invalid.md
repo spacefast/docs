@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_endpoint_invalid",
   "title": "Zero endpoint invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero endpoint definition or its database metadata is invalid.",
   "code": "zero_endpoint_invalid",
   "requestId": "req_4mz0v8qk"

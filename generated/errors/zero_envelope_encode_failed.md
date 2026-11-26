@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_envelope_encode_failed",
   "title": "Zero envelope encode failed",
-  "status": 400,
+  "status": 422,
   "detail": "The PHP bridge cannot encode the Zero runner request envelope.",
   "code": "zero_envelope_encode_failed",
   "requestId": "req_4mz0v8qk"

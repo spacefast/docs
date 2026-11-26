@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_not_created",
   "title": "Build not created",
-  "status": 400,
+  "status": 422,
   "detail": "The build cannot be created.",
   "code": "build_not_created",
   "requestId": "req_4mz0v8qk"

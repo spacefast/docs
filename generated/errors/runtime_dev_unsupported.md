@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_dev_unsupported",
   "title": "Runtime dev unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "`sf dev` cannot run this runtime locally yet.",
   "code": "runtime_dev_unsupported",
   "requestId": "req_4mz0v8qk"

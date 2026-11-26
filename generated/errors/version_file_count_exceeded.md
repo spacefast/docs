@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_file_count_exceeded",
   "title": "Version file count exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The version exceeds the maximum number of files.",
   "code": "version_file_count_exceeded",
   "requestId": "req_4mz0v8qk"

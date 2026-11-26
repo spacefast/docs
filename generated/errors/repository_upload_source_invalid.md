@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_upload_source_invalid",
   "title": "Repository upload source invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The version contains empty, duplicate, or invalid repository paths.",
   "code": "repository_upload_source_invalid",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/staging_signup_restricted",
   "title": "Staging signup restricted",
-  "status": 400,
+  "status": 422,
   "detail": "New accounts on staging require a connection from the approved IP list.",
   "code": "staging_signup_restricted",
   "requestId": "req_4mz0v8qk"

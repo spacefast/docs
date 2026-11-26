@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_kind_mismatch",
   "title": "Runtime kind mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "This operation is only available for a different runtime kind.",
   "code": "runtime_kind_mismatch",
   "requestId": "req_4mz0v8qk"

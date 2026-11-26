@@ -1,9 +1,9 @@
 ---
 title: "spacefast_git_url_invalid"
-description: "The Spacefast Git URL does not identify an organization and Space."
+description: "The Spacefast Git URL does not identify a team and Space."
 ---
 
-The Spacefast Git URL does not identify an organization and Space.
+The Spacefast Git URL does not identify a team and Space.
 
 **How to resolve:** Use the Spacefast source URL in the Source available remix link.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/spacefast_git_url_invalid",
   "title": "Spacefast git url invalid",
-  "status": 400,
-  "detail": "The Spacefast Git URL does not identify an organization and Space.",
+  "status": 422,
+  "detail": "The Spacefast Git URL does not identify a team and Space.",
   "code": "spacefast_git_url_invalid",
   "requestId": "req_4mz0v8qk"
 }

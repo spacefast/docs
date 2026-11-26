@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_rate_limited",
   "title": "Dns provider rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider rate-limited the requested operation.",
   "code": "dns_provider_rate_limited",
   "requestId": "req_4mz0v8qk"

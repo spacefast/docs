@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_upload_failed",
   "title": "Team design system upload failed",
-  "status": 400,
+  "status": 422,
   "detail": "The file or native attachment could not be stored.",
   "code": "team_design_system_upload_failed",
   "requestId": "req_4mz0v8qk"

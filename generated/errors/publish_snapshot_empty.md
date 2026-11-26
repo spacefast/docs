@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_snapshot_empty",
   "title": "Publish snapshot empty",
-  "status": 400,
+  "status": 422,
   "detail": "An empty snapshot was sent without an explicit base version.",
   "code": "publish_snapshot_empty",
   "requestId": "req_4mz0v8qk"

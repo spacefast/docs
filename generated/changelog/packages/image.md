@@ -5,6 +5,16 @@ description: "Release history for @spacefast/image on npm."
 
 Published as [`@spacefast/image`](https://www.npmjs.com/package/@spacefast/image) on npm.
 
+## 0.10.0
+
+#### Minor Changes
+
+- `@spacefast/image` no longer builds screenshot-service URLs (`mshotsUrl`, `MShotsOptions`, `DEFAULT_MSHOTS_OPTIONS`, `MSHOTS_HOST`); the API's capture module is the only code that names a capture service. New `getPageScreenshot` (`?url=<page>&version=<served version>`) serves a public page's 1200x630 social card for its `og:image`, cacheable for a day. Any page that is not public, is not served as HTML, or whose version is not the one its hostname serves now is a miss. The Space Library preview reads say `pending` while a screenshot renders instead of probing a placeholder.
+
+## 0.9.0
+
+_No noted changes in this release._
+
 ## 0.8.1
 
 _No noted changes in this release._

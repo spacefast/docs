@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_connection_unavailable",
   "title": "Dns provider connection unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider connection cannot currently be used.",
   "code": "dns_provider_connection_unavailable",
   "requestId": "req_4mz0v8qk"

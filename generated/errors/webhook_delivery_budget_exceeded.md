@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/webhook_delivery_budget_exceeded",
   "title": "Webhook delivery budget exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The webhook exhausted its delivery budget and was paused.",
   "code": "webhook_delivery_budget_exceeded",
   "requestId": "req_4mz0v8qk"

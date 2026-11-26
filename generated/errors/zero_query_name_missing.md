@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_query_name_missing",
   "title": "Zero query name missing",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero realtime query subscription did not include a query name.",
   "code": "zero_query_name_missing",
   "requestId": "req_4mz0v8qk"

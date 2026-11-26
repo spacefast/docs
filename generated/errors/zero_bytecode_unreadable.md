@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_bytecode_unreadable",
   "title": "Zero bytecode unreadable",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint bytecode file cannot be read.",
   "code": "zero_bytecode_unreadable",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_query_combination_unsupported",
   "title": "Analytics query combination unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The analytics query asks for a metric with a breakdown, filter or granularity it doesn't support.",
   "code": "analytics_query_combination_unsupported",
   "requestId": "req_4mz0v8qk"

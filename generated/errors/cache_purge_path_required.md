@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/cache_purge_path_required",
   "title": "Cache purge path required",
-  "status": 400,
+  "status": 422,
   "detail": "A purge request must name at least one path.",
   "code": "cache_purge_path_required",
   "requestId": "req_4mz0v8qk"

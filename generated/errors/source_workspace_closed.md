@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_closed",
   "title": "Source workspace closed",
-  "status": 400,
+  "status": 422,
   "detail": "The selected source workspace is already closed.",
   "code": "source_workspace_closed",
   "requestId": "req_4mz0v8qk"

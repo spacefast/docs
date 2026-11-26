@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/agent_handoff_declined",
   "title": "Agent handoff declined",
-  "status": 400,
+  "status": 422,
   "detail": "The app-private agent handoff cannot be redeemed.",
   "code": "agent_handoff_declined",
   "requestId": "req_4mz0v8qk"

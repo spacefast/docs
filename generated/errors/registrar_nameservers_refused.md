@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrar_nameservers_refused",
   "title": "Registrar nameservers refused",
-  "status": 400,
+  "status": 422,
   "detail": "The registry refused the nameserver change. Nothing changed.",
   "code": "registrar_nameservers_refused",
   "requestId": "req_4mz0v8qk"

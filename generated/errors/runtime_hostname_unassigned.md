@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_hostname_unassigned",
   "title": "Runtime hostname unassigned",
-  "status": 400,
+  "status": 422,
   "detail": "The hostname is not assigned to a runtime, so the request cannot be routed.",
   "code": "runtime_hostname_unassigned",
   "requestId": "req_4mz0v8qk"

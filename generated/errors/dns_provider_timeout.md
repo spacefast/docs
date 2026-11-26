@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_timeout",
   "title": "Dns provider timeout",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider did not accept the change within the bounded wait.",
   "code": "dns_provider_timeout",
   "requestId": "req_4mz0v8qk"

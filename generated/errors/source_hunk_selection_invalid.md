@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_hunk_selection_invalid",
   "title": "Source hunk selection invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The selected hunks are duplicated or cannot be staged independently.",
   "code": "source_hunk_selection_invalid",
   "requestId": "req_4mz0v8qk"

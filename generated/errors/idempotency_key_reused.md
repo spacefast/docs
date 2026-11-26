@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/idempotency_key_reused",
   "title": "Idempotency key reused",
-  "status": 400,
+  "status": 422,
   "detail": "The Idempotency-Key was reused with a different request body.",
   "code": "idempotency_key_reused",
   "requestId": "req_4mz0v8qk"

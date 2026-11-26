@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_upload_source_changed",
   "title": "Repository upload source changed",
-  "status": 400,
+  "status": 422,
   "detail": "The current upload changed while source was being initialized.",
   "code": "repository_upload_source_changed",
   "requestId": "req_4mz0v8qk"

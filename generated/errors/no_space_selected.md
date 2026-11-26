@@ -5,7 +5,7 @@ description: "The command needs a Space and this directory does not select one."
 
 The command needs a Space and this directory does not select one.
 
-**How to resolve:** Pass --space, link the directory with `sf link --space <id>`, or run it where a project link already selects a Space. `sf spaces ls` lists what the credential can reach.
+**How to resolve:** Pass --space, link the directory with `sf link --space <id>`, or run it where a project link already selects a Space. `sf spaces list` lists what the credential can reach.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/no_space_selected",
   "title": "No space selected",
-  "status": 400,
+  "status": 422,
   "detail": "The command needs a Space and this directory does not select one.",
   "code": "no_space_selected",
   "requestId": "req_4mz0v8qk"

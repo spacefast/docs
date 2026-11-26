@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/api_key_scope_underivable",
   "title": "Api key scope underivable",
-  "status": 400,
+  "status": 422,
   "detail": "A concrete access policy cannot be derived from the requested scope and permissions.",
   "code": "api_key_scope_underivable",
   "requestId": "req_4mz0v8qk"

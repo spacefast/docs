@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/authorization_level_not_allowed",
   "title": "Authorization level not allowed",
-  "status": 400,
+  "status": 422,
   "detail": "This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept.",
   "code": "authorization_level_not_allowed",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_exact_diff_unsupported",
   "title": "Source exact diff unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "CodeStorage compares from the shared ancestor instead of the two selected snapshots.",
   "code": "source_exact_diff_unsupported",
   "requestId": "req_4mz0v8qk"

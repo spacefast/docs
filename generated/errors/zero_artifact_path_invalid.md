@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_artifact_path_invalid",
   "title": "Zero artifact path invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint artifact path is invalid.",
   "code": "zero_artifact_path_invalid",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_version_required",
   "title": "Frame version required",
-  "status": 400,
+  "status": 422,
   "detail": "An all-Versions Frame Link requires one explicit immutable Version.",
   "code": "frame_version_required",
   "requestId": "req_4mz0v8qk"

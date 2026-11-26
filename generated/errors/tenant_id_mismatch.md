@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/tenant_id_mismatch",
   "title": "Tenant id mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The resource belongs to a different tenant than the request.",
   "code": "tenant_id_mismatch",
   "requestId": "req_4mz0v8qk"

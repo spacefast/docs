@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/proxy_upstream_unresolved",
   "title": "Proxy upstream unresolved",
-  "status": 400,
+  "status": 422,
   "detail": "The proxy upstream hostname cannot be resolved.",
   "code": "proxy_upstream_unresolved",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_response_too_large",
   "title": "Zero response too large",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint response exceeds the runtime size limit.",
   "code": "zero_response_too_large",
   "requestId": "req_4mz0v8qk"

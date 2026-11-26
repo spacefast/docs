@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_ref_reserved",
   "title": "Source workspace ref reserved",
-  "status": 400,
+  "status": 422,
   "detail": "The selected ref belongs to the managed source workspace namespace.",
   "code": "source_workspace_ref_reserved",
   "requestId": "req_4mz0v8qk"

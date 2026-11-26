@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_forbidden",
   "title": "Visual review forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "This authority cannot access the review or its recorded deployment.",
   "code": "visual_review_forbidden",
   "requestId": "req_4mz0v8qk"

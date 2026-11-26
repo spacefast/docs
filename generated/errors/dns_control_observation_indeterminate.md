@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_control_observation_indeterminate",
   "title": "Dns control observation indeterminate",
-  "status": 400,
+  "status": 422,
   "detail": "The domain check could not finish because a DNS or HTTP probe did not answer.",
   "code": "dns_control_observation_indeterminate",
   "requestId": "req_4mz0v8qk"

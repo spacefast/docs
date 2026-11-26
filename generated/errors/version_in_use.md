@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_in_use",
   "title": "Version in use",
-  "status": 400,
+  "status": 422,
   "detail": "The version is referenced by one or more channels and cannot be deleted.",
   "code": "version_in_use",
   "requestId": "req_4mz0v8qk"

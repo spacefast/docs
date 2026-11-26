@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/stripe_error",
   "title": "Stripe error",
-  "status": 400,
+  "status": 422,
   "detail": "The billing provider reported an error.",
   "code": "stripe_error",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_object_not_found",
   "title": "Storage object not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested storage object does not exist.",
   "code": "storage_object_not_found",
   "requestId": "req_4mz0v8qk"

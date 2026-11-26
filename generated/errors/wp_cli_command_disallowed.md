@@ -1,11 +1,11 @@
 ---
 title: "wp_cli_command_disallowed"
-description: "WP Cloud refused this WP-CLI command before running it, so nothing ran."
+description: "Spacefast refused this WP-CLI command before running it, so nothing ran."
 ---
 
-WP Cloud refused this WP-CLI command before running it, so nothing ran.
+Spacefast refused this WP-CLI command before running it, so nothing ran.
 
-**How to resolve:** Check the arguments: pass what follows `wp`, already split. If WP Cloud's task runner disallows the command, make the change through the Spacefast API or the WordPress REST API instead. Retrying the same command fails the same way.
+**How to resolve:** Check the arguments: pass what follows `wp`, already split. If Spacefast's task runner disallows the command, make the change through the Spacefast API or the WordPress REST API instead. Retrying the same command fails the same way.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cli_command_disallowed",
   "title": "Wp cli command disallowed",
-  "status": 400,
-  "detail": "WP Cloud refused this WP-CLI command before running it, so nothing ran.",
+  "status": 422,
+  "detail": "Spacefast refused this WP-CLI command before running it, so nothing ran.",
   "code": "wp_cli_command_disallowed",
   "requestId": "req_4mz0v8qk"
 }

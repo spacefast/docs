@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/confirmation_mismatch",
   "title": "Confirmation mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The continuation token is bound to different action terms or a different resource revision than the request presenting it.",
   "code": "confirmation_mismatch",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_deleted",
   "title": "Team deleted",
-  "status": 400,
+  "status": 422,
   "detail": "The team was deleted before the domain could be registered, so the payment for it was refunded.",
   "code": "team_deleted",
   "requestId": "req_4mz0v8qk"

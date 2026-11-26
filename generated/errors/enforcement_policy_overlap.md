@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/enforcement_policy_overlap",
   "title": "Enforcement policy overlap",
-  "status": 400,
+  "status": 422,
   "detail": "Enforcement policy severity ranges overlap within a category.",
   "code": "enforcement_policy_overlap",
   "requestId": "req_4mz0v8qk"

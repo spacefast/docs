@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/network_policy_enterprise_required",
   "title": "Network policy enterprise required",
-  "status": 400,
+  "status": 422,
   "detail": "Ingress network policies require an Enterprise plan.",
   "code": "network_policy_enterprise_required",
   "requestId": "req_4mz0v8qk"

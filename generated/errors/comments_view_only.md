@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comments_view_only",
   "title": "Comments view only",
-  "status": 400,
+  "status": 422,
   "detail": "You can read this page's comments but not add to them.",
   "code": "comments_view_only",
   "requestId": "req_4mz0v8qk"

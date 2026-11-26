@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_contact_not_found",
   "title": "Domain contact not found",
-  "status": 400,
+  "status": 422,
   "detail": "The registrant contact does not exist, or belongs to another team.",
   "code": "domain_contact_not_found",
   "requestId": "req_4mz0v8qk"

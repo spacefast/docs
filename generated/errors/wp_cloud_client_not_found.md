@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_client_not_found",
   "title": "Wp cloud client not found",
-  "status": 400,
+  "status": 422,
   "detail": "The provider client was not found.",
   "code": "wp_cloud_client_not_found",
   "requestId": "req_4mz0v8qk"

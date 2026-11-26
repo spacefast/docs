@@ -5,6 +5,19 @@ description: "Release history for @spacefast/compat-lakebed on npm."
 
 Published as [`@spacefast/compat-lakebed`](https://www.npmjs.com/package/@spacefast/compat-lakebed) on npm.
 
+## 0.10.0
+
+#### Patch Changes
+
+- @spacefast/zero@0.10.0
+
+## 0.9.0
+
+#### Patch Changes
+
+- Updated dependencies
+  - @spacefast/zero@0.9.0
+
 ## 0.8.1
 
 #### Patch Changes

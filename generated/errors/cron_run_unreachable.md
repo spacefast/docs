@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/cron_run_unreachable",
   "title": "Cron run unreachable",
-  "status": 400,
+  "status": 422,
   "detail": "The space did not answer the on-demand cron request: either it exceeded the response limit (HTTP 422, the handler may still be running) or the connection failed (HTTP 503).",
   "code": "cron_run_unreachable",
   "requestId": "req_4mz0v8qk"

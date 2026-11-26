@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_response_header_invalid",
   "title": "Zero response header invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero endpoint response header is invalid or exceeds the header limits.",
   "code": "zero_response_header_invalid",
   "requestId": "req_4mz0v8qk"

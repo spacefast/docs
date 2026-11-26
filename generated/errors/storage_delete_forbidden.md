@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_delete_forbidden",
   "title": "Storage delete forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "The current visitor did not upload this object.",
   "code": "storage_delete_forbidden",
   "requestId": "req_4mz0v8qk"

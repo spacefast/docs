@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_export_query_invalid",
   "title": "Zero db export query invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The local database export request has an invalid table or page size.",
   "code": "zero_db_export_query_invalid",
   "requestId": "req_4mz0v8qk"

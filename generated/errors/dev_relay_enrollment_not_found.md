@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_enrollment_not_found",
   "title": "Dev relay enrollment not found",
-  "status": 400,
+  "status": 422,
   "detail": "No dev relay is enrolled for this token yet.",
   "code": "dev_relay_enrollment_not_found",
   "requestId": "req_4mz0v8qk"

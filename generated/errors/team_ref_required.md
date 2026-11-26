@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_ref_required",
   "title": "Team ref required",
-  "status": 400,
+  "status": 422,
   "detail": "A team reference is required for this operation.",
   "code": "team_ref_required",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comment_page_path_too_long",
   "title": "Comment page path too long",
-  "status": 400,
+  "status": 422,
   "detail": "The comment's page path is longer than Comments allow.",
   "code": "comment_page_path_too_long",
   "requestId": "req_4mz0v8qk"

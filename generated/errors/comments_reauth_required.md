@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comments_reauth_required",
   "title": "Comments reauth required",
-  "status": 400,
+  "status": 422,
   "detail": "Your access to this page changed since you signed in to comment.",
   "code": "comments_reauth_required",
   "requestId": "req_4mz0v8qk"

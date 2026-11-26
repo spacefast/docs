@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/missing_route_param",
   "title": "Missing route param",
-  "status": 400,
+  "status": 422,
   "detail": "A required route parameter is missing from the request path.",
   "code": "missing_route_param",
   "requestId": "req_4mz0v8qk"

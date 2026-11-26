@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_enrollment_conflict",
   "title": "Dev relay enrollment conflict",
-  "status": 400,
+  "status": 422,
   "detail": "Another enrollment took this relay token or hostname at the same moment.",
   "code": "dev_relay_enrollment_conflict",
   "requestId": "req_4mz0v8qk"

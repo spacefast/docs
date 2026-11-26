@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_archive_file_count_exceeded",
   "title": "Publish archive file count exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The archive contains more files than the allowed ceiling.",
   "code": "publish_archive_file_count_exceeded",
   "requestId": "req_4mz0v8qk"

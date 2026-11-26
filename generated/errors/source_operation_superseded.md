@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_operation_superseded",
   "title": "Source operation superseded",
-  "status": 400,
+  "status": 422,
   "detail": "The source operation no longer owns the workspace pending state.",
   "code": "source_operation_superseded",
   "requestId": "req_4mz0v8qk"

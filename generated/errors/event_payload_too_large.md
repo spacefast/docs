@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/event_payload_too_large",
   "title": "Event payload too large",
-  "status": 400,
+  "status": 422,
   "detail": "The event payload exceeds the maximum size.",
   "code": "event_payload_too_large",
   "requestId": "req_4mz0v8qk"

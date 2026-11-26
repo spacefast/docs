@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_runtime_invalid_kind",
   "title": "Config runtime invalid kind",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime block in the space configuration declares an unknown kind.",
   "code": "config_runtime_invalid_kind",
   "requestId": "req_4mz0v8qk"

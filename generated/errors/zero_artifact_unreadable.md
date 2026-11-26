@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_artifact_unreadable",
   "title": "Zero artifact unreadable",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint artifact cannot be read by the runtime.",
   "code": "zero_artifact_unreadable",
   "requestId": "req_4mz0v8qk"

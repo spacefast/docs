@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 802 error codes in the registry.
+There are 1012 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -16,7 +16,10 @@ There are 802 error codes in the registry.
 | [`abuse_report_rate_limited`](/errors/abuse_report_rate_limited) | Too many abuse reports were submitted from this client in a short window. |
 | [`abuse_takedown`](/errors/abuse_takedown) | This space was disabled by an abuse takedown and cannot be served or modified. |
 | [`access_denied`](/errors/access_denied) | The authorization request was denied by the user. |
+| [`access_request_limit`](/errors/access_request_limit) | This Space already has as many pending access requests as its plan allows. |
+| [`account_required`](/errors/account_required) | This needs a signed-in Spacefast account. |
 | [`account_suspended`](/errors/account_suspended) | This account is suspended for a policy or abuse violation and cannot be used. |
+| [`activity_export_person_required`](/errors/activity_export_person_required) | An activity export emails its file to a person, and this credential names none: it is a partner, machine, or support-session credential, or a team key nobody made. |
 | [`agent_handoff_declined`](/errors/agent_handoff_declined) | The app-private agent handoff cannot be redeemed. |
 | [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the space. |
 | [`agent_handoff_origin_unsupported`](/errors/agent_handoff_origin_unsupported) | The dashboard origin this deployment is configured with cannot mint canonical agent handoff links. |
@@ -27,20 +30,30 @@ There are 802 error codes in the registry.
 | [`analytics_query_breakdown_over_time_unsupported`](/errors/analytics_query_breakdown_over_time_unsupported) | The analytics query asks for a breakdown and time buckets together, which isn't answered yet. |
 | [`analytics_query_combination_unsupported`](/errors/analytics_query_combination_unsupported) | The analytics query asks for a metric with a breakdown, filter or granularity it doesn't support. |
 | [`analytics_query_hourly_range_too_long`](/errors/analytics_query_hourly_range_too_long) | Hourly buckets cover at most 7 days. |
+| [`analytics_query_not_found`](/errors/analytics_query_not_found) | No analytics query by that name. |
 | [`analytics_query_range_too_long`](/errors/analytics_query_range_too_long) | An analytics query covers at most 395 days, how long raw events are kept. |
 | [`analytics_query_two_breakdowns`](/errors/analytics_query_two_breakdowns) | An analytics query takes one breakdown dimension besides time. |
 | [`anonymous_expired`](/errors/anonymous_expired) | This anonymous space expired before it was claimed. |
 | [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited) | Too many anonymous publishes came from this network in a short window. |
+| [`anonymous_share_link_limit`](/errors/anonymous_share_link_limit) | This unclaimed Space already has as many active Links as an unclaimed Space may keep. |
 | [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached) | This client already holds the maximum number of unclaimed spaces. |
 | [`api_key_scope_underivable`](/errors/api_key_scope_underivable) | A concrete access policy cannot be derived from the requested scope and permissions. |
 | [`archive_too_large`](/errors/archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
+| [`artifact_cookie_scan_failed`](/errors/artifact_cookie_scan_failed) | A script artifact could not be inspected for shared-domain cookie writes. |
+| [`artifact_decompression_limit_exceeded`](/errors/artifact_decompression_limit_exceeded) | A precompressed .gz or .br artifact exceeded the decoded size or expansion-ratio safety limit. |
 | [`auth_code_required`](/errors/auth_code_required) | An authorization code is required to complete this step. |
 | [`authorization_level_not_allowed`](/errors/authorization_level_not_allowed) | This operation is reserved for a signed-in person, or the credential is acting at an authorization level the operation does not accept. |
 | [`authorization_pending`](/errors/authorization_pending) | The device login is not approved yet. |
+| [`bar_session_body_not_allowed`](/errors/bar_session_body_not_allowed) | The Space bar sends this request as a JSON object, and this body isn't one it can check. |
+| [`bar_session_capability_not_allowed`](/errors/bar_session_capability_not_allowed) | The Space bar can give view or comment access only. |
+| [`bar_session_field_not_allowed`](/errors/bar_session_field_not_allowed) | The Space bar can only change search indexing on the Space itself. |
+| [`bar_session_invalid`](/errors/bar_session_invalid) | The Space bar's sign-in has expired or was revoked. |
+| [`bar_session_operation_not_allowed`](/errors/bar_session_operation_not_allowed) | The Space bar can only manage sharing for its own Space. |
 | [`billing_address_required`](/errors/billing_address_required) | The paying team has no billing address, so tax can't be worked out for this purchase. |
 | [`billing_managed_by_parent`](/errors/billing_managed_by_parent) | This team is a subteam. Its plan, seats and billing belong to its parent team. |
 | [`blob_gate_record_missing`](/errors/blob_gate_record_missing) | The file behind this download link no longer exists. |
 | [`blob_gate_token_invalid`](/errors/blob_gate_token_invalid) | The download token is invalid or expired. |
+| [`browser_error_report_too_large`](/errors/browser_error_report_too_large) | The dashboard error report is larger than the 64 KiB limit. |
 | [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | This browser origin cannot perform authenticated mutations. |
 | [`build_command_missing`](/errors/build_command_missing) | A build or install command cannot be found during the build run. |
 | [`build_execution_unavailable`](/errors/build_execution_unavailable) | Build execution is not available on this deployment. |
@@ -51,6 +64,8 @@ There are 802 error codes in the registry.
 | [`build_oom`](/errors/build_oom) | The build process was killed, most likely after running out of memory. |
 | [`build_output_contains_server_bundle`](/errors/build_output_contains_server_bundle) | The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download. |
 | [`build_output_dir_missing`](/errors/build_output_dir_missing) | The build finished but its output directory was not produced. |
+| [`build_source_export_missing`](/errors/build_source_export_missing) | A source file imports a name that the referenced module does not export. |
+| [`build_source_import_partial`](/errors/build_source_import_partial) | The commit is one part of a source import that was saved in several commits, so it holds only some of the files. |
 | [`build_timeout`](/errors/build_timeout) | The build exceeded its time limit before producing a version. |
 | [`cache_purge_domain_required`](/errors/cache_purge_domain_required) | A purge request must name the domain to purge. |
 | [`cache_purge_path_required`](/errors/cache_purge_path_required) | A purge request must name at least one path. |
@@ -62,15 +77,18 @@ There are 802 error codes in the registry.
 | [`channel_unsupported`](/errors/channel_unsupported) | This space does not support the requested channel. |
 | [`claim_blocked_takedown`](/errors/claim_blocked_takedown) | This space is under an abuse takedown and cannot be claimed. |
 | [`claim_target_not_found`](/errors/claim_target_not_found) | The team or account to claim the space into was not found. |
-| [`cli_upgrade_required`](/errors/cli_upgrade_required) | This CLI version is too old to talk to the API safely. |
+| [`cli_login_limit_reached`](/errors/cli_login_limit_reached) | This MCP connection already has the maximum number of unused CLI sign-ins. |
+| [`cli_login_unsupported_credential`](/errors/cli_login_unsupported_credential) | Only a signed-in hosted MCP session can sign the CLI in. |
 | [`comment_page_path_invalid`](/errors/comment_page_path_invalid) | The comment's page path isn't a plain absolute URL path. |
 | [`comment_page_path_too_long`](/errors/comment_page_path_too_long) | The comment's page path is longer than Comments allow. |
 | [`comment_room_deleted`](/errors/comment_room_deleted) | The comment room for this page was deleted, so it can't take new comments. |
 | [`comments_disabled`](/errors/comments_disabled) | Comments are off for this Space. |
+| [`comments_live_requires_previews`](/errors/comments_live_requires_previews) | Comments on the live Space need Comments on Previews too. |
 | [`comments_not_configured`](/errors/comments_not_configured) | Comments aren't set up on the server for this Space yet. |
 | [`comments_reauth_required`](/errors/comments_reauth_required) | Your access to this page changed since you signed in to comment. |
 | [`comments_target_unavailable`](/errors/comments_target_unavailable) | This Space's comments are set to Previews only, so they show on Versions but not on the live site, and a comment role can't point there. |
 | [`comments_view_only`](/errors/comments_view_only) | You can read this page's comments but not add to them. |
+| [`company_domains_unavailable`](/errors/company_domains_unavailable) | This credential can't read the company domains for every team on this page, so it can't tell who is outside them. |
 | [`config_file_too_large`](/errors/config_file_too_large) | The sf.jsonc configuration file exceeds the maximum size. |
 | [`config_functions_key_removed`](/errors/config_functions_key_removed) | The sf.jsonc configuration still uses the removed top-level functions key. |
 | [`config_invalid`](/errors/config_invalid) | The space configuration failed validation. |
@@ -91,43 +109,63 @@ There are 802 error codes in the registry.
 | [`connection_revoked`](/errors/connection_revoked) | This connection was disconnected and its credential was purged. |
 | [`connection_serving_not_granted`](/errors/connection_serving_not_granted) | This team connection has not been granted site serving access. |
 | [`connector_approval_required`](/errors/connector_approval_required) | The call needs a person to approve it before it runs. |
+| [`connector_arg_pinned`](/errors/connector_arg_pinned) | The role pins this argument to a different value. |
+| [`connector_binding_changed`](/errors/connector_binding_changed) | The connector role is bound to a different account than the one you allowed. |
 | [`connector_first_party_immutable`](/errors/connector_first_party_immutable) | This connector is built into Spacefast and cannot be edited or removed. |
 | [`connector_not_found`](/errors/connector_not_found) | No connector exists with this slug for this team. |
 | [`connector_policy_blocked`](/errors/connector_policy_blocked) | The effective team connector policy blocks this connector. |
+| [`connector_preview_write_not_allowed`](/errors/connector_preview_write_not_allowed) | Preview versions cannot run write or destructive connector tools through shared team or personal bindings. |
 | [`connector_program_failed`](/errors/connector_program_failed) | The connector program failed during execution. |
-| [`connector_role_unknown`](/errors/connector_role_unknown) | The live capsule does not declare this connector role. |
+| [`connector_public_serving_admin_only`](/errors/connector_public_serving_admin_only) | Only team owners and admins can let a team account serve a Space anyone can open. |
+| [`connector_public_serving_team_only`](/errors/connector_public_serving_team_only) | Only team roles have a public serving setting. |
+| [`connector_role_connector_mismatch`](/errors/connector_role_connector_mismatch) | The connection is for a different connector than the role declares. |
+| [`connector_role_pending`](/errors/connector_role_pending) | A connector role the live version declares cannot serve yet. |
+| [`connector_role_unbound`](/errors/connector_role_unbound) | The connector role has no connection bound. |
+| [`connector_role_unknown`](/errors/connector_role_unknown) | The version does not declare this connector role. |
 | [`connector_run_budget_exhausted`](/errors/connector_run_budget_exhausted) | The run hit its tool-call, egress, or time budget and stopped. |
 | [`connector_run_not_found`](/errors/connector_run_not_found) | No run exists with this id, or this credential cannot see it. |
 | [`connector_run_not_resumable`](/errors/connector_run_not_resumable) | The run already settled, or its approval expired. |
 | [`connector_serving_admin_only`](/errors/connector_serving_admin_only) | Only team owners and admins can change serving grants. |
 | [`connector_serving_not_allowlisted`](/errors/connector_serving_not_allowlisted) | This connector is not allowed to serve sites. |
+| [`connector_serving_request_invalid`](/errors/connector_serving_request_invalid) | This role has nothing to ask site serving for. |
 | [`connector_slug_taken`](/errors/connector_slug_taken) | This team already has a connector with that slug. |
 | [`connector_source_blocked`](/errors/connector_source_blocked) | The source URL points somewhere the egress guard refuses to fetch. |
 | [`connector_source_invalid`](/errors/connector_source_invalid) | The source does not match the catalog row it was registered with. |
 | [`connector_source_unreachable`](/errors/connector_source_unreachable) | The spec or endpoint could not be fetched. |
 | [`connector_tool_blocked`](/errors/connector_tool_blocked) | A policy rule blocks this tool for this caller. |
 | [`connector_tool_failed`](/errors/connector_tool_failed) | The provider answered the tool call with an error. |
+| [`connector_tool_not_allowed`](/errors/connector_tool_not_allowed) | The role's tool list does not include this tool. |
 | [`connector_tool_not_found`](/errors/connector_tool_not_found) | The requested tool is not available on this connection. |
-| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | Read handlers can only call read-only connector tools. |
+| [`connector_visitor_proof_invalid`](/errors/connector_visitor_proof_invalid) | The Space runtime's signed visitor session proof was missing, expired, or did not match the Space or visitor. |
+| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | This call may only use read-only connector tools. |
+| [`connector_write_sign_in_required`](/errors/connector_write_sign_in_required) | Writing through a shared team or personal account needs a signed-in member of the Space. |
+| [`content_admin_authorization_unavailable`](/errors/content_admin_authorization_unavailable) | The Space's server could not read its content editor access record, so the editor could not open. |
 | [`content_admin_person_required`](/errors/content_admin_person_required) | A content dashboard sign-in link signs in a person, and this credential names none: it is a partner, machine, or platform credential. |
 | [`continuation_unavailable`](/errors/continuation_unavailable) | This space key can no longer be exchanged for an API key. |
 | [`continuation_used`](/errors/continuation_used) | This space key was already exchanged for a durable API key. |
 | [`credential_class_not_allowed`](/errors/credential_class_not_allowed) | This credential type cannot perform this action. |
+| [`credential_exfiltration_detected`](/errors/credential_exfiltration_detected) | A file combines password or payment card fields with a direct Telegram bot or Discord webhook endpoint. |
 | [`credential_expired`](/errors/credential_expired) | The credential used for this request is expired. |
 | [`credential_not_yet_valid`](/errors/credential_not_yet_valid) | The credential is not valid yet because its start time is in the future. |
-| [`credential_retired`](/errors/credential_retired) | This request used a retired Spacefast token format or authentication header. |
 | [`credential_revoked`](/errors/credential_revoked) | The credential used for this request was revoked. |
 | [`credential_sponsor_inactive`](/errors/credential_sponsor_inactive) | The person who authorized this machine credential is no longer an active member of the team it acts for. |
+| [`credit_already_redeemed`](/errors/credit_already_redeemed) | This credit was already redeemed, and each credit is redeemed once. |
+| [`credit_plan_unavailable`](/errors/credit_plan_unavailable) | A credit starts a plan only on a team without one, and this team is already on a plan. |
+| [`credit_revoked`](/errors/credit_revoked) | Spacefast withdrew this credit, so it can't be redeemed. |
 | [`cron_not_found`](/errors/cron_not_found) | The live version declares no scheduled job with that key or path. |
 | [`cron_run_unreachable`](/errors/cron_run_unreachable) | The space did not answer the on-demand cron request: either it exceeded the response limit (HTTP 422, the handler may still be running) or the connection failed (HTTP 503). |
 | [`csam_blocked`](/errors/csam_blocked) | The content was blocked because it matched known child sexual abuse material. |
 | [`csam_policy_floor`](/errors/csam_policy_floor) | CSAM enforcement policy cannot be set below the mandatory account-suspend floor. |
+| [`dashboard_link_approval_not_awaited`](/errors/dashboard_link_approval_not_awaited) | A dashboard link to an approval can be made only by the credential that is waiting on that approval. |
+| [`dashboard_link_person_required`](/errors/dashboard_link_person_required) | A dashboard sign-in link signs in a person, and this credential names none: it is a partner, team, machine, or platform credential. |
 | [`dashboard_prefs_key_invalid`](/errors/dashboard_prefs_key_invalid) | A dashboard preference key is empty or longer than the 64-character limit. |
 | [`dashboard_prefs_too_large`](/errors/dashboard_prefs_too_large) | The merged dashboard preferences would exceed the 16KB serialized size limit. |
 | [`dashboard_prefs_too_many_keys`](/errors/dashboard_prefs_too_many_keys) | The merged dashboard preferences would hold more than the 50 allowed keys. |
 | [`data_location_immutable`](/errors/data_location_immutable) | This request tried to change data location through an immutable path. |
+| [`database_unavailable`](/errors/database_unavailable) | The service's database connection was unavailable or timed out. |
 | [`db_not_available`](/errors/db_not_available) | The live version has no database to read. |
 | [`decision_execution_lost`](/errors/decision_execution_lost) | The approved action's execution lease is no longer held, so its result cannot be recorded. |
+| [`decision_failed`](/errors/decision_failed) | The approved action ran and failed, so its approval is spent. |
 | [`decision_in_progress`](/errors/decision_in_progress) | This approved action is already executing. |
 | [`dev_relay_automattician_required`](/errors/dev_relay_automattician_required) | This dev relay was approved for an Automattician, and WordPress.com no longer lists the owner as one. |
 | [`dev_relay_decision_invalid`](/errors/dev_relay_decision_invalid) | The dev relay enrollment is already in the requested state, or no longer exists. |
@@ -148,7 +186,7 @@ There are 802 error codes in the registry.
 | [`dns_name_delegated`](/errors/dns_name_delegated) | Your NS record delegates this name to other nameservers. Replace never deletes a delegation. |
 | [`dns_provider_auth_expired`](/errors/dns_provider_auth_expired) | The connected DNS provider authorization expired or was revoked. |
 | [`dns_provider_batch_unsupported`](/errors/dns_provider_batch_unsupported) | The connected DNS provider cannot apply this batch with the required semantics. |
-| [`dns_provider_change_pending`](/errors/dns_provider_change_pending) | The DNS provider accepted the change but propagation or provider completion is still pending. |
+| [`dns_provider_change_pending`](/errors/dns_provider_change_pending) | The DNS provider accepted the change but propagation or provider completion is still pending, or its listing does not yet show the record that was written. |
 | [`dns_provider_conflict`](/errors/dns_provider_conflict) | The DNS provider rejected the change because it conflicts with existing provider state. |
 | [`dns_provider_connection_in_use`](/errors/dns_provider_connection_in_use) | The DNS provider connection is still attached to one or more zones. |
 | [`dns_provider_connection_unavailable`](/errors/dns_provider_connection_unavailable) | The DNS provider connection cannot currently be used. |
@@ -157,6 +195,7 @@ There are 802 error codes in the registry.
 | [`dns_provider_feature_descriptors`](/errors/dns_provider_feature_descriptors) | This provider exposes domain features through capability descriptors. |
 | [`dns_provider_feature_unavailable`](/errors/dns_provider_feature_unavailable) | The requested DNS provider field or feature is not available for this zone. |
 | [`dns_provider_field_unsupported`](/errors/dns_provider_field_unsupported) | The DNS provider does not support one of the requested record fields. |
+| [`dns_provider_listing_incomplete`](/errors/dns_provider_listing_incomplete) | The DNS provider stopped listing the zone's records before the end, so Spacefast did not use the partial list. |
 | [`dns_provider_missing_permission`](/errors/dns_provider_missing_permission) | The connected DNS provider account lacks the required permission. |
 | [`dns_provider_not_connected`](/errors/dns_provider_not_connected) | This domain has no connected DNS provider zone. |
 | [`dns_provider_operation_failed`](/errors/dns_provider_operation_failed) | The DNS provider operation failed before the requested change was accepted. |
@@ -180,9 +219,18 @@ There are 802 error codes in the registry.
 | [`domain_already_exists`](/errors/domain_already_exists) | This domain is already present in your inventory. |
 | [`domain_bound`](/errors/domain_bound) | The domain is currently bound to a space, which blocks this operation. |
 | [`domain_cart_duplicate`](/errors/domain_cart_duplicate) | The cart lists the same domain more than once. |
-| [`domain_checkout_pending`](/errors/domain_checkout_pending) | One or more of these domains is already waiting on an open payment. |
-| [`domain_checkout_total_changed`](/errors/domain_checkout_total_changed) | The live price of the cart no longer matches the total you expected. |
+| [`domain_connect_authorization_not_found`](/errors/domain_connect_authorization_not_found) | This access token has no live Domain Connect authorization for the domain and host. |
+| [`domain_connect_conflict`](/errors/domain_connect_conflict) | Applying the template would replace records the domain uses. |
+| [`domain_connect_redirect_not_allowed`](/errors/domain_connect_redirect_not_allowed) | The `redirect_uri` is not on a domain the template lists in `syncRedirectDomain`. |
+| [`domain_connect_request_invalid`](/errors/domain_connect_request_invalid) | The Domain Connect request is missing a parameter or has one that doesn't fit the template. |
+| [`domain_connect_signature_invalid`](/errors/domain_connect_signature_invalid) | The apply request's signature didn't verify against the service provider's published key. |
+| [`domain_connect_template_not_applied`](/errors/domain_connect_template_not_applied) | That template isn't applied to this domain and host. |
+| [`domain_connect_template_not_found`](/errors/domain_connect_template_not_found) | Spacefast DNS doesn't support this Domain Connect template. |
+| [`domain_connect_zone_not_spacefast_dns`](/errors/domain_connect_zone_not_spacefast_dns) | Domain Connect templates apply only to domains whose DNS Spacefast serves. |
+| [`domain_contact_identity_locked`](/errors/domain_contact_identity_locked) | Only the person who saved this contact can change its name, company name, or email address. |
 | [`domain_contact_not_found`](/errors/domain_contact_not_found) | The registrant contact does not exist, or belongs to another team. |
+| [`domain_contact_not_owned`](/errors/domain_contact_not_owned) | This contact belongs to someone else, so you can't register or move a domain to it. |
+| [`domain_contact_requires_person`](/errors/domain_contact_requires_person) | Contacts belong to a person, and this credential acts as no one. |
 | [`domain_facet_already_managed`](/errors/domain_facet_already_managed) | This facet of the domain is already managed by Spacefast. |
 | [`domain_facet_external`](/errors/domain_facet_external) | This facet of the domain is managed outside Spacefast. |
 | [`domain_facet_not_applicable`](/errors/domain_facet_not_applicable) | The requested facet does not apply to this domain. |
@@ -194,30 +242,44 @@ There are 802 error codes in the registry.
 | [`domain_primary_redirect_conflict`](/errors/domain_primary_redirect_conflict) | A redirecting domain cannot be the primary domain. |
 | [`domain_purchase_apex_required`](/errors/domain_purchase_apex_required) | Only a registrable apex domain (like `example.com`) can be bought, not a subdomain. |
 | [`domain_quota_exceeded`](/errors/domain_quota_exceeded) | Adding this domain would exceed the plan's external domain allowance. |
+| [`domain_registrar_disputed`](/errors/domain_registrar_disputed) | The registry has a dispute flag on this domain, so its registration can't change. |
+| [`domain_registrar_inactive`](/errors/domain_registrar_inactive) | The domain isn't active at the registry, so its registration can't change. |
 | [`domain_registration_active`](/errors/domain_registration_active) | The domain has an active registration, which blocks this operation. |
+| [`domain_registration_actor_invalid`](/errors/domain_registration_actor_invalid) | This credential can't act on the domain registration at the registrar. |
 | [`domain_registration_not_renewable`](/errors/domain_registration_not_renewable) | The domain registration cannot be renewed right now. |
+| [`domain_registration_unconfirmed`](/errors/domain_registration_unconfirmed) | The registrar didn't confirm the registration change, and it may still apply it. |
 | [`domain_reserved_suffix`](/errors/domain_reserved_suffix) | The hostname is under a Spacefast-managed suffix and cannot be added as a domain. |
 | [`domain_transfer_active`](/errors/domain_transfer_active) | The domain has a transfer in progress, which blocks this operation. |
-| [`domain_transfer_unavailable`](/errors/domain_transfer_unavailable) | Domain transfers into or out of Spacefast aren't available yet. Nothing was changed. |
+| [`domain_transfer_authority_changed`](/errors/domain_transfer_authority_changed) | Access to the registration changed before a provider action. |
+| [`domain_transfer_email_failed`](/errors/domain_transfer_email_failed) | The registrar refused the authorization email request. |
+| [`domain_transfer_email_unknown`](/errors/domain_transfer_email_unknown) | The registrar may have queued the authorization email; its outcome is uncertain. |
+| [`domain_transfer_forbidden`](/errors/domain_transfer_forbidden) | Only a team owner or admin can transfer a domain away. |
+| [`domain_transfer_ineligible`](/errors/domain_transfer_ineligible) | The registrar or registry does not allow this transfer. |
+| [`domain_transfer_lock_unconfirmed`](/errors/domain_transfer_lock_unconfirmed) | The registrar has not confirmed the transfer lock change. |
+| [`domain_transfer_locked`](/errors/domain_transfer_locked) | The domain was registered or changed owner less than 60 days ago, so the registry keeps it locked. |
+| [`domain_transfer_needs_attention`](/errors/domain_transfer_needs_attention) | The transfer could not be confirmed or prepared. |
 | [`domain_unavailable`](/errors/domain_unavailable) | Someone else registered the domain first, so the payment for it was refunded. |
-| [`domain_wildcard_label`](/errors/domain_wildcard_label) | The hostname uses a wildcard label in a position that is not allowed. |
-| [`domain_wildcard_not_enabled`](/errors/domain_wildcard_not_enabled) | Wildcard hostnames are not enabled for this domain or plan. |
+| [`domain_wildcard_label`](/errors/domain_wildcard_label) | The hostname has a wildcard label. Wildcard domains aren't available yet. |
+| [`domain_wildcard_not_enabled`](/errors/domain_wildcard_not_enabled) | Wildcard domains aren't available yet. |
 | [`download_required`](/errors/download_required) | This content is too large to return inline and must be downloaded. |
 | [`duplicate_version_path`](/errors/duplicate_version_path) | The version upload declares the same file path twice. |
 | [`edge_logs_truncated`](/errors/edge_logs_truncated) | The edge log query reached the provider's result limit. |
 | [`elevation_denied`](/errors/elevation_denied) | The person denied the temporary access request. |
 | [`elevation_not_required`](/errors/elevation_not_required) | The grant already includes every scope the elevation asked for. |
-| [`elevation_required`](/errors/elevation_required) | A person must approve temporary access before the agent can continue. |
+| [`elevation_required`](/errors/elevation_required) | A person must approve this before the agent can continue. |
 | [`email_already_claimed`](/errors/email_already_claimed) | That email address is already verified on an account. |
 | [`email_verification_code_invalid`](/errors/email_verification_code_invalid) | The emailed confirmation code is wrong, expired, or already used. |
 | [`enforcement_policy_overlap`](/errors/enforcement_policy_overlap) | Enforcement policy severity ranges overlap within a category. |
-| [`enterprise_required`](/errors/enterprise_required) | This feature requires an Enterprise team. |
+| [`enterprise_required`](/errors/enterprise_required) | This feature requires a team on an Enterprise or Internal plan. |
 | [`event_payload_too_large`](/errors/event_payload_too_large) | The event payload exceeds the maximum size. |
 | [`event_rate_limited`](/errors/event_rate_limited) | Too many event submissions came from this client in a short window. |
 | [`expired_token`](/errors/expired_token) | The token is expired. |
+| [`feature_retired`](/errors/feature_retired) | This feature is retired for new versions and settings. Versions already live keep serving. `details.feature` names it and `pointer` marks the input that asks for it. |
+| [`feature_scope_requires_parent_team`](/errors/feature_scope_requires_parent_team) | This feature is set once per company, so a subteam can't carry its own override. |
 | [`feature_unavailable`](/errors/feature_unavailable) | This feature is not available on this deployment or plan. |
 | [`files_mode_does_not_support_spa`](/errors/files_mode_does_not_support_spa) | SPA fallback cannot be combined with files-listing mode. |
 | [`forbidden`](/errors/forbidden) | The credential is valid but does not allow this action. |
+| [`fork_preview_anonymous_only`](/errors/fork_preview_anonymous_only) | Fork pull request previews cannot carry your signed-in account. |
 | [`frame_link_inactive`](/errors/frame_link_inactive) | The Frame Link is revoked, expired, not yet active, or out of uses. |
 | [`frame_path_outside_link_resources`](/errors/frame_path_outside_link_resources) | The requested Frame path is outside the Link's resource set. |
 | [`frame_principal_required`](/errors/frame_principal_required) | A Frame launch needs a signed-in account session, not an API token. |
@@ -227,16 +289,30 @@ There are 802 error codes in the registry.
 | [`frame_target_fixed`](/errors/frame_target_fixed) | The request tried to override a Frame Link with a fixed serving target. |
 | [`frame_version_required`](/errors/frame_version_required) | An all-Versions Frame Link requires one explicit immutable Version. |
 | [`free_external_proxy_disabled`](/errors/free_external_proxy_disabled) | Proxy routes to external upstreams do not serve on an unclaimed Space. |
+| [`free_usage_exhausted`](/errors/free_usage_exhausted) | The Free team's $1 of monthly usage is used up, so new builds and Functions requests are paused. PHP, delivery and email continue. |
+| [`functions_build_unavailable`](/errors/functions_build_unavailable) | This publish needs the platform to build the Space's Functions worker, and the Space's runtime can't take a built worker until its next update. |
+| [`functions_dispatch_busy`](/errors/functions_dispatch_busy) | The Space already has as many Worker requests open as it allows at once, so this one was not started. |
+| [`functions_outside_publish_directory`](/errors/functions_outside_publish_directory) | The project has a functions/ router, but the publish ships only the build output, which does not contain it. Detection reads only the published tree, so the version is static and those routes answer 404. |
+| [`functions_source_incomplete`](/errors/functions_source_incomplete) | A partial change to a Functions worker cannot be built, because the live worker's other source files are not stored in the Space. |
 | [`functions_transport_failed`](/errors/functions_transport_failed) | The space's Functions worker did not answer: the request ran past the 30-second limit, or the connection to the worker failed. |
+| [`git_transfer_limit`](/errors/git_transfer_limit) | The repository exceeds the bounded Git export size. |
+| [`github_account_mismatch`](/errors/github_account_mismatch) | GitHub authorization used a different account from the selected installation. |
+| [`github_account_missing`](/errors/github_account_missing) | The GitHub installation has no account to receive the repository. |
+| [`github_repository_changed`](/errors/github_repository_changed) | The destination changed while its source was being copied. |
+| [`github_repository_exists`](/errors/github_repository_exists) | The repository name is already in use with different visibility. |
+| [`github_repository_not_empty`](/errors/github_repository_not_empty) | The GitHub repository already contains branches or tags that differ from this export. |
+| [`github_repository_write_required`](/errors/github_repository_write_required) | Your GitHub account cannot write to the selected destination. |
 | [`hostname_contested`](/errors/hostname_contested) | The hostname this Space would serve on is already attached to a different site. |
 | [`human_approval_required`](/errors/human_approval_required) | This run was parked for a person, so an agent's decision cannot settle it. |
 | [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) | Another request with the same Idempotency-Key is still in flight. |
 | [`idempotency_key_reused`](/errors/idempotency_key_reused) | The Idempotency-Key was reused with a different request body. |
+| [`identity_connection_issuer_exists`](/errors/identity_connection_issuer_exists) | The team already has an active identity connection for this issuer. |
 | [`incumbent_controls_dns`](/errors/incumbent_controls_dns) | Another team controls this domain's DNS, so the operation is blocked. |
 | [`ingest_admission_exceeded`](/errors/ingest_admission_exceeded) | Too many concurrent uploads for this space. |
 | [`ingress_policy_active`](/errors/ingress_policy_active) | Traffic rules cannot be paused while the Space has an active ingress policy. |
 | [`inject_invalid`](/errors/inject_invalid) | The inject config key is malformed. |
 | [`inject_snippet_too_large`](/errors/inject_snippet_too_large) | An inject snippet exceeds the per-snippet size limit. |
+| [`injection_setting_conflict`](/errors/injection_setting_conflict) | The request set `superpowers.injection` and an older injection key to opposite values, so Spacefast didn't change the setting. |
 | [`insufficient_scope`](/errors/insufficient_scope) | The credential authenticated, but its granted scopes do not include a set this operation accepts. |
 | [`interactive_session_required`](/errors/interactive_session_required) | This action requires an interactive browser session. |
 | [`internal_error`](/errors/internal_error) | Something went wrong on our side. |
@@ -277,6 +353,7 @@ There are 802 error codes in the registry.
 | [`invitation_email_mismatch`](/errors/invitation_email_mismatch) | This invitation was addressed to a different email than the accepting user. |
 | [`invitation_expired`](/errors/invitation_expired) | The invitation is expired and can no longer be accepted. |
 | [`invitation_not_pending`](/errors/invitation_not_pending) | The invitation is no longer pending. |
+| [`invitation_outside_sso_domains`](/errors/invitation_outside_sso_domains) | The team requires SSO, so it can invite only addresses on its company's verified domains. |
 | [`ip_blocked`](/errors/ip_blocked) | Requests from this IP address are blocked for abuse or policy reasons. |
 | [`issuer_exists`](/errors/issuer_exists) | This partner token issuer is already active for another tenant. |
 | [`issuer_not_active`](/errors/issuer_not_active) | The partner token issuer is registered but is not active. |
@@ -300,22 +377,28 @@ There are 802 error codes in the registry.
 | [`job_not_removable`](/errors/job_not_removable) | The job cannot be removed in its current state. |
 | [`job_not_retryable`](/errors/job_not_retryable) | The job cannot be retried in its current state. |
 | [`join_link_not_found`](/errors/join_link_not_found) | No team join link matches this token. It may have been reset. |
+| [`join_policy_requires_subteam`](/errors/join_policy_requires_subteam) | Only a subteam has a join policy; a top-level team admits people by invitation. |
+| [`join_request_required`](/errors/join_request_required) | This subteam's `joinPolicy` is `request`, so people in its parent team cannot join it by themselves. |
 | [`label_limit_reached`](/errors/label_limit_reached) | The team already has the maximum number of labels. |
 | [`label_name_taken`](/errors/label_name_taken) | Another label in this team already uses that name, ignoring case. |
 | [`label_team_mismatch`](/errors/label_team_mismatch) | The label belongs to a different team than the space. |
 | [`labs_enrollment_not_pending`](/errors/labs_enrollment_not_pending) | The team has no pending request for this Labs feature. |
-| [`last_owner`](/errors/last_owner) | The last owner of a team cannot be removed or downgraded. |
+| [`lane_deprecated`](/errors/lane_deprecated) | This publish uses a deprecated runtime (Zero 0.8, zero.config.ts apps, managed content or Commerce) that no longer takes it. `details.lane` names the runtime, and `pointer`, when present, marks the input that asks for it. What is deployed keeps serving, rolling back and changing settings. |
+| [`last_owner`](/errors/last_owner) | The last owner of a team cannot be removed or downgraded. While the team requires SSO, that means the last owner with two-factor. |
 | [`log_retention_clamped`](/errors/log_retention_clamped) | The requested log range exceeds the plan's retention and was clamped. |
 | [`lost_domain_control`](/errors/lost_domain_control) | Spacefast no longer observes DNS control for this domain. |
 | [`maintenance_in_progress`](/errors/maintenance_in_progress) | This change is temporarily unavailable while maintenance finishes. |
 | [`malformed_policy_pattern`](/errors/malformed_policy_pattern) | The policy pattern is not a valid tool-address pattern. |
 | [`malformed_tool_address`](/errors/malformed_tool_address) | The tool address is not `<connectionId>/<tool>`. |
+| [`malicious_script_reference`](/errors/malicious_script_reference) | A published file references a known compromised CDN (such as `polyfill.io`) or a browser crypto-mining endpoint. |
 | [`malware_detected`](/errors/malware_detected) | Malware was detected in the uploaded content. |
 | [`managed_domain_protected`](/errors/managed_domain_protected) | This is a system-managed space.fast or view.fast hostname and cannot be mutated like a custom domain. |
 | [`manifest_body_too_large`](/errors/manifest_body_too_large) | The upload manifest body exceeds the maximum size. |
 | [`manifest_duplicate_path`](/errors/manifest_duplicate_path) | The upload manifest declares the same path more than once. |
 | [`manifest_too_many_files`](/errors/manifest_too_many_files) | The upload manifest declares more files than the allowed ceiling. |
+| [`mcp_client_upgrade_required`](/errors/mcp_client_upgrade_required) | This On-Device Spacefast MCP server is too old to show this result accurately, so the call returned nothing rather than a wrong answer. |
 | [`member_already_exists`](/errors/member_already_exists) | This user is already a member of the team. |
+| [`metadata_too_large`](/errors/metadata_too_large) | The metadata would hold more than 16 keys or 4 KB. |
 | [`method_not_allowed`](/errors/method_not_allowed) | The requested HTTP method is not supported for this endpoint. |
 | [`missing_route_param`](/errors/missing_route_param) | A required route parameter is missing from the request path. |
 | [`move_target_capacity_lost`](/errors/move_target_capacity_lost) | The selected move target no longer has capacity for the space. |
@@ -324,18 +407,24 @@ There are 802 error codes in the registry.
 | [`nameserver_divergence`](/errors/nameserver_divergence) | The domain's observed nameservers diverge from the expected set. |
 | [`nameservers_required`](/errors/nameservers_required) | Spacefast holds this domain's registration, so it leaves Spacefast DNS only by delegating to other nameservers. |
 | [`network_policy_enterprise_required`](/errors/network_policy_enterprise_required) | Ingress network policies require an Enterprise plan. |
+| [`new_subteam_default_requires_root_team`](/errors/new_subteam_default_requires_root_team) | Only a root team sets the default its new subteams start with; this team is a subteam. |
 | [`next_package_layout_unsupported`](/errors/next_package_layout_unsupported) | Automatic Next.js builds do not support Yarn `Plug'n'Play`. |
-| [`next_version_unsupported`](/errors/next_version_unsupported) | This Next.js version is incompatible with the bundled server runtime adapter. |
+| [`next_version_unsupported`](/errors/next_version_unsupported) | Spacefast does not build this Next.js version, either because it has known security vulnerabilities or because it is not a supported stable release. |
 | [`no_space_selected`](/errors/no_space_selected) | The command needs a Space and this directory does not select one. |
 | [`noop_publish`](/errors/noop_publish) | The publish matched the live version exactly, so nothing changed. |
 | [`not_found`](/errors/not_found) | The requested resource was not found. |
-| [`owner_binding_requires_private_space`](/errors/owner_binding_requires_private_space) | Owner connections require a private Space. |
+| [`oidc_discovery_failed`](/errors/oidc_discovery_failed) | The identity provider's OpenID Connect discovery document could not be read. |
+| [`operator_admin_automattician_required`](/errors/operator_admin_automattician_required) | Only a WordPress.com-confirmed Automattician can be granted the read-only admin role. |
+| [`owner_binding_requires_private_space`](/errors/owner_binding_requires_private_space) | Personal roles need a private Space, not shared by link or password, and your own personal connection. |
 | [`parent_authority_required`](/errors/parent_authority_required) | Only an owner or admin of the parent team can do this to a subteam. |
+| [`parent_team_access_requires_subteam`](/errors/parent_team_access_requires_subteam) | Sharing with everyone in the parent team applies only to a space owned by a subteam; this team has no parent team. |
+| [`parent_team_grant_fixed`](/errors/parent_team_grant_fixed) | A parent-team grant is fixed to viewing and commenting on the whole live space and cannot be replaced. |
 | [`partner_preset_not_grantable`](/errors/partner_preset_not_grantable) | The `partner_admin` preset is a tenant-rooted partner credential and cannot be minted as an ordinary team API key. |
 | [`partner_tenant_immutable_client`](/errors/partner_tenant_immutable_client) | The tenant's provider client cannot be changed. |
 | [`password_already_set`](/errors/password_already_set) | The account already has a password. |
 | [`password_compromised`](/errors/password_compromised) | The password appears in a public breach corpus. |
 | [`path_case_collision`](/errors/path_case_collision) | Two file paths differ only by letter case, which collides on serving. |
+| [`path_scoped_manager_refused`](/errors/path_scoped_manager_refused) | A manager manages the whole Space, so a manager role on some paths is refused. |
 | [`path_too_long`](/errors/path_too_long) | A file path exceeds the maximum length. |
 | [`plan_code_already_redeemed`](/errors/plan_code_already_redeemed) | You already redeemed this plan code, or it was already redeemed for this team. |
 | [`plan_code_disabled`](/errors/plan_code_disabled) | This plan code was turned off, so it can no longer be redeemed. |
@@ -343,13 +432,13 @@ There are 802 error codes in the registry.
 | [`plan_code_expired`](/errors/plan_code_expired) | This plan code's link has expired. |
 | [`plan_code_not_found`](/errors/plan_code_not_found) | No plan code matches this link. |
 | [`plan_code_taken`](/errors/plan_code_taken) | Another plan code already uses this code. |
-| [`plan_code_team_already_on_plan`](/errors/plan_code_team_already_on_plan) | The team already has an active grant for the plan this code gives. |
-| [`plan_grant_already_active`](/errors/plan_grant_already_active) | The team already holds an active operator grant for this plan. |
 | [`plan_grant_already_revoked`](/errors/plan_grant_already_revoked) | This plan grant was already revoked. |
+| [`plan_subscription_exists`](/errors/plan_subscription_exists) | The team is already on a plan. A team has one plan at a time. |
 | [`plan_unknown`](/errors/plan_unknown) | The requested plan name is not in the tenant's live plan catalog, so it cannot be assigned to a principal. |
 | [`policy_authority_revoked`](/errors/policy_authority_revoked) | Spacefast did not publish this access change. The recorded requester is missing, inactive, or not permitted to change this Space's access. |
 | [`policy_exceeds_grantor`](/errors/policy_exceeds_grantor) | The requested key policy grants more than your own credential allows. |
 | [`prebuilt_metadata_invalid`](/errors/prebuilt_metadata_invalid) | The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown. |
+| [`primary_contact_ineligible`](/errors/primary_contact_ineligible) | The account cannot be this Space's primary contact. It is not a current member of the owning team and has no accepted editor or manager role on the Space. |
 | [`primary_email_not_removable`](/errors/primary_email_not_removable) | The primary email address cannot be removed while it is the primary. |
 | [`principal_closed`](/errors/principal_closed) | The external principal is closed. Its spaces are tombstoned and cannot be modified. |
 | [`principal_has_active_spaces`](/errors/principal_has_active_spaces) | The external principal still owns spaces, so it cannot be closed. |
@@ -366,12 +455,12 @@ There are 802 error codes in the registry.
 | [`promotion_runtime_publish_incomplete`](/errors/promotion_runtime_publish_incomplete) | The promoted version was accepted but its runtime publish did not finish, so live is unchanged. |
 | [`promotion_test_twin_missing`](/errors/promotion_test_twin_missing) | This live tenant has no linked test tenant, so there is nothing to promote from. |
 | [`provider_commit_denied`](/errors/provider_commit_denied) | The domain changed hands or lost access before the registrar call, so nothing was sent. |
-| [`provider_error`](/errors/provider_error) | WP Cloud reported an error. |
-| [`provider_job_failed`](/errors/provider_job_failed) | A hosting-provider job failed while processing this operation. |
-| [`provider_job_timeout`](/errors/provider_job_timeout) | A hosting-provider job timed out while processing this operation. |
-| [`provider_privilege`](/errors/provider_privilege) | WP Cloud does not grant this client permission to change the setting. |
-| [`provider_rejected_hostname`](/errors/provider_rejected_hostname) | WP Cloud refused to host this hostname. |
-| [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | WP Cloud does not support this runtime feature. |
+| [`provider_error`](/errors/provider_error) | A service Spacefast depends on reported an error. |
+| [`provider_job_failed`](/errors/provider_job_failed) | An infrastructure job failed while processing this operation. |
+| [`provider_job_timeout`](/errors/provider_job_timeout) | An infrastructure job timed out while processing this operation. |
+| [`provider_privilege`](/errors/provider_privilege) | Spacefast's infrastructure does not allow this setting to be changed. |
+| [`provider_rejected_hostname`](/errors/provider_rejected_hostname) | Spacefast's infrastructure refused to serve this hostname. |
+| [`provider_runtime_feature_unsupported`](/errors/provider_runtime_feature_unsupported) | This file is another platform's runtime feature, such as a Cloudflare Pages `_worker.js` or Netlify Functions. Spacefast publishes it as static content and does not run it. |
 | [`provider_site_id_required`](/errors/provider_site_id_required) | A provider site id is required for this internal operation. |
 | [`proxy_upstream_denied`](/errors/proxy_upstream_denied) | The proxy upstream is on a denied network and cannot be used. |
 | [`proxy_upstream_unresolved`](/errors/proxy_upstream_unresolved) | The proxy upstream hostname cannot be resolved. |
@@ -395,11 +484,16 @@ There are 802 error codes in the registry.
 | [`publish_snapshot_empty`](/errors/publish_snapshot_empty) | An empty snapshot was sent without an explicit base version. |
 | [`publish_upload_failed`](/errors/publish_upload_failed) | Uploading the publish content failed. |
 | [`publish_verification_failed`](/errors/publish_verification_failed) | Post-publish verification did not see the new content serving. |
+| [`purchase_in_progress`](/errors/purchase_in_progress) | This domain is paid for and its registration, renewal or refund is still going through. |
+| [`purchase_not_confirmable`](/errors/purchase_not_confirmable) | This purchase is past confirming: it was already charged, canceled, or expired. |
+| [`purchase_payment_method_changed`](/errors/purchase_payment_method_changed) | The team's saved card changed after this purchase was approved, so nothing was charged. |
+| [`purchase_pending`](/errors/purchase_pending) | Another purchase that isn't paid yet already holds some of these. |
+| [`purchase_total_changed`](/errors/purchase_total_changed) | The price changed since you looked, so nothing was charged. |
 | [`queue_not_found`](/errors/queue_not_found) | The named job queue does not exist. |
 | [`quota_exceeded`](/errors/quota_exceeded) | This action would exceed a quota on the plan assigned to the owning customer. The problem details name which quota (for example, the spaces cap) and its limit. |
 | [`rate_limit_backend_unavailable`](/errors/rate_limit_backend_unavailable) | Shared request accounting is temporarily unavailable, so this request cannot proceed. |
 | [`rate_limited`](/errors/rate_limited) | Too many requests were made in a short window. |
-| [`realtime_cursor_expired`](/errors/realtime_cursor_expired) | The realtime event cursor is no longer in the retained event history. |
+| [`realtime_cursor_expired`](/errors/realtime_cursor_expired) | The realtime event cursor names no event in this Space's history. |
 | [`registrant_contact_invalid`](/errors/registrant_contact_invalid) | The registrar rejected the registrant contact, so the payment for this domain was refunded. |
 | [`registrar_nameservers_refused`](/errors/registrar_nameservers_refused) | The registry refused the nameserver change. Nothing changed. |
 | [`registrar_nameservers_unconfirmed`](/errors/registrar_nameservers_unconfirmed) | The registrar did not confirm the nameserver change. The registry may still apply it. |
@@ -412,12 +506,16 @@ There are 802 error codes in the registry.
 | [`registration_failed`](/errors/registration_failed) | The registrar refused the registration, so the payment for this domain was refunded. |
 | [`reply_email_unconfigured`](/errors/reply_email_unconfigured) | Reply emails for comments aren't configured on this server. |
 | [`repository_commit_not_found`](/errors/repository_commit_not_found) | The commit you asked to read does not exist in this repository. |
+| [`repository_commit_too_large`](/errors/repository_commit_too_large) | The commit's files are larger in total than one repository commit can hold. |
 | [`repository_commit_unchanged`](/errors/repository_commit_unchanged) | The commit changes no files: the branch already holds this exact tree, so there is nothing to save. |
 | [`repository_patch_invalid`](/errors/repository_patch_invalid) | The repository refused the diff: it is malformed or does not apply to the selected base branch. |
 | [`repository_path_invalid`](/errors/repository_path_invalid) | The repository provider refused the requested file path. |
+| [`repository_reauthorization_required`](/errors/repository_reauthorization_required) | Spacefast can no longer reach this Space's connected repository: its access was revoked, or the Space moved to a team that has not connected it yet. |
 | [`repository_ref_not_found`](/errors/repository_ref_not_found) | The branch, tag, or commit you asked to read does not exist in this repository. A repository nothing has been pushed to yet answers this for its own default branch. |
 | [`repository_resource_not_found`](/errors/repository_resource_not_found) | The requested repository resource does not exist. |
+| [`repository_search_invalid`](/errors/repository_search_invalid) | The repository refused the search input. |
 | [`repository_source_already_initialized`](/errors/repository_source_already_initialized) | The repository already has source history. |
+| [`repository_source_changed`](/errors/repository_source_changed) | The Space source changed during the GitHub authorization or export. |
 | [`repository_source_read_only`](/errors/repository_source_read_only) | This connected repository must be edited upstream. |
 | [`repository_stale_base`](/errors/repository_stale_base) | The branch moved after this change was built, so the commit was refused. |
 | [`repository_upload_source_changed`](/errors/repository_upload_source_changed) | The current upload changed while source was being initialized. |
@@ -425,19 +523,20 @@ There are 802 error codes in the registry.
 | [`repository_upload_source_invalid`](/errors/repository_upload_source_invalid) | The version contains empty, duplicate, or invalid repository paths. |
 | [`repository_upload_source_too_large`](/errors/repository_upload_source_too_large) | The files exceed the source initialization limit. |
 | [`repository_upload_source_unavailable`](/errors/repository_upload_source_unavailable) | The complete version files could not be verified. |
+| [`resource_busy`](/errors/resource_busy) | Another request was still changing the same resource, so this one could not take its turn in time. |
 | [`resource_revision_changed`](/errors/resource_revision_changed) | The resource changed after you loaded it, so the stale write was rejected. |
 | [`response_headers_unservable`](/errors/response_headers_unservable) | A file needs a response header that the platform cannot deliver for large files. |
 | [`response_table_too_large`](/errors/response_table_too_large) | A compiled response table exceeded the 1 MiB per-file limit. |
 | [`review_item_claimed`](/errors/review_item_claimed) | Another reviewer already claimed this review item. |
 | [`role_managed_by_parent`](/errors/role_managed_by_parent) | Subteam owners, and the subteam roles of parent-team owners and admins, come from the parent team. |
+| [`role_requires_whole_space`](/errors/role_requires_whole_space) | Editor and Admin apply to the whole live Space and require an identified audience. |
 | [`run_replay_diverged`](/errors/run_replay_diverged) | Replaying the paused program took a different path than the first time, so it was stopped. |
 | [`runtime_action_forbidden`](/errors/runtime_action_forbidden) | The runtime credential does not allow this action. |
 | [`runtime_api_not_found`](/errors/runtime_api_not_found) | The requested runtime action was not found. |
 | [`runtime_callback_forbidden`](/errors/runtime_callback_forbidden) | The runtime callback cannot be authenticated. |
-| [`runtime_capabilities_pending`](/errors/runtime_capabilities_pending) | The serving runtime is updating to support this application's compiled features. |
-| [`runtime_delivery_lock_timeout`](/errors/runtime_delivery_lock_timeout) | Another change is still being delivered to this Space, so this request could not take its delivery lease. |
+| [`runtime_capabilities_pending`](/errors/runtime_capabilities_pending) | This Space's server doesn't support this yet: its runtime is updating, or the feature arrives with the next runtime release. |
 | [`runtime_dev_unsupported`](/errors/runtime_dev_unsupported) | `sf dev` cannot run this runtime locally yet. |
-| [`runtime_edge_refused`](/errors/runtime_edge_refused) | WP Cloud's edge refused the request before it reached this Space's runtime. |
+| [`runtime_edge_refused`](/errors/runtime_edge_refused) | Spacefast's edge refused the request before it reached this Space's runtime. |
 | [`runtime_engine_update_busy`](/errors/runtime_engine_update_busy) | The serving runtime is applying an engine update and cannot take this request yet. |
 | [`runtime_hostname_unassigned`](/errors/runtime_hostname_unassigned) | The hostname is not assigned to a runtime, so the request cannot be routed. |
 | [`runtime_instance_mismatch`](/errors/runtime_instance_mismatch) | The request reached a different runtime instance than the one it was issued for. |
@@ -448,11 +547,17 @@ There are 802 error codes in the registry.
 | [`runtime_management_unavailable`](/errors/runtime_management_unavailable) | The runtime management surface is unavailable for this site. |
 | [`runtime_not_provisioned`](/errors/runtime_not_provisioned) | The space does not serve a published version yet, so it has no runtime data to read. |
 | [`runtime_operation_missing`](/errors/runtime_operation_missing) | The runtime operation referenced by this request was not found. |
+| [`runtime_promotion_dispatch_failed`](/errors/runtime_promotion_dispatch_failed) | The platform release promotion could not be handed to its workflow. |
+| [`runtime_promotion_dispatch_unconfirmed`](/errors/runtime_promotion_dispatch_unconfirmed) | GitHub did not confirm the platform release promotion request, so its workflow may have started. |
+| [`runtime_promotion_unavailable`](/errors/runtime_promotion_unavailable) | This environment cannot promote platform releases. |
 | [`runtime_purge_failed`](/errors/runtime_purge_failed) | Content updated but the edge cache purge did not confirm. |
-| [`runtime_release_superseded`](/errors/runtime_release_superseded) | A newer deploy already decided the platform release this one would have changed. |
+| [`runtime_release_canary_unpassed`](/errors/runtime_release_canary_unpassed) | The platform release candidate has not passed its canaries in this environment. |
+| [`runtime_release_not_promotable`](/errors/runtime_release_not_promotable) | The requested platform release cannot be promoted in this environment. |
+| [`runtime_release_superseded`](/errors/runtime_release_superseded) | A newer promotion already decided the platform release this one would have changed. |
 | [`runtime_release_unverifiable`](/errors/runtime_release_unverifiable) | The requested platform release could not be verified at its origin. |
 | [`runtime_request_body_too_large`](/errors/runtime_request_body_too_large) | The runtime management request exceeded its byte limit before JSON parsing. |
 | [`runtime_scope_forbidden`](/errors/runtime_scope_forbidden) | The runtime token's scope does not cover this path or action. |
+| [`runtime_storage_full`](/errors/runtime_storage_full) | The Space's server ran out of disk space, so the runtime could not complete the request. |
 | [`runtime_token_bad_signature`](/errors/runtime_token_bad_signature) | The runtime token signature did not verify. |
 | [`runtime_token_expired`](/errors/runtime_token_expired) | The runtime token is expired. |
 | [`runtime_token_invalid`](/errors/runtime_token_invalid) | The runtime token cannot be parsed or validated. |
@@ -460,18 +565,28 @@ There are 802 error codes in the registry.
 | [`runtime_upload_operation_not_supported`](/errors/runtime_upload_operation_not_supported) | The runtime upload session does not support this operation. |
 | [`runtime_upload_required`](/errors/runtime_upload_required) | This step requires uploaded content, but that content is not uploaded yet. |
 | [`scan_pending`](/errors/scan_pending) | The content is still being scanned for safety and cannot be served yet. |
+| [`secret_detected`](/errors/secret_detected) | A committed file contains a high-confidence secret or private key. |
 | [`secret_variable_in_template`](/errors/secret_variable_in_template) | A secret variable was referenced in a template, which is blocked. |
 | [`sell_seller_changed`](/errors/sell_seller_changed) | The seller binding changed while its Stripe readiness was being refreshed. |
 | [`sell_seller_conflict`](/errors/sell_seller_conflict) | The requested seller conflicts with an existing team or Stripe account binding. |
 | [`sell_shipment_conflict`](/errors/sell_shipment_conflict) | The physical order cannot be marked shipped with the requested tracking reference. |
+| [`sensitive_file_not_supported`](/errors/sensitive_file_not_supported) | A sensitive credential, private key, agent config, or repository metadata file (such as `.env`, `.mcp.json`, `.claude/`, `.git/`, `.ssh/`, or `*.pem`) cannot be published. |
 | [`service_booting`](/errors/service_booting) | The process that received this request is still starting and cannot serve it yet. |
 | [`service_signature_invalid`](/errors/service_signature_invalid) | The service request signature cannot be verified. |
 | [`session_not_fresh`](/errors/session_not_fresh) | This action needs a recent identity confirmation. |
+| [`share_entry_has_no_secret`](/errors/share_entry_has_no_secret) | Only a password or a token entry has a secret to rotate. |
+| [`share_entry_not_a_person`](/errors/share_entry_not_a_person) | Only a person's invitation can be resent. |
+| [`share_entry_not_editable`](/errors/share_entry_not_editable) | This Share entry comes from sf.jsonc or the platform, so this API can't change it. |
+| [`share_link_policy_enforced_by_parent`](/errors/share_link_policy_enforced_by_parent) | The parent team blocks share links for every subteam, so a subteam can't turn the block off. |
+| [`share_public_live_is_general`](/errors/share_public_live_is_general) | Whole-Space public access on the live Space is general access, not an entry. |
+| [`shared_apex_cookie_write`](/errors/shared_apex_cookie_write) | An artifact contains a literal cookie write targeting a shared Space domain. |
+| [`shared_payment_token_unusable`](/errors/shared_payment_token_unusable) | The shared payment token can't pay for this: it's spent, revoked, expired, not in US dollars, or its limit is below the total. Nothing was charged. |
 | [`show_and_tell_ineligible`](/errors/show_and_tell_ineligible) | This space is not eligible for Show & Tell. |
 | [`sign_in_required`](/errors/sign_in_required) | The personal agent's session has no active account authorization. |
 | [`site_already_deleted`](/errors/site_already_deleted) | The site was already deleted. |
 | [`site_required`](/errors/site_required) | A site reference is required for this operation. |
 | [`site_suspended`](/errors/site_suspended) | The site is suspended, so its spaces cannot be served or modified. |
+| [`slack_delivery_acceptance_unknown`](/errors/slack_delivery_acceptance_unknown) | Slack may have accepted a notice without returning a complete receipt. Spacefast skips resending it to avoid a duplicate. |
 | [`slow_down`](/errors/slow_down) | The device login is being polled faster than the advised interval. |
 | [`slug_invalid`](/errors/slug_invalid) | The slug does not meet the structural rules for managed names. |
 | [`slug_reserved`](/errors/slug_reserved) | The slug is reserved for infrastructure, product, or impersonation protection. |
@@ -499,7 +614,7 @@ There are 802 error codes in the registry.
 | [`source_import_pending`](/errors/source_import_pending) | The Space's initial source copy or upload import is still running. |
 | [`source_merge_snapshot_changed`](/errors/source_merge_snapshot_changed) | A managed merge ref no longer matches the pinned source snapshot. |
 | [`source_merge_undo_unsupported`](/errors/source_merge_undo_unsupported) | The selected source commit is a merge commit with multiple parents. |
-| [`source_namespace_required`](/errors/source_namespace_required) | Public source sharing requires an organization namespace. |
+| [`source_namespace_required`](/errors/source_namespace_required) | Public source sharing requires a team namespace. |
 | [`source_nothing_staged`](/errors/source_nothing_staged) | The staged source tree has no changes against the saved base. |
 | [`source_operation_pending`](/errors/source_operation_pending) | A source workspace operation still has an uncertain provider result. |
 | [`source_operation_reused`](/errors/source_operation_reused) | The operation ID was already used with different source input. |
@@ -511,6 +626,7 @@ There are 802 error codes in the registry.
 | [`source_selection_invalid`](/errors/source_selection_invalid) | The selected file paths are absent from the current workspace diff. |
 | [`source_snapshot_changed`](/errors/source_snapshot_changed) | CodeStorage created a managed branch at an unexpected source snapshot. |
 | [`source_tree_too_large`](/errors/source_tree_too_large) | The complete source tree exceeds the workspace operation limit. |
+| [`source_url_domain_unverified`](/errors/source_url_domain_unverified) | OAuth and hosted MCP connections can capture only websites on domains the team controls in Spacefast. |
 | [`source_workspace_closed`](/errors/source_workspace_closed) | The selected source workspace is already closed. |
 | [`source_workspace_connection_changed`](/errors/source_workspace_connection_changed) | The Space repository connection changed after this workspace was created. |
 | [`source_workspace_connection_in_use`](/errors/source_workspace_connection_in_use) | An open source workspace uses this repository connection. |
@@ -519,28 +635,68 @@ There are 802 error codes in the registry.
 | [`source_workspace_ref_reserved`](/errors/source_workspace_ref_reserved) | The selected ref belongs to the managed source workspace namespace. |
 | [`source_workspace_revision_conflict`](/errors/source_workspace_revision_conflict) | The source workspace changed after the caller read its revision. |
 | [`source_workspaces_unavailable`](/errors/source_workspaces_unavailable) | Source workspaces are disabled because the provider cannot compare exact snapshots. |
+| [`space_access_narrowing_blocked`](/errors/space_access_narrowing_blocked) | A public rule this API can't change keeps part of the Space open, so nothing was closed. |
 | [`space_already_claimed`](/errors/space_already_claimed) | The space was already claimed. A claim can only succeed once. |
 | [`space_claim_unavailable`](/errors/space_claim_unavailable) | This space cannot be claimed. |
 | [`space_claimed_credential_available`](/errors/space_claimed_credential_available) | The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher. |
+| [`space_cleanup_unavailable`](/errors/space_cleanup_unavailable) | The Space changed after permanent deletion was requested. |
+| [`space_db_column_not_editable`](/errors/space_db_column_not_editable) | The request writes a column that is binary, generated, or otherwise read-only here. |
+| [`space_db_column_not_found`](/errors/space_db_column_not_found) | The request names a column the table does not have. |
+| [`space_db_constraint_failed`](/errors/space_db_constraint_failed) | The database refused the change because a foreign key or check constraint failed; nothing in this request was written. |
+| [`space_db_cursor_invalid`](/errors/space_db_cursor_invalid) | The cursor does not belong to this table or query. |
+| [`space_db_duplicate_key`](/errors/space_db_duplicate_key) | A row with the same primary or unique key already exists; nothing in this request was written. |
+| [`space_db_key_invalid`](/errors/space_db_key_invalid) | A row key does not name exactly the table's primary-key columns, or a new row leaves out a primary-key column that doesn't auto-increment. |
+| [`space_db_query_failed`](/errors/space_db_query_failed) | The database could not complete the request. A change in it was rolled back before anything was written. |
+| [`space_db_table_not_editable`](/errors/space_db_table_not_editable) | This table's rows can be read but not changed here: it has no primary key, a binary or secret one, triggers, or a storage engine that can't roll back a change. |
+| [`space_db_table_not_found`](/errors/space_db_table_not_found) | The Space's database has no table with this name. |
+| [`space_db_table_protected`](/errors/space_db_table_protected) | This table is Spacefast's own bookkeeping or sign-in data, so it can't be read or changed here. |
+| [`space_db_too_large`](/errors/space_db_too_large) | A row in the request, or the page of rows asked for, is larger than one database statement can carry. |
+| [`space_db_unavailable`](/errors/space_db_unavailable) | The Space's database isn't reachable right now. |
+| [`space_db_value_invalid`](/errors/space_db_value_invalid) | The database refused a value: it is missing, the wrong type, or too long for its column. Nothing in this request was written. |
+| [`space_db_value_protected`](/errors/space_db_value_protected) | The request touches a secret, such as a password hash, session token or WordPress salt, which can't be read, filtered on or changed here. |
+| [`space_db_write_outcome_unknown`](/errors/space_db_write_outcome_unknown) | The database stopped answering while it saved the change, so the change may or may not have been written. |
+| [`space_delete_approval_spent`](/errors/space_delete_approval_spent) | The person's approval to delete this Space was already used or its five minutes ran out. |
 | [`space_disabled`](/errors/space_disabled) | The space is disabled and cannot be served or modified. |
 | [`space_expired`](/errors/space_expired) | The space expired and is no longer served. |
 | [`space_has_active_publish`](/errors/space_has_active_publish) | The space has a publish in progress, which blocks this operation. |
 | [`space_has_active_version`](/errors/space_has_active_version) | The space still has an active version, which blocks this operation. |
 | [`space_hostname_identity_missing`](/errors/space_hostname_identity_missing) | The space is missing its persisted default hostname identity. |
+| [`space_identity_hostname_retained`](/errors/space_identity_hostname_retained) | This hostname is the deleted space's own name, so it cannot be detached on its own. |
 | [`space_no_live_version`](/errors/space_no_live_version) | The space has no live version, so this operation has nothing to act on. |
 | [`space_not_archivable`](/errors/space_not_archivable) | The space is disabled for another reason, so it cannot be archived. |
 | [`space_not_disabled`](/errors/space_not_disabled) | The space is not disabled, so it cannot be restored. |
 | [`space_not_restorable`](/errors/space_not_restorable) | The space is past its recovery window and cannot be restored. |
+| [`space_ownership_changed`](/errors/space_ownership_changed) | Space ownership changed after this request was authorized. |
 | [`space_person_already_member`](/errors/space_person_already_member) | The email already belongs to a member of the space. |
 | [`space_person_invitation_pending`](/errors/space_person_invitation_pending) | A Person invitation is already pending for this email. |
 | [`space_person_self_invite`](/errors/space_person_self_invite) | The inviter already belongs to the space. |
+| [`space_public_access_held`](/errors/space_public_access_held) | Spacefast staff locked this space private. It cannot be made public until staff lift the lock. |
 | [`space_ref_ambiguous`](/errors/space_ref_ambiguous) | The space reference matches more than one accessible space. |
 | [`space_ref_required`](/errors/space_ref_required) | A space reference is required for this operation. |
+| [`space_restore_provider_stopped`](/errors/space_restore_provider_stopped) | The Space's box ran out of room, so its takedown stopped the site at the provider. Restoring it now would serve the Space before its box can be checked. |
 | [`space_selection_conflict`](/errors/space_selection_conflict) | The command asked to create a Space while this directory already selects one. |
+| [`space_share_changed`](/errors/space_share_changed) | Sharing changed after you loaded it, so the stale write was refused. |
 | [`space_transferring`](/errors/space_transferring) | The space has a transfer in progress, which blocks this operation. |
 | [`space_unclaimed`](/errors/space_unclaimed) | This operation requires a claimed space. |
-| [`spacefast_git_url_invalid`](/errors/spacefast_git_url_invalid) | The Spacefast Git URL does not identify an organization and Space. |
+| [`spacefast_git_url_invalid`](/errors/spacefast_git_url_invalid) | The Spacefast Git URL does not identify a team and Space. |
+| [`spacepress_preview_cron_refused`](/errors/spacepress_preview_cron_refused) | A SpacePress app's job runner refused a request without a current token for the version on this hostname. |
+| [`spacepress_preview_preparing`](/errors/spacepress_preview_preparing) | This preview is setting up its own database from the version's code. |
+| [`spacepress_preview_republish`](/errors/spacepress_preview_republish) | This version was published before previews had their own database. |
+| [`spacepress_preview_seed_failed`](/errors/spacepress_preview_seed_failed) | This preview could not set up its database from the version's seed. |
+| [`spacepress_promote_baseline_stale`](/errors/spacepress_promote_baseline_stale) | Another version went live after this one was published, and this one couldn't be compiled again against the live database. |
+| [`spacepress_promote_initialize_required`](/errors/spacepress_promote_initialize_required) | This SpacePress version hasn't run its migrations on the live database yet, so it can't go live. |
+| [`spacepress_promote_live_changed`](/errors/spacepress_promote_live_changed) | Another version went live while this one was being promoted, so its migrations didn't run. |
 | [`ssl_renewal_blocked`](/errors/ssl_renewal_blocked) | SSL certificate renewal is blocked for this hostname. |
+| [`sso_confirmation_expired`](/errors/sso_confirmation_expired) | The step that confirms an address before its first SSO sign-in is missing or more than 15 minutes old. |
+| [`sso_confirmation_invalid`](/errors/sso_confirmation_invalid) | The emailed code, or the account's authenticator code, didn't match. |
+| [`sso_connection_not_oidc`](/errors/sso_connection_not_oidc) | An earlier server returned this when member sign-in named an identity connection that wasn't OIDC. Current servers no longer send it. |
+| [`sso_domain_claimed`](/errors/sso_domain_claimed) | Another team has already verified this domain or a domain that covers it. |
+| [`sso_domain_dns_unavailable`](/errors/sso_domain_dns_unavailable) | Public DNS could not be checked for the domain's TXT record. |
+| [`sso_domain_txt_missing`](/errors/sso_domain_txt_missing) | The domain's TXT record was not found in public DNS. |
+| [`sso_provider_exists`](/errors/sso_provider_exists) | Member sign-in is already set up, or changed since you last read it. |
+| [`sso_required`](/errors/sso_required) | Your company requires signing in through its SSO, so this address can't sign in with a code, a password or another provider. |
+| [`sso_required_on`](/errors/sso_required_on) | The team requires SSO, so member sign-in can't be turned off or removed, and its last verified domain can't be removed. |
+| [`sso_session_required`](/errors/sso_session_required) | Requiring SSO needs member sign-in turned on, a verified domain, and a session that signed in through this team's SSO. |
 | [`staging_signup_restricted`](/errors/staging_signup_restricted) | New accounts on staging require a connection from the approved IP list. |
 | [`static_control_file_not_supported`](/errors/static_control_file_not_supported) | This control file is not supported by the static runtime. |
 | [`static_runtime_control_path_not_supported`](/errors/static_runtime_control_path_not_supported) | This control path is not supported by the static runtime. |
@@ -559,7 +715,7 @@ There are 802 error codes in the registry.
 | [`storage_unavailable`](/errors/storage_unavailable) | The runtime cannot read or persist object storage. |
 | [`stripe_error`](/errors/stripe_error) | The billing provider reported an error. |
 | [`subteam_nesting_unsupported`](/errors/subteam_nesting_unsupported) | Only a regular top-level team can have subteams. Subteams, system teams, and partner teams can't. |
-| [`superadmin_automattic_email_required`](/errors/superadmin_automattic_email_required) | The user needs a verified @automattic.com email address before receiving the superadmin role. |
+| [`superadmin_automattic_email_required`](/errors/superadmin_automattic_email_required) | The user needs a verified @automattic.com or @a8c.com email address before receiving the superadmin role. |
 | [`superadmin_proxy_required`](/errors/superadmin_proxy_required) | Superadmin access requires the operator proxy. |
 | [`superadmin_two_factor_required`](/errors/superadmin_two_factor_required) | The user must have two-factor authentication enrolled before being granted superadmin. |
 | [`superadmin_wpcom_account_required`](/errors/superadmin_wpcom_account_required) | The user must have a WordPress.com account linked before being granted superadmin. |
@@ -567,6 +723,13 @@ There are 802 error codes in the registry.
 | [`system_space_conflict`](/errors/system_space_conflict) | The tenant's system space changed since the value you sent as `baseSystemSpaceId`, so the update was rejected. |
 | [`system_space_invalid`](/errors/system_space_invalid) | The requested system space does not exist, is disabled, or belongs to another tenant. |
 | [`system_team_immutable`](/errors/system_team_immutable) | This team is operated by Spacefast. Its name, slug and lifecycle are fixed, so renaming or deleting it was refused. |
+| [`tag_review_admin_required`](/errors/tag_review_admin_required) | This Space requires review for tag changes, and only an owner or admin can approve, release or roll back its tags. A team's tags count when any Space that inherits them requires review; that Space is in `details.spaceId`. |
+| [`tag_review_inheritance_through_tags`](/errors/tag_review_inheritance_through_tags) | This Space requires review, so its team tag inheritance turns on only in Tags settings, which checks that the team's released tags were reviewed. |
+| [`tag_review_person_required`](/errors/tag_review_person_required) | A Space under tag review puts tag code live only when one person submitted it and another approved or released it. A credential with no person behind it (a partner, machine, or platform credential) counts as nobody: it submitted the revision, or it is approving or releasing one that needs a second person. For a team revision, the Space that requires review is in `details.spaceId`. |
+| [`tag_review_required`](/errors/tag_review_required) | A Space under tag review can't take a one-call apply that also releases. For a team, this applies when any Space that inherits the team's tags requires review; that Space is in `details.spaceId`. |
+| [`tag_review_self_approval`](/errors/tag_review_self_approval) | This Space requires review for tag changes, and the person who submitted a tag revision cannot also be the second person: approve it, or release, roll back or inherit a revision they approved themselves, which includes one approved before review was turned on. A Space under review also can't move into a team whose released tags its submitter approved. A team's tags count when any Space that inherits them requires review; that Space is in `details.spaceId`. |
+| [`tag_revision_changed_since_submit`](/errors/tag_revision_changed_since_submit) | This tag revision was edited after it was submitted, while no review applied. Under review it is approved and released only as its submitter sent it. |
+| [`tag_store_moving`](/errors/tag_store_moving) | Tags are moving to a new store, a one-time step that takes a few seconds. Tag changes wait until it finishes; published tags keep serving. |
 | [`takeover_notice_window`](/errors/takeover_notice_window) | The hostname was recently bound elsewhere. A takeover notice window applies. |
 | [`team_deleted`](/errors/team_deleted) | The team was deleted before the domain could be registered, so the payment for it was refunded. |
 | [`team_design_system_asset_not_found`](/errors/team_design_system_asset_not_found) | The attachment does not belong to this team's design-system media. |
@@ -574,8 +737,11 @@ There are 802 error codes in the registry.
 | [`team_design_system_asset_type_invalid`](/errors/team_design_system_asset_type_invalid) | The filename, declared content type, and file bytes do not agree. |
 | [`team_design_system_contains_credential`](/errors/team_design_system_contains_credential) | The design guidance looks like it contains a password, key, or token. |
 | [`team_design_system_entry_not_found`](/errors/team_design_system_entry_not_found) | The entry is missing, archived, or belongs to a different record type. |
+| [`team_design_system_inherited`](/errors/team_design_system_inherited) | This subteam uses its parent team's design system, which is read-only here. |
 | [`team_design_system_invalid`](/errors/team_design_system_invalid) | The design-system change is invalid or missing required values. |
 | [`team_design_system_limit_reached`](/errors/team_design_system_limit_reached) | Active design metadata exceeds 256 KiB or 200 entries of one type. |
+| [`team_design_system_not_shared`](/errors/team_design_system_not_shared) | The parent team isn't sharing a saved design system with this team. |
+| [`team_design_system_off`](/errors/team_design_system_off) | This subteam chose to use no design system, so it has nothing to save into. |
 | [`team_design_system_operation_conflict`](/errors/team_design_system_operation_conflict) | This operation ID already names different input. |
 | [`team_design_system_revision_conflict`](/errors/team_design_system_revision_conflict) | The team's design system changed since this action was prepared. |
 | [`team_design_system_storage_invalid`](/errors/team_design_system_storage_invalid) | A stored design-system record or action cannot be decoded. |
@@ -584,11 +750,13 @@ There are 802 error codes in the registry.
 | [`team_design_system_upload_failed`](/errors/team_design_system_upload_failed) | The file or native attachment could not be stored. |
 | [`team_design_system_upload_invalid`](/errors/team_design_system_upload_invalid) | The file upload is invalid or exceeds 100 MB. |
 | [`team_design_system_write_failed`](/errors/team_design_system_write_failed) | The design-system transaction could not be stored. |
+| [`team_has_member_sign_in`](/errors/team_has_member_sign_in) | This team has member sign-in set up, so it can't become a subteam. |
 | [`team_has_paid_plan`](/errors/team_has_paid_plan) | This team still has an active subscription or a purchase in progress, so it can't be deleted. |
 | [`team_has_sell_seller`](/errors/team_has_sell_seller) | This team owns a Stripe seller binding and must remain available for Sell order management. |
+| [`team_has_spaces`](/errors/team_has_spaces) | This team still has a live Space, so it can't be deleted. |
 | [`team_has_subteams`](/errors/team_has_subteams) | This team still has subteams. |
 | [`team_knowledge_setup_required`](/errors/team_knowledge_setup_required) | The team has no designated context storage. |
-| [`team_knowledge_storage_unavailable`](/errors/team_knowledge_storage_unavailable) | The designated system Space cannot serve team context. |
+| [`team_knowledge_storage_unavailable`](/errors/team_knowledge_storage_unavailable) | The Space that stores the team's context is archived, removed, or no longer in the team. |
 | [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded) | Inviting this person would exceed the team's seat limit. |
 | [`team_members_missing_two_factor`](/errors/team_members_missing_two_factor) | Some team members don't have two-factor authentication on yet. |
 | [`team_memory_contains_credential`](/errors/team_memory_contains_credential) | The memory looks like it contains a password, key, or token. |
@@ -601,9 +769,13 @@ There are 802 error codes in the registry.
 | [`team_required`](/errors/team_required) | This operation requires an acting team. |
 | [`team_requires_noindex`](/errors/team_requires_noindex) | This team hides every space from search engines. |
 | [`team_scope_mismatch`](/errors/team_scope_mismatch) | The requested team conflicts with the team this credential or resource is bound to. |
+| [`team_share_links_blocked`](/errors/team_share_links_blocked) | This space's team, or its parent team, blocks share links, so the space can't get a new one. |
 | [`team_skill_not_found`](/errors/team_skill_not_found) | No team skill with this key exists. |
 | [`team_slug_conflict`](/errors/team_slug_conflict) | The team slug is already taken. |
+| [`team_sso_required`](/errors/team_sso_required) | This team requires its company's SSO, and this sign-in or credential didn't come through it. |
+| [`team_subscription_required`](/errors/team_subscription_required) | A person has one free team. This team is another one, so it needs a subscription before it can create Spaces, publish, add domains or add members. What it already serves stays online. |
 | [`team_two_factor_required`](/errors/team_two_factor_required) | This team requires two-factor authentication, and your account doesn't have it on. |
+| [`telemetry_ticket_invalid`](/errors/telemetry_ticket_invalid) | The Spacefast Stats ticket is invalid, expired, or for another Space. |
 | [`template_file_too_large`](/errors/template_file_too_large) | A template file exceeds the maximum size for substitution. |
 | [`template_not_in_version`](/errors/template_not_in_version) | The configuration names a template file the version does not contain. |
 | [`template_variable_unresolved`](/errors/template_variable_unresolved) | A template references a variable that has no value. |
@@ -614,6 +786,7 @@ There are 802 error codes in the registry.
 | [`tenant_selection_required`](/errors/tenant_selection_required) | The credential spans multiple tenants, so the request must select one. |
 | [`tenant_suspended`](/errors/tenant_suspended) | The tenant is suspended, so its resources cannot be served or modified. |
 | [`theme_value_invalid`](/errors/theme_value_invalid) | A theme value in the configuration is outside the allowed grammar. |
+| [`thumbnail_unavailable`](/errors/thumbnail_unavailable) | The screenshot service did not return an image for this Space yet. |
 | [`token_alg_invalid`](/errors/token_alg_invalid) | The partner token uses a signing algorithm that Spacefast does not allow. |
 | [`token_audience_mismatch`](/errors/token_audience_mismatch) | The partner token audience does not match the audience for its issuer. |
 | [`token_claims_invalid`](/errors/token_claims_invalid) | The partner token omits a required claim or contains an invalid claim value. |
@@ -631,10 +804,13 @@ There are 802 error codes in the registry.
 | [`transfer_outside_parent_team`](/errors/transfer_outside_parent_team) | The parent team restricts outgoing Space transfers to itself and its subteams. |
 | [`transfer_policy_managed_by_parent`](/errors/transfer_policy_managed_by_parent) | The parent team controls this Space transfer policy. |
 | [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime cannot push the space blobs into the transfer bucket. |
+| [`transfer_request_notification_policy_managed_by_parent`](/errors/transfer_request_notification_policy_managed_by_parent) | The parent team controls which administrators receive subteam transfer requests. |
 | [`transfer_source_changed`](/errors/transfer_source_changed) | The space changed since the transfer was created, so it must be re-confirmed. |
 | [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The transfer target is the same principal that already owns the space. |
+| [`transfer_team_to_customer_unsupported`](/errors/transfer_team_to_customer_unsupported) | A team's space can only move to another team, not to a partner customer. |
 | [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime cannot verify transferred blob content. |
 | [`unauthorized`](/errors/unauthorized) | The request carried no valid credential. |
+| [`unpublished_space_limit_reached`](/errors/unpublished_space_limit_reached) | This team already holds as many never-published Spaces as its plan allows. |
 | [`unsupported_publish_media_type`](/errors/unsupported_publish_media_type) | The publish content-type is not supported. |
 | [`upload_chunk_invalid`](/errors/upload_chunk_invalid) | Chunk contents are not canonical base64. |
 | [`upload_chunk_out_of_order`](/errors/upload_chunk_out_of_order) | The chunk index is not the next expected index. |
@@ -645,7 +821,7 @@ There are 802 error codes in the registry.
 | [`upload_expired`](/errors/upload_expired) | The upload expired or was canceled. |
 | [`upload_hash_mismatch`](/errors/upload_hash_mismatch) | An uploaded file's bytes do not match the declared sha256. |
 | [`upload_import_conflict`](/errors/upload_import_conflict) | The import target already contains chunked content. |
-| [`upload_import_failed`](/errors/upload_import_failed) | The remote file transfer failed. |
+| [`upload_import_failed`](/errors/upload_import_failed) | The remote file transfer failed before Spacefast stored the file. |
 | [`upload_import_redirect_limit`](/errors/upload_import_redirect_limit) | The download reference exceeded three redirects. |
 | [`upload_import_reference_expired`](/errors/upload_import_reference_expired) | The download reference expired or refused access. |
 | [`upload_import_url_invalid`](/errors/upload_import_url_invalid) | The download reference is not an allowed HTTPS target. |
@@ -657,10 +833,12 @@ There are 802 error codes in the registry.
 | [`upload_retry_conflict`](/errors/upload_retry_conflict) | A retry identity is already bound to different input. |
 | [`upload_sealed`](/errors/upload_sealed) | The upload no longer accepts new content. |
 | [`upload_size_mismatch`](/errors/upload_size_mismatch) | An uploaded file's size does not match the declared size. |
+| [`usage_budget_exceeded`](/errors/usage_budget_exceeded) | A usage budget on this team, subteam or Space has run out for the period, so new builds and Workers requests are paused. The budget is the team's own or its plan's default ($25 on Go, $100 on Pro). Past the budget's serving pause (twice the budget unless its owner set it lower), its Spaces stop serving too. Nothing is deleted. |
 | [`usage_period_not_found`](/errors/usage_period_not_found) | The requested usage period does not exist in this tenant. |
 | [`user_banned`](/errors/user_banned) | This user is banned for a policy or abuse violation and cannot perform this action. |
 | [`validation_error`](/errors/validation_error) | A request field failed validation. |
 | [`verification_required`](/errors/verification_required) | Domain verification is required before this operation. |
+| [`verified_email_required`](/errors/verified_email_required) | This needs an account with a verified email address. |
 | [`version_already_live`](/errors/version_already_live) | The version is already live on this channel. |
 | [`version_artifact_not_found`](/errors/version_artifact_not_found) | The requested version artifact was not found. |
 | [`version_busy`](/errors/version_busy) | The version is busy with another operation. |
@@ -684,6 +862,7 @@ There are 802 error codes in the registry.
 | [`vip_manager_unavailable`](/errors/vip_manager_unavailable) | The VIP Manager is not an active, verified account in the main Spacefast tenant. |
 | [`vip_team_binding_mismatch`](/errors/vip_team_binding_mismatch) | The team does not match the VIP organization or the Manager no longer owns it. |
 | [`vip_team_disabled`](/errors/vip_team_disabled) | VIP is disabled for this team, so new invitations and memberships are blocked. |
+| [`visibility_email_policy_managed_by_parent`](/errors/visibility_email_policy_managed_by_parent) | The parent team controls access-change email recipients for this team. |
 | [`visitor_role_not_bindable`](/errors/visitor_role_not_bindable) | Visitors connect their own accounts for this role. |
 | [`visual_review_context_too_large`](/errors/visual_review_context_too_large) | The selected page context exceeds the review limit. |
 | [`visual_review_expired`](/errors/visual_review_expired) | The temporary review expired after one hour. |
@@ -695,8 +874,9 @@ There are 802 error codes in the registry.
 | [`webhook_delivery_budget_exceeded`](/errors/webhook_delivery_budget_exceeded) | The webhook exhausted its delivery budget and was paused. |
 | [`webhook_managed_by_manifest`](/errors/webhook_managed_by_manifest) | The webhook is declared in the tenant's system-space manifest. |
 | [`whois_unavailable`](/errors/whois_unavailable) | WHOIS data is unavailable for this domain right now. |
-| [`wp_cli_command_disallowed`](/errors/wp_cli_command_disallowed) | WP Cloud refused this WP-CLI command before running it, so nothing ran. |
-| [`wp_cli_result_unavailable`](/errors/wp_cli_result_unavailable) | WP Cloud closed the WP-CLI task before the site reported a result, so the outcome is unknown. |
+| [`wp_cli_command_disallowed`](/errors/wp_cli_command_disallowed) | Spacefast refused this WP-CLI command before running it, so nothing ran. |
+| [`wp_cli_command_not_allowed`](/errors/wp_cli_command_not_allowed) | This WP-CLI command or flag is outside Spacefast's allowed read, maintenance, and SpacePress commands, so nothing ran. |
+| [`wp_cli_result_unavailable`](/errors/wp_cli_result_unavailable) | The WP-CLI task closed before the site reported a result, so the outcome is unknown. |
 | [`wp_cli_timeout`](/errors/wp_cli_timeout) | The WP-CLI command did not finish in time and may still be running on the site. |
 | [`wp_cloud_assignment_kind_mismatch`](/errors/wp_cloud_assignment_kind_mismatch) | The domain assignment's kind does not match the site. |
 | [`wp_cloud_assignment_space_mismatch`](/errors/wp_cloud_assignment_space_mismatch) | The domain assignment belongs to a different space. |
@@ -709,7 +889,7 @@ There are 802 error codes in the registry.
 | [`yearly_billing_unavailable`](/errors/yearly_billing_unavailable) | Yearly billing is no longer offered. Every plan bills monthly. |
 | [`zero_ai_unavailable`](/errors/zero_ai_unavailable) | The local Zero AI service is not configured. |
 | [`zero_artifact_abi_mismatch`](/errors/zero_artifact_abi_mismatch) | The Zero endpoint artifact was built for a different runner ABI. |
-| [`zero_artifact_invalid`](/errors/zero_artifact_invalid) | The Zero endpoint artifact is missing required runtime metadata. |
+| [`zero_artifact_invalid`](/errors/zero_artifact_invalid) | The publish carries Zero 0.8 build output without its runtime metadata. |
 | [`zero_artifact_malformed`](/errors/zero_artifact_malformed) | The Zero endpoint artifact cannot be parsed. |
 | [`zero_artifact_path_invalid`](/errors/zero_artifact_path_invalid) | The Zero endpoint artifact path is invalid. |
 | [`zero_artifact_unreadable`](/errors/zero_artifact_unreadable) | The Zero endpoint artifact cannot be read by the runtime. |
@@ -725,6 +905,9 @@ There are 802 error codes in the registry.
 | [`zero_bytecode_unreadable`](/errors/zero_bytecode_unreadable) | The Zero endpoint bytecode file cannot be read. |
 | [`zero_capabilities_encode_failed`](/errors/zero_capabilities_encode_failed) | The runtime cannot encode the Zero endpoint capabilities. |
 | [`zero_client_bundle_not_loaded`](/errors/zero_client_bundle_not_loaded) | The local Zero dev client bundle is not generated or loaded. |
+| [`zero_config_unavailable`](/errors/zero_config_unavailable) | New zero.config.ts apps aren't available yet. A Space that already runs one keeps publishing it. |
+| [`zero_connector_role_new`](/errors/zero_connector_role_new) | This Zero 0.8 publish adds a connector role in capsule({ connectors }) that the live version doesn't have. New roles go in spacefast.config.ts. |
+| [`zero_connector_roles_move`](/errors/zero_connector_roles_move) | This Zero 0.8 app declares connector roles in capsule({ connectors }). Connector roles now belong in spacefast.config.ts. |
 | [`zero_db_connect_failed`](/errors/zero_db_connect_failed) | The Zero runner cannot connect to the configured database. |
 | [`zero_db_execute_failed`](/errors/zero_db_execute_failed) | A Zero database write failed. |
 | [`zero_db_export_cursor_invalid`](/errors/zero_db_export_cursor_invalid) | The local database export cursor is invalid or belongs to another export. |
@@ -732,7 +915,7 @@ There are 802 error codes in the registry.
 | [`zero_db_export_page_too_large`](/errors/zero_db_export_page_too_large) | One database export page exceeded the 16 MiB response limit. |
 | [`zero_db_export_query_invalid`](/errors/zero_db_export_query_invalid) | The local database export request has an invalid table or page size. |
 | [`zero_db_export_schema_changed`](/errors/zero_db_export_schema_changed) | The database schema changed while an export was in progress. |
-| [`zero_db_export_schema_unavailable`](/errors/zero_db_export_schema_unavailable) | The live capsule has no stable schema hash for a complete export. |
+| [`zero_db_export_schema_unavailable`](/errors/zero_db_export_schema_unavailable) | This app's runtime can't describe its database schema, so a complete export isn't possible. |
 | [`zero_db_host_install_failed`](/errors/zero_db_host_install_failed) | The Zero runner cannot install the database host bridge. |
 | [`zero_db_operation_invalid`](/errors/zero_db_operation_invalid) | The Zero database bridge received an invalid operation payload. |
 | [`zero_db_operation_too_large`](/errors/zero_db_operation_too_large) | A database operation is larger than 64 KB (65,536 bytes). A batch counts as one operation. |
@@ -753,7 +936,7 @@ There are 802 error codes in the registry.
 | [`zero_db_url_missing`](/errors/zero_db_url_missing) | No Zero database URL is configured. |
 | [`zero_dev_endpoint_failed`](/errors/zero_dev_endpoint_failed) | A local Zero dev endpoint failed while handling the request. |
 | [`zero_dump_query_invalid`](/errors/zero_dump_query_invalid) | The Zero database dump query parameters are invalid. |
-| [`zero_email_unavailable`](/errors/zero_email_unavailable) | The local Zero email service is not configured. |
+| [`zero_email_unavailable`](/errors/zero_email_unavailable) | Email isn't available to this app when it runs locally. |
 | [`zero_endpoint_compile_failed`](/errors/zero_endpoint_compile_failed) | The runtime cannot compile the Zero endpoint bytecode. |
 | [`zero_endpoint_conflict`](/errors/zero_endpoint_conflict) | Two Zero routes resolve to the same runtime path. |
 | [`zero_endpoint_duplicate`](/errors/zero_endpoint_duplicate) | Two Zero endpoints declare the same method and route. |
@@ -768,17 +951,23 @@ There are 802 error codes in the registry.
 | [`zero_endpoints_invalid`](/errors/zero_endpoints_invalid) | The Zero endpoints payload is invalid. |
 | [`zero_endpoints_too_many`](/errors/zero_endpoints_too_many) | The Zero endpoints payload exceeds the supported endpoint count. |
 | [`zero_envelope_encode_failed`](/errors/zero_envelope_encode_failed) | The PHP bridge cannot encode the Zero runner request envelope. |
-| [`zero_gravatar_unavailable`](/errors/zero_gravatar_unavailable) | The local Zero Gravatar service is not configured. |
+| [`zero_generation_locked`](/errors/zero_generation_locked) | This Space runs a zero.config.ts app and can't go back to an older Zero version. |
+| [`zero_gravatar_unavailable`](/errors/zero_gravatar_unavailable) | Gravatar profiles aren't available to this app when it runs locally. |
 | [`zero_js_context_init_failed`](/errors/zero_js_context_init_failed) | The Zero runner cannot initialize a QuickJS context. |
 | [`zero_js_execution_failed`](/errors/zero_js_execution_failed) | The Zero endpoint JavaScript threw during execution. |
 | [`zero_js_execution_timeout`](/errors/zero_js_execution_timeout) | A Zero query, mutation, or endpoint used more than 500 ms of CPU time on one request. |
 | [`zero_js_globals_failed`](/errors/zero_js_globals_failed) | The Zero runner cannot install runtime globals for the endpoint. |
 | [`zero_js_response_malformed`](/errors/zero_js_response_malformed) | The Zero endpoint returned a malformed runner response. |
 | [`zero_js_runtime_init_failed`](/errors/zero_js_runtime_init_failed) | The Zero runner cannot initialize QuickJS. |
+| [`zero_legacy_retired`](/errors/zero_legacy_retired) | This version no longer serves because its Space runs a newer Zero app. |
 | [`zero_log_query_invalid`](/errors/zero_log_query_invalid) | The Zero log query parameters are invalid. |
 | [`zero_method_not_allowed`](/errors/zero_method_not_allowed) | The request method is not allowed for this Zero endpoint. |
+| [`zero_migration_available`](/errors/zero_migration_available) | An earlier server added this notice to Zero 0.8 versions. Current servers no longer send it. |
 | [`zero_migration_failed`](/errors/zero_migration_failed) | The Zero database migration command failed during finalize. |
+| [`zero_migration_required`](/errors/zero_migration_required) | This Space runs a Zero 0.8 app, so it can't take a zero.config.ts app. |
+| [`zero_migration_tables_mismatch`](/errors/zero_migration_tables_mismatch) | This Space runs a Zero 0.8 app, and the migrated version would start it on empty tables. |
 | [`zero_migrations_too_many`](/errors/zero_migrations_too_many) | The compiled Zero migrations exceed the runtime statement limit. |
+| [`zero_mixed_generation`](/errors/zero_mixed_generation) | The publish has both sf.jsonc runtime.kind "zero" and zero.config.ts. |
 | [`zero_mutation_origin_invalid`](/errors/zero_mutation_origin_invalid) | The cookie-authenticated Zero mutation did not prove the serving origin. |
 | [`zero_query_name_missing`](/errors/zero_query_name_missing) | A Zero realtime query subscription did not include a query name. |
 | [`zero_realtime_forbidden`](/errors/zero_realtime_forbidden) | The Zero realtime event intake credential is invalid. |
@@ -813,4 +1002,25 @@ There are 802 error codes in the registry.
 | [`zero_runs_invalid`](/errors/zero_runs_invalid) | The Zero run-handler payload is invalid. |
 | [`zero_runs_require_runtime_compiler`](/errors/zero_runs_require_runtime_compiler) | Zero run handlers require the Rust runtime compiler. |
 | [`zero_runs_too_many`](/errors/zero_runs_too_many) | The Zero run-handler payload exceeds the supported handler count. |
-| [`zero_spam_unavailable`](/errors/zero_spam_unavailable) | The local Zero spam service is not configured. |
+| [`zero_seed_applied`](/errors/zero_seed_applied) | Synced content was seeded when the Zero version finalized. |
+| [`zero_seed_skipped_existing`](/errors/zero_seed_skipped_existing) | Existing editable records were preserved during source seeding. |
+| [`zero_source_needs_local_capture`](/errors/zero_source_needs_local_capture) | This Zero source imports npm packages that the host cannot install. |
+| [`zero_spam_unavailable`](/errors/zero_spam_unavailable) | Spam checks aren't available to this app when it runs locally. |
+| [`zero_upgrade_required`](/errors/zero_upgrade_required) | Zero 0.8 publishing is turned off, so no new Zero 0.8 version is published or remixed. A Space that already serves a Zero 0.8 app keeps serving it. |
+| [`zero_v2_asset_write_failed`](/errors/zero_v2_asset_write_failed) | The host could not copy a public/ file to the path it serves from. |
+| [`zero_v2_capture_failed`](/errors/zero_v2_capture_failed) | The host could not capture the Zero project's TypeScript sources into a bundle. |
+| [`zero_v2_compile_failed`](/errors/zero_v2_compile_failed) | The Zero v2 project did not compile on the host. |
+| [`zero_v2_compiler_mismatch`](/errors/zero_v2_compiler_mismatch) | The host's Zero compiler is a different version from the one its runtime engine expects. |
+| [`zero_v2_initialize_failed`](/errors/zero_v2_initialize_failed) | The Zero v2 version compiled, but the Space's WordPress could not start it. `details.runtimeDetails.reason` says why. |
+| [`zero_v2_manifest_invalid`](/errors/zero_v2_manifest_invalid) | The manifest the Zero compiler wrote on the host is not valid JSON. |
+| [`zero_v2_manifest_read_failed`](/errors/zero_v2_manifest_read_failed) | The host could not read the manifest the Zero compiler wrote. |
+| [`zero_v2_manifest_write_failed`](/errors/zero_v2_manifest_write_failed) | The host could not save the compiled Zero manifest. |
+| [`zero_v2_migration_failed`](/errors/zero_v2_migration_failed) | A database migration in this Zero app failed against the Space's existing data. The error message names the migration, the statement and the database's answer. |
+| [`zero_v2_mixed_source_forms`](/errors/zero_v2_mixed_source_forms) | The publish uploads both a captured Zero source bundle (.zero-source/) and a raw project (zero.config.ts). |
+| [`zero_v2_not_initialized`](/errors/zero_v2_not_initialized) | This Zero version hasn't finished setting up on its box. |
+| [`zero_v2_output_uploaded`](/errors/zero_v2_output_uploaded) | The publish uploads a .zero-compiled/ directory, which only the host writes. |
+| [`zero_v2_php_uploaded`](/errors/zero_v2_php_uploaded) | The Zero v2 publish includes a .php file. Zero v2 accepts TypeScript source only. |
+| [`zero_v2_seed_failed`](/errors/zero_v2_seed_failed) | Zero could not seed the synced source records during finalize. |
+| [`zero_v2_source_layout`](/errors/zero_v2_source_layout) | The Zero v2 project's files don't fit the layout the host compiles: a public/ file would land in a directory the engine owns (public/.zero-source/ or public/.zero-compiled/), public/ holds another public/ directory, or .zero-source/ holds something besides app.zero.json, vendor.zero.json and manifest.json. |
+| [`zero_v2_source_needs_full_publish`](/errors/zero_v2_source_needs_full_publish) | The publish changes part of a Zero project without the rest: script modules uploaded over a captured app, which would not change it, or zero.config.ts deleted alone, which would serve the project's private files. |
+| [`zero_v2_upload_not_served`](/errors/zero_v2_upload_not_served) | This Space's version holds a raw Zero project, so files uploaded at its root are project source and are not served. |

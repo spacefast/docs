@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_export_page_too_large",
   "title": "Zero db export page too large",
-  "status": 400,
+  "status": 422,
   "detail": "One database export page exceeded the 16 MiB response limit.",
   "code": "zero_db_export_page_too_large",
   "requestId": "req_4mz0v8qk"

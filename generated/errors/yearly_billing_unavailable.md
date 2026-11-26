@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/yearly_billing_unavailable",
   "title": "Yearly billing unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Yearly billing is no longer offered. Every plan bills monthly.",
   "code": "yearly_billing_unavailable",
   "requestId": "req_4mz0v8qk"

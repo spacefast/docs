@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_quota_decrease_not_supported",
   "title": "Storage quota decrease not supported",
-  "status": 400,
+  "status": 422,
   "detail": "This control cannot reduce a team's storage quota.",
   "code": "storage_quota_decrease_not_supported",
   "requestId": "req_4mz0v8qk"

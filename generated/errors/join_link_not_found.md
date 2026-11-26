@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/join_link_not_found",
   "title": "Join link not found",
-  "status": 400,
+  "status": 422,
   "detail": "No team join link matches this token. It may have been reset.",
   "code": "join_link_not_found",
   "requestId": "req_4mz0v8qk"

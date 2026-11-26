@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_client_in_use",
   "title": "Wp cloud client in use",
-  "status": 400,
+  "status": 422,
   "detail": "The provider client is in use and cannot be removed.",
   "code": "wp_cloud_client_in_use",
   "requestId": "req_4mz0v8qk"

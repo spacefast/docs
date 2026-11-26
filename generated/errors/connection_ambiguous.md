@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connection_ambiguous",
   "title": "Connection ambiguous",
-  "status": 400,
+  "status": 422,
   "detail": "The connector has more than one connection you can use, so the call did not name one.",
   "code": "connection_ambiguous",
   "requestId": "req_4mz0v8qk"

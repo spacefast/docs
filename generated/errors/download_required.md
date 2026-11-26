@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/download_required",
   "title": "Download required",
-  "status": 400,
+  "status": 422,
   "detail": "This content is too large to return inline and must be downloaded.",
   "code": "download_required",
   "requestId": "req_4mz0v8qk"

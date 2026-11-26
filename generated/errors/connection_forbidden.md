@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connection_forbidden",
   "title": "Connection forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "This credential is not granted the connection it tried to use.",
   "code": "connection_forbidden",
   "requestId": "req_4mz0v8qk"

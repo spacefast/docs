@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_not_found",
   "title": "Principal not found",
-  "status": 400,
+  "status": 422,
   "detail": "No external principal with that id exists in this tenant.",
   "code": "principal_not_found",
   "requestId": "req_4mz0v8qk"

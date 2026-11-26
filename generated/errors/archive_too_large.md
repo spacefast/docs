@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/archive_too_large",
   "title": "Archive too large",
-  "status": 400,
+  "status": 422,
   "detail": "The uploaded archive exceeds the maximum allowed size.",
   "code": "archive_too_large",
   "requestId": "req_4mz0v8qk"

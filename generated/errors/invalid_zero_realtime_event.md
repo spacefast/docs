@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_zero_realtime_event",
   "title": "Invalid zero realtime event",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero realtime event payload is malformed or scoped to the wrong space.",
   "code": "invalid_zero_realtime_event",
   "requestId": "req_4mz0v8qk"

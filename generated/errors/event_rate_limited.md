@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/event_rate_limited",
   "title": "Event rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "Too many event submissions came from this client in a short window.",
   "code": "event_rate_limited",
   "requestId": "req_4mz0v8qk"

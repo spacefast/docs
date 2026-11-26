@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_data_location",
   "title": "Invalid data location",
-  "status": 400,
+  "status": 422,
   "detail": "The requested data location is not a supported region.",
   "code": "invalid_data_location",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_file_missing",
   "title": "Publish file missing",
-  "status": 400,
+  "status": 422,
   "detail": "A declared file was never uploaded, so the publish cannot finalize.",
   "code": "publish_file_missing",
   "requestId": "req_4mz0v8qk"

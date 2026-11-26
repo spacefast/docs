@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_conflict",
   "title": "Dns provider conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider rejected the change because it conflicts with existing provider state.",
   "code": "dns_provider_conflict",
   "requestId": "req_4mz0v8qk"

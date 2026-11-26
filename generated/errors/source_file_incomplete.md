@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_file_incomplete",
   "title": "Source file incomplete",
-  "status": 400,
+  "status": 422,
   "detail": "CodeStorage returned fewer bytes than the selected source file requires.",
   "code": "source_file_incomplete",
   "requestId": "req_4mz0v8qk"

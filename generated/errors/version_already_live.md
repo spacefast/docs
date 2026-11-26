@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_already_live",
   "title": "Version already live",
-  "status": 400,
+  "status": 422,
   "detail": "The version is already live on this channel.",
   "code": "version_already_live",
   "requestId": "req_4mz0v8qk"

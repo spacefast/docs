@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/name_managed_by_config",
   "title": "Name managed by config",
-  "status": 400,
+  "status": 422,
   "detail": "This Space is named by its live version's config file.",
   "code": "name_managed_by_config",
   "requestId": "req_4mz0v8qk"

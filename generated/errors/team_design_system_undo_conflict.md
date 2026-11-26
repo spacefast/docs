@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_undo_conflict",
   "title": "Team design system undo conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The requested action is no longer the latest design-system action.",
   "code": "team_design_system_undo_conflict",
   "requestId": "req_4mz0v8qk"

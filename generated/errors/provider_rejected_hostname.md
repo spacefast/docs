@@ -1,9 +1,9 @@
 ---
 title: "provider_rejected_hostname"
-description: "WP Cloud refused to host this hostname."
+description: "Spacefast's infrastructure refused to serve this hostname."
 ---
 
-WP Cloud refused to host this hostname.
+Spacefast's infrastructure refused to serve this hostname.
 
 **How to resolve:** Check the hostname is not already verified by another host, then run sf domains check.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_rejected_hostname",
   "title": "Provider rejected hostname",
-  "status": 400,
-  "detail": "WP Cloud refused to host this hostname.",
+  "status": 422,
+  "detail": "Spacefast's infrastructure refused to serve this hostname.",
   "code": "provider_rejected_hostname",
   "requestId": "req_4mz0v8qk"
 }

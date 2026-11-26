@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_live_system_space_not_designated",
   "title": "Promotion live system space not designated",
-  "status": 400,
+  "status": 422,
   "detail": "The live tenant has no designated system space, and promotion publishes the test manifest onto it.",
   "code": "promotion_live_system_space_not_designated",
   "requestId": "req_4mz0v8qk"

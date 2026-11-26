@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_name_delegated",
   "title": "Dns name delegated",
-  "status": 400,
+  "status": 422,
   "detail": "Your NS record delegates this name to other nameservers. Replace never deletes a delegation.",
   "code": "dns_name_delegated",
   "requestId": "req_4mz0v8qk"

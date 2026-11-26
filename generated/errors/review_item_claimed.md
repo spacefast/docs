@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/review_item_claimed",
   "title": "Review item claimed",
-  "status": 400,
+  "status": 422,
   "detail": "Another reviewer already claimed this review item.",
   "code": "review_item_claimed",
   "requestId": "req_4mz0v8qk"

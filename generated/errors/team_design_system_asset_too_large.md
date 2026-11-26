@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_asset_too_large",
   "title": "Team design system asset too large",
-  "status": 400,
+  "status": 422,
   "detail": "The file is empty or exceeds 100 MB.",
   "code": "team_design_system_asset_too_large",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/label_team_mismatch",
   "title": "Label team mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The label belongs to a different team than the space.",
   "code": "label_team_mismatch",
   "requestId": "req_4mz0v8qk"

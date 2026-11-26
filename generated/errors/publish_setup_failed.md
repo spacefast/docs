@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_setup_failed",
   "title": "Publish setup failed",
-  "status": 400,
+  "status": 422,
   "detail": "Provisioning for this publish failed.",
   "code": "publish_setup_failed",
   "requestId": "req_4mz0v8qk"

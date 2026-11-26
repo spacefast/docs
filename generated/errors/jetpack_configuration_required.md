@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_configuration_required",
   "title": "Jetpack configuration required",
-  "status": 400,
+  "status": 422,
   "detail": "Jetpack credentials are missing for an existing license operation.",
   "code": "jetpack_configuration_required",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_commit_unchanged",
   "title": "Repository commit unchanged",
-  "status": 400,
+  "status": 422,
   "detail": "The commit changes no files: the branch already holds this exact tree, so there is nothing to save.",
   "code": "repository_commit_unchanged",
   "requestId": "req_4mz0v8qk"

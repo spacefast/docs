@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_request_body_too_large",
   "title": "Zero request body too large",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero request body exceeds the runtime size limit.",
   "code": "zero_request_body_too_large",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_jwks_key_missing",
   "title": "Runtime jwks key missing",
-  "status": 400,
+  "status": 422,
   "detail": "No signing key matching the token's key id was found.",
   "code": "runtime_jwks_key_missing",
   "requestId": "req_4mz0v8qk"

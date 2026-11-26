@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_export_cursor_invalid",
   "title": "Zero db export cursor invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The local database export cursor is invalid or belongs to another export.",
   "code": "zero_db_export_cursor_invalid",
   "requestId": "req_4mz0v8qk"

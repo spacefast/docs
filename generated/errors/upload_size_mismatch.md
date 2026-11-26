@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_size_mismatch",
   "title": "Upload size mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "An uploaded file's size does not match the declared size.",
   "code": "upload_size_mismatch",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_write_failed",
   "title": "Team design system write failed",
-  "status": 400,
+  "status": 422,
   "detail": "The design-system transaction could not be stored.",
   "code": "team_design_system_write_failed",
   "requestId": "req_4mz0v8qk"

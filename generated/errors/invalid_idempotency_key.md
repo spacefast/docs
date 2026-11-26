@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_idempotency_key",
   "title": "Invalid idempotency key",
-  "status": 400,
+  "status": 422,
   "detail": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
   "code": "invalid_idempotency_key",
   "requestId": "req_4mz0v8qk"

@@ -1,11 +1,11 @@
 ---
 title: "dns_provider_change_pending"
-description: "The DNS provider accepted the change but propagation or provider completion is still pending."
+description: "The DNS provider accepted the change but propagation or provider completion is still pending, or its listing does not yet show the record that was written."
 ---
 
-The DNS provider accepted the change but propagation or provider completion is still pending.
+The DNS provider accepted the change but propagation or provider completion is still pending, or its listing does not yet show the record that was written.
 
-**How to resolve:** Wait and re-check the pollable DNS operation before submitting another conflicting change.
+**How to resolve:** Do not send the change again. When `details.writeAccepted` is true the provider accepted it and only a refresh is needed: refresh the provider snapshot and read the zone, or re-check the DNS operation in `details.operationId`. Retrying means retrying the refresh, never the write.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_change_pending",
   "title": "Dns provider change pending",
-  "status": 400,
-  "detail": "The DNS provider accepted the change but propagation or provider completion is still pending.",
+  "status": 422,
+  "detail": "The DNS provider accepted the change but propagation or provider completion is still pending, or its listing does not yet show the record that was written.",
   "code": "dns_provider_change_pending",
   "requestId": "req_4mz0v8qk"
 }

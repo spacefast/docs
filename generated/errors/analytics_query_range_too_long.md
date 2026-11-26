@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_query_range_too_long",
   "title": "Analytics query range too long",
-  "status": 400,
+  "status": 422,
   "detail": "An analytics query covers at most 395 days, how long raw events are kept.",
   "code": "analytics_query_range_too_long",
   "requestId": "req_4mz0v8qk"

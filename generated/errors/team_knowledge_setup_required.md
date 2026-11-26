@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_knowledge_setup_required",
   "title": "Team knowledge setup required",
-  "status": 400,
+  "status": 422,
   "detail": "The team has no designated context storage.",
   "code": "team_knowledge_setup_required",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_blob_store_full",
   "title": "Zero blob store full",
-  "status": 400,
+  "status": 422,
   "detail": "The local Zero blob store reached its configured size limit.",
   "code": "zero_blob_store_full",
   "requestId": "req_4mz0v8qk"

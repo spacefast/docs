@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_fork_revoked",
   "title": "Source fork revoked",
-  "status": 400,
+  "status": 422,
   "detail": "Source sharing changed before the remix copy completed.",
   "code": "source_fork_revoked",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/email_already_claimed",
   "title": "Email already claimed",
-  "status": 400,
+  "status": 422,
   "detail": "That email address is already verified on an account.",
   "code": "email_already_claimed",
   "requestId": "req_4mz0v8qk"

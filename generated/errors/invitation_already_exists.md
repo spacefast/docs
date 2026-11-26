@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invitation_already_exists",
   "title": "Invitation already exists",
-  "status": 400,
+  "status": 422,
   "detail": "An invitation for this email already exists on the team.",
   "code": "invitation_already_exists",
   "requestId": "req_4mz0v8qk"

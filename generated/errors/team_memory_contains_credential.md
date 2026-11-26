@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_memory_contains_credential",
   "title": "Team memory contains credential",
-  "status": 400,
+  "status": 422,
   "detail": "The memory looks like it contains a password, key, or token.",
   "code": "team_memory_contains_credential",
   "requestId": "req_4mz0v8qk"

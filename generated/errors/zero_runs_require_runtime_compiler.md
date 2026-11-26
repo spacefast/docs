@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runs_require_runtime_compiler",
   "title": "Zero runs require runtime compiler",
-  "status": 400,
+  "status": 422,
   "detail": "Zero run handlers require the Rust runtime compiler.",
   "code": "zero_runs_require_runtime_compiler",
   "requestId": "req_4mz0v8qk"

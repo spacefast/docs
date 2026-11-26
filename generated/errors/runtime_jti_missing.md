@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_jti_missing",
   "title": "Runtime jti missing",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime token is missing its replay-protection id.",
   "code": "runtime_jti_missing",
   "requestId": "req_4mz0v8qk"

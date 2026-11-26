@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_response_header_forbidden",
   "title": "Zero response header forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero endpoint attempted to set a platform-managed response header.",
   "code": "zero_response_header_forbidden",
   "requestId": "req_4mz0v8qk"

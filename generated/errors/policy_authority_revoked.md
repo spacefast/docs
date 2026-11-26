@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/policy_authority_revoked",
   "title": "Policy authority revoked",
-  "status": 400,
+  "status": 422,
   "detail": "Spacefast did not publish this access change. The recorded requester is missing, inactive, or not permitted to change this Space's access.",
   "code": "policy_authority_revoked",
   "requestId": "req_4mz0v8qk"

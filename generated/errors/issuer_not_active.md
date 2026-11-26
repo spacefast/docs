@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/issuer_not_active",
   "title": "Issuer not active",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token issuer is registered but is not active.",
   "code": "issuer_not_active",
   "requestId": "req_4mz0v8qk"

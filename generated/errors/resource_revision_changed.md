@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/resource_revision_changed",
   "title": "Resource revision changed",
-  "status": 400,
+  "status": 422,
   "detail": "The resource changed after you loaded it, so the stale write was rejected.",
   "code": "resource_revision_changed",
   "requestId": "req_4mz0v8qk"

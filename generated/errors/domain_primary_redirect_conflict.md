@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_primary_redirect_conflict",
   "title": "Domain primary redirect conflict",
-  "status": 400,
+  "status": 422,
   "detail": "A redirecting domain cannot be the primary domain.",
   "code": "domain_primary_redirect_conflict",
   "requestId": "req_4mz0v8qk"

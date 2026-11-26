@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/insufficient_scope",
   "title": "Insufficient scope",
-  "status": 400,
+  "status": 422,
   "detail": "The credential authenticated, but its granted scopes do not include a set this operation accepts.",
   "code": "insufficient_scope",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_file_too_large",
   "title": "Version file too large",
-  "status": 400,
+  "status": 422,
   "detail": "A file exceeds the plan's maximum file size.",
   "code": "version_file_too_large",
   "requestId": "req_4mz0v8qk"

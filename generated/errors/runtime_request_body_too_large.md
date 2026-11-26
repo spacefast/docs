@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_request_body_too_large",
   "title": "Runtime request body too large",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime management request exceeded its byte limit before JSON parsing.",
   "code": "runtime_request_body_too_large",
   "requestId": "req_4mz0v8qk"

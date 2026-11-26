@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_connection_in_use",
   "title": "Source workspace connection in use",
-  "status": 400,
+  "status": 422,
   "detail": "An open source workspace uses this repository connection.",
   "code": "source_workspace_connection_in_use",
   "requestId": "req_4mz0v8qk"

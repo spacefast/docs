@@ -1,11 +1,11 @@
 ---
 title: "zero_artifact_invalid"
-description: "The Zero endpoint artifact is missing required runtime metadata."
+description: "The publish carries Zero 0.8 build output without its runtime metadata."
 ---
 
-The Zero endpoint artifact is missing required runtime metadata.
+The publish carries Zero 0.8 build output without its runtime metadata.
 
-**How to resolve:** Rebuild the Zero project and verify the generated zero endpoint artifacts are uploaded.
+**How to resolve:** Rebuild the app and publish it with sf publish, and leave the old build output out of the upload.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_artifact_invalid",
   "title": "Zero artifact invalid",
-  "status": 400,
-  "detail": "The Zero endpoint artifact is missing required runtime metadata.",
+  "status": 422,
+  "detail": "The publish carries Zero 0.8 build output without its runtime metadata.",
   "code": "zero_artifact_invalid",
   "requestId": "req_4mz0v8qk"
 }

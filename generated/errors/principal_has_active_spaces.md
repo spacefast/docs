@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_has_active_spaces",
   "title": "Principal has active spaces",
-  "status": 400,
+  "status": 422,
   "detail": "The external principal still owns spaces, so it cannot be closed.",
   "code": "principal_has_active_spaces",
   "requestId": "req_4mz0v8qk"

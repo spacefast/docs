@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_merge_undo_unsupported",
   "title": "Source merge undo unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The selected source commit is a merge commit with multiple parents.",
   "code": "source_merge_undo_unsupported",
   "requestId": "req_4mz0v8qk"

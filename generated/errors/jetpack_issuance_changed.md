@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_issuance_changed",
   "title": "Jetpack issuance changed",
-  "status": 400,
+  "status": 422,
   "detail": "The pending purchase changed after the recovery request was prepared.",
   "code": "jetpack_issuance_changed",
   "requestId": "req_4mz0v8qk"

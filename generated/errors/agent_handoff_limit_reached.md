@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/agent_handoff_limit_reached",
   "title": "Agent handoff limit reached",
-  "status": 400,
+  "status": 422,
   "detail": "This user already has the maximum number of pending handoffs for the space.",
   "code": "agent_handoff_limit_reached",
   "requestId": "req_4mz0v8qk"

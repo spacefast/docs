@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_commit_not_found",
   "title": "Repository commit not found",
-  "status": 400,
+  "status": 422,
   "detail": "The commit you asked to read does not exist in this repository.",
   "code": "repository_commit_not_found",
   "requestId": "req_4mz0v8qk"

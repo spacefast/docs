@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/access_denied",
   "title": "Access denied",
-  "status": 400,
+  "status": 422,
   "detail": "The authorization request was denied by the user.",
   "code": "access_denied",
   "requestId": "req_4mz0v8qk"

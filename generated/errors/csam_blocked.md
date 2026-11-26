@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/csam_blocked",
   "title": "Csam blocked",
-  "status": 400,
+  "status": 422,
   "detail": "The content was blocked because it matched known child sexual abuse material.",
   "code": "csam_blocked",
   "requestId": "req_4mz0v8qk"

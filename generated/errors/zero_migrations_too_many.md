@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_migrations_too_many",
   "title": "Zero migrations too many",
-  "status": 400,
+  "status": 422,
   "detail": "The compiled Zero migrations exceed the runtime statement limit.",
   "code": "zero_migrations_too_many",
   "requestId": "req_4mz0v8qk"

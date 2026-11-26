@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_program_failed",
   "title": "Connector program failed",
-  "status": 400,
+  "status": 422,
   "detail": "The connector program failed during execution.",
   "code": "connector_program_failed",
   "requestId": "req_4mz0v8qk"

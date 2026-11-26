@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_in_use",
   "title": "Domain in use",
-  "status": 400,
+  "status": 422,
   "detail": "The domain is in use by another binding or assignment.",
   "code": "domain_in_use",
   "requestId": "req_4mz0v8qk"

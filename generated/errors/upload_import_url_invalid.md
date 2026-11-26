@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_import_url_invalid",
   "title": "Upload import url invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The download reference is not an allowed HTTPS target.",
   "code": "upload_import_url_invalid",
   "requestId": "req_4mz0v8qk"

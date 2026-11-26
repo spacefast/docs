@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_author_required",
   "title": "Source author required",
-  "status": 400,
+  "status": 422,
   "detail": "The credential has no complete registered profile, so a source commit needs an explicit author.",
   "code": "source_author_required",
   "requestId": "req_4mz0v8qk"

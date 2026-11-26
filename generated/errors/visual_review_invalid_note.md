@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_invalid_note",
   "title": "Visual review invalid note",
-  "status": 400,
+  "status": 422,
   "detail": "A note has a duplicate ID or an inconsistent capture status.",
   "code": "visual_review_invalid_note",
   "requestId": "req_4mz0v8qk"

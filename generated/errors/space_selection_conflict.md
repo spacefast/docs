@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_selection_conflict",
   "title": "Space selection conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The command asked to create a Space while this directory already selects one.",
   "code": "space_selection_conflict",
   "requestId": "req_4mz0v8qk"

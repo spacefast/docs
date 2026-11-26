@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/maintenance_in_progress",
   "title": "Maintenance in progress",
-  "status": 400,
+  "status": 422,
   "detail": "This change is temporarily unavailable while maintenance finishes.",
   "code": "maintenance_in_progress",
   "requestId": "req_4mz0v8qk"

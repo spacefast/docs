@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/decision_in_progress",
   "title": "Decision in progress",
-  "status": 400,
+  "status": 422,
   "detail": "This approved action is already executing.",
   "code": "decision_in_progress",
   "requestId": "req_4mz0v8qk"

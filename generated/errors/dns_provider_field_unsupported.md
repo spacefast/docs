@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_field_unsupported",
   "title": "Dns provider field unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider does not support one of the requested record fields.",
   "code": "dns_provider_field_unsupported",
   "requestId": "req_4mz0v8qk"

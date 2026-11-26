@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/vip_team_disabled",
   "title": "Vip team disabled",
-  "status": 400,
+  "status": 422,
   "detail": "VIP is disabled for this team, so new invitations and memberships are blocked.",
   "code": "vip_team_disabled",
   "requestId": "req_4mz0v8qk"

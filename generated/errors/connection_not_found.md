@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connection_not_found",
   "title": "Connection not found",
-  "status": 400,
+  "status": 422,
   "detail": "No connection exists with this id, or this credential cannot see it.",
   "code": "connection_not_found",
   "requestId": "req_4mz0v8qk"

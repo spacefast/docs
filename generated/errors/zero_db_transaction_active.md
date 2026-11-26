@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_active",
   "title": "Zero db transaction active",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner tried to start a database transaction while one was already active.",
   "code": "zero_db_transaction_active",
   "requestId": "req_4mz0v8qk"

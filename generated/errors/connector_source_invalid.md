@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_source_invalid",
   "title": "Connector source invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The source does not match the catalog row it was registered with.",
   "code": "connector_source_invalid",
   "requestId": "req_4mz0v8qk"

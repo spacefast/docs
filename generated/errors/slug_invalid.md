@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/slug_invalid",
   "title": "Slug invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The slug does not meet the structural rules for managed names.",
   "code": "slug_invalid",
   "requestId": "req_4mz0v8qk"

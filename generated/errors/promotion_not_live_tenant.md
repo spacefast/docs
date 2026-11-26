@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_not_live_tenant",
   "title": "Promotion not live tenant",
-  "status": 400,
+  "status": 422,
   "detail": "Promotion targets a live tenant, and the tenant named in the request is not in live mode.",
   "code": "promotion_not_live_tenant",
   "requestId": "req_4mz0v8qk"

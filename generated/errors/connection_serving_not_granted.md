@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connection_serving_not_granted",
   "title": "Connection serving not granted",
-  "status": 400,
+  "status": 422,
   "detail": "This team connection has not been granted site serving access.",
   "code": "connection_serving_not_granted",
   "requestId": "req_4mz0v8qk"

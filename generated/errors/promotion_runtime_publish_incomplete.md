@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_runtime_publish_incomplete",
   "title": "Promotion runtime publish incomplete",
-  "status": 400,
+  "status": 422,
   "detail": "The promoted version was accepted but its runtime publish did not finish, so live is unchanged.",
   "code": "promotion_runtime_publish_incomplete",
   "requestId": "req_4mz0v8qk"

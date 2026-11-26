@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_not_restorable",
   "title": "Space not restorable",
-  "status": 400,
+  "status": 422,
   "detail": "The space is past its recovery window and cannot be restored.",
   "code": "space_not_restorable",
   "requestId": "req_4mz0v8qk"

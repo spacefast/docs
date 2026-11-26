@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/manifest_too_many_files",
   "title": "Manifest too many files",
-  "status": 400,
+  "status": 422,
   "detail": "The upload manifest declares more files than the allowed ceiling.",
   "code": "manifest_too_many_files",
   "requestId": "req_4mz0v8qk"

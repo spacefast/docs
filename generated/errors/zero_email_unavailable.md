@@ -1,11 +1,11 @@
 ---
 title: "zero_email_unavailable"
-description: "The local Zero email service is not configured."
+description: "Email isn't available to this app when it runs locally."
 ---
 
-The local Zero email service is not configured.
+Email isn't available to this app when it runs locally.
 
-**How to resolve:** Publish the capsule to call the hosted email service, or guard the `ctx.email` call so local runs skip it.
+**How to resolve:** Publish the app to send email through the hosted service, or skip sending in local runs. See https://spacefast.com/docs/zero.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_email_unavailable",
   "title": "Zero email unavailable",
-  "status": 400,
-  "detail": "The local Zero email service is not configured.",
+  "status": 422,
+  "detail": "Email isn't available to this app when it runs locally.",
   "code": "zero_email_unavailable",
   "requestId": "req_4mz0v8qk"
 }

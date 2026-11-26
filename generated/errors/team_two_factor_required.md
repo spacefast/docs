@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_two_factor_required",
   "title": "Team two factor required",
-  "status": 400,
+  "status": 422,
   "detail": "This team requires two-factor authentication, and your account doesn't have it on.",
   "code": "team_two_factor_required",
   "requestId": "req_4mz0v8qk"

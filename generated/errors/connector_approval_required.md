@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_approval_required",
   "title": "Connector approval required",
-  "status": 400,
+  "status": 422,
   "detail": "The call needs a person to approve it before it runs.",
   "code": "connector_approval_required",
   "requestId": "req_4mz0v8qk"

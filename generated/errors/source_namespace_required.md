@@ -1,9 +1,9 @@
 ---
 title: "source_namespace_required"
-description: "Public source sharing requires an organization namespace."
+description: "Public source sharing requires a team namespace."
 ---
 
-Public source sharing requires an organization namespace.
+Public source sharing requires a team namespace.
 
 **How to resolve:** Move or claim the Space into a team before enabling Source available.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_namespace_required",
   "title": "Source namespace required",
-  "status": 400,
-  "detail": "Public source sharing requires an organization namespace.",
+  "status": 422,
+  "detail": "Public source sharing requires a team namespace.",
   "code": "source_namespace_required",
   "requestId": "req_4mz0v8qk"
 }

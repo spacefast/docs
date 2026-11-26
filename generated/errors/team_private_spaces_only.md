@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_private_spaces_only",
   "title": "Team private spaces only",
-  "status": 400,
+  "status": 422,
   "detail": "This team allows private spaces only, so nothing in it can be public.",
   "code": "team_private_spaces_only",
   "requestId": "req_4mz0v8qk"

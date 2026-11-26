@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/issuer_tenant_occupied",
   "title": "Issuer tenant occupied",
-  "status": 400,
+  "status": 422,
   "detail": "This tenant already has a pending or active partner token issuer.",
   "code": "issuer_tenant_occupied",
   "requestId": "req_4mz0v8qk"

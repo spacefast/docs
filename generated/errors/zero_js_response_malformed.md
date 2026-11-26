@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_js_response_malformed",
   "title": "Zero js response malformed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint returned a malformed runner response.",
   "code": "zero_js_response_malformed",
   "requestId": "req_4mz0v8qk"

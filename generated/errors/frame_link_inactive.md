@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_link_inactive",
   "title": "Frame link inactive",
-  "status": 400,
+  "status": 422,
   "detail": "The Frame Link is revoked, expired, not yet active, or out of uses.",
   "code": "frame_link_inactive",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_disabled",
   "title": "Space disabled",
-  "status": 400,
+  "status": 422,
   "detail": "The space is disabled and cannot be served or modified.",
   "code": "space_disabled",
   "requestId": "req_4mz0v8qk"

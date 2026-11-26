@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_webhook_payload",
   "title": "Invalid webhook payload",
-  "status": 400,
+  "status": 422,
   "detail": "The webhook configuration payload is malformed.",
   "code": "invalid_webhook_payload",
   "requestId": "req_4mz0v8qk"

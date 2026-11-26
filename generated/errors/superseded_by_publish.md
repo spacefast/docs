@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/superseded_by_publish",
   "title": "Superseded by publish",
-  "status": 400,
+  "status": 422,
   "detail": "A newer publish superseded this operation, so it was skipped.",
   "code": "superseded_by_publish",
   "requestId": "req_4mz0v8qk"

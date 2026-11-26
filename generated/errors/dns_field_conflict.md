@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_field_conflict",
   "title": "Dns field conflict",
-  "status": 400,
+  "status": 422,
   "detail": "Two DNS fields cannot be used together for this provider or record type.",
   "code": "dns_field_conflict",
   "requestId": "req_4mz0v8qk"

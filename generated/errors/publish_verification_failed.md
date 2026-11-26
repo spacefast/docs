@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_verification_failed",
   "title": "Publish verification failed",
-  "status": 400,
+  "status": 422,
   "detail": "Post-publish verification did not see the new content serving.",
   "code": "publish_verification_failed",
   "requestId": "req_4mz0v8qk"

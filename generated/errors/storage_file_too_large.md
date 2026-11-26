@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_file_too_large",
   "title": "Storage file too large",
-  "status": 400,
+  "status": 422,
   "detail": "The storage object exceeds the 5 MiB file limit.",
   "code": "storage_file_too_large",
   "requestId": "req_4mz0v8qk"

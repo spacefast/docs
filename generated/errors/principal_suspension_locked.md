@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_suspension_locked",
   "title": "Principal suspension locked",
-  "status": 400,
+  "status": 422,
   "detail": "The suspension was applied by Spacefast (legal/abuse) and cannot be lifted by the partner.",
   "code": "principal_suspension_locked",
   "requestId": "req_4mz0v8qk"

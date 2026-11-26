@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_operation_unreconciled",
   "title": "Source operation unreconciled",
-  "status": 400,
+  "status": 422,
   "detail": "The provider result is uncertain and the target branch changed.",
   "code": "source_operation_unreconciled",
   "requestId": "req_4mz0v8qk"

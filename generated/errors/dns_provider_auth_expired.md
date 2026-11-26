@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_auth_expired",
   "title": "Dns provider auth expired",
-  "status": 400,
+  "status": 422,
   "detail": "The connected DNS provider authorization expired or was revoked.",
   "code": "dns_provider_auth_expired",
   "requestId": "req_4mz0v8qk"

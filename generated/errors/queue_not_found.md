@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/queue_not_found",
   "title": "Queue not found",
-  "status": 400,
+  "status": 422,
   "detail": "The named job queue does not exist.",
   "code": "queue_not_found",
   "requestId": "req_4mz0v8qk"

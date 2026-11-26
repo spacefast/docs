@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/static_runtime_control_path_not_supported",
   "title": "Static runtime control path not supported",
-  "status": 400,
+  "status": 422,
   "detail": "This control path is not supported by the static runtime.",
   "code": "static_runtime_control_path_not_supported",
   "requestId": "req_4mz0v8qk"

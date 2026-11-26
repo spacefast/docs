@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_hash_mismatch",
   "title": "Publish hash mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "Publish content does not match its declared sha256.",
   "code": "publish_hash_mismatch",
   "requestId": "req_4mz0v8qk"

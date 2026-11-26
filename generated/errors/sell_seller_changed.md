@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/sell_seller_changed",
   "title": "Sell seller changed",
-  "status": 400,
+  "status": 422,
   "detail": "The seller binding changed while its Stripe readiness was being refreshed.",
   "code": "sell_seller_changed",
   "requestId": "req_4mz0v8qk"

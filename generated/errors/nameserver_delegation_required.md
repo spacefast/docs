@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/nameserver_delegation_required",
   "title": "Nameserver delegation required",
-  "status": 400,
+  "status": 422,
   "detail": "This operation requires the domain to be delegated to Spacefast nameservers.",
   "code": "nameserver_delegation_required",
   "requestId": "req_4mz0v8qk"

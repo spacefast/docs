@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/internal_error",
   "title": "Internal error",
-  "status": 400,
+  "status": 422,
   "detail": "Something went wrong on our side.",
   "code": "internal_error",
   "requestId": "req_4mz0v8qk"

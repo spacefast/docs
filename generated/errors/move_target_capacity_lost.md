@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/move_target_capacity_lost",
   "title": "Move target capacity lost",
-  "status": 400,
+  "status": 422,
   "detail": "The selected move target no longer has capacity for the space.",
   "code": "move_target_capacity_lost",
   "requestId": "req_4mz0v8qk"

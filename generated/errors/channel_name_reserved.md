@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/channel_name_reserved",
   "title": "Channel name reserved",
-  "status": 400,
+  "status": 422,
   "detail": "The channel name collides with a reserved hostname suffix and cannot be used.",
   "code": "channel_name_reserved",
   "requestId": "req_4mz0v8qk"

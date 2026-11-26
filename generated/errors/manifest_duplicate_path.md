@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/manifest_duplicate_path",
   "title": "Manifest duplicate path",
-  "status": 400,
+  "status": 422,
   "detail": "The upload manifest declares the same path more than once.",
   "code": "manifest_duplicate_path",
   "requestId": "req_4mz0v8qk"

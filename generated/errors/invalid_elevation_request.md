@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_elevation_request",
   "title": "Invalid elevation request",
-  "status": 400,
+  "status": 422,
   "detail": "An elevation request needs at least one scope and a rationale of 1 to 1024 characters.",
   "code": "invalid_elevation_request",
   "requestId": "req_4mz0v8qk"

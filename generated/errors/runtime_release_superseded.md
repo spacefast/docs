@@ -1,11 +1,11 @@
 ---
 title: "runtime_release_superseded"
-description: "A newer deploy already decided the platform release this one would have changed."
+description: "A newer promotion already decided the platform release this one would have changed."
 ---
 
-A newer deploy already decided the platform release this one would have changed.
+A newer promotion already decided the platform release this one would have changed.
 
-**How to resolve:** Nothing to fix here: the newer deploy owns the rollout. Deploy again from a newer receipt to move it.
+**How to resolve:** Nothing to fix here: the newer promotion owns the release. Promote again to move it.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_release_superseded",
   "title": "Runtime release superseded",
-  "status": 400,
-  "detail": "A newer deploy already decided the platform release this one would have changed.",
+  "status": 422,
+  "detail": "A newer promotion already decided the platform release this one would have changed.",
   "code": "runtime_release_superseded",
   "requestId": "req_4mz0v8qk"
 }

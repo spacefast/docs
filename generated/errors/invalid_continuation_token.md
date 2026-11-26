@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_continuation_token",
   "title": "Invalid continuation token",
-  "status": 400,
+  "status": 422,
   "detail": "The continuation token is invalid, expired, or already finished.",
   "code": "invalid_continuation_token",
   "requestId": "req_4mz0v8qk"

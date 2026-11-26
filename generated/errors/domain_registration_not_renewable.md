@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_registration_not_renewable",
   "title": "Domain registration not renewable",
-  "status": 400,
+  "status": 422,
   "detail": "The domain registration cannot be renewed right now.",
   "code": "domain_registration_not_renewable",
   "requestId": "req_4mz0v8qk"

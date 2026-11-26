@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/takeover_notice_window",
   "title": "Takeover notice window",
-  "status": 400,
+  "status": 422,
   "detail": "The hostname was recently bound elsewhere. A takeover notice window applies.",
   "code": "takeover_notice_window",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_not_cancelable",
   "title": "Publish not cancelable",
-  "status": 400,
+  "status": 422,
   "detail": "The publish is past the point where it can be canceled.",
   "code": "publish_not_cancelable",
   "requestId": "req_4mz0v8qk"

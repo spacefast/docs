@@ -1,11 +1,11 @@
 ---
 title: "zero_gravatar_unavailable"
-description: "The local Zero Gravatar service is not configured."
+description: "Gravatar profiles aren't available to this app when it runs locally."
 ---
 
-The local Zero Gravatar service is not configured.
+Gravatar profiles aren't available to this app when it runs locally.
 
-**How to resolve:** Publish the capsule to call the hosted Gravatar service. `ctx.gravatar.avatarUrl` needs no service and works locally.
+**How to resolve:** Publish the app to read Gravatar profiles through the hosted service. Plain avatar image URLs work locally. See https://spacefast.com/docs/zero.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_gravatar_unavailable",
   "title": "Zero gravatar unavailable",
-  "status": 400,
-  "detail": "The local Zero Gravatar service is not configured.",
+  "status": 422,
+  "detail": "Gravatar profiles aren't available to this app when it runs locally.",
   "code": "zero_gravatar_unavailable",
   "requestId": "req_4mz0v8qk"
 }

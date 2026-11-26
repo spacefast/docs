@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_run_not_found",
   "title": "Connector run not found",
-  "status": 400,
+  "status": 422,
   "detail": "No run exists with this id, or this credential cannot see it.",
   "code": "connector_run_not_found",
   "requestId": "req_4mz0v8qk"

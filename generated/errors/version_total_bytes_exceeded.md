@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_total_bytes_exceeded",
   "title": "Version total bytes exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The version exceeds the maximum total size, counting the files it keeps from the previous version as well as the ones it uploads.",
   "code": "version_total_bytes_exceeded",
   "requestId": "req_4mz0v8qk"

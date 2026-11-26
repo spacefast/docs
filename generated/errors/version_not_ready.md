@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_not_ready",
   "title": "Version not ready",
-  "status": 400,
+  "status": 422,
   "detail": "The version is not ready yet.",
   "code": "version_not_ready",
   "requestId": "req_4mz0v8qk"

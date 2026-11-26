@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_entry_not_found",
   "title": "Team design system entry not found",
-  "status": 400,
+  "status": 422,
   "detail": "The entry is missing, archived, or belongs to a different record type.",
   "code": "team_design_system_entry_not_found",
   "requestId": "req_4mz0v8qk"

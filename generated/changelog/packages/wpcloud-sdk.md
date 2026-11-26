@@ -5,6 +5,18 @@ description: "Release history for @spacefast/wpcloud-sdk on npm."
 
 Published as [`@spacefast/wpcloud-sdk`](https://www.npmjs.com/package/@spacefast/wpcloud-sdk) on npm.
 
+## 0.10.0
+
+_No noted changes in this release._
+
+## 0.9.0
+
+#### Patch Changes
+
+- Add a streaming backup download transport with bounded transfers and credential-free HTTPS redirects. Keep metadata requests on their existing response limits.
+
+  Add a shared metrics reader with typed site/account selection, caller-provided filters, and correct summary paths. Applications keep authorization and customer response projection at their own boundaries.
+
 ## 0.8.1
 
 _No noted changes in this release._

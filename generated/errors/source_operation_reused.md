@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_operation_reused",
   "title": "Source operation reused",
-  "status": 400,
+  "status": 422,
   "detail": "The operation ID was already used with different source input.",
   "code": "source_operation_reused",
   "requestId": "req_4mz0v8qk"

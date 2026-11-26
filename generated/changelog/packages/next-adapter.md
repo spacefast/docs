@@ -5,6 +5,21 @@ description: "Release history for @spacefast/next-adapter on npm."
 
 Published as [`@spacefast/next-adapter`](https://www.npmjs.com/package/@spacefast/next-adapter) on npm.
 
+## 0.10.0
+
+#### Patch Changes
+
+- @spacefast/adapter-kit@0.10.0
+  - @spacefast/build-output@0.10.0
+
+## 0.9.0
+
+#### Patch Changes
+
+- Server-rendered Next.js builds now honor `redirects()` and `rewrites()` from `next.config`. Their source paths are routed to the Next.js worker instead of returning 404 from static hosting, and a page covered by a redirect is no longer served as a static file ahead of the redirect.
+- @spacefast/adapter-kit@0.9.0
+  - @spacefast/build-output@0.9.0
+
 ## 0.8.1
 
 #### Patch Changes

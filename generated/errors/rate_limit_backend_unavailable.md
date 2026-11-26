@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/rate_limit_backend_unavailable",
   "title": "Rate limit backend unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Shared request accounting is temporarily unavailable, so this request cannot proceed.",
   "code": "rate_limit_backend_unavailable",
   "requestId": "req_4mz0v8qk"

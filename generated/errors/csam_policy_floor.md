@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/csam_policy_floor",
   "title": "Csam policy floor",
-  "status": 400,
+  "status": 422,
   "detail": "CSAM enforcement policy cannot be set below the mandatory account-suspend floor.",
   "code": "csam_policy_floor",
   "requestId": "req_4mz0v8qk"

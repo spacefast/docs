@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_record_managed",
   "title": "Dns record managed",
-  "status": 400,
+  "status": 422,
   "detail": "This DNS record is managed by Spacefast and cannot be edited directly.",
   "code": "dns_record_managed",
   "requestId": "req_4mz0v8qk"

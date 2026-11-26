@@ -1,11 +1,11 @@
 ---
 title: "connector_write_in_read_handler"
-description: "Read handlers can only call read-only connector tools."
+description: "This call may only use read-only connector tools."
 ---
 
-Read handlers can only call read-only connector tools.
+This call may only use read-only connector tools.
 
-**How to resolve:** Call this tool from a mutation or write endpoint.
+**How to resolve:** Call the tool from a mutation, a write endpoint, or a page POST instead.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_write_in_read_handler",
   "title": "Connector write in read handler",
-  "status": 400,
-  "detail": "Read handlers can only call read-only connector tools.",
+  "status": 422,
+  "detail": "This call may only use read-only connector tools.",
   "code": "connector_write_in_read_handler",
   "requestId": "req_4mz0v8qk"
 }

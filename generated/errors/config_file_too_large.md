@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_file_too_large",
   "title": "Config file too large",
-  "status": 400,
+  "status": 422,
   "detail": "The sf.jsonc configuration file exceeds the maximum size.",
   "code": "config_file_too_large",
   "requestId": "req_4mz0v8qk"

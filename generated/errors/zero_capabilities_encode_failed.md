@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_capabilities_encode_failed",
   "title": "Zero capabilities encode failed",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime cannot encode the Zero endpoint capabilities.",
   "code": "zero_capabilities_encode_failed",
   "requestId": "req_4mz0v8qk"

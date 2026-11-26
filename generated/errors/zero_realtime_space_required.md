@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_realtime_space_required",
   "title": "Zero realtime space required",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero realtime request does not identify a space.",
   "code": "zero_realtime_space_required",
   "requestId": "req_4mz0v8qk"

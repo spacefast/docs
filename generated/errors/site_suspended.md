@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/site_suspended",
   "title": "Site suspended",
-  "status": 400,
+  "status": 422,
   "detail": "The site is suspended, so its spaces cannot be served or modified.",
   "code": "site_suspended",
   "requestId": "req_4mz0v8qk"

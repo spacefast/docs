@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_suspended",
   "title": "Principal suspended",
-  "status": 400,
+  "status": 422,
   "detail": "The external principal is suspended. Its spaces serve the suspended page and its mutations are blocked.",
   "code": "principal_suspended",
   "requestId": "req_4mz0v8qk"

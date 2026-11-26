@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/billing_managed_by_parent",
   "title": "Billing managed by parent",
-  "status": 400,
+  "status": 422,
   "detail": "This team is a subteam. Its plan, seats and billing belong to its parent team.",
   "code": "billing_managed_by_parent",
   "requestId": "req_4mz0v8qk"

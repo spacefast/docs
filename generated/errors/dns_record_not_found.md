@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_record_not_found",
   "title": "Dns record not found",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS record was not found in this zone.",
   "code": "dns_record_not_found",
   "requestId": "req_4mz0v8qk"

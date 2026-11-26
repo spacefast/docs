@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/db_not_available",
   "title": "Db not available",
-  "status": 400,
+  "status": 422,
   "detail": "The live version has no database to read.",
   "code": "db_not_available",
   "requestId": "req_4mz0v8qk"

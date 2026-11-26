@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_hash_mismatch",
   "title": "Upload hash mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "An uploaded file's bytes do not match the declared sha256.",
   "code": "upload_hash_mismatch",
   "requestId": "req_4mz0v8qk"

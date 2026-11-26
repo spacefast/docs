@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/confirmation_token_required",
   "title": "Confirmation token required",
-  "status": 400,
+  "status": 422,
   "detail": "This exact action already has a decision, and a retry without its continuation token cannot clear the gate.",
   "code": "confirmation_token_required",
   "requestId": "req_4mz0v8qk"

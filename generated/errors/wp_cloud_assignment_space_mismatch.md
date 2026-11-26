@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_space_mismatch",
   "title": "Wp cloud assignment space mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The domain assignment belongs to a different space.",
   "code": "wp_cloud_assignment_space_mismatch",
   "requestId": "req_4mz0v8qk"

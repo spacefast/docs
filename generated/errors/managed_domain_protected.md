@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/managed_domain_protected",
   "title": "Managed domain protected",
-  "status": 400,
+  "status": 422,
   "detail": "This is a system-managed space.fast or view.fast hostname and cannot be mutated like a custom domain.",
   "code": "managed_domain_protected",
   "requestId": "req_4mz0v8qk"

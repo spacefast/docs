@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/continuation_unavailable",
   "title": "Continuation unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "This space key can no longer be exchanged for an API key.",
   "code": "continuation_unavailable",
   "requestId": "req_4mz0v8qk"

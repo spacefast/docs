@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_outside_parent_team",
   "title": "Transfer outside parent team",
-  "status": 400,
+  "status": 422,
   "detail": "The parent team restricts outgoing Space transfers to itself and its subteams.",
   "code": "transfer_outside_parent_team",
   "requestId": "req_4mz0v8qk"

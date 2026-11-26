@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_tls_required",
   "title": "Zero db tls required",
-  "status": 400,
+  "status": 422,
   "detail": "The application Zero database cannot be connected with verified pinned TLS.",
   "code": "zero_db_tls_required",
   "requestId": "req_4mz0v8qk"

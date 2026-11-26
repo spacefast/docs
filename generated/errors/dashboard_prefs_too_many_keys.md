@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dashboard_prefs_too_many_keys",
   "title": "Dashboard prefs too many keys",
-  "status": 400,
+  "status": 422,
   "detail": "The merged dashboard preferences would hold more than the 50 allowed keys.",
   "code": "dashboard_prefs_too_many_keys",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/ip_blocked",
   "title": "Ip blocked",
-  "status": 400,
+  "status": 422,
   "detail": "Requests from this IP address are blocked for abuse or policy reasons.",
   "code": "ip_blocked",
   "requestId": "req_4mz0v8qk"

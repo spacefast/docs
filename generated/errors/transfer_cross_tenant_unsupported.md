@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_cross_tenant_unsupported",
   "title": "Transfer cross tenant unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "Spaces cannot be transferred across tenants.",
   "code": "transfer_cross_tenant_unsupported",
   "requestId": "req_4mz0v8qk"

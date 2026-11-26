@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_webhook_url",
   "title": "Invalid webhook url",
-  "status": 400,
+  "status": 422,
   "detail": "The webhook URL is not an allowed public HTTPS endpoint.",
   "code": "invalid_webhook_url",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_already_exists",
   "title": "Domain already exists",
-  "status": 400,
+  "status": 422,
   "detail": "This domain is already present in your inventory.",
   "code": "domain_already_exists",
   "requestId": "req_4mz0v8qk"

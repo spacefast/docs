@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_subject_invalid",
   "title": "Token subject invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token subject is not a normalized lowercase external principal id.",
   "code": "token_subject_invalid",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_integrity_failed",
   "title": "Upload integrity failed",
-  "status": 400,
+  "status": 422,
   "detail": "Stored bytes do not match the upload receipt.",
   "code": "upload_integrity_failed",
   "requestId": "req_4mz0v8qk"

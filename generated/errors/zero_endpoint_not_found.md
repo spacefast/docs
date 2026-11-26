@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_endpoint_not_found",
   "title": "Zero endpoint not found",
-  "status": 400,
+  "status": 422,
   "detail": "No Zero endpoint artifact exists for this endpoint id.",
   "code": "zero_endpoint_not_found",
   "requestId": "req_4mz0v8qk"

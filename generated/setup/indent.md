@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Indent so it can publish what you build.
 
-**Add Spacefast as a custom integration.** Set it up from Indent's Integrations page, for just you or your organization.
+**Add Spacefast as a custom integration** (Hosted MCP server). Set it up from Indent's Integrations page, for just you or your organization.
 
 ```text
 https://mcp.spacefast.com

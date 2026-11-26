@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/edge_logs_truncated",
   "title": "Edge logs truncated",
-  "status": 400,
+  "status": 422,
   "detail": "The edge log query reached the provider's result limit.",
   "code": "edge_logs_truncated",
   "requestId": "req_4mz0v8qk"

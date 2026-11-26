@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/method_not_allowed",
   "title": "Method not allowed",
-  "status": 400,
+  "status": 422,
   "detail": "The requested HTTP method is not supported for this endpoint.",
   "code": "method_not_allowed",
   "requestId": "req_4mz0v8qk"

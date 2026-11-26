@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/usage_period_not_found",
   "title": "Usage period not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested usage period does not exist in this tenant.",
   "code": "usage_period_not_found",
   "requestId": "req_4mz0v8qk"

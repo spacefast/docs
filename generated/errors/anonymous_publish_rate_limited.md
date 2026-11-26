@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/anonymous_publish_rate_limited",
   "title": "Anonymous publish rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "Too many anonymous publishes came from this network in a short window.",
   "code": "anonymous_publish_rate_limited",
   "requestId": "req_4mz0v8qk"

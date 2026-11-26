@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invitation_not_pending",
   "title": "Invitation not pending",
-  "status": 400,
+  "status": 422,
   "detail": "The invitation is no longer pending.",
   "code": "invitation_not_pending",
   "requestId": "req_4mz0v8qk"

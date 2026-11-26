@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_stdin_too_large",
   "title": "Zero runner stdin too large",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner request envelope is too large.",
   "code": "zero_runner_stdin_too_large",
   "requestId": "req_4mz0v8qk"

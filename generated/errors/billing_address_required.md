@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/billing_address_required",
   "title": "Billing address required",
-  "status": 400,
+  "status": 422,
   "detail": "The paying team has no billing address, so tax can't be worked out for this purchase.",
   "code": "billing_address_required",
   "requestId": "req_4mz0v8qk"

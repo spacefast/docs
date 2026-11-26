@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/response_table_too_large",
   "title": "Response table too large",
-  "status": 400,
+  "status": 422,
   "detail": "A compiled response table exceeded the 1 MiB per-file limit.",
   "code": "response_table_too_large",
   "requestId": "req_4mz0v8qk"

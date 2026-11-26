@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/internal_notice_token_required",
   "title": "Internal notice token required",
-  "status": 400,
+  "status": 422,
   "detail": "This internal comments endpoint needs a valid service token.",
   "code": "internal_notice_token_required",
   "requestId": "req_4mz0v8qk"

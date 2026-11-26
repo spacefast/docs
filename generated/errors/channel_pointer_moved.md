@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/channel_pointer_moved",
   "title": "Channel pointer moved",
-  "status": 400,
+  "status": 422,
   "detail": "The channel was promoted to a different version since you read it.",
   "code": "channel_pointer_moved",
   "requestId": "req_4mz0v8qk"

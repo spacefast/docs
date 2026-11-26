@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/service_signature_invalid",
   "title": "Service signature invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The service request signature cannot be verified.",
   "code": "service_signature_invalid",
   "requestId": "req_4mz0v8qk"

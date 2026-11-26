@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_source_already_initialized",
   "title": "Repository source already initialized",
-  "status": 400,
+  "status": 422,
   "detail": "The repository already has source history.",
   "code": "repository_source_already_initialized",
   "requestId": "req_4mz0v8qk"

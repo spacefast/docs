@@ -1,11 +1,11 @@
 ---
 title: "superadmin_automattic_email_required"
-description: "The user needs a verified @automattic.com email address before receiving the superadmin role."
+description: "The user needs a verified @automattic.com or @a8c.com email address before receiving the superadmin role."
 ---
 
-The user needs a verified @automattic.com email address before receiving the superadmin role.
+The user needs a verified @automattic.com or @a8c.com email address before receiving the superadmin role.
 
-**How to resolve:** Ask the user to add and verify an @automattic.com address in account email settings. Then grant the role again.
+**How to resolve:** Ask the user to add and verify an @automattic.com or @a8c.com address in account email settings. Then grant the role again.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/superadmin_automattic_email_required",
   "title": "Superadmin automattic email required",
-  "status": 400,
-  "detail": "The user needs a verified @automattic.com email address before receiving the superadmin role.",
+  "status": 422,
+  "detail": "The user needs a verified @automattic.com or @a8c.com email address before receiving the superadmin role.",
   "code": "superadmin_automattic_email_required",
   "requestId": "req_4mz0v8qk"
 }

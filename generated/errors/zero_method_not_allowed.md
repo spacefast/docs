@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_method_not_allowed",
   "title": "Zero method not allowed",
-  "status": 400,
+  "status": 422,
   "detail": "The request method is not allowed for this Zero endpoint.",
   "code": "zero_method_not_allowed",
   "requestId": "req_4mz0v8qk"

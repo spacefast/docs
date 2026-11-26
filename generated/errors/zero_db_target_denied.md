@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_target_denied",
   "title": "Zero db target denied",
-  "status": 400,
+  "status": 422,
   "detail": "The application Zero database target is not a public TCP address.",
   "code": "zero_db_target_denied",
   "requestId": "req_4mz0v8qk"

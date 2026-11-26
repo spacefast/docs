@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_backend_unavailable",
   "title": "Dns backend unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Spacefast DNS could not be reached, so the change is saved but not served yet.",
   "code": "dns_backend_unavailable",
   "requestId": "req_4mz0v8qk"

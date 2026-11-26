@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/noop_publish",
   "title": "Noop publish",
-  "status": 400,
+  "status": 422,
   "detail": "The publish matched the live version exactly, so nothing changed.",
   "code": "noop_publish",
   "requestId": "req_4mz0v8qk"

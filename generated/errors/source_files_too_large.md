@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_files_too_large",
   "title": "Source files too large",
-  "status": 400,
+  "status": 422,
   "detail": "The selected source file contents exceed the operation size limit.",
   "code": "source_files_too_large",
   "requestId": "req_4mz0v8qk"

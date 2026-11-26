@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_zone_served_by_another_domain",
   "title": "Dns zone served by another domain",
-  "status": 400,
+  "status": 422,
   "detail": "The change is saved, but another Spacefast domain record already serves DNS for this hostname.",
   "code": "dns_zone_served_by_another_domain",
   "requestId": "req_4mz0v8qk"

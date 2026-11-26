@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_upload_failed",
   "title": "Publish upload failed",
-  "status": 400,
+  "status": 422,
   "detail": "Uploading the publish content failed.",
   "code": "publish_upload_failed",
   "requestId": "req_4mz0v8qk"

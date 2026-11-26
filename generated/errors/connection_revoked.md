@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connection_revoked",
   "title": "Connection revoked",
-  "status": 400,
+  "status": 422,
   "detail": "This connection was disconnected and its credential was purged.",
   "code": "connection_revoked",
   "requestId": "req_4mz0v8qk"

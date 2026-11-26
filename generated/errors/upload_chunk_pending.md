@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_chunk_pending",
   "title": "Upload chunk pending",
-  "status": 400,
+  "status": 422,
   "detail": "A reserved chunk has not finished storing its bytes.",
   "code": "upload_chunk_pending",
   "requestId": "req_4mz0v8qk"

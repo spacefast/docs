@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/inject_invalid",
   "title": "Inject invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The inject config key is malformed.",
   "code": "inject_invalid",
   "requestId": "req_4mz0v8qk"

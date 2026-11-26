@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_branch_changed",
   "title": "Source branch changed",
-  "status": 400,
+  "status": 422,
   "detail": "The project branch changed after the workspace read its saved base.",
   "code": "source_branch_changed",
   "requestId": "req_4mz0v8qk"

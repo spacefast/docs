@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_limit_reached",
   "title": "Team design system limit reached",
-  "status": 400,
+  "status": 422,
   "detail": "Active design metadata exceeds 256 KiB or 200 entries of one type.",
   "code": "team_design_system_limit_reached",
   "requestId": "req_4mz0v8qk"

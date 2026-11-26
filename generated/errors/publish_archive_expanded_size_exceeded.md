@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_archive_expanded_size_exceeded",
   "title": "Publish archive expanded size exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The archive expands beyond the maximum allowed total size.",
   "code": "publish_archive_expanded_size_exceeded",
   "requestId": "req_4mz0v8qk"

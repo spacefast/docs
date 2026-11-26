@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_target_same_as_source",
   "title": "Transfer target same as source",
-  "status": 400,
+  "status": 422,
   "detail": "The transfer target is the same principal that already owns the space.",
   "code": "transfer_target_same_as_source",
   "requestId": "req_4mz0v8qk"

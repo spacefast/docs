@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/forbidden",
   "title": "Forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "The credential is valid but does not allow this action.",
   "code": "forbidden",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/system_space_invalid",
   "title": "System space invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The requested system space does not exist, is disabled, or belongs to another tenant.",
   "code": "system_space_invalid",
   "requestId": "req_4mz0v8qk"

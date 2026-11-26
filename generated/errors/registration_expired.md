@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registration_expired",
   "title": "Registration expired",
-  "status": 400,
+  "status": 422,
   "detail": "The domain registration is expired.",
   "code": "registration_expired",
   "requestId": "req_4mz0v8qk"

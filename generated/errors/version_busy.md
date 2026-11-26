@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_busy",
   "title": "Version busy",
-  "status": 400,
+  "status": 422,
   "detail": "The version is busy with another operation.",
   "code": "version_busy",
   "requestId": "req_4mz0v8qk"

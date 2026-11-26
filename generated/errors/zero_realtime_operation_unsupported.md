@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_realtime_operation_unsupported",
   "title": "Zero realtime operation unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero realtime websocket operation is unsupported.",
   "code": "zero_realtime_operation_unsupported",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/device_verification_rate_limited",
   "title": "Device verification rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "Too many incorrect device codes were entered in a short window.",
   "code": "device_verification_rate_limited",
   "requestId": "req_4mz0v8qk"

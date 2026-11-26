@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_replace_all_write_strategy",
   "title": "Dns provider replace all write strategy",
-  "status": 400,
+  "status": 422,
   "detail": "This provider applies DNS changes with a replace-all write strategy.",
   "code": "dns_provider_replace_all_write_strategy",
   "requestId": "req_4mz0v8qk"

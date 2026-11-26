@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/internal_notice_token_unconfigured",
   "title": "Internal notice token unconfigured",
-  "status": 400,
+  "status": 422,
   "detail": "Live comment notices aren't configured on this server.",
   "code": "internal_notice_token_unconfigured",
   "requestId": "req_4mz0v8qk"

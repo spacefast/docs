@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_claim_token",
   "title": "Invalid claim token",
-  "status": 400,
+  "status": 422,
   "detail": "The space key is invalid or does not match this space.",
   "code": "invalid_claim_token",
   "requestId": "req_4mz0v8qk"

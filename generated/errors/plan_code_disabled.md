@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_disabled",
   "title": "Plan code disabled",
-  "status": 400,
+  "status": 422,
   "detail": "This plan code was turned off, so it can no longer be redeemed.",
   "code": "plan_code_disabled",
   "requestId": "req_4mz0v8qk"

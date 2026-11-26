@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/email_verification_code_invalid",
   "title": "Email verification code invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The emailed confirmation code is wrong, expired, or already used.",
   "code": "email_verification_code_invalid",
   "requestId": "req_4mz0v8qk"

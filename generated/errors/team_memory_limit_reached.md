@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_memory_limit_reached",
   "title": "Team memory limit reached",
-  "status": 400,
+  "status": 422,
   "detail": "The team already has the maximum number of active memories.",
   "code": "team_memory_limit_reached",
   "requestId": "req_4mz0v8qk"

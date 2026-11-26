@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_commit_denied",
   "title": "Provider commit denied",
-  "status": 400,
+  "status": 422,
   "detail": "The domain changed hands or lost access before the registrar call, so nothing was sent.",
   "code": "provider_commit_denied",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_not_connected",
   "title": "Dns provider not connected",
-  "status": 400,
+  "status": 422,
   "detail": "This domain has no connected DNS provider zone.",
   "code": "dns_provider_not_connected",
   "requestId": "req_4mz0v8qk"

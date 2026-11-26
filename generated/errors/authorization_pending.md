@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/authorization_pending",
   "title": "Authorization pending",
-  "status": 400,
+  "status": 422,
   "detail": "The device login is not approved yet.",
   "code": "authorization_pending",
   "requestId": "req_4mz0v8qk"

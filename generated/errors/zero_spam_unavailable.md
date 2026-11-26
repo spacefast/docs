@@ -1,11 +1,11 @@
 ---
 title: "zero_spam_unavailable"
-description: "The local Zero spam service is not configured."
+description: "Spam checks aren't available to this app when it runs locally."
 ---
 
-The local Zero spam service is not configured.
+Spam checks aren't available to this app when it runs locally.
 
-**How to resolve:** Publish the capsule to call the hosted spam service, or guard the `ctx.spam` call so local runs skip it.
+**How to resolve:** Publish the app to check spam through the hosted service, or skip the check in local runs. See https://spacefast.com/docs/zero.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_spam_unavailable",
   "title": "Zero spam unavailable",
-  "status": 400,
-  "detail": "The local Zero spam service is not configured.",
+  "status": 422,
+  "detail": "Spam checks aren't available to this app when it runs locally.",
   "code": "zero_spam_unavailable",
   "requestId": "req_4mz0v8qk"
 }

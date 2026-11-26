@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_auth_required",
   "title": "Storage auth required",
-  "status": 400,
+  "status": 422,
   "detail": "This storage operation requires an authenticated visitor.",
   "code": "storage_auth_required",
   "requestId": "req_4mz0v8qk"

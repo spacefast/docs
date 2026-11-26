@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/template_file_too_large",
   "title": "Template file too large",
-  "status": 400,
+  "status": 422,
   "detail": "A template file exceeds the maximum size for substitution.",
   "code": "template_file_too_large",
   "requestId": "req_4mz0v8qk"

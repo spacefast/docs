@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_archive_validation_busy",
   "title": "Source archive validation busy",
-  "status": 400,
+  "status": 422,
   "detail": "The service is already validating its maximum number of source archives.",
   "code": "source_archive_validation_busy",
   "requestId": "req_4mz0v8qk"

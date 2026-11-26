@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_expired",
   "title": "Plan code expired",
-  "status": 400,
+  "status": 422,
   "detail": "This plan code's link has expired.",
   "code": "plan_code_expired",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_conflicts_missing",
   "title": "Source conflicts missing",
-  "status": 400,
+  "status": 422,
   "detail": "The workspace has no active conflict operation to resolve.",
   "code": "source_conflicts_missing",
   "requestId": "req_4mz0v8qk"

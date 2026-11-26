@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/channel_unsupported",
   "title": "Channel unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "This space does not support the requested channel.",
   "code": "channel_unsupported",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_batch_unsupported",
   "title": "Dns provider batch unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The connected DNS provider cannot apply this batch with the required semantics.",
   "code": "dns_provider_batch_unsupported",
   "requestId": "req_4mz0v8qk"

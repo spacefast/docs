@@ -1,11 +1,11 @@
 ---
 title: "runtime_capabilities_pending"
-description: "The serving runtime is updating to support this application's compiled features."
+description: "This Space's server doesn't support this yet: its runtime is updating, or the feature arrives with the next runtime release."
 ---
 
-The serving runtime is updating to support this application's compiled features.
+This Space's server doesn't support this yet: its runtime is updating, or the feature arrives with the next runtime release.
 
-**How to resolve:** Publishing retries automatically after the runtime update. Inspect the publish operation for progress.
+**How to resolve:** Wait for the `Retry-After` interval, then retry. A publish retries on its own; inspect its operation for progress.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_capabilities_pending",
   "title": "Runtime capabilities pending",
-  "status": 400,
-  "detail": "The serving runtime is updating to support this application's compiled features.",
+  "status": 422,
+  "detail": "This Space's server doesn't support this yet: its runtime is updating, or the feature arrives with the next runtime release.",
   "code": "runtime_capabilities_pending",
   "requestId": "req_4mz0v8qk"
 }

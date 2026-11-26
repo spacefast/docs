@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_has_active_publish",
   "title": "Space has active publish",
-  "status": 400,
+  "status": 422,
   "detail": "The space has a publish in progress, which blocks this operation.",
   "code": "space_has_active_publish",
   "requestId": "req_4mz0v8qk"

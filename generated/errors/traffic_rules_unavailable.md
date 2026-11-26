@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/traffic_rules_unavailable",
   "title": "Traffic rules unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "This space has no edge yet, so it cannot hold or check traffic rules.",
   "code": "traffic_rules_unavailable",
   "requestId": "req_4mz0v8qk"

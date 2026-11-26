@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspaces_unavailable",
   "title": "Source workspaces unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Source workspaces are disabled because the provider cannot compare exact snapshots.",
   "code": "source_workspaces_unavailable",
   "requestId": "req_4mz0v8qk"

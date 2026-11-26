@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_chunk_invalid",
   "title": "Upload chunk invalid",
-  "status": 400,
+  "status": 422,
   "detail": "Chunk contents are not canonical base64.",
   "code": "upload_chunk_invalid",
   "requestId": "req_4mz0v8qk"

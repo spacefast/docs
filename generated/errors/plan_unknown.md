@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_unknown",
   "title": "Plan unknown",
-  "status": 400,
+  "status": 422,
   "detail": "The requested plan name is not in the tenant's live plan catalog, so it cannot be assigned to a principal.",
   "code": "plan_unknown",
   "requestId": "req_4mz0v8qk"

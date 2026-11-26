@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/cast_backend_error",
   "title": "Cast backend error",
-  "status": 400,
+  "status": 422,
   "detail": "The comments service turned this request down.",
   "code": "cast_backend_error",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_already_redeemed",
   "title": "Plan code already redeemed",
-  "status": 400,
+  "status": 422,
   "detail": "You already redeemed this plan code, or it was already redeemed for this team.",
   "code": "plan_code_already_redeemed",
   "requestId": "req_4mz0v8qk"

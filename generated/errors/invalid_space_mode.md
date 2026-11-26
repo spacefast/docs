@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_space_mode",
   "title": "Invalid space mode",
-  "status": 400,
+  "status": 422,
   "detail": "The requested space serving mode is not supported.",
   "code": "invalid_space_mode",
   "requestId": "req_4mz0v8qk"

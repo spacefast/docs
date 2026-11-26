@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_incomplete",
   "title": "Upload incomplete",
-  "status": 400,
+  "status": 422,
   "detail": "The upload is not complete.",
   "code": "upload_incomplete",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_test_twin_missing",
   "title": "Promotion test twin missing",
-  "status": 400,
+  "status": 422,
   "detail": "This live tenant has no linked test tenant, so there is nothing to promote from.",
   "code": "promotion_test_twin_missing",
   "requestId": "req_4mz0v8qk"

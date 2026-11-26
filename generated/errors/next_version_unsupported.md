@@ -1,11 +1,11 @@
 ---
 title: "next_version_unsupported"
-description: "This Next.js version is incompatible with the bundled server runtime adapter."
+description: "Spacefast does not build this Next.js version, either because it has known security vulnerabilities or because it is not a supported stable release."
 ---
 
-This Next.js version is incompatible with the bundled server runtime adapter.
+Spacefast does not build this Next.js version, either because it has known security vulnerabilities or because it is not a supported stable release.
 
-**How to resolve:** Upgrade Next.js to the minimum version named in the error, or publish a browser-ready static export.
+**How to resolve:** Upgrade Next.js to a version named in the error, or build the site yourself and publish its static export with --prebuilt.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/next_version_unsupported",
   "title": "Next version unsupported",
-  "status": 400,
-  "detail": "This Next.js version is incompatible with the bundled server runtime adapter.",
+  "status": 422,
+  "detail": "Spacefast does not build this Next.js version, either because it has known security vulnerabilities or because it is not a supported stable release.",
   "code": "next_version_unsupported",
   "requestId": "req_4mz0v8qk"
 }

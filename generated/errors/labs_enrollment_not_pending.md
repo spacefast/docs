@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/labs_enrollment_not_pending",
   "title": "Labs enrollment not pending",
-  "status": 400,
+  "status": 422,
   "detail": "The team has no pending request for this Labs feature.",
   "code": "labs_enrollment_not_pending",
   "requestId": "req_4mz0v8qk"

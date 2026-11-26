@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_query_two_breakdowns",
   "title": "Analytics query two breakdowns",
-  "status": 400,
+  "status": 422,
   "detail": "An analytics query takes one breakdown dimension besides time.",
   "code": "analytics_query_two_breakdowns",
   "requestId": "req_4mz0v8qk"

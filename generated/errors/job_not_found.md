@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/job_not_found",
   "title": "Job not found",
-  "status": 400,
+  "status": 422,
   "detail": "The background job was not found.",
   "code": "job_not_found",
   "requestId": "req_4mz0v8qk"

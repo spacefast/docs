@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/superadmin_wpcom_account_required",
   "title": "Superadmin wpcom account required",
-  "status": 400,
+  "status": 422,
   "detail": "The user must have a WordPress.com account linked before being granted superadmin.",
   "code": "superadmin_wpcom_account_required",
   "requestId": "req_4mz0v8qk"

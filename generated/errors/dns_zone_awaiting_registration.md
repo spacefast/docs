@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_zone_awaiting_registration",
   "title": "Dns zone awaiting registration",
-  "status": 400,
+  "status": 422,
   "detail": "The change is saved, but Spacefast DNS serves this domain only once its registration completes.",
   "code": "dns_zone_awaiting_registration",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_bytecode_path_invalid",
   "title": "Zero bytecode path invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint bytecode path is invalid.",
   "code": "zero_bytecode_path_invalid",
   "requestId": "req_4mz0v8qk"

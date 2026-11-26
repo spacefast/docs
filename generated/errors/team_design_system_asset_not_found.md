@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_asset_not_found",
   "title": "Team design system asset not found",
-  "status": 400,
+  "status": 422,
   "detail": "The attachment does not belong to this team's design-system media.",
   "code": "team_design_system_asset_not_found",
   "requestId": "req_4mz0v8qk"

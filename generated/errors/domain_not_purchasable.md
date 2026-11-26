@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_not_purchasable",
   "title": "Domain not purchasable",
-  "status": 400,
+  "status": 422,
   "detail": "One or more domains in the cart cannot be bought right now.",
   "code": "domain_not_purchasable",
   "requestId": "req_4mz0v8qk"

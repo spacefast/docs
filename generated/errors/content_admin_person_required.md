@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/content_admin_person_required",
   "title": "Content admin person required",
-  "status": 400,
+  "status": 422,
   "detail": "A content dashboard sign-in link signs in a person, and this credential names none: it is a partner, machine, or platform credential.",
   "code": "content_admin_person_required",
   "requestId": "req_4mz0v8qk"

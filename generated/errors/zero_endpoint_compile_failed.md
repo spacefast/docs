@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_endpoint_compile_failed",
   "title": "Zero endpoint compile failed",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime cannot compile the Zero endpoint bytecode.",
   "code": "zero_endpoint_compile_failed",
   "requestId": "req_4mz0v8qk"

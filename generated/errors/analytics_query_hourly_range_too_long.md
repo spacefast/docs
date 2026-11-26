@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_query_hourly_range_too_long",
   "title": "Analytics query hourly range too long",
-  "status": 400,
+  "status": 422,
   "detail": "Hourly buckets cover at most 7 days.",
   "code": "analytics_query_hourly_range_too_long",
   "requestId": "req_4mz0v8qk"

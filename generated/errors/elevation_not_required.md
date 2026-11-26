@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/elevation_not_required",
   "title": "Elevation not required",
-  "status": 400,
+  "status": 422,
   "detail": "The grant already includes every scope the elevation asked for.",
   "code": "elevation_not_required",
   "requestId": "req_4mz0v8qk"

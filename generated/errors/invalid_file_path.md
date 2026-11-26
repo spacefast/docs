@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_file_path",
   "title": "Invalid file path",
-  "status": 400,
+  "status": 422,
   "detail": "A file path in the request is not a valid space path.",
   "code": "invalid_file_path",
   "requestId": "req_4mz0v8qk"

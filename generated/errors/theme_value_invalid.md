@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/theme_value_invalid",
   "title": "Theme value invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A theme value in the configuration is outside the allowed grammar.",
   "code": "theme_value_invalid",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_hostname_unavailable",
   "title": "Dev relay hostname unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Every relay hostname derived from this account's email address is taken.",
   "code": "dev_relay_hostname_unavailable",
   "requestId": "req_4mz0v8qk"

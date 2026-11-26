@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrar_nameservers_unconfirmed",
   "title": "Registrar nameservers unconfirmed",
-  "status": 400,
+  "status": 422,
   "detail": "The registrar did not confirm the nameserver change. The registry may still apply it.",
   "code": "registrar_nameservers_unconfirmed",
   "requestId": "req_4mz0v8qk"

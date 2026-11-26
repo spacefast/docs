@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_controlled_desired_state",
   "title": "Dns provider controlled desired state",
-  "status": 400,
+  "status": 422,
   "detail": "This DNS provider is controlled through desired-state templates instead of direct record edits.",
   "code": "dns_provider_controlled_desired_state",
   "requestId": "req_4mz0v8qk"

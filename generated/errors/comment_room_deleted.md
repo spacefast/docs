@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comment_room_deleted",
   "title": "Comment room deleted",
-  "status": 400,
+  "status": 422,
   "detail": "The comment room for this page was deleted, so it can't take new comments.",
   "code": "comment_room_deleted",
   "requestId": "req_4mz0v8qk"

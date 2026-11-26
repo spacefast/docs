@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_usage_window",
   "title": "Invalid usage window",
-  "status": 400,
+  "status": 422,
   "detail": "The requested usage window is invalid or longer than 92 days.",
   "code": "invalid_usage_window",
   "requestId": "req_4mz0v8qk"

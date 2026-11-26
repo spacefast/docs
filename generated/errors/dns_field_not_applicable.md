@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_field_not_applicable",
   "title": "Dns field not applicable",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS field is not writable for this provider, record type, or management mode.",
   "code": "dns_field_not_applicable",
   "requestId": "req_4mz0v8qk"

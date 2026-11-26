@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_source_blocked",
   "title": "Connector source blocked",
-  "status": 400,
+  "status": 422,
   "detail": "The source URL points somewhere the egress guard refuses to fetch.",
   "code": "connector_source_blocked",
   "requestId": "req_4mz0v8qk"

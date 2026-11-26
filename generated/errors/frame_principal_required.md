@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_principal_required",
   "title": "Frame principal required",
-  "status": 400,
+  "status": 422,
   "detail": "A Frame launch needs a signed-in account session, not an API token.",
   "code": "frame_principal_required",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_licensing_unavailable",
   "title": "Jetpack licensing unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The Jetpack Licensing API did not complete the request.",
   "code": "jetpack_licensing_unavailable",
   "requestId": "req_4mz0v8qk"

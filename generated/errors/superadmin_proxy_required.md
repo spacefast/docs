@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/superadmin_proxy_required",
   "title": "Superadmin proxy required",
-  "status": 400,
+  "status": 422,
   "detail": "Superadmin access requires the operator proxy.",
   "code": "superadmin_proxy_required",
   "requestId": "req_4mz0v8qk"

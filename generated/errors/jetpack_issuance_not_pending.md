@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_issuance_not_pending",
   "title": "Jetpack issuance not pending",
-  "status": 400,
+  "status": 422,
   "detail": "This product has no unresolved Jetpack purchase.",
   "code": "jetpack_issuance_not_pending",
   "requestId": "req_4mz0v8qk"

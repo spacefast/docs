@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cli_timeout",
   "title": "Wp cli timeout",
-  "status": 400,
+  "status": 422,
   "detail": "The WP-CLI command did not finish in time and may still be running on the site.",
   "code": "wp_cli_timeout",
   "requestId": "req_4mz0v8qk"

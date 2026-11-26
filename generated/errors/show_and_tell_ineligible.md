@@ -5,7 +5,7 @@ description: "This space is not eligible for Show & Tell."
 
 This space is not eligible for Show & Tell.
 
-**How to resolve:** Check details.reason. Publish a live version, ensure the live Space is public and enabled, and submit from its self-serve owning team. Sharing settings are never changed by submission.
+**How to resolve:** Check details.reason. Publish a live version, ensure the live Space is public and enabled, and submit from its self-serve owning team. `zero_legacy` means the Space runs a Zero 0.8 app while Zero 0.8 publishing is turned off. Sharing settings are never changed by submission.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/show_and_tell_ineligible",
   "title": "Show and tell ineligible",
-  "status": 400,
+  "status": 422,
   "detail": "This space is not eligible for Show & Tell.",
   "code": "show_and_tell_ineligible",
   "requestId": "req_4mz0v8qk"

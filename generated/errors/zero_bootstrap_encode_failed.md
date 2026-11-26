@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_bootstrap_encode_failed",
   "title": "Zero bootstrap encode failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner cannot encode the JavaScript bootstrap data.",
   "code": "zero_bootstrap_encode_failed",
   "requestId": "req_4mz0v8qk"

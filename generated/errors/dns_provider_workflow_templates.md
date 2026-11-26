@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_workflow_templates",
   "title": "Dns provider workflow templates",
-  "status": 400,
+  "status": 422,
   "detail": "This provider exposes setup through workflow templates instead of low-level DNS edits.",
   "code": "dns_provider_workflow_templates",
   "requestId": "req_4mz0v8qk"

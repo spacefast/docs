@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_skill_not_found",
   "title": "Team skill not found",
-  "status": 400,
+  "status": 422,
   "detail": "No team skill with this key exists.",
   "code": "team_skill_not_found",
   "requestId": "req_4mz0v8qk"

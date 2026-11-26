@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_claimed_credential_available",
   "title": "Space claimed credential available",
-  "status": 400,
+  "status": 422,
   "detail": "The space was claimed and its owner kept agent publishing enabled; this space key now works exactly once as an exchange voucher.",
   "code": "space_claimed_credential_available",
   "requestId": "req_4mz0v8qk"

@@ -1,11 +1,11 @@
 ---
 title: "provider_privilege"
-description: "WP Cloud does not grant this client permission to change the setting."
+description: "Spacefast's infrastructure does not allow this setting to be changed."
 ---
 
-WP Cloud does not grant this client permission to change the setting.
+Spacefast's infrastructure does not allow this setting to be changed.
 
-**How to resolve:** Leave the provider-owned setting unchanged or contact support to request the required provider capability.
+**How to resolve:** Leave this setting unchanged, or contact support to have it changed.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_privilege",
   "title": "Provider privilege",
-  "status": 400,
-  "detail": "WP Cloud does not grant this client permission to change the setting.",
+  "status": 422,
+  "detail": "Spacefast's infrastructure does not allow this setting to be changed.",
   "code": "provider_privilege",
   "requestId": "req_4mz0v8qk"
 }

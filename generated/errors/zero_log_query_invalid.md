@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_log_query_invalid",
   "title": "Zero log query invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero log query parameters are invalid.",
   "code": "zero_log_query_invalid",
   "requestId": "req_4mz0v8qk"

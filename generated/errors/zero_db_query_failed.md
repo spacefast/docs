@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_query_failed",
   "title": "Zero db query failed",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero database read failed.",
   "code": "zero_db_query_failed",
   "requestId": "req_4mz0v8qk"

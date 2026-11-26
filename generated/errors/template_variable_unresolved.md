@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/template_variable_unresolved",
   "title": "Template variable unresolved",
-  "status": 400,
+  "status": 422,
   "detail": "A template references a variable that has no value.",
   "code": "template_variable_unresolved",
   "requestId": "req_4mz0v8qk"

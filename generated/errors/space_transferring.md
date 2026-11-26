@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_transferring",
   "title": "Space transferring",
-  "status": 400,
+  "status": 422,
   "detail": "The space has a transfer in progress, which blocks this operation.",
   "code": "space_transferring",
   "requestId": "req_4mz0v8qk"
