@@ -11,40 +11,16 @@ const trees = [
   { source: "generated/errors", target: "content/(reference)/errors" },
   { source: "generated/changelog", target: "content/(reference)/changelog" },
   { source: "generated/setup", target: "content/setup" },
+  { source: "generated/connect", target: "content/connect" },
 ];
-// The Agents tab sidebar groups the generated /setup/<client> pages into these
-// sections (see components/Sidebar.astro). Every generated client must be listed.
-// Each section is also a parenthesized folder, so a page's breadcrumb names its
-// section without adding a URL segment.
-const setupSections = [
-  {
-    folder: "(coding)",
-    title: "Coding agents",
-    pages: [
-      "claude-code",
-      "codex",
-      "cursor",
-      "vscode",
-      "github-copilot",
-      "grok-build",
-      "devin-desktop",
-      "devin-cloud",
-      "zed",
-      "gemini-cli",
-      "opencode",
-      "amp",
-      "warp",
-      "factory-droid",
-      "cline",
-      "continue",
-      "pi",
-    ],
-  },
-  {
-    folder: "(personal)",
-    title: "Personal agents",
-    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw", "github-copilot-app", "grok", "grok-bot"],
-  },
+// The Agents tab lists the generated /setup/<agent> pages in the order and
+// groups the exporter writes to generated/setup/sections.json, so this repo
+// keeps no agent list of its own. Each group is a parenthesized folder, so a
+// page's breadcrumb names its group without adding a URL segment.
+const setupGroups = [
+  { group: "featured", folder: "(featured)", title: "Popular agents" },
+  { group: "supported", folder: "(supported)", title: "More agents" },
+  { group: "deprecated", folder: "(deprecated)", title: "No longer supported" },
 ];
 
 async function normalizeOverlayLinks(directory) {
@@ -90,28 +66,14 @@ async function exists(value) {
   }
 }
 
-// Short client names from the generated setup index ("- [Codex](/setup/codex): …").
-// Checked before any overlay is replaced, so a failure leaves the last good copy.
-const setupClients = new Map(
-  [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
-    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\/?\)/gmu,
-  )].map(([, name, slug]) => [slug, name]),
-);
-const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
-const unlistedClients = [...setupClients.keys()].filter((slug) => !listedClients.has(slug));
-if (unlistedClients.length > 0) {
-  throw new Error(`Add generated setup clients to setupSections: ${unlistedClients.join(", ")}`);
+const sections = JSON.parse(await readFile(path.join(root, "generated/setup/sections.json"), "utf8"));
+if (sections.schemaVersion !== 1 || !Array.isArray(sections.agents) || !Array.isArray(sections.connect)) {
+  throw new Error("generated/setup/sections.json has an unsupported shape");
 }
-const setupSidebar = `${JSON.stringify(
-  setupSections.map(({ title, pages }) => ({
-    title,
-    pages: pages
-      .filter((slug) => setupClients.has(slug))
-      .map((slug) => ({ slug, label: setupClients.get(slug) })),
-  })),
-  null,
-  2,
-)}\n`;
+const unknownGroups = sections.agents.filter(({ group }) => !setupGroups.some((known) => known.group === group));
+if (unknownGroups.length > 0) {
+  throw new Error(`Add generated setup groups to setupGroups: ${unknownGroups.map(({ group }) => group).join(", ")}`);
+}
 
 for (const tree of trees) {
   const source = path.join(root, tree.source);
@@ -142,29 +104,44 @@ for (const tree of trees) {
     }
   }
   if (tree.source === "generated/setup") {
+    await rm(path.join(target, "sections.json"));
     await writeFile(
       path.join(target, "meta.ts"),
-      `import { defineMeta } from "blume";\n\nexport default defineMeta({ title: "Setup", collapsed: false });\n`,
+      `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({
+        title: "Set up your agent",
+        collapsed: false,
+        pages: ["index", ...setupGroups.map(({ folder }) => folder.slice(1, -1))],
+      })});\n`,
     );
-    await writeFile(path.join(target, "_sidebar.json"), setupSidebar);
-    for (const { folder, title, pages } of setupSections) {
+    for (const { group, folder, title } of setupGroups) {
+      const pages = sections.agents.filter((agent) => agent.group === group).map(({ id }) => id);
       await mkdir(path.join(target, folder));
       await writeFile(
         path.join(target, folder, "meta.ts"),
-        `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({ title, pages })});\n`,
+        `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({ title, collapsed: group !== "featured", pages })});\n`,
       );
-      for (const slug of pages.filter((slug) => setupClients.has(slug))) {
+      for (const slug of pages) {
         await rename(path.join(target, `${slug}.md`), path.join(target, folder, `${slug}.md`));
       }
     }
   }
+  if (tree.source === "generated/connect") {
+    await writeFile(
+      path.join(target, "meta.ts"),
+      `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({
+        title: "Ways to connect",
+        collapsed: true,
+        pages: ["index", "compare", ...sections.connect.map(({ id }) => id)],
+      })});\n`,
+    );
+  }
   await writeFile(marker, "spacefast-public-docs\n");
 }
 
-await mkdir(path.join(root, "content/cli"), { recursive: true });
+await mkdir(path.join(root, "content/(reference)/cli"), { recursive: true });
 await copyFile(
   path.join(root, "generated/cli/index.md"),
-  path.join(root, "content/cli/reference.md"),
+  path.join(root, "content/(reference)/cli/reference.md"),
 );
 const redirectsTarget = path.join(root, "public/_redirects");
 if (await exists(redirectsTarget)) {
@@ -186,5 +163,5 @@ await writeFile(
 );
 
 console.log(
-  `Prepared the generated CLI reference, error reference, changelog, agent setup, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
+  `Prepared the generated CLI reference, error reference, changelog, agent setup and connection pages, and ${routingRules.length} routing rules covering ${redirects.length} compatibility URLs.`,
 );

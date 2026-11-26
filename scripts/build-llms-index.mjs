@@ -35,11 +35,13 @@ const COLLAPSED_ROOTS = [
   "/platforms/api/reference",
   "/partners/api/reference",
   "/changelog",
+  "/setup",
+  "/connect",
 ];
 
-// The one route family that belongs in the index but is not a sidebar route:
-// the generated per-agent setup pages.
-const ALLOWED_NON_SIDEBAR_PREFIX = "/setup";
+// Any stray entry left in "## Other" fails the build so generated families
+// cannot quietly refill llms.txt past its 32 KiB ceiling.
+const ALLOWED_NON_SIDEBAR_PREFIX = null;
 
 // Blume's agent discovery endpoints belong in the index alongside page links.
 const DISCOVERY_ROUTES = new Set([
@@ -156,7 +158,7 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
       const strays = sectionEntries.filter((line) => {
         const route = routeOf(line);
         if (!route) return false;
-        return !isDiscoveryResource(route) && !sidebarRoutes.has(route) && !route.startsWith(ALLOWED_NON_SIDEBAR_PREFIX);
+        return !isDiscoveryResource(route) && !sidebarRoutes.has(route);
       });
       if (strays.length > 0) {
         throw new Error(
@@ -168,7 +170,7 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
             "the sidebar or collapse it in COLLAPSED_ROOTS.",
         );
       }
-      rendered.push("## Agent setup", ...section.body);
+      if (sectionEntries.length > 0) rendered.push("## Other", ...section.body);
       continue;
     }
     if (section.heading) rendered.push(section.heading);
@@ -181,7 +183,7 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
     .replace(/\n*$/u, "\n");
   if (!result.includes("\n## ")) throw new Error("No sections survived the rewrite.");
 
-  // Every surviving entry is a sidebar route or an agent setup page. Nothing
+  // Every surviving entry is a sidebar route or discovery resource. Nothing
   // else belongs in this file, and asserting it here means a future generated
   // family fails the build instead of quietly refilling the bucket.
   const survivors = result.split("\n").filter(isEntry).map(routeOf);
@@ -189,13 +191,11 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
     (route) =>
       route &&
       !isDiscoveryResource(route) &&
-      !sidebarRoutes.has(route) &&
-      !route.startsWith(ALLOWED_NON_SIDEBAR_PREFIX),
+      !sidebarRoutes.has(route),
   );
   if (unexpected.length > 0) {
     throw new Error(
-      `llms.txt would list routes that are neither in the sidebar nor under ` +
-        `${ALLOWED_NON_SIDEBAR_PREFIX}: ${unexpected.slice(0, 5).join(", ")}`,
+      `llms.txt would list routes that are not in the sidebar: ${unexpected.slice(0, 5).join(", ")}`,
     );
   }
 

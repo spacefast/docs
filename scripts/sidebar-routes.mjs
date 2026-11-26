@@ -5,12 +5,15 @@ const GENERATED_ROUTES = [
   "/api/reference",
   "/changelog",
   "/cli/reference",
+  "/connect",
   "/errors",
   "/platforms/api/reference",
+  "/setup",
 ];
 const GENERATED_DIRECTORIES = new Set([
   "content/(reference)/changelog",
   "content/(reference)/errors",
+  "content/connect",
   "content/setup",
 ]);
 
@@ -66,11 +69,21 @@ export function routesFromSidebar(source) {
 export const isDraft = (source) =>
   /^draft:\s*true\s*$/mu.test(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/u.exec(source)?.[1] ?? "");
 
+const customSlug = (source) => {
+  const match = /^slug:\s*["']?([^"'\r\n]+)["']?\s*$/mu.exec(
+    /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/u.exec(source)?.[1] ?? "",
+  );
+  if (!match) return undefined;
+  const trimmed = match[1].trim().replace(/^\/+|\/+$/gu, "");
+  return trimmed === "" ? "/" : `/${trimmed}`;
+};
+
 export async function readSidebarRoutes(root = process.cwd()) {
   const routes = new Set(GENERATED_ROUTES);
   for (const file of await authoredFiles(root)) {
-    if (isDraft(await readFile(path.join(root, "content", file), "utf8"))) continue;
-    const route = routeFromContentPath(file);
+    const source = await readFile(path.join(root, "content", file), "utf8");
+    if (isDraft(source)) continue;
+    const route = customSlug(source) ?? routeFromContentPath(file);
     if (route && route !== "/cli/reference") routes.add(route);
   }
   return routes;

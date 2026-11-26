@@ -127,12 +127,16 @@ export default defineConfig({
     ],
     repo: true,
     sidebar: { display: "group" },
+    // Five tabs. Guides, Agents, and Platforms are real folders, so Blume
+    // scopes them by path. The Reference tab spans /cli, /api, and the other
+    // reference pages; components/Sidebar.astro and components/Header.astro
+    // resolve it from the (reference) folder group instead of a path prefix.
     tabs: [
       { label: "Docs", path: "/", icon: icons.book },
-      { label: "CLI", path: "/cli", icon: icons.terminal },
-      { label: "API", path: "/api", icon: icons.braces },
+      { label: "Guides", path: "/guides", icon: icons.rocket },
       { label: "Agents", path: "/agents", icon: icons.robot },
-      { label: "Spacefast for Platforms", path: "/platforms", icon: icons.handshake },
+      { label: "Reference", path: "/reference", href: "/cli", icon: icons.braces },
+      { label: "Platforms", path: "/platforms", icon: icons.handshake },
     ],
   },
   reference: [
@@ -166,7 +170,7 @@ export default defineConfig({
       enabled: true,
       endpoint: "https://api.spacefast.com/v1/docs/ask",
       suggestions: [
-        { label: "How do I publish a site?" },
+        { label: "How do I publish a Space?" },
         { label: "How should an agent use Spacefast?" },
         { label: "How do I roll back a version?" },
       ],

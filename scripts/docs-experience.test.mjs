@@ -65,17 +65,16 @@ test("unfamiliar homepage terms have a linked glossary with definitions", async 
   }
 });
 
-test("Database gives the Zero prerequisite before query instructions", async () => {
+test("Database explains automatic provisioning and code access before CLI commands", async () => {
   const database = await builtPage("/database");
-  const prerequisite = database.indexOf("Don't have a database yet?");
-  const query = database.indexOf("## Query it from code");
-  assert.ok(prerequisite >= 0 && query > prerequisite);
-  assert.match(database.slice(prerequisite, query), /\[Zero\]\(\/docs\/zero-runtime\/\)/u);
-  assert.match(database.slice(prerequisite, query), /kind: "zero"/u);
-  assert.match(database.slice(prerequisite, query), /\[runtime block\]\(\/docs\/zero-runtime\/#declare-it\)/u);
-  assert.match(database.slice(prerequisite, query), /`server`/u);
-  assert.match(database.slice(prerequisite, query), /server file is required/iu);
-  assert.match(database.slice(prerequisite, query), /sf init --runtime zero/u);
+  const how = database.indexOf("## How a Space gets a database");
+  const query = database.indexOf("## Query from code");
+  const inspect = database.indexOf("## Inspect tables and rows");
+  assert.ok(how >= 0 && query > how && inspect > query);
+  assert.match(database.slice(how, query), /dedicated MySQL database automatically/iu);
+  assert.match(database.slice(how, query), /env\.DB/u);
+  assert.match(database.slice(query, inspect), /env\.DB\.prepare/u);
+  assert.match(database.slice(query, inspect), /import \{ db \} from "spacepress"/u);
 });
 
 test("Troubleshooting gives a first diagnostic step before the error catalog", async () => {
@@ -95,7 +94,7 @@ const firstFactCases = [
   {
     route: "/crons",
     question: "Where is a schedule set, and when does it take effect?",
-    evidence: [/no dashboard editor/iu, /sf\.jsonc/u, /publish/iu],
+    evidence: [/no dashboard editor/iu, /spacefast\.config\.ts/u, /publish/iu],
   },
   {
     route: "/environment-variables",

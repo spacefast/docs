@@ -14,12 +14,14 @@ const sidebarRoutes = new Set([
   "/api/reference",
   "/changelog",
   "/changelog/packages",
+  "/setup",
+  "/connect",
 ]);
 
 const fixture = [
   "# Spacefast Docs",
   "",
-  "> Publish sites and build apps with Spacefast.",
+  "> Publish what your agents build.",
   "",
   "## Read any page as Markdown",
   "",
@@ -32,6 +34,13 @@ const fixture = [
   "## Publish",
   "",
   entry("/publish"),
+  "",
+  "## Agents",
+  "",
+  entry("/setup"),
+  entry("/setup/claude-code"),
+  entry("/connect"),
+  entry("/connect/hosted-mcp"),
   "",
   "## Reference",
   "",
@@ -50,7 +59,6 @@ const fixture = [
   entry("/platforms/api/reference/principals/list"),
   entry("/changelog/v0-0-24"),
   entry("/changelog/packages/sdk"),
-  entry("/setup/claude-code"),
   "",
   "## Discovery",
   ...["/llms-full.txt", "/index.md", "/api/docs/pages.json", "/api-catalog.json", "/ai-catalog.json", "/agent-readability.json"].map((route) => entry(route)),
@@ -66,12 +74,12 @@ const build = (overrides = {}) =>
 
 test("collapses generated descendants and keeps only navigated index pages", () => {
   const { text, dropped } = build();
-  assert.equal(dropped, 7);
+  assert.equal(dropped, 9);
   const routes = text
     .split("\n")
     .filter((line) => line.startsWith("- ["))
     .map(routeOf);
-  for (const kept of ["/errors", "/api/reference", "/changelog/packages"]) {
+  for (const kept of ["/errors", "/api/reference", "/changelog/packages", "/setup", "/connect"]) {
     assert.ok(routes.includes(kept), `${kept} should survive as the family index`);
   }
   for (const gone of [
@@ -79,10 +87,11 @@ test("collapses generated descendants and keeps only navigated index pages", () 
     "/api/reference/spaces/create",
     "/platforms/api/reference",
     "/changelog/v0-0-24",
+    "/setup/claude-code",
+    "/connect/hosted-mcp",
   ]) {
     assert.ok(!routes.includes(gone), `${gone} should be collapsed`);
   }
-  assert.ok(routes.includes("/setup/claude-code"), "agent setup pages stay listed");
   assert.ok(!text.includes("### Spaces"), "a reference tag heading without entries is dropped");
   assert.ok(text.includes("## Reference"), "a heading that keeps entries survives");
   assert.ok(text.includes("## Read any page as Markdown"), "a prose section survives");
@@ -107,10 +116,9 @@ test("keeps a generated page the sidebar explicitly promotes", () => {
   assert.ok(text.includes("https://spacefast.com/docs/errors/rate_limited"));
 });
 
-test("relabels the leftover bucket and drops emptied headings", () => {
+test("drops the empty Other bucket and emptied headings", () => {
   const { text } = build();
   assert.ok(!text.includes("## Other"), "the Other label should not survive");
-  assert.ok(text.includes("## Agent setup"));
   assert.ok(text.includes("## RSS Feeds"), "feeds are not pages and are never collapsed");
   for (const route of ["/changelog/rss.xml", "/llms-full.txt", "/index.md", "/api-catalog.json", "/agent-readability.json"]) {
     assert.ok(text.includes(`https://spacefast.com/docs${route}`));
@@ -124,7 +132,7 @@ test("relabels the leftover bucket and drops emptied headings", () => {
 });
 
 test("throws when an unrecognized generated family survives", () => {
-  const invaded = fixture.replace(entry("/setup/claude-code"), entry("/widgets/blue"));
+  const invaded = fixture.replace(entry("/changelog/packages/sdk"), `${entry("/changelog/packages/sdk")}\n${entry("/widgets/blue")}`);
   assert.throws(() => build({ source: invaded }), /widgets\/blue/u);
 });
 

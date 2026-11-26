@@ -1,0 +1,20 @@
+---
+/*
+ * Blume's header, with the active tab picked by components/sections.ts. Blume
+ * marks the tab whose path is the longest prefix of the route, which would
+ * mark Docs on /cli or /setup/codex. The header uses `route` only to pick
+ * that tab (this site has no selectors or tab menus), so passing the owning
+ * tab's path is all the change needs.
+ */
+import Header from "blume/components/layout/Header.astro";
+import data from "blume:data";
+
+import { tabForRoute } from "./sections.ts";
+
+const props = Astro.props as Record<string, unknown> & { route: string };
+const { sidebar, tabs } = data.navigation;
+const tab = tabForRoute(tabs, sidebar, props.route);
+const route = tab && tab.path !== "/" ? tab.path : props.route;
+---
+
+<Header {...props} route={route} />

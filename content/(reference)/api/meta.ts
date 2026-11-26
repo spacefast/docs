@@ -15,6 +15,5 @@ export default defineMeta({
     "connectors",
     "webhooks",
     "sdk",
-    "reference",
   ],
 });

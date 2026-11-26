@@ -1,6 +1,7 @@
 import { defineComponents } from "blume";
 
 import Breadcrumbs from "./components/Breadcrumbs.astro";
+import Header from "./components/Header.astro";
 import Logo from "./components/Logo.astro";
 import Pagination from "./components/Pagination.astro";
 import Sidebar from "./components/Sidebar.astro";
@@ -8,6 +9,6 @@ import PricingTable from "./components/PricingTable.astro";
 import WpCloudDocs from "./components/WpCloudDocs.astro";
 
 export default defineComponents({
-  layout: { Breadcrumbs, Logo, Pagination, Sidebar },
+  layout: { Breadcrumbs, Header, Logo, Pagination, Sidebar },
   mdx: { PricingTable, WpCloudDocs },
 });
