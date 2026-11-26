@@ -1,8 +1,18 @@
 import { defineMeta } from "blume";
 
 export default defineMeta({
-  title: "Account",
+  title: "Teams & account",
   collapsed: false,
-  order: 6,
-  pages: ["authentication", "api-keys", "identity-connections", "auto-enroll", "subteams", "pricing", "billing", "usage"],
+  pages: [
+    "teams",
+    "subteams",
+    "auto-enroll",
+    "authentication",
+    "api-keys",
+    "identity-connections",
+    "billing",
+    "pricing",
+    "usage",
+    "labs",
+  ],
 });
