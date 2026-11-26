@@ -7,7 +7,7 @@ Publishing, promoting, and domain changes can take longer than one HTTP request,
 
 ## Waiting is the default
 
-`POST /v1/publish`, `POST /v1/spaces/{spaceId}/versions/{versionId}/finalize`, and `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` all hold the request open until the work settles, then return the finished result. That is the default and it is usually what you want.
+[`POST /v1/publish`](/api/reference/publishing/createpublish), [`POST /v1/spaces/{spaceId}/versions/{versionId}/finalize`](/api/reference/versions/finalizespaceversion), and [`POST /v1/spaces/{spaceId}/versions/{versionId}/promote`](/api/reference/versions/promotespaceversion) all hold the request open until the work settles, then return the finished result. That is the default and it is usually what you want.
 
 Set `?async=1` when you would rather have a handle immediately. `async` accepts `0`, `false`, `1`, and `true`, and defaults to `0`.
 
@@ -72,6 +72,8 @@ integration_release
 
 ## Poll one operation
 
+Poll an operation with [`GET /v1/operations/{operationId}`](/api/reference/activity/getoperation) or from the CLI with [`sf operations`](/cli/reference#sf-operations-operation):
+
 ```bash
 curl -sS https://api.spacefast.com/v1/operations/op_2f6a9d4c1e7b0a3f8d5c2e6b9a4f1d7c \
   -H "Authorization: Bearer $SPACEFAST_API_KEY"
@@ -109,6 +111,8 @@ Start at a few hundred milliseconds and back off toward a second. The publish he
 
 ## List operations
 
+Query recent operations with [`GET /v1/operations`](/api/reference/activity/listoperations) or [`sf operations`](/cli/reference#sf-operations-operation):
+
 ```bash
 curl -sS "https://api.spacefast.com/v1/operations?spaceId=spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c&limit=20" \
   -H "Authorization: Bearer $SPACEFAST_API_KEY"
@@ -124,9 +128,9 @@ This list uses cursor pagination. See [Pagination](/api/pagination) for the curs
 
 Authorization is checked per row through the resource each operation touches, so the feed never shows work your credential could not already reach.
 
-## Cancelling
+## Canceling
 
-There is no cancel endpoint on an operation. Builds have their own: `POST /v1/builds/{buildId}/cancel`. A canceled build's operation settles as `canceled`.
+There is no cancel endpoint on an operation. Builds have their own: [`POST /v1/builds/{buildId}/cancel`](/api/reference/builds/cancelbuild). A canceled build's operation settles as `canceled`.
 
 ## When an operation fails
 

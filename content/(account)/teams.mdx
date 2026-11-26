@@ -15,7 +15,7 @@ Personal and Go allow only the owner. Adding another member needs [Pro](/pricing
 
 ## What a team is
 
-A team is the thing that owns work in a self-serve account. Spaces, custom domains, API keys, billing, and members all hang off it. A Space you claim belongs to the team you select, even when you are its only member. [Partner API customers](/platforms/partner-api/customers) use external principals instead.
+A team owns work in a self-serve account. Spaces, custom domains, API keys, billing, and members all hang off it. A Space you claim belongs to the team you select, even when you are its only member. [Partner API customers](/platforms/partner-api/customers) use external principals instead.
 
 An Enterprise team can split into [subteams](/subteams), each with its own members and Spaces. A team can also hold [identity connections](/identity-connections), so people from your own sign-in system can open the Spaces you grant them.
 
@@ -34,7 +34,7 @@ A team has a name and a slug. The slug is the first segment of its dashboard URL
 
 ## Roles
 
-Your team role caps what you can do across the dashboard, CLI, API, and any agent acting on your behalf.
+Your team role caps what you can do across the dashboard, CLI, API, and any agent acting on your behalf. Actions outside your role return `403` [`forbidden`](/errors/forbidden).
 
 | Action | Owner | Admin | Member |
 |---|---|---|---|
@@ -78,14 +78,14 @@ Your team needs [Pro](/pricing) to add another member. Personal and Go include o
   </Step>
 </Steps>
 
-From a terminal, `sf teams invitations ls` lists invitations. Send one from the dashboard, with `sf teams members invite`, or through an agent with Agent access. Resend, cancel, or accept one in the dashboard.
+From a terminal, use [`sf teams`](/cli/reference#sf-teams) and [`sf teams members`](/cli/reference#sf-teams-members) to manage teams and seats. [`sf teams invitations list`](/cli/reference#sf-teams-invitations-list) lists invitations. Send one from the dashboard, with [`sf teams members invite`](/cli/reference#sf-teams-members-invite-emails), via [`POST /v1/team-invitations`](/api/reference/teams/createteaminvitation), or through an agent with Agent access. Resend, cancel, or accept one in the dashboard.
 
 To skip invitations for coworkers, add your company's [allowed email domain](/auto-enroll).
 
 Things that catch people out:
 
 - **Invitations expire after 7 days.** Resending re-stamps a fresh 7 days.
-- **Pending invitations count against your seat limit.** Members plus pending invites are measured against your plan's team member limit. At the cap, remove a member or cancel an invitation first. See [billing](/billing).
+- **Pending invitations count against your seat limit.** Members plus pending invites count against your plan's team member limit. At the cap, inviting returns `409` [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded); remove a member or cancel an invitation first. See [billing](/billing).
 - **Any account with that verified address can accept**, including someone who added it as a secondary address. If the signed-in account does not hold the address, the page offers to sign in with the invited email or add the address to the current account.
 - **An agent cannot accept an invitation for you.** Accept it in the dashboard and the credentials you already approved pick the team up automatically.
 
@@ -112,7 +112,7 @@ To hand the team over, use **Team settings → Danger zone → Transfer ownershi
 | `public` | Access for the owning team, plus view access for anyone on the web |
 | `parent_team` | Access for the owning team, plus view and comment access for everyone in its parent team. Needs subteams, which are on Enterprise |
 
-The default is `private`. From a terminal, `sf teams defaults` prints the current value and `sf teams defaults public` sets it. Per-Space access, share links, and passwords are covered in [Spacefast Share](/share).
+The default is `private`. From a terminal, [`sf teams defaults`](/cli/reference#sf-teams-defaults-access) prints the current value and `sf teams defaults public` sets it. Over the API, use [`GET /v1/teams/{teamId}/access/defaults`](/api/reference/access/getteamaccessdefaults) and [`PUT /v1/teams/{teamId}/access/defaults`](/api/reference/access/setteamaccessdefaults). Per-Space access, share links, and passwords are covered in [Spacefast Share](/share).
 
 ## Move a Space to another team
 
@@ -121,7 +121,7 @@ Open the Space, then **Space settings → General → Transfer this space** and 
 - If you are an owner or admin of the destination, the button reads **Move space** and it happens immediately. The Space keeps serving at its current address.
 - Otherwise the button reads **Request transfer**. Owners and admins of the destination team have 7 days to accept. Nothing changes until they do, and you can cancel any time before then.
 
-From a terminal:
+From a terminal (see [`sf spaces transfer`](/cli/reference#sf-spaces-transfer-team), [`sf transfers accept`](/cli/reference#sf-transfers-accept-transfer), and [`sf transfers cancel`](/cli/reference#sf-transfers-cancel-transfer)):
 
 ```bash
 sf spaces transfer <team>
@@ -137,4 +137,15 @@ Only owners and admins can transfer a Space. Two consequences to plan for: the o
 
 **Leave team** is blocked while you are the only member ("Add another owner before you can leave") or the only owner ("Transfer ownership before you can leave").
 
-**Delete this team** asks you to type the team slug. A team that still has live Spaces refuses to be deleted, so delete or move them first. For 30 days after the delete, an owner or admin of the team can restore it. The dashboard has no restore button yet, so ask support. Only the person who deleted the team can list it, with `GET /v1/teams?deleted=true`. After 30 days it can't be restored, but Spacefast keeps its records.
+**Delete this team** asks you to type the team slug. A team that still has live Spaces refuses to be deleted, so delete or move them first. For 30 days after the delete, an owner or admin of the team can restore it. The dashboard has no restore button yet, so ask support. Only the person who deleted the team can list it, with [`GET /v1/teams`](/api/reference/teams/listteams) (`?deleted=true`). After 30 days it can't be restored, but Spacefast keeps its records.
+
+## API reference
+
+| Action | Endpoint |
+|---|---|
+| List or create teams | [`GET /v1/teams`](/api/reference/teams/listteams), [`POST /v1/teams`](/api/reference/teams/createteam) |
+| Read, update, or delete a team | [`GET /v1/teams/{teamId}`](/api/reference/teams/getteam), [`PATCH /v1/teams/{teamId}`](/api/reference/teams/updateteam), [`DELETE /v1/teams/{teamId}`](/api/reference/teams/deleteteam) |
+| List, re-role, or remove members | [`GET /v1/teams/{teamId}/members`](/api/reference/teams/listteammembers), [`PATCH /v1/teams/{teamId}/members/{memberId}`](/api/reference/teams/updateteammemberrole), [`DELETE /v1/teams/{teamId}/members/{memberId}`](/api/reference/teams/removeteammember) |
+| Review connector offboarding | [`GET /v1/teams/{teamId}/members/{memberId}/offboarding`](/api/reference/teams/getteammemberoffboarding) |
+| List or create invitations | [`GET /v1/team-invitations`](/api/reference/teams/listteaminvitations), [`POST /v1/team-invitations`](/api/reference/teams/createteaminvitation) |
+| Create, accept, or cancel Space transfers | [`POST /v1/space-transfers`](/api/reference/spaces/createspacetransfer), [`POST /v1/space-transfers/{transferId}/accept`](/api/reference/spaces/acceptspacetransfer), [`DELETE /v1/space-transfers/{transferId}`](/api/reference/spaces/cancelspacetransfer) |

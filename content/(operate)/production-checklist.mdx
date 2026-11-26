@@ -7,47 +7,47 @@ Check these nine areas before sending production traffic to a Space.
 
 ## Custom domain and HTTPS
 
-- Attach your custom domain and confirm its DNS records and TLS certificate are healthy with `sf domains diagnostics example.com --space my-space`. See [Custom domains](/domains), [DNS management](/domains/dns), and [TLS certificates](/infrastructure/tls-certificates).
+- Attach your custom domain and confirm its DNS records and TLS certificate are healthy with [`sf domains check`](/cli/reference#sf-domains-check-domain) and [`sf domains diagnostics`](/cli/reference#sf-domains-diagnostics-domain) (`sf domains diagnostics example.com --space my-space`). See [Custom domains](/domains), [DNS management](/domains/dns), and [TLS certificates](/infrastructure/tls-certificates).
 - Confirm your primary hostname (`example.com` vs `www.example.com`) so the secondary hostname redirects cleanly with `308`.
 
 ## Channels and promotion
 
-- Publish changes to a preview channel or branch preview first, verify the build and routes, and promote only a `ready` version to live. See [Channels and previews](/channels) and [Publish](/publish).
+- Run [`sf check`](/cli/reference#sf-check-dir), publish to a preview channel or branch preview with [`sf publish`](/cli/reference#sf-publish-dir), verify the build and routes, and promote only a `ready` version to live with [`sf promote`](/cli/reference#sf-promote-version). See [Channels and previews](/channels) and [Publish](/publish).
 - If you deploy from Git, verify the connected production branch and pull request preview settings in [Publish from Git](/git).
 
 ## Rollback plan
 
-- Record the current live version ID before promoting a release so you can run `sf rollback <version-id>` in seconds without rebuilding. See [Versions](/versions).
+- Record the current live version ID before promoting a release so you can run [`sf rollback`](/cli/reference#sf-rollback-version) (`sf rollback <version-id>`) in seconds without rebuilding. See [Versions](/versions).
 - Keep database schema changes backward-compatible across the previous and new versions when rolling back a dynamic Space.
 
 ## Budgets and plan limits
 
-- Set team or Space usage budgets with `sf budget set` so you receive alerts before hitting spend ceilings. See [Usage](/usage) and [Billing](/billing).
+- Set team or Space usage budgets with [`sf budget set`](/cli/reference#sf-budget-set-amount) so you receive alerts before hitting spend ceilings. See [Usage](/usage) and [Billing](/billing).
 - Verify your Space stays within plan ceilings for compute workers, disk, file sizes, crons, redirects, and header rules on [Limits](/limits).
 
 ## Access and indexing
 
-- Run `sf share show --space my-space` to verify general access (`private` vs `public`), search-engine indexing, and whether Comments are limited to previews or live. See [Share and access](/share).
+- Run [`sf share show`](/cli/reference#sf-share-show) (`sf share show --space my-space`) to verify general access (`private` vs `public`), search-engine indexing, and whether Comments are limited to previews or live. See [Share and access](/share).
 - Revoke any temporary review links or test passwords before launch. If your Space uses SSO, verify the identity connection and external grants on [SSO and external identity](/sso).
 - On Enterprise teams, audit public reach in **Security Review** on [Security and trust](/security).
 
 ## Headers, redirects, and caching
 
-- Configure redirects, rewrites, and response headers in `spacefast.config.ts` and inspect local rules with `sf routing inspect` before promoting. See [Redirects and rewrites](/redirects) and [Headers](/headers).
+- Configure redirects, rewrites, and response headers in [`spacefast.config.ts`](/config-file) and inspect local rules with [`sf routing inspect`](/cli/reference#sf-routing-inspect) before promoting. See [Redirects and rewrites](/redirects) and [Headers](/headers).
 - Add security headers (`X-Content-Type-Options`, `Referrer-Policy`, `Content-Security-Policy`) without overriding platform-managed transport headers. See [HTTP and security headers](/infrastructure/http-security-headers).
 - Verify live caching headers on a public URL after promotion (private previews always return `private, no-store`). See [Caching](/caching) and [Performance and optimization](/performance).
 
 ## Stats and tags
 
 - Confirm **Settings → Stats** (and **Stats** if browser analytics is enabled for your team) reports traffic after launch. See [Stats](/stats).
-- When shipping analytics or marketing scripts through [Tag Manager](/tag-manager), validate the revision and test it with `sf tags debug` before releasing to `production`.
+- When shipping analytics or marketing scripts through [Tag Manager](/tag-manager), validate the revision and test it with [`sf tags debug`](/cli/reference#sf-tags-debug) before releasing to `production`.
 
 ## Logs and audit trail
 
-- Verify access to origin logs (`sf logs`), edge logs (`sf logs edge`), and runtime logs (`sf logs runtime --follow`). See [Logs](/logs) and [Edge request logs](/infrastructure/edge-request-logs).
+- Verify access to origin logs ([`sf logs`](/cli/reference#sf-logs-target-kind)), edge logs (`sf logs edge`), and runtime logs (`sf logs runtime --follow`). See [Logs](/logs) and [Edge request logs](/infrastructure/edge-request-logs).
 - Confirm your team's log and activity retention windows match your incident-response requirements on [Activity and audit logs](/activity).
 
 ## Backups and exports
 
-- Confirm your plan's automatic MySQL backup schedule and test a manual `sf db export` before major data changes. See [Backups, archives, and exports](/exports) and [Database](/database).
-- Keep a clean recovery path for source code via Git or `sf source archive`.
+- Confirm your plan's automatic MySQL backup schedule and test a manual [`sf db export`](/cli/reference#sf-db-export-target) before major data changes. See [Backups, archives, and exports](/exports) and [Database](/database).
+- Keep a clean recovery path for source code via Git or [`sf source archive`](/cli/reference#sf-source-archive).

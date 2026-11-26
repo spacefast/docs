@@ -25,21 +25,22 @@ These instructions can't change your own platform's permissions or network rules
 
 | Task | Request | Credential |
 | --- | --- | --- |
-| Find names from a brief or keyword | `POST /v1/domains/search` | None |
-| Check one name, live, with price | `GET /v1/domains/research/availability?name=` | None |
-| Check up to 80 names | `POST /v1/domains/research/availability` | None |
-| Look up who holds a taken name | `GET /v1/domains/research/whois?name=` | None |
+| Find names from a brief or keyword | [`searchDomains`](/api/reference/domains/searchdomains) (`POST /v1/domains/search`) | None |
+| Check one name, live, with price | [`getDomainAvailability`](/api/reference/domains/getdomainavailability) (`GET /v1/domains/research/availability?name=`) | None |
+| Check up to 80 names | [`checkDomainAvailabilityBatch`](/api/reference/domains/checkdomainavailabilitybatch) (`POST /v1/domains/research/availability`) | None |
+| Rank candidate names | [`rankDomainCandidates`](/api/reference/domains/rankdomaincandidates) (`POST /v1/domains/research/rank`) | None |
+| Look up who holds a taken name | [`getDomainWhois`](/api/reference/domains/getdomainwhois) (`GET /v1/domains/research/whois?name=`) | None |
 | Save the registrant contact | `POST /v1/domains/contacts` | The person's own sign-in |
 | Buy | `POST /v1/domains/purchases` | The person's own sign-in and approval |
 
-The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Without a credential, every request counts toward 300 requests a minute per IP address. Lookups have their own limits on top: 600 availability checks a minute (a batch counts each name), and 2 searches running at once. So checking names one per request stops at 300 a minute; batches go further. The `ratelimit-remaining` header says how many checks are left. If your requests leave from shared servers, other users count against the same limit, so expect an occasional 429.
+The API is at `https://api.spacefast.com`. Every response is `{ "data": ... }`, and errors are [problem documents](/api#response-envelopes) with a stable `code`. Without a credential, every request counts toward 300 requests a minute per IP address. Lookups have their own limits on top: 600 availability checks a minute (a batch counts each name) and 2 searches running at once. Checking names one per request stops at 300 a minute; batches go further. Read `ratelimit-remaining` to see how many checks are left. Shared servers share the IP budget, so expect an occasional HTTP `429` ([`rate_limited`](/errors/rate_limited)).
 
 ## Pick your tool
 
 Use the first option that works where you run. If it fails, drop to the next.
 
 1. **Spacefast MCP with Apps.** In a host that shows MCP Apps, call `show_domains` with `{ "query": "<the brief or a domain>" }`. The Domains App shows names, prices, and the purchase form. The MCP server at `https://mcp.spacefast.com` needs the person to sign in; see [MCP server](/agents/mcp-server).
-2. **Spacefast MCP without Apps.** Call the operation tools and write the results into your reply. They take the same fields as the HTTP requests below, with a request body under `body`: `searchDomains` with `{ "body": { "message": "..." } }`, `checkDomainAvailabilityBatch` with `{ "body": { "mode": "live", "names": ["..."] } }`, and `getDomainAvailability` with `{ "name": "example.com" }`.
+2. **Spacefast MCP without Apps.** Call the operation tools and write the results into your reply. They take the same fields as the HTTP requests below, with a request body under `body`: [`searchDomains`](/api/reference/domains/searchdomains) with `{ "body": { "message": "..." } }`, [`checkDomainAvailabilityBatch`](/api/reference/domains/checkdomainavailabilitybatch) with `{ "body": { "mode": "live", "names": ["..."] } }`, and [`getDomainAvailability`](/api/reference/domains/getdomainavailability) with `{ "name": "example.com" }`.
 3. **HTTP requests.** Call the REST API below and parse the JSON.
 4. **A terminal with network access.** Use `curl`, or [`sf domains search`](/cli/reference#sf-domains-search-query) from the CLI.
 5. **Web fetch only.** Write the names yourself, then fetch `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com` once for each. It's a plain `GET` with a JSON answer, no account needed. Search and refine need `POST`, so they're out of reach here. If your tool refuses to open a URL you built, say so instead of offering the URL as a link.
@@ -49,7 +50,7 @@ Use the first option that works where you run. If it fails, drop to the next.
 
 > "Find distinctive .com domains for a street photography blog. My budget is flexible."
 
-Send the brief to search. `message` is plain words, so put the extension, budget, and style in it:
+Send the brief to [`searchDomains`](/api/reference/domains/searchdomains). `message` is plain words, so put the extension, budget, and style in it:
 
 ```bash
 curl -sS https://api.spacefast.com/v1/domains/search \
@@ -83,13 +84,15 @@ A search takes about 15 to 20 seconds. The answer holds a `session`, the `sugges
 
 `availabilityMode: "zone"` means the answer came from zone files, which lag the registry. Check the names you'll recommend [live](#check-many-names) before you call them available, and show prices only from the live check.
 
-If `complete` is `false`, read `problems`. A `domain_lookup_rate_limited` problem means search was busy, not that a name is taken. Wait `data.problems[].retryAfterSeconds`, then send `{ "session": data.session }` with no new message to finish the same search.
+If `complete` is `false`, read `problems`. A [`domain_lookup_rate_limited`](/errors/domain_lookup_rate_limited) problem means search was busy, not that a name is taken. Wait `data.problems[].retryAfterSeconds`, then send `{ "session": data.session }` with no new message to finish the same search.
 
 You can also write names yourself and skip search. Either way, the live check decides.
 
 ## Check one name
 
 > "Check whether curbpoetry.com is available and how much it costs."
+
+Call [`getDomainAvailability`](/api/reference/domains/getdomainavailability):
 
 ```bash
 curl -sS "https://api.spacefast.com/v1/domains/research/availability?name=curbpoetry.com"
@@ -121,7 +124,7 @@ Prices and availability here are an example from November 2026. They change.
 
 > "Find ten available .com domains for a street photography blog."
 
-Send about 20 names per request; 80 is the most one request takes. Set `mode` to `live`: without it you get zone data and no prices.
+Send about 20 names per request to [`checkDomainAvailabilityBatch`](/api/reference/domains/checkdomainavailabilitybatch); 80 is the most one request takes. Set `mode` to `live`: without it you get zone data and no prices.
 
 ```bash
 curl -sS https://api.spacefast.com/v1/domains/research/availability \
@@ -141,7 +144,7 @@ Put the budget in the search brief, then filter live results on `purchasable: tr
 
 > "Compare these five domains and recommend the best one."
 
-Check all five live in one batch. Then recommend, using the facts you checked plus your own judgment on length, spelling, meaning, and fit.
+Check all five live in one batch (or score and order candidates with [`rankDomainCandidates`](/api/reference/domains/rankdomaincandidates)). Then recommend, using the facts you checked plus your own judgment on length, spelling, meaning, and fit.
 
 ## Refine
 
@@ -227,8 +230,8 @@ Add your own reasoning around the facts: why a name fits, how it reads aloud, wh
 | `price` is `null` | Don't guess a price. Say it's unknown |
 | `unknown` with `available: null`, or a timeout | The check didn't finish. Retry it once on its own. Never report the name as taken |
 | `unknown` with `available: true` | Free, but Spacefast can't sell it. Don't retry; say it isn't for sale here |
-| HTTP 429 with `domain_lookup_rate_limited` | Wait for `Retry-After` or `retryAfterSeconds`, then retry. Send fewer names at once |
-| HTTP 429 with `rate_limited` | Too many requests from your IP address. Wait for `Retry-After`, then check names in batches instead of one per request |
+| HTTP 429 with [`domain_lookup_rate_limited`](/errors/domain_lookup_rate_limited) | Wait for `Retry-After` or `retryAfterSeconds`, then retry. Send fewer names at once |
+| HTTP 429 with [`rate_limited`](/errors/rate_limited) | Too many requests from your IP address. Wait for `Retry-After`, then check names in batches instead of one per request |
 | The request fails, or you can't reach the API | Say live checks aren't working here. Mark names unverified. Don't call any of them available |
 | `checkedAt` is old | Check again before the person buys |
 | `401` or `403` on contacts or purchases | Buying needs the person's own sign-in. Research still works without it |

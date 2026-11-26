@@ -123,7 +123,7 @@ Spacefast injects your Space's variables and platform bindings onto `env`:
 | --- | --- |
 | `env.<VAR>` | Space and team [Environment variables](/environment-variables) |
 | `env.DB` | D1-shaped SQL binding (`env.DB.prepare(sql).bind(...).all()`) to your Space's [Database](/database) through a broker, with no connection string in the bundle |
-| `env.APP` | Calls your Space's [Collections](/collections) and [Actions](/actions) (`env.APP.collection(name)`, `env.APP.action(name, input)`, `env.APP.query(path, params)`, `env.APP.fetch(path, init)`), forwarding the visitor's session cookie (also aliased as `env.SPACEPRESS`) |
+| `env.APP` | Calls your Space's [Collections](/collections) and [Actions](/actions) (`env.APP.collection(name)`, `env.APP.action(name, input)`, `env.APP.query(path, params)`, `env.APP.fetch(path, init)`), forwarding the visitor's session cookie |
 | `env.STORAGE` | Reads and writes runtime [Object storage](/object-storage) (`.upload(file, { public })`, `.get(id)`, `.delete(id)`) |
 | `env.CONNECTORS` | Calls declared [Connector roles](/connectors#call-from-workers) (`env.CONNECTORS.<role>.<tool>(args)` or `env.CONNECTORS.call(role, tool, args)`) |
 

@@ -49,12 +49,11 @@ Keep one serving config file in a project:
 You can declare app definitions (collections, tables, actions, pages, routes, auth, plugins, admin, and locales) either inline under the `app` key in `spacefast.config.ts` or in a standalone `spacepress.config.ts` beside `spacefast.config.ts`.
 
 - Putting serving settings in `spacefast.config.ts` and app definitions in `spacepress.config.ts` keeps both files working side by side.
-- In the shared contract (`composeSpaceAppConfig`), composing an inline `app` block with a standalone `spacepress.config.ts` merges keyed maps (`collections`, `tables`, `actions`, `pages`) per entry with `spacepress.config.ts` winning on key collisions while preserving non-overlapping entries.
-- In current CLI publishes, define your app in either `spacepress.config.ts` or the inline `app` block of `spacefast.config.ts`, not both; `sf` refuses a project that declares both at once.
+- Define your app in either `spacepress.config.ts` or the inline `app` block of `spacefast.config.ts`, not both; [`sf publish`](/cli/reference#sf-publish-dir) and [`sf check`](/cli/reference#sf-check-dir) refuse a project that declares both at once.
 
 ### JSONC fallback (`sf.jsonc`)
 
-`sf.jsonc` and the other JSON filenames accept JSON with comments and are capped at 256 KiB. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation (that JSON Schema describes the JSON format, not executable TypeScript modules):
+`sf.jsonc` and the other JSON filenames accept JSON with comments and are capped at 256 KiB. Set `$schema` to `https://spacefast.com/schemas/sf.json`. Spacefast reads it as the format marker; for editor completion today, write `spacefast.config.ts`, whose `defineConfig` types cover every key:
 
 ```jsonc sf.jsonc
 {
@@ -214,10 +213,10 @@ Environment variables and secrets do not live in `spacefast.config.ts` — set t
 
 When you combine them with `spacefast.config.ts` or `sf.jsonc`:
 
-- Redirect and rewrite rules merge in this order: `_redirects` first, then config `redirects`, then config `rewrites`. First match wins. A config rule shadowed by an unconditional `_redirects` line reports `redirect_shadowed_by_file`.
+- Redirect and rewrite rules merge in this order: `_redirects` first, then config `redirects`, then config `rewrites`. First match wins. A config rule shadowed by an unconditional `_redirects` line reports a `redirect_shadowed_by_file` warning.
 - Header rules merge with `_headers` winning over config `headers` when both set the same header name.
 
-For new projects, declare `redirects`, `rewrites`, and `headers` in `spacefast.config.ts` so all Space configuration lives in one typed file. See [Redirects and rewrites](/redirects) and [Headers](/headers).
+For new projects, declare `redirects`, `rewrites`, and `headers` in `spacefast.config.ts` so all Space configuration lives in one typed file. Validate changes offline with [`sf check`](/cli/reference#sf-check-dir) (invalid configs return [`config_invalid`](/errors/config_invalid)). See [Redirects and rewrites](/redirects) and [Headers](/headers).
 
 ## Limits
 

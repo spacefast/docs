@@ -13,9 +13,9 @@ Upgrades apply immediately and are prorated. Downgrades apply at renewal. Cancel
 
 ## Read the plan through the API
 
-`GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` return the resolved `planCode` and limits. Plan codes are stable: `free` is Personal, `go` is Go and `plus` is Pro. The others are `gold`, `enterprise` and `internal`.
+[`GET /v1/teams/{teamId}/entitlements`](/api/reference/teams/getteamentitlements) and [`GET /v1/teams/{teamId}/plan-policy`](/api/reference/teams/getteamplanpolicy) return the resolved `planCode` and active limits. Public plan codes are stable: `free` (Personal), `go` (Go), `plus` (Pro), and `enterprise` (Enterprise).
 
-Use the returned entitlements for feature checks.
+Use the returned entitlements for feature checks. Read subscription and payment status with [`GET /v1/teams/{teamId}/billing`](/api/reference/teams/getteambilling).
 
 ## When a payment fails
 
@@ -23,8 +23,8 @@ Your Spaces keep serving through a grace period, but you cannot change anything.
 
 | Stage | How long | What visitors get | What you get |
 | --- | --- | --- | --- |
-| Past due | 7 days from the failed payment | Spaces serve normally | Reads work. Every write returns `402` with code `tenant_past_due` |
-| Suspended | After the grace period ends | Every space serves `402` with a **This space is paused** page | Reads work. Every write returns `403` with code `tenant_suspended` |
+| Past due | 7 days from the failed payment | Spaces serve normally | Reads work. Every write returns `402` [`tenant_past_due`](/errors/tenant_past_due) |
+| Suspended | After the grace period ends | Every Space serves `402` with a **This space is paused** page | Reads work. Every write returns `403` [`tenant_suspended`](/errors/tenant_suspended) |
 
 Settle the payment in the billing portal to restore access. API reads remain available in either state.
 

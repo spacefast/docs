@@ -72,7 +72,7 @@ Header names must match `^[A-Za-z0-9-]+$`. Publish rejects platform-owned and tr
 
 | Name or prefix | Diagnostic |
 | --- | --- |
-| `x-spacefast-*`, `x-stattic-*` | `header_name_unsupported` |
+| `x-spacefast-*` and other reserved platform prefixes | `header_name_unsupported` |
 | `content-encoding`, `content-length`, `transfer-encoding`, `connection`, `vary`, `location`, `set-cookie`, `strict-transport-security`, `host`, `date`, `server`, and other transport headers | `header_name_unsupported` |
 | `x-sendfile`, `x-accel-redirect`, and other internal redirect headers | `header_name_unsupported` |
 | `cdn-cache-control`, `cloudflare-cdn-cache-control`, `netlify-cdn-cache-control`, `surrogate-control` | `header_cdn_cache_unsupported` |

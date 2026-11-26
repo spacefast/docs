@@ -22,7 +22,7 @@ To get the highest cache hit rate:
 - **Let the platform handle compression**: Spacefast serves Brotli and gzip automatically; do not set `Content-Encoding` in header rules.
 - **Test caching on public live URLs, not previews**: private previews and authenticated requests always return `private, no-store`.
 
-See [Caching](/caching) and [Headers](/headers) for full override rules and cache invalidation behavior.
+See [Caching](/caching), [Headers](/headers), and [`spacefast.config.ts`](/config-file) for override rules and cache invalidation. Inspect compiled routing and header rules locally with [`sf routing inspect`](/cli/reference#sf-routing-inspect) before running [`sf publish`](/cli/reference#sf-publish-dir).
 
 ## Image optimization with `@spacefast/image`
 
@@ -73,8 +73,8 @@ export { default } from "@spacefast/image/next-loader";
 Keep static assets out of your Worker so edge requests do not wake compute unnecessarily:
 
 - **Use the `functions/` file router**: when only specific API routes need dynamic code, Spacefast dispatches only the exact routes your files declare; unmatched paths return 404 without invoking the Worker.
-- **Keep bundles lean**: every plan enforces a `24 MiB` uncompressed compiled Workers bundle limit covering compiled JavaScript, embedded modules, and the manifest. Smaller bundles reduce cold-start overhead and publish faster.
-- **Tune request timeouts per route**: Worker requests default to `30 s`; raise the timeout per route up to `60 s` (Personal and Go), `120 s` (Pro), or `300 s` (Boost).
+- **Keep bundles lean**: every plan enforces a `24 MiB` uncompressed compiled Workers bundle limit covering compiled JavaScript, embedded modules, and the manifest. Run [`sf check`](/cli/reference#sf-check-dir) locally to catch size or config problems before publishing. Smaller bundles reduce cold-start overhead and publish faster.
+- **Tune request timeouts per route**: Worker requests default to `30 s`; configure longer per-route timeouts in [`spacefast.config.ts`](/config-file) up to `60 s` (Personal and Go), `120 s` (Pro), or `300 s` (Boost).
 
 See [Functions](/functions) for routing layouts and [Limits](/limits) for per-plan ceilings.
 
@@ -100,4 +100,4 @@ Check which version served a request and verify cache behavior with `curl`:
 curl -sI https://my-space.space.fast/ | grep -iE 'x-spacefast|cache-control|etag'
 ```
 
-Compare cache hits, status codes, and response latency across [Edge request logs](/infrastructure/edge-request-logs), [Logs](/logs), and [Stats](/stats).
+Compare cache hits, status codes, and response latency with [`sf logs`](/cli/reference#sf-logs-target-kind), [Edge request logs](/infrastructure/edge-request-logs), [Logs](/logs), and [Stats](/stats).

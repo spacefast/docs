@@ -242,7 +242,7 @@ export default defineConfig({
 | `match` | object | required | Request attributes to compare (at least one field) |
 | `any` | boolean | `false` | When `true`, any matching field triggers the rule; otherwise all fields must match |
 
-Each list stops at the first matching rule. Firewall rules never match platform transport paths such as `/__spacefast/health.php` and `/__stattic/blob/*`.
+Each list stops at the first matching rule. Firewall rules never match platform-reserved internal transport paths.
 
 ### Match fields and operators
 

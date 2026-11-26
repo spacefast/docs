@@ -50,7 +50,7 @@ Every capability publishes and rolls back with your Space's versions. Run `sf ch
 
 ## Local workflow
 
-Run your project locally with `sf dev` and check configuration before publishing with `sf check`:
+Validate your project offline with [`sf check`](/cli/reference#sf-check-dir) before you publish:
 
 ```bash
 sf check
@@ -58,6 +58,8 @@ sf dev
 sf publish
 ```
 
+- **Static files, Vite, Next.js, Astro, and Workers:** [`sf dev`](/cli/reference#sf-dev) runs your framework's dev server and executes `functions/` Workers in-process.
+- **App collections and actions:** [`sf check`](/cli/reference#sf-check-dir) validates your `app` schema offline; full collections and server actions execute when published to a Space.
 - [`sf init`](/cli/reference#sf-init-name) scaffolds a new Space project with `spacefast.config.ts`.
 - [`sf add`](/cli/reference#sf-add-recipe-directory) adds starter code you own for a form (`sf add form`), sign-in (`sf add auth`), or a streaming AI Worker route (`sf add ai-route`).
 - For an older Zero 0.8 Space, see [Migrating from Zero 0.8](/zero-migration) for what changed and how to move to `spacefast.config.ts`.

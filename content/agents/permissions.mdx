@@ -11,7 +11,7 @@ An agent can get access in four ways, each approved in your browser:
 
 | Method | How it starts | What the agent ends up holding |
 |---|---|---|
-| Device login | The agent runs `sf login` and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
+| Device login | The agent runs [`sf login`](/cli/reference#sf-login) and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
 | API key | You mint one and paste it into the agent's config | A key with the permissions from the preset and your expiry |
 | Hosted MCP | The agent sends you to a consent screen | An OAuth token for the scopes and teams you allowed |
 | Handoff link | You mint a one-use link from the dashboard | An API key bound to one Space or one page |
@@ -35,7 +35,7 @@ Two behaviors matter more than the checkboxes:
 
 ## What always needs a person
 
-Spacefast refuses these actions for every agent credential, at every permission level:
+Spacefast refuses these actions for every agent credential, at every permission level, returning [`authorization_level_not_allowed`](/errors/authorization_level_not_allowed):
 
 - Cancelling or resending an invitation
 - Changing a member's role
@@ -56,7 +56,7 @@ When an agent hits something risky, it stops and asks. The request appears on th
 - "Standing access, it changes what the agent may do on its own." The agent is asking to hold a permission for a while.
 - "One suspended call, runs once after you approve." One paused operation, nothing more.
 
-Press **Review** to see the rationale the agent gave, which Space or domain it touches, and for standing access, what it already has next to what it is adding. Then approve or deny.
+Press **Review** to see the rationale the agent gave, which Space or domain it touches, and for standing access, what it already has next to what it is adding. Then approve or deny. Over the REST API, agents can inspect approval status with [`getApproval`](/api/reference/agent/getapproval); only a signed-in person can call [`approveApproval`](/api/reference/agent/approveapproval) or [`denyApproval`](/api/reference/agent/denyapproval).
 
 - A decision is good for about 10 minutes, and never outlives the agent's own access.
 - **Denying is final.** The agent cannot re-ask on the same request. It has to start over.
@@ -79,7 +79,7 @@ A handoff is a one-use link that gives a local coding agent access to one Space,
     Open **/start**, pick your agent, and follow the setup. Each agent has its own page at `/start/<agent>`. Spacefast shows the link once at creation and never shows it again.
   </Step>
   <Step title="Hand it to the agent">
-    The agent redeems it with `sf login --handoff` and pastes the link when prompted, or pipes it on stdin. The CLI refuses a handoff link passed as a command argument so it stays out of your shell history and process list.
+    The agent redeems it with [`sf login`](/cli/reference#sf-login) (`sf login --handoff`) and pastes the link when prompted, or pipes it on stdin. The CLI refuses a handoff link passed as a command argument so it stays out of your shell history and process list.
   </Step>
   <Step title="Track its status">
     The team's **Agents** page has a **Handoff links** section. Rows show **Active**, **Redeemed**, **Expired**, or **Revoked**, which Space the link publishes to, when it was created, and how many times it was fetched.

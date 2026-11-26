@@ -63,7 +63,7 @@ A scope shortfall applies to the requested operation. A credential that can read
 
 The hosted server mints a delegation token for each authenticated request instead of handing your client a Spacefast API key. That delegation token lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session can't be replayed against the wider API.
 
-Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
+Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP. That limit is tracked separately from the general `/v1` REST API budget in [Rate limits](/api/rate-limits) and returns HTTP `429` with [`rate_limited`](/errors/rate_limited).
 
 ### Local
 
@@ -79,7 +79,7 @@ The local server takes its credential from the process, never from client config
 
 The [Spacefast discovery card](https://api.spacefast.com/.well-known/mcp/server-card.json) publishes the hosted tool catalog. It is a Spacefast discovery artifact. Your connection's `tools/list` is the authority for the tools and input schemas available to that client.
 
-Use the API operation tool directly. For example, `searchDocs` searches documentation, `getDocsPage` reads an exact slug, `listSpaces` finds Spaces, and `promoteSpaceVersion` promotes a ready version. Hosts that support tool discovery can load operations on demand.
+Use the API operation tool directly. For example, [`searchDocs`](/api/reference/docs/searchdocs) searches documentation, [`getDocsPage`](/api/reference/docs/getdocspage) reads an exact slug, [`listSpaces`](/api/reference/spaces/listspaces) finds Spaces, and [`promoteSpaceVersion`](/api/reference/versions/promotespaceversion) promotes a ready version. Hosts that support tool discovery can load operations on demand.
 
 Space Apps provide visual views through tools such as `show_space_deployments`, `show_space_domains`, and `show_space_analytics`. Use `show_domains` for the domain library. These views and the publish card remain available alongside operation tools.
 
@@ -98,10 +98,10 @@ Only On-Device MCP (`sf mcp`) exposes `search_connector_tools` through the CLI l
 | Field | Type | What it does |
 |---|---|---|
 | `path` | string | Local runtime only, with the standalone or Homebrew `sf` on macOS or Linux. One local directory, file, or archive. Omit `path`, `files`, and `uploadId` to publish the current workspace |
-| `uploadId` | string | A completed durable upload from `completeUpload`, for files too big to send inline. Reuse it when retrying |
+| `uploadId` | string | A completed durable upload from [`completeUpload`](/api/reference/spaces/completeupload), for files too big to send inline. Reuse it when retrying |
 | `files` | array of 1 to 1000 | Inline files. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
 | `spaceId` | string starting `spc_` | Update this Space. Omit to create one, or on local to use the Space linked to this workspace |
-| `teamId` | string | Destination team ID or slug for a new Space. Send one after a `team_required` error |
+| `teamId` | string | Destination team ID or slug for a new Space. Send one after a [`team_required`](/errors/team_required) error |
 | `access` | `private` or `public` | Initial root access for a Space this publish creates. `private` admits the owning team, `public` also admits anyone on the web. Omit to use the team default. Invalid with `spaceId` |
 | `createNew` | boolean, default `false` | Local runtime only. Forces a separate Space. Invalid with `spaceId` |
 | `slug` | string, 2 to 55 | Slug for a new Space |
@@ -141,15 +141,15 @@ Poll about every two seconds. Stop when `result.done` is true. Report success on
 
 ### Find documentation
 
-Call `searchDocs` with a query, then `getDocsPage` with the returned slug. The HTTP equivalents are `GET /v1/docs/search` and `GET /v1/docs/pages/{slug}`. Read the operation schemas in the [API reference](/api/reference) for their input envelopes.
+Call [`searchDocs`](/api/reference/docs/searchdocs) with a query, then [`getDocsPage`](/api/reference/docs/getdocspage) with the returned slug (`GET /v1/docs/search` and `GET /v1/docs/pages/{slug}`). Read the operation schemas in the [API reference](/api/reference) for their input envelopes.
 
 For an error, open the problem document's `type` URL to read its matching error page.
 
 ## Approvals
 
-An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard.
+An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard. Poll approval state over HTTP or MCP with [`getApproval`](/api/reference/agent/getapproval).
 
-A paused operation waits up to 24 hours for a decision. Keep the returned execution ID and call `resume_execution` with that same `executionId`, using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
+A paused operation waits up to 24 hours for a decision. Keep the returned execution ID and call `resume_execution` (backed by [`resumeAction`](/api/reference/agent/resumeaction)) with that same `executionId`, using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
 
 See [Agent permissions](/agents/permissions) for the actions that require a person and the scope of standing access.
 

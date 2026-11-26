@@ -1,19 +1,19 @@
 ---
 title: Agents
-description: Connect your AI or coding agent to Spacefast with one prompt, a plugin, or MCP
+description: Give your AI the skills, tools, and Spacefast infrastructure to build and ship better in one Space
 ---
 
-Connect your AI to Spacefast once, then ask it to build, update, and publish Spaces for you.
+Connect your AI to Spacefast before you start building. Spacefast gives your agent the skills, recipes, MCP tools, and one Space (database, storage, Workers, auth, domains) so it makes fewer mistakes and ships straight to a live URL.
 
 ## Connect your AI
 
-Paste this prompt into Claude, ChatGPT, Grok Bot, Muse, or any AI with web access. No terminal is needed.
+Paste this prompt into Claude, ChatGPT, Grok Bot, Muse, or any AI that can fetch URLs and make HTTP requests. No terminal is needed.
 
 <Prompt description="Paste into your AI to connect Spacefast." actions={["copy"]}>
 Fetch https://spacefast.com/setup.md and follow it.
 </Prompt>
 
-You can also connect straight from your AI app.
+The setup guide distinguishes connected MCP/CLI clients, anonymous HTTP publishing (via `https://spacefast.com/publish-spec.json`), and full-stack apps so your agent takes the right path automatically. You can also connect straight from your AI app:
 
 <CardGroup cols={3}>
   <Card title="Claude" href="/setup/claude-app" icon="bot">
@@ -22,7 +22,7 @@ You can also connect straight from your AI app.
   <Card title="ChatGPT" href="/setup/chatgpt" icon="message-circle">
     Connect the official Spacefast plugin and mention `@Spacefast` in chat.
   </Card>
-  <Card title="Grok Bot" href="/setup/grok-bot" icon="sparkles">
+  <Card title="Grok Bot" href="/setup/grok-bot" icon="terminal">
     Paste the setup prompt into Grok Bot to connect and publish.
   </Card>
 </CardGroup>

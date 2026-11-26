@@ -67,7 +67,7 @@ export default defineConfig({
     // Plan values from scripts/pricing-next.mjs, the source Pricing & Limits renders.
     ...planVariables(),
   },
-  description: "Publish what your agents build.",
+  description: "Build better and ship with Spacefast — skills, tools, database, Workers, domains, and infrastructure in one Space.",
   // Two links (components/Logo.astro): the mark goes to the Website home at the
   // origin root, outside the /docs base; "Docs" goes to the Docs home.
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
@@ -182,6 +182,8 @@ export default defineConfig({
     // and MCP: without this the component ships as raw JSX.
     markdownComponents: {
       PricingTable: ({ props }) => pricingTableMarkdown(String(props.table), props.row ? String(props.row) : undefined),
+      SpacefastStage: () =>
+        `\`\`\`ts\nimport { defineConfig } from "spacefast/config";\n\nexport default defineConfig({\n  name: "quiet-harbor",\n  app: {\n    collections: { posts: { title: "Posts" } },\n    actions: { subscribe: { access: "anyone" } },\n  },\n  crons: [{ path: "/api/digest", schedule: "daily" }],\n});\n\`\`\``,
       WpCloudDocs: ({ props }) =>
         `Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) in the upstream infrastructure reference.`,
     },

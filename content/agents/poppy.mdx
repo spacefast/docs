@@ -249,8 +249,10 @@ Spacefast rejects unknown fields and requires two trimmed non-empty strings:
 
 Spacefast responds with `202 Accepted` and an empty body (`Cache-Control: no-store`). Invalid payloads return `400` `invalid_request`.
 
-## Next steps
+## Reference links
 
-- Connect over [MCP server](/agents/mcp-server) using the MCP endpoint advertised in `apis`.
-- Read [Agent permissions](/agents/permissions) for role ceilings, approval gates, and revocation.
-- Browse the [API reference](/api/reference) for every operation behind `https://api.spacefast.com/openapi.json`.
+- [MCP server](/agents/mcp-server): connect to the MCP endpoint advertised in `apis`.
+- [Agent permissions](/agents/permissions): role ceilings, approval gates, and revocation.
+- [API authentication](/api/authentication): OAuth 2.0, DPoP, scopes, and credential rules.
+- [`sf setup agent`](/cli/reference#sf-setup-agent): wire local CLI and MCP setup for supported coding agents.
+- [API reference](/api/reference): every operation behind `https://api.spacefast.com/openapi.json`.

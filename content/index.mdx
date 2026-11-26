@@ -1,101 +1,78 @@
 ---
 title: Spacefast
-description: Publish what you and your AI build with one prompt, a folder drop, a Git push, or one CLI command
+description: Build better and ship with Spacefast — skills, database, Workers, auth, domains, and infrastructure in one Space
 ---
 
-Spacefast publishes what people build with AI. Hand it a folder, a Git repository, or a prompt, and get back a live URL. Publish with your AI, drag files onto [drop.fast](https://drop.fast) (no install, no account required; see [Drop](/publish#publish)), push to `push.fast`, or run the CLI.
+Spacefast is the build companion and infrastructure for you and your AI. Connect Spacefast before you start so your agent gets the skills, recipes, database, storage, Workers, auth, email, and domains it needs in one Space—fewer decisions, fewer mistakes, and no stitching five separate services together.
 
-If you already have a website, paste its address into the [website importer](https://spacefast.com/migrate/) to copy it into a Space. See [Copy a website](/guides/migrate).
+Publish with your AI, drag a folder onto [drop.fast](https://drop.fast) (no install, no account required; see [Drop](/publish#publish)), push to `push.fast`, or run the CLI. Already have a website? Paste its address into the [website importer](https://spacefast.com/migrate/) to copy it into a Space; see [Copy a website](/guides/migrate).
 
-## For AI assistants
+<SpacefastStage />
 
-Reading this for someone? Start with the index at [`https://spacefast.com/docs/llms.txt`](https://spacefast.com/docs/llms.txt). Add `.md` to any page's URL for plain Markdown without navigation, like [`https://spacefast.com/docs/index.md`](https://spacefast.com/docs/index.md).
-
-Asked to find or check a domain name? Do the research yourself: it needs no account. Check names live, then show availability and prices in your reply instead of linking to the API. [Domain research for assistants](/agents/domain-research) has the requests, the fields, and what to say.
-
-## Publish in seconds
+## Start in seconds
 
 ### With your AI
 
-Paste this prompt into Claude, ChatGPT, Codex, Cursor, or any AI that can fetch URLs:
+Paste this prompt into Claude, ChatGPT, Codex, Cursor, or any AI that can fetch URLs and make HTTP requests:
 
-<Prompt description="Paste into your AI to connect Spacefast and publish." actions={["copy"]}>
+<Prompt description="Paste into your AI to connect Spacefast, load skills, and start building." actions={["copy"]}>
 Fetch https://spacefast.com/setup.md and follow it.
 </Prompt>
 
-Your AI connects to Spacefast, walks you through sign-in, and publishes what you built. See [Agents](/agents) for plugins, connectors, and MCP setup.
+Your AI connects to Spacefast, loads Spacefast skills, and builds and publishes directly to your Space. See [Agents](/agents) for plugins, connectors, [MCP](/agents/mcp-server), and [Poppy](/agents/poppy).
 
 ### From your terminal
 
-Publish a folder directly with `npx`:
+Scaffold a Space or publish a folder directly with `npx`:
 
 ```bash
 npx -y spacefast publish ./dist
 ```
 
-No account or global install is needed for the first publish. Spacefast creates a Space, uploads the files, and prints a live URL plus a claim link. Sign in later to keep it, or install the `sf` CLI globally with `npm install -g spacefast`.
-
-```text
-Published: https://quiet-harbor.space.fast
-
-  Open          https://quiet-harbor.space.fast
-  Version URL   https://quiet-harbor--v1.space.fast
-  Version       v1 (ready)
-  Files         12
-  Duration      3.2s
-```
+No account or global install is required for your first publish. Spacefast creates a Space, uploads changed files, and prints a live URL plus a claim link. Sign in later to keep it, or install the `sf` CLI globally with `npm install -g spacefast`. See [`sf publish`](/cli/reference#sf-publish-dir) and [`sf init`](/cli/reference#sf-init-name).
 
 ### From Git or a browser
 
 Push a repository to `push.fast` with [Publish from Git](/git), or drag a folder, a `.zip`, or an `index.html` onto [drop.fast](https://drop.fast).
 
-## How it fits together
+## How one Space works
 
-A **Space** holds your published files. Each publish that changes something creates a **version**, an immutable snapshot with its own URL. The `live` channel points at the version visitors see, and stays empty before the first publish. Promoting or rolling back moves that pointer to another retained, ready version without rebuilding. Preview publishes and manual promotion policies leave `live` where it is. For other terms, see the [glossary](/glossary).
+A **Space** is your project's home on the web. Every publish that changes files creates an immutable **version** with its own URL. The `live` channel points at the version visitors see, and stays empty before the first publish. Rolling back restores a retained, ready version without rebuilding (by default refreshing current rewrites into a new version, or keeping the exact saved snapshot with `--no-refresh-rewrites`; see [Versions](/versions)). Preview publishes and manual promotion policies leave `live` untouched. For every core term, see the [glossary](/glossary).
 
-Every Space starts static and can grow without switching products. Point `sf publish` at a build directory to upload only changed files, or push source and let Spacefast detect the framework and build it. When a Space needs server code or data, configure [Workers](/functions), [Database](/database), [Collections and CMS](/collections), [Actions and forms](/actions), [Transactional email](/email), [Object storage](/object-storage), [Crons](/crons), and [Connectors](/connectors) in `spacefast.config.ts`. See [Build](/build).
+Every Space starts static and grows in place without switching products. Configure [Collections and CMS](/collections), [Actions and forms](/actions), [Database](/database), [Workers](/functions), [Transactional email](/email), [Object storage](/object-storage), [Crons](/crons), [Environment variables](/environment-variables), and [Connectors](/connectors) in `spacefast.config.ts`. See [Build on a Space](/build) and [Project configuration](/config-file).
 
-In a self-serve account, your team owns the Spaces you claim, even when you are its only member. On [Pro](/pricing), you can add members who publish and roll back without sharing your login. Personal and Go allow only the owner. Team roles control who can manage domains, credentials, and billing. See [Teams and members](/teams) to invite people and choose how new Spaces are shared.
+Your team owns the Spaces you claim, even when you are the only member. On [Pro](/pricing), invite teammates to publish and roll back without sharing your login; Personal and Go include one seat. See [Teams and members](/teams).
 
-## Where to go next
-
-Browse the [Docs](/), or jump into any section or tab:
+## Start building
 
 <CardGroup cols={2}>
   <Card title="Quickstart" href="/quickstart" icon="rocket">
-    Install, sign in, publish, and attach a domain in five minutes.
+    Install the CLI, sign in, publish a folder, and attach a custom domain.
   </Card>
-  <Card title="Guides" href="/guides" icon="compass">
-    Starters, framework builds, recipes, and migrating from other platforms.
+  <Card title="Build on a Space" href="/build" icon="blocks">
+    Add collections, server actions, MySQL, Workers, email, storage, and crons in `spacefast.config.ts`.
   </Card>
   <Card title="Agents" href="/agents" icon="bot">
-    Connect Claude Code, Cursor, Codex, or any MCP client.
+    Connect Claude, ChatGPT, Claude Code, Codex, Cursor, or any MCP client.
   </Card>
-  <Card title="CLI reference" href="/cli" icon="terminal">
-    Every `sf` command, flag, and exit code.
-  </Card>
-  <Card title="API reference" href="/api" icon="braces">
-    Auth, envelopes, errors, webhooks, and the HTTP reference.
-  </Card>
-  <Card title="Spacefast for Platforms" href="/platforms" icon="layers">
-    Embed publishing in another product with the Partner API.
-  </Card>
-  <Card title="Publishing" href="/publish" icon="upload">
-    What gets uploaded, change-only uploads, and receipts.
-  </Card>
-  <Card title="Build" href="/build" icon="blocks">
-    Collections, actions, database, Workers, email, storage, and crons.
-  </Card>
-  <Card title="Custom domains" href="/domains" icon="globe">
-    DNS records, verification, TLS, and registering domains at cost.
-  </Card>
-  <Card title="Request lifecycle" href="/request-lifecycle" icon="git-branch">
-    Trace how a request moves from DNS through the edge to your Space.
-  </Card>
-  <Card title="Teams and members" href="/teams" icon="users">
-    Invite collaborators, share Spaces, and control who can change what.
-  </Card>
-  <Card title="Glossary" href="/glossary" icon="book-open">
-    Core terms in one place: Space, version, live, and grant.
+  <Card title="Guides and starters" href="/guides" icon="compass">
+    Scaffold with `sf init` and `sf add`, configure frameworks, or migrate from another platform.
   </Card>
 </CardGroup>
+
+## Deploy, route, and operate
+
+- **[Publishing](/publish)** and **[Channels and previews](/channels)**: change-only uploads, preview channels, promotion policies, and receipts.
+- **[Custom domains](/domains)**, **[Redirects and rewrites](/redirects)**, and **[Response headers](/headers)**: DNS, at-cost domain registration, routing rules, and edge caching.
+- **[Share and access](/share)**, **[SSO](/sso)**, **[Stats](/stats)**, **[Logs](/logs)**, and **[Security](/security)**: private-by-default Spaces, grants, traffic stats, and protection.
+- **[Request lifecycle](/request-lifecycle)** and **[Troubleshooting](/troubleshooting)**: trace requests from DNS to your Space and resolve error codes.
+
+## Reference and platforms
+
+- **[CLI reference](/cli)** and **[Generated CLI commands](/cli/reference)**: every `sf` command, flag, and exit code.
+- **[REST API](/api)**, **[API reference](/api/reference)**, **[Configuration](/config-file)**, **[Limits](/limits)**, and **[Errors](/errors)**: exact schemas, config keys, caps, and RFC 9457 error pages.
+- **[Spacefast for Platforms](/platforms)**: embed Spacefast infrastructure in your own product with the [Partner API](/platforms/partner-api).
+
+## For AI assistants
+
+Reading this for someone? Start with [`https://spacefast.com/docs/llms.txt`](https://spacefast.com/docs/llms.txt) for the curated index and machine-readable endpoints, or append `.md` to any docs URL (such as [`https://spacefast.com/docs/config-file.md`](https://spacefast.com/docs/config-file.md)) for plain Markdown. For live domain availability and prices without an account, follow [Domain research for assistants](/agents/domain-research).

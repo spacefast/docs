@@ -21,9 +21,9 @@ Every object is addressed by a bare 32-character hexadecimal id. There is no key
 | `uploaderId` | Who uploaded it |
 | `createdAt` | Timestamp |
 | `public` | Whether visitors can read it |
-| `url` | Path-relative: `/__stattic/u/<id>?k=<key>` for a public object, or `/storage/<id>` for a private one |
+| `url` | Path-relative URL returned by Spacefast for reading the object (public objects include a read key; private objects resolve at `/storage/<id>`) |
 
-A public object's `url` carries the read key current at the time of the response. Resolve it against whichever of the Space's hostnames you are serving from.
+Always use the `url` field Spacefast returns rather than building an object path by hand. Resolve it against whichever of the Space's hostnames you are serving from.
 
 `filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
 
@@ -90,18 +90,18 @@ Open **Storage** for the Space. Use **Choose Files** and **Upload Files** to upl
 
 | Limit | Value |
 | --- | --- |
-| One file | 5 MiB |
-| Empty uploads | Refused with `storage_empty_file` |
-| Anonymous daily budget, per Space | 200 MiB rolling; identified principals carry no budget |
+| Single stored object | 5 MiB (separate from plan disk and version-file caps) |
+| Empty uploads | Refused with [`storage_empty_file`](/errors/storage_empty_file) |
+| Anonymous daily upload budget, per Space | 200 MiB rolling (identified principals have no separate anonymous budget) |
 | `limit` on a list | 1 to 100, default 50 |
 | `cursor` | 2,048 characters |
 | `filename` | 1 to 255 characters, no separators |
 
 :::caution[Active web content is refused]
-Storage serves files to visitors, so it rejects anything that could execute in a browser or on the server. HTML, XHTML, PHP, anything whose type mentions JavaScript or ECMAScript, and executables (PE, ELF, Mach-O, JAR) are all rejected. Spacefast checks the declared type, the first 512 bytes for magic numbers, and text prefixes like `#!`, `<!doctype html`, `<html`, `<script`, and `<?php`. An uploaded `.html` file will not serve as a page.
+Storage serves files directly to visitors, so it rejects executable and active web files—including HTML, XHTML, PHP, JavaScript/ECMAScript, and binary executables (PE, ELF, Mach-O, JAR). Spacefast inspects both the declared `Content-Type` and file contents, so renaming an `.html` file will not bypass the check. An uploaded `.html` file will not serve as a page.
 :::
 
-A Space whose runtime is not reachable answers `503` with `runtime_management_unavailable`.
+A Space whose runtime is not reachable answers `503` with [`runtime_management_unavailable`](/errors/runtime_management_unavailable).
 
 ## API
 

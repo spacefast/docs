@@ -26,7 +26,7 @@ const receipt = await client.post("/v1/publish", {
 
 </CodeGroup>
 
-Every `POST` honours the header, not only the ones that document it. Generate one key per logical attempt, a UUID or ULID, and reuse it for every retry of that attempt.
+Every `POST` honors the header, not only the ones that document it. Generate one key per logical attempt, a UUID or ULID, and reuse it for every retry of that attempt.
 
 | Property | Value |
 | --- | --- |
@@ -44,15 +44,15 @@ The request runs normally and non-idempotently, and you get no error saying so. 
 
 **The first attempt finished.** The server replays the stored status, headers, and body, and adds `Idempotency-Replayed: true`. Nothing executes a second time.
 
-**The first attempt is still in flight.** You get `409 idempotency_conflict_in_progress`. This is not a failure. Wait and ask again with the same key until it resolves into the stored response.
+**The first attempt is still in flight.** You get `409` [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress). This is not a failure. Wait and ask again with the same key until it resolves into the stored response.
 
-**You changed the body.** You get `409 idempotency_key_reused`. One key means one request payload.
+**You changed the body.** You get `409` [`idempotency_key_reused`](/errors/idempotency_key_reused). One key means one request payload.
 
 ## What is not stored
 
 Some outcomes release the key, so the next attempt runs the request again.
 
-| Outcome | Behaviour |
+| Outcome | Behavior |
 | --- | --- |
 | `5xx` or `429` | Not cached. The key is released, so a retry runs again. Caching a 500 would poison the operation for the whole 24-hour window. |
 | A response waiting on a person's approval | Not cached. A retry after the decision runs again. |
@@ -69,17 +69,17 @@ A key is scoped so two callers cannot collide, and so one caller's retry always 
 - A signed-in session scopes by user id, which stays stable across a re-login.
 - A credential-free caller scopes by a principal it supplies itself. See below.
 
-Because the scope includes `METHOD path`, the same key value on `POST /v1/publish` and on a finalize are two independent records.
+Because the scope includes `METHOD path`, the same key value on [`POST /v1/publish`](/api/reference/publishing/createpublish) and on a finalize are two independent records.
 
 ## Anonymous publishing needs a principal
 
-`POST /v1/publish` accepts no credential at all, which leaves nothing to scope a key by. If you send an `Idempotency-Key` on a credential-free publish, you must also send:
+[`POST /v1/publish`](/api/reference/publishing/createpublish) accepts no credential at all, which leaves nothing to scope a key by. If you send an `Idempotency-Key` on a credential-free publish, you must also send:
 
 ```http
 X-Spacefast-Idempotency-Principal: 3f9a1c7e5b2d8a4f6c0e2b8d1a5f7c3e9b4d6a0f2c8e1b5d7a3f9c4e6b0d2a8f
 ```
 
-Exactly 64 lowercase hexadecimal characters, stable across every retry of that attempt, and known only to you. Without it the request fails:
+Exactly 64 lowercase hexadecimal characters, stable across every retry of that attempt, and known only to you. Without it, the request fails with `400` [`invalid_idempotency_key`](/errors/invalid_idempotency_key):
 
 ```json
 {
@@ -97,11 +97,11 @@ Four operations document the header because a duplicate is expensive:
 
 | Operation | Why |
 | --- | --- |
-| `POST /v1/publish` | A retry without a key can create a second Space or a second version. |
-| `POST /v1/spaces/{spaceId}/builds` | A retry can queue a second build. Required when the build is triggered from managed source. |
-| `POST /v1/spaces/{spaceId}/versions/{versionId}/finalize` | Finalize waits by default, so a client timeout is exactly when you want to retry. |
-| `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` | A retry can move a channel twice. |
+| [`POST /v1/publish`](/api/reference/publishing/createpublish) | A retry without a key can create a second Space or a second version. |
+| [`POST /v1/spaces/{spaceId}/builds`](/api/reference/builds/createspacebuild) | A retry can queue a second build. Required when the build is triggered from managed source. |
+| [`POST /v1/spaces/{spaceId}/versions/{versionId}/finalize`](/api/reference/versions/finalizespaceversion) | Finalize waits by default, so a client timeout is exactly when you want to retry. |
+| [`POST /v1/spaces/{spaceId}/versions/{versionId}/promote`](/api/reference/versions/promotespaceversion) | A retry can move a channel twice. |
 
 ## From the SDK
 
-Passing `idempotencyKey` also makes the call eligible for the retry policy in the SDK, which otherwise only retries `GET`, `HEAD`, and `OPTIONS`. The transport treats a `409 idempotency_conflict_in_progress` answering your own key as "still running, ask again" and keeps polling into the stored response. See [the SDK page](/api/sdk).
+Passing `idempotencyKey` also makes the call eligible for the retry policy in the SDK, which otherwise only retries `GET`, `HEAD`, and `OPTIONS`. The transport treats a `409` [`idempotency_conflict_in_progress`](/errors/idempotency_conflict_in_progress) answering your own key as "still running, ask again" and keeps polling into the stored response. See [the SDK page](/api/sdk).

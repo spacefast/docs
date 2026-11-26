@@ -1,0 +1,279 @@
+---
+/*
+ * Miniature Spacefast product stage for the Docs home page.
+ * Follows Stageshow framing (one hero window bled off the bottom/right edge +
+ * one live receipt satellite straddling the left margin, real strings only on
+ * the story, quiet neutral surface steps + single brand green #1efe57) and
+ * Unslop UI rules (no sparkles, no purple, no decorative eyebrows, no headings
+ * inside the stage, responsive compact layout on narrow screens).
+ */
+---
+
+<div class="sf-stage not-prose" role="img" aria-label="spacefast.config.ts declaring a collection, action, cron, and Worker, paired with a live Space receipt at quiet-harbor.space.fast">
+  <div class="sf-stage-hero">
+    <div class="sf-stage-bar">
+      <span class="sf-stage-file">spacefast.config.ts</span>
+      <span class="sf-stage-meta">One Space</span>
+    </div>
+    <div class="sf-stage-code" aria-hidden="true">
+      <div class="sf-stage-line"><span class="sf-k">import</span> &#123; defineConfig &#125; <span class="sf-k">from</span> <span class="sf-s">"spacefast/config"</span>;</div>
+      <div class="sf-stage-line sf-stage-gap"><span class="sf-k">export default</span> <span class="sf-fn">defineConfig</span>(&#123;</div>
+      <div class="sf-stage-line">  name: <span class="sf-s">"quiet-harbor"</span>,</div>
+      <div class="sf-stage-line">  app: &#123;</div>
+      <div class="sf-stage-line">    collections: &#123; posts: &#123; title: <span class="sf-s">"Posts"</span> &#125; &#125;,</div>
+      <div class="sf-stage-line">    actions: &#123; subscribe: &#123; access: <span class="sf-s">"anyone"</span> &#125; &#125;,</div>
+      <div class="sf-stage-line">  &#125;,</div>
+      <div class="sf-stage-line">  crons: [&#123; path: <span class="sf-s">"/api/digest"</span>, schedule: <span class="sf-s">"daily"</span> &#125;],</div>
+      <div class="sf-stage-line sf-stage-dim">  redirects: [&#123; source: <span class="sf-s">"/blog"</span>, destination: <span class="sf-s">"/posts"</span>, status: 301 &#125;],</div>
+      <div class="sf-stage-line sf-stage-dim">&#125;);</div>
+    </div>
+  </div>
+
+  <div class="sf-stage-satellite" aria-hidden="true">
+    <div class="sf-sat-head">
+      <span class="sf-sat-cmd">$ sf publish</span>
+      <span class="sf-sat-pill">v4 live</span>
+    </div>
+    <div class="sf-sat-url">quiet-harbor.space.fast</div>
+    <div class="sf-sat-rows">
+      <div class="sf-sat-row"><span>Database</span><span class="sf-sat-val">MySQL ready</span></div>
+      <div class="sf-sat-row"><span>Workers</span><span class="sf-sat-val">2 routes</span></div>
+      <div class="sf-sat-row"><span>Duration</span><span class="sf-sat-val">2.4 s</span></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sf-stage {
+    position: relative;
+    margin: 1.5rem 0 2rem;
+    height: 292px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f5f5;
+    border: 1px solid color-mix(in oklch, #141414 10%, transparent);
+    font-family: var(--blume-font-body);
+    user-select: none;
+  }
+
+  :root[data-theme="dark"] .sf-stage {
+    background: #0a0a0a;
+    border-color: color-mix(in oklch, #ffffff 10%, transparent);
+  }
+
+  .sf-stage-hero {
+    position: absolute;
+    top: 22px;
+    left: 118px;
+    width: 620px;
+    height: 310px;
+    border-radius: 10px 0 0 0;
+    background: #ffffff;
+    border: 1px solid color-mix(in oklch, #141414 10%, transparent);
+    box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .sf-stage-hero {
+    background: #141414;
+    border-color: color-mix(in oklch, #ffffff 11%, transparent);
+    box-shadow: 0 20px 44px -22px rgba(0, 0, 0, 0.7);
+  }
+
+  .sf-stage-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 38px;
+    padding: 0 14px;
+    border-bottom: 1px solid color-mix(in oklch, #141414 8%, transparent);
+    font-size: 12px;
+  }
+
+  :root[data-theme="dark"] .sf-stage-bar {
+    border-bottom-color: color-mix(in oklch, #ffffff 8%, transparent);
+  }
+
+  .sf-stage-file {
+    font-family: var(--blume-font-mono);
+    font-size: 12px;
+    color: #141414;
+    font-weight: 500;
+  }
+
+  :root[data-theme="dark"] .sf-stage-file {
+    color: #ffffff;
+  }
+
+  .sf-stage-meta {
+    font-size: 11px;
+    color: #6a6a6a;
+  }
+
+  :root[data-theme="dark"] .sf-stage-meta {
+    color: #8e8e8e;
+  }
+
+  .sf-stage-code {
+    padding: 14px 16px;
+    font-family: var(--blume-font-mono);
+    font-size: 12.5px;
+    line-height: 1.68;
+    color: #262626;
+    white-space: pre;
+  }
+
+  :root[data-theme="dark"] .sf-stage-code {
+    color: #d4d4d4;
+  }
+
+  .sf-stage-gap {
+    margin-top: 4px;
+  }
+
+  .sf-stage-dim {
+    opacity: 0.45;
+  }
+
+  .sf-k {
+    color: #6a6a6a;
+  }
+
+  :root[data-theme="dark"] .sf-k {
+    color: #8e8e8e;
+  }
+
+  .sf-fn {
+    color: #141414;
+    font-weight: 500;
+  }
+
+  :root[data-theme="dark"] .sf-fn {
+    color: #ffffff;
+  }
+
+  .sf-s {
+    color: #0b6e28;
+  }
+
+  :root[data-theme="dark"] .sf-s {
+    color: #1efe57;
+  }
+
+  .sf-stage-satellite {
+    position: absolute;
+    left: 22px;
+    bottom: 22px;
+    width: 248px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid color-mix(in oklch, #141414 12%, transparent);
+    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  :root[data-theme="dark"] .sf-stage-satellite {
+    background: #1c1c1c;
+    border-color: color-mix(in oklch, #ffffff 14%, transparent);
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.78), 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  .sf-sat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .sf-sat-cmd {
+    font-family: var(--blume-font-mono);
+    font-size: 12px;
+    color: #6a6a6a;
+  }
+
+  :root[data-theme="dark"] .sf-sat-cmd {
+    color: #a3a3a3;
+  }
+
+  .sf-sat-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #1efe57;
+    color: #141414;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .sf-sat-url {
+    font-family: var(--blume-font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: #141414;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid color-mix(in oklch, #141414 8%, transparent);
+  }
+
+  :root[data-theme="dark"] .sf-sat-url {
+    color: #ffffff;
+    border-bottom-color: color-mix(in oklch, #ffffff 9%, transparent);
+  }
+
+  .sf-sat-rows {
+    display: grid;
+    gap: 6px;
+  }
+
+  .sf-sat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #6a6a6a;
+  }
+
+  :root[data-theme="dark"] .sf-sat-row {
+    color: #8e8e8e;
+  }
+
+  .sf-sat-val {
+    font-family: var(--blume-font-mono);
+    font-variant-numeric: tabular-nums;
+    color: #141414;
+  }
+
+  :root[data-theme="dark"] .sf-sat-val {
+    color: #e5e5e5;
+  }
+
+  @media (max-width: 640px) {
+    .sf-stage {
+      height: auto;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sf-stage-hero {
+      position: static;
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .sf-stage-code {
+      font-size: 11.5px;
+      overflow-x: auto;
+    }
+
+    .sf-stage-satellite {
+      position: static;
+      width: auto;
+    }
+  }
+</style>

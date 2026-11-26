@@ -6,9 +6,10 @@ import Logo from "./components/Logo.astro";
 import Pagination from "./components/Pagination.astro";
 import Sidebar from "./components/Sidebar.astro";
 import PricingTable from "./components/PricingTable.astro";
+import SpacefastStage from "./components/SpacefastStage.astro";
 import WpCloudDocs from "./components/WpCloudDocs.astro";
 
 export default defineComponents({
   layout: { Breadcrumbs, Header, Logo, Pagination, Sidebar },
-  mdx: { PricingTable, WpCloudDocs },
+  mdx: { PricingTable, SpacefastStage, WpCloudDocs },
 });

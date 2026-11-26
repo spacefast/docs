@@ -3,9 +3,9 @@ title: Skills
 description: The base Spacefast skill and the task skills for saving and using a team's Design System
 ---
 
-The Spacefast plugins and `sf skills install` install the base `spacefast` skill for publishing, inspection, and management. The format and tool choices depend on the client. Adding only an MCP connection doesn't install the skill.
+The Spacefast plugins and [`sf skills install`](/cli/reference#sf-skills-install) install the base `spacefast` skill for publishing, inspection, and management. The format and tool choices depend on the client. Adding only an [MCP server](/agents/mcp-server) connection doesn't install the skill; run [`sf setup agent`](/cli/reference#sf-setup-agent) to configure both.
 
-The plugins also include task skills for building a Space, editing a Space, sharing, custom domains, fixing a deployment, and saving and using a team's Design System.
+The plugins also include task skills for building a Space, editing a Space, sharing, custom domains, fixing a deployment, and saving and using a team's Design System. For custom skills shared across your own team, see [Team Skills](/team-skills).
 
 ## The base `spacefast` skill
 
@@ -93,11 +93,11 @@ The rest sets behavior the tools alone do not enforce.
 - Call the matching operation tool directly. Read its input schema before calling it.
 - Reuse the `.spacefast/` link in the current directory. Do not list Spaces before an ordinary publish, and set `createNew` only when you asked for a separate Space.
 - Publish once, then poll `operation_status` until it settles, then read the deployment, then report.
-- Report the live URL and the immutable version URL, plus the access URL when the receipt includes one. Current clients create team-owned Spaces without automatic access URLs: the owning team signs in at the live URL, and `sf share link create` makes a link for people outside the team. For an anonymous publish, relay the receipt's claim link and message so the owner can keep the Space. Treat the link as a credential.
+- Report the live URL and the immutable version URL, plus the access URL when the receipt includes one. Current clients create team-owned Spaces without automatic access URLs: the owning team signs in at the live URL, and [`sf share link create`](/cli/reference#sf-share-link-create) makes a link for people outside the team. For an anonymous publish, relay the receipt's claim link and message so the owner can keep the Space. Treat the link as a credential.
 - Never print API keys, Space keys, upload tokens, or `.spacefast/state.json`.
 - Open the URL before claiming success, since a bare live URL is private until access is granted.
 
-`references.md` holds the deeper material, hosted versus On-Device differences, the update and claim flow, approvals and `resume_execution`, and signed uploads. The skill tells the agent to load it only when the question actually needs it.
+`references.md` holds the deeper material: hosted versus On-Device differences, the update and claim flow, approvals and `resume_execution`, [`spacefast.config.ts`](/config-file) options, and signed uploads. The skill tells the agent to load it only when the question needs it.
 
 ## Kept in sync with the tools
 
@@ -118,7 +118,7 @@ sf skills install
 | `--list` | List the bundled skill files without installing |
 | `--force` | Overwrite locally modified or unverified Spacefast skill files |
 
-Two sibling commands round it out.
+Two sibling commands, [`sf skills status`](/cli/reference#sf-skills-status) and [`sf skills remove`](/cli/reference#sf-skills-remove), round it out.
 
 ```bash
 sf skills status

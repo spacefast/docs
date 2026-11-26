@@ -3,7 +3,7 @@ title: Spaces
 description: What a Space is, the slug rules the API enforces, who owns it, and what a rename, archive, or delete does to its URLs
 ---
 
-A Space is what you publish to, with one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
+A Space is your project's home on Spacefast: one stable hostname that holds your files, immutable versions, database, Workers, and settings. Every publish creates a version inside it, and the Space decides which version visitors see.
 
 ## What a Space is
 
@@ -29,26 +29,17 @@ The slug is the name in the dashboard URL and the label in every hostname the Sp
 | `--` anywhere | Rejected |
 | All digits | Rejected |
 
-Spacefast trims whitespace, strips diacritics, and lowercases your input. It reshapes nothing else, so `My Space` is rejected and `my-space` passes. A failing slug comes back as `slug_invalid` with a sentence saying which rule you hit.
+Spacefast trims whitespace, strips diacritics, and lowercases your input. It reshapes nothing else, so `My Space` is rejected and `my-space` passes. A failing slug returns [`slug_invalid`](/errors/slug_invalid) with a sentence naming the rule you hit.
 
 `--` is out because it separates a version or branch label from the Space label in hostnames. See [URLs and hostnames](/urls).
 
 ### Reserved slugs
 
-Four classes come back as `slug_reserved`:
+Spacefast reserves slugs used by internet infrastructure (such as `www`, `mail`, and `cdn`), Spacefast platform and dashboard routes (such as `api`, `app`, `dashboard`, and `settings`), and protected brand or trademark names. Requesting a reserved name returns `422` [`slug_reserved`](/errors/slug_reserved) along with a `details.suggestion` you can use as-is.
 
-- Infrastructure names, such as `www`, `mail`, `cdn`, `ns1`, and `ftp`.
-- Spacefast product and platform names, such as `api`, `app`, `dashboard`, `login`, `mcp`, and `cli`.
-- Well-known brand names held against impersonation, such as `google`, `github`, and `stripe`.
-- Any slug containing `spacefast`, `stattic`, `automattic`, `wordpress`, or `paypal` as a substring.
+A rename keeps the old slug reserved for that Space, and only that Space can reclaim it. Another Space requesting it receives [`slug_unavailable`](/errors/slug_unavailable): `422` on create, `409` on rename.
 
-The substring class survives numeric suffixing, so `paypal-2` fails for the same reason `paypal` does. Pick a different base word instead of adding a number.
-
-Dashboard route names are reserved too, and the reservation is scoped to the position. `settings` is refused as a Space slug and accepted as a team slug. Refused as Space slugs: `agents`, `api-keys`, `billing`, `connect`, `domains`, `drop`, `handoffs`, `members`, `new`, `partners`, `resume`, `settings`, `variables`, `webhooks`. The `422` carries a `details.suggestion` you can take as-is.
-
-A rename keeps the old slug reserved for that Space, and only that Space can take it back. Another Space asking for it gets `slug_unavailable`: `422` on create, `409` on rename.
-
-Check before you commit with [`getSlugAvailability`](/api/reference/spaces/getslugavailability).
+Check availability before creating or renaming a Space with [`getSlugAvailability`](/api/reference/spaces/getslugavailability).
 
 ## The default hostname
 

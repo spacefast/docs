@@ -13,7 +13,7 @@ Connect your AI tool to your Spacefast account first (see [Agents](/agents)) to 
 sf publish ./dist
 ```
 
-If you are not signed in, the CLI publishes anyway. The server creates a Space owned only by a secret it returns, and prints a live URL you can open immediately.
+If you are not signed in, [`sf publish`](/cli/reference#sf-publish-dir) publishes anyway (or call [`createPublish`](/api/reference/publishing/createpublish) over HTTP with no credential). The server creates a Space owned only by a secret it returns and prints a live URL you can open immediately.
 
 What comes back is a `claim` block with four fields:
 
@@ -38,7 +38,7 @@ The key is in the claim link's URL fragment. Browsers don't send fragments to se
 
 From the browser, [drop.fast](https://drop.fast) does the same thing while signed out, labeled **Anonymous drop · No account needed**. Claiming the resulting Space removes the anonymous publishing deadline, lets you find it again and publish updates, and keeps its existing sharing settings unchanged. A Space published while signed in to your account skips claiming.
 
-Before claiming, you can publish updates, manage scoped viewer links, and promote or roll back to a version ID from an earlier receipt. Listing version history, downloading files, and exporting app data return `space_unclaimed` until someone claims the Space. Run [`sf spaces claim`](/cli/reference#sf-spaces-claim) in the publishing directory, sign in, then retry.
+Before claiming, you can publish updates, manage scoped viewer links, and promote or roll back to a version ID from an earlier receipt. Listing version history, downloading files, and exporting app data return [`space_unclaimed`](/errors/space_unclaimed) until someone claims the Space. Run [`sf spaces claim`](/cli/reference#sf-spaces-claim) in the publishing directory, sign in, then retry.
 
 ## The clock
 
@@ -63,7 +63,7 @@ Anonymous publishing has stricter limits than the Personal plan:
 | Publishes per IP per hour | 20 |
 | Unclaimed Spaces open at once | 10 per client fingerprint |
 
-Hitting the last one is `429` `anonymous_space_limit_reached`, and the count only includes Spaces that still exist. Retrying a failed publish within 60 seconds reuses the Space from the first attempt instead of creating a second one.
+Exceeding the inline file-count or size ceiling returns [`publish_inline_limit_exceeded`](/errors/publish_inline_limit_exceeded), and exceeding the hourly anonymous publish budget returns [`anonymous_publish_rate_limited`](/errors/anonymous_publish_rate_limited). Hitting the open-Space cap returns `429` [`anonymous_space_limit_reached`](/errors/anonymous_space_limit_reached), counting only Spaces that still exist. Retrying a failed publish within 60 seconds reuses the Space from the first attempt instead of creating a second one.
 
 One more difference: an unclaimed Space accepts every file type, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Other file types, such as archives or executables, upload normally but return `403` until you claim the Space. Full numbers are on [Limits](/limits).
 
@@ -114,7 +114,7 @@ After the claim finishes, the page says **&lt;space&gt; is yours.** and offers *
 
 The claim page lists those people and links under **Already Shared With** ("They will keep their access."). Claiming changes ownership, not who already has access.
 
-Two things can block a claim. Claiming moves the Space into the team, so it counts against that team's Space limit like any other create; a team already at its limit returns `quota_exceeded`. Spacefast also re-checks the slug against the receiving team's namespace; if the slug collides, the claim returns `slug_unavailable` and prompts you to pick a new one.
+Two things can block a claim (via [`sf spaces claim`](/cli/reference#sf-spaces-claim) or [`claimSpace`](/api/reference/publishing/claimspace)). Claiming moves the Space into the team, so it counts against that team's Space limit like any other create; a team at its limit returns [`quota_exceeded`](/errors/quota_exceeded). Spacefast also re-checks the slug against the receiving team's namespace; a collision returns [`slug_unavailable`](/errors/slug_unavailable) and prompts you to pick a new one.
 
 ## Keeping your agent publishing
 
@@ -122,24 +122,26 @@ An agent that published the Space for you loses its credential the moment you cl
 
 On the claim page, leave **Let your agent keep updating it** ticked when eligible (or untick it to cut off access and connect the agent from [Agent setup](/setup) later). On the CLI, pass `sf spaces claim --keep-publishing`. Either way the choice is yours, and the server decides whether the Space is eligible.
 
-If you keep access, the agent's next request trades the demoted key for an API key scoped to the Space, using `exchangeSpaceClaim`. Spacefast shows that key once. If you turn access off, the old key stops working and you must reconnect the agent through [Agents](/agents).
+If you keep access, the agent's next request trades the demoted key for an API key scoped to the Space using [`exchangeSpaceClaim`](/api/reference/publishing/exchangespaceclaim). Spacefast shows that key once. If you turn access off, the old key stops working and you must reconnect the agent through [Agents](/agents).
 
 For what a credential like this can and cannot do, see [what agents are allowed to do](/agents/permissions).
 
 ## Rotating the key
 
-If the key leaked, replace it:
+If the key leaked, replace it with [`sf spaces key rotate`](/cli/reference#sf-spaces-key-rotate) or [`rotateSpaceKey`](/api/reference/publishing/rotatespacekey):
 
 ```bash
 sf spaces key rotate --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567
 ```
 
-You get a fresh `claim` receipt. The old key, its `url`, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working, because those are separate credentials.
+You get a fresh `claim` receipt. The old key, its `url`, its claim link, and every view session opened through it stop working immediately. Explicit recipient links you created keep working because those are separate credentials.
 
 ## Checking on it
+
+Check live status and the claim deadline with [`sf status`](/cli/reference#sf-status):
 
 ```bash
 sf status --include-claim-url
 ```
 
-Over HTTP, `getSpaceClaimStatus` with the space key as bearer returns the publish status, the live URL, the current version, and the claim state and deadline.
+Over HTTP, [`getSpaceClaimStatus`](/api/reference/publishing/getspaceclaimstatus) with the space key as bearer returns the publish status, live URL, current version, and claim state and deadline.

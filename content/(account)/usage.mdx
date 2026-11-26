@@ -11,7 +11,7 @@ Open your team's **Settings → Usage** to see usage against each plan limit. Fe
 
 **Settings → Billing** carries a shorter set of meters next to the plan card: Storage, Team members, Custom domains, and Publishes today. Each one highlights when you reach 80% of the limit.
 
-Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage` gives team counters plus a per-space storage breakdown. `GET /v1/spaces/{spaceId}/usage` gives one space's measured period.
+Two endpoints return the numbers those pages draw. [`GET /v1/teams/{teamId}/usage`](/api/reference/teams/getusage) gives team counters plus a per-Space storage breakdown. [`GET /v1/spaces/{spaceId}/usage`](/api/reference/spaces/getspaceusage) gives one Space's measured period. From a terminal, run [`sf usage`](/cli/reference#sf-usage).
 
 ## What gets metered
 
@@ -19,34 +19,44 @@ Two endpoints return the numbers those pages draw. `GET /v1/teams/{teamId}/usage
 
 | Meter | Field | What it counts | At the limit |
 | --- | --- | --- | --- |
-| Spaces | `spaces` | Live spaces in the team | Blocks at the plan limit. `409` `quota_exceeded` |
-| Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` `domain_quota_exceeded` |
-| Team members | `members` | Billable team members | Blocks at the plan limit. `409` `team_member_quota_exceeded` |
-| Storage | `storageBytes` | Disk your spaces occupy | Displayed only. Nothing blocks |
+| Spaces | `spaces` | Live Spaces in the team | Blocks at the plan limit. `409` [`quota_exceeded`](/errors/quota_exceeded) |
+| Custom domains | `domains` | External domain groups against the plan quota | Blocks. `409` [`domain_quota_exceeded`](/errors/domain_quota_exceeded) |
+| Team members | `members` | Billable team members | Blocks at the plan limit. `409` [`team_member_quota_exceeded`](/errors/team_member_quota_exceeded) |
+| Storage | `storageBytes` | Disk your Spaces occupy | Displayed only. Nothing blocks |
 | Publishes | `buildsDeploysToday` | Publishes and builds since the UTC day started, pooled | Warns only. Publishing continues |
 
 The response also carries `storageQuotaBytes`, `storageOverageBytes`, `buildsDeploysDaily`, and `buildsDeploysThisMonth`, so you can compute headroom.
 
-### Current per-space measurements
+### Current per-Space measurements
 
-`GET /v1/spaces/{spaceId}/usage` returns one settled period.
+[`GET /v1/spaces/{spaceId}/usage`](/api/reference/spaces/getspaceusage) returns one settled period.
 
 | Field | What it measures |
 | --- | --- |
 | `storageBytes` | Average bytes on disk during the period, not the size of what you uploaded |
-| `computeSeconds` | Compute the space consumed |
-| `bandwidthBytes` | Bytes the space served |
-| `emailCount` | Emails the space sent |
-| `functionInvocations` | Function calls, counted where the space is known |
+| `computeSeconds` | Compute the Space consumed |
+| `bandwidthBytes` | Bytes the Space served |
+| `emailCount` | Emails the Space sent |
+| `functionInvocations` | Function calls, counted where the Space is known |
 | `functionErrors` | Those calls that ended in an error |
 
 These measurements are usage counters, not invoice line items.
+
+## Usage budgets
+
+Cap monthly spending for a team, subteam, or Space in team **Settings**, from the CLI with [`sf budget`](/cli/reference#sf-budget) ([`sf budget set`](/cli/reference#sf-budget-set-amount), [`sf budget list`](/cli/reference#sf-budget-list), [`sf budget clear`](/cli/reference#sf-budget-clear-budget)), or through the API:
+
+- [`GET /v1/teams/{teamId}/usage/budgets`](/api/reference/teams/listusagebudgets) lists active budgets.
+- [`PUT /v1/teams/{teamId}/usage/budgets`](/api/reference/teams/setusagebudget) creates or updates a budget.
+- [`DELETE /v1/teams/{teamId}/usage/budgets/{budgetId}`](/api/reference/teams/clearusagebudget) removes a budget.
+
+When a budget is reached, new builds and Workers pause and return [`usage_budget_exceeded`](/errors/usage_budget_exceeded). See [Pricing and limits](/pricing#can-i-cap-my-spending) for default budgets and pause thresholds.
 
 ## Measurement timing
 
 Storage is measured by the infra that serves your Spaces, and it lags the present by about an hour. `storageCalculatedAt` tells you how far back the weakest measurement behind the total reaches.
 
-Nothing is deduplicated. A file present in two spaces sits on two disks and counts twice in your team total.
+Nothing is deduplicated. A file present in two Spaces sits on two disks and counts twice in your team total.
 
 The newest measurement period is always dropped, because partial ingestion underreports it. When the measuring infrastructure is unreachable, usage comes back as `null` rather than a zero or a cached guess. A blank meter means unmeasured, not empty.
 

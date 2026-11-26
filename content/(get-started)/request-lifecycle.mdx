@@ -30,7 +30,7 @@ DNS routes your custom domain or `space.fast` hostname to Spacefast's edge, whic
 
 ## Traffic rules
 
-Firewall rules evaluate first at the edge and can `block` or `challenge` a request before it reaches your Space. Cache-bypass rules decide whether a request skips the edge cache and goes straight to the Space. When you enable edge placement (`placement.edge`), eligible redirects and headers also run at the edge. See [Redirects and rewrites](/redirects).
+Firewall rules evaluate first at the edge and can `block` or `challenge` a request before it reaches your Space. Edge traffic protection can also return HTTP `429` for excessive visitor traffic; see [Rate limiting](/infrastructure/rate-limiting) (management API calls follow a separate budget returning [`rate_limited`](/errors/rate_limited)). Cache-bypass rules decide whether a request skips the edge cache and goes straight to the Space. When you enable edge placement (`placement.edge`), eligible redirects and headers also run at the edge. See [Redirects and rewrites](/redirects).
 
 ## Edge cache
 
@@ -38,7 +38,7 @@ For public `GET` and `HEAD` requests that no cache-bypass or no-store rule exclu
 
 ## Redirects, rewrites, and proxies
 
-On a cache miss, Spacefast evaluates compiled rules in order (`_redirects` first, then `redirects`, then `rewrites` from `spacefast.config.ts` or `sf.jsonc`), and the first match wins. Redirects and proxies answer without checking the static file table. Rewrites and `404` rules yield to an existing static file unless you set `force`. See [Redirects and rewrites](/redirects).
+On a cache miss, Spacefast evaluates compiled rules in order (`_redirects` first, then `redirects`, then `rewrites` from [`spacefast.config.ts`](/config-file) or `sf.jsonc`), and the first match wins. Redirects and proxies answer without checking the static file table. Rewrites and `404` rules yield to an existing static file unless you set `force`. Test rule evaluation locally before publishing with [`sf routing inspect`](/cli/reference#sf-routing-inspect), and see [Redirects and rewrites](/redirects).
 
 ## Access control
 
@@ -58,4 +58,4 @@ If a static file or Worker route matched the path for a different HTTP method, S
 
 ## Response headers
 
-On the way out, Spacefast applies every matching header rule from dashboard settings, `spacefast.config.ts` (or `sf.jsonc`), and `_headers`, matched against the visitor's original request path rather than a rewritten path. Spacefast attaches default `Cache-Control` and `ETag` headers here unless your rules override them. See [Response headers](/headers) and [Caching](/caching).
+On the way out, Spacefast applies every matching header rule from dashboard settings, [`spacefast.config.ts`](/config-file#redirects-rewrites-headers-and-traffic-rules) (or `sf.jsonc`), and `_headers`, matched against the visitor's original request path rather than a rewritten path. Spacefast attaches default `Cache-Control` and `ETag` headers here unless your rules override them. See [Response headers](/headers) and [Caching](/caching).

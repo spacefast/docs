@@ -41,7 +41,7 @@ Outside those directories, an unhashed file receives the one-day shared policy. 
 
 ### Bypass the edge cache
 
-Use `cache.bypass` in `spacefast.config.ts` to serve matching requests fresh from origin instead of the edge cache:
+Use `cache.bypass` in [`spacefast.config.ts`](/config-file) to serve matching requests fresh from origin instead of the edge cache:
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
@@ -56,11 +56,11 @@ export default defineConfig({
 });
 ```
 
-You can also add cache-bypass rules without publishing via `sf rules add --kind cache-bypass` or the dashboard's **Traffic Rules** page. See [Traffic Rules](/redirects#traffic-rules) for the full match grammar and limits.
+You can also add cache-bypass rules without publishing via [`sf rules add`](/cli/reference#sf-rules-add) (`--kind cache-bypass`) or the dashboard's **Traffic Rules** page. See [Traffic Rules](/redirects#traffic-rules) for the full match grammar and limits.
 
 ### Override `Cache-Control` for browsers
 
-A matching `Cache-Control` rule in `spacefast.config.ts` (or an optional `_headers` file) is sent verbatim to browsers:
+A matching `Cache-Control` rule in [`spacefast.config.ts`](/config-file#redirects-rewrites-headers-and-traffic-rules) (or an optional `_headers` file) is sent verbatim to browsers:
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
@@ -93,7 +93,7 @@ The non-`GET` rule has no exceptions. Because the shared cache keys on host, pat
 
 Previews are private by default. An authenticated preview response uses `private, no-store`, so it cannot demonstrate the cache behavior of a public live response.
 
-Before promotion, inspect the exact build output you intend to publish:
+Before promotion, inspect the exact build output you intend to publish with [`sf routing inspect`](/cli/reference#sf-routing-inspect):
 
 ```bash
 sf routing inspect --routing ./dist --url https://example.com/path
@@ -101,9 +101,9 @@ sf routing inspect --routing ./dist --url https://example.com/path
 
 Replace `./dist` with your build's publish root and repeat `--url` to match more URLs. This shows compiled custom header rules, not the complete runtime response or managed edge cache policy. See [Response headers](/headers).
 
-`sf routing compute --space my-space` resolves routing with current variables for the ready pending version if one exists, otherwise the live version. It does not accept `--url` or select an arbitrary version. An authenticated request to a preview can inspect its response headers, while its private cache policy stays intentional.
+[`sf routing compute`](/cli/reference#sf-routing-compute) (`sf routing compute --space my-space`, or [`computeSpaceRouting`](/api/reference/spaces/computespacerouting) over HTTP) resolves routing with current variables for the ready pending version if one exists, otherwise the live version. It does not accept `--url` or select an arbitrary version. An authenticated request to a preview can inspect its response headers, while its private cache policy stays intentional.
 
-To observe live edge caching, run `sf promote <version>` and request the public live URL without private access credentials. Run `sf rollback <version>` if you need to return to an earlier version.
+To observe live edge caching, run [`sf promote`](/cli/reference#sf-promote-version) (`sf promote <version>`) and request the public live URL without private access credentials. Run [`sf rollback`](/cli/reference#sf-rollback-version) (`sf rollback <version>`) if you need to return to an earlier version.
 
 ## Vary is not part of the cache key
 
@@ -113,7 +113,7 @@ Because of this, any URL touched by a routing rule with `Country=`, `Language=`,
 
 ## What a publish does
 
-Activating a new version points the Space's hostnames at it and purges the edge for every serving hostname. Purges clear a **whole hostname**; per-URL purges are unavailable because cache keys include query strings.
+Activating a new version points the Space's hostnames at it and purges the edge for every serving hostname. Purges clear a **whole hostname**; per-URL purges are unavailable because cache keys include query strings. Repeated publishes count toward your hourly publish budget and return [`rate_limited`](/errors/rate_limited) past the ceiling; see [Rate limits](/api/rate-limits).
 
 Immutable version hostnames are not purged because their content never changes.
 
