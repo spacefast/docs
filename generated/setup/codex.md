@@ -36,7 +36,7 @@ codex mcp add spacefast -- npx -y spacefast mcp
 1. Restart Codex, or start a new CLI session. Use `/mcp` to check the connection.
 2. Use any Spacefast tool. Sign in to Spacefast in the browser window that opens.
 
-**Install from the plugin marketplace** ([Marketplace listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
+**Install from the plugin marketplace** ([Official listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
 
 [Install from the plugin marketplace](https://chatgpt.com/plugins/plugin_asdk_app_6aa80fbfddb0819188f1304e303c856d)
 

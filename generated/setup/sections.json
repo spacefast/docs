@@ -380,13 +380,8 @@
   ],
   "connect": [
     {
-      "id": "directory-connector",
-      "name": "Directory connector",
-      "path": "/connect/directory-connector/"
-    },
-    {
       "id": "marketplace",
-      "name": "Marketplace listing",
+      "name": "Official listing",
       "path": "/connect/marketplace/"
     },
     {

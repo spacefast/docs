@@ -16,7 +16,7 @@ On a Team Bot, an admin's MCP policy can block the server.
 
 ## Other ways to connect
 
-**Install from the plugin marketplace** ([Marketplace listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
+**Install from the plugin marketplace** ([Official listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
 
 [Install from the plugin marketplace](https://x.ai/bot/plugin/72532022)
 

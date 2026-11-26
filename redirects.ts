@@ -30,6 +30,7 @@ export const redirects: { from: string; to: string; status: 301 }[] = [
   { from: "/cli/docs", to: "/cli", status: 301 },
   { from: "/cli/mcp", to: "/cli/agents", status: 301 },
   { from: "/collab", to: "/", status: 301 },
+  { from: "/connect/directory-connector", to: "/connect/marketplace", status: 301 },
   { from: "/configuration", to: "/config-file", status: 301 },
   { from: "/custom-domains", to: "/domains", status: 301 },
   { from: "/errors/jetpack_licensing_rejected", to: "/api/errors", status: 301 },

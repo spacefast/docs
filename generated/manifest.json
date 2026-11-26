@@ -4,11 +4,12 @@
     "apiOperations": 494,
     "changelogPackages": 24,
     "changelogVersions": 36,
-    "connectPages": 13,
+    "connectPages": 11,
     "errorCodes": 802,
     "partnerOperations": 459,
     "redirects": 3507,
-    "setupPages": 47
+    "setupPages": 47,
+    "files": 930
   },
   "files": [
     {
@@ -327,19 +328,14 @@
       "sha256": "7fde4d1f364d18c734edb71488d7402786a423ed31845faf8b5ba9a1b136c104"
     },
     {
-      "bytes": 10092,
+      "bytes": 9933,
       "path": "connect/compare.md",
-      "sha256": "7d9fd70bbeeb53f110efa6ed28d3e8e4569472e400928caed3614cacec6a0892"
+      "sha256": "f918221a39aaa061d7c5ac282f6c6809470105fd2b9a17bf8fd8c9a4292a559f"
     },
     {
       "bytes": 750,
       "path": "connect/desktop-extension.md",
       "sha256": "bc735fb963813e8faac2a225da59e9cc04114babfc0ddec9495fa84b8ca169f1"
-    },
-    {
-      "bytes": 3114,
-      "path": "connect/directory-connector.md",
-      "sha256": "106e88c16d6785aec0ce58365928ca9c06d1a094eb195add233551b7c80cacf1"
     },
     {
       "bytes": 1454,
@@ -357,19 +353,19 @@
       "sha256": "b40e8069a3142f732c06a6ab06f7b4b5ce44e38a3a05168f461311caf6da934b"
     },
     {
-      "bytes": 1832,
+      "bytes": 1712,
       "path": "connect/index.md",
-      "sha256": "d36b0b0b6cb065359c83388cdf34b4675da7a7bd27d487d784ebd6f7744abd49"
+      "sha256": "03a2220edeed0147c2f3ac671531f58cd8df8b50e40d5a6c0d0c029e5b61442d"
     },
     {
-      "bytes": 3209,
+      "bytes": 5646,
       "path": "connect/marketplace.md",
-      "sha256": "c9ccf196caf1e70bffa952c8b6f40b0585c7103408414b4e3475186b607cf533"
+      "sha256": "3dc7cc98f4003e10b1497164568a1682972fcf4153831fb55133d7fe47b43054"
     },
     {
-      "bytes": 3727,
+      "bytes": 3711,
       "path": "connect/plugin.md",
-      "sha256": "51cd0adc843ce0b2ddd4cad8379a73d333383bd97c314ee15706118516c1ac25"
+      "sha256": "ed7e02469eeb7a42697498e1d4840a3fbd8155f8381d5696aa86bb0a20ad78a1"
     },
     {
       "bytes": 1125,
@@ -377,9 +373,9 @@
       "sha256": "a86a9eb0013617afc29f06f61493e8fa65fac65163195133c7860e90af878d44"
     },
     {
-      "bytes": 7422,
+      "bytes": 7420,
       "path": "connect/setup-prompt.md",
-      "sha256": "6e26cf9eb19a69771fa804fecd99e9cfc42df432a5cba01772dde4863df0eeb8"
+      "sha256": "5c8e2a2ab427ad36fbd3b9fcdf661f54791157e59841d90ab4a2587d452c15c6"
     },
     {
       "bytes": 1659,
@@ -1572,14 +1568,14 @@
       "sha256": "d81bf3dda58495997671f569cd637703a710c21c63f0ce9dc760801b6a001ed9"
     },
     {
-      "bytes": 980,
-      "path": "errors/invalid_domain.md",
-      "sha256": "aa68bd158e26ff8961427c3b88d473d4333ca3ebaa68ab80c64720e4d7e6520f"
-    },
-    {
       "bytes": 1086,
       "path": "errors/invalid_domain_name.md",
       "sha256": "de55c61d14fc4674e106d625b2238106f2fc123a591f050f35e24097fc6aa796"
+    },
+    {
+      "bytes": 980,
+      "path": "errors/invalid_domain.md",
+      "sha256": "aa68bd158e26ff8961427c3b88d473d4333ca3ebaa68ab80c64720e4d7e6520f"
     },
     {
       "bytes": 1222,
@@ -1632,14 +1628,14 @@
       "sha256": "8c4a2901fac7ef088d452a657bc8d73a3c5ff6fba334eebbedd6a17445a2170e"
     },
     {
-      "bytes": 982,
-      "path": "errors/invalid_space.md",
-      "sha256": "7f3007c67f7763c32c640cd9a8aaaff3903fdaeda8a116448b4a22af47905f1b"
-    },
-    {
       "bytes": 1057,
       "path": "errors/invalid_space_mode.md",
       "sha256": "d2822a18b62d99584623b8b1eb501a2415291bd5c67df667e63c654c64863d6b"
+    },
+    {
+      "bytes": 982,
+      "path": "errors/invalid_space.md",
+      "sha256": "7f3007c67f7763c32c640cd9a8aaaff3903fdaeda8a116448b4a22af47905f1b"
     },
     {
       "bytes": 1340,
@@ -4427,9 +4423,9 @@
       "sha256": "911ce27f5a62a4d53d950ba22df9d48965cbf867e78290c1ccde610ff640ebea"
     },
     {
-      "bytes": 2237,
+      "bytes": 2234,
       "path": "setup/antigravity.md",
-      "sha256": "7ec5fd0c2d4766f4fbe3d1a0c97580e4c753e331e3b8e8a426d7d3348a18fb8e"
+      "sha256": "fb8f81b01fd9b6a7221b1b36a7090a8857f4282b26444ff5ae82a6b565883cb9"
     },
     {
       "bytes": 1742,
@@ -4437,39 +4433,39 @@
       "sha256": "6d7978773330de9ec69bab6ffc4d0d73d1eb025b3bf268a01aea34b3e18c7b7d"
     },
     {
-      "bytes": 1302,
+      "bytes": 1299,
       "path": "setup/chatgpt-space.md",
-      "sha256": "1abd823a6f2f7be6a9f1b89066b79193f7dda2d9a0132a461c194589750eb479"
+      "sha256": "1d3f70bc33acb39a17a5cdbf005d69bb8b37157d42407764883cbd6af2a45cfa"
     },
     {
-      "bytes": 1514,
+      "bytes": 1511,
       "path": "setup/chatgpt-work.md",
-      "sha256": "f1cf69bb3cd0f28c6672919c9a7589a5bd9f6368d181de608dd258e20bb42c8a"
+      "sha256": "9580fe98ac941ab1a912bf3434bc8c2f2630cf057bdd10eb365d891c8ede4142"
     },
     {
-      "bytes": 1725,
+      "bytes": 1722,
       "path": "setup/chatgpt.md",
-      "sha256": "5d7a1ffcd2000f3010dd49bd3473f72b90b38ae560ab724750214728339a011b"
+      "sha256": "3f96688794a4c097102c8d172f17836eaad013338648c838b70eb563c47b2700"
     },
     {
-      "bytes": 2971,
+      "bytes": 2959,
       "path": "setup/claude-app.md",
-      "sha256": "552a47089c59d059763462fa5e7920bfc9bd6f805541c3afa5954481a0b394a9"
+      "sha256": "86081b5e032363ce27bdb7e742a4ea5b8195df6e3b11cffa2f5af9315558248e"
     },
     {
-      "bytes": 3741,
+      "bytes": 3730,
       "path": "setup/claude-code.md",
-      "sha256": "cd9789ed5c84cd246389d221cac54fa4ec76a504ea82483a59cbf49c3f785777"
+      "sha256": "bae28717354fce679267440e27026e84508a44faf163f308b3ba0711945f9edf"
     },
     {
-      "bytes": 2933,
+      "bytes": 2922,
       "path": "setup/claude-cowork.md",
-      "sha256": "779aa0d16a7ec89d6e31fa92c92b59d768acbe7653b21866185acc0c77085303"
+      "sha256": "4eabc4f3fdec30f2df3f9b9f72edf44df8a262b5e8ebdb160083cb5a625e16f2"
     },
     {
-      "bytes": 2914,
+      "bytes": 2902,
       "path": "setup/claude-desktop.md",
-      "sha256": "e9519a7f0862b853a1404a038daab7c36bce524401c570935bcb5e54bfcce31b"
+      "sha256": "2cf0c7a736174776f7779c7e4329da5cc9769879668583509a817c71f5d76466"
     },
     {
       "bytes": 3262,
@@ -4477,9 +4473,9 @@
       "sha256": "02036a804d2c60a0642f971fc54486d0c4457b57e5de7fcc08fd71dee10e4418"
     },
     {
-      "bytes": 4457,
+      "bytes": 4454,
       "path": "setup/codex.md",
-      "sha256": "a5d650ecfc871b33ebf777b9f556936d65460e62ded75c1f65c615e26602fd13"
+      "sha256": "c4f8d359df1b5a36868fbbbc3324b1cdd9436864b69cd4f83b0021e14736fc23"
     },
     {
       "bytes": 1248,
@@ -4492,9 +4488,9 @@
       "sha256": "b3907d850bbebc61731ff886fa91f5d476bbe3164aa6afea0fda55ec55665db5"
     },
     {
-      "bytes": 2955,
+      "bytes": 2952,
       "path": "setup/cursor.md",
-      "sha256": "25bf0fa70de5aa826031c5aec6269c4b3b9247246c2981e84d8225847b38ec8e"
+      "sha256": "dc2e501788e5dbbac763a873d60d9fc5a48eb8c6c6ccca2a6a7b46e10e04181a"
     },
     {
       "bytes": 1541,
@@ -4532,9 +4528,9 @@
       "sha256": "3507167923653553d3b020e981c4d80c407d0aa215e4dcbd8a1f74247694fcb1"
     },
     {
-      "bytes": 2247,
+      "bytes": 2244,
       "path": "setup/grok-bot.md",
-      "sha256": "e165803fc3eefe29042e5a17eb2d26c3512d13325bb9774276c2e14caf5fa174"
+      "sha256": "cbb25b4b535396f26283fe87c1c810e43840381721c9ce9eb8bc1949ddd52ac0"
     },
     {
       "bytes": 1309,
@@ -4637,9 +4633,9 @@
       "sha256": "baf31fd2eca29f9aff3063f59ead24ed087483663293425819ad424a08310584"
     },
     {
-      "bytes": 10136,
+      "bytes": 10002,
       "path": "setup/sections.json",
-      "sha256": "f7d09f31cff8bd42a8b3b47beee3fe581f366b10ce09994e7efb9e35dc9b6f29"
+      "sha256": "663db26ec263d80164afb33c4dc9af15d80984b906f38c76cc3afcb23e01a22d"
     },
     {
       "bytes": 767,

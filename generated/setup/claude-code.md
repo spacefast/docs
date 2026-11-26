@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Claude Code so it can publish what you build.
 
-**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Directory connector](/connect/directory-connector/))
+**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Official listing](/connect/marketplace/))
 
 1. If the link opens a custom connector form, add the connector first. Then choose Connect.
 2. Sign in to Spacefast and approve access.

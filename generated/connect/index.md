@@ -7,8 +7,7 @@ seo:
 
 There are a few ways to connect an agent to Spacefast. Your agent's [setup page](/agents/) says which one to use first. These pages explain each one.
 
-- [Directory connector](/connect/directory-connector/): Add Spacefast from the agent's own connector directory, then sign in.
-- [Marketplace listing](/connect/marketplace/): Install the Spacefast plugin from the agent's official plugin marketplace.
+- [Official listing](/connect/marketplace/): Add Spacefast from the agent's official app directory or marketplace, then sign in.
 - [Spacefast plugin](/connect/plugin/): Add the plugin from spacefast/plugins with the agent's own plugin command.
 - [MCP on your computer (stdio)](/connect/stdio-mcp/): Run the Spacefast MCP server locally on your computer over stdio.
 - [Hosted MCP server](/connect/hosted-mcp/): Point the agent at https://mcp.spacefast.com and sign in with OAuth.

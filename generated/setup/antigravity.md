@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Antigravity so its agent can publish what you build.
 
-**Install from the Antigravity Marketplace** ([Marketplace listing](/connect/marketplace/)). Installs Spacefast from Antigravity's Marketplace, with its skills and the hosted connection. In the app, it's under Customizations → Marketplace.
+**Install from the Antigravity Marketplace** ([Official listing](/connect/marketplace/)). Installs Spacefast from Antigravity's Marketplace, with its skills and the hosted connection. In the app, it's under Customizations → Marketplace.
 
 ```bash
 agy plugin install spacefast@antigravity-plugins-partners

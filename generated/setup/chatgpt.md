@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to ChatGPT on the web so it can publish what you build.
 
-**Install from the plugin marketplace** ([Marketplace listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
+**Install from the plugin marketplace** ([Official listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
 
 [Install from the plugin marketplace](https://chatgpt.com/plugins/plugin_asdk_app_6aa80fbfddb0819188f1304e303c856d)
 

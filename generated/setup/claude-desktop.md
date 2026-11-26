@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to the Claude desktop app on this computer.
 
-**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Directory connector](/connect/directory-connector/))
+**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Official listing](/connect/marketplace/))
 
 1. If the link opens a custom connector form, add the connector first. Then choose Connect.
 2. Sign in to Spacefast and approve access.
@@ -46,7 +46,7 @@ Give the agent one prompt that lets it choose and complete the best setup lane.
 
 ## Plan limits
 
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 - **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
 - **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
 

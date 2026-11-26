@@ -25,7 +25,7 @@ https://mcp.spacefast.com
 npx -y plugins add spacefast/plugins -t cursor -y
 ```
 
-**Install from the plugin marketplace** ([Marketplace listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
+**Install from the plugin marketplace** ([Official listing](/connect/marketplace/)). Install Spacefast from the plugin directory, then connect your account.
 
 [Install from the plugin marketplace](https://cursor.com/marketplace/automattic)
 
