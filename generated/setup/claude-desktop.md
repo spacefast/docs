@@ -2,46 +2,39 @@
 title: "Connect Claude Desktop to Spacefast"
 description: "Add Spacefast to the Claude desktop app on this computer."
 seo:
-  canonical: "https://spacefast.com/docs/setup/claude-desktop/"
+  canonical: "https://spacefast.com/docs/agents/claude-desktop/"
 ---
 
 Add Spacefast to the Claude desktop app on this computer.
 
-**Add a connector on claude.ai.** Set it up once in your Claude account, and it works in the desktop app, on the web, and on your phone.
+**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Directory connector](/connect/directory-connector/))
+
+1. If the link opens a custom connector form, add the connector first. Then choose Connect.
+2. Sign in to Spacefast and approve access.
+3. Turn Spacefast on for the conversation you want to use it in.
+
+On a Team or Enterprise plan, an owner has to add the connector first.
+
+If nothing happens, add the endpoint in Claude Desktop yourself:
 
 ```text
 https://mcp.spacefast.com
 ```
 
-1. On claude.ai, open Customize → Connectors, then choose + → Add custom connector.
-2. Name it Spacefast and paste the address above as its URL.
-3. Add the connector, then choose Connect.
-4. Sign in to Spacefast and approve access.
-5. Turn Spacefast on for the conversation you want to use it in.
-
-On a Team or Enterprise plan, an owner has to add the connector first.
-
 ## Other ways to connect
 
-**Add the Spacefast plugin.** Add it once to your Claude account. It works in the Chat and Cowork tabs and in Claude Code, with nothing to install on this computer.
+**Add the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Add it once to your Claude account. It works in the Chat and Cowork tabs and in Claude Code, with nothing to install on this computer.
 
 ```text
 spacefast/plugins
 ```
 
-1. In Claude, open Customize → Plugins, then choose Add → Add marketplace → Add from a repository.
+1. In Claude, click Plugins in the sidebar, then choose Add → Add marketplace → Add from a repository.
 2. Paste spacefast/plugins and add the marketplace.
 3. Select the Spacefast plugin, then choose Add.
 4. Sign in to Spacefast and approve access when Claude asks. If Claude says the Spacefast connector isn't connected, add the connector as well.
 
-Plugins need a paid Claude plan. On a Team or Enterprise plan, an owner may limit which marketplaces you can add.
-
-**Download desktop extension.** An extension that runs Spacefast on this computer. It needs Node.js with npx installed where the desktop app can find it.
-
-[Download desktop extension](https://github.com/spacefast/plugins/releases/latest/download/claude-desktop.mcpb)
-
-1. Download the file, then double-click it and confirm the install.
-2. Paste a Spacefast API key, or leave it blank to publish anonymously and claim the Space later.
+The Plugins page is live on Free, Pro, Max, and Ultra plans. It reaches Team plans from November 30, 2026 and Enterprise plans in the following weeks; until then, look for Customize → Plugins. On a Team or Enterprise plan, an owner may limit which marketplaces you can add, and from November 30, plugins don't work in the Claude Desktop app if Skills are off for your organization. Removing the plugin doesn't disconnect the Spacefast connector, so disconnect it separately.
 
 Prefer to hand this off? Copy setup prompt:
 
@@ -50,5 +43,13 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+## Plan limits
+
+- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
+- **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Claude Desktop documentation](https://github.com/modelcontextprotocol/mcpb)

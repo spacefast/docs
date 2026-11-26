@@ -100,7 +100,7 @@ export function routeOf(line) {
   return match[1].replace(/\/$/u, "") || "/";
 }
 
-export function buildLlmsIndex({ source, sidebarRoutes }) {
+export function buildLlmsIndex({ source, sidebarRoutes, collapsedRoutes = new Set() }) {
   const lines = source.split("\n");
   const entries = lines.filter(isEntry);
   if (entries.length === 0 || !lines.some(isHeading)) {
@@ -114,6 +114,7 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
   const shouldDrop = (line) => {
     const route = routeOf(line);
     if (!route || isDiscoveryResource(route)) return false;
+    if (collapsedRoutes.has(route)) return true;
     if (sidebarRoutes.has(route)) return false;
     return COLLAPSED_ROOTS.some((root) => route === root || route.startsWith(`${root}/`));
   };
@@ -210,13 +211,34 @@ export function buildLlmsIndex({ source, sidebarRoutes }) {
   return { dropped, kept: survivors.length, bytes, text: result };
 }
 
+const AUTHORED_AGENT_SLUGS = new Set(["claude-code", "codex", "cursor", "claude-desktop"]);
+
+async function readGeneratedCollapsedRoutes(root) {
+  const raw = await readFile(path.join(root, "generated/setup/sections.json"), "utf8").catch(
+    () => null,
+  );
+  if (!raw) return new Set();
+  const sections = JSON.parse(raw);
+  const collapsed = new Set();
+  for (const method of sections.connect ?? []) {
+    collapsed.add(`/connect/${method.id}`);
+  }
+  for (const agent of sections.agents ?? []) {
+    if (agent.group !== "featured" && !AUTHORED_AGENT_SLUGS.has(agent.id)) {
+      collapsed.add(`/agents/${agent.id}`);
+    }
+  }
+  return collapsed;
+}
+
 export async function curateLlmsIndex(root = process.cwd()) {
   const target = path.join(root, "dist", "llms.txt");
-  const [source, sidebarRoutes] = await Promise.all([
+  const [source, sidebarRoutes, collapsedRoutes] = await Promise.all([
     readFile(target, "utf8"),
     readSidebarRoutes(root),
+    readGeneratedCollapsedRoutes(root),
   ]);
-  const result = buildLlmsIndex({ source, sidebarRoutes });
+  const result = buildLlmsIndex({ source, sidebarRoutes, collapsedRoutes });
   await writeFile(target, result.text);
   return result;
 }

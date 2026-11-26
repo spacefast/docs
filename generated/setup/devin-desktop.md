@@ -2,12 +2,25 @@
 title: "Connect Devin Desktop to Spacefast"
 description: "Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI."
 seo:
-  canonical: "https://spacefast.com/docs/setup/devin-desktop/"
+  canonical: "https://spacefast.com/docs/agents/devin-desktop/"
 ---
 
 Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and Devin CLI.
 
-**Configure `~/.config/devin/mcp_config.json`.** Works with Devin Local, Devin Desktop's default agent, and with Devin CLI.
+**Install the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Adds Spacefast to Devin Desktop and Devin CLI with its skills and the hosted connection.
+
+```bash
+devin plugins install spacefast/plugins
+```
+
+1. Run `devin mcp login spacefast`, then sign in to Spacefast and approve access.
+2. Start a new session so the Spacefast tools load.
+
+Devin installs plugins for signed-in accounts (`devin auth login`).
+
+## Other ways to connect
+
+**Configure `~/.config/devin/mcp_config.json`** ([Hosted MCP server](/connect/hosted-mcp/)). Works with Devin Local, Devin Desktop's default agent, and with Devin CLI.
 
 ```json
 {
@@ -27,21 +40,25 @@ Add Spacefast to Devin Desktop, formerly Windsurf, for its Devin Local agent and
 
 Legacy Cascade reads the same file.
 
-## Other ways to connect
+**Install just the skill** ([Skill only](/connect/skill/)). Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
-**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
+```bash
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
+```
+
+**Use the Spacefast CLI** ([Spacefast CLI](/connect/cli-setup/)). Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent devin-desktop
 ```
 
-**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
+**Set it up without installing the CLI** ([Spacefast CLI](/connect/cli-setup/)). The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent devin-desktop -y
 ```
 
-**Run in your terminal.** Run this command to add Spacefast.
+**Run in your terminal** ([Hosted MCP server](/connect/hosted-mcp/)). Run this command to add Spacefast.
 
 ```bash
 devin mcp add --scope user spacefast 'https://mcp.spacefast.com' --oauth-resource 'https://mcp.spacefast.com'
@@ -50,13 +67,7 @@ devin mcp add --scope user spacefast 'https://mcp.spacefast.com' --oauth-resourc
 1. Run `devin mcp login spacefast`, then sign in to Spacefast and approve access.
 2. Use `devin mcp list` to check the connection in Devin CLI or Devin Local.
 
-**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
-
-```bash
-npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
-```
-
-**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
+**Push to deploy** ([Git push](/connect/git-push/)). Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
@@ -69,5 +80,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Devin Desktop documentation](https://docs.devin.ai/desktop/devin-local)

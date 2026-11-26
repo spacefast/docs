@@ -2,12 +2,12 @@
 title: "Connect Indent to Spacefast"
 description: "Add Spacefast to Indent so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/docs/setup/indent/"
+  canonical: "https://spacefast.com/docs/agents/indent/"
 ---
 
 Add Spacefast to Indent so it can publish what you build.
 
-**Add Spacefast as a custom integration.** Set it up from Indent's Integrations page, for just you or your organization.
+**Add Spacefast as a custom integration** ([Hosted MCP server](/connect/hosted-mcp/)). Set it up from Indent's Integrations page, for just you or your organization.
 
 ```text
 https://mcp.spacefast.com
@@ -28,5 +28,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Indent documentation](https://docs.indent.com/connecting/mcp-servers)

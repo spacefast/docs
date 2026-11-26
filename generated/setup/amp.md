@@ -2,20 +2,12 @@
 title: "Connect Amp to Spacefast"
 description: "Add Spacefast to Amp so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/docs/setup/amp/"
+  canonical: "https://spacefast.com/docs/agents/amp/"
 ---
 
 Add Spacefast to Amp so it can publish what you build.
 
-**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
-
-```bash
-npm install -g spacefast && sf setup agent --agent amp
-```
-
-## Other ways to connect
-
-**Configure `~/.config/amp/settings.json`.** Add Spacefast to your Amp user settings by hand.
+**Configure `~/.config/amp/settings.json`** ([Hosted MCP server](/connect/hosted-mcp/)). Add Spacefast to your Amp user settings by hand.
 
 ```json
 {
@@ -34,13 +26,27 @@ npm install -g spacefast && sf setup agent --agent amp
 
 These settings only cover this computer, so use Amp's remote MCP settings for orbs.
 
-**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
+## Other ways to connect
+
+**Install just the skill** ([Skill only](/connect/skill/)). Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
+
+```bash
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
+```
+
+**Use the Spacefast CLI** ([Spacefast CLI](/connect/cli-setup/)). Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
+
+```bash
+npm install -g spacefast && sf setup agent --agent amp
+```
+
+**Set it up without installing the CLI** ([Spacefast CLI](/connect/cli-setup/)). The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent amp -y
 ```
 
-**Run in your terminal.** Run this command to add Spacefast.
+**Run in your terminal** ([Hosted MCP server](/connect/hosted-mcp/)). Run this command to add Spacefast.
 
 ```bash
 amp mcp add spacefast 'https://mcp.spacefast.com'
@@ -51,13 +57,7 @@ amp mcp add spacefast 'https://mcp.spacefast.com'
 
 This configures Amp on this computer. Orbs use Amp's remote MCP settings.
 
-**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
-
-```bash
-npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
-```
-
-**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
+**Push to deploy** ([Git push](/connect/git-push/)). Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
@@ -70,5 +70,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Amp documentation](https://ampcode.com/docs/customize/mcp)

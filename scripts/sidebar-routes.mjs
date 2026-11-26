@@ -5,14 +5,19 @@ const GENERATED_ROUTES = [
   "/api/reference",
   "/changelog",
   "/cli/reference",
+  "/connect",
+  "/connect/compare",
   "/errors",
   "/platforms/api/reference",
 ];
 const GENERATED_DIRECTORIES = new Set([
   "content/(reference)/changelog",
   "content/(reference)/errors",
+  "content/connect",
+  "content/agents/(featured)",
   "content/agents/(coding)",
   "content/agents/(personal)",
+  "content/agents/(deprecated)",
 ]);
 
 function routeFromContentPath(relativePath) {

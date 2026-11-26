@@ -9,33 +9,33 @@ The Spacefast plugin lets Claude Code publish your project and manage resources 
 
 ```bash
 claude plugin marketplace add spacefast/plugins
-claude plugin install spacefast@spacefast
+claude plugin install spacefast-code@spacefast
 ```
 
-The plugin does not assume the `sf` CLI is installed. You sign in the first time the hosted server is used, through your client's OAuth flow.
+This installs the dedicated Claude Code plugin (`spacefast-code@spacefast`), which runs Spacefast's local stdio MCP server (`npx -y spacefast mcp`) alongside the Spacefast skills and hooks so Claude Code can publish folders directly from your machine. You sign in via the browser the first time an account tool runs.
 
-Two other ways to install: `npx -y plugins add spacefast/plugins -t claude-code -y` installs the same plugin, and `sf setup agent --agent claude-code` writes MCP config into `~/.claude.json` and installs the skill into `~/.claude/skills/spacefast/` instead. See [sf setup agent](/agents/sf-setup).
+If you prefer the hosted HTTP server (`https://mcp.spacefast.com`) instead — or want the same hosted plugin synced across Claude web, desktop, and mobile — install `claude plugin install spacefast@spacefast` or add the [official Claude connector](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c).
+
+Two other ways to install: `npx -y plugins add spacefast/plugins -t claude-code -y` installs the plugin, and `sf setup agent --agent claude-code` writes MCP config into `~/.claude.json` and installs the skill into `~/.claude/skills/spacefast/`. See [sf setup agent](/agents/sf-setup).
 
 ## What the plugin adds
 
 ### MCP server
 
-One entry, the hosted server.
+`spacefast-code@spacefast` registers Spacefast's On-Device stdio MCP server:
 
 ```json .mcp.json
 {
   "mcpServers": {
     "spacefast": {
-      "type": "http",
-      "url": "https://mcp.spacefast.com"
+      "command": "npx",
+      "args": ["-y", "spacefast", "mcp"]
     }
   }
 }
 ```
 
-Claude Code stores the OAuth credential for it. The `"type": "http"` field is required. Claude Code rejects a bare `{ "url": ... }` entry.
-
-The plugin doesn't add the local stdio server. If you need it to read folders on your machine, set it up separately with [sf setup agent](/agents/sf-setup).
+The hosted variant (`spacefast@spacefast`) registers `"type": "http"` pointing at `https://mcp.spacefast.com`, where Claude Code stores the OAuth credential. The `"type": "http"` field is required for remote HTTP servers in Claude Code.
 
 ### Skills
 

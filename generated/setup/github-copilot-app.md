@@ -2,12 +2,12 @@
 title: "Connect GitHub Copilot app to Spacefast"
 description: "Add Spacefast to the GitHub Copilot app so its agents can publish what you build."
 seo:
-  canonical: "https://spacefast.com/docs/setup/github-copilot-app/"
+  canonical: "https://spacefast.com/docs/agents/github-copilot-app/"
 ---
 
 Add Spacefast to the GitHub Copilot app so its agents can publish what you build.
 
-**[Add to GitHub Copilot app](https://github.com/copilot/app/launch?open=ghapp%3A%2F%2Fmcp%2Finstall%3F%257B%2522name%2522%253A%2522spacefast%2522%252C%2522type%2522%253A%2522http%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fmcp.spacefast.com%2522%257D)**
+**[Add to GitHub Copilot app](https://github.com/copilot/app/launch?open=ghapp%3A%2F%2Fmcp%2Finstall%3F%257B%2522name%2522%253A%2522spacefast%2522%252C%2522type%2522%253A%2522http%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fmcp.spacefast.com%2522%257D)** ([Hosted MCP server](/connect/hosted-mcp/))
 
 1. In the app, choose Allow, then Add server.
 2. Sign in to Spacefast and approve access when asked.
@@ -20,7 +20,7 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Install the Spacefast plugin.** Adds Spacefast with its skills. The app and Copilot CLI share plugins, so both get it.
+**Install the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Adds Spacefast with its skills. The app and Copilot CLI share plugins, so both get it.
 
 ```bash
 npx -y plugins add spacefast/plugins -t github-copilot -y
@@ -36,5 +36,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [GitHub Copilot app documentation](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app)

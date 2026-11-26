@@ -10,46 +10,43 @@ const redirectsMarker = "# Generated from generated/redirects.json. Do not edit.
 const trees = [
   { source: "generated/errors", target: "content/(reference)/errors" },
   { source: "generated/changelog", target: "content/(reference)/changelog" },
+  { source: "generated/connect", target: "content/connect" },
 ];
 // Authored guides under content/agents/<slug>.mdx own those canonical routes;
 // every other generated client guide from generated/setup/ is mounted under
-// content/agents/(coding) or content/agents/(personal) so every agent lives at
-// /docs/agents/<slug>/.
+// parenthesized folders derived from generated/setup/sections.json so every
+// agent lives at /docs/agents/<slug>/ in canonical catalog order.
 const authoredAgentPages = new Set(["claude-code", "codex", "cursor", "claude-desktop"]);
-// The Agents tab sidebar groups the generated /setup/<client> pages into these
-// sections (see components/Sidebar.astro). Every generated client must be listed.
-// Each section is also a parenthesized folder, so a page's breadcrumb names its
-// section without adding a URL segment.
+const sectionsManifest = JSON.parse(
+  await readFile(path.join(root, "generated/setup/sections.json"), "utf8"),
+);
+const codingKinds = new Set(["coding-agent", "editor"]);
 const setupSections = [
+  {
+    folder: "(featured)",
+    title: "Featured agents",
+    pages: sectionsManifest.agents.filter((agent) => agent.group === "featured").map((a) => a.id),
+  },
   {
     folder: "(coding)",
     title: "Coding agents",
-    pages: [
-      "claude-code",
-      "codex",
-      "cursor",
-      "vscode",
-      "github-copilot",
-      "grok-build",
-      "devin-desktop",
-      "devin-cloud",
-      "zed",
-      "gemini-cli",
-      "opencode",
-      "amp",
-      "warp",
-      "factory-droid",
-      "cline",
-      "continue",
-      "pi",
-    ],
+    pages: sectionsManifest.agents
+      .filter((agent) => agent.group === "supported" && codingKinds.has(agent.kind))
+      .map((a) => a.id),
   },
   {
     folder: "(personal)",
     title: "Personal agents",
-    pages: ["claude-app", "chatgpt", "claude-desktop", "raycast", "poke", "indent", "hermes", "openclaw", "github-copilot-app", "grok", "grok-bot"],
+    pages: sectionsManifest.agents
+      .filter((agent) => agent.group === "supported" && !codingKinds.has(agent.kind))
+      .map((a) => a.id),
   },
-];
+  {
+    folder: "(deprecated)",
+    title: "No longer supported",
+    pages: sectionsManifest.agents.filter((agent) => agent.group === "deprecated").map((a) => a.id),
+  },
+].filter((section) => section.pages.length > 0);
 
 async function normalizeOverlayLinks(directory) {
   const entries = await readdir(directory, { recursive: true, withFileTypes: true });
@@ -99,18 +96,9 @@ async function exists(value) {
   }
 }
 
-// Short client names from the generated setup index ("- [Codex](/setup/codex): …").
-// Checked before any overlay is replaced, so a failure leaves the last good copy.
-const setupClients = new Map(
-  [...(await readFile(path.join(root, "generated/setup/index.md"), "utf8")).matchAll(
-    /^- \[([^\]]+)\]\(\/setup\/([a-z0-9-]+)\/?\)/gmu,
-  )].map(([, name, slug]) => [slug, name]),
-);
-const listedClients = new Set(setupSections.flatMap(({ pages }) => pages));
-const unlistedClients = [...setupClients.keys()].filter((slug) => !listedClients.has(slug));
-if (unlistedClients.length > 0) {
-  throw new Error(`Add generated setup clients to setupSections: ${unlistedClients.join(", ")}`);
-}
+// Client names and order come directly from generated/setup/sections.json
+// exported by @spacefast/common — no manual agent list lives in this repo.
+const setupClients = new Map(sectionsManifest.agents.map((agent) => [agent.id, agent.name]));
 const setupSidebar = `${JSON.stringify(
   setupSections.map(({ title, pages }) => ({
     title,
@@ -149,6 +137,15 @@ for (const tree of trees) {
       const match = /^\/errors\/([a-z0-9_]+)$/u.exec(from);
       if (match) await rm(path.join(target, `${match[1]}.md`), { force: true });
     }
+  }
+  if (tree.source === "generated/connect") {
+    await writeFile(
+      path.join(target, "meta.ts"),
+      `import { defineMeta } from "blume";\n\nexport default defineMeta(${JSON.stringify({
+        title: "Ways to connect",
+        pages: ["index", "compare", ...sectionsManifest.connect.map((method) => method.id)],
+      })});\n`,
+    );
   }
   await writeFile(marker, "spacefast-public-docs\n");
 }

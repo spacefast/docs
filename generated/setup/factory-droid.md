@@ -2,12 +2,12 @@
 title: "Connect Factory Droid to Spacefast"
 description: "Add Spacefast to Factory Droid so it can publish what you build."
 seo:
-  canonical: "https://spacefast.com/docs/setup/factory-droid/"
+  canonical: "https://spacefast.com/docs/agents/factory-droid/"
 ---
 
 Add Spacefast to Factory Droid so it can publish what you build.
 
-**Install the Spacefast plugin.** Adds Spacefast to Droid with everything it needs to publish.
+**Install the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Adds Spacefast to Droid with everything it needs to publish.
 
 ```bash
 droid plugin marketplace add spacefast/plugins && droid plugin install spacefast@plugins --scope user
@@ -19,19 +19,25 @@ droid plugin marketplace add spacefast/plugins && droid plugin install spacefast
 
 ## Other ways to connect
 
-**Use the Spacefast CLI.** Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
+**Install just the skill** ([Skill only](/connect/skill/)). Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
+
+```bash
+npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
+```
+
+**Use the Spacefast CLI** ([Spacefast CLI](/connect/cli-setup/)). Sets up this agent and signs you in. You also get the `sf` command to publish from the terminal yourself.
 
 ```bash
 npm install -g spacefast && sf setup agent --agent factory-droid
 ```
 
-**Set it up without installing the CLI.** The same setup as the CLI, without keeping the CLI installed afterwards.
+**Set it up without installing the CLI** ([Spacefast CLI](/connect/cli-setup/)). The same setup as the CLI, without keeping the CLI installed afterwards.
 
 ```bash
 npx -y spacefast setup agent --agent factory-droid -y
 ```
 
-**Run in your terminal.** Run this command to add Spacefast.
+**Run in your terminal** ([Hosted MCP server](/connect/hosted-mcp/)). Run this command to add Spacefast.
 
 ```bash
 droid mcp add spacefast 'https://mcp.spacefast.com' --type http
@@ -40,13 +46,7 @@ droid mcp add spacefast 'https://mcp.spacefast.com' --type http
 1. Start Droid and run `/mcp` to authenticate Spacefast.
 2. Sign in and approve access. Run `droid mcp list` to check the connection.
 
-**Install just the skill.** Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
-
-```bash
-npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
-```
-
-**Push to deploy.** Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
+**Push to deploy** ([Git push](/connect/git-push/)). Set SPACEFAST_GIT_REMOTE to the existing Space's returned git.remoteUrl. If it is null, use its configured source workflow. Store the key in a Git credential helper with username t. Keep credentials out of the remote URL. Check the deployment receipt before reporting success.
 
 ```bash
 git remote add spacefast "$SPACEFAST_GIT_REMOTE" && git -c credential.username=t push spacefast HEAD:main
@@ -59,5 +59,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Factory Droid documentation](https://docs.factory.com/harness/mcp)

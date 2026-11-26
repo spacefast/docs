@@ -8,8 +8,11 @@ content/cli/reference.md
 content/(reference)/errors/
 content/(reference)/changelog/
 content/setup/
+content/connect/
+content/agents/(featured)/
 content/agents/(coding)/
 content/agents/(personal)/
+content/agents/(deprecated)/
 content/agents/_sidebar.json
 public/_redirects
 .env

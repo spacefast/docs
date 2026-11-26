@@ -1,13 +1,14 @@
 {
-  "contentDigest": "4ac678f14f8bbf089cab0acc68849120803082ee1d76f4efa39d99dcb9fb8a3b",
+  "contentDigest": "0a018beafbf56813df1df2217cfb0f652c1d2a94c9678dbf88573d4293689a5a",
   "counts": {
     "apiOperations": 494,
     "changelogPackages": 24,
     "changelogVersions": 36,
+    "connectPages": 13,
     "errorCodes": 802,
     "partnerOperations": 459,
     "redirects": 3507,
-    "setupPages": 28
+    "setupPages": 47
   },
   "files": [
     {
@@ -319,6 +320,76 @@
       "bytes": 529900,
       "path": "cli/index.md",
       "sha256": "38afe32120e18a061b4fe381438a2aa403a8cb3899652cb42c604bfbeed25755"
+    },
+    {
+      "bytes": 1567,
+      "path": "connect/cli-setup.md",
+      "sha256": "7fde4d1f364d18c734edb71488d7402786a423ed31845faf8b5ba9a1b136c104"
+    },
+    {
+      "bytes": 10092,
+      "path": "connect/compare.md",
+      "sha256": "7d9fd70bbeeb53f110efa6ed28d3e8e4569472e400928caed3614cacec6a0892"
+    },
+    {
+      "bytes": 750,
+      "path": "connect/desktop-extension.md",
+      "sha256": "bc735fb963813e8faac2a225da59e9cc04114babfc0ddec9495fa84b8ca169f1"
+    },
+    {
+      "bytes": 3114,
+      "path": "connect/directory-connector.md",
+      "sha256": "106e88c16d6785aec0ce58365928ca9c06d1a094eb195add233551b7c80cacf1"
+    },
+    {
+      "bytes": 1454,
+      "path": "connect/git-push.md",
+      "sha256": "e017f06ae89f27870c2a1832085d3d47ae7323160dd755da24bb699e7887f020"
+    },
+    {
+      "bytes": 763,
+      "path": "connect/github-mcp-registry.md",
+      "sha256": "df4f51b93ae756b2f677ec058392ac682f183351dcaca5641496c5f923b32b70"
+    },
+    {
+      "bytes": 3121,
+      "path": "connect/hosted-mcp.md",
+      "sha256": "b40e8069a3142f732c06a6ab06f7b4b5ce44e38a3a05168f461311caf6da934b"
+    },
+    {
+      "bytes": 1832,
+      "path": "connect/index.md",
+      "sha256": "d36b0b0b6cb065359c83388cdf34b4675da7a7bd27d487d784ebd6f7744abd49"
+    },
+    {
+      "bytes": 3209,
+      "path": "connect/marketplace.md",
+      "sha256": "c9ccf196caf1e70bffa952c8b6f40b0585c7103408414b4e3475186b607cf533"
+    },
+    {
+      "bytes": 3727,
+      "path": "connect/plugin.md",
+      "sha256": "51cd0adc843ce0b2ddd4cad8379a73d333383bd97c314ee15706118516c1ac25"
+    },
+    {
+      "bytes": 1125,
+      "path": "connect/prompt-link.md",
+      "sha256": "a86a9eb0013617afc29f06f61493e8fa65fac65163195133c7860e90af878d44"
+    },
+    {
+      "bytes": 7422,
+      "path": "connect/setup-prompt.md",
+      "sha256": "6e26cf9eb19a69771fa804fecd99e9cfc42df432a5cba01772dde4863df0eeb8"
+    },
+    {
+      "bytes": 1659,
+      "path": "connect/skill.md",
+      "sha256": "a1543400538c2b7d3d9aa355efb54a7e4c65904220572cb81a4c124d5a3bca15"
+    },
+    {
+      "bytes": 1625,
+      "path": "connect/stdio-mcp.md",
+      "sha256": "5eeedee0043264ba2315031c10fa4278b783d22baa34b8d633f02e9e4c5a476b"
     },
     {
       "bytes": 1224,
@@ -4351,149 +4422,249 @@
       "sha256": "2135db88fe07b0434ee55fe90a038fb972f801a2a9cf9c2eb347ca63e742c08d"
     },
     {
-      "bytes": 2411,
+      "bytes": 2694,
       "path": "setup/amp.md",
-      "sha256": "056de4724c3f19e4e2879f49bc559b7758e1bc09c5d547c134d81ad881801765"
+      "sha256": "911ce27f5a62a4d53d950ba22df9d48965cbf867e78290c1ccde610ff640ebea"
     },
     {
-      "bytes": 1500,
+      "bytes": 2237,
+      "path": "setup/antigravity.md",
+      "sha256": "7ec5fd0c2d4766f4fbe3d1a0c97580e4c753e331e3b8e8a426d7d3348a18fb8e"
+    },
+    {
+      "bytes": 1742,
+      "path": "setup/any-mcp.md",
+      "sha256": "6d7978773330de9ec69bab6ffc4d0d73d1eb025b3bf268a01aea34b3e18c7b7d"
+    },
+    {
+      "bytes": 1302,
+      "path": "setup/chatgpt-space.md",
+      "sha256": "1abd823a6f2f7be6a9f1b89066b79193f7dda2d9a0132a461c194589750eb479"
+    },
+    {
+      "bytes": 1514,
+      "path": "setup/chatgpt-work.md",
+      "sha256": "f1cf69bb3cd0f28c6672919c9a7589a5bd9f6368d181de608dd258e20bb42c8a"
+    },
+    {
+      "bytes": 1725,
       "path": "setup/chatgpt.md",
-      "sha256": "7b1d85332fe96645c2211e4565b60e9f554cdf4d9f5b57ca5dc9b20a379fd9ee"
+      "sha256": "5d7a1ffcd2000f3010dd49bd3473f72b90b38ae560ab724750214728339a011b"
     },
     {
-      "bytes": 1776,
+      "bytes": 2971,
       "path": "setup/claude-app.md",
-      "sha256": "f95ca51fa7aceadc080495448412dd9e71af7bd290dddb3170967f50afe46dc6"
+      "sha256": "552a47089c59d059763462fa5e7920bfc9bd6f805541c3afa5954481a0b394a9"
     },
     {
-      "bytes": 2238,
+      "bytes": 3741,
       "path": "setup/claude-code.md",
-      "sha256": "11411e017866d5077b545bd9432d2e197cea90527a2de82c245b11675635835d"
+      "sha256": "cd9789ed5c84cd246389d221cac54fa4ec76a504ea82483a59cbf49c3f785777"
     },
     {
-      "bytes": 2218,
+      "bytes": 2933,
+      "path": "setup/claude-cowork.md",
+      "sha256": "779aa0d16a7ec89d6e31fa92c92b59d768acbe7653b21866185acc0c77085303"
+    },
+    {
+      "bytes": 2914,
       "path": "setup/claude-desktop.md",
-      "sha256": "56eebd53e78a91b6cc1ba604f75632d25cb11f39c129d7f7a78bbf189c2c4623"
+      "sha256": "e9519a7f0862b853a1404a038daab7c36bce524401c570935bcb5e54bfcce31b"
     },
     {
-      "bytes": 3113,
+      "bytes": 3262,
       "path": "setup/cline.md",
-      "sha256": "0e38e02c89475ddc14ebeb61eca06feebcf048bac999f0a385aa86df8510b965"
+      "sha256": "02036a804d2c60a0642f971fc54486d0c4457b57e5de7fcc08fd71dee10e4418"
     },
     {
-      "bytes": 2985,
+      "bytes": 4457,
       "path": "setup/codex.md",
-      "sha256": "ec0fdf9d3a78fc5bd2673ba67de7b6de7c3ece4b538213715f5c99901e4875a8"
+      "sha256": "a5d650ecfc871b33ebf777b9f556936d65460e62ded75c1f65c615e26602fd13"
     },
     {
-      "bytes": 1580,
+      "bytes": 1248,
+      "path": "setup/conductor.md",
+      "sha256": "43bbdab98feb0a47e589b28e021752f7d421359d4b461e57703fbcc7ebecd050"
+    },
+    {
+      "bytes": 442,
       "path": "setup/continue.md",
-      "sha256": "cb9535d46864c82c3ac17beb5f0b620c03212f6b2aadaed92dac10ea3d14a77c"
+      "sha256": "b3907d850bbebc61731ff886fa91f5d476bbe3164aa6afea0fda55ec55665db5"
     },
     {
-      "bytes": 2568,
+      "bytes": 2955,
       "path": "setup/cursor.md",
-      "sha256": "ae357b2687b07d1b3a2240923b78ed9cf44c5279a55f85488adcd901d2f79316"
+      "sha256": "25bf0fa70de5aa826031c5aec6269c4b3b9247246c2981e84d8225847b38ec8e"
     },
     {
-      "bytes": 1413,
+      "bytes": 1541,
       "path": "setup/devin-cloud.md",
-      "sha256": "2b331131b527e821ff8f88f489de92cc159673e459ce6f53d1caa31b0f0c2d52"
+      "sha256": "1793c4860d44efdafad51f81642f44edbf372e5edf0b01018a2231b5d1fa9ea9"
     },
     {
-      "bytes": 2573,
+      "bytes": 3276,
       "path": "setup/devin-desktop.md",
-      "sha256": "ca0a9ed4e9be6e857e34829ab7bfe57061c54571b535cfafddad0c043ad625d3"
+      "sha256": "4c6c3d3c74e2cef703fb8c165da50c3a22f20e55159c883a3005a45b92481371"
     },
     {
-      "bytes": 2211,
+      "bytes": 2489,
       "path": "setup/factory-droid.md",
-      "sha256": "5c0ccf394f9aa5b149e4ef3af676256bb03c571458e594f33c9b2bed66bb8fb1"
+      "sha256": "afdff022197b537e9d0faaaaed0db0b2893f2ffc127b4cd231f0460eb4ed2dd2"
     },
     {
-      "bytes": 2562,
+      "bytes": 570,
       "path": "setup/gemini-cli.md",
-      "sha256": "2f8db0cd19daf0251e23e2d0307d6b443daf37f27c67e97eb63f755cf7404ad3"
+      "sha256": "3205964a073d9603127fd8acf0c0a71be51306af47dc20a512266b131b49a150"
     },
     {
-      "bytes": 1560,
+      "bytes": 1695,
       "path": "setup/github-copilot-app.md",
-      "sha256": "bb91ab7f5b49ab9a65574b2d912a8bc2ac0d494a2e8f2450ad1118458d115c29"
+      "sha256": "779c4b91f93392dace539b129c82b41155003f2c711e8fa51797e5a4e4711480"
     },
     {
-      "bytes": 2677,
+      "bytes": 2777,
       "path": "setup/github-copilot.md",
-      "sha256": "8fe3c5a07697a988c85d06f78de0f2b45e2fa13004e466df525832263f6bab84"
+      "sha256": "36fbcc6fbedfe9bafd90820e5d8bc18f55ee568b888613edbd4b3e369dae0006"
     },
     {
-      "bytes": 927,
+      "bytes": 1939,
+      "path": "setup/goose.md",
+      "sha256": "3507167923653553d3b020e981c4d80c407d0aa215e4dcbd8a1f74247694fcb1"
+    },
+    {
+      "bytes": 2247,
       "path": "setup/grok-bot.md",
-      "sha256": "65a5b589bc40bcb00b8b3899915db3a56bc271e0c1f98086467903a655c7297b"
+      "sha256": "e165803fc3eefe29042e5a17eb2d26c3512d13325bb9774276c2e14caf5fa174"
     },
     {
-      "bytes": 1169,
+      "bytes": 1309,
       "path": "setup/grok-build.md",
-      "sha256": "c826c38be35ccddf4bb7b02dff8495714a668d49c1ea3f8a68dd440d9a339aca"
+      "sha256": "68ae62c32577401ccea0241e2434321a942ce6bdabab8bd695dad2a1400766fa"
     },
     {
-      "bytes": 731,
+      "bytes": 827,
       "path": "setup/grok.md",
-      "sha256": "e6cfecda5cd361778a2eeba6672e20bbc75f8670818dbbfe83b0b16376178562"
+      "sha256": "d6688a9aafb5c28ab73ebba2e0d38ada1209e57b2687b6e4f18c4f6b0a2c5a67"
     },
     {
-      "bytes": 1446,
+      "bytes": 2190,
       "path": "setup/hermes.md",
-      "sha256": "be5a7a5201c6af4d148364ecb12eb15f95a56cbbf1d223724627316eeea2bf37"
+      "sha256": "35340dd8bee851ff5af80caa5bcba9375015a55a347eb2c0036ea768085b3ea6"
     },
     {
-      "bytes": 1124,
+      "bytes": 1220,
       "path": "setup/indent.md",
-      "sha256": "f0fc733f925c14193a47e58540a776ab0ec45e539e2aee0df3fa94c3436181fd"
+      "sha256": "4808bf746c3405e34c2041e18bdf46942dbb46674002cce2451a69b283ca55b6"
     },
     {
-      "bytes": 3264,
+      "bytes": 5398,
       "path": "setup/index.md",
-      "sha256": "bab012a64e4c9b238879d16d82bebcc355e0cb1a8c47ffaf7f7e4cf511de1c9b"
+      "sha256": "bdf590647783ee1e606a15fbd58a75d2e6fd75c7df419a9ef758467a201bc7bf"
     },
     {
-      "bytes": 1400,
+      "bytes": 573,
+      "path": "setup/instinct.md",
+      "sha256": "fce04a4c19b706a024065f6d5d68a751ab23bd20d286e0d61ffcc6f11e879264"
+    },
+    {
+      "bytes": 436,
+      "path": "setup/jules.md",
+      "sha256": "31c35831a500e80a7a150b00ed4f1be2d0a815e2c201b1f32b6a17ba3623d484"
+    },
+    {
+      "bytes": 2094,
+      "path": "setup/kiro.md",
+      "sha256": "d42bc306d1cb6997d59dec56704bf9caf46f5173d9a42bb1c3b32ee9a8d68d53"
+    },
+    {
+      "bytes": 1728,
+      "path": "setup/lm-studio.md",
+      "sha256": "befd0ba7a35efef635aa0199c2a3c0a0835e1a1c0c6fc58cff7495367e54e2be"
+    },
+    {
+      "bytes": 1012,
+      "path": "setup/microsoft-copilot.md",
+      "sha256": "2162dd139a46c9d08b55086396503460d1769c29e9b75c33cd9ed0368bfa1aba"
+    },
+    {
+      "bytes": 988,
+      "path": "setup/mistral.md",
+      "sha256": "5423383a593ec9a902b75cb7ce52caeff2d70ad0e7f771a8ceda12b4981dcfd5"
+    },
+    {
+      "bytes": 599,
+      "path": "setup/muse.md",
+      "sha256": "b23eb275097d09969ce95ad0582123af58594944b9f82bbfb0428824236b3a10"
+    },
+    {
+      "bytes": 2205,
       "path": "setup/openclaw.md",
-      "sha256": "aaead891548f9956d759c8ca73588777182222332e1923c3c7c0a8b07270d5d2"
+      "sha256": "229b857b6b95d4c57dff25aca592cb10d869d8d25c8317f15f90eb4b45c7f219"
     },
     {
-      "bytes": 2337,
+      "bytes": 3012,
       "path": "setup/opencode.md",
-      "sha256": "aba2a6a7bd7b4e794269e2c2b88fe58da4d7756a5d6e0fa61b18df73edd09776"
+      "sha256": "30158e2ec4af930916b3fe542d1383dee10c9832c83c6a8a5c8548dfaf05eeeb"
     },
     {
-      "bytes": 1618,
+      "bytes": 1368,
+      "path": "setup/orca.md",
+      "sha256": "d743aac7fcdf41886ab6f19c1386c44acb44fc817c1c094a6de2d3dba6b9fa38"
+    },
+    {
+      "bytes": 1422,
+      "path": "setup/perplexity.md",
+      "sha256": "a8cf3e1231257891d46201e25578888a598970f99fbdccccacb60edd96873322"
+    },
+    {
+      "bytes": 2200,
       "path": "setup/pi.md",
-      "sha256": "fa65deb6ccafed36b1344164c7df2c676804b13fcf29bd7a8fe4c892a4f7e0e3"
+      "sha256": "c8732c8f5a91546a78f2710cea33341254f00bf9253ef9b4c1494429a5ce17c2"
     },
     {
-      "bytes": 759,
+      "bytes": 855,
       "path": "setup/poke.md",
-      "sha256": "2476fe40a92a765784a4c7539b7fa8b6202b9a44ba3818239baff4555bb3a164"
+      "sha256": "c9c427edc78aa91a3396bcbaf14a0a194c3c48825a196b42a63b5967c3059174"
     },
     {
-      "bytes": 947,
+      "bytes": 1216,
       "path": "setup/raycast.md",
-      "sha256": "ce39cba02ec9b35910554b5c6af3cdbf7c137866190d6a2b2dcf93c23f9db6b9"
+      "sha256": "227f8f57848a48a3e44b9aff00c1caa3907d8300225053cb905aee34650b9261"
     },
     {
-      "bytes": 2627,
+      "bytes": 444,
+      "path": "setup/roo-code.md",
+      "sha256": "baf31fd2eca29f9aff3063f59ead24ed087483663293425819ad424a08310584"
+    },
+    {
+      "bytes": 10136,
+      "path": "setup/sections.json",
+      "sha256": "f7d09f31cff8bd42a8b3b47beee3fe581f366b10ce09994e7efb9e35dc9b6f29"
+    },
+    {
+      "bytes": 767,
+      "path": "setup/t3-chat.md",
+      "sha256": "60ebc2ebf5c5cbd43c2caaa5d6c3002466d0de4c4366a5ffb5ecab022e715926"
+    },
+    {
+      "bytes": 3360,
       "path": "setup/vscode.md",
-      "sha256": "e090150a392ff2ca3f923d17d4db0d31e79c71732e67d8ce372b3a1f54a915db"
+      "sha256": "28464fecf63052ea56e595eedd15838dd74ecea9bd87af310b6cc3e9262f90d1"
     },
     {
-      "bytes": 2259,
+      "bytes": 2542,
       "path": "setup/warp.md",
-      "sha256": "8a60ed32f7e5b59fab63219d62e90c738f6593d5776137af3cdaa4376afe99ba"
+      "sha256": "73dae0dde7d0041da7d63062686ebe9652ef081896f7cd66e34038c22f6a6065"
     },
     {
-      "bytes": 2001,
+      "bytes": 454,
+      "path": "setup/windsurf.md",
+      "sha256": "f7f617710a9567d934ab838ae1bb4193e94fe74892e41798e4f7a6372ee3d0a3"
+    },
+    {
+      "bytes": 2882,
       "path": "setup/zed.md",
-      "sha256": "41018c340b44d8f7e8f41b5d170841ee4b36add8662821cc3c61b621571cc664"
+      "sha256": "a39f643ca07a9609dbb8fc6a65543368757ffba594fe2ebef7348e92ace48fbc"
     }
   ],
   "generator": "spacefast-public-docs",
