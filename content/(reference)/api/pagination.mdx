@@ -1,11 +1,9 @@
 ---
 title: Pagination
 description: Walk cursor-paginated collections, check endpoint-specific limits, and handle lists that use another paging scheme
-sidebar:
-  order: 4
 ---
 
-Cursor-paginated collections return `pagination.nextCursor` for the next request. Check each endpoint's defaults and ordering: documentation search uses offsets, and some lists return their full result without pagination.
+Cursor-paginated collections return `pagination.nextCursor` for the next request. The common default is 20 items per page (with a maximum of 100), storage objects default to 50, documentation search uses offsets, and some lists return their full result without pagination.
 
 ## Request
 

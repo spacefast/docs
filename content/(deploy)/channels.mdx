@@ -1,0 +1,93 @@
+---
+title: Channels and previews
+description: Control how versions go live with the live channel, preview publishes, promotion policies, and promotion history
+---
+
+A channel is a named pointer from a Space to one `ready` version. Today, `live` is the only channel, and visitors on your default hostname and custom domains see whatever `live` points at. Staging and preview workflows use preview publishes, Git branch previews, and a `manual` promotion policy on `live`.
+
+## Preview before going live
+
+Three workflows let you inspect a built version before visitors see it:
+
+- **Preview publishes**: Run `sf publish --target preview` (or pass `channel: null` to the API) to create a `ready` version without moving `live`. Spacefast returns the version's fixed hostname (`https://<slug>--v<n>.space.fast/`).
+- **Git branch previews**: Pushes to any branch other than your production branch build a preview at a branch hostname (`https://<slug>--br-<alias>.space.fast/`) and leave `live` untouched. See [Publish from Git](/git).
+- **Manual promotion on `live`**: Switch `live` to `manual` so every ordinary publish and green production build stops at `ready` (`activation.outcome: "unpromoted"`, `reason: "channel_promotion_manual"`). Inspect its version URL, then promote it with `sf promote`.
+
+Passing a channel name other than `live` (or its `production` alias on publish) fails with [`channel_unsupported`](/errors/channel_unsupported). See [URLs and hostnames](/urls) for version and branch URL rules.
+
+## List channels
+
+Inspect a Space's channels, their current and previous versions, promotion policy, and last pointer move with [`sf channels list`](/cli/reference#sf-channels-list) (alias `sf channels ls`):
+
+```bash
+sf channels list --space docs
+```
+
+Over HTTP, call [`listSpaceChannels`](/api/reference/spaces/listspacechannels) (`GET /v1/spaces/{spaceId}/channels`). Each item includes:
+
+| Field | What it reports |
+| --- | --- |
+| `name` | Channel name (`live`) |
+| `currentVersionId` | Currently served version ID, or `null` before the first publish |
+| `currentDeploymentUrl` | Fixed immutable URL of the served version, when known |
+| `previousVersionId` | Version served immediately before the current pointer |
+| `promotion` | Promotion policy: `auto` or `manual` |
+| `updatedAt` | Timestamp of the last pointer move or policy change |
+| `lastChange` | Most recent pointer move from the promotion log (`kind`: `publish`, `promote`, or `rollback`, plus `at`), or `null` |
+
+## Promotion policies
+
+Every channel has a promotion policy that governs implicit promotions from publishes and green builds:
+
+| Policy | Behavior |
+| --- | --- |
+| `auto` (default) | Finalizing a production publish or build moves `live` to the new version |
+| `manual` | Finalizing leaves `live` unchanged until someone promotes explicitly |
+
+Change the policy with [`sf channels set`](/cli/reference#sf-channels-set-name):
+
+```bash
+sf channels set live --promotion manual --space docs
+sf channels set live --promotion auto --space docs
+```
+
+In the dashboard, switch **Publishing** on the Space's **Versions** page between **Automatic** and **Manual**. Over HTTP, call [`updateSpaceChannel`](/api/reference/spaces/updatespacechannel) (`PATCH /v1/spaces/{spaceId}/channels/live`) with `{"promotion":"manual"}` or `{"promotion":"auto"}`. Updating the policy requires the same `versions:promote` capability as promoting a version.
+
+A `manual` policy never blocks an explicit promote.
+
+## Promote a version
+
+Move `live` to any retained, `ready` version with [`sf promote`](/cli/reference#sf-promote-version):
+
+```bash
+sf promote v14 --space docs
+sf promote ver_4b81f0c2d9a7431e8c6d05fa27b3e914 --channel live --no-wait --json
+```
+
+`sf promote` accepts a version ID, a ref like `v14`, or a bare version number, and waits up to 900 s for the pointer to settle by default. Pass `--no-wait` to receive the operation handle immediately.
+
+Promoting a version numbered lower than the current live version is a rollback: by default, Spacefast refreshes rewrites and creates a new version from those files. Pass `--no-refresh-rewrites` (API: `refreshRewrites: false`) to serve the older version as saved, or use [`sf rollback`](/cli/reference#sf-rollback-version). See [Versions and the live channel](/versions) for version states and rollback details.
+
+Over HTTP, call [`promoteSpaceVersion`](/api/reference/versions/promotespaceversion) (`POST /v1/spaces/{spaceId}/versions/{versionId}/promote`). Add `?async=1` to skip waiting.
+
+## Channel history
+
+Read the deploy log for a channel, newest first, with [`sf channels history`](/cli/reference#sf-channels-history-name):
+
+```bash
+sf channels history --space docs
+sf channels history live --space docs
+```
+
+Over HTTP, call [`listSpaceChannelHistory`](/api/reference/spaces/listspacechannelhistory) (`GET /v1/spaces/{spaceId}/channels/live/history`). Each entry records `versionId`, `channel`, `previousVersionId`, `actorType`, `actorId`, `kind` (`publish`, `promote`, or `rollback`, or `null` for older entries), and `at`.
+
+Channel history reads from the Space's promotion activity events, so your team's plan audit-retention window bounds how far back it goes. See [Activity](/activity) and [Pricing and limits](/pricing).
+
+## Error codes
+
+| Code | What happened | Recovery |
+| --- | --- | --- |
+| [`channel_unsupported`](/errors/channel_unsupported) | You named a channel other than `live` | Target `live` |
+| [`channel_pointer_moved`](/errors/channel_pointer_moved) | Another promotion moved the channel pointer while yours was in flight | Re-read the channel pointer and retry |
+| [`channel_name_reserved`](/errors/channel_name_reserved) | The channel name collides with a reserved `v<n>` or `ver-` hostname suffix | Choose a different channel name |
+| [`promotion_runtime_publish_incomplete`](/errors/promotion_runtime_publish_incomplete) | The promotion was accepted, but its runtime publish did not finish; `live` is unchanged | Retry the promotion |

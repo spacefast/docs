@@ -1,0 +1,84 @@
+---
+title: Transfer a Space
+description: Move a Space between teams without downtime, accept or cancel pending transfers, enforce parent-team transfer policies, and handle transfer errors
+---
+
+Transfer a Space to move its ownership from one team to another without downtime. Ownership changes in one transaction while the Space keeps serving from where it already lives.
+
+## Start a transfer
+
+Move a Space to another team with [`sf spaces transfer`](/cli/reference#sf-spaces-transfer-team) or [`createSpaceTransfer`](/api/reference/spaces/createspacetransfer) (`POST /v1/space-transfers`):
+
+```bash
+sf spaces transfer target-team --space my-space
+```
+
+When a transfer completes depends on your role in the target team and what the Space carries:
+
+- **Completes immediately**: runs at once if you can accept transfers for the target team. Target-team members also trigger immediate transfer when the team allows Space creation and the Space has no custom domain, database, or paid resource.
+- **Waits for acceptance (`pending_confirmation`)**: otherwise, the sending team keeps full control until an owner or admin of the target team accepts.
+
+A pending transfer expires after **7 days**. Only one transfer can be pending for a Space at a time, and conflicting mutations while a transfer is in progress fail with [`space_transferring`](/errors/space_transferring).
+
+## List, inspect, accept, and cancel transfers
+
+Team owners and admins manage pending and past transfers with [`sf transfers`](/cli/reference#sf-transfers-list):
+
+```bash
+sf transfers list --team target-team
+sf transfers inspect trf_123
+sf transfers accept trf_123 --yes
+sf transfers cancel trf_123
+```
+
+- `sf transfers list` returns incoming and outgoing transfers, defaulting to `pending_confirmation`, up to the newest 100. Filter with `--status pending_confirmation|completed|canceled|expired` or `--space spc_...`.
+- `sf transfers accept` runs as an owner or admin of the receiving team and moves ownership immediately.
+- `sf transfers cancel` ends a pending transfer until it is accepted. The sending team withdraws and the receiving team declines; both record `canceled`.
+
+Over HTTP, the matching routes are [`listSpaceTransfers`](/api/reference/spaces/listspacetransfers) (`GET /v1/space-transfers`), [`getSpaceTransfer`](/api/reference/spaces/getspacetransfer) (`GET /v1/space-transfers/{transferId}`), [`acceptSpaceTransfer`](/api/reference/spaces/acceptspacetransfer) (`POST /v1/space-transfers/{transferId}/accept`), and [`cancelSpaceTransfer`](/api/reference/spaces/cancelspacetransfer) (`DELETE /v1/space-transfers/{transferId}`).
+
+## What moves and what resets
+
+Ownership transfers keep the Space serving while stripping credentials and bindings that belonged to the previous team.
+
+### Moves with the Space
+
+- Live serving state, published versions, and Space slug aliases.
+- Attached custom domains, counted against the receiving team's domain limits.
+- Plain (non-secret) Space environment variables.
+- Tags and [Comments](/comments).
+- Usage metering and billing for the Space, moving to the receiving team's budgets.
+
+### Revoked or cleared on transfer
+
+- **Owning-team grants and Space API keys**: Spacefast revokes the previous team's owning grants and Space-granted API keys immediately.
+- **Secret environment variables**: Spacefast clears secret values so code published by the receiving team cannot read the previous owner's secrets.
+- **Connected Git repositories**: Spacefast clears provider credentials and source-sharing flags (`reauthorization_required`). Reconnect the repository from the receiving team to resume automated builds.
+- **Connectors**: Spacefast removes Space connector bindings and visitor connections; visitors reconnect under the new team.
+- **Labels and primary contact**: Spacefast removes Space labels, releases any team system-space designation, and clears an ineligible primary contact.
+- **Public grants on private-only teams**: if the receiving team has **Private spaces only** enabled, Spacefast revokes every public grant on arrival.
+- **Other pending transfers**: Spacefast supersedes any competing pending transfer requests for the Space.
+
+## Parent-team transfer policies
+
+On Enterprise plans, a parent team owner or admin can turn on `restrictSpaceTransfer` so Spaces in the parent team and its [subteams](/subteams) can move only within that team family.
+
+- Subteams inherit the policy and cannot override it; attempting to change the rule from a subteam returns [`transfer_policy_managed_by_parent`](/errors/transfer_policy_managed_by_parent).
+- Attempting to transfer a Space outside the parent team and its subteams fails with [`transfer_outside_parent_team`](/errors/transfer_outside_parent_team).
+- The parent team also controls which administrators receive subteam transfer request notifications ([`transfer_request_notification_policy_managed_by_parent`](/errors/transfer_request_notification_policy_managed_by_parent)).
+
+## Error codes
+
+| Code | What happened |
+| --- | --- |
+| [`space_transferring`](/errors/space_transferring) | Another operation is blocked while a transfer is in progress; complete or cancel the transfer first |
+| [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The target team already owns the Space |
+| [`transfer_not_cancelable`](/errors/transfer_not_cancelable) | The transfer is past the point where it can be canceled |
+| [`transfer_source_changed`](/errors/transfer_source_changed) | The Space changed since the transfer was created; review and confirm again |
+| [`transfer_outside_parent_team`](/errors/transfer_outside_parent_team) | The parent team restricts outgoing transfers to itself and its subteams |
+| [`transfer_policy_managed_by_parent`](/errors/transfer_policy_managed_by_parent) | Only the parent team can change this transfer restriction |
+| [`transfer_request_notification_policy_managed_by_parent`](/errors/transfer_request_notification_policy_managed_by_parent) | Only the parent team controls subteam transfer notification recipients |
+| [`transfer_cross_tenant_unsupported`](/errors/transfer_cross_tenant_unsupported) | Spaces cannot move across tenants |
+| [`transfer_team_to_customer_unsupported`](/errors/transfer_team_to_customer_unsupported) | A team's Space can move only to another team, not to a partner customer |
+| [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime could not push Space blobs into the transfer bucket; retry |
+| [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime could not verify transferred blobs; retry |

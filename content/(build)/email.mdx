@@ -1,0 +1,121 @@
+---
+title: Transactional email
+description: Authenticate your Space's primary custom domain with DKIM, send mail from app actions, and stay within daily and hourly recipient limits
+---
+
+Transactional email sends outbound messages, such as form notifications, receipts, and sign-in messages, signed by your Space's primary custom domain. Free Spacefast hostnames cannot sign mail, so attach a custom domain and make it primary first.
+
+## Set up your sending domain
+
+Email always sends from your Space's exact primary custom domain. The default sender is `noreply@<your-domain>`, and any mailbox at that domain can send once verification succeeds.
+
+<Steps>
+  <Step title="Set a custom primary domain">
+    Attach a custom domain to the Space and set it as primary. See [Custom domains](/domains).
+  </Step>
+  <Step title="Add the DKIM records">
+    Open the Space's **Domains** page and look at the **Email** card.
+
+    - **Spacefast DNS:** Once your Spacefast DNS zone is active and ownership is verified, Spacefast adds the two DKIM records automatically. See [DNS](/domains/dns).
+    - **External DNS:** Add the two `CNAME` records shown in the **Email** card (or returned by `GET /v1/spaces/{spaceId}/email`) at your DNS provider. Leave your existing `SPF`, `MX`, and `DMARC` records unchanged.
+  </Step>
+  <Step title="Verify the records">
+    On external DNS, select **Check Records** in the **Email** card (or call `POST /v1/spaces/{spaceId}/email/setup`). Spacefast checks public DNS every 5 minutes for the first hour, then hourly for a day, then daily until both DKIM selectors verify.
+  </Step>
+</Steps>
+
+For a primary domain `example.com`, the two required DKIM records are:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| `CNAME` | `wpcloud1._domainkey.example.com` | `wpcloud1._domainkey.wpcloud.com` |
+| `CNAME` | `wpcloud2._domainkey.example.com` | `wpcloud2._domainkey.wpcloud.com` |
+
+If your DNS already has conflicting records at either selector name, resolve the conflict before selecting **Check Records** (`email_dns_conflict`).
+
+### Check status via the API
+
+Read the Space's email setup status, required DNS records, and active limits with [`getSpaceEmail`](/api/reference/spaces/getspaceemail):
+
+```bash
+curl https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/email \
+  -H "Authorization: Bearer sfk_your_api_key"
+```
+
+Trigger or retry DKIM verification with [`setupSpaceEmail`](/api/reference/spaces/setupspaceemail):
+
+```bash
+curl -X POST https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/email/setup \
+  -H "Authorization: Bearer sfk_your_api_key"
+```
+
+`getSpaceEmail` returns `status` (`ready`, `pending`, or `action_required`), `domain`, `sender`, `dnsManaged`, `checkedAt`, `records`, and `limits` (`recipientsDaily` and `recipientsHourly`). When `status` is `action_required`, `reason` identifies the next step:
+
+| `reason` | What to do |
+| --- | --- |
+| `custom_domain_required` | Attach a custom domain and make it the Space's primary domain |
+| `domain_dns_pending` | Finish verifying and activating Spacefast DNS for the primary domain |
+| `dns_records_required` | Add the returned DKIM `CNAME` records at your external DNS provider, then check records |
+| `setup_required` | Call `POST /v1/spaces/{spaceId}/email/setup` or select **Check Records** to start or retry setup |
+
+## Send email from actions
+
+In app actions and form mutations, import `mail` from `"spacepress"` and call `mail.send()`. See [Actions and forms](/actions) for the full `sf add form` contact-form starter.
+
+This mutation sends a plain-text notification with a `replyTo` header:
+
+```ts sp/contact.ts
+import { mail, mutation } from "spacepress";
+
+export const notify = mutation(
+  { access: "anyone", rateLimit: "5/min" },
+  async (input: { name: string; email: string; message: string }) => {
+    await mail.send({
+      to: "team@example.com",
+      replyTo: input.email,
+      subject: `New message from ${input.name}`,
+      text: input.message,
+    });
+    return { ok: true };
+  },
+);
+```
+
+Message fields:
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `to` | yes | Email string, `{ email, name }`, or an array of either |
+| `subject` | yes | Non-empty string with no line breaks |
+| `text` or `html` | at least one | Send both for multipart HTML with a plain-text fallback |
+| `from` | no | Defaults to `noreply@<primary-domain>`; must use the Space's verified primary domain |
+| `cc`, `bcc` | no | Single address or array; every address counts toward recipient limits |
+| `replyTo` | no | Defaults to `from` |
+| `headers` | no | Custom `Record<string, string>`; cannot override `From`, `To`, `Cc`, `Bcc`, `Reply-To`, `Content-Type`, or `Message-Id` |
+
+Preview versions hold outbound mail instead of delivering it to real inboxes. Live versions deliver normally once the primary domain's status is `ready`.
+
+## Send email from Workers
+
+Workers do not expose a direct `env.EMAIL` binding. To send transactional email from a [Worker](/functions):
+
+- **Call an app action through `env.APP`:** Define a `mail.send()` action in your Space's app and invoke it from your Worker with `await env.APP.action("notify", payload)`.
+- **Call an external email API:** On a claimed Space, a Worker can send directly through any third-party email API using outbound `fetch()`.
+
+Existing [Zero 0.8](/zero-migration) apps continue calling `ctx.email.send()`; in local `sf dev`, calling `ctx.email` without a configured local email service returns [`zero_email_unavailable`](/errors/zero_email_unavailable).
+
+## Limits
+
+Every address in `to`, `cc`, and `bcc` counts as one recipient. Daily limits reset on the UTC day boundary.
+
+| Plan | Daily recipients per Space | Hourly cap per Space |
+| --- | --- | --- |
+| Personal (Free) | 20 | 200 |
+| Go | 200 | 200 |
+| Pro | 2,000 | 200 |
+| Enterprise | 5,000 | 200 |
+| Boost add-on | +5,000 added to plan allowance | 200 |
+
+- Sends that exceed either the daily allowance or the 200-recipient hourly cap fail immediately; Spacefast does not queue or retry excess sends.
+- Maximum mail request payload size is 1 MiB.
+- See [Pricing](/pricing) and [Limits](/limits) for plan allowances and metered usage rates.

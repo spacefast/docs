@@ -1,8 +1,6 @@
 ---
 title: Operations
 description: How the Spacefast API handles work that outlives a request, the operation handle, its states, and the polling loop
-sidebar:
-  order: 7
 ---
 
 Publishing, promoting, and domain changes can take longer than one HTTP request, so the API either waits for you or hands back a handle for you to follow to a terminal state.

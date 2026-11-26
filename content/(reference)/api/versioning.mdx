@@ -1,0 +1,50 @@
+---
+title: Versioning and deprecations
+description: How Spacefast versions the REST API under /v1, tracks OpenAPI contract snapshots, and signals deprecated operations with standard HTTP headers
+---
+
+The Spacefast API versions routes in the URL path under `/v1`, and the OpenAPI specification stamps each published contract snapshot in `info.version`. Spacefast marks deprecated operations in the specification and sends standard `Deprecation`, `Sunset`, and `Link` headers on live responses.
+
+## URL path version
+
+Every public API operation lives under `/v1` on `https://api.spacefast.com`.
+
+- Additive changes — new endpoints, new optional request parameters, and new response properties — ship within `/v1`.
+- Ignore unknown properties in JSON responses (including `$schema`) so additive fields never break your client.
+- Incompatible contract changes move to a new URL path prefix rather than silently changing what `/v1` returns.
+
+## OpenAPI contract snapshots
+
+Spacefast serves the live OpenAPI document at `https://api.spacefast.com/openapi.json` and generates [the API reference](/api/reference) and [`@spacefast/sdk`](/api/sdk) from it.
+
+The `info.version` field in `openapi.json` identifies the published contract snapshot, not the `/v1` URL version and not your installed `sf` CLI version. Read the live OpenAPI document when you need the current snapshot identifier instead of pinning a value.
+
+## How Spacefast announces deprecations
+
+One declaration per operation drives both the OpenAPI specification and the live HTTP response headers, so the spec and the wire stay aligned.
+
+### In OpenAPI
+
+Deprecated operations set `"deprecated": true` in `https://api.spacefast.com/openapi.json` and show a deprecated label in [the API reference](/api/reference). For example, legacy endpoints such as `GET /v1/spaces/{spaceId}/usage` and `GET /v1/spaces/{spaceId}/data-sources` carry `deprecated: true` in the published specification.
+
+### On live HTTP responses
+
+Every live response from a deprecated operation includes standard deprecation headers:
+
+| Header | Standard | Format and meaning |
+| --- | --- | --- |
+| `Deprecation` | RFC 9745 | `@<unix-seconds>` — Unix timestamp in seconds when the operation became deprecated |
+| `Sunset` | RFC 8594 | HTTP-date (`Sun, 15 Jul 2027 00:00:00 GMT`) when the operation stops responding. Omitted when no removal date is set yet |
+| `Link` | RFC 8288 | `<https://spacefast.com/docs/api/versioning>; rel="deprecation"; type="text/html"` |
+
+`Deprecation` uses RFC 9745's structured-field Date format (`@` plus Unix seconds) while `Sunset` uses RFC 8594's HTTP-date format.
+
+When you test endpoints with the CLI, pass `--include` to [`sf api`](/cli/reference#sf-api-method-path) to print `deprecation`, `sunset`, and `link` headers to stderr alongside other response metadata:
+
+```bash
+sf api GET /v1/spaces/spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c/usage --include
+```
+
+## Changelog and migration notices
+
+The [Changelog](/changelog) records API additions, deprecations, and removals. Monitor `Deprecation` and `Sunset` headers in client logs or check the changelog when upgrading [`@spacefast/sdk`](/api/sdk) so you can migrate to replacement endpoints before a sunset date arrives.

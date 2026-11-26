@@ -1,0 +1,62 @@
+---
+title: Team Memories
+description: Save lasting team and Space facts that connected agents read before they work
+---
+
+<Badge variant="warning">Labs</Badge>
+
+Team Memories stores durable facts, decisions, conventions, and preferences so every connected agent on your team reads them before creating or editing a Space. Memories are a [Labs](/labs) feature (`agents.memories`) and are not enabled for every team.
+
+## Set up team context
+
+Memories share private context storage with [Team Skills](/team-skills) and [Design System](/design-system).
+
+<Steps>
+  <Step title="Enable Memories in Labs">
+    Join **Memories** (`agents.memories`) in **Team settings → Labs**. See [Labs](/labs).
+  </Step>
+  <Step title="Initialize context storage">
+    Open **Memories** in your team and select **Set up team context** if prompted. Owners, admins, and members with publishing access can run setup.
+  </Step>
+  <Step title="Save your first memory">
+    Add facts your agents should remember across sessions, scoped either to the whole team or to one Space.
+  </Step>
+</Steps>
+
+For API setup, call [`ensureTeamContext`](/api/reference/teams/ensureteamcontext) (`POST /v1/teams/{teamId}/context`) with a credential that has `spaces:write` and no request body. Repeated calls reuse the same private storage home without creating memories or changing skills.
+
+## How memories work
+
+Each memory (`mem_...`) is team-authored knowledge, not an instruction. Current user instructions always take precedence over saved memories.
+
+- **Scope**: Leave `spaceId` unset (`null`) for team-wide knowledge, or set `spaceId` to scope a memory to one Space.
+- **Categories**: Every memory uses one category: `brand`, `voice`, `audience`, `design`, `decision`, `convention`, `preference`, or `fact`.
+- **Pinning**: Pinned memories appear first in every agent-context read. Pin only the facts every task needs.
+- **Limits**: Up to **200** active memories per team (archived memories do not count). Titles are 3 to 80 characters and unique per scope (case-insensitive). Bodies hold up to 1,000 characters. One agent-context read returns up to 16,000 characters of memory before setting `truncated: true`.
+
+Save one fact per memory. Never store credentials, payment details, private contact details, temporary task progress, or build output. List existing memories before creating duplicates, and read saved state before retrying after an uncertain write.
+
+## Read context before work
+
+Connected agents call [`getTeamAgentContext`](/api/reference/teams/getteamagentcontext) (`GET /v1/teams/{teamId}/agent-context`) before creating or editing a Space. Pass `spaceId` when working on an existing Space to include both team-wide memories and that Space's memories.
+
+Cache reads with the returned revision fingerprint:
+
+1. Save `memories.revision` from the response.
+2. Pass it as `knownMemoriesRevision` on later reads.
+3. When `memories.changed` is `false`, `memories.items` comes back empty and your cached copy still applies.
+
+A team without `agents.memories` enabled receives empty memory context. Reading context never authorizes setup or a write.
+
+## Manage memories through the API
+
+All paths below start with `/v1/teams/{teamId}`. See the [OpenAPI specification](https://api.spacefast.com/openapi.json) for full request and response schemas.
+
+| Method and path | Operation | Task |
+| --- | --- | --- |
+| `GET /memories` | [`listTeamMemories`](/api/reference/teams/listteammemories) | List active memories (all on one page), or pass `status=archived` with `limit` and `cursor`; filter by `spaceId` |
+| `POST /memories` | [`createTeamMemory`](/api/reference/teams/createteammemory) | Save one lasting fact, decision, or preference |
+| `PATCH /memories/{memoryId}` | [`updateTeamMemory`](/api/reference/teams/updateteammemory) | Update `title`, `body`, `category`, `pinned`, or set `archived: true` / `false` |
+| `DELETE /memories/{memoryId}` | [`deleteTeamMemory`](/api/reference/teams/deleteteammemory) | Permanently delete a memory (owners and admins with `teams:write`; refused for agent grants) |
+
+Memory reads require `spaces:read`. Creating, updating, and archiving memories require `spaces:write`. Agents archive stale memories (`archived: true`) instead of deleting them; permanent deletion requires `teams:write` and returns `authorization_level_not_allowed` for agent grants.

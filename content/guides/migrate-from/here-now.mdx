@@ -3,19 +3,19 @@ title: Move from here.now
 description: Publish the same folder from the same agent. Connect Spacefast to your agent, ask it to publish, and choose who can open the result
 ---
 
-If an agent published your site to here.now, the same agent can publish the same folder to Spacefast. Connect Spacefast to it once, then ask.
+If an agent published your project to here.now, the same agent can publish the same folder to Spacefast. Connect Spacefast to it once, then ask.
 
-## Move the site
+## Move the project
 
 <Steps>
   <Step title="Connect your agent">
-    Add Spacefast to the agent you publish from. [Agents](/agents) covers the three ways to connect and links the setup page for each client.
+    Add Spacefast to the agent you publish from. [Agents](/agents) covers the ways to connect and links the setup page for each client.
   </Step>
   <Step title="Publish the folder">
-    Ask your agent to publish the site's folder. It sends back the live link.
+    Ask your agent to publish the folder. It sends back the live link.
 
-    <Prompt description="Publish this site's folder to Spacefast." actions={["copy"]}>
-    Publish this site's folder to Spacefast and give me the live URL and claim link if it needs claiming.
+    <Prompt description="Publish this folder to Spacefast." actions={["copy"]}>
+    Publish this folder to Spacefast and give me the live URL and claim link if it needs claiming.
     </Prompt>
   </Step>
   <Step title="Choose who can open it">
@@ -32,11 +32,11 @@ Without an agent, drag the folder onto [drop.fast](https://drop.fast), or run `s
 
 | From here.now | On Spacefast |
 | --- | --- |
-| A folder of HTML, CSS, images, and scripts | Published exactly as it sits on disk. See the [plain HTML recipe](/recipes/html) |
+| A folder of HTML, CSS, images, and scripts | Published as it sits on disk. See the [plain HTML recipe](/guides/recipes/html) |
 | Your agent workflow | The same prompt, sent to Spacefast instead |
 
-An agent that publishes without a Spacefast account gets a live URL and a claim link. Claim the Space before it expires to keep it. See [Publish without an account](/anonymous-and-claim).
+An agent that publishes without a Spacefast account gets a live URL and a claim link. Claim the Space before it expires to keep it. See [Publish without an account](/agents/anonymous-and-claim).
 
-## When the site needs a backend
+## When the Space needs a backend
 
-A site that calls an API with a secret, stores form entries, or runs on a schedule needs a server side. On Spacefast that is a [Functions](/functions) route, which reads secrets from [environment variables](/environment-variables) and the Space's [database](/database) on `env.DB`, plus [crons](/crons) for schedules.
+A Space that calls an API with a secret, stores form entries, or runs on a schedule needs server-side code. On Spacefast that is a [Functions](/functions) route, which reads secrets from [environment variables](/environment-variables) and the Space's [database](/database) on `env.DB`, plus [crons](/crons) for schedules.

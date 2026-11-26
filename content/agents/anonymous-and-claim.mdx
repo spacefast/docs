@@ -1,11 +1,11 @@
 ---
 title: Publish without an account
 description: Publish a folder with no login, get a live URL and a space key, and move the Space into a team later without changing its hostname
-sidebar:
-  order: 3
 ---
 
-Keep the space key or claim link from your anonymous publish. Losing the publishing folder is recoverable if you saved either; losing every copy of the key leaves you unable to claim the Space before it expires.
+Keep the space key or claim link from an anonymous publish. Losing the publishing folder is recoverable if you saved either; losing every copy of the key leaves you unable to claim the Space before it expires.
+
+Connect your AI tool to your Spacefast account first (see [Agents](/agents)) to save published Spaces straight to your team with no claim step or expiry timer.
 
 ## Publish with no login
 
@@ -13,9 +13,9 @@ Keep the space key or claim link from your anonymous publish. Losing the publish
 sf publish ./dist
 ```
 
-If you are not signed in, the CLI publishes anyway. The server creates a Space owned by nothing except a secret it hands back, and prints a live URL you can open right now.
+If you are not signed in, the CLI publishes anyway. The server creates a Space owned only by a secret it returns, and prints a live URL you can open immediately.
 
-What comes back is a `claim` block. Four fields:
+What comes back is a `claim` block with four fields:
 
 | Field | What it is |
 | --- | --- |
@@ -30,29 +30,29 @@ https://swift-otter-4821.space.fast/__/sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 https://my.spacefast.com/claim#sfc_Kd2mQ7xR4tYb9wLp1sVn3F
 ```
 
-The key is returned once, at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later.
+Spacefast returns the key once at creation, and once more if you rotate it. The CLI caches it in `.spacefast/state.json` in the directory you published from, which is why `sf publish` from that same folder keeps updating the same Space. Nothing else in Spacefast can tell you the key later.
 
 CLI and MCP receipts include the preview URL, claim link, and message for you to relay. CI masks these links. The separate Space key is never printed on its own.
 
-The key is in the claim link's URL fragment. Browsers don't send fragments to servers, so the key reaches the claim page without being logged on the way.
+The key is in the claim link's URL fragment. Browsers don't send fragments to servers, so the key reaches the claim page without appearing in server logs.
 
-From the dashboard, **Drop** does the same thing while signed out. The eyebrow reads **Anonymous drop · Claim it later**, and the result carries a **Claim this space** button.
+From the browser, [drop.fast](https://drop.fast) does the same thing while signed out, labeled **Anonymous drop · No account needed**. Claiming the resulting Space removes the anonymous publishing deadline, lets you find it again and publish updates, and keeps its existing sharing settings unchanged. A Space published while signed in to your account skips claiming.
 
-Before claiming, you can publish updates, promote or roll back to a version ID from an earlier receipt, and create and revoke scoped viewer links. Listing version history, downloading files, and exporting app data return `space_unclaimed` until someone claims the Space. Run `sf spaces claim` in the publishing directory, sign in, then retry.
+Before claiming, you can publish updates, manage scoped viewer links, and promote or roll back to a version ID from an earlier receipt. Listing version history, downloading files, and exporting app data return `space_unclaimed` until someone claims the Space. Run [`sf spaces claim`](/cli/reference#sf-spaces-claim) in the publishing directory, sign in, then retry.
 
 ## The clock
 
-An anonymous Space serves for **{{anonymous-ttlSeconds}}** after creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation, then stops. A publish that changes nothing creates no version and leaves the deadline where it was.
+An unclaimed Space serves for **{{anonymous-ttlSeconds}}** after creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation, then stops. A publish that changes nothing creates no version and leaves the deadline where it was.
 
 It is recoverable after that. The key stays valid for another **{{anonymous-recoveryWindowSeconds}}**, during which you can still claim the Space and bring it back. After that window the Space is gone.
 
 Opening the claim page when less than an hour remains moves the deadline to one hour from that load, up to {{anonymous-claimPageTotalExtensionSeconds}} of extension in total. Repeated publishes cannot push the deadline past {{anonymous-publishAbsoluteCapSeconds}} from creation.
 
-To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. The address is stored only until the Space is claimed or expires, then deleted. It is never written to logs.
+To get a warning before the clock runs out, leave an address. Set `email` on the publish body, or call [`createSpaceClaimReminder`](/api/reference/spaces/createspaceclaimreminder). The reminder goes out about 3 hours before expiry. Spacefast stores the address only until the Space is claimed or expires, then deletes it without writing it to logs.
 
 ## Caps
 
-Anonymous publishing has stricter limits than the Personal plan.
+Anonymous publishing has stricter limits than the Personal plan:
 
 | Cap | Value |
 | --- | --- |
@@ -63,39 +63,39 @@ Anonymous publishing has stricter limits than the Personal plan.
 | Publishes per IP per hour | 20 |
 | Unclaimed Spaces open at once | 10 per client fingerprint |
 
-Hitting the last one is `429` `anonymous_space_limit_reached`, and the count only includes Spaces that still exist. Retrying a failed publish within 60 seconds lands on the Space the first attempt created rather than making a second one.
+Hitting the last one is `429` `anonymous_space_limit_reached`, and the count only includes Spaces that still exist. Retrying a failed publish within 60 seconds reuses the Space from the first attempt instead of creating a second one.
 
-One more difference. An unclaimed Space accepts every file type, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Anything else, such as a zip or an executable, uploads and returns `403` until the Space is claimed. Full numbers are on [Limits](/limits).
+One more difference: an unclaimed Space accepts every file type, but only *serves* text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Other file types, such as archives or executables, upload normally but return `403` until you claim the Space. Full numbers are on [Limits](/limits).
 
 ## Claim it
 
 <Steps>
 <Step title="Open the claim link">
 
-Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from.
+Open the `claimUrl` from your receipt, or run `sf spaces claim` in the directory you published from. The claim page shows the Space and its current serving deadline.
 
-The claim page header reads **Handed off to you**. Before you claim anything you can already manage **Private links** on it, so you can share the Space while you decide.
+Before you claim anything you can manage **Private Links** on the claim page, so you can share the Space while you decide. Existing sharing settings stay unchanged after you claim.
 
 </Step>
 <Step title="Sign in">
 
-Signed out, the button reads **Sign in & claim**. Signed in, it reads **Claim**, or **Claim & keep access** when the agent that published the Space can stay connected.
+Signed out, choose **Sign In & Claim**. Signed in, choose **Claim This Space**. When the publishing agent is eligible to keep publishing updates, a **Let your agent keep updating it** checkbox appears. Untick it to end that agent's access when you claim.
 
 The CLI equivalent starts a browser login for you if you are not signed in.
 
 </Step>
 <Step title="Pick a team">
 
-If you belong to exactly one team you can write to, that team is used. Otherwise the claim comes back asking which one, with the choices attached, and you repeat the request with your answer.
+If you belong to one writable team, Spacefast selects it automatically. Otherwise the claim comes back asking which one, with the choices attached, and you repeat the request with your answer:
 
 ```bash
 sf spaces claim --space spc_9f2c1ab34d5e4f6789ab01cd23ef4567 --team acme
 ```
 
 </Step>
-<Step title="Choose what people see">
+<Step title="Choose who can open it">
 
-After the claim lands the page says **&lt;space&gt; is yours.** and offers a **Choose what people see** chooser with **Keep private**, **Share with team**, and **Publish website**, plus **Copy live link** and **Open your space**.
+After the claim finishes, the page says **&lt;space&gt; is yours.** and offers **Who Can Open It** with **Private Space** and **Public Space**. You can also create viewer links in [Spacefast Share](/share).
 
 </Step>
 </Steps>
@@ -112,19 +112,19 @@ After the claim lands the page says **&lt;space&gt; is yours.** and offers a **C
 | Space key | The only credential | Demoted, see below |
 | Explicit people and links | Active | Survive unchanged |
 
-The dashboard lists those people and links under **Sharing that stays with this space**. Claiming changes ownership, not who already has access.
+The claim page lists those people and links under **Already Shared With** ("They will keep their access."). Claiming changes ownership, not who already has access.
 
-Two things can block a claim. A claim lands the Space in the team, so it counts against that team's space limit like any other create. A team already at its Space limit answers `quota_exceeded`. And the slug is re-checked against the receiving team's namespace, so an anonymous Space whose slug collides there answers `slug_unavailable` and you pick a new one.
+Two things can block a claim. Claiming moves the Space into the team, so it counts against that team's Space limit like any other create; a team already at its limit returns `quota_exceeded`. Spacefast also re-checks the slug against the receiving team's namespace; if the slug collides, the claim returns `slug_unavailable` and prompts you to pick a new one.
 
 ## Keeping your agent publishing
 
 An agent that published the Space for you loses its credential the moment you claim, which would leave it unable to ship the next change. Instead of destroying the space key, claiming demotes it into a one-time voucher.
 
-On the claim page that is the **Claim & keep access** button. On the CLI it is `sf spaces claim --keep-publishing`. Either way the choice is yours, explicitly, and the server decides whether the Space is even eligible.
+On the claim page, leave **Let your agent keep updating it** ticked when eligible (or untick it to cut off access and connect the agent from [Agent setup](/setup) later). On the CLI, pass `sf spaces claim --keep-publishing`. Either way the choice is yours, and the server decides whether the Space is eligible.
 
-If you say yes, the agent's next request trades the demoted key for a real API key scoped to the Space, using `exchangeSpaceClaim`. That key is shown exactly once. If you say no, the old key stops working and the agent has to be reconnected the normal way.
+If you keep access, the agent's next request trades the demoted key for an API key scoped to the Space, using `exchangeSpaceClaim`. Spacefast shows that key once. If you turn access off, the old key stops working and you must reconnect the agent through [Agents](/agents).
 
-For the full picture of what a credential like this can and cannot do, see [what agents are allowed to do](/agents/permissions).
+For what a credential like this can and cannot do, see [what agents are allowed to do](/agents/permissions).
 
 ## Rotating the key
 

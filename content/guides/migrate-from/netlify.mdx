@@ -1,34 +1,34 @@
 ---
 title: Move from Netlify
-description: Publish a Netlify site on Spacefast. netlify.toml build settings, redirects, and headers carry across when Spacefast builds the project
+description: Publish a Netlify website on Spacefast. netlify.toml build settings, redirects, and headers carry across when Spacefast builds the project
 ---
 
-Spacefast reads `netlify.toml` and the `_redirects` and `_headers` files you already have, so a static or prerendered Netlify site usually moves with one publish.
+Spacefast reads `netlify.toml` and any optional `_redirects` and `_headers` files you already have, so a static or prerendered Netlify website usually moves with one publish.
 
-## Move the site
+## Move the website
 
 <Steps>
   <Step title="Create the Space">
     In the project directory, create an empty Space. Later publishes from this directory update it.
 
     ```bash
-    sf spaces create --slug my-site
+    sf spaces create --slug my-space
     ```
   </Step>
   <Step title="Bring the environment variables">
-    Export the site's variables from Netlify as a dotenv file, then import it before the first build so the build can read them.
+    Export the project's variables from Netlify as a dotenv file, then import it before the first build so the build can read them.
 
     ```bash
-    sf env import .env --from netlify --space my-site
+    sf env import .env --from netlify --space my-space
     ```
 
     A line with an empty value fails the import, and empty values aren't supported. Remove the line, or give the variable a real value. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
-    Run `sf publish --space my-site` in the project and let Spacefast build it. `netlify.toml` is read when Spacefast builds, so a folder you built yourself carries over only the `_redirects` and `_headers` files inside it.
+    Run `sf publish --space my-space` in the project and let Spacefast build it. `netlify.toml` is read when Spacefast builds, so a folder you built yourself carries over only the `_redirects` and `_headers` files inside it.
 
     ```bash
-    sf publish --space my-site
+    sf publish --space my-space
     ```
 
     To build on every push instead, connect the repository with [Publish from Git](/git).
@@ -46,11 +46,21 @@ Spacefast reads `netlify.toml` and the `_redirects` and `_headers` files you alr
 | From Netlify | On Spacefast |
 | --- | --- |
 | `netlify.toml` build command and publish directory | Read after framework detection, and they override the detected build command and output directory |
-| Redirects and headers in `netlify.toml` | Converted to `_redirects` and `_headers` rules |
-| `_redirects` and `_headers` files | Published with your pages and applied as routing rules |
+| Redirects and headers in `netlify.toml` | Imported automatically during the build |
+| `_redirects` and `_headers` files | Supported as optional migration files and applied as routing and header rules |
 | Environment variables | Imported from a dotenv export with `sf env import --from netlify` |
 
-The full rules for build detection are on [Frameworks and builds](/frameworks). Rule order, conditions, and limits are on [Redirects, rewrites, and headers](/routing).
+For ongoing rules once you have moved, declare redirects, rewrites, and response headers in `spacefast.config.ts` (see [Project configuration](/config-file), [Redirects and rewrites](/redirects), and [Response headers](/headers)):
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  redirects: [{ source: "/blog/*", destination: "/articles/:splat", status: 301 }],
+});
+```
+
+The full rules for build detection are on [Frameworks and builds](/guides/frameworks).
 
 ## What doesn't
 

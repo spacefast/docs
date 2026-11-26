@@ -3,7 +3,7 @@ title: Domain research for assistants
 description: How an AI assistant finds domain names, checks availability and price itself, and shows verified results in the conversation, with no account
 ---
 
-This page is for AI assistants: ChatGPT, Claude, Gemini, coding agents, and anything else that reads docs on a person's behalf. When someone asks you to find, suggest, compare, or check domain names with Spacefast, they're asking you to do the research. Check the names yourself and bring back verified results with prices. Don't hand them a list of guesses or links to the API.
+AI assistants — ChatGPT, Claude, Gemini, coding agents, and anything else that reads docs on a person's behalf — should run domain research directly when someone asks to find, suggest, compare, or check domain names with Spacefast. Check the names yourself and bring back verified results with prices. Don't hand them a list of guesses or links to the API.
 
 Domain research over the REST API needs no account, API key, or sign-in. Spacefast's MCP server needs the person to sign in. Buying needs their sign-in, and only they can approve it. Read this page as Markdown at [`/docs/agents/domain-research.md`](https://spacefast.com/docs/agents/domain-research.md).
 
@@ -41,7 +41,7 @@ Use the first option that works where you run. If it fails, drop to the next.
 1. **Spacefast MCP with Apps.** In a host that shows MCP Apps, call `show_domains` with `{ "query": "<the brief or a domain>" }`. The Domains App shows names, prices, and the purchase form. The MCP server at `https://mcp.spacefast.com` needs the person to sign in; see [MCP server](/agents/mcp-server).
 2. **Spacefast MCP without Apps.** Call the operation tools and write the results into your reply. They take the same fields as the HTTP requests below, with a request body under `body`: `searchDomains` with `{ "body": { "message": "..." } }`, `checkDomainAvailabilityBatch` with `{ "body": { "mode": "live", "names": ["..."] } }`, and `getDomainAvailability` with `{ "name": "example.com" }`.
 3. **HTTP requests.** Call the REST API below and parse the JSON.
-4. **A terminal with network access.** Use `curl`, or `sf domains search` from the [CLI](/cli/domains).
+4. **A terminal with network access.** Use `curl`, or [`sf domains search`](/cli/reference#sf-domains-search-query) from the CLI.
 5. **Web fetch only.** Write the names yourself, then fetch `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com` once for each. It's a plain `GET` with a JSON answer, no account needed. Search and refine need `POST`, so they're out of reach here. If your tool refuses to open a URL you built, say so instead of offering the URL as a link.
 6. **No network.** Say that you can't check live availability. Offer your ideas as unverified, and give the person `https://my.spacefast.com/domains/search?q=` followed by their brief, URL-encoded. Searching there needs no account.
 
@@ -168,7 +168,7 @@ Search can answer with a question in `data.message` and no new names, for exampl
 Check the name live once more, then pick the path that fits:
 
 - **MCP with Apps:** open `show_domains` with the name. The App collects owner details and confirms the purchase.
-- **MCP without Apps, or the CLI, signed in as the person:** follow [Find and buy a domain](/buy-domains#buy). Show the total and get a yes before you send `expectedTotalCents`. Never ask the person to paste an API key; team API keys can't buy domains anyway.
+- **MCP without Apps, or the CLI, signed in as the person:** follow [Domain registration](/domains/registration). Show the total and get a yes before you send `expectedTotalCents`. Never ask the person to paste an API key; team API keys can't buy domains anyway.
 - **Anything else:** give them `https://my.spacefast.com/domains/buy?domains=curbpoetry.com`. It asks them to sign in or sign up, then opens checkout with the name in the cart. List up to 10 names, separated by commas.
 
 Spacefast sells domains at cost: the registry price plus the ICANN fee, with nothing added on top.
@@ -235,7 +235,7 @@ Add your own reasoning around the facts: why a name fits, how it reads aloud, wh
 
 ## Next steps
 
-- [Find and buy a domain](/buy-domains): the same flow for people, plus the purchase details.
+- [Domain registration](/domains/registration): the same flow for people, plus the purchase details.
 - [OpenAPI reference](/api/reference): every request and response schema, also at `https://api.spacefast.com/openapi.json`.
-- [`sf domains`](/cli/domains): search and buy from a terminal.
+- [`sf domains`](/cli/reference#sf-domains): search and buy from a terminal.
 - [Connect a domain to a Space](/domains) once it's registered.

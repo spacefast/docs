@@ -1,14 +1,13 @@
 ---
 title: Caching
-description: Default cache policies for public static files, header overrides, responses that are never cached, and what publishing refreshes
-sidebar: { order: 4 }
+description: Default cache policies for public static files, cache-bypass config, header overrides, uncached responses, and cache testing
 ---
 
-Public static files use one of three default cache policies. Protected responses, conditional routing, and header overrides change that. To get a fresh response from the edge, republish.
+Public static files use one of three default cache policies. Protected responses, conditional routing, cache-bypass rules, and header overrides change that. To get a fresh response from the edge, republish.
 
 ## Default policies
 
-Public static files use these defaults unless a header override or a [no-cache rule](#responses-that-are-never-cached) applies.
+Public static files use these defaults unless a cache-bypass rule, header override, or [no-cache rule](#responses-that-are-never-cached) applies:
 
 | Policy | `Cache-Control` |
 | --- | --- |
@@ -16,40 +15,67 @@ Public static files use these defaults unless a header override or a [no-cache r
 | HTML | `public, s-maxage=600, max-age=0, must-revalidate` |
 | Every other file | `public, s-maxage=86400, max-age=0, must-revalidate` |
 
-In the last two, `max-age=0` makes the browser revalidate on every load, and the ETag turns that revalidation into a 304 when nothing changed. Shared caches keep HTML for ten minutes and other files for a day. A visitor's browser never serves a stale page from its own cache. Visitors see a new publish as soon as the shared copy refreshes.
+In the last two policies, `max-age=0` makes browsers revalidate on every load, and the `ETag` turns unchanged requests into `304` responses. Shared caches keep HTML for 10 minutes and other files for 1 day, so visitors see a new publish as soon as the shared copy refreshes.
 
-**HTML always gets the ten-minute policy**, so a missed purge never leaves a page stale for long.
+HTML always uses the 10-minute policy so a missed purge never leaves a page stale for long.
 
 ## Which files are immutable
 
-A file gets the one-year immutable policy when either of these is true.
+A file receives the one-year immutable policy when either condition holds:
 
-**Its name carries a content hash.** Detection is strict, so a file with a version number or date in its name isn't cached for a year by mistake.
+- **Its filename carries a content hash**: Detection is strict so version numbers and dates are not cached for a year by mistake.
 
 | Filename | Immutable | Why |
 | --- | --- | --- |
-| `app.3f9c2d1a4b5e6f70.js` | Yes | A hex digest with both letters and digits |
-| `index-DiwrgTda.js` | Yes | A chunk id with an uppercase and a lowercase character |
-| `jquery-3.7.1.min.js` | No | A version number, not a digest |
-| `photo_20240115.jpg` | No | A date |
-| `hero-image1.jpg` | No | A counter |
+| `app.3f9c2d1a4b5e6f70.js` | Yes | Hex digest with both letters and digits |
+| `index-DiwrgTda.js` | Yes | Chunk ID with uppercase and lowercase characters |
+| `jquery-3.7.1.min.js` | No | Version number, not a digest |
+| `photo_20240115.jpg` | No | Date |
+| `hero-image1.jpg` | No | Counter |
 
-**Or it sits under a known build output directory** and is not `.html`, `.htm`, `.php`, `.txt` or `.xml`. Those directories are `_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`, and `_spacefast/platform/`.
+- **It sits under a build output directory** and is not `.html`, `.htm`, `.php`, `.txt`, or `.xml`: `_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`, and `_spacefast/platform/`.
 
-Outside those directories, a file with an unhashed name gets the one-day shared policy. That works, but hashed filenames make repeat visits faster.
+Outside those directories, an unhashed file receives the one-day shared policy. Precompressed sidecars such as `app.js.gz` serve only at their literal URL and are never substituted for `app.js`.
 
-A precompressed sidecar such as `app.js.gz` is served at its own literal URL and is never selected as the answer for `app.js`.
+## Configure caching in `spacefast.config.ts`
 
-## Overriding the policy
+### Bypass the edge cache
 
-A `Cache-Control` header rule that matches a file wins, and its value is sent verbatim:
+Use `cache.bypass` in `spacefast.config.ts` to serve matching requests fresh from origin instead of the edge cache:
 
-```text _headers
-/data/*.json
-  Cache-Control: public, max-age=60
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  cache: {
+    bypass: [
+      { name: "fresh-api", match: { path: "/api/*" } },
+      { name: "previews", match: { query: { preview: { op: "exists" } } } },
+    ],
+  },
+});
 ```
 
-Publish warns with `header_cache_control_platform_managed`, because the header you set applies to browser responses while shared caching stays managed. Full rules for header files are on [Redirects, rewrites, and headers](/routing).
+You can also add cache-bypass rules without publishing via `sf rules add --kind cache-bypass` or the dashboard's **Traffic Rules** page. See [Traffic Rules](/redirects#traffic-rules) for the full match grammar and limits.
+
+### Override `Cache-Control` for browsers
+
+A matching `Cache-Control` rule in `spacefast.config.ts` (or an optional `_headers` file) is sent verbatim to browsers:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  headers: [
+    {
+      source: "/data/*.json",
+      headers: [{ key: "Cache-Control", value: "public, max-age=60" }],
+    },
+  ],
+});
+```
+
+Publish emits a `header_cache_control_platform_managed` warning because custom `Cache-Control` headers apply to browser responses while shared edge caching stays platform-managed. See [Response headers](/headers).
 
 ## Responses that are never cached
 
@@ -58,56 +84,68 @@ Publish warns with `header_cache_control_platform_managed`, because the header y
 | Anything on a protected Space, or served to an admitted visitor | `private, no-store` |
 | Any URL carrying a share-link token in `?__=` | `private, no-store` |
 | Any request that is not `GET` or `HEAD` | `private, no-store` |
-| Any URL a conditional routing rule touches | `no-store` |
-| The 405 page | `no-store` |
+| Any URL touched by a conditional routing rule | `no-store` |
+| The `405` response | `no-store` |
 
-The non-GET rule has no exceptions. The shared cache in front of a Space keys on host, path, and query and ignores the method, so a cached answer to a `POST` could be replayed to a `GET`.
+The non-`GET` rule has no exceptions. Because the shared cache keys on host, path, and query without method, caching a `POST` response could replay it to a `GET`.
+
+## Testing before promotion
+
+Previews are private by default. An authenticated preview response uses `private, no-store`, so it cannot demonstrate the cache behavior of a public live response.
+
+Before promotion, inspect the exact build output you intend to publish:
+
+```bash
+sf routing inspect --routing ./dist --url https://example.com/path
+```
+
+Replace `./dist` with your build's publish root and repeat `--url` to match more URLs. This shows compiled custom header rules, not the complete runtime response or managed edge cache policy. See [Response headers](/headers).
+
+`sf routing compute --space my-space` resolves routing with current variables for the ready pending version if one exists, otherwise the live version. It does not accept `--url` or select an arbitrary version. An authenticated request to a preview can inspect its response headers, while its private cache policy stays intentional.
+
+To observe live edge caching, run `sf promote <version>` and request the public live URL without private access credentials. Run `sf rollback <version>` if you need to return to an earlier version.
 
 ## Vary is not part of the cache key
 
-The edge keys a stored response on **host, path, and query**. It does not read `Vary`.
+The edge keys stored responses on **host, path, and query**. It does not read `Vary`.
 
-Because of this, a routing rule with a `Country=`, `Language=`, `Cookie=`, or `Agent=` condition could send one visitor's response to the next visitor. To prevent that, any URL a conditional rule touches is `no-store` for everyone, whether the condition matched or not.
-
-If a page needs to differ by country, language, or client, give each variant its own URL instead of putting a condition on one URL. Then every variant can be cached.
+Because of this, any URL touched by a routing rule with `Country=`, `Language=`, `Cookie=`, or `Agent=` serves `no-store` for every visitor, whether the condition matched or not. Give variants distinct URLs if you want them cached.
 
 ## What a publish does
 
-Activating a new version points the Space's hostnames at it and purges the edge for every hostname the Space serves. Purges clear a **whole hostname**. You can't purge one URL, because the cache key includes the query string and a purge can't list every query a page might be requested with.
+Activating a new version points the Space's hostnames at it and purges the edge for every serving hostname. Purges clear a **whole hostname**; per-URL purges are unavailable because cache keys include query strings.
 
-Immutable version hostnames aren't purged, because their content never changes.
+Immutable version hostnames are not purged because their content never changes.
 
-A purge can fail. If it does, HTML still refreshes within ten minutes and other files on the one-day policy within a day, when the shared copy expires. Files on the one-year policy, including unhashed files under the build output directories above, can stay stale for up to a year.
+If a purge fails, HTML refreshes within 10 minutes and other files on the one-day policy refresh within 1 day. Files on the one-year policy—including unhashed files under the build output directories above—can stay cached for up to a year, so rename unhashed files under those directories whenever their content changes.
 
-Browsers don't need a purge. `max-age=0` makes every navigation revalidate, so a returning visitor gets the new version on their first request after the shared copy refreshes. Hashed files and files under the build output directories above are cached for a year. A new build gives changed hashed files new names, but an unhashed file in one of those directories keeps its URL, so browsers can keep the old copy. Rename it when its content changes.
+Browsers need no purge: `max-age=0` forces revalidation on navigation, so returning visitors pick up new versions as soon as the shared copy refreshes.
 
 ## Getting a fresh response
 
 <Steps>
   <Step title="Republish">
-    A publish purges every serving hostname. This is usually all you need.
+    A publish purges every serving hostname and is usually all you need.
   </Step>
   <Step title="Check which version answered">
-    Every response carries `X-Spacefast-Runtime: 1`, and `X-Spacefast-Version` names the version that answered.
+    Every response includes `X-Spacefast-Runtime: 1` and `X-Spacefast-Version`:
 
     ```bash
-    curl -sI https://my-site.space.fast/ | grep -i x-spacefast
+    curl -sI https://my-space.space.fast/ | grep -i x-spacefast
     ```
   </Step>
-  <Step title="Bypass the shared copy while you compare">
-    Add a unique query parameter. The query is part of the cache key, so `?cachebust=1` is a different entry.
+  <Step title="Bypass the shared copy while comparing">
+    Add a unique query parameter to hit a fresh cache key:
 
     ```bash
-    curl -sI "https://my-site.space.fast/?cachebust=$(date +%s)"
+    curl -sI "https://my-space.space.fast/?cachebust=$(date +%s)"
     ```
   </Step>
   <Step title="Open the version URL">
-    Each retained, ready version has a fixed hostname that serves its exact build, regardless of what is live. See [URLs and hostnames](/urls).
+    Each retained, ready version has a fixed hostname serving its exact build regardless of what is live. See [Space URLs](/urls).
   </Step>
 </Steps>
 
 ## Validators
 
-An `ETag` is sent on every 200. Its value is derived from the file's content, not from a clock, so republishing identical bytes produces the same tag.
-
-Conditional requests are answered by the edge, not by the origin, so a revalidation that finds nothing changed comes back as a 304 without reaching your files. Static responses carry no `Last-Modified`.
+Every `200` response carries a content-derived `ETag`, so republishing identical bytes produces the same tag. The edge answers conditional requests directly with `304` when nothing changed. Static responses carry no `Last-Modified` header.

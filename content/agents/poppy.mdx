@@ -1,0 +1,256 @@
+---
+title: Poppy
+description: Personal Agent Protocol 1.0 discovery, session headers, browser handoff, excluded tasks, and feedback on Spacefast
+---
+
+Spacefast implements Personal Agent Protocol (Poppy) `1.0`. Personal agents can discover Spacefast's API and MCP interfaces, sign session-bound requests, hand off to a scoped dashboard browser session, and report task-coverage gaps.
+
+## Discovery
+
+Fetch Spacefast's Poppy discovery document from the apex domain:
+
+```bash
+curl -sS https://spacefast.com/.well-known/poppy.json
+```
+
+Direct requests to `https://api.spacefast.com/.well-known/poppy.json` redirect (`302`, cached for 300 seconds) to `https://spacefast.com/.well-known/poppy.json` so `organization.domain` and the origin's OAuth protected-resource metadata agree.
+
+The response advertises the protocol version, OAuth issuer, API scopes with risk hints, browser handoff endpoint, tasks endpoint, and machine-readable API entry points (`scopes` and `scope_hints` truncated below):
+
+```json
+{
+  "protocol_version": "1.0",
+  "organization": {
+    "name": "Spacefast",
+    "domain": "spacefast.com",
+    "logo_uri": "https://spacefast.com/favicon.svg"
+  },
+  "auth": {
+    "issuer": "https://api.spacefast.com/v1/auth",
+    "scopes": {
+      "spaces:read": "Read Spaces, versions, and build status.",
+      "publish:write": "Publish new immutable versions.",
+      "poppy:browser-sign-in": "Use the Spacefast dashboard in an agent browser, limited to the other scopes approved."
+    },
+    "scope_hints": {
+      "spaces:read": { "changes": "none", "personal_data": false },
+      "publish:write": { "changes": "reversible", "personal_data": false },
+      "poppy:browser-sign-in": { "changes": "none", "personal_data": false }
+    }
+  },
+  "web": {
+    "browser_session_endpoint": "https://api.spacefast.com/v1/auth/poppy/browser-session"
+  },
+  "tasks": {
+    "endpoint": "https://api.spacefast.com/v1/poppy/tasks"
+  },
+  "apis": [
+    {
+      "type": "openapi",
+      "url": "https://api.spacefast.com/openapi.json",
+      "description": "Publish and manage Spaces, builds, domains, and connected services."
+    },
+    {
+      "type": "mcp",
+      "url": "https://mcp.spacefast.com",
+      "description": "Publish artifacts and use Spacefast tools through MCP."
+    }
+  ]
+}
+```
+
+Each entry in `auth.scope_hints` reports `changes` (`none`, `reversible`, or `irreversible`) and `personal_data` (boolean). Authorization server metadata at `https://api.spacefast.com/.well-known/oauth-authorization-server` lists `protected_resources` covering the Poppy domains, `https://api.spacefast.com/v1`, and `https://mcp.spacefast.com`.
+
+## Client identity and OAuth tokens
+
+Poppy agents identify themselves with HTTPS client metadata documents (CIMD):
+
+- `client_id` must be an HTTPS URL with no userinfo or `#fragment`, and the document at that URL must repeat the same `client_id`.
+- `token_endpoint_auth_method` must be `private_key_jwt`.
+- `jwks_uri` must be an HTTPS URL on the same hostname as `client_id`, returning a JWKS containing only public keys (no private key fields).
+- Every URI in `redirect_uris` must be an HTTPS URL on the `client_id` hostname or an RFC 8252 loopback HTTP URI (`localhost`, `127.0.0.1`, or `[::1]`).
+
+Token rules for Poppy clients:
+
+- **Single-resource OAuth access tokens**: a token request with more than one `resource` value fails with `400` `invalid_target`. Omitting `resource` on code exchange or refresh issues a single-audience token for `https://api.spacefast.com/v1`, while the refresh token covers both `https://api.spacefast.com/v1` and `https://mcp.spacefast.com` individually.
+- **DPoP-bound refresh tokens**: refreshing without a matching DPoP proof returns `400` `invalid_grant`.
+- **Immediate sign-out on revocation**: revoking the last active refresh token for a grant at `/v1/auth/oauth2/revoke` revokes the grant immediately and ends any active Poppy browser sessions tied to it.
+
+## Request headers
+
+Poppy protocol endpoints expect these headers:
+
+| Header | Required | Format |
+| --- | --- | --- |
+| `Poppy-Version` | Yes, whenever `Poppy-Session` is sent | `1.0` (any `1.x` minor version is accepted; checked before session verification) |
+| `Poppy-Session` | Yes on Poppy endpoints | Compact JWS (`poppy-session+jwt`) signed with a delegated P-256 key |
+| `Poppy-Extensions` | Optional | RFC 9651 list of quoted extension names with `;v="..."` versions, for example `"example-ext";v="1"`. Invalid syntax parses as no extensions |
+
+### `Poppy-Session` JWT structure
+
+The `Poppy-Session` header carries a short-lived JWS signed by a per-user delegated EC P-256 key, with the agent's signed delegation JWT embedded in its protected header (`poppy_dlg`).
+
+**Delegation JWT (`poppy_dlg`):**
+
+| Part | Field | Requirement |
+| --- | --- | --- |
+| Header | `typ` | `poppy-delegation+jwt` |
+| Header | `alg` | `ES256` or `PS384` |
+| Header | `kid` | Key ID present in the agent's `jwks_uri` |
+| Payload | `iss` | Agent HTTPS `client_id` (must match session `iss`) |
+| Payload | `cnf.jwk` | Public EC `P-256` JWK (`kty`, `crv`, `x`, `y`; no private fields) |
+| Payload | `iat`, `exp` | Integer timestamps; lifetime at most 24 hours (5 seconds clock tolerance) |
+| Payload | `jti` | Unique identifier, 1 to 255 characters |
+
+The delegation payload must not contain `sub`, `agent_id`, or `aud`. Each delegated key is bound to one `sub` for its lifetime.
+
+**Session JWT:**
+
+| Part | Field | Requirement |
+| --- | --- | --- |
+| Header | `typ` | `poppy-session+jwt` |
+| Header | `alg` | `ES256` |
+| Header | `kid` | SHA-256 JWK thumbprint of `cnf.jwk` from `poppy_dlg` |
+| Header | `poppy_dlg` | The compact delegation JWT above |
+| Payload | `iss` | Agent HTTPS `client_id` |
+| Payload | `aud` | Single string `"https://api.spacefast.com/v1/auth"` |
+| Payload | `sid` | Session identifier matching `^[A-Za-z0-9_-]{1,256}$` |
+| Payload | `sub` | Agent user identifier, 1 to 255 characters |
+| Payload | `agent_id` | Optional agent instance identifier, 1 to 255 characters |
+| Payload | `htm` | Uppercase HTTP method matching the request |
+| Payload | `htu` | Request URL without query string or `#fragment` |
+| Payload | `iat` | Integer timestamp within 60 seconds (5 seconds clock tolerance) |
+| Payload | `jti` | Single-use nonce, 1 to 255 characters; Spacefast rejects replays |
+| Payload | `ath` | Base64url SHA-256 of the presented OAuth access token. Required when sending `Authorization`, forbidden when omitted |
+
+Each `(client_id, sid)` session lives for 24 hours. Once a session is bound to a Spacefast account through an OAuth access token, using a token for a different account on the same `sid` returns `400` `session_ended`.
+
+### Protocol errors
+
+Poppy protocol endpoints return `Cache-Control: no-store` JSON errors with `error`, optional `error_description`, and optional `extension`:
+
+| Error code | Meaning |
+| --- | --- |
+| `version_unsupported` | `Poppy-Version` is missing or not in the `1.x` major line |
+| `invalid_session` | `Poppy-Session` is missing, malformed, expired, replayed, mismatched on `htm`/`htu`/`ath`, or fails signature/JWKS checks |
+| `session_ended` | The session expired, was ended, or was used with a different Spacefast account |
+| `extension_required` | A required protocol extension was not declared |
+| `invalid_request` | Request body, code, or headers are invalid for the endpoint |
+
+## Browser handoff
+
+The browser handoff joins an agent-controlled browser to the agent's Poppy session in three steps, either signed out or signed in to the Spacefast dashboard.
+
+<Steps>
+  <Step title="Load the one-time code form in the agent browser">
+    Navigate the agent browser to `GET https://api.spacefast.com/v1/auth/poppy/browser-session`.
+
+    Spacefast returns `200 text/html` containing a form posting to `/v1/auth/poppy/browser-session` with a hidden `code` (`bc_...`, valid for 60 seconds) and sets an `HttpOnly`, `SameSite=Strict`, `Secure` cookie (`__Host-poppy_join`, `Max-Age=60`). Existing login cookies are untouched.
+  </Step>
+  <Step title="Authorize the code from the agent backend">
+    Send `POST https://api.spacefast.com/v1/auth/poppy/browser-session/authorize` with `Poppy-Version: 1.0`, `Poppy-Session`, and the code:
+
+    ```bash
+    curl -i -X POST https://api.spacefast.com/v1/auth/poppy/browser-session/authorize \
+      -H "Poppy-Version: 1.0" \
+      -H "Poppy-Session: $POPPY_SESSION_JWT" \
+      -H "Authorization: Bearer $OAUTH_ACCESS_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"code":"bc_example_one_time_code"}'
+    ```
+
+    Success returns `204 No Content`.
+
+    - **Signed-in handoff**: include `Authorization` (Bearer or DPoP OAuth access token for `https://api.spacefast.com/v1` with the `poppy:browser-sign-in` scope). The dashboard session is capped by the token's other scopes. If the token lacks `poppy:browser-sign-in`, Spacefast returns `403` with `WWW-Authenticate: <scheme> error="insufficient_scope", scope="poppy:browser-sign-in"` without consuming the code, so the agent can retry signed out.
+    - **Signed-out handoff**: omit `Authorization` (and omit `ath` from `Poppy-Session`).
+  </Step>
+  <Step title="Submit the form from the agent browser">
+    Submit the HTML form (`POST https://api.spacefast.com/v1/auth/poppy/browser-session`, `application/x-www-form-urlencoded` with `code=bc_...`) from the same browser holding `__Host-poppy_join`.
+
+    Spacefast consumes the code on the first submission regardless of outcome. On success, Spacefast clears `__Host-poppy_join`, sets `__Host-poppy_session` (`HttpOnly`, `Secure`, `Max-Age` bounded by the Poppy session and OAuth grant expiry), and responds `303 See Other` to `https://my.spacefast.com/`.
+  </Step>
+</Steps>
+
+A signed-in handoff clears any existing human login session cookies in that browser so an earlier account does not resurface when the Poppy session ends. A signed-out handoff leaves any existing login cookie intact. Spacefast verifies `__Host-poppy_session` live on every request, so revoking the OAuth grant or ending the session cuts off dashboard access immediately.
+
+## Excluded tasks and skills (`/v1/poppy/tasks`)
+
+`GET https://api.spacefast.com/v1/poppy/tasks` lists actions agents cannot perform, Spacefast's Agent Skills index, and the feedback endpoint. Send `Poppy-Version: 1.0` and `Poppy-Session`, and omit `Authorization` (sending an OAuth access token here returns `400` `invalid_request`).
+
+```bash
+curl -sS https://api.spacefast.com/v1/poppy/tasks \
+  -H "Poppy-Version: 1.0" \
+  -H "Poppy-Session: $POPPY_SESSION_JWT"
+```
+
+The endpoint returns `200 application/json` (`Cache-Control: private, max-age=300`):
+
+```json
+{
+  "excluded_tasks": [
+    {
+      "task": "Delete a Spacefast account",
+      "alternative": {
+        "instructions": "Account deletion requires signing in directly on the Spacefast dashboard in your own browser.",
+        "references": [{ "type": "web", "url": "https://my.spacefast.com/settings/account" }]
+      }
+    },
+    {
+      "task": "Change account password, email, or two-factor authentication",
+      "alternative": {
+        "instructions": "Account security settings can only be changed directly on the Spacefast dashboard in your own browser.",
+        "references": [{ "type": "web", "url": "https://my.spacefast.com/settings/account" }]
+      }
+    },
+    {
+      "task": "Approve OAuth access for another application",
+      "alternative": {
+        "instructions": "OAuth access must be approved directly by the user in their own browser.",
+        "references": [{ "type": "web", "url": "https://my.spacefast.com/settings/connections" }]
+      }
+    }
+  ],
+  "skill_index": {
+    "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+    "skills": [
+      {
+        "name": "spacefast",
+        "description": "Publish and manage Spaces, builds, domains, and connected services on Spacefast.",
+        "type": "skill-md",
+        "url": "https://api.spacefast.com/skill",
+        "digest": "sha256:..."
+      }
+    ]
+  },
+  "feedback": {
+    "endpoint": "https://api.spacefast.com/v1/poppy/feedback"
+  }
+}
+```
+
+## Task coverage feedback (`/v1/poppy/feedback`)
+
+When an agent hits a task Spacefast's API or skills don't cover, report it to `POST https://api.spacefast.com/v1/poppy/feedback` with `Poppy-Version: 1.0`, `Poppy-Session`, and an optional `Authorization` header (matching `ath` if present):
+
+```bash
+curl -i -X POST https://api.spacefast.com/v1/poppy/feedback \
+  -H "Poppy-Version: 1.0" \
+  -H "Poppy-Session: $POPPY_SESSION_JWT" \
+  -H "Content-Type: application/json" \
+  -d '{"task":"Inspect custom domain DNS records","description":"Needed to verify CNAME propagation before switching traffic."}'
+```
+
+Spacefast rejects unknown fields and requires two trimmed non-empty strings:
+
+| Field | Limits | Description |
+| --- | --- | --- |
+| `task` | 1 to 200 characters | Short name of the task the agent attempted |
+| `description` | 1 to 2,000 characters | Detail on what was missing or blocked |
+
+Spacefast responds with `202 Accepted` and an empty body (`Cache-Control: no-store`). Invalid payloads return `400` `invalid_request`.
+
+## Next steps
+
+- Connect over [MCP server](/agents/mcp-server) using the MCP endpoint advertised in `apis`.
+- Read [Agent permissions](/agents/permissions) for role ceilings, approval gates, and revocation.
+- Browse the [API reference](/api/reference) for every operation behind `https://api.spacefast.com/openapi.json`.

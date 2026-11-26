@@ -1,15 +1,11 @@
 ---
 title: Connectors
-description: Connect an external service once and call its tools from Space pages, Functions, local AI agents, and scripts while credentials stay sealed in Spacefast.
-sidebar:
-  badge: Public Beta
+description: Connect an external service once and call its tools from Space pages, Workers, local AI agents, and scripts while credentials stay sealed in Spacefast
 ---
 
-<Badge variant="warning">Public Beta</Badge>
+Connectors let your team connect an external service once—an OpenAPI spec, a GraphQL endpoint, or a remote MCP server—and call its tools from Space pages, [Workers](/functions), local AI agents, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
 
-Connectors let your team connect an external service once—an OpenAPI spec, a GraphQL endpoint, or a remote MCP server—and call its tools from Space pages, Functions, local AI agents, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
-
-Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. Enterprise adds team-wide connector allowlists and blocklists.
+Connectors are available on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`. Enterprise adds team-wide connector allowlists and blocklists.
 
 ## How Connectors work
 
@@ -20,13 +16,13 @@ Four building blocks cover everything Connectors do:
 | **Connector** | A tool source your team registers once from the catalog or any URL. Its slug becomes the tool namespace, such as `hubspot` or `linear`. |
 | **Connection** | One authenticated account (`cxn_…`) on a connector, owned by the **Team** (shared) or **Personal** (only yours within this team). |
 | **Policy** | Rules that decide whether a tool call **Runs freely** (`approve`), **Ask first** (`require_approval`), or is **Blocked** (`block`). |
-| **Role** | A Space-level declaration in `spacefast.config.ts` or `sf.jsonc` that exposes chosen tools to a Space's pages and Functions. |
+| **Role** | A Space-level declaration in `spacefast.config.ts` or `sf.jsonc` that exposes chosen tools to a Space's pages and Workers. |
 
 ### Where you can call them
 
 | Surface | Best for | How it runs |
 | --- | --- | --- |
-| **Space pages and Functions** | Showing live data or running actions on a Space with no backend to write | Declare a role, bind an account, and call `space.connectors.<role>.<tool>()` or `env.CONNECTORS` |
+| **Space pages and Workers** | Showing live data or running actions on a Space with no backend to write | Declare a role, bind an account, and call `space.connectors.<role>.<tool>()` or `env.CONNECTORS` |
 | **AI agents (On-Device MCP)** | Letting Claude Code, Cursor, Codex, or Claude Desktop search and call your team's tools | `sf mcp` exposes `search_connector_tools` under your team's policy and approval rules. Hosted MCP and `sf mcp proxy` omit connector tools |
 | **CLI and API** | Scripts, CI jobs, or testing a call directly | Run a tool or a multi-tool sandbox program with `sf connectors run` or `POST /v1/connectors/runs` |
 
@@ -133,7 +129,7 @@ Approvals require a signed-in person. A CLI login or API key trying to approve f
 
 ## Use connectors in a Space
 
-A Space can show live data or run actions through a connected service with no backend to write and no keys in the browser. You declare a role in your Space config, bind an account, and call `/__spacefast/connectors/<role>/<tool>` from a page or `env.CONNECTORS` from a [Function](/functions). Spacefast runs the tool on the server with sealed credentials and returns JSON.
+A Space can show live data or run actions through a connected service with no backend to write and no keys in the browser. You declare a role in your Space config, bind an account, and call `/__spacefast/connectors/<role>/<tool>` from a page or `env.CONNECTORS` from a [Worker](/functions). Spacefast runs the tool on the server with sealed credentials and returns JSON.
 
 ### Declare a role
 
@@ -300,9 +296,9 @@ const { state, data } = await response.json();
 
 Without generated types, every client call uses `GET`; pass `{ method: "POST" }` for writes. With `fetch`, query parameters pass string arguments (`?stage=won`), `__args` passes typed JSON, and `POST` accepts a JSON body of at most 64 KiB. Cross-site calls fail with `browser_origin_not_allowed` when `Sec-Fetch-Site` or `Origin` names another host, and writes always require same-origin proof (`Origin` or `Sec-Fetch-Site: same-origin`). Every response is `private, no-store`.
 
-### Call from Functions
+### Call from Workers
 
-A [Functions](/functions) worker whose version declares roles receives `env.CONNECTORS`:
+A [Worker](/functions) whose version declares roles receives `env.CONNECTORS`:
 
 ```js functions/deals.js
 export async function GET(request, { env }) {
@@ -418,6 +414,6 @@ Deleting a connector disconnects every account on it, then deletes the connector
 
 ## Reference
 
-- [sf connectors](/cli/connectors) — every CLI command, flag, and exit code
+- [`sf connectors`](/cli/reference#sf-connectors) — every CLI command, flag, and exit code
 - [Connectors API](/api/connectors) — `/v1/connectors` endpoints, scopes, and errors
 - [MCP server](/agents/mcp-server) — On-Device MCP setup for local AI agents

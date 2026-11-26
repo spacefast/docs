@@ -1,0 +1,139 @@
+---
+title: Actions and forms
+description: Define server actions in spacefast.config.ts, scaffold typed form handlers with sf add form, call actions from Workers, and resume human-approved flows
+---
+
+Actions run server-side logic on your Space for form submissions, database writes, and outbound notifications. Declare actions under `app.actions` in `spacefast.config.ts`, or scaffold a complete form with `sf add form` and own the generated files.
+
+## Declare actions in `spacefast.config.ts`
+
+Add an `actions` map under `app` in `spacefast.config.ts` with `defineConfig`. A standalone `spacepress.config.ts` may sit beside it, but publish only one app definition per project. See [Configuration](/config-file).
+
+This configuration declares a `contact` action and a `rebuild` action restricted to admins:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "my-space",
+  app: {
+    actions: {
+      contact: { access: "anyone" },
+      rebuild: { access: "admin" },
+    },
+  },
+});
+```
+
+Run `sf check` to validate `spacefast.config.ts` and your app schema offline before publishing.
+
+## Scaffold a form with `sf add form`
+
+`sf add form` writes plain source files into your project that you own and edit directly; nothing is regenerated later. It keeps existing files unless you pass `--force`, and `--dry-run` prints the plan without writing.
+
+```bash
+sf add form --dry-run
+sf add form
+```
+
+The recipe creates two files (plus a minimal `spacepress.config.ts` if your project does not declare an app yet):
+
+- `sp/contact.ts`: defines a `contactMessages` table (admin-only read, no direct client writes) and a `sendContactMessage` mutation with `{ access: "anyone", rateLimit: "5/min" }`.
+- `sp/app/contact/page.tsx`: renders the contact form at `/contact`, wired straight to the mutation.
+
+### Server handler and validation
+
+The mutation validates fields before writing to the database and sending mail. Throwing `HttpError` with a JSON Pointer binds the error message to that field in the form state:
+
+```ts sp/contact.ts
+import { db, email, HttpError, mail, mutation, table, text, timestamp } from "spacepress";
+
+export const contactMessages = table(
+  {
+    name: text().max(120),
+    email: email(),
+    message: text({ multiline: true }).max(5000),
+    createdAt: timestamp().defaultNow(),
+  },
+  { access: { read: "admin", create: false, update: false, delete: false } },
+);
+
+export const sendContactMessage = mutation(
+  { access: "anyone", rateLimit: "5/min" },
+  async (input: { name: string; email: string; message: string }) => {
+    if (!input.email.includes("@")) {
+      throw new HttpError(422, "invalid_input", "Enter an email address", "/email");
+    }
+    const [row] = await db.insert(contactMessages).values(input).returning();
+    await mail.send({
+      to: "you@example.com",
+      replyTo: input.email,
+      subject: `New message from ${input.name}`,
+      text: input.message,
+    });
+    return { id: row?.id ?? null };
+  },
+);
+```
+
+Inserting into `contactMessages` before calling `mail.send()` keeps every submission in your [Database](/database) even if outbound delivery fails. To send live mail, configure a custom primary domain for [Transactional email](/email).
+
+### Form submission and state
+
+Pass the mutation directly to `<form action={sendContactMessage}>`, and read the last submission's values, errors, or return value with `useFormState`:
+
+```tsx sp/app/contact/page.tsx
+import { useFormState } from "spacepress/app";
+import { sendContactMessage } from "../../contact";
+
+export default function Contact() {
+  const sent = useFormState(sendContactMessage);
+  return (
+    <form action={sendContactMessage}>
+      <input name="name" required defaultValue={sent.values.name ?? ""} />
+      <input name="email" type="email" required defaultValue={sent.values.email ?? ""} />
+      <textarea name="message" required defaultValue={sent.values.message ?? ""} />
+      <button type="submit">Send</button>
+      {sent.error && <p role="alert">{sent.error.message}</p>}
+      {sent.result && <p role="status">Message sent.</p>}
+    </form>
+  );
+}
+```
+
+## Call actions from Workers
+
+When your Space also runs a [Worker](/functions), `env.APP.action(name, input)` invokes a declared action over the Space's internal relay and forwards the visitor's session cookie.
+
+This Worker route forwards a JSON payload to the `contact` action:
+
+```ts functions/api/contact.ts
+export async function POST(request: Request, { env }: { env: any }) {
+  const input = await request.json();
+  const result = await env.APP.action("contact", input);
+  return Response.json(result);
+}
+```
+
+## Resuming flows blocked on human approval
+
+When an API or agent operation pauses for a human decision (such as an action confirmation or scope elevation from [`requestApproval`](/api/reference/agent/requestapproval)), resume it through Spacefast's continuation API.
+
+The paused operation returns a `requiresAction` envelope containing a short-lived `continuationToken`. That token is a secret and single-use on completion; never log it. Poll `POST /v1/actions/resume` with the token to check progress and redeem the result:
+
+```bash
+curl -X POST https://api.spacefast.com/v1/actions/resume \
+  -H "Content-Type: application/json" \
+  -d '{"continuationToken":"ctk_your_continuation_token"}'
+```
+
+[`resumeAction`](/api/reference/agent/resumeaction) returns one of four outcomes:
+
+| Outcome | What it means |
+| --- | --- |
+| `pending` | The person has not decided yet; keep polling |
+| `completed` | Approved; returns the one-time result and spends the token |
+| `denied` | The person declined; denial is terminal |
+| `expired` | The continuation window elapsed before a decision |
+
+Only the signed-in owner of the requesting grant can approve ([`approveApproval`](/api/reference/agent/approveapproval)) or deny ([`denyApproval`](/api/reference/agent/denyapproval)) an approval request. See [Agent permissions](/agents/permissions) for the full approval lifecycle.

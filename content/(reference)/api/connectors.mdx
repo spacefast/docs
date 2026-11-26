@@ -1,14 +1,9 @@
 ---
 title: Connectors
 description: Register tool sources, connect accounts, set policy rules, and run connector tools over the API, with the scopes, shapes, and error codes each step uses
-sidebar:
-  order: 9
-  badge: Public Beta
 ---
 
-<Badge variant="warning">Public Beta</Badge>
-
-Connectors are in Public Beta on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`.
+Connectors are available on Go, Pro, and Enterprise plans. A team on Personal (Free) gets `feature_unavailable`.
 
 The connectors API lets a team register tool sources, connect accounts, set policy rules, and run tools. Every operation sits under `/v1/connectors` with the `Connectors` tag. For concepts, dashboard workflows, and Space roles, see [Connectors](/connectors).
 
@@ -351,13 +346,13 @@ These codes appear in a failed run's `error`, inside a successful HTTP response 
 
 ## Space bindings, serving, and agents
 
-A Space manages its connector roles, bindings, site-serving requests, public-serving allowances, and visitor connections under the `Spaces` tag:
+A Space manages its connector roles, bindings, serving requests, public-serving allowances, and visitor connections under the `Spaces` tag:
 
 - **Roles:** `getSpace` (for the current `config` overlay and `settingsDigest`) and `updateSpace` (sending the full `config` with your `config.connectors` change and `settingsDigest` as `baseSettingsDigest`, because `config` replaces the stored settings overlay).
 - **Bindings:** `listSpaceConnectorBindings`, `bindSpaceConnector`, and `unbindSpaceConnector`.
-- **Site serving:** `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, `denyConnectorServingRequest`, and `setSpaceConnectorPublicServing`.
+- **Space serving:** `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, `denyConnectorServingRequest`, and `setSpaceConnectorPublicServing`.
 - **Visitor connections:** `listVisitorConnectionUsers` and `revokeVisitorConnection`.
 
-See [Connectors](/connectors#bind-an-account-and-site-serving) for the Space workflow.
+See [Connectors](/connectors) for the Space workflow.
 
 Hosted MCP exposes no connector operations. On-device MCP, `sf mcp`, reaches connectors through one gateway tool, `search_connector_tools`. See [MCP server](/agents/mcp-server).

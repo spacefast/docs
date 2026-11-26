@@ -1,0 +1,121 @@
+---
+title: Response headers
+description: Set or remove HTTP response headers in spacefast.config.ts or _headers, understand caching and security interactions, and inspect headers
+---
+
+Set or remove HTTP response headers per path in `spacefast.config.ts`. Unlike redirects, every matching header block applies and accumulates in order.
+
+## Configure headers in `spacefast.config.ts`
+
+Declare a `headers` array inside `defineConfig`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  headers: [
+    {
+      source: "/*",
+      headers: [
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      ],
+    },
+    {
+      source: "/downloads/*",
+      headers: [
+        { key: "Content-Disposition", value: "attachment" },
+        { key: "X-Frame-Options", remove: true },
+      ],
+    },
+  ],
+});
+```
+
+| Field | Type | What it does |
+| --- | --- | --- |
+| `source` | string, required | Request path to match (`*` splat, `:name` segment) |
+| `headers` | array, required (min 1) | List of header operations |
+| `headers[].key` | string, required | Header name matching `^[A-Za-z0-9-]+$` |
+| `headers[].value` | string | Value to set on matching responses |
+| `headers[].remove` | `true` | Remove the header instead of setting a value |
+
+Every rule object rejects unknown keys. The same `headers` array works in `sf.jsonc`; when both `spacefast.config.ts` and `sf.jsonc` exist, `spacefast.config.ts` wins. See [Project configuration](/config-file).
+
+## Optional: `_headers` file
+
+For migration convenience, Spacefast also reads a `_headers` file at the publish root. An unindented line starts a path matcher, indented `Name: Value` lines set headers, and `!Name` removes a header:
+
+```text _headers
+/*
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/downloads/*
+  Content-Disposition: attachment
+  !X-Frame-Options
+```
+
+If both `_headers` and project configuration define the same header for a path, the `_headers` rule wins. Spacefast compiles `_headers` at publish and returns `404` if a visitor requests it directly.
+
+## Matching and precedence
+
+- **Accumulation**: Every matching block applies. Removals run before sets and delete values set by earlier blocks. Repeating the same header name folds values into a comma-joined list.
+- **Raw pathname matching**: Header matchers cannot include a port and match the raw pathname, so they are sensitive to trailing slashes.
+- **Requested URL**: Header rules match the URL the visitor requested, not the target path an internal rewrite served.
+- **Pattern grammar**: `*` matches a splat and `:name` matches one segment; regular expressions are not supported.
+- **Edge placement**: By default, your Space applies header rules at origin. Setting `config.placement.edge` to `true` moves eligible header rules to the edge on the next publish (see [Traffic Rules](/redirects#place-redirects-and-headers-at-the-edge)).
+
+## Reserved and restricted headers
+
+Header names must match `^[A-Za-z0-9-]+$`. Publish rejects platform-owned and transport headers:
+
+| Name or prefix | Diagnostic |
+| --- | --- |
+| `x-spacefast-*`, `x-stattic-*` | `header_name_unsupported` |
+| `content-encoding`, `content-length`, `transfer-encoding`, `connection`, `vary`, `location`, `set-cookie`, `strict-transport-security`, `host`, `date`, `server`, and other transport headers | `header_name_unsupported` |
+| `x-sendfile`, `x-accel-redirect`, and other internal redirect headers | `header_name_unsupported` |
+| `cdn-cache-control`, `cloudflare-cdn-cache-control`, `netlify-cdn-cache-control`, `surrogate-control` | `header_cdn_cache_unsupported` |
+| `Basic-Auth` | `header_basic_auth_unsupported` |
+
+Spacefast rejects `Basic-Auth` first, redacts it from diagnostics, and strips it from compiled rules so credentials never reach logs. For access control, use [Spacefast Share](/share).
+
+## Caching and security headers
+
+You can set `Cache-Control`, which emits a `header_cache_control_platform_managed` warning at publish. Your `Cache-Control` value applies to browser responses, while shared edge caching stays platform-managed. To skip the edge cache for specific paths, add a `cache.bypass` rule instead. See [Caching](/caching).
+
+For recommended `Content-Security-Policy`, `X-Frame-Options`, `Referrer-Policy`, and other security header setups, see [HTTP and security headers](/infrastructure/http-security-headers).
+
+## Inspect headers locally and live
+
+Check which custom header rules match a URL in your local build output before promoting:
+
+```bash
+sf routing inspect --routing ./dist --url https://example.com/downloads/file.zip
+```
+
+Replace `./dist` with your publish root and repeat `--url` for multiple paths. `sf routing inspect` shows compiled custom header rules, not runtime defaults or managed edge cache headers.
+
+To check live runtime headers after publishing, run `curl -I`:
+
+```bash
+curl -sI https://my-space.space.fast/downloads/file.zip
+```
+
+Private previews always return `Cache-Control: private, no-store`, so test live edge caching on a public live URL. See [Testing before promotion](/caching#testing-before-promotion).
+
+## Limits
+
+| Limit | Value | Severity |
+| --- | --- | --- |
+| Header rules (counted as blocks) | 100 | Error |
+| `_headers` line length | 2,000 characters | Error |
+| `_headers` file size | 2 MiB | Read cap |
+| `sf.jsonc` file size | 256 KiB | Error |
+
+## Next steps
+
+- [HTTP and security headers](/infrastructure/http-security-headers): security policy examples and browser checks
+- [Caching](/caching): default edge and browser cache policies
+- [Redirects and rewrites](/redirects): path redirects, proxies, and Traffic Rules
+- [`sf routing inspect` CLI reference](/cli/reference#sf-routing-inspect): full inspection options

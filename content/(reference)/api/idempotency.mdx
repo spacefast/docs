@@ -1,8 +1,6 @@
 ---
 title: Idempotency
 description: Send Idempotency-Key on any POST to make it safe to retry, with 24-hour replay, conflict rules, and the anonymous publish principal
-sidebar:
-  order: 6
 ---
 
 Send a valid `Idempotency-Key` when retrying a `POST`, and reuse the same body, credential, and path. Stored results replay for 24 hours. In-flight requests return a conflict, and outcomes that are not stored can execute again.

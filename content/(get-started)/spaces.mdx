@@ -1,8 +1,6 @@
 ---
 title: Spaces
-description: What a Space is, the slug rules the API enforces, who owns it, and what a rename or a delete does to the URLs you already handed out
-sidebar:
-  order: 1
+description: What a Space is, the slug rules the API enforces, who owns it, and what a rename, archive, or delete does to its URLs
 ---
 
 A Space is what you publish to, with one stable hostname. Publishing creates versions inside it, and the Space decides which one visitors see.
@@ -11,13 +9,13 @@ A Space is what you publish to, with one stable hostname. Publishing creates ver
 
 Each Space has a slug, a managed hostname, an owner, and a pointer to the version visitors see. A publish creates a new immutable version or reports no changes, and the Space controls which version is live.
 
-Ids are `spc_` plus 32 hex characters:
+IDs are `spc_` plus 32 hex characters:
 
 ```text
 spc_9f2c1ab34d5e4f6789ab01cd23ef4567
 ```
 
-Anywhere the CLI takes `--space`, you can pass that id, the slug, the live URL, or a custom domain pointed at it.
+Anywhere the CLI takes `--space`, you can pass that ID, the slug, the live URL, or a custom domain pointed at it.
 
 ## Slug rules
 
@@ -31,7 +29,7 @@ The slug is the name in the dashboard URL and the label in every hostname the Sp
 | `--` anywhere | Rejected |
 | All digits | Rejected |
 
-Spacefast trims whitespace, strips diacritics, and lowercases your input. It reshapes nothing else, so `My Site` is rejected and `my-site` passes. A failing slug comes back as `slug_invalid` with a sentence saying which rule you hit.
+Spacefast trims whitespace, strips diacritics, and lowercases your input. It reshapes nothing else, so `My Space` is rejected and `my-space` passes. A failing slug comes back as `slug_invalid` with a sentence saying which rule you hit.
 
 `--` is out because it separates a version or branch label from the Space label in hostnames. See [URLs and hostnames](/urls).
 
@@ -61,7 +59,7 @@ New Spaces use `https://<label>.space.fast/`. Existing Spaces on `view.fast` kee
 The owner depends on how the Space was created:
 
 - **A team.** The normal case. Team members reach the Space by their role. Slugs are unique per team rather than globally, so two teams can both own `docs`.
-- **A space key.** A Space published without an account is owned by its `sfc_` key until someone claims it. See [Publish without an account](/anonymous-and-claim).
+- **A space key.** A Space published without an account is owned by its `sfc_` key until someone claims it. See [Publish without an account](/agents/anonymous-and-claim).
 - **An external principal.** A customer in a [Partner API integration](/platforms/partner-api/customers) can own Spaces without a self-serve team.
 
 To move a Space to another team, run `sf spaces transfer <team> --space docs`, or open **Space settings → General → Transfer this space → Transfer space…**. If you are an owner or admin of both teams, the move is instant. The Space keeps serving at its current address. Otherwise the target team has 7 days to accept, and nothing changes until they do. Roles and membership are on [Teams](/teams).
@@ -70,7 +68,7 @@ To move a Space to another team, run `sf spaces transfer <team> --space docs`, o
 
 ## Sharing when you create one
 
-A new team-owned Space starts at one of three presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/anonymous-and-claim).
+A new team-owned Space starts at one of three presets. A Space published without an account has no owning team. Its space key and claim link open it until the claim window ends; see [Publish without an account](/agents/anonymous-and-claim).
 
 | Preset | Who can open the live Space |
 | --- | --- |
@@ -110,7 +108,7 @@ curl https://api.spacefast.com/v1/spaces \
   -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
-[`listSpaces`](/api/reference/spaces/listspaces) is cursor paginated. [`resolveSpace`](/api/reference/spaces/resolvespace) turns an id, hostname, URL, or slug into one Space.
+[`listSpaces`](/api/reference/spaces/listspaces) is cursor paginated. [`resolveSpace`](/api/reference/spaces/resolvespace) turns an ID, hostname, URL, or slug into one Space.
 
 </Tab>
 </Tabs>
@@ -134,7 +132,11 @@ What changes:
 - The old slug stays reserved for this Space.
 - Version URLs do not move. They were computed once and stored.
 
-One thing blocks a rename. While `name` is set in your `sf.jsonc`, the API refuses to rename the Space, because the next publish would set the old name again. Remove the key or rename it in the file. See [Config file](/config-file).
+One thing blocks a rename. While `name` is set in your project configuration (`spacefast.config.ts` or `sf.jsonc`), the API refuses to rename the Space, because the next publish would set the old name again. Remove the key or rename it in the file. See [Config file](/config-file).
+
+## Archiving and restoring
+
+To stop serving a Space without deleting its versions, source, database, storage, or domains, archive it with `sf spaces archive` and bring it back later with `sf spaces restore`. Archived Spaces do not count toward your team's live Space limit. For full archiving steps and finding inactive Spaces, see [Backups, archives, and exports](/exports).
 
 ## Deleting and restoring
 
@@ -162,8 +164,8 @@ The one reversible case is a Space you deleted with its space key. [`restoreSpac
 
 ## Published without an account
 
-A Space created by an anonymous publish expires {{anonymous-ttlSeconds}} after the latest publish that changes files and uses a single `sfc_` key. Claiming it moves it into a team and keeps its hostname. That whole path is on [Publish without an account](/anonymous-and-claim).
+A Space created by an anonymous publish expires {{anonymous-ttlSeconds}} after the latest publish that changes files and uses a single `sfc_` key. Claiming it moves it into a team and keeps its hostname. That whole path is on [Publish without an account](/agents/anonymous-and-claim).
 
 ## Next steps
 
-Use [CLI Spaces](/cli/spaces) to find and manage Spaces from your terminal.
+Use [`sf spaces`](/cli/reference#sf-spaces) in the CLI reference to find and manage Spaces from your terminal.

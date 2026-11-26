@@ -1,75 +1,75 @@
 ---
-title: Storage
-description: Object storage for a running app. Upload a file from the browser or the API, get back an id and a URL, list and delete from sf storage.
-sidebar:
-  order: 5
+title: Object storage
+description: Runtime object storage for a Space. Upload files from Workers, the CLI, or the API, get back an id and URL, and list, download, or delete objects
 ---
 
-Storage holds files uploaded by a running app, separate from published version files. Each object has a 32-character hexadecimal id. Objects are private unless uploaded as public.
+Object storage holds files uploaded at runtime, separate from published version files. Each object has a 32-character hexadecimal id, and uploads are private unless marked public.
 
 ## What it is
 
-Storage holds files a running app uploaded, not the files you published. Only a Space with a runtime app has it. Version files are a different thing and live in [Publishing](/publish).
+Object storage holds files uploaded while your Space is running—such as visitor uploads, generated PDF files, or media—not the files you publish in a version. Version files live in [Publishing](/publish).
 
-An object is addressed by a bare 32-character hexadecimal id. There is no key or path. The id is the identity. Uploads are private by default; set `public` at upload time to make an object readable by visitors.
+Every object is addressed by a bare 32-character hexadecimal id. There is no key or path hierarchy; the id is the identity. Uploads are private by default; set `public` at upload time to make an object readable by visitors.
 
 | Field | Notes |
 | --- | --- |
 | `id` | 32 hex characters, matching `/^[a-f0-9]{32}$/` |
 | `contentType` | From the uploaded object's `Content-Type`, up to 255 characters |
-| `filename` | Display and download name only. Optional |
+| `filename` | Display and download name only; optional |
 | `size` | Bytes |
 | `sha256` | Content digest |
 | `uploaderId` | Who uploaded it |
 | `createdAt` | Timestamp |
 | `public` | Whether visitors can read it |
-| `url` | Path-relative. `/__stattic/u/<id>?k=<key>` for a public object, the authenticated `/storage/<id>` path for a private one |
+| `url` | Path-relative: `/__stattic/u/<id>?k=<key>` for a public object, or `/storage/<id>` for a private one |
 
-A public object's `url` carries the read key current at the time of the response. Absolutize it against whichever of the space's hostnames you are serving from.
+A public object's `url` carries the read key current at the time of the response. Resolve it against whichever of the Space's hostnames you are serving from.
 
 `filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
 
-## Upload from a capsule
+## Use storage from a Worker
 
-The client SDK is the upload path for a [Zero](/zero-runtime) app.
+A [Worker](/functions) reaches runtime object storage through `env.STORAGE`.
 
-```tsx client/upload.tsx
-import { storage } from "@spacefast/zero/client";
+This route uploads a request file as a public object and returns its id and URL:
 
-async function onFile(file: File) {
-  const object = await storage.upload(file, { public: true });
-  console.log(object.id, object.url);
+```ts functions/api/upload.ts
+export async function POST(request: Request, { env }: { env: any }) {
+  const form = await request.formData();
+  const file = form.get("file");
+  if (!(file instanceof File)) return Response.json({ error: "Missing file" }, { status: 400 });
+  const object = await env.STORAGE.upload(file, { public: true });
+  return Response.json({ id: object.id, url: object.url }, { status: 201 });
 }
 ```
 
-`storage` has three methods.
+`env.STORAGE` exposes three methods:
 
 | Method | Returns |
 | --- | --- |
-| `upload(file: Blob, options?: { public?: boolean })` | `{ id, public, contentType, size, url }`. Private unless `public: true` |
-| `get(id: string)` | A `Response`, or `null` |
-| `delete(id: string)` | Nothing |
-
-In local `sf dev`, uploads live in memory.
+| `upload(file: Blob, options?: { public?: boolean })` | `{ id, public, contentType, size, url }`; private unless `public: true` |
+| `get(id: string)` | A `Response`, or `null` when not found |
+| `delete(id: string)` | Nothing (idempotent if already absent) |
 
 ## Upload from the API
 
-The request body is the file itself. The `Content-Type` header becomes the object's content type, `?filename=` sets the display name, and `?public=true` makes the object public. Without it, the object is private.
+Send the raw file as the request body. The `Content-Type` header becomes the object's content type, `?filename=` sets the display name, and `?public=true` makes the object public. Without `?public=true`, the object is private.
 
 ```bash
 curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/storage?filename=receipt.pdf" \
-  -H "Authorization: Bearer $SPACEFAST_TOKEN" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/pdf" \
   --data-binary @receipt.pdf
 ```
 
-A successful upload answers `201`.
+A successful upload returns `201`.
 
-## Upload, list, and delete from the CLI
+## Upload, list, download, and delete from the CLI
+
+Manage stored objects from the command line:
 
 ```bash
 sf storage put receipt.pdf --content-type application/pdf
-sf storage
 sf storage list --limit 100
 sf storage list --cursor <cursor>
 sf storage download 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
@@ -78,13 +78,13 @@ sf storage delete 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
 
 `sf storage` and `sf storage list` (alias `ls`) do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
 
-`sf storage delete` confirms first. The id must be the 32-character id the list prints. A prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone prints `<id> was already gone.` rather than failing.
-
 `sf storage put` uploads a private object unless you pass `--public`. `sf storage download` saves to `--output` or a file named after the id, and never overwrites an existing file.
+
+`sf storage delete` confirms first. The id must be the 32-character id the list prints; a prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone reports that it was absent rather than failing.
 
 ## Dashboard
 
-Open **Storage** for the space. It has a **Choose Files** picker and an **Upload Files** button. It also prints the per-file limit inline. Deleting asks first, because it removes the object for every visitor.
+Open **Storage** for the Space. Use **Choose Files** and **Upload Files** to upload directly; the per-file limit appears inline. Deleting prompts first because it removes the object for every visitor.
 
 ## Limits
 
@@ -92,13 +92,13 @@ Open **Storage** for the space. It has a **Choose Files** picker and an **Upload
 | --- | --- |
 | One file | 5 MiB |
 | Empty uploads | Refused with `storage_empty_file` |
-| Anonymous daily budget, per Space | 200 MiB rolling. Identified principals carry no budget |
+| Anonymous daily budget, per Space | 200 MiB rolling; identified principals carry no budget |
 | `limit` on a list | 1 to 100, default 50 |
-| `cursor` | 2048 characters |
+| `cursor` | 2,048 characters |
 | `filename` | 1 to 255 characters, no separators |
 
-:::warning[Active web content is refused]
-Storage serves files to visitors, so it will not accept anything that could execute in a browser or on the box. HTML, XHTML, PHP, anything whose type mentions JavaScript or ECMAScript, and executables (PE, ELF, Mach-O, JAR) are all rejected. The check reads the declared type, the first 512 bytes for magic numbers, and text prefixes like `#!`, `<!doctype html`, `<html`, `<script`, and `<?php`. An uploaded `.html` will not serve as a page.
+:::caution[Active web content is refused]
+Storage serves files to visitors, so it rejects anything that could execute in a browser or on the server. HTML, XHTML, PHP, anything whose type mentions JavaScript or ECMAScript, and executables (PE, ELF, Mach-O, JAR) are all rejected. Spacefast checks the declared type, the first 512 bytes for magic numbers, and text prefixes like `#!`, `<!doctype html`, `<html`, `<script`, and `<?php`. An uploaded `.html` file will not serve as a page.
 :::
 
 A Space whose runtime is not reachable answers `503` with `runtime_management_unavailable`.
@@ -108,11 +108,8 @@ A Space whose runtime is not reachable answers `503` with `runtime_management_un
 | Operation | Route |
 | --- | --- |
 | [`listSpaceStorageObjects`](/api/reference/spaces/listspacestorageobjects) | `GET /v1/spaces/{spaceId}/storage` |
-| `createSpaceStorageObject` | `POST /v1/spaces/{spaceId}/storage` |
+| [`createSpaceStorageObject`](/api/reference/spaces/createspacestorageobject) | `POST /v1/spaces/{spaceId}/storage` |
+| [`readSpaceStorageObject`](/api/reference/spaces/readspacestorageobject) | `GET /v1/spaces/{spaceId}/storage/{objectId}` |
 | [`deleteSpaceStorageObject`](/api/reference/spaces/deletespacestorageobject) | `DELETE /v1/spaces/{spaceId}/storage/{objectId}` |
 
-Listing needs the `versions:read` scope. As the Space owner you can delete any object, including one a visitor uploaded.
-
-## Next steps
-
-See [CLI storage](/cli/storage) for every flag.
+Listing requires the `versions:read` scope. As the Space owner, you can download or delete any object, including private ones a visitor uploaded. See [`sf storage`](/cli/reference#sf-storage-target) in the CLI reference for every flag.

@@ -1,8 +1,6 @@
 ---
 title: TypeScript SDK
 description: Install @spacefast/sdk, construct a client, call any operation by path with full type inference, and handle errors and retries
-sidebar:
-  order: 9
 ---
 
 `@spacefast/sdk` is a typed client generated from the same OpenAPI document that produces [the reference](/api/reference), so every call in the API gets path params, query params, request body, and response body checked at compile time.
@@ -13,7 +11,7 @@ sidebar:
 npm i @spacefast/sdk
 ```
 
-ESM only, Node 20 or newer, MIT licensed. The runtime dependencies are `@spacefast/common` and `ignore`. `@tanstack/react-query` is an optional peer, needed only for the `/query` entry point.
+ESM only, Node.js 20 or newer, MIT licensed. `@tanstack/react-query` is an optional peer dependency, needed only for the `/query` entry point.
 
 ## Construct a client
 

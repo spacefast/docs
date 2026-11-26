@@ -1,0 +1,103 @@
+---
+title: Activity and audit logs
+description: Inspect Space and team activity, filter setting changes, and export team audit logs as CSV
+---
+
+Every Space and team mutation writes an append-only activity event naming who acted, what changed, when it happened, and the outcome. Read the feed in the dashboard, through [`sf activity`](/cli/reference#sf-activity), or over the API, and export team logs as CSV for audits.
+
+## Where to read activity
+
+- **Space activity**: open a Space in the dashboard and go to **Activity**, or run `sf activity` in a linked directory.
+- **Team activity**: open **Team settings → Activity**. On Enterprise plans, the team audit log also appears as its own **Audit log** page.
+- **Account-wide feed**: run `sf activity --all` to read every event visible to your account.
+
+On teams that are or have been on Enterprise plans, reading team and Space activity requires `activity:read`, which team owners and admins hold. Partner keys and `client_credentials` OAuth tokens do not hold it.
+
+## Read activity from the CLI
+
+Inspect recent Space activity, filter by event code or changed team setting, or bound the time range with [`sf activity`](/cli/reference#sf-activity):
+
+```bash
+sf activity
+sf activity --code version.promoted
+sf activity --all --since 2026-06-01T00:00:00Z
+sf activity --setting requireTwoFactor
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--all` | off | Read account-wide activity instead of one Space |
+| `--code` | none | Filter to one taxonomy code, such as `space.created` or `version.ready` |
+| `--setting` | none | Return only team events that changed a specific setting (reads account-wide activity) |
+| `--since`, `--until` | none | ISO 8601 timestamps bounding the query |
+| `--limit` | 50 | Maximum events per page, up to 100 |
+| `--cursor` | none | Continue from the previous page's cursor |
+
+Common `--setting` values include `requireTwoFactor`, `privateSpacesOnly`, `newSpaceGrantPreset`, `noindex`, `restrictSpaceTransfer`, `blockShareLinks`, `joinPolicy`, `autoEnroll`, and `connectorsEnforcementPolicy`.
+
+## What each event records
+
+Each event carries a stable structure across the dashboard, CLI, API, and CSV exports:
+
+| Field | What it holds |
+| --- | --- |
+| `id`, `sequence` | Unique event ID and monotonic sequence number |
+| `createdAt` | UTC ISO 8601 timestamp |
+| `actor` | `type` (`user`, `api_key`, `partner_token`, `oauth_client`, `visitor`, `anonymous_claim`, or `system`) and `id` |
+| `code` | Dot-delimited taxonomy code, such as `space.transferred`, `team.member_added`, or `api_key.revoked` |
+| `message` | Plain-language summary |
+| `details` | Structured JSON context for the event, nullable |
+| `staffAction` | `true` when Spacefast staff performed the action |
+| `supportSession` | `true` when Spacefast staff acted in a support session under a customer's account |
+
+Events also carry a derived result of `success`, `failure`, `attention`, or `neutral`. Because the log is append-only, start events such as `build.created` or `transfer.requested` stay `neutral` while their completion writes a second event.
+
+To receive activity events in real time instead of polling, subscribe with [Webhooks](/api/webhooks).
+
+## Retention
+
+Spacefast never deletes activity history. Your team's plan sets how far back the dashboard, CLI, API, and CSV exports can read:
+
+| Plan | Visible and exportable window |
+| --- | --- |
+| Personal | Last 7 days |
+| Go | Last 30 days |
+| Pro | Last year |
+| Enterprise | Custom |
+
+Spacefast hides events older than your plan's window and excludes them from exports. Upgrading widens the window to include earlier history. See [Limits](/limits) and [Pricing](/pricing).
+
+## Export activity as CSV
+
+Export team logs as an RFC 4180 CSV file covering the team and its subteams, newest first, with no page limit.
+
+Request an export from the team Activity page or by calling [`createTeamActivityExport`](/api/reference/activity/createteamactivityexport) (`POST /v1/teams/{teamId}/activity/exports`). The endpoint accepts the feed's filters (`spaceId`, `actorType`, `actorId`, `code`, `setting`, `since`, `until`) plus `result`.
+
+Export rules and delivery:
+
+- **Person required**: exports require a credential tied to a person (`sf login`, an OAuth sign-in, a dashboard session, or a team API key created by a team member). Other credentials fail with [`activity_export_person_required`](/errors/activity_export_person_required).
+- **Rate limit**: 10 export requests per minute per team.
+- **Background build**: Spacefast builds the file asynchronously (`building` → `ready`, `failed`, or `expired`) and emails a download link to the person who asked. Check status with [`getTeamActivityExport`](/api/reference/activity/getteamactivityexport).
+- **Download window**: the file stays available for **7 days** after it becomes ready. Only the requester can download it while signed in to the dashboard and still allowed to read the log. Non-session credentials calling [`downloadTeamActivityExport`](/api/reference/activity/downloadteamactivityexport) receive `interactive_session_required`.
+- **Audited**: requesting an export logs `security.activity_exported`, and every download logs `security.activity_export_downloaded`.
+
+### CSV columns and integrity
+
+Files use UTF-8 with a byte order mark, guard spreadsheet formula prefixes, and always use these 15 English column names:
+
+`time`, `actor`, `actor_type`, `actor_id`, `staff_action`, `support_session`, `event_code`, `message`, `space`, `space_id`, `team`, `team_id`, `result`, `details`, `event_id`
+
+To prevent credentials inside links from leaking into downloaded files, `details` omits any field whose key ends in `url` as well as truncated `preview` blobs.
+
+Every complete export ends with a trailer row whose `event_code` is `export.complete` and whose `details` holds `{"events": <count>}`. Treat any CSV missing that final row as incomplete.
+
+## API operations
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceActivity`](/api/reference/activity/listspaceactivity) | `GET /v1/spaces/{spaceId}/activity` |
+| [`listTeamActivity`](/api/reference/activity/listteamactivity) | `GET /v1/teams/{teamId}/activity` |
+| [`listActivity`](/api/reference/activity/listactivity) | `GET /v1/activity` |
+| [`createTeamActivityExport`](/api/reference/activity/createteamactivityexport) | `POST /v1/teams/{teamId}/activity/exports` |
+| [`getTeamActivityExport`](/api/reference/activity/getteamactivityexport) | `GET /v1/teams/{teamId}/activity/exports/{exportId}` |
+| [`downloadTeamActivityExport`](/api/reference/activity/downloadteamactivityexport) | `GET /v1/teams/{teamId}/activity/exports/{exportId}/download` |

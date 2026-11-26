@@ -1,34 +1,34 @@
 ---
 title: Move from Cloudflare Pages
-description: Publish a Cloudflare Pages site on Spacefast. _redirects and _headers publish as they are, wrangler.toml build settings are read, and Pages Functions are rewritten as Spacefast Functions
+description: Publish a Cloudflare Pages project on Spacefast. Carry over wrangler.toml, _redirects, and _headers, and move Pages Functions to Spacefast Functions
 ---
 
-Your `_redirects` and `_headers` files publish with your pages, and Spacefast reads the build settings in `wrangler.toml`. A Pages Functions folder needs rewriting, because Spacefast Functions uses different file and handler conventions.
+Your `_redirects` and `_headers` files publish with your pages as optional migration files, and Spacefast reads the build settings in `wrangler.toml`. A Pages Functions folder needs rewriting, because Spacefast Functions uses different file and handler conventions.
 
-## Move the site
+## Move the website
 
 <Steps>
   <Step title="Create the Space">
     In the project directory, create an empty Space. Later publishes from this directory update it.
 
     ```bash
-    sf spaces create --slug my-site
+    sf spaces create --slug my-space
     ```
   </Step>
   <Step title="Bring the environment variables">
     Export the project's variables as a dotenv file, then import it before the first build so the build can read them.
 
     ```bash
-    sf env import .env --from cloudflare --space my-site
+    sf env import .env --from cloudflare --space my-space
     ```
 
     A line with an empty value fails the import, and empty values aren't supported. Remove the line, or give the variable a real value. See [Environment variables](/environment-variables).
   </Step>
   <Step title="Publish the project">
-    Run `sf publish --space my-site` in the project and let Spacefast build it, or publish the output folder you deploy today.
+    Run `sf publish --space my-space` in the project and let Spacefast build it, or publish the output folder you deploy today.
 
     ```bash
-    sf publish --space my-site
+    sf publish --space my-space
     ```
 
     To build on every push instead, connect the repository with [Publish from Git](/git).
@@ -45,11 +45,19 @@ Your `_redirects` and `_headers` files publish with your pages, and Spacefast re
 
 | From Cloudflare Pages | On Spacefast |
 | --- | --- |
-| `_redirects` and `_headers` files | Published with your pages and applied as routing rules |
+| `_redirects` and `_headers` files | Supported as optional migration files and applied as routing and header rules |
 | `wrangler.toml` build settings | Read after framework detection, and they override the detected build command and output directory |
 | Environment variables | Imported from a dotenv export with `sf env import --from cloudflare` |
 
-Rule order, conditions, and limits are on [Redirects, rewrites, and headers](/routing).
+Once the project runs on Spacefast, you can move build, redirect, rewrite, and header rules into `spacefast.config.ts` (see [Project configuration](/config-file), [Redirects and rewrites](/redirects), and [Response headers](/headers)):
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  headers: [{ source: "/assets/*", headers: { "X-Frame-Options": "DENY" } }],
+});
+```
 
 ## Functions
 

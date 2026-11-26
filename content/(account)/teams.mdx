@@ -1,8 +1,6 @@
 ---
 title: Teams and members
-description: How teams own Spaces, what each role can do, and how to invite people, move Spaces between teams, and set the default access for new Spaces
-sidebar:
-  order: 3
+description: How teams own Spaces, what each role can do, and how to invite people, move Spaces between teams, and set default access
 ---
 
 A team owns its Spaces, domains, API keys, and billing. Your role in that team caps what you can do with them.
@@ -21,7 +19,7 @@ A team is the thing that owns work in a self-serve account. Spaces, custom domai
 
 An Enterprise team can split into [subteams](/subteams), each with its own members and Spaces. A team can also hold [identity connections](/identity-connections), so people from your own sign-in system can open the Spaces you grant them.
 
-A team can also hold a [Design System](/design-system) for colors, type, voice, and brand files. Saving those standards does not change any Space until you apply them to its project.
+A team can also opt into [Labs](/labs) features such as [Team Memories](/team-memories), [Team Skills](/team-skills), and [Design System](/design-system). Saving standards in a Design System does not change any Space until you apply them to its project.
 
 A team has a name and a slug. The slug is the first segment of its dashboard URLs. You can change it in **Team settings → General**, where a live check tells you whether the new one is free.
 
@@ -42,11 +40,13 @@ Your team role caps what you can do across the dashboard, CLI, API, and any agen
 |---|---|---|---|
 | Read the team, its Spaces and versions | Yes | Yes | Yes |
 | Create Spaces, publish, rename a Space | Yes | Yes | Yes |
+| Archive or restore a Space | Yes | Yes | Yes |
 | Promote or roll back a version, download one | Yes | Yes | Yes |
 | Start a build | Yes | Yes | Yes |
 | Read domains | Yes | Yes | Yes |
 | Read billing and usage | Yes | Yes | Yes |
 | Delete a Space or a version, export, import | Yes | Yes | No |
+| List the team's inactive Spaces | Yes | Yes | No |
 | Attach a domain to a Space and verify it | Yes | Yes | Yes |
 | Detach or buy domains, change DNS | Yes | Yes | No |
 | Team variables and webhooks | Yes | Yes | No |

@@ -61,7 +61,7 @@ A signer body uses `authorizeUrl` and `publicKeys` instead of the client fields:
 }
 ```
 
-The `201` response holds the connection. Its `id` starts with `acn_`, and grants use that ID. A team can have one active connection per issuer. A second one fails with `409 identity_connection_issuer_exists`. From a terminal, run `sf share identity create`. See [`sf share`](/cli/share#sf-share-identity-create).
+The `201` response holds the connection. Its `id` starts with `acn_`, and grants use that ID. A team can have one active connection per issuer. A second one fails with `409 identity_connection_issuer_exists`. From a terminal, run `sf share identity create`. See [`sf share identity create`](/cli/reference#sf-share-identity-create).
 
 | Field | Applies to | Rules |
 | --- | --- | --- |
@@ -83,7 +83,7 @@ To add a grant in the dashboard, open the Space and go to **Share**. Open **Adva
 From a terminal, run `sf share identity grant`:
 
 ```bash
-sf share identity grant --connection acn_xxxxxxxx --subject alex@example.com --name "Alex (Acme SSO)" --path '/docs/**' --space my-site
+sf share identity grant --connection acn_xxxxxxxx --subject alex@example.com --name "Alex (Acme SSO)" --path '/docs/**' --space my-space
 ```
 
 Over HTTP, send [`createSpaceGrant`](/api/reference/access/createspacegrant) with an `external` audience:

@@ -1,24 +1,20 @@
 ---
 title: Rate limits
-description: The per-credential and per-IP request budgets, the hourly publish and build limits per plan, and how to back off from a 429
-sidebar:
-  order: 5
+description: The per-credential and per-IP request budgets, hourly publish and build limits, and how to back off from a 429
 ---
 
-Two layers of limits sit in front of the API: a general per-minute request budget, and hourly budgets on expensive actions. Use the rate-limit headers when present; they can be absent when accounting is unavailable.
+Two layers of limits sit in front of the API: a general per-minute request budget (600 per minute per credential, 300 per minute per IP), and hourly budgets on expensive actions. Use the rate-limit headers when present; they can be absent when accounting is unavailable.
 
 ## The general budget
 
-A fixed 60 second window on every `/v1` request.
+A fixed 60-second window applies to every `/v1` request:
 
 | Keyed by | Limit |
 | --- | --- |
-| Credential id, when the request authenticates | 600 requests per minute |
-| Client IP, when it does not | 300 requests per minute |
+| Credential ID, when the request authenticates | 600 per minute per credential |
+| Client IP, when it does not | 300 per minute per IP |
 
 Windows are fixed, not sliding, so the counter resets at the boundary rather than decaying. `OPTIONS` is exempt.
-
-An API key also carries its own budget of 50,000 requests per rolling hour, independent of the per-minute window above.
 
 ## Headers
 

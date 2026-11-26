@@ -1,117 +1,244 @@
 ---
-title: Customization
-description: Theme the pages Spacefast draws, set the title and image links unfurl with, add an analytics tag, and run one site-wide script
+title: Customization and error pages
+description: Theme Spacefast-drawn pages, set link preview metadata and analytics tags, and customize layouts and error pages
 ---
 
-Customization settings are saved on the Space, not on a version, and they override the `theme` and `meta` in your `sf.jsonc`.
+Customize Spacefast's built-in pages, link previews, and error pages either on the Space in the dashboard or in your published repository with `spacefast.config.ts`, `theme.json`, `_layout.html`, `_pages/<id>.html`, and `404.html`.
 
-Open the Space and go to **Customization**. It has four tabs: **Theme**, **Search & sharing**, **Google Analytics**, and **Custom JS**. A preview labeled **Visitor sees** shows your unsaved changes beside the controls.
+Open a Space and go to **Customization** to edit **Theme** and **Search & sharing** with a live **Visitor sees** preview. When page tag injection is enabled for your team, **Google Analytics** and **Custom JS** tabs also appear there.
 
-## What lives on the Space, not the version
+## Space settings versus project configuration
 
-Because these settings are stored on the Space, they stay in place through publishes and rollbacks. They also override the published `sf.jsonc`, so the Space's `theme` replaces the file's `theme` instead of merging with it. If your config sets `theme` and you also edit the Theme tab, the dashboard values win until you clear them. The same applies to `meta`.
+Settings saved in **Customization** live on the Space, not on a version, so they survive publishes and rollbacks. They override `theme` and `meta` in your project configuration by replacing the object rather than merging it. Clear the dashboard fields if you want your repository configuration to take control again.
 
-Theme and share metadata apply without republishing, and the next request after you save gets them. **Custom JS** is different. A script change takes effect on the next publish.
+Theme and share metadata apply on the next request after saving, with no republish. **Custom JS** changes apply on the next publish.
 
-The four tabs write `meta`, `theme`, and `superpowers` in the Space's config. The same keys are documented in the [`sf.jsonc` reference](/config-file), and the [`updateSpace`](/api/reference/spaces/updatespace) operation is what the dashboard calls.
+To keep theme and share metadata in version control instead, declare `meta` and `theme` in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  meta: {
+    title: "My Space",
+    description: "What this Space is about",
+    image: "/og.png",
+    favicon: "/favicon.ico",
+  },
+  theme: {
+    name: "My Space",
+    logo: "/logo.svg",
+    accent: "#0d9488",
+    background: "#ffffff",
+    font: "Inter, system-ui, sans-serif",
+  },
+});
+```
+
+The **Copy as spacefast.jsonc** button in the **Customization** header copies your current `meta` and `theme` draft as JSON. Merge those keys into your existing `spacefast.config.ts` or `sf.jsonc` without creating a second configuration file. See [Project configuration](/config-file) and [`updateSpace`](/api/reference/spaces/updatespace).
 
 ## Theme
 
-Every field is optional. A blank field uses the platform default.
+Every theme field is optional; blank fields fall back to platform defaults:
 
 | Group | Field | Config key | What it does |
 | --- | --- | --- | --- |
-| Brand | **Logo** | `theme.logo` | Shown at 28px beside your name on every Spacefast-drawn page. An `https://` URL or a root-relative path, up to 2000 characters |
-| Brand | **Display name** | `theme.name` | The name in the brand row, 1 to 120 characters |
-| Color | **Accent** | `theme.accent` | Buttons and fills. Placeholder `#ea580c` |
-| Color | **Background** | `theme.background` | Page background. Blank follows the visitor |
-| Type | **Font stack** | `theme.font` | A plain CSS font-family stack, no imports, up to 256 characters |
-| Badge | **Hide "Powered by Spacefast"** | `theme.hideSpacefastBranding` | Removes the badge from the pages Spacefast draws |
+| Brand | **Logo** | `theme.logo` | Shown at 28px beside your name on Spacefast-drawn pages; `https://` URL or root-relative path, up to 2,000 characters |
+| Brand | **Display name** | `theme.name` | Name in the brand row, 1 to 120 characters |
+| Color | **Accent** | `theme.accent` | Buttons and fills (for example `#ea580c`) |
+| Color | **Background** | `theme.background` | Page background; blank follows each visitor's light/dark preference |
+| Type | **Font stack** | `theme.font` | Plain CSS `font-family` stack, no imports, up to 256 characters |
+| Badge | **Hide "Powered by Spacefast"** | `theme.hideSpacefastBranding` | Removes the badge from Spacefast-drawn pages |
 
-Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names, up to 64 characters. Uploading a logo stages the file, and the field says it uploads to your Space when you save. A logo path that is not in the live version warns "This path isn't in your live version yet."
+Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names up to 64 characters. Uploading a logo stages it and uploads it when you save; a path missing from the live version warns that it is not live yet.
 
-### The background pins the color scheme
+### Background color and color scheme
 
-With **Background** blank, pages follow each visitor's device setting, light or dark.
+Leaving **Background** blank follows each visitor's device light or dark mode. Setting a background color lets Spacefast determine whether it is light or dark and pins that single scheme for all visitors (**Pinned · Light** or **Pinned · Dark**). Clear the field to follow visitors again.
 
-Set a background and Spacefast decides whether that color is light or dark, then serves that one scheme to every visitor. The field shows **Pinned.** and a **Clear to follow visitors again** option. In the preview, a locked **Pinned · Dark** or **Pinned · Light** label replaces the Auto/Light/Dark switcher.
+### Branding entitlement
 
-### Check the branding entitlement
-
-The dashboard enables badge removal when the team has the branding entitlement or the Space used badge removal before the new plans took effect. Other Spaces need the entitlement.
-
-Publishing checks this too. Publishing a version whose effective theme sets `hideSpacefastBranding` without either allowance fails with `hide_spacefast_branding_not_entitled` and the message "theme.hideSpacefastBranding is not included on this plan."
-
-### Code override
-
-These controls don't restyle a page that your version ships as its own file. The preview marks that page **Code override.** and points at its `_pages/<id>.html` file. See [Layout, theme, and site pages](/site-pages).
+Removing the "Powered by Spacefast" badge requires a plan with the branding entitlement (such as Enterprise) or a Space that enabled badge removal before plan limits took effect. Publishing `theme.hideSpacefastBranding: true` without the entitlement fails with `hide_spacefast_branding_not_entitled` (`theme.hideSpacefastBranding is not included on this plan.`).
 
 ## Search and sharing
 
-What a browser tab, a link unfurl, and a search result show.
+Controls browser tab titles, link unfurls, and search result snippets:
 
 | Field | Config key | Cap |
 | --- | --- | --- |
 | **Title** | `meta.title` | 300 characters |
-| **Description** | `meta.description` | 1000 characters |
-| **Social image** | `meta.image` | 2000 characters |
-| **Favicon** | `meta.favicon` | 2000 characters |
+| **Description** | `meta.description` | 1,000 characters |
+| **Social image** | `meta.image` | 2,000 characters |
+| **Favicon** | `meta.favicon` | 2,000 characters |
 
-A 1200 × 630 social image fills the card exactly. Favicon takes an upload or a path. A value longer than most previews can show is still saved, with a note under the field that it will be cut off.
+A 1200 × 630 social image fills the preview card cleanly. Under **Shortcut**, **Import from a live page** fetches title, description, and image from any published path on the Space.
 
-**Import from a live page** under **Shortcut** pulls title, description, and image from a page you have already published. Give it a path and press **Fetch**.
+## Analytics tags and Custom JS
 
-Two previews sit beside the fields, **Link unfurl · iMessage, Slack, X** and **Search result**.
+When tag injection is enabled on your team, **Google Analytics** and **Custom JS** appear under **Customization** (for governed tag releases across Spaces, see [Tag Manager](/tag-manager)):
 
-## Analytics tags
-
-The **Google Analytics** tab holds two cards, **Google Analytics** and **Google Tag Manager**. Each has a **Collect analytics** switch and one id field.
-
-| Card | Field | Config key | Accepted |
+| Card | Field | Config key | Accepted format |
 | --- | --- | --- | --- |
-| Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-`, `GT-`, `AW-`, `DC-`, or `UA-`, then letters or digits joined by single `_` or `-` |
-| Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-`, then letters or digits joined by single `_` or `-` |
+| Google Analytics | **Measurement ID** | `superpowers.googleAnalytics.measurementId` | `G-`, `GT-`, `AW-`, `DC-`, or `UA-` followed by letters or digits joined by single `_` or `-` |
+| Google Tag Manager | **Container ID** | `superpowers.googleTagManager.containerId` | `GTM-` followed by letters or digits joined by single `_` or `-` |
+| **Site-Wide JavaScript** | **JavaScript** | `superpowers.javascriptTags[0]` | Up to 8 KiB, without `<script>` tags; takes effect on next publish |
 
-Saving an ID that doesn't match fails, and the card shows **Invalid ID**. A card with its switch off shows **Off** and sends nothing. With the switch on and a valid ID, the card shows **Enabled** and the tag loads on every published page.
+Both tabs require turning on **Page enhancements** under **Settings → Page enhancements**. While it is off, the dashboard disables the controls and keeps your saved values intact.
 
-### Page enhancements has to be on first
-
-Analytics and custom code only load when the Space's **Page enhancements** switch is on. With it off, both tabs show **Page enhancements is off.**, every control is disabled, and an **Enable page enhancements** button turns it on.
-
-The switch is in **Settings** under **Page enhancements**. It controls the performance, SEO, analytics, and comment features Spacefast adds to published pages. Turning it off keeps your saved settings. When it's on, an **Active now** row lists what is being added.
-
-## Custom JS
-
-One card, **Site-wide JavaScript**, with a **Run custom code** switch and a **JavaScript** textarea. The script applies to every published page view and is stored as the first entry in `superpowers.javascriptTags`.
-
-Don't include `<script>` tags. Changes take effect on the next publish. A snippet can be up to 8 KiB.
-
-:::warning[Custom code runs with your page]
-Only paste code you trust. A broken script can break the page for visitors.
+:::caution[Custom code runs with your page]
+Only paste JavaScript you trust. A broken script can break pages for every visitor.
 :::
 
-## Copy as spacefast.jsonc
+## Error and system pages
 
-The **Copy as spacefast.jsonc** button in the header copies your current draft as JSON. It includes only the `meta` and `theme` objects, without empty fields:
+Spacefast serves five built-in system pages and supports custom `404.html` files plus three levels of template customization in your published directory.
 
-```jsonc sf.jsonc
-{
-  "meta": {
-    "title": "My App",
-    "description": "What this site is",
-    "image": "/og.png",
-    "favicon": "/favicon.ico"
-  },
-  "theme": {
-    "name": "My App",
-    "logo": "/logo.svg",
-    "accent": "#0d9488",
-    "background": "#ffffff",
-    "font": "Inter, system-ui, sans-serif"
-  }
-}
+### Custom `404.html`
+
+Any file named `404.html`, at any depth, acts as the not-found document for its directory and subdirectories. Resolution walks upward from the requested directory to the root: `/docs/api/missing` checks `docs/api/404.html`, then `docs/404.html`, then root `404.html`.
+
+A `404.html` file takes precedence over built-in `404` theming. Requesting `/404.html` directly returns `200`; reaching it for a missing route returns `404`. Without a `404.html`, Spacefast renders its built-in `404` page with status `404`, the missed path, and a link home.
+
+For dynamic `404` responses from a root `handler.ts` Worker, see [Workers](/functions).
+
+### The five built-in pages
+
+| ID | Shown for | Status | Caching |
+| --- | --- | --- | --- |
+| `404` | A URL that matched nothing | `404` | Cacheable |
+| `denied` | A visitor refused access with no way in | `403` | `private, no-store`, noindex |
+| `access` | The access gate (sign-in, password, share link, or invite request) | `403` | `private, no-store`, noindex |
+| `index` | Directory listing in files mode | `200` | Cacheable |
+| `preview` | Single-file preview card | `200` | Cacheable |
+
+### Three customization levels
+
+| Level | File | Plan |
+| --- | --- | --- |
+| Design tokens | `theme.json` | Every plan |
+| Shared page chrome | `_layout.html` | Every plan |
+| Full document takeover | `_pages/<id>.html` | Pro and Enterprise |
+
+All three live in the directory you publish and roll forward and back with each version.
+
+### `theme.json`
+
+Spacefast reads a WordPress-compatible `theme.json` at the root up to 64 KiB as an inference input and ignores larger files without failing the publish:
+
+| Path | Mapped token |
+| --- | --- |
+| `settings.color.palette[]` with slug `accent` or `primary` | Accent color |
+| `settings.color.palette[]` with slug `background` | Background color |
+| `settings.typography.fontFamilies[0].fontFamily` | Font stack |
+
+Spacefast ignores all other keys. Palette takes up to 64 entries, `fontFamilies` up to 32, and slugs up to 64 lowercase characters. Precedence runs from weakest to strongest: `theme.json` → `spacefast.config.ts` / `sf.jsonc` `theme` → Space **Customization** settings.
+
+### `_layout.html`
+
+`_layout.html` wraps the built-in body of every system page you have not replaced with `_pages/<id>.html`. It resolves upward from the request's directory so `docs/_layout.html` covers `/docs/*` while root `_layout.html` covers the rest:
+
+```html _layout.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><sf-page-title></sf-page-title></title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <header>
+      <sf-logo></sf-logo>
+      <strong><sf-name></sf-name></strong>
+    </header>
+    <main><sf-content></sf-content></main>
+    <footer><sf-spacefast-branding></sf-spacefast-branding></footer>
+  </body>
+</html>
 ```
 
-Paste it into your project's `sf.jsonc` to keep those settings in the repository. The button says `spacefast.jsonc`, an older filename that still works, but the current name is `sf.jsonc`.
+`_layout.html` must include exactly one `<sf-content>` (`layout_missing_content`), use only `sf-content`, `sf-logo`, `sf-name`, `sf-page-title`, and `sf-spacefast-branding` (`page_element_not_allowed`, `unknown_page_element`), and stay at or under 2 MiB (`page_source_too_large`).
 
-While the Space has its own `theme`, it still overrides the file. Clear the Theme tab's fields if you want the file to control the theme.
+### `_pages/<id>.html`
+
+Full-page takeovers at `_pages/<id>.html` require **Pro or Enterprise** (`pagesTemplates` entitlement). A takeover replaces the entire built-in document: `_layout.html` does not wrap it, and **Customization** theme controls stop repainting it (marked **Code override.** in the dashboard preview).
+
+Each file must start with `<!doctype html>`, stay at or under 2 MiB, and resolve upward from the request's directory. Publishing `_pages/*.html` on Personal or Go fails at finalize with `pages_templates_not_entitled` (`_pages/*.html takeovers require Plus or Enterprise. Remove the templates or upgrade before publishing.`).
+
+| Element | Renders | Legal in |
+| --- | --- | --- |
+| `<sf-logo>` | Theme logo image | Every page |
+| `<sf-name>` | Theme display name | Every page |
+| `<sf-spacefast-branding>` | "Powered by Spacefast" badge | Every page |
+| `<sf-page-path>` | Requested path | `404`, `index`, `preview` |
+| `<sf-page-title>` | Page title | `index`, `preview` |
+| `<sf-page-summary>` | Item count | `index` |
+| `<sf-files>` | Directory listing rows | `index` |
+| `<sf-file>` | Single-file preview card | `preview` |
+| `<sf-denial-context>` | Denial reason | `denied` |
+| `<sf-access-status>` | Gate state message | `access` |
+| `<sf-access-lanes>` | Sign-in, password, and request blocks | `access` |
+
+An `access` takeover must include `<sf-access-lanes>` (`access_lanes_missing`), and any CSP declaring `form-action` must include `'self'` (`access_csp_form_action_missing_self`). An `index` takeover without `<sf-files>` warns (`index_files_missing`) without blocking publish.
+
+### Generate, pull, and validate templates
+
+Use the CLI to scaffold, inspect, and validate page templates locally before publishing:
+
+<Steps>
+  <Step title="Generate theme.json and _layout.html from DESIGN.md">
+    Put fenced `theme.json` and `layout.html` blocks inside `DESIGN.md` at the project root, then run:
+
+    ```bash
+    sf design generate
+    ```
+
+    Spacefast never reads `DESIGN.md` at publish or serve time. Pass `--force` to overwrite existing files.
+  </Step>
+
+  <Step title="Pull default templates">
+    Copy Spacefast's default templates into your project locally without calling the API:
+
+    ```bash
+    sf pages pull 404
+    sf pages pull
+    ```
+
+    Pass `layout`, a page ID, or omit the argument for `_layout.html` and all five `_pages/<id>.html` files. Move or delete existing files first; `pull` does not overwrite.
+  </Step>
+
+  <Step title="Validate before publishing">
+    Run the same structural checks publish enforces:
+
+    ```bash
+    sf pages validate
+    ```
+
+    Pass `--dir ./dist` to validate a build output directory. `sf pages validate` exits `2` on any error diagnostic and `0` on warnings.
+  </Step>
+</Steps>
+
+### Template diagnostics
+
+Publish fails on the first error diagnostic and keeps the current live version serving:
+
+| Code | Severity | Meaning |
+| --- | --- | --- |
+| `unknown_page_template` | Error | Filename is not one of the five supported page IDs |
+| `page_document_required` | Error | File does not start with `<!doctype html>` |
+| `page_source_too_large` | Error | File exceeds 2 MiB |
+| `unknown_page_element` | Error | Unrecognized `sf-*` element |
+| `page_element_not_allowed` | Error | Valid `sf-*` element used on an unsupported page |
+| `layout_missing_content` | Error | `_layout.html` has zero or more than one `<sf-content>` |
+| `access_lanes_missing` | Error | `access` page omits `<sf-access-lanes>` |
+| `access_csp_form_action_missing_self` | Error | `access` CSP `form-action` omits `'self'` |
+| `pages_templates_not_entitled` | Error | `_pages/*.html` used on a plan without the entitlement |
+| `page_source_unreadable` | Error | File in manifest could not be read at finalize |
+| `index_files_missing` | Warning | `index` page omits `<sf-files>` |
+| `page_indexable` | Warning | `access` or `denied` page declares itself indexable (served noindex regardless) |
+
+## Next steps
+
+- [Project configuration](/config-file): full `meta`, `theme`, and `superpowers` schema
+- [Workers](/functions): dynamic `404` and custom request handling in `handler.ts`
+- [`sf pages` CLI reference](/cli/reference#sf-pages) and [`sf design` CLI reference](/cli/reference#sf-design): command flags

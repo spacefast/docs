@@ -1,0 +1,116 @@
+---
+title: Backups, archives, and exports
+description: Export Space databases, source repositories, comments, and activity logs, plus archive, restore, and audit inactive Spaces
+---
+
+Export your database, source repository, comments, or team activity at any time without lock-in, or archive an unused Space to stop serving while keeping all its data.
+
+## Database backups and exports
+
+Spacefast runs automatic MySQL backups for every Space on top of platform disaster-recovery backups:
+
+| Plan | Schedule and self-service restore window |
+| --- | --- |
+| Personal | Daily, restore 7 days back |
+| Go | Hourly, restore 7 days back |
+| Pro and Boost | Hourly, restore 30 days back |
+| Enterprise | Custom |
+
+Spacefast keeps older backups; contact support to restore past the self-service window. See [Database](/database) and [Pricing](/pricing).
+
+### Export a Space database
+
+Export every declared table to one versioned JSON backup with [`sf db export`](/cli/reference#sf-db-export-target):
+
+```bash
+sf db export my-space --output ./my-space-backup.json
+sf db export --port 4173
+```
+
+The CLI reads rows in stable keyset pages and replaces the destination file only after the export completes. Without `--output`, the CLI writes `spacefast-backup-<space>-<timestamp>.json`.
+
+Over HTTP, list exportable tables and read the schema fence with [`getSpaceDatabaseExport`](/api/reference/database/getspacedatabaseexport) (`GET /v1/spaces/{spaceId}/db/export`), then page through each table with [`getSpaceDatabaseExportPage`](/api/reference/database/getspacedatabaseexportpage) (`GET /v1/spaces/{spaceId}/db/export/{table}?schemaHash=...`). The `schemaHash` and opaque cursor prevent pages from being mixed across exports.
+
+## Source archives
+
+Download a `.tar.gz` archive of a Space's source repository without signing a Git remote using [`sf source archive`](/cli/reference#sf-source-archive):
+
+```bash
+sf source archive --space my-space --ref main --output ./repo.tar.gz
+```
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--connection-type` | `connected` | Repository connection type: `connected` or `hosted` |
+| `--ref` | default branch | Branch, tag, commit, or ref to archive |
+| `--output` | current directory | Archive file path or existing directory |
+| `--include-glob` / `--exclude-glob` | none | Include or exclude files by glob |
+| `--max-blob-size` | none | Maximum blob size to include |
+| `--archive-prefix` | none | Directory prefix inside the archive |
+| `--force` | off | Overwrite an existing archive file |
+
+Over HTTP, call [`downloadSpaceSourceArchive`](/api/reference/git/downloadspacesourcearchive) (`GET /v1/spaces/{spaceId}/source/archive`).
+
+## Export source to GitHub
+
+Copy a Space's hosted Git history to an empty GitHub repository and connect it as the Space's source with [`createSpaceGithubExport`](/api/reference/git/createspacegithubexport) (`POST /v1/spaces/{spaceId}/source/github-export`).
+
+- Spacefast keeps the original hosted repository.
+- The person who starts the export must open the returned `authorizeUrl` and confirm GitHub write access.
+- If the GitHub account cannot create repositories directly, create an empty repository using the returned `newRepositoryUrl` and call the endpoint in `existing` mode.
+- The export never overwrites destination refs, and retries succeed only when branch and tag refs match identically.
+
+See [Publish from Git](/git) for connecting repositories and automated branch deploys.
+
+## Comment exports
+
+Export every comment thread in a Space, or only one version's threads, as Markdown or JSON with [`sf comments export`](/cli/reference#sf-comments-export):
+
+```bash
+sf comments export --space my-space --status open --format markdown
+sf comments export --space my-space --version v3 --format json
+```
+
+Over HTTP, call [`exportSpaceComments`](/api/reference/spaces/exportspacecomments) (`GET /v1/spaces/{spaceId}/comments/export`) or [`exportSpaceVersionComments`](/api/reference/versions/exportspaceversioncomments) (`GET /v1/spaces/{spaceId}/versions/{versionId}/comments/export`). See [Comments](/comments#export-comments) for the Markdown structure and JSON envelope.
+
+## Activity log exports
+
+To export a team's audit log as CSV (covering the team and its subteams, with formula guards and a completion trailer row), see [Export activity as CSV](/activity#export-activity-as-csv).
+
+## Archive and restore Spaces
+
+Archive a Space you no longer need live but may want back. Archiving stops serving and keeps everything else.
+
+Archive one or more Spaces or restore an archived Space with [`sf spaces archive`](/cli/reference#sf-spaces-archive) and [`sf spaces restore`](/cli/reference#sf-spaces-restore):
+
+```bash
+sf spaces archive --space old-report
+sf spaces archive --team acme --space old-report --space q3-dashboard
+sf spaces restore --space old-report
+```
+
+Repeat `--space` to archive several Spaces in one run. The run stops at the first Space it cannot archive, and Spaces archived earlier in the run stay archived. Over HTTP, call [`archiveSpace`](/api/reference/spaces/archivespace) and [`restoreSpace`](/api/reference/spaces/restorespace). The dashboard has no archive or restore control yet.
+
+| What | What happens |
+| --- | --- |
+| Live URL | Stops serving |
+| Versions, source, database, storage, and domains | Kept |
+| Team live Space limit | Archived Spaces do not count toward it |
+| Undo | `sf spaces restore` brings the Space back with the same versions, data, and URLs |
+
+Any member of the team can archive or restore a Space. When someone archives a Space they did not create, the creator receives an email naming who archived it and how to restore it.
+
+## Find inactive Spaces
+
+Team owners and admins can list Spaces with no publishes or edits in a given number of days, oldest first, using [`sf spaces list`](/cli/reference#sf-spaces-list):
+
+```bash
+sf spaces list --team acme --inactive-for 90
+```
+
+- A publish or change by a person, an agent, or a Git push counts as activity. Visitor traffic does not.
+- A Space created within the window counts as active.
+- Pinned Spaces never appear. Pin a Space for the team from its menu on the team page to exclude it from the audit.
+- Archived Spaces do not appear.
+
+Over HTTP, call [`listTeamInactiveSpaces`](/api/reference/teams/listteaminactivespaces) (`GET /v1/teams/{teamId}/inactive-spaces?days=90`). `days` defaults to 90.

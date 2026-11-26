@@ -1,0 +1,181 @@
+---
+title: DNS
+description: Manage Spacefast DNS zones and records, configure email, switch nameservers, and use Domain Connect for one-click DNS setup
+---
+
+Domains registered through Spacefast use Spacefast DNS from day one on nameservers `ns1.spacefast.com` and `ns2.spacefast.com`. You can manage records in the dashboard, from the CLI, or through an MCP-connected agent.
+
+## What Spacefast manages in a zone
+
+A newly registered domain starts with only its required `SOA` and `NS` records and points nowhere.
+
+When you [connect the domain to a Space](/domains), Spacefast writes the routing records automatically, including the `www` twin. Those rows appear as managed in the DNS table, and Spacefast removes them when you unassign the domain. You cannot edit managed records directly ([`dns_record_managed`](/errors/dns_record_managed)), and Spacefast rejects new records that conflict with them ([`dns_record_conflicts_with_managed`](/errors/dns_record_conflicts_with_managed)).
+
+If existing `A`, `AAAA`, `CNAME`, or `ALIAS` records in your Spacefast DNS zone block a Space attachment, clear them with one command:
+
+```bash
+sf domains dns replace example.com --space my-space
+```
+
+Over the API, call [`replaceSpaceCustomDomainDnsRecords`](/api/reference/domains/replacespacecustomdomaindnsrecords) (`POST /v1/spaces/{spaceId}/domains/{domainId}/dns/replace`). Removing the domain from the Space later does not restore deleted records, and Spacefast never replaces names delegated by an `NS` record.
+
+## Add, edit, or delete records
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open your team's **Domains** page and select the domain.
+2. In the **DNS** section, select **Add record**, or select an existing record to edit or delete it.
+3. Changes stay as drafts until you select **Review changes**, check the diff, and select **Apply changes**. Every change in a batch applies together, or none do.
+
+To configure common mail or verification services in one step, select **Add a service** and choose a preset.
+
+</Tab>
+<Tab title="CLI">
+
+List, add, update, remove, or batch-apply records from the terminal:
+
+```bash
+sf domains dns list example.com
+sf domains dns add example.com --type MX --name @ --value mail.example.com --priority 10
+sf domains dns add example.com --type TXT --name @ --value "v=spf1 include:_spf.example.com ~all"
+sf domains dns update example.com rec_123 --ttl 300
+sf domains dns remove example.com rec_123
+sf domains dns batch example.com --input @changes.json
+```
+
+`sf domains dns batch` runs `delete`, `patch`, `put`, and `post` arrays in a single atomic transaction. If the domain uses a connected external DNS provider, run `sf domains dns capabilities example.com` to inspect supported fields and `sf domains dns refresh example.com` to refresh the cached provider snapshot before editing.
+
+</Tab>
+</Tabs>
+
+### Supported record types
+
+| Type | Purpose |
+| --- | --- |
+| `A` | Points a name to an IPv4 address |
+| `AAAA` | Points a name to an IPv6 address |
+| `ALIAS` | Points the apex to another hostname, acting like a root `CNAME` |
+| `CNAME` | Aliases one hostname to another |
+| `MX` | Routes email for this name to a mail server; requires `priority` (`0` to `65535`) |
+| `TXT` | Stores verification tokens, `SPF`, `DKIM`, `DMARC`, or other text |
+| `SRV` | Publishes a service with `priority`, weight, port, and target |
+| `CAA` | Restricts which certificate authorities may issue certificates |
+| `NS` | Delegates a subdomain to other nameservers |
+
+TTL accepts values from `60` seconds to `86400` seconds (1 day) and defaults to `3600` seconds (1 hour). Use a lower TTL during migrations and a higher TTL once records stabilize.
+
+### Import and export zones
+
+To import records from another DNS provider, export a BIND zone file there, open **Import zone** in the dashboard, and paste the file. Imported records become drafts for review. Turn on **Remove records not in the file** to replace the zone instead of merging. Spacefast skips and lists unsupported record types.
+
+Select **Export zone** to download or copy a `.zone` file, or **Copy for AI agent** to copy a chat-ready summary. From the terminal, print the zone in BIND format:
+
+```bash
+sf domains dns export example.com
+```
+
+## Set up email
+
+Spacefast registrations do not include mailboxes. In the dashboard, **Add a service** includes presets for Google Workspace, Microsoft 365, `Fastmail`, Proton Mail, `Zoho Mail`, iCloud Mail, Resend, Postmark, Amazon SES, `Mailgun`, and generic email authentication. To configure a provider manually, add these four record types:
+
+- **`MX` records**: Route incoming mail to your mail provider.
+- **`SPF`**: A `TXT` record at `@` starting with `v=spf1` listing authorized senders.
+- **`DKIM`**: A `TXT` or `CNAME` record from your provider that signs outgoing mail.
+- **`DMARC`**: A `TXT` record at `_dmarc` stating how receivers handle messages that fail checks.
+
+Only one provider can receive mail for a domain at a time; remove old `MX` records when switching. Routing records Spacefast manages for a Space never modify `MX`, `SPF`, `DKIM`, or `DMARC` records.
+
+## Domain Connect
+
+Spacefast supports the Domain Connect standard in both directions: connecting external domains to Spaces with one-click approval, and letting third-party services configure records on Spacefast DNS zones.
+
+### One-click DNS setup at external providers
+
+When you attach a domain whose DNS lives at a Domain Connect-enabled provider, Spacefast checks whether the provider carries the Spacefast template and generates a signed approval URL. Over the API, call [`getSpaceCustomDomainConnectSetup`](/api/reference/domains/getspacecustomdomainconnectsetup) (`GET /v1/spaces/{spaceId}/domains/{domainId}/domain-connect`). Approve the records at your provider; Spacefast marks the domain ready once the records resolve publicly.
+
+:::note[Proxied DNS providers]
+Some DNS providers, such as Cloudflare, proxy new `A` records by default. Turn off proxy mode (DNS-only mode) on Spacefast routing records so Spacefast can verify DNS and issue HTTPS certificates.
+:::
+
+For providers that support asynchronous automatic DNS links, Spacefast can keep Space records updated without repeated approvals. List or disconnect active links from the CLI:
+
+```bash
+sf domains connect links --team my-team
+sf domains connect disconnect dcl_123
+```
+
+Disconnecting stops future automatic updates. Existing DNS records stay in place; revoke Spacefast's access at your DNS provider as well.
+
+### Third-party templates on Spacefast DNS
+
+External services that publish templates in the Domain Connect registry (`github.com/Domain-Connect/Templates`) can apply templates to domains served by Spacefast DNS after you approve them on the consent page.
+
+Inspect and manage applied templates and ongoing service authorizations from the CLI:
+
+```bash
+sf domains connect list example.com
+sf domains connect remove example.com dcti_123
+sf domains connect access example.com
+sf domains connect revoke example.com grt_123
+```
+
+- `sf domains connect remove` deletes the applied template and every DNS record it still owns, including records edited after the template was applied.
+- `sf domains connect revoke` stops a service from applying templates in the future while leaving already-applied records intact.
+
+## Nameservers and propagation
+
+### Move a Spacefast-registered domain to external DNS
+
+You can delegate a domain registered through Spacefast to another DNS provider by changing its nameservers. Export and recreate all records at the new provider first, including `MX`, `SPF`, `DKIM`, and `DMARC`, so your Space and email do not go offline during the switch.
+
+Then set at least two nameservers:
+
+```bash
+sf domains nameservers set example.com ns1.example-dns.com,ns2.example-dns.com
+```
+
+Once delegated to external nameservers:
+
+- Spacefast DNS stops answering for the domain, though your saved records stay stored if you return later.
+- Serving a Space requires adding the Spacefast routing records at the new DNS provider (see [Custom domains](/domains)).
+- Registration and renewals stay with Spacefast.
+
+### Return to Spacefast DNS
+
+Point the nameservers back to Spacefast's pair and verify the current mode:
+
+```bash
+sf domains nameservers set example.com ns1.spacefast.com,ns2.spacefast.com
+sf domains nameservers example.com
+```
+
+If you delegate an externally registered domain to Spacefast DNS, Spacefast requires TXT ownership proof at the current DNS provider before serving the zone ([`dns_zone_ownership_unproven`](/errors/dns_zone_ownership_unproven)).
+
+:::note[Propagation timing]
+Nameserver changes can take up to 48 hours to reach every network. Individual record edits propagate within the record's previous TTL.
+:::
+
+## Errors
+
+| Code | Meaning | Resolution |
+| --- | --- | --- |
+| [`dns_record_managed`](/errors/dns_record_managed) | Record is owned by an active Spacefast service | Change the Space assignment or service instead of editing the record |
+| [`dns_record_conflicts_with_managed`](/errors/dns_record_conflicts_with_managed) | Change conflicts with a Spacefast-managed record | Adjust or remove the conflicting record |
+| [`dns_zone_awaiting_registration`](/errors/dns_zone_awaiting_registration) | DNS was edited before registration finished | Wait; Spacefast serves the saved zone once registration completes |
+| [`dns_zone_ownership_unproven`](/errors/dns_zone_ownership_unproven) | Delegated external zone lacks ownership proof | Add the TXT proof in `details.proofRecord` at the current provider before switching nameservers |
+| [`dns_backend_rejected`](/errors/dns_backend_rejected) | Zone rejected the change and still serves prior records | Fix or delete the record named in the error to republish |
+| [`dns_backend_unavailable`](/errors/dns_backend_unavailable) | Change saved, but DNS backend was unreachable | Do not resend; Spacefast publishes automatically when reachable |
+| [`nameservers_required`](/errors/nameservers_required) | Spacefast-registered domain must name external nameservers to leave Spacefast DNS | Run `sf domains nameservers set` with the external nameservers |
+| [`registrar_nameservers_refused`](/errors/registrar_nameservers_refused) | Registry refused the nameserver change | Verify every nameserver hostname resolves and the domain is active |
+| [`domain_connect_zone_not_spacefast_dns`](/errors/domain_connect_zone_not_spacefast_dns) | Domain Connect template targeted a non-Spacefast zone | Move the domain to Spacefast DNS or apply at its current DNS provider |
+| [`domain_connect_template_not_found`](/errors/domain_connect_template_not_found) | Template is not in the Spacefast DNS synced registry | Submit the template to `github.com/Domain-Connect/Templates` |
+| [`domain_connect_conflict`](/errors/domain_connect_conflict) | Template would replace existing records | Review `details.records` and approve replacement or pass `force=1` |
+| [`registrar_writes_disabled`](/errors/registrar_writes_disabled) | Registrar writes are paused | Try again later; nothing was changed |
+
+## Next steps
+
+- [Custom domains](/domains): attach a domain to a Space and issue HTTPS certificates
+- [Domain registration](/domains/registration): buy domains on Spacefast DNS at cost
+- [`sf domains dns` CLI reference](/cli/reference#sf-domains-dns): full DNS command reference
+- [`sf domains connect` CLI reference](/cli/reference#sf-domains-connect): full Domain Connect command reference

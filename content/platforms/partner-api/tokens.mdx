@@ -1,26 +1,32 @@
 ---
 title: Issue customer JWTs
-description: Register an issuer, prove key ownership, and issue customer-scoped JWTs.
+description: Register an issuer, prove key ownership, and issue customer-scoped JWTs
 ---
 
 Your server signs a short-lived JWT for a customer. Spacefast verifies it against the keys registered in your tenant's system manifest. Keep tenant API keys and signing keys on your server.
 
 ## Register the issuer
 
-Generate an Ed25519 key pair. Store the private key in your secret manager. Add the public key to `system.tokenIssuers` in your [system Space configuration](/platforms/partner-api/configuration).
+Generate an Ed25519 key pair. Store the private key in your secret manager. Add the public key to `system.tokenIssuers` in your [system Space configuration](/platforms/partner-api/configuration):
 
-```json
-{
-  "system": {
-    "tokenIssuers": [{
-      "issuer": "https://identity.example.com/spacefast",
-      "keys": [{
-        "kid": "customer-signing-1",
-        "publicKey": "<base64url Ed25519 public-key x coordinate>"
-      }]
-    }]
-  }
-}
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  system: {
+    tokenIssuers: [
+      {
+        issuer: "https://identity.example.com/spacefast",
+        keys: [
+          {
+            kid: "customer-signing-1",
+            publicKey: "<base64url Ed25519 public-key x coordinate>",
+          },
+        ],
+      },
+    ],
+  },
+});
 ```
 
 Publish the system Space. Read `GET /v1/tenants/{tenantId}` and find the `tokenIssuers` item in `manifestStatus.items`. Save its `audience` and `challenge`. The issuer remains `pending` until you prove possession of every new private key.
@@ -29,7 +35,7 @@ An active issuer URL belongs to one tenant. Use different issuer URLs for test a
 
 ## Prove key ownership
 
-Sign the challenge with the corresponding private key. This example uses `jose` and an Ed25519 PKCS8 private key.
+Sign the challenge with the corresponding private key. This example uses `jose` and an Ed25519 PKCS8 private key:
 
 ```ts
 import { importPKCS8, SignJWT } from "jose";
@@ -46,6 +52,8 @@ const proof = await new SignJWT({ challenge })
 Add the signed JWT to that issuer's `proofs` array, and retain its `issuer` and `keys`. Then republish. Wait for the manifest item to become `active`. If the key proposal changes, read the new challenge and sign it again.
 
 ## Sign a customer JWT
+
+Sign a short-lived token scoped to one customer ID:
 
 ```ts
 import { randomUUID } from "node:crypto";

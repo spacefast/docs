@@ -1,8 +1,6 @@
 ---
 title: Errors
 description: RFC 9457 problem documents, the stable error code, pointer semantics, and every code the Spacefast API can return
-sidebar:
-  order: 3
 ---
 
 Every failure from this API is an RFC 9457 problem document with a stable `code`, letting you branch on that code, point a user at the exact bad field, and decide whether to retry.
@@ -145,7 +143,7 @@ Two retry rules that come from the wire rather than the table. A `429` carries `
 | --- | --- | --- | --- |
 | `build_failed` | fix_input | no | The build run failed before producing a version. |
 | `build_timeout` | retry | yes | The build exceeded its time limit before producing a version. |
-| `build_no_index_html` | fix_input | no | The build produced output but no index.html at the site root. |
+| `build_no_index_html` | fix_input | no | The build produced output but no `index.html` at the Space root. |
 | `build_output_dir_missing` | fix_input | no | The build finished but its output directory was not produced. |
 | `build_oom` | fix_input | no | The build process was killed, most likely after running out of memory. |
 | `build_output_contains_server_bundle` | fix_input | no | The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download. |

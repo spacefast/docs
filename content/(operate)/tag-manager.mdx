@@ -1,0 +1,165 @@
+---
+title: Tag Manager
+description: Govern analytics, marketing, monitoring, and custom tags across Spaces and teams with reviewed revisions, consent rules, preview sessions, and rollback
+---
+
+Tag Manager manages analytics, marketing, support, monitoring, and custom tags across a Space or a whole team. Changes move through versioned revisions, per-environment releases, and consent rules. You can roll back any environment to an earlier approved revision without republishing your Space.
+
+## Revisions and review workflow
+
+Every tag change starts as a mutable **revision** before it reaches visitors. A revision moves through these states:
+
+| Status | What it means |
+| --- | --- |
+| `draft` | Mutable working copy you can edit, validate, diff, and preview |
+| `in_review` | Submitted for approval |
+| `approved` | Validated and approved; ready to release to any environment |
+| `publishing` | Release compilation is in progress |
+| `published` | Released to an environment; immutable |
+| `abandoned` | Discarded draft or submission |
+
+Create a draft revision from a built-in template, validate it, inspect the diff, submit it, and approve it with [`sf tags revisions`](/cli/reference#sf-tags-revisions):
+
+```bash
+sf tags revisions create --space my-space --template google-analytics --field measurementId=G-XXXXXXXXXX
+sf tags revisions validate tver_123 --space my-space
+sf tags revisions diff tver_123 --space my-space
+sf tags revisions submit tver_123 --space my-space
+sf tags revisions approve tver_123 --graph-revision 1 --space my-space
+```
+
+Passing `--graph-revision` on approval ensures the revision did not change after you reviewed it (otherwise the API returns `tag_graph_revision_conflict`). Discard an unwanted draft with [`sf tags revisions abandon`](/cli/reference#sf-tags-revisions-abandon-revision).
+
+When a Space requires tag review (`superpowers.tags.requireReview`), only a team owner or admin who did not submit the revision can approve it. Submitting or approving without meeting that policy fails with [`tag_review_admin_required`](/errors/tag_review_admin_required), [`tag_review_self_approval`](/errors/tag_review_self_approval), or [`tag_review_person_required`](/errors/tag_review_person_required).
+
+## Declarative config with `sf tags apply`
+
+To manage tags from version control, store a `spacefast.tags.json` file containing either a full `spacefast.tag_graph.v1` graph or a `{ "templates": [...] }` list, then apply it with [`sf tags apply`](/cli/reference#sf-tags-apply-file):
+
+```json spacefast.tags.json
+{
+  "templates": [
+    {
+      "templateId": "google-analytics",
+      "config": { "measurementId": "G-XXXXXXXXXX" }
+    }
+  ]
+}
+```
+
+Apply the file as a draft, or submit and release it in one step when your review policy allows:
+
+```bash
+sf tags apply spacefast.tags.json --space my-space
+sf tags apply spacefast.tags.json --space my-space --submit --release production
+```
+
+Tags use `"dynamic"` delivery by default. To bake static markup such as verification `<meta>` tags directly into HTML, set `"delivery": "static"` and `"placement"` to `"head"`, `"bodyStart"`, `"bodyEnd"`, or `"noscript"`:
+
+```json spacefast.tags.json
+{
+  "templates": [
+    {
+      "templateId": "custom-html",
+      "config": { "html": "<meta name=\"example-verification\" content=\"token\" />" },
+      "delivery": "static",
+      "placement": "head"
+    }
+  ]
+}
+```
+
+Static tags require `necessary` consent and the `page_view` trigger. Releasing a revision to `production` automatically refreshes the live Space version when baked HTML inputs change.
+
+## Releases and rollback
+
+Each Space and team maintains independent release pointers for three environments: `production`, `preview`, and `development`.
+
+Inspect effective tags, release an approved revision, or roll back an environment with [`sf tags releases`](/cli/reference#sf-tags-releases):
+
+```bash
+sf tags --space my-space --environment production
+sf tags releases --space my-space
+sf tags releases set production tver_123 --space my-space
+sf tags releases rollback production tver_122 --space my-space
+```
+
+Pass `--expected-current-revision <id>` to `set` or `rollback` for compare-and-swap protection so concurrent releases do not overwrite each other.
+
+## Built-in templates and triggers
+
+List every available template and trigger preset with [`sf tags templates`](/cli/reference#sf-tags-templates):
+
+- **Analytics and product**: `google-analytics`, `google-tag-manager`, `posthog`, `plausible`, `amplitude`, `segment`
+- **Advertising**: `meta-pixel`, `tiktok-pixel`, `linkedin-insight`
+- **Monitoring and support**: `sentry-browser`, `intercom`, `hubspot`, `crisp`
+- **Custom**: `custom-javascript`, `custom-html`
+
+Five built-in trigger presets fire tags without custom JavaScript:
+
+| Trigger preset | When it fires |
+| --- | --- |
+| `page_view` | When the page is ready |
+| `outbound_click` | When a visitor clicks a link to another origin |
+| `form_submit` | When a visitor submits a form |
+| `file_download` | When a visitor clicks a downloadable file link |
+| `scroll_depth` | As visitors reach 25%, 50%, 75%, and 90% page depth |
+
+## Consent policy
+
+Tag Manager enforces consent categories on every tag graph before running non-essential scripts, with stricter defaults in General Data Protection Regulation (GDPR) regions:
+
+| Category | Default outside GDPR regions | GDPR regions | Denied when GPC or DNT is on |
+| --- | --- | --- | --- |
+| `necessary` | Granted (required) | Granted | No |
+| `functional` | Granted | Granted | No |
+| `analytics` | Granted | Denied until granted | Yes |
+| `marketing` | Granted | Denied until granted | Yes |
+| `personalization` | Granted | Denied until granted | Yes |
+
+The GDPR region check fails closed when visitor geography is unknown. Both Global Privacy Control (`GPC`) and Do Not Track (`DNT`) default to enabled in `consentPolicy.privacySignals` and deny `analytics`, `marketing`, and `personalization`. You can customize `defaultByCategory`, `regionDefaults`, and per-tag category requirements inside the tag graph's `consentPolicy`.
+
+## Preview and debug sessions
+
+Test an unreleased revision on a live page without affecting other visitors by creating a signed preview session with [`sf tags debug`](/cli/reference#sf-tags-debug):
+
+```bash
+sf tags debug --space my-space --revision tver_123 --url https://my-space.space.fast
+```
+
+Preview sessions expire after 1 hour by default (set between `60 s` and `86,400 s` through the API) and serve with `Cache-Control: public, max-age=0, s-maxage=60, must-revalidate`. Revoke a session early with `sf tags debug --revoke-session <session-id>`.
+
+## Team-level tags and inheritance
+
+A team can manage its own tag revisions, releases, and preview sessions through the team Tags API (`/v1/teams/{teamId}/tags/*`). Spaces in the team inherit released team tags alongside their own Space tags.
+
+Control inheritance for a Space through the API:
+
+- [`getSpaceTagInheritance`](/api/reference/tags/getspacetaginheritance): inspect whether the Space inherits team tags and which team tag IDs it overrides.
+- [`updateSpaceTagInheritance`](/api/reference/tags/updatespacetaginheritance): toggle `inherited` or disable specific inherited `tagId` entries with an optional `reason` while keeping the Space's local tag graph intact.
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Encoded tag graph size | 256 KB (262,144 bytes) |
+| Request body size | 512 KB (524,288 bytes) |
+| Tags per graph | 256 |
+| Triggers per graph | 256 |
+| Variables per graph | 256 |
+| System modules per graph | 64 |
+| Items per nested array | 256 |
+| Keys per nested object | 64 |
+| String size | 64 KB (65,536 bytes) |
+| Nesting depth | 16 levels |
+
+Tag IDs cannot contain `--`.
+
+## API operations
+
+| Scope | Key operations |
+| --- | --- |
+| Space revisions | [`listSpaceTagRevisions`](/api/reference/tags/listspacetagrevisions), [`createSpaceTagRevision`](/api/reference/tags/createspacetagrevision), [`submitSpaceTagRevision`](/api/reference/tags/submitspacetagrevision), [`approveSpaceTagRevision`](/api/reference/tags/approvespacetagrevision) |
+| Space releases and apply | [`applySpaceTagConfig`](/api/reference/tags/applyspacetagconfig), [`releaseSpaceTagRevision`](/api/reference/tags/releasespacetagrevision), [`rollbackSpaceTagRelease`](/api/reference/tags/rollbackspacetagrelease) |
+| Preview and inheritance | [`createSpaceTagPreviewSession`](/api/reference/tags/createspacetagpreviewsession), [`getSpaceTagInheritance`](/api/reference/tags/getspacetaginheritance), [`updateSpaceTagInheritance`](/api/reference/tags/updatespacetaginheritance) |
+| Team tags | [`listTeamTagRevisions`](/api/reference/tags/listteamtagrevisions), [`listTeamTagTemplates`](/api/reference/tags/listteamtagtemplates) |

@@ -1,96 +1,221 @@
 ---
-title: Find and buy a domain
-description: Search for a name, check that it's available, and register it to your team at cost, from an agent, the CLI, or the API
+title: Domain registration
+description: Search for a domain, check live pricing, register at cost, manage owner details and privacy, and handle renewals
 ---
 
-Spacefast registers domains at cost: you pay the registry price plus the ICANN fee, and Spacefast adds nothing on top. A domain you buy belongs to your team, renews on its own, and doesn't count toward your plan's custom domain limit. Once it's registered, [connect it to a Space](/domains).
+Spacefast registers apex domains at cost: you pay the registry price plus the ICANN fee in US dollars plus tax, with no markup. A registered domain belongs to your team, runs on [Spacefast DNS](/domains/dns), auto-renews by default, and does not count toward your plan's [custom domain limit](/pricing).
 
-The fastest path is to ask your agent: "Find me a domain for a cozy bakery in Brooklyn, and buy the one I pick." The rest of this page is what the agent does. If you're the agent, [Domain research for assistants](/agents/domain-research) covers checking names and showing the results.
+If you already own a domain at another registrar, [connect it to a Space](/domains) without moving it, or [transfer the registration](/domains/transfers).
 
-## Find names
+## Find and buy a domain
 
-Search takes a keyword or a naming brief. A keyword checks exact matches and domain hacks. A brief generates ideas. You don't need an account.
+Only team owners and admins can complete a domain purchase. An agent or API key without purchasing power can hold the names for 24 hours and return a confirmation link for an owner or admin to pay.
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open your team and select **Domains**.
+2. Select **Buy domain**.
+3. Enter a domain name or describe your project to generate suggestions across extensions such as `.com`, `.org`, `.app`, and `.dev`.
+4. Select up to 10 apex domains and continue to **Review and buy**.
+5. Enter or confirm the **Domain owner** details.
+6. Check **Total today**, select **Buy**, and pay with the team's saved payment method or add one at checkout.
+
+</Tab>
+<Tab title="CLI">
+
+Search for names, save registrant details if needed, and buy:
 
 ```bash
 sf domains search "a cozy bakery in Brooklyn" --json > names.json
-sf domains search "shorter, playful names" --input @names.json --like 2 --select 3 --json
+sf domains search "shorter, playful names" --input @names.json --like 2 --select 3
+sf domains registration purchase example.com --contact-file contact.json
 ```
 
-Over the API, send `POST /v1/domains/search` with `{ "message": "a cozy bakery in Brooklyn" }`. Send the returned `data.session` back unchanged on the next call, with a new `message` or `feedback`. Each suggestion shows its availability, a fee-inclusive first-year price, and an estimate for later years. Generated names get their availability from zone files, which lag the registry, so `availabilityMode` says `zone`.
-
-A suggestion isn't proof that a name can be bought. Check it live before you buy.
-
-## Check availability and price
-
-```bash
-curl "https://api.spacefast.com/v1/domains/research/availability?name=example.com"
-```
-
-This check is live. The answer says whether the name is `available` and `purchasable`, and gives its `price`. Premium names can show as available but not purchasable. To check many names at once, send `POST /v1/domains/research/availability` with `mode: "live"`. The default mode uses older zone data without prices.
-
-## Save who owns it
-
-A domain is registered to a person or organization, the registrant. Save one before your first purchase, with real details. An agent asks you for them and never makes them up.
-
-```bash
-sf domains contacts add --file contact.json
-```
-
-The file needs `firstName`, `lastName`, `address1`, `city`, `state`, `postalCode`, `countryCode`, `email`, and `phone`. `organization` and `address2` are optional. Over the API, it's `POST /v1/domains/contacts`.
-
-A contact belongs to the person who saved it, so sign in as yourself. Team API keys can't save contacts or buy domains.
-
-## Buy
-
-One purchase holds up to 10 apex domains, like `example.com` and not `app.example.com`. The team's saved payment method pays.
-
-```bash
-sf domains registration purchase example.com example.dev
-```
-
-Without `--expect-total`, this holds the names and shows the total. Nothing is charged. To charge now, pass the total before tax that you agreed to:
+Without `--expect-total`, `purchase` holds the names for 24 hours, prints the total, and returns a checkout link without charging. To charge the team's saved payment method immediately (when your credential has purchasing power), pass the exact pre-tax total:
 
 ```bash
 sf domains registration purchase example.com --expect-total 10.34
 ```
 
-Over the API, send `POST /v1/domains/purchases`. Each entry in `domains` is an object with a `name`, not a bare string:
+To pay from an agent wallet instead of the team's saved card, pass `--payment-token spt_...` together with `--expect-total`.
+
+</Tab>
+<Tab title="Agents">
+
+Ask your agent to find and buy a domain. In an MCP host that supports MCP Apps, the agent opens the Domains interface (`show_domains`) where you compare prices, enter owner details, and pay. In other hosts, the agent calls [`purchaseDomain`](/api/reference/domains/purchasedomain) and gives you `confirmUrl` to confirm and pay. Agents never see card numbers and never charge on their own unless explicitly granted purchasing power.
+
+For agent workflows, see [Domain research for assistants](/agents/domain-research).
+
+</Tab>
+<Tab title="API">
+
+Check live availability before buying, save a registrant contact, then call [`purchaseDomain`](/api/reference/domains/purchasedomain) (`POST /v1/domains/purchases`). Each entry in `domains` is an object with `name`:
 
 ```json
-{ "domains": [{ "name": "example.com" }], "contactId": "dcon_...", "expectedTotalCents": 1034 }
+{
+  "domains": [{ "name": "example.com" }],
+  "contactId": "dcon_...",
+  "expectedTotalCents": 1034
+}
 ```
 
-What happens next depends on who's buying:
-
-| You have | Result |
+| Method and path | Purpose |
 | --- | --- |
-| Purchasing power (`billing:purchase` on the paying team) and the total | Charged now |
-| No purchasing power, or no total | Held as `awaiting_confirmation`. A team admin confirms it at `purchase.confirmUrl` |
-| No usable payment method | Held as `awaiting_payment_method`. At `confirmUrl`, a team admin adds one and confirms |
-| A Stripe shared payment token from an agent wallet | Pass `--payment-token spt_...` with `--expect-total`. The token pays instead of the saved payment method |
+| `POST /v1/domains/search` | Search from a brief and refine by sending `data.session` back unchanged |
+| `POST /v1/domains/research/conversation` | Stream naming suggestions and follow-ups |
+| `GET /v1/domains/research/availability?name=example.com` | Live single-domain check for `available`, `purchasable`, and `price` |
+| `POST /v1/domains/research/availability` | Batch check (`mode: "live"` for live data; default uses zone data without prices) |
+| `GET /v1/domains/research/whois` | Read public registration data |
+| `GET` / `POST` / `PATCH /v1/domains/contacts` | List, save, or update registrant contacts |
+| `POST /v1/domains/purchases` | Create a purchase for up to 10 apex domains |
+| `GET` / `POST` / `PATCH /v1/domains/{domainId}/registration` | Read status, purchase/renew, or update registration settings |
 
-An agent without purchasing power gives you `confirmUrl` and stops. It doesn't retry or open a payment page itself.
+Search suggestions and default batch checks use zone data (`availabilityMode: "zone"`) and are not purchase guarantees. Confirm availability live before purchasing.
 
-If any name in the cart can't be bought, the whole purchase is refused with [`domain_not_purchasable`](/errors/domain_not_purchasable). Drop that name and buy the rest. If the live total no longer matches the one you sent, the purchase is refused with `purchase_total_changed`. Look at the new total and buy again.
+</Tab>
+</Tabs>
 
-## Check that it registered
+### What happens at checkout
+
+| Condition | Result |
+| --- | --- |
+| Purchasing power (`billing:purchase`) and matching total | Saved payment method is charged immediately |
+| No purchasing power, or no total supplied | Held for 24 hours as `awaiting_confirmation`; a team owner or admin pays at `purchase.confirmUrl` |
+| No usable payment method on the team | Held as `awaiting_payment_method`; an owner or admin adds a card at `confirmUrl` |
+| Stripe shared payment token (`spt_...`) with matching total | Token pays instead of the team's saved payment method |
+
+No charge or registration happens until payment clears. If any name in a multi-domain cart cannot be bought, the entire purchase fails with [`domain_not_purchasable`](/errors/domain_not_purchasable). If the live price changed, it fails with [`purchase_total_changed`](/errors/purchase_total_changed).
+
+### After payment
+
+Check registration progress from the CLI or [`getDomainRegistration`](/api/reference/domains/getdomainregistration) (`GET /v1/domains/{domainId}/registration`):
 
 ```bash
 sf domains registration example.com
 ```
 
-A paid purchase moves from `pending_payment` to `pending_registration` to `active`. If the registry refuses the name, the registration shows `failed` with a reason, and the payment is refunded. Over the API, read `GET /v1/teams/{teamId}/purchases/{purchaseId}`. If the purchase shows `requires_action`, the bank wants the cardholder to verify the charge: open the purchase's `confirmUrl` to finish. Once it's `paid`, read `GET /v1/domains/{domainId}/registration`.
+A paid purchase moves through `pending_payment` → `pending_registration` → `active`. If the bank requires card verification (`requires_action`), open `confirmUrl` to complete it. If the registry rejects a name (taken, price changed, or maintenance), Spacefast refunds that name automatically, tax included.
 
-## Renewals
+Once active, attach it to a Space with `sf domains add example.com --space my-space --role primary`. Because it uses Spacefast DNS, Spacefast writes the routing records for you. DNS propagation across networks can take up to 48 hours.
 
-A registered domain renews for a year on the team's saved payment method. The charge comes no sooner than 30 days before expiry, and no sooner than a week after the team is told. Turn renewal off with `sf domains registration example.com --no-auto-renew`, or renew now with `sf domains registration renew example.com`.
+## Pricing and supported extensions
 
-## In Claude, ChatGPT, and other MCP hosts
+- **Currency and term**: Prices are in US dollars plus tax, billed one year at a time.
+- **24-hour hold**: Unpaid checkouts hold their quote for 24 hours, then expire. You can cancel an unpaid purchase with **Cancel purchase** at checkout.
+- **No post-registration cancel**: Once registered, a domain cannot be canceled. Turn off auto-renew to let it expire at the end of its term. Spacefast blocks deleting a domain from your team while its registration is active.
+- **Over 370 generic extensions**: Includes `.com`, `.org`, `.net`, `.blog`, `.app`, `.dev`, `.page`, `.shop`, `.studio`, and `.xyz`.
+- **Exclusions**: Country-code extensions (such as `.co`, `.io`, `.me`, `.uk`, `.de`) and registry-priced premium names cannot be registered through Spacefast. Register them elsewhere and [connect them](/domains).
+- **Apex only**: Buy `example.com`, then add subdomains as DNS records.
+- **HTTPS-only extensions**: Browsers load `.app`, `.dev`, and `.page` over HTTPS only. Spacefast provisions certificates automatically; if you point one of these domains at an external server, that server must serve valid HTTPS.
 
-Ask your agent to find or buy a domain. In a host that shows MCP Apps, the Domains app opens. There you compare names and prices, add owner details in a form, and confirm the purchase. In other hosts, the agent gives you a link to finish on Spacefast.
+## Owner details and privacy
+
+ICANN requires valid registrant details for every registered domain. Registries can suspend domains registered with fabricated details or unverified email addresses.
+
+### Required contact fields
+
+Save registrant details once in the dashboard checkout or from a JSON file with `sf domains contacts add --file contact.json` (list saved contacts with `sf domains contacts list`):
+
+| Field | JSON key | Required |
+| --- | --- | --- |
+| First and last name | `firstName`, `lastName` | Yes |
+| Organization | `organization` | No |
+| Street address | `address1`, `address2` | `address1` required |
+| City, state/region, postal code, and country | `city`, `state`, `postalCode`, `countryCode` | Yes (`state` required for every country; two-letter `countryCode`) |
+| Email address | `email` | Yes |
+| Phone number | `phone` | Yes |
+
+:::tip[Use an independent email address]
+Avoid using an email address on the domain you are registering. If the domain expires or breaks, you lose access to renewal and verification messages sent to that inbox.
+:::
+
+Watch your inbox after registration and click any ICANN email-verification link promptly so the registry does not suspend the domain.
+
+### Ownership rules
+
+Saved contacts belong to the person who created them, not to the whole team:
+
+- **Personal sign-in required**: Team API keys cannot save contacts or buy domains under them ([`domain_contact_requires_person`](/errors/domain_contact_requires_person)). Save contacts while signed in as yourself.
+- **Identity edits**: Only the contact's creator can change `firstName`, `lastName`, `organization`, or `email`. Team owners and admins with purchase access can update street address or phone details.
+- **Registry propagation**: Editing a saved contact updates every domain registered to it. To move a domain to another saved contact you own, pass `contactId` to [`updateDomainRegistration`](/api/reference/domains/updatedomainregistration).
+- **60-day transfer lock**: Changing the owner's name, organization, or email triggers a 60-day ICANN transfer lock.
+
+### Privacy protection and registrar of record
+
+Privacy protection is enabled by default on every Spacefast-registered domain at no extra cost, so public WHOIS and RDAP lookups return redacted contact fields.
+
+To change privacy settings, update the **Registration** card in the dashboard or send `privacySetting` (`enable_privacy_service`, `redact_contact_info`, or `disclose_contact_info`) via [`updateDomainRegistration`](/api/reference/domains/updatedomainregistration). Even with privacy on, ICANN requires sharing registrant data with the registry, registrar, data escrow provider, and UDRP or URS dispute providers. The registrar also reviews tiered-access requests, such as law enforcement requests, case by case.
+
+Spacefast registers domains through **Automattic Inc.**, the ICANN-accredited registrar of record shown in WHOIS. Report domain abuse (spam, phishing, or malware) to `domainabuse@automattic.com`.
+
+## Renewal and expiration
+
+Every registration lasts one year. Auto-renew is on by default and bills the extension's current registration price in US dollars plus tax.
+
+### Auto-renew timeline
+
+| Timing | What happens |
+| --- | --- |
+| 60 days before expiry | Team owners and admins receive an email and notification with the renewal date and price |
+| 30 days before expiry | Spacefast charges the team's saved payment method and adds one year |
+| If payment fails | Owners and admins receive an alert with a link to fix the card; Spacefast retries until expiry |
+| On expiry date | Automatic retries stop and the domain expires |
+
+If you buy a domain or enable auto-renew fewer than 37 days before expiry, the charge waits at least 7 days after notice. When that 7-day window would pass expiry, auto-renew cannot run in time (`autoRenewChargesFrom` is `null`); renew manually instead.
+
+To toggle auto-renew (team owners and admins only):
+
+- **Dashboard**: Open team **Domains → `<domain>`** and toggle **Auto-renew** on the **Registration** card.
+- **CLI**: Run `sf domains registration example.com --no-auto-renew` (or `--auto-renew`).
+- **API**: Call `PATCH /v1/domains/{domainId}/registration` with `{"autoRenew": false}`.
+
+Turning auto-renew off cancels any upcoming automatic charge that has not run yet.
+
+### Renew manually
+
+Renewing adds one year to the existing expiry date, so renewing early loses no time.
+
+- **Dashboard**: Open the domain and select **Renew for 1 year** on the **Registration** card (shown starting 30 days before expiry).
+- **CLI**: Run `sf domains registration renew example.com` (available anytime; add `--expect-total` to charge immediately instead of printing a checkout link).
+- **API**: Call [`createDomainRegistrationAction`](/api/reference/domains/createdomainregistrationaction) with `{"action": "renew"}`.
+
+If the registry rejects a renewal, Spacefast refunds your payment automatically.
+
+### When a domain expires
+
+After the expiry date, status changes to **Expired** and Spacefast stops automatic charges. Spacefast keeps an expired domain renewable for about **30 days** during the redemption window:
+
+- Your Space keeps serving as long as the registry still resolves the domain, and Space content is never deleted. Some registries park or stop resolving expired names sooner.
+- You can renew using **Renew for 1 year** or `sf domains registration renew`. If the registry has already moved the name into a non-renewable redemption state, Spacefast refunds your payment.
+
+Once the window ends without renewal, Spacefast checks with the registrar. If the registry released the name, Spacefast marks the registration deleted, Spacefast DNS stops serving it, and the domain stays in your team list as an unregistered domain. Released domains can be registered immediately by anyone.
+
+Check upcoming expiration dates in team **Domains** (sort by **Expires soonest**) or with `sf domains registration example.com`.
+
+## Errors
+
+| Code | Meaning | Resolution |
+| --- | --- | --- |
+| [`domain_not_purchasable`](/errors/domain_not_purchasable) | A domain in the cart is taken, premium, unsupported, or in registry maintenance | Remove that domain and retry |
+| [`domain_purchase_apex_required`](/errors/domain_purchase_apex_required) | Attempted to purchase a subdomain | Purchase the apex domain, then add subdomains in DNS |
+| [`domain_cart_duplicate`](/errors/domain_cart_duplicate) | Same domain appeared twice in one cart | Remove the duplicate |
+| [`purchase_total_changed`](/errors/purchase_total_changed) | Live price changed since your quote; nothing charged | Re-check the total and purchase again |
+| [`purchase_pending`](/errors/purchase_pending) | An unpaid purchase already holds this domain | Complete or cancel the open purchase, or wait 24 hours |
+| [`purchase_in_progress`](/errors/purchase_in_progress) | Payment succeeded and registration, renewal, or refund is still settling | Wait a minute and check status again |
+| [`domain_unavailable`](/errors/domain_unavailable) | Someone else registered the domain first; payment refunded | Choose another name |
+| [`domain_contact_not_found`](/errors/domain_contact_not_found) | Contact ID does not exist or belongs to another team | Run `sf domains contacts list` and pass a valid ID |
+| [`domain_contact_not_owned`](/errors/domain_contact_not_owned) | Contact belongs to another person | Save your own contact or ask that person to purchase |
+| [`domain_contact_identity_locked`](/errors/domain_contact_identity_locked) | Only the contact's creator can change name, organization, or email | Ask them or create a new contact |
+| [`domain_contact_requires_person`](/errors/domain_contact_requires_person) | Team API key tried to save owner details | Sign in as a person or fill in details at checkout |
+| [`registrant_contact_invalid`](/errors/registrant_contact_invalid) | Registrar rejected owner details; payment refunded | Correct address or phone format and retry |
+| [`domain_registration_not_renewable`](/errors/domain_registration_not_renewable) | Registration is not active or expired | Inspect status with `sf domains registration` |
+| [`registrar_unavailable`](/errors/registrar_unavailable) | Registrar could not be reached | Retry shortly; paid purchases retry automatically |
+| [`registrar_writes_disabled`](/errors/registrar_writes_disabled) | Registrar writes are paused; nothing charged | Try again later |
 
 ## Next steps
 
-- [Connect the domain to a Space](/domains)
-- [`sf domains` commands](/cli/domains)
-- [Error reference](/errors)
+- [Custom domains](/domains): attach your registered domain to a Space
+- [DNS](/domains/dns): add email records or change nameservers
+- [Domain transfers](/domains/transfers): transfer registrations into or out of Spacefast
+- [`sf domains registration` CLI reference](/cli/reference#sf-domains-registration-domain): full command reference

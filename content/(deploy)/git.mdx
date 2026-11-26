@@ -1,15 +1,13 @@
 ---
 title: Publish from Git
 description: Push to a Spacefast remote or connect GitHub, choose which branches build, and control which versions go live
-sidebar:
-  order: 4
 ---
 
-Keep your source in Git and publish from a Spacefast remote or a connected GitHub repository. Connected repository pushes queue builds only when auto-deploy is enabled for that branch; deleting a branch does not build it.
+Keep your source in Git and publish from a Spacefast remote (`push.fast`) or a connected GitHub repository. Connected repository pushes queue builds only when auto-deploy is enabled for that branch; deleting a branch does not build it.
 
 There are two ways to connect. The Spacefast remote needs no external Git provider and no app install. A GitHub connection keeps your repository where it is and reacts to its webhooks.
 
-The `sf git` and `sf source` command families use different names for the same two connection types.
+The [`sf git`](/cli/reference#sf-git) and `sf source` command families use different names for the same two connection types.
 
 ## Source and deployment files
 
@@ -17,9 +15,9 @@ The `sf git` and `sf source` command families use different names for the same t
 
 Keep the editable project in Git. Connect its repository or push it to the Spacefast remote below. Add and commit the source files before pushing. A Git push transfers the committed history on the branch you push; it excludes files you have not committed. Keep an independent copy of your source and history for recovery. Rolling back a deployment restores published files, not deleted source files or branches.
 
-## Push to a Spacefast remote
+## Push to a Spacefast remote (`push.fast`)
 
-Spacefast hosts a Git endpoint. `sf git origin` mints a signed remote and installs it.
+Spacefast provides a Git endpoint (`push.fast`, which routes to `git.spacefast.com`). [`sf git origin`](/cli/reference#sf-git-origin) mints a signed remote and installs it.
 
 <Steps>
   <Step title="Install the remote">
@@ -52,31 +50,53 @@ Treat that URL as a secret. It expires, and the `sf git origin` receipt reports 
 
 ## Connect a GitHub repository
 
+Run [`sf git connect`](/cli/reference#sf-git-connect) to attach an external repository:
+
 ```bash
 sf git connect --space docs --provider github --repository owner/repo --production-branch main --sync
 ```
 
-GitHub connections resolve their installation and repository ids from your GitHub App installations, so `--repository owner/repo` is enough. When several installations grant the same repository, pass `--installation` to pick one.
+GitHub connections resolve their installation and repository IDs from your GitHub App installations, so `--repository owner/repo` is enough. When several installations grant the same repository, pass `--installation` to pick one.
 
 | Flag | Default | What it does |
 | --- | --- | --- |
 | `--provider` | none | `github`, `gitlab`, `bitbucket`, or `generic` |
-| `--connection-type` | `connected` | `connected` for an external host with a webhook, `hosted` for the Spacefast remote |
+| `--connection-type` | `connected` | `connected` for an external Git provider with a webhook, `hosted` for the Spacefast remote |
 | `--repository` | the `origin` remote | `owner/repo` |
 | `--production-branch` | none | The branch that publishes to production |
 | `--default-branch` | none | The repository's default branch |
-| `--credential` | none | A clone token for a generic host, stored encrypted |
+| `--credential` | none | A clone token for a generic Git provider, stored encrypted |
 | `--auto-deploy-production` / `--no-…` | on | Builds pushes to the production branch |
 | `--auto-deploy-previews` / `--no-…` | on | Builds preview branches and pull requests |
 | `--apply-best` | off | Detects and saves the highest-ranked build settings after connecting |
 | `--sync` | off | Requests a repository sync after connecting |
 | `--build-now` | off | Queues a build after connecting |
 
-`--apply-best`, `--sync`, and `--build-now` need `--connection-type=connected` and exit `2` otherwise. So does connecting with neither `--repository` nor a git `origin` to read it from.
+`--apply-best`, `--sync`, and `--build-now` need `--connection-type=connected` and exit `2` otherwise. So does connecting with neither `--repository` nor a Git `origin` to read it from.
 
-In the dashboard the same flow lives on the space's **Builds** page. Click **Connect GitHub**, then **Connect repository**, and pick an **Installation** and a **Repository**. **Add repositories** takes you back to GitHub to widen the installation.
+In the dashboard the same flow lives on the Space's **Builds** page. Click **Connect GitHub**, then **Connect repository**, and pick an **Installation** and a **Repository**. **Add repositories** takes you back to GitHub to widen the installation.
 
 Once connected, the sidebar's **Code** row shows **Source**, the repository tree at the production branch, instead of the version's files.
+
+## Pull request preview comments
+
+Spacefast can post one comment on a GitHub pull request and update it with the latest preview status and links.
+
+- In **Team settings**, **GitHub preview comments** sets **Comment on preview pull requests**. The default is on.
+- On a Space's **Builds** page, open repository settings. **Pull request preview comments** can inherit the team default, turn on, or turn off.
+
+The section heading is not a second toggle. The comment does not replace GitHub's deployment timeline entries or change a preview's access rules.
+
+Comments require the GitHub App to have **Pull requests: Read and write** permission. A setting cannot grant that permission. If GitHub offers a permission update, an installation owner must approve it. If no update is available, contact Spacefast support. Detaching and reconnecting the repository does not add a permission that the App does not request.
+
+## Source sharing
+
+Check or toggle whether a Space's repository allows independent forks of `main` with [`sf source availability`](/cli/reference#sf-source-availability) or the API:
+
+- `GET /v1/spaces/{spaceId}/source/availability` returns whether the current repository permits independent forks of `main`, its remix URL, and whether the Remix button is shown.
+- `PUT /v1/spaces/{spaceId}/source/availability` accepts `{"enabled":true}` to allow forks or `{"enabled":false}` to stop allowing them, plus an optional `remixButton` boolean.
+
+Obtain the owner's consent before enabling source sharing. This setting does not change Space access. Repository replacement and ownership transfer require new consent.
 
 ## Which branch publishes what
 
@@ -89,11 +109,13 @@ The connection carries one production branch. Everything else is a preview.
 
 Both are on by default. Turn one off and pushes to that side still record a delivery but queue no build. The dashboard's **Publish on every push** toggle flips to **Publishing on push paused**, and its hint says webhooks stay visible while no builds are queued.
 
+Update branch settings with [`sf git update`](/cli/reference#sf-git-update):
+
 ```bash
 sf git update --space docs --production-branch main --no-auto-deploy-previews
 ```
 
-Force a target by hand when you need to.
+Force a target by hand when you need to with [`sf git build`](/cli/reference#sf-git-build):
 
 ```bash
 sf git build --space docs --ref main --target production --wait
@@ -105,27 +127,29 @@ sf git build --space docs --ref main --target production --wait
 
 The platform builds your repository and publishes the output. It detects the framework and fills in the commands, so an unconfigured repository usually works.
 
-Detected presets include Astro, Next, Nuxt, SvelteKit, Remix, TanStack Start, Vite, Solid Start, Qwik, Angular, Ember, Gatsby, Docusaurus, Eleventy, VitePress, Hugo, Jekyll, Zola, MkDocs, and Sphinx. See [Frameworks](/frameworks).
+Detected presets include Astro, Next, Nuxt, SvelteKit, Remix, TanStack Start, Vite, Solid Start, Qwik, Angular, Ember, Gatsby, Docusaurus, Eleventy, VitePress, Nextra, Hugo, Jekyll, Zola, MkDocs, and Sphinx. See [Frameworks and builds](/guides/frameworks).
 
-Override any of it in `sf.jsonc` or on the connection.
+Repository builds read `spacefast.config.ts` in the isolated build environment. Override build settings there or on the connection. `sf.jsonc` remains supported; TypeScript takes precedence when both files exist. See [Project configuration](/config-file) for imports, migration, and file precedence.
 
-```jsonc sf.jsonc
-{
-  "build": {
-    "rootDirectory": "apps/web",
-    "installCommand": "pnpm install",
-    "buildCommand": "pnpm build",
-    "outputDirectory": "dist",
-    "timeoutSeconds": 900
-  }
-}
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  build: {
+    rootDirectory: "apps/web",
+    installCommand: "pnpm install",
+    buildCommand: "pnpm build",
+    outputDirectory: "dist",
+    timeoutSeconds: 900,
+  },
+});
 ```
 
 The dashboard's **Build settings** section holds the same four fields as **Root directory**, **Install command**, **Build command**, and **Output directory**, each with an **Auto** placeholder. Leave a field empty and the builder decides from the detected framework. **Detect build settings** re-runs detection and shows candidates with a confidence, which you can **Apply**.
 
 Every run appears under **Runs** on the Builds page, and a run's detail view carries **Commit**, **Pull request**, **Started**, **Duration**, **Artifact**, a **Diagnostics** section, and a **Pipeline** section holding the settings snapshot the run built with. The log pane streams while the build runs.
 
-From the CLI:
+Inspect build runs and stream logs from the CLI:
 
 ```bash
 sf builds list
@@ -150,6 +174,8 @@ The API exposes the same list.
 
 ## Managing the connection
 
+Inspect, sync, update credentials, or disconnect with [`sf git inspect`](/cli/reference#sf-git-inspect), [`sf git sync`](/cli/reference#sf-git-sync), [`sf git update`](/cli/reference#sf-git-update), [`sf git disconnect`](/cli/reference#sf-git-disconnect), [`sf git github installations`](/cli/reference#sf-git-github-installations), and [`sf git github repos`](/cli/reference#sf-git-github-repos-installation):
+
 ```bash
 sf git inspect --space docs
 sf git sync --space docs --ref main
@@ -167,7 +193,7 @@ The exact values each command family uses:
 
 | Command family | Values | Meaning |
 | --- | --- | --- |
-| `sf git connect`, `git inspect`, `git sync`, `git build` | `connected`, `hosted` | `connected` is an external host with a webhook. `hosted` is the Spacefast remote |
-| `sf source ls`, `source cat`, `source diff`, `source branch`, `source merge`, `source tags`, `source commits` | `remote`, `push`, `import` | `remote` is the same thing as `connected`, `push` the same as `hosted`, and `import` is a one-off import remote |
+| [`sf git connect`](/cli/reference#sf-git-connect), [`sf git inspect`](/cli/reference#sf-git-inspect), [`sf git sync`](/cli/reference#sf-git-sync), [`sf git build`](/cli/reference#sf-git-build) | `connected`, `hosted` | `connected` is an external Git provider with a webhook. `hosted` is the Spacefast remote |
+| [`sf source list`](/cli/reference#sf-source-list), [`sf source cat`](/cli/reference#sf-source-cat-path), [`sf source diff`](/cli/reference#sf-source-diff), [`sf source branch`](/cli/reference#sf-source-branch), [`sf source merge`](/cli/reference#sf-source-merge-source-target), [`sf source tags list`](/cli/reference#sf-source-tags-list), [`sf source commits list`](/cli/reference#sf-source-commits-list) | `remote`, `push`, `import` | `remote` is the same thing as `connected`, `push` the same as `hosted`, and `import` is a one-off import remote |
 
-`--connection-type` defaults to `connected` on the `git` commands and to `remote` on most `source` commands. Which commands require it, and which values each one takes, is on [sf git](/cli/git) and [sf source](/cli/source).
+`--connection-type` defaults to `connected` on the `git` commands and to `remote` on most `source` commands. See the full flag lists under [`sf git`](/cli/reference#sf-git) and [`sf source list`](/cli/reference#sf-source-list).

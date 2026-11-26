@@ -15,7 +15,7 @@ Spacefast's infra has three PHP filesystem permission modes:
 | `ro` | PHP can read files but cannot write them. Uploads, updates, and other file-writing operations can fail. |
 | `loggedin` | Changes write behavior for some logged-in WordPress requests. The feature is evolving and requires testing against the Space's actual workflows. |
 
-Spacefast sets the mode for every Space. There is no `sf.jsonc` field for it. Use [publish](/publish), [Storage](/object-storage), and the documented [WordPress tools](/wordpress) for the changes your application needs.
+Spacefast sets the mode for every Space. There is no `sf.jsonc` field for it. Use [publish](/publish), [Database](/database), and [Storage](/object-storage) for the changes your application needs.
 
 ## Read-only files do not mean read-only data
 

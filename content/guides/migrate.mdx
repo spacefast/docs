@@ -1,17 +1,15 @@
 ---
 title: Copy a website
 description: Copy a public website into a static Space from your browser or with sf migrate, then finish the move with a claim and a domain
-sidebar:
-  order: 3.5
 ---
 
-Give Spacefast the URL of a live website and it publishes a static copy to a new Space. Your original site stays where it is, and copying it again makes another Space.
+Give Spacefast the URL of a live website and it publishes a static copy to a new Space. Your original website stays where it is, and copying it again makes another Space.
 
 ## Copy from your browser
 
 Open [spacefast.com/migrate](https://spacefast.com/migrate/), paste the address, and select **Migrate**. If you belong to more than one team, pick the one that receives the copy.
 
-The page shows each step and counts pages as they're copied. A small site takes about a minute. A site with hundreds of pages can take most of an hour. Reloading the tab picks the progress back up, but a new tab starts empty.
+The page shows each step and counts pages as they're copied. A small website takes about a minute. A website with hundreds of pages can take most of an hour. Reloading the tab picks the progress back up, but a new tab starts empty.
 
 Keep the tab open until it finishes. Signed in, the copy keeps going if you close it, and the new Space shows up in your [dashboard](https://my.spacefast.com). Signed out, the tab holds your only claim link, so if you close it you can't claim the copy.
 
@@ -40,7 +38,7 @@ sf migrate URL [--team <value>] [--name <value>] [--idempotency-key <value>]
 
 | Argument | What it is |
 | --- | --- |
-| `URL` | The public `https://` address of the site to copy. Required |
+| `URL` | The public `https://` address of the website to copy. Required |
 
 ### Flags
 
@@ -53,7 +51,7 @@ sf migrate URL [--team <value>] [--name <value>] [--idempotency-key <value>]
 | `--wait-timeout=<seconds>` | `900` | Seconds to wait for the capture and the publish. Minimum 1 |
 | `--show-secret` | off | Print the **Open** and **Claim** links in JSON or non-interactive output |
 
-The global flags (`--api-url`, `--profile`, `--token`, `-y`, `--json`) also apply. See [the CLI overview](/cli).
+The global flags (`--api-url`, `--profile`, `--token`, `-y`, `--json`) also apply. See [`sf migrate`](/cli/reference#sf-migrate-url) and [the CLI overview](/cli).
 
 ## Choose what the URL can be
 
@@ -67,11 +65,11 @@ The URL must:
 
 ## Know what the copy contains
 
-The capture renders the site as portable HTML and publishes those files as a static Space. If the capture produces no HTML file, the build fails.
+The capture renders the website as portable HTML and publishes those files as a static Space. If the capture produces no HTML file, the build fails.
 
-The copy is static files only. Server-side code, accounts, stored data, and domains stay with the old site. Forms, comments, logins, and search that depend on the old server stop working in the copy.
+The copy is static files only. Server-side code, accounts, stored data, and domains stay with the old website. Forms, comments, logins, and search that depend on the old server stop working in the copy.
 
-A large site can finish with only part of its pages copied. The result still publishes, and it says how many pages were copied out of how many it found. Links to pages that weren't copied still point at the old site, so they break once you move your domain. Open the copy and check the pages you need before you switch.
+A large website can finish with only part of its pages copied. The result still publishes, and it says how many pages were copied out of how many it found. Links to pages that weren't copied still point at the old website, so they break once you move your domain. Open the copy and check the pages you need before you switch.
 
 Without a login, the copy publishes as an anonymous Space and gets the anonymous limits:
 
@@ -120,11 +118,11 @@ sf migrate https://example.com --idempotency-key 5f0c6a1e-8a51-4c3b-9d1e-2a7f4b6
 
 Use the same URL, `--team`, `--name`, and credential as the first run. The CLI keeps each attempt under `~/.spacefast/migrations/`, and a repeat with matching inputs resumes it without a new capture. When a run fails after the request starts, the error prints the repeat command.
 
-To return at once and check later, pass `--no-wait`. The receipt has the build ID. Follow it with [`sf builds logs`](/cli/builds), or repeat the run with the key.
+To return at once and check later, pass `--no-wait`. The receipt has the build ID. Follow it with [`sf builds logs`](/cli/reference#sf-builds-logs-build), or repeat the run with the key.
 
 ## Finish the move
 
-1. To keep an anonymous copy, open the **Claim** link and pick a team. An unclaimed copy stops serving after 33 hours and 20 minutes. See [The clock](/anonymous-and-claim#the-clock).
+1. To keep an anonymous copy, open the **Claim** link and pick a team. An unclaimed copy stops serving after 33 hours and 20 minutes. See [The clock](/agents/anonymous-and-claim#the-clock).
 2. To serve the copy on your own domain, attach the domain to the new Space. See [Custom domains](/domains).
 3. To edit the copy after you claim it, download it with `sf spaces download --space` and the ID from the `Space` line. Change the files, then publish them with `sf publish --space` and the same ID.
 

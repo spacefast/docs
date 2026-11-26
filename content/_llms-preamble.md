@@ -1,9 +1,9 @@
 ---
 title: llms.txt preamble
-description: Agent guidance that Blume places at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
+description: Agent guidance placed at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
 ---
 
-Spacefast publishes static sites and runs apps. You can drive all of it from the
+Spacefast publishes static Spaces and runs apps. You can drive all of it from the
 CLI, the REST API, the SDK, or MCP. Billing changes need a person in the dashboard.
 
 The sections below index every authored page. Read this header first: it covers
@@ -26,17 +26,21 @@ source named under Generated references.
 An agent that can fetch URLs and make HTTP requests can follow this publishing guide:
 
 ```
-Fetch https://spacefast.com/setup.md
+Fetch https://spacefast.com/setup.md and follow it.
 ```
 
 That page teaches a single-request publish flow that needs no CLI and no MCP
 server.
 
-For a fuller setup, install the CLI and let it configure the rest:
+For project settings, read [Project configuration](https://spacefast.com/docs/config-file).
+New projects use `spacefast.config.ts` with `defineConfig` from `spacefast/config`;
+`sf.jsonc` remains supported. The [JSON Schema](https://spacefast.com/schemas/sf.json)
+describes the JSON format, not TypeScript modules.
+
+For a fuller setup, run the zero-install setup wizard or install the CLI:
 
 ```bash
-npm install -g spacefast
-sf setup agent
+npx -y spacefast setup
 ```
 
 To install only the skill:

@@ -34,9 +34,21 @@ Published: https://quiet-harbor.space.fast
 
 Vite emits hashed filenames like `index-DiwrgTda.js`, and Spacefast serves those with a one-year immutable cache. See [Caching](/caching).
 
+For single-page app routing, redirects, or response headers, configure `fallback`, `redirects`, `rewrites`, and `headers` in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  fallback: "/index.html",
+});
+```
+
+See [Project configuration](/config-file), [Redirects and rewrites](/redirects), and [Response headers](/headers).
+
 ## The plugin
 
-`@spacefast/vite-plugin` is optional. It compiles `_redirects` and `_headers` the same way the Astro integration does, and it checks the build before you find out in production.
+`@spacefast/vite-plugin` is optional. It checks that the Vite build can be published before you find out in production, and it can also compile inline or optional `_redirects` and `_headers` files in `vite dev`.
 
 ```ts vite.config.ts
 import { defineConfig } from "vite";
@@ -49,7 +61,7 @@ export default defineConfig({
 
 ## The gotcha
 
-The plugin's `mode` defaults to `static`, and a static build whose output holds no `.html` file anywhere fails the build. A blank site is a real outcome of a misconfigured Vite entry, and failing is more useful than deploying it.
+The plugin's `mode` defaults to `static`, and a static build whose output holds no `.html` file anywhere fails the build. A blank Space is a real outcome of a misconfigured Vite entry, and failing is more useful than deploying it.
 
 For a single-page app, say so:
 
@@ -59,4 +71,4 @@ spacefast({ mode: "spa" });
 
 That writes an `/index.html` fallback for `/*` into the output, and then checks that the fallback file exists. A `build.ssr` config is refused outright unless you pass `allowSsrBuild`.
 
-The plugin needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`. More on [Frameworks and builds](/frameworks).
+The plugin needs Vite 6 or newer. TanStack Start has its own entry point at `@spacefast/vite-plugin/tanstack-start`. More on [Frameworks and builds](/guides/frameworks).

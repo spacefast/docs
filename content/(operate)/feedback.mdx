@@ -1,13 +1,29 @@
 ---
-title: Send feedback
-description: Tell Spacefast what broke or what is missing, from the CLI, the API, an agent, or the docs, with the error code and request ID attached
-sidebar:
-  order: 5
+title: Status, support, and feedback
+description: Reach Spacefast support and send bug reports or product feedback from the CLI, API, an agent, or the docs with error codes and request IDs attached
 ---
 
-Every note gets a reference, and a person reads it. The fastest report names what you tried, what happened, and the request ID from the error.
+Every feedback note gets a reference and is read by a person. For account, billing, or urgent operational help, write to Spacefast support directly.
+
+## Support
+
+Contact Spacefast support at [support@spacefast.com](mailto:support@spacefast.com). Include the Space ID or URL, the error `code`, and the `requestId` from the failed response or dashboard **Error details** panel so support can trace the exact request.
+
+Support channels vary by plan:
+
+| Plan | Support channel |
+| --- | --- |
+| Personal | Community |
+| Go | Email |
+| Pro | Priority email |
+| Business | Slack Connect channel |
+| Enterprise | Dedicated, with SLA |
+
+See [Pricing](/pricing) for full plan details and [Troubleshooting](/troubleshooting) for common error codes you can resolve directly.
 
 ## Send feedback from the CLI
+
+Send product or docs feedback with [`sf feedback`](/cli/reference#sf-feedback):
 
 ```bash
 sf feedback --message "The continuation docs are unclear" --category docs
@@ -36,19 +52,19 @@ Thanks. We read every one.
 Signed in with `sf login`? Read it back with `sf feedback inspect fdb_0123456789abcdef`.
 ```
 
-With `--json`, `data` is `{ "ref": "fdb_…", "status": "stored" }`.
+With `--json`, `data` is `{ "ref": "fdb_...", "status": "stored" }`.
 
 ## Attach an error to your feedback
 
-Every API error carries a stable `code` and a `requestId`. Send both, and the team can find the exact failed request.
+Every API error carries a stable `code` and a `requestId`. Send both so the team can find the exact failed request.
 
-When the API fails with a server error, or the CLI hits a bug, the CLI prints the report command, with both values filled in:
+When the API fails with a server error or the CLI hits a bug, the CLI prints a prefilled report command:
 
 ```text
 To report this: sf feedback --error-code internal_error --request-id 00000000-0000-4000-8000-000000000000 --message "Describe what happened"
 ```
 
-With `--json`, the CLI does not print the line. Build it from `error.code` and `error.requestId`. Copy the command, replace the message, and run it.
+With `--json`, the CLI does not print that line. Build it from `error.code` and `error.requestId`, replace the message, and run it:
 
 ```bash
 sf feedback --message "Publish failed after claim" --category bug --error-code space_claimed_credential_available --request-id 00000000-0000-4000-8000-000000000000
@@ -58,13 +74,15 @@ The dashboard shows the same values. An error screen lists the code, the HTTP st
 
 ## Read back what you sent
 
+List your submitted feedback or inspect one note with [`sf feedback list`](/cli/reference#sf-feedback-list) and [`sf feedback inspect`](/cli/reference#sf-feedback-inspect-ref):
+
 ```bash
 sf feedback list
 sf feedback list --limit 5 --json
 sf feedback inspect fdb_0123456789abcdef
 ```
 
-`sf feedback list` shows your notes, newest first, as a `REF | CATEGORY | SENT | MESSAGE` table. The message column shows the first 60 characters. `--limit` defaults to 20, with a maximum of 100. With nothing sent, it prints `No feedback. You haven't sent any yet.`
+`sf feedback list` shows your notes, newest first, as a `REF | CATEGORY | SENT | MESSAGE` table. The message column shows the first 60 characters. `--limit` defaults to 20, with a maximum of 100.
 
 `sf feedback inspect` prints one note in full: the reference, the category, the time sent, any context, and the message.
 
@@ -72,7 +90,7 @@ Only the person who sent a note can read it. Sign in with `sf login` or the dash
 
 ## Send feedback through the API
 
-[`createFeedback`](/api/reference/spaces/createfeedback) takes the same fields as the CLI. It needs no credential.
+[`createFeedback`](/api/reference/spaces/createfeedback) takes the same fields as the CLI and needs no credential:
 
 ```bash
 curl -X POST https://api.spacefast.com/v1/feedback \
@@ -80,7 +98,7 @@ curl -X POST https://api.spacefast.com/v1/feedback \
   -d '{"message":"Publish failed after claim","category":"bug","context":{"errorCode":"space_claimed_credential_available","requestId":"00000000-0000-4000-8000-000000000000"}}'
 ```
 
-The response is `201` with `{ "data": { "ref": "fdb_…" } }`. The body can also be form-encoded or multipart.
+The response is `201` with `{ "data": { "ref": "fdb_..." } }`. The body can also be form-encoded or multipart.
 
 | Field | Required | Limits |
 | --- | --- | --- |
@@ -97,14 +115,14 @@ Spacefast identifies the sender from the credential on the request:
 | --- | --- |
 | A login (dashboard, `sf login`, or MCP sign-in) | That person |
 | A team API key, OAuth client, or partner key | The person who created it |
-| A space key (`sfc_…`) | The unclaimed Space the key belongs to |
+| A Space key (`sfc_...`) | The unclaimed Space the key belongs to |
 | None | Anonymous |
 
-To read notes back, call [`listFeedback`](/api/reference/spaces/listfeedback) (`limit` 1 to 100, default 20) or [`getFeedback`](/api/reference/spaces/getfeedback) with the reference. Both need a login as the person who sent the note. Team API keys, OAuth clients, partner keys, and Space keys can send notes but can't read them back.
+To read notes back, call [`listFeedback`](/api/reference/spaces/listfeedback) (`limit` 1 to 100, default 20) or [`getFeedback`](/api/reference/spaces/getfeedback) with the reference. Both require a login as the person who sent the note. Team API keys, OAuth clients, partner keys, and Space keys can send notes but cannot read them back.
 
 ## Send feedback from an agent
 
-Agents call the same `createFeedback` operation. On the [MCP server](/agents/mcp-server), the agent calls the `createFeedback` tool by name. From a terminal, the agent runs `sf feedback`.
+Agents call the same `createFeedback` operation. On the [MCP server](/agents/mcp-server), the agent calls `createFeedback` by name. From a terminal, the agent runs `sf feedback`.
 
 The Spacefast agent instructions tell an agent to ask you once, after a task with friction, whether to send feedback. If you agree, the agent sends later notes in the same conversation without asking again and tells you what it sent. If you decline, it does not ask again. The agent includes the error code and request ID when it has them, and never includes credentials or private links.
 

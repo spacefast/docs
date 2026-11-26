@@ -1,17 +1,15 @@
 ---
 title: Quickstart
-description: Install the sf CLI, sign in, publish a folder, and put it on your own domain.
-sidebar:
-  order: 1
+description: Install the sf CLI, sign in, publish a folder, and put it on your own domain
 ---
 
 You can publish a folder of static files and get a live `space.fast` URL in one command, then point your own domain at it. Existing Spaces on `view.fast` keep their URLs. See [URLs and hostnames](/urls).
 
 ## Before you start
 
-You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you; see [Frameworks and builds](/frameworks).
+You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, `sf publish` can build it for you; see [Frameworks and builds](/guides/frameworks).
 
-Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window. No account needed. See [Drop](/publish#publish) for the full walkthrough.
+Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window, or run `npx -y spacefast setup` from any terminal. No account needed to start. See [Drop](/publish#publish) or [Publish from Git](/git) (`push.fast`) for the browser and Git workflows.
 
 <Steps>
   <Step title="Install the CLI">
@@ -41,7 +39,7 @@ Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a f
   <Step title="Publish">
 
     ```bash
-    cd my-site
+    cd my-space
     sf publish ./dist
     ```
 
@@ -90,14 +88,14 @@ Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a f
 
     Once the domain is `active`, the Live URL switches to `https://example.com`. The `space.fast` hostname keeps working. Details, states, and troubleshooting are in [Custom domains](/domains).
 
-    No domain yet? `sf domains search "your idea"` finds one, and [Find and buy a domain](/buy-domains) walks you through buying it.
+    No domain yet? `sf domains search "your idea"` finds one, and [Register a domain](/domains/registration) walks you through buying it.
 
   </Step>
 </Steps>
 
 ## Next
 
-Working with other people? If your Space is still anonymous, [claim it first](/anonymous-and-claim#claim-it). Signed-in publishes already belong to a team. Personal and Go allow only the owner; adding another member needs [Pro](/pricing). Then [invite members](/teams#invite-someone) to publish and roll back together. Owners and admins can manage domains and invitations. Choose whether new Spaces start private to the team or public in [team access settings](/teams#default-access-for-new-spaces).
+Working with other people? If your Space is still anonymous, [claim it first](/agents/anonymous-and-claim#claim-it). Signed-in publishes already belong to a team. Personal and Go allow only the owner; adding another member needs [Pro](/pricing). Then [invite members](/teams#invite-someone) to publish and roll back together. Owners and admins can manage domains and invitations. Choose whether new Spaces start private to the team or public in [team access settings](/teams#default-access-for-new-spaces).
 
 <CardGroup cols={2}>
   <Card title="Work with a team" href="/teams" icon="users">
@@ -107,12 +105,12 @@ Working with other people? If your Space is still anonymous, [claim it first](/a
     Install the Spacefast plugin for Claude Code, Cursor, or Codex.
   </Card>
   <Card title="Publish from Git" href="/git" icon="git-branch">
-    Push to a remote or connect GitHub and let Spacefast build.
+    Push to `push.fast` or connect GitHub and let Spacefast build.
   </Card>
-  <Card title="Dynamic sites" href="/zero-runtime" icon="database">
-    Add a database, functions, and crons with the Zero runtime.
+  <Card title="Build with Spacefast" href="/build" icon="database">
+    Add collections, actions, a database, Workers, email, and crons.
   </Card>
-  <Card title="Run in CI" href="/cli" icon="workflow">
-    `CI=1` switches the CLI to JSON output and no prompts.
+  <Card title="Run in CI" href="/ci" icon="workflow">
+    Publish from GitHub Actions or GitLab CI with an API key.
   </Card>
 </CardGroup>

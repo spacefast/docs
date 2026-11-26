@@ -1,0 +1,63 @@
+---
+title: Build on a Space
+description: Combine static files with collections, actions, database tables, Workers, email, storage, crons, variables, and connectors in one spacefast.config.ts
+---
+
+Every Space serves static files and runs dynamic capabilities from one project and one configuration file. You do not choose between a static Space and a dynamic app up front. Start with HTML or a frontend framework, then turn on collections, server actions, Workers, storage, crons, or connectors when you need them.
+
+## Configure everything in `spacefast.config.ts`
+
+Declare your Space's capabilities in `spacefast.config.ts` with `defineConfig` from `spacefast/config`. `sf.jsonc` remains permanently supported as the JSON fallback, and `spacepress.config.ts` may sit beside it; see [Configuration](/config-file).
+
+The following configuration defines a collection, a server action, a daily cron, a connector role, and a template file on one Space:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "my-space",
+  app: {
+    collections: {
+      posts: { title: "Posts" },
+    },
+    actions: {
+      subscribe: { access: "anyone" },
+    },
+  },
+  crons: [{ path: "/api/digest", schedule: "daily" }],
+  connectors: {
+    crm: { connector: "hubspot", tools: ["list_deals"], cache: "60s" },
+  },
+  templates: ["index.html"],
+});
+```
+
+Every capability publishes and rolls back with your Space's versions. Run `sf check` to validate `spacefast.config.ts`, app schemas, routing rules, Worker routes, and publishable files offline before you run `sf publish`.
+
+## Capabilities
+
+| Capability | What it does |
+| --- | --- |
+| [Collections and CMS](/collections) | Structured content collections, custom tables, admin editor, locales, and Content API |
+| [Actions and forms](/actions) | Server actions, typed form submissions, and human-in-the-loop action approvals |
+| [Database](/database) | Dedicated MySQL per Space with table and row CLI commands, `env.DB`, and a single-use SQL console |
+| [Workers](/functions) | Server-side JavaScript and TypeScript via `functions/`, a root `handler.ts`, or OpenNext |
+| [Transactional email](/email) | Outbound mail signed with your Space's primary custom domain |
+| [Object storage](/object-storage) | Runtime file uploads separate from published version files, with private and public access |
+| [Crons](/crons) | Scheduled `GET` requests against paths on your Space, declared in config |
+| [Environment variables](/environment-variables) | Space- and team-scoped variables, write-only secrets, and build-time substitution |
+| [Connectors](/connectors) | Connect external APIs, GraphQL endpoints, and MCP servers with credentials sealed on the server |
+
+## Local workflow
+
+Run your project locally with `sf dev` and check configuration before publishing with `sf check`:
+
+```bash
+sf check
+sf dev
+sf publish
+```
+
+- [`sf init`](/cli/reference#sf-init-name) scaffolds a new Space project with `spacefast.config.ts`.
+- [`sf add`](/cli/reference#sf-add-recipe-directory) adds starter code you own for a form (`sf add form`), sign-in (`sf add auth`), or a streaming AI Worker route (`sf add ai-route`).
+- For an older Zero 0.8 Space, see [Migrating from Zero 0.8](/zero-migration) for what changed and how to move to `spacefast.config.ts`.

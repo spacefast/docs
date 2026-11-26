@@ -1,0 +1,88 @@
+---
+title: Security and trust
+description: Audit external access across Enterprise teams, lock down Spaces in one action, understand crawler challenges, report abuse, and review edge protections
+---
+
+Review which Spaces are reachable outside your team, lock down public links and passwords in one action, and inspect how Spacefast handles crawlers, abuse reports, and edge protection.
+
+## Security Review (Enterprise)
+
+Enterprise teams include **Security Review** in the dashboard (`/<team>/external-access`), a read-only inventory of external reach across a root team and its live [subteams](/subteams) (or one subteam).
+
+Any member of an Enterprise team can open **Security Review** for the teams and Spaces their credential can read. It shows public reach, share link counts, password counts, configured team connectors, team access defaults, and people with access. It never exposes sharing URLs, password proofs, connector credentials, or private account identities.
+
+The **People** view lists one row per person across the covered teams: members, pending team invitations, guests invited to Spaces, and [SSO](/sso) identity grants. Filter by **Outside company domains** (matching domains configured under **Join link**), team, or search.
+
+Over HTTP, the matching read operations are:
+
+| Operation | Route | What it returns |
+| --- | --- | --- |
+| [`listTeamExternalAccess`](/api/reference/teams/listteamexternalaccess) | `GET /v1/teams/{teamId}/external-access` | Paginated external-access rows per Space (follow `nextCursor` even on empty pages) |
+| [`getTeamExternalAccessSummary`](/api/reference/teams/getteamexternalaccesssummary) | `GET /v1/teams/{teamId}/external-access/summary` | Aggregate totals across readable Spaces and whether permissions hide anything |
+| [`listTeamExternalAccessPeople`](/api/reference/teams/listteamexternalaccesspeople) | `GET /v1/teams/{teamId}/external-access/people` | People with access across the covered teams |
+| [`listTeamExternalAccessTeams`](/api/reference/teams/listteamexternalaccessteams) | `GET /v1/teams/{teamId}/external-access/teams` | Team access defaults and up to three configured team connectors per team |
+| [`listTeamExternalAccessTeamConnectors`](/api/reference/teams/listteamexternalaccessteamconnectors) | `GET /v1/teams/{teamId}/external-access/teams/{owningTeamId}/connectors` | Paginated active team-owned connectors for one team |
+| [`getTeamExternalAccessSpace`](/api/reference/teams/getteamexternalaccessspace) | `GET /v1/teams/{teamId}/external-access/{spaceId}` | Detailed metadata for one Space (up to 100 links, passwords, and people per section) |
+
+## Lock down Spaces
+
+From **Security Review**, select one or more Spaces and choose **Lock Down** (or call [`lockDownTeamExternalAccess`](/api/reference/teams/lockdownteamexternalaccess), `POST /v1/teams/{teamId}/external-access/lock-down`).
+
+Locking down closes every path into a Space that does not require an account:
+
+- Revokes every managed public grant, including scheduled public openings.
+- Revokes every share link and password. Revoked links and passwords cannot be restored.
+- Turns search-engine indexing off (`noindex`).
+
+Team members, invited people, and connectors keep their access.
+
+Each selected Space commits in its own transaction and reports one of four outcomes:
+
+- `locked`: private, hidden from search engines, and no active links or passwords remain.
+- `needs_publish`: Spacefast revoked managed access, but `spacefast.config.ts` or `sf.jsonc` still declares public access; remove the `access` block and republish to close it.
+- `unconfirmed`: Spacefast could not confirm public access after the write; inspect the Space directly.
+- `failed`: the caller lacked permission or Spacefast could not update the Space.
+
+Repeating a lock-down call revokes nothing new. Calling the endpoint requires `teams:read`, `spaces:write`, and access management authority on each targeted Space.
+
+## Crawler protection
+
+Crawler identification is separate from Space access. Requests claiming to be `Googlebot`, `Bingbot`, `GPTBot`, or `ClaudeBot` from IPs that do not belong to those crawlers can receive a **403** page saying **"Checking search engine crawler"**. Sending a crawler `User-Agent` with `curl` does not establish how a genuine crawler is treated.
+
+Whether genuine `GPTBot`, `ClaudeBot`, or `PerplexityBot` requests pass is not established, and there is no documented guarantee that AI crawlers are allowed. Private and preview hostnames also carry access and indexing restrictions independent of this challenge.
+
+When reporting a challenge, include the URL, time, status, response body, `User-Agent`, and source IP. An absent [edge request log](/infrastructure/edge-request-logs) row is not evidence that a request was allowed.
+
+WP Cloud's `ssl-social-crawler-redirect` endpoint is unrelated: its documented purpose is HTTPS-to-HTTP redirects for Facebook, Twitter, and LinkedIn to retain historic share counts, not AI-crawler access.
+
+## Report abusive content
+
+Report malware, phishing, spam, copyright violations, or illegal content served from a Space using [`createAbuseReport`](/api/reference/spaces/createabusereport) (`POST /v1/abuse-reports`):
+
+```bash
+curl -X POST https://api.spacefast.com/v1/abuse-reports \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.space.fast/page","category":"phishing","description":"Describe what you observed on the page."}'
+```
+
+`category` accepts `malware`, `phishing`, `spam`, `copyright`, `illegal_content`, or `other`. `description` takes 10 to 5,000 characters. Spacefast reviews reports and may disable the Space.
+
+## Infrastructure security
+
+Spacefast runs on managed infrastructure with automated failover, edge DDoS mitigation, TLS management, and traffic rules. See the infrastructure guides for each layer:
+
+| Area | Guide |
+| --- | --- |
+| Overview of platform-managed vs Space-managed controls | [Infrastructure](/infrastructure) |
+| Edge DDoS mitigation and firewall rules | [DDoS protection](/infrastructure/ddos-protection) |
+| Browser challenge mode during active attacks | [Defensive Mode](/infrastructure/defensive-mode) |
+| Edge rate limiting vs API rate limits | [Rate limiting](/infrastructure/rate-limiting) |
+| Managed TLS issuance, renewal, and custom certificates | [TLS certificates](/infrastructure/tls-certificates) |
+| Security response headers and platform-owned transport headers | [HTTP and security headers](/infrastructure/http-security-headers) |
+| PHP filesystem modes vs immutable versions | [Filesystem permissions](/infrastructure/filesystem-permissions) |
+| Edge request logs, challenge verdicts, and filters | [Edge request logs](/infrastructure/edge-request-logs) |
+| Edge and origin IP ranges and outbound behavior | [IP ranges](/infrastructure/ip-ranges) |
+| DNS verification records and ownership proof | [Domain verification records](/infrastructure/domain-verification-records) |
+| Automatic region failover | [Automated failover](/infrastructure/automated-failover) |
+| Edge caching and origin pools | [Origin and edge servers](/infrastructure/origin-edge-servers) |
+| Hardware specs, compression, and server boundaries | [Server specifications and settings](/infrastructure/server-specs-settings) |

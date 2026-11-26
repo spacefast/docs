@@ -1,13 +1,86 @@
 ---
 title: Agents
-description: What an agent can do on Spacefast, and the three ways to connect your client to the Spacefast MCP server
+description: Connect your AI or coding agent to Spacefast with one prompt, a plugin, or MCP
 ---
 
-Connect your coding agent to Spacefast once, then ask it to publish.
+Connect your AI to Spacefast once, then ask it to build, update, and publish Spaces for you.
+
+## Connect your AI
+
+Paste this prompt into Claude, ChatGPT, Grok Bot, Muse, or any AI with web access. No terminal is needed.
+
+<Prompt description="Paste into your AI to connect Spacefast." actions={["copy"]}>
+Fetch https://spacefast.com/setup.md and follow it.
+</Prompt>
+
+You can also connect straight from your AI app.
+
+<CardGroup cols={3}>
+  <Card title="Claude" href="/setup/claude-app" icon="bot">
+    Add the Spacefast connector once — it syncs across web, mobile, and Claude Desktop.
+  </Card>
+  <Card title="ChatGPT" href="/setup/chatgpt" icon="message-circle">
+    Connect the official Spacefast plugin and mention `@Spacefast` in chat.
+  </Card>
+  <Card title="Grok Bot" href="/setup/grok-bot" icon="sparkles">
+    Paste the setup prompt into Grok Bot to connect and publish.
+  </Card>
+</CardGroup>
+
+In the same conversation where you connect Spacefast, describe what you want to make and ask your AI to publish it. Publishing through your connected account saves the Space directly to your team with no claim step. New Spaces start private unless your team changed its default. Ask the agent for a viewer link, or open the Space in [your dashboard](https://my.spacefast.com) and choose **Access → Create share link → Can view**, then test it while signed out. To make edits, return to the same conversation and ask the agent to update that Space.
+
+You can also publish without connecting an AI. Drag a folder or `.zip` onto [drop.fast](https://drop.fast) with no install or account (see [Publishing](/publish)), or push a Git repository to `push.fast` (see [Publish from Git](/git)).
+
+## Coding agents, plugins, and MCP
+
+For coding agents that work with local folders and repositories, install the **Spacefast plugin** first. It sets up MCP, Spacefast skills, and advisory hooks in one step. Compare every connection method on [Ways to connect](/connect).
+
+<CardGroup cols={3}>
+  <Card title="Spacefast plugin" icon="package">
+    Recommended. Installs MCP config, Spacefast skills, and hooks through your client's marketplace or `npx -y plugins add spacefast/plugins`.
+  </Card>
+  <Card title="npx spacefast setup" icon="terminal">
+    Zero-install setup wizard. Signs in, configures detected agents, and publishes your project.
+  </Card>
+  <Card title="Direct MCP" icon="plug">
+    Point any MCP client at `https://mcp.spacefast.com` (hosted OAuth) or `npx -y spacefast mcp` (local stdio).
+  </Card>
+</CardGroup>
+
+### Spacefast plugin (recommended)
+
+Claude Code, Codex, and Factory Droid each take the same plugin repository:
+
+```bash
+claude plugin marketplace add spacefast/plugins
+claude plugin install spacefast@spacefast
+```
+
+Or use the universal installer for `claude-code`, `codex`, `cursor`, `vscode`, `github-copilot`, `grok`, and `kimi`:
+
+```bash
+npx -y plugins add spacefast/plugins -t cursor -y
+```
+
+Nothing assumes the `sf` CLI is already installed. In Claude, adding the Spacefast connector and plugin to your account syncs across web, mobile, and Claude Desktop — you don't need a separate desktop bundle. On a Claude Team or Enterprise plan, an owner must enable the connector first, and `sf setup agent` does not edit `claude_desktop_config.json`.
+
+### Terminal setup (`npx spacefast setup`)
+
+Run the zero-install setup wizard to sign in, configure detected agents, and publish the current directory:
+
+```bash
+npx -y spacefast setup
+```
+
+To configure agent tooling alone with an installed CLI, run [`sf setup agent`](/cli/reference#sf-setup-agent). By default it connects editors over `sf mcp proxy` using your CLI login, which helps when an editor lacks native MCP OAuth. See [`sf setup`](/cli/reference#sf-setup) for every flag.
+
+### Direct MCP
+
+Point any MCP client at `https://mcp.spacefast.com` for hosted OAuth, or run `npx -y spacefast mcp` for local stdio. Hosted MCP has no local filesystem access, so `publish` takes inline files or a completed `uploadId`. To publish a local folder by `path` over local MCP, install the standalone or Homebrew `sf` CLI on macOS or Linux; `npx`, the npm package on Node.js, and Windows take inline files. See [MCP server](/agents/mcp-server).
 
 ## What an agent can do
 
-Agents call API operations directly through MCP, within the permissions you approve. Some actions, including team membership and billing changes, need you in the dashboard.
+Agents call API operations directly through MCP, within the permissions you approve. Some actions, including team membership changes and billing changes, need you in the dashboard.
 
 Use `publish` for files, `operation_status` for an active publish, and Space Apps for visual inspection. Call operation tools such as `searchDocs`, `getDocsPage`, and `listSpaces` directly. Continue a saved approval with `resume_execution`.
 
@@ -27,81 +100,50 @@ Show me the deployments for this Space and whether the last build passed.
 Point docs.example.com at this Space and tell me which DNS records to add.
 </Prompt>
 
-Read [the MCP server page](/agents/mcp-server) for operation tools, runtime differences, and approvals.
-
-## Three ways to connect
-
-<CardGroup cols={3}>
-  <Card title="Vendor plugin" icon="package">
-    Your client's own marketplace installs MCP config, the Spacefast skills, and any hooks in one step.
-  </Card>
-  <Card title="Universal installer" icon="download">
-    One `npx` command that writes the same plugin into any of seven supported clients.
-  </Card>
-  <Card title="sf setup agent" icon="terminal">
-    The CLI detects your installed clients, writes MCP config, and installs the skill.
-  </Card>
-</CardGroup>
-
-### Vendor plugin
-
-Best when your client has a plugin marketplace. Claude Code, Codex, and Factory Droid each take the same repository.
-
-```bash
-claude plugin marketplace add spacefast/plugins
-claude plugin install spacefast@spacefast
-```
-
-You get the hosted MCP connection, the Spacefast skills, and, for Claude Code and Codex, two advisory hooks. Nothing assumes the `sf` CLI is installed.
-
-### Universal plugins installer
-
-Best when your client has no marketplace of its own but does read plugin directories. Targets are `claude-code`, `cursor`, `codex`, `github-copilot`, `vscode`, `grok`, and `kimi`.
-
-```bash
-npx -y plugins add spacefast/plugins -t cursor -y
-```
-
-### sf setup agent
-
-Best when you already use the `sf` CLI and want the connection to ride on your CLI login instead of an editor OAuth flow. It detects installed clients, writes each one's MCP config, and installs the skill.
-
-```bash
-npm install -g spacefast
-```
-
-```bash
-sf setup agent
-```
-
-The default connection method is `remote-proxy`, which points your client at `sf mcp proxy`. See [sf setup agent](/agents/sf-setup) for every flag.
-
 ## Pick your client
 
+Every supported client has its own step-by-step page under [Agent setup](/setup):
+
 <CardGroup cols={2}>
-  <Card title="Claude Code" href="/agents/claude-code" icon="bot">
-    Plugin with the hosted MCP server, skills, and two advisory hooks.
+  <Card title="Claude Code" href="/setup/claude-code" icon="bot">
+    Plugin with hosted MCP, Spacefast skills, and advisory hooks.
   </Card>
-  <Card title="Codex" href="/agents/codex" icon="terminal">
-    Plugin with the hosted MCP server and skills, or a TOML entry.
+  <Card title="Codex" href="/setup/codex" icon="terminal">
+    Plugin or `config.toml` setup for Codex on your computer or in the cloud.
   </Card>
-  <Card title="Cursor" href="/agents/cursor" icon="mouse-pointer">
+  <Card title="Cursor" href="/setup/cursor" icon="mouse-pointer">
     Plugin with skills and a rule, or a one-click deeplink.
   </Card>
-  <Card title="Claude Desktop" href="/agents/claude-desktop" icon="monitor">
-    A double-click desktop extension that runs the MCP server on your computer.
+  <Card title="Claude Desktop" href="/setup/claude-desktop" icon="monitor">
+    Syncs connectors and plugins from your Claude account — no desktop bundle needed.
   </Card>
-  <Card title="Any other MCP client" href="/agents/other-clients" icon="plug">
-    The stdio command, the hosted URL, and generic JSON config.
+  <Card title="Any MCP client" href="/setup/any-mcp" icon="plug">
+    Hosted URL, local stdio command, and generic client config.
   </Card>
-  <Card title="Skills" href="/agents/skills" icon="book-open">
-    What the shipped skill tells your agent, and how to install it alone.
-  </Card>
-  <Card title="Permissions" href="/agents/permissions" icon="shield">
-    What an agent can never do without you, and how approvals work.
+  <Card title="All supported agents" href="/setup" icon="list">
+    Setup pages for Antigravity, Raycast, VS Code, Zed, OpenCode, and more.
   </Card>
 </CardGroup>
 
-## Share an existing artifact
+## Go deeper
 
-[Share a Claude artifact publicly](/agents/share-claude-artifact) walks through exporting a page, publishing it, choosing its audience, and keeping the same address for updates. [Put HTML from ChatGPT online](/agents/share-chatgpt-html) does the same for a page ChatGPT wrote.
+<CardGroup cols={2}>
+  <Card title="MCP server" href="/agents/mcp-server" icon="server">
+    Hosted HTTP vs local stdio runtimes, OAuth scopes, tools, and approvals.
+  </Card>
+  <Card title="Poppy" href="/agents/poppy" icon="handshake">
+    Personal Agent Protocol 1.0 discovery, session headers, browser handoff, and tasks.
+  </Card>
+  <Card title="Skills" href="/agents/skills" icon="book-open">
+    What the shipped Spacefast skills tell your agent, and how to install them alone.
+  </Card>
+  <Card title="Permissions" href="/agents/permissions" icon="shield">
+    What an agent can never do without you, and how approvals and revocation work.
+  </Card>
+  <Card title="Publish without an account" href="/agents/anonymous-and-claim" icon="clock">
+    Anonymous publishes, claim links, expiry timers, and keeping agent access after claim.
+  </Card>
+  <Card title="Domain research" href="/agents/domain-research" icon="search">
+    How assistants check domain availability and prices with no account.
+  </Card>
+</CardGroup>

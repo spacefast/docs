@@ -47,9 +47,20 @@ Spacefast reads `vercel.json`, converts its routing rules and crons, and runs su
 | --- | --- |
 | `vercel.json` root directory, install command, build command, and output directory | Read after framework detection, and they override what detection set |
 | The `framework` field in `vercel.json` | Overrides the detected framework |
-| Redirects, rewrites, and headers in `vercel.json` | Converted to `_redirects` and `_headers` rules |
-| Crons in `vercel.json` | Converted to `sf.jsonc` crons |
+| Redirects, rewrites, and headers in `vercel.json` | Imported automatically during the build |
+| Crons in `vercel.json` | Imported automatically as Spacefast crons |
 | Environment variables | Imported from a dotenv export with `sf env import --from vercel` |
+
+Once the project is running on Spacefast, move any ongoing build, routing, header, or cron settings into `spacefast.config.ts` so they live in one typed config file (see [Project configuration](/config-file), [Redirects and rewrites](/redirects), and [Response headers](/headers)):
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  redirects: [{ source: "/old", destination: "/new", status: 301 }],
+  crons: [{ path: "/api/digest", schedule: "daily" }],
+});
+```
 
 ## Crons
 
@@ -67,7 +78,7 @@ A Spacefast cron is a scheduled `GET` against a path on your own Space, like a V
 | 16.4.5 and later 16.4 releases | Server-rendered builds, through the adapter `sf publish` wires in for you |
 | 15.5.29 and later 15.5 releases | Server-rendered builds |
 
-Other versions are refused before anything builds. The [Next.js recipe](/recipes/next) has the details and the export fallback.
+Older releases have known security vulnerabilities, so they are refused before anything builds, with the version to upgrade to (matching OpenNext 1.20.17). The [Next.js recipe](/guides/recipes/next) has the details and the static export fallback.
 
 ## What doesn't
 

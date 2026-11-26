@@ -1,6 +1,6 @@
 ---
 title: Comments
-description: Turn on Comments, leave feedback on a version or the live Space, reply, mention, react, resolve, and export threads
+description: Turn on Comments, leave feedback on a version or the live Space, reply, mention, react, resolve, moderate, and export threads
 ---
 
 Comments put feedback threads on the page they are about. A reviewer pins a thread to an element, a whole page, or a file. You answer from the page, the dashboard, the CLI, or the API.
@@ -8,8 +8,8 @@ Comments put feedback threads on the page they are about. A reviewer pins a thre
 ## Before you start
 
 - Comments run only on claimed Spaces that belong to a team. Other Spaces get `team_required`.
-- **Page Enhancements** must be on. Turn it on in the Space's settings under **General**. With it off, the API answers `comments_disabled`. The switch is `superpowers.enabled` in [the config file](/config-file#superpowers).
-- Who can comment comes from the Space's grants. A grant needs the `commenter` role or higher. See [Spacefast Share](/share#roles).
+- **Page Enhancements** must be on. Turn it on in the Space's settings under **General**. With it off, the API answers `comments_disabled`. The switch is `superpowers.enabled` in [the configuration file](/config-file#access-public-identity-theme-and-snippets).
+- Who can comment comes from the Space's grants. A grant needs the `commenter` role or higher. See [Share and access](/share#roles).
 
 ## Choose where Comments run
 
@@ -27,7 +27,7 @@ To change the setting in the dashboard:
 2. Open the settings control in the page header. It shows the current setting.
 3. Under **Where people can comment**, choose an option.
 
-To change it from the terminal, run `sf comments settings set --surface everywhere`. See [sf comments](/cli/comments#sf-comments-settings-set).
+To change it from the terminal, run `sf comments settings set --surface everywhere`. See [`sf comments settings set`](/cli/reference#sf-comments-settings-set). You can also switch Comments on previews or live with [`sf share set`](/cli/reference#sf-share-set).
 
 Over HTTP, read the settings with [`getSpaceCollaboration`](/api/reference/spaces/getspacecollaboration). Then send only the settings to change to [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration), with the `revision` you read as `expectedRevision`. If someone changed the settings after your read, the update returns 409 `resource_revision_changed` with the current settings in `details.current`. The dashboard shows **Comment Settings Changed Elsewhere** with **Apply Your Change** and **Use Latest**.
 
@@ -75,11 +75,13 @@ A thread points at one of three anchors.
 
 Writing a comment needs a credential that acts as a person and carries `spaces:write`. Any other credential gets 403 "Comments require a credential that acts as a user."
 
+To edit your own comment or reply, run [`sf comments edit`](/cli/reference#sf-comments-edit-comment). Only the author can edit, and editing sends no new notifications.
+
 If a request can be retried, send the same `idempotencyKey` each time. A repeated reply returns `status: "existing"` instead of a second reply.
 
 ## Reply and mention teammates
 
-To reply, write in the thread's reply box on the page or the **Collab** page. From the terminal, run `sf comments reply`. Over HTTP, call [`createSpaceCommentReply`](/api/reference/spaces/createspacecommentreply).
+To reply, write in the thread's reply box on the page or the **Collab** page. From the terminal, run [`sf comments reply`](/cli/reference#sf-comments-reply-comment). Over HTTP, call [`createSpaceCommentReply`](/api/reference/spaces/createspacecommentreply).
 
 A mention notifies one teammate. You can mention the members of the Space's team who can open the Space. The `listSpaceCommentMentionable` operation returns them.
 
@@ -92,7 +94,7 @@ A mention notifies one teammate. You can mention the members of the Space's team
 
 A thread takes six reactions: 👍, ❤️, 🎉, 👀, 🚀, and 🙏. Select one on the page or the **Collab** page. Select it again to take yours back.
 
-From the terminal, run `sf comments react` and `sf comments unreact`. Over HTTP, send `emoji` and `op` (`add` or `remove`) to [`updateSpaceCommentReaction`](/api/reference/spaces/updatespacecommentreaction).
+From the terminal, run [`sf comments react`](/cli/reference#sf-comments-react-comment-emoji) and [`sf comments unreact`](/cli/reference#sf-comments-unreact-comment-emoji). Over HTTP, send `emoji` and `op` (`add` or `remove`) to [`updateSpaceCommentReaction`](/api/reference/spaces/updatespacecommentreaction).
 
 ## Resolve and reopen a thread
 
@@ -100,7 +102,7 @@ A resolved thread leaves the open list and keeps every reply. Reopen it to put i
 
 - On the page, you can resolve your own threads. People with the `editor` or `manager` role can resolve any thread. The **Sidebar** menu has **Resolve all**.
 - On the **Collab** page, open the thread and select **Resolve** or **Reopen**.
-- From the terminal, run `sf comments resolve` or `sf comments reopen`.
+- From the terminal, run [`sf comments resolve`](/cli/reference#sf-comments-resolve-comment) or [`sf comments reopen`](/cli/reference#sf-comments-reopen-comment).
 - Over HTTP, send `status: "archived"` to resolve or `status: "open"` to reopen with [`updateSpaceComment`](/api/reference/spaces/updatespacecomment).
 
 The API, its exports, and the CLI's JSON name the resolved state `archived`. The dashboard, the page, and the CLI's human output say resolved.
@@ -113,7 +115,7 @@ A thread is unread for you when it is open and someone else posted in it after y
 | --- | --- |
 | **Collab** page | Opening the thread |
 | Page | **Mark all as read** in the **Sidebar** menu |
-| CLI | `sf comments read`. `sf comments inspect` and `sf comments list` never mark a thread read |
+| CLI | [`sf comments read`](/cli/reference#sf-comments-read-comment). `sf comments inspect` and `sf comments list` never mark a thread read |
 | API | [`markSpaceCommentRead`](/api/reference/spaces/markspacecommentread). Reading a thread with [`getSpaceComment`](/api/reference/spaces/getspacecomment) does not mark it |
 
 The **Collab** item in the Space's sidebar shows a badge with the unread count.
@@ -136,11 +138,23 @@ Filters and the open thread live in the URL, so you can share a filtered view. `
 
 A thread on a file opens in **Files**, at that file. Other threads open their page in a new tab.
 
-## Handle spam
+## Moderate comments and handle spam
 
 **Spam filtering** is on by default. It holds suspected spam out of the open list.
 
-Team owners and admins can review held threads in the **Spam** folder. Open a thread and select **Not spam** to release it. Select **Mark as spam** on any thread to hold it.
+Team owners and admins can review held threads in the **Spam** folder, delete threads or replies, and block repeat offenders.
+
+From the CLI:
+
+```bash
+sf comments spam cmt_123
+sf comments not-spam cmt_123
+sf comments delete cmt_123
+sf comments block act_123
+sf comments unblock act_123
+```
+
+Pass `--reply <reply-id>` to `spam`, `not-spam`, or `delete` to act on one reply instead of the whole thread. Blocking stops a commenter from writing on the Space while still letting them read.
 
 Over HTTP, team owners and admins send `status: "spam"` to [`updateSpaceComment`](/api/reference/spaces/updatespacecomment) to hold a thread, and `status: "open"` to release one. Add `spamCommentId` to judge one held reply. List held threads with `filter=spam` on [`listSpaceComments`](/api/reference/spaces/listspacecomments). Other callers get 403, except that `status: "open"` on a held thread answers 404 for them.
 
@@ -164,21 +178,23 @@ All three settings are on by default. In the settings control on the **Collab** 
 
 ## Export comments
 
+Export every thread in a Space (`GET /v1/spaces/{spaceId}/comments/export`) or one version's threads as Markdown or JSON. For database, source, and activity exports alongside comments, see [Backups, archives, and exports](/exports).
+
 | Where | Format | What it holds |
 | --- | --- | --- |
 | **Download Comments** on the **Collab** page | Markdown, `spacefast-comments-<space>.md` | Every thread in the Space |
 | **Download Comments** on a version page | JSON, `spacefast-comments-<version-id>.json` | The version's threads |
-| `sf comments export` | Markdown by default, or JSON | All threads, or one version's with `--version` |
-| [`exportSpaceComments`](/api/reference/spaces/exportspacecomments) | `format=markdown` (default) or `format=json` | All threads |
+| [`sf comments export`](/cli/reference#sf-comments-export) | Markdown by default, or JSON | All threads, or one version's with `--version` |
+| [`exportSpaceComments`](/api/reference/spaces/exportspacecomments) | `format=markdown` (default) or `format=json` | All threads (`GET /v1/spaces/{spaceId}/comments/export`) |
 | [`exportSpaceVersionComments`](/api/reference/versions/exportspaceversioncomments) | `format=markdown` (default) or `format=json` | One version's threads |
 
 Both endpoints take `status=open` or `status=archived`, and the CLI takes `--status open` or `--status resolved`. The JSON export is `{ "data": [...] }` with the same thread objects the list returns.
 
 The Markdown export starts with `# Spacefast comments`. Each thread is a `## <id> <status>` section. The API writes `open` or `archived` there, and `sf comments export` writes `open` or `resolved`. A section lists the page, URL, permalink, author, `viewport`, `selectors`, and attachments, then the body and one `- Reply by <name>: <body>` line per reply.
 
-## Let another site embed Comments
+## Let another website embed Comments
 
-A site that you list can run this Space's Comments for its own visitors. There is no dashboard control for the list. Use the CLI or [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration):
+An external website that you allowlist can run this Space's Comments for its own visitors. There is no dashboard control for the list. Use the CLI or [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration):
 
 ```bash
 sf comments settings set --embed-allow https://docs.example.com
@@ -186,13 +202,13 @@ sf comments settings set --embed-allow https://docs.example.com
 
 - Each entry is one exact `https` origin. Wildcards and paths are refused.
 - A Space takes up to 20 origins.
-- Each site gets its own threads. They are separate from the threads on your Space's own pages.
-- An embedded site gets no screenshots and no attachments.
+- Each external website gets its own threads. They are separate from the threads on your Space's own pages.
+- An embedded website gets no screenshots and no attachments.
 - Comments must be on, and the Space must have a ready live version.
 
-The site calls [`getSpaceCommentsEmbedConfig`](/api/reference/spaces/getspacecommentsembedconfig) and [`createSpaceCommentsEmbedTicket`](/api/reference/spaces/createspacecommentsembedticket) from the browser, with no credential. Both answer only to a listed origin. Every other caller gets the same 404.
+The website calls [`getSpaceCommentsEmbedConfig`](/api/reference/spaces/getspacecommentsembedconfig) and [`createSpaceCommentsEmbedTicket`](/api/reference/spaces/createspacecommentsembedticket) from the browser, with no credential. Both answer only to a listed origin. Every other caller gets the same 404.
 
-Allowing a site lets its visitors comment in this Space without an account. `sf comments settings set` asks for confirmation before it adds or removes a site.
+Allowing a website lets its visitors comment in this Space without an account. `sf comments settings set` asks for confirmation before it adds or removes an origin.
 
 ## Limits
 
@@ -210,6 +226,6 @@ Allowing a site lets its visitors comment in this Space without an account. `sf 
 | New threads and replies from visitors without an account | 10 per minute per network |
 | Reactions | 60 per minute per person. Without an account, per network |
 | Embed configuration reads | 120 per minute per IP address, 600 per minute per Space |
-| Embed tickets | 30 per minute per IP address, 120 per minute per site, 600 per minute per Space |
+| Embed tickets | 30 per minute per IP address, 120 per minute per origin, 600 per minute per Space |
 
 A request over an embed rate limit fails with `rate_limited`.

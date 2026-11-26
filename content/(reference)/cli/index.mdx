@@ -1,37 +1,37 @@
 ---
 title: sf CLI
-description: "Install sf, sign in, and learn the contract every command shares: global flags, JSON receipts, exit codes, and how the CLI picks a Space"
-sidebar:
-  order: 1
+description: Install sf, authenticate, and use the shared contract for global flags, JSON receipts, exit codes, and Space resolution
 ---
 
-`sf` publishes folders and projects to Spacefast, and manages everything that follows: versions, domains, access, teams, keys. Every command reads the same global flags, prints the same `--json` receipt, and exits with the same code table. Learn that once here and every command page is short.
+`sf` publishes folders and projects to Spacefast and manages versions, domains, access, data, teams, and agent tooling. Every command shares the same global flags, `--json` receipt format, and exit-code table. For every command's full arguments and flags, see the [CLI command reference](/cli/reference).
 
 ## Install
+
+Install the npm package globally with Node.js 22.19 or newer:
 
 ```bash
 npm install -g spacefast
 ```
 
-The package is `spacefast` and it installs two binaries, `spacefast` and `sf`. Standalone binaries for macOS (arm64, x64), Linux (arm64, x64), and Windows (x64) are also available.
+The `spacefast` package installs two binaries: `spacefast` and `sf`. Standalone binaries for macOS (arm64, x64), Linux (arm64, x64), and Windows (x64) bundle their own runtime with no Node.js install required.
 
-On macOS or Linux, Homebrew installs the same two binaries:
+On macOS or Linux, install the same two binaries with Homebrew:
 
 ```bash
 brew install spacefast/tap/spacefast
 ```
 
-Upgrade with `brew upgrade spacefast`.
-
-The npm package needs Node.js 22.19 or newer. Homebrew and the standalone binaries bundle their own runtime. Check the install:
+Upgrade Homebrew installs with `brew upgrade spacefast`. Verify your installation with `--version`:
 
 ```bash
 sf --version
 ```
 
-It prints the version number, such as `0.10.0`.
+The output prints your installed CLI version. Add `--json` to print `{ "data": { "version": "..." } }`.
 
-## First login
+## Authentication
+
+Sign in through your browser, verify your identity, and publish a directory:
 
 ```bash
 sf login
@@ -39,28 +39,38 @@ sf whoami
 sf publish ./dist
 ```
 
-`sf login` prints a code and a link, opens your browser, and polls until you approve. See [Authentication](/cli/login) for the read-only variant and for signing in with an API key.
+`sf login` prints a verification code and link to stderr, opens your browser when on a local desktop session, and polls until you approve. Only the approving device needs a browser, so `sf login` works over SSH and inside containers. The confirmation receipt prints to stdout.
 
-Bare `sf` runs `sf status`. Typing `sf` in a project tells you who you are, which team is default, and which Space the directory is linked to.
+To sign in without a browser, store an API key with `sf login --token <key>`. In CI pipelines, export `SPACEFAST_TOKEN` instead of running `sf login`.
+
+- **Re-authenticating**: `sf login` stores the replacement credential before revoking the old one, so a canceled or expired login never leaves you signed out. Signing in clears your stored default team and resets it from the new identity.
+- **Handoff-link protection**: passing a browser handoff URL as a command argument aborts with `handoff_link_in_argv` (exit 2) so secrets stay out of shell history and process lists.
+- **Signing out**: `sf logout` clears your default team, removes the local CLI credential, and revokes CLI-minted tokens against the API URL they were issued for. It never deletes API keys you created yourself; revoke those with [`sf api-keys revoke`](/cli/reference#sf-api-keys-revoke-key).
+- **Bare `sf`**: running `sf` with no subcommand runs [`sf status`](/cli/reference#sf-status), showing your identity, default team, and linked Space.
 
 ## Global flags
 
-Every command accepts these.
+Every command accepts these flags, either before or after the command path (for example, `sf --json spaces list`):
 
 | Flag | Default | What it does |
 | --- | --- | --- |
-| `--json` | off | Print a machine receipt instead of human output. Success goes to stdout, failure to stderr. |
-| `--api-url=<url>` | resolved, see below | Spacefast API base URL. Env `SPACEFAST_API_URL`. |
-| `--profile=<name>` | current profile | Named provider profile from `sf profiles`. Env `SPACEFAST_PROFILE`. |
-| `--token=<key>` | none | API key for non-interactive auth. Env `SPACEFAST_TOKEN`. |
-| `-y, --yes` | `false` | Skip confirmation prompts. Env `SPACEFAST_YES`. |
-| `--cwd=<path>` | current directory | Change directory before the command runs. Parsed before anything else, so it applies to Space resolution too. |
+| `--json`, `--no-json` | off | Print a machine receipt instead of human output, or force human output in agent mode |
+| `--api-url=<url>` | resolved | Spacefast API base URL. Env `SPACEFAST_API_URL` |
+| `--profile=<name>` | current profile | Named provider profile from `sf profiles`. Env `SPACEFAST_PROFILE` |
+| `--token=<key>` | none | API key for non-interactive auth; prefer `SPACEFAST_TOKEN` |
+| `-y, --yes` | `false` | Skip confirmation prompts. Env `SPACEFAST_YES` |
+| `--cwd=<dir>` | current directory | Change working directory before the command runs, including Space resolution |
+| `-d, --debug` | off | Print redacted diagnostics on stderr. Env `SPACEFAST_DEBUG` |
+| `--no-color` | off | Disable terminal color. Env `NO_COLOR` |
+| `--non-interactive` | off | Never prompt; fail when required inputs are missing. Env `SPACEFAST_NON_INTERACTIVE` |
 
-Commands that act on a Space add `--space`, `-T, --team`, and `--claim-token`. Commands that queue work add `--wait` / `--no-wait` and `--wait-timeout=<seconds>` (default 900).
+Commands that act on a Space also accept `--space`, `-T, --team`, and `--claim-token`. Commands that queue background work accept `--wait`, `--no-wait`, and `--wait-timeout=<seconds>` (default `900`).
 
-## JSON receipts
+## JSON output
 
-`--json` prints `{ data }` on stdout when the command succeeds, and nothing else. It prints `{ error }` on stderr when it fails. Piping stdout into a parser can never turn a failure into data.
+Pass `--json` to print `{ "data": ... }` on stdout when a command succeeds, and nothing else. Progress lines go to stderr in human mode and are suppressed under `--json`. Failures print `{ "error": ... }` on stderr, so piping stdout into a parser never turns a failure into data.
+
+This success receipt shows the `{ data }` envelope returned by `sf whoami --json`:
 
 ```json
 {
@@ -74,6 +84,8 @@ Commands that act on a Space add `--space`, `-T, --team`, and `--claim-token`. C
   }
 }
 ```
+
+This error receipt shows the `{ error }` envelope printed to stderr when a credential has expired:
 
 ```json
 {
@@ -91,140 +103,304 @@ Commands that act on a Space add `--space`, `-T, --team`, and `--claim-token`. C
 }
 ```
 
-`error.code` is stable. `error.retryable` says whether re-running the same command unchanged could work. `error.recovery` is one runnable hint. Validation failures add `error.pointer`, an RFC 6901 JSON Pointer into the failing input. List endpoints pass their `{ data, pagination }` envelope through without double-wrapping. Capability query parameters and blob paths are replaced with `[redacted]`.
+`error.code` is stable. `error.retryable` tells you whether repeating the same command unchanged could succeed. `error.recovery` gives one runnable command, and validation failures include an RFC 6901 `error.pointer`. Cursor-paginated list commands pass their `{ data, pagination }` envelope through without double-wrapping. The CLI replaces capability query parameters and secret paths with `[redacted]`.
+
+Some commands use their own output contract instead of the CLI JSON envelope. `sf mcp` and `sf mcp proxy` speak MCP over stdio, `sf api` prints raw API responses verbatim, and `--help` prints human help unless you pass `--json`.
 
 ## Exit codes
 
+Run `sf help exit-codes` to print this table offline:
+
 | Code | Name | Meaning |
 | --- | --- | --- |
-| `0` | ok | Success. |
-| `1` | unknown | Unexpected or uncategorized failure. |
-| `2` | validation | Bad flags or arguments, or validation failure (HTTP 422). |
-| `10` | auth | Not signed in, or the credential is missing or expired (HTTP 401). Run `sf login`. |
-| `11` | permission | Signed in, but this credential or role can't do it (HTTP 403). Signing in again doesn't help. |
-| `20` | not-found | Resource not found or gone (HTTP 404/410). |
-| `30` | conflict | Request conflicts with the resource's current state (HTTP 409). |
-| `40` | network | Network failure reaching the API. Retryable. |
-| `50` | timeout | Timed out waiting for queued work. Retryable. |
-| `60` | unknown-outcome | A change may or may not have been applied. Check its state before repeating it. |
-| `130` | cancelled | Interrupted with Ctrl-C, or a confirmation prompt was declined. |
+| `0` | `ok` | Success |
+| `1` | `unknown` | Unexpected or uncategorized failure |
+| `2` | `validation` | Bad flags or arguments, or client/server validation failure (HTTP 422) |
+| `10` | `auth` | Authentication failure: not signed in, or the credential is missing or expired (HTTP 401). Run `sf login` |
+| `11` | `permission` | Signed in, but this credential or role cannot perform the action (HTTP 403). Signing in again does not help |
+| `20` | `not-found` | Resource not found or gone (HTTP 404 or 410) |
+| `30` | `conflict` | Request conflicts with the resource's current state (HTTP 409) |
+| `40` | `network` | Network failure reaching the API before the request arrived. Retryable |
+| `50` | `timeout` | Timed out waiting for queued work. Check `sf operations <id>` before retrying |
+| `60` | `outcome` | A change may or may not have been applied. Inspect state before repeating |
+| `130` | `cancelled` | Interrupted with Ctrl-C, or a confirmation prompt was declined |
 
-`sf doctor` is the one exception: it exits `1` when any check fails, without classifying.
+[`sf doctor`](/cli/reference#sf-doctor) is the one exception: it exits `1` when any check fails without classifying the failure.
 
-## Interactive and non-interactive
+## Interactive, CI, and agent modes
 
-The CLI prompts only when stdin and stdout are both connected to a terminal, `--json` is absent, and neither `CI` nor `SPACEFAST_NON_INTERACTIVE` is set. Otherwise it never prompts.
+The CLI prompts only when stdin and stderr are terminals, `--json` and `--non-interactive` are absent, and neither CI nor agent mode is active.
 
-Destructive actions need an answer either way. Pass `--yes` (or set `SPACEFAST_YES=1`) to proceed without a prompt. Without it, a non-interactive run fails with `confirmation_required` and exit 2. Declining a prompt exits 130.
-
-Setting `SF_AGENT=1`, or running anywhere `CI` is set, appends `--json` to your command for you and suppresses prompts. It never implies `--yes`: remote destructive actions still demand an explicit `--yes` on every invocation. `SF_AGENT_ALLOW_DESTRUCTIVE=1` auto-confirms local protection-removing actions only, like `sf unlink`.
-
-Some commands are exempt from the automatic `--json`: `sf mcp`, help and `--version`, and `sf api`, which has its own output contract.
-
-## How the CLI finds your Space
-
-In order, highest first:
-
-1. `--space` or `SPACEFAST_SPACE`.
-2. Anonymous claim state in `.spacefast/state.json`, unless the committed link names a different Space ID.
-3. The `space` field in `.spacefast/space.json`.
-4. The cached `spaceId` in `.spacefast/state.json`.
-
-If nothing selects a Space and your account has exactly one, the CLI uses it, in agent mode too. With several, it prompts when interactive and fails with `no_space_selected` (exit 2) when not. A blank or whitespace-only `--space` is an error, not "absent", so a misconfigured CI variable cannot silently create a second Space.
+- **Destructive actions**: pass `--yes` (or `SPACEFAST_YES=1`) to confirm without a prompt. Without it, a non-interactive run fails with `confirmation_required` (exit 2). Declining a prompt exits `130`.
+- **Agent mode**: setting `SPACEFAST_AGENT=1` (or running inside a detected agent harness such as Claude Code, Codex, Cursor, or Gemini CLI) defaults to `--json` and suppresses prompts. Pass `--no-json` or `SPACEFAST_AGENT=0` to opt out. Agent mode never implies `--yes` for remote destructive actions. Set `SPACEFAST_AGENT_ALLOW_DESTRUCTIVE=1` to auto-confirm local protection-removing actions only, such as `sf unlink`.
+- **CI environments**: when `CI` (or a recognized CI runner variable) is set, the CLI runs non-interactively and masks secrets in logs, while keeping human output unless you pass `--json`.
 
 ## Environment variables
 
 | Variable | What it does |
 | --- | --- |
-| `SPACEFAST_TOKEN` | API key to authenticate with. Same as `--token`. |
-| `SPACEFAST_SPACE` | Space ID, live URL, domain, or slug. Same as `--space`. |
-| `SPACEFAST_TEAM` | Team slug, ID, or name. Same as `--team`. |
-| `SPACEFAST_CLAIM_TOKEN` | Space key (`sfc_…`) for an unclaimed anonymous Space. |
-| `SPACEFAST_API_URL` | API base URL. Same as `--api-url`. |
-| `SPACEFAST_PROFILE` | Profile to use. Same as `--profile`. |
-| `SPACEFAST_YES` | `1`, `true`, or `yes` skips confirmation prompts. |
-| `SPACEFAST_NON_INTERACTIVE` | Any value stops the CLI from ever prompting. |
-| `SF_AGENT` | `1`, `true`, or `yes` turns on agent mode. |
-| `SF_AGENT_ALLOW_DESTRUCTIVE` | Lets agent mode auto-confirm local protection-removing actions. |
-| `SPACEFAST_HOME` | CLI state directory, default `~/.spacefast`. |
-| `SPACEFAST_CREDENTIAL_STORE` | `keyring` forces the OS keyring, `plaintext` forces the file fallback. |
-| `SPACEFAST_DEBUG` | Turns on diagnostics on stderr. Same as `-d, --debug`. Add `LOG_FORMAT=json` for JSON lines. |
-| `DO_NOT_TRACK`, `SPACEFAST_TELEMETRY_DISABLED` | `1`, `true`, `yes`, or `on` disables agent-setup telemetry. |
-| `NO_COLOR`, `FORCE_COLOR` | Color control. |
+| `SPACEFAST_TOKEN` | API key for authentication. Preferred over `--token` |
+| `SPACEFAST_SPACE` | Space ID, live URL, domain, or slug. Same as `--space` |
+| `SPACEFAST_TEAM` | Team slug, ID, or name. Same as `--team` |
+| `SPACEFAST_CLAIM_TOKEN` | Space key (`sfc_…`) or claim link for an unclaimed Space |
+| `SPACEFAST_API_URL` | API base URL. Same as `--api-url` |
+| `SPACEFAST_PROFILE` | Named provider profile. Same as `--profile` |
+| `SPACEFAST_YES` | `1`, `true`, or `yes` skips confirmation prompts |
+| `SPACEFAST_NON_INTERACTIVE` | Disables all interactive prompts. Same as `--non-interactive` |
+| `SPACEFAST_AGENT` | Turns on agent mode (`--json` default, no prompts); `0`, `false`, or `no` disables auto-detection |
+| `SPACEFAST_AGENT_ALLOW_DESTRUCTIVE` | Lets agent mode auto-confirm local destructive actions |
+| `SPACEFAST_CONFIG` | Explicit path to `spacefast.config.ts` or `sf.jsonc` for `sf git` commands |
+| `SPACEFAST_HOME` | CLI state directory, default `~/.spacefast` |
+| `SPACEFAST_CREDENTIAL_STORE` | `keyring` forces the OS keyring; `plaintext` forces the file fallback |
+| `SPACEFAST_DEBUG` | Prints redacted diagnostics on stderr. Same as `-d, --debug`. Add `LOG_FORMAT=json` for JSON lines |
+| `DO_NOT_TRACK`, `SPACEFAST_TELEMETRY_DISABLED` | `1`, `true`, `yes`, or `on` disables agent-setup telemetry |
+| `NO_COLOR`, `FORCE_COLOR` | Terminal color control |
 
-## API URL resolution
+## How the CLI resolves Space, API URL, and files
 
-| Order | Source |
-| --- | --- |
-| 1 | `--api-url` passed on the command line |
-| 2 | The `apiUrl` of an explicitly named `--profile` |
-| 3 | `SPACEFAST_API_URL` |
-| 4 | The provider recorded in `.spacefast/state.json` |
-| 5 | `apiBaseUrl` in `.spacefast/space.json` |
-| 6 | The `apiUrl` of the currently selected profile |
-| 7 | The `apiUrl` of your stored login |
-| 8 | `https://api.spacefast.com` |
+When you omit `--space`, the CLI picks a Space in this order:
 
-Every credential is bound to the base URL it was issued for. Point the CLI somewhere else and it will not send that credential along.
+1. `--space` or `SPACEFAST_SPACE`. A blank value is a validation error, never "absent", so a misconfigured CI variable cannot silently create a second Space.
+2. Anonymous claim state in `.spacefast/state.json`, unless `.spacefast/space.json` names a different Space ID.
+3. The `space` field in `.spacefast/space.json`.
+4. The cached `spaceId` in `.spacefast/state.json`.
 
-## Where credentials live
+If nothing selects a Space and your account can reach one Space, the CLI selects it. With several, an interactive terminal prompts and a non-interactive run fails with `no_space_selected` (exit 2).
 
-On macOS the login goes into the Keychain as a generic password under the service `Spacefast CLI`. On Linux it goes into the Secret Service through `secret-tool`. Anywhere else, including Windows, there is no keyring and the CLI writes `~/.spacefast/auth.json`, telling you it did.
+The CLI resolves the API base URL in this order:
 
-The keyring wins when both exist. A stale plaintext copy is deleted after the keyring is read. If the keyring is locked, the CLI fails with `credential_keyring_unavailable` (exit 10). Open the keyring, or set `SPACEFAST_CREDENTIAL_STORE=plaintext`. Under `CI`, the plaintext store is the default.
+1. `--api-url`
+2. An explicit `--profile`
+3. `SPACEFAST_API_URL`
+4. `.spacefast/state.json`
+5. `.spacefast/space.json`
+6. The active profile
+7. The stored login's URL
+8. `https://api.spacefast.com`
 
-Other files the CLI owns:
+Every credential is bound to the base URL it was issued for and never sent to another origin.
+
+On macOS, the CLI stores logins in the Keychain under `Spacefast CLI`. On Linux, it uses Secret Service through `secret-tool`. On Windows, in CI, and in other environments, it writes `~/.spacefast/auth.json`. If the keyring is locked, unlock it or set `SPACEFAST_CREDENTIAL_STORE=plaintext`.
 
 | Path | Contents |
 | --- | --- |
 | `~/.spacefast/config.json` | Profiles and defaults, including your default team |
 | `~/.spacefast/credentials/profile-*.json` | One credential file per profile |
-| `.spacefast/space.json` | Committable link: which Space, team, and API base URL |
-| `.spacefast/state.json` | Local cache and credentials. Never commit it, and `sf` adds it to `.gitignore` for you |
-| `spacefast.config.ts` or `sf.jsonc` | [Project config](/config-file). `sf init` writes `spacefast.config.ts` |
+| `.spacefast/space.json` | Committable link: Space ID, team, and API base URL |
+| `.spacefast/state.json` | Local cache and anonymous claim credentials. Never commit it; `sf` adds it to `.gitignore` |
+| `spacefast.config.ts` | Typed project configuration written by `sf init`; see [Configuration](/config-file) |
+| `sf.jsonc` | Permanently supported JSONC configuration; `spacefast.config.ts` takes precedence when both exist |
 
-## Update checks
+## Update checks and shell completion
 
-The CLI checks npm for a newer version every 7 days and prints the exact upgrade command for how you installed it. It skips the check whenever the invocation looks machine-driven: `--json` anywhere in the arguments, an `mcp` invocation, or a non-TTY stderr.
+The CLI checks npm for a newer release every 7 days and prints the upgrade command matching how you installed it. It skips update checks when you pass `--json`, run `mcp` commands, or redirect stderr away from a terminal.
 
-## Shell completion
-
-The npm package completes commands and flags in `zsh`, `bash`, and PowerShell. The standalone binaries and Homebrew do not include completion. To set it up, run `sf autocomplete` with your shell:
+The npm package includes shell completion for `zsh`, `bash`, and PowerShell. Standalone binaries and Homebrew do not include completion. Run `sf autocomplete` with your shell name:
 
 ```bash
 sf autocomplete zsh
 ```
 
-The command builds the completion cache and prints the setup steps. For `zsh`, the step adds one line to `~/.zshrc`:
+Add the printed setup line to `~/.zshrc`, `~/.bashrc`, or `$PROFILE`. After upgrading `sf`, refresh the cache with `sf autocomplete --refresh-cache`.
 
-```bash
-printf "$(sf autocomplete script zsh)" >> ~/.zshrc; source ~/.zshrc
-```
+## Command map
 
-For `bash`, the line goes in `~/.bashrc`. PowerShell adds the script to `$PROFILE`. Without a shell argument, `sf autocomplete` detects your shell. To pick up new commands after an upgrade, run `sf autocomplete --refresh-cache`.
+Singular topic names work as aliases for plural ones (for example, `sf space list` runs `sf spaces list`). Every row below links to its full entry in the [CLI command reference](/cli/reference).
 
-## Command reference
+### Publish and versions
 
-<CardGroup cols={2}>
-  <Card title="Authentication" href="/cli/login" icon="key">
-    `login`, `logout`, `whoami`, `auth`, `access`
-  </Card>
-  <Card title="Project setup" href="/cli/project" icon="folder">
-    `init`, `link`, `unlink`, `switch`, `profiles`, `open`, `status`
-  </Card>
-  <Card title="API keys" href="/cli/api-keys" icon="lock">
-    `api-keys create`, `list`, `revoke`
-  </Card>
-  <Card title="Raw API access" href="/cli/api" icon="braces">
-    `sf api`
-  </Card>
-  <Card title="Operations and activity" href="/cli/operations" icon="activity">
-    `operations`, `activity`
-  </Card>
-  <Card title="Inspection and agent helpers" href="/cli/agent-commands" icon="wrench">
-    `inspect`, `fetch`, `apply`, `continue`, `map`, `docs`, `doctor`, `feedback`, `plugins`
-  </Card>
-  <Card title="Send feedback" href="/feedback" icon="message-square">
-    `feedback`, `feedback list`, `feedback inspect`
-  </Card>
-</CardGroup>
+| Command | What it does |
+| --- | --- |
+| [`sf publish`](/cli/reference#sf-publish-dir) | Publish a file, folder, project, or archive to a Space |
+| [`sf init`](/cli/reference#sf-init-name) | Scaffold a project and write `spacefast.config.ts` |
+| [`sf add`](/cli/reference#sf-add-recipe-directory) | Add a capability or starter recipe to an existing project |
+| [`sf check`](/cli/reference#sf-check-dir) | Validate config, routing rules, Worker routes, and secret scanning offline |
+| [`sf versions list`](/cli/reference#sf-versions-list) | List versions (`*` marks live, `>` marks deploying) |
+| [`sf versions inspect`](/cli/reference#sf-versions-inspect-version) | Inspect one version's status, files, and diagnostics |
+| [`sf versions delete`](/cli/reference#sf-versions-delete-version) | Delete a version not held by a channel or branch hostname |
+| [`sf promote`](/cli/reference#sf-promote-version) | Point `live` at a ready version (non-destructive; no confirmation prompt) |
+| [`sf rollback`](/cli/reference#sf-rollback-version) | Move `live` back to an older retained ready version |
+| [`sf redeploy`](/cli/reference#sf-redeploy-build) | Re-run a previous build |
+| [`sf channels list`](/cli/reference#sf-channels-list) | List channels and their active versions |
+| [`sf channels set`](/cli/reference#sf-channels-set-name) | Switch a channel's promotion policy between `auto` and `manual` |
+| [`sf channels history`](/cli/reference#sf-channels-history-name) | Show promotion history for a channel |
+| [`sf apply`](/cli/reference#sf-apply) | Re-finalize the live version to apply saved Space settings |
+| [`sf migrate`](/cli/reference#sf-migrate-url) | Import and publish an external website from a public URL |
+
+`sf publish` never uploads `.env*`, `.git/`, `node_modules/`, or private key files (`*.pem`, `*.key`, `*.p12`, `*.pfx`). On an anonymous publish, `claim.key` stays `[REDACTED]` in `--json` and non-interactive output unless you pass `--show-secret`. `sf rollback` refreshes current rewrites by default; pass `--no-refresh-rewrites` to restore the exact earlier version.
+
+### Spaces
+
+| Command | What it does |
+| --- | --- |
+| [`sf spaces list`](/cli/reference#sf-spaces-list) | List Spaces you can reach |
+| [`sf spaces create`](/cli/reference#sf-spaces-create) | Create a new Space |
+| [`sf spaces inspect`](/cli/reference#sf-spaces-inspect) | Show a Space's configuration, runtime, and live version |
+| [`sf spaces check`](/cli/reference#sf-spaces-check-name) | Check slug availability (advisory; max 55 characters) |
+| [`sf spaces update`](/cli/reference#sf-spaces-update) | Update a Space's slug or settings |
+| [`sf spaces claim`](/cli/reference#sf-spaces-claim) | Claim an anonymous Space into your account |
+| [`sf spaces download`](/cli/reference#sf-spaces-download) | Download a version's files locally |
+| [`sf spaces duplicate`](/cli/reference#sf-spaces-duplicate) | Copy a Space into a new Space |
+| [`sf spaces key rotate`](/cli/reference#sf-spaces-key-rotate) | Rotate an unclaimed Space's `sfc_` key and claim link |
+| [`sf spaces archive`](/cli/reference#sf-spaces-archive) | Archive a Space |
+| [`sf spaces restore`](/cli/reference#sf-spaces-restore) | Restore a deleted or archived Space |
+| [`sf spaces delete`](/cli/reference#sf-spaces-delete) | Delete a Space |
+| [`sf spaces transfer`](/cli/reference#sf-spaces-transfer-team) | Start transferring a Space to another team |
+| [`sf transfers list`](/cli/reference#sf-transfers-list) | List incoming and outgoing Space transfers (owners and admins) |
+| [`sf transfers accept`](/cli/reference#sf-transfers-accept-transfer) | Accept a pending transfer into the target team |
+| [`sf link`](/cli/reference#sf-link) | Bind the current directory to a Space via `.spacefast/space.json` |
+| [`sf unlink`](/cli/reference#sf-unlink) | Remove the local Space link without touching the server |
+| [`sf open`](/cli/reference#sf-open-target) | Open a Space in your browser with a temporary author handoff |
+
+### Domains
+
+| Command | What it does |
+| --- | --- |
+| [`sf domains list`](/cli/reference#sf-domains-list) | List domains attached to a Space |
+| [`sf domains add`](/cli/reference#sf-domains-add-hostname) | Create, attach, and verify a custom domain |
+| [`sf domains check`](/cli/reference#sf-domains-check-domain) | Re-check DNS and TLS verification |
+| [`sf domains diagnostics`](/cli/reference#sf-domains-diagnostics-domain) | Inspect DNS, TXT proof, and certificate status |
+| [`sf domains update`](/cli/reference#sf-domains-update-domain) | Change a domain's role or primary setting |
+| [`sf domains remove`](/cli/reference#sf-domains-remove-domain) | Unassign a domain from a Space without deleting it from the team |
+| [`sf domains delete`](/cli/reference#sf-domains-delete-domain) | Delete an unassigned domain from the team inventory |
+| [`sf domains search`](/cli/reference#sf-domains-search-query) | Research available domain names and prices (never purchases) |
+| [`sf domains contacts`](/cli/reference#sf-domains-contacts) | Save and list personal registrant contacts |
+| [`sf domains registration`](/cli/reference#sf-domains-registration-domain) | Inspect, purchase, renew, or transfer domain registrations |
+| [`sf domains dns`](/cli/reference#sf-domains-dns) | Manage DNS records on Spacefast DNS |
+| [`sf domains nameservers`](/cli/reference#sf-domains-nameservers-domain) | Inspect or update nameservers |
+| [`sf domains connect`](/cli/reference#sf-domains-connect) | Manage Domain Connect authorizations and templates |
+| [`sf routing inspect`](/cli/reference#sf-routing-inspect) | Validate local redirects, rewrites, and headers |
+| [`sf routing compute`](/cli/reference#sf-routing-compute) | Preview compiled routing rules for a Space |
+| [`sf rules`](/cli/reference#sf-rules) | List, add, remove, pause, resume, test, and validate traffic rules |
+
+`sf domains contacts add` and `sf domains registration purchase` require a personal sign-in; team API keys cannot save registrant contacts or buy domains. `sf domains remove` unassigns the domain from the Space while keeping it in your team's domain inventory. Edit rules declared in `spacefast.config.ts` in the file and publish; `sf rules remove` removes only rules stored in Space settings.
+
+### Build and runtime
+
+| Command | What it does |
+| --- | --- |
+| [`sf build`](/cli/reference#sf-build-dir) | Build locally and pack `.spacefast/build-output.tgz` (`--json` streams by default) |
+| [`sf dev`](/cli/reference#sf-dev) | Run local development for the project in the current directory |
+| [`sf builds list`](/cli/reference#sf-builds-list) | List remote builds for a Space |
+| [`sf builds inspect`](/cli/reference#sf-builds-inspect-build) | Inspect one remote build |
+| [`sf builds logs`](/cli/reference#sf-builds-logs-build) | Read remote build logs |
+| [`sf builds cancel`](/cli/reference#sf-builds-cancel-build) | Cancel an in-progress build |
+| [`sf builds retry`](/cli/reference#sf-builds-retry-build) | Re-run a terminal build with the same immutable input |
+| [`sf builds detect`](/cli/reference#sf-builds-detect-dir) | Inspect detected framework and build candidates |
+| [`sf git`](/cli/reference#sf-git) | Connect, update, sync, and build Git repositories |
+| [`sf source list`](/cli/reference#sf-source-list) | Browse, search, diff, branch, merge, commit, and tag managed source |
+| [`sf source availability`](/cli/reference#sf-source-availability) | Control public main-branch remixing for a Space's source |
+| [`sf functions`](/cli/reference#sf-functions) | Inspect Workers routes and runtime configuration |
+| [`sf runtime status`](/cli/reference#sf-runtime-status) | Show live version runtime metadata (Worker or capsule) |
+| [`sf crons list`](/cli/reference#sf-crons-list) | List scheduled jobs declared by the live version |
+| [`sf crons run`](/cli/reference#sf-crons-run-target) | Trigger a declared cron path on demand |
+| [`sf app`](/cli/reference#sf-app) | Inspect app environment and run remote WP-CLI (`sf app wp`) |
+| [`sf logs`](/cli/reference#sf-logs-target-kind) | Read `access`, `edge`, and `runtime` logs (`--follow` polls) |
+| [`sf analytics`](/cli/reference#sf-analytics) | Read live edge traffic stats (`48h`, `7d`, or `30d`) |
+| [`sf tags`](/cli/reference#sf-tags) | Manage Spacefast Tag Manager revisions, releases, and debug sessions |
+| [`sf pages`](/cli/reference#sf-pages) | Pull and validate Spacefast-authored `_layout.html` and `_pages/*.html` |
+| [`sf design generate`](/cli/reference#sf-design-generate) | Extract `theme.json` and `_layout.html` from a `DESIGN.md` file |
+
+`sf crons run` cannot send the platform's `x-spacefast-cron` header, so handlers that require authentication on manual runs need a separate header or shared secret. `sf logs --follow` polls rather than opening a persistent socket and remembers up to 5,000 seen keys. Remote `sf app wp` reports exit status and duration without returning command stdout.
+
+### Data
+
+| Command | What it does |
+| --- | --- |
+| [`sf db`](/cli/reference#sf-db-target) | Inspect a Space's database tables, columns, and migration state |
+| [`sf db rows`](/cli/reference#sf-db-rows) | List, add, update, and delete rows in declared tables |
+| [`sf db dump`](/cli/reference#sf-db-dump-target) | Dump table rows |
+| [`sf db export`](/cli/reference#sf-db-export-target) | Export declared tables to a versioned JSON backup |
+| [`sf db migrate`](/cli/reference#sf-db-migrate-source) | Apply schema migrations |
+| [`sf db console`](/cli/reference#sf-db-console-target) | Open a single-use browser SQL console (write access required) |
+| [`sf storage`](/cli/reference#sf-storage-target) | List runtime storage objects |
+| [`sf storage put`](/cli/reference#sf-storage-put-file) | Upload a file to runtime object storage |
+| [`sf storage download`](/cli/reference#sf-storage-download-object) | Download a stored object |
+| [`sf storage delete`](/cli/reference#sf-storage-delete-object) | Delete a stored object as the Space owner |
+| [`sf env`](/cli/reference#sf-env) | List, set, import, pull, and remove Space environment variables |
+| [`sf connectors`](/cli/reference#sf-connectors) | Register tool sources, connect accounts, set policies, bind roles, and run tools |
+
+New variables created with `sf env set` default to write-only secrets; pass `--value-from-stdin` to keep secrets out of shell history, or `--no-secret` for readable values. `sf env pull` skips write-only secrets and writes mode `0600`. `sf env` names starting with `SPACEFAST_` are reserved.
+
+### Access and sharing
+
+| Command | What it does |
+| --- | --- |
+| [`sf share`](/cli/reference#sf-share) | Manage Grants on a Space |
+| [`sf share list`](/cli/reference#sf-share-list) | List every active Grant across audiences |
+| [`sf share check`](/cli/reference#sf-share-check) | Explain which Grants match one route, audience, and target |
+| [`sf share grant`](/cli/reference#sf-share-grant) | Add a `public`, `team`, or `parent_team` Grant |
+| [`sf share revoke`](/cli/reference#sf-share-revoke-grant) | Revoke a managed Grant by ID |
+| [`sf share link`](/cli/reference#sf-share-link) | Create, list, copy, update, and revoke share links |
+| [`sf share password`](/cli/reference#sf-share-password) | Create, list, rotate, and revoke password Grants (Argon2id) |
+| [`sf share people`](/cli/reference#sf-share-people) | Invite, list, update, resend, and remove named People |
+| [`sf share token`](/cli/reference#sf-share-token) | Create, list, rotate, and revoke `sfm_` machine credentials |
+| [`sf share request`](/cli/reference#sf-share-request) | List, approve, and deny visitor access requests |
+| [`sf share identity`](/cli/reference#sf-share-identity) | Manage team OIDC or signer connections and external subject Grants |
+| [`sf access sessions revoke`](/cli/reference#sf-access-sessions-revoke) | Revoke every active visitor session on a Space |
+| [`sf comments`](/cli/reference#sf-comments) | List, inspect, create, reply, react, resolve, export, and configure Comments |
+| [`sf oauth-apps`](/cli/reference#sf-oauth-apps) | Register and manage Sign in with Spacefast OAuth apps |
+
+Grants are additive, so a Space with no Grants is private. Edit Grants declared in `spacefast.config.ts` in the file and publish instead of running `sf share revoke`. The API rejects unsupported IP/CIDR `--network` rules on writes.
+
+### Teams and billing
+
+| Command | What it does |
+| --- | --- |
+| [`sf teams`](/cli/reference#sf-teams) | List, create, join, and manage teams |
+| [`sf teams switch`](/cli/reference#sf-teams-switch-team) | Set the default team for future CLI commands |
+| [`sf teams defaults`](/cli/reference#sf-teams-defaults-access) | Read or set default access for new Spaces |
+| [`sf teams members`](/cli/reference#sf-teams-members) | List team members and send invitations |
+| [`sf teams invitations`](/cli/reference#sf-teams-invitations) | List pending team invitations |
+| [`sf teams subteams`](/cli/reference#sf-teams-subteams) | Manage subteams and subteam membership |
+| [`sf teams domains`](/cli/reference#sf-teams-domains) | Manage auto-enroll email domains |
+| [`sf api-keys`](/cli/reference#sf-api-keys) | Create, list, update, and revoke team API keys |
+| [`sf deploy-tokens`](/cli/reference#sf-deploy-tokens) | Create, list, update, rotate, and revoke deploy tokens |
+| [`sf usage`](/cli/reference#sf-usage) | Inspect team and Space metered usage |
+| [`sf budget`](/cli/reference#sf-budget) | List, set, and clear monthly usage budgets |
+| [`sf billing card`](/cli/reference#sf-billing-card) | Inspect the team's saved payment card |
+| [`sf purchases inspect`](/cli/reference#sf-purchases-inspect-id) | Inspect, confirm, or cancel a team purchase |
+
+`sf teams accept`, `sf teams members remove`, `sf teams invitations resend`, and `sf teams invitations cancel` require a dashboard browser session and return `403 authorization_level_not_allowed` with CLI credentials. `sf api-keys create` prints the one-time secret in human output and masks it under `--json`, so run without `--json` when copying a new key.
+
+### Agents
+
+| Command | What it does |
+| --- | --- |
+| [`sf setup`](/cli/reference#sf-setup) | Interactive onboarding for CLI login, agent tooling, and first publish |
+| [`sf setup agent`](/cli/reference#sf-setup-agent) | Detect supported coding agents and configure Spacefast skills and MCP |
+| [`sf mcp`](/cli/reference#sf-mcp) | Run the local On-Device MCP server over stdio |
+| [`sf mcp install`](/cli/reference#sf-mcp-install) | Write MCP config for detected or selected coding agents |
+| [`sf mcp proxy`](/cli/reference#sf-mcp-proxy) | Proxy hosted Spacefast MCP over stdio using your CLI login |
+| [`sf skills`](/cli/reference#sf-skills) | Install, check, or remove the bundled `spacefast` agent skill |
+| [`sf agents init`](/cli/reference#sf-agents-init-directory) | Insert or refresh the managed Spacefast block in `AGENTS.md` |
+| [`sf plugins`](/cli/reference#sf-plugins) | Install the Spacefast plugin for coding agents that support plugins |
+| [`sf continue`](/cli/reference#sf-continue) | Exchange a saved `sfc_` Space key for a durable API key after claim approval |
+
+`sf mcp proxy` caps individual responses at 32 MiB and times out requests after 55 seconds. `sf mcp` restricts publish paths to the workspace root and refuses absolute paths, escaping paths, and symlinks.
+
+### Utilities
+
+| Command | What it does |
+| --- | --- |
+| [`sf login`](/cli/reference#sf-login) | Sign in through the browser or store an API key |
+| [`sf logout`](/cli/reference#sf-logout) | Remove local login and revoke CLI-minted credentials |
+| [`sf whoami`](/cli/reference#sf-whoami) | Print the authenticated account and teams |
+| [`sf auth`](/cli/reference#sf-auth) | Set or clear the local dev guest identity (`sf auth as`, `sf auth reset`) |
+| [`sf status`](/cli/reference#sf-status) | Show active auth, default team, and linked Space |
+| [`sf switch`](/cli/reference#sf-switch-team) | Switch default team |
+| [`sf profiles`](/cli/reference#sf-profiles) | Manage named API base URL and credential profiles |
+| [`sf inspect`](/cli/reference#sf-inspect-target) | Inspect any Space by slug, ID, or URL |
+| [`sf fetch`](/cli/reference#sf-fetch-path) | Fetch a private Space path using the browser cookie exchange flow |
+| [`sf resolve`](/cli/reference#sf-resolve-ref) | Resolve a Space, domain, or URL reference |
+| [`sf operations`](/cli/reference#sf-operations-operation) | List or inspect asynchronous operations (no `--follow`; re-run to poll) |
+| [`sf activity`](/cli/reference#sf-activity) | Read the audit trail for a team or Space |
+| [`sf api`](/cli/reference#sf-api-method-path) | Send authenticated requests to `/v1/` endpoints with optional `--paginate` |
+| [`sf search`](/cli/reference#sf-search) | Find the CLI command for a task offline |
+| [`sf docs`](/cli/reference#sf-docs-query) | Search bundled Spacefast documentation offline |
+| [`sf map`](/cli/reference#sf-map) | Output every CLI command, argument, and option as text or JSON |
+| [`sf doctor`](/cli/reference#sf-doctor) | Check local state, project config, auth, API reachability, and Space health |
+| [`sf feedback`](/cli/reference#sf-feedback) | Send, list, or inspect feedback reports |
+| [`sf autocomplete`](/cli/reference#sf-autocomplete-shell) | Configure shell tab completion |
+
+`sf api` calls `/v1/` paths only, prints the raw API body verbatim (or `{"data":null}` on `204`, `205`, and `304`), and prints selected response headers to stderr with `--include`. `--paginate` works only on `GET` operations declared as cursor-paginated lists in the bundled OpenAPI spec.

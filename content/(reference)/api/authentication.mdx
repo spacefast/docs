@@ -1,8 +1,6 @@
 ---
 title: API authentication
 description: Every credential the Spacefast API accepts, where each one is created, what it can reach, and which routes refuse it
-sidebar:
-  order: 2
 ---
 
 The API takes one header, but a valid token can still get a 403 on some routes.
@@ -63,7 +61,7 @@ const created = await client.post("/v1/api-keys", {
 | Field | Type | What it does |
 | --- | --- | --- |
 | `name` | string, 1 to 255 | Label shown in listings. Optional. |
-| `scope` | `{kind:"team",teamId}`, `{kind:"partner",teamId}`, or `{kind:"space",spaceId}` | What the key can reach. A `space` scope narrows to that Space, never the owning team's tree. |
+| `scope` | `{kind:"team",teamId}` or `{kind:"space",spaceId}` | What the key can reach. A `space` scope narrows to that Space, never the owning team's tree. |
 | `permissions` | 1 to 64 action strings | The actions the key may take. |
 | `metadata` | object | Free-form. Optional. |
 | `ipAllowlist` | up to 100 strings, each ≤ 255 chars | Restrict the key to these addresses. Optional, nullable. |
@@ -92,7 +90,7 @@ The presets and what they grant:
 | Billing viewer | `teams:read`, `billing:read`. |
 | Team admin | `*`, everything the team can do. |
 
-An API key carries its own request budget of 50,000 requests per rolling hour, on top of the [general rate limits](/api/rate-limits).
+API keys use the request-wide per-credential rate limit. See [Rate limits](/api/rate-limits).
 
 ## Space keys
 
@@ -110,7 +108,7 @@ It is a management capability for an unclaimed Space, not a share link. Anyone h
 
 An `sfm_` credential is `sfm_` plus a 43-character opaque token, minted for one Space so a machine can reach it without a team-wide key. `POST /v1/spaces/{spaceId}/machine-credentials` takes a `name`, the `resources` and `capabilities` the credential may use, and a `target`, then returns `{ credential, token }`.
 
-The token is returned exactly once, on create and on rotate, and it is accepted only in the `Authorization` header. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
+The token is returned once, on create and on rotate. API requests accept it only in the `Authorization` header; requests to the Space itself send it as `X-SF-Authorization: Bearer sfm_…`, because the Space passes `Authorization` through to your own application. Afterwards listings show a hint of the form `sfm_…<last 4>`. Rotate with `POST .../machine-credentials/{credentialId}/rotate`, which invalidates the previous token and keeps the grant. Revoke with `DELETE .../machine-credentials/{credentialId}`.
 
 Creating, rotating, and revoking a machine credential all need an API key or a session. A machine credential cannot mint another one.
 
@@ -133,7 +131,6 @@ Authorization code is the flow for people, client credentials for machines. The 
 | `teams:read` | Read the teams the account belongs to. |
 | `teams:create` | Create teams. |
 | `teams:members.write` | Invite people to teams the account can administer. |
-| `sell:write` | Set up Sell, enable live sales, resend downloads, and mark orders shipped. |
 | `spaces:read` | Read Spaces, versions, and build status. |
 | `spaces:write` | Create and update Spaces and their settings. |
 | `spaces:rename` | Rename Space slugs and managed addresses. |
@@ -142,7 +139,6 @@ Authorization code is the flow for people, client credentials for machines. The 
 | `versions:download` | Read files from deployment versions. |
 | `publish:write` | Publish new immutable versions. |
 | `spaces:publish` | Publish a version to an existing Space. |
-| `builds:trigger` | Start a build for an existing version. |
 | `domains:read` | Read Space hostnames and certificate status, plus domain registrations and DNS records when enabled. |
 | `domains:write` | Manage Space hostnames, and start domain purchases and manage DNS records when enabled. |
 | `billing:read` | Read team plans, subscriptions, usage, and saved payment method details. |
@@ -152,9 +148,10 @@ Authorization code is the flow for people, client credentials for machines. The 
 | `connectors:write` | Connect and disconnect services, and set tool policy. |
 | `connectors:execute` | Run tools on services the team connected, with real accounts and data. |
 | `person-pages:read` | Read private pages other people shared with the account personally. |
+| `poppy:browser-sign-in` | Use the Spacefast dashboard in an agent browser, limited to the other approved scopes. |
 | `offline_access` | Refresh access without another interactive sign-in. |
 
-`spaces:publish` and `builds:trigger` exist only on the API resource. Their actions are already covered by `publish:write`.
+`spaces:publish` exists only on the API resource; its actions are already covered by `publish:write`.
 
 A token that authenticates but lacks a scope set the operation accepts fails with `insufficient_scope`.
 

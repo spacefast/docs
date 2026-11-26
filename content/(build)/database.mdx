@@ -1,199 +1,128 @@
 ---
 title: Database
-description: Every Zero Space gets its own MySQL. Declare tables in your capsule, migrate on publish, read rows with sf db, and open a single-use SQL console when you need one.
-sidebar:
-  order: 2
+description: Every provisioned Space gets its own MySQL database. Query it from app code or Workers via env.DB, inspect tables and rows with sf db, or open a SQL console
 ---
 
-This database has no connection string. Your code reaches it through `ctx.db` or `env.DB`, or through a single-use SQL console when you need raw SQL.
+Every provisioned Space gets its own MySQL database with no connection string to manage. Reach it through `db` in app code or `env.DB` in a [Worker](/functions). You can also inspect tables, edit rows, export data, or open a single-use SQL console from the CLI, dashboard, and API.
 
-:::note[Don't have a database yet?]
-For [Zero](/zero-runtime), start with `sf init --runtime zero`, or add the full [runtime block](/zero-runtime#declare-it) to `sf.jsonc`, including `kind: "zero"`, `server`, and `client` entry paths. The server file is required; Zero can generate a client shell. Publish the app before querying its live database. A [Functions](/functions#what-is-on-env) worker also gets a database through `env.DB`, but the Zero table commands do not apply to it.
+## How a Space gets a database
+
+A Space receives a dedicated MySQL database automatically once provisioned, with no extra setup or flag required.
+
+- **Collections and tables:** Declare `app.collections` or `app.tables` in `spacefast.config.ts` (or in `sp/` source files) and query them through `db`. See [Collections and CMS](/collections).
+- **Workers:** Every [Worker](/functions) receives `env.DB`, a D1-shaped SQL binding backed by your Space's MySQL through a broker, so no credentials or DSN ever enter your bundle.
+- **Any provisioned Space:** `sf db tables`, `sf db rows`, and `sf db console` work against the Space's database on any runtime.
+
+:::caution[There is no external connection string]
+No route, flag, or dashboard field returns a database DSN. Your code reaches MySQL through `db` or `env.DB`. For direct SQL queries, open the single-use SQL console below.
 :::
 
-## What it is
+## Query from code
 
-Every Space that runs [Zero](/zero-runtime) gets one database, the MySQL that lives on the machine serving the Space. A [Functions](/functions) worker gets one too, as `env.DB`.
+In a [Worker](/functions), `env.DB` exposes the D1 query interface:
 
-You do not create it, size it, or connect to it. Your capsule declares the tables. The platform applies the migration when a version finalizes.
-
-:::warning[There is no external connection string]
-No route, flag, or dashboard field returns a DSN. Your code reaches the database through `ctx.db` (Zero) or `env.DB` (Functions). For everything else there is the SQL console below.
-:::
-
-## Query it from code
-
-In a Zero capsule the schema you declared is the API.
-
-```ts server/index.ts
-import { capsule, mutation, query, string, table } from "@spacefast/zero/server";
-
-export default capsule({
-  name: "notes",
-  schema: {
-    notes: table({ body: string(), ownerId: string() }).index("by_owner", ["ownerId"]),
-  },
-  queries: {
-    recent: query(async (ctx) =>
-      ctx.db.notes
-        .withIndex("by_owner", (range) => range.eq("ownerId", ctx.auth.userId))
-        .order("desc")
-        .take(20),
-    ),
-  },
-  mutations: {
-    add: mutation(async (ctx, body: string) => {
-      await ctx.db.notes.insert({ body, ownerId: ctx.auth.userId });
-      ctx.invalidate("recent");
-    }),
-  },
-});
+```ts functions/api/notes.ts
+export async function GET(request: Request, { env }: { env: { DB: D1Database } }) {
+  const { results } = await env.DB.prepare("SELECT * FROM notes LIMIT 10").all();
+  return Response.json(results);
+}
 ```
 
-| Call | Available in | What it does |
-| --- | --- | --- |
-| `get(id)` | queries and mutations | One row by id, or `null` |
-| `withIndex(index, range?)` | queries and mutations | A query builder over a declared index |
-| `.order("asc" \| "desc")` | builder | Direction |
-| `.collect()` | builder | Every matching row |
-| `.take(n)` | builder | The first `n` |
-| `.first()` | builder | One row or `null` |
-| `.paginate({ cursor, numItems })` | builder | `{ page, continueCursor, isDone }` |
-| `insert(value)` | mutations and write endpoints | Returns the new row |
-| `update(id, patch)` | mutations and write endpoints | Returns the row or `null` |
-| `delete(id)` | mutations and write endpoints | Returns a boolean |
+In app code under `sp/`, import `db` from `"spacepress"` to query declared collections and tables:
 
-Index ranges take `eq`, `gt`, `gte`, `lt`, and `lte`. Every call is async, so await all of them.
+```ts sp/app/page.tsx
+import { db } from "spacepress";
 
-A Functions worker gets a D1-shaped binding instead.
-
-```ts handler.ts
-export default {
-  async fetch(request: Request, env: { DB: D1Database }) {
-    const { results } = await env.DB.prepare("select * from notes limit 10").all();
-    return Response.json(results);
-  },
-};
+export default async function Home() {
+  const notes = await db.query.notes.findMany({ columns: { title: true }, limit: 5 });
+  return <ul>{notes.map((note) => <li>{note.title}</li>)}</ul>;
+}
 ```
 
-## Inspect the schema
+## Inspect tables and rows
+
+`sf db tables` and `sf db rows` work on any provisioned Space, regardless of runtime. They list your Space's tables and the tables your code created, excluding Spacefast's internal tables.
 
 ```bash
-sf db
+sf db tables
+sf db rows list notes --limit 20
+sf db rows list notes --where status=open
+sf db rows add notes --data '{"title":"First note"}'
+sf db rows update notes --key id=1 --set title="Updated note"
+sf db rows delete notes --key id=1 --yes
 ```
 
-`sf db` reads the live version's declared tables, its migration plan, and whether that plan has been applied. It takes an optional target, so `sf db docs` reads the space `docs` without `--space`. A space id, slug, live URL, or custom domain all work.
+- `sf db rows list` returns 1 to 100 rows per page (default 50) in primary-key order. Secret columns such as password hashes and session tokens read as `[redacted]`.
+- `add`, `update`, and `delete` accept up to 50 rows in one transaction (either all changes apply or none do).
+- Rows are editable only when the table has a primary key with no binary or secret column, uses InnoDB, and has no triggers. You cannot write to binary, generated, or secret columns.
+- `sf db rows delete` prompts for confirmation; pass `--yes` for non-interactive runs. Deleted rows cannot be restored from the CLI.
 
-```text
-Backend        mysql
-Schema hash    sha256:1f9c…
-Tables         notes, sessions
-Migrations     0 pending
-```
+All table and row endpoints require write access (`spaces:write`) and an authenticated API key or CLI login.
 
-`plan.applied` can come back `null`. That means the control plane has no application record and refuses to guess, not that something failed.
+## Open the SQL console
 
-To read a locally running capsule instead of the live version, point at `sf dev`.
+When you need raw SQL, Spacefast mints a single-use phpMyAdmin sign-in URL and records the access in your Space's [activity log](/activity).
 
-```bash
-sf db --port 4173
-sf db --local-url http://127.0.0.1:4173
-```
-
-`--local-url` accepts `localhost`, `127.0.0.1`, or `::1` only. A refused port exits `40`.
-
-## Read rows
-
-```bash
-sf db dump
-sf db dump --table notes --limit 100
-```
-
-`--limit` is 1 to 100 and defaults to 25. `--table` must be a declared table name matching `/^[A-Za-z_][A-Za-z0-9_]*$/`. Omit it to dump every declared table. The dump reads through the space's live runtime, so it needs the app to be reachable.
-
-## Back up everything
-
-```bash
-sf db export
-sf db export docs --output ./docs-backup.json
-```
-
-`sf db export` walks every declared table in stable keyset pages of 500 rows and writes one JSON file. Without `--output` the file is `spacefast-backup-<space>-<timestamp>.json`.
-
-The write is atomic and mode `0600`. If the export fails part-way, an existing destination is left exactly as it was.
-
-## Migrations
-
-Your capsule's tables are the schema. Publishing a version that changes them plans a migration, and the platform applies it at finalize. `sf db migrate` applies the live plan again, or previews what your source tree would change on top of it.
-
-```bash
-sf db migrate
-sf db migrate --drop
-sf db migrate --rename
-```
-
-<Steps>
-  <Step title="Change the schema">
-    Edit `table(...)` and `.index(...)` in your server entry.
-  </Step>
-  <Step title="See the plan">
-    Run `sf db migrate` from the project directory. It computes the plan locally, prints the operations, and asks before applying.
-  </Step>
-  <Step title="Opt in to anything destructive">
-    Drops and renames are refused unless you pass `--drop` or `--rename`. The two are mutually exclusive.
-  </Step>
-</Steps>
-
-| Operation | Needs a flag |
-| --- | --- |
-| `create_table`, `add_column`, `add_index` | no |
-| `drop_table`, `drop_column`, `drop_index` | `--drop` |
-| `rename_table`, `rename_column` | `--rename` |
-
-`sf db migrate` checks whether the project uses Zero from your local `sf.jsonc` before it contacts the API. A static or Functions project fails with `runtime_kind_mismatch` and exit code `30`, having sent no request. `--previous-artifact` diffs against a named artifact instead of the live schema.
-
-`sf db`, `sf db dump`, and `sf db migrate` are Zero-only. A worker declares no table set, so they answer `runtime_kind_mismatch` for one.
-
-## The SQL console
-
-When you need raw SQL, the dashboard mints a single-use phpMyAdmin sign-in URL.
-
-Open **Database** for the space and click **Open db console**. The page shows **Backend**, **Migrations**, a **Database tables** list, and per-table **Columns** and **Indexes**.
-
-From the CLI:
+Open **Database** for the Space in the dashboard and select **Open db console**. From the CLI:
 
 ```bash
 sf db console
 sf db console --show-secret
 ```
 
-`sf db console` opens a browser by default, because the URL grants full SQL authority over the space's database. `--show-secret` prints it instead, and is the deliberate override. The URL is masked in `--json` receipts unless you pass it.
+`sf db console` opens a browser by default because the URL grants full SQL authority over the Space's database. `--show-secret` prints the URL instead, and the URL is masked in `--json` receipts unless you pass it.
 
-The console is also how you reach a Functions worker's tables, since the schema routes do not apply to one.
+## Backups and database exports
 
-Until the space runs a Zero app or a worker, the Database page shows **Database isn't enabled**.
+Spacefast takes automatic MySQL backups for every Space. Personal runs daily backups with a 7-day self-service restore window; Go runs hourly backups with 7-day restore; Pro and Enterprise run hourly backups with 30-day restore. See [Backups, archives, and exports](/exports) for full Space exports and restore details.
+
+For Spaces running an existing [Zero 0.8](/zero-migration) capsule, `sf db export` walks every declared table in stable 500-row keyset pages through `GET /v1/spaces/{spaceId}/db/export` and writes one atomic JSON backup (`mode 0600`):
+
+```bash
+sf db export
+sf db export docs --output ./docs-backup.json
+```
+
+Without `--output`, Spacefast writes `spacefast-backup-<space>-<timestamp>.json`. If the export fails part-way, any existing file at that path stays untouched.
+
+## Legacy Zero 0.8 schema commands
+
+The declared-schema commands (`sf db`, `sf db dump`, `sf db migrate`, and `sf db export`) apply only to existing [Zero 0.8](/zero-migration) capsules that declare a capsule schema. Running them against a Worker returns [`runtime_kind_mismatch`](/errors/runtime_kind_mismatch), and running them against a static Space returns [`db_not_available`](/errors/db_not_available). Use `sf db tables`, `sf db rows`, and `sf db console` instead for Workers and `spacefast.config.ts` apps.
+
+```bash
+sf db
+sf db dump --table notes --limit 100
+sf db migrate
+```
+
+- `sf db` inspects the live Zero 0.8 version's declared tables, schema hash, and pending migration plan (`--port` or `--local-url` targets a local `sf dev` loopback server).
+- `sf db dump` reads 1 to 100 rows per declared table (default 25) through the live runtime.
+- `sf db migrate` checks your local project configuration (`spacefast.config.ts` or `sf.jsonc`) before contacting the API, re-applies the live capsule's stored migration plan, and previews additive source changes.
 
 ## Limits
 
 | Limit | Value |
 | --- | --- |
 | Databases per Space | 1 |
-| `sf db dump --limit` | 1 to 100, default 25 |
-| Export page size | 500 rows, fixed |
-| Field types you can declare | `string()`, `number()`, `boolean()`, `userId()`, `id("table")` |
-| Reserved column names | `id`, `createdAt`, `updatedAt` |
-| Reserved index name | `by_creation` |
+| `sf db rows list --limit` | 1 to 100, default 50 |
+| `sf db rows` batch write (`add`, `update`, `delete`) | 50 rows per transaction |
+| `sf db dump --limit` (Zero 0.8) | 1 to 100, default 25 |
+| `sf db export` page size (Zero 0.8) | 500 rows, fixed |
 
 ## API
 
 | Operation | Route |
 | --- | --- |
+| [`listSpaceDatabaseTables`](/api/reference/database/listspacedatabasetables) | `GET /v1/spaces/{spaceId}/db/tables` |
+| [`listSpaceDatabaseRows`](/api/reference/database/listspacedatabaserows) | `GET /v1/spaces/{spaceId}/db/tables/{table}/rows` |
+| [`createSpaceDatabaseRows`](/api/reference/database/createspacedatabaserows) | `POST /v1/spaces/{spaceId}/db/tables/{table}/rows` |
+| [`updateSpaceDatabaseRows`](/api/reference/database/updatespacedatabaserows) | `PATCH /v1/spaces/{spaceId}/db/tables/{table}/rows` |
+| [`deleteSpaceDatabaseRows`](/api/reference/database/deletespacedatabaserows) | `DELETE /v1/spaces/{spaceId}/db/tables/{table}/rows` |
+| [`openSpaceDatabaseConsole`](/api/reference/database/openspacedatabaseconsole) | `POST /v1/spaces/{spaceId}/db/console` |
 | [`getSpaceDatabase`](/api/reference/database/getspacedatabase) | `GET /v1/spaces/{spaceId}/db` |
 | [`getSpaceDatabaseDump`](/api/reference/database/getspacedatabasedump) | `GET /v1/spaces/{spaceId}/db/dump` |
 | [`getSpaceDatabaseExport`](/api/reference/database/getspacedatabaseexport) | `GET /v1/spaces/{spaceId}/db/export` |
+| [`getSpaceDatabaseExportPage`](/api/reference/database/getspacedatabaseexportpage) | `GET /v1/spaces/{spaceId}/db/export/{table}` |
 | [`migrateSpaceDatabase`](/api/reference/database/migratespacedatabase) | `POST /v1/spaces/{spaceId}/db/migrate` |
-| `openSpaceDatabaseConsole` | `POST /v1/spaces/{spaceId}/db/console` |
 
-## Next steps
-
-Use [CLI database commands](/cli/db) to inspect tables or export data.
+See [`sf db`](/cli/reference#sf-db-target) in the CLI reference for every subcommand and flag.

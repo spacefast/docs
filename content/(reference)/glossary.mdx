@@ -1,56 +1,78 @@
 ---
 title: Glossary
 description: Core Spacefast terms used across these docs, defined in one place
-sidebar:
-  order: 3
 ---
 
-Definitions of Spacefast terms, with links to the guides that explain them.
+Core terms used across the Spacefast documentation, with links to the guides that explain each one in detail.
 
 ## Ability
 
-A named operation with a schema that a Space's WordPress publishes for agents to call. Some ship with the runtime itself and exist on every Space; others come from an app you publish. See [WordPress on every Space](/wordpress).
+A named, schema-backed operation that a Space's runtime publishes for agents and scripts to discover and call. Some Abilities ship with the platform; others come from an application you publish. See [Build overview](/build).
+
+## Action
+
+A server-side mutation or form handler declared under `app.actions` in `spacefast.config.ts` (or `spacepress.config.ts`) that runs on your Space's backend with access rules and validation. See [Actions](/actions).
 
 ## Build
 
-A build turns source code into publishable output. You can build locally or let Spacefast build remotely and publish the result. See [Frameworks and builds](/frameworks).
+The step that turns project source code into publishable output. You can build locally with `sf build` or let Spacefast build remotely from a connected Git repository. See [Frameworks](/guides/frameworks).
 
 ## Capsule
 
-The compiled form of a Zero app. `sf publish` turns your TypeScript server code into a capsule, which the platform installs on the Space. See [Dynamic sites with Zero](/zero-runtime).
+The compiled server bundle of a legacy Zero 0.8 application. `sf publish` compiles Zero TypeScript server code into a capsule that installs onto the Space alongside its database. See [Migrating from Zero 0.8](/zero-migration).
+
+## Channel
+
+A named pointer from a Space to one ready version. `live` is the production channel that your default hostname and custom domains follow, using either `auto` or `manual` promotion. Connected Git branches also maintain branch preview URLs that track the latest version on each branch. See [Channels and previews](/channels) and [Versions](/versions).
 
 ## Claim / claiming
 
-Attaching an anonymous Space (one published with no account) to a real account and team, so it stops counting down to its expiry deadline. See [Publish without an account](/anonymous-and-claim).
+Attaching an anonymous Space (published without an account) to a Spacefast account and team, which removes its expiry countdown and unlocks full serving capabilities. See [Anonymous publish and claiming](/agents/anonymous-and-claim).
+
+## Collection
+
+A structured content type declared under `app.collections` in `spacefast.config.ts` (or `spacepress.config.ts`), backed by your Space's database with typed fields and access rules. See [Collections](/collections).
 
 ## Drop
 
-The drag-and-drop publish flow at [drop.fast](https://drop.fast): drag a folder, a `.zip`, or a single `index.html` onto the window. No install, no account required. See [Publishing](/publish#publish).
+The drag-and-drop publish flow at [drop.fast](https://drop.fast): drag a folder, a `.zip`, or a single `index.html` into the browser to publish with no install and no account required. See [Publishing](/publish#publish).
 
 ## Functions
 
-The runtime that runs a server worker next to your Space, with npm packages, framework server output, and outbound HTTP. It and [Zero](#zero) are the two options for Spaces that need more than static files. See [Functions](/functions).
+The runtime that runs a [Worker](#worker) alongside your Space's static files, supporting npm packages, framework server output (including OpenNext Next.js), and outbound HTTP. See [Functions](/functions).
 
 ## Grant
 
-One rule in a Space's access list: it names an audience (public, team, one person, a link, a password, a machine, or an external identity) and what that audience can do. A Space has no public or private switch. Its grants alone decide who can reach it. See [Spacefast Share](/share).
+One rule in a Space's access list naming an audience (`public`, `team`, a named person, a share link, a password, a machine credential, or an external identity), a role, route patterns, and a target. Grants are additive; a Space with no matching Grants is private. See [Share and access](/share).
 
 ## Live (the live channel)
 
-The pointer that selects the version served at the live URL. Promoting or rolling back points it at a retained, ready version without running a build. Moving it to an older version applies your current rewrites by default, which makes a new version from that version's files. Publishing can build a new version; preview publishes and manual promotion policies leave `live` unchanged. See [Versions and the live channel](/versions).
+The production [channel](#channel) that selects the version served at a Space's live URL and custom domains. Promoting or rolling back repoints `live` at a retained, ready version without rebuilding. Moving `live` to an older version applies your current rewrites by default, which creates a new version from that version's files. Preview publishes and manual promotion policies leave `live` unchanged. See [Versions](/versions).
+
+## Poppy
+
+The Personal Agent Protocol (`Poppy 1.0`) supported by Spacefast so personal agents can authenticate with OAuth, discover supported tasks and skills, and sign an agent browser into a scoped dashboard session using the `poppy:browser-sign-in` scope. See [Poppy](/agents/poppy).
 
 ## Space
 
-A container for versions and access settings, served at its own hostname. It can exist before anything is published. Custom domains belong to a team and are assigned to a Space. See [Spaces](/spaces).
+A container for versions, domains, data, and access settings, served at its own hostname. A Space can exist before anything is published. Custom domains belong to a team and are assigned to a Space. See [Spaces](/spaces).
 
 ## Team
 
-The owner of Spaces, domains, API keys, and billing in a self-serve account, even when you are its only member. Partner API integrations can use external principals for customer ownership instead. See [Teams and members](/teams).
+The owner of Spaces, domains, API keys, and billing in a self-serve account, even when you are the only member. Partner API integrations can use external principals for customer ownership instead. See [Teams and members](/teams).
+
+## Traffic Rules
+
+Edge firewall and cache-bypass rules declared under `firewall` and `cache.bypass` in `spacefast.config.ts` or in Space settings. Traffic Rules block, challenge, or bypass cache for requests matching attributes such as path, IP, country, headers, cookies, or query parameters before they reach the Space. See [Redirects and rewrites](/redirects).
 
 ## Version
 
-An immutable snapshot created when a publish produces a new version. A ready version gets its own URL, which serves the snapshot while the version is retained. The [live](#live-the-live-channel) pointer names the version visitors see; it is empty before the first publish. See [Versions and the live channel](/versions).
+An immutable snapshot created when a publish changes files or configuration. Every ready version gets its own immutable URL, which serves that exact snapshot while the version is retained. The [live](#live-the-live-channel) channel points to the version visitors see; it is empty before the first publish. See [Versions](/versions).
+
+## Worker
+
+The compiled JavaScript server code run by [Functions](#functions) in an isolated runtime beside a Space's static files. Static assets serve directly from the Space, while a Worker handles the dynamic routes it claims, with access to `env.DB`, storage, connectors, and outbound `fetch()`. See [Functions](/functions).
 
 ## Zero
 
-The runtime for an app with live queries and a declared database schema. One TypeScript app compiles into a [capsule](#capsule) with a MySQL database next to your code. [Functions](#functions) also provides a database, and [crons](/crons) can call either runtime or static files. See [Dynamic sites with Zero](/zero-runtime).
+The earlier transactional app runtime that compiles TypeScript tables, queries, mutations, actions, and HTTP endpoints into a [capsule](#capsule) paired with a MySQL database. New apps declare `collections` and `actions` directly in `spacefast.config.ts` or use [Functions](#functions). See [Migrating from Zero 0.8](/zero-migration).

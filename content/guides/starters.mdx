@@ -1,0 +1,107 @@
+---
+title: Starters and templates
+description: Scaffold a new Spacefast project with sf init or add starter source files with sf add
+---
+
+`sf init` creates a new Spacefast project with `spacefast.config.ts` and starter files. `sf add` writes editable source files for a contact form, sign-in, or an AI route into an existing project. Neither command locks you into a generator: every file becomes yours to edit.
+
+## Create a project with `sf init`
+
+Run `sf init` with a directory name to create a new folder, or omit the name to initialize the current directory.
+
+```bash
+sf init my-space
+```
+
+Without `--template`, `sf init` scaffolds the default `app` starter: `spacefast.config.ts`, a starter collection, a server action in `sp/actions.ts`, and a starter page in `sp/app/page.tsx`.
+
+### Templates
+
+Pass `--template` to pick a starter:
+
+| Template | What `sf init` writes | Next step |
+| --- | --- | --- |
+| `app` (default) | `spacefast.config.ts`, a starter `notes` collection, `sp/actions.ts`, and `sp/app/page.tsx` | `sf check`, then `sf publish` |
+| `static` | Only `spacefast.config.ts`, with commented config examples | `sf dev`, then `sf publish` |
+| `next` | A Next.js 16 + React 19 starter (`package.json`, `next.config.mjs`, `tsconfig.json`, `app/layout.tsx`, `app/page.tsx`) alongside `spacefast.config.ts` | `npm install && sf dev` |
+| `astro` | An Astro starter (`package.json`, `astro.config.mjs`, `src/pages/index.astro`) alongside `spacefast.config.ts` | `npm install && sf dev` |
+
+Create a framework starter or a config-only static project by naming the template:
+
+```bash
+sf init my-next-app --template next
+sf init my-astro-app --template astro
+sf init --template static --space docs
+```
+
+### Flags and safety checks
+
+Preview the plan before writing anything with `--dry-run`:
+
+```bash
+sf init my-space --dry-run --json
+```
+
+| Flag | What it does |
+| --- | --- |
+| `--template=<option>` | Starter to scaffold (`app`, `static`, `next`, or `astro`). Defaults to `app` unless you pass `--space` |
+| `--space=<space>` | Link the directory to an existing Space in `.spacefast/space.json`. Works only with `--template static`; passing `--space` without `--template` selects `static` |
+| `-T`, `--team=<team>` | Team context when resolving `--space` |
+| `--dry-run` | Print the target directory, template, and file list without writing |
+| `--force` | Overwrite existing generated files |
+| `-y`, `--yes` | Confirm scaffolding into a directory that already has other files |
+
+`sf init` prints its plan to stderr before writing. Adding an app starter to a non-empty directory asks for confirmation unless you pass `--yes`. `--template static` writes one file and never prompts. Both paths refuse symbolic links, refuse to write outside the current directory, and roll back a newly created directory if initialization fails.
+
+See [`sf init`](/cli/reference#sf-init-name) for the full flag reference and [Project configuration](/config-file) for `spacefast.config.ts`.
+
+## Add starter code with `sf add`
+
+`sf add RECIPE [DIRECTORY]` writes plain source files into an existing project. Existing files stay untouched unless you pass `--force`.
+
+```bash
+sf add form
+```
+
+Pass a second argument to target another directory, or omit it to write into the current directory.
+
+### Recipes
+
+| Recipe | Files written | What it gives you |
+| --- | --- | --- |
+| `form` | `sp/contact.ts`, `sp/app/contact/page.tsx` | A contact form at `/contact` backed by a `contactMessages` table, a rate-limited server action (`5/min`), and transactional email via `mail.send()`. Change the `to:` address in `sp/contact.ts` before publishing |
+| `auth` | `sp/app/login.tsx`, `sp/app/account/page.tsx` | A sign-in page using [Sign in with Spacefast](/share) and a protected `/account` page that redirects signed-out visitors |
+| `ai-route` | `functions/api/chat.ts` | A streaming `POST /api/chat` [Functions](/functions) route using the AI SDK (`ai` and `@ai-sdk/openai`) |
+
+Preview a recipe or add an AI route with its JSON receipt:
+
+```bash
+sf add form --dry-run
+sf add auth
+sf add ai-route --json
+```
+
+For `ai-route`, install the AI SDK packages and store your OpenAI key as a Space [environment variable](/environment-variables) before publishing:
+
+```bash
+npm install ai @ai-sdk/openai
+printf %s "$OPENAI_API_KEY" | sf env set OPENAI_API_KEY --value-from-stdin
+```
+
+### Flags and safeguards
+
+| Flag | What it does |
+| --- | --- |
+| `--dry-run` | Print each file as `Would create`, `Would overwrite`, or `Kept` without writing |
+| `--force` | Overwrite files that already exist instead of keeping them |
+| `--json` | Return a structured receipt with `recipe`, `directory`, `status` (`done`, `no-op`, or `planned`), `files`, `setup`, and `next` |
+
+If every file in a recipe already exists and you omit `--force`, `sf add` reports `no-op` and changes nothing. It checks the whole target tree before writing and refuses symbolic links, missing directories, and Zero projects you have not migrated yet. Migrate Zero projects first with [`sf migrate app --from zero`](/zero-migration).
+
+See [`sf add`](/cli/reference#sf-add-recipe-directory) for the full command specification.
+
+## Next steps
+
+- Configure builds, redirects, headers, and crons in [`spacefast.config.ts`](/config-file).
+- Learn how [Collections](/collections), [Actions](/actions), [Transactional email](/email), and [Functions](/functions) work once created.
+- Run `sf publish` when you are ready to go live; see [Publishing](/publish).
