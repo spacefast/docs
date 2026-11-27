@@ -12,6 +12,7 @@ export default defineMeta({
     "ddos-protection",
     "defensive-mode",
     "rate-limiting",
+    "http-status-codes",
     "http-security-headers",
     "filesystem-permissions",
     "edge-request-logs",

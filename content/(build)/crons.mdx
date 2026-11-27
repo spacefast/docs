@@ -87,7 +87,7 @@ Each cron takes a slot of its own kind, in the order you declare them. A later c
 - A crontab with no advanced slot left still publishes, with a warning. It runs at its closest simple schedule and counts against the simple allowance. That can run more or less often than the crontab asked, and not at the times it names: `*/5 * * * *` runs `12h` (12 times an hour), and `0 9 * * 1-5` runs `5w` (5 times a week, not necessarily on weekdays at 9:00).
 - Crons past the allowance still publish, and the publish carries a warning. Within each kind of slot, the first ones declared run. The rest show as not scheduled, "over this plan's cron limit", on the dashboard's **Crons** page and in `sf crons list`.
 
-Advanced crons also run at their closest simple schedule for now, until advanced scheduling is enabled for the platform.
+For now, advanced crons also run at their closest simple schedule rather than exact crontab times.
 
 A raised limit applies right away. After an upgrade or Boost, crons that were waiting start running without a publish.
 

@@ -5,7 +5,7 @@ description: Save lasting team and Space facts that connected agents read before
 
 <Badge variant="warning">Labs</Badge>
 
-Team Memories stores durable facts, decisions, conventions, and preferences so every connected agent on your team reads them before creating or editing a Space. Memories are a [Labs](/labs) feature (`agents.memories`) and are not enabled for every team.
+Team Memories stores durable facts, decisions, conventions, and preferences so every connected agent on your team reads them before creating or editing a Space. Memories is a [Labs](/labs) feature you join from team settings.
 
 ## Set up team context
 
@@ -13,7 +13,7 @@ Memories share private context storage with [Team Skills](/team-skills) and [Des
 
 <Steps>
   <Step title="Enable Memories in Labs">
-    Join **Memories** (`agents.memories`) in **Team settings → Labs**. See [Labs](/labs).
+    Join **Memories** in **Team settings → Labs**. See [Labs](/labs).
   </Step>
   <Step title="Initialize context storage">
     Open **Memories** in your team and select **Set up team context** if prompted. Owners, admins, and members with publishing access can run setup.
@@ -46,7 +46,7 @@ Cache reads with the returned revision fingerprint:
 2. Pass it as `knownMemoriesRevision` on later reads.
 3. When `memories.changed` is `false`, `memories.items` comes back empty and your cached copy still applies.
 
-A team without `agents.memories` enabled receives empty memory context. Reading context never authorizes setup or a write.
+A team that hasn't joined Memories gets empty memory context. Reading context never authorizes setup or a write.
 
 ## Manage memories through the API
 

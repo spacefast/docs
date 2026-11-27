@@ -17,13 +17,13 @@ A visitor-facing rate-limit page can also represent a PHP resource-limit event, 
 
 Spacefast also limits concurrent application work. When that admission limit is reached, it returns `429` with `Retry-After`. Respect that header and retry with backoff. Repeating the same work immediately adds pressure.
 
-A [Defensive Mode](/infrastructure/defensive-mode) challenge uses `403` instead. Look at the request details before treating every rejected request as the same problem.
+A [Defensive Mode](/infrastructure/defensive-mode) challenge uses `403` instead. See [HTTP status codes](/infrastructure/http-status-codes) for every platform-controlled status code before treating every rejected request as the same problem.
 
 ## Find the affected requests
 
 ```bash
-sf logs edge --space my-site --status 429
-sf logs access --space my-site
+sf logs edge --space my-space --status 429
+sf logs access --space my-space
 ```
 
 [Edge request logs](/infrastructure/edge-request-logs) show cache handling, rate-limit reasons, and challenge details. Origin [access and runtime logs](/logs) help explain requests that reached your application. Compare the same hostname and time window.

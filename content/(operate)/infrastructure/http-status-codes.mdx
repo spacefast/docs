@@ -1,0 +1,42 @@
+---
+title: HTTP status codes
+description: Platform-controlled HTTP status codes for rate limiting, security challenges, suspension, and capacity limits on Spacefast
+---
+
+Spacefast's edge and infrastructure use specific HTTP status codes for rate limiting, security challenges, suspension, maintenance, and capacity limits. When the platform controls a response, it takes precedence before your Space's static files, custom error templates, or [Workers](/functions) run.
+
+These behaviors apply to platform-generated responses and do not replace standard HTTP semantics for responses your own Space returns.
+
+## Security, rate limiting, and capacity
+
+| Status | Spacefast platform behavior |
+| --- | --- |
+| `403` | Blocked by an access or security control, a [Defensive Mode](/infrastructure/defensive-mode) browser challenge, or crawler verification. |
+| `406` | Rejected by the edge web application firewall. |
+| `428` | Platform security or request-control response. |
+| `429` | Rate limited at the edge or by Space admission limits. Because the edge intercepts `429` for platform rate limiting, it can replace a [Worker's](/functions) `429` JSON response and headers—including `Retry-After`—with a platform HTML page. |
+| `599` | Recorded internally in logs when a Space exhausts available origin compute capacity. Visitors typically receive HTTP `429`. |
+
+Avoid assigning custom application meanings to `406`, `428`, or `599`, and do not rely on a custom JSON body or `Retry-After` header surviving a Worker-generated `429`. See [Rate limiting](/infrastructure/rate-limiting) for diagnosing `429` and `599` responses.
+
+## Suspension, pause, and maintenance
+
+When a Space is paused, suspended, or under maintenance, Spacefast returns the response directly from the edge before your application code runs:
+
+| Status | Spacefast platform behavior |
+| --- | --- |
+| `402` | Reserved for platform billing and budget pauses (for example, a suspended or budget-paused Space). See [Plans and billing](/billing). |
+| `480` | Soft suspension. Visitor HTTP requests are blocked at the edge. |
+| `403`, `404`, `410`, or `451` | Used for administrative or partner-controlled suspensions. `404` also answers for missing files or Spaces with no live version. |
+| `503` | Temporary maintenance, Space locking, or restore workflows such as a database restore. |
+
+## Inspect status codes in logs
+
+Filter edge logs by status code to tell edge-intercepted responses apart from responses your Space returned:
+
+```bash
+sf logs edge --space my-space --status 429
+sf logs access --space my-space
+```
+
+See [Edge request logs](/infrastructure/edge-request-logs), [Logs](/logs), and [`sf logs`](/cli/reference#sf-logs-target-kind) for every flag. For Spacefast REST API error codes (`api.spacefast.com`), see the [Error reference](/errors).

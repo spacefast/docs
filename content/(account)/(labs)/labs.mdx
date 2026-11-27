@@ -1,11 +1,11 @@
 ---
 title: Labs
-description: Join private-beta features for your team in Settings, check enrollment status, or opt out
+description: Join early features for your team in Settings, check status, or turn them off
 ---
 
 <Badge variant="warning">Labs</Badge>
 
-Labs lets team owners and admins opt a team into private-beta features before general availability. Joining a feature turns it on for every member and connected agent on that team.
+Labs lets team owners and admins opt a team into early features before they open to everyone. Joining a feature turns it on for every member and connected agent on that team.
 
 ## Available Labs features
 
@@ -23,30 +23,30 @@ Three team-context features are available through Labs. They share one private s
   </Card>
 </CardGroup>
 
-| Feature | Key | Enrollment |
-| --- | --- | --- |
-| [Team Memories](/team-memories) | `agents.memories` | `waitlist` |
-| [Team Skills](/team-skills) | `agents.skills` | `application` |
-| [Design System](/design-system) | `agents.design_system` | `waitlist` |
-
-## How enrollment works
-
-Open your team and go to **Team settings → Labs** to view each feature's stage, enrollment method, and current status.
-
-| Enrollment mode | What happens when you join |
+| Feature | How to join |
 | --- | --- |
-| `self` | Turns on immediately (`active`) |
-| `waitlist` | Records a `pending` request until Spacefast approves it |
-| `application` | Records a `pending` request with a required note (up to 1,000 characters) explaining what your team wants the feature for |
+| [Team Memories](/team-memories) | Join the waitlist |
+| [Team Skills](/team-skills) | Apply with a short note |
+| [Design System](/design-system) | Join the waitlist |
 
-Each enrollment holds one status:
+## How joining works
 
-- **`pending`**: waiting for Spacefast to review the request.
-- **`active`**: approved and turned on for the team.
-- **`declined`**: declined by Spacefast; you can submit a new request later.
-- **`left`**: opted out by a team owner or admin.
+Open your team and go to **Team settings → Labs** to see available features, how to join each one, and your team's current status.
 
-An `active` enrollment sets `enabled` to `true` unless an operational stop or plan requirement holds the feature off.
+| How to join | What happens |
+| --- | --- |
+| Turn on right away | Turns the feature on immediately for your team |
+| Join the waitlist | Adds your team to the waitlist until Spacefast approves access |
+| Apply with a short note | Submits a request with a required note (up to 1,000 characters) explaining what your team wants the feature for |
+
+Each feature shows your team's current status on the same page:
+
+- **On the waitlist** or **Applied**: waiting for Spacefast to review the request.
+- **On**: approved and active for your team.
+- **Paused**: temporarily paused by Spacefast or held by a plan requirement.
+- **Not yet**: declined for now; you can submit a new request later.
+
+You can turn off an active feature, leave a waitlist, or withdraw an application from the same page at any time.
 
 ### Who can join or leave
 
@@ -59,8 +59,16 @@ All paths below start with `/v1/teams/{teamId}`. See the [API reference](/api/re
 | Method and path | Operation | What it does |
 | --- | --- | --- |
 | `GET /labs` | [`listTeamLabs`](/api/reference/teams/listteamlabs) | List every Labs feature and this team's enrollment status |
-| `POST /labs/{featureKey}` | [`enrollTeamLabs`](/api/reference/teams/enrollteamlabs) | Join a feature or submit a request; send `{"note":"..."}` for `application` features |
+| `POST /labs/{featureKey}` | [`enrollTeamLabs`](/api/reference/teams/enrollteamlabs) | Join a feature or submit a request; send `{"note":"..."}` for features that require a note |
 | `DELETE /labs/{featureKey}` | [`leaveTeamLabs`](/api/reference/teams/leaveteamlabs) | Leave an active feature or withdraw a pending request |
+
+Use these keys in the API:
+
+| Feature | API key |
+| --- | --- |
+| Team Memories | `agents.memories` |
+| Team Skills | `agents.skills` |
+| Design System | `agents.design_system` |
 
 ## Shared team context setup
 

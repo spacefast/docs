@@ -1,12 +1,21 @@
 ---
-// The brand lockup: the Spacefast mark links to the Website home, "Docs" links
-// to the Docs home. Docs are always served inside the Website artifact at
-// /docs, so the configured root-relative `logo.href` ("/") is emitted as is,
-// without the deployment base, and reaches the Website home on whatever origin
-// serves the page. The Website is not part of the Docs' client router, so the
-// mark's link does a plain page load instead of a router fetch first.
+// The brand's section lockup, drawn the way Drop and Push draw it
+// ("spacefast | Drop"): the wordmark at 20px, a 28px rule in ink at 55% with
+// 14px either side, and the section name in ink at text-lg, raised 1px so the
+// lighter name sits level with the heavy wordmark. On a phone the lockup gives
+// way to the star alone at 28px.
+//
+// Two links: the logo goes to the Website home, "Docs" to the Docs home. Docs
+// are always served inside the Website artifact at /docs, so the configured
+// root-relative `logo.href` ("/") is emitted as is, without the deployment
+// base, and reaches the Website home on whatever origin serves the page. The
+// Website is not part of the Docs' client router, so the logo's link does a
+// plain page load instead of a router fetch first.
 import { withBase } from "blume/components/islands/base-path.ts";
 import type { BlumeLogo } from "blume/core/data.ts";
+
+// The logo's star alone, for phones: the shared brand asset's path.
+import star from "./spacefast-star.svg?raw";
 
 interface Props {
   site: { title: string };
@@ -16,26 +25,32 @@ interface Props {
 
 const { site, logo } = Astro.props;
 const label = logo?.text ?? site.title;
-const link = "inline-flex items-center transition-opacity hover:opacity-80";
+// The logo and a linked title share one box: 36px tall and 6px either side,
+// drawn back by matching negative margins so the lockup's spacing holds.
+const box = "-mx-1.5 inline-flex h-9 shrink-0 items-center rounded-md px-1.5";
 // The config inlines the wordmark so it follows the theme. Fail the build
-// rather than ship a header whose mark silently disappeared.
+// rather than ship a header whose logo silently disappeared.
 if (!logo?.svg) throw new Error("components/Logo.astro needs blume.config.ts `logo` to resolve to an inline SVG.");
 ---
 
-<div class="flex min-w-0 items-center gap-2" data-sf-brand>
+<div class="flex min-w-0 items-center" data-sf-brand>
   <a
     aria-label={`${logo.alt || "Spacefast"} home`}
-    class:list={[link, "shrink-0 text-foreground"]}
+    class:list={[box, "text-foreground transition-opacity hover:opacity-80"]}
     data-astro-reload
     href={logo.href}
   >
-    <span aria-hidden="true" class="inline-flex h-5 items-center [&>svg]:h-5 [&>svg]:w-auto" set:html={logo.svg} />
+    <span aria-hidden="true" class="inline-flex size-7 sm:hidden [&>svg]:size-7" set:html={star} />
+    <span aria-hidden="true" class="inline-flex h-5 items-center max-sm:hidden [&>svg]:h-5 [&>svg]:w-auto" set:html={logo.svg} />
   </a>
   {
     label && (
-      <a class:list={[link, "min-w-0 font-semibold text-base text-foreground"]} href={withBase("/")}>
-        <span class="truncate">{label}</span>
-      </a>
+      <>
+        <span aria-hidden="true" class="mx-3.5 h-7 w-px shrink-0 bg-foreground/55 max-sm:hidden" />
+        <a class:list={[box, "min-w-0 font-medium text-foreground text-lg max-sm:hidden"]} href={withBase("/")}>
+          <span class="relative -top-px truncate">{label}</span>
+        </a>
+      </>
     )
   }
 </div>

@@ -5,7 +5,7 @@ description: Turn on preset practices like SEO, accessibility, and spam protecti
 
 <Badge variant="warning">Labs</Badge>
 
-Team Skills are preset, read-only practice briefs that team owners and admins turn on so every connected agent follows the same engineering and publishing standards. Team Skills are a [Labs](/labs) feature (`agents.skills`) and are distinct from the Spacefast CLI and plugin skills documented in [Agent skills](/agents/skills).
+Team Skills are preset, read-only practice briefs that team owners and admins turn on so every connected agent follows the same engineering and publishing standards. Team Skills is a [Labs](/labs) feature and is distinct from the Spacefast CLI and plugin skills documented in [Agent skills](/agents/skills).
 
 ## Set up Team Skills
 
@@ -13,7 +13,7 @@ Team Skills share private context storage with [Team Memories](/team-memories) a
 
 <Steps>
   <Step title="Apply in Labs">
-    Apply for **Skills** (`agents.skills`) in **Team settings → Labs** with a short note explaining how your team plans to use it. See [Labs](/labs).
+    Apply for **Skills** in **Team settings → Labs** with a short note explaining how your team plans to use it. See [Labs](/labs).
   </Step>
   <Step title="Initialize context storage">
     Open **Skills** in your team and select **Set up team context** if prompted, or call [`ensureTeamContext`](/api/reference/teams/ensureteamcontext) (`POST /v1/teams/{teamId}/context`) with no request body.
@@ -46,7 +46,7 @@ Presets that require no extra setup (`seo`, `no-slop`, and `front-end-craft`) st
 
 Connected agents read enabled skills through [`getTeamAgentContext`](/api/reference/teams/getteamagentcontext) (`GET /v1/teams/{teamId}/agent-context`). The response returns `skills` as Markdown briefs alongside `skillsRevision` and `skillsChanged`.
 
-Pass `skillsRevision` back as `knownSkillsRevision` on later reads. When `skillsChanged` is `false`, `skills` comes back empty and your cached briefs still apply. A team without `agents.skills` enabled receives no team skills in agent context.
+Pass `skillsRevision` back as `knownSkillsRevision` on later reads. When `skillsChanged` is `false`, `skills` comes back empty and your cached briefs still apply. A team that hasn't joined Skills gets no team skills in agent context.
 
 ## Manage skills through the API
 

@@ -3,7 +3,7 @@ title: Infrastructure
 description: What the infra under every Space does for you, from failover and edge protection to certificates and server settings
 ---
 
-Spacefast runs on the same infra as WordPress.com and Pressable. Most of it needs no setup from you. Certificates renew automatically, failover moves traffic without a republish, and edge protection works without a plugin. These pages explain what the platform handles and the few parts left to you. [Functions](/functions) workers run separately and have their own outbound network rules.
+Spacefast runs on the same infra as WordPress.com and Pressable. Most of it needs no setup from you. Certificates renew automatically, failover moves traffic without a republish, and edge protection works without a plugin. These pages explain what the platform handles and the few parts left to you. [Workers](/functions) run separately and have their own outbound network rules.
 
 ## Availability
 
@@ -28,6 +28,9 @@ Spacefast runs on the same infra as WordPress.com and Pressable. Most of it need
   <Card title="Rate limiting" href="/infrastructure/rate-limiting" icon="gauge">
     Tell an edge traffic limit apart from application capacity when a request gets HTTP `429`.
   </Card>
+  <Card title="HTTP status codes" href="/infrastructure/http-status-codes" icon="hash">
+    Platform-controlled status codes for rate limits, security challenges, suspension, and maintenance.
+  </Card>
   <Card title="Edge request logs" href="/infrastructure/edge-request-logs" icon="scroll-text">
     Cached responses, rate limits, and browser challenges, including requests that never reached your Space's origin.
   </Card>
@@ -40,7 +43,7 @@ Spacefast runs on the same infra as WordPress.com and Pressable. Most of it need
     Spacefast provisions and renews HTTPS certificates for your Space's hostnames automatically.
   </Card>
   <Card title="HTTP and security headers" href="/infrastructure/http-security-headers" icon="lock">
-    Set your own security headers in `_headers`. The platform manages transport headers, including HTTP Strict Transport Security.
+    Set your own security headers in `spacefast.config.ts` or `_headers`. The platform manages transport headers, including HTTP Strict Transport Security.
   </Card>
   <Card title="Filesystem permissions" href="/infrastructure/filesystem-permissions" icon="folder-lock">
     A published version is an immutable snapshot. PHP filesystem permissions are a separate control over writes from PHP web requests.

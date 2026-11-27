@@ -89,7 +89,7 @@ The fallback above returns plain text `"Not found"` for every unknown path, incl
 Requests and responses are standard Web `Request` and `Response` objects with no Spacefast wrapper.
 
 :::caution[HTTP `429` responses]
-WP Cloud uses HTTP `429` for platform rate limiting and can replace a Worker's `429` JSON response with its own HTML page. Do not rely on your handler's response body or headers, including `Retry-After`, reaching the client on a `429`. See [WP Cloud HTTP status codes](https://wp.cloud/docs/troubleshooting/wp-cloud-http-status-codes/) for platform behavior.
+Spacefast uses HTTP `429` for edge and platform rate limiting and can replace a Worker's `429` JSON response with a platform HTML page. Do not rely on your handler's response body or headers, including `Retry-After`, reaching the client on a `429`. See [HTTP status codes](/infrastructure/http-status-codes) for every platform-controlled status code.
 :::
 
 ## Configure in `spacefast.config.ts`
