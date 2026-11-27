@@ -36,7 +36,8 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - [Claude Cowork](/agents/claude-cowork/)
 - [Codex](/agents/codex/)
 - [ChatGPT Work](/agents/chatgpt-work/)
-- [dots and ChatGPT Space](/agents/chatgpt-space/)
+- [dots](/agents/dots/)
+- [ChatGPT Space](/agents/chatgpt-space/)
 - [VS Code](/agents/vscode/)
 - [GitHub Copilot CLI](/agents/github-copilot/)
 - [GitHub Copilot app](/agents/github-copilot-app/)
@@ -111,10 +112,14 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - **Free, Go, Plus and Pro:** The Spacefast plugin installs on every personal plan. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Business and Enterprise:** Plugins are on by default on Business. On Enterprise an admin turns them on first. ([source](https://chatgpt.com/features/plugins/), checked 2026-11-14)
 
-### dots and ChatGPT Space
+### dots
 
-- **Free, Go and Plus:** dots and ChatGPT Space aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
+- **Free, Go and Plus:** dots aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Pro, Business Premium and Enterprise:** dots are included. On Pro they need you to be 18 or older and outside the EEA, the UK and Switzerland. ([source](https://learn.chatgpt.com/docs/dots.md), checked 2026-11-14)
+
+### ChatGPT Space
+
+- **Free, Go and Plus:** ChatGPT Space isn't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 
 ### Perplexity
 

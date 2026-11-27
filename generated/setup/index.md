@@ -24,7 +24,8 @@ the others, and the same Spacefast account works across all of them.
 - [Claude Cowork](/agents/claude-cowork/): Add Spacefast to your Claude account so Cowork tasks can publish what they make.
 - [Codex](/agents/codex/): Add Spacefast to Codex so it can publish what you build, on your computer or in the cloud.
 - [ChatGPT Work](/agents/chatgpt-work/): Add the Spacefast plugin so ChatGPT Work can publish what it makes.
-- [dots and ChatGPT Space](/agents/chatgpt-space/): Add the Spacefast plugin to your ChatGPT account so your dot can publish what it makes.
+- [dots](/agents/dots/): Give your dot one prompt and it sets up Spacefast itself.
+- [ChatGPT Space](/agents/chatgpt-space/): Add the Spacefast plugin to your ChatGPT account so ChatGPT in Space can publish what it makes.
 - [VS Code](/agents/vscode/): Add Spacefast to VS Code so Copilot can publish from agent mode.
 - [GitHub Copilot CLI](/agents/github-copilot/): Add Spacefast to GitHub Copilot CLI so it can publish from your terminal.
 - [GitHub Copilot app](/agents/github-copilot-app/): Add Spacefast to the GitHub Copilot app so its agents can publish what you build.

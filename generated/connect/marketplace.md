@@ -33,7 +33,8 @@ Agents with an official Spacefast listing. One click, reviewed by the vendor, an
 - [Claude Cowork](/agents/claude-cowork/)
 - [Codex](/agents/codex/)
 - [ChatGPT Work](/agents/chatgpt-work/)
-- [dots and ChatGPT Space](/agents/chatgpt-space/)
+- [dots](/agents/dots/)
+- [ChatGPT Space](/agents/chatgpt-space/)
 
 ## Plan limits
 
@@ -78,9 +79,13 @@ Agents with an official Spacefast listing. One click, reviewed by the vendor, an
 - **Free, Go, Plus and Pro:** The Spacefast plugin installs on every personal plan. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Business and Enterprise:** Plugins are on by default on Business. On Enterprise an admin turns them on first. ([source](https://chatgpt.com/features/plugins/), checked 2026-11-14)
 
-### dots and ChatGPT Space
+### dots
 
-- **Free, Go and Plus:** dots and ChatGPT Space aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
+- **Free, Go and Plus:** dots aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Pro, Business Premium and Enterprise:** dots are included. On Pro they need you to be 18 or older and outside the EEA, the UK and Switzerland. ([source](https://learn.chatgpt.com/docs/dots.md), checked 2026-11-14)
+
+### ChatGPT Space
+
+- **Free, Go and Plus:** ChatGPT Space isn't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 
 [Compare every way to connect](/connect/compare/) · [All agents](/agents/)

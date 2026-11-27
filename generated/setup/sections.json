@@ -106,8 +106,16 @@
       "path": "/agents/chatgpt-work/"
     },
     {
+      "id": "dots",
+      "name": "dots",
+      "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": "personal-agents",
+      "path": "/agents/dots/"
+    },
+    {
       "id": "chatgpt-space",
-      "name": "dots and ChatGPT Space",
+      "name": "ChatGPT Space",
       "group": "supported",
       "kind": "chat-app",
       "wizardGroup": "openai",

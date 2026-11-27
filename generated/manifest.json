@@ -8,8 +8,8 @@
     "errorCodes": 802,
     "partnerOperations": 459,
     "redirects": 3507,
-    "setupPages": 47,
-    "files": 930
+    "setupPages": 48,
+    "files": 931
   },
   "files": [
     {
@@ -328,9 +328,9 @@
       "sha256": "7fde4d1f364d18c734edb71488d7402786a423ed31845faf8b5ba9a1b136c104"
     },
     {
-      "bytes": 9933,
+      "bytes": 10051,
       "path": "connect/compare.md",
-      "sha256": "f918221a39aaa061d7c5ac282f6c6809470105fd2b9a17bf8fd8c9a4292a559f"
+      "sha256": "5204c4f9ce93caed19039ec59a52aadac53d0c756ed0578232bc42cd0e94bbf0"
     },
     {
       "bytes": 750,
@@ -358,9 +358,9 @@
       "sha256": "03a2220edeed0147c2f3ac671531f58cd8df8b50e40d5a6c0d0c029e5b61442d"
     },
     {
-      "bytes": 5646,
+      "bytes": 5760,
       "path": "connect/marketplace.md",
-      "sha256": "3dc7cc98f4003e10b1497164568a1682972fcf4153831fb55133d7fe47b43054"
+      "sha256": "f9acdcc89320f9a4fbce26dfee98b1f4793b5ec8a7a0504914bf5786e555c7b2"
     },
     {
       "bytes": 3711,
@@ -373,9 +373,9 @@
       "sha256": "a86a9eb0013617afc29f06f61493e8fa65fac65163195133c7860e90af878d44"
     },
     {
-      "bytes": 7420,
+      "bytes": 7534,
       "path": "connect/setup-prompt.md",
-      "sha256": "5c8e2a2ab427ad36fbd3b9fcdf661f54791157e59841d90ab4a2587d452c15c6"
+      "sha256": "725f21acda255bf09be35c473995a5a8566097fbadff2d9ea566598355ca3bd7"
     },
     {
       "bytes": 1659,
@@ -4433,9 +4433,9 @@
       "sha256": "6d7978773330de9ec69bab6ffc4d0d73d1eb025b3bf268a01aea34b3e18c7b7d"
     },
     {
-      "bytes": 1299,
+      "bytes": 1070,
       "path": "setup/chatgpt-space.md",
-      "sha256": "1d3f70bc33acb39a17a5cdbf005d69bb8b37157d42407764883cbd6af2a45cfa"
+      "sha256": "2d34fcc644a96de0e6440b592317551a9ca969a2c4ad0d3de01153dbdd8b20b4"
     },
     {
       "bytes": 1511,
@@ -4503,6 +4503,11 @@
       "sha256": "4c6c3d3c74e2cef703fb8c165da50c3a22f20e55159c883a3005a45b92481371"
     },
     {
+      "bytes": 1221,
+      "path": "setup/dots.md",
+      "sha256": "70f51493885ec05f34f069d19bcc7404ac8b107a452f1f2b21906b1c8fc958d7"
+    },
+    {
       "bytes": 2489,
       "path": "setup/factory-droid.md",
       "sha256": "afdff022197b537e9d0faaaaed0db0b2893f2ffc127b4cd231f0460eb4ed2dd2"
@@ -4553,9 +4558,9 @@
       "sha256": "4808bf746c3405e34c2041e18bdf46942dbb46674002cce2451a69b283ca55b6"
     },
     {
-      "bytes": 5398,
+      "bytes": 5480,
       "path": "setup/index.md",
-      "sha256": "bdf590647783ee1e606a15fbd58a75d2e6fd75c7df419a9ef758467a201bc7bf"
+      "sha256": "f684d82299ee449170572babcf0f42a5bfa0f927f74527ebe91fa55b88983e00"
     },
     {
       "bytes": 573,
@@ -4633,9 +4638,9 @@
       "sha256": "baf31fd2eca29f9aff3063f59ead24ed087483663293425819ad424a08310584"
     },
     {
-      "bytes": 10002,
+      "bytes": 10172,
       "path": "setup/sections.json",
-      "sha256": "663db26ec263d80164afb33c4dc9af15d80984b906f38c76cc3afcb23e01a22d"
+      "sha256": "913a56165155fe8eb1e28b6ce6d19f607b8630d99475eadcc3fc441788cb4033"
     },
     {
       "bytes": 767,

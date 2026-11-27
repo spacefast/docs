@@ -22,7 +22,8 @@ Each row is an agent, and each column is a [way to connect](/connect/). Agents a
 | [Claude Cowork](/agents/claude-cowork/) | Yes | Yes |  |  |  | Yes |  |  |  |  |  |
 | [Codex](/agents/codex/) | Yes | Yes | Yes | Yes |  | Yes | Yes | Yes |  |  | Yes |
 | [ChatGPT Work](/agents/chatgpt-work/) | Yes |  |  |  |  | Yes |  |  |  |  |  |
-| [dots and ChatGPT Space](/agents/chatgpt-space/) | Yes |  |  |  |  | Yes |  |  |  |  |  |
+| [dots](/agents/dots/) | Yes |  |  |  |  | Yes |  |  |  |  |  |
+| [ChatGPT Space](/agents/chatgpt-space/) | Yes |  |  |  |  | Yes |  |  |  |  |  |
 | [VS Code](/agents/vscode/) |  | Yes |  | Yes |  | Yes | Yes | Yes |  | Yes | Yes |
 | [GitHub Copilot CLI](/agents/github-copilot/) |  | Yes |  | Yes |  | Yes | Yes | Yes |  |  | Yes |
 | [GitHub Copilot app](/agents/github-copilot-app/) |  | Yes |  | Yes |  | Yes |  |  |  |  |  |
@@ -79,8 +80,9 @@ What works on which plan, from each vendor's own pages.
 | [ChatGPT Work](/agents/chatgpt-work/) | Plus and Pro | ChatGPT Work runs on the desktop, the web and mobile. [Source](https://chatgpt.com/pricing) |
 | [ChatGPT Work](/agents/chatgpt-work/) | Free, Go, Plus and Pro | The Spacefast plugin installs on every personal plan. [Source](https://chatgpt.com/pricing) |
 | [ChatGPT Work](/agents/chatgpt-work/) | Business and Enterprise | Plugins are on by default on Business. On Enterprise an admin turns them on first. [Source](https://chatgpt.com/features/plugins/) |
-| [dots and ChatGPT Space](/agents/chatgpt-space/) | Free, Go and Plus | dots and ChatGPT Space aren't included. [Source](https://chatgpt.com/pricing) |
-| [dots and ChatGPT Space](/agents/chatgpt-space/) | Pro, Business Premium and Enterprise | dots are included. On Pro they need you to be 18 or older and outside the EEA, the UK and Switzerland. [Source](https://learn.chatgpt.com/docs/dots.md) |
+| [dots](/agents/dots/) | Free, Go and Plus | dots aren't included. [Source](https://chatgpt.com/pricing) |
+| [dots](/agents/dots/) | Pro, Business Premium and Enterprise | dots are included. On Pro they need you to be 18 or older and outside the EEA, the UK and Switzerland. [Source](https://learn.chatgpt.com/docs/dots.md) |
+| [ChatGPT Space](/agents/chatgpt-space/) | Free, Go and Plus | ChatGPT Space isn't included. [Source](https://chatgpt.com/pricing) |
 | [Perplexity](/agents/perplexity/) | Free | Custom connectors aren't included. [Source](https://www.perplexity.ai/changelog/what-we-shipped---march-13-2026) |
 | [Perplexity](/agents/perplexity/) | Pro, Max and Enterprise | Custom connectors work. On Enterprise, an admin has to allow members to add them. [Source](https://www.perplexity.ai/help-center/en/articles/13915507-adding-custom-remote-connectors) |
 | [Microsoft Copilot](/agents/microsoft-copilot/) | Personal accounts | Copilot connects only to OneDrive, Outlook.com, Google Drive and Gmail. It has no custom connectors or MCP. [Source](https://support.microsoft.com/en-us/microsoft-copilot/connecting-microsoft-copilot-to-other-services) |
