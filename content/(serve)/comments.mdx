@@ -7,7 +7,7 @@ Comments put feedback threads on the page they are about. A reviewer pins a thre
 
 ## Before you start
 
-- Collecting new comments is included on **Go** and higher plans. See [Pricing & Limits](/pricing). On **Personal** (or when Comments are turned off), existing threads stay readable and exportable in the dashboard, and team owners and admins can still moderate them.
+- Collecting new comments is included on **Go** and higher plans (see [Pricing & Limits](/pricing)); other plans return 403 `collab_plan_required`. Personal teams that already used Comments before the move to Go keep them. On **Personal** without Comments (or when Comments are turned off), existing threads stay readable and exportable in the dashboard, and team owners and admins can still moderate them.
 - Comments run only on claimed Spaces that belong to a team. Other Spaces get `team_required`.
 - **Page Enhancements** must be on. Turn it on in the Space's settings under **General**. With it off, the API answers `comments_disabled`. The switch is `superpowers.enabled` in [the config file](/config-file#superpowers).
 - Who can comment comes from the Space's grants. A grant needs the `commenter` role or higher. See [Spacefast Share](/share#roles).
