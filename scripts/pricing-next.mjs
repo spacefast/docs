@@ -85,7 +85,7 @@ const SPACE = [
     row("Burst", "Extra compute workers a Space can borrow when the server has room.",
       ["Off", "Up to 4", "Up to 8", "Up to 16", "Custom"]),
     row("Compute memory per request", null, ["512 MB", "512 MB", "1 GB", "2 GB", "2 GB"]),
-    row("Function bundle", null, ["64 MB", "64 MB", "128 MB", "250 MB", "Custom"]),
+    row("Function bundle", "Uncompressed compiled bundle.", ["24 MiB", "24 MiB", "24 MiB", "24 MiB", "24 MiB"]),
     row("Function run time", "The longest one request can run, including time spent waiting on other services. Requests default to 30 s; raise it per route up to this limit.",
       ["60 s", "60 s", "120 s", "300 s", "Custom"]),
   ]],
