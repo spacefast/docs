@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to your Claude account once, and use it on the web, your phone, the desktop app, and Cowork.
 
-**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** (Directory connector)
+**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Official listing](/connect/marketplace/))
 
 1. If the link opens a custom connector form, add the connector first. Then choose Connect.
 2. Sign in to Spacefast and approve access.
@@ -23,7 +23,7 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Add the Spacefast plugin** (Spacefast plugin). Adds the Spacefast connector and its skills to your Claude account, for chat, Cowork, and Claude Code.
+**Add the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Adds the Spacefast connector and its skills to your Claude account, for chat, Cowork, and Claude Code.
 
 ```text
 spacefast/plugins
@@ -46,8 +46,10 @@ Give the agent one prompt that lets it choose and complete the best setup lane.
 
 ## Plan limits
 
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 - **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
 - **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Claude documentation](https://claude.com/docs/connectors/building/directory-vs-custom)

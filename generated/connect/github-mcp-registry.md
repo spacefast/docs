@@ -25,4 +25,4 @@ VS Code users who already browse github.com/mcp.
 
 - [VS Code](/setup/vscode/)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

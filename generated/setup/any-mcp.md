@@ -7,7 +7,7 @@ seo:
 
 Connect any app that speaks MCP: run Spacefast on your computer, or point the app at the hosted server.
 
-**Add the hosted server** (Hosted MCP server). Point the app at the hosted Spacefast server. It signs you in with OAuth.
+**Add the hosted server** ([Hosted MCP server](/connect/hosted-mcp/)). Point the app at the hosted Spacefast server. It signs you in with OAuth.
 
 ```json
 {
@@ -25,7 +25,7 @@ Connect any app that speaks MCP: run Spacefast on your computer, or point the ap
 
 ## Other ways to connect
 
-**Run Spacefast MCP on this computer** (MCP on your computer (stdio)). Starts the Spacefast MCP server on your computer with npx. The first tool call signs you in.
+**Run Spacefast MCP on this computer** ([MCP on your computer (stdio)](/connect/stdio-mcp/)). Starts the Spacefast MCP server on your computer with npx. The first tool call signs you in.
 
 ```json
 {
@@ -53,5 +53,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Any MCP client documentation](https://modelcontextprotocol.io/specification/latest/basic/transports)

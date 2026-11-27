@@ -23,21 +23,21 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 
 ## Agents that support it
 
-- [Claude Code](/setup/claude-code/)
-- [ChatGPT](/setup/chatgpt/)
-- [Grok Bot](/setup/grok-bot/)
-- [Muse](/setup/muse/)
-- [Antigravity](/setup/antigravity/)
-- [Cursor](/setup/cursor/)
-- [Raycast](/setup/raycast/)
-- [Any MCP client](/setup/any-mcp/)
-- [Claude Desktop](/setup/claude-desktop/)
 - [Claude](/setup/claude-app/)
+- [ChatGPT](/setup/chatgpt/)
+- [Cursor](/setup/cursor/)
+- [Antigravity](/setup/antigravity/)
+- [Grok Bot](/setup/grok-bot/)
+- [OpenClaw](/setup/openclaw/)
+- [Raycast](/setup/raycast/)
+- [Muse](/setup/muse/)
+- [Claude Code](/setup/claude-code/)
+- [Claude Desktop](/setup/claude-desktop/)
 - [Claude Cowork](/setup/claude-cowork/)
-- [ChatGPT Work](/setup/chatgpt-work/)
 - [Codex](/setup/codex/)
-- [dots and ChatGPT Space](/setup/chatgpt-space/)
-- [Windsurf](/setup/windsurf/)
+- [ChatGPT Work](/setup/chatgpt-work/)
+- [dots](/setup/dots/)
+- [ChatGPT Space](/setup/chatgpt-space/)
 - [VS Code](/setup/vscode/)
 - [GitHub Copilot CLI](/setup/github-copilot/)
 - [GitHub Copilot app](/setup/github-copilot-app/)
@@ -45,12 +45,17 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - [Zed](/setup/zed/)
 - [Devin Desktop](/setup/devin-desktop/)
 - [Devin Cloud](/setup/devin-cloud/)
-- [OpenClaw](/setup/openclaw/)
+- [Conductor](/setup/conductor/)
+- [Orca](/setup/orca/)
+- [Goose](/setup/goose/)
+- [Kiro](/setup/kiro/)
 - [Hermes](/setup/hermes/)
 - [Pi](/setup/pi/)
-- [Conductor](/setup/conductor/)
-- [Instinct](/setup/instinct/)
+- [LM Studio](/setup/lm-studio/)
+- [Mistral Le Chat](/setup/mistral/)
 - [Perplexity](/setup/perplexity/)
+- [Any MCP client](/setup/any-mcp/)
+- [Instinct](/setup/instinct/)
 - [Microsoft Copilot](/setup/microsoft-copilot/)
 - [T3 Chat](/setup/t3-chat/)
 - [Amp](/setup/amp/)
@@ -61,6 +66,12 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - [Poke](/setup/poke/)
 
 ## Plan limits
+
+### Claude
+
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
+- **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
 
 ### ChatGPT
 
@@ -79,13 +90,7 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 
 ### Claude Desktop
 
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
-- **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
-- **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
-
-### Claude
-
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 - **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
 - **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
 
@@ -95,6 +100,11 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - **Pro, Max and Ultra:** New Cowork tasks run in the cloud, where a plugin's local MCP server doesn't run. The connector works there. ([source](https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile), checked 2026-11-14)
 - **Team and Enterprise:** An owner has to turn on connectors, and may limit which plugin marketplaces you can add. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 
+### Codex
+
+- **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
+- **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
+
 ### ChatGPT Work
 
 - **Free and Go:** ChatGPT Work is limited and runs in the desktop app only. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
@@ -102,15 +112,14 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 - **Free, Go, Plus and Pro:** The Spacefast plugin installs on every personal plan. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Business and Enterprise:** Plugins are on by default on Business. On Enterprise an admin turns them on first. ([source](https://chatgpt.com/features/plugins/), checked 2026-11-14)
 
-### Codex
+### dots
 
-- **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
-- **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
-
-### dots and ChatGPT Space
-
-- **Free, Go and Plus:** dots and ChatGPT Space aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
+- **Free, Go and Plus:** dots aren't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 - **Pro, Business Premium and Enterprise:** dots are included. On Pro they need you to be 18 or older and outside the EEA, the UK and Switzerland. ([source](https://learn.chatgpt.com/docs/dots.md), checked 2026-11-14)
+
+### ChatGPT Space
+
+- **Free, Go and Plus:** ChatGPT Space isn't included. ([source](https://chatgpt.com/pricing), checked 2026-11-14)
 
 ### Perplexity
 
@@ -125,4 +134,4 @@ Any agent, including ones with no MCP support. It's the fallback that works almo
 
 - **All plans:** T3 Chat has no MCP, connectors, plugins or skills. ([source](https://t3.chat/faq), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

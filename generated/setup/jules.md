@@ -9,4 +9,4 @@ Spacefast no longer has a setup for Jules. Jules is read-only and winds down on 
 
 Use [Antigravity](/setup/antigravity/) instead.
 
-[What Jules's maker says](https://jules.google/docs/changelog/) · [All agents](/setup/)
+[What Jules's maker says](https://jules.google/docs/changelog/) · [All agents](/agents/)

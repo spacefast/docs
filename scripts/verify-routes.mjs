@@ -249,16 +249,21 @@ if (new Set(sitemapUrls).size !== sitemapUrls.length) {
 // searchable and instead declare a canonical straight at the www copy that
 // owns that content, so Blume leaves them out of the Docs sitemap.
 const htmlFiles = await htmlFilesUnder(dist);
+const redirectHtmlFiles = new Set();
 for (const file of htmlFiles) {
   const html = await readBuilt(file);
   const isRedirect = /<meta\s+http-equiv="refresh"/u.test(html);
+  if (isRedirect) redirectHtmlFiles.add(file);
   if (!isRedirect && /<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
     throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
   }
 }
 // Each generated setup and connect page's route, relative to its site: `setup/`, `setup/codex/`, `connect/hosted-mcp/`.
 const setupRoutes = htmlFiles
-  .filter((file) => /^(?:setup|connect)\/(?:[^/]+\/)?index\.html$/u.test(file))
+  .filter(
+    (file) =>
+      !redirectHtmlFiles.has(file) && /^(?:setup|connect)\/(?:[^/]+\/)?index\.html$/u.test(file),
+  )
   .map((file) => file.replace(/index\.html$/u, ""));
 if (setupRoutes.length < 2) {
   throw new Error("Expected generated /setup and /connect pages in the build; none are present.");
@@ -317,7 +322,7 @@ for (const [file, prev, next] of [
   ["quickstart/index.html", "/", "/spaces"],
   ["spaces/index.html", "/quickstart", "/request-lifecycle"],
   ["agents/mcp-server/index.html", "/agents", "/agents/poppy"],
-  ["setup/vscode/index.html", "/setup/windsurf", "/setup/github-copilot"],
+  ["setup/vscode/index.html", "/setup/chatgpt-space", "/setup/github-copilot"],
   ["api/index.html", "/cli/reference", "/api/authentication"],
 ]) {
   const pager = (await readBuilt(file)).split("</article>").at(-1);

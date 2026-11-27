@@ -23,14 +23,12 @@ Agents without a shell, and anyone who can't run Node.js locally.
 
 ## Agents that support it
 
-- [Claude Code](/setup/claude-code/)
 - [ChatGPT](/setup/chatgpt/)
-- [Antigravity](/setup/antigravity/)
 - [Cursor](/setup/cursor/)
+- [Antigravity](/setup/antigravity/)
 - [Raycast](/setup/raycast/)
-- [Any MCP client](/setup/any-mcp/)
+- [Claude Code](/setup/claude-code/)
 - [Codex](/setup/codex/)
-- [Windsurf](/setup/windsurf/)
 - [VS Code](/setup/vscode/)
 - [GitHub Copilot CLI](/setup/github-copilot/)
 - [GitHub Copilot app](/setup/github-copilot-app/)
@@ -38,8 +36,13 @@ Agents without a shell, and anyone who can't run Node.js locally.
 - [Zed](/setup/zed/)
 - [Devin Desktop](/setup/devin-desktop/)
 - [Devin Cloud](/setup/devin-cloud/)
-- [Grok Build](/setup/grok-build/)
+- [Goose](/setup/goose/)
+- [Kiro](/setup/kiro/)
+- [LM Studio](/setup/lm-studio/)
+- [Mistral Le Chat](/setup/mistral/)
 - [Perplexity](/setup/perplexity/)
+- [Any MCP client](/setup/any-mcp/)
+- [Grok Build](/setup/grok-build/)
 - [Amp](/setup/amp/)
 - [Warp](/setup/warp/)
 - [Factory Droid](/setup/factory-droid/)
@@ -70,4 +73,4 @@ Agents without a shell, and anyone who can't run Node.js locally.
 - **Free:** Custom connectors aren't included. ([source](https://www.perplexity.ai/changelog/what-we-shipped---march-13-2026), checked 2026-11-14)
 - **Pro, Max and Enterprise:** Custom connectors work. On Enterprise, an admin has to allow members to add them. ([source](https://www.perplexity.ai/help-center/en/articles/13915507-adding-custom-remote-connectors), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

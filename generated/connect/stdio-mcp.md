@@ -1,11 +1,11 @@
 ---
 title: "MCP on your computer (stdio): connect an agent to Spacefast"
-description: "Run `npx -y spacefast mcp`, which starts the Spacefast MCP server on your computer."
+description: "Run the Spacefast MCP server locally on your computer over stdio."
 seo:
   canonical: "https://spacefast.com/docs/connect/stdio-mcp/"
 ---
 
-Run `npx -y spacefast mcp`, which starts the Spacefast MCP server on your computer.
+Run the Spacefast MCP server locally on your computer over stdio.
 
 ## How it works
 
@@ -24,15 +24,19 @@ Coding agents and anything with a shell. It's the default for terminal agents.
 
 ## Agents that support it
 
+- [OpenClaw](/setup/openclaw/)
 - [Claude Code](/setup/claude-code/)
-- [Any MCP client](/setup/any-mcp/)
 - [Codex](/setup/codex/)
 - [OpenCode](/setup/opencode/)
 - [Zed](/setup/zed/)
-- [OpenClaw](/setup/openclaw/)
+- [Conductor](/setup/conductor/)
+- [Orca](/setup/orca/)
+- [Goose](/setup/goose/)
+- [Kiro](/setup/kiro/)
 - [Hermes](/setup/hermes/)
 - [Pi](/setup/pi/)
-- [Conductor](/setup/conductor/)
+- [LM Studio](/setup/lm-studio/)
+- [Any MCP client](/setup/any-mcp/)
 
 ## Plan limits
 
@@ -41,4 +45,4 @@ Coding agents and anything with a shell. It's the default for terminal agents.
 - **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 - **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

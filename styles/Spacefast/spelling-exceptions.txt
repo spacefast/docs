@@ -117,6 +117,7 @@ jittered
 joinable
 JWTs
 keyset
+Kiro
 Klarna
 Lakebed
 letterboxed
@@ -342,7 +343,9 @@ webhooks
 websocket
 websockets
 whoami
+Windsurf's
 wordmark
+worktrees
 wp
 WP
 www

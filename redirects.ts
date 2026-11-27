@@ -54,6 +54,7 @@ const moved: [from: string, to: string][] = [
   ["/agents/sf-setup", "/connect/cli-setup"],
   ["/agents/share-chatgpt-html", "/setup/chatgpt"],
   ["/agents/share-claude-artifact", "/setup/claude-app"],
+  ["/connect/directory-connector", "/connect/marketplace"],
   ["/workshop-start", "/agents"],
   // Reference tab: the hand-authored CLI pages became one generated reference.
   ["/api/versions", "/api/versioning"],

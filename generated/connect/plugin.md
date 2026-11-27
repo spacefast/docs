@@ -19,18 +19,17 @@ Add the plugin from spacefast/plugins with the agent's own plugin command.
 
 ## Best for
 
-Coding agents that support plugins but have no Spacefast marketplace listing.
+Coding agents that support plugins without an official listing.
 
 ## Agents that support it
 
-- [Claude Code](/setup/claude-code/)
-- [Antigravity](/setup/antigravity/)
-- [Cursor](/setup/cursor/)
-- [Claude Desktop](/setup/claude-desktop/)
 - [Claude](/setup/claude-app/)
+- [Cursor](/setup/cursor/)
+- [Antigravity](/setup/antigravity/)
+- [Claude Code](/setup/claude-code/)
+- [Claude Desktop](/setup/claude-desktop/)
 - [Claude Cowork](/setup/claude-cowork/)
 - [Codex](/setup/codex/)
-- [Windsurf](/setup/windsurf/)
 - [VS Code](/setup/vscode/)
 - [GitHub Copilot CLI](/setup/github-copilot/)
 - [GitHub Copilot app](/setup/github-copilot-app/)
@@ -39,15 +38,15 @@ Coding agents that support plugins but have no Spacefast marketplace listing.
 
 ## Plan limits
 
-### Claude Desktop
+### Claude
 
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 - **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
 - **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
 
-### Claude
+### Claude Desktop
 
-- **All plans:** Directory connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
+- **All plans:** Official connectors work on every plan. On Team and Enterprise, an owner has to turn them on first. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
 - **Free:** One custom connector at most, and no plugins. ([source](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), checked 2026-11-14)
 - **Pro, Max, Ultra, Team and Enterprise:** Plugins work. A plugin's local MCP server runs in Claude Code and in Cowork on your computer, not in chat. ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), checked 2026-11-14)
 
@@ -62,4 +61,4 @@ Coding agents that support plugins but have no Spacefast marketplace listing.
 - **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 - **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

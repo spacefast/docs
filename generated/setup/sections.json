@@ -2,267 +2,394 @@
   "schemaVersion": 1,
   "agents": [
     {
-      "id": "claude-code",
-      "name": "Claude Code",
+      "id": "claude-app",
+      "name": "Claude",
       "group": "featured",
-      "path": "/setup/claude-code/"
+      "kind": "chat-app",
+      "wizardGroup": "claude",
+      "path": "/setup/claude-app/"
     },
     {
       "id": "chatgpt",
       "name": "ChatGPT",
       "group": "featured",
+      "kind": "chat-app",
+      "wizardGroup": "openai",
       "path": "/setup/chatgpt/"
-    },
-    {
-      "id": "grok-bot",
-      "name": "Grok Bot",
-      "group": "featured",
-      "path": "/setup/grok-bot/"
-    },
-    {
-      "id": "muse",
-      "name": "Muse",
-      "group": "featured",
-      "path": "/setup/muse/"
-    },
-    {
-      "id": "antigravity",
-      "name": "Antigravity",
-      "group": "featured",
-      "path": "/setup/antigravity/"
     },
     {
       "id": "cursor",
       "name": "Cursor",
       "group": "featured",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
       "path": "/setup/cursor/"
+    },
+    {
+      "id": "antigravity",
+      "name": "Antigravity",
+      "group": "featured",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
+      "path": "/setup/antigravity/"
+    },
+    {
+      "id": "grok-bot",
+      "name": "Grok Bot",
+      "group": "featured",
+      "kind": "mcp-app",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/grok-bot/"
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "group": "featured",
+      "kind": "coding-agent",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/openclaw/"
     },
     {
       "id": "raycast",
       "name": "Raycast",
       "group": "featured",
+      "kind": "mcp-app",
+      "wizardGroup": "personal-agents",
       "path": "/setup/raycast/"
     },
     {
-      "id": "any-mcp",
-      "name": "Any MCP client",
+      "id": "muse",
+      "name": "Muse",
       "group": "featured",
-      "path": "/setup/any-mcp/"
+      "kind": "chat-app",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/muse/"
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "claude",
+      "path": "/setup/claude-code/"
     },
     {
       "id": "claude-desktop",
       "name": "Claude Desktop",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": "claude",
       "path": "/setup/claude-desktop/"
-    },
-    {
-      "id": "claude-app",
-      "name": "Claude",
-      "group": "supported",
-      "path": "/setup/claude-app/"
     },
     {
       "id": "claude-cowork",
       "name": "Claude Cowork",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": "claude",
       "path": "/setup/claude-cowork/"
-    },
-    {
-      "id": "chatgpt-work",
-      "name": "ChatGPT Work",
-      "group": "supported",
-      "path": "/setup/chatgpt-work/"
     },
     {
       "id": "codex",
       "name": "Codex",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "openai",
       "path": "/setup/codex/"
     },
     {
-      "id": "chatgpt-space",
-      "name": "dots and ChatGPT Space",
+      "id": "chatgpt-work",
+      "name": "ChatGPT Work",
       "group": "supported",
-      "path": "/setup/chatgpt-space/"
+      "kind": "chat-app",
+      "wizardGroup": "openai",
+      "path": "/setup/chatgpt-work/"
     },
     {
-      "id": "windsurf",
-      "name": "Windsurf",
+      "id": "dots",
+      "name": "dots",
       "group": "supported",
-      "path": "/setup/windsurf/"
+      "kind": "chat-app",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/dots/"
+    },
+    {
+      "id": "chatgpt-space",
+      "name": "ChatGPT Space",
+      "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": "openai",
+      "path": "/setup/chatgpt-space/"
     },
     {
       "id": "vscode",
       "name": "VS Code",
       "group": "supported",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
       "path": "/setup/vscode/"
     },
     {
       "id": "github-copilot",
       "name": "GitHub Copilot CLI",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
       "path": "/setup/github-copilot/"
     },
     {
       "id": "github-copilot-app",
       "name": "GitHub Copilot app",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/github-copilot-app/"
     },
     {
       "id": "opencode",
       "name": "OpenCode",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
       "path": "/setup/opencode/"
     },
     {
       "id": "zed",
       "name": "Zed",
       "group": "supported",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
       "path": "/setup/zed/"
     },
     {
       "id": "devin-desktop",
       "name": "Devin Desktop",
       "group": "supported",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
       "path": "/setup/devin-desktop/"
     },
     {
       "id": "devin-cloud",
       "name": "Devin Cloud",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": null,
       "path": "/setup/devin-cloud/"
     },
     {
-      "id": "grok-build",
-      "name": "Grok Build",
+      "id": "conductor",
+      "name": "Conductor",
       "group": "supported",
-      "path": "/setup/grok-build/"
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
+      "path": "/setup/conductor/"
     },
     {
-      "id": "openclaw",
-      "name": "OpenClaw",
+      "id": "orca",
+      "name": "Orca",
       "group": "supported",
-      "path": "/setup/openclaw/"
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
+      "path": "/setup/orca/"
+    },
+    {
+      "id": "goose",
+      "name": "Goose",
+      "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
+      "path": "/setup/goose/"
+    },
+    {
+      "id": "kiro",
+      "name": "Kiro",
+      "group": "supported",
+      "kind": "editor",
+      "wizardGroup": "coding-agents",
+      "path": "/setup/kiro/"
     },
     {
       "id": "hermes",
       "name": "Hermes",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "personal-agents",
       "path": "/setup/hermes/"
     },
     {
       "id": "pi",
       "name": "Pi",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": "coding-agents",
       "path": "/setup/pi/"
     },
     {
-      "id": "conductor",
-      "name": "Conductor",
+      "id": "lm-studio",
+      "name": "LM Studio",
       "group": "supported",
-      "path": "/setup/conductor/"
+      "kind": "mcp-app",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/lm-studio/"
     },
     {
-      "id": "instinct",
-      "name": "Instinct",
+      "id": "mistral",
+      "name": "Mistral Le Chat",
       "group": "supported",
-      "path": "/setup/instinct/"
+      "kind": "chat-app",
+      "wizardGroup": "personal-agents",
+      "path": "/setup/mistral/"
     },
     {
       "id": "perplexity",
       "name": "Perplexity",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": "personal-agents",
       "path": "/setup/perplexity/"
+    },
+    {
+      "id": "any-mcp",
+      "name": "Any MCP client",
+      "group": "supported",
+      "kind": "mcp-app",
+      "wizardGroup": null,
+      "path": "/setup/any-mcp/"
+    },
+    {
+      "id": "grok-build",
+      "name": "Grok Build",
+      "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": null,
+      "path": "/setup/grok-build/"
+    },
+    {
+      "id": "instinct",
+      "name": "Instinct",
+      "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": null,
+      "path": "/setup/instinct/"
     },
     {
       "id": "microsoft-copilot",
       "name": "Microsoft Copilot",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": null,
       "path": "/setup/microsoft-copilot/"
     },
     {
       "id": "t3-chat",
       "name": "T3 Chat",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": null,
       "path": "/setup/t3-chat/"
     },
     {
       "id": "amp",
       "name": "Amp",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/amp/"
     },
     {
       "id": "warp",
       "name": "Warp",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/warp/"
     },
     {
       "id": "factory-droid",
       "name": "Factory Droid",
       "group": "supported",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/factory-droid/"
     },
     {
       "id": "cline",
       "name": "Cline",
       "group": "supported",
+      "kind": "editor",
+      "wizardGroup": null,
       "path": "/setup/cline/"
     },
     {
       "id": "indent",
       "name": "Indent",
       "group": "supported",
+      "kind": "mcp-app",
+      "wizardGroup": null,
       "path": "/setup/indent/"
     },
     {
       "id": "poke",
       "name": "Poke",
       "group": "supported",
+      "kind": "mcp-app",
+      "wizardGroup": null,
       "path": "/setup/poke/"
     },
     {
       "id": "grok",
       "name": "Grok",
       "group": "supported",
+      "kind": "chat-app",
+      "wizardGroup": null,
       "path": "/setup/grok/"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "group": "deprecated",
+      "kind": "editor",
+      "wizardGroup": null,
+      "path": "/setup/windsurf/"
     },
     {
       "id": "gemini-cli",
       "name": "Gemini CLI",
       "group": "deprecated",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/gemini-cli/"
     },
     {
       "id": "continue",
       "name": "Continue",
       "group": "deprecated",
+      "kind": "editor",
+      "wizardGroup": null,
       "path": "/setup/continue/"
     },
     {
       "id": "roo-code",
       "name": "Roo Code",
       "group": "deprecated",
+      "kind": "editor",
+      "wizardGroup": null,
       "path": "/setup/roo-code/"
     },
     {
       "id": "jules",
       "name": "Jules",
       "group": "deprecated",
+      "kind": "coding-agent",
+      "wizardGroup": null,
       "path": "/setup/jules/"
     }
   ],
   "connect": [
     {
-      "id": "directory-connector",
-      "name": "Directory connector",
-      "path": "/connect/directory-connector/"
-    },
-    {
       "id": "marketplace",
-      "name": "Marketplace listing",
+      "name": "Official listing",
       "path": "/connect/marketplace/"
     },
     {

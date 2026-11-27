@@ -57,7 +57,10 @@ async function presentHistory(directory) {
 }
 
 async function presentClaudeAppSetup(directory) {
-  const file = path.join(directory, "(supported)", "claude-app.md");
+  let file = path.join(directory, "(featured)", "claude-app.md");
+  if (!(await exists(file))) {
+    file = path.join(directory, "(supported)", "claude-app.md");
+  }
   if (!(await exists(file))) return;
   const content = [
     "---",
@@ -75,21 +78,21 @@ async function presentClaudeAppSetup(directory) {
     "",
     "| Claude app | What it is | How Spacefast connects | Local files | Setup guide |",
     "| --- | --- | --- | --- | --- |",
-    "| **Claude on web and mobile** (`claude.ai`, iOS, Android) | Browser and mobile chat clients | [Directory connector](/connect/directory-connector/) (hosted MCP over OAuth) or [Spacefast plugin](/connect/plugin/) | No local filesystem; publishes inline files or uploads | Steps below |",
+    "| **Claude on web and mobile** (`claude.ai`, iOS, Android) | Browser and mobile chat clients | [Official listing](/connect/marketplace/) (hosted MCP over OAuth) or [Spacefast plugin](/connect/plugin/) | No local filesystem; publishes inline files or uploads | Steps below |",
     "| **Claude Desktop** (macOS, Windows) | Native desktop app with Chat and Cowork tabs | Syncs your account connector and plugin automatically, or runs a local [Desktop extension](/connect/desktop-extension/) (`.mcpb`) | Local tools run via Desktop extension or local Cowork | [Claude Desktop](/setup/claude-desktop/) |",
-    "| **Claude Cowork** | Multi-step task runner on paid plans (runs locally in Desktop or in the cloud across web, desktop, and mobile) | Cloud tasks use the hosted [Directory connector](/connect/directory-connector/); local Desktop tasks can also run a plugin's local MCP server | Local Desktop tasks access chosen folders; cloud tasks do not | [Claude Cowork](/setup/claude-cowork/) |",
+    "| **Claude Cowork** | Multi-step task runner on paid plans (runs locally in Desktop or in the cloud across web, desktop, and mobile) | Cloud tasks use the hosted [Official listing](/connect/marketplace/); local Desktop tasks can also run a plugin's local MCP server | Local Desktop tasks access chosen folders; cloud tasks do not | [Claude Cowork](/setup/claude-cowork/) |",
     "| **Claude Code** | Terminal and IDE coding agent for local repositories | Local [stdio MCP](/connect/stdio-mcp/) (`npx -y spacefast mcp`), [Spacefast plugin](/connect/plugin/) (MCP, skills, and hooks), or account-synced connector | Full local repository and folder publishing | [Claude Code](/setup/claude-code/) |",
     "",
     "Sources: [Use connectors in Claude](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), [Get started with Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork), [Use Claude Cowork on web, desktop, and mobile](https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile), and [Claude Code MCP docs](https://code.claude.com/docs/en/mcp).",
     "",
     "## What each connection method gives you",
     "",
-    "- **[Directory connector](/connect/directory-connector/) (recommended for chat and cloud Cowork):** Connects Claude directly to Spacefast's hosted MCP server (`https://mcp.spacefast.com`) over OAuth. One setup syncs across web, mobile, Desktop, and Cowork with nothing to install locally ([Directory vs. custom connectors](https://claude.com/docs/connectors/building/directory-vs-custom)).",
+    "- **[Official listing](/connect/marketplace/) (recommended for chat and cloud Cowork):** Connects Claude directly to Spacefast's hosted MCP server (`https://mcp.spacefast.com`) over OAuth. One setup syncs across web, mobile, Desktop, and Cowork with nothing to install locally ([Directory vs. custom connectors](https://claude.com/docs/connectors/building/directory-vs-custom)).",
     "- **[Spacefast plugin](/connect/plugin/):** Bundles Spacefast's skills and MCP configuration from `spacefast/plugins` so Claude loads Spacefast conventions automatically alongside the connector across Chat, Cowork, and Claude Code ([Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)).",
     "- **[Custom connector](/connect/hosted-mcp/):** Manual fallback if the directory link does not open — add `https://mcp.spacefast.com` in Claude's connector settings ([Custom connectors using remote MCP](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp)).",
     "- **[Desktop extension](/connect/desktop-extension/) (`.mcpb`):** Claude Desktop only. Runs the Spacefast MCP server locally via Node.js (`npx`) when you need local machine tools ([Desktop extensions spec](https://github.com/modelcontextprotocol/mcpb)).",
     "",
-    "## Recommended: Add the Directory connector",
+    "## Recommended: Add from the official listing",
     "",
     "**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)**",
     "",
@@ -116,7 +119,7 @@ async function presentClaudeAppSetup(directory) {
     "1. In Claude, open **Plugins** in the sidebar (or **Customize -> Plugins** on older Team and Enterprise layouts), then choose **Add -> Add marketplace -> Add from a repository**.",
     "2. Paste `spacefast/plugins` and add the marketplace.",
     "3. Select the **Spacefast** plugin and choose **Add**.",
-    "4. Sign in to Spacefast and approve access when prompted. If Claude reports that the Spacefast connector is not connected, add the Directory connector above too.",
+    "4. Sign in to Spacefast and approve access when prompted. If Claude reports that the Spacefast connector is not connected, add the official listing above too.",
     "",
     "On Team and Enterprise plans, owners can restrict allowed plugin marketplaces and must keep **Skills** enabled for plugins to run in Claude Desktop. Removing the plugin does not disconnect the Spacefast connector; disconnect it separately in connector settings ([source](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)).",
     "",
@@ -130,9 +133,9 @@ async function presentClaudeAppSetup(directory) {
     "",
     "## Plan limits by Anthropic tier",
     "",
-    "- **All plans (Free, Pro, Max, Ultra, Team, Enterprise):** Directory connectors work on every plan. Team and Enterprise require an owner to enable the connector first ([Use connectors](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities)).",
+    "- **All plans (Free, Pro, Max, Ultra, Team, Enterprise):** Official connector listings work on every plan. Team and Enterprise require an owner to enable the connector first ([Use connectors](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities)).",
     "- **Free:** Limited to one custom remote MCP connector; Cowork is not available ([Custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), [Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)).",
-    "- **Pro, Max, Ultra, Team, and Enterprise:** Full plugin support and Claude Cowork access. A plugin's local MCP server runs in Claude Code and in local Claude Desktop Cowork sessions, not in web chat or cloud Cowork tasks — use the hosted Directory connector there ([Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), [Cowork on web, desktop, and mobile](https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile)).",
+    "- **Pro, Max, Ultra, Team, and Enterprise:** Full plugin support and Claude Cowork access. A plugin's local MCP server runs in Claude Code and in local Claude Desktop Cowork sessions, not in web chat or cloud Cowork tasks — use the hosted connector there ([Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude), [Cowork on web, desktop, and mobile](https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile)).",
     "",
     "[Agent documentation](/agents/) · [Compare every connection method](/connect/compare/) · [Claude connector docs](https://claude.com/docs/connectors/building/directory-vs-custom)",
     "",

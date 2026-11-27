@@ -23,9 +23,9 @@ The lightest setup, for agents that read skills natively.
 
 ## Agents that support it
 
-- [Claude Code](/setup/claude-code/)
-- [Antigravity](/setup/antigravity/)
 - [Cursor](/setup/cursor/)
+- [Antigravity](/setup/antigravity/)
+- [Claude Code](/setup/claude-code/)
 - [Codex](/setup/codex/)
 - [VS Code](/setup/vscode/)
 - [GitHub Copilot CLI](/setup/github-copilot/)
@@ -33,6 +33,9 @@ The lightest setup, for agents that read skills natively.
 - [Zed](/setup/zed/)
 - [Devin Desktop](/setup/devin-desktop/)
 - [Devin Cloud](/setup/devin-cloud/)
+- [Orca](/setup/orca/)
+- [Goose](/setup/goose/)
+- [Kiro](/setup/kiro/)
 - [Pi](/setup/pi/)
 - [Amp](/setup/amp/)
 - [Warp](/setup/warp/)
@@ -46,4 +49,4 @@ The lightest setup, for agents that read skills natively.
 - **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 - **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/setup/)
+[Compare every way to connect](/connect/compare/) · [All agents](/agents/)

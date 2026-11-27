@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Devin Cloud so your sessions can publish what you build.
 
-**Add Spacefast as a custom MCP** (Hosted MCP server). Set it up from Devin's Customize page, for just you or your whole organization.
+**Add Spacefast as a custom MCP** ([Hosted MCP server](/connect/hosted-mcp/)). Set it up from Devin's Customize page, for just you or your whole organization.
 
 ```text
 https://mcp.spacefast.com
@@ -25,7 +25,7 @@ You need the Manage MCP Servers permission to add a custom MCP.
 
 ## Other ways to connect
 
-**Install just the skill** (Skill only). Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
+**Install just the skill** ([Skill only](/connect/skill/)). Teaches your agent how to publish with Spacefast and adds nothing else. The lightest option.
 
 ```bash
 npx -y skills add https://github.com/spacefast/plugins/tree/main/skills/spacefast -y
@@ -38,5 +38,7 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
+
+[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Devin Cloud documentation](https://docs.devin.ai/work-with-devin/mcp)
