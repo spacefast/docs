@@ -4,5 +4,12 @@
     "path": "404.html",
     "status": 404
   },
-  "cleanUrls": true
+  "cleanUrls": true,
+  "security": {
+    "secrets": {
+      "allowlist": {
+        "fingerprints": ["773b00be5ab0c40c", "a92049f5958a4fa2"]
+      }
+    }
+  }
 }
