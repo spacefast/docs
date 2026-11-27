@@ -175,9 +175,9 @@ const FEATURES = [
   ["Sharing and feedback", [
     row("Private by default, share links, passwords", null, all(YES)),
     row("Invitations and access requests", null, all(YES)),
-    row("Comments on any page", null, all(YES)),
+    row("Comments on any page", null, [NO, YES, YES, YES]),
     row("Show & Tell: share public Spaces for discovery", null, all(BETA)),
-    row("Live comment updates", null, all(YES)),
+    row("Live comment updates", null, [NO, YES, YES, YES]),
     row("Custom access page without Spacefast branding", null, [NO, NO, NO, YES]),
   ]],
   ["Agents", [
