@@ -3,7 +3,7 @@ title: llms.txt preamble
 description: Agent guidance placed at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
 ---
 
-Spacefast is the build companion and infrastructure for people and AI agents: one Space combines static files, collections, server actions, MySQL, Workers, object storage, transactional email, crons, connectors, custom domains, and sharing—all configured in `spacefast.config.ts` and driven through the CLI, REST API, SDK, MCP, or Poppy. Billing changes require a person in the dashboard.
+Spacefast is the build companion and infrastructure for people and AI agents: one Space combines static files, full-stack SpacePress apps (collections, SQL tables, ORM queries, server actions, jobs, TSX pages, WooCommerce, and WordPress REST/Abilities), MySQL, Workers, object storage, transactional email, crons, connectors, custom domains, and sharing—all configured in `spacefast.config.ts` and driven through the CLI, REST API, SDK, MCP, or Poppy. Billing changes require a person in the dashboard.
 
 Read this header first: it gives you the exact machine-readable endpoints, setup paths, and reference pointers before the authored page index.
 

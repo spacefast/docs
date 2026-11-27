@@ -1,15 +1,44 @@
 ---
-title: Actions and forms
-description: Define server actions in spacefast.config.ts, scaffold typed form handlers with sf add form, call actions from Workers, and resume human-approved flows
+title: Actions, queries, and jobs
+description: Write typed SpacePress queries, server mutations, zero-JS forms, background jobs, transactional hooks, and custom HTTP routes on your Space
 ---
 
-Actions run server-side logic on your Space for form submissions, database writes, and outbound notifications. Declare actions under `app.actions` in `spacefast.config.ts`, or scaffold a complete form with `sf add form` and own the generated files.
+SpacePress runs typed server queries, validated mutations, progressive zero-JS forms, transactional hooks, Action Scheduler background jobs, and custom HTTP routes directly on your Space. Export them in TypeScript under `sp/` or declare actions under `app.actions` in `spacefast.config.ts`.
 
-## Declare actions in `spacefast.config.ts`
+## Write typed queries and mutations
 
-Add an `actions` map under `app` in `spacefast.config.ts` with `defineConfig`. A standalone `spacepress.config.ts` may sit beside it, but publish only one app definition per project. See [Configuration](/config-file).
+Export `query(options, handler)` for read-only server functions and `mutation(options, handler)` for writes. Both validate input from your TypeScript parameter types, enforce declarative access rules, and expose endpoints at `POST /wp-json/spacepress/v1/actions/<name>` and as WordPress Abilities.
 
-This configuration declares a `contact` action and a `rebuild` action restricted to admins:
+```ts sp/tasks.ts
+import { mutation, query } from "spacepress";
+import { HttpError } from "spacepress/server";
+import { tasks } from "spacepress/server/db";
+
+export const openTasks = query(
+  { access: "authenticated" },
+  async ({ limit }: { limit: number }) => {
+    return tasks.list({ where: { done: false }, limit });
+  },
+);
+
+export const archiveTask = mutation(
+  { access: "editor", idempotent: true },
+  async ({ id }: { id: number }) => {
+    const row = await tasks.update(id, { done: true });
+    if (!row) throw new HttpError(404, "not_found", "Task not found");
+    return row;
+  },
+);
+```
+
+Key options on `query()` and `mutation()`:
+
+- `access`: `"anyone"`, `"authenticated"`, `"self"`, a role on the ladder (`guest < subscriber < author < editor < admin`), a boolean, or an access function.
+- `rateLimit`: Throttle calls per caller window, such as `"5/min"`.
+- `idempotent` and `destructive`: Mark safe retries or destructive mutations for clients and agents.
+- `signature`: Verify HMAC-signed inbound webhooks before the handler runs.
+
+You can also declare inline actions under `app.actions` in `spacefast.config.ts` (publish only one app definition per project — inline `app` or standalone `spacepress.config.ts`, not both):
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
@@ -25,28 +54,29 @@ export default defineConfig({
 });
 ```
 
-Run `sf check` to validate `spacefast.config.ts` and your app schema offline before publishing.
+Run `sf check` to validate `spacefast.config.ts` and your SpacePress handlers offline before publishing.
 
-## Scaffold a form with `sf add form`
+## Scaffold a progressive form with `sf add form`
 
-`sf add form` writes plain source files into your project that you own and edit directly; nothing is regenerated later. It keeps existing files unless you pass `--force`, and `--dry-run` prints the plan without writing.
+`sf add form` writes plain SpacePress files into your project that you own and edit directly; nothing is regenerated later. It keeps existing files unless you pass `--force`, and `--dry-run` prints the plan without writing:
 
 ```bash
 sf add form --dry-run
 sf add form
 ```
 
-The recipe creates two files (plus a minimal `spacepress.config.ts` if your project does not declare an app yet):
+The recipe creates two files (plus a minimal `spacepress.config.ts` when the project does not declare an app yet):
 
-- `sp/contact.ts`: defines a `contactMessages` table (admin-only read, no direct client writes) and a `sendContactMessage` mutation with `{ access: "anyone", rateLimit: "5/min" }`.
-- `sp/app/contact/page.tsx`: renders the contact form at `/contact`, wired straight to the mutation.
+- `sp/contact.ts`: Defines a `contactMessages` table (admin-only read, no direct client writes) and a `sendContactMessage` mutation with `{ access: "anyone", rateLimit: "5/min" }`.
+- `sp/app/contact/page.tsx`: Renders the contact form at `/contact`, wired straight to the mutation.
 
-### Server handler and validation
+### Server handler and field-level validation
 
-The mutation validates fields before writing to the database and sending mail. Throwing `HttpError` with a JSON Pointer binds the error message to that field in the form state:
+Throwing `HttpError` with a JSON Pointer (`"/email"`) binds the error message to that input in the form state and marks the field `aria-invalid="true"`:
 
 ```ts sp/contact.ts
-import { db, email, HttpError, mail, mutation, table, text, timestamp } from "spacepress";
+import { email, mutation, table, text, timestamp } from "spacepress";
+import { db, HttpError, mail } from "spacepress/server";
 
 export const contactMessages = table(
   {
@@ -76,11 +106,11 @@ export const sendContactMessage = mutation(
 );
 ```
 
-Inserting into `contactMessages` before calling `mail.send()` keeps every submission in your [Database](/database) even if outbound delivery fails. To send live mail, configure a custom primary domain for [Transactional email](/email).
+Inserting into `contactMessages` before calling `mail.send()` keeps every submission in your [Database](/database) even if outbound delivery retries. To deliver live mail, authenticate a custom primary domain for [Transactional email](/email).
 
-### Form submission and state
+### Zero-JS forms and `useFormState`
 
-Pass the mutation directly to `<form action={sendContactMessage}>`, and read the last submission's values, errors, or return value with `useFormState`:
+Pass any mutation directly to `<form action={sendContactMessage}>`. Forms work before JavaScript loads (form-encoded POST with a `303` redirect back to the page) and upgrade to in-place `fetch` updates once the router script runs:
 
 ```tsx sp/app/contact/page.tsx
 import { useFormState } from "spacepress/app";
@@ -101,11 +131,54 @@ export default function Contact() {
 }
 ```
 
+- **Compile-time field checks:** Every literal `name` attribute inside the form must match a parameter on the mutation, or `sf check` fails at that field.
+- **Refill, reset, and pending states:** Failed submissions refill typed values (never passwords) and set `data-sp-form-state="error"`. Successful submissions reset the form and set `data-sp-form-state="success"`. While a JavaScript submit is in flight, the form carries `aria-busy="true"` and disables submit buttons.
+
+## Background jobs and transactional hooks
+
+Move slow outbound calls, retries, and scheduled work into Action Scheduler background jobs with `job()`, and tie side effects to writes with `.on()`:
+
+```ts sp/jobs.ts
+import { boolean, job, table, text } from "spacepress";
+import { tasks } from "spacepress/server/db";
+
+export const notifyTask = job(
+  { retries: 3 },
+  async ({ taskId }: { taskId: number }) => {
+    const task = await tasks.system.get(taskId);
+    if (!task) return;
+    await fetch("https://hooks.example.com/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: task.id, title: task.title }),
+    });
+  },
+);
+
+export const items = table({
+  title: text().min(1).max(120),
+  done: boolean().default(false),
+}).on({
+  async afterCreate(row) {
+    await notifyTask.enqueue({ taskId: row.id }, { key: `task-${row.id}` });
+  },
+});
+```
+
+- **Transactional queuing:** Calling `myJob.enqueue(input, { delay, key })` commits with the enclosing database transaction. If a hook or mutation throws, the transaction rolls back and the job is never dispatched.
+- **Relaxed outbound limits:** Background jobs allow a 60-second `fetch()` timeout and 16 MiB response body cap (compared with 10 seconds and 1 MiB in HTTP handlers). Guard non-idempotent side effects with `once(key, fn)`.
+- **Recurring schedules:** Set `every: "1h"` on a `job()` or export `cron("0 3 * * *", handler)`. You can also declare HTTP cron triggers in `spacefast.config.ts`; see [Crons](/crons).
+- **Collection and table hooks:** Chain `.on({ beforeCreate, afterCreate, beforeUpdate, afterUpdate, beforeDelete, afterDelete, afterPublish })` onto any collection or table. Throwing aborts the request and rolls back the transaction.
+- **WordPress core hooks:** Place typed WordPress filters and actions in `sp/wp-hooks/<hook>.ts` using `Handler<"...">` from `"spacepress/server/wp"`.
+
+## Custom HTTP routes and private file buckets
+
+- **Custom routes:** Create `sp/app/<path>/route.ts` exporting `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`, plus an optional `export const guard` access rule.
+- **Private files:** Define upload buckets with `files({ accept, maxBytes, access })`. Expanding a `file(bucket)` column with `with` returns a 5-minute signed URL, and server handlers, hooks, and jobs can read stored files directly via `bucket.get(id)`, `bucket.readText(id)`, or `bucket.readBase64(id)` (up to 16 MiB). See [Object storage](/object-storage) for runtime storage from Workers, the CLI, and the API.
+
 ## Call actions from Workers
 
-When your Space also runs a [Worker](/functions), `env.APP.action(name, input)` invokes a declared action over the Space's internal relay and forwards the visitor's session cookie.
-
-This Worker route forwards a JSON payload to the `contact` action:
+When your Space also runs a [Worker](/functions), `env.APP.action(name, input)` invokes a declared action over the Space's internal relay and forwards the visitor's session cookie:
 
 ```ts functions/api/contact.ts
 export async function POST(request: Request, { env }: { env: any }) {

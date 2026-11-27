@@ -8,6 +8,7 @@ export default defineMeta({
     "collections",
     "actions",
     "database",
+    "wordpress",
     "functions",
     "email",
     "object-storage",

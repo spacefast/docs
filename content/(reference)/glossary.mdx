@@ -7,11 +7,11 @@ Core terms used across the Spacefast documentation, with links to the guides tha
 
 ## Ability
 
-A named, schema-backed operation that a Space's runtime publishes for agents and scripts to discover and call. Some Abilities ship with the platform; others come from an application you publish. See [Build overview](/build).
+A named, schema-backed WordPress operation that a Space's runtime publishes for clients, agents, and scripts to discover and call at `/wp-json/wp-abilities/v1/abilities/<name>/run`. Platform Abilities ship with every Space, and SpacePress exports your app's queries, mutations, and collections as Abilities. See [WordPress and Content API](/wordpress).
 
 ## Action
 
-A server-side mutation or form handler declared under `app.actions` in `spacefast.config.ts` (or `spacepress.config.ts`) that runs on your Space's backend with access rules and validation. See [Actions](/actions).
+A server-side `query()` or `mutation()` handler in `sp/` (or declared under `app.actions` in `spacefast.config.ts`) that runs on your Space's backend with typed validation, access rules, and optional rate limits. See [Actions, queries, and jobs](/actions).
 
 ## Build
 
@@ -56,6 +56,10 @@ The Personal Agent Protocol (`Poppy 1.0`) supported by Spacefast so personal age
 ## Space
 
 A container for versions, domains, data, and access settings, served at its own hostname. A Space can exist before anything is published. Custom domains belong to a team and are assigned to a Space. See [Spaces](/spaces).
+
+## SpacePress
+
+The full-stack TypeScript app framework built into every Space. SpacePress compiles collections, SQL tables, typed ORM queries, server actions, background jobs, TSX pages, `"use client"` interactive islands, Markdown sync, and WooCommerce stores into native WordPress and PHP with no Node.js server in production. See [Build on a Space](/build) and [Collections and CMS](/collections).
 
 ## Team
 

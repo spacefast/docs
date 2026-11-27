@@ -3,7 +3,7 @@ title: Starters and templates
 description: Scaffold a new Spacefast project with sf init or add starter source files with sf add
 ---
 
-`sf init` creates a new Spacefast project with `spacefast.config.ts` and starter files. `sf add` writes editable source files for a contact form, sign-in, or an AI route into an existing project. Neither command locks you into a generator: every file becomes yours to edit.
+`sf init` creates a new Spacefast project with `spacefast.config.ts` and a SpacePress app starter by default. `sf add` writes editable source files for a contact form, a WooCommerce shop, sign-in, or an AI Worker route into an existing project. Neither command locks you into a generator: every file becomes yours to edit.
 
 ## Create a project with `sf init`
 
@@ -69,14 +69,16 @@ Pass a second argument to target another directory, or omit it to write into the
 
 | Recipe | Files written | What it gives you |
 | --- | --- | --- |
-| `form` | `sp/contact.ts`, `sp/app/contact/page.tsx` | A contact form at `/contact` backed by a `contactMessages` table, a rate-limited server action (`5/min`), and transactional email via `mail.send()`. Change the `to:` address in `sp/contact.ts` before publishing |
-| `auth` | `sp/app/login.tsx`, `sp/app/account/page.tsx` | A sign-in page using [Sign in with Spacefast](/share) and a protected `/account` page that redirects signed-out visitors |
-| `ai-route` | `functions/api/chat.ts` | A streaming `POST /api/chat` [Functions](/functions) route using the AI SDK (`ai` and `@ai-sdk/openai`) |
+| `form` | `sp/contact.ts`, `sp/app/contact/page.tsx` | A contact form at `/contact` backed by a `contactMessages` table, a rate-limited server mutation (`5/min`), and transactional email via `mail.send()`. Change the `to:` address in `sp/contact.ts` before publishing |
+| `shop` | `sp/shop.ts`, `sp/app/checkout/page.md`, `content/products/ceramic-mug.md`, `content/product-categories/home.md` | A native WooCommerce `store()` with products, categories, shipping zones, orders, and a `/checkout` block page. Update currency, country, and shipping in `sp/shop.ts` before publishing |
+| `auth` | `sp/app/login.tsx`, `sp/app/account/page.tsx` | A sign-in page using [Sign in with Spacefast](/share) alongside WordPress `<LoginForm />`, plus a protected `/account` page that redirects signed-out visitors |
+| `ai-route` | `functions/api/chat.ts` | A streaming `POST /api/chat` [Worker](/functions) route using the AI SDK (`ai` and `@ai-sdk/openai`) |
 
-Preview a recipe or add an AI route with its JSON receipt:
+`form`, `shop`, and `auth` also create a minimal `spacepress.config.ts` when your project does not declare an app yet. Preview a recipe or add an AI route with its JSON receipt:
 
 ```bash
 sf add form --dry-run
+sf add shop --dry-run
 sf add auth
 sf add ai-route --json
 ```
@@ -103,5 +105,5 @@ See [`sf add`](/cli/reference#sf-add-recipe-directory) for the full command spec
 ## Next steps
 
 - Configure builds, redirects, headers, and crons in [`spacefast.config.ts`](/config-file).
-- Learn how [Collections](/collections), [Actions](/actions), [Transactional email](/email), and [Functions](/functions) work once created.
+- Learn how [Collections and CMS](/collections), [Actions, queries, and jobs](/actions), [Database and ORM](/database), [WordPress and Content API](/wordpress), [Transactional email](/email), and [Workers](/functions) work once created.
 - Run `sf publish` when you are ready to go live; see [Publishing](/publish).

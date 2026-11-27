@@ -60,12 +60,13 @@ curl -X POST https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/email/setup \
 
 ## Send email from actions
 
-In app actions and form mutations, import `mail` from `"spacepress"` and call `mail.send()`. See [Actions and forms](/actions) for the full `sf add form` contact-form starter.
+In SpacePress actions, hooks, and form mutations, import `mail` from `"spacepress/server"` (or `"spacepress"`) and call `mail.send()`. `mail.send()` queues the message inside the current database transaction and dispatches it after commit with retries — if a hook or action rolls back, no email is sent. See [Actions, queries, and jobs](/actions) for the full `sf add form` contact-form starter.
 
 This mutation sends a plain-text notification with a `replyTo` header:
 
 ```ts sp/contact.ts
-import { mail, mutation } from "spacepress";
+import { mutation } from "spacepress";
+import { mail } from "spacepress/server";
 
 export const notify = mutation(
   { access: "anyone", rateLimit: "5/min" },
@@ -79,6 +80,23 @@ export const notify = mutation(
     return { ok: true };
   },
 );
+```
+
+### Render React Email templates
+
+Author reusable templates under `emails/*.tsx` with `react-email` components, render them with `mail.render(Template, props)` to get `{ html, text }`, and pass both to `mail.send()`:
+
+```ts sp/invites.ts
+import { mail } from "spacepress/server";
+import Invitation from "../emails/invitation";
+
+const rendered = mail.render(Invitation, { name: "Ada", url: "https://example.com/invite" });
+await mail.send({
+  to: "ada@example.com",
+  subject: "You are invited",
+  html: rendered.html,
+  text: rendered.text,
+});
 ```
 
 Message fields:

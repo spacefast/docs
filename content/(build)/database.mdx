@@ -1,34 +1,55 @@
 ---
-title: Database
-description: Every provisioned Space gets its own MySQL database. Query it from app code or Workers via env.DB, inspect tables and rows with sf db, or open a SQL console
+title: Database and ORM
+description: Every provisioned Space gets a dedicated MySQL database with SpacePress typed ORM queries, visitor-scoped access rules, SQL migrations, env.DB, sf db, and a SQL console
 ---
 
-Every provisioned Space gets its own MySQL database with no connection string to manage. Reach it through `db` in app code or `env.DB` in a [Worker](/functions). You can also inspect tables, edit rows, export data, or open a single-use SQL console from the CLI, dashboard, and API.
+Every provisioned Space gets its own MySQL database with no connection string to manage. Query it through SpacePress's typed ORM (`spacepress/server/db` and `db`), reach it over SQL from a [Worker](/functions) with `env.DB`, or inspect tables, edit rows, and open a single-use SQL console from the CLI, dashboard, and API.
 
 ## How a Space gets a database
 
 A Space receives a dedicated MySQL database automatically once provisioned, with no extra setup or flag required.
 
-- **Collections and tables:** Declare `app.collections` or `app.tables` in `spacefast.config.ts` (or in `sp/` source files) and query them through `db`. See [Collections and CMS](/collections).
+- **SpacePress collections and SQL tables:** Declare `collection()` and `table()` schemas under `sp/` (or `app.collections` / `app.tables` in `spacefast.config.ts`) and query them through SpacePress's typed ORM. See [Collections and CMS](/collections).
 - **Workers:** Every [Worker](/functions) receives `env.DB`, a D1-shaped SQL binding backed by your Space's MySQL through a broker, so no credentials or DSN ever enter your bundle.
 - **Any provisioned Space:** `sf db tables`, `sf db rows`, and `sf db console` work against the Space's database on any runtime.
+- **Isolated preview databases:** Preview versions run against an isolated SQLite database per version so preview writes never affect live MySQL data.
 
 :::caution[There is no external connection string]
-No route, flag, or dashboard field returns a database DSN. Your code reaches MySQL through `db` or `env.DB`. For direct SQL queries, open the single-use SQL console below.
+No route, flag, or dashboard field returns a database DSN. Your code reaches MySQL through SpacePress's ORM (`spacepress/server/db` and `db`) or `env.DB`. For direct SQL queries, open the single-use SQL console below.
 :::
 
 ## Query from code
 
-In a [Worker](/functions), `env.DB` exposes the D1 query interface:
+### Visitor-scoped SpacePress queries (`spacepress/server/db`)
 
-```ts functions/api/notes.ts
-export async function GET(request: Request, { env }: { env: { DB: D1Database } }) {
-  const { results } = await env.DB.prepare("SELECT * FROM notes LIMIT 10").all();
-  return Response.json(results);
+Import your declared collections and tables from `"spacepress/server/db"` in pages, routes, queries, and mutations. Every call automatically enforces row-level access rules, draft visibility, and field-level `.access()` masks for the active visitor:
+
+```ts sp/app/blog/page.tsx
+import { posts } from "spacepress/server/db";
+
+export default async function Blog() {
+  const published = await posts.list({
+    where: { tags: { has: "release" } },
+    orderBy: { publishedAt: "desc" },
+    with: { cover: true },
+    limit: 20,
+  });
+
+  return (
+    <ul>
+      {published.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
 }
 ```
 
-In app code under `sp/`, import `db` from `"spacepress"` to query declared collections and tables:
+When trusted server code needs to bypass visitor filters explicitly, call `.system` on the kind (for example, `posts.system.list({ limit: 100 })` or `posts.system.get(id)`).
+
+### Trusted Drizzle-inspired ORM (`db`)
+
+Inside server actions, hooks, and background jobs, you can also use the Drizzle-inspired `db` API to run typed queries and mutations directly:
 
 ```ts sp/app/page.tsx
 import { db } from "spacepress";
@@ -39,9 +60,50 @@ export default async function Home() {
 }
 ```
 
+For writes and single-row lookups inside `sp/` server modules (`import { db } from "spacepress/server"`):
+
+```ts sp/tasks.ts
+import { db } from "spacepress/server";
+import { tasks } from "./schema";
+
+const first = await db.query.tasks.findFirst({ where: { done: false } });
+const [created] = await db.insert(tasks).values({ title: "Ship v1" }).returning();
+```
+
+### Direct SQL from Workers (`env.DB`)
+
+In a [Worker](/functions), `env.DB` exposes the D1 query interface against your Space's MySQL database:
+
+```ts functions/api/notes.ts
+export async function GET(request: Request, { env }: { env: { DB: D1Database } }) {
+  const { results } = await env.DB.prepare("SELECT * FROM notes LIMIT 10").all();
+  return Response.json(results);
+}
+```
+
+## Declarative access control, search, and migrations
+
+### Role ladder and row-level filters
+
+SpacePress evaluates access rules on an ordered role ladder: `guest < subscriber < author < editor < admin`. Naming a role admits that role and every higher role.
+
+- **Shorthands:** `"anyone"`, `"authenticated"`, `"self"`, a role name, or a boolean.
+- **Row-level filter functions:** Return a boolean or an access filter from `(ctx) => ...` (sync or `async`). Returning a filter compiles straight into SQL/PHP for `read`, `update`, and `delete` queries; non-matching rows answer `404`. Access functions may run read-only trusted queries (`db.query.<kind>`, `db.globals.<name>.get`, `<kind>.system`) to check memberships or grants; writes, outbound `fetch()`, mail, and jobs are refused inside access rules.
+- **Field masks:** Chain `.access({ read, create, update })` onto any column to strip or refuse unauthorized fields across REST responses, pages, and client queries.
+
+### Full-text search (`.searchable()`)
+
+`list({ search })`, `count({ search })`, `?search=` on REST routes, `GET /search`, and `/wp/v2/search` match prefixes across searchable fields while keeping the list's sort order and enforcing every row and field access rule. By default, SpacePress searches title, content, and every `text()` or `richText()` column. Mark fields with `.searchable()` to restrict search to title, content, and the marked fields, or chain `.searchable(false)` to exclude any column (including title or content).
+
+### Forward-only SQL migrations and retention
+
+- **Migrations:** Commit each generated migration folder under `sp/_generated/migrations/`. SpacePress folds `ops.json` files in order and writes a new numbered migration folder whenever a `table()` schema changes. Removing a column or table retires it while preserving stored data.
+- **Safe renames:** Keep physical SQL names intact with `.column("old_name")` and `storageName: "old_table"`, and accept old API field names with `.alias("oldName")`.
+- **Soft deletes and revisions:** Configure `retention` (`"forever"` by default, or durations like `"30d"` and `keepLast`) and query soft-deleted rows with `deleted: "exclude" | "include" | "only"`.
+
 ## Inspect tables and rows
 
-`sf db tables` and `sf db rows` work on any provisioned Space, regardless of runtime. They list your Space's tables and the tables your code created, excluding Spacefast's internal tables.
+`sf db tables` and `sf db rows` work on any provisioned Space, regardless of runtime. They list your Space's tables and the tables your code created, excluding Spacefast's internal tables:
 
 ```bash
 sf db tables
@@ -87,7 +149,7 @@ Without `--output`, Spacefast writes `spacefast-backup-<space>-<timestamp>.json`
 
 ## Legacy Zero 0.8 schema commands
 
-The declared-schema commands (`sf db`, `sf db dump`, `sf db migrate`, and `sf db export`) apply only to existing [Zero 0.8](/zero-migration) capsules that declare a capsule schema. Running them against a Worker returns [`runtime_kind_mismatch`](/errors/runtime_kind_mismatch), and running them against a static Space returns [`db_not_available`](/errors/db_not_available). Use `sf db tables`, `sf db rows`, and `sf db console` instead for Workers and `spacefast.config.ts` apps.
+The declared-schema commands (`sf db`, `sf db dump`, `sf db migrate`, and `sf db export`) apply only to existing [Zero 0.8](/zero-migration) capsules that declare a capsule schema. Running them against a Worker returns [`runtime_kind_mismatch`](/errors/runtime_kind_mismatch), and running them against a static Space returns [`db_not_available`](/errors/db_not_available). Use `sf db tables`, `sf db rows`, and `sf db console` instead for Workers and SpacePress apps.
 
 ```bash
 sf db

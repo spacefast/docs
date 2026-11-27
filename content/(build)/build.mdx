@@ -1,15 +1,15 @@
 ---
 title: Build on a Space
-description: Combine static files with collections, actions, database tables, Workers, email, storage, crons, variables, and connectors in one spacefast.config.ts
+description: Build full-stack SpacePress apps, collections, SQL tables, server actions, Workers, WooCommerce stores, and WordPress integrations in one Space
 ---
 
-Every Space serves static files and runs dynamic capabilities from one project and one configuration file. You do not choose between a static Space and a dynamic app up front. Start with HTML or a frontend framework, then turn on collections, server actions, Workers, storage, crons, or connectors when you need them.
+Every Space combines static files, a SpacePress full-stack TypeScript app, a dedicated MySQL database, WordPress REST APIs, Workers, storage, email, crons, and connectors in one project. You start with HTML, a frontend framework, or `sf init` (which scaffolds a SpacePress app by default) and turn on capabilities as you need them.
 
-## Configure everything in `spacefast.config.ts`
+## SpacePress is built into every Space
 
-Declare your Space's capabilities in `spacefast.config.ts` with `defineConfig` from `spacefast/config`. `sf.jsonc` remains permanently supported as the JSON fallback, and `spacepress.config.ts` may sit beside it; see [Configuration](/config-file).
+SpacePress is Spacefast's full-stack TypeScript layer. Write collections, SQL tables, declarative access rules, queries, server actions, background jobs, HTTP routes, TSX pages, and interactive islands in TypeScript under `sp/`. On publish, Spacefast compiles your project to native WordPress and PHP with no Node.js server to manage.
 
-The following configuration defines a collection, a server action, a daily cron, a connector role, and a template file on one Space:
+Configure your Space in `spacefast.config.ts` with `defineConfig` from `spacefast/config`. You can declare app settings inline under `app` in `spacefast.config.ts` or in a standalone `spacepress.config.ts` beside it, but not both in the same project. `sf.jsonc` remains permanently supported as the JSON fallback; see [Configuration](/config-file).
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
@@ -32,34 +32,37 @@ export default defineConfig({
 });
 ```
 
-Every capability publishes and rolls back with your Space's versions. Run `sf check` to validate `spacefast.config.ts`, app schemas, routing rules, Worker routes, and publishable files offline before you run `sf publish`.
+Every capability publishes and rolls back with your Space's versions. Preview channels run against an isolated SQLite database per version so preview edits never touch live MySQL data.
 
 ## Capabilities
 
 | Capability | What it does |
 | --- | --- |
-| [Collections and CMS](/collections) | Structured content collections, custom tables, admin editor, locales, and Content API |
-| [Actions and forms](/actions) | Server actions, typed form submissions, and human-in-the-loop action approvals |
-| [Database](/database) | Dedicated MySQL per Space with table and row CLI commands, `env.DB`, and a single-use SQL console |
-| [Workers](/functions) | Server-side JavaScript and TypeScript via `functions/`, a root `handler.ts`, or OpenNext |
-| [Transactional email](/email) | Outbound mail signed with your Space's primary custom domain |
-| [Object storage](/object-storage) | Runtime file uploads separate from published version files, with private and public access |
-| [Crons](/crons) | Scheduled `GET` requests against paths on your Space, declared in config |
-| [Environment variables](/environment-variables) | Space- and team-scoped variables, write-only secrets, and build-time substitution |
-| [Connectors](/connectors) | Connect external APIs, GraphQL endpoints, and MCP servers with credentials sealed on the server |
+| [Collections and CMS](/collections) | SpacePress storage kinds (`collection()`, `table()`, `global()`, `taxonomy()`, `wp.posts.extend()`), typed fields, TSX pages, `"use client"` islands, Markdown sync, and WooCommerce stores |
+| [Actions, queries, and jobs](/actions) | Typed `query()` and `mutation()` server functions, zero-JS forms, transactional hooks, Action Scheduler background `job()`s, custom HTTP routes, and human approval continuation |
+| [Database and ORM](/database) | Dedicated MySQL per Space, visitor-scoped `spacepress/server/db` queries, Drizzle-inspired `db` ORM, declarative access rules, forward-only SQL migrations, `env.DB`, `sf db`, and a single-use SQL console |
+| [WordPress and Content API](/wordpress) | SpacePress Admin (`/wp-admin/new/`), one-use admin links, proxied and direct WordPress REST APIs, WordPress Abilities, three-way content sync, generated typed clients, `sf app wp`, and `sf apply` |
+| [Workers](/functions) | Server-side JavaScript and TypeScript via `functions/`, a root `handler.ts`, or OpenNext, with `env.APP`, `env.DB`, `env.STORAGE`, and `env.CONNECTORS` bindings |
+| [Transactional email](/email) | Outbound mail signed with your primary custom domain, React Email templates (`emails/*.tsx`), `mail.render()`, and transactional `mail.send()` |
+| [Object storage](/object-storage) | Runtime file uploads separate from published version files, with private and public access plus SpacePress `files()` buckets |
+| [Crons](/crons) | Scheduled `GET` requests declared in `spacefast.config.ts`, alongside recurring SpacePress jobs and `cron()` handlers |
+| [Environment variables](/environment-variables) | Space- and team-scoped variables, write-only secrets, and build-time template substitution |
+| [Connectors](/connectors) | Connect external REST APIs, GraphQL endpoints, and MCP servers with credentials sealed on the server |
 
-## Local workflow
+## Local workflow and scaffolding
 
-Validate your project offline with [`sf check`](/cli/reference#sf-check-dir) before you publish:
+Scaffold a SpacePress app, add owned starter recipes, validate offline, and publish:
 
 ```bash
+sf init my-space
+sf add form
 sf check
 sf dev
 sf publish
 ```
 
-- **Static files, Vite, Next.js, Astro, and Workers:** [`sf dev`](/cli/reference#sf-dev) runs your framework's dev server and executes `functions/` Workers in-process.
-- **App collections and actions:** [`sf check`](/cli/reference#sf-check-dir) validates your `app` schema offline; full collections and server actions execute when published to a Space.
-- [`sf init`](/cli/reference#sf-init-name) scaffolds a new Space project with `spacefast.config.ts`.
-- [`sf add`](/cli/reference#sf-add-recipe-directory) adds starter code you own for a form (`sf add form`), sign-in (`sf add auth`), or a streaming AI Worker route (`sf add ai-route`).
-- For an older Zero 0.8 Space, see [Migrating from Zero 0.8](/zero-migration) for what changed and how to move to `spacefast.config.ts`.
+- [`sf init`](/cli/reference#sf-init-name) scaffolds a SpacePress `app` project by default (`spacefast.config.ts`, a `notes` collection, `sp/actions.ts`, and `sp/app/page.tsx`), or pass `--template static`, `next`, or `astro`. See [Starters and templates](/guides/starters).
+- [`sf add`](/cli/reference#sf-add-recipe-directory) writes plain source files you own and edit directly: `form` (contact table, mutation, and form), `shop` (native WooCommerce store, checkout block, and synced products), `auth` (Sign in with Spacefast and `/account`), or `ai-route` (streaming `functions/api/chat.ts` route).
+- [`sf check`](/cli/reference#sf-check-dir) validates `spacefast.config.ts` (or `sf.jsonc`), SpacePress schemas and handlers, routing rules, Worker routes, and scans publishable files for secrets in one offline pass.
+- [`sf dev`](/cli/reference#sf-dev) starts your framework dev server and runs `functions/` Workers locally. For a full local WordPress + SQLite server with live rebuilds on `sp/` edits, run `npx spacepress dev` or publish to a Spacefast preview channel.
+- Moving an older Zero 0.8 or `zero.config.ts` Space? See [Migrating from Zero 0.8](/zero-migration).
