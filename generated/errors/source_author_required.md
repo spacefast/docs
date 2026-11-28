@@ -5,7 +5,7 @@ description: "The credential has no complete registered profile, so a source com
 
 The credential has no complete registered profile, so a source commit needs an explicit author.
 
-**How to resolve:** Send `author` with a name and an email when you create the workspace. Later mutations reuse that author.
+**How to resolve:** Open Account settings and complete your name and email. For an API request, you can send `author.name` and `author.email`. A workspace can reuse the author you set when you create it.
 
 <div data-pagefind-ignore>
 

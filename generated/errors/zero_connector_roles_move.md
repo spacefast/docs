@@ -5,7 +5,7 @@ description: "This Zero 0.8 app declares connector roles in capsule({ connectors
 
 This Zero 0.8 app declares connector roles in capsule({ connectors }). Connector roles now belong in spacefast.config.ts.
 
-**How to resolve:** Paste `details.config` into spacefast.config.ts. It keeps each role's connector, kind, tools, pins and cache. Once the config declares them, remove the capsule entries.
+**How to resolve:** Paste `details.config` into spacefast.config.ts. It keeps each role's connector, kind, tools, pins and cache. Once the config declares them, remove those app bundle entries.
 
 <div data-pagefind-ignore>
 

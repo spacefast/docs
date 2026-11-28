@@ -9,4 +9,4 @@ Spacefast no longer has a setup for Continue. Cursor acquired Continue, and its 
 
 Use [Cursor](/setup/cursor/) instead.
 
-[What Continue's maker says](https://github.com/continuedev/continue) · [All agents](/agents/)
+[What Continue's maker says](https://github.com/continuedev/continue) · [All agents](/setup/)

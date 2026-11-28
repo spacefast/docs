@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to your Claude account so Cowork tasks can publish what they make.
 
-**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** ([Official listing](/connect/marketplace/))
+**[Add to Claude](https://claude.ai/directory/b0989c59-00b4-40db-a6d1-1e591ce2516c)** (Directory connector)
 
 1. If the link opens a custom connector form, add the connector first. Then choose Connect.
 2. Sign in to Spacefast and approve access.
@@ -23,7 +23,7 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Add the Spacefast plugin** ([Spacefast plugin](/connect/plugin/)). Adds the Spacefast connector and its skills to your Claude account, so Cowork knows how to publish.
+**Add the Spacefast plugin** (Spacefast plugin). Adds the Spacefast connector and its skills to your Claude account, so Cowork knows how to publish.
 
 ```text
 spacefast/plugins
@@ -49,7 +49,5 @@ Give the agent one prompt that lets it choose and complete the best setup lane.
 - **Free:** Cowork isn't available on the Free plan. ([source](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork), checked 2026-11-14)
 - **Pro, Max and Ultra:** New Cowork tasks run in the cloud, where a plugin's local MCP server doesn't run. The connector works there. ([source](https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile), checked 2026-11-14)
 - **Team and Enterprise:** An owner has to turn on connectors, and may limit which plugin marketplaces you can add. ([source](https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities), checked 2026-11-14)
-
-[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Claude Cowork documentation](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)

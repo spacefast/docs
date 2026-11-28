@@ -30,7 +30,7 @@ To change the setting in the dashboard:
 
 To change it from the terminal, run `sf comments settings set --surface everywhere`. See [`sf comments settings set`](/cli/reference#sf-comments-settings-set). You can also switch Comments on previews or live with [`sf share set`](/cli/reference#sf-share-set).
 
-Over HTTP, read the settings with [`getSpaceCollaboration`](/api/reference/spaces/getspacecollaboration). Then send only the settings to change to [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration), with the `revision` you read as `expectedRevision`. If someone changed the settings after your read, the update returns 409 `resource_revision_changed` with the current settings in `details.current`. The dashboard shows **Comment Settings Changed Elsewhere** with **Apply Your Change** and **Use Latest**.
+Over HTTP, read Share and comment settings with [`getSpaceShare`](/api/reference/spaces/getspaceshare) (`GET /v1/spaces/{spaceId}/share`). Then send the `comments` fields to change (`previews`, `live`, `spamFilter`, or `notifications`) to [`updateSpaceShare`](/api/reference/spaces/updatespaceshare) (`PATCH /v1/spaces/{spaceId}/share`), passing the `revision` you read as `expectedRevision`. If someone changed the settings after your read, the update returns `409` `space_share_changed` with the current Share state. The dashboard shows **Comment Settings Changed Elsewhere** with **Apply Your Change** and **Use Latest**.
 
 :::note[Grants must match the setting]
 With **Previews only**, a new `commenter` grant on the `live` target is refused with `comments_target_unavailable`. With **Off**, every new `commenter` grant is refused. Point the grant at a version, or change the setting. Existing grants do not change when you change the setting.
@@ -175,7 +175,7 @@ Spacefast sends comment notifications to the dashboard **Notifications** panel a
 - Only a mention from a member of the Space's team notifies.
 - A visitor without an account gets reply emails only after they confirm an address. Each email has a **Stop reply emails** link.
 
-All three settings are on by default. In the settings control on the **Comments** page, under **Advanced**, **Notify on new comments** sets `newThreads` and `newReplies` together. **Notify on status changes** sets `statusChanges`. Over HTTP, send `notificationPreferences` to [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration). Each key you leave out keeps its value.
+All three settings are on by default. In the settings control on the **Comments** page, under **Advanced**, **Notify on new comments** sets `newThreads` and `newReplies` together. **Notify on status changes** sets `statusChanges`. Over HTTP, send `comments.notifications` to [`updateSpaceShare`](/api/reference/spaces/updatespaceshare). Each key you leave out keeps its value.
 
 ## Export comments
 
@@ -195,7 +195,7 @@ The Markdown export starts with `# Spacefast comments`. Each thread is a `## <id
 
 ## Let another website embed Comments
 
-An external website that you allowlist can run this Space's Comments for its own visitors. There is no dashboard control for the list. Use the CLI or [`updateSpaceCollaboration`](/api/reference/spaces/updatespacecollaboration):
+An external website that you allowlist can run this Space's Comments for its own visitors. There is no dashboard control for the list. Configure it from the CLI with [`sf comments settings set`](/cli/reference#sf-comments-settings-set):
 
 ```bash
 sf comments settings set --embed-allow https://docs.example.com

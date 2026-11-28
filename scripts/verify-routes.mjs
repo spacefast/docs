@@ -322,7 +322,7 @@ for (const [file, prev, next] of [
   ["quickstart/index.html", "/", "/spaces"],
   ["spaces/index.html", "/quickstart", "/request-lifecycle"],
   ["agents/mcp-server/index.html", "/agents", "/agents/poppy"],
-  ["setup/vscode/index.html", "/setup/chatgpt-space", "/setup/github-copilot"],
+  ["setup/vscode/index.html", "/setup/windsurf", "/setup/github-copilot"],
   ["api/index.html", "/cli/reference", "/api/authentication"],
 ]) {
   const pager = (await readBuilt(file)).split("</article>").at(-1);

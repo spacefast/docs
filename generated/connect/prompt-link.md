@@ -31,4 +31,4 @@ Agents that set up connectors themselves when asked.
 - **Premium, Super and Ultra:** Grok Bot comes with these plans. Plus and Free don't include it. ([source](https://docs.x.ai/x-subscription/grok-bot), checked 2026-11-14)
 - **Team bots:** An admin's MCP policy can block the server, and then it can't be saved. ([source](https://docs.x.ai/grok-bot/computer-and-apps), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/agents/)
+[Compare every way to connect](/connect/compare/) · [All agents](/setup/)

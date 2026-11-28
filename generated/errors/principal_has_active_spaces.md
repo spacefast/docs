@@ -5,7 +5,7 @@ description: "The external principal still owns spaces, so it cannot be closed."
 
 The external principal still owns spaces, so it cannot be closed.
 
-**How to resolve:** Delete the principal's spaces first, or retry with `force` to tombstone them as part of the close.
+**How to resolve:** Delete the owner's spaces first, or retry with `force` to delete them as part of the close.
 
 <div data-pagefind-ignore>
 

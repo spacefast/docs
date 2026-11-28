@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast's remote MCP server to Grok Build.
 
-**Configure `~/.grok/config.toml`** ([Hosted MCP server](/connect/hosted-mcp/)). Add Spacefast to Grok Build's MCP configuration.
+**Configure `~/.grok/config.toml`** (Hosted MCP server). Add Spacefast to Grok Build's MCP configuration.
 
 ```toml
 [mcp_servers.spacefast]
@@ -21,7 +21,7 @@ url = "https://mcp.spacefast.com"
 
 ## Other ways to connect
 
-**Run in your terminal** ([Hosted MCP server](/connect/hosted-mcp/)). Run this command to add Spacefast.
+**Run in your terminal** (Hosted MCP server). Run this command to add Spacefast.
 
 ```bash
 grok mcp add --transport http spacefast 'https://mcp.spacefast.com'
@@ -29,7 +29,5 @@ grok mcp add --transport http spacefast 'https://mcp.spacefast.com'
 
 1. Open Grok Build and use Spacefast, or open `/mcps` and press `i` to authenticate.
 2. Sign in to Spacefast and approve access. Run `grok mcp doctor spacefast` to check the connection.
-
-[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Grok Build documentation](https://docs.x.ai/build/features/mcp-servers)

@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Poke so it can publish for you.
 
-**[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)** ([Hosted MCP server](/connect/hosted-mcp/))
+**[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)** (Hosted MCP server)
 
 1. Choose Create Integration.
 2. Sign in to Spacefast and approve access.
@@ -25,7 +25,5 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
-
-[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Poke documentation](https://poke.com/docs/mcp-servers)

@@ -5,7 +5,7 @@ description: "The upload manifest declares more files than the allowed ceiling."
 
 The upload manifest declares more files than the allowed ceiling.
 
-**How to resolve:** Reduce the file count or split content across multiple spaces.
+**How to resolve:** For an anonymous publish, sign in and publish to a team-owned Space to use the higher file limit. If the manifest still exceeds the limit, reduce its file count or split the content across Spaces.
 
 <div data-pagefind-ignore>
 

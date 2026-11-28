@@ -1,9 +1,9 @@
 ---
 title: "publish_bytes_missing"
-description: "The publish has no complete staged content to materialize."
+description: "The publish has no complete staged content to build."
 ---
 
-The publish has no complete staged content to materialize.
+The publish has no complete staged content to build.
 
 **How to resolve:** Finish uploading the staged content, or start a new publish.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/publish_bytes_missing",
   "title": "Publish bytes missing",
   "status": 422,
-  "detail": "The publish has no complete staged content to materialize.",
+  "detail": "The publish has no complete staged content to build.",
   "code": "publish_bytes_missing",
   "requestId": "req_4mz0v8qk"
 }

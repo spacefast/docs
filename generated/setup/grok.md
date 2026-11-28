@@ -7,7 +7,7 @@ seo:
 
 Connect Spacefast to Grok through a custom MCP connector.
 
-**Add Spacefast as a custom connector** ([Hosted MCP server](/connect/hosted-mcp/)). Use Grok's custom connector form to add the hosted Spacefast server.
+**Add Spacefast as a custom connector** (Hosted MCP server). Use Grok's custom connector form to add the hosted Spacefast server.
 
 ```text
 https://mcp.spacefast.com
@@ -18,7 +18,5 @@ https://mcp.spacefast.com
 3. Paste the server URL above, then sign in to Spacefast and approve access.
 
 Business and Enterprise teams need an admin to provision the connector first.
-
-[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Grok documentation](https://docs.x.ai/grok/connectors)

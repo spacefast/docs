@@ -8,7 +8,7 @@ It carries a stable `code` and a `type` URI that links to one of the pages below
 `code` in clients. The meaning of a `code` stays stable, while `detail` text can change.
 Retired codes leave with the API that owns them.
 
-There are 1012 error codes in the registry.
+There are 1015 error codes in the registry.
 
 | Code | Meaning |
 | --- | --- |
@@ -22,7 +22,7 @@ There are 1012 error codes in the registry.
 | [`activity_export_person_required`](/errors/activity_export_person_required) | An activity export emails its file to a person, and this credential names none: it is a partner, machine, or support-session credential, or a team key nobody made. |
 | [`agent_handoff_declined`](/errors/agent_handoff_declined) | The app-private agent handoff cannot be redeemed. |
 | [`agent_handoff_limit_reached`](/errors/agent_handoff_limit_reached) | This user already has the maximum number of pending handoffs for the space. |
-| [`agent_handoff_origin_unsupported`](/errors/agent_handoff_origin_unsupported) | The dashboard origin this deployment is configured with cannot mint canonical agent handoff links. |
+| [`agent_handoff_origin_unsupported`](/errors/agent_handoff_origin_unsupported) | The dashboard origin this deployment is configured with cannot create agent handoff links. |
 | [`ambiguous_space_slug`](/errors/ambiguous_space_slug) | The slug matches spaces in more than one of your teams, so it cannot be resolved. |
 | [`analytics_backend_error`](/errors/analytics_backend_error) | The analytics service answered this query with something the analytics query contract doesn't allow. |
 | [`analytics_backend_unavailable`](/errors/analytics_backend_unavailable) | Analytics couldn't answer right now. |
@@ -79,6 +79,7 @@ There are 1012 error codes in the registry.
 | [`claim_target_not_found`](/errors/claim_target_not_found) | The team or account to claim the space into was not found. |
 | [`cli_login_limit_reached`](/errors/cli_login_limit_reached) | This MCP connection already has the maximum number of unused CLI sign-ins. |
 | [`cli_login_unsupported_credential`](/errors/cli_login_unsupported_credential) | Only a signed-in hosted MCP session can sign the CLI in. |
+| [`collab_plan_required`](/errors/collab_plan_required) | Comments require a Go plan or higher. |
 | [`comment_page_path_invalid`](/errors/comment_page_path_invalid) | The comment's page path isn't a plain absolute URL path. |
 | [`comment_page_path_too_long`](/errors/comment_page_path_too_long) | The comment's page path is longer than Comments allow. |
 | [`comment_room_deleted`](/errors/comment_room_deleted) | The comment room for this page was deleted, so it can't take new comments. |
@@ -291,6 +292,7 @@ There are 1012 error codes in the registry.
 | [`free_external_proxy_disabled`](/errors/free_external_proxy_disabled) | Proxy routes to external upstreams do not serve on an unclaimed Space. |
 | [`free_usage_exhausted`](/errors/free_usage_exhausted) | The Free team's $1 of monthly usage is used up, so new builds and Functions requests are paused. PHP, delivery and email continue. |
 | [`functions_build_unavailable`](/errors/functions_build_unavailable) | This publish needs the platform to build the Space's Functions worker, and the Space's runtime can't take a built worker until its next update. |
+| [`functions_bundle_not_published`](/errors/functions_bundle_not_published) | The version declares a Functions bundle that is missing from its runtime files. |
 | [`functions_dispatch_busy`](/errors/functions_dispatch_busy) | The Space already has as many Worker requests open as it allows at once, so this one was not started. |
 | [`functions_outside_publish_directory`](/errors/functions_outside_publish_directory) | The project has a functions/ router, but the publish ships only the build output, which does not contain it. Detection reads only the published tree, so the version is static and those routes answer 404. |
 | [`functions_source_incomplete`](/errors/functions_source_incomplete) | A partial change to a Functions worker cannot be built, because the live worker's other source files are not stored in the Space. |
@@ -329,7 +331,7 @@ There are 1012 error codes in the registry.
 | [`invalid_elevation_request`](/errors/invalid_elevation_request) | An elevation request needs at least one scope and a rationale of 1 to 1024 characters. |
 | [`invalid_file_path`](/errors/invalid_file_path) | A file path in the request is not a valid space path. |
 | [`invalid_grant`](/errors/invalid_grant) | The authorization grant is invalid or was already used. |
-| [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal. |
+| [`invalid_idempotency_key`](/errors/invalid_idempotency_key) | The request requires a valid Idempotency-Key or a secret for anonymous publish retries. |
 | [`invalid_publish_archive`](/errors/invalid_publish_archive) | The uploaded archive cannot be read as a valid zip. |
 | [`invalid_publish_path`](/errors/invalid_publish_path) | A file path in the publish payload is not allowed. |
 | [`invalid_publish_payload`](/errors/invalid_publish_payload) | The publish payload is malformed. |
@@ -440,7 +442,7 @@ There are 1012 error codes in the registry.
 | [`prebuilt_metadata_invalid`](/errors/prebuilt_metadata_invalid) | The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown. |
 | [`primary_contact_ineligible`](/errors/primary_contact_ineligible) | The account cannot be this Space's primary contact. It is not a current member of the owning team and has no accepted editor or manager role on the Space. |
 | [`primary_email_not_removable`](/errors/primary_email_not_removable) | The primary email address cannot be removed while it is the primary. |
-| [`principal_closed`](/errors/principal_closed) | The external principal is closed. Its spaces are tombstoned and cannot be modified. |
+| [`principal_closed`](/errors/principal_closed) | The external principal is closed. Its spaces are deleted and cannot be modified. |
 | [`principal_has_active_spaces`](/errors/principal_has_active_spaces) | The external principal still owns spaces, so it cannot be closed. |
 | [`principal_not_found`](/errors/principal_not_found) | No external principal with that id exists in this tenant. |
 | [`principal_space_mismatch`](/errors/principal_space_mismatch) | The space does not belong to the principal in the request. |
@@ -469,7 +471,7 @@ There are 1012 error codes in the registry.
 | [`publish_archive_file_count_exceeded`](/errors/publish_archive_file_count_exceeded) | The archive contains more files than the allowed ceiling. |
 | [`publish_archive_too_large`](/errors/publish_archive_too_large) | The uploaded archive exceeds the maximum allowed size. |
 | [`publish_base_changed`](/errors/publish_base_changed) | Someone published new space settings after the base you loaded, so saving would overwrite their change. |
-| [`publish_bytes_missing`](/errors/publish_bytes_missing) | The publish has no complete staged content to materialize. |
+| [`publish_bytes_missing`](/errors/publish_bytes_missing) | The publish has no complete staged content to build. |
 | [`publish_config_only_no_artifact`](/errors/publish_config_only_no_artifact) | A configuration-only publish needs an existing ready version to carry forward. |
 | [`publish_config_unsupported`](/errors/publish_config_unsupported) | The publish carries configuration this endpoint does not support. |
 | [`publish_failed`](/errors/publish_failed) | The publish failed before going live. |
@@ -508,6 +510,7 @@ There are 1012 error codes in the registry.
 | [`repository_commit_not_found`](/errors/repository_commit_not_found) | The commit you asked to read does not exist in this repository. |
 | [`repository_commit_too_large`](/errors/repository_commit_too_large) | The commit's files are larger in total than one repository commit can hold. |
 | [`repository_commit_unchanged`](/errors/repository_commit_unchanged) | The commit changes no files: the branch already holds this exact tree, so there is nothing to save. |
+| [`repository_not_ready`](/errors/repository_not_ready) | The Space's repository storage is still getting ready. |
 | [`repository_patch_invalid`](/errors/repository_patch_invalid) | The repository refused the diff: it is malformed or does not apply to the selected base branch. |
 | [`repository_path_invalid`](/errors/repository_path_invalid) | The repository provider refused the requested file path. |
 | [`repository_reauthorization_required`](/errors/repository_reauthorization_required) | Spacefast can no longer reach this Space's connected repository: its access was revoked, or the Space moved to a team that has not connected it yet. |
@@ -649,7 +652,7 @@ There are 1012 error codes in the registry.
 | [`space_db_query_failed`](/errors/space_db_query_failed) | The database could not complete the request. A change in it was rolled back before anything was written. |
 | [`space_db_table_not_editable`](/errors/space_db_table_not_editable) | This table's rows can be read but not changed here: it has no primary key, a binary or secret one, triggers, or a storage engine that can't roll back a change. |
 | [`space_db_table_not_found`](/errors/space_db_table_not_found) | The Space's database has no table with this name. |
-| [`space_db_table_protected`](/errors/space_db_table_protected) | This table is Spacefast's own bookkeeping or sign-in data, so it can't be read or changed here. |
+| [`space_db_table_protected`](/errors/space_db_table_protected) | This table is Spacefast's own internal or sign-in data, so it can't be read or changed here. |
 | [`space_db_too_large`](/errors/space_db_too_large) | A row in the request, or the page of rows asked for, is larger than one database statement can carry. |
 | [`space_db_unavailable`](/errors/space_db_unavailable) | The Space's database isn't reachable right now. |
 | [`space_db_value_invalid`](/errors/space_db_value_invalid) | The database refused a value: it is missing, the wrong type, or too long for its column. Nothing in this request was written. |
@@ -806,13 +809,13 @@ There are 1012 error codes in the registry.
 | [`transfer_push_failed`](/errors/transfer_push_failed) | The source runtime cannot push the space blobs into the transfer bucket. |
 | [`transfer_request_notification_policy_managed_by_parent`](/errors/transfer_request_notification_policy_managed_by_parent) | The parent team controls which administrators receive subteam transfer requests. |
 | [`transfer_source_changed`](/errors/transfer_source_changed) | The space changed since the transfer was created, so it must be re-confirmed. |
-| [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The transfer target is the same principal that already owns the space. |
+| [`transfer_target_same_as_source`](/errors/transfer_target_same_as_source) | The transfer target is the same owner that already owns the space. |
 | [`transfer_team_to_customer_unsupported`](/errors/transfer_team_to_customer_unsupported) | A team's space can only move to another team, not to a partner customer. |
 | [`transfer_verify_failed`](/errors/transfer_verify_failed) | The target runtime cannot verify transferred blob content. |
 | [`unauthorized`](/errors/unauthorized) | The request carried no valid credential. |
 | [`unpublished_space_limit_reached`](/errors/unpublished_space_limit_reached) | This team already holds as many never-published Spaces as its plan allows. |
 | [`unsupported_publish_media_type`](/errors/unsupported_publish_media_type) | The publish content-type is not supported. |
-| [`upload_chunk_invalid`](/errors/upload_chunk_invalid) | Chunk contents are not canonical base64. |
+| [`upload_chunk_invalid`](/errors/upload_chunk_invalid) | Chunk contents are not standard base64. |
 | [`upload_chunk_out_of_order`](/errors/upload_chunk_out_of_order) | The chunk index is not the next expected index. |
 | [`upload_chunk_pending`](/errors/upload_chunk_pending) | A reserved chunk has not finished storing its bytes. |
 | [`upload_chunk_too_large`](/errors/upload_chunk_too_large) | A chunk exceeds 16 KiB after decoding. |
@@ -828,7 +831,7 @@ There are 1012 error codes in the registry.
 | [`upload_in_use`](/errors/upload_in_use) | An accepted operation is using this upload. |
 | [`upload_incomplete`](/errors/upload_incomplete) | The upload is not complete. |
 | [`upload_integrity_failed`](/errors/upload_integrity_failed) | Stored bytes do not match the upload receipt. |
-| [`upload_path_not_canonical`](/errors/upload_path_not_canonical) | An upload path is not in canonical (decoded, NFC-normalized) form. |
+| [`upload_path_not_canonical`](/errors/upload_path_not_canonical) | An upload path is not in normalized (decoded, NFC-normalized) form. |
 | [`upload_path_not_declared`](/errors/upload_path_not_declared) | An uploaded path was not declared in the version's manifest. |
 | [`upload_retry_conflict`](/errors/upload_retry_conflict) | A retry identity is already bound to different input. |
 | [`upload_sealed`](/errors/upload_sealed) | The upload no longer accepts new content. |

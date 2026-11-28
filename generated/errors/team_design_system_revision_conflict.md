@@ -5,7 +5,7 @@ description: "The team's design system changed since this action was prepared."
 
 The team's design system changed since this action was prepared.
 
-**How to resolve:** Reconcile with the current values and retry with their revision and a new operationId.
+**How to resolve:** Reload and sync with the current values, then retry with their revision and a new operationId.
 
 <div data-pagefind-ignore>
 

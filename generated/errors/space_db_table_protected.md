@@ -1,9 +1,9 @@
 ---
 title: "space_db_table_protected"
-description: "This table is Spacefast's own bookkeeping or sign-in data, so it can't be read or changed here."
+description: "This table is Spacefast's own internal or sign-in data, so it can't be read or changed here."
 ---
 
-This table is Spacefast's own bookkeeping or sign-in data, so it can't be read or changed here.
+This table is Spacefast's own internal or sign-in data, so it can't be read or changed here.
 
 **How to resolve:** Work with the Space's WordPress or app tables instead. Spacefast tables change only through Spacefast's own features.
 
@@ -29,7 +29,7 @@ Match on `code`, never on `detail`.
   "type": "https://spacefast.com/docs/errors/space_db_table_protected",
   "title": "Space db table protected",
   "status": 422,
-  "detail": "This table is Spacefast's own bookkeeping or sign-in data, so it can't be read or changed here.",
+  "detail": "This table is Spacefast's own internal or sign-in data, so it can't be read or changed here.",
   "code": "space_db_table_protected",
   "requestId": "req_4mz0v8qk"
 }

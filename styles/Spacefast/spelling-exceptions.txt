@@ -91,6 +91,7 @@ fsynced
 Gbit
 github
 globals
+gmail
 Googlebot
 Gravatar
 grayscale
@@ -286,6 +287,7 @@ Uncached
 uncategorized
 unclaimed
 unconfigured
+uncurated
 uncursored
 underreports
 undoable

@@ -1,11 +1,11 @@
 ---
 title: "Spacefast CLI: connect an agent to Spacefast"
-description: "Run the Spacefast CLI setup command, which detects your agents and configures each one."
+description: "Run `npx -y spacefast setup agent`, which detects your agents and sets each one up."
 seo:
   canonical: "https://spacefast.com/docs/connect/cli-setup/"
 ---
 
-Run the Spacefast CLI setup command, which detects your agents and configures each one.
+Run `npx -y spacefast setup agent`, which detects your agents and sets each one up.
 
 ## How it works
 
@@ -23,15 +23,15 @@ Setting up several agents on one computer in one step.
 
 ## Agents that support it
 
-- [Cursor](/setup/cursor/)
-- [OpenClaw](/setup/openclaw/)
 - [Claude Code](/setup/claude-code/)
+- [Cursor](/setup/cursor/)
 - [Codex](/setup/codex/)
 - [VS Code](/setup/vscode/)
 - [GitHub Copilot CLI](/setup/github-copilot/)
 - [OpenCode](/setup/opencode/)
 - [Zed](/setup/zed/)
 - [Devin Desktop](/setup/devin-desktop/)
+- [OpenClaw](/setup/openclaw/)
 - [Hermes](/setup/hermes/)
 - [Pi](/setup/pi/)
 - [Amp](/setup/amp/)
@@ -46,4 +46,4 @@ Setting up several agents on one computer in one step.
 - **ChatGPT Free and Go:** Codex works in the desktop app only, with limited use. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 - **ChatGPT Plus and above:** Codex works on the web, in the CLI, in the IDE extension and on iOS. ([source](https://learn.chatgpt.com/docs/pricing), checked 2026-11-14)
 
-[Compare every way to connect](/connect/compare/) · [All agents](/agents/)
+[Compare every way to connect](/connect/compare/) · [All agents](/setup/)

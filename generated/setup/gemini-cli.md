@@ -9,4 +9,4 @@ Spacefast no longer has a setup for Gemini CLI. Google stopped serving Gemini CL
 
 Use [Antigravity](/setup/antigravity/) instead.
 
-[What Gemini CLI's maker says](https://github.com/google-gemini/gemini-cli/discussions/28017) · [All agents](/agents/)
+[What Gemini CLI's maker says](https://github.com/google-gemini/gemini-cli/discussions/28017) · [All agents](/setup/)

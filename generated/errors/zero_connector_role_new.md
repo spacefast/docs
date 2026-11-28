@@ -5,7 +5,7 @@ description: "This Zero 0.8 publish adds a connector role in capsule({ connector
 
 This Zero 0.8 publish adds a connector role in capsule({ connectors }) that the live version doesn't have. New roles go in spacefast.config.ts.
 
-**How to resolve:** Declare the role under `connectors` in spacefast.config.ts and remove it from the capsule. Roles the live version already has keep publishing.
+**How to resolve:** Declare the role under `connectors` in spacefast.config.ts and remove it from the app bundle. Roles the live version already has keep publishing.
 
 <div data-pagefind-ignore>
 

@@ -108,6 +108,7 @@ GLOBAL FLAGS
 - [`sf connectors`](#sf-connectors)
 - [`sf connectors bind ROLE CONNECTION`](#sf-connectors-bind-role-connection)
 - [`sf connectors bindings`](#sf-connectors-bindings)
+- [`sf connectors connect TARGET`](#sf-connectors-connect-target)
 - [`sf connectors connections`](#sf-connectors-connections)
 - [`sf connectors connections connect CONNECTOR`](#sf-connectors-connections-connect-connector)
 - [`sf connectors connections disconnect CONNECTION`](#sf-connectors-connections-disconnect-connection)
@@ -2720,6 +2721,69 @@ GLOBAL FLAGS
 
 ```
 
+## `sf connectors connect TARGET`
+
+Register and connect a connector in one step.
+
+```text
+USAGE
+  $ sf connectors connect TARGET [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--surface openapi|graphql|mcp] [--slug <value>] [--title
+    <value>] [--owner team|personal] [--name <value>] [--description <value>] [--auth-method <value>] [--api-key
+    <value>] [--field <value>...] [--wait] [--open]
+
+ARGUMENTS
+  TARGET  Connector name (such as stripe or linear), existing connector slug, or spec/MCP URL.
+
+FLAGS
+  --auth-method=<value>  Which of the connector's auth methods to use, when more than one applies.
+  --description=<value>  Agent-visible note on what this connection is for.
+  --name=<value>         Account label. Defaults to the connector's title.
+  --owner=<option>       Share it with the team (default), or keep it yours within this team.
+                         <options: team|personal>
+  --slug=<value>         Connector slug when registering a new connector.
+  --surface=<option>     Prefer this protocol when a service offers more than one.
+                         <options: openapi|graphql|mcp>
+  --title=<value>        Display name when registering a new connector.
+  --wait                 Wait for browser OAuth sign-in to complete before exiting.
+
+GLOBAL FLAGS
+  -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
+  -y, --yes              [env: SPACEFAST_YES] Skip confirmation prompts.
+      --api-url=<URL>    [env: SPACEFAST_API_URL] Spacefast API base URL.
+      --cwd=<DIR>        Working directory for this invocation.
+      --[no-]json        Print the result as JSON.
+      --no-color         Disable color (NO_COLOR).
+      --non-interactive  Never prompt; fail with the required inputs instead (SPACEFAST_NON_INTERACTIVE).
+      --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
+
+CREDENTIAL FLAGS
+  --api-key=<value>   API key for connectors that take one. Never echoed back, in any output mode.
+  --field=<value>...  name=value for a connector that asks for several values. Repeat per field.
+
+BROWSER FLAGS
+  --[no-]open  Open the browser. --no-open prints the link instead.
+
+DESCRIPTION
+  Register and connect a connector in one step.
+
+  Register a connector if needed and connect an account in one command. Accepts a curated catalog slug, an existing
+  connector slug, or any OpenAPI, GraphQL, or MCP URL.
+
+EXAMPLES
+  Register Linear if needed and start connecting a team account.
+
+    $ sf connectors connect linear
+
+  Register Stripe and connect an API key in one step.
+
+    $ sf connectors connect stripe --api-key $STRIPE_KEY
+
+  Detect a remote MCP server, register it, and wait for OAuth sign-in.
+
+    $ sf connectors connect https://mcp.example.com/mcp --wait
+```
+
 ## `sf connectors connections`
 
 Manage connections.
@@ -3192,7 +3256,7 @@ Show a connector and its tools.
 USAGE
   $ sf connectors inspect CONNECTOR [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
     [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--query <value>] [--effect approve|require_approval|block]
-    [--limit <NUMBER>] [--cursor <CURSOR>]
+    [--limit <NUMBER>] [--cursor <CURSOR>] [--tool <value>]
 
 ARGUMENTS
   CONNECTOR  Connector slug.
@@ -3203,6 +3267,7 @@ FLAGS
                      <options: approve|require_approval|block>
   --limit=<NUMBER>   Maximum tools to return (default 50).
   --query=<value>    Filter tools by name or summary.
+  --tool=<value>     Show full JSON inputSchema, policy, and run command for one tool.
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -3223,6 +3288,10 @@ EXAMPLES
   See HubSpot's deal tools and whether policy lets them run.
 
     $ sf connectors inspect hubspot --query deals
+
+  Show full JSON input schema and policy for one tool.
+
+    $ sf connectors inspect stripe --tool list_customers
 ```
 
 ## `sf connectors list`
@@ -3898,17 +3967,21 @@ Search the connector catalog.
 ```text
 USAGE
   $ sf connectors search [QUERY] [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--source openapi|graphql|mcp] [--limit <NUMBER>] [--cursor
-    <CURSOR>]
+    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--source openapi|graphql|mcp] [--category
+    developer-tools|databases-infra|project-management|communication|docs-knowledge|email-calendar|payments-commerce|ana
+    lytics-observability|design|crm-support|ai-search] [--limit <NUMBER>] [--cursor <CURSOR>]
 
 ARGUMENTS
   [QUERY]  What to look for, such as calendar.
 
 FLAGS
-  --cursor=<CURSOR>  Continue from the cursor the previous page returned.
-  --limit=<NUMBER>   Maximum rows to return (default 50).
-  --source=<option>  Show only rows built from this kind of source.
-                     <options: openapi|graphql|mcp>
+  --category=<option>  Show only rows in this category.
+                       <options: developer-tools|databases-infra|project-management|communication|docs-knowledge|email-c
+                       alendar|payments-commerce|analytics-observability|design|crm-support|ai-search>
+  --cursor=<CURSOR>    Continue from the cursor the previous page returned.
+  --limit=<NUMBER>     Maximum rows to return (default 50).
+  --source=<option>    Show only rows built from this kind of source.
+                       <options: openapi|graphql|mcp>
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -3923,13 +3996,17 @@ GLOBAL FLAGS
 DESCRIPTION
   Search the connector catalog.
 
-  Searches the connectors a team can add: Spacefast presets and the public registry, with the ones already added marked.
-  Add a row with `sf connectors create <ID>`.
+  Searches the connectors a team can add: curated Spacefast connectors and the public registry, with the ones already
+  added marked. Connect a row with `sf connectors connect <SLUG>`.
 
 EXAMPLES
   Find calendar connectors to add.
 
     $ sf connectors search calendar
+
+  Browse connectors in the Payments & Commerce category.
+
+    $ sf connectors search --category payments-commerce
 ```
 
 ## `sf connectors serving`
@@ -7395,7 +7472,8 @@ USAGE
     [--output <value>] [--status] [--verify <value>]
 
 ARGUMENTS
-  [PATH]  Canonical route to fetch, or a full https URL of a page shared with you. Defaults to /.
+  [PATH]  Canonical route to fetch, a full https URL shared with you, or a share link URL (including /__#<token> or
+          /path#<token>). Defaults to /.
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -7418,13 +7496,18 @@ OUTPUT FLAGS
 DESCRIPTION
   Fetch private content.
 
-  Fetch private Space content through the same central exchange and host-only cookie flow as a browser. A full https URL
-  fetches a page someone shared with you personally; log in with `--access agent-personal-pages` first.
+  Fetch private Space content through the same central exchange and host-only cookie flow as a browser. Pass a share
+  link URL (including `#<token>`) to fetch directly with its embedded token, or a full https URL for a page shared with
+  you personally (log in with `--access agent-personal-pages` first).
 
 EXAMPLES
   Fetch /docs from the linked Space.
 
     $ sf fetch /docs --output ./docs.html
+
+  Fetch a private page directly using a share link URL (no login needed).
+
+    $ sf fetch 'https://plan.space.fast/__#<token>' --output ./plan.html
 
   Fetch a private page someone shared with you.
 
@@ -9496,12 +9579,13 @@ BUILD FLAGS
   --output-directory=<value>       Build output directory relative to the app root.
   --prebuilt                       Publish a prebuilt directory or archive without installing or building.
   --remote                         Upload source and run the build remotely.
-  --root-directory=<value>         Repository subdirectory that contains the app.
+  --root-directory=<value>         Repository subdirectory that contains the app. For remote builds, add other source
+                                   paths with --source-include.
   --skip-build                     Skip the build command and publish the selected directory unless --output-directory
                                    is set.
   --skip-install                   Skip dependency installation.
-  --source-include=<value>...      Ignored file or directory to include in a remote source archive. Repeat for multiple
-                                   paths.
+  --source-include=<value>...      Repository-relative file or directory to include in a remote source archive,
+                                   including paths outside the build directories. Repeat for multiple paths.
 
 GIT FLAGS
   --git  Publish this Git repository by pushing it: sign in if needed, create its space (or use the linked one), add a
@@ -11340,11 +11424,11 @@ Create a Link.
 
 ```text
 USAGE
-  $ sf share link create --name <value> [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive]
-    [--profile <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--landing <value>]
-    [--path <value>...] [--exclude <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>]
-    [--expires <value>] [--max-uses <value>] [--require-verified-email] [--network <value>...] [--country <value>...]
-    [--exclude-country <value>...] [--exclude-user-agent <value>...] [--show-secret]
+  $ sf share link create [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
+    <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--landing <value>] [--path
+    <value>...] [--exclude <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>] [--expires
+    <value>] [--network <value>...] [--country <value>...] [--exclude-country <value>...] [--exclude-user-agent
+    <value>...] [--name <value>] [--show-secret]
 
 GLOBAL FLAGS
   -d, --debug            Print redacted diagnostic detail on stderr (SPACEFAST_DEBUG).
@@ -11361,16 +11445,14 @@ CONSTRAINTS FLAGS
   --exclude-country=<value>...     [default: ] Blocked ISO country code. Repeatable.
   --exclude-user-agent=<value>...  [default: ] Block user agents containing this text. Repeatable.
   --expires=<value>                How long the link lasts (e.g. 30m, 24h, 7d). Omit for no expiry.
-  --max-uses=<value>               Maximum successful opens before the Link stops working.
   --network=<value>...             [default: ] Unsupported: the runtime has no trusted visitor IP.
   --not-before=<value>             Do not admit this Link before this ISO date-time.
-  --require-verified-email         Admit only visitors whose session has a verified email.
 
 LINK FLAGS
   --exclude=<value>...  [default: ] Excluded route pattern local to this Link. Repeatable.
   --landing=<value>     Page opened by the Link. Defaults to / when allowed, then to a permitted path or directory from
                         --path. For a scope like /docs/*, supply a matching page.
-  --name=<value>        (required) Human name shown in the Links list.
+  --name=<value>        Human name shown in the Links list. Defaults to "Share link".
   --path=<value>...     [default: /**] Included route pattern. Repeat for disjoint paths.
   --role=<option>       [default: viewer] Role: viewer or commenter. Defaults to viewer. A commenter on the live target
                         needs comments set to Everywhere; otherwise target a Version.
@@ -11381,13 +11463,18 @@ LINK FLAGS
 DESCRIPTION
   Create a Link.
 
-  Create a named Link backed by one Grant. Links can View or Comment on multiple path patterns.
+  Create a share link backed by one Grant. Works with zero flags for a default view link, or customize name, role,
+  expiry, path, and version.
 
 EXAMPLES
-  Create a client Link that can comment on one Version's two path groups except internal docs.
+  Create a default view-only share link for the whole Space.
 
-    $ sf share link create --landing /docs --path "/docs/**" --path "/assets/**" --exclude "/docs/internal/**" \
-      --role commenter --target version:ver_123 --name "Client review" --expires 7d
+    $ sf share link create
+
+  Create a client share link that can comment on /docs for 7 days.
+
+    $ sf share link create --landing /docs --path "/docs/**" --role commenter --target version:ver_123 --name \
+      "Client review" --expires 7d
 ```
 
 ## `sf share link list`
@@ -11466,9 +11553,8 @@ USAGE
   $ sf share link update LINK [--api-url <URL>] [--cwd <DIR>] [-d] [--no-color] [--non-interactive] [--profile
     <NAME>] [--token <TOKEN>] [-y] [-T <TEAM>] [--space <SPACE>] [--name <value>] [--landing
     <value>] [--exclude <value>... --path <value>...] [--role viewer|commenter] [--target <value>] [--not-before <value>
-    | --no-not-before] [--expires <value> | --no-expiry] [--max-uses <value> | --no-max-uses] [--require-verified-email
-    | --allow-unverified-email] [--network <value>... | --no-network] [--country <value>... | ] [--exclude-country
-    <value>... | ] [--exclude-user-agent <value>... | ]
+    | --no-not-before] [--expires <value> | --no-expiry] [--network <value>... | --no-network] [--country <value>... | ]
+    [--exclude-country <value>... | ] [--exclude-user-agent <value>... | ]
 
 ARGUMENTS
   LINK  Link id.
@@ -11484,19 +11570,15 @@ GLOBAL FLAGS
       --profile=<NAME>   [env: SPACEFAST_PROFILE] Named provider profile from `sf profiles`.
 
 CONSTRAINTS FLAGS
-  --allow-unverified-email         Remove the verified-email requirement.
   --country=<value>...             Replace allowed ISO country codes. Repeatable.
   --exclude-country=<value>...     Replace blocked ISO country codes. Repeatable.
   --exclude-user-agent=<value>...  Replace blocked user-agent substrings. Repeatable.
   --expires=<value>                New lifetime from now (e.g. 30m, 24h, 7d).
-  --max-uses=<value>               Replace the maximum successful opens.
   --network=<value>...             Unsupported: the runtime has no trusted visitor IP.
   --no-expiry                      Remove the Link expiry.
-  --no-max-uses                    Remove the open limit.
   --no-network                     Remove network restrictions.
   --no-not-before                  Remove the earliest admission time.
   --not-before=<value>             Replace the earliest admission time with this ISO date-time.
-  --require-verified-email         Require a verified email.
 
 LINK FLAGS
   --exclude=<value>...  Excluded route pattern for the replacement path set. Repeatable.

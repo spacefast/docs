@@ -86,14 +86,16 @@ From a terminal, run `sf share identity grant`:
 sf share identity grant --connection acn_xxxxxxxx --subject alex@example.com --name "Alex (Acme SSO)" --path '/docs/**' --space my-space
 ```
 
-Over HTTP, send [`createSpaceGrant`](/api/reference/access/createspacegrant) with an `external` audience:
+Over HTTP, call [`createSpaceShareEntry`](/api/reference/spaces/createspaceshareentry) (`POST /v1/spaces/{spaceId}/share/entries`) with `audience: "identity"`:
 
 ```json
 {
+  "audience": "identity",
+  "connectionId": "acn_xxxxxxxx",
+  "subject": "alex@example.com",
   "name": "Alex (Acme SSO)",
-  "audience": { "kind": "external", "connectionId": "acn_xxxxxxxx", "subject": "alex@example.com" },
-  "resources": { "include": ["/docs/**"] },
-  "capabilities": ["page.view"],
+  "role": "viewer",
+  "paths": ["/docs/**"],
   "target": { "kind": "live" }
 }
 ```

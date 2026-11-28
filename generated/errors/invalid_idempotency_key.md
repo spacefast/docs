@@ -1,11 +1,11 @@
 ---
 title: "invalid_idempotency_key"
-description: "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal."
+description: "The request requires a valid Idempotency-Key or a secret for anonymous publish retries."
 ---
 
-The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.
+The request requires a valid Idempotency-Key or a secret for anonymous publish retries.
 
-**How to resolve:** Send a non-empty Idempotency-Key of at most 255 characters. Credential-free publish retries also need a stable, secret X-Spacefast-Idempotency-Principal containing 64 hexadecimal characters.
+**How to resolve:** Send a non-empty `Idempotency-Key` of at most 255 characters. For an anonymous publish with that header, generate 32 cryptographically random bytes before the first request. Hex-encode them and send the resulting 64 characters as `X-Spacefast-Idempotency-Principal`. Store both values privately and reuse them unchanged only when retrying the same request body and path. Never log or share the principal.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_idempotency_key",
   "title": "Invalid idempotency key",
-  "status": 422,
-  "detail": "The Idempotency-Key is missing or invalid, or an anonymous publish omitted its secret replay principal.",
+  "status": 400,
+  "detail": "The request requires a valid Idempotency-Key or a secret for anonymous publish retries.",
   "code": "invalid_idempotency_key",
   "requestId": "req_4mz0v8qk"
 }

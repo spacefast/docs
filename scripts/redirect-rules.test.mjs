@@ -66,7 +66,7 @@ test("the routing map stays well under budget and redirects moved public pages i
     ["/routing", "/redirects/"],
     ["/zero-runtime", "/zero-migration/"],
     ["/cli/domains", "/cli/reference/#sf-domains"],
-    ["/api/reference/spaces/createspacegrant", "/api/reference/access/createspacegrant/"],
+    ["/api/reference/account/getv1authemails", "/api/reference/account/listaccountemails/"],
   ]) {
     const url = new URL(`https://spacefast.com/docs${source}?from=test`);
     const first = matchRedirect({ compilation, request: { url, headers: new Headers() } });

@@ -5,7 +5,7 @@ description: "The team does not match the VIP organization or the Manager no lon
 
 The team does not match the VIP organization or the Manager no longer owns it.
 
-**How to resolve:** Ask a superadmin to check the organization binding and Manager ownership before retrying. Reconciliation does not repair ownership.
+**How to resolve:** Ask a superadmin to check the organization binding and Manager ownership before retrying. Syncing does not repair ownership.
 
 <div data-pagefind-ignore>
 

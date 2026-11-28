@@ -7,7 +7,7 @@ seo:
 
 Conductor runs Claude Code and Codex side by side on your Mac. Add Spacefast to Claude Code once and every Conductor workspace has it.
 
-**Run Spacefast MCP on this computer** ([MCP on your computer (stdio)](/connect/stdio-mcp/)). Adds Spacefast to Claude Code, which Conductor runs in every workspace. Starts the server on your computer with npx.
+**Run Spacefast MCP on this computer** (MCP on your computer (stdio)). Adds Spacefast to Claude Code, which Conductor runs in every workspace. Starts the server on your computer with npx.
 
 ```bash
 claude mcp add --scope user --transport stdio spacefast -- npx -y spacefast mcp
@@ -23,7 +23,5 @@ Fetch https://spacefast.com/setup.md
 ```
 
 Give the agent one prompt that lets it choose and complete the best setup lane.
-
-[Compare every way to connect](/connect/compare/)
 
 [Agent documentation](/agents/) · [Conductor documentation](https://www.conductor.build/docs/guides/configure-mcp-servers)
