@@ -3,9 +3,9 @@ title: Domain registration
 description: Search for a domain, check live pricing, register at cost, manage owner details and privacy, and handle renewals
 ---
 
-Spacefast registers apex domains at cost: you pay the registry price plus the ICANN fee in US dollars plus tax, with no markup. A registered domain belongs to your team, runs on [Spacefast DNS](/domains/dns), auto-renews by default, and does not count toward your plan's [custom domain limit](/pricing).
+Spacefast registers apex domains at cost: you pay the registry price plus the ICANN fee in US dollars plus tax, and Spacefast adds nothing on top. A registered domain belongs to your team, runs on [Spacefast DNS](/domains/dns), auto-renews by default, and does not count toward your plan's [custom domain limit](/pricing).
 
-If you already own a domain at another registrar, [connect it to a Space](/domains) without moving it, or [transfer the registration](/domains/transfers).
+If you already own a domain at another registrar, [connect it to a Space](/domains) without moving it, or [transfer the registration](/domains/transfers). If you're an AI assistant researching names for someone, follow [Domain research for assistants](/agents/domain-research).
 
 ## Find and buy a domain
 
@@ -24,7 +24,7 @@ Only team owners and admins can complete a domain purchase. An agent or API key 
 </Tab>
 <Tab title="CLI">
 
-Search for names, save registrant details if needed, and buy:
+Search for names, refine the session (`--input`, `--like`, `--dislike`, `--neutral`, `--select`, `--unselect`, `--interactive`, or `--local` for offline ideas), save registrant details if needed, and buy:
 
 ```bash
 sf domains search "a cozy bakery in Brooklyn" --json > names.json
@@ -32,13 +32,19 @@ sf domains search "shorter, playful names" --input @names.json --like 2 --select
 sf domains registration purchase example.com --contact-file contact.json
 ```
 
+Exact matches and names you like or select are checked live; generated suggestions use zone data (`availabilityMode: "zone"`), so check them live before buying.
+
 Without `--expect-total`, `purchase` holds the names for 24 hours, prints the total, and returns a checkout link without charging. To charge the team's saved payment method immediately (when your credential has purchasing power), pass the exact pre-tax total:
 
 ```bash
 sf domains registration purchase example.com --expect-total 10.34
 ```
 
-To pay from an agent wallet instead of the team's saved card, pass `--payment-token spt_...` together with `--expect-total`.
+To pay from an agent wallet instead of the team's saved card, pass `--payment-token spt_...` together with `--expect-total`. To confirm a held purchase later from the CLI, run [`sf purchases confirm`](/cli/reference#sf-purchases-confirm-id) (requires purchasing power on the paying team, or `domains:write` when paying with `--payment-token`):
+
+```bash
+sf purchases confirm pur_xxxxxxxx --expect-total 10.34
+```
 
 </Tab>
 <Tab title="Agents">
@@ -69,9 +75,10 @@ Check live availability before buying, save a registrant contact, then call [`pu
 | `GET /v1/domains/research/whois` | Read public registration data |
 | `GET` / `POST` / `PATCH /v1/domains/contacts` | List, save, or update registrant contacts |
 | `POST /v1/domains/purchases` | Create a purchase for up to 10 apex domains |
+| `GET` / `POST /v1/teams/{teamId}/purchases/{purchaseId}` (`/confirm`, `/cancel`) | Poll purchase payment status, confirm a held purchase, or cancel an unpaid one |
 | `GET` / `POST` / `PATCH /v1/domains/{domainId}/registration` | Read status, purchase/renew, or update registration settings |
 
-Search suggestions and default batch checks use zone data (`availabilityMode: "zone"`) and are not purchase guarantees. Confirm availability live before purchasing.
+Generated search suggestions and default batch checks use zone data (`availabilityMode: "zone"`) and are not purchase guarantees. Confirm availability live before purchasing.
 
 </Tab>
 </Tabs>
@@ -83,19 +90,19 @@ Search suggestions and default batch checks use zone data (`availabilityMode: "z
 | Purchasing power (`billing:purchase`) and matching total | Saved payment method is charged immediately |
 | No purchasing power, or no total supplied | Held for 24 hours as `awaiting_confirmation`; a team owner or admin pays at `purchase.confirmUrl` |
 | No usable payment method on the team | Held as `awaiting_payment_method`; an owner or admin adds a card at `confirmUrl` |
-| Stripe shared payment token (`spt_...`) with matching total | Token pays instead of the team's saved payment method |
+| Stripe shared payment token (`spt_...`) with matching total | Token pays instead of the team's saved payment method (requires `domains:write` on `sf purchases confirm` / [`confirmTeamPurchase`](/api/reference/teams/confirmteampurchase)) |
 
-No charge or registration happens until payment clears. If any name in a multi-domain cart cannot be bought, the entire purchase fails with [`domain_not_purchasable`](/errors/domain_not_purchasable). If the live price changed, it fails with [`purchase_total_changed`](/errors/purchase_total_changed).
+An agent without purchasing power hands you `confirmUrl` and stops; it does not retry or open a payment page itself. No charge or registration happens until payment clears. If any name in a multi-domain cart cannot be bought, the entire purchase fails with [`domain_not_purchasable`](/errors/domain_not_purchasable). If the live price changed, it fails with [`purchase_total_changed`](/errors/purchase_total_changed).
 
 ### After payment
 
-Check registration progress from the CLI or [`getDomainRegistration`](/api/reference/domains/getdomainregistration) (`GET /v1/domains/{domainId}/registration`):
+Check registration progress from the CLI:
 
 ```bash
 sf domains registration example.com
 ```
 
-A paid purchase moves through `pending_payment` → `pending_registration` → `active`. If the bank requires card verification (`requires_action`), open `confirmUrl` to complete it. If the registry rejects a name (taken, price changed, or maintenance), Spacefast refunds that name automatically, tax included.
+Over the API, poll [`getTeamPurchase`](/api/reference/teams/getteampurchase) (`GET /v1/teams/{teamId}/purchases/{purchaseId}`). If the purchase shows `requires_action`, the bank needs the cardholder to verify the charge at `confirmUrl`. Once the purchase is `paid`, poll [`getDomainRegistration`](/api/reference/domains/getdomainregistration) (`GET /v1/domains/{domainId}/registration`) as it moves through `pending_payment` → `pending_registration` → `active`. If the registry rejects a name (taken, price changed, or maintenance), Spacefast marks the registration `failed` with a reason and refunds that name automatically, tax included. To cancel an unpaid hold, use **Cancel purchase** at checkout or [`cancelTeamPurchase`](/api/reference/teams/cancelteampurchase).
 
 Once active, attach it to a Space with `sf domains add example.com --space my-space --role primary`. Because it uses Spacefast DNS, Spacefast writes the routing records for you. DNS propagation across networks can take up to 48 hours.
 

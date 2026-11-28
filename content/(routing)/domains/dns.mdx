@@ -150,7 +150,7 @@ sf domains nameservers set example.com ns1.spacefast.com,ns2.spacefast.com
 sf domains nameservers example.com
 ```
 
-If you delegate an externally registered domain to Spacefast DNS, Spacefast requires TXT ownership proof at the current DNS provider before serving the zone ([`dns_zone_ownership_unproven`](/errors/dns_zone_ownership_unproven)).
+When you delegate an externally registered domain to Spacefast DNS, pointing its nameservers to `ns1.spacefast.com` and `ns2.spacefast.com` proves ownership directly — Spacefast queries the registry directly so the change registers without waiting on public resolver caches. If the domain is already delegated to Spacefast DNS or another person holds a competing claim, Spacefast falls back to requiring TXT ownership proof at the previous DNS provider before serving the zone ([`dns_zone_ownership_unproven`](/errors/dns_zone_ownership_unproven)). Unverified claims expire after 72 hours while keeping your saved records.
 
 :::note[Propagation timing]
 Nameserver changes can take up to 48 hours to reach every network. Individual record edits propagate within the record's previous TTL.
