@@ -1,9 +1,9 @@
 ---
 title: "upload_path_not_canonical"
-description: "An upload path is not in canonical (decoded, NFC-normalized) form."
+description: "An upload path is not in normalized (decoded, NFC-normalized) form."
 ---
 
-An upload path is not in canonical (decoded, NFC-normalized) form.
+An upload path is not in normalized (decoded, NFC-normalized) form.
 
 **How to resolve:** Send paths exactly as declared, decoded once and NFC-normalized.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_path_not_canonical",
   "title": "Upload path not canonical",
-  "status": 400,
-  "detail": "An upload path is not in canonical (decoded, NFC-normalized) form.",
+  "status": 422,
+  "detail": "An upload path is not in normalized (decoded, NFC-normalized) form.",
   "code": "upload_path_not_canonical",
   "requestId": "req_4mz0v8qk"
 }

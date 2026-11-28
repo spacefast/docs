@@ -1,0 +1,116 @@
+---
+title: Quickstart
+description: Install the sf CLI, sign in, publish a folder, and put it on your own domain
+---
+
+You can publish a folder of static files and get a live `space.fast` URL in one command, then point your own domain at it. Existing Spaces on `view.fast` keep their URLs. See [URLs and hostnames](/urls).
+
+## Before you start
+
+You need a folder of built static files. Any framework's output directory works (`dist`, `out`, `build`, `public`). If you only have source, [`sf publish`](/cli/reference#sf-publish-dir) can build it for you; see [Frameworks and builds](/guides/frameworks).
+
+Don't want to install anything? Open [drop.fast](https://drop.fast) and drag a folder, a `.zip`, or a single `index.html` onto the window, or run `npx -y spacefast setup` from any terminal. No account needed to start. See [Drop](/publish#publish) or [Publish from Git](/git) (`push.fast`) for the browser and Git workflows.
+
+<Steps>
+  <Step title="Install the CLI">
+
+    ```package-install
+    npm install -g spacefast
+    ```
+
+    The npm package needs Node.js 22.19 or newer. On macOS or Linux you can use Homebrew instead (`brew install spacefast/tap/spacefast`). Standalone binaries are also available. Check the install:
+
+    ```bash
+    sf --version
+    ```
+
+  </Step>
+  <Step title="Sign in">
+
+    ```bash
+    sf login
+    ```
+
+    [`sf login`](/cli/reference#sf-login) prints a code and opens your browser. Approve the request there. The CLI receives an API key that lasts 30 days and expires after 7 days without use. Confirm with [`sf whoami`](/cli/reference#sf-whoami).
+
+    You can skip this step and publish anonymously. The claim link printed after the publish lets you attach the Space to your account later. An unclaimed Space serves for {{anonymous-ttlSeconds}} after creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation.
+
+  </Step>
+  <Step title="Publish">
+
+    ```bash
+    cd my-space
+    sf publish ./dist
+    ```
+
+    The CLI creates a Space, uploads the folder, and prints the URLs:
+
+    ```text
+    Published: https://quiet-harbor.space.fast
+
+      Open          https://quiet-harbor.space.fast
+      Live URL      https://quiet-harbor.space.fast
+      Version URL   https://quiet-harbor--v1.space.fast
+      Space         spc_…
+      Version       v1 (ready)
+      Files         12
+      Duration      3.2s
+    ```
+
+    The link between this folder and the Space is saved in `.spacefast/space.json`. Commit that file so the next `sf publish` from any machine updates the same Space.
+
+  </Step>
+  <Step title="Publish again, then roll back">
+
+    If you skipped sign-in, run [`sf spaces claim`](/cli/reference#sf-spaces-claim) in this directory first. It asks you to sign in and attach the Space to a team. [`sf versions list`](/cli/reference#sf-versions-list) and rollback by version number need a claimed Space.
+
+    Change a file and run [`sf publish`](/cli/reference#sf-publish-dir) (`sf publish ./dist`) again. Only changed files upload. You get `v2`, and `live` now points at it. The version URL for a retained `v1` still serves the old build.
+
+    ```bash
+    sf versions list
+    sf rollback v1
+    ```
+
+    [`sf rollback`](/cli/reference#sf-rollback-version) puts `v1`'s files live without running a build. By default it applies your current rewrites, so the result is a new version. To put `v2` back, run [`sf promote`](/cli/reference#sf-promote-version) (`sf promote v2`).
+
+  </Step>
+  <Step title="Add your domain">
+
+    ```bash
+    sf domains add example.com --role primary
+    ```
+
+    [`sf domains add`](/cli/reference#sf-domains-add-hostname) prints the DNS records to create at your DNS provider: a TXT record that proves you control the name, and A records that route traffic. Adding an apex also adds `www` and redirects it to the apex. Check progress with [`sf domains check`](/cli/reference#sf-domains-check-domain):
+
+    ```bash
+    sf domains check example.com
+    ```
+
+    Once the domain is `active`, the Live URL switches to `https://example.com`. The `space.fast` hostname keeps working. Details, states, and troubleshooting are in [Custom domains](/domains).
+
+    No domain yet? [`sf domains search`](/cli/reference#sf-domains-search-query) (`sf domains search "your idea"`) finds one, and [Register a domain](/domains/registration) walks you through buying it.
+
+  </Step>
+</Steps>
+
+## Next
+
+Add redirects, response headers, cache rules, or Workers in [`spacefast.config.ts`](/config-file). Working with other people? If your Space is still anonymous, [claim it first](/agents/anonymous-and-claim#claim-it). Signed-in publishes already belong to a team. Personal and Go allow only the owner; adding another member needs [Pro](/pricing). Then [invite members](/teams#invite-someone) to publish and roll back together. Owners and admins can manage domains and invitations. Choose whether new Spaces start private to the team or public in [team access settings](/teams#default-access-for-new-spaces).
+
+<CardGroup cols={2}>
+  <Card title="Work with a team" href="/teams" icon="users">
+    Invite members, choose roles, and set access for new Spaces.
+  </Card>
+  <Card title="Let your agent publish" href="/agents" icon="bot">
+    Install the Spacefast plugin for Claude Code, Cursor, or Codex.
+  </Card>
+  <Card title="Publish from Git" href="/git" icon="git-branch">
+    Push to `push.fast` or connect GitHub and let Spacefast build.
+  </Card>
+  <Card title="Build with Spacefast" href="/build" icon="database">
+    Add collections, actions, a database, Workers, email, and crons.
+  </Card>
+  <Card title="Run in CI" href="/ci" icon="workflow">
+    Publish from GitHub Actions or GitLab CI with an API key.
+  </Card>
+</CardGroup>

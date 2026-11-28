@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_tool_blocked",
   "title": "Connector tool blocked",
-  "status": 400,
+  "status": 422,
   "detail": "A policy rule blocks this tool for this caller.",
   "code": "connector_tool_blocked",
   "requestId": "req_4mz0v8qk"

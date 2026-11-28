@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_enrollment_revoked",
   "title": "Dev relay enrollment revoked",
-  "status": 400,
+  "status": 422,
   "detail": "A Spacefast admin revoked this dev relay, so it no longer renews.",
   "code": "dev_relay_enrollment_revoked",
   "requestId": "req_4mz0v8qk"

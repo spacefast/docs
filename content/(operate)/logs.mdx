@@ -1,0 +1,113 @@
+---
+title: Logs
+description: Read origin access logs, edge request logs, runtime output, and build logs with sf logs, including follow mode, filters, and paging rules
+---
+
+Use [`sf logs`](/cli/reference#sf-logs-target-kind) for requests, `sf logs runtime` for your code's output, and [`sf builds logs`](/cli/reference#sf-builds-logs-build) for build failures.
+
+## Four streams
+
+| Stream | What it holds | How to read it |
+| --- | --- | --- |
+| Access | Requests that reached the origin | `sf logs`, dashboard **Logs** with source **Access** |
+| Edge | Requests handled by the edge, including cache hits and challenges | `sf logs edge`, dashboard **Logs** with source **Edge Logs** |
+| Runtime | Lines your own code, workers, jobs, or connectors wrote | `sf logs runtime`, dashboard **Logs** with source **App** |
+| Build | A build runner's output | `sf builds logs <bld_...>` |
+
+Access, edge, and runtime are per Space. Build logs belong to one build.
+
+On teams that are or have been on Enterprise plans, Space logs are restricted to team owners and admins rather than every team member.
+
+## Read logs from the CLI
+
+Read recent entries or follow a stream live from the terminal:
+
+```bash
+sf logs
+sf logs edge
+sf logs runtime
+sf logs my-space runtime
+sf logs https://example.com access
+sf logs runtime --follow
+```
+
+The first positional argument is a target: a Space ID, slug, live URL, or custom domain. The second is the kind (`access`, `edge`, or `runtime`, defaulting to `access`). The command shifts a bare kind out of the first slot, so `sf logs runtime` and `sf logs my-space runtime` both work. See [Edge request logs](/infrastructure/edge-request-logs) for edge-specific filters such as `--hostname`, `--status`, `--method`, `--remote-addr`, `--asn`, `--ja3-hash`, and `--user-agent`.
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--limit` | 50 | Entries per page, 1 to 100 |
+| `--follow`, `-f` | off | Polls every 2 seconds until Ctrl-C |
+| `--wait-timeout` | none | With `--follow`, stops following after this many seconds and exits 0 |
+| `--cursor` | none | Continues from the cursor the previous page printed |
+| `--since`, `--until` | none | ISO 8601 time window boundaries |
+| `--request-id` | none | Runtime only. Everything logged while serving one request |
+| `--handler` | none | Runtime only. Lines from one handler |
+| `--source` | `all` | Runtime only. One of `all`, `box`, `worker`, `job`, or `connector` |
+
+`--request-id`, `--handler`, and `--source` apply only to `sf logs runtime` and are refused on the access stream rather than ignored.
+
+`--follow` polls on a 2-second interval rather than opening a websocket or server-sent stream. Each poll prints only entries it has not seen, newest first, deduplicated against the last 5,000 entries.
+
+`--follow --json` writes one JSON object per line, then a final `{"data":{"followed":true,"kind":"runtime"}}` when you interrupt it, so you can pipe it straight into `jq`:
+
+```bash
+sf logs runtime --follow --json | jq 'select(.data.level == "error")'
+```
+
+## What an entry carries
+
+Access entries carry the time, host, method, path, status, and byte count. The dashboard shows them as **Time**, **Host**, **Method**, **Path**, and **Status**.
+
+Runtime entries carry structured fields:
+
+| Field | Notes |
+| --- | --- |
+| `timestamp` | When the line was written |
+| `level` | `debug`, `info`, `warn`, or `error` |
+| `requestId` | Nullable. Pass it to `--request-id` |
+| `handlerName` | Nullable. Names the handler that wrote the line |
+| `versionId` | Nullable |
+| `message` | What your code logged |
+| `metadata` | Structured data passed alongside the message |
+
+In server runtime code, `ctx.log.info(message, data)`, `warn`, and `error` write to this stream, alongside output from Workers, background jobs, and connectors (filterable with `--source`). A static Space returns an empty runtime stream because it runs no code.
+
+## Two things that surprise people
+
+:::caution[A line you just triggered will not be in the next page]
+A record is written on the origin, shipped off the box, and indexed before it can be read back. Runtime lines lag behind execution. If a line is missing right after a request, wait and page again.
+:::
+
+**An empty page does not mean the end of the log.** A response can carry `hasMore: true` with no entries, which means the scan stopped early rather than that nothing is left. Keep following the cursor. The CLI prints `More: --cursor <nextCursor>` even for an empty page for this reason.
+
+## Filters
+
+`--request-id` and `--handler` are applied over pages already fetched, so give a `--limit` large enough to cover the window you care about.
+
+Use `--since` and `--until` for an ISO 8601 time window. Edge logs have their own [window and retention limits](/infrastructure/edge-request-logs#filters-and-time-windows).
+
+## Retention
+
+Log retention is a plan limit covering runtime and edge logs: Personal keeps 1 day, Go keeps 3 days, Pro keeps 7 days, and Enterprise offers custom retention plus log drains. Build logs are kept with each version.
+
+A request that reaches past your plan's window is not silently truncated. It answers with what it can plus a `log_retention_clamped` warning naming the effective `since`. See [Limits](/limits) and [Pricing](/pricing).
+
+## Build logs
+
+Read or follow a build's logs with [`sf builds logs`](/cli/reference#sf-builds-logs-build):
+
+```bash
+sf builds logs bld_123
+sf builds logs bld_123 --follow
+```
+
+`--limit` is 1 to 100, `--cursor` pages, and `--follow` streams until the build reaches a terminal state. In the dashboard, open **Builds**, pick a run, and the log pane streams while it runs.
+
+## API
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceAccessLogs`](/api/reference/activity/listspaceaccesslogs) | `GET /v1/spaces/{spaceId}/logs/access` |
+| [`listSpaceEdgeLogs`](/api/reference/activity/listspaceedgelogs) | `GET /v1/spaces/{spaceId}/logs/edge` |
+| [`listSpaceRuntimeLogs`](/api/reference/activity/listspaceruntimelogs) | `GET /v1/spaces/{spaceId}/logs/runtime` |
+| [`listBuildLogs`](/api/reference/builds/listbuildlogs) | `GET /v1/builds/{buildId}/logs` |

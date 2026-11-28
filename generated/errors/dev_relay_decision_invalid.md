@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_decision_invalid",
   "title": "Dev relay decision invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The dev relay enrollment is already in the requested state, or no longer exists.",
   "code": "dev_relay_decision_invalid",
   "requestId": "req_4mz0v8qk"

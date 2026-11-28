@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_tool_not_found",
   "title": "Connector tool not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested tool is not available on this connection.",
   "code": "connector_tool_not_found",
   "requestId": "req_4mz0v8qk"

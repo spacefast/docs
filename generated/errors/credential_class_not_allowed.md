@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/credential_class_not_allowed",
   "title": "Credential class not allowed",
-  "status": 400,
+  "status": 422,
   "detail": "This credential type cannot perform this action.",
   "code": "credential_class_not_allowed",
   "requestId": "req_4mz0v8qk"

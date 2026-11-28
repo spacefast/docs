@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_not_found",
   "title": "Plan code not found",
-  "status": 400,
+  "status": 422,
   "detail": "No plan code matches this link.",
   "code": "plan_code_not_found",
   "requestId": "req_4mz0v8qk"

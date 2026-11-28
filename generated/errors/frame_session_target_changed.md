@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_session_target_changed",
   "title": "Frame session target changed",
-  "status": 400,
+  "status": 422,
   "detail": "The server-owned Frame serving target changed after launch.",
   "code": "frame_session_target_changed",
   "requestId": "req_4mz0v8qk"

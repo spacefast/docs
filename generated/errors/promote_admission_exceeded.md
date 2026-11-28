@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promote_admission_exceeded",
   "title": "Promote admission exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "Too many archived files are being restored for this space right now.",
   "code": "promote_admission_exceeded",
   "requestId": "req_4mz0v8qk"

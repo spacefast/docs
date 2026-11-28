@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/inject_snippet_too_large",
   "title": "Inject snippet too large",
-  "status": 400,
+  "status": 422,
   "detail": "An inject snippet exceeds the per-snippet size limit.",
   "code": "inject_snippet_too_large",
   "requestId": "req_4mz0v8qk"

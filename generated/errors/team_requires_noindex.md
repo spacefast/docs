@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_requires_noindex",
   "title": "Team requires noindex",
-  "status": 400,
+  "status": 422,
   "detail": "This team hides every space from search engines.",
   "code": "team_requires_noindex",
   "requestId": "req_4mz0v8qk"

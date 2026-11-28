@@ -1,0 +1,75 @@
+---
+title: Labs
+description: Join early features for your team in Settings, check status, or turn them off
+---
+
+<Badge variant="warning">Labs</Badge>
+
+Labs lets team owners and admins opt a team into early features before they open to everyone. Joining a feature turns it on for every member and connected agent on that team.
+
+## Available Labs features
+
+Three team-context features are available through Labs. They share one private storage home on your team, which you initialize the first time you open any of them:
+
+<CardGroup cols={3}>
+  <Card title="Team Memories" href="/team-memories" icon="brain">
+    Save lasting facts, decisions, and preferences that every connected agent reads before it works.
+  </Card>
+  <Card title="Team Skills" href="/team-skills" icon="sparkles">
+    Turn on preset practices such as SEO, accessibility, and spam protection for your team's agents.
+  </Card>
+  <Card title="Design System" href="/design-system" icon="palette">
+    Store colors, typography, layout, voice, and brand files so every Space matches your brand.
+  </Card>
+</CardGroup>
+
+| Feature | How to join |
+| --- | --- |
+| [Team Memories](/team-memories) | Join the waitlist |
+| [Team Skills](/team-skills) | Apply with a short note |
+| [Design System](/design-system) | Join the waitlist |
+
+## How joining works
+
+Open your team and go to **Team settings → Labs** to see available features, how to join each one, and your team's current status.
+
+| How to join | What happens |
+| --- | --- |
+| Turn on right away | Turns the feature on immediately for your team |
+| Join the waitlist | Adds your team to the waitlist until Spacefast approves access |
+| Apply with a short note | Submits a request with a required note (up to 1,000 characters) explaining what your team wants the feature for |
+
+Each feature shows your team's current status on the same page:
+
+- **On the waitlist** or **Applied**: waiting for Spacefast to review the request.
+- **On**: approved and active for your team.
+- **Paused**: temporarily paused by Spacefast or held by a plan requirement.
+- **Not yet**: declined for now; you can submit a new request later.
+
+You can turn off an active feature, leave a waitlist, or withdraw an application from the same page at any time.
+
+### Who can join or leave
+
+Any team member can list Labs features and check enrollment status. Only team **owners and admins in a dashboard browser session** can join, leave, or withdraw a pending request. API keys, CLI logins, and agent grants cannot change Labs enrollment.
+
+## API operations
+
+All paths below start with `/v1/teams/{teamId}`. See the [API reference](/api/reference) for full schemas.
+
+| Method and path | Operation | What it does |
+| --- | --- | --- |
+| `GET /labs` | [`listTeamLabs`](/api/reference/teams/listteamlabs) | List every Labs feature and this team's enrollment status |
+| `POST /labs/{featureKey}` | [`enrollTeamLabs`](/api/reference/teams/enrollteamlabs) | Join a feature or submit a request; send `{"note":"..."}` for features that require a note |
+| `DELETE /labs/{featureKey}` | [`leaveTeamLabs`](/api/reference/teams/leaveteamlabs) | Leave an active feature or withdraw a pending request |
+
+Use these keys in the API:
+
+| Feature | API key |
+| --- | --- |
+| Team Memories | `agents.memories` |
+| Team Skills | `agents.skills` |
+| Design System | `agents.design_system` |
+
+## Shared team context setup
+
+Team Memories, Team Skills, and Design System store their records in one private context home per team. The first time you open **Memories**, **Skills**, or **Design System** in the dashboard, select **Set up team context** if prompted. Over the API, call [`ensureTeamContext`](/api/reference/teams/ensureteamcontext) (`POST /v1/teams/{teamId}/context`) with an empty request body and a credential that holds `spaces:write`. Repeated calls reuse the same storage home.

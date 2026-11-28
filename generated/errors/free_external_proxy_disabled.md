@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/free_external_proxy_disabled",
   "title": "Free external proxy disabled",
-  "status": 400,
+  "status": 422,
   "detail": "Proxy routes to external upstreams do not serve on an unclaimed Space.",
   "code": "free_external_proxy_disabled",
   "requestId": "req_4mz0v8qk"

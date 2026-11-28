@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/confirmation_expired",
   "title": "Confirmation expired",
-  "status": 400,
+  "status": 422,
   "detail": "The confirmation for this action expired before a person decided it.",
   "code": "confirmation_expired",
   "requestId": "req_4mz0v8qk"

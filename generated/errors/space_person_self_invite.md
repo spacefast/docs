@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_person_self_invite",
   "title": "Space person self invite",
-  "status": 400,
+  "status": 422,
   "detail": "The inviter already belongs to the space.",
   "code": "space_person_self_invite",
   "requestId": "req_4mz0v8qk"

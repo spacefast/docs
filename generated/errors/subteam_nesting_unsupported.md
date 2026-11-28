@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/subteam_nesting_unsupported",
   "title": "Subteam nesting unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "Only a regular top-level team can have subteams. Subteams, system teams, and partner teams can't.",
   "code": "subteam_nesting_unsupported",
   "requestId": "req_4mz0v8qk"

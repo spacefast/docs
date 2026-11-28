@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_malformed",
   "title": "Token malformed",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token is not a valid compact JWT within the size limit.",
   "code": "token_malformed",
   "requestId": "req_4mz0v8qk"

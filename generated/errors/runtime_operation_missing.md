@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_operation_missing",
   "title": "Runtime operation missing",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime operation referenced by this request was not found.",
   "code": "runtime_operation_missing",
   "requestId": "req_4mz0v8qk"

@@ -1,0 +1,165 @@
+---
+title: Publish from CI
+description: Run sf publish from GitHub Actions or GitLab CI with a deploy token or API key, a pinned Space, and the live URL read out of the receipt
+---
+
+A CI pipeline can publish pushes to your production branch. Use `--target preview` for pull requests to leave the `live` channel unchanged; an ordinary publish can move it.
+
+## Set it up
+
+<Steps>
+  <Step title="Mint a deploy token or API key">
+
+    For one Space, create a **deploy token** with [`sf deploy-tokens create`](/cli/reference#sf-deploy-tokens-create). Deploy tokens are Space-scoped `sfm_` machine tokens that default to preview-only publishing:
+
+    ```bash
+    # Preview-only token for pull request checks
+    sf deploy-tokens create --name ci-preview --show-secret
+
+    # Preview + live token for production releases, expiring after 90 days
+    sf deploy-tokens create --name ci-release --live --expires 90d --show-secret
+    ```
+
+    The `sfm_` secret prints once. Copy it and store it as a secret named `SPACEFAST_TOKEN` in your CI provider. Rotate or revoke tokens in place with [`sf deploy-tokens rotate`](/cli/reference#sf-deploy-tokens-rotate-id) and [`sf deploy-tokens revoke`](/cli/reference#sf-deploy-tokens-revoke-id).
+
+    If one workflow publishes to multiple Spaces across a team, create a team-scoped `sfa_` API key instead:
+
+    ```bash
+    sf api-keys create --name "CI publish" --preset ci_deploy
+    ```
+
+    The `sfa_` secret prints once in human output only. Presets, scopes, deploy tokens, and rotation are on [API keys and tokens](/api-keys).
+
+  </Step>
+  <Step title="Pin the Space">
+
+    Commit `.spacefast/space.json`. It records which Space, team, and API base URL this checkout publishes to, and it is written for you by the first `sf publish` or by `sf link`. Never commit `.spacefast/state.json`.
+
+    If you would rather not commit the link, set `SPACEFAST_SPACE` to the Space ID or slug in your CI environment instead. A blank value is an error, not "absent", so a misconfigured variable cannot silently create a second Space.
+
+  </Step>
+  <Step title="Add the workflow">
+
+    Install the CLI, build, publish, and read the URL back out of the receipt.
+
+  </Step>
+</Steps>
+
+## Deploy tokens vs API keys
+
+| Credential | Prefix | Scope | Best for |
+| --- | --- | --- | --- |
+| Deploy token ([`sf deploy-tokens`](/cli/reference#sf-deploy-tokens)) | `sfm_` | One Space; preview-only by default, `--live` for live, optional `--view-only` and `--path` filters | Single-repository CI jobs and least-privilege PR previews |
+| API key ([`sf api-keys`](/cli/reference#sf-api-keys)) | `sfa_` | Team-wide (or single Space via API), bounded by a preset such as `ci_deploy` | Shared workflows that publish to several Spaces or manage domains |
+
+Manage existing deploy tokens with [`sf deploy-tokens list`](/cli/reference#sf-deploy-tokens-list), [`sf deploy-tokens update`](/cli/reference#sf-deploy-tokens-update-id) (change target, paths, or expiry without changing the secret), [`sf deploy-tokens rotate`](/cli/reference#sf-deploy-tokens-rotate-id), and [`sf deploy-tokens revoke`](/cli/reference#sf-deploy-tokens-revoke-id). Pass `--show-secret` when scripting creation or rotation with `--json`.
+
+## The workflow
+
+<Tabs>
+<Tab title="GitHub Actions">
+
+```yaml .github/workflows/publish.yml
+name: Publish
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build
+      - run: npm install -g spacefast
+      - name: Publish
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: |
+          sf publish ./dist --json > receipt.json
+          echo "Live: $(jq -r '.data.space.liveUrl' receipt.json)"
+```
+
+</Tab>
+<Tab title="GitLab CI">
+
+```yaml .gitlab-ci.yml
+publish:
+  image: node:22
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - apt-get update -qq && apt-get install -y -qq jq
+    - npm ci
+    - npm run build
+    - npm install -g spacefast
+    - sf publish ./dist --json > receipt.json
+    - echo "Live: $(jq -r '.data.space.liveUrl' receipt.json)"
+```
+
+`SPACEFAST_TOKEN` goes in **Settings → CI/CD → Variables**, masked. GitLab puts it in the job environment for you.
+
+</Tab>
+</Tabs>
+
+The CLI needs Node.js 22.19 or newer. `sf publish` waits by default, but a successful command can leave a version ready without making it live. Check the receipt's activation outcome, especially for previews or a manual promotion policy.
+
+## What `CI` changes
+
+GitHub Actions and GitLab CI both set `CI` for you, and a truthy `CI` puts the CLI in agent mode. Three things follow.
+
+| Change | Detail |
+| --- | --- |
+| `--json` is appended | Every command prints `{ data }` on stdout, `{ error }` on stderr. Pass `--json` anyway so the command behaves the same when you run it locally |
+| Prompts are off | The CLI doesn't prompt |
+| `--yes` is not implied | Agent mode doesn't add it |
+
+A destructive command in CI without `--yes` fails with `confirmation_required` and exit code 2. Add `--yes` to the command that needs it rather than setting it globally.
+
+Credentials also behave differently under `CI`. The plaintext credential store is the default there, so a locked or missing OS keyring doesn't block a job.
+
+## Version provenance
+
+The CLI collects build provenance automatically. On GitHub Actions it reads the branch, commit SHA, ref, repository, run ID, run attempt, run URL, workflow, job, actor, and event name from the environment, plus the pull request number when the ref starts `refs/pull/`. On GitLab CI it reads the equivalents, and takes the commit title as the version message. Bitbucket Pipelines is detected too.
+
+Every value shows up on the version, so version history says which commit and which run produced each build. Override any of them with `--git-branch`, `--git-commit`, `--git-ref`, `--git-repository`, or `--message`. Full flag table on [`sf publish`](/cli/reference#sf-publish-dir).
+
+## Previews on pull requests
+
+`--target preview` creates a ready version and leaves the `live` channel alone. Add `pull_request` to the workflow's `on:` triggers, then swap the publish step for this one.
+
+```yaml
+      - name: Publish preview
+        if: github.event_name == 'pull_request'
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: |
+          sf publish ./dist --target preview --json > receipt.json
+          echo "Preview: $(jq -r '.data.version.immutableUrl' receipt.json)"
+```
+
+`version.immutableUrl` is that version's fixed hostname. It serves that exact build while the version is retained, regardless of what goes live later. `activation.outcome` comes back `unpromoted`, and promoting it later is one call to the URL in `links.promote`. See [Channels and previews](/channels).
+
+A preview on an existing Space refuses `--name`, `--mode`, and a non-`auto` `--spa`, because a preview must not change settings live traffic shares.
+
+## Read the receipt
+
+The fields a script usually checks:
+
+| Field | Use |
+| --- | --- |
+| `data.space.liveUrl` | The URL to print or comment on the PR |
+| `data.version.ref` | `v12`, the human version label |
+| `data.version.immutableUrl` | The per-version URL, for previews |
+| `data.next.action` | `done` when there is nothing left to do |
+| `data.diagnostics` | Dropped paths, warnings, and `noop_publish` |
+
+A publish whose files reproduce the live version byte for byte creates no version and reports the `noop_publish` diagnostic. That is a success, not a failure. The whole receipt is documented on [Publishing](/publish).
+
+## Rate limits
+
+Publishing is capped per hour, both per person or API key and per account, with the numbers set by your plan. A pipeline that publishes on every push to a busy repository can reach them. A `429` carries `Retry-After` in seconds. See [Rate limits](/api/rate-limits).

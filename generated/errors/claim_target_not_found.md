@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/claim_target_not_found",
   "title": "Claim target not found",
-  "status": 400,
+  "status": 422,
   "detail": "The team or account to claim the space into was not found.",
   "code": "claim_target_not_found",
   "requestId": "req_4mz0v8qk"

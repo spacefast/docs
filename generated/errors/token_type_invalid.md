@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_type_invalid",
   "title": "Token type invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token has a typ header that Spacefast does not accept.",
   "code": "token_type_invalid",
   "requestId": "req_4mz0v8qk"

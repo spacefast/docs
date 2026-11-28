@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/tenant_past_due",
   "title": "Tenant past due",
-  "status": 400,
+  "status": 422,
   "detail": "The tenant is past due. Mutations are rejected while serving continues.",
   "code": "tenant_past_due",
   "requestId": "req_4mz0v8qk"

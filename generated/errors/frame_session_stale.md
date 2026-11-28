@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_session_stale",
   "title": "Frame session stale",
-  "status": 400,
+  "status": 422,
   "detail": "The Frame Link changed after this session was launched.",
   "code": "frame_session_stale",
   "requestId": "req_4mz0v8qk"

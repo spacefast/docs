@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_js_execution_failed",
   "title": "Zero js execution failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint JavaScript threw during execution.",
   "code": "zero_js_execution_failed",
   "requestId": "req_4mz0v8qk"

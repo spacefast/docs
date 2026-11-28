@@ -1,11 +1,11 @@
 ---
 title: "domain_wildcard_not_enabled"
-description: "Wildcard hostnames are not enabled for this domain or plan."
+description: "Wildcard domains aren't available yet."
 ---
 
-Wildcard hostnames are not enabled for this domain or plan.
+Wildcard domains aren't available yet.
 
-**How to resolve:** Bind concrete hostnames, or enable wildcard support for the domain.
+**How to resolve:** Add each subdomain as its own domain.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_wildcard_not_enabled",
   "title": "Domain wildcard not enabled",
-  "status": 400,
-  "detail": "Wildcard hostnames are not enabled for this domain or plan.",
+  "status": 422,
+  "detail": "Wildcard domains aren't available yet.",
   "code": "domain_wildcard_not_enabled",
   "requestId": "req_4mz0v8qk"
 }

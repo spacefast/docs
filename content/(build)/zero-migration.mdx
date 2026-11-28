@@ -1,0 +1,91 @@
+---
+title: Migrating from Zero 0.8
+description: What changed for Zero 0.8 and zero.config.ts apps, what keeps serving, and how to move to spacefast.config.ts capabilities
+---
+
+Zero 0.8 (`runtime: { kind: "zero" }` capsules) is deprecated and closing in stages. Deployed Zero 0.8 apps keep serving live traffic, rolling back, and accepting settings changes, while new dynamic development uses capabilities configured in `spacefast.config.ts`.
+
+## What changed
+
+Spacefast consolidated its dynamic capabilities into the [One Space model](/build), where static files, collections, server actions, database access, Workers, email, storage, crons, and connectors live together in `spacefast.config.ts`.
+
+Two deprecation stages apply to legacy Zero lanes:
+
+| Lane | Stage | What happens |
+| --- | --- | --- |
+| Zero 0.8 (`runtime.kind: "zero"`) | Closed to new Spaces | Spaces that have never run a Zero 0.8 app, and remixes of 0.8 Spaces, are refused with [`lane_deprecated`](/errors/lane_deprecated) |
+| Zero 0.8 (`runtime.kind: "zero"`) | Closed to new versions | New Zero 0.8 versions are refused with [`zero_upgrade_required`](/errors/zero_upgrade_required) |
+| `zero.config.ts` apps | Closed to new Spaces and versions | New Spaces are refused with [`zero_config_unavailable`](/errors/zero_config_unavailable); new versions are refused with [`lane_deprecated`](/errors/lane_deprecated) |
+
+### What keeps working
+
+- **Live serving continues:** Deployed Zero 0.8 and `zero.config.ts` apps keep serving visitors without interruption.
+- **Settings and rollbacks keep working:** Promoting ready versions, rolling back, and changing Space settings or environment variables carry the saved app forward and remain allowed.
+- **Version retirement after moving:** Once a Space publishes a newer app runtime, older Zero 0.8 version URLs return [`zero_legacy_retired`](/errors/zero_legacy_retired).
+- **Capsule connector roles are frozen:** A Zero 0.8 publish cannot add new connector roles inside `capsule({ connectors })`; declare new roles at the top level of `spacefast.config.ts` under `connectors`.
+
+## Capability mapping
+
+Map each Zero 0.8 feature to its replacement on a Space:
+
+| Zero 0.8 feature | Replacement | Guide |
+| --- | --- | --- |
+| `schema` (`table(...)`) | `app.collections` / `app.tables` in `spacefast.config.ts`, or direct SQL via `env.DB` | [Collections and CMS](/collections), [Database](/database) |
+| `queries`, `mutations`, `actions` | `app.actions` and `mutation()` in `sp/`, or `functions/` routes | [Actions and forms](/actions), [Workers](/functions) |
+| `endpoints` | `functions/` file router, root `handler.ts`, or `app.routes` | [Workers](/functions) |
+| `ctx.db` | `db` in app code, or `env.DB` (D1 API) in Workers | [Database](/database) |
+| `ctx.env` | `env` in Workers, managed with `sf env` and `.env.server` | [Environment variables](/environment-variables) |
+| `ctx.email` | `mail.send()` in app actions | [Transactional email](/email) |
+| `@spacefast/zero/client` `storage` | `env.STORAGE` in Workers, `sf storage`, and the Storage API | [Object storage](/object-storage) |
+| `capsule({ connectors })` | Top-level `connectors` in `spacefast.config.ts` | [Connectors](/connectors) |
+
+## Move a Zero 0.8 app to `spacefast.config.ts`
+
+`sf migrate app` does not convert Zero 0.8 `capsule()` projects automatically (it converts `zero.config.ts` and `content.managed` projects). Move a Zero 0.8 app step by step:
+
+<Steps>
+  <Step title="Export your Zero 0.8 database">
+    Save a full JSON backup of your declared tables before changing the Space. See [Database](/database) and [Backups, archives, and exports](/exports).
+
+    ```bash
+    sf db export --output ./zero-backup.json
+    ```
+  </Step>
+  <Step title="Switch to spacefast.config.ts">
+    Create `spacefast.config.ts` using `defineConfig` from `spacefast/config` (or start clean in a new directory with `sf init`). Remove the `runtime: { kind: "zero", ... }` block and migrate any `crons`, `redirects`, `rewrites`, `headers`, `templates`, and `connectors` into `spacefast.config.ts`.
+
+    If an older `sf.jsonc` still has a top-level `functions` key, remove it or publishing fails with [`config_functions_key_removed`](/errors/config_functions_key_removed). Place Worker overrides under `runtime: { kind: "functions" }` or let `sf publish` detect `functions/` or `handler.ts` automatically.
+  </Step>
+  <Step title="Port data models and handlers">
+    Move tables and content models into `app.collections` or `app.tables`, and move form or write handlers into `app.actions` (or scaffold one with `sf add form`). Move custom HTTP endpoints into `functions/` Worker routes.
+  </Step>
+  <Step title="Validate and publish">
+    Validate configuration, app schemas, Worker routes, and secrets offline with `sf check`, test locally with `sf dev`, and publish to a preview or new Space first. Import any data you need from `./zero-backup.json` using `sf db rows add` or `sf db console`, then cut over your domain.
+
+    ```bash
+    sf check
+    sf dev
+    sf publish
+    ```
+  </Step>
+</Steps>
+
+## Move a `zero.config.ts` app with `sf migrate app`
+
+If your project uses `zero.config.ts`, `sf migrate app --from zero` converts it in place by rewriting `zero` and `typedpress` module imports as text without executing your code. It verifies that the migrated project compiles before writing anything, and removes `zero.config.ts` after writing `spacepress.config.ts`.
+
+Preview the changes first, then apply them:
+
+```bash
+sf migrate app --from zero --dry-run
+sf migrate app --from zero
+sf check
+sf dev
+```
+
+Keep these limits in mind:
+
+- `sf migrate app` does not move database rows, users, or content; export and import data separately.
+- `sf migrate app` keeps existing files unless you pass `--force`.
+- If the directory still uses a legacy `tp/` folder, move those files into `sp/` and remove `tp/` before running `sf migrate app`.
+- `sf migrate <url>` (without `app`) captures a public website into a static Space; it does not migrate a local app. See [`sf migrate app`](/cli/reference#sf-migrate-app-input).

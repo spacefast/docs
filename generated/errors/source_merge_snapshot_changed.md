@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_merge_snapshot_changed",
   "title": "Source merge snapshot changed",
-  "status": 400,
+  "status": 422,
   "detail": "A managed merge ref no longer matches the pinned source snapshot.",
   "code": "source_merge_snapshot_changed",
   "requestId": "req_4mz0v8qk"

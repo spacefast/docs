@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/ingress_policy_active",
   "title": "Ingress policy active",
-  "status": 400,
+  "status": 422,
   "detail": "Traffic rules cannot be paused while the Space has an active ingress policy.",
   "code": "ingress_policy_active",
   "requestId": "req_4mz0v8qk"

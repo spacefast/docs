@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/lost_domain_control",
   "title": "Lost domain control",
-  "status": 400,
+  "status": 422,
   "detail": "Spacefast no longer observes DNS control for this domain.",
   "code": "lost_domain_control",
   "requestId": "req_4mz0v8qk"

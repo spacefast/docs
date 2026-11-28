@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_already_claimed",
   "title": "Space already claimed",
-  "status": 400,
+  "status": 422,
   "detail": "The space was already claimed. A claim can only succeed once.",
   "code": "space_already_claimed",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_owner_required",
   "title": "Team owner required",
-  "status": 400,
+  "status": 422,
   "detail": "Only a team owner can change this setting.",
   "code": "team_owner_required",
   "requestId": "req_4mz0v8qk"

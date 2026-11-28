@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/confirmation_denied",
   "title": "Confirmation denied",
-  "status": 400,
+  "status": 422,
   "detail": "A person reviewed this exact action and denied it. The denial is terminal.",
   "code": "confirmation_denied",
   "requestId": "req_4mz0v8qk"

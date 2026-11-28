@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/abuse_takedown",
   "title": "Abuse takedown",
-  "status": 400,
+  "status": 422,
   "detail": "This space was disabled by an abuse takedown and cannot be served or modified.",
   "code": "abuse_takedown",
   "requestId": "req_4mz0v8qk"

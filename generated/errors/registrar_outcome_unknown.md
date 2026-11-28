@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrar_outcome_unknown",
   "title": "Registrar outcome unknown",
-  "status": 400,
+  "status": 422,
   "detail": "The registrar has not confirmed whether the registration went through yet.",
   "code": "registrar_outcome_unknown",
   "requestId": "req_4mz0v8qk"

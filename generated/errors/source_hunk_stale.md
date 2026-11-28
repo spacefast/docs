@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_hunk_stale",
   "title": "Source hunk stale",
-  "status": 400,
+  "status": 422,
   "detail": "The hunk IDs do not match the current source workspace snapshots.",
   "code": "source_hunk_stale",
   "requestId": "req_4mz0v8qk"

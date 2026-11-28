@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_command_missing",
   "title": "Build command missing",
-  "status": 400,
+  "status": 422,
   "detail": "A build or install command cannot be found during the build run.",
   "code": "build_command_missing",
   "requestId": "req_4mz0v8qk"

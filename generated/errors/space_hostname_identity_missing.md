@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_hostname_identity_missing",
   "title": "Space hostname identity missing",
-  "status": 400,
+  "status": 422,
   "detail": "The space is missing its persisted default hostname identity.",
   "code": "space_hostname_identity_missing",
   "requestId": "req_4mz0v8qk"

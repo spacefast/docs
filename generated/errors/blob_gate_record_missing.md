@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/blob_gate_record_missing",
   "title": "Blob gate record missing",
-  "status": 400,
+  "status": 422,
   "detail": "The file behind this download link no longer exists.",
   "code": "blob_gate_record_missing",
   "requestId": "req_4mz0v8qk"

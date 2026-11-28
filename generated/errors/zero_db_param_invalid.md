@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_param_invalid",
   "title": "Zero db param invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A Zero database query parameter has an unsupported value.",
   "code": "zero_db_param_invalid",
   "requestId": "req_4mz0v8qk"

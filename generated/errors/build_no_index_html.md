@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_no_index_html",
   "title": "Build no index html",
-  "status": 400,
+  "status": 422,
   "detail": "The build produced output but no index.html at the site root.",
   "code": "build_no_index_html",
   "requestId": "req_4mz0v8qk"

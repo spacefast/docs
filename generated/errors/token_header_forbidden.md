@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_header_forbidden",
   "title": "Token header forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token contains a header that can select an untrusted key.",
   "code": "token_header_forbidden",
   "requestId": "req_4mz0v8qk"

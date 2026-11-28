@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_resolution_invalid",
   "title": "Source resolution invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The resolution contains duplicate paths or paths outside the current conflicts.",
   "code": "source_resolution_invalid",
   "requestId": "req_4mz0v8qk"

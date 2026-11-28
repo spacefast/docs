@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invitation_email_mismatch",
   "title": "Invitation email mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "This invitation was addressed to a different email than the accepting user.",
   "code": "invitation_email_mismatch",
   "requestId": "req_4mz0v8qk"

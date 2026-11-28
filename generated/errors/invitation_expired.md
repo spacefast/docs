@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invitation_expired",
   "title": "Invitation expired",
-  "status": 400,
+  "status": 422,
   "detail": "The invitation is expired and can no longer be accepted.",
   "code": "invitation_expired",
   "requestId": "req_4mz0v8qk"

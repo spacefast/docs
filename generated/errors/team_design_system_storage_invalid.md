@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_storage_invalid",
   "title": "Team design system storage invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A stored design-system record or action cannot be decoded.",
   "code": "team_design_system_storage_invalid",
   "requestId": "req_4mz0v8qk"

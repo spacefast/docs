@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_artifact_abi_mismatch",
   "title": "Zero artifact abi mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint artifact was built for a different runner ABI.",
   "code": "zero_artifact_abi_mismatch",
   "requestId": "req_4mz0v8qk"

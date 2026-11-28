@@ -1,0 +1,191 @@
+---
+title: Domain transfers
+description: Transfer domain registrations into or out of Spacefast, check transfer status, and manage transfer locks
+---
+
+Domain transfers move a domain's registration between Spacefast and another registrar while leaving your current DNS records and serving configuration untouched.
+
+:::note[Availability]
+Domain transfers into and out of Spacefast aren't available to every team yet. If the dashboard says transfers aren't available for your team, keep the registration where it is and [connect the domain](/domains) to serve a Space on it.
+:::
+
+## Transfer a domain to Spacefast
+
+Transferring a domain in adds one year to its registration at the extension's current Spacefast registration price (US dollars plus tax). Your domain keeps its current nameservers during the transfer, so DNS, email, and live Spaces stay online.
+
+### Before you start
+
+1. Unlock the domain at its current registrar.
+2. Request the domain's transfer authorization code (EPP code) from the current registrar.
+3. Confirm the domain is not inside a 60-day ICANN transfer lock (after registration, transfer, or registrant change).
+4. Make sure you have a [saved registrant contact](/domains/registration#owner-details-and-privacy) under your personal account.
+
+### Start a transfer in
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open your team's **Domains** page and add the domain or open its existing inventory record.
+2. On the **Registration** card (or in the add-domain transfer flow), enter the **Authorization code**.
+3. Select or enter the **Domain owner** details.
+4. Select **Continue to Payment** to review the price and pay. Nothing is charged until you pay.
+
+</Tab>
+<Tab title="CLI">
+
+Ensure the domain is in your team's domain list, then pass the authorization code from a file or stdin (`-`):
+
+```bash
+sf domains registration transfer-in example.com --auth-code-file code.txt
+```
+
+Without `--expect-total`, the command checks eligibility and returns a checkout link without charging. To charge the team's saved card immediately (with purchasing power), pass `--expect-total`:
+
+```bash
+sf domains registration transfer-in example.com --auth-code-file code.txt --expect-total 10.34
+```
+
+Optional flags: `--contact <dcon_...>` or `--contact-file <file>` to specify the registrant, and `--payment-token spt_...` with `--expect-total` to pay from an agent wallet.
+
+</Tab>
+<Tab title="API">
+
+Call [`createDomainRegistrationAction`](/api/reference/domains/createdomainregistrationaction) (`POST /v1/domains/{domainId}/registration`) with `action: "transfer_in"`:
+
+```json
+{
+  "action": "transfer_in",
+  "authCode": "your-auth-code",
+  "contactId": "dcon_...",
+  "expectedTotalCents": 1034
+}
+```
+
+Omit `expectedTotalCents` to hold the purchase for confirmation at `purchase.confirmUrl`.
+
+</Tab>
+</Tabs>
+
+Spacefast refuses domains without a registration price (such as premium names or unsupported extensions) with [`domain_not_purchasable`](/errors/domain_not_purchasable) and charges nothing.
+
+### Track a transfer in
+
+Transfers can take several days while the losing registrar and registry confirm. Poll status with `sf domains registration example.com` or [`getDomainRegistration`](/api/reference/domains/getdomainregistration). The API never returns authorization codes.
+
+| `transfer.status` (`direction: "in"`) | Meaning |
+| --- | --- |
+| `awaiting_payment` | Checkout created; nothing submitted to the registrar yet |
+| `submitting` | Payment cleared; Spacefast is submitting the transfer |
+| `pending` | Submitted; waiting on the losing registrar and registry |
+| `completed` | Spacefast now holds the registration |
+| `failed` | Transfer failed; payment is refunded if rejected |
+| `cancelled` | Checkout expired or was canceled before submission |
+
+## Transfer a domain away from Spacefast
+
+Only a current **team owner or admin** acting as themselves can transfer a domain out of Spacefast. Spacefast refuses team API keys with [`domain_transfer_forbidden`](/errors/domain_transfer_forbidden). Agent grants require explicit human confirmation before unlocking the domain.
+
+ICANN rules lock a domain for **60 days** after registration, transfer in, or changing the registrant's name, organization, or email. Attempting a transfer out during that window fails with [`domain_transfer_locked`](/errors/domain_transfer_locked), which reports `details.lockedUntil`.
+
+### Unlock and request an authorization code
+
+<Tabs>
+<Tab title="Dashboard">
+
+1. Open team **Domains** and select the domain.
+2. On the **Registration** card, select **Transfer to Another Registrar**.
+3. Type the domain name to confirm, then select **Unlock and Email Code**.
+
+</Tab>
+<Tab title="CLI">
+
+```bash
+sf domains registration transfer-out example.com --yes
+```
+
+Pass `--resend` to explicitly request another authorization email after checking the registrant's inbox.
+
+</Tab>
+<Tab title="API">
+
+Call [`createDomainRegistrationAction`](/api/reference/domains/createdomainregistrationaction) (`POST /v1/domains/{domainId}/registration`):
+
+```json
+{
+  "action": "transfer_out",
+  "resendAuthCode": false
+}
+```
+
+</Tab>
+</Tabs>
+
+Starting a transfer out unlocks the registration and asks the registrar to email the authorization code to the **registrant's email address**. The API never returns the code, and Spacefast never sends it to another team member. Once the email arrives, start the transfer at your new registrar using that code.
+
+Your DNS records and live Spaces remain unchanged while the transfer completes.
+
+### Track a transfer out
+
+Poll `sf domains registration example.com` or [`getDomainRegistration`](/api/reference/domains/getdomainregistration). Email acceptance means queued (`authCodeDelivery: "queued"`), not delivered; neither acceptance nor unlocking proves the transfer completed.
+
+| `transfer.status` (`direction: "out"`) | Meaning |
+| --- | --- |
+| `preparing` | Unlocking the domain and requesting the authorization email |
+| `ready` | Domain is unlocked and the authorization email was queued |
+| `pending` | The gaining registrar started the transfer; waiting for registry confirmation |
+| `completed` | Registration moved to the new registrar; DNS and Space settings stay as configured |
+| `needs_attention` | Transfer could not be confirmed; check the registrant inbox, resend, or lock the domain again |
+| `failed` | Transfer did not complete; check the gaining registrar before retrying or locking the domain again |
+| `cancelled` | Domain transfer lock was turned back on |
+
+## Lock a domain again
+
+If you decide not to transfer a domain away, or want to restore protection after a failed attempt, re-enable the transfer lock:
+
+<Tabs>
+<Tab title="Dashboard">
+
+Open the domain's **Registration** card and select **Enable Transfer Lock**.
+
+</Tab>
+<Tab title="CLI">
+
+```bash
+sf domains registration relock example.com
+```
+
+</Tab>
+<Tab title="API">
+
+Call [`updateDomainRegistration`](/api/reference/domains/updatedomainregistration) (`PATCH /v1/domains/{domainId}/registration`) with `transferLock` on its own and no other fields:
+
+```json
+{
+  "transferLock": true
+}
+```
+
+</Tab>
+</Tabs>
+
+Enabling the transfer lock again remains available for recovery even when new transfers are disabled.
+
+## Errors
+
+| Code | Meaning | Resolution |
+| --- | --- | --- |
+| [`domain_transfer_locked`](/errors/domain_transfer_locked) | Domain is inside a 60-day ICANN lock | Wait until `details.lockedUntil` and retry |
+| [`domain_transfer_forbidden`](/errors/domain_transfer_forbidden) | Caller is not a team owner or admin acting as themselves | Sign in as a team owner or admin |
+| [`domain_transfer_ineligible`](/errors/domain_transfer_ineligible) | Registrar or registry refused the transfer, or registration is not active | Verify the authorization code, unlock status, and registry rules |
+| [`domain_transfer_active`](/errors/domain_transfer_active) | Another transfer is already in progress | Wait for it to settle or cancel it first |
+| [`domain_transfer_email_failed`](/errors/domain_transfer_email_failed) | Registrar refused the authorization email request | Check the registrant contact and retry, or lock the domain again |
+| [`domain_transfer_email_unknown`](/errors/domain_transfer_email_unknown) | Registrar may have queued the email; outcome uncertain | Check the registrant inbox before using `--resend`, or lock the domain again |
+| [`domain_transfer_needs_attention`](/errors/domain_transfer_needs_attention) | Transfer could not be confirmed or prepared | Check transfer status and registrant inbox, then retry or lock the domain again |
+| [`domain_transfer_lock_unconfirmed`](/errors/domain_transfer_lock_unconfirmed) | Registrar has not confirmed the lock change | Refresh registration state and retry the lock call |
+| [`domain_transfer_authority_changed`](/errors/domain_transfer_authority_changed) | Registration access changed before the registrar action | Refresh the domain and start again with current purchase access |
+
+## Next steps
+
+- [Domain registration](/domains/registration): buy domains, manage contacts, and handle renewals
+- [DNS](/domains/dns): export zones or switch nameservers before or after a transfer
+- [`sf domains registration` CLI reference](/cli/reference#sf-domains-registration-transfer-in-domain): full transfer CLI flags

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/scan_pending",
   "title": "Scan pending",
-  "status": 400,
+  "status": 422,
   "detail": "The content is still being scanned for safety and cannot be served yet.",
   "code": "scan_pending",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/malformed_tool_address",
   "title": "Malformed tool address",
-  "status": 400,
+  "status": 422,
   "detail": "The tool address is not `<connectionId>/<tool>`.",
   "code": "malformed_tool_address",
   "requestId": "req_4mz0v8qk"

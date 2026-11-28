@@ -1,11 +1,11 @@
 ---
 title: "upload_import_failed"
-description: "The remote file transfer failed."
+description: "The remote file transfer failed before Spacefast stored the file."
 ---
 
-The remote file transfer failed.
+The remote file transfer failed before Spacefast stored the file.
 
-**How to resolve:** Retry the transfer with a current download reference.
+**How to resolve:** Retry the import. `details.phase` says whether the download host or Spacefast failed.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_import_failed",
   "title": "Upload import failed",
-  "status": 400,
-  "detail": "The remote file transfer failed.",
+  "status": 422,
+  "detail": "The remote file transfer failed before Spacefast stored the file.",
   "code": "upload_import_failed",
   "requestId": "req_4mz0v8qk"
 }

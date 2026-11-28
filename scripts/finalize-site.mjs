@@ -25,14 +25,33 @@ await rm(path.join(dist, ".well-known"), { recursive: true, force: true });
 // The platform reads _redirects. Blume's manifests for other hosts would only
 // be rewritten into stale, self-referencing entries here.
 for (const file of ["blume-redirects.json", "vercel.json"]) await rm(path.join(dist, file), { force: true });
+// The platform refuses to publish any file named like an agent config
+// (`mcp.json`, `.mcp.json`), so the per-page JSON twin of the @spacefast/mcp
+// changelog cannot ship. Drop that twin and its pointer in the page index;
+// the page itself and its Markdown mirror still publish.
+const agentConfigName = /(?:^|\/)\.?mcp\.json$/iu;
+const pageIndexFile = path.join(dist, "api/docs/pages.json");
+const pageIndex = JSON.parse(await readFile(pageIndexFile, "utf8"));
+for (const page of pageIndex.pages) {
+  if (!page.json || !agentConfigName.test(new URL(page.json).pathname)) continue;
+  await rm(path.join(dist, new URL(page.json).pathname.slice(base.length)), { force: true });
+  delete page.json;
+}
+await writeFile(pageIndexFile, `${JSON.stringify(pageIndex, null, 2)}\n`);
+const blockedTwins = (await listFiles()).filter((file) => agentConfigName.test(file));
+if (blockedTwins.length > 0) throw new Error(`Unpublishable agent-config filenames in dist: ${blockedTwins.join(", ")}`);
 // Include the catalogs just moved out of .well-known in URL normalization.
 files = await listFiles();
+const urlAliases = new Map([
+  ...catalogs,
+  [`${base}/api/docs`, `${base}/api/docs/pages.json`],
+]);
 const finalUrl = (value) => {
   const absolute = value.startsWith(origin);
   const local = absolute ? value.slice(origin.length) : value;
   if (local !== base && !local.startsWith(`${base}/`) && !local.startsWith(`${base}?`) && !local.startsWith(`${base}#`)) return value;
   const [, pathname, suffix = ""] = /^(.*?)([?#].*)?$/u.exec(local);
-  if (catalogs.has(pathname)) return `${absolute ? origin : ""}${catalogs.get(pathname)}${suffix}`;
+  if (urlAliases.has(pathname)) return `${absolute ? origin : ""}${urlAliases.get(pathname)}${suffix}`;
   const route = pathname.slice(base.length).replace(/\/$/u, "") || "/";
   const destination = resolveRedirect(route, rules).destination;
   const [target, fragment = ""] = destination.split(/(?=#)/u);

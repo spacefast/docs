@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_endpoint_mismatch",
   "title": "Zero endpoint mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The requested Zero endpoint does not match the endpoint artifact.",
   "code": "zero_endpoint_mismatch",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_facet_already_managed",
   "title": "Domain facet already managed",
-  "status": 400,
+  "status": 422,
   "detail": "This facet of the domain is already managed by Spacefast.",
   "code": "domain_facet_already_managed",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_has_paid_plan",
   "title": "Team has paid plan",
-  "status": 400,
+  "status": 422,
   "detail": "This team still has an active subscription or a purchase in progress, so it can't be deleted.",
   "code": "team_has_paid_plan",
   "requestId": "req_4mz0v8qk"

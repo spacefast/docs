@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_quota_exceeded",
   "title": "Storage quota exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The operation would exceed its storage allowance.",
   "code": "storage_quota_exceeded",
   "requestId": "req_4mz0v8qk"

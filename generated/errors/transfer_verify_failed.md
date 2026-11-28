@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_verify_failed",
   "title": "Transfer verify failed",
-  "status": 400,
+  "status": 422,
   "detail": "The target runtime cannot verify transferred blob content.",
   "code": "transfer_verify_failed",
   "requestId": "req_4mz0v8qk"

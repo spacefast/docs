@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_import_redirect_limit",
   "title": "Upload import redirect limit",
-  "status": 400,
+  "status": 422,
   "detail": "The download reference exceeded three redirects.",
   "code": "upload_import_redirect_limit",
   "requestId": "req_4mz0v8qk"

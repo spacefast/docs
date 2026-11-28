@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_zero_realtime_replay_query",
   "title": "Invalid zero realtime replay query",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero realtime replay query parameters are invalid.",
   "code": "invalid_zero_realtime_replay_query",
   "requestId": "req_4mz0v8qk"

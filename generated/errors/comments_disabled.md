@@ -5,7 +5,7 @@ description: "Comments are off for this Space."
 
 Comments are off for this Space.
 
-**How to resolve:** Turn them on in the Space's Comments settings, or run sf comments settings set --surface everywhere.
+**How to resolve:** Turn them on in the Space's Comments settings or run sf comments settings set --surface everywhere. Over the API, read `revision` with `getSpaceShare`, then send `comments: { previews: "on", live: "on" }` and that revision as `expectedRevision` to `updateSpaceShare`. If Comments are already on, turn on Page Enhancements in the Space's General settings. Over the API, read the Space's `config` and `settingsDigest` with `getSpace`, set `superpowers.enabled` to `true`, and send the whole `config` to `updateSpace` with that digest as `baseSettingsDigest`. `updateSpace` replaces the config, and the digest makes it refuse the write if the settings changed since your read.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comments_disabled",
   "title": "Comments disabled",
-  "status": 400,
+  "status": 422,
   "detail": "Comments are off for this Space.",
   "code": "comments_disabled",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_path_outside_link_resources",
   "title": "Frame path outside link resources",
-  "status": 400,
+  "status": 422,
   "detail": "The requested Frame path is outside the Link's resource set.",
   "code": "frame_path_outside_link_resources",
   "requestId": "req_4mz0v8qk"

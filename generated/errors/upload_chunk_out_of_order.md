@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_chunk_out_of_order",
   "title": "Upload chunk out of order",
-  "status": 400,
+  "status": 422,
   "detail": "The chunk index is not the next expected index.",
   "code": "upload_chunk_out_of_order",
   "requestId": "req_4mz0v8qk"

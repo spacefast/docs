@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_facet_not_applicable",
   "title": "Domain facet not applicable",
-  "status": 400,
+  "status": 422,
   "detail": "The requested facet does not apply to this domain.",
   "code": "domain_facet_not_applicable",
   "requestId": "req_4mz0v8qk"

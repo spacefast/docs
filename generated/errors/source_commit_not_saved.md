@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_commit_not_saved",
   "title": "Source commit not saved",
-  "status": 400,
+  "status": 422,
   "detail": "The selected commit is not in the project branch's saved first-parent history.",
   "code": "source_commit_not_saved",
   "requestId": "req_4mz0v8qk"

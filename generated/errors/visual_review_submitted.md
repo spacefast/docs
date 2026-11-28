@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_submitted",
   "title": "Visual review submitted",
-  "status": 400,
+  "status": 422,
   "detail": "This review already contains a different feedback batch.",
   "code": "visual_review_submitted",
   "requestId": "req_4mz0v8qk"

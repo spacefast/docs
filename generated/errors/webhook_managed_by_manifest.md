@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/webhook_managed_by_manifest",
   "title": "Webhook managed by manifest",
-  "status": 400,
+  "status": 422,
   "detail": "The webhook is declared in the tenant's system-space manifest.",
   "code": "webhook_managed_by_manifest",
   "requestId": "req_4mz0v8qk"

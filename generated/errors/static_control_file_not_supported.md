@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/static_control_file_not_supported",
   "title": "Static control file not supported",
-  "status": 400,
+  "status": 422,
   "detail": "This control file is not supported by the static runtime.",
   "code": "static_control_file_not_supported",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_recovery_license_mismatch",
   "title": "Jetpack recovery license mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The supplied license does not match this pending purchase.",
   "code": "jetpack_recovery_license_mismatch",
   "requestId": "req_4mz0v8qk"

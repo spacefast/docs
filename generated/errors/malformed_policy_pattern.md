@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/malformed_policy_pattern",
   "title": "Malformed policy pattern",
-  "status": 400,
+  "status": 422,
   "detail": "The policy pattern is not a valid tool-address pattern.",
   "code": "malformed_policy_pattern",
   "requestId": "req_4mz0v8qk"

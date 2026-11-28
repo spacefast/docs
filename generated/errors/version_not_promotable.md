@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_not_promotable",
   "title": "Version not promotable",
-  "status": 400,
+  "status": 422,
   "detail": "The version cannot be promoted in its current status.",
   "code": "version_not_promotable",
   "requestId": "req_4mz0v8qk"

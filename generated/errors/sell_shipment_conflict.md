@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/sell_shipment_conflict",
   "title": "Sell shipment conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The physical order cannot be marked shipped with the requested tracking reference.",
   "code": "sell_shipment_conflict",
   "requestId": "req_4mz0v8qk"

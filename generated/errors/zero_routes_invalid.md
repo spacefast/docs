@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_routes_invalid",
   "title": "Zero routes invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero routes artifact is invalid.",
   "code": "zero_routes_invalid",
   "requestId": "req_4mz0v8qk"

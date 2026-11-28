@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_memory_exists",
   "title": "Team memory exists",
-  "status": 400,
+  "status": 422,
   "detail": "An active memory with this title already exists in the same scope, ignoring case.",
   "code": "team_memory_exists",
   "requestId": "req_4mz0v8qk"

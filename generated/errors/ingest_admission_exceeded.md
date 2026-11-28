@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/ingest_admission_exceeded",
   "title": "Ingest admission exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "Too many concurrent uploads for this space.",
   "code": "ingest_admission_exceeded",
   "requestId": "req_4mz0v8qk"

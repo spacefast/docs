@@ -5,7 +5,7 @@ description: "This Space's comments are set to Previews only, so they show on Ve
 
 This Space's comments are set to Previews only, so they show on Versions but not on the live site, and a comment role can't point there.
 
-**How to resolve:** Point the Link or person at a Version (`--target version:<id>`), or set comments to Everywhere with sf comments settings set --surface everywhere.
+**How to resolve:** Point the Link or person at a Version (`--target version:<id>`), or set comments to Everywhere with sf comments settings set --surface everywhere. Over the API, read `revision` with `getSpaceShare`, then send `comments: { previews: "on", live: "on" }` and that revision as `expectedRevision` to `updateSpaceShare`.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comments_target_unavailable",
   "title": "Comments target unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "This Space's comments are set to Previews only, so they show on Versions but not on the live site, and a comment role can't point there.",
   "code": "comments_target_unavailable",
   "requestId": "req_4mz0v8qk"

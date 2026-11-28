@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_invalid",
   "title": "Team design system invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The design-system change is invalid or missing required values.",
   "code": "team_design_system_invalid",
   "requestId": "req_4mz0v8qk"

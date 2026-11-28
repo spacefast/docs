@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_endpoint_duplicate",
   "title": "Zero endpoint duplicate",
-  "status": 400,
+  "status": 422,
   "detail": "Two Zero endpoints declare the same method and route.",
   "code": "zero_endpoint_duplicate",
   "requestId": "req_4mz0v8qk"

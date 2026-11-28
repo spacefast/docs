@@ -1,11 +1,11 @@
 ---
 title: "last_owner"
-description: "The last owner of a team cannot be removed or downgraded."
+description: "The last owner of a team cannot be removed or downgraded. While the team requires SSO, that means the last owner with two-factor."
 ---
 
-The last owner of a team cannot be removed or downgraded.
+The last owner of a team cannot be removed or downgraded. While the team requires SSO, that means the last owner with two-factor.
 
-**How to resolve:** Promote another member to owner first.
+**How to resolve:** Promote another member to owner first. While the team requires SSO, that owner must turn on two-factor too.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/last_owner",
   "title": "Last owner",
-  "status": 400,
-  "detail": "The last owner of a team cannot be removed or downgraded.",
+  "status": 422,
+  "detail": "The last owner of a team cannot be removed or downgraded. While the team requires SSO, that means the last owner with two-factor.",
   "code": "last_owner",
   "requestId": "req_4mz0v8qk"
 }

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/idempotency_conflict_in_progress",
   "title": "Idempotency conflict in progress",
-  "status": 400,
+  "status": 422,
   "detail": "Another request with the same Idempotency-Key is still in flight.",
   "code": "idempotency_conflict_in_progress",
   "requestId": "req_4mz0v8qk"

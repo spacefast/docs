@@ -1,11 +1,11 @@
 ---
 title: "provider_runtime_feature_unsupported"
-description: "WP Cloud does not support this runtime feature."
+description: "This file is another platform's runtime feature, such as a Cloudflare Pages `_worker.js` or Netlify Functions. Spacefast publishes it as static content and does not run it."
 ---
 
-WP Cloud does not support this runtime feature.
+This file is another platform's runtime feature, such as a Cloudflare Pages `_worker.js` or Netlify Functions. Spacefast publishes it as static content and does not run it.
 
-**How to resolve:** Check the feature's availability for this site's runtime.
+**How to resolve:** Remove the file, or move that logic to Spacefast Functions.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_runtime_feature_unsupported",
   "title": "Provider runtime feature unsupported",
-  "status": 400,
-  "detail": "WP Cloud does not support this runtime feature.",
+  "status": 422,
+  "detail": "This file is another platform's runtime feature, such as a Cloudflare Pages `_worker.js` or Netlify Functions. Spacefast publishes it as static content and does not run it.",
   "code": "provider_runtime_feature_unsupported",
   "requestId": "req_4mz0v8qk"
 }

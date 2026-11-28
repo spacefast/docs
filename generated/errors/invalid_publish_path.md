@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_publish_path",
   "title": "Invalid publish path",
-  "status": 400,
+  "status": 422,
   "detail": "A file path in the publish payload is not allowed.",
   "code": "invalid_publish_path",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_expired",
   "title": "Version expired",
-  "status": 400,
+  "status": 422,
   "detail": "The version's upload session expired before it was finalized.",
   "code": "version_expired",
   "requestId": "req_4mz0v8qk"

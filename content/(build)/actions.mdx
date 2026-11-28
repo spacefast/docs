@@ -1,0 +1,213 @@
+---
+title: Actions, queries, and jobs
+description: Write typed SpacePress queries, server mutations, zero-JS forms, background jobs, transactional hooks, and custom HTTP routes on your Space
+---
+
+SpacePress runs typed server queries, validated mutations, progressive zero-JS forms, transactional hooks, Action Scheduler background jobs, and custom HTTP routes directly on your Space. Export them in TypeScript under `sp/` or declare actions under `app.actions` in `spacefast.config.ts`.
+
+## Write typed queries and mutations
+
+Export `query(options, handler)` for read-only server functions and `mutation(options, handler)` for writes. Both validate input from your TypeScript parameter types, enforce declarative access rules, and expose endpoints at `POST /wp-json/spacepress/v1/actions/<name>` and as WordPress Abilities.
+
+```ts sp/tasks.ts
+import { mutation, query } from "spacepress";
+import { HttpError } from "spacepress/server";
+import { tasks } from "spacepress/server/db";
+
+export const openTasks = query(
+  { access: "authenticated" },
+  async ({ limit }: { limit: number }) => {
+    return tasks.list({ where: { done: false }, limit });
+  },
+);
+
+export const archiveTask = mutation(
+  { access: "editor", idempotent: true },
+  async ({ id }: { id: number }) => {
+    const row = await tasks.update(id, { done: true });
+    if (!row) throw new HttpError(404, "not_found", "Task not found");
+    return row;
+  },
+);
+```
+
+Key options on `query()` and `mutation()`:
+
+- `access`: `"anyone"`, `"authenticated"`, `"self"`, a role on the ladder (`guest < subscriber < author < editor < admin`), a boolean, or an access function.
+- `rateLimit`: Throttle calls per caller window, such as `"5/min"`.
+- `idempotent` and `destructive`: Mark safe retries or destructive mutations for clients and agents.
+- `signature`: Verify HMAC-signed inbound webhooks before the handler runs.
+- **Inferred input schema:** Do not pass `input`, `args`, or `fields` in the options object — SpacePress infers input fields and validation directly from the handler's TypeScript parameter type.
+
+You can also declare inline actions under `app.actions` in `spacefast.config.ts` (publish only one app definition per project — inline `app` or standalone `spacepress.config.ts`, not both):
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "my-space",
+  app: {
+    actions: {
+      contact: { access: "anyone" },
+      rebuild: { access: "admin" },
+    },
+  },
+});
+```
+
+Run `sf check` to validate `spacefast.config.ts` and your SpacePress handlers offline before publishing.
+
+## Scaffold a progressive form with `sf add form`
+
+`sf add form` writes plain SpacePress files into your project that you own and edit directly; nothing is regenerated later. It keeps existing files unless you pass `--force`, and `--dry-run` prints the plan without writing:
+
+```bash
+sf add form --dry-run
+sf add form
+```
+
+The recipe creates two files (plus a minimal `spacepress.config.ts` when the project does not declare an app yet):
+
+- `sp/contact.ts`: Defines a `contactMessages` table (admin-only read, no direct client writes) and a `sendContactMessage` mutation with `{ access: "anyone", rateLimit: "5/min" }`.
+- `sp/app/contact/page.tsx`: Renders the contact form at `/contact`, wired straight to the mutation.
+
+### Server handler and field-level validation
+
+Throwing `HttpError` with a JSON Pointer (`"/email"`) binds the error message to that input in the form state and marks the field `aria-invalid="true"`:
+
+```ts sp/contact.ts
+import { email, mutation, table, text, timestamp } from "spacepress";
+import { db, HttpError, mail } from "spacepress/server";
+
+export const contactMessages = table(
+  {
+    name: text().max(120),
+    email: email(),
+    message: text({ multiline: true }).max(5000),
+    createdAt: timestamp().defaultNow(),
+  },
+  { access: { read: "admin", create: false, update: false, delete: false } },
+);
+
+export const sendContactMessage = mutation(
+  { access: "anyone", rateLimit: "5/min" },
+  async (input: { name: string; email: string; message: string }) => {
+    if (!input.email.includes("@")) {
+      throw new HttpError(422, "invalid_input", "Enter an email address", "/email");
+    }
+    const [row] = await db.insert(contactMessages).values(input).returning();
+    await mail.send({
+      to: "you@example.com",
+      replyTo: input.email,
+      subject: `New message from ${input.name}`,
+      text: input.message,
+    });
+    return { id: row?.id ?? null };
+  },
+);
+```
+
+Inserting into `contactMessages` before calling `mail.send()` keeps every submission in your [Database](/database) even if outbound delivery retries. To deliver live mail, authenticate a custom primary domain for [Transactional email](/email).
+
+### Zero-JS forms and `useFormState`
+
+Pass any mutation directly to `<form action={sendContactMessage}>` (omit `method` and `encType` — SpacePress sets them). Forms work before JavaScript loads (form-encoded POST with a `303` redirect back to the page) and upgrade to in-place `fetch` updates once the router script runs:
+
+```tsx sp/app/contact/page.tsx
+import { useFormState } from "spacepress/app";
+import { sendContactMessage } from "../../contact";
+
+export default function Contact() {
+  const sent = useFormState(sendContactMessage);
+  return (
+    <form action={sendContactMessage}>
+      <input name="name" required defaultValue={sent.values.name ?? ""} />
+      <input name="email" type="email" required defaultValue={sent.values.email ?? ""} />
+      <textarea name="message" required defaultValue={sent.values.message ?? ""} />
+      <button type="submit">Send</button>
+      {sent.error && <p role="alert">{sent.error.message}</p>}
+      {sent.result && <p role="status">Message sent.</p>}
+    </form>
+  );
+}
+```
+
+- **Compile-time field checks:** Every literal `name` attribute inside the form must match a parameter on the mutation, or `sf check` fails at that field.
+- **Refill, reset, and pending states:** Failed submissions refill typed values (never passwords) and set `data-sp-form-state="error"`. Successful submissions reset the form and set `data-sp-form-state="success"`. While a JavaScript submit is in flight, the form carries `aria-busy="true"` and disables submit buttons.
+
+## Background jobs and transactional hooks
+
+Move slow outbound calls, retries, and scheduled work into Action Scheduler background jobs with `job()`, and tie side effects to writes with `.on()`:
+
+```ts sp/jobs.ts
+import { boolean, job, table, text } from "spacepress";
+import { tasks } from "spacepress/server/db";
+
+export const notifyTask = job(
+  { retries: 3 },
+  async ({ taskId }: { taskId: number }) => {
+    const task = await tasks.system.get(taskId);
+    if (!task) return;
+    await fetch("https://hooks.example.com/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: task.id, title: task.title }),
+    });
+  },
+);
+
+export const items = table({
+  title: text().min(1).max(120),
+  done: boolean().default(false),
+}).on({
+  async afterCreate(row) {
+    await notifyTask.enqueue({ taskId: row.id }, { key: `task-${row.id}` });
+  },
+});
+```
+
+- **Transactional queuing:** Calling `myJob.enqueue(input, { delay, key })` commits with the enclosing database transaction. If a hook or mutation throws, the transaction rolls back and the job is never dispatched.
+- **Relaxed outbound limits:** Background jobs allow a 60-second `fetch()` timeout and 16 MiB response body cap (compared with 10 seconds and 1 MiB in HTTP handlers). Guard non-idempotent side effects with `once(key, fn)`.
+- **Recurring schedules:** Set `every: "1h"` on a `job()` or export `cron("0 3 * * *", handler)`. You can also declare HTTP cron triggers in `spacefast.config.ts`; see [Crons](/crons).
+- **Collection and table hooks:** Chain `.on({ beforeCreate, afterCreate, beforeUpdate, afterUpdate, beforeDelete, afterDelete, afterPublish })` onto any collection or table. Throwing aborts the request and rolls back the transaction.
+- **WordPress core hooks:** Place typed WordPress filters and actions in `sp/wp-hooks/<hook>.ts` using `Handler<"...">` from `"spacepress/server/wp"`.
+
+## Custom HTTP routes and private file buckets
+
+- **Custom routes:** Create `sp/app/<path>/route.ts` exporting `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`, plus an optional `export const guard` access rule. Start a `route.ts` file with `"use worker";` to run it on the Space's [Worker](/functions) instead of PHP (cannot export `guard` or `signature`, and cannot collide with PHP pages or `functions/` routes).
+- **Private files:** Define upload buckets with `files({ accept, maxBytes, access })`. Expanding a `file(bucket)` column with `with` returns a 5-minute signed URL, and server handlers, hooks, and jobs can read stored files directly via `bucket.get(id)`, `bucket.readText(id)`, or `bucket.readBase64(id)` (up to 16 MiB). See [Object storage](/object-storage) for runtime storage from Workers, the CLI, and the API.
+
+## Call actions from Workers
+
+When your Space also runs a [Worker](/functions), `env.SPACE.action(name, input)` (aliases: `env.SPACEPRESS` and `env.APP`) invokes a declared action over the Space's internal relay and forwards the visitor's session cookie:
+
+```ts functions/api/contact.ts
+export async function POST(request: Request, { env }: { env: any }) {
+  const input = await request.json();
+  const result = await env.SPACE.action("contact", input);
+  return Response.json(result);
+}
+```
+
+## Resuming flows blocked on human approval
+
+When an API or agent operation pauses for a human decision (such as an action confirmation or scope elevation from [`requestApproval`](/api/reference/agent/requestapproval)), resume it through Spacefast's continuation API.
+
+The paused operation returns a `requiresAction` envelope containing a short-lived `continuationToken`. That token is a secret and single-use on completion; never log it. Poll `POST /v1/actions/resume` with the token to check progress and redeem the result:
+
+```bash
+curl -X POST https://api.spacefast.com/v1/actions/resume \
+  -H "Content-Type: application/json" \
+  -d '{"continuationToken":"ctk_your_continuation_token"}'
+```
+
+[`resumeAction`](/api/reference/agent/resumeaction) returns one of four outcomes:
+
+| Outcome | What it means |
+| --- | --- |
+| `pending` | The person has not decided yet; keep polling |
+| `completed` | Approved; returns the one-time result and spends the token |
+| `denied` | The person declined; denial is terminal |
+| `expired` | The continuation window elapsed before a decision |
+
+Only the signed-in owner of the requesting grant can approve ([`approveApproval`](/api/reference/agent/approveapproval)) or deny ([`denyApproval`](/api/reference/agent/denyapproval)) an approval request. See [Agent permissions](/agents/permissions) for the full approval lifecycle.

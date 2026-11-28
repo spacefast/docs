@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_live_system_space_invalid",
   "title": "Promotion live system space invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The space designated as the live tenant's system space is not an active space that tenant owns.",
   "code": "promotion_live_system_space_invalid",
   "requestId": "req_4mz0v8qk"

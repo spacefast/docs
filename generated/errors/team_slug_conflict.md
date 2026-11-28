@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_slug_conflict",
   "title": "Team slug conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The team slug is already taken.",
   "code": "team_slug_conflict",
   "requestId": "req_4mz0v8qk"

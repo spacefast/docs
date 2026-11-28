@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_rollback_failed",
   "title": "Zero db transaction rollback failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero database transaction cannot be rolled back cleanly.",
   "code": "zero_db_transaction_rollback_failed",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_quota_exceeded",
   "title": "Domain quota exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "Adding this domain would exceed the plan's external domain allowance.",
   "code": "domain_quota_exceeded",
   "requestId": "req_4mz0v8qk"

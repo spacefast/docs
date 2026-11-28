@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_memory_not_found",
   "title": "Team memory not found",
-  "status": 400,
+  "status": 422,
   "detail": "No memory with this id exists in the team.",
   "code": "team_memory_not_found",
   "requestId": "req_4mz0v8qk"

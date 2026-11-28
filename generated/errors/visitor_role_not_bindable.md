@@ -5,7 +5,7 @@ description: "Visitors connect their own accounts for this role."
 
 Visitors connect their own accounts for this role.
 
-**How to resolve:** Declare a team or owner role to bind a connection.
+**How to resolve:** Declare a team or personal role to bind a connection.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visitor_role_not_bindable",
   "title": "Visitor role not bindable",
-  "status": 400,
+  "status": 422,
   "detail": "Visitors connect their own accounts for this role.",
   "code": "visitor_role_not_bindable",
   "requestId": "req_4mz0v8qk"

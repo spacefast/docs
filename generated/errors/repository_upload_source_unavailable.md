@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_upload_source_unavailable",
   "title": "Repository upload source unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The complete version files could not be verified.",
   "code": "repository_upload_source_unavailable",
   "requestId": "req_4mz0v8qk"

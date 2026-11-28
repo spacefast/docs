@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_action_forbidden",
   "title": "Runtime action forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime credential does not allow this action.",
   "code": "runtime_action_forbidden",
   "requestId": "req_4mz0v8qk"

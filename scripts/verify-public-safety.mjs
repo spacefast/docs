@@ -131,6 +131,13 @@ const scanText = (path, text) => {
   const markerText = text
     .replace(new RegExp(`(?<![\\w-])--(?:\\[no-\\])?${internalMarkers[3]}(?![\\w-])`, "gu"), blank)
     .replace(new RegExp(`\\b${internalMarkers[3]} (?:app|client)s?\\b`, "gu"), blank)
+    // Shipped product wording: the OAuth property and error code identifiers, the team setting
+    // ("while a team is" plus the marker), and the plan pair ("Enterprise or"
+    // plus the Internal plan and "only").
+    .replace(new RegExp(`(?<=["\`_])${internalMarkers[3]}(?=["\`])`, "gu"), blank)
+    .replace(new RegExp(`\\b${internalMarkers[3]} secret-backed\\b`, "gu"), blank)
+    .replace(new RegExp(`\\bteam is ${internalMarkers[1]}\\b`, "gu"), blank)
+    .replace(new RegExp(`\\bEnterprise or ${["Internal", "only"].join(" ")}\\b`, "gu"), blank)
     .toLowerCase();
   for (const marker of internalMarkers) {
     const index = markerText.indexOf(marker.toLowerCase());
@@ -158,9 +165,19 @@ const scanText = (path, text) => {
     (match) => [match.index, match.index + match[0].length],
   );
   const shortHashPattern = /(?<![#\p{L}\p{N}_])[0-9a-f]{7,12}(?![\p{L}\p{N}_])/giu;
+  // An Apple signing identity names its team ID in parentheses (the CLI's
+  // `sf desktop build --sign` example); that is not a commit.
+  const signingIdentityRanges = Array.from(
+    text.matchAll(/Developer ID Application: [^"\n()]+\(([0-9A-Z]{10})\)/gu),
+    (match) => [match.index, match.index + match[0].length],
+  );
   for (const match of text.matchAll(shortHashPattern)) {
     const value = match[0];
-    if (uuidRanges.some(([start, end]) => match.index >= start && match.index < end)) {
+    if (
+      [...uuidRanges, ...signingIdentityRanges].some(
+        ([start, end]) => match.index >= start && match.index < end,
+      )
+    ) {
       continue;
     }
     if (value.toLowerCase() !== "ed25519" && /[a-f]/iu.test(value)) {

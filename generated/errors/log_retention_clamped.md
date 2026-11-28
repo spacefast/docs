@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/log_retention_clamped",
   "title": "Log retention clamped",
-  "status": 400,
+  "status": 422,
   "detail": "The requested log range exceeds the plan's retention and was clamped.",
   "code": "log_retention_clamped",
   "requestId": "req_4mz0v8qk"

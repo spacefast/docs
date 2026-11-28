@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_canceled",
   "title": "Version canceled",
-  "status": 400,
+  "status": 422,
   "detail": "The version was canceled and cannot be used.",
   "code": "version_canceled",
   "requestId": "req_4mz0v8qk"

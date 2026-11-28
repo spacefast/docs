@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/duplicate_version_path",
   "title": "Duplicate version path",
-  "status": 400,
+  "status": 422,
   "detail": "The version upload declares the same file path twice.",
   "code": "duplicate_version_path",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_install_failed",
   "title": "Build install failed",
-  "status": 400,
+  "status": 422,
   "detail": "The dependency install step failed during the build run.",
   "code": "build_install_failed",
   "requestId": "req_4mz0v8qk"

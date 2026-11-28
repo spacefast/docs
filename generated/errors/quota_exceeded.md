@@ -5,7 +5,7 @@ description: "This action would exceed a quota on the plan assigned to the ownin
 
 This action would exceed a quota on the plan assigned to the owning customer. The problem details name which quota (for example, the spaces cap) and its limit.
 
-**How to resolve:** Delete an existing resource to free room, or assign the customer a plan whose quota allows it.
+**How to resolve:** Check the owner's usage and current plan. Choose a plan with enough capacity, or move the Space to an eligible team. Keep existing live Spaces serving.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/quota_exceeded",
   "title": "Quota exceeded",
-  "status": 400,
+  "status": 409,
   "detail": "This action would exceed a quota on the plan assigned to the owning customer. The problem details name which quota (for example, the spaces cap) and its limit.",
   "code": "quota_exceeded",
   "requestId": "req_4mz0v8qk"

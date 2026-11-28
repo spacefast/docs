@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_resolution_pending",
   "title": "Source resolution pending",
-  "status": 400,
+  "status": 422,
   "detail": "A conflict resolution still has an uncertain provider result.",
   "code": "source_resolution_pending",
   "requestId": "req_4mz0v8qk"

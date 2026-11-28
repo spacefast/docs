@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_has_subteams",
   "title": "Team has subteams",
-  "status": 400,
+  "status": 422,
   "detail": "This team still has subteams.",
   "code": "team_has_subteams",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrar_writes_disabled",
   "title": "Registrar writes disabled",
-  "status": 400,
+  "status": 422,
   "detail": "Spacefast paused registrar writes.",
   "code": "registrar_writes_disabled",
   "requestId": "req_4mz0v8qk"

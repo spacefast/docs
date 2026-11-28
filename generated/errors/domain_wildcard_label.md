@@ -1,11 +1,11 @@
 ---
 title: "domain_wildcard_label"
-description: "The hostname uses a wildcard label in a position that is not allowed."
+description: "The hostname has a wildcard label. Wildcard domains aren't available yet."
 ---
 
-The hostname uses a wildcard label in a position that is not allowed.
+The hostname has a wildcard label. Wildcard domains aren't available yet.
 
-**How to resolve:** Use a single leading wildcard (*.example.com) or a concrete hostname.
+**How to resolve:** Add the apex or each subdomain as its own domain, for example www.example.com.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_wildcard_label",
   "title": "Domain wildcard label",
-  "status": 400,
-  "detail": "The hostname uses a wildcard label in a position that is not allowed.",
+  "status": 422,
+  "detail": "The hostname has a wildcard label. Wildcard domains aren't available yet.",
   "code": "domain_wildcard_label",
   "requestId": "req_4mz0v8qk"
 }

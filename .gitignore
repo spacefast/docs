@@ -4,10 +4,11 @@
 dist/
 .spacefast/
 node_modules/
-content/cli/reference.md
+content/(reference)/cli/reference.md
 content/(reference)/errors/
 content/(reference)/changelog/
 content/setup/
+content/connect/
 public/_redirects
 .env
 .env.*

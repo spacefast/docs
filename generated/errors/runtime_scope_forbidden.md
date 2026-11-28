@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_scope_forbidden",
   "title": "Runtime scope forbidden",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime token's scope does not cover this path or action.",
   "code": "runtime_scope_forbidden",
   "requestId": "req_4mz0v8qk"

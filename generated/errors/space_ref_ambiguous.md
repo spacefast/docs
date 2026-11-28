@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_ref_ambiguous",
   "title": "Space ref ambiguous",
-  "status": 400,
+  "status": 422,
   "detail": "The space reference matches more than one accessible space.",
   "code": "space_ref_ambiguous",
   "requestId": "req_4mz0v8qk"

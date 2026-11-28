@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/session_not_fresh",
   "title": "Session not fresh",
-  "status": 400,
+  "status": 422,
   "detail": "This action needs a recent identity confirmation.",
   "code": "session_not_fresh",
   "requestId": "req_4mz0v8qk"

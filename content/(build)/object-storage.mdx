@@ -1,0 +1,115 @@
+---
+title: Object storage
+description: Runtime object storage for a Space. Upload files from Workers, the CLI, or the API, get back an id and URL, and list, download, or delete objects
+---
+
+Object storage holds files uploaded at runtime, separate from published version files. Each object has a 32-character hexadecimal id, and uploads are private unless marked public.
+
+## What it is
+
+Object storage holds files uploaded while your Space is running — such as visitor uploads, generated PDF files, or media — not the files you publish in a version. Version files live in [Publishing](/publish).
+
+Every object is addressed by a bare 32-character hexadecimal id. There is no key or path hierarchy; the id is the identity. Uploads are private by default; set `public` at upload time to make an object readable by visitors.
+
+| Field | Notes |
+| --- | --- |
+| `id` | 32 hex characters, matching `/^[a-f0-9]{32}$/` |
+| `contentType` | From the uploaded object's `Content-Type`, up to 255 characters |
+| `filename` | Display and download name only; optional |
+| `size` | Bytes |
+| `sha256` | Content digest |
+| `uploaderId` | Who uploaded it |
+| `createdAt` | Timestamp |
+| `public` | Whether visitors can read it |
+| `url` | Path-relative URL returned by Spacefast for reading the object (public objects include a read key; private objects resolve at `/storage/<id>`) |
+
+Always use the `url` field Spacefast returns rather than building an object path by hand. Resolve it against whichever of the Space's hostnames you are serving from.
+
+`filename` is presentation only. Path separators, control characters, `.`, and `..` are refused rather than stripped, so the value you send is the value that comes back.
+
+## Use storage from a Worker
+
+A [Worker](/functions) reaches runtime object storage through `env.STORAGE`.
+
+This route uploads a request file as a public object and returns its id and URL:
+
+```ts functions/api/upload.ts
+export async function POST(request: Request, { env }: { env: any }) {
+  const form = await request.formData();
+  const file = form.get("file");
+  if (!(file instanceof File)) return Response.json({ error: "Missing file" }, { status: 400 });
+  const object = await env.STORAGE.upload(file, { public: true });
+  return Response.json({ id: object.id, url: object.url }, { status: 201 });
+}
+```
+
+`env.STORAGE` exposes three methods:
+
+| Method | Returns |
+| --- | --- |
+| `upload(file: Blob, options?: { public?: boolean })` | `{ id, public, contentType, size, url }`; private unless `public: true` |
+| `get(id: string)` | A `Response`, or `null` when not found |
+| `delete(id: string)` | Nothing (idempotent if already absent) |
+
+## Upload from the API
+
+Send the raw file as the request body. The `Content-Type` header becomes the object's content type, `?filename=` sets the display name, and `?public=true` makes the object public. Without `?public=true`, the object is private.
+
+```bash
+curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/storage?filename=receipt.pdf" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/pdf" \
+  --data-binary @receipt.pdf
+```
+
+A successful upload returns `201`.
+
+## Upload, list, download, and delete from the CLI
+
+Manage stored objects from the command line:
+
+```bash
+sf storage put receipt.pdf --content-type application/pdf
+sf storage list --limit 100
+sf storage list --cursor <cursor>
+sf storage download 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
+sf storage delete 0f3a2c19b74e4d0f8c6e5a2b1d9f4c73
+```
+
+`sf storage` and `sf storage list` (alias `ls`) do the same thing. When there is another page, the output ends with a `Next cursor:` line to pass back through `--cursor`.
+
+`sf storage put` uploads a private object unless you pass `--public`. `sf storage download` saves to `--output` or a file named after the id, and never overwrites an existing file.
+
+`sf storage delete` confirms first. The id must be the 32-character id the list prints; a prefixed value like `private/<id>` is refused. Delete is idempotent, so removing an object that is already gone reports that it was absent rather than failing.
+
+## Dashboard
+
+Open **Storage** for the Space. Use **Choose Files** and **Upload Files** to upload directly; the per-file limit appears inline. Deleting prompts first because it removes the object for every visitor.
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Single stored object | 5 MiB (separate from plan disk and version-file caps) |
+| Empty uploads | Refused with [`storage_empty_file`](/errors/storage_empty_file) |
+| Anonymous daily upload budget, per Space | 200 MiB rolling (identified principals have no separate anonymous budget) |
+| `limit` on a list | 1 to 100, default 50 |
+| `cursor` | 2,048 characters |
+| `filename` | 1 to 255 characters, no separators |
+
+:::caution[Active web content is refused]
+Storage serves files directly to visitors, so it rejects executable and active web files — including HTML, XHTML, PHP, JavaScript/ECMAScript, and binary executables (PE, ELF, Mach-O, JAR). Spacefast inspects both the declared `Content-Type` and file contents, so renaming an `.html` file will not bypass the check. An uploaded `.html` file will not serve as a page.
+:::
+
+A Space whose runtime is not reachable answers `503` with [`runtime_management_unavailable`](/errors/runtime_management_unavailable).
+
+## API
+
+| Operation | Route |
+| --- | --- |
+| [`listSpaceStorageObjects`](/api/reference/spaces/listspacestorageobjects) | `GET /v1/spaces/{spaceId}/storage` |
+| [`createSpaceStorageObject`](/api/reference/spaces/createspacestorageobject) | `POST /v1/spaces/{spaceId}/storage` |
+| [`readSpaceStorageObject`](/api/reference/spaces/readspacestorageobject) | `GET /v1/spaces/{spaceId}/storage/{objectId}` |
+| [`deleteSpaceStorageObject`](/api/reference/spaces/deletespacestorageobject) | `DELETE /v1/spaces/{spaceId}/storage/{objectId}` |
+
+Listing requires the `versions:read` scope. As the Space owner, you can download or delete any object, including private ones a visitor uploaded. See [`sf storage`](/cli/reference#sf-storage-target) in the CLI reference for every flag.

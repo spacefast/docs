@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/reply_email_unconfigured",
   "title": "Reply email unconfigured",
-  "status": 400,
+  "status": 422,
   "detail": "Reply emails for comments aren't configured on this server.",
   "code": "reply_email_unconfigured",
   "requestId": "req_4mz0v8qk"

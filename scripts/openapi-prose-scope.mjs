@@ -6,6 +6,9 @@ export function openapiProseScope(pointer) {
 }
 
 export function openapiProseForChecking(text, pointer) {
+  if (pointer === "/info/description") {
+    return text.replace(/\bwp\.cloud-compatible(?=\s+`\/v0\/atomic-api`)/giu, (term) => `\`${term}\``);
+  }
   if (openapiProseScope(pointer) !== "compatibility") return text;
   // The provider compatibility contract names these external protocol terms.
   // Mark only those terms as identifiers in the checker input; preserve the

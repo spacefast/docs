@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_purchase_apex_required",
   "title": "Domain purchase apex required",
-  "status": 400,
+  "status": 422,
   "detail": "Only a registrable apex domain (like `example.com`) can be bought, not a subdomain.",
   "code": "domain_purchase_apex_required",
   "requestId": "req_4mz0v8qk"

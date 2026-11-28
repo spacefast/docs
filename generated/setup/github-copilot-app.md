@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to the GitHub Copilot app so its agents can publish what you build.
 
-**[Add to GitHub Copilot app](https://github.com/copilot/app/launch?open=ghapp%3A%2F%2Fmcp%2Finstall%3F%257B%2522name%2522%253A%2522spacefast%2522%252C%2522type%2522%253A%2522http%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fmcp.spacefast.com%2522%257D)**
+**[Add to GitHub Copilot app](https://github.com/copilot/app/launch?open=ghapp%3A%2F%2Fmcp%2Finstall%3F%257B%2522name%2522%253A%2522spacefast%2522%252C%2522type%2522%253A%2522http%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fmcp.spacefast.com%2522%257D)** (Hosted MCP server)
 
 1. In the app, choose Allow, then Add server.
 2. Sign in to Spacefast and approve access when asked.
@@ -20,7 +20,7 @@ https://mcp.spacefast.com
 
 ## Other ways to connect
 
-**Install the Spacefast plugin.** Adds Spacefast with its skills. The app and Copilot CLI share plugins, so both get it.
+**Install the Spacefast plugin** (Spacefast plugin). Adds Spacefast with its skills. The app and Copilot CLI share plugins, so both get it.
 
 ```bash
 npx -y plugins add spacefast/plugins -t github-copilot -y

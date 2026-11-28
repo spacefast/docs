@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_consumer_released",
   "title": "Upload consumer released",
-  "status": 400,
+  "status": 422,
   "detail": "The upload operation has already been released.",
   "code": "upload_consumer_released",
   "requestId": "req_4mz0v8qk"

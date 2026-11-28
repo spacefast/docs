@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_meta_too_long",
   "title": "Config meta too long",
-  "status": 400,
+  "status": 422,
   "detail": "A meta field in the space configuration exceeds its maximum length.",
   "code": "config_meta_too_long",
   "requestId": "req_4mz0v8qk"

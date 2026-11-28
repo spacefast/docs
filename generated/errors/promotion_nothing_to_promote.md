@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_nothing_to_promote",
   "title": "Promotion nothing to promote",
-  "status": 400,
+  "status": 422,
   "detail": "The test tenant's system space has no live manifest, so there is no configuration to promote.",
   "code": "promotion_nothing_to_promote",
   "requestId": "req_4mz0v8qk"

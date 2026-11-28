@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_exhausted",
   "title": "Plan code exhausted",
-  "status": 400,
+  "status": 422,
   "detail": "Every redemption of this plan code has been used.",
   "code": "plan_code_exhausted",
   "requestId": "req_4mz0v8qk"

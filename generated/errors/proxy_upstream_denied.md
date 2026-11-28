@@ -5,7 +5,7 @@ description: "The proxy upstream is on a denied network and cannot be used."
 
 The proxy upstream is on a denied network and cannot be used.
 
-**How to resolve:** Proxy only to public HTTPS upstreams. Spacefast blocks private and internal addresses.
+**How to resolve:** Proxy only to public HTTPS upstreams outside Spacefast. Private and internal addresses are blocked, and so are other Spaces' space.fast and view.fast hostnames. Browser calls require the target to allow your origin through CORS; otherwise ask its owner for a supported access method.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/proxy_upstream_denied",
   "title": "Proxy upstream denied",
-  "status": 400,
+  "status": 422,
   "detail": "The proxy upstream is on a denied network and cannot be used.",
   "code": "proxy_upstream_denied",
   "requestId": "req_4mz0v8qk"

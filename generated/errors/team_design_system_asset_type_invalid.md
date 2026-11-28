@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_asset_type_invalid",
   "title": "Team design system asset type invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The filename, declared content type, and file bytes do not agree.",
   "code": "team_design_system_asset_type_invalid",
   "requestId": "req_4mz0v8qk"

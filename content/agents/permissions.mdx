@@ -11,22 +11,22 @@ An agent can get access in four ways, each approved in your browser:
 
 | Method | How it starts | What the agent ends up holding |
 |---|---|---|
-| Device login | The agent runs `sf login` and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
+| Device login | The agent runs [`sf login`](/cli/reference#sf-login) and shows you a code | An API key, scoped to what you ticked, good for 30 days or 7 days idle |
 | API key | You mint one and paste it into the agent's config | A key with the permissions from the preset and your expiry |
 | Hosted MCP | The agent sends you to a consent screen | An OAuth token for the scopes and teams you allowed |
 | Handoff link | You mint a one-use link from the dashboard | An API key bound to one Space or one page |
 
-Device login is covered step by step in [sign in and security](/authentication). Keys and presets are in [API keys and tokens](/api-keys). For connecting over MCP, see [the Spacefast MCP server](/agents/mcp-server).
+See [sign in and security](/authentication) for device login steps, [API keys and tokens](/api-keys) for keys and presets, and [the Spacefast MCP server](/agents/mcp-server) for MCP connections.
 
 ## What you are approving
 
 Interactive approval screens ask for two things: how much the agent may do, and where.
 
-**Access.** The device page names the profile it asked for. **Read-only access** reads your teams, Spaces, and domains and changes nothing. **Agent access** can create and publish Spaces, and manage their access, domains, and DNS. It can invite team members, create teams, manage Sell, and register sign-in apps. Its limits line says that to delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase, and it can't remove team members or change roles or billing.
+**Access.** The device page names the profile it asked for. **Read-only access** reads your teams, Spaces, and domains and changes nothing. **Agent access** can create and publish Spaces, and manage their access, domains, and DNS. It can invite team members, create teams, and register sign-in apps. Its limits line says that to delete Spaces it asks you first, and your OK lasts five minutes. A team admin confirms every purchase, and it can't remove team members or change roles or billing.
 
 **Teams.** You pick **All teams** ("Includes teams you join or create later"), **Choose teams** with a picker, or **No team access** ("Sign-in only. This device can't touch any team").
 
-Open **Customize what this device can do** to untick individual permissions. The list only ever contains what the agent asked for. You can narrow the request, never widen it.
+Open **Customize Access** to untick individual permissions. The list only ever contains what the agent asked for. You can narrow the request, never widen it.
 
 Two behaviors matter more than the checkboxes:
 
@@ -35,7 +35,7 @@ Two behaviors matter more than the checkboxes:
 
 ## What always needs a person
 
-These are refused for every agent credential, at every permission level:
+Spacefast refuses these actions for every agent credential, at every permission level, returning [`authorization_level_not_allowed`](/errors/authorization_level_not_allowed):
 
 - Cancelling or resending an invitation
 - Changing a member's role
@@ -49,14 +49,14 @@ An agent that logged in with anything other than **All teams** also cannot creat
 
 ## Approvals
 
-When an agent hits something risky, it stops and asks. The request lands on the **Approvals** page and in the bell in the dashboard header.
+When an agent hits something risky, it stops and asks. The request appears on the **Approvals** page and in the notification bell in the dashboard header.
 
 `/approvals` is titled **Approvals**, with "Waiting on you, highest impact first." Each pending row says what kind of decision it is:
 
 - "Standing access, it changes what the agent may do on its own." The agent is asking to hold a permission for a while.
 - "One suspended call, runs once after you approve." One paused operation, nothing more.
 
-Press **Review** to see the rationale the agent gave, which Space or domain it touches, and for standing access, what it already has next to what it is adding. Then approve or deny.
+Press **Review** to see the rationale the agent gave, which Space or domain it touches, and for standing access, what it already has next to what it is adding. Then approve or deny. Over the REST API, agents can inspect approval status with [`getApproval`](/api/reference/agent/getapproval); only a signed-in person can call [`approveApproval`](/api/reference/agent/approveapproval) or [`denyApproval`](/api/reference/agent/denyapproval).
 
 - A decision is good for about 10 minutes, and never outlives the agent's own access.
 - **Denying is final.** The agent cannot re-ask on the same request. It has to start over.
@@ -72,25 +72,25 @@ Roll this Space back to the previous version.
 
 ## Handoffs
 
-A handoff is a one-use link that hands a local coding agent access to exactly one Space, or to the page you are looking at. You mint it, the agent redeems it, and the link is dead.
+A handoff is a one-use link that gives a local coding agent access to one Space, or to the page you are viewing. You mint it, the agent redeems it, and the link expires.
 
 <Steps>
   <Step title="Mint the link">
-    Open **/start**, pick your agent, and follow the setup. Each agent has its own page at `/start/<agent>`. The link appears once, at creation, and is never shown again.
+    Open **/start**, pick your agent, and follow the setup. Each agent has its own page at `/start/<agent>`. Spacefast shows the link once at creation and never shows it again.
   </Step>
   <Step title="Hand it to the agent">
-    The agent redeems it with `sf login --handoff` and pastes the link when prompted, or pipes it on stdin. Passing a handoff link as a command argument is refused, because it would land in your shell history and in the process list.
+    The agent redeems it with [`sf login`](/cli/reference#sf-login) (`sf login --handoff`) and pastes the link when prompted, or pipes it on stdin. The CLI refuses a handoff link passed as a command argument so it stays out of your shell history and process list.
   </Step>
-  <Step title="Watch it land">
+  <Step title="Track its status">
     The team's **Agents** page has a **Handoff links** section. Rows show **Active**, **Redeemed**, **Expired**, or **Revoked**, which Space the link publishes to, when it was created, and how many times it was fetched.
   </Step>
 </Steps>
 
-A handoff link lives 15 minutes and can be redeemed once. A team can have 10 pending at a time. **Revoke** on an active row stops it immediately, redeemed or not, though anything the agent already published stays where it is.
+A handoff link lives 15 minutes and can be redeemed once. A team can have 10 pending at a time. Selecting **Revoke** on an active row stops it immediately whether it was redeemed or not; anything the agent already published remains live.
 
 ## Turning access off
 
-**Account settings → Connected apps** lists everything acting as you, labelled **Agent**, **App**, **CLI**, **One-time handoff**, **API key**, or **Machine OAuth client**. Opening one shows which teams it reaches, which permissions it holds, and its recent activity.
+**Account settings → Connected apps** lists everything acting as you, labeled **Agent**, **App**, **CLI**, **One-time handoff**, **API key**, or **Machine OAuth client**. Opening one shows which teams it reaches, which permissions it holds, and its recent activity.
 
 - Revoking one connection kills the whole thing: its API keys, its OAuth tokens, its handoff links, and any temporary elevation.
 - **Stop All Agent Access** is the account-wide emergency stop. It revokes everything acting as you and cancels handoff links that were never redeemed. Team-owned automation is not yours alone, so it survives.

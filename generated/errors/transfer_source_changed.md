@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_source_changed",
   "title": "Transfer source changed",
-  "status": 400,
+  "status": 422,
   "detail": "The space changed since the transfer was created, so it must be re-confirmed.",
   "code": "transfer_source_changed",
   "requestId": "req_4mz0v8qk"

@@ -32,14 +32,14 @@ curl --fail-with-body -sS https://api.spacefast.com/v1/spaces \
   -H "Authorization: Bearer $SPACEFAST_API_KEY" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: $IDEMPOTENCY_KEY" \
-  -d '{"title":"Customer site","principal":{"type":"external","id":"customer_123"}}'
+  -d '{"title":"Customer Space","principal":{"type":"external","id":"customer_123"}}'
 ```
 
 Set `IDEMPOTENCY_KEY` to a fresh UUID for each new Space and reuse it only to retry that request. See [idempotency](/api/idempotency).
 
 Save `data.space.id`. Spacefast creates the customer principal when it first owns a resource. There is no separate customer registration call.
 
-Publish content to that Space with the [publish flow](/publish) or [`sf publish --space`](/cli/publish). Test tenants simulate provisioning. A test result does not prove that a live hostname or certificate works.
+Publish content to that Space with the [publish flow](/publish) or [`sf publish --space`](/cli/reference#sf-publish-dir). Test tenants simulate provisioning. A test result does not prove that a live hostname or certificate works.
 
 ## Use the partner SDK
 

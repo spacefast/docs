@@ -67,7 +67,7 @@ export default defineConfig({
     // Plan values from scripts/pricing-next.mjs, the source Pricing & Limits renders.
     ...planVariables(),
   },
-  description: "Publish what your agents build.",
+  description: "Build better and ship with Spacefast — skills, tools, database, Workers, domains, and infrastructure in one Space.",
   // Two links (components/Logo.astro): the mark goes to the Website home at the
   // origin root, outside the /docs base; "Docs" goes to the Docs home.
   logo: { href: "/", image: { light: "/spacefast-wordmark.svg", alt: "Spacefast" }, text: "Docs" },
@@ -127,12 +127,16 @@ export default defineConfig({
     ],
     repo: true,
     sidebar: { display: "group" },
+    // Five tabs. Guides, Agents, and Platforms are real folders, so Blume
+    // scopes them by path. The Reference tab spans /cli, /api, and the other
+    // reference pages; components/Sidebar.astro and components/Header.astro
+    // resolve it from the (reference) folder group instead of a path prefix.
     tabs: [
       { label: "Docs", path: "/", icon: icons.book },
-      { label: "CLI", path: "/cli", icon: icons.terminal },
-      { label: "API", path: "/api", icon: icons.braces },
+      { label: "Guides", path: "/guides", icon: icons.rocket },
       { label: "Agents", path: "/agents", icon: icons.robot },
-      { label: "Spacefast for Platforms", path: "/platforms", icon: icons.handshake },
+      { label: "Reference", path: "/reference", href: "/cli", icon: icons.braces },
+      { label: "Platforms", path: "/platforms", icon: icons.handshake },
     ],
   },
   reference: [
@@ -166,7 +170,7 @@ export default defineConfig({
       enabled: true,
       endpoint: "https://api.spacefast.com/v1/docs/ask",
       suggestions: [
-        { label: "How do I publish a site?" },
+        { label: "How do I publish a Space?" },
         { label: "How should an agent use Spacefast?" },
         { label: "How do I roll back a version?" },
       ],
@@ -178,6 +182,8 @@ export default defineConfig({
     // and MCP: without this the component ships as raw JSX.
     markdownComponents: {
       PricingTable: ({ props }) => pricingTableMarkdown(String(props.table), props.row ? String(props.row) : undefined),
+      SpacefastStage: () =>
+        `\`\`\`ts\nimport { defineConfig } from "spacefast/config";\n\nexport default defineConfig({\n  name: "quiet-harbor",\n  app: {\n    collections: { posts: { title: "Posts" } },\n    actions: { subscribe: { access: "anyone" } },\n  },\n  crons: [{ path: "/api/digest", schedule: "daily" }],\n});\n\`\`\``,
       WpCloudDocs: ({ props }) =>
         `Using the [Partner API](${deploymentBase}/platforms/partner-api)? See [${String(props.title)}](${String(props.href)}) in the upstream infrastructure reference.`,
     },

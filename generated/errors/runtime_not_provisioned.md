@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_not_provisioned",
   "title": "Runtime not provisioned",
-  "status": 400,
+  "status": 422,
   "detail": "The space does not serve a published version yet, so it has no runtime data to read.",
   "code": "runtime_not_provisioned",
   "requestId": "req_4mz0v8qk"

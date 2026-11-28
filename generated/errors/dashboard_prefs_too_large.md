@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dashboard_prefs_too_large",
   "title": "Dashboard prefs too large",
-  "status": 400,
+  "status": 422,
   "detail": "The merged dashboard preferences would exceed the 16KB serialized size limit.",
   "code": "dashboard_prefs_too_large",
   "requestId": "req_4mz0v8qk"

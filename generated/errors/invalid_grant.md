@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_grant",
   "title": "Invalid grant",
-  "status": 400,
+  "status": 422,
   "detail": "The authorization grant is invalid or was already used.",
   "code": "invalid_grant",
   "requestId": "req_4mz0v8qk"

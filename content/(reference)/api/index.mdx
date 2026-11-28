@@ -1,0 +1,177 @@
+---
+title: API overview
+description: Base URL, response envelopes, content types, and a curl walkthrough from credential to published version
+---
+
+Use the Spacefast API to publish files, inspect Spaces, and manage resources within your credential's permissions. Publishing can return an operation handle that requires polling before the final state is known.
+
+## Base URL and versioning
+
+All Spacefast API requests go to one origin:
+
+```text
+https://api.spacefast.com
+```
+
+Every operation lives under `/v1`. The OpenAPI document that generates [the API reference](/api/reference) is served at `https://api.spacefast.com/openapi.json`. Its `info.version` identifies the contract snapshot, not the URL version or your installed CLI version. Read the live spec for the current value, and see [Versioning and deprecations](/api/versioning) for deprecation headers and sunset policy.
+
+`HEAD` works for every `GET`.
+
+## Authentication
+
+Send one `Authorization` header for API keys, Space keys, Space machine credentials, sessions, OAuth access tokens, and partner customer `JWTs`:
+
+<CodeGroup>
+
+```bash curl
+curl -sS https://api.spacefast.com/v1/me \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+```ts SDK
+import { createSpacefastClient } from "@spacefast/sdk";
+
+const client = createSpacefastClient({
+  baseUrl: "https://api.spacefast.com",
+  apiKey: "your_api_key",
+});
+
+const me = await client.get("/v1/me");
+```
+
+</CodeGroup>
+
+Read [API authentication](/api/authentication) for credential prefixes, where each credential is created, and which routes refuse which credential.
+
+## Response envelopes
+
+Success responses are JSON objects with a `data` member. Three shapes cover the whole API:
+
+| Shape | When | Example operation |
+| --- | --- | --- |
+| `{ data }` | One resource, or a mutation with no background work | `GET /v1/spaces/{spaceId}` |
+| `{ data, pagination }` | A cursor-paginated list | `GET /v1/spaces/{spaceId}/versions` |
+| `{ data, operation }` | A mutation that can outlive the request | `POST /v1/spaces/{spaceId}/versions/{versionId}/promote` |
+
+`operation` is `null` when the work finishes inside the request. See [Operations](/api/long-running-operations).
+
+Every JSON body also carries a `$schema` member naming its JSON Schema, and a `Link: <...>; rel="describedby"` header pointing at the same document. A strict client-side validator that rejects unknown properties will trip on `$schema`, so allow it.
+
+Creations answer `201`. Deletes answer `204` with no body. Failures are RFC 9457 problem documents with `Content-Type: application/problem+json`, described in [Errors](/api/errors).
+
+## Content types
+
+Send `application/json` on every request body. `POST /v1/publish` is the exception: it also accepts `multipart/form-data`, a raw `text/html` or `application/octet-stream` single file, and zip, tar, or gzip project archives.
+
+Every response carries `X-Request-Id`. It matches `requestId` in problem documents and is the identifier to quote when reporting an issue.
+
+## Publish with curl
+
+<Steps>
+  <Step title="Check the credential">
+Call `GET /v1/me` to confirm your credential and copy the `teamId` you want to publish under:
+
+```bash
+curl -sS https://api.spacefast.com/v1/me \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+The response returns the authenticated subject and its team memberships.
+  </Step>
+
+  <Step title="Create a Space">
+Create a private Space inside that team:
+
+```bash
+curl -sS -X POST https://api.spacefast.com/v1/spaces \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"teamId":"team_example","slug":"my-space","title":"My Space","access":"private"}'
+```
+
+This answers `201` with `{ data: { space, access, claim? } }`. The Space ID looks like `spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c`.
+  </Step>
+
+  <Step title="Publish files">
+Upload one or more files with an `Idempotency-Key` so retries stay safe:
+
+```bash
+curl -sS -X POST "https://api.spacefast.com/v1/publish?async=1" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Idempotency-Key: 01J8ZQ7WYX3M4N5P6R7S8T9V0W" \
+  -F "spaceId=spc_4a7f9c2e8b1d0a6f5c3e9d2b7a1f8e4c" \
+  -F "files=@index.html"
+```
+
+The receipt tells you what to do next:
+
+```json
+{
+  "data": {
+    "space": { "id": "spc_4a7f...", "slug": "my-space", "liveUrl": "https://my-space.space.fast" },
+    "version": { "id": "ver_8c1d...", "status": "finalizing", "number": 7, "immutableUrl": null },
+    "next": { "action": "poll", "url": "/v1/operations/op_2f6a...", "retryAfter": 1 },
+    "operation": { "id": "op_2f6a...", "kind": "version_finalize", "status": "running" }
+  }
+}
+```
+
+Omit `async=1` to wait for finalization to finish inside the request and return `next.action: "done"`.
+  </Step>
+
+  <Step title="Poll until it settles">
+Poll the operation URL until `data.status` is terminal:
+
+```bash
+curl -sS https://api.spacefast.com/v1/operations/op_2f6a9d4c1e7b0a3f8d5c2e6b9a4f1d7c \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY"
+```
+
+Stop when `data.status` is `succeeded`, `failed`, or `canceled`. Then read `space.liveUrl` and `version.immutableUrl`.
+  </Step>
+</Steps>
+
+## Find documentation
+
+`GET /v1/docs/search` searches the published documentation without authentication. Set `q` to a question for ranked results, or to an exact page slug to read the full page. An empty `q` lists pages; `tier` and `kind` narrow the results. Continue with `nextOffset` while `hasMore` is true.
+
+`POST /v1/docs/ask` streams an answer grounded in the published documentation.
+
+## Connect external tools
+
+Connectors make OpenAPI, GraphQL, and remote MCP tools available to a team while keeping credentials inside Spacefast. Connectors are available on Go, Pro, and Enterprise plans; Personal teams receive `feature_unavailable`. Start with [Connectors](/connectors) for concepts and dashboard workflows, and see the [Connectors API guide](/api/connectors) for operations, scopes, and errors.
+
+## Guides and reference
+
+<CardGroup cols={2}>
+  <Card title="Authentication" href="/api/authentication" icon="key">
+    API keys, Space keys, machine credentials, and OAuth scopes.
+  </Card>
+  <Card title="Errors" href="/api/errors" icon="triangle-alert">
+    Problem documents, stable error codes, and recovery rules.
+  </Card>
+  <Card title="Pagination" href="/api/pagination" icon="list">
+    Cursor paging, endpoint defaults, and other list shapes.
+  </Card>
+  <Card title="Rate limits" href="/api/rate-limits" icon="gauge">
+    Per-credential and per-IP budgets, and how to handle 429s.
+  </Card>
+  <Card title="Idempotency" href="/api/idempotency" icon="repeat">
+    Make any POST request safe to retry.
+  </Card>
+  <Card title="Operations" href="/api/long-running-operations" icon="clock">
+    Asynchronous work: handles, states, and polling loops.
+  </Card>
+  <Card title="Versioning and deprecations" href="/api/versioning" icon="git-branch">
+    Path versioning, contract snapshots, and deprecation headers.
+  </Card>
+  <Card title="Webhooks" href="/api/webhooks" icon="webhook">
+    Signed event delivery, retries, and redelivery.
+  </Card>
+  <Card title="TypeScript SDK" href="/api/sdk" icon="braces">
+    `@spacefast/sdk`, typed against the published OpenAPI spec.
+  </Card>
+  <Card title="API reference" href="/api/reference" icon="book-open">
+    Every operation, generated from the OpenAPI specification.
+  </Card>
+</CardGroup>

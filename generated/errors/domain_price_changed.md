@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_price_changed",
   "title": "Domain price changed",
-  "status": 400,
+  "status": 422,
   "detail": "The registrar price changed after you paid, so the payment for this domain was refunded.",
   "code": "domain_price_changed",
   "requestId": "req_4mz0v8qk"

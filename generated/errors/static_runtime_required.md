@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/static_runtime_required",
   "title": "Static runtime required",
-  "status": 400,
+  "status": 422,
   "detail": "This operation only applies to static-runtime spaces.",
   "code": "static_runtime_required",
   "requestId": "req_4mz0v8qk"

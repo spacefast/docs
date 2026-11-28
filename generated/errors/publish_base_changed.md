@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_base_changed",
   "title": "Publish base changed",
-  "status": 400,
+  "status": 422,
   "detail": "Someone published new space settings after the base you loaded, so saving would overwrite their change.",
   "code": "publish_base_changed",
   "requestId": "req_4mz0v8qk"

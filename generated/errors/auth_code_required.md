@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/auth_code_required",
   "title": "Auth code required",
-  "status": 400,
+  "status": 422,
   "detail": "An authorization code is required to complete this step.",
   "code": "auth_code_required",
   "requestId": "req_4mz0v8qk"

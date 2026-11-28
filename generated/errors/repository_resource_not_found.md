@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_resource_not_found",
   "title": "Repository resource not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested repository resource does not exist.",
   "code": "repository_resource_not_found",
   "requestId": "req_4mz0v8qk"

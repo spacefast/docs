@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_invalid_status",
   "title": "Zero runner invalid status",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner returned an invalid HTTP status.",
   "code": "zero_runner_invalid_status",
   "requestId": "req_4mz0v8qk"

@@ -1,11 +1,11 @@
 ---
 title: "enterprise_required"
-description: "This feature requires an Enterprise team."
+description: "This feature requires a team on an Enterprise or Internal plan."
 ---
 
-This feature requires an Enterprise team.
+This feature requires a team on an Enterprise or Internal plan.
 
-**How to resolve:** Use a team on an Enterprise plan to manage subteams.
+**How to resolve:** Use a team on an Enterprise or Internal plan for subteams, parent-team access and primary contacts.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/enterprise_required",
   "title": "Enterprise required",
-  "status": 400,
-  "detail": "This feature requires an Enterprise team.",
+  "status": 422,
+  "detail": "This feature requires a team on an Enterprise or Internal plan.",
   "code": "enterprise_required",
   "requestId": "req_4mz0v8qk"
 }

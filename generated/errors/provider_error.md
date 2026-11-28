@@ -1,9 +1,9 @@
 ---
 title: "provider_error"
-description: "WP Cloud reported an error."
+description: "A service Spacefast depends on reported an error."
 ---
 
-WP Cloud reported an error.
+A service Spacefast depends on reported an error.
 
 **How to resolve:** Retry. If the error persists, contact support with the `requestId`.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_error",
   "title": "Provider error",
-  "status": 400,
-  "detail": "WP Cloud reported an error.",
+  "status": 422,
+  "detail": "A service Spacefast depends on reported an error.",
   "code": "provider_error",
   "requestId": "req_4mz0v8qk"
 }

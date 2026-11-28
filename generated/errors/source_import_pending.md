@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_import_pending",
   "title": "Source import pending",
-  "status": 400,
+  "status": 422,
   "detail": "The Space's initial source copy or upload import is still running.",
   "code": "source_import_pending",
   "requestId": "req_4mz0v8qk"

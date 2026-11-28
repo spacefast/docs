@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_release_unverifiable",
   "title": "Runtime release unverifiable",
-  "status": 400,
+  "status": 422,
   "detail": "The requested platform release could not be verified at its origin.",
   "code": "runtime_release_unverifiable",
   "requestId": "req_4mz0v8qk"

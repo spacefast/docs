@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comments_not_configured",
   "title": "Comments not configured",
-  "status": 400,
+  "status": 422,
   "detail": "Comments aren't set up on the server for this Space yet.",
   "code": "comments_not_configured",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_transfer_active",
   "title": "Domain transfer active",
-  "status": 400,
+  "status": 422,
   "detail": "The domain has a transfer in progress, which blocks this operation.",
   "code": "domain_transfer_active",
   "requestId": "req_4mz0v8qk"

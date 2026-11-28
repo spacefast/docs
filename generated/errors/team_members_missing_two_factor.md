@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_members_missing_two_factor",
   "title": "Team members missing two factor",
-  "status": 400,
+  "status": 422,
   "detail": "Some team members don't have two-factor authentication on yet.",
   "code": "team_members_missing_two_factor",
   "requestId": "req_4mz0v8qk"

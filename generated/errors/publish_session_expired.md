@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_session_expired",
   "title": "Publish session expired",
-  "status": 400,
+  "status": 422,
   "detail": "This publish session expired before it was finalized.",
   "code": "publish_session_expired",
   "requestId": "req_4mz0v8qk"

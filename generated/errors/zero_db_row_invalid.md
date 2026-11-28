@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_row_invalid",
   "title": "Zero db row invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A database row cannot be converted into a Zero response value.",
   "code": "zero_db_row_invalid",
   "requestId": "req_4mz0v8qk"

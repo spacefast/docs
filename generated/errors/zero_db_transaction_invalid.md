@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_transaction_invalid",
   "title": "Zero db transaction invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A database batch is empty or has more than 64 statements.",
   "code": "zero_db_transaction_invalid",
   "requestId": "req_4mz0v8qk"

@@ -5,7 +5,7 @@ description: "The external principal still owns spaces, so it cannot be closed."
 
 The external principal still owns spaces, so it cannot be closed.
 
-**How to resolve:** Delete the principal's spaces first, or retry with `force` to tombstone them as part of the close.
+**How to resolve:** Delete the owner's spaces first, or retry with `force` to delete them as part of the close.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_has_active_spaces",
   "title": "Principal has active spaces",
-  "status": 400,
+  "status": 422,
   "detail": "The external principal still owns spaces, so it cannot be closed.",
   "code": "principal_has_active_spaces",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/incumbent_controls_dns",
   "title": "Incumbent controls dns",
-  "status": 400,
+  "status": 422,
   "detail": "Another team controls this domain's DNS, so the operation is blocked.",
   "code": "incumbent_controls_dns",
   "requestId": "req_4mz0v8qk"

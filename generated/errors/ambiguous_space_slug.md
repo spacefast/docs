@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/ambiguous_space_slug",
   "title": "Ambiguous space slug",
-  "status": 400,
+  "status": 422,
   "detail": "The slug matches spaces in more than one of your teams, so it cannot be resolved.",
   "code": "ambiguous_space_slug",
   "requestId": "req_4mz0v8qk"

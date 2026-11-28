@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_invalid",
   "title": "Config invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The space configuration failed validation.",
   "code": "config_invalid",
   "requestId": "req_4mz0v8qk"

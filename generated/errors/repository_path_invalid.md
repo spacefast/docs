@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_path_invalid",
   "title": "Repository path invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The repository provider refused the requested file path.",
   "code": "repository_path_invalid",
   "requestId": "req_4mz0v8qk"

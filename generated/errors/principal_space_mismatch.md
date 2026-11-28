@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_space_mismatch",
   "title": "Principal space mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The space does not belong to the principal in the request.",
   "code": "principal_space_mismatch",
   "requestId": "req_4mz0v8qk"

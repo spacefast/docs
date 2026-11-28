@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_js_context_init_failed",
   "title": "Zero js context init failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner cannot initialize a QuickJS context.",
   "code": "zero_js_context_init_failed",
   "requestId": "req_4mz0v8qk"

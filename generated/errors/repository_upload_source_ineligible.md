@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_upload_source_ineligible",
   "title": "Repository upload source ineligible",
-  "status": 400,
+  "status": 422,
   "detail": "This version cannot automatically initialize original uploaded source.",
   "code": "repository_upload_source_ineligible",
   "requestId": "req_4mz0v8qk"

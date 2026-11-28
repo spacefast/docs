@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_blob_key_invalid",
   "title": "Zero blob key invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The local Zero blob key is invalid.",
   "code": "zero_blob_key_invalid",
   "requestId": "req_4mz0v8qk"

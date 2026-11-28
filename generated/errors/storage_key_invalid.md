@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_key_invalid",
   "title": "Storage key invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The storage object id is malformed.",
   "code": "storage_key_invalid",
   "requestId": "req_4mz0v8qk"

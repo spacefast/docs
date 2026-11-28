@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/credential_sponsor_inactive",
   "title": "Credential sponsor inactive",
-  "status": 400,
+  "status": 422,
   "detail": "The person who authorized this machine credential is no longer an active member of the team it acts for.",
   "code": "credential_sponsor_inactive",
   "requestId": "req_4mz0v8qk"

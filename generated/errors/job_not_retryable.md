@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/job_not_retryable",
   "title": "Job not retryable",
-  "status": 400,
+  "status": 422,
   "detail": "The job cannot be retried in its current state.",
   "code": "job_not_retryable",
   "requestId": "req_4mz0v8qk"

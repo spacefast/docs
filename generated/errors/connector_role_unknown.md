@@ -1,11 +1,11 @@
 ---
 title: "connector_role_unknown"
-description: "The live capsule does not declare this connector role."
+description: "The version does not declare this connector role."
 ---
 
-The live capsule does not declare this connector role.
+The version does not declare this connector role.
 
-**How to resolve:** Use a role declared by the live version.
+**How to resolve:** Declare the role under `connectors` in the config file, or add it from the Space's connector settings.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_role_unknown",
   "title": "Connector role unknown",
-  "status": 400,
-  "detail": "The live capsule does not declare this connector role.",
+  "status": 422,
+  "detail": "The version does not declare this connector role.",
   "code": "connector_role_unknown",
   "requestId": "req_4mz0v8qk"
 }

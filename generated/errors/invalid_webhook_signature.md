@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_webhook_signature",
   "title": "Invalid webhook signature",
-  "status": 400,
+  "status": 422,
   "detail": "The webhook signature did not verify.",
   "code": "invalid_webhook_signature",
   "requestId": "req_4mz0v8qk"

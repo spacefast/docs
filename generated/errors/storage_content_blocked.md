@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_content_blocked",
   "title": "Storage content blocked",
-  "status": 400,
+  "status": 422,
   "detail": "The object contains executable or active web content that Spacefast storage does not serve.",
   "code": "storage_content_blocked",
   "requestId": "req_4mz0v8qk"

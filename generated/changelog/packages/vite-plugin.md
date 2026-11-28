@@ -5,6 +5,24 @@ description: "Release history for @spacefast/vite-plugin on npm."
 
 Published as [`@spacefast/vite-plugin`](https://www.npmjs.com/package/@spacefast/vite-plugin) on npm.
 
+## 0.10.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/routing@0.10.0
+  - @spacefast/adapter-kit@0.10.0
+
+## 0.9.0
+
+#### Patch Changes
+
+- Preserve middleware routing before static responses and block imports of unsupported access restrictions. Keep private files and unregistered handlers out of local development responses.
+- Updated dependencies
+  - @spacefast/routing@0.9.0
+  - @spacefast/adapter-kit@0.9.0
+
 ## 0.8.1
 
 #### Patch Changes

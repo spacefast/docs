@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/manifest_body_too_large",
   "title": "Manifest body too large",
-  "status": 400,
+  "status": 422,
   "detail": "The upload manifest body exceeds the maximum size.",
   "code": "manifest_body_too_large",
   "requestId": "req_4mz0v8qk"

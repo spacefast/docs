@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_fork_replaced",
   "title": "Source fork replaced",
-  "status": 400,
+  "status": 422,
   "detail": "The remix destination no longer matches its captured source.",
   "code": "source_fork_replaced",
   "requestId": "req_4mz0v8qk"

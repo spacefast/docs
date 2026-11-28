@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_tree_too_large",
   "title": "Source tree too large",
-  "status": 400,
+  "status": 422,
   "detail": "The complete source tree exceeds the workspace operation limit.",
   "code": "source_tree_too_large",
   "requestId": "req_4mz0v8qk"

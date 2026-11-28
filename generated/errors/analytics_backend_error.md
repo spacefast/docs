@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_backend_error",
   "title": "Analytics backend error",
-  "status": 400,
+  "status": 422,
   "detail": "The analytics service answered this query with something the analytics query contract doesn't allow.",
   "code": "analytics_backend_error",
   "requestId": "req_4mz0v8qk"

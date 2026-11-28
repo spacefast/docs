@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/interactive_session_required",
   "title": "Interactive session required",
-  "status": 400,
+  "status": 422,
   "detail": "This action requires an interactive browser session.",
   "code": "interactive_session_required",
   "requestId": "req_4mz0v8qk"

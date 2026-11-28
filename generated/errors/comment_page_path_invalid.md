@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/comment_page_path_invalid",
   "title": "Comment page path invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The comment's page path isn't a plain absolute URL path.",
   "code": "comment_page_path_invalid",
   "requestId": "req_4mz0v8qk"

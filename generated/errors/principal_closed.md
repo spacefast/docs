@@ -1,9 +1,9 @@
 ---
 title: "principal_closed"
-description: "The external principal is closed. Its spaces are tombstoned and cannot be modified."
+description: "The external principal is closed. Its spaces are deleted and cannot be modified."
 ---
 
-The external principal is closed. Its spaces are tombstoned and cannot be modified.
+The external principal is closed. Its spaces are deleted and cannot be modified.
 
 **How to resolve:** A closed principal is terminal and cannot be reopened; create a new principal to resume.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/principal_closed",
   "title": "Principal closed",
-  "status": 400,
-  "detail": "The external principal is closed. Its spaces are tombstoned and cannot be modified.",
+  "status": 422,
+  "detail": "The external principal is closed. Its spaces are deleted and cannot be modified.",
   "code": "principal_closed",
   "requestId": "req_4mz0v8qk"
 }

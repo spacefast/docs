@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_scope_mismatch",
   "title": "Team scope mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The requested team conflicts with the team this credential or resource is bound to.",
   "code": "team_scope_mismatch",
   "requestId": "req_4mz0v8qk"

@@ -5,7 +5,7 @@ description: "Only team owners and admins can change serving grants."
 
 Only team owners and admins can change serving grants.
 
-**How to resolve:** Ask a team owner or admin to change the grant.
+**How to resolve:** Ask a team owner or admin to change the grant. Asking to turn serving on creates a request they approve instead.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_serving_admin_only",
   "title": "Connector serving admin only",
-  "status": 400,
+  "status": 422,
   "detail": "Only team owners and admins can change serving grants.",
   "code": "connector_serving_admin_only",
   "requestId": "req_4mz0v8qk"

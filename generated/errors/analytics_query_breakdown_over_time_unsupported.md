@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_query_breakdown_over_time_unsupported",
   "title": "Analytics query breakdown over time unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The analytics query asks for a breakdown and time buckets together, which isn't answered yet.",
   "code": "analytics_query_breakdown_over_time_unsupported",
   "requestId": "req_4mz0v8qk"

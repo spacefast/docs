@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_not_found",
   "title": "Connector not found",
-  "status": 400,
+  "status": 422,
   "detail": "No connector exists with this slug for this team.",
   "code": "connector_not_found",
   "requestId": "req_4mz0v8qk"

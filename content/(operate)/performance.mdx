@@ -1,0 +1,103 @@
+---
+title: Performance and optimization
+description: Maximize edge cache hits, serve immutable assets, optimize images with @spacefast/image, keep Workers fast, and size compute workers and Burst
+---
+
+Serve static files from the edge cache, hash asset filenames for one-year browser caching, keep Workers off static routes, and size compute workers and Burst for dynamic traffic.
+
+## Caching headers and immutable assets
+
+Public static files receive one of three default `Cache-Control` policies at the edge:
+
+| Asset class | Default `Cache-Control` |
+| --- | --- |
+| Content-hashed files and build output directories | `public, max-age=31536000, immutable` |
+| HTML files | `public, s-maxage=600, max-age=0, must-revalidate` |
+| Other unhashed files | `public, s-maxage=86400, max-age=0, must-revalidate` |
+
+To get the highest cache hit rate:
+
+- **Use content-hashed filenames**: emit hashed filenames (such as `app.3f9c2d1a4b5e6f70.js`) or standard framework build directories (`_next/static/`, `_app/immutable/`, `_nuxt/`, `_astro/`). Avoid unhashed files inside those directories because browsers cache them for a year and cannot revalidate them until the filename changes.
+- **Avoid conditional routing rules on shared URLs**: the edge keys responses on host, path, and query and ignores `Vary`. Any URL matched by a `Country=`, `Language=`, `Cookie=`, or `Agent=` condition returns `no-store` for every visitor. Give each locale or variant its own URL so every variant caches at the edge.
+- **Let the platform handle compression**: Spacefast serves Brotli and gzip automatically; do not set `Content-Encoding` in header rules.
+- **Test caching on public live URLs, not previews**: private previews and authenticated requests always return `private, no-store`.
+
+See [Caching](/caching), [Headers](/headers), and [`spacefast.config.ts`](/config-file) for override rules and cache invalidation. Inspect compiled routing and header rules locally with [`sf routing inspect`](/cli/reference#sf-routing-inspect) before running [`sf publish`](/cli/reference#sf-publish-dir).
+
+## Image optimization with `@spacefast/image`
+
+Install [`@spacefast/image`](https://www.npmjs.com/package/@spacefast/image) to generate resized, compressed WordPress.com Site Accelerator image URLs without hand-building query strings:
+
+```bash
+npm install @spacefast/image
+```
+
+Pass any absolute `http` or `https` image URL to `siteAcceleratorUrl`. Relative paths return unchanged, so the helper is safe for mixed local and remote sources:
+
+```ts
+import { siteAcceleratorUrl } from "@spacefast/image";
+
+const src = siteAcceleratorUrl("https://example.com/photo.jpg", {
+  w: 1200,
+  quality: 80,
+  strip: "all",
+});
+```
+
+### Next.js image loader
+
+For Next.js (15.5 and 16.x), spread `spacefastNextImageConfig` and point `loaderFile` at a one-line client module in your project root:
+
+```ts next.config.ts
+import type { NextConfig } from "next";
+import { spacefastNextImageConfig } from "@spacefast/image/next";
+
+const config: NextConfig = {
+  images: {
+    ...spacefastNextImageConfig,
+    loaderFile: "./spacefast-image-loader.ts",
+  },
+};
+
+export default config;
+```
+
+```ts spacefast-image-loader.ts
+"use client";
+
+export { default } from "@spacefast/image/next-loader";
+```
+
+## Workers and dynamic routes
+
+Keep static assets out of your Worker so edge requests do not wake compute unnecessarily:
+
+- **Use the `functions/` file router**: when only specific API routes need dynamic code, Spacefast dispatches only the exact routes your files declare; unmatched paths return 404 without invoking the Worker.
+- **Keep bundles lean**: every plan enforces a `24 MiB` uncompressed compiled Workers bundle limit covering compiled JavaScript, embedded modules, and the manifest. Run [`sf check`](/cli/reference#sf-check-dir) locally to catch size or config problems before publishing. Smaller bundles reduce cold-start overhead and publish faster.
+- **Tune request timeouts per route**: Worker requests default to `30 s`; configure longer per-route timeouts in [`spacefast.config.ts`](/config-file) up to `60 s` (Personal and Go), `120 s` (Pro), or `300 s` (Boost).
+
+See [Functions](/functions) for routing layouts and [Limits](/limits) for per-plan ceilings.
+
+## Compute workers and Burst
+
+Each Space runs dynamic origin requests across its allocated **compute workers**. Requests beyond the worker limit wait briefly and then return HTTP `429`. Requests served from the edge cache never consume compute workers.
+
+**Burst** lets a Space borrow extra compute workers when the origin server has room:
+
+| Resource | Personal | Go | Pro | Boost | Enterprise |
+| --- | --- | --- | --- | --- | --- |
+| Compute workers per Space | 2 | 2 | 4 | 8 | Custom |
+| Burst compute workers | Off | Up to 4 | Up to 8 | Up to 16 | Custom |
+| Compute memory per request | 512 MB | 512 MB | 1 GB | 2 GB | 2 GB |
+
+Add **Boost** to a busy Space when sustained concurrent dynamic traffic hits worker or memory limits, or move cacheable responses onto public static routes so the edge absorbs spikes. See [Server specifications and settings](/infrastructure/server-specs-settings) and [Pricing](/pricing).
+
+## Measure changes
+
+Check which version served a request and verify cache behavior with `curl`:
+
+```bash
+curl -sI https://my-space.space.fast/ | grep -iE 'x-spacefast|cache-control|etag'
+```
+
+Compare cache hits, status codes, and response latency with [`sf logs`](/cli/reference#sf-logs-target-kind), [Edge request logs](/infrastructure/edge-request-logs), [Logs](/logs), and [Stats](/stats).

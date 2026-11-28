@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_oom",
   "title": "Build oom",
-  "status": 400,
+  "status": 422,
   "detail": "The build process was killed, most likely after running out of memory.",
   "code": "build_oom",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_token",
   "title": "Invalid token",
-  "status": 400,
+  "status": 422,
   "detail": "The session token is expired or does not authorize this interface.",
   "code": "invalid_token",
   "requestId": "req_4mz0v8qk"

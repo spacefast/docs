@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_domain_not_on_site",
   "title": "Wp cloud domain not on site",
-  "status": 400,
+  "status": 422,
   "detail": "The hostname is not a domain of this provider site.",
   "code": "wp_cloud_domain_not_on_site",
   "requestId": "req_4mz0v8qk"

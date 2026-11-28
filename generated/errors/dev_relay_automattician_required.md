@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_automattician_required",
   "title": "Dev relay automattician required",
-  "status": 400,
+  "status": 422,
   "detail": "This dev relay was approved for an Automattician, and WordPress.com no longer lists the owner as one.",
   "code": "dev_relay_automattician_required",
   "requestId": "req_4mz0v8qk"

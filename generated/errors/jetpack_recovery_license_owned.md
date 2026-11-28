@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_recovery_license_owned",
   "title": "Jetpack recovery license owned",
-  "status": 400,
+  "status": 422,
   "detail": "Another space already owns the supplied license.",
   "code": "jetpack_recovery_license_owned",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_not_cancelable",
   "title": "Transfer not cancelable",
-  "status": 400,
+  "status": 422,
   "detail": "The transfer is past the point where it can be canceled.",
   "code": "transfer_not_cancelable",
   "requestId": "req_4mz0v8qk"

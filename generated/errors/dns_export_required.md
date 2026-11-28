@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_export_required",
   "title": "Dns export required",
-  "status": 400,
+  "status": 422,
   "detail": "This operation requires exporting the current DNS records first.",
   "code": "dns_export_required",
   "requestId": "req_4mz0v8qk"

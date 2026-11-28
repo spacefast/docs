@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_code_taken",
   "title": "Plan code taken",
-  "status": 400,
+  "status": 422,
   "detail": "Another plan code already uses this code.",
   "code": "plan_code_taken",
   "requestId": "req_4mz0v8qk"

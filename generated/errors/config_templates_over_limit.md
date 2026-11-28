@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_templates_over_limit",
   "title": "Config templates over limit",
-  "status": 400,
+  "status": 422,
   "detail": "The configuration declares more template files than the plan allows.",
   "code": "config_templates_over_limit",
   "requestId": "req_4mz0v8qk"

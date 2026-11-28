@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/credential_expired",
   "title": "Credential expired",
-  "status": 400,
+  "status": 422,
   "detail": "The credential used for this request is expired.",
   "code": "credential_expired",
   "requestId": "req_4mz0v8qk"

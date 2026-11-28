@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/abuse_report_invalid_transition",
   "title": "Abuse report invalid transition",
-  "status": 400,
+  "status": 422,
   "detail": "The abuse report cannot move to the requested status from its current status.",
   "code": "abuse_report_invalid_transition",
   "requestId": "req_4mz0v8qk"

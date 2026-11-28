@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/rate_limited",
   "title": "Rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "Too many requests were made in a short window.",
   "code": "rate_limited",
   "requestId": "req_4mz0v8qk"

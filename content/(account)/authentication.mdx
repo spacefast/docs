@@ -1,8 +1,6 @@
 ---
 title: Sign in and security
 description: Create a Spacefast account, add a password and two-factor, manage sessions, and log the sf CLI in from your terminal
-sidebar:
-  order: 1
 ---
 
 To create a Spacefast account, you need an email address and the six-digit code sent to it. A password is optional, and you can add one later.
@@ -11,7 +9,7 @@ To create a Spacefast account, you need an email address and the six-digit code 
 
 Type your email address on the sign-in page and press **Continue**. If the address has no account yet, Spacefast mails you a six-digit code. Enter the code to finish signing up.
 
-There is no password signup. Passwords are something you add later, from settings, once you already have an account.
+There is no password signup. Add a password later from **Account settings → Security**.
 
 Two other ways in create an account for you:
 
@@ -32,7 +30,7 @@ The code is six digits and you get three tries. A fourth attempt stops working e
 
 Forgot the password you set? Sign in with a mailed code. Codes keep working whether or not a password exists.
 
-A secondary address on your account signs you into that same account, and the code goes to the inbox you typed.
+A secondary address on your account signs you in to that same account, and the code goes to the inbox you typed.
 
 ## Add a password
 
@@ -86,11 +84,11 @@ Sessions are separate from agent access. To cut off an agent or a CLI, use **Acc
 
 ## Log the CLI in
 
-`sf login` does not store a browser session. It walks a browser approval and ends up holding an API key scoped to what you approved.
+[`sf login`](/cli/reference#sf-login) does not store a browser session. It runs a browser approval flow and stores an API key scoped to what you approved.
 
 <Steps>
   <Step title="Run the command">
-    Run `sf login`. Add `--access read` if you want a credential that changes nothing.
+    Run [`sf login`](/cli/reference#sf-login). Add `--access read` if you want a credential that changes nothing.
   </Step>
   <Step title="Take the code to the browser">
     The CLI prints an eight-character code and a link, and opens your browser when it can.
@@ -104,14 +102,14 @@ Sessions are separate from agent access. To cut off an agent or a CLI, use **Acc
     On a machine with no browser, open the link from your phone or laptop instead. Dashes and letter case in the code are ignored.
   </Step>
   <Step title="Approve it">
-    The page is titled **Authorize this device**. It shows the **Client**, the **Requested access**, the **Request origin** it was started from, and the line "This access expires after 30 days, or after 7 days unused."
+    The page says the client "is requesting access to your account". It shows the code to check against your terminal, the account you are signed in as (open the account menu and pick **Switch Account** if it is the wrong one), the **Client ID**, and the address the request was **Started from**. Under the requested access it says the access stays connected for 30 days, or until it goes 7 days unused.
 
-    Pick the team reach: **All teams** (including teams you join later), **Choose teams**, or **No team access** for sign-in only. Open **Customize what this device can do** to untick anything you would rather not hand over. You can narrow the request, never widen it.
+    Pick the team reach under **Team Access**: **All teams** (including teams you join later), **Choose teams**, or **No team access** for sign-in only. Open **Customize Access** to untick anything you would rather not hand over. You can narrow the request, never widen it.
 
-    Press **Approve**.
+    Press **Allow**, or **Deny** to refuse it.
   </Step>
   <Step title="Back in the terminal">
-    The CLI picks the approval up within a few seconds and prints who you are and which teams the credential reaches. Run `sf whoami` any time to see it again.
+    The CLI picks the approval up within a few seconds and prints who you are and which teams the credential reaches. Run [`sf whoami`](/cli/reference#sf-whoami) any time to see it again.
   </Step>
 </Steps>
 
@@ -128,7 +126,7 @@ About that credential:
 
 Inside each team, the credential can't do more than your current role allows there. If your role changes, the new role applies from the credential's next request.
 
-`sf logout` deletes the local login and revokes the key when the CLI minted it. To kill it from the browser instead, revoke the connection under **Account settings → Connected apps**.
+[`sf logout`](/cli/reference#sf-logout) deletes the local login and revokes the key when the CLI minted it. To kill it from the browser instead, revoke the connection under **Account settings → Connected apps**. Requests made with an expired or revoked credential return `401` [`unauthorized`](/errors/unauthorized).
 
 ## Account settings
 
@@ -145,4 +143,19 @@ Every `/account` page opens as a dialog over the dashboard.
 
 Your primary address gets account mail, drives the Gravatar avatar, and is the address sign-in codes go to. Two-factor codes, password resets, and other security mail are never turned off by the notification switches.
 
-API keys are not on this branch. They live on the team page. See [API keys and tokens](/api-keys).
+## API reference
+
+| Action | Endpoint |
+|---|---|
+| Read current account | [`GET /v1/me`](/api/reference/account/getme) |
+| List sign-in methods | [`GET /v1/auth/methods`](/api/reference/account/listauthmethods) |
+| Set or change password | [`POST /v1/auth/password`](/api/reference/account/setaccountpassword) |
+| List account emails | [`GET /v1/auth/emails`](/api/reference/account/listaccountemails) |
+| Start device login | [`POST /v1/auth/device`](/api/reference/account/startdeviceauthorization) |
+| Poll device login | [`POST /v1/auth/device/poll`](/api/reference/account/polldeviceauthorization) |
+| List active credentials | [`GET /v1/me/credentials`](/api/reference/account/listcredentials) |
+| Revoke a credential | [`DELETE /v1/me/credentials/{kind}/{credentialId}`](/api/reference/account/revokecredential) |
+| List connected apps | [`GET /v1/me/grants`](/api/reference/account/listgrants) |
+| Stop all agent access | [`DELETE /v1/me/grants`](/api/reference/account/revokeallgrants) |
+
+API keys live on the team page, not under `/account`. See [API keys](/api-keys) and [API authentication](/api/authentication).

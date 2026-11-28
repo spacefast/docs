@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/label_name_taken",
   "title": "Label name taken",
-  "status": 400,
+  "status": 422,
   "detail": "Another label in this team already uses that name, ignoring case.",
   "code": "label_name_taken",
   "requestId": "req_4mz0v8qk"

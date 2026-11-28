@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_context_too_large",
   "title": "Visual review context too large",
-  "status": 400,
+  "status": 422,
   "detail": "The selected page context exceeds the review limit.",
   "code": "visual_review_context_too_large",
   "requestId": "req_4mz0v8qk"

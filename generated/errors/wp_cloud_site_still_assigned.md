@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_site_still_assigned",
   "title": "Wp cloud site still assigned",
-  "status": 400,
+  "status": 422,
   "detail": "The provider site still has assignments and cannot be released.",
   "code": "wp_cloud_site_still_assigned",
   "requestId": "req_4mz0v8qk"

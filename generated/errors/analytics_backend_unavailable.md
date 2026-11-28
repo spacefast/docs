@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/analytics_backend_unavailable",
   "title": "Analytics backend unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Analytics couldn't answer right now.",
   "code": "analytics_backend_unavailable",
   "requestId": "req_4mz0v8qk"

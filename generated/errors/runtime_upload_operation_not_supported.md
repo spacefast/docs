@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_upload_operation_not_supported",
   "title": "Runtime upload operation not supported",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime upload session does not support this operation.",
   "code": "runtime_upload_operation_not_supported",
   "requestId": "req_4mz0v8qk"

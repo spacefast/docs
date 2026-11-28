@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrant_contact_invalid",
   "title": "Registrant contact invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The registrar rejected the registrant contact, so the payment for this domain was refunded.",
   "code": "registrant_contact_invalid",
   "requestId": "req_4mz0v8qk"

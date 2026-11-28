@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/promotion_live_content_missing",
   "title": "Promotion live content missing",
-  "status": 400,
+  "status": 422,
   "detail": "The live tenant's system space has nothing published, so promotion has no content to carry forward.",
   "code": "promotion_live_content_missing",
   "requestId": "req_4mz0v8qk"

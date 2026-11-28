@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_execution_unavailable",
   "title": "Build execution unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Build execution is not available on this deployment.",
   "code": "build_execution_unavailable",
   "requestId": "req_4mz0v8qk"

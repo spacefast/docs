@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_lookup_rate_limited",
   "title": "Domain lookup rate limited",
-  "status": 400,
+  "status": 422,
   "detail": "Too many domain lookups were made in a short window.",
   "code": "domain_lookup_rate_limited",
   "requestId": "req_4mz0v8qk"

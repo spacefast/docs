@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/secret_variable_in_template",
   "title": "Secret variable in template",
-  "status": 400,
+  "status": 422,
   "detail": "A secret variable was referenced in a template, which is blocked.",
   "code": "secret_variable_in_template",
   "requestId": "req_4mz0v8qk"

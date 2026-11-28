@@ -1,0 +1,425 @@
+---
+title: Connectors
+description: Connect an external service once and call its tools from Space pages, Workers, local AI agents, and scripts while credentials stay sealed in Spacefast
+---
+
+Connectors let your team connect an external service once (an OpenAPI spec, a GraphQL endpoint, or a remote MCP server) and call its tools from Space pages, [Workers](/functions), local AI agents, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
+
+Connectors are available on Go, Pro, and Enterprise plans. A team on Personal receives [`feature_unavailable`](/errors/feature_unavailable). Enterprise adds team-wide connector allowlists and blocklists.
+
+## How Connectors work
+
+Four building blocks cover everything Connectors do:
+
+| Concept | What it is |
+| --- | --- |
+| **Connector** | A tool source your team registers once from the catalog or any URL. Its slug becomes the tool namespace, such as `hubspot` or `linear`. |
+| **Connection** | One authenticated account (`cxn_…`) on a connector, owned by the **Team** (shared) or **Personal** (only yours within this team). |
+| **Policy** | Rules that decide whether a tool call **Runs freely** (`approve`), **Ask first** (`require_approval`), or is **Blocked** (`block`). |
+| **Role** | A Space-level declaration in `spacefast.config.ts` or `sf.jsonc` that exposes chosen tools to a Space's pages and Workers. |
+
+### Where you can call them
+
+| Surface | Best for | How it runs |
+| --- | --- | --- |
+| **Space pages and Workers** | Showing live data or running actions on a Space with no backend to write | Declare a role, bind an account, and call `space.connectors.<role>.<tool>()` or `env.CONNECTORS` |
+| **AI agents (On-Device MCP)** | Letting Claude Code, Cursor, Codex, or Claude Desktop search and call your team's tools | `sf mcp` exposes `search_connector_tools` under your team's policy and approval rules. Hosted MCP and `sf mcp proxy` omit connector tools |
+| **CLI and API** | Scripts, CI jobs, or testing a call directly | Run a tool or a multi-tool sandbox program with `sf connectors run` or `POST /v1/connectors/runs` |
+
+### Who can do what
+
+- **Team owners and admins** manage connectors in the dashboard: registering tool sources, connecting or disconnecting team accounts, and editing team policy rules (`connectors:write`).
+- **Team members** can list and run team connections through the API, CLI, and On-Device MCP (`connectors:read` and `connectors:execute`), subject to team policy rules and per-credential connection limits. The team's **Connectors** dashboard pages remain owner and admin only.
+- **API keys** need connector scopes: `connectors:read` reads connectors, connections, tools, rules, and runs; `connectors:write` manages connectors, accounts, and rules; `connectors:execute` runs tools. `write` and `execute` each include `read`, and neither includes the other. See [API keys](/api-keys).
+
+## Connect a service
+
+In the dashboard, open **Connectors** in the team sidebar. A header switch moves between **Connectors**, **Runs**, and **Policies**.
+
+### Add a connector
+
+Click **Browse Connectors** to search curated presets, the public registry, and your team's own connectors, or filter by **All**, **API**, **GraphQL**, or **MCP**. The catalog has one row per source type, so a service with an API and an MCP server appears as two rows. Click **Add** on a row (or **Set Up** if the provider needs a custom endpoint).
+
+To add a service from any URL, paste it into the search box on **Browse**, click **Detect**, choose a candidate, check **Name**, **Namespace**, and **Description**, and click **Register**. Detection inspects the URL, so the registered endpoint can differ from what you pasted.
+
+- **Namespace** is the connector slug: lowercase letters, digits, and dashes, starting with a letter or digit.
+- **Description** helps agents choose between connectors.
+- No credentials are entered at registration. Authentication comes from the source, and Spacefast asks remote MCP servers how they authenticate.
+
+From the CLI:
+
+```bash
+sf connectors search linear
+sf connectors create linear
+
+# Or register from any URL
+sf connectors detect https://api.example.com
+sf connectors create https://api.example.com/openapi.json
+```
+
+### Connect an account
+
+Open the connector and click **Connect Account**. Pick **Team** or **Personal**, choose a **Method** if more than one exists, add an optional **Label** so agents can tell accounts apart, and click **Connect**.
+
+- **Team** shares the account with the team and agents acting for it.
+- **Personal** keeps it yours, only within this team.
+- API keys can connect **Team** accounts only.
+
+```bash
+sf connectors connections connect linear
+sf connectors connections connect stripe --api-key "$STRIPE_KEY"
+sf connectors connections connect linear --owner personal
+sf connectors connections list --connector linear
+```
+
+Connecting ends in one of three states:
+
+| Result | What to do |
+| --- | --- |
+| `connected` | Ready to use |
+| `authorization_required` | Finish OAuth sign-in at the provider (**Open Sign-In** in the dashboard, or open the URL printed by the CLI). The callback completes the connection automatically |
+| `input_required` | Supply the fields the connector asks for and connect again. Provider setup notes and links appear inline (or via [`getConnectorCredentialGuidance`](/api/reference/connectors/getconnectorcredentialguidance)) |
+
+A tool address is `<connectionId>/<tool>`. While a connector has one usable account, `<connector>/<tool>` also works. Adding a second account turns the short form into `connection_ambiguous`, so address tools by connection id.
+
+## Policy rules and approvals
+
+A policy rule pairs an address pattern with an action:
+
+| Pattern | Matches |
+| --- | --- |
+| `*` | Every tool |
+| `<connector>/*` | Every tool on every account of one connector |
+| `<connector>/<tool>` | One tool on every account of one connector |
+| `<connectionId>/*` | Every tool of one account |
+| `<connectionId>/<tool>` | One tool on one account |
+
+| Action | Dashboard label | When a call matches |
+| --- | --- | --- |
+| `approve` | **Runs freely** | Runs immediately |
+| `require_approval` | **Ask first** | Parks until a person approves or denies it |
+| `block` | **Blocked** | Fails with `connector_tool_blocked` |
+
+How rules combine:
+
+- **Most specific pattern wins.** Spacefast evaluates rules by specificity, not creation order.
+- **Team rules are a floor.** A **Personal** rule can tighten a **Team** rule, never loosen it.
+- **Unmatched tools use the source's default.** A tool can also ask for approval itself.
+- **Pattern and owner are fixed.** Delete the rule and add a new one to change either. Deleting a block hands its tools back to the next matching rule.
+
+Manage rules under **Policies** in the connectors header (an API key can add **Team** rules only), or check what an address resolves to without calling it:
+
+```bash
+sf connectors policies add cxn_abc123/charges.create --action require_approval
+sf connectors policies explain cxn_abc123/charges.create
+```
+
+Use a wildcard like `'*'` when you intend a team-wide default rather than testing one tool. On Enterprise plans, team owners and admins can also set a team-wide connector allowlist or blocklist.
+
+### Approve or deny a parked run
+
+A parked run returns an `approvalUrl` and appears in two dashboard views:
+
+- **Approvals**, under **Connector calls awaiting approval**.
+- **Runs**, filtered to **Waiting on you**. Click **Review** to inspect the matched rule, arguments, and deadline before approving, or click **Deny** on the row.
+
+**Approve** runs the call once. **Deny** fails it with `connector_approval_declined`. A parked run expires after 15 minutes.
+
+Approvals require a signed-in person. A CLI login or API key trying to approve fails with `human_approval_required`. Read the settled outcome with `sf connectors run inspect <runId>`. Approving in the dashboard executes the call and settles the run, so `sf connectors run resume <runId>` applies only while the run still awaits a decision (a settled run returns `connector_run_not_resumable`). Pass `--deny-unattended` on `sf connectors run` to fail immediately with `connector_approval_required` instead of parking.
+
+## Use connectors in a Space
+
+A Space can show live data or run actions through a connected service with no backend to write and no keys in the browser. You declare a role in your Space config, bind an account, and call `/__spacefast/connectors/<role>/<tool>` from a page or `env.CONNECTORS` from a [Worker](/functions). Spacefast runs the tool on the server with sealed credentials and returns JSON.
+
+### Declare a role
+
+Put roles under `connectors` in `spacefast.config.ts` or `sf.jsonc`:
+
+<CodeGroup>
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  connectors: {
+    crm: {
+      connector: "hubspot",
+      tools: ["list_deals"],
+      args: { list_deals: { pipeline: "sales" } },
+      cache: "60s",
+    },
+  },
+});
+```
+
+```jsonc sf.jsonc
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "connectors": {
+    "crm": {
+      "connector": "hubspot",
+      "tools": ["list_deals"],
+      "args": { "list_deals": { "pipeline": "sales" } },
+      "cache": "60s"
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+When both files exist, `spacefast.config.ts` wins. Publish to apply changes, because each version freezes the roles it was published with. Tool names and arguments here (`list_deals`, `stage`) are examples — check what your connection exposes with `sf connectors connections inspect <connectionId>` or [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+
+| Key | Required | What it does |
+| --- | --- | --- |
+| `connector` | yes | Connector slug registered on your team, such as `hubspot` (`sf connectors list` shows them) |
+| `tools` | yes | A list of tool names, or `"*"` for every tool on the connection, including tools added later |
+| `as` | no | Whose account answers: `team` (default), `personal`, or `visitor` |
+| `args` | no | Argument values pinned per tool on the server |
+| `cache` | no | How long viewers share one read: `"30s"` by default, up to `"1440m"` (1 day). `"0"` disables sharing |
+
+Role names are camelCase, start with a lowercase letter, and are up to 64 characters. A Space declares at most 32 roles, and each role lists at most 200 tools. Tool names use letters, digits, `_`, `.`, `:`, and `-`. `connect`, `callback`, and `disconnect` are reserved.
+
+- **Pinned arguments (`args`):** Every call runs with the pinned values regardless of what the page sends. Sending a different value fails with `connector_arg_pinned` and a `pointer` naming the argument. Pin anything viewers shouldn't choose, such as a pipeline, project, or workspace id.
+- **Shared reads (`cache`):** For `team` and `personal` roles, Spacefast shares one successful upstream read across viewers for the `cache` window. Writes, `visitor` roles, and tools requiring approval are never shared.
+
+| Cache rule | Behavior |
+| --- | --- |
+| Cache key | Space, role, tool, and final pinned arguments (order-independent); cached `ok` answers include `cachedAt` |
+| Upstream budget | 60 upstream reads per role per rolling minute per Space; concurrent viewers wait on a cold key (`cache: "0"` disables sharing but still counts) |
+| Over budget | Serves the last cached value for up to an hour past its window, otherwise returns `connectors_unavailable` |
+
+### Bind an account and site serving
+
+A `team` or `personal` role needs a bound account (`visitor` roles bind nothing; each viewer connects their own).
+
+Publishing a live version as a human team owner or admin (with `connectors:write` and access to the account) binds a role automatically when exactly one eligible connection exists. When two or more eligible connections exist, or on publishes by team members without `connectors:write`, API keys, or settings republishes, the role stays unbound. The publish receipt lists roles that still need a binding or site serving. Bind remaining roles from the Space's **Integrations** page, `sf connectors bind`, or the API ([`listSpaceConnectorBindings`](/api/reference/spaces/listspaceconnectorbindings), [`bindSpaceConnector`](/api/reference/spaces/bindspaceconnector)):
+
+```bash
+sf connectors bindings --space example
+sf connectors bind crm cxn_abc123 --space example
+```
+
+A `team` connection serves Space viewers only after site serving is turned on. Until then, the role's state is `needs_serving_grant` and calls answer `connection_forbidden`.
+
+Owners and admins can turn serving on from the connection in the dashboard or with `sf connectors connections update cxn_abc123 --serving`. Anyone else can request it:
+
+```bash
+sf connectors serving create crm --space example
+```
+
+That returns a pending request (`csr_…`), or approves immediately if you already have permission. Owners and admins receive a notification and decide in the dashboard or CLI:
+
+```bash
+sf connectors serving list
+sf connectors serving approve csr_abc123
+sf connectors serving deny csr_abc123
+```
+
+Owners and admins can also restrict serving approvals to admins and allowlist which connectors may serve Spaces with `sf connectors serving set`. The API operations are `requestSpaceConnectorServing`, `listConnectorServingRequests`, `approveConnectorServingRequest`, and `denyConnectorServingRequest`.
+
+### Access, writes, and previews
+
+| `as` | Whose account | Who reads through it | Who writes through it |
+| --- | --- | --- | --- |
+| `team` | A team connection with site serving on | Everyone who can open the Space | A signed-in current member of the owning team |
+| `personal` | The connection of the person who bound it | Everyone who can open the Space (private Spaces only) | A signed-in current member of the owning team |
+| `visitor` | Each viewer's own connection | That viewer | That viewer |
+
+The connectors route sits behind the Space's own access check, so data is never more public than the pages. A private Space stays private; a share link or password admits viewers with that link or password for reads. Team connector policy still applies to every call: blocked tools are refused, and **Ask first** tools answer `approval_pending`.
+
+Four guardrails protect shared accounts and previews:
+
+- **`team` on a public, link-shared, or password-protected Space:** Serves only after a team owner or admin allows public serving with `sf connectors public-serving set crm --enable --space example` (API: `setSpaceConnectorPublicServing`). Until then, calls answer `connection_forbidden`. Rebinding the role resets the allowance.
+- **`personal` requires a private Space:** Works only while the Space is private with no share link or password; otherwise calls answer `connection_forbidden`.
+- **Shared writes require a team member:** Anyone else reading an allowed `team` role gets `connector_write_sign_in_required` on writes. Send viewers to sign in with `space.access.signIn()`.
+- **Previews protect live bindings:** Preview and held versions never auto-bind roles (promoting or rolling back binds them then). Previews can read through already-bound `team` or `personal` roles, but non-read-only tools on shared bindings fail with `connector_preview_write_not_allowed` until promoted. `visitor` roles work normally in previews.
+
+**Visitor accounts** require a connector with an OAuth sign-in method (API-key-only connectors answer `connector_oauth_required`; missing team OAuth apps answer `connector_oauth_app_required`). A `visitor` role's `connectUrl` is `/__spacefast/connectors/<role>/connect`, which signs the viewer in if needed, sends them to the provider, and returns them to `/` (or `?return_to=/some/path`). A same-origin `POST` to `/__spacefast/connectors/<role>/disconnect` disconnects the viewer's account. Inspect or revoke visitor accounts with `sf connectors visitors list --space example` and `sf connectors visitors revoke 42 calendar --space example` (API: `listVisitorConnectionUsers`, `revokeVisitorConnection`).
+
+### Call from a page
+
+Install `@spacefast/client` for typed calls. `sf dev` and `sf publish` generate `spacefast.generated.ts` next to your config file automatically (or run `sf client`, passing `--out` to place it elsewhere). When roles are declared, `sf publish` stops if regeneration fails so you never ship stale types; `sf dev` warns and continues.
+
+```bash
+npm install @spacefast/client
+```
+
+```ts
+import { space } from "./spacefast.generated";
+
+const answer = await space.connectors.crm.list_deals({ stage: "won" });
+if (answer.state === "ok") render(answer.data);
+else showNotice(answer.message);
+```
+
+Each generated method knows its HTTP method: read-only tools send `GET`, and write tools send `POST`. Pass `{ idempotencyKey }` as the last argument so a retried write runs once. Pinned arguments are omitted from parameter types, non-identifier tool names use bracket keys (`space.connectors.github["issues.list"]()`), and tools without an output schema return `unknown`.
+
+Keep a read live with `.watch()` or `useConnector` in React. `.watch()` refreshes on an interval (`every` in milliseconds or `"30s"`, `"5m"`, `"1h"`, never under one second) and on window focus while sharing identical requests. Writes cannot be watched.
+
+<CodeGroup>
+
+```ts TypeScript
+const deals = space.connectors.crm.list_deals.watch({ stage: "won" }, { every: "60s" });
+const stop = deals.subscribe(() => render(deals.getSnapshot()));
+```
+
+```tsx React
+import { useConnector } from "@spacefast/client/react";
+import { space } from "./spacefast.generated";
+
+export function Deals() {
+  const deals = useConnector(space.connectors.crm.list_deals, { stage: "won" }, { every: "60s" });
+  if (deals.state === "ok") return <DealList deals={deals.data} />;
+  return <p>{deals.message ?? "Loading…"}</p>;
+}
+```
+
+</CodeGroup>
+
+`useConnector` returns `data`, `state`, `message`, `connectUrl`, `approvalUrl`, `cachedAt`, `refreshing`, `error`, and `refresh`, keeping the last good `data` during refreshes and sharing requests across components.
+
+For pages with no build step, import `/__spacefast/client.js` (types live at `/__spacefast/client.d.ts`) or call the route with `fetch`:
+
+<CodeGroup>
+
+```html Plain HTML
+<script type="module">
+  import { space } from "/__spacefast/client.js";
+
+  const { state, data, message } = await space.connectors.crm.list_deals({ stage: "won" });
+  document.querySelector("#deals").textContent = state === "ok" ? JSON.stringify(data) : message;
+</script>
+```
+
+```js fetch
+const args = encodeURIComponent(JSON.stringify({ stage: "won", limit: 5 }));
+const response = await fetch(`/__spacefast/connectors/crm/list_deals?__args=${args}`);
+const { state, data } = await response.json();
+```
+
+</CodeGroup>
+
+Without generated types, every client call uses `GET`; pass `{ method: "POST" }` for writes. With `fetch`, query parameters pass string arguments (`?stage=won`), `__args` passes typed JSON, and `POST` accepts a JSON body of at most 64 KiB. Cross-site calls fail with `browser_origin_not_allowed` when `Sec-Fetch-Site` or `Origin` names another host, and writes always require same-origin proof (`Origin` or `Sec-Fetch-Site: same-origin`). Every response is `private, no-store`.
+
+### Call from Workers
+
+A [Worker](/functions) whose version declares roles receives `env.CONNECTORS`:
+
+```js functions/deals.js
+export async function GET(request, { env }) {
+  const deals = await env.CONNECTORS.crm.list_deals({ stage: "won" });
+  return Response.json(deals);
+}
+```
+
+The proxy returns the tool's output or throws `ConnectorCallError` with `state.code` (such as `connect_required` or `forbidden`). `env.CONNECTORS.call("crm", "list_deals", args)` returns `{ state, result }` without throwing. Workers forward the request's signed-in viewer, so `visitor` roles, write permissions, and preview write rules match page calls. Worker calls are never shared reads.
+
+### States and errors
+
+A Space call returns `{ state, data }`. When `state` is `ok`, `data` holds the tool's output; every other state returns `data: null` and a user-facing `message`:
+
+| State | What it means | What the page should do |
+| --- | --- | --- |
+| `ok` | `data` is the provider's payload. HTTP-backed tools add `http` (`status`, `headers`), and shared reads add `cachedAt` | Render `data` |
+| `unbound` | No account serves this role yet | Show `message`; the Space's owner binds an account |
+| `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
+| `reconnect_required` | The account's authorization expired | For `visitor` roles, link to `connectUrl`. For `team` or `personal` roles, the team reconnects it; don't show `connectUrl` |
+| `approval_pending` | The call is waiting for human approval | Show `message` and link to `approvalUrl` when present |
+| `running` | Still executing | Retry shortly (watched reads retry automatically) |
+
+Hard failures return an RFC 9457 problem document with a stable `code`, thrown as `ConnectorError` (`status`, `code`, `message`) by the client (`state: "error"` in `useConnector`):
+
+| Code | Status | When |
+| --- | --- | --- |
+| [`connection_forbidden`](/errors/connection_forbidden) | 403 | Policy blocks the connector, read tool, or visitor write; approval denied; site serving off; or Space too open for the role |
+| [`connector_role_unknown`](/errors/connector_role_unknown) | 404 | The live version doesn't declare this role |
+| `connector_tool_not_allowed` | 403 | The role's `tools` list omits this tool |
+| `connector_arg_pinned` | 422 | The call sent a different value for a pinned argument |
+| `connector_preview_write_not_allowed` | 403 | A preview version tried to run a non-read-only tool on a shared `team` or `personal` role |
+| `connector_write_sign_in_required` | 403 | A write on a `team` or `personal` role from someone who isn't a signed-in current member of the owning team |
+| [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | Team policy blocks this write tool on a `team` or `personal` role |
+| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a write tool; send `POST` instead |
+| [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | Cross-site call, or write without same-origin proof |
+| `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer; retry |
+
+### Change roles without a publish
+
+Use the Space's **Integrations** page or `sf connectors roles` to override, turn off, or reset roles on a live Space without republishing:
+
+```bash
+sf connectors roles list --space example
+sf connectors roles set crm --connector hubspot --tools list_deals --cache 60s --space example
+sf connectors roles remove crm --space example
+sf connectors roles reset crm --space example
+```
+
+Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, `config` on [`updateSpace`](/api/reference/spaces/updatespace) replaces the Space's stored settings overlay (except `config.network`). Read `config` and `settingsDigest` from [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your `config.connectors` change (set a role to `null` to remove it), and pass `settingsDigest` as `baseSettingsDigest`.
+
+## Use connectors from agents, CLI, and API
+
+The `/__spacefast/connectors/...` route answers only the Space's own pages. From an AI agent, script, CI job, or terminal, calls run directly against your credential and team policy, with no Space role, no pinned arguments, and no shared reads.
+
+- **AI agents (On-Device MCP):** `sf mcp` and the desktop extension expose one gateway tool, `search_connector_tools`, under your team's policy and approval rules. Hosted MCP and `sf mcp proxy` intentionally omit connector tools and grant no connector scopes. See [MCP server](/agents/mcp-server).
+- **Dashboard Tools view:** Click **See tools** on a connector row (or open **Connector tools** from the command palette) to browse reachable tools, resolved policy effects, input schemas, and declared safety (**Read-only**, **Writes**, or **Destructive**). Run any tool directly from a form or JSON payload.
+- **CLI and API:** Inspect tools and run one tool or a multi-tool sandbox program with `sf connectors run` or [`createConnectorRun`](/api/reference/connectors/createconnectorrun):
+
+```bash
+sf connectors inspect hubspot --query deals
+sf connectors connections inspect cxn_abc123
+sf connectors run --tool cxn_abc123/issues.list --args '{"limit":5}'
+```
+
+| Run status | Meaning |
+| --- | --- |
+| `running` | Still working. Check again with `sf connectors run inspect` |
+| `awaiting_approval` | Parked on a person's decision |
+| `succeeded` | Finished. Output is in `result` |
+| `failed` | Finished with an RFC 9457 problem document in `error` |
+| `expired` | Parked past 15 minutes without a decision |
+
+`sf connectors run` waits up to 30 seconds by default (`--wait` up to 120 seconds) and exits `1` on `failed` or `expired`.
+
+### Limit which connections a key or app can use
+
+By default, a credential with connector scopes reaches every team connection it is allowed to use. Narrow it to specific connections when a script, CI job, or AI client should touch only one account:
+
+- **API keys:** Pass `--connection <connectionId>` (repeatable) on `sf api-keys create` or `sf api-keys update`, or pass `connectorAccess: { connectionIds: ["cxn_abc123"] }` over the API. Remove the limit with `--all-connections` or `connectorAccess: null`. See [API keys](/api-keys#limit-connector-access).
+- **OAuth apps and CLI logins:** Open **Choose Connections** on the consent screen, or edit the allowlist later on **Connected apps** without re-authorizing.
+
+Direct lookups of a connection outside a credential's allowlist answer `404` as if it doesn't exist. Tool runs still return a run record (HTTP `200` or `201`): addressing a disallowed connection by ID (`<connectionId>/<tool>`) fails in `error` with `connection_forbidden`, while the short `<connector>/<tool>` form fails with `connection_not_found`; see [Errors](/api/connectors#errors).
+
+## Manage connections and clean up
+
+Open a connector's **Accounts** tab for connection actions:
+
+| Action | What it does | CLI |
+| --- | --- | --- |
+| **Edit…** | Changes **Label** and the agent note, **What it's for** | `sf connectors connections update` |
+| **Check Health** | Probes the provider without changing state | `sf connectors connections health` |
+| **Re-Sync Tools** | Re-reads the tool list so added or removed tools show up | `sf connectors connections refresh` |
+| **Reconnect…** | Re-authenticates or replaces a key while keeping the id, label, policies, and Space bindings | `sf connectors connections reconnect` |
+| **Disconnect…** | Purges the stored credential permanently | `sf connectors connections disconnect` |
+
+Token refresh happens automatically; reconnect only when a connection reports `needs_reauth` or `degraded`, or to rotate an API key. A disconnected account cannot be reconnected — connect again to create a new connection id.
+
+### When a member leaves
+
+Before removing a team member, the dashboard shows their connector dependencies:
+
+- **Personal connections** owned by that member disconnect automatically on removal. Stored credentials are purged, pending sign-ins are canceled, and any Space bindings pointing to them are removed.
+- **Team connections** the departing member created stay active while their existing Space bindings stay in place. If an owner or admin rebinds a role on a public, link-shared, or password-protected Space, restore its public-serving allowance before expecting calls to succeed.
+
+### Remove a connector
+
+```bash
+sf connectors delete linear --yes
+```
+
+Deleting a connector disconnects every account on it, then deletes the connector and its tools. Built-in connectors cannot be removed.
+
+## Reference
+
+- [`sf connectors`](/cli/reference#sf-connectors) — every CLI command, flag, and exit code
+- [Connectors API](/api/connectors) — `/v1/connectors` endpoints, scopes, and errors
+- [MCP server](/agents/mcp-server) — On-Device MCP setup for local AI agents

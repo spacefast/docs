@@ -5,6 +5,14 @@ description: "Release history for @spacefast/wordpress on npm."
 
 Published as [`@spacefast/wordpress`](https://www.npmjs.com/package/@spacefast/wordpress) on npm.
 
+## 0.10.0
+
+_No noted changes in this release._
+
+## 0.9.0
+
+_No noted changes in this release._
+
 ## 0.8.1
 
 _No noted changes in this release._

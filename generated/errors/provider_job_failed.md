@@ -1,9 +1,9 @@
 ---
 title: "provider_job_failed"
-description: "A hosting-provider job failed while processing this operation."
+description: "An infrastructure job failed while processing this operation."
 ---
 
-A hosting-provider job failed while processing this operation.
+An infrastructure job failed while processing this operation.
 
 **How to resolve:** Retry the operation. If it keeps failing, contact support with the operation id.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_job_failed",
   "title": "Provider job failed",
-  "status": 400,
-  "detail": "A hosting-provider job failed while processing this operation.",
+  "status": 422,
+  "detail": "An infrastructure job failed while processing this operation.",
   "code": "provider_job_failed",
   "requestId": "req_4mz0v8qk"
 }

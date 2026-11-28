@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/run_replay_diverged",
   "title": "Run replay diverged",
-  "status": 400,
+  "status": 422,
   "detail": "Replaying the paused program took a different path than the first time, so it was stopped.",
   "code": "run_replay_diverged",
   "requestId": "req_4mz0v8qk"

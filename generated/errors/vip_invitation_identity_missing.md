@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/vip_invitation_identity_missing",
   "title": "Vip invitation identity missing",
-  "status": 400,
+  "status": 422,
   "detail": "The accepted VIP invitation has no stored account identity or matching acceptance event.",
   "code": "vip_invitation_identity_missing",
   "requestId": "req_4mz0v8qk"

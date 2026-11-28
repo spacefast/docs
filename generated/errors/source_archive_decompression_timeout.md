@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_archive_decompression_timeout",
   "title": "Source archive decompression timeout",
-  "status": 400,
+  "status": 422,
   "detail": "The uploaded source archive did not finish decompressing within the validation limit.",
   "code": "source_archive_decompression_timeout",
   "requestId": "req_4mz0v8qk"

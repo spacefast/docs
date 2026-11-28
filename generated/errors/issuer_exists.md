@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/issuer_exists",
   "title": "Issuer exists",
-  "status": 400,
+  "status": 422,
   "detail": "This partner token issuer is already active for another tenant.",
   "code": "issuer_exists",
   "requestId": "req_4mz0v8qk"

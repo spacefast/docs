@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_timeout",
   "title": "Build timeout",
-  "status": 400,
+  "status": 422,
   "detail": "The build exceeded its time limit before producing a version.",
   "code": "build_timeout",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_temporarily_unavailable",
   "title": "Dns provider temporarily unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider is rate-limited, degraded, or temporarily unavailable.",
   "code": "dns_provider_temporarily_unavailable",
   "requestId": "req_4mz0v8qk"

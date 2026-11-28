@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_config_only_no_artifact",
   "title": "Publish config only no artifact",
-  "status": 400,
+  "status": 422,
   "detail": "A configuration-only publish needs an existing ready version to carry forward.",
   "code": "publish_config_only_no_artifact",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_device_code",
   "title": "Invalid device code",
-  "status": 400,
+  "status": 422,
   "detail": "The device code is invalid or expired.",
   "code": "invalid_device_code",
   "requestId": "req_4mz0v8qk"

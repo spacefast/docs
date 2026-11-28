@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/ssl_renewal_blocked",
   "title": "Ssl renewal blocked",
-  "status": 400,
+  "status": 422,
   "detail": "SSL certificate renewal is blocked for this hostname.",
   "code": "ssl_renewal_blocked",
   "requestId": "req_4mz0v8qk"

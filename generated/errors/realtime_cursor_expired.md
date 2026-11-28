@@ -1,11 +1,11 @@
 ---
 title: "realtime_cursor_expired"
-description: "The realtime event cursor is no longer in the retained event history."
+description: "The realtime event cursor names no event in this Space's history."
 ---
 
-The realtime event cursor is no longer in the retained event history.
+The realtime event cursor names no event in this Space's history.
 
-**How to resolve:** Discard the expired cursor and refresh active query snapshots. Resume realtime updates from the next received event instead of retrying the expired cursor.
+**How to resolve:** Discard the cursor and refresh active query snapshots. Resume realtime updates from the next received event instead of retrying the same cursor.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/realtime_cursor_expired",
   "title": "Realtime cursor expired",
-  "status": 400,
-  "detail": "The realtime event cursor is no longer in the retained event history.",
+  "status": 422,
+  "detail": "The realtime event cursor names no event in this Space's history.",
   "code": "realtime_cursor_expired",
   "requestId": "req_4mz0v8qk"
 }

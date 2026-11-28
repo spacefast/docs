@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_person_already_member",
   "title": "Space person already member",
-  "status": 400,
+  "status": 422,
   "detail": "The email already belongs to a member of the space.",
   "code": "space_person_already_member",
   "requestId": "req_4mz0v8qk"

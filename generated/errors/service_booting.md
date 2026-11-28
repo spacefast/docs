@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/service_booting",
   "title": "Service booting",
-  "status": 400,
+  "status": 422,
   "detail": "The process that received this request is still starting and cannot serve it yet.",
   "code": "service_booting",
   "requestId": "req_4mz0v8qk"

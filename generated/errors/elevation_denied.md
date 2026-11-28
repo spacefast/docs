@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/elevation_denied",
   "title": "Elevation denied",
-  "status": 400,
+  "status": 422,
   "detail": "The person denied the temporary access request.",
   "code": "elevation_denied",
   "requestId": "req_4mz0v8qk"

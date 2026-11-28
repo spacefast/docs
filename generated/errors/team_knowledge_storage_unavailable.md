@@ -1,11 +1,11 @@
 ---
 title: "team_knowledge_storage_unavailable"
-description: "The designated system Space cannot serve team context."
+description: "The Space that stores the team's context is archived, removed, or no longer in the team."
 ---
 
-The designated system Space cannot serve team context.
+The Space that stores the team's context is archived, removed, or no longer in the team.
 
-**How to resolve:** Check that the system Space still belongs to this team and is available, then retry. Existing designations are preserved.
+**How to resolve:** Retrying returns the same answer. Ask a team owner to restore the Space in details.systemSpaceId: restoreSpace brings back an archived one, and support restores a removed one. Its content is kept and is never replaced automatically.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_knowledge_storage_unavailable",
   "title": "Team knowledge storage unavailable",
-  "status": 400,
-  "detail": "The designated system Space cannot serve team context.",
+  "status": 422,
+  "detail": "The Space that stores the team's context is archived, removed, or no longer in the team.",
   "code": "team_knowledge_storage_unavailable",
   "requestId": "req_4mz0v8qk"
 }

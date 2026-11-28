@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/registrar_tld_maintenance",
   "title": "Registrar tld maintenance",
-  "status": 400,
+  "status": 422,
   "detail": "The registry for this domain ending is down for maintenance.",
   "code": "registrar_tld_maintenance",
   "requestId": "req_4mz0v8qk"

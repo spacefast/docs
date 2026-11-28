@@ -5,7 +5,7 @@ description: "The uploaded archive exceeds the maximum allowed size."
 
 The uploaded archive exceeds the maximum allowed size.
 
-**How to resolve:** Reduce the archive size or use a version upload session for big publishes.
+**How to resolve:** Inline publish bodies are limited to 128 MiB, including multipart overhead or the compressed archive. Publish a directory with `sf publish` to upload files separately. Individual files and the complete version still have their own limits.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_archive_too_large",
   "title": "Publish archive too large",
-  "status": 400,
+  "status": 413,
   "detail": "The uploaded archive exceeds the maximum allowed size.",
   "code": "publish_archive_too_large",
   "requestId": "req_4mz0v8qk"

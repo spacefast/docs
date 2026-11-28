@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_push_failed",
   "title": "Transfer push failed",
-  "status": 400,
+  "status": 422,
   "detail": "The source runtime cannot push the space blobs into the transfer bucket.",
   "code": "transfer_push_failed",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_archive_expansion_ratio_exceeded",
   "title": "Source archive expansion ratio exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The uploaded source archive expands too much relative to its compressed size.",
   "code": "source_archive_expansion_ratio_exceeded",
   "requestId": "req_4mz0v8qk"

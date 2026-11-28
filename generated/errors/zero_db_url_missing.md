@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_url_missing",
   "title": "Zero db url missing",
-  "status": 400,
+  "status": 422,
   "detail": "No Zero database URL is configured.",
   "code": "zero_db_url_missing",
   "requestId": "req_4mz0v8qk"

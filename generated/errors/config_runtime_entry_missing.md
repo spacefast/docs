@@ -5,7 +5,7 @@ description: "The declared runtime has no entry module to compile."
 
 The declared runtime has no entry module to compile.
 
-**How to resolve:** Name the entry in sf.jsonc: runtime.entry for functions, runtime.server and runtime.client for zero. Remove the runtime block to publish files without a runtime instead.
+**How to resolve:** Publish the worker source with the config: a module at runtime.entry, a handler.ts or handler.js, or route modules under functions/. Every publish path builds it. Remove the runtime block to publish files without a runtime instead.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_runtime_entry_missing",
   "title": "Config runtime entry missing",
-  "status": 400,
+  "status": 422,
   "detail": "The declared runtime has no entry module to compile.",
   "code": "config_runtime_entry_missing",
   "requestId": "req_4mz0v8qk"

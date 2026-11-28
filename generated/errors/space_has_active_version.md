@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_has_active_version",
   "title": "Space has active version",
-  "status": 400,
+  "status": 422,
   "detail": "The space still has an active version, which blocks this operation.",
   "code": "space_has_active_version",
   "requestId": "req_4mz0v8qk"

@@ -1,22 +1,20 @@
 ---
-// Keep the /setup pages, which the Docs sidebar doesn't list, out of the Docs reading order.
+// Previous/next follow the reading order of the page's own tab
+// (components/sections.ts), so the Reference and Agents tabs page through
+// their own sections instead of Blume's prefix-scoped tree.
 import Pagination from "blume/components/layout/Pagination.astro";
-import { flattenPages, getPagination, sidebarForRoute } from "blume/components/layout/nav-utils.ts";
+import { flattenPages, getPagination } from "blume/components/layout/nav-utils.ts";
 import { stripBasePath } from "blume/core/base-path.ts";
 import data from "blume:data";
 
-const { prev, next, strings } = Astro.props;
+import { sectionSidebar } from "./sections.ts";
+
+const { strings } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/u, "");
 const route = stripBasePath(base, Astro.url.pathname.replace(/(.)\/$/u, "$1"));
-const isSetup = (route: string) => route === "/setup" || route.startsWith("/setup/");
-let links = { prev, next };
-if (!isSetup(route) && [prev, next].some((link) => link && isSetup(link.route))) {
-  const { sidebar, tabs, root } = data.navigation;
-  const order = flattenPages(sidebarForRoute(sidebar, tabs, route, root))
-    .filter((page) => !isSetup(page.route));
-  links = getPagination(order, route);
-}
+const { sidebar, tabs, root } = data.navigation;
+const { prev, next } = getPagination(flattenPages(sectionSidebar(sidebar, tabs, route, root)), route);
 ---
 
-<Pagination next={links.next} prev={links.prev} strings={strings} />
+<Pagination next={next} prev={prev} strings={strings} />

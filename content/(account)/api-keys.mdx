@@ -1,8 +1,6 @@
 ---
 title: API keys and tokens
 description: Create, scope, use, and rotate Spacefast API keys, and tell them apart from the other credentials the platform hands you
-sidebar:
-  order: 2
 ---
 
 Team owners and admins can mint scoped API keys. To rotate without interrupting an integration, create a replacement, switch the integration to it, verify a request, and only then revoke the old key.
@@ -107,6 +105,23 @@ A secret is immutable, so rotation means a new key. In the dashboard, **Replace 
 
 Revoking is immediate. Anything using that key fails on its next request. The row stays in the list marked revoked, so the audit trail survives.
 
+## Deploy tokens
+
+For a CI pipeline or script that only needs one Space, mint a Space-scoped **deploy token** (`sfm_`) instead of a team-wide `sfa_` API key. Deploy tokens are Share entries (`audience: "token"`) managed through [`sf deploy-tokens`](/cli/reference#sf-deploy-tokens) and `/v1/spaces/{spaceId}/share/entries`:
+
+```bash
+# Preview-only deploy token (default)
+sf deploy-tokens create --name ci-preview --show-secret
+
+# Preview + live deploy token with 90-day expiry
+sf deploy-tokens create --name ci-release --live --expires 90d --show-secret
+
+# Read-only machine token limited to /docs/**
+sf deploy-tokens create --name docs-feed --view-only --path '/docs/**' --show-secret
+```
+
+Pass the returned `sfm_` token in `SPACEFAST_TOKEN` or `Authorization: Bearer sfm_...`. Manage tokens without recreating them using [`sf deploy-tokens list`](/cli/reference#sf-deploy-tokens-list), [`sf deploy-tokens update`](/cli/reference#sf-deploy-tokens-update-id), [`sf deploy-tokens rotate`](/cli/reference#sf-deploy-tokens-rotate-id), and [`sf deploy-tokens revoke`](/cli/reference#sf-deploy-tokens-revoke-id). See [Publish from CI](/ci) for GitHub Actions and GitLab CI examples.
+
 ## Every credential, by prefix
 
 Spacefast puts a prefix on each credential so you always know what you are holding.
@@ -114,7 +129,7 @@ Spacefast puts a prefix on each credential so you always know what you are holdi
 | Prefix | What it is | Where you get it |
 |---|---|---|
 | `sfa_` | API key. The credential for the CLI, CI, and server-to-server calls | The team's **Agents** page, `sf api-keys create`, or `sf login` |
-| `sfm_` | Space machine credential. Lets a script or service fetch a private Space's pages | `sf share token create`, shown once, rotatable |
+| `sfm_` | Space machine or deploy token. Publishes one Space (preview-only or live) or reads a private Space's pages | [`sf deploy-tokens create`](/cli/reference#sf-deploy-tokens-create) or [`sf share token create`](/cli/reference#sf-share-token-create), shown once, rotatable |
 | `sfc_` | Space key. Proves you published an anonymous Space, keeps updating it, and claims it later | The publish receipt, and the fragment of the claim URL |
 | `sfl_` | Share link token. Rides in the `?__=` query of a share URL | `sf share link create`, or the dashboard access panel |
 | `sfp_` | Git push credential, embedded in the push remote URL | The dashboard, inside the `git remote add` line it gives you |
@@ -125,6 +140,7 @@ Lifetimes differ by kind:
 | Credential | Lifetime |
 |---|---|
 | API key from the dashboard or `sf api-keys create` | The **Expires** date you set, otherwise no expiry |
+| Deploy token from `sf deploy-tokens create` | The `--expires` duration or date you set, otherwise no expiry |
 | API key from `sf login` | 30 days, or 7 days without use |
 | Space key for an unclaimed Space | Matches that Space's unclaimed window. If you claim with **Claim & keep access**, it keeps working for another 7 days |
 | Continuation token | 30 minutes at most |

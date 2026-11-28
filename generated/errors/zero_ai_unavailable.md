@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_ai_unavailable",
   "title": "Zero ai unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The local Zero AI service is not configured.",
   "code": "zero_ai_unavailable",
   "requestId": "req_4mz0v8qk"

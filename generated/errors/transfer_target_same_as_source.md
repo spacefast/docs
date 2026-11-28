@@ -1,9 +1,9 @@
 ---
 title: "transfer_target_same_as_source"
-description: "The transfer target is the same principal that already owns the space."
+description: "The transfer target is the same owner that already owns the space."
 ---
 
-The transfer target is the same principal that already owns the space.
+The transfer target is the same owner that already owns the space.
 
 **How to resolve:** Pick a different target team or account.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_target_same_as_source",
   "title": "Transfer target same as source",
-  "status": 400,
-  "detail": "The transfer target is the same principal that already owns the space.",
+  "status": 422,
+  "detail": "The transfer target is the same owner that already owns the space.",
   "code": "transfer_target_same_as_source",
   "requestId": "req_4mz0v8qk"
 }

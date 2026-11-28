@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/frame_target_fixed",
   "title": "Frame target fixed",
-  "status": 400,
+  "status": 422,
   "detail": "The request tried to override a Frame Link with a fixed serving target.",
   "code": "frame_target_fixed",
   "requestId": "req_4mz0v8qk"

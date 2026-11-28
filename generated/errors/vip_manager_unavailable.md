@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/vip_manager_unavailable",
   "title": "Vip manager unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The VIP Manager is not an active, verified account in the main Spacefast tenant.",
   "code": "vip_manager_unavailable",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/tenant_selection_required",
   "title": "Tenant selection required",
-  "status": 400,
+  "status": 422,
   "detail": "The credential spans multiple tenants, so the request must select one.",
   "code": "tenant_selection_required",
   "requestId": "req_4mz0v8qk"

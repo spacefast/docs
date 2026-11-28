@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_invalid_image",
   "title": "Visual review invalid image",
-  "status": 400,
+  "status": 422,
   "detail": "The screenshot is not a valid PNG payload.",
   "code": "visual_review_invalid_image",
   "requestId": "req_4mz0v8qk"

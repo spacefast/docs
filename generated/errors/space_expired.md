@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_expired",
   "title": "Space expired",
-  "status": 400,
+  "status": 422,
   "detail": "The space expired and is no longer served.",
   "code": "space_expired",
   "requestId": "req_4mz0v8qk"

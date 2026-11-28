@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/password_compromised",
   "title": "Password compromised",
-  "status": 400,
+  "status": 422,
   "detail": "The password appears in a public breach corpus.",
   "code": "password_compromised",
   "requestId": "req_4mz0v8qk"

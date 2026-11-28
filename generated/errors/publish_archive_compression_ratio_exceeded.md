@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_archive_compression_ratio_exceeded",
   "title": "Publish archive compression ratio exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "The archive's compression ratio is suspiciously high and was rejected.",
   "code": "publish_archive_compression_ratio_exceeded",
   "requestId": "req_4mz0v8qk"

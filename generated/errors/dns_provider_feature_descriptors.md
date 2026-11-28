@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_feature_descriptors",
   "title": "Dns provider feature descriptors",
-  "status": 400,
+  "status": 422,
   "detail": "This provider exposes domain features through capability descriptors.",
   "code": "dns_provider_feature_descriptors",
   "requestId": "req_4mz0v8qk"

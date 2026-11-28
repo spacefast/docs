@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/traffic_rules_placement_incomplete",
   "title": "Traffic rules placement incomplete",
-  "status": 400,
+  "status": 422,
   "detail": "The redirects and headers this version runs at the edge are not all there, so going live would drop them.",
   "code": "traffic_rules_placement_incomplete",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_upload_required",
   "title": "Runtime upload required",
-  "status": 400,
+  "status": 422,
   "detail": "This step requires uploaded content, but that content is not uploaded yet.",
   "code": "runtime_upload_required",
   "requestId": "req_4mz0v8qk"

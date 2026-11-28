@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dev_relay_enrollment_pending",
   "title": "Dev relay enrollment pending",
-  "status": 400,
+  "status": 422,
   "detail": "The dev relay enrollment is waiting for a Spacefast admin to approve it.",
   "code": "dev_relay_enrollment_pending",
   "requestId": "req_4mz0v8qk"

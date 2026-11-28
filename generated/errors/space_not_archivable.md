@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_not_archivable",
   "title": "Space not archivable",
-  "status": 400,
+  "status": 422,
   "detail": "The space is disabled for another reason, so it cannot be archived.",
   "code": "space_not_archivable",
   "requestId": "req_4mz0v8qk"

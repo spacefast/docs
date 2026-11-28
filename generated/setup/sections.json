@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "group": "featured",
+      "path": "/setup/claude-code/"
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "group": "featured",
+      "path": "/setup/chatgpt/"
+    },
+    {
+      "id": "grok-bot",
+      "name": "Grok Bot",
+      "group": "featured",
+      "path": "/setup/grok-bot/"
+    },
+    {
+      "id": "muse",
+      "name": "Muse",
+      "group": "featured",
+      "path": "/setup/muse/"
+    },
+    {
+      "id": "antigravity",
+      "name": "Antigravity",
+      "group": "featured",
+      "path": "/setup/antigravity/"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "group": "featured",
+      "path": "/setup/cursor/"
+    },
+    {
+      "id": "raycast",
+      "name": "Raycast",
+      "group": "featured",
+      "path": "/setup/raycast/"
+    },
+    {
+      "id": "any-mcp",
+      "name": "Any MCP client",
+      "group": "featured",
+      "path": "/setup/any-mcp/"
+    },
+    {
+      "id": "claude-desktop",
+      "name": "Claude Desktop",
+      "group": "supported",
+      "path": "/setup/claude-desktop/"
+    },
+    {
+      "id": "claude-app",
+      "name": "Claude",
+      "group": "supported",
+      "path": "/setup/claude-app/"
+    },
+    {
+      "id": "claude-cowork",
+      "name": "Claude Cowork",
+      "group": "supported",
+      "path": "/setup/claude-cowork/"
+    },
+    {
+      "id": "chatgpt-work",
+      "name": "ChatGPT Work",
+      "group": "supported",
+      "path": "/setup/chatgpt-work/"
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "group": "supported",
+      "path": "/setup/codex/"
+    },
+    {
+      "id": "chatgpt-space",
+      "name": "dots and ChatGPT Space",
+      "group": "supported",
+      "path": "/setup/chatgpt-space/"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "group": "supported",
+      "path": "/setup/windsurf/"
+    },
+    {
+      "id": "vscode",
+      "name": "VS Code",
+      "group": "supported",
+      "path": "/setup/vscode/"
+    },
+    {
+      "id": "github-copilot",
+      "name": "GitHub Copilot CLI",
+      "group": "supported",
+      "path": "/setup/github-copilot/"
+    },
+    {
+      "id": "github-copilot-app",
+      "name": "GitHub Copilot app",
+      "group": "supported",
+      "path": "/setup/github-copilot-app/"
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "group": "supported",
+      "path": "/setup/opencode/"
+    },
+    {
+      "id": "zed",
+      "name": "Zed",
+      "group": "supported",
+      "path": "/setup/zed/"
+    },
+    {
+      "id": "devin-desktop",
+      "name": "Devin Desktop",
+      "group": "supported",
+      "path": "/setup/devin-desktop/"
+    },
+    {
+      "id": "devin-cloud",
+      "name": "Devin Cloud",
+      "group": "supported",
+      "path": "/setup/devin-cloud/"
+    },
+    {
+      "id": "grok-build",
+      "name": "Grok Build",
+      "group": "supported",
+      "path": "/setup/grok-build/"
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "group": "supported",
+      "path": "/setup/openclaw/"
+    },
+    {
+      "id": "hermes",
+      "name": "Hermes",
+      "group": "supported",
+      "path": "/setup/hermes/"
+    },
+    {
+      "id": "pi",
+      "name": "Pi",
+      "group": "supported",
+      "path": "/setup/pi/"
+    },
+    {
+      "id": "conductor",
+      "name": "Conductor",
+      "group": "supported",
+      "path": "/setup/conductor/"
+    },
+    {
+      "id": "instinct",
+      "name": "Instinct",
+      "group": "supported",
+      "path": "/setup/instinct/"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "group": "supported",
+      "path": "/setup/perplexity/"
+    },
+    {
+      "id": "microsoft-copilot",
+      "name": "Microsoft Copilot",
+      "group": "supported",
+      "path": "/setup/microsoft-copilot/"
+    },
+    {
+      "id": "t3-chat",
+      "name": "T3 Chat",
+      "group": "supported",
+      "path": "/setup/t3-chat/"
+    },
+    {
+      "id": "amp",
+      "name": "Amp",
+      "group": "supported",
+      "path": "/setup/amp/"
+    },
+    {
+      "id": "warp",
+      "name": "Warp",
+      "group": "supported",
+      "path": "/setup/warp/"
+    },
+    {
+      "id": "factory-droid",
+      "name": "Factory Droid",
+      "group": "supported",
+      "path": "/setup/factory-droid/"
+    },
+    {
+      "id": "cline",
+      "name": "Cline",
+      "group": "supported",
+      "path": "/setup/cline/"
+    },
+    {
+      "id": "indent",
+      "name": "Indent",
+      "group": "supported",
+      "path": "/setup/indent/"
+    },
+    {
+      "id": "poke",
+      "name": "Poke",
+      "group": "supported",
+      "path": "/setup/poke/"
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "group": "supported",
+      "path": "/setup/grok/"
+    },
+    {
+      "id": "gemini-cli",
+      "name": "Gemini CLI",
+      "group": "deprecated",
+      "path": "/setup/gemini-cli/"
+    },
+    {
+      "id": "continue",
+      "name": "Continue",
+      "group": "deprecated",
+      "path": "/setup/continue/"
+    },
+    {
+      "id": "roo-code",
+      "name": "Roo Code",
+      "group": "deprecated",
+      "path": "/setup/roo-code/"
+    },
+    {
+      "id": "jules",
+      "name": "Jules",
+      "group": "deprecated",
+      "path": "/setup/jules/"
+    }
+  ],
+  "connect": [
+    {
+      "id": "directory-connector",
+      "name": "Directory connector",
+      "path": "/connect/directory-connector/"
+    },
+    {
+      "id": "marketplace",
+      "name": "Marketplace listing",
+      "path": "/connect/marketplace/"
+    },
+    {
+      "id": "plugin",
+      "name": "Spacefast plugin",
+      "path": "/connect/plugin/"
+    },
+    {
+      "id": "stdio-mcp",
+      "name": "MCP on your computer (stdio)",
+      "path": "/connect/stdio-mcp/"
+    },
+    {
+      "id": "hosted-mcp",
+      "name": "Hosted MCP server",
+      "path": "/connect/hosted-mcp/"
+    },
+    {
+      "id": "prompt-link",
+      "name": "Prompt link",
+      "path": "/connect/prompt-link/"
+    },
+    {
+      "id": "setup-prompt",
+      "name": "Setup prompt",
+      "path": "/connect/setup-prompt/"
+    },
+    {
+      "id": "cli-setup",
+      "name": "Spacefast CLI",
+      "path": "/connect/cli-setup/"
+    },
+    {
+      "id": "skill",
+      "name": "Skill only",
+      "path": "/connect/skill/"
+    },
+    {
+      "id": "desktop-extension",
+      "name": "Desktop extension",
+      "path": "/connect/desktop-extension/"
+    },
+    {
+      "id": "github-mcp-registry",
+      "name": "GitHub MCP Registry",
+      "path": "/connect/github-mcp-registry/"
+    },
+    {
+      "id": "git-push",
+      "name": "Git push",
+      "path": "/connect/git-push/"
+    }
+  ]
+}

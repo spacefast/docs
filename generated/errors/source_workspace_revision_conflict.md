@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_revision_conflict",
   "title": "Source workspace revision conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The source workspace changed after the caller read its revision.",
   "code": "source_workspace_revision_conflict",
   "requestId": "req_4mz0v8qk"

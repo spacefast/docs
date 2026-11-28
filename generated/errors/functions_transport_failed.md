@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/functions_transport_failed",
   "title": "Functions transport failed",
-  "status": 400,
+  "status": 422,
   "detail": "The space's Functions worker did not answer: the request ran past the 30-second limit, or the connection to the worker failed.",
   "code": "functions_transport_failed",
   "requestId": "req_4mz0v8qk"

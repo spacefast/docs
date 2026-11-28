@@ -5,7 +5,7 @@ description: "The domain assignment's kind does not match the site."
 
 The domain assignment's kind does not match the site.
 
-**How to resolve:** Verify the assignment against the site's hosting kind.
+**How to resolve:** Verify the assignment against the site's runtime kind.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_assignment_kind_mismatch",
   "title": "Wp cloud assignment kind mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The domain assignment's kind does not match the site.",
   "code": "wp_cloud_assignment_kind_mismatch",
   "requestId": "req_4mz0v8qk"

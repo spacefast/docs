@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_retry_conflict",
   "title": "Upload retry conflict",
-  "status": 400,
+  "status": 422,
   "detail": "A retry identity is already bound to different input.",
   "code": "upload_retry_conflict",
   "requestId": "req_4mz0v8qk"

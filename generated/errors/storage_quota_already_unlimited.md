@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_quota_already_unlimited",
   "title": "Storage quota already unlimited",
-  "status": 400,
+  "status": 422,
   "detail": "The team already has unlimited storage.",
   "code": "storage_quota_already_unlimited",
   "requestId": "req_4mz0v8qk"

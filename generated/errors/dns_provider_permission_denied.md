@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_permission_denied",
   "title": "Dns provider permission denied",
-  "status": 400,
+  "status": 422,
   "detail": "The connected DNS provider denied permission for this zone or action.",
   "code": "dns_provider_permission_denied",
   "requestId": "req_4mz0v8qk"

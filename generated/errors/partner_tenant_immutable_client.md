@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/partner_tenant_immutable_client",
   "title": "Partner tenant immutable client",
-  "status": 400,
+  "status": 422,
   "detail": "The tenant's provider client cannot be changed.",
   "code": "partner_tenant_immutable_client",
   "requestId": "req_4mz0v8qk"

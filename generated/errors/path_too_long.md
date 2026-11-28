@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/path_too_long",
   "title": "Path too long",
-  "status": 400,
+  "status": 422,
   "detail": "A file path exceeds the maximum length.",
   "code": "path_too_long",
   "requestId": "req_4mz0v8qk"

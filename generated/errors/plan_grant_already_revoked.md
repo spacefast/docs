@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/plan_grant_already_revoked",
   "title": "Plan grant already revoked",
-  "status": 400,
+  "status": 422,
   "detail": "This plan grant was already revoked.",
   "code": "plan_grant_already_revoked",
   "requestId": "req_4mz0v8qk"

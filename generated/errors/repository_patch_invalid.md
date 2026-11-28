@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_patch_invalid",
   "title": "Repository patch invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The repository refused the diff: it is malformed or does not apply to the selected base branch.",
   "code": "repository_patch_invalid",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/password_already_set",
   "title": "Password already set",
-  "status": 400,
+  "status": 422,
   "detail": "The account already has a password.",
   "code": "password_already_set",
   "requestId": "req_4mz0v8qk"

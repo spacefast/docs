@@ -1,0 +1,369 @@
+---
+title: Redirects and rewrites
+description: Configure redirects, rewrites, upstream proxies, clean URLs, SPA fallback, and edge Traffic Rules in spacefast.config.ts
+---
+
+Declare redirects, internal rewrites, upstream proxies, and edge Traffic Rules in `spacefast.config.ts`. Redirect and rewrite rules evaluate in order and the first match wins.
+
+For response headers, see [Response headers](/headers). Spacefast compiles routing rules when you publish, and you can check them locally with `sf routing inspect` before publishing.
+
+## Configure redirects and rewrites
+
+Add `redirects` and `rewrites` to `spacefast.config.ts` using `defineConfig` from `spacefast/config`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  redirects: [
+    { source: "/old/:id", destination: "/new/:id", status: 301 },
+    { source: "/docs", destination: "/documentation", status: 308 },
+  ],
+  rewrites: [
+    { source: "/app/*", destination: "/index.html" },
+    {
+      source: "/api/*",
+      destination: "https://api.example.com/:splat",
+      cache: "shared",
+    },
+    { source: "/legacy/*", destination: "/404.html", notFound: true },
+  ],
+});
+```
+
+Every rule object rejects unknown keys.
+
+### `redirects`
+
+| Field | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `source` | string, required | | Request path to match; `*` is a splat, `:name` captures one segment |
+| `destination` | string, required | | Path or absolute URL; `:splat` and `:name` are substituted |
+| `status` | `301` \| `302` \| `303` \| `307` \| `308` | `302` | Redirect status code |
+| `force` | boolean | `false` | Match even when the path resolves to a committed file |
+| `query` | object | | Required query parameters mapped to capture names, such as `{ id: "id" }` |
+
+Using `status: 200` in `redirects` fails with `redirect_status_use_rewrites`, and `404` fails pointing at `notFound` in `rewrites`. Any other status fails with `redirect_status_unsupported`.
+
+### `rewrites`
+
+| Field | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `source` | string, required | | Request path to match |
+| `destination` | string, required | | Local path to serve under this URL, or an absolute `http(s)` URL to proxy |
+| `cache` | `"shared"` | | Let shared caches store the proxy response (absolute-URL destinations only) |
+| `force` | boolean | `false` | Match even when the path resolves to a committed file |
+| `query` | object | | Required query parameters mapped to capture names |
+| `notFound` | boolean | `false` | Serve a local destination path with status `404` |
+
+Proxy rewrites serve on every plan. On an unclaimed Space, they publish and return a restriction page instead of relaying, then begin relaying automatically once the Space is claimed without a republish. Upstream hosts are checked at publish and can fail with [`proxy_upstream_denied`](/errors/proxy_upstream_denied) or [`proxy_upstream_unresolved`](/errors/proxy_upstream_unresolved).
+
+### JSON fallback (`sf.jsonc`)
+
+The same `redirects` and `rewrites` arrays work in `sf.jsonc` and its supported JSON/JSONC aliases. When both `spacefast.config.ts` and `sf.jsonc` exist, `spacefast.config.ts` wins, the CLI warns that it ignored the other file, and an invalid winning file fails rather than falling back. Add rules to your existing configuration rather than creating a second file. See [Project configuration](/config-file).
+
+## Optional: `_redirects` file
+
+For migration convenience from other static platforms, Spacefast also reads a `_redirects` file at the publish root. Each line is one rule, `#` starts a comment, and Spacefast skips blank lines:
+
+```text _redirects
+# source                destination                      status
+/old-blog/*             /blog/:splat                     301
+/docs                   /documentation                   308
+/team/:name             /people/:name                    302
+/api/*                  https://api.example.com/:splat   200
+/legacy/*               /404.html                        404
+/beta/*                 /beta-home.html                  200!
+/search q=:term         /results/:term                   301
+/*                      /uk/:splat                       302  Country=gb
+/*                      /llms.txt                        200  Agent=1
+```
+
+Status decides the action (`301`/`302`/`303`/`307`/`308` redirect, `200` path rewrite or absolute-URL proxy, `404` not-found document). Status defaults to `302`, and a trailing `!` forces the rule over committed files. Query matchers sit between source and destination, and conditions sit at the end.
+
+Rules merge in this order: `_redirects` first, then `redirects` from project configuration, then `rewrites` from project configuration. A config rule whose source is already claimed by an unconditional `_redirects` rule never runs and reports `redirect_shadowed_by_file`. Spacefast never serves `_redirects` as public content and returns `404` if requested.
+
+Space settings overlays written via the API or dashboard prepend ahead of file and config rules so urgent changes match first without removing committed rules.
+
+## Matching rules
+
+The pattern grammar is shared across `spacefast.config.ts`, `sf.jsonc`, and `_redirects`. Spacefast does not accept regular expressions.
+
+| Token | Matches |
+| --- | --- |
+| `*` | A splat matching everything from that point onward, substituted as `:splat` |
+| `:name` | One path segment, or one host label in a host pattern |
+
+Patterns allow at most one wildcard, and it must end a segment. `*` and `:name` cannot share a segment, and a capture name cannot repeat. An unmatched `:placeholder` in a destination expands to an empty string without warning.
+
+An absolute URL in `source` scopes the rule to that host. A literal host not assigned to the Space fails with `redirect_hostname_unassigned`. Host patterns such as `*.example.com` and `:tenant.example.com` skip that check.
+
+Query matching checks an exact parameter count: a rule declaring one parameter will not match a request carrying two, and every declared parameter must be present. Repeated keys join with a comma.
+
+### Conditions (`_redirects` only)
+
+Conditions combine with AND. Spacefast drops an invalid condition while still compiling the rule.
+
+| Condition | Values | Matched against |
+| --- | --- | --- |
+| `Country=` | Two-letter country code | The visitor's country |
+| `Language=` | Full language tag | The first `Accept-Language` entry, compared in full (`Language=nl` does not match `nl-NL,nl;q=0.9`) |
+| `Cookie=` | Cookie name | Presence of the cookie; value is ignored |
+| `Agent=` | `1`, `true`, `yes` | Whether the request looks like an AI agent or script |
+
+Publish rejects `Role=` conditions.
+
+:::caution[Conditional rules disable shared caching]
+The edge cache keys on host, path, and query without reading `Vary`. Any URL touched by a conditional rule serves `no-store` for every visitor, whether the condition matched or not. Use distinct URLs instead of conditions on high-traffic pages.
+:::
+
+### Rules versus committed files
+
+A rewrite or `404` rule skips itself when the request path resolves to a committed file unless `force` (or `!`) is set, and evaluation continues to later rules. Redirects and proxies never check the file table.
+
+### Query strings
+
+| Action | Incoming query string |
+| --- | --- |
+| Redirect | Appended only when the destination has no `?` of its own |
+| Proxy | Always appended, joined with `&` if the upstream URL already has a query |
+| Rewrite and `404` | Dropped; only the destination's own query survives |
+
+A rule that declares query matchers clears the incoming query string on the way through.
+
+### Loops
+
+A rule whose destination path matches its source path fails at publish with `redirect_loop_invalid`. For absolute destinations, the hosts must also match. Trailing slashes are stripped before comparison, so `/docs` to `/docs/` counts as a loop.
+
+## Trailing slashes, clean URLs, and index files
+
+There is no generic trailing-slash normalizer. Behavior comes from the files in your published version:
+
+| Situation | Behavior |
+| --- | --- |
+| `dir/index.html` exists | `/dir/` serves; `/dir` answers `308` to `/dir/`. With clean URLs on, `/dir/index` and `/dir/index.html` also redirect to `/dir/` |
+| Directory listing exists for `dir` | `/dir/` serves; `/dir` answers `308` to `/dir/` |
+| Clean URLs are on and `page.html` exists | `/page` serves; `/page/` and `/page.html` answer `308` to `/page` |
+| Anything else | No normalization; falls through to the SPA fallback or `404` |
+
+These `308` redirects preserve the query string. The `/dir` and `/page/` redirects accept any HTTP method; `.html` redirects answer only `GET` and `HEAD`, and files mode never sends them.
+
+Configure homepage and clean URL behavior in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  index: "home.html",
+  cleanUrls: true,
+});
+```
+
+- **`index`**: Names the file served at `/`. It does not rename folder index files (`docs/home.html` does not answer `/docs/`, and publish warns with `custom_index_not_folder_index`). Setting `index: false` stops homepage and SPA inference, though a root `index.html` still answers `/` unless you enable `listing`. When you omit `index`, Spacefast checks for a root `index.html`, then a `200` fallback file (when no Worker runs), then a single public HTML file, then a sole root HTML file. If none match, Spacefast falls back to files mode.
+- **`cleanUrls`**: Enabled by default. Serves flat `about.html` at `/about` and redirects `/about.html` and `/about/` with `308`. A page keeps its `.html` URL if a redirect names either URL or a header rule matches only one. Setting `cleanUrls: false` serves flat files only at their literal `.html` URL while folders still serve `index.html` at `/dir/`.
+
+In legacy `"version": 1` configs, these keys live under `serve` (`serve.index`, `serve.cleanUrls`, `serve.spaFallback`, `serve.directoryListing`).
+
+## SPA fallback
+
+When `fallback` is unset and no worker runs, Spacefast infers an SPA shell and reports `spa_fallback_inferred` in this order:
+
+1. Root `200.html`
+2. Root `_shell.html`
+3. Root `index.html` beside build output (`_app/`, `_next/static/`, `_nuxt/`, `asset-manifest.json`, or a hashed script under `assets/` or `static/js/`), provided no root `404.html` exists
+
+Files mode (`listing: true` or `index: false`) never infers an SPA fallback. Set `fallback` explicitly in `spacefast.config.ts`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  fallback: "/index.html",
+});
+```
+
+Use `{ path: "/index.html", status: 200 }` for the long form, `{ path: "/404.html", status: 404 }` for a custom error document, or `false` to disable fallback and serve the nearest `404.html`. The target must be a committed, non-private file, or publish fails with `config_invalid`. Combining files mode with an SPA fallback fails with `files_mode_does_not_support_spa`.
+
+Committed files win over the fallback. The fallback skips common static asset extensions (such as `css`, `js`, `json`, `png`, `svg`, `woff2`, `pdf`, and `zip`) so missing assets return `404` while client routes containing dots (such as `/users/jane.doe`) still reach the shell.
+
+For custom `404.html` files and Spacefast's built-in error templates, see [Customization and error pages](/customization#error-and-system-pages).
+
+## Requests other than GET or HEAD
+
+Static files answer `GET` and `HEAD`. Any other method against an existing static path returns `405` with an `Allow` header, never `404` and never the SPA shell. `OPTIONS` receives no synthetic `204`. Compiled redirects accept every method.
+
+## Traffic Rules
+
+Traffic Rules run at the edge to block or challenge requests (`firewall`) or skip the edge cache (`cache.bypass`) based on request attributes such as path, country, IP, or headers.
+
+### Where rules live
+
+| Source | `origin` | Takes effect |
+| --- | --- | --- |
+| `firewall` and `cache.bypass` in `spacefast.config.ts` or `sf.jsonc` | `config` | On publish |
+| Space settings: dashboard **Traffic Rules**, `sf rules add`, or [`updateSpace`](/api/reference/spaces/updatespace) | `overlay` | On save, without a publish |
+
+Settings rules evaluate before config rules. A settings rule with the same `name` and kind replaces the config rule at the edge. Put rules that ship with your code in `spacefast.config.ts`, and use Space settings for urgent blocks or bypasses that must apply immediately.
+
+A Space provisions its edge on its first publish. Validation, pause, and resume fail with [`traffic_rules_unavailable`](/errors/traffic_rules_unavailable) until the Space has published once.
+
+### Declare Traffic Rules
+
+Configure `firewall` and `cache.bypass` in `spacefast.config.ts` (the same keys work in `sf.jsonc`):
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  firewall: [
+    { name: "protect-admin", action: "challenge", match: { path: "/admin/*" } },
+    {
+      name: "block-logins",
+      action: "block",
+      status: 403,
+      match: { path: "/wp-login.php*" },
+    },
+  ],
+  cache: {
+    bypass: [
+      { name: "fresh-api", match: { path: "/api/*" } },
+      { name: "previews", match: { query: { preview: { op: "exists" } } } },
+    ],
+  },
+});
+```
+
+| Field | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `name` | string | none | Lowercase letters, digits, `-`, and `_`, up to 61 characters; not all digits or reserved words (`add`, `validate`, `preview`, `bulk`, `ingress-allowlist`, `suspend-all`, `restore-all`); unique within its list |
+| `description` | string, max 255 chars | none | Notes what the rule does |
+| `action` | `"block"` \| `"challenge"` | required (firewall) | `block` answers without reaching the Space; `challenge` asks for human proof |
+| `status` | integer, `400` to `499` | `403` | HTTP status for blocked requests (`block` only) |
+| `match` | object | required | Request attributes to compare (at least one field) |
+| `any` | boolean | `false` | When `true`, any matching field triggers the rule; otherwise all fields must match |
+
+Each list stops at the first matching rule. Firewall rules never match platform-reserved internal transport paths.
+
+### Match fields and operators
+
+| Field | Supported operators |
+| --- | --- |
+| `path`, `host` | `eq`, `neq`, `in`, `contains`, `startsWith`, `endsWith`, `wildcard` |
+| `method`, `country`, `asn` | `eq`, `neq`, `in` |
+| `ip` | `eq`, `neq`, `in`, `inCidr` |
+| `userAgent`, `referer` | `eq`, `neq`, `in`, `contains`, `startsWith`, `endsWith`, `wildcard`, `exists` |
+| `header`, `cookie`, `query` | Same as `userAgent`, keyed by name (for example `{ "x-api-client": { op: "exists" } }`) |
+| `extension` | `eq`, `neq`, `in`, `exists` (without the leading dot) |
+| `ja3`, `ja4` | `eq`, `in`, `exists` |
+
+Shorthand values expand as follows: a string with `*` uses `wildcard`, any other string uses `eq` (text fields ignore case), an array uses `in`, and an `ip` string with `/` uses `inCidr`. Use an explicit clause object for everything else (`{ op: "startsWith", value: "/admin/" }`, `{ op: "in", values: ["RU"], not: true }`, `{ op: "exists" }`). Read the full catalog via [`getTrafficRuleCatalog`](/api/reference/spaces/gettrafficrulecatalog).
+
+### Add, inspect, and remove settings rules
+
+Add overlay rules without publishing from the CLI or dashboard:
+
+```bash
+sf rules add --kind firewall --action challenge --path '/wp-login.php*'
+sf rules add --kind firewall --action block --country US,CA --not country
+sf rules add --kind cache-bypass --path '/api/*' --name fresh-api
+sf rules list
+sf rules remove block-logins --kind firewall
+```
+
+In the dashboard, open **Traffic Rules → New Rule**, choose **Firewall** or **Cache**, configure the match pattern and action, and select **Create Rule**. Use **Move up** and **Move down** to reorder rules, or **Remove** to delete overlay rules. To edit a config rule without publishing, select **Override in Dashboard** to copy it into Space settings.
+
+The **Edge Allowance** card and `sf rules list` (`listSpaceTrafficRules`) show each rule's placement (**Edge** or **Origin**) and state (`live`, `pending`, `over_quota`, `invalid`, `failed`, `suspended`, `disabled`, or `unknown`). Duplicate rules or duplicate names are reported under `collapsed`.
+
+To write settings rules over the API, read the Space with [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your updated `config.firewall` or `config.cache.bypass` arrays via [`updateSpace`](/api/reference/spaces/updatespace), and pass `settingsDigest` as `baseSettingsDigest` to avoid overwriting concurrent edits.
+
+### Test a URL and validate rules
+
+Evaluate firewall and cache-bypass rules locally without sending requests to your Space:
+
+```bash
+sf rules test /wp-login.php --country RU
+sf rules test /api/orders --file spacefast.config.ts
+sf rules validate
+```
+
+`sf rules validate` checks your config file against the grammar and edge limits, printing field paths such as `firewall[0].match.country` and exiting `2` on errors (same check as [`validateSpaceTrafficRules`](/api/reference/spaces/validatespacetrafficrules)).
+
+In the dashboard, open **Test a request against your rules** under the rule list to test a path with optional **Country**, **IP address**, **User agent**, **Header**, or **Cookie** values. The dashboard tester does not accept method, ASN, referrer, JA3, or JA4 inputs, so rules using those fields may behave differently at the edge.
+
+### Pause and resume all rules
+
+Pause every Traffic Rule at once without deleting them:
+
+```bash
+sf rules pause
+sf rules resume
+```
+
+In the dashboard, select **Pause All Edge Rules** and **Resume**. Over the API, call [`pauseSpaceTrafficRules`](/api/reference/spaces/pausespacetrafficrules) and [`resumeSpaceTrafficRules`](/api/reference/spaces/resumespacetrafficrules). Pause and resume apply immediately without a publish. Rules added while paused stay parked until resumed.
+
+### Place redirects and headers at the edge
+
+By default, your Space answers redirects and header rules at origin. To move eligible rules to the edge, set `config.placement.edge` to `true` via [`updateSpace`](/api/reference/spaces/updatespace); the change applies at the next publish. Rules the edge cannot evaluate faithfully (such as path captures, proxies, `404` rules, or redirects outside `301`/`302`/`307`/`308`) remain at origin. Publishing with edge placement while rules are paused fails with [`traffic_rules_placement_incomplete`](/errors/traffic_rules_placement_incomplete).
+
+### When rule changes take effect
+
+| Change | Takes effect |
+| --- | --- |
+| `firewall` or `cache.bypass` in `spacefast.config.ts` or `sf.jsonc` | On publish |
+| `firewall` or `cache.bypass` in Space settings | On settings save |
+| `redirects`, `rewrites`, or `headers` in Space settings | Immediately on a Space with a live version, else first publish |
+| `_redirects`, `_headers`, or config `redirects`, `rewrites`, `headers` | On publish |
+| Pause or resume | Immediately |
+| `placement.edge` | Next publish |
+
+## Inspect compiled routing rules
+
+Test local routing files and `spacefast.config.ts` against specific URLs before publishing or promoting:
+
+```bash
+sf routing inspect --routing ./dist --url https://example.com/old-blog/post-1
+```
+
+Replace `./dist` with your publish root and repeat `--url` to check multiple paths. `sf routing inspect` exits `2` on errors (publish also fails on routing errors while allowing warnings).
+
+To view the resolved routing table with current variables for a published Space (the pending ready version if one exists, otherwise the live version):
+
+```bash
+sf routing compute --space my-space
+```
+
+`sf routing compute` does not accept `--url` or select an arbitrary version.
+
+## Limits
+
+### Redirect and config limits
+
+| Limit | Value | Severity |
+| --- | --- | --- |
+| Total redirect and rewrite rules after merge | 2,100 | Error |
+| Static rules (exact path, no host) | 2,000 | Error |
+| Dynamic rules (wildcard, placeholder, or host) | 100 | Error |
+| `_redirects` line length | 1,000 characters | Error |
+| `_redirects` file size | 2 MiB | Read cap |
+| `sf.jsonc` file size | 256 KiB | Error |
+
+### Traffic Rules limits
+
+| Limit | Value |
+| --- | --- |
+| Rules per `firewall` or `cache.bypass` list | 50 |
+| Comparisons per firewall rule | 47 |
+| Comparisons per cache-bypass rule | 50 |
+| Values in one `in` or `inCidr` clause | 1,000 |
+| Characters per value | 4,096 |
+| Characters per header, cookie, or query name | 128 |
+| Characters in `description` | 255 |
+| Rules active at the edge | Set by the edge (shown in **Edge Allowance**) |
+
+Space settings and config files each keep their own lists. Keyed fields count one comparison per key, and a firewall rule with `any: true` uses one edge slot per comparison.
+
+## Next steps
+
+- [Response headers](/headers): set or remove HTTP response headers
+- [Caching](/caching): default cache policies and testing before promotion
+- [`sf routing` CLI reference](/cli/reference#sf-routing-inspect) and [`sf rules` CLI reference](/cli/reference#sf-rules): full flag reference

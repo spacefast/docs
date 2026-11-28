@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_selection_invalid",
   "title": "Source selection invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The selected file paths are absent from the current workspace diff.",
   "code": "source_selection_invalid",
   "requestId": "req_4mz0v8qk"

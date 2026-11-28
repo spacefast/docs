@@ -114,3 +114,38 @@ blume-panel-tabs [data-blume-ask] {
 :root {
   --font-sans: var(--blume-font-body);
 }
+
+/*
+ * Quiet surface polish (Stageshow / Unslop UI discipline): aligned tabular
+ * numbers in reference tables, crisp keyboard caps, and restrained hover
+ * contrast on cards without glow or accent stripes.
+ */
+.prose table {
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th {
+  font-weight: 500;
+  color: var(--blume-foreground);
+}
+
+.prose kbd {
+  font-family: var(--blume-font-mono);
+  font-size: 0.8em;
+  padding: 0.12rem 0.38rem;
+  border-radius: 5px;
+  border: 1px solid var(--blume-border);
+  background: var(--blume-code-background);
+}
+
+[data-blume-card] {
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+[data-blume-card]:hover {
+  border-color: color-mix(in oklch, var(--blume-foreground) 22%, transparent);
+}
+
+:root[data-theme="dark"] [data-blume-card]:hover {
+  background-color: color-mix(in oklch, #ffffff 3.5%, transparent);
+}

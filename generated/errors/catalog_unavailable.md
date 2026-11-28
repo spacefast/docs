@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/catalog_unavailable",
   "title": "Catalog unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The connector catalog could not be built right now.",
   "code": "catalog_unavailable",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_runtime_event",
   "title": "Invalid runtime event",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime event payload is not recognized.",
   "code": "invalid_runtime_event",
   "requestId": "req_4mz0v8qk"

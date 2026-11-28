@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/cron_not_found",
   "title": "Cron not found",
-  "status": 400,
+  "status": 422,
   "detail": "The live version declares no scheduled job with that key or path.",
   "code": "cron_not_found",
   "requestId": "req_4mz0v8qk"

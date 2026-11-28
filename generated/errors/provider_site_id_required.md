@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_site_id_required",
   "title": "Provider site id required",
-  "status": 400,
+  "status": 422,
   "detail": "A provider site id is required for this internal operation.",
   "code": "provider_site_id_required",
   "requestId": "req_4mz0v8qk"

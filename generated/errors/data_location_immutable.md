@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/data_location_immutable",
   "title": "Data location immutable",
-  "status": 400,
+  "status": 422,
   "detail": "This request tried to change data location through an immutable path.",
   "code": "data_location_immutable",
   "requestId": "req_4mz0v8qk"

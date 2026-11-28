@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_publish_payload",
   "title": "Invalid publish payload",
-  "status": 400,
+  "status": 422,
   "detail": "The publish payload is malformed.",
   "code": "invalid_publish_payload",
   "requestId": "req_4mz0v8qk"

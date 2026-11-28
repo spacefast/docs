@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_request",
   "title": "Invalid request",
-  "status": 400,
+  "status": 422,
   "detail": "The request is malformed.",
   "code": "invalid_request",
   "requestId": "req_4mz0v8qk"

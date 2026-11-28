@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_jti_replayed",
   "title": "Runtime jti replayed",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime token was already used. Replays are rejected.",
   "code": "runtime_jti_replayed",
   "requestId": "req_4mz0v8qk"

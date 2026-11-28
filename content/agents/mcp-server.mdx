@@ -3,10 +3,10 @@ title: MCP server
 description: Connect to the Spacefast MCP server over hosted HTTP or local stdio, and use API operation tools, publishing, Apps, and saved approvals
 ---
 
-The hosted MCP server uses OAuth and accepts inline files. The local server uses your CLI login or `SPACEFAST_TOKEN` and can publish files from your workspace.
+The hosted MCP server uses OAuth and accepts inline files or uploaded archives. The local server uses your CLI login or `SPACEFAST_TOKEN`, and with the standalone or Homebrew `sf` CLI on macOS or Linux it can publish files from your workspace by path.
 
-:::note[Already connected through Claude Desktop or a one-click plugin?]
-You don't need this page. It's the technical reference for wiring up the MCP server by hand. See [Claude Desktop](/agents/claude-desktop) or [Claude Code](/agents/claude-code) for the point-and-click setup instead.
+:::note[Already connected through a connector or plugin?]
+You don't need this page. It's the technical reference for wiring up the MCP server by hand. See [Claude Desktop](/setup/claude-desktop), [Claude Code](/setup/claude-code), or [Agent setup](/setup) for guided setup instead.
 :::
 
 ## Two runtimes, one tool set
@@ -17,13 +17,13 @@ The same server ships in two runtimes. Both expose the eligible API operations b
 |---|---|---|
 | Transport | Streamable HTTP | stdio |
 | Endpoint or command | `https://mcp.spacefast.com` | `sf mcp`, or `npx -y spacefast mcp` |
-| Filesystem | None. `publish` takes inline `files` or a completed `uploadId` | Reads your workspace. `publish` also takes a `path` or publishes the current workspace |
+| Filesystem | None. `publish` takes inline `files` or a completed `uploadId` | Reads your workspace. With the standalone or Homebrew `sf` on macOS or Linux, `publish` takes a `path` or publishes the current workspace. Through `npx`, the npm package (Node.js), or on Windows, it takes inline `files` or an `uploadId` |
 | Auth | OAuth, per client | Your CLI login, or `SPACEFAST_TOKEN` |
 | Where it runs | Spacefast | Your machine |
 
 The hosted endpoint also answers on `/mcp` and `/mcp/`. Only the `mcp.` hostname serves MCP; the path `/mcp` on the API host does not.
 
-There is a third option, `sf mcp proxy`, which speaks stdio to your editor and HTTPS to the hosted endpoint using your CLI login. It is what `sf setup agent` writes by default. See [other clients](/agents/other-clients).
+There is a third option, [`sf mcp proxy`](/cli/reference#sf-mcp-proxy), which speaks stdio to your editor and HTTPS to the hosted endpoint using your CLI login. It is what [`sf setup agent`](/cli/reference#sf-setup-agent) writes by default. See [Any MCP client](/setup/any-mcp) and [Ways to connect](/connect).
 
 ## Authentication
 
@@ -33,14 +33,13 @@ The hosted server is an OAuth 2.0 protected resource. It is never anonymous. A r
 
 The resource identifier is the MCP origin itself. A platform OAuth token not bound to the MCP resource is rejected here, even though it's a valid Spacefast token.
 
-By default a client asks for these scopes.
+By default a client asks for these scopes:
 
 | Scope | What it grants |
 |---|---|
 | `teams:read` | Read the teams the account belongs to |
 | `teams:create` | Create teams |
 | `teams:members.write` | Invite people to teams that the account can administer |
-| `sell:write` | Set up Sell, enable live sales, resend downloads, and mark orders shipped |
 | `spaces:read` | Read Spaces, versions, and build status |
 | `spaces:write` | Create and update Spaces and their settings |
 | `spaces:rename` | Rename Space slugs and managed addresses |
@@ -62,13 +61,13 @@ Read each operation's required scopes in its tool schema and the [API reference]
 
 A scope shortfall applies to the requested operation. A credential that can read analytics may still lack access to domains.
 
-The hosted server mints a delegation token for each authenticated request instead of handing your client a Spacefast API token. That delegation token lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session can't be replayed against the wider API.
+The hosted server mints a delegation token for each authenticated request instead of handing your client a Spacefast API key. That delegation token lives five minutes and carries the source credential's policy verbatim, so a leaked MCP session can't be replayed against the wider API.
 
-Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP.
+Hosted requests are rate limited to 600 per minute per credential and 300 per minute per IP. That limit is tracked separately from the general `/v1` REST API budget in [Rate limits](/api/rate-limits) and returns HTTP `429` with [`rate_limited`](/errors/rate_limited).
 
 ### Local
 
-The local server takes its credential from the process, never from client config. `sf mcp` resolves your CLI login and hands it to the in-process server. Standalone runs read `SPACEFAST_TOKEN`.
+The local server takes its credential from the process, never from client config. [`sf mcp`](/cli/reference#sf-mcp) resolves your CLI login and hands it to the in-process server. Standalone runs read `SPACEFAST_TOKEN`. Pass `--read-only` or `--groups` to narrow which tools the server exposes.
 
 | Variable | Effect |
 |---|---|
@@ -80,9 +79,11 @@ The local server takes its credential from the process, never from client config
 
 The [Spacefast discovery card](https://api.spacefast.com/.well-known/mcp/server-card.json) publishes the hosted tool catalog. It is a Spacefast discovery artifact. Your connection's `tools/list` is the authority for the tools and input schemas available to that client.
 
-Use the API operation tool directly. For example, `searchDocs` searches documentation, `getDocsPage` reads an exact slug, `listSpaces` finds Spaces, and `promoteSpaceVersion` promotes a ready version. Hosts that support tool discovery can load operations on demand.
+Use the API operation tool directly. For example, [`searchDocs`](/api/reference/docs/searchdocs) searches documentation, [`getDocsPage`](/api/reference/docs/getdocspage) reads an exact slug, [`listSpaces`](/api/reference/spaces/listspaces) finds Spaces, and [`promoteSpaceVersion`](/api/reference/versions/promotespaceversion) promotes a ready version. Hosts that support tool discovery can load operations on demand.
 
 Space Apps provide visual views through tools such as `show_space_deployments`, `show_space_domains`, and `show_space_analytics`. Use `show_domains` for the domain library. These views and the publish card remain available alongside operation tools.
+
+For visual verification of a deployed version, agents can start a one-hour visual review with [`createSpaceVersionVisualReview`](/api/reference/versions/createspaceversionvisualreview), read the pinned target with [`getSpaceVisualPreview`](/api/reference/spaces/getspacevisualpreview), capture an initial screenshot with [`getSpaceVersionVisualScreenshot`](/api/reference/versions/getspaceversionvisualscreenshot), and read submitted notes with [`getVisualReview`](/api/reference/spaces/getvisualreview). Live Space thumbnails and public `1200x630` page cards are exposed via [`getSpaceThumbnail`](/api/reference/spaces/getspacethumbnail) and [`getPageScreenshot`](/api/reference/spaces/getpagescreenshot).
 
 `publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. `choose_space` asks you to pick a Space when the target is unclear, and `cli_login` signs the `sf` CLI in with this connection's access when you ask for it. Read each tool's schema before calling it.
 
@@ -90,27 +91,29 @@ Results from the built-in tools are capped at 24,000 characters of text across t
 
 ### Connector access
 
-Only On-Device MCP (`sf mcp` and the desktop extension) exposes `search_connector_tools` through the CLI login. Hosted MCP and `sf mcp proxy` do not expose connectors. Hosted OAuth grants no connector scopes. See [Connectors](/connectors).
+Only On-Device MCP (`sf mcp`) exposes `search_connector_tools` through the CLI login. Hosted MCP and `sf mcp proxy` do not expose connectors. Hosted OAuth grants no connector scopes. See [Connectors](/connectors).
 
-### publish
+### `publish`
 
 `publish` is synchronous by default. It waits for the version to finalize and returns the receipt.
 
 | Field | Type | What it does |
 |---|---|---|
-| `path` | string | Local runtime only. One local directory, file, or archive. Omit `path`, `files`, and `uploadId` to publish the current workspace |
-| `uploadId` | string | A completed durable upload from `completeUpload`, for files too big to send inline. Reuse it when retrying |
+| `path` | string | Local runtime only, with the standalone or Homebrew `sf` on macOS or Linux. One local directory, file, or archive. Omit `path`, `files`, and `uploadId` to publish the current workspace |
+| `uploadId` | string | A completed durable upload from [`completeUpload`](/api/reference/spaces/completeupload), for files too big to send inline. Reuse it when retrying |
 | `files` | array of 1 to 1000 | Inline files. Each is `{ path, content, encoding }` with `encoding` one of `utf8` or `base64`, default `utf8` |
 | `spaceId` | string starting `spc_` | Update this Space. Omit to create one, or on local to use the Space linked to this workspace |
-| `teamId` | string | Destination team id or slug for a new Space. Send one after a `team_required` error |
-| `access` | `private` or `public` | Initial root access for a Space this publish creates. `private` admits the owning team, `public` also admits anyone on the web. Omit to use the team default. Invalid with `spaceId` |
+| `teamId` | string | Destination team ID or slug for a new Space. Send one after a [`team_required`](/errors/team_required) error |
+| `access` | `private`, `parent_team`, or `public` | Initial root access for a Space this publish creates (`parent_team` needs Enterprise subteams). Omit unless the user names who should see it so the team's default access applies. Invalid with `spaceId` |
 | `createNew` | boolean, default `false` | Local runtime only. Forces a separate Space. Invalid with `spaceId` |
 | `slug` | string, 2 to 55 | Slug for a new Space |
 | `title` | string, 1 to 255 | Title for a new Space |
 | `description` | string, up to 2000 | Changelog for this version. It does not change the Space description |
 | `requestId` | string, 16 to 200 | Idempotency handle. Reuse the same value only when retrying a call that timed out |
 
-Send at most one of `path`, `files`, and `uploadId`. Hosted MCP needs exactly one of `files` or `uploadId`.
+Send at most one of `path`, `files`, and `uploadId`. Hosted MCP needs one of `files` or `uploadId`.
+
+Publish a local directory from On-Device MCP:
 
 ```json
 {
@@ -123,14 +126,16 @@ The result carries `status` of `publishing` or `published`, `liveUrl`, `immutabl
 
 Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
-### operation_status
+To publish a [SpacePress](/collections) app over MCP, send complete SpacePress source files inline (`spacepress.config.ts` or an app-only `spacefast.config.ts`, `sp/schema.ts`, `sp/actions.ts`, `sp/app/page.tsx`, and `public/` assets) to a team-owned Space, or pass a local project directory on On-Device MCP. Put separate Space serving settings in resolved `sf.jsonc` when using direct MCP publish; use `sf publish` or a source build when evaluating full TypeScript `spacefast.config.ts` settings or combined runtimes. When iterating on an existing app through a source workspace, check [`getSpaceWorkMode`](/api/reference/spaces/getspaceworkmode) before committing edits.
+
+### `operation_status`
 
 | Field | Type | What it does |
 |---|---|---|
 | `url` | string | Copy `publish.result.job.poll.url`. Prefer it when present |
 | `operationId` | string | Copy `publish.result.job.poll.operationId` |
 
-Send exactly one of the two.
+Send one of the two:
 
 ```json
 { "operationId": "opr_7f2b8c1d4e5a6b7c" }
@@ -140,23 +145,23 @@ Poll about every two seconds. Stop when `result.done` is true. Report success on
 
 ### Find documentation
 
-Call `searchDocs` with a query, then `getDocsPage` with the returned slug. The HTTP equivalents are `GET /v1/docs/search` and `GET /v1/docs/pages/{slug}`. Read the operation schemas in the [API reference](/api/reference) for their input envelopes.
+Call [`searchDocs`](/api/reference/docs/searchdocs) with a query, then [`getDocsPage`](/api/reference/docs/getdocspage) with the returned slug (`GET /v1/docs/search` and `GET /v1/docs/pages/{slug}`). Read the operation schemas in the [API reference](/api/reference) for their input envelopes.
 
 For an error, open the problem document's `type` URL to read its matching error page.
 
 ## Approvals
 
-An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard.
+An operation can pause before its API request is dispatched. Follow its approval link, review the exact action, and accept, decline, or cancel in the dashboard. Poll approval state over HTTP or MCP with [`getApproval`](/api/reference/agent/getapproval).
 
-A paused operation waits up to 24 hours for a decision. Keep the returned execution ID and call `resume_execution` with that same `executionId`, using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
+A paused operation waits up to 24 hours for a decision. Keep the returned execution ID and call `resume_execution` (backed by [`resumeAction`](/api/reference/agent/resumeaction)) with that same `executionId`, using the fields its schema requests. Resume continues the saved operation, including after a server restart. Do not start a second operation to replace a pending approval or repeat a call whose dispatch outcome is uncertain.
 
 See [Agent permissions](/agents/permissions) for the actions that require a person and the scope of standing access.
 
 ## Local file access
 
-Only the local runtime reads files, and it reads them from exactly one directory.
+Only the local runtime reads files, and it reads them from one directory.
 
-The workspace root is resolved in this order.
+The workspace root is resolved in this order:
 
 1. `SPACEFAST_MCP_WORKSPACE_ROOT`, or the `--workspace-root` flag on `sf mcp`.
 2. The first `file:` root your MCP client advertises. The server asks once per session and remembers the answer, so changing roots mid-session has no effect.
@@ -164,16 +169,16 @@ The workspace root is resolved in this order.
 
 Setting the environment variable turns off root discovery. The variable wins and your client's advertised root is ignored.
 
-Inside that root, `publish` refuses a few things outright.
+Inside that root, `publish` refuses a few things outright:
 
 - Absolute paths. Every `path` must be relative to the workspace root.
 - Any path that escapes the root.
 - Symbolic links, and anything that is not a regular file or a directory.
 - Paths that look like credential material.
 
-Some files never upload, at any depth. `.env` and every `.env.*`, `.git`, `node_modules`, `.ssh`, `.aws`, `.npmrc`, `.netrc`, `.DS_Store`, key material such as `*.pem`, `*.key`, `id_rsa`, and `.spacefast/state.json`.
+Some files never upload, at any depth: `.env` and every `.env.*`, `.git`, `node_modules`, `.ssh`, `.aws`, `.npmrc`, `.netrc`, `.DS_Store`, key material such as `*.pem`, `*.key`, `id_rsa`, and `.spacefast/state.json`.
 
-Size caps are checked before any bytes are read.
+Size caps are checked before any bytes are read:
 
 | Cap | Value |
 |---|---|
@@ -182,6 +187,6 @@ Size caps are checked before any bytes are read.
 | File count | 100,000 |
 | One path | 1,024 bytes |
 
-:::warning[Anonymous publishes fail closed]
+:::caution[Anonymous publishes fail closed]
 When the local runtime publishes anonymously but cannot save the Space key to `.spacefast/state.json`, the tool call fails instead of printing the credential. Fix the directory permissions and publish again.
 :::

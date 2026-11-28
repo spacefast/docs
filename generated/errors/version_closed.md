@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_closed",
   "title": "Version closed",
-  "status": 400,
+  "status": 422,
   "detail": "The version's upload session is closed. No more files can be added.",
   "code": "version_closed",
   "requestId": "req_4mz0v8qk"

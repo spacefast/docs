@@ -1,23 +1,20 @@
 ---
 title: Limits
-description: Every enforced Spacefast limit in one table, with the error code you get when you cross it
-sidebar:
-  order: 1
+description: Every enforced Spacefast platform limit, anonymous cap, retention window, and rate limit with the error code returned when crossed
 ---
 
-Plan allowances, platform limits, and the errors returned when you exceed them.
-
-## Plan allowances
-
-Every plan's allowances and per-Space limits, and what Boost raises, are on [Pricing & Limits](/pricing). The limits below are the same on every plan.
+Platform limits apply identically across every plan, while plan allowances scale per team and per Space on [Pricing and limits](/pricing).
 
 ## Enforcement
 
-Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` for the limits active on a team. A blocked Space creation or claim returns `409` with `quota_exceeded`; domain and team-member admission use `domain_quota_exceeded` and `team_member_quota_exceeded`.
+Read `GET /v1/teams/{teamId}/entitlements` and `GET /v1/teams/{teamId}/plan-policy` to inspect the active limits on a team.
 
-The daily publish counter warns rather than refusing a publish. It pools direct publishes and CI builds and resets at 00:00 UTC. The storage usage counter reports overage without blocking writes. These counters are not invoice line items.
+- Blocked Space creation or claims return `409` with `quota_exceeded`.
+- Domain and team-member caps return `domain_quota_exceeded` and `team_member_quota_exceeded`.
+- The daily publish counter warns rather than blocking publishes. It pools direct publishes and CI builds and resets at `00:00` UTC.
+- The storage usage counter reports overage without blocking writes. Neither warning counter is an invoice line item.
 
-See [Versions](/versions#how-many-versions-are-kept) for version cleanup.
+See [Versions](/versions#how-many-versions-are-kept) for version retention and deletion rules.
 
 ## Same on every plan
 
@@ -25,28 +22,33 @@ See [Versions](/versions#how-many-versions-are-kept) for version cleanup.
 | --- | --- | --- |
 | Largest single file | 1 GiB | `422` `version_file_too_large` |
 | Total bytes per version | 2 GiB | `422` `version_total_bytes_exceeded` |
-| Bandwidth per space per day | 100 GiB | Measured hourly and recorded |
+| Files per version | 100,000 | `422` `manifest_too_many_files` |
+| Delivery bandwidth per Space per day | 100 GiB | Measured hourly and enforced |
 | Inline publish archive | 128 MiB | `publish_archive_too_large` |
 | Archive compression ratio | 100:1 | `publish_archive_compression_ratio_exceeded` |
-| Inline archive expanded size | 2 GiB, the version limit | `publish_archive_expanded_size_exceeded` |
-| Build output | 512 MiB | The build fails |
+| Inline archive expanded size | 512 MiB | `publish_archive_expanded_size_exceeded` |
+| Build output | 2 GiB | Build fails |
+| Build timeout | Default 900 s (15 minutes); set from 60 s to 7,200 s (2 hours) | `build_timeout` |
+| [Compiled Workers bundle](/functions#limits) | 24 MiB uncompressed | Build fails |
 | File path length | 1,024 bytes | `path_too_long` |
 | Manifest body | 16 MiB | `manifest_body_too_large` |
-| `sf.jsonc` file size | 256 KiB | Config validation error |
-| Templates in `sf.jsonc` | 100 | `config_templates_over_limit` |
-| Cron jobs declared per space | 8 for now, until the runtime update reaches every box. Your plan sets how many run, see [Crons](/crons#allowance-by-plan) | Config validation error |
-| Data sources in `sf.jsonc` | 32 | Config validation error |
-| Inject snippets | 16, each 8 KiB | Config validation error |
-| Redirect rules compiled | 2,100 total, 2,000 static, 100 dynamic | Routing compile error |
+| Config file size (`sf.jsonc` or evaluated `spacefast.config.ts`) | 256 KiB | Config validation error |
+| Templates in config | 100 | `config_templates_over_limit` |
+| Cron jobs declared per Space | 8 (your plan sets how many run; see [Crons](/crons)) | Config validation error |
+| Connector roles in config | 32 | Config validation error |
+| Inject snippets or custom JavaScript tags | 16 per list, each 8 KiB | Config validation error |
+| Redirect rules compiled | 2,100 total (2,000 static, 100 dynamic) | Routing compile error |
 | Header rules compiled | 100 | Routing compile error |
+| Firewall rules / cache-bypass rules | 50 each | Config validation error |
 | Storage object upload | 5 MiB | `storage_file_too_large` |
+| Pending access requests per Space | 25 | Request blocked |
 | Webhook deliveries per hour, per team | 10,000 | Delivery recorded as failed with `webhook_delivery_budget_exceeded` |
 
-Every key in the config file is documented on [Config file](/config-file). Routing rule syntax is on [Routing](/routing).
+The 24 MiB Workers bundle limit applies on every plan and includes compiled JavaScript, embedded modules, and the manifest JSON. Every config key and parser cap is on [Configuration](/config-file). Routing rule syntax is on [Redirects and rewrites](/redirects) and [Headers](/headers).
 
 ## Anonymous publish caps
 
-Publishing without an account uses stricter limits than the Personal plan.
+Publishing without an account uses stricter limits than the Personal plan:
 
 | Cap | Value | When you hit it |
 | --- | --- | --- |
@@ -56,56 +58,53 @@ Publishing without an account uses stricter limits than the Personal plan.
 | Inline publish body | 100 MiB | `publish_inline_limit_exceeded` |
 | Publishes per IP per hour | 20 | `429` `anonymous_publish_rate_limited` |
 | Publishes per network fingerprint per hour | 60 | `429` `anonymous_publish_rate_limited` |
-| Publishes per space per hour | 20 | `429` `anonymous_publish_rate_limited` |
-| Unclaimed spaces open at once | 10 per fingerprint | `429` `anonymous_space_limit_reached` |
+| Publishes per unclaimed Space per hour | 20 | `429` `anonymous_publish_rate_limited` |
+| Unclaimed Spaces open at once | 10 per fingerprint | `429` `anonymous_space_limit_reached` |
+| Active share links per unclaimed Space | 50 | Blocked |
 
-Until a space is claimed, the runtime serves a restricted set of content types: text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Anything outside that list uploads but does not serve. Claim the space and it serves normally. See [Publish without an account](/anonymous-and-claim).
+Until you claim a Space, Spacefast serves a restricted set of content types: text, images, fonts, JSON, web manifests, JavaScript, PDF, gzip, XML, RSS, and Atom. Other file types upload without serving until you claim the Space. See [Anonymous publish and claiming](/agents/anonymous-and-claim).
 
 ## Retention windows
 
 | What | Window | What happens at the end |
 | --- | --- | --- |
-| Unclaimed space | {{anonymous-ttlSeconds}} from creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation | The space stops serving |
-| Claiming an expired anonymous space | 7 more days | The claim link stops working |
-| Unfinished publish drafts | 24 hours | The draft expires and can't be resumed; it stays in your version history |
-| Deleted team | 30 days | It can no longer be restored. Its records stay |
-| Past-due account | 7 days | The account is suspended and its spaces go dark |
-| Activity history | Plan window, see [Pricing & Limits](/pricing) | Older entries are hidden, not deleted |
-| Logs | Plan window, see [Pricing & Limits](/pricing) | Reads are clamped to the window |
+| Unclaimed Space | {{anonymous-ttlSeconds}} from creation or the latest publish that changes files, capped at {{anonymous-publishAbsoluteCapSeconds}} from creation | The Space stops serving |
+| Claiming an expired anonymous Space | 7 more days | The claim link stops working |
+| Unfinished publish drafts | 24 hours | The draft expires and cannot be resumed; it stays in version history |
+| Deleted team | 30 days | You can no longer restore the team; records remain stored |
+| Past-due account | 7 days | Spacefast suspends the account and its Spaces stop serving |
+| Activity history | Plan window, see [Pricing and limits](/pricing) | Hidden from listings, not deleted |
+| Logs | Plan window, see [Pricing and limits](/pricing) | Queries clamp to the window |
 
-Nothing is deleted when a window ends. Spacefast keeps your data until you delete it. Most deletes are soft deletes: the record stays but no longer appears, and you can list teams and domains you deleted yourself. Removing data for good is a manual step our team takes on request.
+Spacefast does not permanently delete records when a window ends. Most deletes are soft deletes: the record stops appearing in normal listings, and Spacefast handles permanent data removal on request.
 
-The two anonymous rows work together. A space that stops serving at its deadline is still recoverable through the claim link for another 7 days. Claim-page loads can push that deadline out by up to 6 hours. See [Publish without an account](/anonymous-and-claim).
+An unclaimed Space that stops serving at its expiry deadline remains recoverable through its claim link for 7 more days. Loading the claim page when less than 1 hour remains extends the deadline by 1 hour at a time, up to 6 hours total. See [Anonymous publish and claiming](/agents/anonymous-and-claim).
 
-## What a paused or removed space serves
+## What a paused or removed Space serves
 
-A space that stops serving does not fall back to a blank 404. The status code and the body say which situation you are in.
+A Space that stops serving returns a specific status code and message instead of a blank 404:
 
-| Situation | Status | Body | Writes to the space |
+| Situation | Status | Body | Writes to the Space |
 | --- | --- | --- | --- |
-| Account past due, inside the grace period | Serves normally | Your Space | `402` `tenant_past_due` |
+| Account past due, inside grace period | Serves normally | Your Space | `402` `tenant_past_due` |
 | Account suspended | `402` | `This space is paused.` | `403` `tenant_suspended` |
-| Space disabled, expired, or taken down | `404` | `This space is no longer available.` | `409` with the disable reason |
+| Space disabled, expired, or taken down | `404` | `This space is no longer available.` | `409` with disable reason |
 | Removed after a legal complaint | `451` | `This content is unavailable for legal reasons.` | `409` |
-| Removed under the strictest safety category | `404` | `This space hasn't been published yet.` | `409` |
+| Removed under strictest safety category | `404` | `This space hasn't been published yet.` | `409` |
 
-During the grace period, a past-due account keeps serving Spaces that would otherwise serve normally while blocking writes in the dashboard, CLI, and API. Once suspended, it stops serving its Spaces too.
+During the grace period, a past-due account keeps serving Spaces while blocking writes in the dashboard, CLI, and API. Once suspended, it stops serving Spaces as well.
 
-The legal-removal and no-longer-available pages are customizable like any other error page. The strictest-safety response is byte-identical to a host that has never published anything: `404` with `X-Spacefast-Undeployed: 1` and the unpublished body. That header tells it apart from a missing page on a published Space.
+You can customize the legal-removal and no-longer-available pages like other error pages. The strictest-safety response matches an unpublished hostname (`404` with `X-Spacefast-Undeployed: 1`).
 
 ## Rate limits
 
-Exceeding one returns `429` `rate_limited`. The response headers that tell you the ceiling, what is left, and when to retry are on [Rate limits](/api/rate-limits#headers).
+Exceeding a rate limit returns `429` `rate_limited`. See [Rate limits](/api/rate-limits#headers) for response headers and backoff guidance.
 
-The general budget is per fixed 60-second window.
+The general `/v1` request budget uses a fixed 60-second window:
 
 | Caller | Requests per minute |
 | --- | --- |
 | Authenticated, per credential | 600 |
 | Anonymous, per IP | 300 |
 
-Publishing, building, and creating spaces carry their own hourly budgets that scale with your plan. Each has an actor bucket, which contains one credential, and an account bucket, which contains a whole team.
-
-Read the rate-limit headers and the error's retry information for the active budget. These safeguards are separate from the plan allowances above.
-
-Full rate limit behavior, including what happens when the accounting backend is down, is on the [Rate limits](/api/rate-limits). For what each error code means and whether to retry it, see [Error codes](/api/errors).
+Publishing, remote builds, and Space creation also carry hourly budgets per credential and per team that scale with your plan. Read `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`, and `Retry-After` on responses for active limits. See [Rate limits](/api/rate-limits) for full behavior and [Errors](/api/errors) for every error code.

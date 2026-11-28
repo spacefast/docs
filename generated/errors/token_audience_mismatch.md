@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_audience_mismatch",
   "title": "Token audience mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token audience does not match the audience for its issuer.",
   "code": "token_audience_mismatch",
   "requestId": "req_4mz0v8qk"

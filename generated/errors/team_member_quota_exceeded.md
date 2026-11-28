@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_member_quota_exceeded",
   "title": "Team member quota exceeded",
-  "status": 400,
+  "status": 422,
   "detail": "Inviting this person would exceed the team's seat limit.",
   "code": "team_member_quota_exceeded",
   "requestId": "req_4mz0v8qk"

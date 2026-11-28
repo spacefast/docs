@@ -2,8 +2,6 @@ import { redirects as authoredRedirects } from "../redirects.ts";
 
 import { verifyBuiltSeo } from "./verify-built-seo.mjs";
 
-import referenceAliases from "./reference-aliases.json" with { type: "json" };
-
 import { access, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { compileRoutingFilesWasm } from "@spacefast/routing/finalize";
@@ -11,6 +9,7 @@ import { matchRedirect } from "@spacefast/routing/match";
 
 import {
   buildRoutingRules,
+  compileRedirectRules,
   deploymentBase,
   markdownTwinRules,
 } from "./redirect-rules.mjs";
@@ -138,20 +137,25 @@ if (requiredIaRoutes.length === 0) {
   throw new Error("The content directory declares no routes.");
 }
 const representativePages = [
-  ["index.html", docsRoot, "Spacefast publishes"],
+  ["index.html", docsRoot, "Spacefast is the build companion"],
   ["quickstart/index.html", `${docsRoot}/quickstart`, "Before you start"],
   ["publish/index.html", `${docsRoot}/publish`, "What gets uploaded"],
-  ["migrate/index.html", `${docsRoot}/migrate`, "https://spacefast.com/migrate/"],
+  ["guides/index.html", `${docsRoot}/guides`, "Guides"],
+  ["guides/migrate/index.html", `${docsRoot}/guides/migrate`, "https://spacefast.com/migrate/"],
+  ["guides/recipes/vite/index.html", `${docsRoot}/guides/recipes/vite`, "Vite"],
   ["versions/index.html", `${docsRoot}/versions`, "immutable"],
   ["agents/mcp-server/index.html", `${docsRoot}/agents/mcp-server`, "MCP"],
+  ["agents/poppy/index.html", `${docsRoot}/agents/poppy`, "Poppy"],
   ["api/index.html", `${docsRoot}/api`, "Response envelopes"],
+  ["api/versioning/index.html", `${docsRoot}/api/versioning`, "Deprecation"],
   ["api/reference/index.html", `${docsRoot}/api/reference`, "Spacefast API"],
   ["cli/index.html", `${docsRoot}/cli`, "Global flags"],
   ["cli/reference/index.html", `${docsRoot}/cli/reference`, "CLI reference"],
   ["errors/index.html", `${docsRoot}/errors`, "Error reference"],
   ["errors/rate_limited/index.html", `${docsRoot}/errors/rate_limited`, "rate_limited"],
-  ["recipes/vite/index.html", `${docsRoot}/recipes/vite`, "Vite"],
-  ["zero-runtime/index.html", `${docsRoot}/zero-runtime`, "What Zero is"],
+  ["zero-migration/index.html", `${docsRoot}/zero-migration`, "Zero 0.8"],
+  ["headers/index.html", `${docsRoot}/headers`, "spacefast.config.ts"],
+  ["platforms/index.html", `${docsRoot}/platforms`, "Partner API"],
 ];
 for (const page of representativePages) {
   await requirePage(...page);
@@ -245,19 +249,24 @@ if (new Set(sitemapUrls).size !== sitemapUrls.length) {
 // searchable and instead declare a canonical straight at the www copy that
 // owns that content, so Blume leaves them out of the Docs sitemap.
 const htmlFiles = await htmlFilesUnder(dist);
+const redirectHtmlFiles = new Set();
 for (const file of htmlFiles) {
   const html = await readBuilt(file);
   const isRedirect = /<meta\s+http-equiv="refresh"/u.test(html);
+  if (isRedirect) redirectHtmlFiles.add(file);
   if (!isRedirect && /<meta\s+name="robots"\s+content="[^"]*noindex/u.test(html)) {
     throw new Error(`dist/${file} is noindex — this site never noindexes a page.`);
   }
 }
-// Each generated setup page's route, relative to its site: `setup/`, `setup/codex/`.
+// Each generated setup and connect page's route, relative to its site: `setup/`, `setup/codex/`, `connect/hosted-mcp/`.
 const setupRoutes = htmlFiles
-  .filter((file) => /^setup\/(?:[^/]+\/)?index\.html$/u.test(file))
+  .filter(
+    (file) =>
+      !redirectHtmlFiles.has(file) && /^(?:setup|connect)\/(?:[^/]+\/)?index\.html$/u.test(file),
+  )
   .map((file) => file.replace(/index\.html$/u, ""));
 if (setupRoutes.length < 2) {
-  throw new Error("Expected generated /setup pages in the build; none are present.");
+  throw new Error("Expected generated /setup and /connect pages in the build; none are present.");
 }
 for (const route of setupRoutes) {
   const expected = `<link rel="canonical" href="https://spacefast.com/docs/${route}">`;
@@ -265,7 +274,7 @@ for (const route of setupRoutes) {
     throw new Error(`dist/${route}index.html does not declare its self canonical (${expected}).`);
   }
 }
-// The sidebar override (components/Sidebar.astro) links pages across tabs.
+// The sidebar override (components/Sidebar.astro) scopes each of the 5 tabs.
 // Check the rendered sidebars, so a Blume change that drops the override fails here.
 const sidebarOf = async (file) => {
   const html = await readBuilt(file);
@@ -274,10 +283,12 @@ const sidebarOf = async (file) => {
   return html.slice(start, html.indexOf("</aside>", start));
 };
 const sidebarExpectations = [
-  ["quickstart/index.html", ["/cli", "/agents", "/migrate"], ["/setup/vscode", "Other agents"]],
-  ["agents/index.html", ["/agents/mcp-server", "/setup/vscode", "Other agents"], ["/setup/codex"]],
-  ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "Other agents"], ["/quickstart"]],
-  ["cli/agents/index.html", ["/cli/reference"], ["Other agents", "/setup/vscode"]],
+  ["quickstart/index.html", ["/spaces", "/build", "/publish", "/redirects", "/share", "/teams"], ["/guides/frameworks", "/agents/mcp-server", "/cli/reference", "/api/reference", "/setup/vscode"]],
+  ["guides/index.html", ["/guides/starters", "/guides/frameworks", "/guides/migrate"], ["/quickstart", "/cli/reference"]],
+  ["agents/index.html", ["/agents/mcp-server", "/agents/poppy", "/setup", "/connect"], ["/quickstart", "/cli/reference"]],
+  ["setup/vscode/index.html", ["/agents/mcp-server", "/setup/chatgpt", "/connect"], ["/quickstart"]],
+  ["cli/index.html", ["/cli/reference", "/api", "/api/reference", "/config-file", "/limits", "/errors", "/glossary", "/changelog"], ["/quickstart", "/setup/vscode"]],
+  ["platforms/index.html", ["/platforms/partner-api", "/platforms/api/reference"], ["/quickstart", "/cli/reference"]],
 ];
 for (const [file, present, absent] of sidebarExpectations) {
   const sidebar = await sidebarOf(file);
@@ -306,16 +317,18 @@ for (const file of ["index.html", "quickstart/index.html", "api/reference/index.
     throw new Error(`dist/${file} header lockup is wrong: ${JSON.stringify(links)}.`);
   }
 }
-// Docs previous/next skip the generated /setup pages; /setup keeps Blume's order.
+// Previous/next follow each tab's scoped sidebar order.
 for (const [file, prev, next] of [
-  ["troubleshooting/index.html", "/quickstart", "/spaces"],
-  ["spaces/index.html", "/troubleshooting", "/versions"],
-  ["setup/vscode/index.html", "/setup/cursor", "/setup/github-copilot"],
+  ["quickstart/index.html", "/", "/spaces"],
+  ["spaces/index.html", "/quickstart", "/request-lifecycle"],
+  ["agents/mcp-server/index.html", "/agents", "/agents/poppy"],
+  ["setup/vscode/index.html", "/setup/windsurf", "/setup/github-copilot"],
+  ["api/index.html", "/cli/reference", "/api/authentication"],
 ]) {
   const pager = (await readBuilt(file)).split("</article>").at(-1);
   const links = [...pager.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gu)];
   const got = ["Previous", "Next"].map((label) => links.find(([, , body]) => body.includes(label))?.[1]);
-  const want = [prev, next].map((route) => `${deploymentBase}${route}/`);
+  const want = [prev, next].map((route) => `${deploymentBase}${route === "/" ? "/" : `${route}/`}`);
   if (got.join() !== want.join()) {
     throw new Error(`dist/${file} pagination is wrong: expected ${want.join(" / ")}, got ${got.join(" / ")}.`);
   }
@@ -383,12 +396,10 @@ const llmsRoutes = new Set(
     return route === "" ? "/" : route;
   }),
 );
-const strayLlmsRoutes = [...llmsRoutes].filter(
-  (route) => !requiredIaRoutes.includes(route) && !route.startsWith("/setup"),
-);
+const strayLlmsRoutes = [...llmsRoutes].filter((route) => !requiredIaRoutes.includes(route));
 if (strayLlmsRoutes.length > 0) {
   throw new Error(
-    `llms.txt lists routes that are neither authored nor generated agent setup pages: ${strayLlmsRoutes.join(", ")}`,
+    `llms.txt lists routes that are not authored or generated family indexes: ${strayLlmsRoutes.join(", ")}`,
   );
 }
 const missingLlmsRoutes = requiredIaRoutes.filter((route) => !llmsRoutes.has(route));
@@ -402,7 +413,7 @@ for (const route of llmsRoutes) {
 }
 // Each collapsed family contributes its index page and nothing more. This is
 // what stops the "## Other" pile from quietly returning.
-for (const collapsed of ["/errors", "/api/reference", "/changelog"]) {
+for (const collapsed of ["/errors", "/api/reference", "/changelog", "/setup", "/connect"]) {
   const descendants = [...llmsRoutes].filter((route) => route.startsWith(`${collapsed}/`));
   const unexpected = descendants.filter((route) => !requiredIaRoutes.includes(route));
   if (unexpected.length > 0) {
@@ -537,12 +548,10 @@ for (const { from, status } of routingRules) {
 if (shadowedPages.length > 0) {
   throw new Error(`Routing rules redirect away from built pages: ${shadowedPages.join(", ")}`);
 }
-for (const redirect of [...generatedRedirects, ...referenceAliases]) {
+const activeCompatibilityRedirects = compileRedirectRules(generatedRedirects);
+for (const redirect of activeCompatibilityRedirects) {
   const example = representativeRedirect(redirect);
-  const canonicalDestination = example.destination.replace(
-    "/partners/api/reference",
-    "/platforms/api/reference",
-  );
+  const canonicalDestination = example.destination;
   const target = localTargetFor(canonicalDestination);
   if (!(await exists(path.join(dist, target)))) {
     throw new Error(`Redirect destination is missing: ${example.source} -> ${example.destination}`);
@@ -584,7 +593,7 @@ for (const file of htmlFiles) {
 }
 
 console.log(
-  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap URLs, ${corpusUrls.length} LLM/corpus pages, ${routingRules.length} routing rules covering ${generatedRedirects.length + referenceAliases.length} compatibility URLs, and every root-relative URL resolves.`,
+  `Route verification passed: all ${requiredIaRoutes.length} IA routes, ${htmlFiles.length} HTML pages, ${indexedPages} Pagefind records, ${sitemapUrls.length} sitemap URLs, ${corpusUrls.length} LLM/corpus pages, ${routingRules.length} routing rules covering ${activeCompatibilityRedirects.length} canonical API rename URLs, and every root-relative URL resolves.`,
 );
 
 await verifyBuiltSeo(dist);

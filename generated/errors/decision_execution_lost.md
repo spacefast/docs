@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/decision_execution_lost",
   "title": "Decision execution lost",
-  "status": 400,
+  "status": 422,
   "detail": "The approved action's execution lease is no longer held, so its result cannot be recorded.",
   "code": "decision_execution_lost",
   "requestId": "req_4mz0v8qk"

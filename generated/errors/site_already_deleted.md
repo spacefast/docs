@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/site_already_deleted",
   "title": "Site already deleted",
-  "status": 400,
+  "status": 422,
   "detail": "The site was already deleted.",
   "code": "site_already_deleted",
   "requestId": "req_4mz0v8qk"

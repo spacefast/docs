@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_run_budget_exhausted",
   "title": "Connector run budget exhausted",
-  "status": 400,
+  "status": 422,
   "detail": "The run hit its tool-call, egress, or time budget and stopped.",
   "code": "connector_run_budget_exhausted",
   "requestId": "req_4mz0v8qk"

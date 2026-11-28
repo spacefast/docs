@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/device_authorization_failed",
   "title": "Device authorization failed",
-  "status": 400,
+  "status": 422,
   "detail": "The device login request failed and cannot be completed.",
   "code": "device_authorization_failed",
   "requestId": "req_4mz0v8qk"

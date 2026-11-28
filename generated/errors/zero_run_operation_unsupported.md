@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_run_operation_unsupported",
   "title": "Zero run operation unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The hosted Zero runtime does not support this run operation yet.",
   "code": "zero_run_operation_unsupported",
   "requestId": "req_4mz0v8qk"

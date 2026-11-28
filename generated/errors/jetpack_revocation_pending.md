@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_revocation_pending",
   "title": "Jetpack revocation pending",
-  "status": 400,
+  "status": 422,
   "detail": "Jetpack has not confirmed the license revocation.",
   "code": "jetpack_revocation_pending",
   "requestId": "req_4mz0v8qk"

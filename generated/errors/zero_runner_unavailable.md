@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_unavailable",
   "title": "Zero runner unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner process cannot be started.",
   "code": "zero_runner_unavailable",
   "requestId": "req_4mz0v8qk"

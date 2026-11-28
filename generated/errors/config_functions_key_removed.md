@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/config_functions_key_removed",
   "title": "Config functions key removed",
-  "status": 400,
+  "status": 422,
   "detail": "The sf.jsonc configuration still uses the removed top-level functions key.",
   "code": "config_functions_key_removed",
   "requestId": "req_4mz0v8qk"

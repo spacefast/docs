@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_token_invalid",
   "title": "Runtime token invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime token cannot be parsed or validated.",
   "code": "runtime_token_invalid",
   "requestId": "req_4mz0v8qk"

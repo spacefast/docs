@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_output_contains_server_bundle",
   "title": "Build output contains server bundle",
-  "status": 400,
+  "status": 422,
   "detail": "The build output contains a compiled server bundle (an OpenNext worker.js), which a file-only publish would expose as a public download.",
   "code": "build_output_contains_server_bundle",
   "requestId": "req_4mz0v8qk"

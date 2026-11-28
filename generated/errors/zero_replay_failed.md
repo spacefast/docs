@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_replay_failed",
   "title": "Zero replay failed",
-  "status": 400,
+  "status": 422,
   "detail": "The hosted Zero runtime cannot fetch realtime replay events.",
   "code": "zero_replay_failed",
   "requestId": "req_4mz0v8qk"

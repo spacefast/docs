@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_artifact_malformed",
   "title": "Zero artifact malformed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero endpoint artifact cannot be parsed.",
   "code": "zero_artifact_malformed",
   "requestId": "req_4mz0v8qk"

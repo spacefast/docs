@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_usage_bucket",
   "title": "Invalid usage bucket",
-  "status": 400,
+  "status": 422,
   "detail": "The usage bucket has an invalid time range.",
   "code": "invalid_usage_bucket",
   "requestId": "req_4mz0v8qk"

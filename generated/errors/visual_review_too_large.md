@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/visual_review_too_large",
   "title": "Visual review too large",
-  "status": 400,
+  "status": 422,
   "detail": "The feedback batch exceeds the screenshot delivery limit.",
   "code": "visual_review_too_large",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_serving_not_allowlisted",
   "title": "Connector serving not allowlisted",
-  "status": 400,
+  "status": 422,
   "detail": "This connector is not allowed to serve sites.",
   "code": "connector_serving_not_allowlisted",
   "requestId": "req_4mz0v8qk"

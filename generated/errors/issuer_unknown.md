@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/issuer_unknown",
   "title": "Issuer unknown",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token names an issuer that Spacefast does not recognize.",
   "code": "issuer_unknown",
   "requestId": "req_4mz0v8qk"

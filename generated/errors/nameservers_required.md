@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/nameservers_required",
   "title": "Nameservers required",
-  "status": 400,
+  "status": 422,
   "detail": "Spacefast holds this domain's registration, so it leaves Spacefast DNS only by delegating to other nameservers.",
   "code": "nameservers_required",
   "requestId": "req_4mz0v8qk"

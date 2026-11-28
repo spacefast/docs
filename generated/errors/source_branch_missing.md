@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_branch_missing",
   "title": "Source branch missing",
-  "status": 400,
+  "status": 422,
   "detail": "The workspace project branch no longer exists in CodeStorage.",
   "code": "source_branch_missing",
   "requestId": "req_4mz0v8qk"

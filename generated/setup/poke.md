@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast to Poke so it can publish for you.
 
-**[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)**
+**[Add to Poke](https://poke.com/integrations/new?name=Spacefast&url=https%3A%2F%2Fmcp.spacefast.com)** (Hosted MCP server)
 
 1. Choose Create Integration.
 2. Sign in to Spacefast and approve access.

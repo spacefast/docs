@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_stale_base",
   "title": "Repository stale base",
-  "status": 400,
+  "status": 422,
   "detail": "The branch moved after this change was built, so the commit was refused.",
   "code": "repository_stale_base",
   "requestId": "req_4mz0v8qk"

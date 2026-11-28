@@ -5,6 +5,22 @@ description: "Release history for @spacefast/domain-sdk on npm."
 
 Published as [`@spacefast/domain-sdk`](https://www.npmjs.com/package/@spacefast/domain-sdk) on npm.
 
+## 0.10.0
+
+_No noted changes in this release._
+
+## 0.9.0
+
+#### Patch Changes
+
+- The MCP domain progress panel and domain SDK treat absent TXT challenges and successful TXT proof as completed ownership independently of pending HTTPS. Domain guidance distinguishes legacy inventory proof, native inventory status, compatibility overlays, and Space-attachment provider readiness.
+
+  Forward TXT challenge diagnostics through the MCP tool response without turning an absent older-API field into a completed challenge. Attachment failures keep the overall MCP domain state in setup-needed even when ownership is complete or a certificate is active.
+
+  MCP and the domain SDK still wait for Spacefast DNS zone proof when no hostname TXT challenge is required, preserving pending ownership and the zone's ownership instructions.
+
+  An existing provider certificate does not make a pending Space attachment ready: MCP keeps checking, and the domain SDK waits for attachment readiness even after ownership completes.
+
 ## 0.8.1
 
 _No noted changes in this release._

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_realtime_unavailable",
   "title": "Zero realtime unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Zero realtime helpers are unavailable for this endpoint.",
   "code": "zero_realtime_unavailable",
   "requestId": "req_4mz0v8qk"

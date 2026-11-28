@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_operation_conflict",
   "title": "Team design system operation conflict",
-  "status": 400,
+  "status": 422,
   "detail": "This operation ID already names different input.",
   "code": "team_design_system_operation_conflict",
   "requestId": "req_4mz0v8qk"

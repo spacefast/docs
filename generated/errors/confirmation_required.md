@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/confirmation_required",
   "title": "Confirmation required",
-  "status": 400,
+  "status": 422,
   "detail": "This action destroys live content or spends money, so a person must approve this exact action before it runs.",
   "code": "confirmation_required",
   "requestId": "req_4mz0v8qk"

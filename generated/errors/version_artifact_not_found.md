@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_artifact_not_found",
   "title": "Version artifact not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested version artifact was not found.",
   "code": "version_artifact_not_found",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/build_output_dir_missing",
   "title": "Build output dir missing",
-  "status": 400,
+  "status": 422,
   "detail": "The build finished but its output directory was not produced.",
   "code": "build_output_dir_missing",
   "requestId": "req_4mz0v8qk"

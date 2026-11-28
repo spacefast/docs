@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/prebuilt_metadata_invalid",
   "title": "Prebuilt metadata invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The metadata file next to the prebuilt archive exists but cannot be read or parsed, so the build's runtime shape is unknown.",
   "code": "prebuilt_metadata_invalid",
   "requestId": "req_4mz0v8qk"

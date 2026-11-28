@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/space_claim_unavailable",
   "title": "Space claim unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "This space cannot be claimed.",
   "code": "space_claim_unavailable",
   "requestId": "req_4mz0v8qk"

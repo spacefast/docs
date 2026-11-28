@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_connection_changed",
   "title": "Source workspace connection changed",
-  "status": 400,
+  "status": 422,
   "detail": "The Space repository connection changed after this workspace was created.",
   "code": "source_workspace_connection_changed",
   "requestId": "req_4mz0v8qk"

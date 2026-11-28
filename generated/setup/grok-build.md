@@ -7,7 +7,7 @@ seo:
 
 Add Spacefast's remote MCP server to Grok Build.
 
-**Configure `~/.grok/config.toml`.** Add Spacefast to Grok Build's MCP configuration.
+**Configure `~/.grok/config.toml`** (Hosted MCP server). Add Spacefast to Grok Build's MCP configuration.
 
 ```toml
 [mcp_servers.spacefast]
@@ -21,7 +21,7 @@ url = "https://mcp.spacefast.com"
 
 ## Other ways to connect
 
-**Run in your terminal.** Run this command to add Spacefast.
+**Run in your terminal** (Hosted MCP server). Run this command to add Spacefast.
 
 ```bash
 grok mcp add --transport http spacefast 'https://mcp.spacefast.com'

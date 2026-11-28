@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_envelope_invalid",
   "title": "Zero runner envelope invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner request envelope is malformed.",
   "code": "zero_runner_envelope_invalid",
   "requestId": "req_4mz0v8qk"

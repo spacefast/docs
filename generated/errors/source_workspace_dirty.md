@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/source_workspace_dirty",
   "title": "Source workspace dirty",
-  "status": 400,
+  "status": 422,
   "detail": "The workspace contains pending staged or working changes.",
   "code": "source_workspace_dirty",
   "requestId": "req_4mz0v8qk"

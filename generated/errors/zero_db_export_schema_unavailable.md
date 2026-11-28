@@ -1,11 +1,11 @@
 ---
 title: "zero_db_export_schema_unavailable"
-description: "The live capsule has no stable schema hash for a complete export."
+description: "This app's runtime can't describe its database schema, so a complete export isn't possible."
 ---
 
-The live capsule has no stable schema hash for a complete export.
+This app's runtime can't describe its database schema, so a complete export isn't possible.
 
-**How to resolve:** Publish the capsule with a current Zero schema, then start the export again.
+**How to resolve:** Publish the app again, then start the export again. See https://spacefast.com/docs/zero.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_export_schema_unavailable",
   "title": "Zero db export schema unavailable",
-  "status": 400,
-  "detail": "The live capsule has no stable schema hash for a complete export.",
+  "status": 422,
+  "detail": "This app's runtime can't describe its database schema, so a complete export isn't possible.",
   "code": "zero_db_export_schema_unavailable",
   "requestId": "req_4mz0v8qk"
 }

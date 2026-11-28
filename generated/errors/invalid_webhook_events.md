@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_webhook_events",
   "title": "Invalid webhook events",
-  "status": 400,
+  "status": 422,
   "detail": "One or more webhook event codes are not in the event taxonomy.",
   "code": "invalid_webhook_events",
   "requestId": "req_4mz0v8qk"

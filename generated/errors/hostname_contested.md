@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/hostname_contested",
   "title": "Hostname contested",
-  "status": 400,
+  "status": 422,
   "detail": "The hostname this Space would serve on is already attached to a different site.",
   "code": "hostname_contested",
   "requestId": "req_4mz0v8qk"

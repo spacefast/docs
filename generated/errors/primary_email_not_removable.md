@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/primary_email_not_removable",
   "title": "Primary email not removable",
-  "status": 400,
+  "status": 422,
   "detail": "The primary email address cannot be removed while it is the primary.",
   "code": "primary_email_not_removable",
   "requestId": "req_4mz0v8qk"

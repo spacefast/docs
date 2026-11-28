@@ -1,0 +1,67 @@
+---
+title: Next.js
+description: Build a Next.js app with the bundled Spacefast adapter on a supported, patched Next release
+---
+
+Spacefast detects Next.js from its `next` dependency. A project that also depends on `nextra` matches the Nextra row instead, which builds and outputs the same way.
+
+## What to build
+
+Spacefast runs `next build` by default. On Next 16.4.5 and later 16.4 releases, the CLI first points Next at the bundled `@spacefast/next-adapter` through the `NEXT_ADAPTER_PATH` environment variable, so you add nothing to `next.config`. The adapter opts the build into immutable static assets and writes down what Next produced for the classifier to read.
+
+## Supported Next versions
+
+| Next.js | Server-rendered build | `output: "export"` |
+| --- | --- | --- |
+| 16.4.5 and later 16.4 releases | Yes, through the bundled adapter | Yes |
+| 15.5.29 and later 15.5 releases | Yes | Yes |
+
+Spacefast builds the same releases OpenNext 1.20.17 supports. Its minimum versions follow Next.js security releases, so every older release has published [security advisories](https://github.com/vercel/next.js/security/advisories), and Spacefast refuses to build it. Only stable releases count; Spacefast refuses canary and other prerelease versions.
+
+## The output directory
+
+Static exports write to `out`. Server-rendered builds package the server entry and static assets automatically.
+
+## Publish
+
+```bash
+sf publish
+```
+
+Add redirects, headers, crons, or custom build settings in `spacefast.config.ts` if you need them; see [Project configuration](/config-file).
+
+## What the receipt shows
+
+```text
+Published: https://quiet-harbor.space.fast
+
+  Live URL      https://quiet-harbor.space.fast
+  Version URL   https://quiet-harbor--v3.space.fast
+  Version       v3 (ready)
+  Files         212
+```
+
+## Unsupported Next.js versions and wrapper pitfalls
+
+A version outside the table fails with [`next_version_unsupported`](/errors/next_version_unsupported) before anything builds and exits with code 2:
+
+```text
+next_version_unsupported
+```
+
+For an older release, the error says it has known security vulnerabilities and names the version to upgrade to. Upgrade, then publish again. There is no guessing fallback, because a publish classified from guessed facts is worse than a refused one.
+
+If you can't upgrade yet, build a static export yourself and upload it:
+
+```js next.config.js
+module.exports = { output: "export" };
+```
+
+```bash
+npx next build
+sf publish ./out --prebuilt
+```
+
+One related failure mode on Next 16.4: if a custom build command runs `next build` in a way that loses the environment the CLI set, the adapter never runs. The publish then stops with `build_failed`, saying `.spacefast/next-build.json` was not written. Let the CLI invoke the build, or pass its environment through your wrapper.
+
+See [Frameworks and builds](/guides/frameworks) for full detection rules and build overrides.

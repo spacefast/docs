@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/nameserver_divergence",
   "title": "Nameserver divergence",
-  "status": 400,
+  "status": 422,
   "detail": "The domain's observed nameservers diverge from the expected set.",
   "code": "nameserver_divergence",
   "requestId": "req_4mz0v8qk"

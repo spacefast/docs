@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_run_not_resumable",
   "title": "Connector run not resumable",
-  "status": 400,
+  "status": 422,
   "detail": "The run already settled, or its approval expired.",
   "code": "connector_run_not_resumable",
   "requestId": "req_4mz0v8qk"

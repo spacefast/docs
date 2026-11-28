@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_unavailable",
   "title": "Storage unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime cannot read or persist object storage.",
   "code": "storage_unavailable",
   "requestId": "req_4mz0v8qk"

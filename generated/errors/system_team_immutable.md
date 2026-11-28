@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/system_team_immutable",
   "title": "System team immutable",
-  "status": 400,
+  "status": 422,
   "detail": "This team is operated by Spacefast. Its name, slug and lifecycle are fixed, so renaming or deleting it was refused.",
   "code": "system_team_immutable",
   "requestId": "req_4mz0v8qk"

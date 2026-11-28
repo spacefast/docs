@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/role_managed_by_parent",
   "title": "Role managed by parent",
-  "status": 400,
+  "status": 422,
   "detail": "Subteam owners, and the subteam roles of parent-team owners and admins, come from the parent team.",
   "code": "role_managed_by_parent",
   "requestId": "req_4mz0v8qk"

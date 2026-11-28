@@ -5,7 +5,7 @@ description: "The team's design system changed since this action was prepared."
 
 The team's design system changed since this action was prepared.
 
-**How to resolve:** Reconcile with the current values and retry with their revision and a new operationId.
+**How to resolve:** Reload and sync with the current values, then retry with their revision and a new operationId.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_revision_conflict",
   "title": "Team design system revision conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The team's design system changed since this action was prepared.",
   "code": "team_design_system_revision_conflict",
   "requestId": "req_4mz0v8qk"

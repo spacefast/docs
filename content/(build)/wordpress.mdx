@@ -1,0 +1,117 @@
+---
+title: WordPress and Content API
+description: Open SpacePress Admin, call your Space's WordPress REST API and Abilities, run three-way content sync, use generated typed clients, and run allowlisted WP-CLI commands
+---
+
+Every SpacePress Space runs native WordPress alongside your TypeScript code, with no servers or plugins to maintain by hand. Open SpacePress Admin at `/wp-admin/new/`, call your Space's WordPress REST API and Abilities, reconcile Markdown files with live posts, or run allowlisted WP-CLI commands with `sf app wp`.
+
+## Open SpacePress Admin and one-use sign-in links
+
+SpacePress Admin (`/wp-admin/new/`) uses the WordPress block editor, typed REST fields, and the access rules from your schema. Classic `/wp-admin/` stays available when you need core WordPress screens or WooCommerce settings.
+
+Two API endpoints mint one-use sign-in URLs for the editor:
+
+| Operation | Route | Auth and behavior |
+| --- | --- | --- |
+| [`launchSpaceContentAdmin`](/api/reference/spaces/launchspacecontentadmin) | `POST /v1/spaces/{spaceId}/content/admin-session` | Session cookie auth. Returns a one-use launch URL; `screen` picks `"collections"` or `"users"`, `path` picks a classic `/wp-admin/` screen, and an empty body opens classic WordPress |
+| [`createSpaceContentAdminLink`](/api/reference/spaces/createspacecontentadminlink) | `POST /v1/spaces/{spaceId}/content/admin-link` | Requires `spaces:write`. Returns a one-use link expiring in 10 minutes that opens a confirmation button and signs in the person behind the credential (signed-in user or team API key creator). An empty body opens the collections screen |
+
+```bash
+curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/content/admin-link" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"screen":"collections"}'
+```
+
+## Call your Space's WordPress REST API
+
+You can call a Space's WordPress REST endpoints in two ways: proxied through the Spacefast management API, or directly against the Space hostname with a short-lived bearer token.
+
+### Option 1: Proxy through the Spacefast API
+
+[`requestSpaceContentRest`](/api/reference/spaces/requestspacecontentrest) (`POST /v1/spaces/{spaceId}/content/rest`) sends a relative WordPress REST request as the authenticated actor. Reads require `spaces:read`, mutations require `spaces:write`, and WordPress enforces its own endpoint permissions. The response returns the WordPress status code, headers (including pagination headers), and JSON body.
+
+```bash
+curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/content/rest" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"method":"GET","path":"/wp/v2/posts?per_page=10"}'
+```
+
+`requestSpaceContentRest` supports `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`, JSON `body` payloads, and `upload` objects for uploading media attachments through WordPress REST.
+
+### Option 2: Call the Space host directly with a REST token
+
+For external apps, scripts, or CI jobs that talk straight to your Space's hostname, mint a short-lived bearer token scoped to a Space machine credential with [`createSpaceRestApiToken`](/api/reference/spaces/createspacerestapitoken). The endpoint is `POST /v1/spaces/{spaceId}/zero/token` (it keeps the `/zero/token` wire path for compatibility):
+
+```bash
+curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/zero/token" \
+  -H "Authorization: Bearer $SPACEFAST_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"credentialId":"mcred_xxxxxxxx","ttlSeconds":300}'
+```
+
+Send the returned bearer token only to the returned `endpoint`, and keep it out of logs and chat. The Space re-checks the machine credential's Grant on every request. With a valid token, you can call:
+
+- **Core and collection REST endpoints:** `/wp-json/wp/v2/...`
+- **SpacePress queries and mutations:** `POST /wp-json/spacepress/v1/actions/<name>`
+- **WordPress Abilities:** `POST /wp-json/wp-abilities/v1/abilities/<name>/run`
+
+### Read private media attachments
+
+Fetch private WordPress media bytes through [`getSpaceContentMedia`](/api/reference/spaces/getspacecontentmedia) (`GET /v1/spaces/{spaceId}/content/media/{attachmentId}`). Pass `?size=<image-size>` to request a WordPress image size. Spacefast checks Space ownership and WordPress read permissions and returns `Cache-Control: private, no-store`.
+
+## WordPress Abilities and generated typed clients
+
+### Platform and app Abilities
+
+SpacePress compiles your exported `query()`, `mutation()`, collection, table, and global operations into WordPress Abilities invoked at `POST /wp-json/wp-abilities/v1/abilities/<name>/run` on the Space host.
+
+Every Space runtime also publishes built-in platform Abilities (`zero-wp-users` and `zero-storage`). Inspect their schemas and required WordPress capabilities with [`listSpaceZeroAbilities`](/api/reference/spaces/listspacezeroabilities) (`GET /v1/spaces/{spaceId}/zero/abilities`), and read the live compiled content model revision with [`getSpaceZeroContentModel`](/api/reference/spaces/getspacezerocontentmodel) (`GET /v1/spaces/{spaceId}/zero/content-model`). Both endpoints keep the `/zero/` path segment for API compatibility.
+
+### Generated TypeScript client, React hooks, and Astro loaders
+
+When you build a SpacePress project, the compiler writes typed clients under `sp/_generated/client/` for external frontends and interactive islands:
+
+- **`sp/_generated/client/index.ts`:** Exports `createClient({ url })` for typed CRUD queries, pagination, live subscriptions, and server actions against `/wp-json`. On SpacePress-rendered pages, `createClient()` reads the site's REST root and nonce automatically; external callers authenticate with an application password, a SpacePress Identity bearer token, or a cookie nonce.
+- **`sp/_generated/client/react.ts`:** Exports `createHooks(React)` returning `useQuery()` and `useMutation()` (with optimistic updates and rollback) for React 18+ or Preact.
+- **`@spacepress/astro`:** Connects Astro 7+ frontends with `spLoader(kind, opts)` (build-time Content Layer loader), `spLiveLoader(kind, opts)` (on-demand loader with cache tags), and `spWebhook(opts)` (HMAC-verified `SpacePress-Signature` webhook handler that invalidates cache tags).
+
+## Content sync and source conversions
+
+When your Space binds repository Markdown or HTML files to WordPress documents (via `sync` in your schema), use the three-way reconciliation API below. Code edits and WordPress editorial edits stay separate and never overwrite each other silently:
+
+| Operation | Route | What it does |
+| --- | --- | --- |
+| [`getSpaceContentSyncStatus`](/api/reference/spaces/getspacecontentsyncstatus) | `GET /v1/spaces/{spaceId}/content/sync` | Lists acknowledged source changes, open conflicts, and linked build and live-version status |
+| [`reconcileSpaceContentSync`](/api/reference/spaces/reconcilespacecontentsync) | `POST /v1/spaces/{spaceId}/content/sync/reconcile` | Three-way reconciles one bound Markdown or HTML file against its WordPress document using the stored common base, returning the new ledger and any text to write back |
+| [`acknowledgeSpaceContentSync`](/api/reference/spaces/acknowledgespacecontentsync) | `POST /v1/spaces/{spaceId}/content/sync/acknowledge` | Closes a prepared source write (`format: "spacefast.content-sync-ack"`) after the caller lands the bytes, failing if the ledger moved on |
+| [`getSpaceContentSourceConflict`](/api/reference/spaces/getspacecontentsourceconflict) | `GET /v1/spaces/{spaceId}/content/sync/{bindingId}` | Returns the common base, current source, and current WordPress revisions needed to resolve a conflict |
+| [`resolveSpaceContentSourceConflict`](/api/reference/spaces/resolvespacecontentsourceconflict) | `POST /v1/spaces/{spaceId}/content/sync/resolve` | Saves the chosen revision only while both source and WordPress still match the supplied revisions, then queues a source commit and build |
+| [`convertSpaceContentSource`](/api/reference/spaces/convertspacecontentsource) | `POST /v1/spaces/{spaceId}/content/conversions` | Converts a code-authored document to editable WordPress blocks while keeping the original code in source history |
+
+## WP-CLI, app environment, and runtime apply
+
+Manage your Space's WordPress runtime from the CLI without SSH access:
+
+```bash
+sf app env
+sf app env --format dotenv
+sf app wp option get blogname
+sf app wp cache flush
+sf app wp spacepress status
+sf app wp --mode limited core version
+sf apply
+```
+
+- **[`sf app env`](/cli/reference#sf-app-env):** Prints scoped Space, SpacePress, and WordPress environment variables with secrets masked by default. Pass `--reveal` to print plaintext values or `--format dotenv` for dotenv output.
+- **[`sf app wp`](/cli/reference#sf-app-wp) and [`runSpaceWpCliCommand`](/api/reference/spaces/runspacewpclicommand) (`POST /v1/spaces/{spaceId}/wp-cli`):** Runs allowlisted WP-CLI commands against your Space's WordPress (or a local WordPress install with `--local` / `--path`), writing every remote run to the Space's [activity log](/activity).
+  - **Allowed:** Safe read/inspect commands, bounded maintenance (`cache`, `rewrite`, `transient`, `cron event`), and `spacepress *`.
+  - **Refused (`wp_cli_command_not_allowed`):** Arbitrary execution (`eval`, `shell`), direct database or config edits (`db`, `config`), and plugin, theme, or user writes (`plugin install`).
+  - **Recovery mode:** Pass `--mode limited` remotely to skip the site's themes and plugins when a broken theme or plugin blocks a normal run.
+  - **Remote output:** Remote runs return `output: null` because the runtime exposes no stdout channel.
+- **[`sf apply`](/cli/reference#sf-apply):** Pushes saved Space and runtime changes onto the live runtime (`POST /v1/spaces/{spaceId}/apply`) and checks live apply state (`GET /v1/spaces/{spaceId}/apply-state` — `pending`, `applying`, `live`, or `failed`). Pass `--no-wait` to return immediately with the operation handle.
+
+## Themes and `theme.json`
+
+SpacePress pages rendered with `template = "theme"` mount inside your block theme's **Page content** block (`<!-- wp:sp/page /-->`), so editors can adjust headers and footers in the WordPress Site Editor. Spacefast also reads a WordPress-compatible `theme.json` up to 64 KiB at your project root to infer palette colors and font families for system pages. See [Customization and error pages](/customization).

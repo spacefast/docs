@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/tenant_not_granted",
   "title": "Tenant not granted",
-  "status": 400,
+  "status": 422,
   "detail": "Your credential has no grant on the requested tenant.",
   "code": "tenant_not_granted",
   "requestId": "req_4mz0v8qk"

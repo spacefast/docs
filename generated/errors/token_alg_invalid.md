@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_alg_invalid",
   "title": "Token alg invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token uses a signing algorithm that Spacefast does not allow.",
   "code": "token_alg_invalid",
   "requestId": "req_4mz0v8qk"

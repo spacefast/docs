@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_contains_credential",
   "title": "Team design system contains credential",
-  "status": 400,
+  "status": 422,
   "detail": "The design guidance looks like it contains a password, key, or token.",
   "code": "team_design_system_contains_credential",
   "requestId": "req_4mz0v8qk"

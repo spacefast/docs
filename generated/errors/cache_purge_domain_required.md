@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/cache_purge_domain_required",
   "title": "Cache purge domain required",
-  "status": 400,
+  "status": 422,
   "detail": "A purge request must name the domain to purge.",
   "code": "cache_purge_domain_required",
   "requestId": "req_4mz0v8qk"

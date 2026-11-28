@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_registration_active",
   "title": "Domain registration active",
-  "status": 400,
+  "status": 422,
   "detail": "The domain has an active registration, which blocks this operation.",
   "code": "domain_registration_active",
   "requestId": "req_4mz0v8qk"

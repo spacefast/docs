@@ -1,0 +1,124 @@
+---
+title: Stats
+description: Edge traffic stats and browser visitor stats for a Space, what each source counts, and how to read them from the dashboard, CLI, and API
+---
+
+Views exclude crawlers and failed requests. Requests count every HTTP request, and unique visitors use a separate daily count without those filters.
+
+Spacefast measures traffic from two independent sources:
+
+| Source | Where to open it | How it measures | Windows |
+| --- | --- | --- | --- |
+| **Edge traffic stats** | **Settings → Stats**, [`sf analytics`](/cli/reference#sf-analytics), [`getSpaceAnalytics`](/api/reference/activity/getspaceanalytics) | Script-free request accounting at the edge | 48 hours (hourly), 7 days (daily), 30 days (daily) |
+| **Browser stats (Spacefast Stats)** | **Stats** in the Space sidebar, or the on-Space Stats drawer | Browser tracker on published pages | Live (**Now**) and 7, 30, or 90 days (**Trends**) |
+
+Use edge traffic stats to inspect HTTP requests, bandwidth, and busy paths. Use browser stats to watch live visitors and explore engagement, referrers, and scroll depth over time. The two sources count visits differently, so do not expect their totals to match.
+
+## Edge traffic stats
+
+Open the Space and go to **Settings → Stats**. A segmented control labeled **Time period** switches between three windows.
+
+| Window | Buckets |
+| --- | --- |
+| 48 hours | Hourly |
+| 7 days | Daily |
+| 30 days | Daily |
+
+Thirty days is the longest window for edge traffic stats.
+
+The page shows **Requests**, **Visitor requests**, and **Visitors per day**. Visitor requests include assets, not only page loads. Visitors per day averages complete UTC days in the selected window.
+
+| Section | What it lists |
+| --- | --- |
+| Traffic by period | One row per bucket, with requests, visitor requests, visitors on daily windows, and bandwidth |
+| Visitors | Daily distinct counts in the period table. The hourly window lists daily counts under the visitor card |
+| Top paths | The busiest paths in the window |
+
+Buckets are labeled in UTC. Bandwidth is available in the table's field picker but hidden by default. Cached and uncached traffic have [plan allowances and usage rates](/pricing).
+
+### What counts as a view
+
+A **request** is any HTTP request the Space answered. A **view** is a request with a status under 400 that did not come from a crawler, assets included. `views` cannot exceed `requests`; the difference is crawler traffic and responses with a status of 400 or higher.
+
+**Unique visitors** come from a separate daily measurement. It ignores the crawler and status filters, and it counts every hostname mapped to the Space together. Visitors are only counted per day. Daily counts are not added into a window total, so the dashboard shows daily counts and an average over complete days instead.
+
+**Top paths** and top hosts are capped at 10 entries each.
+
+### How edge stats work
+
+The edge that serves your Space counts every request. Spacefast adds nothing to your pages, runs no script in the visitor's browser, and sets no cookie. A static HTML file with no JavaScript counts like any other file.
+
+Each time you open edge stats, Spacefast reads them from the edge instead of storing its own copy. As a result:
+
+- A Space that has never published a version has no runtime to read, and the request answers `runtime_not_provisioned`. Publish first.
+- When stats cannot be read, the page says **Analytics are temporarily unavailable** and offers **Try again** instead of showing zeros. Your Space keeps serving.
+
+### Read edge stats from the CLI
+
+Run [`sf analytics`](/cli/reference#sf-analytics) to print edge traffic stats in the terminal:
+
+```bash
+sf analytics --space my-space --window 30d
+```
+
+`--window` takes `48h`, `7d`, or `30d` and defaults to `7d`. The output prints the window, the granularity, the totals, the per-day visitors, the top paths, and the series. `sf analytics` returns edge traffic stats only; it does not return the browser stats **Now** or **Trends** cards.
+
+### Read edge stats from the API
+
+Fetch the same edge stats payload with [`getSpaceAnalytics`](/api/reference/activity/getspaceanalytics):
+
+```bash
+curl "https://api.spacefast.com/v1/spaces/spc_xxxxxxxx/analytics?window=7d" \
+  -H "Authorization: Bearer sfa_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+| Field | What it holds |
+| --- | --- |
+| `window`, `since`, `until` | The window you asked for and the range it resolved to |
+| `granularity` | `hourly` for `48h`, `daily` otherwise |
+| `views` | Total views in the window |
+| `bandwidthBytes` | Total bytes served |
+| `series[]` | Per bucket: `bucket`, `requests`, `views`, `bandwidthBytes` |
+| `visitorsByDay[]` | Per day: `date`, `visitors` |
+| `topPaths[]` | `path` and `views`, up to 10 |
+| `topHosts[]` | `host` and `views`, up to 10 |
+
+There is no window-level request total in the payload. Sum `series[].requests` for it, which is what the dashboard does.
+
+## Browser stats (Now and Trends)
+
+Open the Space and choose **Stats** in the sidebar to see who is on your Space right now (**Now**) and how visits change over 7, 30, or 90 days (**Trends**). You must be signed in as an editor of the Space.
+
+### Requirements and controls
+
+- **Team access**: Browser stats aren't available to every team yet. Once your team has access, Spacefast tracks every Space by default unless an editor switches it off.
+- **Per-Space switch**: on the **Stats** page, choose **Turn Off** to stop tracking a Space or **Turn On Stats** to resume it from the next visit. Turning it off keeps existing history.
+- **Page Enhancements**: collecting visits on published pages requires **Page Enhancements** enabled in the Space's settings (`superpowers.enabled` in [the configuration file](/config-file#access-public-identity-theme-and-snippets)). Opening the dashboard does not start collection while Page Enhancements is off.
+- **Comments not required for the dashboard**: the dashboard **Now** and **Trends** cards do not require [Comments](/comments). If only one of the live or history services is configured on a deployment, only its card appears.
+
+### What Now and Trends show
+
+| View | What it shows |
+| --- | --- |
+| **Now** | Live visitor count, active pages, and recent arrivals |
+| **Now** | Traffic sources, countries, engagement, and recent events where available |
+| **Trends** | Visitors, page views, and engaged time over 7, 30, or 90 days |
+| **Trends** | Top pages, period-over-period comparisons, and engagement by page |
+| **Trends** | Referrers and scroll depth |
+
+The Space's analytics profile orders which live views appear first. Any measurement a source cannot supply is shown as unavailable or left out, never counted as zero. Visitor analytics counts visitors in aggregate without listing individual people.
+
+Browser events carry no IP address, raw user agent, or browser fingerprint. Spacefast drops events whenever the visitor denies analytics consent or sends Global Privacy Control (`GPC`). A visitor who has not consented is counted per UTC day with a daily rotating hash, so multi-day totals are not additive. Spacefast keeps raw events for up to 395 days.
+
+If **Trends** cannot be reached, reload the page to try again. A gap or an error is not evidence that nobody visited.
+
+### Watch on the live Space
+
+For a published Space, the **Stats** page links straight to the live Space:
+
+- **`Spacebar Stats`** appears when both **Page Enhancements** and [Comments](/comments) are enabled on the live Space (not only on previews), opening the live Space with its on-Space Stats drawer.
+- Otherwise, the button opens the live Space without the drawer.
+
+## Third-party analytics tags
+
+To run external analytics such as Google Analytics, Plausible, or PostHog with consent controls and reviewed releases, use [Tag Manager](/tag-manager). You can also add a Google Analytics measurement ID or Google Tag Manager container ID under **Customization**; see [Customization](/customization).

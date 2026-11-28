@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/jetpack_space_not_deleting",
   "title": "Jetpack space not deleting",
-  "status": 400,
+  "status": 422,
   "detail": "License cleanup requires a space marked for deletion.",
   "code": "jetpack_space_not_deleting",
   "requestId": "req_4mz0v8qk"

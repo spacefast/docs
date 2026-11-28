@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_realtime_message_invalid",
   "title": "Zero realtime message invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero realtime websocket message is malformed.",
   "code": "zero_realtime_message_invalid",
   "requestId": "req_4mz0v8qk"

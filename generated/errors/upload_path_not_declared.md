@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_path_not_declared",
   "title": "Upload path not declared",
-  "status": 400,
+  "status": 422,
   "detail": "An uploaded path was not declared in the version's manifest.",
   "code": "upload_path_not_declared",
   "requestId": "req_4mz0v8qk"

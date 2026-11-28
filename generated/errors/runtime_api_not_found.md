@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_api_not_found",
   "title": "Runtime api not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested runtime action was not found.",
   "code": "runtime_api_not_found",
   "requestId": "req_4mz0v8qk"

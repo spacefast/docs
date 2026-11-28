@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/connector_first_party_immutable",
   "title": "Connector first party immutable",
-  "status": 400,
+  "status": 422,
   "detail": "This connector is built into Spacefast and cannot be edited or removed.",
   "code": "connector_first_party_immutable",
   "requestId": "req_4mz0v8qk"

@@ -1,0 +1,225 @@
+---
+title: Collections and CMS
+description: Define SpacePress collections, SQL tables, globals, typed fields, TSX pages, interactive islands, Markdown sync, and WooCommerce stores in TypeScript
+---
+
+SpacePress gives every Space a typed CMS, custom SQL tables, server-rendered TSX pages, and native WooCommerce stores. Declare your models in TypeScript under `sp/` (with `spacepress.config.ts`) or inline under `app` in `spacefast.config.ts`. Spacefast backs them with your Space's database on publish.
+
+## Choose a storage kind
+
+SpacePress runs a dual storage engine on WordPress and MySQL. Pick the builder that matches how you edit and query the data:
+
+| Builder | Backed by | Best for |
+| --- | --- | --- |
+| `collection()` | WordPress custom post type | Editorial content needing the block editor, drafts, revisions, staged versions, comments, URL routing, or Markdown sync |
+| `table()` | Dedicated SQL table | Relational app data, high-volume records, compound `.index()` definitions, and forward-only SQL migrations |
+| `global()` | WordPress options singleton | Site-wide settings, navigation links, and feature flags |
+| `wp.posts.extend()` | Built-in WordPress `post` | Native blog posts extended with typed fields, custom URL patterns, comments, and Markdown sync |
+| `userProjection()` | `wp_users` and `wp_usermeta` | Typed user profiles without duplicating WordPress accounts |
+| `taxonomy()` | WordPress term tables | Flat or hierarchical vocabularies attached with `on: [...]` or `terms()` |
+| `store()`, `product()`, `order()` | Native WooCommerce | Online stores with currencies, shipping zones, checkout blocks, and optimistic cart hooks |
+
+### Define collections and tables in TypeScript
+
+Export your storage kinds from `sp/schema.ts` or `spacepress.config.ts`. Pass the fields object first (`table({ ... })` takes no table-name string; the exported variable name becomes the kind name). Declare kinds in `sp/schema.ts` instead of importing them from `spacepress.config.ts`, and pass a lowercase kebab-case slug to `defineConfig({ name })`. All columns are `NOT NULL` unless you chain `.optional()`:
+
+```ts spacepress.config.ts
+import {
+  boolean,
+  collection,
+  defineConfig,
+  ref,
+  richText,
+  slug,
+  table,
+  text,
+  wp,
+} from "spacepress";
+
+export const posts = wp.posts.extend(
+  { subtitle: text().max(200).optional() },
+  {
+    url: "/blog/:slug",
+    sync: "content/posts/*.md",
+    comments: { moderation: "first-time", threaded: 2 },
+  },
+);
+
+export const docs = collection(
+  {
+    title: text().min(1).max(160),
+    slug: slug({ source: "title" }),
+    content: richText().searchable(),
+    internalNotes: text().optional().searchable(false),
+  },
+  { hierarchical: true, url: "/docs/:path", sync: "content/docs/**/*.md" },
+);
+
+export const tasks = table(
+  {
+    title: text().min(1).max(120),
+    done: boolean().default(false),
+    postId: ref(posts).optional().onDelete("cascade"),
+  },
+  { access: { read: "anyone", create: "authenticated", update: "authenticated", delete: "editor" } },
+);
+
+export default defineConfig({ name: "my-space", seed: true });
+```
+
+### Field builders and modifiers
+
+SpacePress validates every field across REST requests, `db` calls, CLI writes, and the admin editor:
+
+- **Scalars:** `text()` (single-line or multi-line), `integer()`, `number()`, `boolean()`, `date()`, `timestamp()`, `json<T>()`
+- **Semantic:** `email()`, `url()`, `slug({ source })`, `richText()`, `select([...])` (chain `.many()` for multi-select)
+- **Relations and files:** `ref(kind)` (`.many()`, `.onDelete("cascade" | "restrict" | "setNull")`, `.reverse("name")`), `terms(taxonomy)`, `media({ accept })`, `file(bucket)`
+- **Structured:** `group(fields)`, `repeater(fields)`, `blocks(layouts)`
+
+Chain modifiers directly onto any supported column:
+
+- **Validation and defaults:** `.optional()`, `.min(n)`, `.max(n)`, `.pattern(/.../)`, `.unique()`, `.default(v)`, `.defaultNow()`, `.$default(fn)`, `.$onUpdate(fn)`, `.validate((value, ctx) => ...)`
+- **Search and localization:** `.searchable()` (or `.searchable(false)` to exclude title, content, or specific text fields from search) and `.localized()` for per-locale fields
+- **Access and editor UI:** `.access({ read, create, update })` for per-field masks, `.ui({ label, help, placeholder, width })`, and `.showIf({ ... })` for conditional editor visibility
+- **Safe renames without data loss:** `.column("old_name")` keeps an existing physical SQL column, `storageName: "old_table"` keeps a table name, and `.alias("oldName")` keeps older API and filter names working during a rename
+
+## Inline `app` config in `spacefast.config.ts`
+
+For smaller schemas or when you want every Space setting in one file, declare `app` directly inside `spacefast.config.ts` with `defineConfig` from `spacefast/config`. Publish only one app definition per project — either inline under `app` or in a standalone `spacepress.config.ts`, never both. See [Configuration](/config-file#coexistence-with-spacepressconfigts).
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "my-space",
+  app: {
+    collections: {
+      posts: { label: "Posts", title: "title" },
+    },
+    tables: {
+      subscribers: { columns: { email: "text" } },
+    },
+    admin: { enabled: true, title: "Editorial" },
+    auth: { enabled: true },
+    locales: { default: "en", supported: ["en", "es"] },
+  },
+});
+```
+
+The inline `app` block accepts these keys:
+
+| Key | Type | What it configures |
+| --- | --- | --- |
+| `name` | string (1–128 chars) | Optional app display name |
+| `collections` | record of objects | Structured content collections with admin screens and query access |
+| `tables` | record of objects | Custom relational tables in the Space's database |
+| `actions` | record of objects | Server actions and form handlers; see [Actions, queries, and jobs](/actions) |
+| `pages` | record of objects | App page definitions |
+| `routes` | object or array of objects | Custom application routes |
+| `admin` | boolean or `{ enabled, path, title }` | Admin interface toggle, path, and title |
+| `auth` | `{ enabled, providers, roles, twoFactor }` | App authentication settings and role definitions |
+| `locales` | `string[]` or `{ default, supported }` | Supported locales and default locale |
+| `plugins` | array or object | App plugin entries |
+
+## Pages, layouts, and `"use client"` islands
+
+Place TSX pages and layouts under `sp/app/`. SpacePress compiles them to server-rendered PHP on publish, with zero React shipped to the browser:
+
+- **Routing files:** `sp/app/layout.tsx` (shared shell, `metadata`, `template = "theme" | "blank" | "<slug>"`), `page.tsx`, `[slug]/page.tsx`, `[...path]/page.tsx`, `(group)/`, `not-found.tsx`, and `login.tsx`. Dynamic route `params` is a plain synchronous object (such as `{ slug: string }`), not a Promise — read `params.slug` directly instead of `await params`.
+- **Automatic document shell and assets:** SpacePress renders `<html>`, `<head>`, and `<body>` automatically. Never render `<html>`, `<head>`, `<meta>`, or `<link>` inside TSX components — set head tags with `export const metadata = { title: "..." }`, import stylesheets directly from TSX (`import "./app.css"`), and place static files or images under `public/` (served from `/`).
+- **Page Enhancements and `inject` snippets:** Rendered SpacePress HTML pages receive Spacefast Page Enhancements ([Tag Manager](/tag-manager), browser stats, Remix pill, and Space bar / [Comments](/comments)) plus `inject` snippets from `spacefast.config.ts`. `/wp-json/*`, `/wp-admin/*`, `/__spacefast/auth/*`, and `*.md` Markdown twins are excluded.
+- **Typed search params and guards:** Export `search = { page: integer().default(1) }` for typed query parameters and `guard = "authenticated"` (or any role or access function) for route-level protection.
+- **Built-in server components (`spacepress/app`):** `<Link>` (Interactivity Router navigation), `<Content>` (block content), `<Html>` (sanitized HTML), `<Comments>`, `<Pagination>`, `<Search>`, `<SearchResults>`, `<LoginForm>`, `<TemplatePart>`, `<Live>`, and `useFormState(action)`.
+- **Interactive islands (`"use client"`):** Start a component file with `"use client";`, import `useState`, `useEffect`, or `useRef` from `"react"`, SpacePress client hooks (`useLive`, `useMutation`, `useMount`, `useEvent`, `sharedState`, `uploadFile`) from `"spacepress/react"`, and typed client references from `sp/_generated/api`. SpacePress renders the initial HTML on the server and compiles client interactivity to the WordPress Interactivity API.
+
+```tsx sp/app/page.tsx
+import { posts } from "spacepress/server/db";
+import { Link } from "spacepress/app";
+
+export const metadata = { title: "Home" };
+
+export default async function Home() {
+  const latest = await posts.list({ orderBy: { publishedAt: "desc" }, limit: 10 });
+  return (
+    <main>
+      <h1>Latest posts</h1>
+      <ul>
+        {latest.map((post) => (
+          <li key={post.id}>
+            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+## Two-way Markdown and Git sync
+
+Bind any `collection()`, `wp.posts.extend()`, `taxonomy()`, `product()`, or `table()` to Markdown or JSON files in your repository with `sync`:
+
+```ts sp/schema.ts
+export const guides = collection(
+  {
+    title: text(),
+    slug: slug({ source: "title" }),
+    content: richText().optional(),
+  },
+  { hierarchical: true, url: "/guides/:path", sync: "content/guides/**/*.md" },
+);
+```
+
+- A `**` pattern maps subdirectories into parent-child hierarchy (`index.md` represents the folder item).
+- Every synced record receives a stable `uid` so file renames and slug changes stay linked across Git and WordPress.
+- Set `seed: true` in `defineConfig()` to populate synced files on an empty Space without overwriting existing editorial changes.
+- Reconcile changes, inspect conflicts, or convert code-authored pages to editable blocks through the [Content sync API](/wordpress#content-sync-and-source-conversions) or `npx spacepress sync`.
+
+## Native WooCommerce stores (`sf add shop`)
+
+Add a full WooCommerce store to any Space with `sf add shop`. It scaffolds `sp/shop.ts`, a native WooCommerce checkout block at `sp/app/checkout/page.md`, and sample Markdown product and category files you own and edit:
+
+```bash
+sf add shop --dry-run
+sf add shop
+```
+
+`sp/shop.ts` declares `store()` (currency, country, sell-to regions, shipping zones, and payment methods) alongside `product()`, `productCategory()`, `productTag()`, and `order()`. When a project exports `store()`, the build generates `commerce.ts`, `cart-store.ts`, and `cart-react.ts` in `sp/_generated/client/` with `createCartHooks(React)` (`useCart()` and `useCartCount()`, optimistic quantity updates, and automatic rollback on failure).
+
+## How content is stored across live and preview
+
+Spacefast stores live collections, custom tables, and WordPress data in your Space's dedicated MySQL database. You do not provision or manage a connection string.
+
+- Inspect any table and read or edit rows by primary key with `sf db tables` and `sf db rows`. See [Database and ORM](/database).
+- Preview versions use an isolated SQLite database per version, seeded from that version's code on its first request. Edits made in a preview never touch live data.
+- Promoting a preview version initializes it against the live MySQL database before switching traffic.
+- Owning team members keep their live Space role when administering a preview version.
+
+## Read collections from Workers and `"use worker"` routes
+
+When a Space runs both a SpacePress app and a [Worker](/functions) — from `functions/` or a SpacePress `route.ts` starting with `"use worker";` — Spacefast injects `env.SPACE` into the Worker handler (typed by generated `worker.d.ts`; `env.SPACEPRESS` and `env.APP` remain aliases). Use `env.SPACE.collection(name)` to read and write records while forwarding the visitor's session cookie:
+
+```ts functions/api/posts.ts
+export async function GET(request: Request, { env }: { env: any }) {
+  const posts = await env.SPACE.collection("posts").list({ limit: 10 });
+  return Response.json(posts);
+}
+```
+
+`env.SPACE.collection(name)` exposes five methods:
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `list(params?)` | `GET` | Collection list payload |
+| `get(id, params?)` | `GET` | One record, or `null` on `404` |
+| `create(data)` | `POST` | Created record |
+| `update(id, data)` | `PATCH` | Updated record |
+| `delete(id)` | `DELETE` | Delete response |
+
+`env.SPACE.query(path, params)` runs a `GET` query against the app's REST namespace, and `env.SPACE.fetch(path, init)` forwards `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE` requests to the app runtime.
+
+## Admin editor, REST API, and CLI
+
+- **Admin editor, WordPress REST API, Content sync, Abilities, and WP-CLI:** See [WordPress and Content API](/wordpress) for `POST /v1/spaces/{spaceId}/content/*`, direct WordPress REST tokens, and `sf app wp`.
+- **Validate offline:** Run [`sf check`](/cli/reference#sf-check-dir) to validate `spacefast.config.ts`, SpacePress schemas, routing rules, Worker routes, and secret scanning in one pass (exits `2` on failure).
+- **System and error pages:** [`sf pages`](/cli/reference#sf-pages) manages Spacefast system and error page templates (`_pages/*.html`), not CMS collections. See [Customization and error pages](/customization).

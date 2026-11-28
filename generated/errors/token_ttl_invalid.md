@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/token_ttl_invalid",
   "title": "Token ttl invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The partner token time claims are expired, premature, or outside the lifetime limit.",
   "code": "token_ttl_invalid",
   "requestId": "req_4mz0v8qk"

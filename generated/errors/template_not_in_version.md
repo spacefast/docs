@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/template_not_in_version",
   "title": "Template not in version",
-  "status": 400,
+  "status": 422,
   "detail": "The configuration names a template file the version does not contain.",
   "code": "template_not_in_version",
   "requestId": "req_4mz0v8qk"

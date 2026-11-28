@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_js_globals_failed",
   "title": "Zero js globals failed",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner cannot install runtime globals for the endpoint.",
   "code": "zero_js_globals_failed",
   "requestId": "req_4mz0v8qk"

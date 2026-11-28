@@ -1,9 +1,9 @@
 ---
 title: "upload_chunk_invalid"
-description: "Chunk contents are not canonical base64."
+description: "Chunk contents are not standard base64."
 ---
 
-Chunk contents are not canonical base64.
+Chunk contents are not standard base64.
 
 **How to resolve:** Encode the exact bytes as padded standard base64, or use utf8.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_chunk_invalid",
   "title": "Upload chunk invalid",
-  "status": 400,
-  "detail": "Chunk contents are not canonical base64.",
+  "status": 422,
+  "detail": "Chunk contents are not standard base64.",
   "code": "upload_chunk_invalid",
   "requestId": "req_4mz0v8qk"
 }

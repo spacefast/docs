@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/user_banned",
   "title": "User banned",
-  "status": 400,
+  "status": 422,
   "detail": "This user is banned for a policy or abuse violation and cannot perform this action.",
   "code": "user_banned",
   "requestId": "req_4mz0v8qk"

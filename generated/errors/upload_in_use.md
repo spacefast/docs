@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_in_use",
   "title": "Upload in use",
-  "status": 400,
+  "status": 422,
   "detail": "An accepted operation is using this upload.",
   "code": "upload_in_use",
   "requestId": "req_4mz0v8qk"

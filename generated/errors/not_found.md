@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/not_found",
   "title": "Not found",
-  "status": 400,
+  "status": 422,
   "detail": "The requested resource was not found.",
   "code": "not_found",
   "requestId": "req_4mz0v8qk"

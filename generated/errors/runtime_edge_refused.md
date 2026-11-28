@@ -1,9 +1,9 @@
 ---
 title: "runtime_edge_refused"
-description: "WP Cloud's edge refused the request before it reached this Space's runtime."
+description: "Spacefast's edge refused the request before it reached this Space's runtime."
 ---
 
-WP Cloud's edge refused the request before it reached this Space's runtime.
+Spacefast's edge refused the request before it reached this Space's runtime.
 
 **How to resolve:** Nothing in your request needs to change. Wait a few minutes and retry. If it keeps failing, contact support with the `requestId`.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_edge_refused",
   "title": "Runtime edge refused",
-  "status": 400,
-  "detail": "WP Cloud's edge refused the request before it reached this Space's runtime.",
+  "status": 422,
+  "detail": "Spacefast's edge refused the request before it reached this Space's runtime.",
   "code": "runtime_edge_refused",
   "requestId": "req_4mz0v8qk"
 }

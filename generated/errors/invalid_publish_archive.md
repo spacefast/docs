@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_publish_archive",
   "title": "Invalid publish archive",
-  "status": 400,
+  "status": 422,
   "detail": "The uploaded archive cannot be read as a valid zip.",
   "code": "invalid_publish_archive",
   "requestId": "req_4mz0v8qk"

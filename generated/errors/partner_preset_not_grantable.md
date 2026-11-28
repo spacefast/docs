@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/partner_preset_not_grantable",
   "title": "Partner preset not grantable",
-  "status": 400,
+  "status": 422,
   "detail": "The `partner_admin` preset is a tenant-rooted partner credential and cannot be minted as an ordinary team API key.",
   "code": "partner_preset_not_grantable",
   "requestId": "req_4mz0v8qk"

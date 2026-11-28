@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runner_protocol_unsupported",
   "title": "Zero runner protocol unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero runner received an unsupported invoke protocol.",
   "code": "zero_runner_protocol_unsupported",
   "requestId": "req_4mz0v8qk"

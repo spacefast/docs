@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_replace_all_requires_fresh_plan",
   "title": "Dns provider replace all requires fresh plan",
-  "status": 400,
+  "status": 422,
   "detail": "This provider requires a fresh full-zone plan before replacing DNS records.",
   "code": "dns_provider_replace_all_requires_fresh_plan",
   "requestId": "req_4mz0v8qk"

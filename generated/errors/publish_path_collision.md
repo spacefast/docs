@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_path_collision",
   "title": "Publish path collision",
-  "status": 400,
+  "status": 422,
   "detail": "Two different artifacts would serve the same URL after directory-index or clean-URL resolution.",
   "code": "publish_path_collision",
   "requestId": "req_4mz0v8qk"

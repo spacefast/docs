@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_decision_state",
   "title": "Invalid decision state",
-  "status": 400,
+  "status": 422,
   "detail": "The decision record is in a state this endpoint cannot interpret.",
   "code": "invalid_decision_state",
   "requestId": "req_4mz0v8qk"

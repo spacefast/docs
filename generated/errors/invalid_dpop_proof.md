@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_dpop_proof",
   "title": "Invalid dpop proof",
-  "status": 400,
+  "status": 422,
   "detail": "The request's proof of possession is missing, invalid, or already used.",
   "code": "invalid_dpop_proof",
   "requestId": "req_4mz0v8qk"

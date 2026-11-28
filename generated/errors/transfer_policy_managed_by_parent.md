@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/transfer_policy_managed_by_parent",
   "title": "Transfer policy managed by parent",
-  "status": 400,
+  "status": 422,
   "detail": "The parent team controls this Space transfer policy.",
   "code": "transfer_policy_managed_by_parent",
   "requestId": "req_4mz0v8qk"

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_operation_failed",
   "title": "Dns provider operation failed",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS provider operation failed before the requested change was accepted.",
   "code": "dns_provider_operation_failed",
   "requestId": "req_4mz0v8qk"

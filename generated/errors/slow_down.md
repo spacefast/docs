@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/slow_down",
   "title": "Slow down",
-  "status": 400,
+  "status": 422,
   "detail": "The device login is being polled faster than the advised interval.",
   "code": "slow_down",
   "requestId": "req_4mz0v8qk"

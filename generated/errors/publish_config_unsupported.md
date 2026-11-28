@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/publish_config_unsupported",
   "title": "Publish config unsupported",
-  "status": 400,
+  "status": 422,
   "detail": "The publish carries configuration this endpoint does not support.",
   "code": "publish_config_unsupported",
   "requestId": "req_4mz0v8qk"

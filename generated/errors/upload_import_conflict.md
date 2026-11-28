@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_import_conflict",
   "title": "Upload import conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The import target already contains chunked content.",
   "code": "upload_import_conflict",
   "requestId": "req_4mz0v8qk"

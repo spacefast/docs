@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/system_space_conflict",
   "title": "System space conflict",
-  "status": 400,
+  "status": 422,
   "detail": "The tenant's system space changed since the value you sent as `baseSystemSpaceId`, so the update was rejected.",
   "code": "system_space_conflict",
   "requestId": "req_4mz0v8qk"

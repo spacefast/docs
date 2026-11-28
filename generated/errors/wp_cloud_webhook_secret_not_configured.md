@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/wp_cloud_webhook_secret_not_configured",
   "title": "Wp cloud webhook secret not configured",
-  "status": 400,
+  "status": 422,
   "detail": "The infra webhook secret is not configured on this deployment.",
   "code": "wp_cloud_webhook_secret_not_configured",
   "requestId": "req_4mz0v8qk"

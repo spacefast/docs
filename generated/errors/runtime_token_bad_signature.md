@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_token_bad_signature",
   "title": "Runtime token bad signature",
-  "status": 400,
+  "status": 422,
   "detail": "The runtime token signature did not verify.",
   "code": "runtime_token_bad_signature",
   "requestId": "req_4mz0v8qk"

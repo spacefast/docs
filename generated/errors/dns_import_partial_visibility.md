@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_import_partial_visibility",
   "title": "Dns import partial visibility",
-  "status": 400,
+  "status": 422,
   "detail": "The DNS import cannot see the full zone, so importing would lose records.",
   "code": "dns_import_partial_visibility",
   "requestId": "req_4mz0v8qk"

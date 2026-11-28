@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/browser_origin_not_allowed",
   "title": "Browser origin not allowed",
-  "status": 400,
+  "status": 422,
   "detail": "This browser origin cannot perform authenticated mutations.",
   "code": "browser_origin_not_allowed",
   "requestId": "req_4mz0v8qk"

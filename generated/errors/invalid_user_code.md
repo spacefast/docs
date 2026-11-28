@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/invalid_user_code",
   "title": "Invalid user code",
-  "status": 400,
+  "status": 422,
   "detail": "The user code does not match a pending device login.",
   "code": "invalid_user_code",
   "requestId": "req_4mz0v8qk"

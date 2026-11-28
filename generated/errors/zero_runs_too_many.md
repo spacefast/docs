@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_runs_too_many",
   "title": "Zero runs too many",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero run-handler payload exceeds the supported handler count.",
   "code": "zero_runs_too_many",
   "requestId": "req_4mz0v8qk"

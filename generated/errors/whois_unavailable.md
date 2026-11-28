@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/whois_unavailable",
   "title": "Whois unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "WHOIS data is unavailable for this domain right now.",
   "code": "whois_unavailable",
   "requestId": "req_4mz0v8qk"

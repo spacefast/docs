@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dashboard_prefs_key_invalid",
   "title": "Dashboard prefs key invalid",
-  "status": 400,
+  "status": 422,
   "detail": "A dashboard preference key is empty or longer than the 64-character limit.",
   "code": "dashboard_prefs_key_invalid",
   "requestId": "req_4mz0v8qk"

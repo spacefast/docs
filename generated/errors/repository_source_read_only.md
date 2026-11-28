@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/repository_source_read_only",
   "title": "Repository source read only",
-  "status": 400,
+  "status": 422,
   "detail": "This connected repository must be edited upstream.",
   "code": "repository_source_read_only",
   "requestId": "req_4mz0v8qk"

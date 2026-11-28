@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/policy_exceeds_grantor",
   "title": "Policy exceeds grantor",
-  "status": 400,
+  "status": 422,
   "detail": "The requested key policy grants more than your own credential allows.",
   "code": "policy_exceeds_grantor",
   "requestId": "req_4mz0v8qk"

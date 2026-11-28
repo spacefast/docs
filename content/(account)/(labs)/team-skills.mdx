@@ -1,0 +1,60 @@
+---
+title: Team Skills
+description: Turn on preset practices like SEO, accessibility, and spam protection for every agent on your team
+---
+
+<Badge variant="warning">Labs</Badge>
+
+Team Skills are preset, read-only practice briefs that team owners and admins turn on so every connected agent follows the same engineering and publishing standards. Team Skills is a [Labs](/labs) feature and is distinct from the Spacefast CLI and plugin skills documented in [Agent skills](/agents/skills).
+
+## Set up Team Skills
+
+Team Skills share private context storage with [Team Memories](/team-memories) and [Design System](/design-system).
+
+<Steps>
+  <Step title="Apply in Labs">
+    Apply for **Skills** in **Team settings → Labs** with a short note explaining how your team plans to use it. See [Labs](/labs).
+  </Step>
+  <Step title="Initialize context storage">
+    Open **Skills** in your team and select **Set up team context** if prompted, or call [`ensureTeamContext`](/api/reference/teams/ensureteamcontext) (`POST /v1/teams/{teamId}/context`) with no request body.
+  </Step>
+  <Step title="Choose active skills">
+    Turn on the presets you want every agent on the team to follow.
+  </Step>
+</Steps>
+
+## Preset catalog
+
+Spacefast maintains each preset brief in four sections: **When this applies**, **Do**, **Don't**, and **Verify**. Teams toggle presets on or off without editing the brief text.
+
+| Key | Title | Default | Summary |
+| --- | --- | --- | --- |
+| `seo` | SEO | On | Titles, canonicals, sitemaps, and `301` redirects for search engines |
+| `no-slop` | Anti-slop | On | Keeps copy and layout specific to your brand instead of generic templates |
+| `front-end-craft` | Front-end craft | On | Semantic HTML, mobile responsiveness at `320px`, dark mode, and keyboard support |
+| `social-previews` | Social previews | Off | Open Graph tags, share images, and `favicon.ico` icon sets on canonical URLs |
+| `speed` | Speed | Off | Core Web Vitals budgets, image sizing, fonts, and caching |
+| `accessibility` | Accessibility | Off | WCAG 2.2 AA contrast, focus management, landmarks, and screen-reader support |
+| `spam-protection` | Spam protection | Off | Server-side spam checks and honeypots for forms (optional secret variable `AKISMET_API_KEY`) |
+| `contact-forms` | Contact forms | Off | Accessible forms validated and delivered on the server |
+| `security-headers` | Security headers | Off | Safe Content Security Policy (CSP), referrer, and permissions headers where Spacefast allows them |
+| `privacy-consent` | Privacy & consent | Off | Cookie-free defaults, consent handling, and Global Privacy Control |
+
+Presets that require no extra setup (`seo`, `no-slop`, and `front-end-craft`) start enabled once Team Skills is active for your team.
+
+## Read enabled skills before work
+
+Connected agents read enabled skills through [`getTeamAgentContext`](/api/reference/teams/getteamagentcontext) (`GET /v1/teams/{teamId}/agent-context`). The response returns `skills` as Markdown briefs alongside `skillsRevision` and `skillsChanged`.
+
+Pass `skillsRevision` back as `knownSkillsRevision` on later reads. When `skillsChanged` is `false`, `skills` comes back empty and your cached briefs still apply. A team that hasn't joined Skills gets no team skills in agent context.
+
+## Manage skills through the API
+
+All paths below start with `/v1/teams/{teamId}`. See the [OpenAPI specification](https://api.spacefast.com/openapi.json) for full request and response schemas.
+
+| Method and path | Operation | Task |
+| --- | --- | --- |
+| `GET /skills` | [`listTeamSkills`](/api/reference/teams/listteamskills) | List every preset skill, its sections, setup status, and whether it is enabled |
+| `PATCH /skills/{skillKey}` | [`updateTeamSkill`](/api/reference/teams/updateteamskill) | Send `{"enabled": true}` or `{"enabled": false}` to toggle a skill for the whole team |
+
+Reading skills requires `spaces:read`. Toggling a skill changes standing instructions for every agent on the team, so `PATCH /skills/{skillKey}` requires `teams:write` (team owners and admins) and returns `authorization_level_not_allowed` for agent grants.

@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_cart_duplicate",
   "title": "Domain cart duplicate",
-  "status": 400,
+  "status": 422,
   "detail": "The cart lists the same domain more than once.",
   "code": "domain_cart_duplicate",
   "requestId": "req_4mz0v8qk"

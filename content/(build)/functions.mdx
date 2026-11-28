@@ -1,0 +1,179 @@
+---
+title: Workers
+description: Run server-side JavaScript and TypeScript on your Space with a functions/ file router, a root handler.ts, or OpenNext, with built-in Spacefast bindings
+---
+
+Workers (also called Functions in `sf functions` and `runtime.kind: "functions"`) run server-side JavaScript and TypeScript alongside your Space's static files. `sf publish` detects a supported Worker layout automatically without a `runtime` block; declare one in `spacefast.config.ts` only when you need a custom entry path or compatibility date.
+
+Workers are available on every account.
+
+## Where the code lives
+
+`sf publish` inspects your project tree and selects the first matching layout in this order:
+
+| Layout | What it is | Route table |
+| --- | --- | --- |
+| `.open-next/worker.js` | An OpenNext build of a Next.js app | The build's classified routes, or the whole Space when the publish did not run the build |
+| `handler.ts`, `handler.js`, `handler.mjs` | One hand-written Worker at the project root | The whole Space |
+| `functions/` with at least one route module | A file router | Only the routes its files declare |
+| SpacePress `route.ts` with `"use worker";` | SpacePress route files marked for the Worker | Merged with `functions/` into the Space's Worker; collisions with PHP pages or `functions/` fail `sf check` |
+
+A directory matching none of these publishes as a static Space. An OpenNext build takes precedence over a stray `handler.ts`. Files in `sp/wp-hooks/`, `components/`, or `content/` cannot use `"use worker";`, nor can a `"use worker";` file export `guard` or `signature`. Run `sf publish --dry-run --json` to inspect the four build slots (`static`, `spacepress`, `worker`, and `config`).
+
+### Static files first, then the Worker
+
+Files in your published tree serve before the Worker runs. Only a path with no matching static file reaches the Worker route table.
+
+A root `handler.ts` claims the whole Space, receives every path that does not match a file, and its response is final. A `404.html` in the tree is never served for those paths; visitors see whatever the handler returns. To serve a custom 404 page, return HTML from the handler's fallback for browser requests, or use the `functions/` file router instead.
+
+With a `functions/` file router, an unclaimed path never wakes the Worker. It falls through to static handling: your SPA `fallback` if set, then the nearest `404.html`, then the Spacefast error page. See [Redirects and rewrites](/redirects) and [Customization and error pages](/customization).
+
+### The `functions/` file router
+
+Each module's filename is its route, and the HTTP methods it exports are the methods it answers. Nothing is inferred from a module graph, so the route table is exact.
+
+<FileTree>
+- functions/
+  - index.ts
+  - hello.ts
+  - blog/
+    - index.ts
+  - haiku/
+    - "[topic].ts"
+  - posts/
+    - "[...rest].ts"
+</FileTree>
+
+| File | Route |
+| --- | --- |
+| `functions/index.ts` | `/` |
+| `functions/hello.ts` | `/hello` |
+| `functions/blog/index.ts` | `/blog` |
+| `functions/haiku/[topic].ts` | `/haiku/:topic` |
+| `functions/posts/[...rest].ts` | `/posts` and everything under it |
+
+Route modules can use `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, or `.cjs`. Spacefast never routes files starting with `_` or `.`, `.d.ts` files, or `*.test.*` / `*.spec.*` files. A catch-all `[...rest]` must be terminal; Spacefast skips one in the middle of a path.
+
+A path that exists for other HTTP methods answers `405` with an `Allow` header. A path missing from the table never wakes the Worker and falls through to static handling.
+
+## Write a handler
+
+A `functions/` route module exports one function per HTTP method, or a default export for every method. `context` carries `params`, `env`, and `ctx`, and a catch-all binds the remainder of the path as `params.splat`.
+
+This route answers `GET` and `POST` at `/haiku/:topic`:
+
+```ts functions/haiku/[topic].ts
+export async function GET(request: Request, context: { params: Record<string, string> }) {
+  return Response.json({ topic: context.params.topic });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  return Response.json({ received: body }, { status: 201 });
+}
+```
+
+A root Worker default-exports a handler object with a `fetch` method:
+
+```ts handler.ts
+export default {
+  async fetch(request: Request, env: Record<string, string>): Promise<Response> {
+    const url = new URL(request.url);
+    if (url.pathname === "/api/hello") return Response.json({ hello: "world" });
+    return new Response("Not found", { status: 404 });
+  },
+};
+```
+
+The fallback above returns plain text `"Not found"` for every unknown path, including mistyped page URLs. Return an HTML page for browser requests or use `functions/` if the Space needs a custom 404 page; see [Static files first, then the Worker](#static-files-first-then-the-worker). You can also add a streaming AI route to any project with `sf add ai-route` ([`sf add`](/cli/reference#sf-add-recipe-directory)).
+
+Requests and responses are standard Web `Request` and `Response` objects with no Spacefast wrapper.
+
+:::caution[HTTP `429` responses]
+Spacefast uses HTTP `429` for edge and platform rate limiting and can replace a Worker's `429` JSON response with a platform HTML page. Do not rely on your handler's response body or headers, including `Retry-After`, reaching the client on a `429`. See [HTTP status codes](/infrastructure/http-status-codes) for every platform-controlled status code.
+:::
+
+## Configure in `spacefast.config.ts`
+
+Most projects need no `runtime` block because detection picks up `functions/`, `handler.ts`, and `.open-next/worker.js` automatically. Add `runtime` in `spacefast.config.ts` (or `sf.jsonc`) when you need a custom entry path or compatibility date:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  runtime: {
+    kind: "functions",
+    entry: "src/worker.ts",
+    compatibilityDate: "2026-07-01",
+  },
+});
+```
+
+| Key | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `entry` | string | detected | Path to the Worker entry module; naming a missing file fails the publish instead of falling back to static |
+| `compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | Runtime semantics the Worker was built against, frozen per version |
+
+Do not use the removed top-level `functions` config key; it fails publish with [`config_functions_key_removed`](/errors/config_functions_key_removed). Every Worker receives `env.DB` and outbound `fetch()` automatically; leftover `database` or `fetch` keys under `runtime` are ignored with a warning.
+
+## Bindings on `env`
+
+Spacefast injects your Space's variables and platform bindings onto `env`:
+
+| Binding | What it does |
+| --- | --- |
+| `env.<VAR>` | Space and team [Environment variables](/environment-variables) |
+| `env.DB` | D1-shaped SQL binding (`env.DB.prepare(sql).bind(...).all()`) to your Space's [Database](/database) through a broker, with no connection string in the bundle |
+| `env.SPACE` | Calls your Space's [Collections](/collections) and [Actions](/actions) (`env.SPACE.collection(name)`, `env.SPACE.action(name, input)`, `env.SPACE.query(path, params)`, `env.SPACE.fetch(path, init)`), typed by generated `worker.d.ts`, forwarding the visitor's session cookie (`env.SPACEPRESS` and `env.APP` remain available as aliases) |
+| `env.STORAGE` | Reads and writes runtime [Object storage](/object-storage) (`.upload(file, { public })`, `.get(id)`, `.delete(id)`) |
+| `env.CONNECTORS` | Calls declared [Connector roles](/connectors#call-from-workers) (`env.CONNECTORS.<role>.<tool>(args)` or `env.CONNECTORS.call(role, tool, args)`) |
+
+Spacefast withholds these variable names from `env` rather than blanking them, so your code reads them as absent:
+
+| Withheld names | Why |
+| --- | --- |
+| `DATABASE_URL`, `DATABASE_URI`, `MYSQL_URL`, `MYSQL_URI`, `MYSQL_DSN`, `POSTGRES_URL`, `POSTGRES_URI`, `POSTGRESQL_URL`, `POSTGRESQL_URI` | Workers reach the database through `env.DB` only |
+| `SPACE` (on SpacePress Workers) | Reserved for the `env.SPACE` binding; `sf check` and `sf publish` reject a colliding `SPACE` variable or binding |
+| Names starting with `SPACEFAST_` or `ZERO_` | Reserved platform namespace |
+
+## Outbound HTTP
+
+`fetch()` works in every Worker. Reachability depends on whether the Space is claimed:
+
+| Space | Reaches |
+| --- | --- |
+| Claimed | Any public HTTP or HTTPS host |
+| Unclaimed | Trusted list only: `api.anthropic.com`, `api.openai.com`, `api.github.com`, `api.stripe.com`, `api.groq.com`, `api.mistral.ai`, `api.together.xyz`, `generativelanguage.googleapis.com`, `openrouter.ai` |
+
+Requests to other hosts from an unclaimed Space return `403`. Claiming the Space opens outbound access immediately without republishing.
+
+Outbound Worker requests leave from Cloudflare's shared network addresses, not from a dedicated IP for your Space. Upstream APIs that rate-limit by IP can count traffic from other Spaces against yours, and there is no fixed IP to add to an allowlist:
+
+- Authenticate with your own API key so upstream limits apply per key instead of per IP.
+- Retry `429` responses with backoff; if `Retry-After` exceeds the request window, return an error and retry from a later request or [cron run](/crons).
+- Cache upstream responses in `env.DB` to avoid repeat calls.
+- Call public, secret-free APIs directly from the browser when cross-origin requests are allowed.
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Uncompressed compiled bundle | 24 MiB |
+| Routes per version | 256 |
+| Next cache seed, one entry | 2 MiB minus 8,192 bytes |
+| Next cache seed, total | 8 MiB |
+
+The 24 MiB bundle limit includes compiled JavaScript, embedded modules, and the JSON manifest that describes them. Every plan uses the same 24 MiB bundle limit. See [Limits](/limits) for full Space limits.
+
+## Local development and logs
+
+Run `sf dev` to start a local server for `handler.ts` or `functions/` (or Wrangler when a Wrangler config is present), and run `sf check` to validate Worker routes offline before publishing:
+
+```bash
+sf check
+sf dev
+sf logs runtime --follow
+sf logs runtime --handler checkout
+```
+
+Everything your Worker logs appears in the runtime log stream with the handler name and request ID on each line. See [Logs](/logs) for filters, retention, and paging, and [`sf functions`](/cli/reference#sf-functions) in the CLI reference.

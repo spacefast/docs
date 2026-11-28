@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_export_schema_changed",
   "title": "Zero db export schema changed",
-  "status": 400,
+  "status": 422,
   "detail": "The database schema changed while an export was in progress.",
   "code": "zero_db_export_schema_changed",
   "requestId": "req_4mz0v8qk"

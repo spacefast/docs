@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/upload_import_reference_expired",
   "title": "Upload import reference expired",
-  "status": 400,
+  "status": 422,
   "detail": "The download reference expired or refused access.",
   "code": "upload_import_reference_expired",
   "requestId": "req_4mz0v8qk"

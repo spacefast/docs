@@ -1,11 +1,11 @@
 ---
 title: "provider_job_timeout"
-description: "A hosting-provider job timed out while processing this operation."
+description: "An infrastructure job timed out while processing this operation."
 ---
 
-A hosting-provider job timed out while processing this operation.
+An infrastructure job timed out while processing this operation.
 
-**How to resolve:** Retry the operation. If the provider is slow, wait and retry again.
+**How to resolve:** Retry the operation. If the infrastructure is slow, wait and retry again.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/provider_job_timeout",
   "title": "Provider job timeout",
-  "status": 400,
-  "detail": "A hosting-provider job timed out while processing this operation.",
+  "status": 422,
+  "detail": "An infrastructure job timed out while processing this operation.",
   "code": "provider_job_timeout",
   "requestId": "req_4mz0v8qk"
 }

@@ -5,7 +5,7 @@ description: "The team does not match the VIP organization or the Manager no lon
 
 The team does not match the VIP organization or the Manager no longer owns it.
 
-**How to resolve:** Ask a superadmin to check the organization binding and Manager ownership before retrying. Reconciliation does not repair ownership.
+**How to resolve:** Ask a superadmin to check the organization binding and Manager ownership before retrying. Syncing does not repair ownership.
 
 <div data-pagefind-ignore>
 
@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/vip_team_binding_mismatch",
   "title": "Vip team binding mismatch",
-  "status": 400,
+  "status": 422,
   "detail": "The team does not match the VIP organization or the Manager no longer owns it.",
   "code": "vip_team_binding_mismatch",
   "requestId": "req_4mz0v8qk"

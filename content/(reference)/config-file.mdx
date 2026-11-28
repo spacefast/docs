@@ -1,15 +1,31 @@
 ---
-title: Project config reference
-description: Every key the project config accepts in spacefast.config.ts or sf.jsonc, how the CLI finds the file, and which defaults Spacefast computes
-sidebar:
-  order: 1
+title: Configuration
+description: Configure a Space with spacefast.config.ts or sf.jsonc, see file precedence and coexistence rules, and look up every top-level key and cap
 ---
 
-The project config holds the settings Spacefast reads when a version finalizes. Write it as `spacefast.config.ts` or as `sf.jsonc`. Both formats accept the same keys, and both stay supported. `sf init` writes `spacefast.config.ts`.
+`spacefast.config.ts` is the primary configuration file for Spacefast projects and what `sf init` creates. `sf.jsonc` and its JSON/JSONC aliases remain permanently supported and accept the same keys. The CLI evaluates TypeScript at build or publish time and freezes the resolved JSON into the version; the server never runs TypeScript on visitor requests.
 
-## File names and discovery order
+## Example
 
-The CLI looks for the config in the project directory. The first file found wins, in this order.
+Create `spacefast.config.ts` at your project root using `defineConfig` from `spacefast/config`:
+
+```ts spacefast.config.ts
+import { defineConfig } from "spacefast/config";
+
+export default defineConfig({
+  name: "My Space",
+  cleanUrls: true,
+  fallback: { path: "index.html", status: 200 },
+  redirects: [{ source: "/old", destination: "/new", status: 301 }],
+  headers: [{ source: "/assets/*", headers: [{ key: "X-Frame-Options", value: "DENY" }] }],
+  crons: [{ path: "/api/digest", schedule: "daily" }],
+  build: { buildCommand: "npm run build", outputDirectory: "dist" },
+});
+```
+
+## File discovery and precedence
+
+The CLI searches the project root in this order, and the first file found wins:
 
 1. `spacefast.config.ts`
 2. `sf.jsonc`
@@ -20,144 +36,40 @@ The CLI looks for the config in the project directory. The first file found wins
 7. `.sf/config.jsonc`
 8. `.sf/config.json`
 
-No other TypeScript or JavaScript file name is read. `spacefast.config.mts` and `spacefast.config.js` are ignored.
+The CLI ignores other TypeScript or JavaScript filenames, including `spacefast.config.mts` and `spacefast.config.js`. All eight files stay private and never serve to visitors.
 
-All eight files are private. They are never served.
+Keep one serving config file in a project:
 
-## A full example
+- If several exist, the CLI uses the highest-priority file and warns about each ignored file.
+- If the winning file fails to load or validate, the command stops with `config_invalid` (exit 2); it does not fall back to a lower-priority file.
+- An explicit `--config` path (or `SPACEFAST_CONFIG`) on `sf git` commands selects that file for repository build settings; a missing path fails with `config_not_found` (exit 2).
 
-The two files below declare the same config.
+### Coexistence with `spacepress.config.ts`
 
-<Tabs>
-<Tab title="spacefast.config.ts">
+You can declare app definitions (collections, tables, actions, pages, routes, auth, plugins, admin, and locales) either inline under the `app` key in `spacefast.config.ts` or in a standalone `spacepress.config.ts` beside `spacefast.config.ts`.
 
-```ts spacefast.config.ts
-import { defineConfig } from "spacefast/config";
+- Putting serving settings in `spacefast.config.ts` and app definitions in `spacepress.config.ts` keeps both files working side by side.
+- Define your app in either `spacepress.config.ts` or the inline `app` block of `spacefast.config.ts`, not both; [`sf publish`](/cli/reference#sf-publish-dir) and [`sf check`](/cli/reference#sf-check-dir) refuse a project that declares both at once.
 
-export default defineConfig({
-  // Which Space this project publishes to, and what it is called.
-  space: "my-app",
-  name: "My App",
+### JSONC fallback (`sf.jsonc`)
 
-  // Serving shape.
-  index: "index.html",
-  fallback: { path: "index.html", status: 200 },
-  cleanUrls: true,
-  listing: false,
-
-  // Listing, sharing, and browser icon metadata.
-  meta: {
-    title: "My App",
-    description: "What this site is",
-    image: "/og.png",
-    favicon: "/favicon.ico",
-  },
-
-  // Visual tokens for Spacefast-authored pages (404, access, index).
-  theme: { accent: "#0d9488", background: "#ffffff", name: "My App" },
-
-  // Files that receive {{ vars.NAME }} substitution at finalize.
-  templates: ["index.html"],
-
-  // Analytics tags and custom snippets.
-  superpowers: {
-    googleAnalytics: { enabled: true, measurementId: "G-XXXXXXX" },
-  },
-
-  // Settings for builds the platform runs from a connected repository.
-  build: {
-    rootDirectory: "apps/web",
-    installCommand: "pnpm install",
-    buildCommand: "pnpm build",
-    outputDirectory: "dist",
-    timeoutSeconds: 900,
-  },
-
-  // Run code alongside the files.
-  runtime: { kind: "zero", server: "server/index.ts", client: "client/index.tsx" },
-
-  // Scheduled GETs against this space's own paths.
-  crons: [{ path: "/api/digest", schedule: "daily" }],
-
-  // Paths that stay public even on a restricted Space.
-  access: { public: ["/health", "/assets/**"] },
-
-  // Routing rules; see the routing page.
-  redirects: [{ source: "/old", destination: "/new", status: 301 }],
-  headers: [{ source: "/assets/*", headers: [{ key: "X-Frame-Options", value: "DENY" }] }],
-});
-```
-
-</Tab>
-<Tab title="sf.jsonc">
+`sf.jsonc` and the other JSON filenames accept JSON with comments and are capped at 256 KiB. Set `$schema` to `https://spacefast.com/schemas/sf.json`. Spacefast reads it as the format marker; for editor completion today, write `spacefast.config.ts`, whose `defineConfig` types cover every key:
 
 ```jsonc sf.jsonc
 {
   "$schema": "https://spacefast.com/schemas/sf.json",
-
-  // Which Space this project publishes to, and what it is called.
-  "space": "my-app",
-  "name": "My App",
-
-  // Serving shape.
-  "index": "index.html",
-  "fallback": { "path": "index.html", "status": 200 },
-  "cleanUrls": true,
-  "listing": false,
-
-  // Listing, sharing, and browser icon metadata.
-  "meta": {
-    "title": "My App",
-    "description": "What this site is",
-    "image": "/og.png",
-    "favicon": "/favicon.ico"
-  },
-
-  // Visual tokens for Spacefast-authored pages (404, access, index).
-  "theme": { "accent": "#0d9488", "background": "#ffffff", "name": "My App" },
-
-  // Files that receive {{ vars.NAME }} substitution at finalize.
-  "templates": ["index.html"],
-
-  // Analytics tags and custom snippets.
-  "superpowers": {
-    "googleAnalytics": { "enabled": true, "measurementId": "G-XXXXXXX" }
-  },
-
-  // Settings for builds the platform runs from a connected repository.
-  "build": {
-    "rootDirectory": "apps/web",
-    "installCommand": "pnpm install",
-    "buildCommand": "pnpm build",
-    "outputDirectory": "dist",
-    "timeoutSeconds": 900
-  },
-
-  // Run code alongside the files.
-  "runtime": { "kind": "zero", "server": "server/index.ts", "client": "client/index.tsx" },
-
-  // Scheduled GETs against this space's own paths.
-  "crons": [{ "path": "/api/digest", "schedule": "daily" }],
-
-  // Paths that stay public even on a restricted Space.
-  "access": { "public": ["/health", "/assets/**"] },
-
-  // Routing rules; see the routing page.
-  "redirects": [{ "source": "/old", "destination": "/new", "status": 301 }],
-  "headers": [{ "source": "/assets/*", "headers": [{ "key": "X-Frame-Options", "value": "DENY" }] }]
+  "name": "My Space",
+  "cleanUrls": true
 }
 ```
 
-</Tab>
-</Tabs>
+## TypeScript configuration
 
-## TypeScript config
-
-`spacefast.config.ts` is an ES module. Its default export is the config. The export can be an object, a promise of an object, or a function that returns either. An async function works.
+`spacefast.config.ts` is an ES module whose default export is an object, a promise of an object, or a synchronous or async function returning an object.
 
 ```ts spacefast.config.ts
 import { defineConfig } from "spacefast/config";
-import { siteTitle } from "./site/meta";
+import { siteTitle } from "./config/meta";
 
 export default defineConfig(async () => ({
   name: siteTitle,
@@ -165,297 +77,166 @@ export default defineConfig(async () => ({
 }));
 ```
 
-The CLI bundles the file and its relative imports, then imports the bundle into the CLI process. Package imports and Node.js built-ins are not bundled. They resolve from the project directory when the config loads.
+`spacefast/config` exports three symbols:
 
-`sf build`, `sf publish`, and hosted Git builds load the config before they run the install command. Package imports other than `spacefast/config` must already be installed when the config loads. For a fresh checkout, use relative files, Node.js built-ins, and `spacefast/config` so the config does not depend on that install step.
-
-The resolved value must be a JSON object. Strings, numbers, booleans, `null`, arrays, and plain objects are allowed. A key set to `undefined` is dropped. Any other value, for example a `Date`, fails the load.
-
-The config is code. It runs on your machine and in hosted builds. Do not put secrets in it, because the resolved values are stored with the version.
-
-### `defineConfig` and types
-
-The CLI provides the `spacefast/config` module.
-
-| Export | Kind | What it is |
+| Export | Kind | What it does |
 | --- | --- | --- |
-| `defineConfig` | function | Returns its argument unchanged. Its signature type-checks the default export |
-| `SpacefastConfig` | type | The config object |
-| `SpacefastConfigInput` | type | `SpacefastConfig`, a promise of it, or a function that returns either |
+| `defineConfig` | function | Returns its argument unchanged while type-checking the default export |
+| `SpacefastConfig` | type | The config object shape |
+| `SpacefastConfigInput` | type | `SpacefastConfig`, a promise of it, or a factory function returning either |
 
-The CLI supplies the module when it loads the file, so the project needs no dependency for it.
+`defineConfig` is optional; you can type a plain export with `satisfies SpacefastConfig`. The installed CLI resolves `spacefast/config` when loading your file, including global and standalone installs. For editor type checking, add `spacefast` as a dev dependency:
 
-:::note[Editor types]
-The published `spacefast` package includes `spacefast/config` and its types. For editor type checking, add it as a development dependency with `npm install --save-dev spacefast`. The CLI supplies the helper when loading the config even without that project dependency.
-:::
-
-`defineConfig` is optional. A plain default export works the same way.
-
-```ts spacefast.config.ts
-import type { SpacefastConfig } from "spacefast/config";
-
-export default { name: "My App", cleanUrls: true } satisfies SpacefastConfig;
+```bash
+npm install --save-dev spacefast
 ```
 
-## Precedence and failure rules
+How evaluation works:
 
-- The first file in the discovery order wins. The CLI prints a warning for each lower file it ignores.
-- An explicit `--config` path names the file whose `build` block the command sends. The command still reads the config in the current directory to pick the Space.
-- The selected file must be valid. If it fails to load or validate, the command stops with `config_invalid` (exit 2). The CLI never falls back to a lower file.
-- A selected file that exists but cannot be read also fails with `config_invalid`.
-- A `--config` path that does not exist fails with `config_not_found` (exit 2).
+- The CLI bundles `spacefast.config.ts` and its relative imports, while leaving package imports and Node.js built-ins external so they resolve from your project directory.
+- `sf build`, `sf publish`, and Git repository builds load the config before running `installCommand`, so avoid third-party package imports unless they are already installed.
+- The resolved value must be a JSON-compatible object. The CLI omits properties set to `undefined` when writing JSON. Non-JSON values such as `Date` fail with `config_invalid`.
+- Configuration is executable code. Only build repositories you trust, and never store secrets in config files.
 
-A TypeScript file fails to load when it throws, has no default export, imports a package that is not installed, or resolves to a value that is not JSON. A file that loads but sets an invalid key fails validation. For example, `cleanUrls: "yes"` fails with `config_invalid` and a message that starts with `spacefast.config.ts:<line>:<column> cleanUrls:`. For a TypeScript file, the line and column count in the resolved JSON, not in your source.
+### How TypeScript config ships and `.spacefast/config-source.ts`
 
-## Which commands read it
+When `sf publish` or `sf build` packs a version, the CLI evaluates `spacefast.config.ts` and writes the resolved JSON into the version as `sf.jsonc` without modifying your local files.
 
-Every command that selects a Space from the current directory reads the config. That includes commands that take `--space`, so an invalid config stops them too. `sf publish`, `sf build`, `sf dev`, `sf doctor`, and `sf routing inspect` also read it for their own work. `sf doctor` reports the selected file and any ignored files on its `project-config` line.
+The CLI also stores your authored `spacefast.config.ts` inside the version at `.spacefast/config-source.ts` so each version records which TypeScript config produced it:
 
-Two command groups take an explicit path.
+- `.spacefast/config-source.ts` is never served to visitors.
+- Your team can inspect it with the version's uploaded files.
+- `spacefast.config.ts` is also part of your source repository. If you enable public source sharing (`sf source availability`), anyone can read `spacefast.config.ts` on the main branch. Keep tokens and internal URLs out of the file and read them from Space variables instead. The first time you publish a Space whose source is public, `sf publish` prints a one-time warning.
 
-| Command | Flag | What it reads |
-| --- | --- | --- |
-| `sf git connect`, `sf git update`, `sf git build` | `--config=<path>`, env `SPACEFAST_CONFIG` | The `build` block, sent as repository build settings |
-| `sf rules validate`, `sf rules test` | `--file=<path>` | The `firewall` and `cache` blocks |
+Git repository builds evaluate a committed `spacefast.config.ts` inside the isolated build environment. Raw file uploads through the API and hosted MCP inline publishing cannot execute TypeScript config and reject an uploaded `spacefast.config.ts`. To publish prebuilt output without losing TypeScript config, run `sf build` and then `sf publish .spacefast/build-output.tgz --prebuilt`.
 
-## How the TypeScript config ships
+### Migrate from `sf.jsonc`
 
-The server does not run TypeScript. When `sf publish` or `sf build` packs a version, the CLI evaluates `spacefast.config.ts`. It writes the result into the version as `sf.jsonc`, in place of any `sf.jsonc` on disk. Your source files do not change.
+Migration is optional; `sf.jsonc` stays permanently supported. There is no `sf migrate config` command (`sf migrate` imports an external website from a public URL).
 
-Files that the config imports are ordinary files. If they are in the published directory, they are published and served.
+1. Create `spacefast.config.ts` beside your existing `sf.jsonc` (or rename the file).
+2. Add `import { defineConfig } from "spacefast/config";` at the top and wrap your existing object in `export default defineConfig(...)`. Quoted keys, `//` comments, and trailing commas remain valid TypeScript. Remove `$schema`.
+3. Keep all existing settings, including `runtime`, routing rules, `crons`, and `build`.
+4. Run `sf build` (or `sf check`) from the project root to validate your configuration without publishing.
+5. Delete the old `sf.jsonc` once validation passes. Keep `.spacefast/space.json` untouched so your Space link stays intact.
 
-Hosted Git builds run the same CLI build, so they evaluate a committed `spacefast.config.ts` too.
+## Top-level keys
 
-Loose-file publishing through the API or MCP does not evaluate TypeScript config. This includes local MCP publishing when a local directory becomes a file upload. If the upload includes `spacefast.config.ts`, it fails. Run `sf publish` from the project directory to evaluate the config, or run `sf build` and publish its `.spacefast/build-output.tgz` archive with `--prebuilt`. Sending the framework output directory alone does not carry the resolved project config.
+Every top-level key accepted by `spacefast.config.ts` and `sf.jsonc`:
 
-## Migrate from sf.jsonc
-
-Migration is optional. `sf.jsonc` stays supported. If the project uses another JSON file name, use that file in step 1.
-
-1. Move `sf.jsonc` to `spacefast.config.ts` in the project directory.
-2. Add `import { defineConfig } from "spacefast/config";` as the first line.
-3. Put `export default defineConfig(` before the opening `{`.
-4. Put `);` after the closing `}`.
-5. Run `sf doctor`.
-6. Make sure that the `project-config` line starts with `ok` and names `spacefast.config.ts`.
-
-Quoted keys, `//` comments, and trailing commas are valid TypeScript. The pasted object needs no other change. The `$schema` key is allowed but has no effect in TypeScript. Your Space link in `.spacefast/space.json` does not change.
-
-## File format
-
-`sf.jsonc` and the other JSON names are JSON with comments. Point `$schema` at `https://spacefast.com/schemas/sf.json` for editor completion and validation. The schema covers the JSON files only.
-
-The config is capped at 256 KiB. For `spacefast.config.ts`, the cap applies to the resolved JSON, not to the source file.
-
-## Identity
-
-| Key | Type | Default | What it does |
+| Key | Type | What it does | Guide |
 | --- | --- | --- | --- |
-| `$schema` | string | none | Editor pointer to the published JSON Schema |
-| `space` | string | none | The Space this project publishes to, as a slug or an `spc_` id |
-| `name` | string, 1 to 255 chars | none | Display name for the Space |
+| `$schema` | string | JSON Schema pointer (`https://spacefast.com/schemas/sf.json`) for JSONC editors | [JSONC fallback](#jsonc-fallback-sfjsonc) |
+| `space` | string | Target Space slug or `spc_` ID (legacy; prefer `.spacefast/space.json`) | [Spaces](/spaces) |
+| `name` | string | Display name for the Space (1 to 255 chars; blocks API renames while set) | [Spaces](/spaces) |
+| `compatibilityDate` | `YYYY-MM-DD` | Behavior date this version freezes under; defaults to publish date | [Versions](/versions) |
+| `index` | string or `false` | Homepage file served at `/`; `false` stops homepage and SPA inference | [Redirects and rewrites](/redirects) |
+| `fallback` | string, `false`, or `{ path, status }` | Committed file served when no exact route matches (SPA fallback) | [Redirects and rewrites](/redirects) |
+| `cleanUrls` | boolean | Serve `<name>.html` at `/<name>` ahead of fallback (default `true`) | [Redirects and rewrites](/redirects) |
+| `listing` | boolean | Enable automatic directory listings when no index exists | [Customization](/customization) |
+| `redirects` | array | Browser redirect rules (`301`, `302`, `303`, `307`, `308`) | [Redirects and rewrites](/redirects) |
+| `rewrites` | array | Internal path rewrites, external URL proxies, and custom 404 rewrites | [Redirects and rewrites](/redirects) |
+| `headers` | array | Response headers to set or remove on matching paths | [Headers](/headers) |
+| `firewall` | array | Edge firewall rules to block or challenge requests (up to 50) | [Redirects and rewrites](/redirects) |
+| `cache` | `{ bypass?: array }` | Cache behavior, including up to 50 cache-bypass rules | [Caching](/caching) |
+| `crons` | array | Scheduled `GET` requests to your Space's own paths (up to 8) | [Crons](/crons) |
+| `runtime` | `{ kind: "functions" \| "zero", ... }` | Server runtime declaration for Workers or legacy Zero capsules | [Functions](/functions) |
+| `templates` | string[] | Files that receive `{{ vars.NAME }}` substitution at finalize (up to 100) | [Environment variables](/environment-variables) |
+| `security` | `{ secrets?: { allowlist } }` | Scoped allowlist for confirmed secret-scan false positives | [Security](/security) |
+| `connectors` | record | Named connector roles pages call at `/__spacefast/connectors/<role>/<tool>` (up to 32) | [Connectors](/connectors) |
+| `app` | object | Inline app schema: `collections`, `tables`, `actions`, `pages`, `routes`, `auth`, `plugins`, `admin`, `locales` | [Collections](/collections), [Actions](/actions) |
+| `access` | `"public"` or `{ public: string[] }` | Live paths that stay public regardless of Space access settings | [Share and access](/share) |
+| `public` | object | Public identity for link previews, sign-in pages, and password gates | [Customization](/customization) |
+| `meta` | object | Listing, sharing, and browser icon metadata (`title`, `description`, `image`, `favicon`) | [Customization](/customization) |
+| `theme` | object | Visual tokens (`accent`, `background`, `logo`, `name`, `font`, `hideSpacefastBranding`) | [Customization](/customization) |
+| `collab` | `{ ui: "default" \| "custom" }` | Comments overlay delivery mode | [Comments](/comments) |
+| `superpowers` | object | Platform-managed tags, Google Analytics, Google Tag Manager, and custom JS tags | [Tag Manager](/tag-manager) |
+| `inject` | object | Static HTML snippets (`head`, `bodyStart`, `bodyEnd`, `noscript`) | [Customization](/customization) |
+| `build` | object | Repository and local build commands, directories, presets, and timeout | [Publish from Git](/git) |
+| `placement` | `{ burstable?, edge? }` | Worker bursting and opt-in edge placement for eligible redirects and headers | [Infrastructure](/infrastructure) |
+| `markdownNegotiation` | boolean | Accepted flag; runtime enforcement is not active yet | — |
+| `system` | object | Control-plane manifest for a Partner API tenant's system Space | [Partner configuration](/platforms/partner-api/configuration) |
 
-While `name` is set in the file, the API refuses to rename the Space. The file wins, so a rename means editing the file and publishing.
+## Key details
 
-## Serving
+### Identity and compatibility
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `index` | string or `false` | inferred, see below | The homepage file `/` serves. Folders always serve their own `index.html`. `false` stops homepage and SPA inference. A root `index.html` still answers `/` unless `listing` is on |
-| `fallback` | string, `false`, or `{ path, status }` | inferred for a single-page app, see below | The committed file served when no exact route matches. `status` is 100 to 599. `false` turns the inference off |
-| `cleanUrls` | boolean | `true` | Serves `about.html` at `/about`, ahead of any fallback |
-| `listing` | boolean | on when no index could be inferred and the version runs no worker | Automatic directory listings |
+- `name` sets the Space's display name. While `name` is declared in your config, the API refuses to rename the Space; edit the config and publish instead.
+- `compatibilityDate` (`YYYY-MM-DD`) pins config behavior for the version. If omitted, Spacefast records the publish date on the version so later platform changes do not alter older versions.
 
-`index` defaults to `index.html` when the version has one at the root. Otherwise, if a 200-status `fallback` names a committed file and the version runs no worker, that file. Otherwise, if the version publishes exactly one HTML file, that file. Otherwise, if there is exactly one HTML file at the root, that one. Otherwise `false`.
+### Serving
 
-`"fallback": { "path": "index.html", "status": 200 }` is the SPA declaration. It names the shell that owns every unresolved route, so it turns `listing` off unless you set it yourself. Committed pages still answer their own URLs. With `"cleanUrls": false`, a flat `about.html` no longer answers `/about`, so that route reaches the shell. A `fallback` path that is not a committed file fails the publish. Left unset, `fallback` is inferred: a root `200.html`, else `_shell.html`, else a root `index.html` beside a build tool's output when there's no root `404.html`. See [SPA fallback](/routing#spa-fallback).
+- `index` defaults to root `index.html` when present, otherwise a `200`-status `fallback` target (when no Worker runs), otherwise a single HTML file in the version or root, otherwise `false`.
+- `fallback: { path: "index.html", status: 200 }` declares a single-page app shell and disables `listing` unless set explicitly. Naming a file not in the version fails the publish.
+- `cleanUrls` defaults to `true`, so `about.html` serves at `/about` ahead of any fallback.
 
-## Metadata and appearance
+### Redirects, rewrites, headers, and traffic rules
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `meta.title` | string, up to 300 chars | none | Title for listings, sharing, and the viewer |
-| `meta.description` | string, up to 1000 chars | none | Description for the same |
-| `meta.image` | string, up to 2000 chars | none | Sharing image |
-| `meta.favicon` | string, up to 2000 chars | none | Browser icon |
-| `theme.accent` | color | none | Accent color on Spacefast-authored pages |
-| `theme.background` | color | none | Background color on the same |
-| `theme.name` | string, 1 to 120 chars | none | Display name in the brand row |
-| `theme.logo` | string, up to 2000 chars | none | An `https://` URL or a root-relative path |
-| `theme.font` | string, up to 256 chars | none | A plain font-family stack. No `url()` or `src` |
+- `redirects` entries accept `source`, `destination`, optional `status` (`301`, `302`, `303`, `307`, `308`; default `302`), optional `force`, and optional `query`.
+- `rewrites` entries accept `source`, `destination` (local path or absolute `https://` URL to proxy), optional `cache: "shared"` (proxy destinations only), optional `force`, optional `query`, and optional `notFound: true` (local paths only).
+- `headers` entries accept `source` and a non-empty `headers` array of `{ key, value }` or `{ key, remove: true }`.
+- `firewall` holds up to 50 rules (`action: "block" | "challenge"`, optional `status` `400`–`499` for blocks, `match`, optional `any`, `name`, `description`).
+- `cache.bypass` holds up to 50 rules (`match`, optional `any`, `name`, `description`) for requests that skip the edge cache.
 
-Colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names. `theme` is a closed object, so an unknown key is an error.
+Rules declared in Space settings (through the dashboard, CLI, or API) match ahead of rules declared in your config file. See [Redirects and rewrites](/redirects) and [Headers](/headers).
 
-A `theme.json` file next to the config is an inference input rather than configuration. Only `settings.color.palette` and `settings.typography.fontFamilies` are read from it. A [Zero](/zero-runtime) capsule's Tailwind compile reads the same file.
+### Runtime, crons, and environment variables
 
-What these tokens paint, and how to replace those pages outright, is on [Layout, theme, and site pages](/site-pages).
+One `runtime` block per version, discriminated on `kind`:
 
-## Templates
+- `kind: "functions"`: optional `entry` (auto-detected from `.open-next/worker.js`, `handler.ts`/`js`/`mjs`, or `functions/` when omitted; naming a missing file fails publish) and optional `compatibilityDate` (`YYYY-MM-DD`). See [Functions](/functions).
+- `kind: "zero"`: `server` (required) and `client` (defaults to the scaffold entry). See [Migrating from Zero 0.8](/zero-migration).
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `templates` | string array, up to 100 entries | none | Files whose `{{ vars.NAME }}` tokens are substituted at finalize |
+`crons` accepts up to 8 entries, each with `path` (literal `/...` path up to 512 chars, no wildcards, placeholders, or query string) and `schedule` (`hourly`, `daily`, `twicedaily`, `weekly`, `Nh`/`Nd`/`Nw`, or a numeric five-field crontab). Your plan determines how many declared crons run; see [Crons](/crons).
 
-See [Environment variables](/environment-variables) for where the values come from.
+Environment variables and secrets do not live in `spacefast.config.ts` — set them with `sf env set` or in the dashboard, and list files under `templates` (up to 100) for build-time `{{ vars.NAME }}` substitution. Use `security.secrets.allowlist` (`entries`, `fingerprints`, `paths`, or `rules`, up to 128 each) only to suppress confirmed secret-scan false positives.
 
-## Superpowers
+### Connectors and app
 
-Platform-managed script injection and your own snippets.
+- `connectors` maps up to 32 camelCase role names to `{ connector, as?, tools, args?, cache? }`, where `as` is `"team"` (default), `"personal"`, or `"visitor"`, `tools` is `"*"` or up to 200 tool names, and `cache` defaults to `"30s"` (up to `"1440m"`, `"0"` disables reuse).
+- `app` accepts `name`, `collections`, `tables`, `actions`, `pages`, `routes`, `auth`, `plugins`, `admin`, and `locales`. See [Collections](/collections) and [Actions](/actions).
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `superpowers.enabled` | boolean | on unless set to `false` | Master switch for platform-managed injections |
-| `superpowers.disable_all_injection` | boolean | none | When true, suppresses every managed injection |
-| `superpowers.googleAnalytics.enabled` | boolean | none | Turns the tag on |
-| `superpowers.googleAnalytics.measurementId` | string, up to 64 chars | none | The `G-` measurement id |
-| `superpowers.googleTagManager.enabled` | boolean | none | Turns the container on |
-| `superpowers.googleTagManager.containerId` | string, up to 64 chars | none | The `GTM-` container id |
-| `superpowers.javascriptTags` | array, up to 16 entries | none | Custom snippets. Each has `code` (up to 8 KiB) plus optional `id`, `name`, `enabled` |
+### Access, public identity, theme, and snippets
 
-Injection is on unless `enabled` is `false` or `disable_all_injection` is `true`.
+- `access` accepts `"public"` (shorthand for `{ public: ["/**"] }`) or `{ public: string[] }` (up to 100 unique patterns; prefix exclusions with `!`; `*` and `**` match whole segments). The declaration stays inactive until you claim the Space, and Spacefast ignores it while the team has **Private spaces only** turned on. It compiles to one public `viewer` grant on `live` that `sf share revoke` cannot remove; edit the config and publish instead. See [Share and access](/share).
+- `public` sets the Space's external identity (`title`, `description`, `icon`, `accent`, `ogImage`, `hideOnPrivateLinks`) shown on link previews and access gates, separate from the team-internal `name`.
+- `theme` accepts `accent`, `background`, `logo`, `name`, `font`, and `hideSpacefastBranding` (closed object; colors accept hex, `rgb()`, `rgba()`, `hsl()`, `hsla()`, and CSS color names). A sibling `theme.json` acts only as an inference input (`settings.color.palette` and `settings.typography.fontFamilies`).
+- `superpowers` configures `enabled`, `disable_all_injection`, `googleAnalytics`, `googleTagManager`, `javascriptTags` (up to 16 entries, each `code` up to 8 KiB), and `tags` (`inheritance`, `requireReview`).
+- `inject` accepts static HTML snippet arrays under `head`, `bodyStart`, `bodyEnd`, and `noscript` (up to 16 snippets per slot, 8 KiB per snippet).
+- `build` is a closed object accepting nullable `rootDirectory`, `installDirectory`, `installCommand`, `buildCommand`, `outputDirectory`, `ignoredBuildCommand`, `frameworkPreset`, `platformPreset`, plus boolean `allowUnsupportedPlatformFeatures` and integer `timeoutSeconds` (`60` to `7200`, default `900`).
 
-## Build
+## Optional `_redirects` and `_headers` files
 
-Settings for builds the platform runs from a connected repository. They do nothing for a folder publish. See [Publish from Git](/git).
+`_redirects` and `_headers` at the root of your published directory are optional convenience and migration files. Both are private and never served as content (requesting one returns `404`).
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `build.rootDirectory` | string | none | Directory the build runs in |
-| `build.installDirectory` | string | none | Directory the install runs in, when it differs |
-| `build.installCommand` | string | none | Overrides the detected install command |
-| `build.buildCommand` | string | none | Overrides the detected build command |
-| `build.outputDirectory` | string | none | Where the build wrote its output |
-| `build.ignoredBuildCommand` | string | none | A command whose exit code decides whether to skip the build |
-| `build.frameworkPreset` | string | none | Pins the framework instead of detecting it |
-| `build.platformPreset` | string | none | Pins the source platform preset |
-| `build.allowUnsupportedPlatformFeatures` | boolean | none | Proceeds past unsupported migration features |
-| `build.timeoutSeconds` | integer, 60 to 7200 | none | Build timeout |
+When you combine them with `spacefast.config.ts` or `sf.jsonc`:
 
-Every field is nullable, and `build` is a closed object.
+- Redirect and rewrite rules merge in this order: `_redirects` first, then config `redirects`, then config `rewrites`. First match wins. A config rule shadowed by an unconditional `_redirects` line reports a `redirect_shadowed_by_file` warning.
+- Header rules merge with `_headers` winning over config `headers` when both set the same header name.
 
-## Placement
+For new projects, declare `redirects`, `rewrites`, and `headers` in `spacefast.config.ts` so all Space configuration lives in one typed file. Validate changes offline with [`sf check`](/cli/reference#sf-check-dir) (invalid configs return [`config_invalid`](/errors/config_invalid)). See [Redirects and rewrites](/redirects) and [Headers](/headers).
 
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `placement.burstable` | boolean | none | Whether the Space may burst its PHP workers |
+## Limits
 
-Data location is chosen once, when the Space is created, and never changes.
-
-## Runtime
-
-One runtime per version, discriminated on `kind`. Omit the block for a static site.
-
-### `kind: "zero"`
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `runtime.server` | string, required | none | Server entry, relative to the published directory |
-| `runtime.client` | string, required | none | Client entry, relative to the published directory |
-
-Both are required. Zero is never inferred. See [Dynamic sites with Zero](/zero-runtime).
-
-### `kind: "functions"`
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `runtime.entry` | string | detected | Worker entry. Naming a file that does not exist fails the publish |
-| `runtime.compatibilityDate` | `YYYY-MM-DD` | `2026-07-01` | Runtime semantics this worker was written against |
-
-See [Functions](/functions).
-
-## Crons
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `crons` | array, up to 8 entries for now | none | Scheduled requests. Your plan sets how many run, see [Crons](/crons#allowance-by-plan) |
-| `crons[].path` | string, up to 512 chars | none | Path to GET. Starts with `/`, no query, no wildcards, no `:placeholders` |
-| `crons[].schedule` | string | none | A named schedule, a shorthand, or a five-field crontab |
-
-The project config is the only writer. See [Crons](/crons) for the schedule grammar.
-
-## Connectors
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `connectors` | object, up to 32 roles | none | Connector roles your pages call at `/__spacefast/connectors/<role>/<tool>` |
-
-See [Connectors](/connectors#declare-a-role) for each role's keys.
-
-<a id="access" />
-
-## Sharing
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `access` | `"public"` or `{ public: string[] }` | none | Live paths that stay public whatever the Space's access setting is |
-
-`"public"` is shorthand for `{ "public": ["/**"] }`. Prefix a pattern with `!` to exclude it, and use `*` and `**` as whole-segment wildcards. Patterns must be unique, and a non-empty list needs at least one inclusion. The declaration is inactive until the Space is claimed. See [Spacefast Share](/share).
-
-## Routing
-
-`redirects`, `rewrites`, and `headers` are real config keys, owned by the routing compiler and merged behind the `_redirects` and `_headers` files. Their grammar, precedence, and every rule field live on one page.
-
-See [Redirects, rewrites, and headers](/routing).
-
-## Traffic rules
-
-| Key | Type | Default | What it does |
-| --- | --- | --- | --- |
-| `firewall` | array, up to 50 rules | none | Requests to block or challenge before they reach the Space |
-| `cache.bypass` | array, up to 50 rules | none | Requests that skip the cache |
-
-A publish puts these rules at the edge. The Space settings can declare the same two keys, and their rules answer first. See [Traffic rules](/traffic-rules) for the rule fields.
-
-## Accepted but not yet enforced
-
-| Key | Type | What it does |
-| --- | --- | --- |
-| `markdownNegotiation` | boolean | Accepted by the schema. Runtime enforcement ships separately, so setting it changes nothing today |
-
-## Parser caps
+Parser caps enforced on every plan (plans may lower some runtime allowances, never raise these caps):
 
 | Cap | Value |
 | --- | --- |
-| File size | 256 KiB |
+| Resolved config size (`sf.jsonc` or evaluated `spacefast.config.ts`) | 256 KiB |
+| Stored API config overlay size | 16 KiB |
 | `templates` entries | 100 |
-| `crons` entries | 8 for now |
-| `crons[].path` | 512 characters |
-| `name` | 255 characters |
-| `meta.title` | 300 characters |
-| `meta.description` | 1000 characters |
-| `meta.image`, `meta.favicon` | 2000 characters |
-| `superpowers.javascriptTags` entries | 16, each `code` up to 8 KiB |
+| `crons` entries | 8 |
+| `crons[].path` length | 512 characters |
+| `connectors` roles | 32 (up to 200 tools per role) |
+| `firewall` rules | 50 |
+| `cache.bypass` rules | 50 |
+| `access.public` patterns | 100 |
+| `name` length | 255 characters |
+| `meta.title`, `public.title` length | 300 characters |
+| `meta.description`, `public.description` length | 1,000 characters |
+| `meta.image`, `meta.favicon`, `theme.logo`, `public.ogImage` length | 2,000 characters |
+| `superpowers.javascriptTags` / `inject` snippets | 16 per list, up to 8 KiB each |
 
-A plan may lower these caps. None of them can be raised. The `crons` cap is the same on every plan, and your plan sets how many of the declared crons run. See [Crons](/crons#allowance-by-plan).
+### Strict `version: 1` shape
 
-## The strict v1 shape
-
-There is a second, stricter contract for the same files, selected by a top-level `"version": 1`. Its schema is published separately at `https://spacefast.com/schemas/sf.v1.json`, and `sf routing inspect` compiles against it.
-
-In that shape the serving keys move into a `serve` block.
-
-```jsonc sf.jsonc
-{
-  "$schema": "https://spacefast.com/schemas/sf.v1.json",
-  "version": 1,
-  "serve": {
-    "index": "index.html",
-    "spaFallback": "index.html",
-    "cleanUrls": true,
-    "directoryListing": false
-  }
-}
-```
-
-Under `version: 1` the flat spellings are rejected. Four of them get `config_unknown_key` with the replacement named in the message.
-
-| Flat key | v1 spelling |
-| --- | --- |
-| `index` | `serve.index` |
-| `fallback` | `serve.spaFallback` |
-| `cleanUrls` | `serve.cleanUrls` |
-| `meta` | `metadata` |
-
-The v1 root accepts `$schema`, `version`, `build`, `serve`, `redirects`, `rewrites`, `headers`, `firewall`, `cache`, `metadata`, `substitute`, `access`, and `crons`. Anything else is an error. `listing`, `superpowers`, `templates`, `theme`, `placement`, and `markdownNegotiation` report `config_key_removed`; `space` reports `config_identity_moved`.
-
-The flat shape above is what the finalizer reads and what the CLI writes. Use `version: 1` only if you want the stricter contract.
+Adding `"version": 1` selects a stricter contract described at `https://spacefast.com/schemas/sf.v1.json` (used by `sf routing inspect`). In `version: 1`, flat serving keys move under `serve` (`serve.index`, `serve.spaFallback`, `serve.cleanUrls`, `serve.directoryListing`) and `meta` becomes `metadata`. The flat shape documented above is what `sf init` writes and what the finalizer consumes by default.

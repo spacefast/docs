@@ -2,7 +2,7 @@
 questions:
   - id: cli-node-version
     question: What is the minimum Node.js version the sf CLI needs?
-    expected: ["Node.js 20.3 or newer"]
+    expected: ["Node.js 22.19 or newer"]
     routes: /cli
   - id: default-hostname
     question: What hostname does a new Space get, and what does a single version's URL look like?
@@ -15,7 +15,7 @@ questions:
   - id: anonymous-lifetime
     question: After publishing without an account, when does the Space stop serving, and how long after that can its key still be used to claim it?
     expected: ["33 hours and 20 minutes", "7 days"]
-    routes: /anonymous-and-claim
+    routes: /agents/anonymous-and-claim
   - id: domain-dns-records
     question: Which DNS records do I add to connect example.com?
     expected: ["A records for example.com", "a CNAME for www.example.com", "no TXT record unless the hostname is already in use elsewhere"]
@@ -23,7 +23,7 @@ questions:
   - id: domains-rm
     question: Does `sf domains rm` delete the domain?
     expected: ["No, it unassigns the domain from the Space", "the domain stays in the team inventory"]
-    routes: /cli/domains
+    routes: /cli/reference
   - id: exit-code-auth
     question: Which exit code does the sf CLI use for an authentication failure?
     expected: ["10"]
@@ -56,26 +56,26 @@ questions:
     question: Which team roles exist?
     expected: ["owner", "admin", "member"]
     routes: /teams
-  - id: plans
-    question: Under the documented upcoming plan terms, what is the Plus base price per team per month before extra seats or usage?
-    expected: ["$15 per team per month"]
-    routes: /billing
+  - id: boost-price
+    question: How much does per-Space Boost cost per month, and which plans can add it?
+    expected: ["$9 a month", "Go", "Pro"]
+    routes: /pricing
   - id: free-file-limit
-    question: What is the largest single file on a claimed Free plan, and how does the cap differ for an anonymous publish?
-    expected: ["1 GiB on the claimed Free plan", "50 MiB for an anonymous publish"]
+    question: What is the largest single file on a claimed Personal plan, and how does the cap differ for an anonymous publish?
+    expected: ["1 GiB", "50 MiB for an anonymous publish"]
     routes: /limits
   - id: config-filename
-    question: What is the project config file called?
-    expected: ["sf.jsonc"]
+    question: What is the primary project configuration file called, and what is its JSON fallback?
+    expected: ["spacefast.config.ts", "sf.jsonc"]
     routes: /config-file
-  - id: zero-declare
-    question: How do I turn on the Zero runtime for a project?
-    expected: ["runtime.kind set to zero in sf.jsonc", "a server entry"]
-    routes: /zero-runtime
+  - id: zero-migration
+    question: Can existing Zero 0.8 apps still serve traffic and roll back?
+    expected: ["Yes", "deployed Zero 0.8 apps keep serving", "new dynamic development uses spacefast.config.ts"]
+    routes: /zero-migration
   - id: routing-precedence
-    question: If both a _redirects file and sf.jsonc rules match a path, which wins?
+    question: If both a _redirects file and spacefast.config.ts rules match a path, which wins?
     expected: ["_redirects"]
-    routes: /routing
+    routes: /redirects
   - id: publish-ignores
     question: Does `sf publish` upload node_modules and .git?
     expected: ["No, both are dropped"]
@@ -89,6 +89,6 @@ questions:
     expected: ["--json is added automatically", "no prompts", "--yes is still required for destructive actions"]
     routes: /cli
   - id: rollback
-    question: Does rolling back rebuild the site?
+    question: Does rolling back rebuild the Space?
     expected: ["No", "the live channel points at an older version"]
     routes: /versions

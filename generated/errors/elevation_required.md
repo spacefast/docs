@@ -1,9 +1,9 @@
 ---
 title: "elevation_required"
-description: "A person must approve temporary access before the agent can continue."
+description: "A person must approve this before the agent can continue."
 ---
 
-A person must approve temporary access before the agent can continue.
+A person must approve this before the agent can continue.
 
 **How to resolve:** Open the approval URL. Poll the resume URL until the person decides. After approval, retry the original operation.
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/elevation_required",
   "title": "Elevation required",
-  "status": 400,
-  "detail": "A person must approve temporary access before the agent can continue.",
+  "status": 422,
+  "detail": "A person must approve this before the agent can continue.",
   "code": "elevation_required",
   "requestId": "req_4mz0v8qk"
 }

@@ -1,96 +1,83 @@
 ---
 title: llms.txt preamble
-description: Agent guidance that Blume places at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
+description: Agent guidance placed at the top of dist/llms.txt through agents.llmsTxt.details. The underscore keeps it out of the site; verify-prose still lints it.
 ---
 
-Spacefast publishes static sites and runs apps. You can drive all of it from the
-CLI, the REST API, the SDK, or MCP. Billing changes need a person in the dashboard.
+Spacefast is the build companion and infrastructure for people and AI agents: one Space combines static files, full-stack SpacePress apps (collections, SQL tables, ORM queries, server actions, jobs, TSX pages, WooCommerce, and WordPress REST/Abilities), MySQL, Workers, object storage, transactional email, crons, connectors, custom domains, and sharing — all configured in `spacefast.config.ts` and driven through the CLI, REST API, SDK, MCP, or Poppy. Billing changes require a person in the dashboard.
 
-The sections below index every authored page. Read this header first: it covers
-the things an agent needs that a link list cannot express.
+Read this header first: it gives you the exact machine-readable endpoints, setup paths, and reference pointers before the authored page index.
 
 ## Read any page as Markdown
 
-Add `.md` to any docs URL to get the raw Markdown instead of rendered HTML:
+Add `.md` to any docs URL to get raw Markdown without HTML chrome:
 
-```
+```text
 https://spacefast.com/docs/publish/     ->  https://spacefast.com/docs/publish.md
 ```
 
-Every authored page below works both ways. The API reference is the exception:
-its Markdown is a section outline, and the operations themselves come from the
-source named under Generated references.
+Every authored page works both ways. For the OpenAPI references, parse the machine-readable specs below instead of scraping HTML.
+
+## Machine-readable endpoints
+
+| Need | Endpoint |
+| --- | --- |
+| Full docs corpus (all pages) | `https://spacefast.com/docs/llms-full.txt` |
+| REST API OpenAPI spec | `https://api.spacefast.com/openapi.json` |
+| Partner API OpenAPI spec | `https://api.spacefast.com/partner/openapi.json` |
+| Agent onboarding playbook | `https://spacefast.com/setup.md` |
+| HTTP publish contract | `https://spacefast.com/publish-spec.json` |
+| Raw Spacefast skill | `https://api.spacefast.com/skill` |
+| Hosted MCP server (OAuth) | `https://mcp.spacefast.com` |
+| Poppy discovery (per Space) | `https://<space-host>/.well-known/poppy.json` |
+| Search docs by keyword | `GET https://api.spacefast.com/v1/docs/search?q=<query>` |
+| Read one docs page by slug | `GET https://api.spacefast.com/v1/docs/pages/{slug}` |
+| Ask docs endpoint | `POST https://api.spacefast.com/v1/docs/ask` |
+
+## Task-to-reference pointers
+
+- **Exact CLI flags, exit codes, and anchors:** [CLI overview](https://spacefast.com/docs/cli.md) and [CLI reference](https://spacefast.com/docs/cli/reference.md).
+- **Exact `spacefast.config.ts` keys and `sf.jsonc` fallback:** [Project configuration](https://spacefast.com/docs/config-file.md). New projects use `spacefast.config.ts` with `defineConfig` from `spacefast/config`; `sf.jsonc` remains permanently supported.
+- **Exact RFC 9457 error codes:** construct `https://spacefast.com/docs/errors/<code>.md` directly from the problem document's `code`, or browse the [Error reference](https://spacefast.com/docs/errors.md).
+- **Exact plan allowances and caps:** [Pricing and limits](https://spacefast.com/docs/pricing.md) and [Limits](https://spacefast.com/docs/limits.md).
+- **HTTP request schemas and idempotency:** parse `https://api.spacefast.com/openapi.json`, or browse [REST API](https://spacefast.com/docs/api.md) and [API reference](https://spacefast.com/docs/api/reference).
+- **Per-client agent setup and connection methods:** [Agent setup](https://spacefast.com/docs/setup/) and [Ways to connect](https://spacefast.com/docs/connect/).
 
 ## Set up an agent
 
-An agent that can fetch URLs and make HTTP requests can follow this publishing guide:
+Any agent that can fetch URLs and make HTTP requests can follow:
 
+```text
+Fetch https://spacefast.com/setup.md and follow it.
 ```
-Fetch https://spacefast.com/setup.md
-```
 
-That page teaches a single-request publish flow that needs no CLI and no MCP
-server.
+That guide distinguishes connected MCP/CLI clients, anonymous HTTP publishing (via `https://spacefast.com/publish-spec.json`), and full-stack Space apps.
 
-For a fuller setup, install the CLI and let it configure the rest:
+For coding agents in a terminal, run the zero-install setup wizard or install the plugin/skill:
 
 ```bash
-npm install -g spacefast
-sf setup agent
-```
-
-To install only the skill:
-
-```bash
+npx -y spacefast setup
 npx -y skills add spacefast/plugins --skill spacefast -g -y
 ```
 
-The raw skill Markdown is at `https://api.spacefast.com/skill` for agents that
-can only fetch and import. Hosted MCP runs at `https://mcp.spacefast.com` and
-signs in through browser OAuth. Per-agent instructions live at
-[agent setup](https://spacefast.com/docs/setup/).
-
 ## Find and buy a domain
 
-Asked to find or check domain names? Do the research yourself; it needs no
-account. Search with `POST https://api.spacefast.com/v1/domains/search`, then
-check each name you recommend live with
-`GET https://api.spacefast.com/v1/domains/research/availability?name=example.com`
-(or `POST` the same path with `{"mode":"live","names":[...]}`). Show status,
-price, renewal, currency, premium, and purchasable in your reply. Never give
-API URLs as links, never invent results, and treat a failed check as
-unknown, not taken. Buying needs the user's sign-in and their yes on the
-total. Read
-[Domain research for assistants](https://spacefast.com/docs/agents/domain-research.md).
+Asked to find or check domain names? Do the research yourself; it needs no account. Search with `POST https://api.spacefast.com/v1/domains/search`, then check each recommended name live with `GET https://api.spacefast.com/v1/domains/research/availability?name=example.com` (or `POST` the same path with `{"mode":"live","names":[...]}`). Show status, price, renewal, currency, premium, and purchasable in your reply. Never give API URLs as links, never invent results, and treat a failed check as unknown, not taken. Buying requires the user's sign-in and confirmation of the total. Read [Domain research for assistants](https://spacefast.com/docs/agents/domain-research.md).
 
 ## Search the docs
 
-Search returns matching pages without crawling this file:
+Search returns matching pages without crawling this index:
 
 ```bash
 curl "https://api.spacefast.com/v1/docs/search?q=rollback"
 ```
 
-Read one page with `GET https://api.spacefast.com/v1/docs/pages/{slug}`.
-
-Each result carries the page path, its full URL, and a summary, so you can go
-straight to the Markdown.
+Read one page with `GET https://api.spacefast.com/v1/docs/pages/{slug}`. Each result carries the page path, full URL, and summary.
 
 ## Generated references
 
-Three references are too large to list page by page, so each one appears here as
-its index. The URLs under them are frozen contracts and will not move.
+Large generated families appear as their index pages below so this index stays concise; their URLs are frozen contracts:
 
-- [Error reference](https://spacefast.com/docs/errors): every error code with
-  its meaning and how to resolve it. Each code also has its own page at
-  `https://spacefast.com/docs/errors/<code>`, which is where the `type` URI in
-  an RFC 9457 problem document points. Construct that URL directly rather than
-  searching for it.
-- REST API: read `https://api.spacefast.com/openapi.json` for every operation,
-  request, and response, including the schemas and the idempotency contract. It
-  is the machine-readable source, and it is what to parse. The
-  [reference page](https://spacefast.com/docs/api/reference) renders the same
-  spec for browsing.
-- [Changelog](https://spacefast.com/docs/changelog): what shipped and when.
-  Per-package history is at
-  [changelog/packages](https://spacefast.com/docs/changelog/packages).
+- [Error reference](https://spacefast.com/docs/errors): every error code and resolution (`https://spacefast.com/docs/errors/<code>`).
+- [API reference](https://spacefast.com/docs/api/reference): browsable REST API (`https://api.spacefast.com/openapi.json` for machine parsing).
+- [Changelog](https://spacefast.com/docs/changelog): release timeline, with per-package history linked from it.
+- [Agent setup](https://spacefast.com/docs/setup) and [Ways to connect](https://spacefast.com/docs/connect): generated per-agent setup pages and connection methods.

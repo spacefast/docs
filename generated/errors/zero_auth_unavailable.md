@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_auth_unavailable",
   "title": "Zero auth unavailable",
-  "status": 400,
+  "status": 422,
   "detail": "Hosted Zero auth is not configured for this deployment.",
   "code": "zero_auth_unavailable",
   "requestId": "req_4mz0v8qk"

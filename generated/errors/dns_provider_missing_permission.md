@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/dns_provider_missing_permission",
   "title": "Dns provider missing permission",
-  "status": 400,
+  "status": 422,
   "detail": "The connected DNS provider account lacks the required permission.",
   "code": "dns_provider_missing_permission",
   "requestId": "req_4mz0v8qk"

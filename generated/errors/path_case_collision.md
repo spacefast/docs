@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/path_case_collision",
   "title": "Path case collision",
-  "status": 400,
+  "status": 422,
   "detail": "Two file paths differ only by letter case, which collides on serving.",
   "code": "path_case_collision",
   "requestId": "req_4mz0v8qk"

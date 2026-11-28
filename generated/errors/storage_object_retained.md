@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/storage_object_retained",
   "title": "Storage object retained",
-  "status": 400,
+  "status": 422,
   "detail": "This commerce-protected object is retained for purchased downloads.",
   "code": "storage_object_retained",
   "requestId": "req_4mz0v8qk"

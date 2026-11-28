@@ -5,6 +5,194 @@ description: "Release history for @spacefast/domain-search-terminal on npm."
 
 Published as [`@spacefast/domain-search-terminal`](https://www.npmjs.com/package/@spacefast/domain-search-terminal) on npm.
 
+## 0.10.0
+
+#### Minor Changes
+
+- The SSH domain search terminal runs on OpenTUI 0.8.4 and can draw with OpenTUI's own renderer: pass `renderer: "remote"` to `createDomainSearchSshSession`. A paste then arrives as text, and OpenTUI restores the visitor's terminal itself. `destroy()` now returns a promise that settles once the terminal is restored and `end` was called, so wait for it before you close the channel. Sessions add no listeners to the process, on either renderer.
+
+  In the terminal itself: the command palette stays where the wheel left it, help and WHOIS keep their key hints in the border, WHOIS shows two more rows on a short terminal, a new query starts from its first result, and a terminal that grew fills with results at once.
+
+#### Patch Changes
+
+- Domain purchases and renewals now charge the team's saved card instead of opening a payment page. `sf domains registration purchase --expect-total` charges right away when you have purchasing power; without it you get the exact `sf purchases confirm` command or a dashboard link to hand to a person. New: `sf purchases inspect|confirm|cancel` and `sf billing card`.
+
+  CLIs before 0.9.0 keep working: the server holds their purchases for a person to confirm and returns the pay link they expect, so nothing is charged from their `--expect-total`.
+
+  The saved-card migration (`team_payment_method`) runs after the row-retention and internal-subscription migrations, preserving historical purchase receipts and soft-deleted rows.
+
+  Saved-card confirmations carry the displayed card's identity. A changed default requires renewed confirmation, and interrupted charges retain the selected card.
+
+  Domain Checkout sessions opened by the preceding release still settle or release their held names during rollout; their paid lines remain refundable. Purchase receipts show saved-card details only to callers with billing access. Changing a card after a failed purchase returns to billing instead of a purchase that cannot be retried.
+
+  SDK callers: the `checkout` object on purchase and renewal responses is now optional and `checkoutUnavailable` is gone; read `purchase.confirmUrl`, which is null when nothing needs confirming. `includeCheckout` is still accepted on registration reads and ignored. The team billing response no longer has the top-level `stripeCustomerId` and `subscription` fields.
+
+  Auto-renew and operator guidance share the notice window and refunded-term eligibility. An expiring domain that cannot be charged automatically names the customer as the next actor.
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.10.0
+
+## Unreleased
+
+#### Patch Changes
+
+- Buy domains over SSH with a saved or typed card, shared registrant validation, bank authentication, and browser fallbacks that retain uncertain payments.
+- Render SSH sessions with OpenTUI by default and restore the visitor's terminal before closing the connection.
+- Keep SSH sign-in notices aligned with the current key lifetime: seven days unused, thirty days at most.
+- Keep SSH checkout and bank confirmation compatible with the current billing and domain-lock services.
+- Bind saved-card confirmation to the displayed card and retain it through interrupted checkout recovery. If the card changes while creating a purchase, return its confirmation link instead of hiding the held purchase.
+
+## 0.9.0
+
+#### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @spacefast/common@0.9.0
+
 ## 0.8.1
 
 #### Patch Changes

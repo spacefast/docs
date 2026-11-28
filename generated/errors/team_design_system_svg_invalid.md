@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/team_design_system_svg_invalid",
   "title": "Team design system svg invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The SVG contains unsupported elements, attributes, or external content.",
   "code": "team_design_system_svg_invalid",
   "requestId": "req_4mz0v8qk"

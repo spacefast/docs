@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/tenant_not_found",
   "title": "Tenant not found",
-  "status": 400,
+  "status": 422,
   "detail": "The tenant was not found.",
   "code": "tenant_not_found",
   "requestId": "req_4mz0v8qk"

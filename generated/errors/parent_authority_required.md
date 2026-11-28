@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/parent_authority_required",
   "title": "Parent authority required",
-  "status": 400,
+  "status": 422,
   "detail": "Only an owner or admin of the parent team can do this to a subteam.",
   "code": "parent_authority_required",
   "requestId": "req_4mz0v8qk"

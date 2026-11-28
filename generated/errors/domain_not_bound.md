@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/domain_not_bound",
   "title": "Domain not bound",
-  "status": 400,
+  "status": 422,
   "detail": "The domain is not bound to this space.",
   "code": "domain_not_bound",
   "requestId": "req_4mz0v8qk"

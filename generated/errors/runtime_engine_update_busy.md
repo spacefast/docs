@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/runtime_engine_update_busy",
   "title": "Runtime engine update busy",
-  "status": 400,
+  "status": 422,
   "detail": "The serving runtime is applying an engine update and cannot take this request yet.",
   "code": "runtime_engine_update_busy",
   "requestId": "req_4mz0v8qk"

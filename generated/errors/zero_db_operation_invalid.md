@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_db_operation_invalid",
   "title": "Zero db operation invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The Zero database bridge received an invalid operation payload.",
   "code": "zero_db_operation_invalid",
   "requestId": "req_4mz0v8qk"

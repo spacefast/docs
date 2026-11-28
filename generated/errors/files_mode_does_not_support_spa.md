@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/files_mode_does_not_support_spa",
   "title": "Files mode does not support spa",
-  "status": 400,
+  "status": 422,
   "detail": "SPA fallback cannot be combined with files-listing mode.",
   "code": "files_mode_does_not_support_spa",
   "requestId": "req_4mz0v8qk"

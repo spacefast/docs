@@ -1,11 +1,11 @@
 ---
 title: "owner_binding_requires_private_space"
-description: "Owner connections require a private Space."
+description: "Personal roles need a private Space, not shared by link or password, and your own personal connection."
 ---
 
-Owner connections require a private Space.
+Personal roles need a private Space, not shared by link or password, and your own personal connection.
 
-**How to resolve:** Make the Space private and choose your own personal connection.
+**How to resolve:** Make the Space private and remove its share links and passwords, then choose one of your personal connections, or declare the role as team.
 
 <div data-pagefind-ignore>
 
@@ -28,8 +28,8 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/owner_binding_requires_private_space",
   "title": "Owner binding requires private space",
-  "status": 400,
-  "detail": "Owner connections require a private Space.",
+  "status": 422,
+  "detail": "Personal roles need a private Space, not shared by link or password, and your own personal connection.",
   "code": "owner_binding_requires_private_space",
   "requestId": "req_4mz0v8qk"
 }

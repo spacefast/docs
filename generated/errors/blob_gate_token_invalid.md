@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/blob_gate_token_invalid",
   "title": "Blob gate token invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The download token is invalid or expired.",
   "code": "blob_gate_token_invalid",
   "requestId": "req_4mz0v8qk"

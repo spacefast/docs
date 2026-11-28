@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/zero_mutation_origin_invalid",
   "title": "Zero mutation origin invalid",
-  "status": 400,
+  "status": 422,
   "detail": "The cookie-authenticated Zero mutation did not prove the serving origin.",
   "code": "zero_mutation_origin_invalid",
   "requestId": "req_4mz0v8qk"

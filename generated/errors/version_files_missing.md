@@ -28,7 +28,7 @@ Match on `code`, never on `detail`.
 {
   "type": "https://spacefast.com/docs/errors/version_files_missing",
   "title": "Version files missing",
-  "status": 400,
+  "status": 422,
   "detail": "Declared files were never uploaded, so the version cannot finalize.",
   "code": "version_files_missing",
   "requestId": "req_4mz0v8qk"
