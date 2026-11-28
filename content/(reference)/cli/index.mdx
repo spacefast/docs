@@ -404,3 +404,12 @@ Grants are additive, so a Space with no Grants is private. Edit Grants declared 
 | [`sf autocomplete`](/cli/reference#sf-autocomplete-shell) | Configure shell tab completion |
 
 `sf api` calls `/v1/` paths only, prints the raw API body verbatim (or `{"data":null}` on `204`, `205`, and `304`), and prints selected response headers to stderr with `--include`. `--paginate` works only on `GET` operations declared as cursor-paginated lists in the bundled OpenAPI spec.
+
+Common utility invocations for debugging, inspection, and agent automation:
+
+```bash
+sf doctor --space docs                              # Check CLI state, auth, API reachability, and Space health
+sf inspect https://docs.space.fast                  # Inspect a Space by slug, ID, URL, or custom domain
+sf fetch /admin --headers --verify ver_0123456789   # Fetch a private route and verify the live version ID
+sf map --paths                                      # List every canonical CLI command for scripts or agents
+```

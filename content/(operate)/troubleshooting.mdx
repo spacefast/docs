@@ -6,7 +6,7 @@ description: Common failures by symptom, with the error code or state each one r
 Find your symptom below. Each entry names the error code or state Spacefast returns and links to the page with the full fix.
 
 :::note[Not sure where to start?]
-Open your Space in the dashboard first. Its **Overview** page shows the last publish and its status. Come back here once you have an error code or a symptom from the list below.
+Open your Space in the dashboard first. Its **Overview** page shows the last publish and its status. From a terminal, run [`sf doctor`](/cli/reference#sf-doctor) (or `sf doctor --space <slug>`) to check local CLI state, auth, API reachability, and Space health, or [`sf inspect`](/cli/reference#sf-inspect-target) to check a Space's live version and runtime. Come back here once you have an error code or a symptom from the list below.
 :::
 
 ## Publishing
@@ -66,6 +66,8 @@ Activating a new version requests a purge of the Space's serving hostnames; immu
 ```bash
 curl -sI https://my-space.space.fast/ | grep -i x-spacefast-version
 ```
+
+For a private Space, use [`sf fetch`](/cli/reference#sf-fetch-path) instead of copying browser cookies — `sf fetch / --headers --verify <version-id>` runs the signed exchange flow and checks that the response serves the exact version ID you expect.
 
 If a live release needs to revert immediately, run [`sf rollback`](/cli/reference#sf-rollback-version) with a retained ready version ID, or inspect live traffic with [`sf logs`](/cli/reference#sf-logs-target-kind). Full policy on [Caching](/caching).
 

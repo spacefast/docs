@@ -154,7 +154,6 @@ Every top-level key accepted by `spacefast.config.ts` and `sf.jsonc`:
 | `inject` | object | Static HTML snippets (`head`, `bodyStart`, `bodyEnd`, `noscript`) | [Customization](/customization) |
 | `build` | object | Repository and local build commands, directories, presets, and timeout | [Publish from Git](/git) |
 | `placement` | `{ burstable?, edge? }` | Worker bursting and opt-in edge placement for eligible redirects and headers | [Infrastructure](/infrastructure) |
-| `services` | object | Managed platform service toggles (`video`, `spam`, `uptime`, `search`, `backups`, `security`) | [Build overview](/build) |
 | `markdownNegotiation` | boolean | Accepted flag; runtime enforcement is not active yet | — |
 | `system` | object | Control-plane manifest for a Partner API tenant's system Space | [Partner configuration](/platforms/partner-api/configuration) |
 
@@ -192,11 +191,10 @@ One `runtime` block per version, discriminated on `kind`:
 
 Environment variables and secrets do not live in `spacefast.config.ts` — set them with `sf env set` or in the dashboard, and list files under `templates` (up to 100) for build-time `{{ vars.NAME }}` substitution. Use `security.secrets.allowlist` (`entries`, `fingerprints`, `paths`, or `rules`, up to 128 each) only to suppress confirmed secret-scan false positives.
 
-### Connectors, app, and services
+### Connectors and app
 
 - `connectors` maps up to 32 camelCase role names to `{ connector, as?, tools, args?, cache? }`, where `as` is `"team"` (default), `"personal"`, or `"visitor"`, `tools` is `"*"` or up to 200 tool names, and `cache` defaults to `"30s"` (up to `"1440m"`, `"0"` disables reuse).
 - `app` accepts `name`, `collections`, `tables`, `actions`, `pages`, `routes`, `auth`, `plugins`, `admin`, and `locales`. See [Collections](/collections) and [Actions](/actions).
-- `services` enables managed platform capabilities by boolean toggle: `video`, `spam`, `uptime`, `search`, `backups`, and `security`.
 
 ### Access, public identity, theme, and snippets
 

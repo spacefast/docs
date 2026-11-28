@@ -83,6 +83,13 @@ Over HTTP, call [`listSpaceChannelHistory`](/api/reference/spaces/listspacechann
 
 Channel history reads from the Space's promotion activity events, so your team's plan audit-retention window bounds how far back it goes. See [Activity](/activity) and [Pricing and limits](/pricing).
 
+## Visual reviews and screenshots
+
+When you or an agent want to inspect a built version visually before promoting it, the API provides temporary visual reviews and captured screenshots:
+
+- **Temporary visual reviews**: Call [`createSpaceVersionVisualReview`](/api/reference/versions/createspaceversionvisualreview) (`POST /v1/spaces/{spaceId}/versions/{versionId}/visual-reviews`) to open a version-bound review session that expires after one hour. Its browser URL is a secret review capability and stays separate from persistent [Comments](/comments). Read the pinned preview target with [`getSpaceVisualPreview`](/api/reference/spaces/getspacevisualpreview), fetch an initial page screenshot with [`getSpaceVersionVisualScreenshot`](/api/reference/versions/getspaceversionvisualscreenshot), submit a one-shot feedback batch with [`submitVisualReview`](/api/reference/spaces/submitvisualreview), and read submitted notes with [`getVisualReview`](/api/reference/spaces/getvisualreview).
+- **Space thumbnails and social cards**: Read a live Space's captured thumbnail with [`getSpaceThumbnail`](/api/reference/spaces/getspacethumbnail) (`GET /v1/spaces/{spaceId}/thumbnail`, public for public Spaces and credential-gated for private ones), or fetch a `1200x630` public page social card (`og:image`) with [`getPageScreenshot`](/api/reference/spaces/getpagescreenshot) (`GET /v1/screenshots/page`; returns `503` with `Retry-After` while rendering).
+
 ## Error codes
 
 | Code | What happened | Recovery |

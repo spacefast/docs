@@ -83,6 +83,8 @@ Use the API operation tool directly. For example, [`searchDocs`](/api/reference/
 
 Space Apps provide visual views through tools such as `show_space_deployments`, `show_space_domains`, and `show_space_analytics`. Use `show_domains` for the domain library. These views and the publish card remain available alongside operation tools.
 
+For visual verification of a deployed version, agents can start a one-hour visual review with [`createSpaceVersionVisualReview`](/api/reference/versions/createspaceversionvisualreview), read the pinned target with [`getSpaceVisualPreview`](/api/reference/spaces/getspacevisualpreview), capture an initial screenshot with [`getSpaceVersionVisualScreenshot`](/api/reference/versions/getspaceversionvisualscreenshot), and read submitted notes with [`getVisualReview`](/api/reference/spaces/getvisualreview). Live Space thumbnails and public `1200x630` page cards are exposed via [`getSpaceThumbnail`](/api/reference/spaces/getspacethumbnail) and [`getPageScreenshot`](/api/reference/spaces/getpagescreenshot).
+
 `publish` publishes files, `operation_status` checks an active publish, and `resume_execution` continues a saved execution after approval. `choose_space` asks you to pick a Space when the target is unclear, and `cli_login` signs the `sf` CLI in with this connection's access when you ask for it. Read each tool's schema before calling it.
 
 Results from the built-in tools are capped at 24,000 characters of text across the whole structured value, with an explicit truncation marker. Source-file views refuse results over 1 MiB with `source_result_too_large`.

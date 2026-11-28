@@ -1,6 +1,6 @@
 ---
 title: Publish from CI
-description: Run sf publish from GitHub Actions or GitLab CI with an API key, a pinned Space, and the live URL read out of the receipt
+description: Run sf publish from GitHub Actions or GitLab CI with a deploy token or API key, a pinned Space, and the live URL read out of the receipt
 ---
 
 A CI pipeline can publish pushes to your production branch. Use `--target preview` for pull requests to leave the `live` channel unchanged; an ordinary publish can move it.
@@ -8,15 +8,27 @@ A CI pipeline can publish pushes to your production branch. Use `--target previe
 ## Set it up
 
 <Steps>
-  <Step title="Mint a key">
+  <Step title="Mint a deploy token or API key">
 
-    Create an API key scoped to publishing and nothing else.
+    For one Space, create a **deploy token** with [`sf deploy-tokens create`](/cli/reference#sf-deploy-tokens-create). Deploy tokens are Space-scoped `sfm_` machine tokens that default to preview-only publishing:
+
+    ```bash
+    # Preview-only token for pull request checks
+    sf deploy-tokens create --name ci-preview --show-secret
+
+    # Preview + live token for production releases, expiring after 90 days
+    sf deploy-tokens create --name ci-release --live --expires 90d --show-secret
+    ```
+
+    The `sfm_` secret prints once. Copy it and store it as a secret named `SPACEFAST_TOKEN` in your CI provider. Rotate or revoke tokens in place with [`sf deploy-tokens rotate`](/cli/reference#sf-deploy-tokens-rotate-id) and [`sf deploy-tokens revoke`](/cli/reference#sf-deploy-tokens-revoke-id).
+
+    If one workflow publishes to multiple Spaces across a team, create a team-scoped `sfa_` API key instead:
 
     ```bash
     sf api-keys create --name "CI publish" --preset ci_deploy
     ```
 
-    The `sfa_` secret prints once, in human output only. Copy it and store it as a secret named `SPACEFAST_TOKEN` in your CI provider. Presets, scopes, and rotation are on [API keys](/api-keys).
+    The `sfa_` secret prints once in human output only. Presets, scopes, deploy tokens, and rotation are on [API keys and tokens](/api-keys).
 
   </Step>
   <Step title="Pin the Space">
@@ -32,6 +44,15 @@ A CI pipeline can publish pushes to your production branch. Use `--target previe
 
   </Step>
 </Steps>
+
+## Deploy tokens vs API keys
+
+| Credential | Prefix | Scope | Best for |
+| --- | --- | --- | --- |
+| Deploy token ([`sf deploy-tokens`](/cli/reference#sf-deploy-tokens)) | `sfm_` | One Space; preview-only by default, `--live` for live, optional `--view-only` and `--path` filters | Single-repository CI jobs and least-privilege PR previews |
+| API key ([`sf api-keys`](/cli/reference#sf-api-keys)) | `sfa_` | Team-wide (or single Space via API), bounded by a preset such as `ci_deploy` | Shared workflows that publish to several Spaces or manage domains |
+
+Manage existing deploy tokens with [`sf deploy-tokens list`](/cli/reference#sf-deploy-tokens-list), [`sf deploy-tokens update`](/cli/reference#sf-deploy-tokens-update-id) (change target, paths, or expiry without changing the secret), [`sf deploy-tokens rotate`](/cli/reference#sf-deploy-tokens-rotate-id), and [`sf deploy-tokens revoke`](/cli/reference#sf-deploy-tokens-revoke-id). Pass `--show-secret` when scripting creation or rotation with `--json`.
 
 ## The workflow
 
