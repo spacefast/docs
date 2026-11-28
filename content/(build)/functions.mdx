@@ -16,8 +16,9 @@ Workers are available on every account.
 | `.open-next/worker.js` | An OpenNext build of a Next.js app | The build's classified routes, or the whole Space when the publish did not run the build |
 | `handler.ts`, `handler.js`, `handler.mjs` | One hand-written Worker at the project root | The whole Space |
 | `functions/` with at least one route module | A file router | Only the routes its files declare |
+| SpacePress `route.ts` with `"use worker";` | SpacePress route files marked for the Worker | Merged with `functions/` into the Space's Worker; collisions with PHP pages or `functions/` fail `sf check` |
 
-A directory matching none of these publishes as a static Space. An OpenNext build takes precedence over a stray `handler.ts`.
+A directory matching none of these publishes as a static Space. An OpenNext build takes precedence over a stray `handler.ts`. Files in `sp/wp-hooks/`, `components/`, or `content/` cannot use `"use worker";`, nor can a `"use worker";` file export `guard` or `signature`. Run `sf publish --dry-run --json` to inspect the four build slots (`static`, `spacepress`, `worker`, and `config`).
 
 ### Static files first, then the Worker
 
@@ -123,15 +124,16 @@ Spacefast injects your Space's variables and platform bindings onto `env`:
 | --- | --- |
 | `env.<VAR>` | Space and team [Environment variables](/environment-variables) |
 | `env.DB` | D1-shaped SQL binding (`env.DB.prepare(sql).bind(...).all()`) to your Space's [Database](/database) through a broker, with no connection string in the bundle |
-| `env.APP` | Calls your Space's [Collections](/collections) and [Actions](/actions) (`env.APP.collection(name)`, `env.APP.action(name, input)`, `env.APP.query(path, params)`, `env.APP.fetch(path, init)`), forwarding the visitor's session cookie |
+| `env.SPACE` | Calls your Space's [Collections](/collections) and [Actions](/actions) (`env.SPACE.collection(name)`, `env.SPACE.action(name, input)`, `env.SPACE.query(path, params)`, `env.SPACE.fetch(path, init)`), typed by generated `worker.d.ts`, forwarding the visitor's session cookie (`env.SPACEPRESS` and `env.APP` remain available as aliases) |
 | `env.STORAGE` | Reads and writes runtime [Object storage](/object-storage) (`.upload(file, { public })`, `.get(id)`, `.delete(id)`) |
 | `env.CONNECTORS` | Calls declared [Connector roles](/connectors#call-from-workers) (`env.CONNECTORS.<role>.<tool>(args)` or `env.CONNECTORS.call(role, tool, args)`) |
 
-Spacefast withholds two groups of variable names from `env` rather than blanking them, so your code reads them as absent:
+Spacefast withholds these variable names from `env` rather than blanking them, so your code reads them as absent:
 
 | Withheld names | Why |
 | --- | --- |
 | `DATABASE_URL`, `DATABASE_URI`, `MYSQL_URL`, `MYSQL_URI`, `MYSQL_DSN`, `POSTGRES_URL`, `POSTGRES_URI`, `POSTGRESQL_URL`, `POSTGRESQL_URI` | Workers reach the database through `env.DB` only |
+| `SPACE` (on SpacePress Workers) | Reserved for the `env.SPACE` binding; `sf check` and `sf publish` reject a colliding `SPACE` variable or binding |
 | Names starting with `SPACEFAST_` or `ZERO_` | Reserved platform namespace |
 
 ## Outbound HTTP

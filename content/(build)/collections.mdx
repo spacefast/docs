@@ -21,7 +21,7 @@ SpacePress runs a dual storage engine on WordPress and MySQL. Pick the builder t
 
 ### Define collections and tables in TypeScript
 
-Export your storage kinds from `sp/schema.ts` or `spacepress.config.ts`. All columns are `NOT NULL` unless you chain `.optional()`:
+Export your storage kinds from `sp/schema.ts` or `spacepress.config.ts`. Pass the fields object first (`table({ ... })` takes no table-name string; the exported variable name is the kind name), declare kinds in `sp/schema.ts` rather than importing them from `spacepress.config.ts`, and pass a lowercase kebab-case slug to `defineConfig({ name })` (not a display title). All columns are `NOT NULL` unless you chain `.optional()`:
 
 ```ts spacepress.config.ts
 import {
@@ -125,7 +125,8 @@ The inline `app` block accepts these keys:
 
 Place TSX pages and layouts under `sp/app/`. SpacePress compiles them to server-rendered PHP on publish, with zero React shipped to the browser:
 
-- **Routing files:** `sp/app/layout.tsx` (shared shell, `metadata`, `template = "theme" | "blank" | "<slug>"`), `page.tsx`, `[slug]/page.tsx`, `[...path]/page.tsx`, `(group)/`, `not-found.tsx`, and `login.tsx`.
+- **Routing files:** `sp/app/layout.tsx` (shared shell, `metadata`, `template = "theme" | "blank" | "<slug>"`), `page.tsx`, `[slug]/page.tsx`, `[...path]/page.tsx`, `(group)/`, `not-found.tsx`, and `login.tsx`. Dynamic route `params` is a plain synchronous object (such as `{ slug: string }`), not a Promise — read `params.slug` directly instead of `await params`.
+- **Automatic document shell and assets:** SpacePress renders `<html>`, `<head>`, and `<body>` automatically. Never render `<html>`, `<head>`, `<meta>`, or `<link>` inside TSX components — set head tags with `export const metadata = { title: "..." }`, import stylesheets directly from TSX (`import "./app.css"`), and place static files or images under `public/` (served from `/`).
 - **Typed search params and guards:** Export `search = { page: integer().default(1) }` for typed query parameters and `guard = "authenticated"` (or any role or access function) for route-level protection.
 - **Built-in server components (`spacepress/app`):** `<Link>` (Interactivity Router navigation), `<Content>` (block content), `<Html>` (sanitized HTML), `<Comments>`, `<Pagination>`, `<Search>`, `<SearchResults>`, `<LoginForm>`, `<TemplatePart>`, `<Live>`, and `useFormState(action)`.
 - **Interactive islands (`"use client"`):** Start a component file with `"use client";`, import `useState`, `useEffect`, or `useRef` from `"react"`, SpacePress client hooks (`useLive`, `useMutation`, `useMount`, `useEvent`, `sharedState`, `uploadFile`) from `"spacepress/react"`, and typed client references from `sp/_generated/api`. SpacePress renders the initial HTML on the server and compiles client interactivity to the WordPress Interactivity API.
@@ -193,18 +194,18 @@ Spacefast stores live collections, custom tables, and WordPress data in your Spa
 - Promoting a preview version initializes it against the live MySQL database before switching traffic.
 - Owning team members keep their live Space role when administering a preview version.
 
-## Read collections from Workers
+## Read collections from Workers and `"use worker"` routes
 
-When a Space runs both a SpacePress app and a [Worker](/functions), Spacefast injects `env.APP` into the Worker handler. Use `env.APP.collection(name)` to read and write records from a Worker route while forwarding the visitor's session cookie:
+When a Space runs both a SpacePress app and a [Worker](/functions) — either from `functions/` or from a SpacePress `route.ts` file starting with `"use worker";` — Spacefast injects `env.SPACE` (typed by generated `worker.d.ts`; `env.SPACEPRESS` and `env.APP` stay available as aliases) into the Worker handler. Use `env.SPACE.collection(name)` to read and write records from a Worker route while forwarding the visitor's session cookie:
 
 ```ts functions/api/posts.ts
 export async function GET(request: Request, { env }: { env: any }) {
-  const posts = await env.APP.collection("posts").list({ limit: 10 });
+  const posts = await env.SPACE.collection("posts").list({ limit: 10 });
   return Response.json(posts);
 }
 ```
 
-`env.APP.collection(name)` exposes five methods:
+`env.SPACE.collection(name)` exposes five methods:
 
 | Method | Request | Returns |
 | --- | --- | --- |
@@ -214,7 +215,7 @@ export async function GET(request: Request, { env }: { env: any }) {
 | `update(id, data)` | `PATCH` | Updated record |
 | `delete(id)` | `DELETE` | Delete response |
 
-`env.APP.query(path, params)` runs a `GET` query against the app's REST namespace, and `env.APP.fetch(path, init)` forwards `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE` requests to the app runtime.
+`env.SPACE.query(path, params)` runs a `GET` query against the app's REST namespace, and `env.SPACE.fetch(path, init)` forwards `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, or `DELETE` requests to the app runtime.
 
 ## Admin editor, REST API, and CLI
 

@@ -37,6 +37,7 @@ Key options on `query()` and `mutation()`:
 - `rateLimit`: Throttle calls per caller window, such as `"5/min"`.
 - `idempotent` and `destructive`: Mark safe retries or destructive mutations for clients and agents.
 - `signature`: Verify HMAC-signed inbound webhooks before the handler runs.
+- **Inferred input schema:** Do not pass `input`, `args`, or `fields` in the options object — SpacePress infers input fields and validation directly from the handler's TypeScript parameter type.
 
 You can also declare inline actions under `app.actions` in `spacefast.config.ts` (publish only one app definition per project — inline `app` or standalone `spacepress.config.ts`, not both):
 
@@ -110,7 +111,7 @@ Inserting into `contactMessages` before calling `mail.send()` keeps every submis
 
 ### Zero-JS forms and `useFormState`
 
-Pass any mutation directly to `<form action={sendContactMessage}>`. Forms work before JavaScript loads (form-encoded POST with a `303` redirect back to the page) and upgrade to in-place `fetch` updates once the router script runs:
+Pass any mutation directly to `<form action={sendContactMessage}>` (omit `method` and `encType` — SpacePress sets them). Forms work before JavaScript loads (form-encoded POST with a `303` redirect back to the page) and upgrade to in-place `fetch` updates once the router script runs:
 
 ```tsx sp/app/contact/page.tsx
 import { useFormState } from "spacepress/app";
@@ -173,17 +174,17 @@ export const items = table({
 
 ## Custom HTTP routes and private file buckets
 
-- **Custom routes:** Create `sp/app/<path>/route.ts` exporting `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`, plus an optional `export const guard` access rule.
+- **Custom routes:** Create `sp/app/<path>/route.ts` exporting `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`, plus an optional `export const guard` access rule. Start a `route.ts` file with `"use worker";` to run it on the Space's [Worker](/functions) instead of PHP (cannot export `guard` or `signature`, and cannot collide with PHP pages or `functions/` routes).
 - **Private files:** Define upload buckets with `files({ accept, maxBytes, access })`. Expanding a `file(bucket)` column with `with` returns a 5-minute signed URL, and server handlers, hooks, and jobs can read stored files directly via `bucket.get(id)`, `bucket.readText(id)`, or `bucket.readBase64(id)` (up to 16 MiB). See [Object storage](/object-storage) for runtime storage from Workers, the CLI, and the API.
 
 ## Call actions from Workers
 
-When your Space also runs a [Worker](/functions), `env.APP.action(name, input)` invokes a declared action over the Space's internal relay and forwards the visitor's session cookie:
+When your Space also runs a [Worker](/functions), `env.SPACE.action(name, input)` (aliases: `env.SPACEPRESS` and `env.APP`) invokes a declared action over the Space's internal relay and forwards the visitor's session cookie:
 
 ```ts functions/api/contact.ts
 export async function POST(request: Request, { env }: { env: any }) {
   const input = await request.json();
-  const result = await env.APP.action("contact", input);
+  const result = await env.SPACE.action("contact", input);
   return Response.json(result);
 }
 ```

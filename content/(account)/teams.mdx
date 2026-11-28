@@ -80,7 +80,7 @@ Your team needs [Pro](/pricing) to add another member. Personal and Go include o
 
 From a terminal, use [`sf teams`](/cli/reference#sf-teams) and [`sf teams members`](/cli/reference#sf-teams-members) to manage teams and seats. [`sf teams invitations list`](/cli/reference#sf-teams-invitations-list) lists invitations. Send one from the dashboard, with [`sf teams members invite`](/cli/reference#sf-teams-members-invite-emails), via [`POST /v1/team-invitations`](/api/reference/teams/createteaminvitation), or through an agent with Agent access. Resend, cancel, or accept one in the dashboard.
 
-To skip invitations for coworkers, add your company's [allowed email domain](/auto-enroll).
+To skip invitations for coworkers, add your company's [allowed email domain](/auto-enroll) and share the team's join link. Print or rotate the join link with [`sf teams join-link`](/cli/reference#sf-teams-join-link) (`--reset` replaces the link and invalidates the old one immediately, without affecting current members). Over HTTP, read or reset it with [`getTeamJoinLink`](/api/reference/teams/getteamjoinlink) and [`resetTeamJoinLink`](/api/reference/teams/resetteamjoinlink); visitors resolve a join link with [`getJoinLink`](/api/reference/teams/getjoinlink). The link itself grants no access — joining still requires a verified allowed email domain or a pending invitation.
 
 Things that catch people out:
 
@@ -113,6 +113,12 @@ To hand the team over, use **Team settings → Danger zone → Transfer ownershi
 | `parent_team` | Access for the owning team, plus view and comment access for everyone in its parent team. Needs subteams, which are on Enterprise |
 
 The default is `private`. From a terminal, [`sf teams defaults`](/cli/reference#sf-teams-defaults-access) prints the current value and `sf teams defaults public` sets it. Over the API, use [`GET /v1/teams/{teamId}/access/defaults`](/api/reference/access/getteamaccessdefaults) and [`PUT /v1/teams/{teamId}/access/defaults`](/api/reference/access/setteamaccessdefaults). Per-Space access, share links, and passwords are covered in [Spacefast Share](/share).
+
+## Organize Spaces with labels
+
+Teams can define shared labels (name and color) and attach them to Spaces to group projects by product, client, or owner. Label names are unique per team (case-insensitive); omitting a color picks the next unused palette hue. Deleting a label removes it from every Space that wears it without touching the Spaces themselves.
+
+Manage team labels with [`listTeamLabels`](/api/reference/teams/listteamlabels), [`createTeamLabel`](/api/reference/teams/createteamlabel), [`updateTeamLabel`](/api/reference/teams/updateteamlabel), and [`deleteTeamLabel`](/api/reference/teams/deleteteamlabel), and attach or remove them on a Space with [`addSpaceLabel`](/api/reference/spaces/addspacelabel) and [`removeSpaceLabel`](/api/reference/spaces/removespacelabel).
 
 ## Move a Space to another team
 
@@ -148,4 +154,6 @@ Only owners and admins can transfer a Space. Two consequences to plan for: the o
 | List, re-role, or remove members | [`GET /v1/teams/{teamId}/members`](/api/reference/teams/listteammembers), [`PATCH /v1/teams/{teamId}/members/{memberId}`](/api/reference/teams/updateteammemberrole), [`DELETE /v1/teams/{teamId}/members/{memberId}`](/api/reference/teams/removeteammember) |
 | Review connector offboarding | [`GET /v1/teams/{teamId}/members/{memberId}/offboarding`](/api/reference/teams/getteammemberoffboarding) |
 | List or create invitations | [`GET /v1/team-invitations`](/api/reference/teams/listteaminvitations), [`POST /v1/team-invitations`](/api/reference/teams/createteaminvitation) |
+| Read or reset the team join link | [`GET /v1/teams/{teamId}/join-link`](/api/reference/teams/getteamjoinlink), [`POST /v1/teams/{teamId}/join-link/reset`](/api/reference/teams/resetteamjoinlink), [`GET /v1/join-links/{token}`](/api/reference/teams/getjoinlink) |
+| Manage team labels | [`GET /v1/teams/{teamId}/labels`](/api/reference/teams/listteamlabels), [`POST /v1/teams/{teamId}/labels`](/api/reference/teams/createteamlabel), [`PATCH /v1/teams/{teamId}/labels/{labelId}`](/api/reference/teams/updateteamlabel), [`DELETE /v1/teams/{teamId}/labels/{labelId}`](/api/reference/teams/deleteteamlabel) |
 | Create, accept, or cancel Space transfers | [`POST /v1/space-transfers`](/api/reference/spaces/createspacetransfer), [`POST /v1/space-transfers/{transferId}/accept`](/api/reference/spaces/acceptspacetransfer), [`DELETE /v1/space-transfers/{transferId}`](/api/reference/spaces/cancelspacetransfer) |

@@ -145,6 +145,8 @@ Link minting does not check whether the version holds the path. A path missing f
 
 To browse rather than diff, [`listSpaceVersionFiles`](/api/reference/versions/listspaceversionfiles) lists one version's files and [`listSpaceFiles`](/api/reference/spaces/listspacefiles) lists whatever `live` currently serves. In the dashboard, **Code** browses any version, with `?version=` pinning an older one.
 
+To compare two completed versions directly, call [`compareSpaceDeploymentVersions`](/api/reference/versions/comparespacedeploymentversions) (`GET /v1/spaces/{spaceId}/versions/compare`; reading file contents requires `versions:download`). To inspect the compiled `_redirects` and `_headers` artifacts a version serves, use [`listSpaceVersionConventionArtifacts`](/api/reference/versions/listspaceversionconventionartifacts) and [`getSpaceVersionConventionArtifactContent`](/api/reference/versions/getspaceversionconventionartifactcontent).
+
 ## Where each thing lives
 
 | Task | CLI | Dashboard |

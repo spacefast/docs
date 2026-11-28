@@ -125,6 +125,16 @@ What changes:
 
 One thing blocks a rename. While `name` is set in your project configuration (`spacefast.config.ts` or `sf.jsonc`), the API refuses to rename the Space, because the next publish would set the old name again. Remove the key or rename it in the file. See [Config file](/config-file).
 
+## Labels, runtime apply, and work mode
+
+- **Labels**: Group Spaces under your team's shared labels with [`addSpaceLabel`](/api/reference/spaces/addspacelabel) (`PUT /v1/spaces/{spaceId}/labels/{labelId}`) and [`removeSpaceLabel`](/api/reference/spaces/removespacelabel). Create and edit labels at the team level; see [Teams and members](/teams#organize-spaces-with-labels).
+- **Apply saved changes**: Push saved Space settings onto the live runtime without running a full publish using [`sf apply`](/cli/reference#sf-apply) (or [`applySpaceRuntimeChanges`](/api/reference/spaces/applyspaceruntimechanges)). Check whether changes are `pending`, `applying`, `live`, or `failed` with [`getSpaceApplyState`](/api/reference/spaces/getspaceapplystate).
+- **Work mode**: Each user has a saved editing mode per Space (`vibe` or `code`, defaulting to `vibe` when unset). Read or update it with [`getSpaceWorkMode`](/api/reference/spaces/getspaceworkmode) and [`setSpaceWorkMode`](/api/reference/spaces/setspaceworkmode) (passing `expectedRevision`).
+
+## Show & Tell
+
+Submit a public live Space to the moderated Show & Tell directory with [`submitShowAndTellEntry`](/api/reference/spaces/submitshowandtellentry) (`POST /v1/show-and-tell/submissions`). Submission requires a public live Space and never changes your sharing settings. Browse approved entries with [`listShowAndTellEntries`](/api/reference/spaces/listshowandtellentries), check your review status with [`listMyShowAndTellSubmissions`](/api/reference/spaces/listmyshowandtellsubmissions), and remove a listing at any time with [`withdrawShowAndTellEntry`](/api/reference/spaces/withdrawshowandtellentry) without deleting or privatizing the Space.
+
 ## Archiving and restoring
 
 To stop serving a Space without deleting its versions, source, database, storage, or domains, archive it with `sf spaces archive` and bring it back later with `sf spaces restore`. Archived Spaces do not count toward your team's live Space limit. For full archiving steps and finding inactive Spaces, see [Backups, archives, and exports](/exports).

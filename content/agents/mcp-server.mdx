@@ -126,6 +126,8 @@ The result carries `status` of `publishing` or `published`, `liveUrl`, `immutabl
 
 Archives are recognized by extension: `.zip`, `.tar`, `.tgz`, `.tar.gz`.
 
+To publish a [SpacePress](/collections) app over MCP, send complete SpacePress source files inline (`spacepress.config.ts` or an app-only `spacefast.config.ts`, `sp/schema.ts`, `sp/actions.ts`, `sp/app/page.tsx`, and `public/` assets) to a team-owned Space, or pass a local project directory on On-Device MCP. Put separate Space serving settings in resolved `sf.jsonc` when using direct MCP publish; use `sf publish` or a source build when evaluating full TypeScript `spacefast.config.ts` settings or combined runtimes. When iterating on an existing app through a source workspace, check [`getSpaceWorkMode`](/api/reference/spaces/getspaceworkmode) before committing edits.
+
 ### `operation_status`
 
 | Field | Type | What it does |

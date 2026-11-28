@@ -91,6 +91,14 @@ To prevent credentials inside links from leaking into downloaded files, `details
 
 Every complete export ends with a trailer row whose `event_code` is `export.complete` and whose `details` holds `{"events": <count>}`. Treat any CSV missing that final row as incomplete.
 
+## Dashboard notifications
+
+Personal alerts (such as comment replies, mentions, and access requests) appear in the dashboard **Notifications** panel and are also exposed over the API for the signed-in account:
+
+- [`listNotifications`](/api/reference/account/listnotifications) (`GET /v1/notifications`): list notifications newest first.
+- [`getNotificationUnreadCount`](/api/reference/account/getnotificationunreadcount) (`GET /v1/notifications/unread-count`): read the unread badge count.
+- [`markNotificationsRead`](/api/reference/account/marknotificationsread) (`POST /v1/notifications/read`): mark selected notifications, or all notifications, as read.
+
 ## API operations
 
 | Operation | Route |
