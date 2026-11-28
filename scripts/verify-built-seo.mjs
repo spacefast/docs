@@ -23,7 +23,7 @@ export async function verifyDiscoveryUrls(dist, files, served) {
     // Parse JSON so escaped URLs and URLs embedded in prose are checked too.
     const values = file.endsWith(".json") ? strings(JSON.parse(text)) : [text];
     for (const value of values) {
-      for (const [href] of value.matchAll(/(?<![\w/])(?:https:\/\/spacefast\.com)?\/docs(?=[/\s?#,"'<>`\)\]}]|$)(?:\/[^\s,"'<>`\\)\]}]*)?(?:[?#][^\s,"'<>`\\)\]}]*)?/gu)) {
+      for (const [href] of value.matchAll(/(?<![\w/])(?:https:\/\/spacefast\.com)?\/docs(?=[/\s?#,"'<>`\)\]}]|$)(?:\/[^\s,"'<>`\\)\]}]*(?<![.;:!?]))?(?:[?#][^\s,"'<>`\\)\]}]*(?<![.;:!?]))?/gu)) {
         if (checked.has(href)) continue;
         const url = new URL(href.replaceAll("&amp;", "&"), "https://spacefast.com");
         const result = matchRedirect({ compilation, request: { url, headers: new Headers() } });

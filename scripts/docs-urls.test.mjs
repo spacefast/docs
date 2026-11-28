@@ -6,6 +6,7 @@ test("docs URL rewriting matches Spacefast docs paths and nothing that merely co
   const text = [
     'href="/docs/cli"',
     "https://spacefast.com/docs/publish#claim",
+    "See https://spacefast.com/docs/zero.",
     "(/docs)",
     String.raw`"line\n/docs/api"`,
     "https://docs.github.com/en/actions",
@@ -13,5 +14,5 @@ test("docs URL rewriting matches Spacefast docs paths and nothing that merely co
     "./docs-backup.json",
     "/docsearch",
   ].join(" ");
-  assert.deepEqual(text.match(docsUrlPattern), ["/docs/cli", "https://spacefast.com/docs/publish#claim", "/docs", "/docs/api"]);
+  assert.deepEqual(text.match(docsUrlPattern), ["/docs/cli", "https://spacefast.com/docs/publish#claim", "https://spacefast.com/docs/zero", "/docs", "/docs/api"]);
 });

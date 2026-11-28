@@ -42,12 +42,16 @@ const blockedTwins = (await listFiles()).filter((file) => agentConfigName.test(f
 if (blockedTwins.length > 0) throw new Error(`Unpublishable agent-config filenames in dist: ${blockedTwins.join(", ")}`);
 // Include the catalogs just moved out of .well-known in URL normalization.
 files = await listFiles();
+const urlAliases = new Map([
+  ...catalogs,
+  [`${base}/api/docs`, `${base}/api/docs/pages.json`],
+]);
 const finalUrl = (value) => {
   const absolute = value.startsWith(origin);
   const local = absolute ? value.slice(origin.length) : value;
   if (local !== base && !local.startsWith(`${base}/`) && !local.startsWith(`${base}?`) && !local.startsWith(`${base}#`)) return value;
   const [, pathname, suffix = ""] = /^(.*?)([?#].*)?$/u.exec(local);
-  if (catalogs.has(pathname)) return `${absolute ? origin : ""}${catalogs.get(pathname)}${suffix}`;
+  if (urlAliases.has(pathname)) return `${absolute ? origin : ""}${urlAliases.get(pathname)}${suffix}`;
   const route = pathname.slice(base.length).replace(/\/$/u, "") || "/";
   const destination = resolveRedirect(route, rules).destination;
   const [target, fragment = ""] = destination.split(/(?=#)/u);
