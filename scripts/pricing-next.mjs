@@ -169,13 +169,14 @@ const FEATURES = [
     row("Sign in with Spacefast for your apps", null, all(YES)),
     row("Tag Manager", null, all(YES)),
     row("Connectors to other services", "Connect services like Linear or Google once and let agents and Spaces use them. Available on Go, Pro, and Enterprise.", [NO, YES, YES, YES]),
+    row("Draw on pages when giving feedback", null, [NO, YES, YES, YES]),
   ]],
   ["Sharing and feedback", [
     row("Private by default, share links, passwords", null, all(YES)),
     row("Invitations and access requests", null, all(YES)),
-    row("Comments on any page", null, all(YES)),
+    row("Comments on any page", null, [NO, YES, YES, YES]),
     row("Show & Tell: share public Spaces for discovery", null, all(BETA)),
-    row("Live comment updates", null, all(YES)),
+    row("Live comment updates", null, [NO, YES, YES, YES]),
     row("Custom access page without Spacefast branding", null, [NO, NO, NO, YES]),
   ]],
   ["Agents", [
