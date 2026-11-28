@@ -50,7 +50,7 @@ Each event carries a stable structure across the dashboard, CLI, API, and CSV ex
 | `staffAction` | `true` when Spacefast staff performed the action |
 | `supportSession` | `true` when Spacefast staff acted in a support session under a customer's account |
 
-Events also carry a derived result of `success`, `failure`, `attention`, or `neutral`. Because the log is append-only, start events such as `build.created` or `transfer.requested` stay `neutral` while their completion writes a second event.
+Events also carry a derived result of `success`, `failure`, `attention`, or `neutral`. Because the log is append-only, start events such as `build.created` or `transfer.requested` stay `neutral` while their completion writes a second event. `space.created` events also record the starting `access` mode and `accessSource` (`requested` when the caller passed `access`, `team_default` when the team default applied, or `system` when Spacefast forced private).
 
 To receive activity events in real time instead of polling, subscribe with [Webhooks](/api/webhooks).
 
