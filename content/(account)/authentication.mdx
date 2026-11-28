@@ -104,11 +104,11 @@ Sessions are separate from agent access. To cut off an agent or a CLI, use **Acc
     On a machine with no browser, open the link from your phone or laptop instead. Dashes and letter case in the code are ignored.
   </Step>
   <Step title="Approve it">
-    The page is titled **Authorize this device**. It shows the **Client**, the **Requested access**, the **Request origin** it was started from, and the line "This access expires after 30 days, or after 7 days unused."
+    The page says the client "is requesting access to your account". It shows the code to check against your terminal, the account you are signed in as (open the account menu and pick **Switch Account** if it is the wrong one), the **Client ID**, and the address the request was **Started from**. Under the requested access it says the access stays connected for 30 days, or until it goes 7 days unused.
 
-    Pick the team reach: **All teams** (including teams you join later), **Choose teams**, or **No team access** for sign-in only. Open **Customize what this device can do** to untick anything you would rather not hand over. You can narrow the request, never widen it.
+    Pick the team reach under **Team Access**: **All teams** (including teams you join later), **Choose teams**, or **No team access** for sign-in only. Open **Customize Access** to untick anything you would rather not hand over. You can narrow the request, never widen it.
 
-    Press **Approve**.
+    Press **Allow**, or **Deny** to refuse it.
   </Step>
   <Step title="Back in the terminal">
     The CLI picks the approval up within a few seconds and prints who you are and which teams the credential reaches. Run `sf whoami` any time to see it again.
