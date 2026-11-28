@@ -14,7 +14,7 @@ These behaviors apply to platform-generated responses and do not replace standar
 | `403` | Blocked by an access or security control, a [Defensive Mode](/infrastructure/defensive-mode) browser challenge, or crawler verification. |
 | `406` | Rejected by the edge web application firewall. |
 | `428` | Platform security or request-control response. |
-| `429` | Rate limited at the edge or by Space admission limits. Because the edge intercepts `429` for platform rate limiting, it can replace a [Worker's](/functions) `429` JSON response and headers—including `Retry-After`—with a platform HTML page. |
+| `429` | Rate limited at the edge or by Space admission limits. Because the edge intercepts `429` for platform rate limiting, it can replace a [Worker's](/functions) `429` JSON response and headers — including `Retry-After` — with a platform HTML page. |
 | `599` | Recorded internally in logs when a Space exhausts available origin compute capacity. Visitors typically receive HTTP `429`. |
 
 Avoid assigning custom application meanings to `406`, `428`, or `599`, and do not rely on a custom JSON body or `Retry-After` header surviving a Worker-generated `429`. See [Rate limiting](/infrastructure/rate-limiting) for diagnosing `429` and `599` responses.

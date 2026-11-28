@@ -7,7 +7,7 @@ Object storage holds files uploaded at runtime, separate from published version 
 
 ## What it is
 
-Object storage holds files uploaded while your Space is running—such as visitor uploads, generated PDF files, or media—not the files you publish in a version. Version files live in [Publishing](/publish).
+Object storage holds files uploaded while your Space is running — such as visitor uploads, generated PDF files, or media — not the files you publish in a version. Version files live in [Publishing](/publish).
 
 Every object is addressed by a bare 32-character hexadecimal id. There is no key or path hierarchy; the id is the identity. Uploads are private by default; set `public` at upload time to make an object readable by visitors.
 
@@ -98,7 +98,7 @@ Open **Storage** for the Space. Use **Choose Files** and **Upload Files** to upl
 | `filename` | 1 to 255 characters, no separators |
 
 :::caution[Active web content is refused]
-Storage serves files directly to visitors, so it rejects executable and active web files—including HTML, XHTML, PHP, JavaScript/ECMAScript, and binary executables (PE, ELF, Mach-O, JAR). Spacefast inspects both the declared `Content-Type` and file contents, so renaming an `.html` file will not bypass the check. An uploaded `.html` file will not serve as a page.
+Storage serves files directly to visitors, so it rejects executable and active web files — including HTML, XHTML, PHP, JavaScript/ECMAScript, and binary executables (PE, ELF, Mach-O, JAR). Spacefast inspects both the declared `Content-Type` and file contents, so renaming an `.html` file will not bypass the check. An uploaded `.html` file will not serve as a page.
 :::
 
 A Space whose runtime is not reachable answers `503` with [`runtime_management_unavailable`](/errors/runtime_management_unavailable).

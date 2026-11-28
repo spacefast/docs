@@ -104,7 +104,7 @@ curl https://api.spacefast.com/v1/spaces \
 </Tab>
 </Tabs>
 
-## Renaming
+## Rename a Space
 
 A rename moves the slug and the managed hostname together.
 
@@ -135,11 +135,11 @@ One thing blocks a rename. While `name` is set in your project configuration (`s
 
 Submit a public live Space to the moderated Show & Tell directory with [`submitShowAndTellEntry`](/api/reference/spaces/submitshowandtellentry) (`POST /v1/show-and-tell/submissions`). Submission requires a public live Space and never changes your sharing settings. Browse approved entries with [`listShowAndTellEntries`](/api/reference/spaces/listshowandtellentries), check your review status with [`listMyShowAndTellSubmissions`](/api/reference/spaces/listmyshowandtellsubmissions), and remove a listing at any time with [`withdrawShowAndTellEntry`](/api/reference/spaces/withdrawshowandtellentry) without deleting or privatizing the Space.
 
-## Archiving and restoring
+## Archive or restore a Space
 
 To stop serving a Space without deleting its versions, source, database, storage, or domains, archive it with `sf spaces archive` and bring it back later with `sf spaces restore`. Archived Spaces do not count toward your team's live Space limit. For full archiving steps and finding inactive Spaces, see [Backups, archives, and exports](/exports).
 
-## Deleting and restoring
+## Delete a Space
 
 Deleting is a takedown, and it takes effect at once.
 

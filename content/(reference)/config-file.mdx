@@ -3,7 +3,7 @@ title: Configuration
 description: Configure a Space with spacefast.config.ts or sf.jsonc, see file precedence and coexistence rules, and look up every top-level key and cap
 ---
 
-`spacefast.config.ts` is the primary configuration file for Spacefast projects and what `sf init` creates. `sf.jsonc` and its JSON/JSONC aliases remain permanently supported; they are not deprecated. Both formats accept the same keys. The CLI evaluates TypeScript at build or publish time and freezes the resolved JSON into the version; the server never runs TypeScript on visitor requests.
+`spacefast.config.ts` is the primary configuration file for Spacefast projects and what `sf init` creates. `sf.jsonc` and its JSON/JSONC aliases remain permanently supported and accept the same keys. The CLI evaluates TypeScript at build or publish time and freezes the resolved JSON into the version; the server never runs TypeScript on visitor requests.
 
 ## Example
 

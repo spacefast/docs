@@ -3,11 +3,11 @@ title: Build on a Space
 description: Build full-stack SpacePress apps, collections, SQL tables, server actions, Workers, WooCommerce stores, and WordPress integrations in one Space
 ---
 
-Every Space combines static files, a SpacePress full-stack TypeScript app, a dedicated MySQL database, WordPress REST APIs, Workers, storage, email, crons, and connectors in one project. You start with HTML, a frontend framework, or `sf init` (which scaffolds a SpacePress app by default) and turn on capabilities as you need them.
+Every Space starts with your files and grows into a full-stack app in one project. Start with HTML, a frontend framework, or `sf init` (which scaffolds a SpacePress app by default), then turn on database, Workers, email, storage, crons, and connectors as you need them.
 
 ## SpacePress is built into every Space
 
-SpacePress is Spacefast's full-stack TypeScript layer. Write collections, SQL tables, declarative access rules, queries, server actions, background jobs, HTTP routes, TSX pages, and interactive islands in TypeScript under `sp/`. On publish, Spacefast compiles your project to native WordPress and PHP with no Node.js server to manage.
+SpacePress is Spacefast's full-stack TypeScript layer. Write your schema, queries, actions, jobs, and TSX pages in TypeScript under `sp/`. On publish, Spacefast compiles them to native WordPress and PHP with no Node.js server to manage.
 
 Configure your Space in `spacefast.config.ts` with `defineConfig` from `spacefast/config`. You can declare app settings inline under `app` in `spacefast.config.ts` or in a standalone `spacepress.config.ts` beside it, but not both in the same project. `sf.jsonc` remains permanently supported as the JSON fallback; see [Configuration](/config-file).
 
@@ -42,7 +42,7 @@ Every capability publishes and rolls back with your Space's versions. Preview ch
 | [Actions, queries, and jobs](/actions) | Typed `query()` and `mutation()` server functions, zero-JS forms, transactional hooks, Action Scheduler background `job()`s, custom HTTP routes, and human approval continuation |
 | [Database and ORM](/database) | Dedicated MySQL per Space, visitor-scoped `spacepress/server/db` queries, Drizzle-inspired `db` ORM, declarative access rules, forward-only SQL migrations, `env.DB`, `sf db`, and a single-use SQL console |
 | [WordPress and Content API](/wordpress) | SpacePress Admin (`/wp-admin/new/`), one-use admin links, proxied and direct WordPress REST APIs, WordPress Abilities, three-way content sync, generated typed clients, `sf app wp`, and `sf apply` |
-| [Workers](/functions) | Server-side JavaScript and TypeScript via `functions/`, a root `handler.ts`, or OpenNext, with `env.APP`, `env.DB`, `env.STORAGE`, and `env.CONNECTORS` bindings |
+| [Workers](/functions) | Server-side JavaScript and TypeScript via `functions/`, a root `handler.ts`, `"use worker";` SpacePress routes, or OpenNext, with `env.SPACE`, `env.DB`, `env.STORAGE`, and `env.CONNECTORS` bindings |
 | [Transactional email](/email) | Outbound mail signed with your primary custom domain, React Email templates (`emails/*.tsx`), `mail.render()`, and transactional `mail.send()` |
 | [Object storage](/object-storage) | Runtime file uploads separate from published version files, with private and public access plus SpacePress `files()` buckets |
 | [Crons](/crons) | Scheduled `GET` requests declared in `spacefast.config.ts`, alongside recurring SpacePress jobs and `cron()` handlers |

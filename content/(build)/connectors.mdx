@@ -3,7 +3,7 @@ title: Connectors
 description: Connect an external service once and call its tools from Space pages, Workers, local AI agents, and scripts while credentials stay sealed in Spacefast
 ---
 
-Connectors let your team connect an external service once—an OpenAPI spec, a GraphQL endpoint, or a remote MCP server—and call its tools from Space pages, [Workers](/functions), local AI agents, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
+Connectors let your team connect an external service once (an OpenAPI spec, a GraphQL endpoint, or a remote MCP server) and call its tools from Space pages, [Workers](/functions), local AI agents, and scripts. Credentials stay sealed in Spacefast and never enter prompts, source code, or browsers.
 
 Connectors are available on Go, Pro, and Enterprise plans. A team on Personal receives [`feature_unavailable`](/errors/feature_unavailable). Enterprise adds team-wide connector allowlists and blocklists.
 
@@ -59,7 +59,7 @@ sf connectors create https://api.example.com/openapi.json
 
 ### Connect an account
 
-Open the connector, click **Connect Account**, pick **Team** or **Personal**, choose a **Method** if more than one exists, add an optional **Label** so agents can tell accounts apart, and click **Connect**.
+Open the connector and click **Connect Account**. Pick **Team** or **Personal**, choose a **Method** if more than one exists, add an optional **Label** so agents can tell accounts apart, and click **Connect**.
 
 - **Team** shares the account with the team and agents acting for it.
 - **Personal** keeps it yours, only within this team.
@@ -168,7 +168,7 @@ export default defineConfig({
 
 </CodeGroup>
 
-When both files exist, `spacefast.config.ts` wins. Publish to apply changes, because each version freezes the roles it was published with. Tool names and arguments here (`list_deals`, `stage`) are examples—check what your connection exposes with `sf connectors connections inspect <connectionId>` or [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
+When both files exist, `spacefast.config.ts` wins. Publish to apply changes, because each version freezes the roles it was published with. Tool names and arguments here (`list_deals`, `stage`) are examples — check what your connection exposes with `sf connectors connections inspect <connectionId>` or [`listConnectionTools`](/api/reference/connectors/listconnectiontools).
 
 | Key | Required | What it does |
 | --- | --- | --- |
@@ -181,7 +181,13 @@ When both files exist, `spacefast.config.ts` wins. Publish to apply changes, bec
 Role names are camelCase, start with a lowercase letter, and are up to 64 characters. A Space declares at most 32 roles, and each role lists at most 200 tools. Tool names use letters, digits, `_`, `.`, `:`, and `-`. `connect`, `callback`, and `disconnect` are reserved.
 
 - **Pinned arguments (`args`):** Every call runs with the pinned values regardless of what the page sends. Sending a different value fails with `connector_arg_pinned` and a `pointer` naming the argument. Pin anything viewers shouldn't choose, such as a pipeline, project, or workspace id.
-- **Shared reads (`cache`):** For `team` and `personal` roles, Spacefast shares one successful upstream read across viewers for the `cache` window. Keys combine the Space, role, tool, and final pinned arguments (ignoring argument order). One viewer fills a cold key while concurrent viewers wait, with a budget of 60 upstream reads per role per rolling minute per Space. Once the budget is spent, the last cached value serves for up to an hour past its window (otherwise `connectors_unavailable`). Cached `ok` answers include `cachedAt`; fresh fetches omit it. `cache: "0"` disables sharing while still counting against the budget. Writes, `visitor` roles, and tools requiring approval are never shared.
+- **Shared reads (`cache`):** For `team` and `personal` roles, Spacefast shares one successful upstream read across viewers for the `cache` window. Writes, `visitor` roles, and tools requiring approval are never shared.
+
+| Cache rule | Behavior |
+| --- | --- |
+| Cache key | Space, role, tool, and final pinned arguments (order-independent); cached `ok` answers include `cachedAt` |
+| Upstream budget | 60 upstream reads per role per rolling minute per Space; concurrent viewers wait on a cold key (`cache: "0"` disables sharing but still counts) |
+| Over budget | Serves the last cached value for up to an hour past its window, otherwise returns `connectors_unavailable` |
 
 ### Bind an account and site serving
 
@@ -249,7 +255,7 @@ else showNotice(answer.message);
 
 Each generated method knows its HTTP method: read-only tools send `GET`, and write tools send `POST`. Pass `{ idempotencyKey }` as the last argument so a retried write runs once. Pinned arguments are omitted from parameter types, non-identifier tool names use bracket keys (`space.connectors.github["issues.list"]()`), and tools without an output schema return `unknown`.
 
-Keep a read live with `.watch()`—which refreshes on an interval (`every` in milliseconds or `"30s"`, `"5m"`, `"1h"`, never under one second) and on window focus while sharing identical requests (writes cannot be watched)—or with `useConnector` in React:
+Keep a read live with `.watch()` or `useConnector` in React. `.watch()` refreshes on an interval (`every` in milliseconds or `"30s"`, `"5m"`, `"1h"`, never under one second) and on window focus while sharing identical requests. Writes cannot be watched.
 
 <CodeGroup>
 
@@ -318,7 +324,7 @@ A Space call returns `{ state, data }`. When `state` is `ok`, `data` holds the t
 | `ok` | `data` is the provider's payload. HTTP-backed tools add `http` (`status`, `headers`), and shared reads add `cachedAt` | Render `data` |
 | `unbound` | No account serves this role yet | Show `message`; the Space's owner binds an account |
 | `connect_required` | A `visitor` role needs this viewer's account | Link to `connectUrl` |
-| `reconnect_required` | The account's authorization expired | For `visitor` roles, link to `connectUrl`. For `team` or `personal` roles, the team reconnects it—don't show `connectUrl` |
+| `reconnect_required` | The account's authorization expired | For `visitor` roles, link to `connectUrl`. For `team` or `personal` roles, the team reconnects it; don't show `connectUrl` |
 | `approval_pending` | The call is waiting for human approval | Show `message` and link to `approvalUrl` when present |
 | `running` | Still executing | Retry shortly (watched reads retry automatically) |
 
@@ -333,7 +339,7 @@ Hard failures return an RFC 9457 problem document with a stable `code`, thrown a
 | `connector_preview_write_not_allowed` | 403 | A preview version tried to run a non-read-only tool on a shared `team` or `personal` role |
 | `connector_write_sign_in_required` | 403 | A write on a `team` or `personal` role from someone who isn't a signed-in current member of the owning team |
 | [`connector_tool_blocked`](/errors/connector_tool_blocked) | 403 | Team policy blocks this write tool on a `team` or `personal` role |
-| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a write tool—send `POST` instead |
+| [`connector_write_in_read_handler`](/errors/connector_write_in_read_handler) | 403 | A `GET` to a write tool; send `POST` instead |
 | [`browser_origin_not_allowed`](/errors/browser_origin_not_allowed) | 403 | Cross-site call, or write without same-origin proof |
 | `connectors_unavailable` | 502 or 503 | The provider or Spacefast couldn't answer; retry |
 
@@ -348,14 +354,14 @@ sf connectors roles remove crm --space example
 sf connectors roles reset crm --space example
 ```
 
-Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, `config` on [`updateSpace`](/api/reference/spaces/updatespace) replaces the Space's stored settings overlay (except `config.network`), so read `config` and `settingsDigest` from [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your `config.connectors` change (setting a role to `null` removes it), and pass `settingsDigest` as `baseSettingsDigest`.
+Overrides apply immediately to the live version and persist across future publishes until reset (**Use config file**). Over the API, `config` on [`updateSpace`](/api/reference/spaces/updatespace) replaces the Space's stored settings overlay (except `config.network`). Read `config` and `settingsDigest` from [`getSpace`](/api/reference/spaces/getspace), send back the full `config` with your `config.connectors` change (set a role to `null` to remove it), and pass `settingsDigest` as `baseSettingsDigest`.
 
 ## Use connectors from agents, CLI, and API
 
-The `/__spacefast/connectors/...` route answers only the Space's own pages. From an AI agent, script, CI job, or terminal, calls run directly against your credential and team policy—with no Space role, no pinned arguments, and no shared reads.
+The `/__spacefast/connectors/...` route answers only the Space's own pages. From an AI agent, script, CI job, or terminal, calls run directly against your credential and team policy, with no Space role, no pinned arguments, and no shared reads.
 
 - **AI agents (On-Device MCP):** `sf mcp` and the desktop extension expose one gateway tool, `search_connector_tools`, under your team's policy and approval rules. Hosted MCP and `sf mcp proxy` intentionally omit connector tools and grant no connector scopes. See [MCP server](/agents/mcp-server).
-- **Dashboard Tools view:** Click **See tools** on a connector row (or open **Connector tools** from the command palette) to browse reachable tools, their resolved policy effect, input schema, and source-declared safety (**Read-only**, **Writes**, or **Destructive**), and run any tool from a form or JSON payload.
+- **Dashboard Tools view:** Click **See tools** on a connector row (or open **Connector tools** from the command palette) to browse reachable tools, resolved policy effects, input schemas, and declared safety (**Read-only**, **Writes**, or **Destructive**). Run any tool directly from a form or JSON payload.
 - **CLI and API:** Inspect tools and run one tool or a multi-tool sandbox program with `sf connectors run` or [`createConnectorRun`](/api/reference/connectors/createconnectorrun):
 
 ```bash
@@ -395,7 +401,7 @@ Open a connector's **Accounts** tab for connection actions:
 | **Reconnect…** | Re-authenticates or replaces a key while keeping the id, label, policies, and Space bindings | `sf connectors connections reconnect` |
 | **Disconnect…** | Purges the stored credential permanently | `sf connectors connections disconnect` |
 
-Token refresh happens automatically; reconnect only when a connection reports `needs_reauth` or `degraded`, or to rotate an API key. A disconnected account cannot be reconnected—connect again to create a new connection id.
+Token refresh happens automatically; reconnect only when a connection reports `needs_reauth` or `degraded`, or to rotate an API key. A disconnected account cannot be reconnected — connect again to create a new connection id.
 
 ### When a member leaves
 

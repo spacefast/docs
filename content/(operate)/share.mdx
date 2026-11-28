@@ -182,7 +182,7 @@ Rotating keeps the grant and its scope and immediately signs out sessions admitt
 
 The dashboard's **Password** card carries **Set password**, **Change password**, and **Remove password**, with **Expires**, **Paths**, and **What password holders can do** under **Password options**. The card manages one password; use the CLI or API for more.
 
-## Inviting people
+## Invite people
 
 Invite collaborators by email with [`sf share people`](/cli/reference#sf-share-people):
 
@@ -276,7 +276,7 @@ A visitor session expires after 7 days without use, or 30 days after it started.
 
 Two behaviors can look like bugs and are not. A rewrite cannot widen access, because the visitor needs access to both the URL they asked for and the path it rewrote to. And a directory listing on a protected Space leaves out entries the visitor cannot open.
 
-## Revoking everything at once
+## Revoke every session at once
 
 End every active visitor session on a Space immediately without a republish using [`sf access sessions revoke`](/cli/reference#sf-access-sessions-revoke):
 

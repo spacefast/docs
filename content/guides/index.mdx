@@ -10,7 +10,7 @@ Start a new Space from a starter template, wire a full-stack app in one Space, c
 Go from an empty folder to a live Space with a database-backed form, outbound email, and a share link in five steps:
 
 1. Scaffold the project with [`sf init`](/cli/reference#sf-init-name) and add a form starter with [`sf add form`](/cli/reference#sf-add-recipe-directory) ([Starters and templates](/guides/starters)).
-2. Review the generated table and server mutation under `app.actions` ([Actions and forms](/actions)) and inspect stored rows with [`sf db`](/database).
+2. Review the generated `contactMessages` table and `sendContactMessage` mutation in `sp/contact.ts` (and the form in `sp/app/contact/page.tsx`; see [Actions and forms](/actions)), then inspect stored rows with [`sf db`](/database).
 3. Attach a custom domain if the form sends [Transactional email](/email).
 4. Validate offline with [`sf check`](/cli/reference#sf-check-dir) and ship with [`sf publish`](/cli/reference#sf-publish-dir) ([Publishing](/publish)).
 5. Keep the Space private by default or create a viewer link in [Share and access](/share).

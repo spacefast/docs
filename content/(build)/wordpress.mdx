@@ -3,7 +3,7 @@ title: WordPress and Content API
 description: Open SpacePress Admin, call your Space's WordPress REST API and Abilities, run three-way content sync, use generated typed clients, and run allowlisted WP-CLI commands
 ---
 
-Every SpacePress Space runs native WordPress alongside your TypeScript code, with no servers or plugins to maintain by hand. Open SpacePress Admin at `/wp-admin/new/`, call your Space's WordPress REST API (proxied through the Spacefast API or directly on the Space host), invoke WordPress Abilities, reconcile Markdown files with live posts, and run allowlisted WP-CLI commands from `sf app wp`.
+Every SpacePress Space runs native WordPress alongside your TypeScript code, with no servers or plugins to maintain by hand. Open SpacePress Admin at `/wp-admin/new/`, call your Space's WordPress REST API and Abilities, reconcile Markdown files with live posts, or run allowlisted WP-CLI commands with `sf app wp`.
 
 ## Open SpacePress Admin and one-use sign-in links
 
@@ -42,7 +42,7 @@ curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/content/rest" \
 
 ### Option 2: Call the Space host directly with a REST token
 
-For external apps, scripts, or CI jobs that talk straight to your Space's hostname, mint a short-lived bearer token scoped to a Space machine credential with [`createSpaceRestApiToken`](/api/reference/spaces/createspacerestapitoken) (`POST /v1/spaces/{spaceId}/zero/token`, which keeps the `/zero/token` wire path for compatibility):
+For external apps, scripts, or CI jobs that talk straight to your Space's hostname, mint a short-lived bearer token scoped to a Space machine credential with [`createSpaceRestApiToken`](/api/reference/spaces/createspacerestapitoken). The endpoint is `POST /v1/spaces/{spaceId}/zero/token` (it keeps the `/zero/token` wire path for compatibility):
 
 ```bash
 curl -X POST "https://api.spacefast.com/v1/spaces/$SPACE_ID/zero/token" \
@@ -79,7 +79,7 @@ When you build a SpacePress project, the compiler writes typed clients under `sp
 
 ## Content sync and source conversions
 
-When your Space binds repository Markdown or HTML files to WordPress documents (via `sync` in your schema), Spacefast exposes a three-way reconciliation API so code edits and WordPress editorial edits never overwrite each other silently:
+When your Space binds repository Markdown or HTML files to WordPress documents (via `sync` in your schema), use the three-way reconciliation API below. Code edits and WordPress editorial edits stay separate and never overwrite each other silently:
 
 | Operation | Route | What it does |
 | --- | --- | --- |

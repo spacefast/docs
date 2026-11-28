@@ -138,7 +138,7 @@ Only the newest failures are kept, with no history behind them. A real failure a
 | --- | --- |
 | `scheduled` | Whether the cron runs |
 | `tier` | `simple` or `advanced`; `null` when not scheduled |
-| `runsAs` | The schedule that actually runs; `null` when not scheduled |
+| `runsAs` | The active schedule; `null` when not scheduled |
 | `reason` | `over_plan_limit` past the allowance, `unsupported_schedule` for a schedule that cannot run; `null` when scheduled |
 
 The response's `allowance` carries the Space's `simple` and `advanced` counts and `upgrade`, the step that unlocks more: `upgrade_plan`, `upgrade_or_boost`, `boost`, or `null` when there is none. See [`sf crons`](/cli/reference#sf-crons) in the CLI reference for full flags.
